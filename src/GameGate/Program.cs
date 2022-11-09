@@ -131,7 +131,7 @@ namespace GameGate
         private static Task ReLoadConfig()
         {
             ConfigManager.Instance.ReLoadConfig();
-            ServerManager.Instance.StartMessageThread(CancellationToken.Token);
+            ServerManager.Instance.StartMessageWorkThread(CancellationToken.Token);
             Console.WriteLine("重新读取配置文件完成...");
             return Task.CompletedTask;
         }

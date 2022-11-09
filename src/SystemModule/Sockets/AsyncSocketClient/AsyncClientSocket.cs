@@ -123,8 +123,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 发送数据到tcp服务器
         /// </summary>
-        /// <param name="message">要发送的数据</param>
-        public void Send(Memory<byte> buffer)
+        /// <param name="buffer">要发送的数据</param>
+        public void Send(byte[] buffer)
         {
             if (buffer.Length <= 0)
                 throw new ArgumentNullException("buffer cannot be null");

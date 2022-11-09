@@ -66,6 +66,20 @@ namespace SystemModule
             var encBuf = PacketEncoder.DecodeBuf(str, str.Length, ref nLen);
             return HUtil32.GetString(encBuf);
         }
+        
+        /// <summary>
+        /// 解密字符串
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static string DeCodeString(Span<byte> str)
+        {
+            if (str == null) throw new ArgumentNullException(nameof(str));
+            var nLen = 0;
+            var encBuf = PacketEncoder.DecodeBuf(str, str.Length, ref nLen);
+            return HUtil32.GetString(encBuf);
+        }
 
         public static byte[] DecodeBuffer(string strSrc)
         {

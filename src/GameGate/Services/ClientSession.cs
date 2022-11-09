@@ -20,21 +20,20 @@ namespace GameGate.Services
         private ClientThread ClientThread { get; set; }
         private SendQueue SendQueue { get; set; }
         IList<DelayMessage> MsgList { get; set; }
-        int _lastDirection = -1;
+        private int LastDirection { get; set; }
         private bool HandleLogin { get; set; }
         private bool KickFlag { get; set; }
         public int SvrListIdx { get; set; }
-        int m_nSvrObject = 0;
-        int m_nChrStutas = 0;
-        int m_SendCheckTick = 0;
-        TCheckStep m_Stat;
+        private int SvrObjectId { get; set; }
+        private int SendCheckTick { get; set; }
+        private CheckStep Stat{ get; set; }
         /// <summary>
         /// 会话密钥
         /// 用于OTP动态口令验证
         /// </summary>
         private string SessionKey { get; set; }
-        long FinishTick { get; set; }
-        readonly DynamicAuthenticator _authenticator = null;
+        private long FinishTick { get; set; }
+        private readonly DynamicAuthenticator _authenticator = null;
         /// <summary>
         /// 封包发送缓冲区
         /// </summary>
@@ -47,7 +46,8 @@ namespace GameGate.Services
             SendQueue = sendQueue;
             MsgList = new List<DelayMessage>();
             KickFlag = false;
-            m_Stat = TCheckStep.CheckLogin;
+            Stat = CheckStep.CheckLogin;
+            LastDirection = -1;
             _syncObj = new object();
             _gameSpeed = new SessionSpeed();
             SessionKey = Guid.NewGuid().ToString("N");
@@ -64,9 +64,9 @@ namespace GameGate.Services
 
         public SessionInfo Session => _session;
 
-        private static MirLog LogQueue => MirLog.Instance;
+        private static MirLog Logger => MirLog.Instance;
 
-        private GateConfig Config => ConfigManager.Instance.GateConfig;
+        private static GateConfig Config => ConfigManager.Instance.GateConfig;
 
         private void Kick(byte code)
         {
@@ -79,7 +79,7 @@ namespace GameGate.Services
         public void ProcessPacket(MessagePacket messagePacket)
         {
             var sMsg = string.Empty;
-            var currentTick = 0;
+            int currentTick;
             if (KickFlag)
             {
                 KickFlag = false;
@@ -99,20 +99,20 @@ namespace GameGate.Services
                     //return;
                 }
             }
-            if ((m_Stat == TCheckStep.CheckLogin) || (m_Stat == TCheckStep.SendCheck))
+            if ((Stat == CheckStep.CheckLogin) || (Stat == CheckStep.SendCheck))
             {
                 currentTick = HUtil32.GetTickCount();
-                if (0 == m_SendCheckTick)
+                if (0 == SendCheckTick)
                 {
-                    m_SendCheckTick = currentTick;
+                    SendCheckTick = currentTick;
                 }
-                if ((currentTick - m_SendCheckTick) > 1000 * 5)// 如果5 秒 没有回数据 就下发数据
+                if ((currentTick - SendCheckTick) > 1000 * 5)// 如果5 秒 没有回数据 就下发数据
                 {
-                    m_Stat = TCheckStep.SendSmu;
+                    Stat = CheckStep.SendSmu;
                 }
             }
             // 如果下发成功  得多少秒有数据如果没有的话，那就是有问题
-            if ((m_Stat == TCheckStep.SendFinsh))
+            if ((Stat == CheckStep.SendFinsh))
             {
                 currentTick = HUtil32.GetTickCount();
                 if ((currentTick - FinishTick) > 1000 * 10)
@@ -135,11 +135,11 @@ namespace GameGate.Services
 
                 var packetHeader = decodeBuff.AsSpan();
 
-                var Recog = BitConverter.ToInt32(packetHeader[..4]);
-                var Ident = BitConverter.ToUInt16(packetHeader.Slice(4, 2));
-                var Param = BitConverter.ToUInt16(packetHeader.Slice(6, 2));
-                var Tag = BitConverter.ToUInt16(packetHeader.Slice(8, 2));
-                var Series = BitConverter.ToUInt16(packetHeader.Slice(10, 2));
+                var recog = BitConverter.ToInt32(packetHeader[..4]);
+                var ident = BitConverter.ToUInt16(packetHeader.Slice(4, 2));
+                var param = BitConverter.ToUInt16(packetHeader.Slice(6, 2));
+                var tag = BitConverter.ToUInt16(packetHeader.Slice(8, 2));
+                var series = BitConverter.ToUInt16(packetHeader.Slice(10, 2));
 
                 //if (Config.EnableOtp)
                 //{
@@ -157,13 +157,13 @@ namespace GameGate.Services
                 //        return;
                 //    }
                 //}
-                switch (Ident)
+                switch (ident)
                 {
                     case Grobal2.CM_GUILDUPDATENOTICE:
                     case Grobal2.CM_GUILDUPDATERANKINFO:
                         if (messagePacket.BufferLen > Config.MaxClientPacketSize)
                         {
-                            LogQueue.Log("Kick off user,over max client packet size: " + messagePacket.BufferLen, 5);
+                            Logger.Log("Kick off user,over max client packet size: " + messagePacket.BufferLen, 5);
                             // Misc.KickUser(m_pUserOBJ.nIPAddr);
                             return;
                         }
@@ -171,7 +171,7 @@ namespace GameGate.Services
                     default:
                         if (messagePacket.BufferLen > Config.NomClientPacketSize)
                         {
-                            LogQueue.Log("Kick off user,over nom client packet size: " + messagePacket.BufferLen, 5);
+                            Logger.Log("Kick off user,over nom client packet size: " + messagePacket.BufferLen, 5);
                             // Misc.KickUser(m_pUserOBJ.nIPAddr);
                             return;
                         }
@@ -180,8 +180,8 @@ namespace GameGate.Services
 
                 int nInterval;
                 int delayMsgCount;
-                var dwDelay = 0;
-                switch (Ident)
+                int dwDelay;
+                switch (ident)
                 {
                     case Grobal2.CM_WALK:
                     case Grobal2.CM_RUN:
@@ -206,7 +206,7 @@ namespace GameGate.Services
                                 {
                                     _gameSpeed.AttackTick = currentTick - Config.MoveNextAttackCompensate;
                                 }
-                                _lastDirection = Tag;
+                                LastDirection = tag;
                             }
                             else
                             {
@@ -266,7 +266,7 @@ namespace GameGate.Services
                                     _gameSpeed.MoveTick = currentTick - Config.AttackNextMoveCompensate;// 550
                                     _gameSpeed.SpellTick = currentTick - Config.AttackNextSpellCompensate;// 1150
                                 }
-                                _lastDirection = Tag;
+                                LastDirection = tag;
                             }
                             else
                             {
@@ -295,27 +295,27 @@ namespace GameGate.Services
                         if (Config.IsSpellInterval)// 1380
                         {
                             currentTick = HUtil32.GetTickCount();
-                            if (Tag >= 0128)
+                            if (tag >= 0128)
                             {
                                 return;
                             }
-                            if (TableDef.MaigicDelayArray[Tag]) // 过滤武士魔法
+                            if (TableDef.MaigicDelayArray[tag]) // 过滤武士魔法
                             {
                                 int nSpellInterval;
                                 if (_gameSpeed.SpeedLimit)
                                 {
-                                    nSpellInterval = TableDef.MaigicDelayTimeList[Tag] + Config.PunishSpellInterval;
+                                    nSpellInterval = TableDef.MaigicDelayTimeList[tag] + Config.PunishSpellInterval;
                                 }
                                 else
                                 {
-                                    nSpellInterval = TableDef.MaigicDelayTimeList[Tag];
+                                    nSpellInterval = TableDef.MaigicDelayTimeList[tag];
                                 }
                                 nInterval = (currentTick - _gameSpeed.SpellTick);
                                 if ((nInterval >= nSpellInterval))
                                 {
                                     int dwNextMove;
                                     int dwNextAtt;
-                                    if (TableDef.MaigicAttackArray[Tag])
+                                    if (TableDef.MaigicAttackArray[tag])
                                     {
                                         dwNextMove = Config.SpellNextMoveCompensate;
                                         dwNextAtt = Config.SpellNextAttackCompensate;
@@ -328,7 +328,7 @@ namespace GameGate.Services
                                     _gameSpeed.SpellTick = currentTick;
                                     _gameSpeed.MoveTick = currentTick - dwNextMove;
                                     _gameSpeed.AttackTick = currentTick - dwNextAtt;
-                                    _lastDirection = Tag;
+                                    LastDirection = tag;
                                 }
                                 else
                                 {
@@ -397,7 +397,7 @@ namespace GameGate.Services
                             {
                                 if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                 {
-                                    if (!PeekDelayMsg(Ident))
+                                    if (!PeekDelayMsg(ident))
                                     {
                                         dwDelay = Config.PunishBaseInterval + (int)Math.Round((Config.ButchInterval - nInterval) * Config.PunishIntervalRate);
                                         _gameSpeed.ButchTick = currentTick + dwDelay;
@@ -414,19 +414,19 @@ namespace GameGate.Services
                     case Grobal2.CM_TURN:
                         if (Config.IsTurnInterval && (Config.OverSpeedPunishMethod != TPunishMethod.TurnPack))
                         {
-                            if (_lastDirection != Tag)
+                            if (LastDirection != tag)
                             {
                                 currentTick = HUtil32.GetTickCount();
                                 if (currentTick - _gameSpeed.TurnTick >= Config.TurnInterval)
                                 {
-                                    _lastDirection = Tag;
+                                    LastDirection = tag;
                                     _gameSpeed.TurnTick = currentTick;
                                 }
                                 else
                                 {
                                     if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
                                     {
-                                        if (!PeekDelayMsg(Ident))
+                                        if (!PeekDelayMsg(ident))
                                         {
                                             dwDelay = Config.PunishBaseInterval + (int)Math.Round((Config.TurnInterval - (currentTick - _gameSpeed.TurnTick)) * Config.PunishIntervalRate);
                                         }
@@ -439,9 +439,9 @@ namespace GameGate.Services
                         currentTick = HUtil32.GetTickCount();
                         if ((currentTick - _gameSpeed.DealTick < 10000))
                         {
-                            if ((currentTick - -_gameSpeed.dwWaringTick > 2000))
+                            if ((currentTick - -_gameSpeed.WaringTick > 2000))
                             {
-                                _gameSpeed.dwWaringTick = currentTick;
+                                _gameSpeed.WaringTick = currentTick;
                                 SendSysMsg($"攻击状态不能交易！请稍等{(10000 - currentTick + _gameSpeed.DealTick) / 1000 + 1}秒……");
                             }
                             return;
@@ -482,15 +482,15 @@ namespace GameGate.Services
                                 // }
                                 if (GateShare.ChatCommandFilter.ContainsKey(pszChatCmd))
                                 {
-                                    var Cmd = new ClientMesaagePacket();
-                                    Cmd.UID = m_nSvrObject;
-                                    Cmd.Cmd = Grobal2.SM_WHISPER;
-                                    Cmd.X = HUtil32.MakeWord(0xFF, 56);
+                                    var cmd = new ClientMesaagePacket();
+                                    cmd.UID = SvrObjectId;
+                                    cmd.Cmd = Grobal2.SM_WHISPER;
+                                    cmd.X = HUtil32.MakeWord(0xFF, 56);
                                     //StrFmt(pszChatBuffer, Protocol._STR_CMD_FILTER, new char[] { pszChatCmd });
                                     pszChatBuffer = HUtil32.GetBytes(string.Format(Protocol._STR_CMD_FILTER, pszChatCmd));
                                     var pszSendBuf = new byte[255];
                                     pszSendBuf[0] = (byte)'#';
-                                    Buffer.BlockCopy(Cmd.GetBuffer(), 0, pszSendBuf, 0, pszSendBuf.Length);
+                                    Buffer.BlockCopy(cmd.GetBuffer(), 0, pszSendBuf, 0, pszSendBuf.Length);
                                     //Move(Cmd, m_pOverlapRecv.BBuffer[1], TCmdPack.PackSize);
                                     //Move(pszChatBuffer[0], m_pOverlapRecv.BBuffer[13], pszChatBuffer.Length);
                                     //var nEnCodeLen = Misc.EncodeBuf(((int)m_pOverlapRecv.BBuffer[1]), TCmdPack.PackSize + pszChatBuffer.Length, ((int)pszSendBuf[1]));
@@ -568,7 +568,7 @@ namespace GameGate.Services
                     case Grobal2.CM_EAT:
                         if (Config.IsEatInterval)
                         {
-                            if (Series == 0 || Series == 1 || Series == 3)
+                            if (series == 0 || series == 1 || series == 3)
                             {
                                 currentTick = HUtil32.GetTickCount();
                                 if (currentTick - _gameSpeed.EatTick > Config.EatInterval)
@@ -578,7 +578,7 @@ namespace GameGate.Services
                                 else
                                 {
                                     var eatPacket = new ClientMesaagePacket();
-                                    eatPacket.UID = Recog;
+                                    eatPacket.UID = recog;
                                     eatPacket.Cmd = Grobal2.SM_EAT_FAIL;
                                     var pszSendBuf = new byte[ClientMesaagePacket.PackSize];
                                     pszSendBuf[0] = (byte)'#';
@@ -592,8 +592,8 @@ namespace GameGate.Services
                         break;
                 }
 
-                //todo 需要优化，此处会内存有问题
-                byte[] BodyBuffer;
+                //todo 需要优化
+                byte[] bodyBuffer;
                 var cmdPack = new GameServerPacket();
                 cmdPack.PacketCode = Grobal2.RUNGATECODE;
                 cmdPack.Socket = _session.SckHandle;
@@ -604,30 +604,27 @@ namespace GameGate.Services
                     var sendBuffer = new byte[messagePacket.Buffer.Length - ClientMesaagePacket.PackSize + 1];
                     var tLen = PacketEncoder.EncodeBuf(decodeBuff, nDeCodeLen - ClientMesaagePacket.PackSize, sendBuffer);
                     cmdPack.PackLength = ClientMesaagePacket.PackSize + tLen + 1;
-                    BodyBuffer = new byte[GameServerPacket.PacketSize + cmdPack.PackLength];
-                    Buffer.BlockCopy(decodeBuff, 0, BodyBuffer, GameServerPacket.PacketSize, ClientMesaagePacket.PackSize);
-                    Buffer.BlockCopy(tempBuff.ToArray(), 16, BodyBuffer, 32, tLen); //消息体
+                    bodyBuffer = new byte[GameServerPacket.PacketSize + cmdPack.PackLength];
+                    Buffer.BlockCopy(decodeBuff, 0, bodyBuffer, GameServerPacket.PacketSize, ClientMesaagePacket.PackSize);
+                    Buffer.BlockCopy(tempBuff.ToArray(), 16, bodyBuffer, 32, tLen); //消息体
                 }
                 else
                 {
-                    BodyBuffer = new byte[GameServerPacket.PacketSize + decodeBuff.Length];
+                    bodyBuffer = new byte[GameServerPacket.PacketSize + decodeBuff.Length];
                     cmdPack.PackLength = ClientMesaagePacket.PackSize;
-                    Buffer.BlockCopy(decodeBuff, 0, BodyBuffer, GameServerPacket.PacketSize, decodeBuff.Length);
+                    Buffer.BlockCopy(decodeBuff, 0, bodyBuffer, GameServerPacket.PacketSize, decodeBuff.Length);
                 }
-                Buffer.BlockCopy(cmdPack.GetBuffer(), 0, BodyBuffer, 0, GameServerPacket.PacketSize);//复制消息头
-                ClientThread.SendBuffer(BodyBuffer);
+                Buffer.BlockCopy(cmdPack.GetBuffer(), 0, bodyBuffer, 0, GameServerPacket.PacketSize);//复制消息头
+                ClientThread.SendBuffer(bodyBuffer);
             }
             else
             {
-                sMsg = HUtil32.GetString(messagePacket.Buffer.AsSpan().Slice(2, messagePacket.BufferLen - 3));
-                LogQueue.DebugLog("LoginPacket: " + sMsg);
-                var tempStr = EDCode.DeCodeString(sMsg);
+                var tempStr = EDCode.DeCodeString(messagePacket.Buffer.AsSpan().Slice(2, messagePacket.BufferLen - 3));
                 ClientLogin(tempStr, messagePacket.BufferLen, "", ref success);
                 if (!success)
                 {
-                    LogQueue.Log("客户端登陆消息处理失败，剔除链接", 1);
+                    Logger.Log("客户端登陆消息处理失败，剔除链接", 1);
                     Kick(1);
-                    return;
                 }
             }
         }
@@ -667,7 +664,7 @@ namespace GameGate.Services
                             {
                                 _gameSpeed.AttackTick = dwCurrentTick - Config.MoveNextAttackCompensate; //900
                             }
-                            _lastDirection = delayMsg.Dir;
+                            LastDirection = delayMsg.Dir;
                             break;
                         case Grobal2.CM_HIT:
                         case Grobal2.CM_HEAVYHIT:
@@ -691,12 +688,12 @@ namespace GameGate.Services
                                 _gameSpeed.MoveTick = dwCurrentTick - Config.AttackNextMoveCompensate; // 550
                                 _gameSpeed.SpellTick = dwCurrentTick - Config.AttackNextSpellCompensate;// 1150
                             }
-                            _lastDirection = delayMsg.Dir;
+                            LastDirection = delayMsg.Dir;
                             break;
                         case Grobal2.CM_SPELL:
                             _gameSpeed.SpellTick = dwCurrentTick;
-                            int nNextMov = 0;
-                            int nNextAtt = 0;
+                            int nNextMov;
+                            int nNextAtt;
                             if (TableDef.MaigicAttackArray[delayMsg.Mag])
                             {
                                 nNextMov = Config.SpellNextMoveCompensate;
@@ -712,7 +709,7 @@ namespace GameGate.Services
                             {
                                 _gameSpeed.AttackTick = dwCurrentTick - nNextAtt;
                             }
-                            _lastDirection = delayMsg.Dir;
+                            LastDirection = delayMsg.Dir;
                             break;
                     }
                 }
@@ -794,7 +791,6 @@ namespace GameGate.Services
                 delayMsg.Cmd = msg.Cmd;
                 delayMsg.BufLen = msg.BufLen;
                 delayMsg.Buffer = msg.Buffer;
-                msg = null;
                 result = true;
             }
             HUtil32.LeaveCriticalSection(_syncObj);
@@ -843,7 +839,7 @@ namespace GameGate.Services
             }
             if (magicId > 0)
             {
-                LogQueue.DebugLog($"发送延时处理消息:User:[{_session.ChrName}] MagicID:[{magicId}] DelayTime:[{delayTime}]");
+                Logger.DebugLog($"发送延时处理消息:User:[{_session.ChrName}] MagicID:[{magicId}] DelayTime:[{delayTime}]");
             }
         }
 
@@ -863,7 +859,6 @@ namespace GameGate.Services
 
         private void SendPacketData(byte[] packtData)
         {
-            //_session.Socket.Send(packtData);
             SendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, packtData);
         }
 
@@ -923,15 +918,15 @@ namespace GameGate.Services
             var messagePacket = clientPacket.Buffer.AsSpan();
             if (messagePacket.Length > 10)
             {
-                var Recog = BitConverter.ToInt32(messagePacket[..4]);
-                var Ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
-                var Param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
-                var Tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
-                var Series = 0;
-                switch (Ident)
+                var recog = BitConverter.ToInt32(messagePacket[..4]);
+                var ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
+                var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
+                var tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
+                int series;
+                switch (ident)
                 {
                     case Grobal2.SM_RUSH:
-                        if (m_nSvrObject == Recog)
+                        if (SvrObjectId == recog)
                         {
                             var dwCurrentTick = HUtil32.GetTickCount();
                             _gameSpeed.MoveTick = dwCurrentTick;
@@ -945,35 +940,35 @@ namespace GameGate.Services
                     case Grobal2.SM_NEWMAP:
                     case Grobal2.SM_CHANGEMAP:
                     case Grobal2.SM_LOGON:
-                        if (m_nSvrObject == 0)
+                        if (SvrObjectId == 0)
                         {
-                            m_nSvrObject = Recog;
+                            SvrObjectId = recog;
                         }
                         break;
                     case Grobal2.SM_PLAYERCONFIG:
 
                         break;
                     case Grobal2.SM_CHARSTATUSCHANGED:
-                        Series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
-                        if (m_nSvrObject == Recog)
+                        series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
+                        if (SvrObjectId == recog)
                         {
-                            _gameSpeed.DefItemSpeed = Series;
-                            _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, Series);
-                            m_nChrStutas = HUtil32.MakeLong(Param, Tag);
+                            _gameSpeed.DefItemSpeed = series;
+                            _gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, series);
+                            //_mNChrStutas = HUtil32.MakeLong(param, tag);
                             //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
                         }
                         break;
                     case Grobal2.SM_HWID:
-                        Series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
+                        series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
                         if (Config.IsProcClientHardwareID)
                         {
-                            switch (Series)
+                            switch (series)
                             {
                                 case 1:
-                                    LogQueue.DebugLog("封机器码");
+                                    Logger.DebugLog("封机器码");
                                     break;
                                 case 2:
-                                    LogQueue.DebugLog("清理机器码");
+                                    Logger.DebugLog("清理机器码");
                                     GateShare.HardwareFilter.ClearDeny();
                                     GateShare.HardwareFilter.SaveDenyList();
                                     break;
@@ -1019,6 +1014,8 @@ namespace GameGate.Services
                     break;
             }
 
+            Logger.DebugLog(sendMsg);
+            
             //defMsg.UID = m_nSvrObject;
             //defMsg.Cmd = Grobal2.SM_SYSMESSAGE;
             //defMsg.X = HUtil32.MakeWord(0xFF, 0xF9);
@@ -1050,14 +1047,15 @@ namespace GameGate.Services
         /// <summary>
         /// 处理登录数据
         /// </summary>
-        private void ClientLogin(string loginData, int nLen, string Addr, ref bool success)
+        private void ClientLogin(string loginData, int nLen, string addr, ref bool success)
         {
             const int firstPakcetMaxLen = 254;
             if (nLen < firstPakcetMaxLen && nLen > 15)
             {
+                Logger.DebugLog("ClientLogin: " + loginData);
                 if (loginData[0] != '*' || loginData[1] != '*')
                 {
-                    LogQueue.Log($"[HandleLogin] Kicked 1: {loginData}", 1);
+                    Logger.Log($"[ClientLogin] Kicked 1: {loginData}", 1);
                     success = false;
                     return;
                 }
@@ -1065,10 +1063,9 @@ namespace GameGate.Services
                 var sHumName = string.Empty;//人物名称
                 var sAccount = string.Empty;//账号
                 var szCert = string.Empty;
-                var szClientVerNO = string.Empty;//客户端版本号
+                var szClientVerNo = string.Empty;//客户端版本号
                 var szCode = string.Empty;
-                var szHarewareID = string.Empty;//硬件ID
-                var sData = string.Empty;
+                var szHarewareId = string.Empty;//硬件ID
 
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sAccount, HUtil32.Backslash);
                 sDataText = HUtil32.GetValidStr3(sDataText, ref sHumName, HUtil32.Backslash);
@@ -1076,17 +1073,17 @@ namespace GameGate.Services
                 if ((sAccount.Length >= 4) && (sAccount.Length <= 12) && (sHumName.Length > 2) && (sHumName.Length < 15))
                 {
                     sDataText = HUtil32.GetValidStr3(sDataText, ref szCert, HUtil32.Backslash);
-                    sDataText = HUtil32.GetValidStr3(sDataText, ref szClientVerNO, HUtil32.Backslash);
+                    sDataText = HUtil32.GetValidStr3(sDataText, ref szClientVerNo, HUtil32.Backslash);
                     sDataText = HUtil32.GetValidStr3(sDataText, ref szCode, HUtil32.Backslash);
-                    sDataText = HUtil32.GetValidStr3(sDataText, ref szHarewareID, HUtil32.Backslash);
+                    HUtil32.GetValidStr3(sDataText, ref szHarewareId, HUtil32.Backslash);
                     if (szCert.Length <= 0 || szCert.Length > 8)
                     {
                         success = false;
                         return;
                     }
-                    if (szClientVerNO.Length < 8)
+                    if (szClientVerNo.Length < 8)
                     {
-                        LogQueue.Log($"[HandleLogin] Kicked 2: {sHumName} clientVer validation failed.", 1);
+                        Logger.Log($"[ClientLogin] Kicked 2: {sHumName} clientVer validation failed.", 1);
                         success = false;
                         return;
                     }
@@ -1104,50 +1101,50 @@ namespace GameGate.Services
                     var hardWareDigest = MD5.EmptyDigest;
                     if (Config.IsProcClientHardwareID)
                     {
-                        if (string.IsNullOrEmpty(szHarewareID) || (szHarewareID.Length > 256) || ((szHarewareID.Length % 2) != 0))
+                        if (string.IsNullOrEmpty(szHarewareId) || (szHarewareId.Length > 256) || ((szHarewareId.Length % 2) != 0))
                         {
-                            LogQueue.Log($"[HandleLogin] Kicked 3: {sHumName}", 1);
+                            Logger.Log($"[ClientLogin] Kicked 3: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
-                        var Src = szHarewareID;
-                        var Key = Config.ProClientHardwareKey;
-                        var KeyLen = Key.Length;
-                        var KeyPos = 0;
-                        var OffSet = Convert.ToInt32("$" + Src.Substring(0, 2));
-                        var SrcPos = 3;
+                        var src = szHarewareId;
+                        var key = Config.ProClientHardwareKey;
+                        var keyLen = key.Length;
+                        var keyPos = 0;
+                        var offSet = Convert.ToInt32("$" + src.Substring(0, 2));
+                        var srcPos = 3;
                         var i = 0;
-                        var SrcAsc = 0;
-                        var TmpSrcAsc = 0;
+                        int srcAsc;
+                        int tmpSrcAsc;
                         var dest = new byte[1024];
                         var fMatch = false;
                         try
                         {
                             do
                             {
-                                SrcAsc = Convert.ToInt32("$" + Src.Substring(SrcPos - 1, 2));
-                                if (KeyPos < KeyLen)
+                                srcAsc = Convert.ToInt32("$" + src.Substring(srcPos - 1, 2));
+                                if (keyPos < keyLen)
                                 {
-                                    KeyPos += 1;
+                                    keyPos += 1;
                                 }
                                 else
                                 {
-                                    KeyPos = 1;
+                                    keyPos = 1;
                                 }
-                                TmpSrcAsc = SrcAsc ^ Key[KeyPos];
-                                if (TmpSrcAsc <= OffSet)
+                                tmpSrcAsc = srcAsc ^ key[keyPos];
+                                if (tmpSrcAsc <= offSet)
                                 {
-                                    TmpSrcAsc = 255 + TmpSrcAsc - OffSet;
+                                    tmpSrcAsc = 255 + tmpSrcAsc - offSet;
                                 }
                                 else
                                 {
-                                    TmpSrcAsc -= OffSet;
+                                    tmpSrcAsc -= offSet;
                                 }
-                                dest[i] = (byte)(TmpSrcAsc);
+                                dest[i] = (byte)(tmpSrcAsc);
                                 i++;
-                                OffSet = SrcAsc;
-                                SrcPos += 2;
-                            } while (!(SrcPos >= Src.Length));
+                                offSet = srcAsc;
+                                srcPos += 2;
+                            } while (!(srcPos >= src.Length));
                         }
                         catch (Exception)
                         {
@@ -1155,27 +1152,27 @@ namespace GameGate.Services
                         }
                         if (fMatch)
                         {
-                            LogQueue.Log($"[HandleLogin] Kicked 5: {sHumName}", 1);
+                            Logger.Log($"[ClientLogin] Kicked 5: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
                         HardwareHeader pHardwareHeader = Packets.ToPacket<HardwareHeader>(dest);
                         //todo session会话里面需要存用户ip
-                        LogQueue.Log($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {Addr}", 1);
+                        Logger.Log($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {addr}", 1);
                         if (pHardwareHeader.dwMagicCode == 0x13F13F13)
                         {
                             if (MD5.MD5Match(MD5.EmptyDigest, pHardwareHeader.xMd5Digest))
                             {
-                                LogQueue.Log($"[HandleLogin] Kicked 6: {sHumName}", 1);
+                                Logger.Log($"[ClientLogin] Kicked 6: {sHumName}", 1);
                                 SendKickMsg(4);
                                 return;
                             }
                             hardWareDigest = pHardwareHeader.xMd5Digest;
-                            bool OverClientCount = false;
-                            if (GateShare.HardwareFilter.IsFilter(hardWareDigest, ref OverClientCount))
+                            bool overClientCount = false;
+                            if (GateShare.HardwareFilter.IsFilter(hardWareDigest, ref overClientCount))
                             {
-                                LogQueue.Log($"[HandleLogin] Kicked 7: {sHumName}", 1);
-                                if (OverClientCount)
+                                Logger.Log($"[ClientLogin] Kicked 7: {sHumName}", 1);
+                                if (overClientCount)
                                 {
                                     SendKickMsg(5);
                                 }
@@ -1188,41 +1185,37 @@ namespace GameGate.Services
                         }
                         else
                         {
-                            LogQueue.Log($"[HandleLogin] Kicked 8: {sHumName}", 1);
+                            Logger.Log($"[ClientLogin] Kicked 8: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
                     }
-                    var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNO}/{szCode}/{MD5.MD5Print(hardWareDigest)}";
-                    // #0.........!
+                    var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNo}/{szCode}/{MD5.MD5Print(hardWareDigest)}";
                     var tempBuf = HUtil32.GetBytes(loginPacket);
                     Span<byte> pszLoginPacket = stackalloc byte[tempBuf.Length + 100];
-                    var encodelen = PacketEncoder.EncodeBuf(tempBuf, tempBuf.Length, pszLoginPacket, 2);
+                    var encodeLen = PacketEncoder.EncodeBuf(tempBuf, tempBuf.Length, pszLoginPacket, 2);
                     pszLoginPacket[0] = (byte)'#';
                     pszLoginPacket[1] = (byte)'0';
-                    pszLoginPacket[encodelen + 2] = (byte)'!';
-                    HandleLogin = true;
+                    pszLoginPacket[encodeLen + 2] = (byte)'!';
                     _session.Account = sAccount;
                     _session.ChrName = sHumName;
-                    SendLoginPacket(pszLoginPacket, encodelen + 3);
+                    SendLoginPacket(pszLoginPacket, encodeLen + 3);
                     success = true;
-
-                    var dyKey = $"{sAccount}";
-                    var secretKey = _authenticator.GenerateSetupCode("openmir2", dyKey, SessionKey, 5);
-                    LogQueue.Log($"动态密钥:{secretKey.AccountSecretKey}", 1);
-                    var code = secretKey.ManualEntryKey;
-                    LogQueue.Log($"动态验证码：{code}", 1);
-                    LogQueue.Log($"{_authenticator.DefaultClockDriftTolerance.TotalMilliseconds}秒后验证新的密钥,容错5秒.", 1);
+                    HandleLogin = true;
+                    /*var secretKey = _authenticator.GenerateSetupCode("openmir2", sAccount, SessionKey, 5);
+                    Logger.Log($"动态密钥:{secretKey.AccountSecretKey}", 1);
+                    Logger.Log($"动态验证码：{secretKey.ManualEntryKey}", 1);
+                    Logger.Log($"{_authenticator.DefaultClockDriftTolerance.TotalMilliseconds}秒后验证新的密钥,容错5秒.", 1);*/
                 }
                 else
                 {
-                    LogQueue.Log($"[ClientLogin] Kicked 2: {loginData}", 1);
+                    Logger.Log($"[ClientLogin] Kicked 2: {loginData}", 1);
                     success = false;
                 }
             }
             else
             {
-                LogQueue.Log($"[ClientLogin] Kicked 0: {loginData}", 1);
+                Logger.Log($"[ClientLogin] Kicked 0: {loginData}", 1);
                 success = false;
             }
         }
@@ -1270,7 +1263,7 @@ namespace GameGate.Services
             var tempBuf = new byte[1024];
             var sendBuf = new byte[1024];
             var clientPacket = new ClientMesaagePacket();
-            clientPacket.UID = m_nSvrObject;
+            clientPacket.UID = SvrObjectId;
             clientPacket.Cmd = Grobal2.SM_SYSMESSAGE;
             clientPacket.X = HUtil32.MakeWord(0xFF, 0xF9);
             clientPacket.Y = 0;
@@ -1291,7 +1284,7 @@ namespace GameGate.Services
         }
     }
 
-    public enum TCheckStep : byte
+    public enum CheckStep : byte
     {
         CheckLogin,
         SendCheck,
@@ -1305,11 +1298,11 @@ namespace GameGate.Services
         /// <summary>
         /// 是否速度限制
         /// </summary>
-        public bool SpeedLimit = false;
+        public bool SpeedLimit;
         /// <summary>
         /// 最高的人物身上所有装备+速度，默认6。
         /// </summary>
-        public int ItemSpeed = 0;
+        public int ItemSpeed;
         /// <summary>
         /// 玩家加速度装备因数，数值越小，封加速越严厉，默认60。
         /// </summary>
@@ -1317,7 +1310,7 @@ namespace GameGate.Services
         /// <summary>
         /// 加速的累计值
         /// </summary>
-        public int nErrorCount;
+        public int ErrorCount;
         /// <summary>
         /// 交易时间
         /// </summary>
@@ -1325,7 +1318,7 @@ namespace GameGate.Services
         /// <summary>
         /// 装备加速
         /// </summary>
-        public int m_nHitSpeed;
+        public int HitSpeed;
         /// <summary>
         /// 发言时间
         /// </summary>
@@ -1345,11 +1338,11 @@ namespace GameGate.Services
         /// <summary>
         /// 走路时间
         /// </summary>
-        public int dwWalkTick;
+        public int DwWalkTick;
         /// <summary>
         /// 跑步时间
         /// </summary>
-        public int dwRunTick;
+        public int DwRunTick;
         /// <summary>
         /// 转身时间
         /// </summary>
@@ -1373,85 +1366,85 @@ namespace GameGate.Services
         /// <summary>
         /// 移动时间
         /// </summary>
-        public int dwRunWalkTick;
+        public int DwRunWalkTick;
         /// <summary>
         /// 传送时间
         /// </summary>
-        public int dwFeiDnItemsTick;
+        public int DwFeiDnItemsTick;
         /// <summary>
         /// 变速齿轮时间
         /// </summary>
-        public int dwSupSpeederTick;
+        public int DwSupSpeederTick;
         /// <summary>
         /// 变速齿轮累计
         /// </summary>
-        public int dwSupSpeederCount;
+        public int DwSupSpeederCount;
         /// <summary>
         /// 超级加速时间
         /// </summary>
-        public int dwSuperNeverTick;
+        public int DwSuperNeverTick;
         /// <summary>
         /// 超级加速累计
         /// </summary>
-        public int dwSuperNeverCount;
+        public int DwSuperNeverCount;
         /// <summary>
         /// 记录上一次操作
         /// </summary>
-        public int dwUserDoTick;
+        public int DwUserDoTick;
         /// <summary>
         /// 保存停顿操作时间
         /// </summary>
-        public long dwContinueTick;
+        public long ContinueTick;
         /// <summary>
         /// 带有攻击并发累计
         /// </summary>
-        public int dwConHitMaxCount;
+        public int ConHitMaxCount;
         /// <summary>
         /// 带有魔法并发累计
         /// </summary>
-        public int dwConSpellMaxCount;
+        public int ConSpellMaxCount;
         /// <summary>
         /// 记录上一次移动方向
         /// </summary>
-        public int dwCombinationTick;
+        public int CombinationTick;
         /// <summary>
         /// 智能攻击累计
         /// </summary>
-        public int dwCombinationCount;
-        public long dwGameTick;
-        public int dwWaringTick;
+        public int CombinationCount;
+        public long GameTick;
+        public int WaringTick;
 
         public SessionSpeed()
         {
             var dwCurrentTick = HUtil32.GetTickCount();
-            nErrorCount = dwCurrentTick;
+            ErrorCount = dwCurrentTick;
             DealTick = dwCurrentTick;
-            m_nHitSpeed = dwCurrentTick;
+            HitSpeed = dwCurrentTick;
             SayMsgTick = dwCurrentTick;
             MoveTick = dwCurrentTick;
             AttackTick = dwCurrentTick;
             SpellTick = dwCurrentTick;
-            dwWalkTick = dwCurrentTick;
-            dwRunTick = dwCurrentTick;
+            DwWalkTick = dwCurrentTick;
+            DwRunTick = dwCurrentTick;
             TurnTick = dwCurrentTick;
             ButchTick = dwCurrentTick;
             SitDownTick = dwCurrentTick;
             EatTick = dwCurrentTick;
             PickupTick = dwCurrentTick;
-            dwRunWalkTick = dwCurrentTick;
-            dwFeiDnItemsTick = dwCurrentTick;
-            dwSupSpeederTick = dwCurrentTick;
-            dwSupSpeederCount = dwCurrentTick;
-            dwSuperNeverTick = dwCurrentTick;
-            dwSuperNeverCount = dwCurrentTick;
-            dwUserDoTick = dwCurrentTick;
-            dwContinueTick = dwCurrentTick;
-            dwConHitMaxCount = dwCurrentTick;
-            dwConSpellMaxCount = dwCurrentTick;
-            dwCombinationTick = dwCurrentTick;
-            dwCombinationCount = dwCurrentTick;
-            dwGameTick = dwCurrentTick;
-            dwWaringTick = dwCurrentTick;
+            DwRunWalkTick = dwCurrentTick;
+            DwFeiDnItemsTick = dwCurrentTick;
+            DwSupSpeederTick = dwCurrentTick;
+            DwSupSpeederCount = dwCurrentTick;
+            DwSuperNeverTick = dwCurrentTick;
+            DwSuperNeverCount = dwCurrentTick;
+            DwUserDoTick = dwCurrentTick;
+            ContinueTick = dwCurrentTick;
+            ConHitMaxCount = dwCurrentTick;
+            ConSpellMaxCount = dwCurrentTick;
+            CombinationTick = dwCurrentTick;
+            CombinationCount = dwCurrentTick;
+            GameTick = dwCurrentTick;
+            WaringTick = dwCurrentTick;
         }
     }
 }

@@ -1,4 +1,5 @@
 using GameGate.Services;
+using System;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -31,9 +32,9 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 将队列消息发送到客户端
+        /// 消息发送队列
         /// </summary>
-        public void ProcessSendQueue(CancellationToken stoppingToken)
+        public void StartProcessQueueSend(CancellationToken stoppingToken)
         {
             Task.Factory.StartNew(async () =>
             {
@@ -41,7 +42,15 @@ namespace GameGate
                 {
                     if (_sendQueue.Reader.TryRead(out ClientPacketQueueData sendPacket))
                     {
-                        ServerMgr.SendClientQueue(sendPacket.ConnectId, sendPacket.ThreadId, sendPacket.PacketBuffer);
+                        try
+                        {
+                            //todo 能不能直接让ClientSession然后循环处理
+                            ServerMgr.SendClientQueue(sendPacket.ConnectId, sendPacket.ThreadId, sendPacket.PacketBuffer);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.StackTrace);
+                        }
                     }
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
