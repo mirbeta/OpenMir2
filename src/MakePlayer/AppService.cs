@@ -58,21 +58,21 @@ namespace MakePlayer
                             var playClient = new PlayClient(_clientManager);
                             playClient.SessionId = Guid.NewGuid().ToString("N");
                             playClient.m_boNewAccount = _options.NewAccount;
-                            playClient.m_sLoginAccount = string.Concat(_options.LoginAccount, _loginIndex);
-                            playClient.m_sLoginPasswd = playClient.m_sLoginAccount;
-                            playClient.m_sChrName = playClient.m_sLoginAccount;
-                            playClient.m_sServerName = _options.ServerName;
+                            playClient.LoginAccount = string.Concat(_options.LoginAccount, _loginIndex);
+                            playClient.LoginPasswd = playClient.LoginAccount;
+                            playClient.ChrName = playClient.LoginAccount;
+                            playClient.ServerName = _options.ServerName;
                             //playClient.ClientSocket.Close();
                             playClient.ClientSocket.Host = _options.Address;
                             playClient.ClientSocket.Port = _options.Port;
-                            playClient.m_dwConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
+                            playClient.ConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
                             _clientManager.AddClient(playClient.SessionId, playClient);
                             _loginIndex++;
                         }
                     }
                 }
                 _clientManager.Run();
-                Thread.Sleep(TimeSpan.FromMilliseconds(50));
+                Thread.Sleep(TimeSpan.FromMilliseconds(500));
             }
         }
     }

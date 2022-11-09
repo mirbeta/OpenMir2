@@ -127,7 +127,7 @@ namespace MakePlayer
             for (var i = g_nPosition; i < _clients.Count; i++)
             {
                 _clientList[i].Run();
-                if (((HUtil32.GetTickCount() - dwRunTick) > 20))
+                if (((HUtil32.GetTickCount() - dwRunTick) > 50))
                 {
                     g_nPosition = i;
                     boProcessLimit = true;
