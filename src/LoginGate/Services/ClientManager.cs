@@ -162,9 +162,9 @@ namespace LoginGate.Services
         {
             if (clientThread.ConnectState)
             {
-                clientThread.SendPacket(new GatePacket()
+                clientThread.SendPacket(new ServerDataMessage()
                 {
-                    Type = PacketType.KeepAlive,
+                    Type = ServerDataType.KeepAlive,
                     SocketId = 0
                 });
                 clientThread.CheckServerFailCount = 1;

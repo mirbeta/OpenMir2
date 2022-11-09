@@ -4,6 +4,7 @@ using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SystemModule.Data;
 using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MySQL
@@ -52,7 +53,7 @@ namespace DBSvr.Storage.MySQL
                 using var dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    var DBRecord = new HumRecordData();
+                    var DBRecord = new PlayerRecordData();
                     DBRecord.Id = dr.GetInt32("Id");
                     DBRecord.sAccount = dr.GetString("Account");
                     DBRecord.sChrName = dr.GetString("ChrName");
@@ -60,12 +61,12 @@ namespace DBSvr.Storage.MySQL
                     DBRecord.Deleted = dr.GetBoolean("IsDeleted");
                     DBRecord.Header = new RecordHeader();
                     DBRecord.Header.sAccount = DBRecord.sAccount;
-                    DBRecord.Header.sName = DBRecord.sChrName;
+                    DBRecord.Header.Name = DBRecord.sChrName;
                     DBRecord.Header.Deleted = DBRecord.Deleted;
                     if (!DBRecord.Header.Deleted)
                     {
-                        _quickList.Add(DBRecord.Header.sName, DBRecord.Id);
-                        _indexQuickList.Add(DBRecord.Id, DBRecord.Header.sName);
+                        _quickList.Add(DBRecord.Header.Name, DBRecord.Id);
+                        _indexQuickList.Add(DBRecord.Id, DBRecord.Header.Name);
                         AccountList.Add(new PlayQuick()
                         {
                             Index = DBRecord.Id,
@@ -121,12 +122,12 @@ namespace DBSvr.Storage.MySQL
             return -1;
         }
 
-        public HumRecordData Get(int nIndex, ref bool success)
+        public PlayerRecordData Get(int nIndex, ref bool success)
         {
             return GetRecord(nIndex, ref success);
         }
 
-        private HumRecordData GetRecord(int nIndex, ref bool success)
+        private PlayerRecordData GetRecord(int nIndex, ref bool success)
         {
             var connSuccess = false;
             var connection = Open(ref connSuccess);
@@ -135,7 +136,7 @@ namespace DBSvr.Storage.MySQL
                 return default;
             }
             const string sSqlStrig = "select * from characters_indexes where Id=@Id";
-            HumRecordData humRecord = null;
+            PlayerRecordData humRecord = null;
             try
             {
                 var command = new MySqlCommand();
@@ -145,14 +146,14 @@ namespace DBSvr.Storage.MySQL
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
-                    humRecord = new HumRecordData();
+                    humRecord = new PlayerRecordData();
                     humRecord.sAccount = dr.GetString("Account");
                     humRecord.sChrName = dr.GetString("ChrName");
                     humRecord.Selected = (byte)dr.GetUInt32("SelectID");
                     humRecord.Deleted = dr.GetBoolean("IsDeleted");
                     humRecord.Header = new RecordHeader();
                     humRecord.Header.sAccount = humRecord.sAccount;
-                    humRecord.Header.sName = humRecord.sChrName;
+                    humRecord.Header.Name = humRecord.sChrName;
                     humRecord.Header.SelectID = humRecord.Selected;
                     humRecord.Header.Deleted = humRecord.Deleted;
                     success = true;
@@ -180,7 +181,7 @@ namespace DBSvr.Storage.MySQL
             return ChrList.Count;
         }
 
-        public HumRecordData GetBy(int nIndex, ref bool success)
+        public PlayerRecordData GetBy(int nIndex, ref bool success)
         {
             if (nIndex > 0) return GetRecord(nIndex, ref success);
             success = false;
@@ -211,7 +212,7 @@ namespace DBSvr.Storage.MySQL
             {
                 for (var i = 0; i < ChrList.Count; i++)
                 {
-                    HumRecordData HumDBRecord = GetBy(ChrList[i].Index, ref success);
+                    PlayerRecordData HumDBRecord = GetBy(ChrList[i].Index, ref success);
                     if (success && !HumDBRecord.Deleted)
                     {
                         result++;
@@ -221,12 +222,12 @@ namespace DBSvr.Storage.MySQL
             return result;
         }
 
-        public bool Add(HumRecordData HumRecord)
+        public bool Add(PlayerRecordData HumRecord)
         {
             bool result = false;
-            if (_quickList.ContainsKey(HumRecord.Header.sName))
+            if (_quickList.ContainsKey(HumRecord.Header.Name))
             {
-                if (_quickList[HumRecord.Header.sName] > 0)
+                if (_quickList[HumRecord.Header.Name] > 0)
                 {
                     return false;
                 }
@@ -246,7 +247,7 @@ namespace DBSvr.Storage.MySQL
                 }
                 if (UpdateRecord(HumRecord, true, ref nIndex))
                 {
-                    _quickList.Add(HumRecord.Header.sName, nIndex);
+                    _quickList.Add(HumRecord.Header.Name, nIndex);
                     _quickIdList.AddRecord(HumRecord.sAccount, HumRecord.sChrName, nIndex, HumRecord.Header.SelectID);
                     result = true;
                 }
@@ -261,7 +262,7 @@ namespace DBSvr.Storage.MySQL
         private const string InsertChrIndexes = "INSERT INTO characters_indexes (Account, ChrName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES (@Account, @ChrName, @SelectID, @IsDeleted, now(), now());";
         private const string UpdateChrIndexes = "UPDATE characters_indexes SET Account = @Account, ChrName = @ChrName, SelectID = @SelectID, IsDeleted = @IsDeleted,ModifyDate = now() WHERE Id = @Id;";
         
-        private bool UpdateRecord(HumRecordData HumRecord, bool boNew, ref int nIndex)
+        private bool UpdateRecord(PlayerRecordData HumRecord, bool boNew, ref int nIndex)
         {
             var connSuccess = false;
             var connection = Open(ref connSuccess);
@@ -272,7 +273,7 @@ namespace DBSvr.Storage.MySQL
             var result = false;
             try
             {
-                if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.sName)))
+                if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.Name)))
                 {
                     var command = new MySqlCommand();
                     command.Connection = connection;
@@ -330,7 +331,7 @@ namespace DBSvr.Storage.MySQL
                 _indexQuickList.Remove(nIndex);
                 result = true;
             }
-            HumRecordData HumRecord = Get(nIndex, ref result);
+            PlayerRecordData HumRecord = Get(nIndex, ref result);
             if (result)
             {
                 var n14 = _quickIdList.GetChrList(HumRecord.sAccount, ref ChrNameList);
@@ -373,7 +374,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        public bool Update(int nIndex, ref HumRecordData HumDBRecord)
+        public bool Update(int nIndex, ref PlayerRecordData HumDBRecord)
         {
             if (nIndex < 0)
             {
@@ -390,7 +391,7 @@ namespace DBSvr.Storage.MySQL
             return false;
         }
 
-        public void UpdateBy(int nIndex, ref HumRecordData HumDBRecord)
+        public void UpdateBy(int nIndex, ref PlayerRecordData HumDBRecord)
         {
             UpdateRecord(HumDBRecord, false, ref nIndex);
         }

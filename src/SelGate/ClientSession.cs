@@ -75,11 +75,11 @@ namespace SelGate
                 case Grobal2.CM_DELCHR:
                 case Grobal2.CM_SELCHR:
                     _clientTimeOutTick = HUtil32.GetTickCount();
-                    var accountPacket = new GatePacket();
+                    var accountPacket = new ServerDataMessage();
                     accountPacket.Body = userData.Body;
                     accountPacket.BuffLen = (byte)userData.Body.Length;
                     accountPacket.StartChar = '%';
-                    accountPacket.Type = PacketType.Data;
+                    accountPacket.Type = ServerDataType.Data;
                     accountPacket.SocketId = Session.SocketId;
                     accountPacket.EndChar = '$';
                     _lastDbSvr.SendSocket(accountPacket.GetBuffer());
@@ -186,11 +186,11 @@ namespace SelGate
         {
             var sendStr = $"%K{_session.SocketId}/{_session.ClientIP}/{_session.ClientIP}$";
             var body = HUtil32.GetBytes(sendStr);
-            var accountPacket = new GatePacket();
+            var accountPacket = new ServerDataMessage();
             accountPacket.Body = body;
             accountPacket.BuffLen = (short)body.Length;
             accountPacket.StartChar = '%';
-            accountPacket.Type = PacketType.Enter;
+            accountPacket.Type = ServerDataType.Enter;
             accountPacket.SocketId = Session.SocketId;
             accountPacket.EndChar = '$';
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());
@@ -208,11 +208,11 @@ namespace SelGate
             }
             var sendStr = $"%L{_session.SocketId}$";
             var body = HUtil32.GetBytes( sendStr);
-            var accountPacket = new GatePacket();
+            var accountPacket = new ServerDataMessage();
             accountPacket.Body = body;
             accountPacket.BuffLen = (short)body.Length;
             accountPacket.StartChar = '%';
-            accountPacket.Type = PacketType.Leave;
+            accountPacket.Type = ServerDataType.Leave;
             accountPacket.SocketId = Session.SocketId;
             accountPacket.EndChar = '$';
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());

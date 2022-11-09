@@ -1,37 +1,38 @@
 ﻿using ProtoBuf;
 using System.Runtime.Serialization;
+using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 
 namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
-    public class HumDataInfo
+    public class PlayerDataInfo
     {
         [ProtoMember(1)]
         public RecordHeader Header { get; set; }
         [ProtoMember(2)]
-        public HumInfoData Data { get; set; }
+        public PlayerInfoData Data { get; set; }
 
-        public HumDataInfo()
+        public PlayerDataInfo()
         {
             Header = new RecordHeader();
-            Data = new HumInfoData();
+            Data = new PlayerInfoData();
         }
     }
 
     [ProtoContract]
-    public class SaveHumDataPacket : CmdPacket
+    public class SavePlayerDataMessage : RequestPacket
     {
         [ProtoMember(1)]
         public string Account { get; set; }
         [ProtoMember(2)]
         public string ChrName { get; set; }
         [ProtoMember(3)]
-        public HumDataInfo HumDataInfo { get; set; }
+        public PlayerDataInfo HumDataInfo { get; set; }
     }
 
     [ProtoContract]
-    public class LoadHumDataPacket : CmdPacket
+    public class LoadPlayerDataMessage : RequestPacket
     {
         [ProtoMember(1)]
         public string Account { get; set; }
@@ -44,7 +45,7 @@ namespace SystemModule.Packet.ServerPackets
     }
 
     [ProtoContract]
-    public class HumInfoData
+    public class PlayerInfoData
     {
         [ProtoMember(1)]
         public byte ServerIndex;
@@ -87,7 +88,7 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(20)]
         public string MasterName;
         [ProtoMember(21)]
-        public bool boMaster;
+        public bool IsMaster;
         [ProtoMember(22)]
         public string DearName;
         [ProtoMember(23)]
@@ -151,7 +152,7 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(52, OverwriteList = true)]
         public MagicRcd[] Magic;
 
-        public HumInfoData()
+        public PlayerInfoData()
         {
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];

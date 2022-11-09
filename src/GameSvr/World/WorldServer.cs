@@ -1433,13 +1433,13 @@ namespace GameSvr.World
             {
                 return;
             }
-            var saveRcd = new TSaveRcd
+            var saveRcd = new SavePlayerRcd
             {
                 sAccount = playObject.UserID,
                 sChrName = playObject.ChrName,
                 nSessionID = playObject.m_nSessionID,
                 PlayObject = playObject,
-                HumanRcd = new HumDataInfo()
+                HumanRcd = new PlayerDataInfo()
             };
             MakeSaveRcd(playObject, ref saveRcd.HumanRcd);
             M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
@@ -1451,9 +1451,9 @@ namespace GameSvr.World
             PlayObjectFreeList.Add(playObject);
         }
 
-        private void GetHumData(PlayObject playObject, ref HumDataInfo humanRcd)
+        private void GetHumData(PlayObject playObject, ref PlayerDataInfo humanRcd)
         {
-            HumInfoData humData;
+            PlayerInfoData humData;
             UserItem[] humItems;
             UserItem[] bagItems;
             MagicRcd[] humMagic;
@@ -1493,7 +1493,7 @@ namespace GameSvr.World
             playObject.m_btCreditPoint = humData.CreditPoint;
             playObject.m_btReLevel = humData.ReLevel;
             playObject.m_sMasterName = humData.MasterName;
-            playObject.m_boMaster = humData.boMaster;
+            playObject.m_boMaster = humData.IsMaster;
             playObject.m_sDearName = humData.DearName;
             playObject.m_sStoragePwd = humData.StoragePwd;
             if (playObject.m_sStoragePwd != "")
@@ -1599,7 +1599,7 @@ namespace GameSvr.World
             }
         }
 
-        private void MakeSaveRcd(PlayObject playObject, ref HumDataInfo humanRcd)
+        private void MakeSaveRcd(PlayObject playObject, ref PlayerDataInfo humanRcd)
         {
             humanRcd.Data.ServerIndex = M2Share.ServerIndex;
             humanRcd.Data.ChrName = playObject.ChrName;
@@ -1637,7 +1637,7 @@ namespace GameSvr.World
             humanRcd.Data.CreditPoint = playObject.m_btCreditPoint;
             humanRcd.Data.ReLevel = playObject.m_btReLevel;
             humanRcd.Data.MasterName = playObject.m_sMasterName;
-            humanRcd.Data.boMaster = playObject.m_boMaster;
+            humanRcd.Data.IsMaster = playObject.m_boMaster;
             humanRcd.Data.DearName = playObject.m_sDearName;
             humanRcd.Data.GameGold = playObject.m_nGameGold;
             humanRcd.Data.GamePoint = playObject.m_nGamePoint;

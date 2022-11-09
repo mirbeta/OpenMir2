@@ -204,7 +204,7 @@ namespace LoginGate.Services
             }
         }
 
-        public void SendPacket(GatePacket packet)
+        public void SendPacket(ServerDataMessage packet)
         {
             packet.StartChar = '%';
             packet.EndChar = '$';

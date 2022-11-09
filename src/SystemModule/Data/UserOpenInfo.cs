@@ -6,6 +6,6 @@ namespace SystemModule.Data
     {
         public string sChrName;
         public LoadDBInfo LoadUser;
-        public HumDataInfo HumanRcd;
+        public PlayerDataInfo HumanRcd;
     }
 }

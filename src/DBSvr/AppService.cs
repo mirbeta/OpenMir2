@@ -11,9 +11,9 @@ namespace DBSvr
         private readonly ILogger<AppService> _logger;
         private readonly UserService _userSocService;
         private readonly LoginService _loginSvrService;
-        private readonly HumDataService _dataService;
+        private readonly PlayerDataService _dataService;
 
-        public AppService(ILogger<AppService> logger, UserService userSoc, LoginService idSoc, HumDataService dataService)
+        public AppService(ILogger<AppService> logger, UserService userSoc, LoginService idSoc, PlayerDataService dataService)
         {
             _logger = logger;
             _userSocService = userSoc;

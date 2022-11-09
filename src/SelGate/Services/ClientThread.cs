@@ -160,12 +160,12 @@ namespace SelGate.Services
             {
                 return;
             }
-            var packet = Packets.ToPacket<GatePacket>(e.Buff);
+            var packet = Packets.ToPacket<ServerDataMessage>(e.Buff);
             if (packet == null)
             {
                 return;
             }
-            if (packet.Type == PacketType.KeepAlive)
+            if (packet.Type == ServerDataType.KeepAlive)
             {
                 _logQueue.DebugLog("DBSvr Heartbeat Response");
                 CheckServerFail = false;
@@ -211,10 +211,10 @@ namespace SelGate.Services
 
         public void SendKeepAlive()
         {
-            var accountPacket = new GatePacket();
+            var accountPacket = new ServerDataMessage();
             accountPacket.Body = Array.Empty<byte>();
             accountPacket.StartChar = '%';
-            accountPacket.Type = PacketType.KeepAlive;
+            accountPacket.Type = ServerDataType.KeepAlive;
             accountPacket.SocketId = 0;
             accountPacket.EndChar = '$';
             SendSocket(accountPacket.GetBuffer());

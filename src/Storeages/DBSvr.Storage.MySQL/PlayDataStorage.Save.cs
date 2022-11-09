@@ -10,7 +10,7 @@ namespace DBSvr.Storage.MySQL
 {
     public partial class PlayDataStorage : IPlayDataStorage
     {
-        public bool Update(string chrName, HumDataInfo humanRcd)
+        public bool Update(string chrName, PlayerDataInfo humanRcd)
         {
             if (_NameQuickMap.TryGetValue(chrName, out var playerId))
             {
@@ -41,7 +41,7 @@ namespace DBSvr.Storage.MySQL
         /// todo 保存前要先获取一次数据，部分数据要进行对比
         /// </summary>
         /// <returns></returns>
-        private bool SaveRecord(int playerId, ref HumDataInfo humanRcd)
+        private bool SaveRecord(int playerId, ref PlayerDataInfo humanRcd)
         {
             using var context = new StorageContext(_storageOption);
             var success = false;
@@ -63,13 +63,13 @@ namespace DBSvr.Storage.MySQL
                 SaveBonusability(context, playerId, humanRcd.Data.BonusAbil);
                 SaveStatus(context, playerId, humanRcd.Data.StatusTimeArr);
                 context.Commit();
-                _logger.Debug($"保存角色[{humanRcd.Header.sName}]数据成功");
+                _logger.Debug($"保存角色[{humanRcd.Header.Name}]数据成功");
             }
             catch (Exception ex)
             {
                 result = false;
                 context.RollBack();
-                _logger.Error($"保存角色[{humanRcd.Header.sName}]数据失败. " + ex.Message);
+                _logger.Error($"保存角色[{humanRcd.Header.Name}]数据失败. " + ex.Message);
             }
             finally
             {
@@ -78,7 +78,7 @@ namespace DBSvr.Storage.MySQL
             return result;
         }
 
-        private void SaveRecord(StorageContext context, int playerId, HumInfoData hd)
+        private void SaveRecord(StorageContext context, int playerId, PlayerInfoData hd)
         {
             var strSql = new StringBuilder();
             strSql.AppendLine("UPDATE characters SET ServerIndex = @ServerIndex, LoginID = @LoginID,MapName = @MapName, CX = @CX, CY = @CY, Level = @Level, Dir = @Dir, Hair = @Hair, Sex = @Sex, Job = Job, Gold = @Gold, ");
@@ -120,7 +120,7 @@ namespace DBSvr.Storage.MySQL
             command.Parameters.AddWithValue("@AllowGroupReCall", hd.AllowGroup);
             command.Parameters.AddWithValue("@GroupRcallTime", hd.GroupRcallTime);
             command.Parameters.AddWithValue("@AllowGuildReCall", hd.AllowGuildReCall);
-            command.Parameters.AddWithValue("@IsMaster", hd.boMaster);
+            command.Parameters.AddWithValue("@IsMaster", hd.IsMaster);
             command.Parameters.AddWithValue("@MasterName", hd.MasterName);
             command.Parameters.AddWithValue("@DearName", hd.DearName);
             command.Parameters.AddWithValue("@StoragePwd", hd.StoragePwd);
@@ -205,7 +205,7 @@ namespace DBSvr.Storage.MySQL
         private void SaveItem(StorageContext context, int playerId, UserItem[] userItems)
         {
             var useSize = userItems.Length;
-            var playData = new HumDataInfo();
+            var playData = new PlayerDataInfo();
             GetItemRecord(playerId, context, ref playData);
             var oldItems = playData.Data.HumItems;
             var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
@@ -284,7 +284,7 @@ namespace DBSvr.Storage.MySQL
         {
             try
             {
-                var playData = new HumDataInfo();
+                var playData = new PlayerDataInfo();
                 GetBagItemRecord(playerId, context, ref playData);
                 var oldItems = playData.Data.BagItems;
                 var bagSize = bagItems.Length;
@@ -361,7 +361,7 @@ namespace DBSvr.Storage.MySQL
             try
             {
                 var storageSize = storageItems.Length;
-                var playData = new HumDataInfo();
+                var playData = new PlayerDataInfo();
                 GetStorageRecord(playerId, context, ref playData);
                 var oldItems = playData.Data.StorageItems;
                 var newItems = storageItems;
@@ -489,7 +489,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void SaveQuest(StorageContext context, int id, HumDataInfo humanRcd)
+        private void SaveQuest(StorageContext context, int id, PlayerDataInfo humanRcd)
         {
             const string sSqlStr4 = "DELETE FROM characters_quest WHERE PlayerId=@PlayerId";
             const string sSqlStr5 = "INSERT INTO characters_quest (PlayerId, QUESTOPENINDEX, QUESTFININDEX, QUEST) VALUES(@PlayerId, @QUESTOPENINDEX, @QUESTFININDEX, @QUEST)";

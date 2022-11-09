@@ -9,19 +9,19 @@ namespace GameSvr.Services
     {
         private readonly object m_UserCriticalSection;
         private IList<LoadDBInfo> m_LoadRcdList;
-        private readonly IList<TSaveRcd> m_SaveRcdList;
+        private readonly IList<SavePlayerRcd> m_SaveRcdList;
         private readonly IList<TGoldChangeInfo> m_ChangeGoldList;
         private IList<LoadDBInfo> m_LoadRcdTempList;
-        private readonly IList<TSaveRcd> m_SaveRcdTempList;
+        private readonly IList<SavePlayerRcd> m_SaveRcdTempList;
 
         public TFrontEngine()
         {
             m_UserCriticalSection = new object();
             m_LoadRcdList = new List<LoadDBInfo>();
-            m_SaveRcdList = new List<TSaveRcd>();
+            m_SaveRcdList = new List<SavePlayerRcd>();
             m_ChangeGoldList = new List<TGoldChangeInfo>();
             m_LoadRcdTempList = new List<LoadDBInfo>();
-            m_SaveRcdTempList = new List<TSaveRcd>();
+            m_SaveRcdTempList = new List<SavePlayerRcd>();
         }
 
         public void Start(CancellationToken stoppingToken)
@@ -155,16 +155,16 @@ namespace GameSvr.Services
             {
                 HUtil32.LeaveCriticalSection(m_UserCriticalSection);
             }
-            if (HumDataService.DBSocketConnected())
+            if (PlayerDataService.SocketConnected())
             {
                 for (var i = 0; i < m_SaveRcdTempList.Count; i++)
                 {
-                    TSaveRcd SaveRcd = m_SaveRcdTempList[i];
+                    SavePlayerRcd SaveRcd = m_SaveRcdTempList[i];
                     if (SaveRcd == null)
                     {
                         continue;
                     }
-                    if (HumDataService.SaveHumRcdToDB(SaveRcd.sAccount, SaveRcd.sChrName, SaveRcd.nSessionID, SaveRcd.HumanRcd) || SaveRcd.nReTryCount > 50)
+                    if (PlayerDataService.SaveHumRcdToDB(SaveRcd.sAccount, SaveRcd.sChrName, SaveRcd.nSessionID, SaveRcd.HumanRcd) || SaveRcd.nReTryCount > 50)
                     {
                         if (SaveRcd.PlayObject != null)
                         {
@@ -314,7 +314,7 @@ namespace GameSvr.Services
 
         private bool LoadHumFromDB(LoadDBInfo LoadUser, ref bool boReTry)
         {
-            HumDataInfo HumanRcd = null;
+            PlayerDataInfo HumanRcd = null;
             var result = false;
             boReTry = false;
             if (InSaveRcdList(LoadUser.ChrName))
@@ -328,7 +328,7 @@ namespace GameSvr.Services
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
-            if (!HumDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
+            if (!PlayerDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
             {
                 M2Share.GateMgr.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
             }
@@ -390,7 +390,7 @@ namespace GameSvr.Services
         /// <summary>
         /// 添加到保存队列中
         /// </summary>
-        public void AddToSaveRcdList(TSaveRcd SaveRcd)
+        public void AddToSaveRcdList(SavePlayerRcd SaveRcd)
         {
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
@@ -428,14 +428,14 @@ namespace GameSvr.Services
 
         private bool ChangeUserGoldInDB(TGoldChangeInfo GoldChangeInfo)
         {
-            HumDataInfo HumanRcd = null;
+            PlayerDataInfo HumanRcd = null;
             var result = false;
-            if (HumDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
+            if (PlayerDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
             {
                 if (HumanRcd.Data.Gold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.Gold + GoldChangeInfo.nGold < 2000000000)
                 {
                     HumanRcd.Data.Gold += GoldChangeInfo.nGold;
-                    if (HumDataService.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, HumanRcd))
+                    if (PlayerDataService.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, HumanRcd))
                     {
                         M2Share.WorldEngine.sub_4AE514(GoldChangeInfo);
                         result = true;

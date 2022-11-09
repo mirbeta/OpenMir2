@@ -3,10 +3,10 @@
 namespace SystemModule.Packet.ServerPackets
 {
     /// <summary>
-    /// 服务端消息
+    /// 服务消息头
     /// </summary>
     [ProtoContract]
-    public class ServerMessagePacket
+    public class ServerRequestMessage
     {
         [ProtoMember(1)] 
         public int Recog { get; set; }
@@ -19,11 +19,11 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(5)] 
         public ushort Series { get; set; }
 
-        public ServerMessagePacket()
+        public ServerRequestMessage()
         {
         }
 
-        public ServerMessagePacket(int ident, int recog, int param, int tag, int series)
+        public ServerRequestMessage(int ident, int recog, int param, int tag, int series)
         {
             Recog = recog;
             Ident = (ushort)ident;

@@ -11,14 +11,14 @@ namespace DBSvr.Storage
         /// <summary>
         /// 添加角色数据到内存缓存
         /// </summary>
-        void Add(string sChrName, HumDataInfo humDataInfo);
+        void Add(string sChrName, PlayerDataInfo humDataInfo);
 
         /// <summary>
         /// 从缓存取出角色数据
         /// </summary>
         /// <param name="sChrName"></param>
         /// <returns></returns>
-        HumDataInfo Get(string sChrName);
+        PlayerDataInfo Get(string sChrName);
 
         /// <summary>
         /// 从缓存删除角色数据
@@ -30,6 +30,6 @@ namespace DBSvr.Storage
         /// 从缓存取出所有角色数据
         /// </summary>
         /// <returns></returns>
-        IList<HumDataInfo> QueryCacheData();
+        IList<PlayerDataInfo> QueryCacheData();
     }
 }

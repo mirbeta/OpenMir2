@@ -31,9 +31,9 @@ namespace DBSvr.Storage.MySQL
             return false;
         }
 
-        public bool Add(HumDataInfo humanRcd)
+        public bool Add(PlayerDataInfo humanRcd)
         {
-            var sChrName = humanRcd.Header.sName;
+            var sChrName = humanRcd.Header.Name;
             if (CheckChrExists(sChrName))
             {
                 return false;
@@ -48,7 +48,7 @@ namespace DBSvr.Storage.MySQL
             return false;
         }
 
-        private bool AddRecord(ref int nIndex, ref HumDataInfo humanRcd)
+        private bool AddRecord(ref int nIndex, ref PlayerDataInfo humanRcd)
         {
             using var context = new StorageContext(_storageOption);
             var success = false;
@@ -87,7 +87,7 @@ namespace DBSvr.Storage.MySQL
             return result;
         }
 
-        private int CreateCharacters(StorageContext context, HumDataInfo humanRcd)
+        private int CreateCharacters(StorageContext context, PlayerDataInfo humanRcd)
         {
             var hd = humanRcd.Data;
             var strSql = new StringBuilder();
@@ -135,7 +135,7 @@ namespace DBSvr.Storage.MySQL
             command.Parameters.AddWithValue("@AllowGroupReCall", hd.AllowGroup);
             command.Parameters.AddWithValue("@GroupRcallTime", hd.GroupRcallTime);
             command.Parameters.AddWithValue("@AllowGuildReCall", hd.AllowGuildReCall);
-            command.Parameters.AddWithValue("@IsMaster", hd.boMaster);
+            command.Parameters.AddWithValue("@IsMaster", hd.IsMaster);
             command.Parameters.AddWithValue("@MasterName", hd.MasterName);
             command.Parameters.AddWithValue("@DearName", hd.DearName);
             command.Parameters.AddWithValue("@StoragePwd", hd.StoragePwd);
@@ -154,7 +154,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void CreateAblity(StorageContext context, int playerId, HumInfoData hd)
+        private void CreateAblity(StorageContext context, int playerId, PlayerInfoData hd)
         {
             try
             {
@@ -214,7 +214,7 @@ namespace DBSvr.Storage.MySQL
         private void CreateUseItem(StorageContext context, int playerId)
         {
             const string InsertUseItemSql = "INSERT INTO characters_item (PlayerId,Position,MakeIndex,StdIndex,Dura,DuraMax) VALUES (@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
-            var playData = new HumDataInfo();
+            var playData = new PlayerDataInfo();
             GetItemRecord(playerId, context, ref playData);
             var oldItems = playData.Data.HumItems;
             var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
@@ -266,7 +266,7 @@ namespace DBSvr.Storage.MySQL
         private void CreateBagItem(StorageContext context, int playerId)
         {
             const string InsertBagItemSql = "INSERT INTO characters_bagitem (PlayerId, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
-            var playData = new HumDataInfo();
+            var playData = new PlayerDataInfo();
             GetBagItemRecord(playerId, context, ref playData);
             var oldItems = playData.Data.BagItems;
             var bagItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
@@ -314,7 +314,7 @@ namespace DBSvr.Storage.MySQL
         private void CreateStorageItem(StorageContext context, int playerId)
         {
             const string InsertStorageItemSql = "INSERT INTO characters_storageitem (PlayerId, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
-            var playData = new HumDataInfo();
+            var playData = new PlayerDataInfo();
             GetStorageRecord(playerId, context, ref playData);
             var oldItems = playData.Data.StorageItems;
             var storageItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);

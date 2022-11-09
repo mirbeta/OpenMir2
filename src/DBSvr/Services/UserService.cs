@@ -10,6 +10,7 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
 using SystemModule.Logger;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
@@ -98,7 +99,7 @@ namespace DBSvr.Services
             }, stoppingToken);
         }
 
-        private void ProcessGateMsg(TGateInfo gateInfo, GatePacket packet)
+        private void ProcessGateMsg(TGateInfo gateInfo, ServerDataMessage packet)
         {
             var s0C = string.Empty;
             var sData = string.Empty;
@@ -111,12 +112,12 @@ namespace DBSvr.Services
             HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
             switch (packet.Type)
             {
-                case PacketType.KeepAlive:
+                case ServerDataType.KeepAlive:
                     _logger.DebugLog("Received SelGate Heartbeat.");
                     SendKeepAlivePacket(gateInfo.Socket);
                     //dwKeepAliveTick = HUtil32.GetTickCount();
                     break;
-                case PacketType.Data:
+                case ServerDataType.Data:
                     for (var i = 0; i < gateInfo.UserList.Count; i++)
                     {
                         var userInfo = gateInfo.UserList[i];
@@ -135,7 +136,7 @@ namespace DBSvr.Services
                         }
                     }
                     break;
-                case PacketType.Enter:
+                case ServerDataType.Enter:
                     sData = HUtil32.GetValidStr3(sData, ref s0C, HUtil32.Backslash);
                     OpenUser(packet.SocketId, sData, ref gateInfo);
                     /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
@@ -145,7 +146,7 @@ namespace DBSvr.Services
                         dwCheckUserSocTick = HUtil32.GetTickCount();
                     }*/
                     break;
-                case PacketType.Leave:
+                case ServerDataType.Leave:
                     CloseUser(packet.SocketId, ref gateInfo);
                     /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
                     if (dwCheckUserSocTimeMax < dwCheckUserSocTimeMin)
@@ -211,14 +212,14 @@ namespace DBSvr.Services
                 var nReviceLen = e.BytesReceived;
                 var data = new byte[nReviceLen];
                 Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                var packet = Packets.ToPacket<GatePacket>(data);
+                var packet = Packets.ToPacket<ServerDataMessage>(data);
                 if (packet == null)
                 {
                     _logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
                     continue;
                 }
                 var message = new UserMessage();
-                message.Packet = Packets.ToPacket<GatePacket>(data);
+                message.Packet = Packets.ToPacket<ServerDataMessage>(data);
                 message.GateInfo = GateList[i];
                 _reviceQueue.Writer.TryWrite(message);
             }
@@ -239,11 +240,11 @@ namespace DBSvr.Services
         private bool NewChrData(string sAccount, string sChrName, int nSex, int nJob, int nHair)
         {
             if (_playDataStorage.Index(sChrName) != -1) return false;
-            var chrRecord = new HumDataInfo();
+            var chrRecord = new PlayerDataInfo();
             chrRecord.Header = new RecordHeader();
-            chrRecord.Header.sName = sChrName;
+            chrRecord.Header.Name = sChrName;
             chrRecord.Header.sAccount = sAccount;
-            chrRecord.Data = new HumInfoData();
+            chrRecord.Data = new PlayerInfoData();
             chrRecord.Data.ChrName = sChrName;
             chrRecord.Data.Account = sAccount;
             chrRecord.Data.Sex = (byte)nSex;
@@ -375,8 +376,8 @@ namespace DBSvr.Services
 
         private void SendKeepAlivePacket(Socket socket)
         {
-            var gataPacket = new GatePacket();
-            gataPacket.Type = PacketType.KeepAlive;
+            var gataPacket = new ServerDataMessage();
+            gataPacket.Type = ServerDataType.KeepAlive;
             gataPacket.SocketId = 0;
             SendPacket(socket, gataPacket);
         }
@@ -736,12 +737,12 @@ namespace DBSvr.Services
                 }
                 if (_playRecordStorage.ChrCountOfAccount(sAccount) < 2)
                 {
-                    var humRecord = new HumRecordData();
+                    var humRecord = new PlayerRecordData();
                     humRecord.sChrName = sChrName;
                     humRecord.sAccount = sAccount;
                     humRecord.Deleted = false;
                     humRecord.Header = new RecordHeader();
-                    humRecord.Header.sName = sChrName;
+                    humRecord.Header.Name = sChrName;
                     humRecord.Header.SelectID = userInfo.nSelGateID;
                     if (!_playRecordStorage.Add(humRecord))
                     {
@@ -899,11 +900,11 @@ namespace DBSvr.Services
 
         private void SendUserSocket(Socket socket, int sessionId, string sSendMsg)
         {
-            var packet = new GatePacket();
+            var packet = new ServerDataMessage();
             packet.SocketId = sessionId;
             packet.Body = HUtil32.GetBytes("#" + sSendMsg + "!");
             packet.BuffLen = (short)packet.Body.Length;
-            packet.Type = PacketType.Data;
+            packet.Type = ServerDataType.Data;
             SendPacket(socket, packet);
         }
 
@@ -925,7 +926,7 @@ namespace DBSvr.Services
             return result;
         }
 
-        private void SendPacket(Socket socket, GatePacket packet)
+        private void SendPacket(Socket socket, ServerDataMessage packet)
         {
             if (!socket.Connected)
                 return;
@@ -937,7 +938,7 @@ namespace DBSvr.Services
 
     public class UserMessage
     {
-        public GatePacket Packet;
+        public ServerDataMessage Packet;
         public TGateInfo GateInfo;
     }
 }

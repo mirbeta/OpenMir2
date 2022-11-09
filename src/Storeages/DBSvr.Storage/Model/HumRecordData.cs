@@ -1,8 +1,9 @@
-﻿using SystemModule.Packet.ServerPackets;
+﻿using SystemModule.Data;
+using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.Model
 {
-    public class HumRecordData
+    public class PlayerRecordData
     {
         public int Id;
         public RecordHeader Header;

@@ -1,12 +1,11 @@
 using System;
 using System.IO;
 using ProtoBuf;
-using SystemModule.Packet.ClientPackets;
 
 namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
-    public class RequestServerPacket : Packets
+    public class ServerRequestData : Packets
     {
         private int packlen;
 
@@ -37,7 +36,7 @@ namespace SystemModule.Packet.ServerPackets
 
         private const int ByteSize = 1 + 4 + 4 + 2 + 2 + 2 + 1;
 
-        public RequestServerPacket()
+        public ServerRequestData()
         {
 
         }
@@ -87,11 +86,11 @@ namespace SystemModule.Packet.ServerPackets
     }
 
     [ProtoContract]
-    public class LoadHumanRcdResponsePacket
+    public class LoadPlayerDataPacket
     {
         [ProtoMember(1)]
-        public string sChrName { get; set; }
+        public string ChrName { get; set; }
         [ProtoMember(2)]
-        public HumDataInfo HumDataInfo { get; set; }
+        public PlayerDataInfo HumDataInfo { get; set; }
     }
 }

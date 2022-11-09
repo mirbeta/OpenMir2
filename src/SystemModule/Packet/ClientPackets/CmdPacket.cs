@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Packet.ClientPackets
 {
-    public class CmdPacket
+    public class RequestPacket
     {
 
     }
