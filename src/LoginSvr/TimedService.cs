@@ -62,6 +62,21 @@ namespace LoginSvr
                             builder.Append("Game/");
                         }
                         builder.Append($"Online:{msgServer.OnlineCount}/");
+                        switch (msgServer.PayMentMode)
+                        {
+                            case 0:
+                                builder.Append("免费/");
+                                break;
+                            case 1:
+                                builder.Append("试玩/");
+                                break;
+                            case 2:
+                                builder.Append("测试/");
+                                break;
+                            case 3:
+                                builder.Append("付费/");
+                                break;
+                        }
                         if ((HUtil32.GetTickCount() - msgServer.KeepAliveTick) < 30000)
                         {
                             builder.Append("正常");

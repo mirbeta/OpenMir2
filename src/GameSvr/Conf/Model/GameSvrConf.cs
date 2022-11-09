@@ -40,6 +40,14 @@ namespace GameSvr.Conf.Model
         /// </summary>
         public bool ServiceMode;
         /// <summary>
+        /// 服务器付费模式
+        /// 0:免费
+        /// 1:试玩
+        /// 2:测试
+        /// 3:付费
+        /// </summary>
+        public byte PayMentMode;
+        /// <summary>
         /// PEV模式
         /// </summary>
         public bool PveServer;
@@ -1030,6 +1038,7 @@ namespace GameSvr.Conf.Model
             nServerNumber = 0;
             VentureServer = false;
             TestServer = true;
+            PayMentMode = 1;
             ServiceMode = false;
             PveServer = false;
             TestLevel = 1;

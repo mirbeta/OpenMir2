@@ -31,7 +31,6 @@ namespace LoginSvr.Conf
         {
             Load();
             Config = new Config();
-            Config.SessionList = new List<TConnInfo>();
             Config.ServerNameList = new List<string>();
         }
 
@@ -54,7 +53,6 @@ namespace LoginSvr.Conf
             Config.ConnctionString = LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
             Config.ShowLogLevel = ReadInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
             Config.ShowDebugLog = ReadBool("Server", "ShowDebugLog", Config.ShowDebugLog);
-            Config.PayMode = ReadInteger("Server", "PayMode", Config.PayMode);
         }
 
         private string LoadConfigString(string sSection, string sIdent, string sDefault)
@@ -76,8 +74,7 @@ namespace LoginSvr.Conf
         private int LoadConfigInteger(string sSection, string sIdent, int nDefault)
         {
             int result;
-            int nLoadInteger;
-            nLoadInteger = ReadInteger(sSection, sIdent, -1);
+            var nLoadInteger = ReadInteger(sSection, sIdent, -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger(sSection, sIdent, nDefault);
@@ -93,8 +90,7 @@ namespace LoginSvr.Conf
         private bool LoadConfigBoolean(string sSection, string sIdent, bool boDefault)
         {
             bool result;
-            int nLoadInteger;
-            nLoadInteger = ReadInteger(sSection, sIdent, -1);
+            var nLoadInteger = ReadInteger(sSection, sIdent, -1);
             if (nLoadInteger < 0)
             {
                 WriteBool(sSection, sIdent, boDefault);

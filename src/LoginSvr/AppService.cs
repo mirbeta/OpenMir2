@@ -41,14 +41,6 @@ namespace LoginSvr
             _loginService.StartServer();
             _masSocService.StartServer();
             _accountStorage.Initialization();
-            if (_configManager.Config.PayMode == 1)
-            {
-                _logger.LogInformation("当前游戏付费模式:收费模式");
-            }
-            else
-            {
-                _logger.LogInformation("当前游戏付费模式:免费模式");
-            }
             return base.StartAsync(cancellationToken);
         }
 

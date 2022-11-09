@@ -2281,7 +2281,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKPAYMENT);
                 return result;
             }
-            if (PlayObject.m_nPayMent == nPayMent)
+            if (PlayObject.PayMent == nPayMent)
             {
                 result = true;
             }

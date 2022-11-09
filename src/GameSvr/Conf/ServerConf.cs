@@ -46,6 +46,11 @@ namespace GameSvr.Conf
             if (ReadString("Server", "VentureServer", "") == "")
                 WriteString("Server", "VentureServer", HUtil32.BoolToStr(M2Share.Config.VentureServer));
             M2Share.Config.VentureServer = string.Compare(ReadString("Server", "VentureServer", "FALSE"), "TRUE", StringComparison.OrdinalIgnoreCase) == 0;
+            
+            if (ReadInteger("Server", "PayMentMode", -1) == -1)
+                WriteInteger("Server", "PayMentMode", M2Share.Config.PayMentMode);
+            M2Share.Config.PayMentMode = (byte)ReadInteger("Server", "PayMentMode", M2Share.Config.PayMentMode);
+            
             if (ReadString("Server", "TestServer", "") == "")
                 WriteString("Server", "TestServer", HUtil32.BoolToStr(M2Share.Config.TestServer));
             M2Share.Config.TestServer = string.Compare(ReadString("Server", "TestServer", "FALSE"), "TRUE", StringComparison.OrdinalIgnoreCase) == 0;

@@ -2,18 +2,8 @@
 
 namespace LoginSvr.Conf
 {
-    public class AccountOption
-    {
-
-    }
-
     public class Config
     {
-        /// <summary>
-        /// 账号付费模式(0:免费 1:收费)
-        /// 收费模式(0:免费 1:点卡 2:月卡 3:试玩 4:永久免费)
-        /// </summary>
-        public int PayMode;
         /// <summary>
         /// 是否显示调试日志
         /// </summary>
@@ -44,7 +34,6 @@ namespace LoginSvr.Conf
         /// </summary>
         public bool EnableMakingID;
         public bool DynamicIPMode;
-        public IList<TConnInfo> SessionList;
         public IList<string> ServerNameList;
         public int RouteCount;
         public GateRoute[] GateRoute;
@@ -52,7 +41,6 @@ namespace LoginSvr.Conf
 
         public Config()
         {
-            PayMode = 0;
             sDBServer = "127.0.0.1";
             nDBSPort = 16300;
             sFeeServer = "127.0.0.1";

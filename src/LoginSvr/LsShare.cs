@@ -162,6 +162,7 @@ namespace LoginSvr
         public int AccountId;
         public int ErrorCount;
         public int ActionTick;
+        public int PayModel;
         public long PlayTime;
         public UserEntry UserEntry;
         public UserEntryAdd UserEntryAdd;
@@ -189,17 +190,18 @@ namespace LoginSvr
         }
     }
 
-    public class TConnInfo
+    public class SessionConnInfo
     {
         public string Account;
         public string IPaddr;
         public string ServerName;
         public int SessionID;
         public bool boPayCost;
-        public bool bo11;
+        public bool IsPayMent;
+        public byte PayMenMode;
         public long dwKickTick;
         public long dwStartTick;
-        public bool boKicked;
+        public bool Kicked;
         public int nLockCount;
     }
 
@@ -250,6 +252,5 @@ namespace LoginSvr
         public bool SelServer;
         public Socket Socket;
         public long ClientTick;
-        public GateInfo Gate;
     }
 }

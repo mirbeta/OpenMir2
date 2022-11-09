@@ -40,7 +40,7 @@
 		<Optimize>True</Optimize>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' ">
-	  <ExternalConsole>true</ExternalConsole>
+		<ExternalConsole>true</ExternalConsole>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Collections.Pooled" Version="1.0.82" />
@@ -66,7 +66,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
 	</ItemGroup>

@@ -71,9 +71,12 @@ namespace GameSvr.Player
         /// </summary>
         public int m_nSessionID = 0;
         /// <summary>
-        /// 人物当前模式(测试/付费模式)
+        /// 人物当前付费模式
+        /// 1:试玩
+        /// 2:付费
+        /// 3:测试
         /// </summary>
-        public int m_nPayMent;
+        public int PayMent;
         public int m_nPayMode = 0;
         /// <summary>
         /// 全局会话信息
@@ -700,7 +703,7 @@ namespace GameSvr.Player
                 }
                 if (M2Share.Config.TestServer || M2Share.Config.ServiceMode)
                 {
-                    m_nPayMent = 3;
+                    PayMent = 3;
                 }
                 MapMoveTick = HUtil32.GetTickCount();
                 m_dLogonTime = DateTime.Now;
@@ -925,7 +928,7 @@ namespace GameSvr.Player
                     }
                 }
                 RefShowName();
-                if (m_nPayMent == 1)
+                if (PayMent == 1)
                 {
                     if (!bo6AB)
                     {
@@ -939,7 +942,7 @@ namespace GameSvr.Player
                         m_boEmergencyClose = true;
                     }
                 }
-                if (m_nPayMent == 3 && !bo6AB)
+                if (PayMent == 3 && !bo6AB)
                 {
                     SysMsg(M2Share.g_sNowIsFreePlayMode, MsgColor.Green, MsgType.Hint);
                 }
