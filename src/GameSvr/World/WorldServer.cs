@@ -518,7 +518,7 @@ namespace GameSvr.World
                 playObject.m_nGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
                 playObject.m_nGateIdx = userOpenInfo.LoadUser.nGateIdx;
                 playObject.m_nSessionID = userOpenInfo.LoadUser.nSessionID;
-                playObject.m_nPayMent = userOpenInfo.LoadUser.nPayMent;
+                playObject.PayMent = userOpenInfo.LoadUser.nPayMent;
                 playObject.m_nPayMode = userOpenInfo.LoadUser.nPayMode;
                 playObject.ExpireTime = userOpenInfo.LoadUser.PlayTime;
                 playObject.ExpireCount = (int)Math.Round(TimeSpan.FromSeconds(playObject.ExpireTime).TotalMinutes, 1);

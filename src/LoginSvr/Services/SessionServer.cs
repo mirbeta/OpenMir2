@@ -21,7 +21,6 @@ namespace LoginSvr.Services
         private readonly MirLogger _logger;
         private readonly IList<ServerSessionInfo> _serverList = null;
         private readonly SocketServer _serverSocket;
-        private readonly ConfigManager _configManager;
         private readonly AccountStorage _accountStorage;
         private readonly Config _config;
         private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
@@ -29,7 +28,7 @@ namespace LoginSvr.Services
         public SessionServer(MirLogger logger, ConfigManager configManager, AccountStorage accountStorage)
         {
             _logger = logger;
-            _configManager = configManager;
+            _config = configManager.Config;
             _accountStorage = accountStorage;
             _serverList = new List<ServerSessionInfo>();
             _serverSocket = new SocketServer(byte.MaxValue, 512);
@@ -37,7 +36,6 @@ namespace LoginSvr.Services
             _serverSocket.OnClientDisconnect += SocketClientDisconnect;
             _serverSocket.OnClientError += SocketClientError;
             _serverSocket.OnClientRead += SocketClientRead;
-            _config = _configManager.Config;
         }
 
         public IList<ServerSessionInfo> ServerList => _serverList;
@@ -69,6 +67,7 @@ namespace LoginSvr.Services
                 msgServer.ReceiveMsg = string.Empty;
                 msgServer.Socket = e.Socket;
                 msgServer.EndPoint = e.EndPoint;
+                msgServer.SessionList = new List<SessionConnInfo>();
                 _serverList.Add(msgServer);
                 _logger.DebugLog($"{e.EndPoint}链接成功.");
             }
@@ -83,18 +82,18 @@ namespace LoginSvr.Services
         {
             for (var i = 0; i < _serverList.Count; i++)
             {
-                var MsgServer = _serverList[i];
-                if (MsgServer.Socket == e.Socket)
+                var msgServer = _serverList[i];
+                if (msgServer.Socket == e.Socket)
                 {
-                    if (MsgServer.ServerIndex == 99)
+                    if (msgServer.ServerIndex == 99)
                     {
-                        _logger.LogWarning($"[{MsgServer.ServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.LogWarning($"[{msgServer.ServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
                     else
                     {
-                        _logger.LogWarning($"[{MsgServer.ServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.LogWarning($"[{msgServer.ServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
                     }
-                    MsgServer = null;
+                    msgServer = null;
                     _serverList.RemoveAt(i);
                     break;
                 }
@@ -115,6 +114,7 @@ namespace LoginSvr.Services
             var sServerName = string.Empty;
             var sIndex = string.Empty;
             var sOnlineCount = string.Empty;
+            var sPayMentMode = string.Empty;
             for (var i = 0; i < _serverList.Count; i++)
             {
                 var msgServer = _serverList[i];
@@ -137,16 +137,17 @@ namespace LoginSvr.Services
                         {
                             case Grobal2.SS_SOFTOUTSESSION:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
-                                CloseUser(sAccount, HUtil32.StrToInt(sMsg, 0));
+                                CloseUser(msgServer, sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
                             case Grobal2.SS_SERVERINFO:
-                                //todo 目前的收费/免费模式存在瑕疵，只能同一时间内免费或者收费，应该改成由GameSvr同步过来告诉账号中心计费模式
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sIndex, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sOnlineCount, new[] { "/" });
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sPayMentMode, new[] { "/" });
                                 msgServer.ServerName = sServerName;
                                 msgServer.ServerIndex = HUtil32.StrToInt(sIndex, 0);
                                 msgServer.OnlineCount = HUtil32.StrToInt(sOnlineCount, 0);
+                                msgServer.PayMentMode = HUtil32.StrToInt(sPayMentMode, 0); // 由GameSvr同步过来告诉账号中心计费模式
                                 msgServer.KeepAliveTick = HUtil32.GetTickCount();
                                 SortServerList(i);
                                 LsShare.OnlineCountMin = GetOnlineHumCount();
@@ -160,15 +161,15 @@ namespace LoginSvr.Services
                             case Grobal2.ISM_GAMETIMEOFTIMECARDUSER:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
-                                ChanggePlayTimeUser(sServerName, sAccount, HUtil32.StrToInt(sMsg, 0));
+                                ChanggePlayTimeUser(msgServer, sServerName, sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
                             case Grobal2.ISM_QUERYACCOUNTEXPIRETIME:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
-                                QueryPlayTime(sAccount);
+                                QueryPlayTime(msgServer, sAccount);
                                 break;
                             case Grobal2.ISM_CHECKTIMEACCOUNT:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
-                                CheckTimeAccount(sAccount);
+                                CheckTimeAccount(msgServer, sAccount);
                                 break;
                             case Grobal2.UNKNOWMSG:
                                 SendServerMsgA(Grobal2.UNKNOWMSG, sMsg);
@@ -186,13 +187,13 @@ namespace LoginSvr.Services
         /// <summary>
         /// 查询账号剩余游戏时间
         /// </summary>
-        private void QueryPlayTime(string account)
+        private void QueryPlayTime(ServerSessionInfo serverInfo, string account)
         {
             if (string.IsNullOrEmpty(account))
             {
                 return;
             }
-            if (_config.PayMode == 0)
+            if (serverInfo.PayMentMode < 3)
             {
                 return;
             }
@@ -217,9 +218,9 @@ namespace LoginSvr.Services
         /// <summary>
         /// 减少或更新账号游戏时间
         /// </summary>
-        private void ChanggePlayTimeUser(string serverName, string account, int gameTime)
+        private void ChanggePlayTimeUser(ServerSessionInfo serverInfo, string serverName, string account, int gameTime)
         {
-            if (_config.PayMode == 0)
+            if (serverInfo.PayMentMode < 3)
             {
                 return;
             }
@@ -271,14 +272,13 @@ namespace LoginSvr.Services
         /// <summary>
         /// 检查账号游戏时间
         /// </summary>
-        /// <param name="account"></param>
-        private void CheckTimeAccount(string account)
+        private void CheckTimeAccount(ServerSessionInfo serverInfo, string account)
         {
             if (string.IsNullOrEmpty(account))
             {
                 return;
             }
-            if (_config.PayMode == 0)
+            if (serverInfo.PayMentMode < 3)
             {
                 return;
             }
@@ -307,17 +307,16 @@ namespace LoginSvr.Services
             SendServerMsg(Grobal2.ISM_ACCOUNTEXPIRED, certUser.ServerName, certUser.LoginID + "/" + certUser.Certification);
         }
 
-        private void CloseUser(string account, int sessionId)
+        private void CloseUser(ServerSessionInfo serverInfo, string account, int sessionId)
         {
-            var config = _configManager.Config;
-            for (var i = config.SessionList.Count - 1; i >= 0; i--)
+            for (var i = serverInfo.SessionList.Count - 1; i >= 0; i--)
             {
-                var connInfo = config.SessionList[i];
+                var connInfo = serverInfo.SessionList[i];
                 if ((connInfo.Account == account) || (connInfo.SessionID == sessionId))
                 {
                     SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
                     connInfo = null;
-                    config.SessionList.RemoveAt(i);
+                    serverInfo.SessionList.RemoveAt(i);
                 }
             }
         }
@@ -365,21 +364,27 @@ namespace LoginSvr.Services
         /// </summary>
         public void SessionClearNoPayMent()
         {
-            //todo 判断服务器是否开启收费模式
-            for (var i = _config.SessionList.Count - 1; i >= 0; i--)
+            for (int i = 0; i < _serverList.Count; i++)
             {
-                var connInfo = _config.SessionList[i];
-                if (!connInfo.boKicked && !_config.TestServer && !connInfo.bo11)
+                var sessionServer = _serverList[i];
+                if (sessionServer.PayMentMode == 3)
                 {
-                    if (HUtil32.GetTickCount() - connInfo.dwStartTick > 60 * 60 * 1000)
+                    for (var j = sessionServer.SessionList.Count - 1; j >= 0; j--)
                     {
-                        connInfo.dwStartTick = HUtil32.GetTickCount();
-                        // if (!IsPayMent(config, connInfo.IPaddr, connInfo.Account))
-                        // {
-                        //     SendServerMsg(Grobal2.SS_KICKUSER, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
-                        //     _config.SessionList[i] = null;
-                        //     _config.SessionList.RemoveAt(i);
-                        // }
+                        var connInfo = sessionServer.SessionList[j];
+                        if (!connInfo.Kicked && !_config.TestServer && !connInfo.IsPayMent)
+                        {
+                            if (HUtil32.GetTickCount() - connInfo.dwStartTick > 60 * 60 * 1000)
+                            {
+                                connInfo.dwStartTick = HUtil32.GetTickCount();
+                                if (!connInfo.IsPayMent) //todo 完善处理方式，如果游戏是付费，但账号是免费模式则需要额外处理
+                                {
+                                    SendServerMsg(Grobal2.SS_KICKUSER, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
+                                    sessionServer.SessionList[j] = null;
+                                    sessionServer.SessionList.RemoveAt(j);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -662,6 +667,18 @@ namespace LoginSvr.Services
         public int SelectID;
         public int KeepAliveTick;
         public string IPaddr;
+        /// <summary>
+        /// 服务器付费模式
+        /// 0:免费
+        /// 1:试玩
+        /// 2:测试
+        /// 3:付费
+        /// </summary>
+        public int PayMentMode;
+        /// <summary>
+        /// 会话列表
+        /// </summary>
+        public IList<SessionConnInfo> SessionList;
     }
 
     public struct LimitServerUserInfo

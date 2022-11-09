@@ -1611,7 +1611,7 @@ namespace GameSvr.Player
             {
                 HUtil32.GetValidStr3(sMsg, ref sMsg, new[] { " " });
             }
-            if (m_nPayMent == 1 && !M2Share.Config.TryModeUseStorage)
+            if (PayMent == 1 && !M2Share.Config.TryModeUseStorage)
             {
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
@@ -1661,7 +1661,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (m_nPayMent == 1 && !M2Share.Config.TryModeUseStorage)
+            if (PayMent == 1 && !M2Share.Config.TryModeUseStorage)
             {
                 // '试玩模式不可以使用仓库功能!!!'
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);

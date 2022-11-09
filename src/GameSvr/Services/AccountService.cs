@@ -120,8 +120,8 @@ namespace GameSvr.Services
 
         public void SendOnlineHumCountMsg(int nCount)
         {
-            const string sFormatMsg = "({0}/{1}/{2}/{3})";
-            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.Config.ServerName, M2Share.ServerIndex, nCount));
+            const string sFormatMsg = "({0}/{1}/{2}/{3}/{4})";
+            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.Config.ServerName, M2Share.ServerIndex, nCount, M2Share.Config.PayMentMode));
         }
 
         public void SendUserPlayTime(string account,long playTime)

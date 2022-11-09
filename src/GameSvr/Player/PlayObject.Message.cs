@@ -33,19 +33,22 @@ namespace GameSvr.Player
                         DealCancel();
                     }
                 }
-                if (HUtil32.GetTickCount() - AccountExpiredTick > QueryExpireTick)//一分钟查询一次账号游戏到期时间
+                if (M2Share.Config.PayMentMode == 3)
                 {
-                    ExpireTime = ExpireTime - 60;//游戏时间减去一分钟
-                    IdSrvClient.Instance.SendUserPlayTime(UserID, ExpireTime);
-                    AccountExpiredTick = HUtil32.GetTickCount();
-                    CheckExpiredTime();
-                }
-                if (AccountExpired)
-                {
-                    SysMsg(sPayMentExpire, MsgColor.Red, MsgType.Hint);
-                    SysMsg(sDisConnectMsg, MsgColor.Red, MsgType.Hint);
-                    m_boEmergencyClose = true;
-                    AccountExpired = false;
+                    if (HUtil32.GetTickCount() - AccountExpiredTick > QueryExpireTick)//一分钟查询一次账号游戏到期时间
+                    {
+                        ExpireTime = ExpireTime - 60;//游戏时间减去一分钟
+                        IdSrvClient.Instance.SendUserPlayTime(UserID, ExpireTime);
+                        AccountExpiredTick = HUtil32.GetTickCount();
+                        CheckExpiredTime();
+                    }
+                    if (AccountExpired)
+                    {
+                        SysMsg(sPayMentExpire, MsgColor.Red, MsgType.Hint);
+                        SysMsg(sDisConnectMsg, MsgColor.Red, MsgType.Hint);
+                        m_boEmergencyClose = true;
+                        AccountExpired = false;
+                    }
                 }
                 if (FireHitSkill && (HUtil32.GetTickCount() - LatestFireHitTick) > 20 * 1000)
                 {

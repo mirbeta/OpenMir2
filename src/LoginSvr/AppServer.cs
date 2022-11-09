@@ -45,8 +45,9 @@ namespace LoginSvr
             services.AddSingleton<MirLogger>();
             services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
             services.AddSingleton<SessionServer>();
-            services.AddSingleton<LoginServer>();
             services.AddSingleton<ClientSession>();
+            services.AddSingleton<SessionManager>();
+            services.AddSingleton<LoginServer>();
             services.AddSingleton<ClientManager>();
             services.AddSingleton<AccountStorage>();
             services.AddHostedService<TimedService>();

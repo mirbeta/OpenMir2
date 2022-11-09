@@ -1,6 +1,7 @@
 using LoginSvr.Conf;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
@@ -31,13 +32,15 @@ namespace LoginSvr.Services
         private readonly Config _config;
         private readonly ClientSession _clientSession;
         private readonly ClientManager _clientManager;
+        private readonly SessionManager _sessionManager;
         private readonly Channel<LoginPacket> _messageQueue;
 
-        public LoginServer(MirLogger logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager)
+        public LoginServer(MirLogger logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager, SessionManager sessionManager)
         {
             _logger = logger;
             _clientSession = clientSession;
             _clientManager = clientManager;
+            _sessionManager = sessionManager;
             _config = configManager.Config;
             _messageQueue = Channel.CreateUnbounded<LoginPacket>();
             _serverSocket = new SocketServer(short.MaxValue, 2048);
@@ -58,7 +61,7 @@ namespace LoginSvr.Services
         {
             var gateInfo = new GateInfo();
             gateInfo.Socket = e.Socket;
-            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, e.RemoteIPaddr);
+            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, e.RemoteIPaddr);//应该改为按策略获取一个对外的公开网关地址
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.KeepAliveTick = HUtil32.GetTickCount();
             _clientManager.AddSession(e.SocHandle, gateInfo);
@@ -213,9 +216,8 @@ namespace LoginSvr.Services
                 userInfo.SessionID = 0;
                 userInfo.Socket = gateInfo.Socket;
                 userInfo.ClientTick = HUtil32.GetTickCount();
-                userInfo.Gate = gateInfo;
                 gateInfo.UserList.Add(userInfo);
-                _clientManager.AddSession(sSockIndex, gateInfo);
+                //_clientManager.AddSession(sSockIndex, gateInfo);
                 _logger.DebugLog(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
             }
             catch (Exception ex)
@@ -230,20 +232,21 @@ namespace LoginSvr.Services
         /// </summary>
         public void SessionClearKick()
         {
-            for (var i = _config.SessionList.Count - 1; i >= 0; i--)
+            var sessionList = _sessionManager.GetSessions.ToArray();
+            for (var i = sessionList.Length - 1; i >= 0; i--)
             {
-                var connInfo = _config.SessionList[i];
-                if (connInfo.boKicked && HUtil32.GetTickCount() - connInfo.dwKickTick > 5 * 1000)
+                var connInfo = sessionList[i];
+                if (connInfo.Kicked && HUtil32.GetTickCount() - connInfo.dwKickTick > 5 * 1000)
                 {
-                    _config.SessionList[i] = null;
-                    _config.SessionList.RemoveAt(i);
+                    sessionList[i] = null;
                 }
             }
         }
 
         private void SessionDel(int nSessionId)
         {
-            for (var i = 0; i < _config.SessionList.Count; i++)
+            _sessionManager.Delete(nSessionId);
+            /*for (var i = 0; i < _config.SessionList.Count; i++)
             {
                 if (_config.SessionList[i].SessionID == nSessionId)
                 {
@@ -251,7 +254,7 @@ namespace LoginSvr.Services
                     _config.SessionList.RemoveAt(i);
                     break;
                 }
-            }
+            }*/
         }
     }
 }
