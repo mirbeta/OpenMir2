@@ -94,6 +94,7 @@ namespace LoginSvr.Services
                 if (userInfo.SockIndex == clientId)
                 {
                     ProcessUserMsg(clientSession, userInfo, sMsg);
+                    break;
                 }
                 j++;
             }
