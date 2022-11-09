@@ -1,5 +1,6 @@
 ﻿using NLog;
 using SystemModule;
+using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 using SystemModule.Packet.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -48,7 +49,7 @@ namespace GameSvr.Services
             _clientScoket.Connect(M2Share.Config.sDBAddr, M2Share.Config.nDBPort);
         }
 
-        public bool SendRequest<T>(int nQueryID, ServerMessagePacket packet, T requet) where T : CmdPacket
+        public bool SendRequest<T>(int nQueryID, ServerRequestMessage message, T packet) where T : RequestPacket
         {
             if (!_clientScoket.IsConnected)
             {
@@ -56,13 +57,13 @@ namespace GameSvr.Services
             }
             _recvBuff = null;
 
-            var requestPacket = new RequestServerPacket();
+            var requestPacket = new ServerRequestData();
             requestPacket.QueryId = nQueryID;
-            requestPacket.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
-            requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(requet));
+            requestPacket.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(message));
+            requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
 
-            var s = HUtil32.MakeLong((ushort)(nQueryID ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
-            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
+            var sginId = HUtil32.MakeLong((ushort)(nQueryID ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
             _clientScoket.Send(requestPacket.GetBuffer());
             return true;
         }
@@ -104,7 +105,7 @@ namespace GameSvr.Services
                 var data = e.Buff;
                 if (_packetLen == 0 && data[0] == (byte)'#')
                 {
-                    _packetLen = BitConverter.ToInt32(data[1..5]);
+                    _packetLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
                 }
                 if (_recvBuff != null && _recvBuff.Length > 0)
                 {
@@ -147,7 +148,7 @@ namespace GameSvr.Services
             try
             {
                 if (!_socketWorking) return;
-                var responsePacket = SystemModule.Packet.Packets.ToPacket<RequestServerPacket>(data);
+                var responsePacket = Packets.ToPacket<ServerRequestData>(data);
                 if (responsePacket != null && responsePacket.PacketLen > 0)
                 {
                     var respCheckCode = responsePacket.QueryId;
@@ -161,11 +162,11 @@ namespace GameSvr.Services
                             return;
                         }
                         var signatureBuff = BitConverter.GetBytes(queryId);
-                        var signatureId = BitConverter.ToInt16(signatureBuff);
                         var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
+                        var signatureId = BitConverter.ToInt16(signatureBuff);
                         if (signatureId == BitConverter.ToInt16(sginBuff))
                         {
-                            HumDataService.AddToProcess(respCheckCode, responsePacket);
+                            PlayerDataService.Enqueue(respCheckCode, responsePacket);
                         }
                         else
                         {

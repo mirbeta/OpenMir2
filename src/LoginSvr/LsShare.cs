@@ -208,7 +208,7 @@ namespace LoginSvr
         public Socket Socket;
         public string sIPaddr;
         public IList<UserInfo> UserList;
-        public long dwKeepAliveTick;
+        public long KeepAliveTick;
     }
 
     public struct CertUser

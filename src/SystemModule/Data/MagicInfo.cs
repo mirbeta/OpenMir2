@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using SystemModule.Extensions;
+using SystemModule.Packet;
 
-namespace SystemModule.Packet.ServerPackets
+namespace SystemModule.Data
 {
     public class MagicInfo : Packets
     {

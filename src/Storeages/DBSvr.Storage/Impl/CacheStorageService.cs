@@ -8,9 +8,9 @@ namespace DBSvr.Storage.Impl
 {
     public class CacheStorageService : ICacheStorage
     {
-        private readonly ConcurrentDictionary<string, HumDataInfo> _cacheMap = new ConcurrentDictionary<string, HumDataInfo>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, PlayerDataInfo> _cacheMap = new ConcurrentDictionary<string, PlayerDataInfo>(StringComparer.OrdinalIgnoreCase);
 
-        public void Add(string sChrName, HumDataInfo humDataInfo)
+        public void Add(string sChrName, PlayerDataInfo humDataInfo)
         {
             if (_cacheMap.ContainsKey(sChrName)) //缓存存在则直接直接替换
             {
@@ -18,7 +18,7 @@ namespace DBSvr.Storage.Impl
             }
         }
 
-        public HumDataInfo Get(string sChrName)
+        public PlayerDataInfo Get(string sChrName)
         {
             if (_cacheMap.TryGetValue(sChrName, out var humDataInfo))
             {
@@ -35,7 +35,7 @@ namespace DBSvr.Storage.Impl
             }
         }
 
-        public IList<HumDataInfo> QueryCacheData()
+        public IList<PlayerDataInfo> QueryCacheData()
         {
             return _cacheMap.Values.ToList();
         }

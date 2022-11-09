@@ -51,14 +51,14 @@ namespace DBSvr.Storage.MongoDB
             return -1;
         }
 
-        public HumRecordData Get(int nIndex, ref bool success)
+        public PlayerRecordData Get(int nIndex, ref bool success)
         {
             return GetRecord(nIndex, ref success);
         }
 
-        private HumRecordData GetRecord(int nIndex, ref bool success)
+        private PlayerRecordData GetRecord(int nIndex, ref bool success)
         {
-            var humRecord = new HumRecordData();
+            var humRecord = new PlayerRecordData();
             return humRecord;
         }
 
@@ -74,7 +74,7 @@ namespace DBSvr.Storage.MongoDB
             return ChrList.Count;
         }
 
-        public HumRecordData GetBy(int nIndex, ref bool success)
+        public PlayerRecordData GetBy(int nIndex, ref bool success)
         {
             if (nIndex > 0) return GetRecord(nIndex, ref success);
             success = false;
@@ -105,7 +105,7 @@ namespace DBSvr.Storage.MongoDB
             {
                 for (var i = 0; i < ChrList.Count; i++)
                 {
-                    HumRecordData HumDBRecord = GetBy(ChrList[i].Index, ref success);
+                    PlayerRecordData HumDBRecord = GetBy(ChrList[i].Index, ref success);
                     if (success && !HumDBRecord.Deleted)
                     {
                         result++;
@@ -115,12 +115,12 @@ namespace DBSvr.Storage.MongoDB
             return result;
         }
 
-        public bool Add(HumRecordData HumRecord)
+        public bool Add(PlayerRecordData HumRecord)
         {
             bool result = false;
-            if (_quickList.ContainsKey(HumRecord.Header.sName))
+            if (_quickList.ContainsKey(HumRecord.Header.Name))
             {
-                if (_quickList[HumRecord.Header.sName] > 0)
+                if (_quickList[HumRecord.Header.Name] > 0)
                 {
                     return false;
                 }
@@ -140,7 +140,7 @@ namespace DBSvr.Storage.MongoDB
                 }
                 if (UpdateRecord(HumRecord, true, ref nIndex))
                 {
-                    _quickList.Add(HumRecord.Header.sName, nIndex);
+                    _quickList.Add(HumRecord.Header.Name, nIndex);
                     _quickIdList.AddRecord(HumRecord.sAccount, HumRecord.sChrName, nIndex, HumRecord.Header.SelectID);
                     result = true;
                 }
@@ -152,7 +152,7 @@ namespace DBSvr.Storage.MongoDB
             return result;
         }
 
-        private bool UpdateRecord(HumRecordData HumRecord, bool boNew, ref int nIndex)
+        private bool UpdateRecord(PlayerRecordData HumRecord, bool boNew, ref int nIndex)
         {
             bool result = false;
             return result;
@@ -167,7 +167,7 @@ namespace DBSvr.Storage.MongoDB
             {
                 return result;
             }
-            HumRecordData HumRecord = Get(n10, ref result);
+            PlayerRecordData HumRecord = Get(n10, ref result);
             //if (DeleteRecord(m_IndexQuickList[n10]))
             //{
             //    m_QuickList.Remove(n10);
@@ -189,7 +189,7 @@ namespace DBSvr.Storage.MongoDB
             throw new NotImplementedException();
         }
 
-        public bool Update(int nIndex, ref HumRecordData HumDBRecord)
+        public bool Update(int nIndex, ref PlayerRecordData HumDBRecord)
         {
             var result = false;
             if (nIndex < 0)
@@ -207,7 +207,7 @@ namespace DBSvr.Storage.MongoDB
             return result;
         }
 
-        public void UpdateBy(int nIndex, ref HumRecordData HumDBRecord)
+        public void UpdateBy(int nIndex, ref PlayerRecordData HumDBRecord)
         {
             UpdateRecord(HumDBRecord, false, ref nIndex);
         }

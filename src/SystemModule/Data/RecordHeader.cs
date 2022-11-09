@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace SystemModule.Packet.ServerPackets
+namespace SystemModule.Data
 {
     [ProtoContract]
     public class RecordHeader
@@ -8,7 +8,7 @@ namespace SystemModule.Packet.ServerPackets
         [ProtoMember(1)]
         public string sAccount;
         [ProtoMember(2)]
-        public string sName;
+        public string Name;
         [ProtoMember(3)]
         public int SelectID;
         [ProtoMember(4)]

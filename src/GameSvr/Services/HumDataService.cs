@@ -5,17 +5,17 @@ using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.Services
 {
-    public class HumDataService
+    public static class PlayerDataService
     {
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private static readonly ConcurrentDictionary<int, RequestServerPacket> ReceivedMap = new ConcurrentDictionary<int, RequestServerPacket>();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ConcurrentDictionary<int, ServerRequestData> ReceivedMap = new ConcurrentDictionary<int, ServerRequestData>();
 
-        public static bool DBSocketConnected()
+        public static bool SocketConnected()
         {
             return true;
         }
 
-        public static void AddToProcess(int queryId, RequestServerPacket data)
+        public static void Enqueue(int queryId, ServerRequestData data)
         {
             ReceivedMap.TryAdd(queryId, data);
         }
@@ -24,7 +24,7 @@ namespace GameSvr.Services
         {
             var result = false;
             var boLoadDBOK = false;
-            RequestServerPacket respPack = null;
+            ServerRequestData respPack = null;
             const string sLoadDBTimeOut = "[RunDB] 读取人物数据超时...";
             const string sSaveDBTimeOut = "[RunDB] 保存人物数据超时...";
             var timeOutTick = HUtil32.GetTickCount();
@@ -32,7 +32,7 @@ namespace GameSvr.Services
             {
                 if ((HUtil32.GetTickCount() - timeOutTick) > dwTimeOut)
                 {
-                    _logger.Debug("获取DBServer消息超时...");
+                    Logger.Debug("获取DBServer消息超时...");
                     break;
                 }
                 HUtil32.EnterCriticalSection(M2Share.UserDBSection);
@@ -58,7 +58,7 @@ namespace GameSvr.Services
                 }
                 if (respPack.PacketLen > 0)
                 {
-                    var serverPacket = ProtoBufDecoder.DeSerialize<ServerMessagePacket>(EDCode.DecodeBuff(respPack.Message));
+                    var serverPacket = ProtoBufDecoder.DeSerialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
                     if (serverPacket == null)
                     {
                         return false;
@@ -83,10 +83,10 @@ namespace GameSvr.Services
             return result;
         }
 
-        public static bool LoadHumRcdFromDB(string sAccount, string sChrName, string sStr, ref HumDataInfo HumanRcd, int nCertCode)
+        public static bool LoadHumRcdFromDB(string sAccount, string sChrName, string sStr, ref PlayerDataInfo HumanRcd, int nCertCode)
         {
             var result = false;
-            var loadHum = new LoadHumDataPacket()
+            var loadHum = new LoadPlayerDataMessage()
             {
                 Account = sAccount,
                 ChrName = sChrName,
@@ -110,23 +110,23 @@ namespace GameSvr.Services
         /// 保存玩家数据到DB
         /// </summary>
         /// <returns></returns>
-        public static bool SaveHumRcdToDB(string sAccount, string sChrName, int nSessionID, HumDataInfo HumanRcd)
+        public static bool SaveHumRcdToDB(string account, string chrName, int sessionId, PlayerDataInfo HumanRcd)
         {
             M2Share.Config.nSaveDBCount++;
-            return SaveRcd(sAccount, sChrName, nSessionID, HumanRcd);
+            return SaveRcd(account, chrName, sessionId, HumanRcd);
         }
 
-        private static bool SaveRcd(string sAccount, string sChrName, int nSessionID, HumDataInfo HumanRcd)
+        private static bool SaveRcd(string account, string chrName, int sessionId, PlayerDataInfo HumanRcd)
         {
             var nIdent = 0;
             var nRecog = 0;
             byte[] data = null;
             var nQueryId = GetQueryId();
             var result = false;
-            var packet = new ServerMessagePacket(Grobal2.DB_SAVEHUMANRCD, nSessionID, 0, 0, 0);
-            var saveHumData = new SaveHumDataPacket();
-            saveHumData.Account = sAccount;
-            saveHumData.ChrName = sChrName;
+            var packet = new ServerRequestMessage(Grobal2.DB_SAVEHUMANRCD, sessionId, 0, 0, 0);
+            var saveHumData = new SavePlayerDataMessage();
+            saveHumData.Account = account;
+            saveHumData.ChrName = chrName;
             saveHumData.HumDataInfo = HumanRcd;
             if (M2Share.DataServer.SendRequest(nQueryId, packet, saveHumData))
             {
@@ -138,25 +138,25 @@ namespace GameSvr.Services
                     }
                     else
                     {
-                        _logger.Error($"[RunDB] 保存人物({sChrName})数据失败");
+                        Logger.Error($"[RunDB] 保存人物({chrName})数据失败");
                     }
                 }
             }
             else
             {
-                _logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+                Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             }
             return result;
         }
 
-        private static bool LoadRcd(LoadHumDataPacket loadHuman, ref HumDataInfo HumanRcd)
+        private static bool LoadRcd(LoadPlayerDataMessage loadHuman, ref PlayerDataInfo HumanRcd)
         {
             var result = false;
             var nIdent = 0;
             var nRecog = 0;
             byte[] humRespData = null;
             var nQueryID = GetQueryId();
-            var packet = new ServerMessagePacket(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
+            var packet = new ServerRequestMessage(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
             if (M2Share.DataServer.SendRequest(nQueryID, packet, loadHuman))
             {
                 if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref humRespData, 5000, true))
@@ -166,11 +166,11 @@ namespace GameSvr.Services
                         if (nRecog == 1)
                         {
                             humRespData = EDCode.DecodeBuff(humRespData);
-                            var responsePacket = ProtoBufDecoder.DeSerialize<LoadHumanRcdResponsePacket>(humRespData);
-                            var sDBChrName = EDCode.DeCodeString(responsePacket.sChrName);
-                            if (sDBChrName == loadHuman.ChrName)
+                            var responsePacket = ProtoBufDecoder.DeSerialize<LoadPlayerDataPacket>(humRespData);
+                            var chrName = EDCode.DeCodeString(responsePacket.ChrName);
+                            if (chrName == loadHuman.ChrName)
                             {
-                                HumanRcd = new HumDataInfo();
+                                HumanRcd = new PlayerDataInfo();
                                 HumanRcd = responsePacket.HumDataInfo;
                                 result = true;
                             }
@@ -180,7 +180,7 @@ namespace GameSvr.Services
             }
             else
             {
-                _logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+                Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             }
             return result;
         }

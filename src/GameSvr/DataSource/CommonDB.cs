@@ -117,7 +117,7 @@ namespace GameSvr.DataSource
 
         public int LoadMagicDB()
         {
-            SystemModule.Packet.ServerPackets.MagicInfo Magic;
+            MagicInfo Magic;
             const string sSQLString = "select * from Magics";
             var result = -1;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
@@ -132,7 +132,7 @@ namespace GameSvr.DataSource
                 {
                     while (dr.Read())
                     {
-                        Magic = new SystemModule.Packet.ServerPackets.MagicInfo
+                        Magic = new MagicInfo
                         {
                             MagicId = dr.GetUInt16("MagId"),
                             MagicName = dr.GetString("MagName"),

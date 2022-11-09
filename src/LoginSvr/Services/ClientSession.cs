@@ -86,14 +86,12 @@ namespace LoginSvr.Services
 
             var clientSession = _clientManager.GetSession(clientId);
             
-            //todo 还需要得到当前用户，不然下面的代码会导致重复操作
-            
             var j = 0;
             while (true)
             {
                 if (clientSession.UserList.Count <= j) break;
                 var userInfo = clientSession.UserList[j];
-                if (userInfo.SockIndex == clientId) //todo 注意这里
+                if (userInfo.SockIndex == clientId)
                 {
                     ProcessUserMsg(clientSession, userInfo, sMsg);
                 }

@@ -75,10 +75,10 @@ namespace LoginGate.Services
                 }
                 if (!string.IsNullOrEmpty(sReviceMsg))
                 {
-                    GatePacket accountPacket = new GatePacket();
+                    ServerDataMessage accountPacket = new ServerDataMessage();
                     accountPacket.Body = userData.Body;
                     accountPacket.BuffLen = (short)userData.Body.Length;
-                    accountPacket.Type = PacketType.Data;
+                    accountPacket.Type = ServerDataType.Data;
                     accountPacket.SocketId = Session.ConnectionId;
                     _lastLoginSvr.SendPacket(accountPacket);
                 }
@@ -220,10 +220,10 @@ namespace LoginGate.Services
         public void UserEnter()
         {
             byte[] body = HUtil32.GetBytes($"{_session.ClientIP}/{_session.ClientIP}");
-            GatePacket accountPacket = new GatePacket();
+            ServerDataMessage accountPacket = new ServerDataMessage();
             accountPacket.Body = body;
             accountPacket.BuffLen = (byte)body.Length;
-            accountPacket.Type = PacketType.Enter;
+            accountPacket.Type = ServerDataType.Enter;
             accountPacket.SocketId = Session.ConnectionId;
             _lastLoginSvr.SendPacket(accountPacket);
         }
@@ -237,10 +237,10 @@ namespace LoginGate.Services
             {
                 return;
             }
-            GatePacket accountPacket = new GatePacket();
+            ServerDataMessage accountPacket = new ServerDataMessage();
             accountPacket.Body = Array.Empty<byte>();
             accountPacket.BuffLen = 0;
-            accountPacket.Type = PacketType.Leave;
+            accountPacket.Type = ServerDataType.Leave;
             accountPacket.SocketId = Session.ConnectionId;
             _lastLoginSvr.SendPacket(accountPacket);
             m_KickFlag = false;

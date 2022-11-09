@@ -60,7 +60,7 @@ namespace LoginSvr.Services
             gateInfo.Socket = e.Socket;
             gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, e.RemoteIPaddr);
             gateInfo.UserList = new List<UserInfo>();
-            gateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
+            gateInfo.KeepAliveTick = HUtil32.GetTickCount();
             _clientManager.AddSession(e.SocHandle, gateInfo);
             _logger.LogInformation($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
         }
@@ -101,7 +101,7 @@ namespace LoginSvr.Services
                     {
                         try
                         {
-                            var packet = Packets.ToPacket<GatePacket>(clientPacket.Pakcet);
+                            var packet = Packets.ToPacket<ServerDataMessage>(clientPacket.Pakcet);
                             ProcessGateData(clientPacket.SocketId, packet);
                         }
                         catch (Exception e)
@@ -114,7 +114,7 @@ namespace LoginSvr.Services
             _clientSession.Start(stoppingToken);
         }
 
-        private void ProcessGateData(int socketId, GatePacket packet)
+        private void ProcessGateData(int socketId, ServerDataMessage packet)
         {
             var gateInfo = _clientManager.GetSession(socketId);
             if (packet.Body != null && gateInfo.UserList != null)
@@ -126,19 +126,19 @@ namespace LoginSvr.Services
                 }
                 switch (packet.Type)
                 {
-                    case PacketType.KeepAlive:
+                    case ServerDataType.KeepAlive:
                         SendKeepAlivePacket(gateInfo.Socket);
-                        gateInfo.dwKeepAliveTick = HUtil32.GetTickCount();
+                        gateInfo.KeepAliveTick = HUtil32.GetTickCount();
                         break;
-                    case PacketType.Data:
+                    case ServerDataType.Data:
                         var dataMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
                         ProcessUserMessage(packet.SocketId, dataMsg);
                         break;
-                    case PacketType.Enter:
+                    case ServerDataType.Enter:
                         var endterMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
                         ReceiveOpenUser(packet.SocketId, endterMsg, gateInfo);
                         break;
-                    case PacketType.Leave:
+                    case ServerDataType.Leave:
                         ReceiveCloseUser(packet.SocketId, gateInfo);
                         break;
                 }

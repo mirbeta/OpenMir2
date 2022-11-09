@@ -3,17 +3,9 @@ using System.IO;
 
 namespace SystemModule.Packet.ServerPackets
 {
-    public enum PacketType : byte
+    public class ServerDataMessage : Packets
     {
-        Enter = 0,
-        Leave = 1,
-        Data = 2,
-        KeepAlive = 3
-    }
-    
-    public class GatePacket : Packets
-    {
-        public PacketType Type { get; set; }
+        public ServerDataType Type { get; set; }
         public int SocketId { get; set; }
         public short BuffLen { get; set; }
         public byte[] Body { get; set; }
@@ -23,7 +15,7 @@ namespace SystemModule.Packet.ServerPackets
         protected override void ReadPacket(BinaryReader reader)
         {
             StartChar = reader.ReadChar();
-            Type = (PacketType)reader.ReadByte();
+            Type = (ServerDataType)reader.ReadByte();
             SocketId = reader.ReadInt32();
             BuffLen = reader.ReadInt16();
             Body = reader.ReadBytes(BuffLen);
@@ -47,5 +39,13 @@ namespace SystemModule.Packet.ServerPackets
             }
             writer.Write(EndChar);
         }
+    }
+    
+    public enum ServerDataType : byte
+    {
+        Enter = 0,
+        Leave = 1,
+        Data = 2,
+        KeepAlive = 3
     }
 }

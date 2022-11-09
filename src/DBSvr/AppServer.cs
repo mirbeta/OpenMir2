@@ -57,7 +57,7 @@ namespace DBSvr
             services.AddSingleton<MirLogger>();
             services.AddSingleton<LoginService>();
             services.AddSingleton<UserService>();
-            services.AddSingleton<HumDataService>();
+            services.AddSingleton<PlayerDataService>();
             services.AddSingleton<ICacheStorage, CacheStorageService>();
             switch (storagePolicy)
             {

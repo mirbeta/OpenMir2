@@ -16,7 +16,7 @@ namespace DBSvr.Services
     /// 玩家数据查询保存
     /// DBSvr->GameSvr
     /// </summary>
-    public class HumDataService
+    public class PlayerDataService
     {
         private readonly MirLogger _logger;
         private readonly IList<TServerInfo> _serverList;
@@ -27,7 +27,7 @@ namespace DBSvr.Services
         private readonly LoginService _loginSvrService;
         private readonly DBSvrConf _conf;
 
-        public HumDataService(MirLogger logger, DBSvrConf conf, LoginService loginSvrService, IPlayDataStorage playDataStorage, ICacheStorage memoryStorageServive)
+        public PlayerDataService(MirLogger logger, DBSvrConf conf, LoginService loginSvrService, IPlayDataStorage playDataStorage, ICacheStorage memoryStorageServive)
         {
             _logger = logger;
             _loginSvrService = loginSvrService;
@@ -137,13 +137,13 @@ namespace DBSvr.Services
             var nQueryId = 0;
             if (data.Length > 0)
             {
-                var requestPacket = Packets.ToPacket<RequestServerPacket>(data);
+                var requestPacket = Packets.ToPacket<ServerRequestData>(data);
                 if (requestPacket == null)
                 {
                     return;
                 }
                 nQueryId = requestPacket.QueryId;
-                var packet = ProtoBufDecoder.DeSerialize<ServerMessagePacket>(EDCode.DecodeBuff(requestPacket.Message));
+                var packet = ProtoBufDecoder.DeSerialize<ServerRequestMessage>(EDCode.DecodeBuff(requestPacket.Message));
                 var packetLen = requestPacket.Message.Length + requestPacket.Packet.Length + 6;
                 if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0)
                 {
@@ -172,15 +172,15 @@ namespace DBSvr.Services
                     return;
                 }
             }
-            var responsePack = new RequestServerPacket();
+            var responsePack = new ServerRequestData();
             responsePack.QueryId = nQueryId;
-            var messagePacket = new ServerMessagePacket(Grobal2.DBR_FAIL, 0, 0, 0, 0);
+            var messagePacket = new ServerRequestMessage(Grobal2.DBR_FAIL, 0, 0, 0, 0);
             responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
             SendRequest(serverInfo.Socket, responsePack);
             serverInfo.Data = null;
         }
 
-        private void SendRequest(Socket socket, RequestServerPacket requestPacket)
+        private void SendRequest(Socket socket, ServerRequestData requestPacket)
         {
             var queryPart = 0;
             if (requestPacket.Packet != null)
@@ -198,7 +198,7 @@ namespace DBSvr.Services
             socket.Send(pk, pk.Length, SocketFlags.None);
         }
 
-        private void SendRequest<T>(Socket socket, RequestServerPacket requestPacket, T packet) where T : class, new()
+        private void SendRequest<T>(Socket socket, ServerRequestData requestPacket, T packet) where T : class, new()
         {
             if (packet != null)
             {
@@ -254,7 +254,7 @@ namespace DBSvr.Services
             }
         }
 
-        private void ProcessServerMsg(int nQueryId, ServerMessagePacket packet, byte[] sData, Socket Socket)
+        private void ProcessServerMsg(int nQueryId, ServerRequestMessage packet, byte[] sData, Socket Socket)
         {
             sData = EDCode.DecodeBuff(sData);
             switch (packet.Ident)
@@ -269,9 +269,9 @@ namespace DBSvr.Services
                     SaveHumanRcdEx(nQueryId, sData, packet.Recog, Socket);
                     break;
                 default:
-                    var responsePack = new RequestServerPacket();
+                    var responsePack = new ServerRequestData();
                     responsePack.QueryId = nQueryId;
-                    var messagePacket = new ServerMessagePacket(Grobal2.DBR_FAIL, 0, 0, 0, 0);
+                    var messagePacket = new ServerRequestMessage(Grobal2.DBR_FAIL, 0, 0, 0, 0);
                     responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                     SendRequest(Socket, responsePack);
                     break;
@@ -280,12 +280,12 @@ namespace DBSvr.Services
 
         private void LoadHumanRcd(int queryId, byte[] data, Socket Socket)
         {
-            var loadHumanPacket = ProtoBufDecoder.DeSerialize<LoadHumDataPacket>(data);
+            var loadHumanPacket = ProtoBufDecoder.DeSerialize<LoadPlayerDataMessage>(data);
             if (loadHumanPacket == null)
             {
                 return;
             }
-            HumDataInfo HumanRCD = null;
+            PlayerDataInfo HumanRCD = null;
             bool boFoundSession = false;
             int nCheckCode = -1;
             if ((!string.IsNullOrEmpty(loadHumanPacket.Account)) && (!string.IsNullOrEmpty(loadHumanPacket.ChrName)))
@@ -315,20 +315,20 @@ namespace DBSvr.Services
                     nCheckCode = -3;
                 }
             }
-            var responsePack = new RequestServerPacket();
+            var responsePack = new ServerRequestData();
             responsePack.QueryId = queryId;
             if ((nCheckCode == 1) || boFoundSession)
             {
-                var loadHumData = new LoadHumanRcdResponsePacket();
-                loadHumData.sChrName = EDCode.EncodeString(loadHumanPacket.ChrName);
+                var loadHumData = new LoadPlayerDataPacket();
+                loadHumData.ChrName = EDCode.EncodeString(loadHumanPacket.ChrName);
                 loadHumData.HumDataInfo = HumanRCD;
-                var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
+                var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                 SendRequest(Socket, responsePack, loadHumData);
             }
             else
             {
-                var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
+                var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                 SendRequest(Socket, responsePack);
             }
@@ -336,7 +336,7 @@ namespace DBSvr.Services
 
         private void SaveHumanRcd(int queryId, int nRecog, byte[] sMsg, Socket Socket)
         {
-            var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
+            var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SavePlayerDataMessage>(sMsg);
             if (saveHumDataPacket == null)
             {
                 _logger.LogError("保存玩家数据出错.");
@@ -352,20 +352,20 @@ namespace DBSvr.Services
                 var nIndex = _playDataStorage.Index(sChrName);
                 if (nIndex < 0)
                 {
-                    humanRcd.Header.sName = sChrName;
+                    humanRcd.Header.Name = sChrName;
                     _playDataStorage.Add(humanRcd);
                     nIndex = _playDataStorage.Index(sChrName);
                 }
                 if (nIndex >= 0)
                 {
-                    humanRcd.Header.sName = sChrName;
+                    humanRcd.Header.Name = sChrName;
                     _memoryStorageServive.Add(sChrName, humanRcd);
                     _playDataStorage.Update(sChrName, humanRcd);
                     bo21 = false;
                 }
                 _loginSvrService.SetSessionSaveRcd(sUserID);
             }
-            var responsePack = new RequestServerPacket();
+            var responsePack = new ServerRequestData();
             responsePack.QueryId = queryId;
             if (!bo21)
             {
@@ -378,13 +378,13 @@ namespace DBSvr.Services
                         break;
                     }
                 }
-                var messagePacket = new ServerMessagePacket(Grobal2.DBR_SAVEHUMANRCD, 1, 0, 0, 0);
+                var messagePacket = new ServerRequestMessage(Grobal2.DBR_SAVEHUMANRCD, 1, 0, 0, 0);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                 SendRequest(Socket, responsePack);
             }
             else
             {
-                var messagePacket = new ServerMessagePacket(Grobal2.DBR_LOADHUMANRCD, 0, 0, 0, 0);
+                var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 0, 0, 0, 0);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                 SendRequest(Socket, responsePack);
             }
@@ -392,7 +392,7 @@ namespace DBSvr.Services
 
         private void SaveHumanRcdEx(int nQueryId, byte[] sMsg, int nRecog, Socket Socket)
         {
-            var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SaveHumDataPacket>(sMsg);
+            var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SavePlayerDataMessage>(sMsg);
             if (saveHumDataPacket == null)
             {
                 _logger.LogError("保存玩家数据出错.");

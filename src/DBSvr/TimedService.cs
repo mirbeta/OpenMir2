@@ -21,11 +21,11 @@ namespace DBSvr
         private readonly MirLogger _logger;
         private readonly UserService _userSoc;
         private readonly LoginService _loginSoc;
-        private readonly HumDataService _dataService;
+        private readonly PlayerDataService _dataService;
         private readonly ICacheStorage _cacheStorage;
         private readonly IPlayDataStorage _playDataStorage;
 
-        public TimedService(MirLogger logger, UserService userSoc, LoginService loginSoc, HumDataService dataService, ICacheStorage cacheStorage, IPlayDataStorage playDataStorage)
+        public TimedService(MirLogger logger, UserService userSoc, LoginService loginSoc, PlayerDataService dataService, ICacheStorage cacheStorage, IPlayDataStorage playDataStorage)
         {
             _logger = logger;
             _userSoc = userSoc;
@@ -73,21 +73,21 @@ namespace DBSvr
         {
             //从内存获取保存数据，刷新到数据库，减少数据库压力，和防止大量数据保存超时
             _logger.LogInformation("同步缓存数据.");
-            IList<HumDataInfo> playList = _cacheStorage.QueryCacheData();
+            IList<PlayerDataInfo> playList = _cacheStorage.QueryCacheData();
             if (playList.Any())
             {
                 _logger.LogInformation($"同步缓存数据[{playList.Count()}].");
                 foreach (var play in playList)
                 {
-                    if (_playDataStorage.Update(play.Header.sName, play))
+                    if (_playDataStorage.Update(play.Header.Name, play))
                     {
-                        _logger.DebugLog($"{play.Header.sName}同步成功.");
+                        _logger.DebugLog($"{play.Header.Name}同步成功.");
                     }
                     else
                     {
-                        _logger.DebugLog($"{play.Header.sName}同步失败.");
+                        _logger.DebugLog($"{play.Header.Name}同步失败.");
                     }
-                    _cacheStorage.Delete(play.Header.sName);//处理完从缓存删除
+                    _cacheStorage.Delete(play.Header.Name);//处理完从缓存删除
                 }
             }
             _logger.LogInformation("同步缓存数据完成.");
