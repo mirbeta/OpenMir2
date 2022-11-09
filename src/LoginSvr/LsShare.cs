@@ -244,9 +244,9 @@ namespace LoginSvr
         /// 2 : 免费（创建时间）
         /// </summary>
         public byte PayMode;
-        public int nCertification;
+        public int Certification;
         public long Seconds;
-        public byte nAvailableType;
+        public byte AvailableType;
         public bool SelServer;
         public Socket Socket;
         public long ClientTick;

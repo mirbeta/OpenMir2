@@ -269,7 +269,7 @@ namespace LoginSvr.Storage
         private int CreateAccount(AccountRecord accountRecord)
         {
             var result = 0;
-            const string sqlStr = "INSERT INTO tbl_account (Account, PassWord, PassFailCount, PassFailTime, ValidFrom, ValidUntil, Seconds, StopUntil, PayMode, State, CreateTime, ModifyTime, LastLoginTime) VALUES (@Account, @PassWord, @PassFailCount, @PassFailTime,@ValidFrom, @ValidUntil, @Seconds,@StopUntil, @PayMode, @State, @CreateTime, @ModifyTime, @LastLoginTime);";
+            const string sqlStr = "INSERT INTO account (Account, PassWord, PassFailCount, PassFailTime, ValidFrom, ValidUntil, Seconds, StopUntil, PayMode, State, CreateTime, ModifyTime, LastLoginTime) VALUES (@Account, @PassWord, @PassFailCount, @PassFailTime,@ValidFrom, @ValidUntil, @Seconds,@StopUntil, @PayMode, @State, @CreateTime, @ModifyTime, @LastLoginTime);";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
@@ -286,10 +286,10 @@ namespace LoginSvr.Storage
                 command.Parameters.AddWithValue("@PassWord", accountRecord.UserEntry.Password);
                 command.Parameters.AddWithValue("@PassFailCount", 0);
                 command.Parameters.AddWithValue("@PassFailTime", 0);
-                command.Parameters.AddWithValue("@ValidFrom", DateTimeOffset.Now.ToUnixTimeSeconds());
-                command.Parameters.AddWithValue("@ValidUntil", DateTimeOffset.Now.ToUnixTimeSeconds());
+                command.Parameters.AddWithValue("@ValidFrom", DateTimeOffset.Now);
+                command.Parameters.AddWithValue("@ValidUntil", DateTimeOffset.Now);
                 command.Parameters.AddWithValue("@Seconds", 0);
-                command.Parameters.AddWithValue("@StopUntil", DateTimeOffset.Now.ToUnixTimeSeconds());
+                command.Parameters.AddWithValue("@StopUntil", DateTimeOffset.Now);
                 command.Parameters.AddWithValue("@PayMode", 0);
                 command.Parameters.AddWithValue("@State", 0);
                 command.Parameters.AddWithValue("@CreateTime", DateTimeOffset.Now.ToUnixTimeSeconds());

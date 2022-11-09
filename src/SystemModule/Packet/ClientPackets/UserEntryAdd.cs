@@ -1,4 +1,5 @@
 using System.IO;
+using SystemModule.Extensions;
 
 namespace SystemModule.Packet.ClientPackets
 {
@@ -18,7 +19,12 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            throw new System.NotImplementedException();
+            writer.WriteAsciiString(Quiz2, 20);
+            writer.WriteAsciiString(Answer2, 12);
+            writer.WriteAsciiString(BirthDay, 10);
+            writer.WriteAsciiString(MobilePhone, 13);
+            writer.WriteAsciiString(Memo, 20);
+            writer.WriteAsciiString(Memo2, 20);
         }
     }
 }

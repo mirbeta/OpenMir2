@@ -95,32 +95,23 @@ namespace LoginSvr.Services
         {
             Task.Factory.StartNew(async () =>
             {
-                await ProcessGateMessage(stoppingToken);
-            }, stoppingToken);
-            _clientSession.Start(stoppingToken);
-        }
-
-        /// <summary>
-        /// 处理网关消息
-        /// </summary>
-        /// <returns></returns>
-        private async Task ProcessGateMessage(CancellationToken stoppingToken)
-        {
-            while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
-            {
-                while (_messageQueue.Reader.TryRead(out var clientPacket))
+                while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    try
+                    while (_messageQueue.Reader.TryRead(out var clientPacket))
                     {
-                        var packet = Packets.ToPacket<GatePacket>(clientPacket.Pakcet);
-                        ProcessGateData(clientPacket.SocketId, packet);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e);
+                        try
+                        {
+                            var packet = Packets.ToPacket<GatePacket>(clientPacket.Pakcet);
+                            ProcessGateData(clientPacket.SocketId, packet);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e);
+                        }
                     }
                 }
-            }
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
+            _clientSession.Start(stoppingToken);
         }
 
         private void ProcessGateData(int socketId, GatePacket packet)
@@ -153,6 +144,15 @@ namespace LoginSvr.Services
                 }
                 _config.sGateIPaddr = gateInfo.sIPaddr;
             }
+        }
+        
+        private void ProcessUserMessage(int sSockIndex, string sData)
+        {
+            _clientSession.Enqueue(new UserSessionData()
+            {
+                SoketId = sSockIndex,
+                Msg = sData
+            });
         }
 
         private void SendKeepAlivePacket(Socket socket)
@@ -223,28 +223,6 @@ namespace LoginSvr.Services
                 _logger.LogError("[Exception] LoginService.ReceiveOpenUser ");
                 _logger.LogError(ex);
             }
-        }
-
-        private void ProcessUserMessage(int sSockIndex, string sData)
-        {
-            _clientSession.SendToQueue(new UserSessionData()
-            {
-                SoketId = sSockIndex,
-                Msg = sData
-            });
-            // for (var i = 0; i < gateInfo.UserList.Count; i++)
-            // {
-            //     var userInfo = gateInfo.UserList[i];
-            //     if (userInfo.SockIndex == sSockIndex)
-            //     {
-            //         _clientSession.SendToQueue(new UserSessionData()
-            //         {
-            //             UserInfo = userInfo,
-            //             Msg = sData
-            //         });
-            //         break;
-            //     }
-            // }
         }
 
         /// <summary>

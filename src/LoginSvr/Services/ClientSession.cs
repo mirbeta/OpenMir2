@@ -1,6 +1,7 @@
 ﻿using LoginSvr.Conf;
 using LoginSvr.Storage;
 using System;
+using System.Collections;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
@@ -38,10 +39,10 @@ namespace LoginSvr.Services
             Task.Factory.StartNew(async () =>
             {
                 await ProcessUserMessage(stoppingToken);
-            }, stoppingToken);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
-        public void SendToQueue(UserSessionData userData)
+        public void Enqueue(UserSessionData userData)
         {
             _packetQueue.Writer.TryWrite(userData);
         }
@@ -56,7 +57,15 @@ namespace LoginSvr.Services
             {
                 while (_packetQueue.Reader.TryRead(out var message))
                 {
-                    ProcessUserData(message.SoketId, message.Msg);
+                    try
+                    {
+                          ProcessUserData(message.SoketId, message.Msg);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError("[Exception] LoginService.DecodeUserData");
+                        _logger.LogError(ex);
+                    }
                 }
             }
         }
@@ -64,34 +73,31 @@ namespace LoginSvr.Services
         private void ProcessUserData(int clientId, string userData)
         {
             var sMsg = string.Empty;
-            try
+            if (!userData.EndsWith("!"))
             {
-                if (!userData.EndsWith("!"))
-                {
-                    return;
-                }
-                HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
-                if (string.IsNullOrEmpty(sMsg))
-                    return;
-                if (sMsg.Length < Grobal2.DEFBLOCKSIZE)
-                    return;
-                sMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
-
-                var clientSession = _clientManager.GetSession(clientId);
-
-                var j = 0;
-                while (true)
-                {
-                    if (clientSession.UserList.Count <= j) break;
-                    var userInfo = clientSession.UserList[j];
-                    ProcessUserMsg(clientSession, userInfo, sMsg);
-                    j++;
-                }
+                return;
             }
-            catch (Exception ex)
+            HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
+            if (string.IsNullOrEmpty(sMsg))
+                return;
+            if (sMsg.Length < Grobal2.DEFBLOCKSIZE)
+                return;
+            sMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
+
+            var clientSession = _clientManager.GetSession(clientId);
+            
+            //todo 还需要得到当前用户，不然下面的代码会导致重复操作
+            
+            var j = 0;
+            while (true)
             {
-                _logger.LogError("[Exception] LoginService.DecodeUserData");
-                _logger.LogError(ex);
+                if (clientSession.UserList.Count <= j) break;
+                var userInfo = clientSession.UserList[j];
+                if (userInfo.SockIndex == clientId) //todo 注意这里
+                {
+                    ProcessUserMsg(clientSession, userInfo, sMsg);
+                }
+                j++;
             }
         }
 
@@ -200,6 +206,12 @@ namespace LoginSvr.Services
                 var accountIndex = _accountStorage.Index(sLoginId);
                 if (accountIndex > 0 && _accountStorage.Get(accountIndex, ref accountRecord) > 0)
                 {
+                    if (accountRecord == null)
+                    {
+                        _logger.LogError($"获取账号{sLoginId}资料出错");
+                        _accountStorage.Get(accountIndex, ref accountRecord);
+                        return;
+                    }
                     if (accountRecord.ErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.ActionTick > 60000)
                     {
                         if (string.Compare(accountRecord.UserEntry.Password, sPassword, StringComparison.OrdinalIgnoreCase) == 0)
@@ -305,26 +317,26 @@ namespace LoginSvr.Services
             pCert.IDHour = pUser.Seconds;
             pCert.IPDay = 0;
             pCert.IDDay = 0;
-            pUser.nAvailableType = 5;
+            pUser.AvailableType = 5;
             if ((pCert.IDHour > 0))
             {
-                pUser.nAvailableType = 2;
+                pUser.AvailableType = 2;
             }
             if ((pCert.IPHour > 0))
             {
-                pUser.nAvailableType = 4;
+                pUser.AvailableType = 4;
             }
             if ((pCert.IPDay > 0))
             {
-                pUser.nAvailableType = 3;
+                pUser.AvailableType = 3;
             }
             if ((pCert.IDDay > 0))
             {
-                pUser.nAvailableType = 1;
+                pUser.AvailableType = 1;
             }
-            pCert.Certification = pUser.nCertification;
+            pCert.Certification = pUser.Certification;
             pCert.OpenTime = HUtil32.GetTickCount();
-            pCert.AvailableType = pUser.nAvailableType;
+            pCert.AvailableType = pUser.AvailableType;
             pCert.Closing = false;
             LsShare.CertList.Add(pCert);
         }
