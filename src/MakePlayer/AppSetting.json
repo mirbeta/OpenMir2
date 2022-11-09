@@ -3,7 +3,7 @@
     "ServerName": "热血传奇",
     "Address": "10.10.0.102",
     "Port": 7000,
-    "ChrCount": 1,
+    "ChrCount": 100,
     "TotalChrCount": 10000,
     "NewAccount": true,
     "LoginAccount": "winplay"
