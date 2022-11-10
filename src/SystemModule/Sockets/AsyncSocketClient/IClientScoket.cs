@@ -11,7 +11,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 缓冲区大小
         /// </summary>
-        private const int Buffersize = 1024;
+        private int Buffersize = 1024;
         /// <summary>
         /// 客户端Socket
         /// </summary>
@@ -39,7 +39,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 接收到数据事件
         /// </summary>
-        public event DSCClientOnReceiveHandler ReceivedDatagram;
+        public event DSCClientOnReceiveHandler OnReceivedData;
         /// <summary>
         /// 断开连接事件
         /// </summary>
@@ -48,6 +48,19 @@ namespace SystemModule.Sockets.AsyncSocketClient
         public ClientScoket()
         {
             _databuffer = new byte[Buffersize];
+        }
+        
+        public ClientScoket(IPEndPoint endPoint,int buffSize)
+        {
+            if (buffSize <= 0)
+            {
+                buffSize = 1024;
+            }
+            Buffersize = buffSize;
+            _databuffer = new byte[Buffersize];
+            Host = endPoint.Address.ToString();
+            Port = endPoint.Port;
+            EndPoint = endPoint;
         }
 
         public void Connect()
@@ -179,7 +192,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                     {
                         destinationArray[i] = _databuffer[i];
                     }
-                    ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(_cli, destinationArray.ToArray(), length)); //引发接收数据事件
+                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(_cli, destinationArray.ToArray(), length)); //引发接收数据事件
                     StartWaitingForData(asyncState);//继续接收数据
                 }
             }

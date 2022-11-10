@@ -4,8 +4,8 @@
     "Address": "10.10.0.102",
     "Port": 7000,
     "ChrCount": 10,
-    "TotalChrCount": 10000,
+    "TotalChrCount": 8000,
     "NewAccount": true,
-    "LoginAccount": "winplay"
+    "LoginAccount": "play"
   }
 }

@@ -69,7 +69,7 @@ namespace LoginGate.Services
                 int nPos = sReviceMsg.IndexOf("*", StringComparison.OrdinalIgnoreCase);
                 if (nPos > 0)
                 {
-                    string s10 = sReviceMsg.Substring(0, nPos - 1);
+                    string s10 = sReviceMsg[..(nPos - 1)];
                     string s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
                     sReviceMsg = s10 + s1C;
                 }
@@ -91,6 +91,18 @@ namespace LoginGate.Services
             ClientMesaagePacket cltCmd = Packets.ToPacket<ClientMesaagePacket>(packBuff);
             switch (cltCmd.Cmd)
             {
+                case Grobal2.CM_ADDNEWUSER://注册账号
+                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
+                    /*if (nDeCodeLen > TCmdPack.PackSize)
+                    {
+                        pszSendBuff = new byte[nDeCodeLen];
+                        Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
+                        int nDeCodeLen = 0;
+                        byte[] packBuff = PacketEncoder.EncodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+                        var createAccount = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
+                        _lastLoginSvr.SendPacket(accountPacket);
+                    }*/
+                    break;
                 case Grobal2.CM_IDPASSWORD://登录消息
                     m_dwClientTimeOutTick = HUtil32.GetTickCount();
                     //pszSendBuff = new byte[nDeCodeLen];
@@ -108,16 +120,6 @@ namespace LoginGate.Services
                     //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
                     //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
                     //lastGameSvr.SendBuffer(accountPacket.GetPacket());
-                    break;
-                case Grobal2.CM_ADDNEWUSER://注册账号
-                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                    //if (nDeCodeLen > TCmdPack.PackSize)
-                    //{
-                    //    pszSendBuff = new byte[nDeCodeLen];
-                    //    Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
-                    //    accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
-                    //    lastGameSvr.SendBuffer(accountPacket.GetPacket());
-                    //}
                     break;
                 default:
                     Console.WriteLine($"错误的数据包索引:[{cltCmd.Cmd}]");

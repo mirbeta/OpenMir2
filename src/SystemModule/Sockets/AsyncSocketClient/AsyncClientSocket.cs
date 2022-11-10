@@ -173,43 +173,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 服务器接收到的总字节数计数器
         /// </summary>
         public long TotalBytesRead => _totalBytesRead;
-
-        /// <summary>
-        /// 获取大小的显示字符串
-        /// </summary>
-        /// <returns></returns>
-        public string FormatBytesValue(long length)
-        {
-            int byteConversion = 1024;
-            double bytes = Convert.ToDouble(length);
-            // 超过EB的单位已经没有实际转换意义了, 太大了, 忽略不用
-            if (bytes >= Math.Pow(byteConversion, 6)) // EB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 6), 2), " EB");
-            }
-            if (bytes >= Math.Pow(byteConversion, 5)) // PB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 5), 2), " PB");
-            }
-            if (bytes >= Math.Pow(byteConversion, 4)) // TB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 4), 2), " TB");
-            }
-            if (bytes >= Math.Pow(byteConversion, 3)) // GB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 3), 2), " GB");
-            }
-            if (bytes >= Math.Pow(byteConversion, 2)) // MB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 2), 2), " MB");
-            }
-            if (bytes >= byteConversion) // KB
-            {
-                return string.Concat(Math.Round(bytes / byteConversion, 2), " KB");
-            }
-            return string.Concat(bytes, " Bytes");// Bytes
-        }
-
+        
         /// <summary>
         /// Socket.ConnectAsync完成回调函数
         /// </summary>

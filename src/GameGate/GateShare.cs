@@ -14,7 +14,7 @@ namespace GameGate
         /// <summary>
         /// 单线程最大用户数
         /// </summary>
-        public const int MaxSession = 5000;
+        public const int MaxSession = 6000;
         /// <summary>
         ///  网关游戏服务器之间检测超时时间
         /// </summary>

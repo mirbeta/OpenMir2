@@ -34,7 +34,7 @@ namespace GameSvr.Planes
         {
             _msgClient = new ClientScoket();
             _msgClient.OnConnected += MsgClientConnect;
-            _msgClient.ReceivedDatagram += MsgClientRead;
+            _msgClient.OnReceivedData += MsgClientRead;
             _msgClient.OnError += MsgClientError;
             _msgClient.OnDisconnected += MsgClientDisconnected;
             _groupMessageHandle = new PlanesMessage();

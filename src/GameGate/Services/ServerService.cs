@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
@@ -44,8 +45,8 @@ namespace GameGate.Services
         public void Start(CancellationToken stoppingToken)
         {
             _serverSocket.Start(_gateEndPoint);
-            _clientThread.Start();
             _clientThread.RestSessionArray();
+            _clientThread.Start();
             sendQueue.StartProcessQueueSend(stoppingToken);
             LogQueue.Log($"游戏网关[{_gateEndPoint}]已启动...", 1);
         }

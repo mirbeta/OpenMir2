@@ -141,6 +141,7 @@ namespace LoginSvr
 
     public struct UserSessionData
     {
+        public int SessionId;
         public int SoketId;
         public string Msg;
     }

@@ -25,6 +25,7 @@ namespace MakePlayer
             _options.ChrCount = HUtil32._MIN(_options.ChrCount, _options.TotalChrCount);
             _loginTimeTick = HUtil32.GetTickCount() - 1000 * _options.ChrCount;
             Task.Factory.StartNew(Start, _cancellation.Token);
+            Task.Factory.StartNew(Run, _cancellation.Token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
             _clientManager.Start();
             return Task.CompletedTask;
         }
@@ -34,6 +35,15 @@ namespace MakePlayer
             _clientManager.Stop();
             _cancellation.Cancel();
             return Task.CompletedTask;
+        }
+
+        private void Run()
+        {
+            while (!_cancellation.IsCancellationRequested)
+            {
+                _clientManager.Run();
+                Thread.Sleep(TimeSpan.FromMilliseconds(10));
+            }
         }
 
         private void Start()
@@ -59,6 +69,10 @@ namespace MakePlayer
                             playClient.SessionId = Guid.NewGuid().ToString("N");
                             playClient.m_boNewAccount = _options.NewAccount;
                             playClient.LoginAccount = string.Concat(_options.LoginAccount, _loginIndex);
+                            if (playClient.LoginAccount.Length > 10)
+                            {
+                                playClient.LoginAccount = playClient.LoginAccount.Substring(1, 8);
+                            }
                             playClient.LoginPasswd = playClient.LoginAccount;
                             playClient.ChrName = playClient.LoginAccount;
                             playClient.ServerName = _options.ServerName;
@@ -71,8 +85,7 @@ namespace MakePlayer
                         }
                     }
                 }
-                _clientManager.Run();
-                Thread.Sleep(TimeSpan.FromMilliseconds(50));
+                Thread.Sleep(TimeSpan.FromMilliseconds(5));
             }
         }
     }

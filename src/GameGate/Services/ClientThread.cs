@@ -1,6 +1,9 @@
 using GameGate.Conf;
 using System;
 using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packet;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -13,65 +16,54 @@ namespace GameGate.Services
     /// </summary>
     public class ClientThread
     {
-        private readonly AsyncClientSocket ClientSocket;
-
+        private readonly ClientScoket ClientSocket;
         /// <summary>
         /// 网关ID
         /// </summary>
         public readonly string ClientId;
-
         private IPEndPoint GateEndPoint { get; }
-
         /// <summary>
         /// 用户会话
         /// </summary>
         public readonly SessionInfo[] SessionArray = new SessionInfo[GateShare.MaxSession];
-
         /// <summary>
         ///  网关游戏服务器之间检测是否失败（超时）
         /// </summary>
         private bool CheckServerFail { get; set; }
-
         /// <summary>
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
         private int CheckServerFailCount { get; set; }
-
         /// <summary>
         /// Buffer
         /// </summary>
         private byte[] ReceiveBuffer { get; set; }
-
         /// <summary>
         /// 上次剩下多少字节未处理
         /// </summary>
         private int BuffLen { get; set; }
-
         /// <summary>
         /// 网关是否就绪
         /// </summary>
         private bool GateReady { get; set; }
-
         /// <summary>
         /// 是否链接成功
         /// </summary>
         private bool Connected { get; set; }
-
         /// <summary>
         /// 历史最高在线人数
         /// </summary>
         private int Counter { get; set; }
-
         /// <summary>
         /// 发送总字节数
         /// </summary>
         private int SendBytes { get; set; }
-
         /// <summary>
         /// 接收总字节数
         /// </summary>
         private int ReceiveBytes { get; set; }
-
+        private int TotalBytesRead { get; set; }
+        private int TotalBytesWrite { get; set; }
         private int CheckRecviceTick { get; set; }
         private int CheckServerTick { get; set; }
         private int CheckServerTimeMin { get; set; }
@@ -97,7 +89,7 @@ namespace GameGate.Services
             Connected = false;
             GateEndPoint = endPoint;
             CheckServerTick = HUtil32.GetTickCount();
-            ClientSocket = new AsyncClientSocket(gameGate.ServerAdress, gameGate.ServerPort, 512);
+            ClientSocket = new ClientScoket(new IPEndPoint(IPAddress.Parse(gameGate.ServerAdress), gameGate.ServerPort), 512);
             ClientSocket.OnConnected += ClientSocketConnect;
             ClientSocket.OnDisconnected += ClientSocketDisconnect;
             ClientSocket.OnReceivedData += ClientSocketRead;
@@ -110,14 +102,14 @@ namespace GameGate.Services
 
         public void Start()
         {
-            ClientSocket.Start();
+            ClientSocket.Connect();
         }
 
         private void ReConnected()
         {
             if (Connected == false)
             {
-                ClientSocket.Start();
+                ClientSocket.Connect();
             }
         }
 
@@ -206,7 +198,8 @@ namespace GameGate.Services
             {
                 ProcessServerPacket(packetData, nMsgLen);
             }
-            ReceiveBytes += e.BuffLen;
+            ReceiveBytes += nMsgLen;
+            TotalBytesRead += nMsgLen;
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -401,6 +394,7 @@ namespace GameGate.Services
                 return;
             }
             SendBytes += sendBuffer.Length;
+            TotalBytesWrite += SendBytes;
             ClientSocket.Send(sendBuffer);
         }
 
@@ -496,8 +490,8 @@ namespace GameGate.Services
             return receiveStr;
         }
 
-        public string TotalReceive => $"↓{ClientSocket.FormatBytesValue(ClientSocket.TotalBytesRead)}";
+        public string TotalReceive => $"↓{HUtil32.FormatBytesValue(TotalBytesRead)}";
 
-        public string TotalSend => $"↑{ClientSocket.FormatBytesValue(ClientSocket.TotalBytesWrite)}";
+        public string TotalSend => $"↑{HUtil32.FormatBytesValue(TotalBytesWrite)}";
     }
 }

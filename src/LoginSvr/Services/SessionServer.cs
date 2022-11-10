@@ -327,6 +327,10 @@ namespace LoginSvr.Services
             for (var i = 0; i < _serverList.Count; i++)
             {
                 var msgServer = _serverList[i];
+                if (msgServer == null)
+                {
+                    continue;
+                }
                 if ((msgServer.ServerIndex != 99) && (msgServer.ServerName == serverName))
                 {
                     nCount += msgServer.OnlineCount;
@@ -407,6 +411,10 @@ namespace LoginSvr.Services
                 for (var nC = 0; nC < _serverList.Count; nC++)
                 {
                     var msgServer = _serverList[nC];
+                    if (msgServer == null)
+                    {
+                        continue;
+                    }
                     if (string.Compare(msgServer.ServerName, msgServerSort.ServerName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (msgServer.ServerIndex < msgServerSort.ServerIndex)

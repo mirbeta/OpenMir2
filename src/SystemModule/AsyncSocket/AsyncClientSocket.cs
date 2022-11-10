@@ -299,6 +299,7 @@ namespace SystemModule.AsyncSocket
                 disposedValue = true;
             }
         }
+        
         public void Dispose()
         {
             Dispose(true);
