@@ -11,7 +11,7 @@ namespace SystemModule.Common
     public abstract class IniFile
     {
         private string _fileName;
-        private Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
 
         private bool largeCommentFlag = false;
 
@@ -21,7 +21,7 @@ namespace SystemModule.Common
         {
 
         }
-        
+
         protected IniFile(string fileName)
         {
             FileName = fileName;
@@ -322,7 +322,7 @@ namespace SystemModule.Common
             {
                 fi.IsReadOnly = false;
             }
-            var sw = new StreamWriter(File.Open(FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite),  Encoding.GetEncoding("GB2312"));
+            var sw = new StreamWriter(File.Open(FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite), Encoding.GetEncoding("GB2312"));
             foreach (KeyValuePair<string, Dictionary<string, string>> pair in iniCahce)
             {
                 sw.WriteLine("[" + pair.Key + "]");

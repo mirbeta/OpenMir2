@@ -3,7 +3,7 @@ using SystemModule.Extensions;
 
 namespace SystemModule.Packet.ClientPackets
 {
-    public class UserEntry: Packets
+    public class UserEntry : Packets
     {
         public string Account;
         public string Password;
@@ -15,7 +15,7 @@ namespace SystemModule.Packet.ClientPackets
         public string EMail;
 
         public const byte Size = 140 + 8;
-        
+
         protected override void ReadPacket(BinaryReader reader)
         {
             throw new System.NotImplementedException();
@@ -62,7 +62,7 @@ namespace SystemModule.Packet.ClientPackets
             UserEntryAdd.BirthDay = reader.ReadPascalString(10);
             UserEntryAdd.MobilePhone = reader.ReadPascalString(13);
             UserEntryAdd.Memo = reader.ReadPascalString(20);
-            UserEntryAdd.Memo2 =reader. ReadPascalString(20);
+            UserEntryAdd.Memo2 = reader.ReadPascalString(20);
         }
 
         protected override void WritePacket(BinaryWriter writer)

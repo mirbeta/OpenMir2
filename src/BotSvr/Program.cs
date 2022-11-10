@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BotSvr
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -17,7 +17,7 @@ namespace BotSvr
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("AppSetting.json", true, false)
                 .Build();
-            
+
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {

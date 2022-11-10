@@ -11,7 +11,7 @@ namespace SystemModule.RandomSelector
     {
         public MultipleSelector(WeightedSelector<T> weightedSelector) : base(weightedSelector)
         {
-            
+
         }
 
         public List<T> Select(int count)

@@ -143,7 +143,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         /// <summary>
         /// 是否被动攻击怪物类型
         /// Race:小于52属于一些不会主动攻击角色的怪物类型
@@ -158,7 +158,7 @@ namespace GameSvr.Actor
             }
             return false;
         }
-        
+
         public virtual void SearchViewRange()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";

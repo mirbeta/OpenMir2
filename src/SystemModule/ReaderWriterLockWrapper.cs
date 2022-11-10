@@ -5,7 +5,7 @@ namespace SystemModule
 {
     public class ReaderWriterLockWrapper
     {
-        readonly ReaderWriterLockSlim lck;
+        private readonly ReaderWriterLockSlim lck;
         private readonly ReaderWrapper reader;
         private readonly WriterWrapper writer;
 
@@ -28,9 +28,9 @@ namespace SystemModule
             return writer;
         }
 
-        struct ReaderWrapper : IDisposable
+        private struct ReaderWrapper : IDisposable
         {
-            readonly ReaderWriterLockSlim lck;
+            private readonly ReaderWriterLockSlim lck;
 
             public ReaderWrapper(ReaderWriterLockSlim lck)
             {
@@ -43,9 +43,9 @@ namespace SystemModule
             }
         }
 
-        struct WriterWrapper : IDisposable
+        private struct WriterWrapper : IDisposable
         {
-            readonly ReaderWriterLockSlim lck;
+            private readonly ReaderWriterLockSlim lck;
 
             public WriterWrapper(ReaderWriterLockSlim lck)
             {

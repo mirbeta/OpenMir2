@@ -16,17 +16,17 @@ namespace GameGate.Services
     {
         private readonly SessionSpeed _gameSpeed;
         private readonly SessionInfo _session;
-        readonly object _syncObj;
+        private readonly object _syncObj;
         private ClientThread ClientThread { get; set; }
         private SendQueue SendQueue { get; set; }
-        IList<DelayMessage> MsgList { get; set; }
+        private IList<DelayMessage> MsgList { get; set; }
         private int LastDirection { get; set; }
         private bool HandleLogin { get; set; }
         private bool KickFlag { get; set; }
         public int SvrListIdx { get; set; }
         private int SvrObjectId { get; set; }
         private int SendCheckTick { get; set; }
-        private CheckStep Stat{ get; set; }
+        private CheckStep Stat { get; set; }
         /// <summary>
         /// 会话密钥
         /// 用于OTP动态口令验证
@@ -1012,7 +1012,7 @@ namespace GameGate.Services
             }
 
             Logger.DebugLog(sendMsg);
-            
+
             //defMsg.UID = m_nSvrObject;
             //defMsg.Cmd = Grobal2.SM_SYSMESSAGE;
             //defMsg.X = HUtil32.MakeWord(0xFF, 0xF9);

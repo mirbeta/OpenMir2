@@ -77,7 +77,7 @@ namespace LoginSvr
 
         public override void Dispose()
         {
-           
+
         }
 
         private void Stop()

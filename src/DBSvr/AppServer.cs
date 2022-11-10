@@ -16,7 +16,6 @@ using System.Runtime.Loader;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
 using SystemModule.Hosts;
 using SystemModule.Logger;
 
@@ -27,7 +26,8 @@ namespace DBSvr
         private static PeriodicTimer _timer;
         private static DBSvrConf _config;
 
-        public AppServer() {
+        public AppServer()
+        {
 
             PrintUsage();
             Console.CancelKeyPress += delegate

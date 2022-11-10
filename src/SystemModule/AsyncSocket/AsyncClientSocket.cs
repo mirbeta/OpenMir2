@@ -19,12 +19,12 @@ namespace SystemModule.AsyncSocket
         /// <summary>
         /// 服务器监听地址
         /// </summary>
-        private IPEndPoint _remoteEndPoint;
+        private readonly IPEndPoint _remoteEndPoint;
 
         /// <summary>
         /// 本地监听地址
         /// </summary>
-        private IPEndPoint _localEndPoint;
+        private readonly IPEndPoint _localEndPoint;
 
         /// <summary>  
         /// 用于每个I/O Socket操作的缓冲区大小  
@@ -34,7 +34,7 @@ namespace SystemModule.AsyncSocket
         /// <summary>
         /// 连接超时
         /// </summary>
-        private int _timeOut;
+        private readonly int _timeOut;
 
         private int _state;
 
@@ -52,16 +52,15 @@ namespace SystemModule.AsyncSocket
         /// <summary>  
         /// 缓冲区管理  
         /// </summary>  
-        private BufferManager _bufferManager;
+        private readonly BufferManager _bufferManager;
 
         /// <summary>  
         /// 对象池  
         /// </summary>  
-        private UserTokenPool _objectPool;
+        private readonly UserTokenPool _objectPool;
+        private const int opsToPreAlloc = 2;
 
-        const int opsToPreAlloc = 2;
-
-        private int _maxClient = 10;
+        private readonly int _maxClient = 10;
 
         #endregion
 

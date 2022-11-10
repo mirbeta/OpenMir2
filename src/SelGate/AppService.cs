@@ -1,9 +1,8 @@
 using Microsoft.Extensions.Hosting;
-using System.Threading;
-using System.Threading.Tasks;
 using SelGate.Conf;
 using SelGate.Services;
-using SystemModule;
+using System.Threading;
+using System.Threading.Tasks;
 using SystemModule.Logger;
 
 namespace SelGate

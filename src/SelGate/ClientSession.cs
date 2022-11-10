@@ -207,7 +207,7 @@ namespace SelGate
                 return;
             }
             var sendStr = $"%L{_session.SocketId}$";
-            var body = HUtil32.GetBytes( sendStr);
+            var body = HUtil32.GetBytes(sendStr);
             var accountPacket = new ServerDataMessage();
             accountPacket.Body = body;
             accountPacket.BuffLen = (short)body.Length;

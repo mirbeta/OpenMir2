@@ -11,7 +11,7 @@ namespace SystemModule.Common
     public class ConfFile
     {
         private string fileName;
-        private Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
 
         private bool largeCommentFlag = false;
 

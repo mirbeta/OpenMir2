@@ -9,7 +9,7 @@ namespace SystemModule.AsyncSocket
     {
         private Socket connectSocket;
         private TaskCompletionSource<SocketResult> completionSource;
-        private Timer timer = null;
+        private readonly Timer timer = null;
         public UserToken()
         {
             completionSource = new TaskCompletionSource<SocketResult>();

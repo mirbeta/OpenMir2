@@ -9,7 +9,7 @@ namespace MapSvr
         /// <summary>
         /// 用于存储和管理管道的进程池
         /// </summary>
-        private static ConcurrentDictionary<Guid, Pipeline> ServerPool = new ConcurrentDictionary<Guid, Pipeline>();
+        private static readonly ConcurrentDictionary<Guid, Pipeline> ServerPool = new ConcurrentDictionary<Guid, Pipeline>();
 
         /// <summary>
         /// 创建一个新的管道

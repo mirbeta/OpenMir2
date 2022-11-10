@@ -21,7 +21,7 @@ namespace SystemModule.Packet.ClientPackets
         public bool boShowHelp;
         public bool boShowGameShop;
         public bool boGamepath;
-        
+
         protected override void ReadPacket(BinaryReader reader)
         {
             throw new System.NotImplementedException();

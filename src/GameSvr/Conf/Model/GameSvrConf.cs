@@ -1,5 +1,4 @@
-﻿using Spectre.Console;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packet.ClientPackets;
 

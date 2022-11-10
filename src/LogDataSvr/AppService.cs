@@ -51,7 +51,7 @@ namespace LogDataSvr
                         int counter = 0;
 
                         DiagnosticsClient client = new DiagnosticsClient(processes.First().Id);
-                        
+
                         Console.WriteLine($"GameSvr进程监听成功.PID[{processes.First().Id}]");
 
                         var providers = new List<EventPipeProvider>()

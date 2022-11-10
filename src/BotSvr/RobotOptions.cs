@@ -21,7 +21,7 @@ namespace BotSvr
         /// <summary>
         /// 同时登录人数
         /// </summary>
-        public int ChrCount  { get; set; }
+        public int ChrCount { get; set; }
         /// <summary>
         /// 登录总人数
         /// </summary>

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
@@ -14,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace MapSvr
 {
-    class Program
+    internal class Program
     {
-        private static PeriodicTimer _timer;
+        private static readonly PeriodicTimer _timer;
         private static IHost _host;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            
+
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
@@ -39,7 +38,7 @@ namespace MapSvr
             LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
-            
+
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -56,7 +55,7 @@ namespace MapSvr
             Stop();
         }
 
-        static void Stop()
+        private static void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
@@ -64,7 +63,7 @@ namespace MapSvr
             });
         }
 
-        static async Task ProcessLoopAsync()
+        private static async Task ProcessLoopAsync()
         {
             string? input = null;
             do
@@ -108,8 +107,8 @@ namespace MapSvr
             AnsiConsole.Clear();
             return Task.CompletedTask;
         }
-     
-        static void PrintUsage()
+
+        private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
             using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MapSvr.logo.png");

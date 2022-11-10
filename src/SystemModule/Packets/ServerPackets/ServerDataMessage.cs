@@ -11,7 +11,7 @@ namespace SystemModule.Packet.ServerPackets
         public byte[] Body { get; set; }
         public char StartChar { get; set; }
         public char EndChar { get; set; }
-        
+
         protected override void ReadPacket(BinaryReader reader)
         {
             StartChar = reader.ReadChar();
@@ -40,7 +40,7 @@ namespace SystemModule.Packet.ServerPackets
             writer.Write(EndChar);
         }
     }
-    
+
     public enum ServerDataType : byte
     {
         Enter = 0,

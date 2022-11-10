@@ -206,7 +206,7 @@ namespace GameSvr.Script
             NPC.m_ScriptList.Add(ScriptInfo);
             return ScriptInfo;
         }
-        
+
         private bool LoadScriptFileQuestCondition(string sText, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
@@ -1767,7 +1767,7 @@ namespace GameSvr.Script
                         sScript = HUtil32.GetValidStrCap(sScript, ref sItemName, TextSpitConst);
                         sScript = HUtil32.GetValidStrCap(sScript, ref sItemCount, TextSpitConst);
                         sScript = HUtil32.GetValidStrCap(sScript, ref sItemRefillTime, TextSpitConst);
-                        if (!string.IsNullOrEmpty(sItemName)  && !string.IsNullOrEmpty(sItemRefillTime))
+                        if (!string.IsNullOrEmpty(sItemName) && !string.IsNullOrEmpty(sItemRefillTime))
                         {
                             if (sItemName[0] == '\"')
                             {

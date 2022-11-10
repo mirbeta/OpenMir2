@@ -39,7 +39,7 @@ namespace DBSvr.Storage.MongoDB
 
         private void Close()
         {
- 
+
         }
 
         public int Index(string sName)

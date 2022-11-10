@@ -1,5 +1,5 @@
-using System;
 using SelGate.Services;
+using System;
 using System.Collections.Generic;
 using SystemModule;
 using SystemModule.Common;
@@ -50,7 +50,7 @@ namespace SelGate
             TempBlockIPList = new List<string>();
             ServerGateList = new List<ClientThread>();
         }
-        
+
         private bool IsBlockIP(string sIPaddr)
         {
             bool result = false;

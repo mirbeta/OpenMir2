@@ -5,7 +5,7 @@ namespace SystemModule
     public class Grobal2
     {
         public const int CLIENT_VERSION_NUMBER = 120040918;
-        
+
         public const byte DR_UP = 0;
         public const byte DR_UPRIGHT = 1;
         public const byte DR_RIGHT = 2;
@@ -14,7 +14,7 @@ namespace SystemModule
         public const byte DR_DOWNLEFT = 5;
         public const byte DR_LEFT = 6;
         public const byte DR_UPLEFT = 7;
-        
+
         /// <summary>
         /// 衣服
         /// </summary>
@@ -67,7 +67,7 @@ namespace SystemModule
         /// 宝石
         /// </summary>
         public const byte U_CHARM = 12;
-        
+
         public const int DEFBLOCKSIZE = 16;
         public const int BUFFERSIZE = 10000;
         public const int LOGICALMAPUNIT = 40;
@@ -79,7 +79,7 @@ namespace SystemModule
         public const int HOWMANYMAGICS = 20;
 
         //摆摊
-        public const int CM_SENDSELL = 9050;   
+        public const int CM_SENDSELL = 9050;
         public const int SM_SENDSELL = 9051;
         public const int RM_SENDSELL = 9052;
         public const int CM_MYSHOPEXIT = 9053;
@@ -105,7 +105,7 @@ namespace SystemModule
         /// 物品类型(物品属性读取)
         /// </summary>
         public const byte MAX_STATUS_ATTRIBUTE = 12;
-       
+
         public const int ET_DIGOUTZOMBI = 1;
         public const int ET_MINE = 2;
         public const int ET_PILESTONES = 3;
@@ -549,15 +549,15 @@ namespace SystemModule
         public const int DB_SAVEHUMANRCDEX = 102;
         public const int DBR_LOADHUMANRCD = 1100;
         public const int DBR_SAVEHUMANRCD = 1102;
-        
+
         public const uint RUNGATECODE = 0xAA55AA55 + 0x00450045;
-        
+
         public const byte GM_OPEN = 1;
         public const byte GM_CLOSE = 2;
         public const byte GM_CHECKSERVER = 3;
         public const byte GM_CHECKCLIENT = 4;
         public const byte GM_DATA = 5;
-        
+
         public const int GM_SERVERUSERINDEX = 6;
         public const int GM_RECEIVE_OK = 7;
         public const int SM_RUNGATELOGOUT = 599;

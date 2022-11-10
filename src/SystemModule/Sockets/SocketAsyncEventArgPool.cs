@@ -12,7 +12,7 @@ namespace SystemModule.Sockets
     {
         private readonly Stack<SocketAsyncEventArgs> m_pool;
         private readonly ReaderWriterLock toolLock = new ReaderWriterLock();
-        
+
         /// <summary>
         /// 用指定的大小初始化对象池
         /// </summary>

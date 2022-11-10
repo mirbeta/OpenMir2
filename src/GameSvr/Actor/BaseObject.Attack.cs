@@ -63,7 +63,7 @@ namespace GameSvr.Actor
                 {
                     AttackTarget = TargeBaseObject;
                 }
-                if (UseItems[Grobal2.U_WEAPON] != null  && (UseItems[Grobal2.U_WEAPON].Index > 0) && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0)
+                if (UseItems[Grobal2.U_WEAPON] != null && (UseItems[Grobal2.U_WEAPON].Index > 0) && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0)
                 {
                     if (AttackTarget != null)
                     {

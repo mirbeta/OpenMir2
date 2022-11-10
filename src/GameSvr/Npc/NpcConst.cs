@@ -70,7 +70,7 @@ namespace GameSvr.Npc
         public string sOpName;
         public string sOpHName;
     }
-    
+
     public class SayingProcedure
     {
         public IList<QuestConditionInfo> ConditionList;

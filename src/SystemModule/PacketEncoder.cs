@@ -245,7 +245,7 @@ namespace SystemModule
             }
             return dstBuffer;
         }
-        
+
         private static int GetDecodeLen(int cycles, int bytesLeft)
         {
             var dstPos = cycles * 3;

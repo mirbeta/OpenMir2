@@ -8,9 +8,9 @@ namespace GameSvr
     public class MapPipeClient
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private static NamePipeClient[] pipeClientMaps = new NamePipeClient[100];
+        private static readonly NamePipeClient[] pipeClientMaps = new NamePipeClient[100];
 
-        void PipeStream()
+        private void PipeStream()
         {
             try
             {
@@ -29,7 +29,6 @@ namespace GameSvr
 
         public MapCellInfo GetCellInfo(int nX, int nY, ref bool success)
         {
-            MapCellInfo mapCellInfo = null;
             var ram = RandomNumber.GetInstance().Random(pipeClientMaps.Length);
             pipeClientMaps[ram].SendPipeMessage(Encoding.UTF8.GetBytes("123"));
             pipeClientMaps[ram].Close();

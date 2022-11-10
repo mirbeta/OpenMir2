@@ -2,7 +2,6 @@
 using GameSvr.Services;
 using GameSvr.World;
 using NLog;
-using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Channels;
 using SystemModule;
@@ -73,14 +72,14 @@ namespace GameSvr.GateWay
                     ProcessBuffer(data, nMsgLen);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Error(sExceptionMsg);
                 _logger.Error(ex.StackTrace);
             }
         }
 
-        private void ProcessBuffer(Span<byte> packetBuff,int packetLen)
+        private void ProcessBuffer(Span<byte> packetBuff, int packetLen)
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer -> ExecGateMsg";
             var nLen = packetLen;

@@ -46,11 +46,11 @@ namespace GameSvr.Conf
             if (ReadString("Server", "VentureServer", "") == "")
                 WriteString("Server", "VentureServer", HUtil32.BoolToStr(M2Share.Config.VentureServer));
             M2Share.Config.VentureServer = string.Compare(ReadString("Server", "VentureServer", "FALSE"), "TRUE", StringComparison.OrdinalIgnoreCase) == 0;
-            
+
             if (ReadInteger("Server", "PayMentMode", -1) == -1)
                 WriteInteger("Server", "PayMentMode", M2Share.Config.PayMentMode);
             M2Share.Config.PayMentMode = (byte)ReadInteger("Server", "PayMentMode", M2Share.Config.PayMentMode);
-            
+
             if (ReadString("Server", "TestServer", "") == "")
                 WriteString("Server", "TestServer", HUtil32.BoolToStr(M2Share.Config.TestServer));
             M2Share.Config.TestServer = string.Compare(ReadString("Server", "TestServer", "FALSE"), "TRUE", StringComparison.OrdinalIgnoreCase) == 0;
@@ -331,7 +331,7 @@ namespace GameSvr.Conf
             if (ReadString("Setup", "ClientFile3", "") == "")
                 WriteString("Setup", "ClientFile3", M2Share.Config.ClientFile3);
             M2Share.Config.ClientFile3 = ReadString("Setup", "ClientFile3", M2Share.Config.ClientFile3);
-            if (ReadInteger("Setup", "MonUpLvNeedKillBase", -1) < 0) 
+            if (ReadInteger("Setup", "MonUpLvNeedKillBase", -1) < 0)
                 WriteInteger("Setup", "MonUpLvNeedKillBase", M2Share.Config.MonUpLvNeedKillBase);
             M2Share.Config.MonUpLvNeedKillBase = ReadInteger("Setup", "MonUpLvNeedKillBase", M2Share.Config.MonUpLvNeedKillBase);
             if (ReadInteger("Setup", "MonUpLvRate", -1) < 0)

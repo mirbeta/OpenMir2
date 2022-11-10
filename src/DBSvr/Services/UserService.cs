@@ -81,7 +81,7 @@ namespace DBSvr.Services
                 GateList.RemoveAt(i);
             }
         }
-        
+
         /// <summary>
         /// 处理客户端请求消息
         /// </summary>
@@ -516,7 +516,7 @@ namespace DBSvr.Services
                     if ((HUtil32.GetTickCount() - userInfo.dwChrTick) > 1000)
                     {
                         userInfo.dwChrTick = HUtil32.GetTickCount();
-                        if ((!string.IsNullOrEmpty(userInfo.sAccount )) && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
+                        if ((!string.IsNullOrEmpty(userInfo.sAccount)) && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
                         {
                             DeleteChr(sText, ref userInfo);
                             userInfo.boChrQueryed = false;

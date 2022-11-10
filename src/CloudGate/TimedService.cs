@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 
 namespace CloudGate

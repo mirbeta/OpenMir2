@@ -35,7 +35,7 @@ namespace LoginSvr.Services
             }
             return false;
         }
-        
+
         public bool IsLogin(string sessionId)
         {
             if (sessionAccountMap.ContainsKey(sessionId))
@@ -49,7 +49,7 @@ namespace LoginSvr.Services
         {
             if (sessionMap.Remove(sessionId))
             {
-                
+
             }
         }
 

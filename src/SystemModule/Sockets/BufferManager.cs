@@ -13,19 +13,19 @@ namespace SystemModule.Sockets
         /// <summary>
         /// 被缓冲区池管理的字节总数
         /// </summary>
-        private readonly int _numBytes;        
+        private readonly int _numBytes;
         /// <summary>
         /// 被BufferManager维持的基础字节数组
         /// </summary>
-        private byte[] _buffer;                
+        private byte[] _buffer;
         /// <summary>
         /// 释放的索引池
         /// </summary>
-        private readonly Stack<int> _freeIndexPool;  
+        private readonly Stack<int> _freeIndexPool;
         /// <summary>
         /// 当前索引
         /// </summary>
-        private int _currentIndex;            
+        private int _currentIndex;
         /// <summary>
         /// 缓冲区大小
         /// </summary>

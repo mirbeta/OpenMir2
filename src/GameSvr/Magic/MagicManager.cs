@@ -1300,7 +1300,7 @@ namespace GameSvr.Magic
         /// <summary>
         /// 宠物叛变时间
         /// </summary>
-        const int dwRoyaltySec = 10 * 24 * 60 * 60;
+        private const int dwRoyaltySec = 10 * 24 * 60 * 60;
 
         private bool MagMakeSlave(PlayObject PlayObject, UserMagic UserMagic)
         {

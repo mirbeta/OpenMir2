@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SystemModule.AsyncSocket
 {
-   public abstract class IOCPBase
+    public abstract class IOCPBase
     {
         #region Properties
         public abstract int BufferSize { get; protected set; }
@@ -37,7 +37,7 @@ namespace SystemModule.AsyncSocket
             {
                 userToken.SetResult(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 userToken.SetException(ex);
             }
@@ -136,13 +136,13 @@ namespace SystemModule.AsyncSocket
                 userToken.ReceiveArgs.SendPacketsFlags = TransmitFileOptions.UseDefaultWorkerThread;
                 RecycleToken(userToken);
             }
-            
+
         }
 
         #endregion
 
         #region Abstract
-        
+
         #region Close
         public abstract void CloseClientSocket(Socket socket);
 
@@ -178,7 +178,7 @@ namespace SystemModule.AsyncSocket
         #region Callback
         protected void OnIOCompleted(object serder, SocketAsyncEventArgs e)
         {
-            SocketResult result = new SocketResult { SocketError = e.SocketError, Args=e };
+            SocketResult result = new SocketResult { SocketError = e.SocketError, Args = e };
             switch (e.LastOperation)
             {
                 case SocketAsyncOperation.Connect:

@@ -51,15 +51,15 @@ namespace BotSvr.Scenes
         {
 
         }
-        
+
         public void AddChatBoardString(string str, int fcolor, ConsoleColor bcolor = ConsoleColor.White)
         {
             Console.BackgroundColor = bcolor;
-            Console.ForegroundColor = (ConsoleColor) fcolor;
+            Console.ForegroundColor = (ConsoleColor)fcolor;
             Console.WriteLine(str);
             Console.ResetColor();
         }
-        
+
         public void AddChatBoardString(string str, ConsoleColor fcolor, ConsoleColor bcolor = ConsoleColor.White)
         {
             Console.BackgroundColor = bcolor;

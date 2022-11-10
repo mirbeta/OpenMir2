@@ -43,7 +43,7 @@ namespace SystemModule.Extensions
             }
             return -1;
         }
-        
+
         public static long GetInt64(this IDataReader dr, string name)
         {
             var idx = GetOrdinal(dr, name);

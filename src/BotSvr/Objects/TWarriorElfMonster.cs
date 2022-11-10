@@ -4,7 +4,7 @@
     {
         public TWarriorElfMonster(RobotClient robotClient) : base(robotClient)
         {
-        
+
         }
     }
 }

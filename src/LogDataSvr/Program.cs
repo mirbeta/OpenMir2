@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace LogDataSvr
 {
-    class Program
+    internal class Program
     {
-        private static PeriodicTimer _timer;
+        private static readonly PeriodicTimer _timer;
         private static IHost _host;
         private static readonly CancellationTokenSource cts = new CancellationTokenSource();
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -38,7 +38,7 @@ namespace LogDataSvr
             LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
-            
+
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -55,7 +55,7 @@ namespace LogDataSvr
             Stop();
         }
 
-        static void Stop()
+        private static void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
@@ -63,7 +63,7 @@ namespace LogDataSvr
             });
         }
 
-        static async Task ProcessLoopAsync()
+        private static async Task ProcessLoopAsync()
         {
             string? input = null;
             do
@@ -107,8 +107,8 @@ namespace LogDataSvr
             AnsiConsole.Clear();
             return Task.CompletedTask;
         }
-     
-        static void PrintUsage()
+
+        private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
             using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("LogDataSvr.logo.png");

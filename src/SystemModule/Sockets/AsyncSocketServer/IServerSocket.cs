@@ -21,15 +21,16 @@ namespace SystemModule.Sockets.AsyncSocketServer
         /// <summary>
         /// 读对象池同步对象
         /// </summary>
-        private object _readPoolLock = new object();
+        private readonly object _readPoolLock = new object();
         /// <summary>
         /// 写对象池同步对象
         /// </summary>
-        private object _writePoolLock = new object();
+        private readonly object _writePoolLock = new object();
+
         /// <summary>
         /// 接收数据事件对象集合
         /// </summary>
-        ConcurrentDictionary<string, AsyncUserToken> _mTokens;
+        private readonly ConcurrentDictionary<string, AsyncUserToken> _mTokens;
         /// <summary>
         /// 设计同时处理的连接最大数
         /// </summary>
@@ -70,12 +71,12 @@ namespace SystemModule.Sockets.AsyncSocketServer
         /// <summary>
         /// 连接到服务器的Socket总数
         /// </summary>
-        private long _numConnectedSockets;
+        private readonly long _numConnectedSockets;
         /// <summary>
         /// 最大接受请求数信号量
         /// </summary>
-        private Semaphore _maxNumberAcceptedClients;
-        private  ReaderWriterLock rwl = new ReaderWriterLock();
+        private readonly Semaphore _maxNumberAcceptedClients;
+        private readonly ReaderWriterLock rwl = new ReaderWriterLock();
         /// <summary>
         /// 获取已经连接的Socket总数
         /// </summary>
@@ -372,7 +373,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
         /// <summary>
         /// 这个方法是关联异步接受操作的回调方法并且当接收操作完成时被调用        
         /// </summary>
-        void AcceptEventArg_Completed(object sender, SocketAsyncEventArgs e)
+        private void AcceptEventArg_Completed(object sender, SocketAsyncEventArgs e)
         {
             ProcessAccept(e);
         }
@@ -441,7 +442,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e">和完成的接受操作关联的SocketAsyncEventArg对象</param>
-        void IO_Completed(object sender, SocketAsyncEventArgs e)
+        private void IO_Completed(object sender, SocketAsyncEventArgs e)
         {
             // 确定刚刚完成的操作类型并调用关联的句柄
             switch (e.LastOperation)

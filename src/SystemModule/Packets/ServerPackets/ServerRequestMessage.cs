@@ -8,15 +8,15 @@ namespace SystemModule.Packet.ServerPackets
     [ProtoContract]
     public class ServerRequestMessage
     {
-        [ProtoMember(1)] 
+        [ProtoMember(1)]
         public int Recog { get; set; }
-        [ProtoMember(2)] 
+        [ProtoMember(2)]
         public ushort Ident { get; set; }
-        [ProtoMember(3)] 
+        [ProtoMember(3)]
         public ushort Param { get; set; }
-        [ProtoMember(4)] 
+        [ProtoMember(4)]
         public ushort Tag { get; set; }
-        [ProtoMember(5)] 
+        [ProtoMember(5)]
         public ushort Series { get; set; }
 
         public ServerRequestMessage()

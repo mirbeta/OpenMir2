@@ -13,7 +13,6 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.Player
 {
@@ -353,7 +352,7 @@ namespace GameSvr.Player
             byte result;
             if (Envir.Flag.boDayLight)
             {
-              return 0;
+                return 0;
             }
             if (Envir.Flag.boDarkness)
             {
@@ -1696,36 +1695,36 @@ namespace GameSvr.Player
         private void SendSaveItemList(int merchantId)
         {
             var sSendMsg = string.Empty;
-           var maxCount = StorageItemList.Count;
-           var page = (short)Math.Ceiling(maxCount / 50f);
+            var maxCount = StorageItemList.Count;
+            var page = (short)Math.Ceiling(maxCount / 50f);
 
-           for (int p = 0; p < page; p++)
-           {
-               var startCount = p * 50;
-               var endCount = startCount + 50;
-               if (endCount > maxCount)
-               {
-                   endCount = maxCount;
-               }
-               for (var i = startCount; i < endCount; i++)
-               {
-                   var UserItem = StorageItemList[i];
-                   var Item = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                   if (Item != null)
-                   {
-                       ClientItem clientItem = new ClientItem();
-                       Item.GetUpgradeStdItem(UserItem, ref clientItem);
-                       //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                       clientItem.Item.Name = CustomItem.GetItemName(UserItem);
-                       clientItem.Dura = UserItem.Dura;
-                       clientItem.DuraMax = UserItem.DuraMax;
-                       clientItem.MakeIndex = UserItem.MakeIndex;
-                       sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientItem) + '/';
-                   }
-               }
-               m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, merchantId, 0, p, (page - 1) < 0 ? 0 : page - 1);
-               SendSocket(m_DefMsg, sSendMsg);
-           }
+            for (int p = 0; p < page; p++)
+            {
+                var startCount = p * 50;
+                var endCount = startCount + 50;
+                if (endCount > maxCount)
+                {
+                    endCount = maxCount;
+                }
+                for (var i = startCount; i < endCount; i++)
+                {
+                    var UserItem = StorageItemList[i];
+                    var Item = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                    if (Item != null)
+                    {
+                        ClientItem clientItem = new ClientItem();
+                        Item.GetUpgradeStdItem(UserItem, ref clientItem);
+                        //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
+                        clientItem.Item.Name = CustomItem.GetItemName(UserItem);
+                        clientItem.Dura = UserItem.Dura;
+                        clientItem.DuraMax = UserItem.DuraMax;
+                        clientItem.MakeIndex = UserItem.MakeIndex;
+                        sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientItem) + '/';
+                    }
+                }
+                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, merchantId, 0, p, (page - 1) < 0 ? 0 : page - 1);
+                SendSocket(m_DefMsg, sSendMsg);
+            }
         }
 
         private void SendChangeGuildName()
@@ -2765,7 +2764,7 @@ namespace GameSvr.Player
             }
             return result;
         }
-        
+
         public void RefRankInfo(int nRankNo, string sRankName)
         {
             GuildRankNo = nRankNo;
@@ -3790,6 +3789,6 @@ namespace GameSvr.Player
                 }
             }
         }
-        
+
     }
 }

@@ -5,11 +5,10 @@ namespace SystemModule
     public static class MemoryCopy
     {
         private const int Threshold = 128;
+        private static readonly int PlatformWordSize = IntPtr.Size;
+        private static readonly int PlatformWordSizeBits = PlatformWordSize * 8;
 
-        static readonly int PlatformWordSize = IntPtr.Size;
-        static readonly int PlatformWordSizeBits = PlatformWordSize * 8;
-
-       public static void CopyMemory(byte[] src, int srcOff, byte[] dst, int dstOff, int count)
+        public static void CopyMemory(byte[] src, int srcOff, byte[] dst, int dstOff, int count)
         {
             if (src == null)
                 throw new ArgumentNullException("src");
@@ -38,38 +37,38 @@ namespace SystemModule
                 }
             }
         }
-       
-       public static void CopyMemory(Span<byte> src, int srcOff, Span<byte> dst, int dstOff, int count)
-       {
-           if (src == null)
-               throw new ArgumentNullException("src");
 
-           if (dst == null)
-               throw new ArgumentNullException("dst");
+        public static void CopyMemory(Span<byte> src, int srcOff, Span<byte> dst, int dstOff, int count)
+        {
+            if (src == null)
+                throw new ArgumentNullException("src");
 
-           if (srcOff < 0)
-               throw new ArgumentOutOfRangeException("srcOffset");
+            if (dst == null)
+                throw new ArgumentNullException("dst");
 
-           if (dstOff < 0)
-               throw new ArgumentOutOfRangeException("dstOffset");
+            if (srcOff < 0)
+                throw new ArgumentOutOfRangeException("srcOffset");
 
-           if (count < 0)
-               throw new ArgumentOutOfRangeException("count");
+            if (dstOff < 0)
+                throw new ArgumentOutOfRangeException("dstOffset");
 
-           if (count == 0)
-               return;
+            if (count < 0)
+                throw new ArgumentOutOfRangeException("count");
 
-           unsafe
-           {
-               fixed (byte* srcPtr = &src[srcOff])
-               fixed (byte* dstPtr = &dst[dstOff])
-               {
-                   CopyMemory(srcPtr, dstPtr, count);
-               }
-           }
-       }
+            if (count == 0)
+                return;
 
-        static unsafe void CopyMemory(byte* srcPtr, byte* dstPtr, int count)
+            unsafe
+            {
+                fixed (byte* srcPtr = &src[srcOff])
+                fixed (byte* dstPtr = &dst[dstOff])
+                {
+                    CopyMemory(srcPtr, dstPtr, count);
+                }
+            }
+        }
+
+        private static unsafe void CopyMemory(byte* srcPtr, byte* dstPtr, int count)
         {
             const int u32Size = sizeof(uint);
             const int u64Size = sizeof(ulong);
@@ -151,7 +150,7 @@ namespace SystemModule
             else
                 Buffer.BlockCopy(src, srcOffset, dst, dstOffset, count);
         }
-        
+
         public static void BlockCopy(Span<byte> source, int srcOff, Span<byte> destination, int dstOff, int count)
         {
             unsafe

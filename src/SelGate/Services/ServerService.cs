@@ -26,7 +26,7 @@ namespace SelGate.Services
         private readonly ClientManager _clientManager;
         private readonly ConfigManager _configManager;
 
-        public ServerService(MirLogger mirLog, SessionManager sessionManager, ClientManager clientManager,ConfigManager configManager)
+        public ServerService(MirLogger mirLog, SessionManager sessionManager, ClientManager clientManager, ConfigManager configManager)
         {
             _logger = mirLog;
             _sessionManager = sessionManager;

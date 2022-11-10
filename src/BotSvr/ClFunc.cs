@@ -7,7 +7,7 @@ namespace BotSvr
 {
     public class ClFunc
     {
-        private static IList<ClientItem> DropItems = null;
+        private static readonly IList<ClientItem> DropItems = null;
 
         public static void GetNextHitPosition(short sX, short sY, ref short NewX, ref short NewY)
         {

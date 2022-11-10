@@ -5,7 +5,6 @@ using NLog.Extensions.Logging;
 using Spectre.Console;
 using System.Reflection;
 using System.Text;
-using SystemModule;
 using SystemModule.Hosts;
 using SystemModule.Logger;
 
@@ -13,8 +12,8 @@ namespace GameSvr
 {
     public class AppServer : ServiceHost
     {
-        private static PeriodicTimer _timer;
-        
+        private static readonly PeriodicTimer _timer;
+
         public AppServer()
         {
             PrintUsage();
@@ -59,8 +58,8 @@ namespace GameSvr
         {
             throw new NotImplementedException();
         }
-        
-        static void Stop()
+
+        private static void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
@@ -68,7 +67,7 @@ namespace GameSvr
             });
         }
 
-        static void PrintUsage()
+        private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
             using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("GameSvr.logo.png");
@@ -117,7 +116,7 @@ namespace GameSvr
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();
         }
-        
+
         public override void Dispose()
         {
             throw new NotImplementedException();

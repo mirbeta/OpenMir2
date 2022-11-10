@@ -13,11 +13,11 @@ namespace SystemModule.AsyncSocket
     // The operations exposed on the BufferManager class are not thread safe.
     public sealed class BufferManager
     {
-        int m_numBytes;                 // the total number of bytes controlled by the buffer pool
-        byte[] m_buffer;                // the underlying byte array maintained by the Buffer Manager
-        Stack<int> m_freeIndexPool;     // 
-        int m_currentIndex;
-        int m_bufferSize;
+        private readonly int m_numBytes;                 // the total number of bytes controlled by the buffer pool
+        private byte[] m_buffer;                // the underlying byte array maintained by the Buffer Manager
+        private readonly Stack<int> m_freeIndexPool;     // 
+        private int m_currentIndex;
+        private readonly int m_bufferSize;
 
         public BufferManager(int totalBytes, int bufferSize)
         {

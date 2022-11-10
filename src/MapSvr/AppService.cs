@@ -2,8 +2,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 using System;
-using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +17,7 @@ namespace MapSvr
         private CancellationTokenSource? _cancellationTokenSource;
         private PeriodicTimer _timer;
         private readonly NamedPipeServerStream pipeServer;
-        
+
         public AppService(ILogger<AppService> logger, IHostApplicationLifetime lifetime)
         {
             _logger = logger;
@@ -58,7 +56,7 @@ namespace MapSvr
             });
 
             _appLifetime.ApplicationStopping.Register(OnShutdown);
-            
+
             return Task.CompletedTask;
         }
 

@@ -36,10 +36,10 @@ namespace BotSvr
                 await ProcessReviceMessage(stoppingToken);
             }, stoppingToken);
         }
-        
+
         public void Stop(CancellationToken stoppingToken)
         {
-           
+
         }
 
         private async Task ProcessReviceMessage(CancellationToken stoppingToken)

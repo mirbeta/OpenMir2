@@ -1,6 +1,7 @@
 using CloudGate.Conf;
 using System.Net;
 using SystemModule;
+using SystemModule.Packet;
 using SystemModule.Packet.ClientPackets;
 
 namespace CloudGate.Services

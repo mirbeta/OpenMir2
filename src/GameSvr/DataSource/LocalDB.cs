@@ -6,7 +6,6 @@ using System.Collections;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
-using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr.DataSource
 {
@@ -27,7 +26,7 @@ namespace GameSvr.DataSource
     {
         private readonly string[] TextSpitConst = new[] { " ", "\t" };
         private readonly string[] MonsterSpitConst = new[] { " ", "/", "\t" };
-        
+
         public bool LoadAdminList()
         {
             var sIPaddr = string.Empty;

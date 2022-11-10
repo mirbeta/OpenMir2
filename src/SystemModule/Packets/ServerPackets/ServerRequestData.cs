@@ -1,13 +1,13 @@
+using ProtoBuf;
 using System;
 using System.IO;
-using ProtoBuf;
 
 namespace SystemModule.Packet.ServerPackets
 {
     [ProtoContract]
     public class ServerRequestData : Packets
     {
-        private int packlen;
+        private readonly int packlen;
 
         [ProtoMember(1)]
         public int? PacketLen

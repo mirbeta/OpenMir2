@@ -416,7 +416,7 @@ namespace GameSvr.Player
                             this.SysMsg(string.Format(CommandHelp.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
                             if (M2Share.GameLogGameGold)
                             {
-                                M2Share.EventSource.AddEventLog( Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, m_nGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
+                                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, m_nGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
                             }
                             break;
                         }
