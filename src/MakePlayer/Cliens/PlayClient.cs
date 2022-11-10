@@ -60,7 +60,7 @@ namespace MakePlayer.Cliens
             ClientSocket = new ClientScoket();
             ClientSocket.OnConnected += SocketConnect;
             ClientSocket.OnDisconnected += SocketDisconnect;
-            ClientSocket.ReceivedDatagram += SocketRead;
+            ClientSocket.OnReceivedData += SocketRead;
             ClientSocket.OnError += SocketError;
             m_btCode = 0;
             LoginAccount = "";

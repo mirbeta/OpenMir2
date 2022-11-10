@@ -41,7 +41,6 @@ namespace SystemModule.AsyncSocket
         // <returns>true if the buffer was successfully set, else false</returns>
         public bool SetBuffer(SocketAsyncEventArgs args)
         {
-
             if (m_freeIndexPool.Count > 0)
             {
                 args.SetBuffer(m_buffer, m_freeIndexPool.Pop(), m_bufferSize);
@@ -70,10 +69,12 @@ namespace SystemModule.AsyncSocket
                 }
             }
         }
+        
         public void ReturnBuffer(UserToken token)
         {
             this.m_freeIndexPool.Push(token.ReceiveArgs.Offset);
         }
+        
         public void ResetBuffer(UserToken token)
         {
             if (token.ReceiveArgs.Buffer == this.m_buffer)

@@ -22,7 +22,7 @@ namespace GameSvr.Services
             _clientScoket.OnConnected += IDSocketConnect;
             _clientScoket.OnDisconnected += IDSocketDisconnect;
             _clientScoket.OnError += IDSocketError;
-            _clientScoket.ReceivedDatagram += IdSocketRead;
+            _clientScoket.OnReceivedData += IdSocketRead;
             if (M2Share.Config != null)
             {
                 _clientScoket.Host = M2Share.Config.sIDSAddr;

@@ -13,13 +13,13 @@ namespace LoginSvr.Storage
     {
         private readonly MirLogger _logger;
         private readonly ConfigManager _configManager;
-        private readonly Dictionary<string, AccountQuick> _quickList;
+        private readonly Dictionary<string, AccountQuick> _accountMap;
 
         public AccountStorage(MirLogger logQueue, ConfigManager configManager)
         {
             _logger = logQueue;
             _configManager = configManager;
-            _quickList = new Dictionary<string, AccountQuick>(StringComparer.OrdinalIgnoreCase);
+            _accountMap = new Dictionary<string, AccountQuick>(StringComparer.OrdinalIgnoreCase);
         }
 
         private Config Config => _configManager.Config;
@@ -85,8 +85,8 @@ namespace LoginSvr.Storage
 
         private void LoadQuickList()
         {
-            const string sSQL = "SELECT Id,Account,State FROM account";
-            _quickList.Clear();
+            const string sSQL = "SELECT Id,Account,State FROM account order by Id Desc";
+            _accountMap.Clear();
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
@@ -105,7 +105,7 @@ namespace LoginSvr.Storage
                     var boDeleted = dr.GetByte("State");
                     if (boDeleted == 0 && (!string.IsNullOrEmpty(sAccount)))
                     {
-                        _quickList.Add(sAccount, new AccountQuick(sAccount, nIndex));
+                        _accountMap.Add(sAccount, new AccountQuick(sAccount, nIndex));
                     }
                 }
                 dr.Close();
@@ -120,12 +120,12 @@ namespace LoginSvr.Storage
             {
                 Close(dbConnection);
             }
-            _logger.LogInformation($"账号数据读取成功.[{_quickList.Count}]");
+            _logger.LogInformation($"账号数据读取成功.[{_accountMap.Count}]");
         }
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
         {
-            if (_quickList.TryGetValue(sName, out var accountQuick))
+            if (_accountMap.TryGetValue(sName, out var accountQuick))
             {
                 List.Add(new AccountQuick(accountQuick.Account, accountQuick.Index));
             }
@@ -182,7 +182,7 @@ namespace LoginSvr.Storage
 
         public int Index(string account)
         {
-            if (_quickList.TryGetValue(account, out var accountQuick))
+            if (_accountMap.TryGetValue(account, out var accountQuick))
             {
                 return accountQuick.Index;
             }
@@ -315,7 +315,6 @@ namespace LoginSvr.Storage
                 command.Parameters.AddWithValue("@Answer2", accountRecord.UserEntryAdd.Answer2);
                 command.ExecuteNonQuery();
                 beginTransaction.Commit();
-                result = 1;
             }
             catch (Exception ex)
             {
@@ -468,7 +467,7 @@ namespace LoginSvr.Storage
             {
                 return false;
             }
-            if (_quickList.Count <= nIndex)
+            if (_accountMap.Count <= nIndex)
             {
                 return false;
             }
@@ -547,7 +546,7 @@ namespace LoginSvr.Storage
                 var nIndex = CreateAccount(accountRecord);
                 if (nIndex > 0)
                 {
-                    _quickList.Add(sAccount, new AccountQuick(sAccount, nIndex));
+                    _accountMap.Add(sAccount, new AccountQuick(sAccount, nIndex));
                     result = true;
                 }
                 else
@@ -565,14 +564,14 @@ namespace LoginSvr.Storage
             {
                 return false;
             }
-            if (_quickList.Count <= nIndex)
+            if (_accountMap.Count <= nIndex)
             {
                 return false;
             }
             var up = DeleteAccount(accountRecord.UserEntry.Account);
             if (up > 0)
             {
-                _quickList.Remove(accountRecord.UserEntry.Account);
+                _accountMap.Remove(accountRecord.UserEntry.Account);
                 result = true;
             }
             return result;

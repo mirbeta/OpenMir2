@@ -25,7 +25,7 @@ namespace DBSvr.Services
             _logger = logger;
             _conf = conf;
             _clientScoket = new ClientScoket();
-            _clientScoket.ReceivedDatagram += LoginSocketRead;
+            _clientScoket.OnReceivedData += LoginSocketRead;
             _clientScoket.OnConnected += LoginSocketConnected;
             _clientScoket.OnDisconnected += LoginSocketDisconnected;
             _clientScoket.OnError += LoginSocketError;

@@ -21,7 +21,7 @@ namespace GameSvr.Services
             _clientScoket = new ClientScoket();
             _clientScoket.OnConnected += DbScoketConnected;
             _clientScoket.OnDisconnected += DbScoketDisconnected;
-            _clientScoket.ReceivedDatagram += DBSocketRead;
+            _clientScoket.OnReceivedData += DBSocketRead;
             _clientScoket.OnError += DBSocketError;
             _socketWorking = false;
         }

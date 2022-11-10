@@ -73,7 +73,7 @@ namespace LoginSvr.Services
                             return;
                         sMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
 
-                        var clientSession = _clientManager.GetSession(message.SoketId);
+                        var clientSession = _clientManager.GetSession(message.SessionId);
                         if (clientSession == null)
                         {
                             continue;

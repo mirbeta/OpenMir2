@@ -67,7 +67,7 @@ namespace SelGate.Services
             _clientSocket = new ClientScoket();
             _clientSocket.OnConnected += ClientSocketConnect;
             _clientSocket.OnDisconnected += ClientSocketDisconnect;
-            _clientSocket.ReceivedDatagram += ClientSocketRead;
+            _clientSocket.OnReceivedData += ClientSocketRead;
             _clientSocket.OnError += ClientSocketError;
             _clientSocket.Host = serverAddr;
             _clientSocket.Port = serverPort;

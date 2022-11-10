@@ -10,6 +10,7 @@ namespace SystemModule.AsyncSocket
         private Socket connectSocket;
         private TaskCompletionSource<SocketResult> completionSource;
         private readonly Timer timer = null;
+        
         public UserToken()
         {
             completionSource = new TaskCompletionSource<SocketResult>();
@@ -22,7 +23,6 @@ namespace SystemModule.AsyncSocket
             Console.WriteLine("Timer_Elapsed fired");
 #endif
             SetCanceled();
-
         }
 
         public string Id { get; set; }
@@ -45,6 +45,7 @@ namespace SystemModule.AsyncSocket
                 this.ReceiveArgs.AcceptSocket = this.connectSocket;
             }
         }
+        
         public Task<SocketResult> CompletionSource
         {
             get
@@ -62,6 +63,7 @@ namespace SystemModule.AsyncSocket
         }
 
         public int TimeOut { get; set; } = -1;
+        
         public void SetResult(SocketResult result)
         {
             if (completionSource.Task.IsCompleted)
@@ -72,6 +74,7 @@ namespace SystemModule.AsyncSocket
             Console.WriteLine($"UserToken SetResult: {Id} TaskID: {completionSource.Task.Id}");
 #endif
         }
+        
         public void SetException(Exception exception)
         {
             if (completionSource.Task.IsCompleted)
@@ -82,6 +85,7 @@ namespace SystemModule.AsyncSocket
             Console.WriteLine($"UserToken SetException: {Id} TaskID: {completionSource.Task.Id}");
 #endif
         }
+        
         public void SetCanceled()
         {
             if (completionSource.Task.IsCompleted)
@@ -92,6 +96,7 @@ namespace SystemModule.AsyncSocket
             Console.WriteLine($"UserToken SetCanceled: {Id} TaskID: {completionSource.Task.Id}");
 #endif
         }
+        
         private void ResetTask()
         {
             TaskCompletionSource.Reset(ref completionSource);
