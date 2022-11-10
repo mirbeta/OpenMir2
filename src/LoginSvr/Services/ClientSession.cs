@@ -74,7 +74,10 @@ namespace LoginSvr.Services
                         sMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
 
                         var clientSession = _clientManager.GetSession(message.SoketId);
-
+                        if (clientSession == null)
+                        {
+                            continue;
+                        }
                         for (var i = 0; i < clientSession.UserList.Count; i++)
                         {
                             var userInfo = clientSession.UserList[i];

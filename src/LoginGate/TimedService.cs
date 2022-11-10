@@ -11,6 +11,7 @@ namespace LoginGate
     public class TimedService : BackgroundService
     {
         private int _processDelayTick = 0;
+        private int _heartInterval = 0;
         private readonly MirLogger _logger;
         private readonly SessionManager _sessionManager;
         private readonly ClientManager _clientManager;
@@ -25,10 +26,29 @@ namespace LoginGate
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _processDelayTick = HUtil32.GetTickCount();
+            _heartInterval = HUtil32.GetTickCount();
             while (!stoppingToken.IsCancellationRequested)
             {
                 ProcessDelayMsg();
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                ProcessHeartbeat();
+                await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+            }
+        }
+
+        private void ProcessHeartbeat()
+        {
+            if (HUtil32.GetTickCount() - _heartInterval > 10000)
+            {
+                _heartInterval = HUtil32.GetTickCount();
+                var clientList = _clientManager.ServerGateList();
+                for (var i = 0; i < clientList.Count; i++)
+                {
+                    if (clientList[i] == null)
+                    {
+                        continue;
+                    }
+                    _clientManager.ProcessClientThreadHeartbeat(clientList[i]);
+                }
             }
         }
 
@@ -44,7 +64,6 @@ namespace LoginGate
                     {
                         continue;
                     }
-                    _clientManager.ProcessClientThreadState(clientList[i]);
                     if (clientList[i].SessionArray == null)
                     {
                         continue;

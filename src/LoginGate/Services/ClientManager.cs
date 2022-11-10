@@ -158,7 +158,7 @@ namespace LoginGate.Services
         /// 检查客户端和服务端之间的状态以及心跳维护
         /// </summary>
         /// <param name="clientThread"></param>
-        public void ProcessClientThreadState(ClientThread clientThread)
+        public void ProcessClientThreadHeartbeat(ClientThread clientThread)
         {
             if (clientThread.ConnectState)
             {
@@ -168,7 +168,7 @@ namespace LoginGate.Services
                     SocketId = 0
                 });
                 clientThread.CheckServerFailCount = 1;
-                if (HUtil32.GetTickCount() - clientThread.KeepAliveTick > GateShare.KeepAliveTickTimeOut) //10s没有LoginSvr服务器心跳回应则超时
+                if (HUtil32.GetTickCount() - clientThread.KeepAliveTick > GateShare.KeepAliveTickTimeOut) //30s没有LoginSvr服务器心跳回应则超时
                 {
                     _logger.LogError("账号服务器长时间没有响应，断开链接。");
                     clientThread.ConnectState = false;
