@@ -11,7 +11,6 @@ using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.Actor
 {
@@ -79,7 +78,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// /衣服特效(如天外飞仙衣服效果)
         /// </summary>
-        private byte DressEffType;
+        private readonly byte DressEffType;
         /// <summary>
         /// 人物的PK值
         /// </summary>
@@ -103,7 +102,7 @@ namespace GameSvr.Actor
         /// </summary>
         public int FightZoneDieCount;
         public NakedAbility BonusAbil;
-        private NakedAbility CurBonusAbil;
+        private readonly NakedAbility CurBonusAbil;
         public int BonusPoint = 0;
         public int HungerStatus = 0;
         public bool AllowGuildReCall = false;
@@ -529,7 +528,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 防复活
         /// </summary>
-        private bool UnRevival = false;
+        private readonly bool UnRevival = false;
         /// <summary>
         /// 复活戒指使用间隔计数
         /// </summary>
@@ -553,7 +552,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 防护身
         /// </summary>
-        private bool UnMagicShield = false;
+        private readonly bool UnMagicShield = false;
         /// <summary>
         /// 活力戒指
         /// </summary>
@@ -2911,7 +2910,7 @@ namespace GameSvr.Actor
             else
             {
                 n8 = WAbil.MaxHP;
-                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC),(ushort) HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(WAbil.DC)));
+                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(WAbil.DC)));
                 n8 = n8 + HUtil32.Round(WAbil.MaxHP * 0.15) * SlaveExpLevel;
                 WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + SlaveExpLevel * 60), n8);
             }
@@ -4685,7 +4684,7 @@ namespace GameSvr.Actor
                             stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog(3,MapName + "\t" + CurrX + "\t" + CurrY +
+                                M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY +
                                                        "\t" + ChrName + "\t" + stdItem.Name + "\t" +
                                                        UseItems[i].MakeIndex + "\t"
                                                        + HUtil32.BoolToIntStr(Race == ActorRace.Play) +

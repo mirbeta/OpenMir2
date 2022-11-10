@@ -1,5 +1,4 @@
 using SelGate.Conf;
-using SelGate.Package;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +18,7 @@ namespace SelGate.Services
         private readonly ConfigManager _configManager;
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
 
-        public ClientManager(MirLogger logQueue, SessionManager sessionManager,ConfigManager configManager)
+        public ClientManager(MirLogger logQueue, SessionManager sessionManager, ConfigManager configManager)
         {
             _logQueue = logQueue;
             _configManager = configManager;

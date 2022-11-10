@@ -687,7 +687,7 @@ namespace GameSvr.Actor
                     SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 M2Share.Log.LogError(sExceptionMsg5);
             }
@@ -1054,7 +1054,7 @@ namespace GameSvr.Actor
                     {
                         tStr = "####";
                     }
-                    M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie,MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.boFightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
+                    M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.boFightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
                 }
                 // 减少地图上怪物计数
                 if (Master == null && !DelFormMaped)

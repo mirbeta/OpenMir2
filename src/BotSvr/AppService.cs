@@ -25,7 +25,7 @@ namespace BotSvr
             _clientManager = clientManager;
             _options = options.Value;
         }
-        
+
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             MShare.g_sGameIPaddr = _options.Address;
@@ -34,7 +34,7 @@ namespace BotSvr
             Start();
             return Task.CompletedTask;
         }
-        
+
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _options.ChrCount = HUtil32._MIN(_options.ChrCount, _options.TotalChrCount);
@@ -47,7 +47,7 @@ namespace BotSvr
             _clientManager.Start(cancellationToken);
             return base.StopAsync(cancellationToken);
         }
-        
+
         private void Start()
         {
             while (true)

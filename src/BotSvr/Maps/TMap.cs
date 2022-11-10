@@ -428,7 +428,6 @@ namespace BotSvr.Maps
 
         public void CloseDoor(int mx, int my)
         {
-            var result = false;
             var cx = mx - m_nBlockLeft;
             var cy = my - m_nBlockTop;
             if ((cx < 0) || (cy < 0))

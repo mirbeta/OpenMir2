@@ -25,7 +25,7 @@ namespace DBSvr.Storage.MySQL
             _IndexQuickIdMap = new Dictionary<int, int>();
             _storageOption = storageOption;
         }
-        
+
         public void LoadQuickList()
         {
             const string sSqlString = "SELECT * FROM characters WHERE Deleted=0";
@@ -139,7 +139,7 @@ namespace DBSvr.Storage.MySQL
                 }
                 playData = GetChrRecord(playerId, context);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -484,7 +484,6 @@ namespace DBSvr.Storage.MySQL
 
         public int Find(string sChrName, StringDictionary list)
         {
-            int result;
             for (var i = 0; i < _NameQuickMap.Count; i++)
             {
                 //if (HUtil32.CompareLStr(m_MirQuickList[i], sChrName, sChrName.Length))
@@ -596,7 +595,7 @@ namespace DBSvr.Storage.MySQL
                 dr.Close();
                 dr.Dispose();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _logger.Error("[Exception] PlayDataStorage.GetQryChar");
                 return false;

@@ -833,7 +833,7 @@ namespace GameSvr.Player
                     ClientDelGroupMember(ProcessMsg.Msg.Trim());
                     break;
                 case Grobal2.CM_USERREPAIRITEM:
-                    ClientRepairItem(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2,(ushort) ProcessMsg.nParam3), ProcessMsg.Msg);
+                    ClientRepairItem(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_MERCHANTQUERYREPAIRCOST:
                     ClientQueryRepairCost(ProcessMsg.nParam1, HUtil32.MakeLong((ushort)ProcessMsg.nParam2, (ushort)ProcessMsg.nParam3), ProcessMsg.Msg);
@@ -2078,7 +2078,7 @@ namespace GameSvr.Player
                     this.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 M2Share.Log.LogError(sExceptionMsg);
                 M2Share.Log.LogError(ex.StackTrace);

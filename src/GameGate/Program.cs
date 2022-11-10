@@ -8,7 +8,6 @@ using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime;
@@ -18,18 +17,18 @@ using System.Threading.Tasks;
 
 namespace GameGate
 {
-    class Program
+    internal class Program
     {
         private static Logger _logger;
         private static PeriodicTimer _timer;
         private static readonly CancellationTokenSource CancellationToken = new CancellationTokenSource();
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
-            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce; 
-            
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+
             ThreadPool.SetMaxThreads(200, 200);
             ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
             Console.WriteLine(new StringBuilder()
@@ -47,13 +46,13 @@ namespace GameGate
                 }
                 AnsiConsole.Reset();
             };
-            
+
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
-            
+
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -72,7 +71,7 @@ namespace GameGate
             Stop();
         }
 
-        static void Stop()
+        private static void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
@@ -80,7 +79,7 @@ namespace GameGate
             });
         }
 
-        static async Task ProcessLoopAsync()
+        private static async Task ProcessLoopAsync()
         {
             string input = null;
             do

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using SystemModule.Sockets.Event;
 
@@ -42,11 +41,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 接受缓存数组
         /// </summary>
-        private byte[] recvBuff = null;
+        private readonly byte[] recvBuff = null;
         /// <summary>
         /// 发送缓存数组
         /// </summary>
-        private byte[] sendBuff = null;
+        private readonly byte[] sendBuff = null;
         /// <summary>
         /// 连接socket
         /// </summary>
@@ -55,11 +54,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 用于发送数据的SocketAsyncEventArgs
         /// </summary>
-        private SocketAsyncEventArgs sendEventArg = null;
+        private readonly SocketAsyncEventArgs sendEventArg = null;
         /// <summary>
         /// 用于接收数据的SocketAsyncEventArgs
         /// </summary>
-        private SocketAsyncEventArgs recvEventArg = null;
+        private readonly SocketAsyncEventArgs recvEventArg = null;
         //tcp服务器ip
         public string Host = "";
         //tcp服务器端口
@@ -174,7 +173,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 服务器接收到的总字节数计数器
         /// </summary>
         public long TotalBytesRead => _totalBytesRead;
-        
+
         /// <summary>
         /// 获取大小的显示字符串
         /// </summary>

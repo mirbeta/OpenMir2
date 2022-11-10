@@ -55,7 +55,7 @@ namespace SystemModule
             var encBuf = PacketEncoder.DecodeBuf(bSrc, bSrc.Length, ref nLen);
             return HUtil32.GetString(encBuf, 0, nLen);
         }
-        
+
         /// <summary>
         /// 解密字符串
         /// </summary>
@@ -66,7 +66,7 @@ namespace SystemModule
             var encBuf = PacketEncoder.DecodeBuf(str, str.Length, ref nLen);
             return HUtil32.GetString(encBuf);
         }
-        
+
         /// <summary>
         /// 解密字符串
         /// </summary>
@@ -103,7 +103,7 @@ namespace SystemModule
             var nLen = 0;
             return PacketEncoder.DecodeBuf(bSrc, bSrc.Length, ref nLen);
         }
-        
+
         public static T DecodeBuffer<T>(string src) where T : Packets, new()
         {
             if (src == null) throw new ArgumentNullException(nameof(src));

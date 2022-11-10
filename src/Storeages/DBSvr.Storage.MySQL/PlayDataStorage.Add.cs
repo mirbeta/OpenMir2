@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using SystemModule.Packet.ClientPackets;
@@ -42,7 +41,7 @@ namespace DBSvr.Storage.MySQL
             if (AddRecord(ref nIndex, ref humanRcd))
             {
                 _NameQuickMap.Add(sChrName, nIndex);
-                _IndexQuickIdMap.Add(nIndex, nIndex); 
+                _IndexQuickIdMap.Add(nIndex, nIndex);
                 return true;
             }
             return false;
@@ -358,7 +357,7 @@ namespace DBSvr.Storage.MySQL
                 }
             }
         }
-        
+
         private void CreateItemAttr(StorageContext context, int playerId, UserItem[] userItems)
         {
             try

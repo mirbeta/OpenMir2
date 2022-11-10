@@ -54,14 +54,14 @@ namespace GameGate
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
     }
-    
+
     public readonly struct ClientOutPacketData
     {
         public readonly string ConnectId;
         public readonly int ThreadId;
         public readonly byte[] Buffer;
 
-        public ClientOutPacketData(string connectId,int threadId, byte[] buff)
+        public ClientOutPacketData(string connectId, int threadId, byte[] buff)
         {
             ConnectId = connectId;
             ThreadId = threadId;

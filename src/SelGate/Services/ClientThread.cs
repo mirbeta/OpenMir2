@@ -1,11 +1,9 @@
 using SelGate.Package;
 using System;
-using System.Net;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Packet;
 using SystemModule.Packet.ServerPackets;
-using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -60,7 +58,7 @@ namespace SelGate.Services
         /// </summary>
         private static MirLogger _logQueue;
 
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager,MirLogger logQueue)
+        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, MirLogger logQueue)
         {
             ClientId = clientId;
             _logQueue = logQueue;

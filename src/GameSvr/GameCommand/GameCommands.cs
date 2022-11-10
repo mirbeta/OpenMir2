@@ -550,7 +550,7 @@ namespace GameSvr.GameCommand
             LockLogon = new GameCmd();
         }
     }
-    
+
     public class GameCmd
     {
         /// <summary>

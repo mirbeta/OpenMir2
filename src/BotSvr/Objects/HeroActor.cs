@@ -1123,14 +1123,14 @@ namespace BotSvr.Objects
                             if (robotClient.g_PlayScene.CanWalk(nx, ny)) break;
                             tdir++;
                             tdir = tdir % 8;
-                            ClFunc.GetBackPosition(MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, tdir, ref nx,ref ny);
+                            ClFunc.GetBackPosition(MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, tdir, ref nx, ref ny);
                             nTag++;
                             if (nTag > 8) break;
                         }
 
                         if (robotClient.g_PlayScene.CanWalk(nx, ny))
                         {
-                            ClFunc.GetBackPosition2(MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, tdir, ref nTX,ref nTY);
+                            ClFunc.GetBackPosition2(MShare.g_MySelf.m_nCurrX, MShare.g_MySelf.m_nCurrY, tdir, ref nTX, ref nTY);
                             // Map.CanMove(nTX, nTY)
                             if (robotClient.g_PlayScene.CanWalk(nTX, nTY))
                             {

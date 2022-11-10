@@ -46,8 +46,8 @@ namespace SystemModule.Packet
 
     public class ClientOutMessage : Packets
     {
-        private GameServerPacket MessageHeader;
-        private ClientMesaagePacket clientMesaage;
+        private readonly GameServerPacket MessageHeader;
+        private readonly ClientMesaagePacket clientMesaage;
 
         public ClientOutMessage(GameServerPacket messageHeader, ClientMesaagePacket clientMesaage)
         {

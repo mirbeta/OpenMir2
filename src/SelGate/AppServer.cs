@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
 using SystemModule.Hosts;
 using SystemModule.Logger;
 
@@ -19,7 +18,7 @@ namespace SelGate
 {
     public class AppServer : ServiceHost
     {
-        private static PeriodicTimer _timer;
+        private static readonly PeriodicTimer _timer;
 
         public AppServer()
         {
@@ -67,7 +66,7 @@ namespace SelGate
             throw new NotImplementedException();
         }
 
-        static void Stop()
+        private static void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
@@ -75,7 +74,7 @@ namespace SelGate
             });
         }
 
-        async Task ProcessLoopAsync()
+        private async Task ProcessLoopAsync()
         {
             string input = null;
             do
@@ -175,7 +174,7 @@ namespace SelGate
             return Task.CompletedTask;
         }
 
-        static void PrintUsage()
+        private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
             using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SelGate.logo.png");

@@ -78,7 +78,7 @@ namespace BotSvr.Objects
 
         public override void DefaultMotion()
         {
-            
+
         }
 
         public override int GetDefaultFrame(bool wmode)
@@ -160,7 +160,7 @@ namespace BotSvr.Objects
 
         public void DoWeaponBreakEffect()
         {
- 
+
         }
 
         //public bool Run_MagicTimeOut()

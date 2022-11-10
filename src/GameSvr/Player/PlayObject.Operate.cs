@@ -60,7 +60,7 @@ namespace GameSvr.Player
 
         private void ClientQueryUserSet(ProcessMessage processMsg)
         {
-            
+
         }
 
         private void ClientQueryUserInformation(int charId, int nX, int nY)

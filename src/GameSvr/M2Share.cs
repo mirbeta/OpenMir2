@@ -17,13 +17,11 @@ using GameSvr.Services;
 using GameSvr.World;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Logger;
-using SystemModule.Packet.ClientPackets;
 
 namespace GameSvr
 {
@@ -49,10 +47,10 @@ namespace GameSvr
         public static readonly ReaderWriterLockWrapper SyncLock = new ReaderWriterLockWrapper();
         public static ActorMgr ActorMgr = null;
         public static ServerConf ServerConf;
-        private static StringConf StringConf;
-        private static ExpsConf ExpConf;
-        private static GlobalConf GlobalConf;
-        private static GameSettingConf GameSetting;
+        private static readonly StringConf StringConf;
+        private static readonly ExpsConf ExpConf;
+        private static readonly GlobalConf GlobalConf;
+        private static readonly GameSettingConf GameSetting;
         /// <summary>
         /// 寻路
         /// </summary>
@@ -152,7 +150,7 @@ namespace GameSvr
         public static bool GameLogGameGold = true;
         public static bool GameLogGamePoint = true;
         public static bool boGameLogHumanDie = true;
-        
+
         public static IList<string> g_DenyIPAddrList = null;
         // IP过滤列表
         public static IList<string> g_DenyChrNameList = null;
@@ -1996,7 +1994,7 @@ namespace GameSvr
             {
                 return 1;
             }
-            for (var i = 0; i < GameLogItemNameList.Count; i ++ )
+            for (var i = 0; i < GameLogItemNameList.Count; i++)
             {
                 if (string.Compare(sItemName, GameLogItemNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
                 {

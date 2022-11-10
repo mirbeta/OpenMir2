@@ -7,7 +7,7 @@ namespace SystemModule.Sockets
     /// </summary>
     public class AsyncSocketErrorEventArgs : EventArgs
     {
-        private AsyncSocketException _exception;
+        private readonly AsyncSocketException _exception;
 
         /// <summary>
         /// 使用SocketException参数进行构造

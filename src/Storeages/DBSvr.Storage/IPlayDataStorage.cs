@@ -14,11 +14,11 @@ namespace DBSvr.Storage
         int Index(string sName);
 
         int Get(int nIndex, ref PlayerDataInfo HumanRCD);
-        
+
         bool Get(string chrName, ref PlayerDataInfo HumanRCD);
 
         PlayerInfoData Query(int playerId);
-        
+
         bool GetQryChar(int nIndex, ref QueryChr QueryChrRcd);
 
         bool Update(string chrName, PlayerDataInfo HumanRCD);

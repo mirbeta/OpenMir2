@@ -151,15 +151,15 @@ namespace GameSvr.Player
                     switch (sData[0])
                     {
                         case '/':
-                        {
-                            sText = sData.AsSpan()[1..].ToString();
-                            sText = HUtil32.GetValidStr3(sText, ref sParam1, new[] { " " });
-                            if (!m_boFilterSendMsg)
                             {
-                                Whisper(sParam1, sText);
+                                sText = sData.AsSpan()[1..].ToString();
+                                sText = HUtil32.GetValidStr3(sText, ref sParam1, new[] { " " });
+                                if (!m_boFilterSendMsg)
+                                {
+                                    Whisper(sParam1, sText);
+                                }
+                                return;
                             }
-                            return;
-                        }
                         case '!':
                             {
                                 if (sData.Length >= 1)
@@ -237,9 +237,6 @@ namespace GameSvr.Player
             var sParam5 = string.Empty;
             var sParam6 = string.Empty;
             var sParam7 = string.Empty;
-            PlayObject PlayObject;
-            int nFlag;
-            int nValue;
             int nLen;
             const string sExceptionMsg = "[Exception] TPlayObject::ProcessUserLineMsg Msg = {0}";
             try

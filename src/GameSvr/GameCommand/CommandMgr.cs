@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand
         private static readonly Dictionary<string, Command> CommandMaps = new Dictionary<string, Command>(StringComparer.OrdinalIgnoreCase);
         private static CommandMgr instance = null;
         private static readonly object locker = new object();
-        
+
         private CommandMgr()
         {
             CommandConf = new GameCmdConf(Path.Combine(M2Share.BasePath, ConfConst.sCommandFileName));

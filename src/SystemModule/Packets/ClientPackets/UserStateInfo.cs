@@ -15,8 +15,8 @@ namespace SystemModule.Packet.ClientPackets
         public bool ExistLover;
         public string LoverName;
 
-        private static byte[] nullItemBuff = new ClientItem().GetBuffer();
-        
+        private static readonly byte[] nullItemBuff = new ClientItem().GetBuffer();
+
         public UserStateInfo()
         {
             UseItems = new ClientItem[13];

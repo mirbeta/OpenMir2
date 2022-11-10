@@ -19,7 +19,7 @@ namespace MakePlayer
             _clientManager = clientManager;
             _options = options.Value;
         }
-        
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _options.ChrCount = HUtil32._MIN(_options.ChrCount, _options.TotalChrCount);
@@ -35,8 +35,8 @@ namespace MakePlayer
             _cancellation.Cancel();
             return Task.CompletedTask;
         }
-        
-        void Start()
+
+        private void Start()
         {
             while (!_cancellation.IsCancellationRequested)
             {

@@ -1,5 +1,4 @@
 ﻿using SystemModule.Data;
-using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.Model
 {

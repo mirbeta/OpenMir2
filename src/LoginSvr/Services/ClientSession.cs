@@ -1,7 +1,6 @@
 ﻿using LoginSvr.Conf;
 using LoginSvr.Storage;
 using System;
-using System.Collections;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
@@ -61,30 +60,30 @@ namespace LoginSvr.Services
                 {
                     try
                     {
-                          var userData = message.Msg;
-                          var sMsg = string.Empty;
-                          if (!userData.EndsWith("!"))
-                          {
-                              return;
-                          }
-                          HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
-                          if (string.IsNullOrEmpty(sMsg))
-                              return;
-                          if (sMsg.Length < Grobal2.DEFBLOCKSIZE)
-                              return;
-                          sMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
+                        var userData = message.Msg;
+                        var sMsg = string.Empty;
+                        if (!userData.EndsWith("!"))
+                        {
+                            return;
+                        }
+                        HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
+                        if (string.IsNullOrEmpty(sMsg))
+                            return;
+                        if (sMsg.Length < Grobal2.DEFBLOCKSIZE)
+                            return;
+                        sMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
 
-                          var clientSession = _clientManager.GetSession(message.SoketId);
+                        var clientSession = _clientManager.GetSession(message.SoketId);
 
-                          for (var i = 0; i < clientSession.UserList.Count; i++)
-                          {
-                              var userInfo = clientSession.UserList[i];
-                              if (userInfo.SockIndex == message.SoketId)
-                              {
-                                  ProcessUserMsg(clientSession, userInfo, sMsg);
-                                  break;
-                              }
-                          }
+                        for (var i = 0; i < clientSession.UserList.Count; i++)
+                        {
+                            var userInfo = clientSession.UserList[i];
+                            if (userInfo.SockIndex == message.SoketId)
+                            {
+                                ProcessUserMsg(clientSession, userInfo, sMsg);
+                                break;
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {

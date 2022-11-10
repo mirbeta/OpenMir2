@@ -20,7 +20,7 @@ namespace GameSvr.Robots
         {
             ClearScript();
         }
-        
+
         private void AutoRun(AutoRunInfo AutoRunInfo)
         {
             if (M2Share.g_RobotNPC == null)
@@ -171,7 +171,7 @@ namespace GameSvr.Robots
             }
             AutoRunList.Clear();
         }
-        
+
         public void LoadScript()
         {
             string sLineText;

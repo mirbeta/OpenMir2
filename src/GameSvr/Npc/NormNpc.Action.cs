@@ -2651,7 +2651,7 @@ namespace GameSvr.Npc
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                             if (StdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog(9,PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
+                                M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                             }
                         }
                         else

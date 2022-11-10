@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SystemModule.Data;
-using SystemModule.Packet.ServerPackets;
 
 namespace DBSvr.Storage.MySQL
 {
@@ -261,7 +260,7 @@ namespace DBSvr.Storage.MySQL
 
         private const string InsertChrIndexes = "INSERT INTO characters_indexes (Account, ChrName, SelectID, IsDeleted, CreateDate, ModifyDate) VALUES (@Account, @ChrName, @SelectID, @IsDeleted, now(), now());";
         private const string UpdateChrIndexes = "UPDATE characters_indexes SET Account = @Account, ChrName = @ChrName, SelectID = @SelectID, IsDeleted = @IsDeleted,ModifyDate = now() WHERE Id = @Id;";
-        
+
         private bool UpdateRecord(PlayerRecordData HumRecord, bool boNew, ref int nIndex)
         {
             var connSuccess = false;

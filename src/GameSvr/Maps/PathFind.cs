@@ -60,7 +60,7 @@ namespace GameSvr.Maps
         /// <summary>
         /// 寻找范围
         /// </summary>
-        private int _scopeValue;
+        private readonly int _scopeValue;
         /// <summary>
         /// 开始寻路
         /// </summary>

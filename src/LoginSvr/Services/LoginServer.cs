@@ -105,7 +105,38 @@ namespace LoginSvr.Services
                         try
                         {
                             var packet = Packets.ToPacket<ServerDataMessage>(clientPacket.Pakcet);
-                            ProcessGateData(clientPacket.SocketId, packet);
+                            if (packet == null)
+                            {
+                                continue;
+                            }
+                            var gateInfo = _clientManager.GetSession(clientPacket.SocketId);
+                            if (packet.Body != null && gateInfo.UserList != null)
+                            {
+                                if (packet.EndChar != '$' && packet.StartChar != '%')
+                                {
+                                    _logger.LogWarning("丢弃错误的封包数据");
+                                    return;
+                                }
+                                switch (packet.Type)
+                                {
+                                    case ServerDataType.KeepAlive:
+                                        SendKeepAlivePacket(gateInfo.Socket);
+                                        gateInfo.KeepAliveTick = HUtil32.GetTickCount();
+                                        break;
+                                    case ServerDataType.Data:
+                                        var dataMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
+                                        ProcessUserMessage(packet.SocketId, dataMsg);
+                                        break;
+                                    case ServerDataType.Enter:
+                                        var endterMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
+                                        ReceiveOpenUser(packet.SocketId, endterMsg, gateInfo);
+                                        break;
+                                    case ServerDataType.Leave:
+                                        ReceiveCloseUser(packet.SocketId, gateInfo);
+                                        break;
+                                }
+                                _config.sGateIPaddr = gateInfo.sIPaddr;
+                            }
                         }
                         catch (Exception e)
                         {
@@ -117,38 +148,6 @@ namespace LoginSvr.Services
             _clientSession.Start(stoppingToken);
         }
 
-        private void ProcessGateData(int socketId, ServerDataMessage packet)
-        {
-            var gateInfo = _clientManager.GetSession(socketId);
-            if (packet.Body != null && gateInfo.UserList != null)
-            {
-                if (packet.EndChar != '$' && packet.StartChar != '%')
-                {
-                    _logger.LogWarning("丢弃错误的封包数据");
-                    return;
-                }
-                switch (packet.Type)
-                {
-                    case ServerDataType.KeepAlive:
-                        SendKeepAlivePacket(gateInfo.Socket);
-                        gateInfo.KeepAliveTick = HUtil32.GetTickCount();
-                        break;
-                    case ServerDataType.Data:
-                        var dataMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
-                        ProcessUserMessage(packet.SocketId, dataMsg);
-                        break;
-                    case ServerDataType.Enter:
-                        var endterMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
-                        ReceiveOpenUser(packet.SocketId, endterMsg, gateInfo);
-                        break;
-                    case ServerDataType.Leave:
-                        ReceiveCloseUser(packet.SocketId, gateInfo);
-                        break;
-                }
-                _config.sGateIPaddr = gateInfo.sIPaddr;
-            }
-        }
-        
         private void ProcessUserMessage(int sSockIndex, string sData)
         {
             _clientSession.Enqueue(new UserSessionData()

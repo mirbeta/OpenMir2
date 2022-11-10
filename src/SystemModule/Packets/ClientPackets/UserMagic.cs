@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using SystemModule.Data;
-using SystemModule.Packet.ServerPackets;
 
 namespace SystemModule.Packet.ClientPackets
 {

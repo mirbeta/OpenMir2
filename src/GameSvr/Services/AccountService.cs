@@ -124,7 +124,7 @@ namespace GameSvr.Services
             SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.Config.ServerName, M2Share.ServerIndex, nCount, M2Share.Config.PayMentMode));
         }
 
-        public void SendUserPlayTime(string account,long playTime)
+        public void SendUserPlayTime(string account, long playTime)
         {
             const string sFormatMsg = "({0}/{1}/{2}/{3})";
             SendSocket(string.Format(sFormatMsg, Grobal2.ISM_GAMETIMEOFTIMECARDUSER, M2Share.Config.ServerName, account, playTime));
@@ -238,7 +238,7 @@ namespace GameSvr.Services
                 }
             }
         }
-        
+
         private void GetAccountExpired(string sData)
         {
             var account = string.Empty;

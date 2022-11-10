@@ -15,7 +15,7 @@ namespace SystemModule.Extensions
             var data = binaryReader.ReadBytes(size);
             return PacketEncoder.DecodeBuf(data, data.Length, ref buffLen);
         }
-        
+
         public static string ReadPascalString(this BinaryReader binaryReader, int size)
         {
             var packegeLen = binaryReader.ReadByte();

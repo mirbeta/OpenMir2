@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -85,7 +84,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 RaiseErrorEvent(exception);//引发错误事件
             }
         }
-        
+
         public void Connect(string ip, int port)//连接到终结点
         {
             try
@@ -207,7 +206,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             var buffer = System.Text.Encoding.GetEncoding("gb2312").GetBytes(str);
             Send(buffer);
         }
-        
+
         public void Send(byte[] buffer)
         {
             try

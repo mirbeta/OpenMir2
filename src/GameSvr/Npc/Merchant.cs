@@ -103,7 +103,7 @@ namespace GameSvr.Npc
             m_dwMoveTick = HUtil32.GetTickCount();
             MapCell = CellType.Merchant;
         }
-        
+
         public override void Run()
         {
             try
@@ -169,7 +169,7 @@ namespace GameSvr.Npc
         {
             return base.Operate(ProcessMsg);
         }
-        
+
         private void AddItemPrice(ushort nIndex, double nPrice)
         {
             var itemPrice = new ItemPrice
@@ -331,7 +331,7 @@ namespace GameSvr.Npc
                 nInt -= 1;
             }
         }
-        
+
         private bool CheckItemType(int nStdMode)
         {
             var result = false;
@@ -788,7 +788,7 @@ namespace GameSvr.Npc
             }
             return result;
         }
-        
+
         public override void UserSelect(PlayObject PlayObject, string sData)
         {
             var sLabel = string.Empty;
@@ -948,7 +948,7 @@ namespace GameSvr.Npc
                 M2Share.Log.LogError(ex.StackTrace);
             }
         }
-        
+
         /// <summary>
         /// 特殊修理物品
         /// </summary>
@@ -1020,7 +1020,7 @@ namespace GameSvr.Npc
 
         private void UserSelectItemPrices(PlayObject User)
         {
-            
+
         }
 
         private void UserSelectStorage(PlayObject User)

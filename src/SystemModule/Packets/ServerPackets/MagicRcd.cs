@@ -1,5 +1,5 @@
-﻿using System.IO;
-using ProtoBuf;
+﻿using ProtoBuf;
+using System.IO;
 
 namespace SystemModule.Packet.ServerPackets
 {

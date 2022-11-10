@@ -6,7 +6,6 @@ using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
 
 namespace GameSvr.Conf
 {

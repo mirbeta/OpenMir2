@@ -85,11 +85,11 @@ namespace SystemModule.Packet.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-           writer.Write(Recog);
-           writer.Write(Ident);
-           writer.Write(Param);
-           writer.Write(Tag);
-           writer.Write(Series);
+            writer.Write(Recog);
+            writer.Write(Ident);
+            writer.Write(Param);
+            writer.Write(Tag);
+            writer.Write(Series);
         }
     }
 }

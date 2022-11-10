@@ -44,12 +44,8 @@ namespace DBSvr.Storage.MongoDB
 
         public void LoadQuickList()
         {
-            bool boDeleted;
             IList<PlayQuick> AccountList;
             IList<string> ChrNameList;
-            string sAccount;
-            string sChrName;
-            const string sSQLString = "SELECT * FROM TBL_CHARACTER WHERE Deleted=0";
             _mirQuickMap.Clear();
             _mirQuickIdList.Clear();
             _recordCount = -1;
@@ -98,7 +94,7 @@ namespace DBSvr.Storage.MongoDB
 
         private void Close()
         {
- 
+
         }
 
         public int Index(string sName)
@@ -219,37 +215,30 @@ namespace DBSvr.Storage.MongoDB
 
         private void GetChrRecord(int playerId, ref PlayerDataInfo HumanRCD)
         {
-            var success = false;
         }
 
         private void GetAbilGetRecord(int playerId, ref PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void GetBonusAbilRecord(int playerId, ref PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void GetMagicRecord(int playerId, ref PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void GetItemRecord(int playerId, ref PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void GetStorageRecord(int playerId, ref PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void GetPlayerStatus(int playerId, ref PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private bool AddRecord(ref int nIndex, ref PlayerDataInfo HumanRCD)
@@ -270,46 +259,35 @@ namespace DBSvr.Storage.MongoDB
 
         private void UpdateRecord(int Id, PlayerDataInfo HumanRCD)
         {
-            
+
         }
 
         private void UpdateAblity(int playerId, PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void UpdateItem(int playerId, PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void SaveItemStorge(int playerId, PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void SavePlayerMagic(int playerId, PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void UpdateBonusability(int playerId, PlayerDataInfo HumanRCD)
         {
-            bool success = false;
         }
 
         private void UpdateQuest(int Id, PlayerDataInfo HumanRCD)
         {
-            const string sSqlStr4 = "DELETE FROM TBL_QUEST WHERE PLAYERID='{0}'";
-            const string sSqlStr5 = "INSERT INTO TBL_QUEST (PLAYERID, QUESTOPENINDEX, QUESTFININDEX, QUEST) VALUES(@PLAYERID, @QUESTOPENINDEX, @QUESTFININDEX, @QUEST)";
-            bool success = false;
         }
 
         private void UpdateStatus(int playerId, PlayerDataInfo HumanRCD)
         {
-            const string sSqlStr4 = "DELETE FROM TBL_CHARACTER_STATUS WHERE PlayerId={0}";
-            const string sSqlStr5 = "INSERT INTO TBL_CHARACTER_STATUS (PlayerId, ChrName, Status) VALUES(@PlayerId, @ChrName, @Status)";
-            bool success = false;
         }
 
         public int Find(string sChrName, StringDictionary List)
@@ -348,7 +326,6 @@ namespace DBSvr.Storage.MongoDB
         {
             bool result = true;
             int PlayerId = _quickIndexIdMap[nIndex];
-            bool success = false;
             return result;
         }
 
@@ -374,8 +351,6 @@ namespace DBSvr.Storage.MongoDB
 
         public bool GetQryChar(int nIndex, ref QueryChr QueryChrRcd)
         {
-            int result = -1;
-            const string sSQL = "SELECT * FROM TBL_CHARACTER WHERE ID={0}";
             return false;
         }
     }

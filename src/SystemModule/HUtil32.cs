@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using SystemModule.Packet.ClientPackets;
@@ -194,7 +193,7 @@ namespace SystemModule
 
         public static string GetString(Span<byte> bytes, int index, int count)
         {
-            return Encoding.GetEncoding("gb2312").GetString(bytes.Slice(index,count));
+            return Encoding.GetEncoding("gb2312").GetString(bytes.Slice(index, count));
         }
 
         public static string GetString(Memory<byte> bytes, int index, int count)
@@ -241,7 +240,7 @@ namespace SystemModule
             }
             return sb.ToString();
         }
-        
+
         /// <summary>
         /// 字符串转丹字节
         /// 思路：对于含有高字节不为0的，说明字符串包含汉字，用Encoding.Default.GetBytes
@@ -344,7 +343,7 @@ namespace SystemModule
         {
             return int.TryParse(str, out var result) ? result : def;
         }
-        
+
         public static int StrToInt(ReadOnlySpan<char> str, int def)
         {
             return int.TryParse(str, out var result) ? result : def;

@@ -9,9 +9,9 @@ namespace MapSvr
     public class Pipeline : IDisposable
     {
         public Guid ID { get; }
-        private NamedPipeServerStream Server;
+        private readonly NamedPipeServerStream Server;
         private Task Task;
-        private AutoResetEvent Get, Got;
+        private readonly AutoResetEvent Get, Got;
         private string inputContext;
         private StreamWriter Writer;
         private StreamReader Reader;
@@ -32,7 +32,7 @@ namespace MapSvr
         {
             Task = Task.Factory.StartNew(TaskRun);
         }
-        
+
         private void TaskRun()
         {
             Server.WaitForConnection();
@@ -58,14 +58,14 @@ namespace MapSvr
             Console.WriteLine($"管道{ID}即将关闭");
             Dispose();
         }
-        
+
         private void readerThread()
         {
             Get.WaitOne();
             inputContext = Reader.ReadLine();
             Got.Set();
         }
-        
+
         private string TryReadLine()
         {
             int TimeOutCount = 0;
@@ -83,7 +83,7 @@ namespace MapSvr
             }
             return inputContext;
         }
-        
+
         public void Dispose()
         {
             Server.Close();

@@ -1810,7 +1810,7 @@ namespace GameSvr.World
             door.Status.Opened = false;
             SendDoorStatus(envir, door.nX, door.nY, Grobal2.RM_DOORCLOSE, 0, door.nX, door.nY);
         }
- 
+
         private void SendDoorStatus(Envirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY)
         {
             int n1C = nX - 12;
@@ -2130,7 +2130,7 @@ namespace GameSvr.World
 
         public void StartAi()
         {
-           
+
         }
 
         public void AddAiLogon(RoBotLogon ai)
@@ -2313,7 +2313,7 @@ namespace GameSvr.World
             return 0;
         }
 
-        public void SetPlayExpireTime(string account,int playTime)
+        public void SetPlayExpireTime(string account, int playTime)
         {
             for (int i = 0; i < PlayObjectList.Count(); i++)
             {

@@ -15,7 +15,7 @@ namespace GameGate
 
         public ServerApp()
         {
-            
+
         }
 
         public void StartService(CancellationToken stoppingToken)
@@ -29,13 +29,13 @@ namespace GameGate
             ServerManager.Start(stoppingToken);
             if (ConfigManager.GateConfig.UseCloudGate)
             {
-                if (string.IsNullOrEmpty(ConfigManager.GateConfig.CloudAddr) || ConfigManager.GateConfig.CloudPort<=0)
+                if (string.IsNullOrEmpty(ConfigManager.GateConfig.CloudAddr) || ConfigManager.GateConfig.CloudPort <= 0)
                 {
                     LogQueue.Log("智能防外挂云网关服务地址配置错误.请检查配置文件是否配置正确.", 0);
                     return;
                 }
                 if (string.IsNullOrEmpty(ConfigManager.GateConfig.LicenseCode))
-                { 
+                {
                     LogQueue.Log("智能防外挂云网关授权码为空或配置错误,请检查配置文件是否配置正确.", 0);
                     return;
                 }

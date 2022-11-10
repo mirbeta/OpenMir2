@@ -420,7 +420,7 @@ namespace BotSvr
             }
             return result;
         }
-        
+
         public static int GetTickCount()
         {
             return HUtil32.GetTickCount();

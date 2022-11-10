@@ -35,7 +35,7 @@ namespace DBSvr.Storage.MySQL
             }
             return result;
         }
-        
+
         /// <summary>
         /// 保存玩家数据
         /// todo 保存前要先获取一次数据，部分数据要进行对比
@@ -492,7 +492,6 @@ namespace DBSvr.Storage.MySQL
         private void SaveQuest(StorageContext context, int id, PlayerDataInfo humanRcd)
         {
             const string sSqlStr4 = "DELETE FROM characters_quest WHERE PlayerId=@PlayerId";
-            const string sSqlStr5 = "INSERT INTO characters_quest (PlayerId, QUESTOPENINDEX, QUESTFININDEX, QUEST) VALUES(@PlayerId, @QUESTOPENINDEX, @QUESTFININDEX, @QUEST)";
             try
             {
                 var command = context.CreateCommand();
@@ -539,7 +538,7 @@ namespace DBSvr.Storage.MySQL
                 _logger.Error(ex.StackTrace);
             }
         }
-     
+
         private void UpdateItemAttr(StorageContext context, int playerId, UserItem[] userItems)
         {
             try
@@ -571,7 +570,7 @@ namespace DBSvr.Storage.MySQL
                 _logger.Error(e.StackTrace);
             }
         }
-        
+
         private bool UpdateChrRecord(int playerId, QueryChr queryChrRcd)
         {
             const string sStrString = "UPDATE characters SET Sex=@Sex, Job=@Job WHERE ID=@Id";
@@ -624,7 +623,7 @@ namespace DBSvr.Storage.MySQL
                 _logger.Error(e.StackTrace);
             }
         }
-        
+
         private void ClearItemAttr(StorageContext context, int playerId, IList<int> makeIndex)
         {
             if (!makeIndex.Any())

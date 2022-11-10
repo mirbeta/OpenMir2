@@ -1,5 +1,4 @@
 ﻿using ProtoBuf;
-using System;
 using System.IO;
 
 namespace SystemModule.Packet.ClientPackets

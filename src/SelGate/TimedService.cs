@@ -16,7 +16,7 @@ namespace SelGate
         private int _processClearSessionTick = 0;
         private int _lastChekSocketTick = 0;
         private int _processDelayTick = 0;
-        
+
         public TimedService(MirLogger logQueue, ClientManager clientManager, SessionManager sessionManager)
         {
             _logQueue = logQueue;
@@ -131,7 +131,7 @@ namespace SelGate
                 }
             }
         }
-        
+
         /// <summary>
         /// 检查客户端和服务端之间的状态以及心跳维护
         /// </summary>

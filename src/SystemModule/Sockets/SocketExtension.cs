@@ -36,7 +36,7 @@ namespace SystemModule.Sockets
             }
             return false;
         }
-        
+
         public static bool SendBuffer(this Socket socket, byte[] buffer)
         {
             if (socket.Connected)
