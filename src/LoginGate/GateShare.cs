@@ -18,7 +18,7 @@ namespace LoginGate
         /// <summary>
         /// 心跳响应超时时间
         /// </summary>
-        public const int KeepAliveTickTimeOut = 10 * 1000;
+        public const int KeepAliveTickTimeOut = 30 * 1000;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>

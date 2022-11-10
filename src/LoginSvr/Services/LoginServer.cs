@@ -110,7 +110,7 @@ namespace LoginSvr.Services
                                 continue;
                             }
                             var gateInfo = _clientManager.GetSession(clientPacket.SocketId);
-                            if (packet.Body != null && gateInfo.UserList != null)
+                            if (packet.Body != null)
                             {
                                 if (packet.EndChar != '$' && packet.StartChar != '%')
                                 {
@@ -124,12 +124,10 @@ namespace LoginSvr.Services
                                         gateInfo.KeepAliveTick = HUtil32.GetTickCount();
                                         break;
                                     case ServerDataType.Data:
-                                        var dataMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
-                                        ProcessUserMessage(packet.SocketId, dataMsg);
+                                        ProcessUserMessage(packet.SocketId, packet.Body);
                                         break;
                                     case ServerDataType.Enter:
-                                        var endterMsg = HUtil32.GetString(packet.Body, 0, packet.Body.Length);
-                                        ReceiveOpenUser(packet.SocketId, endterMsg, gateInfo);
+                                        ReceiveOpenUser(packet.SocketId, packet.Body, gateInfo);
                                         break;
                                     case ServerDataType.Leave:
                                         ReceiveCloseUser(packet.SocketId, gateInfo);
@@ -148,12 +146,13 @@ namespace LoginSvr.Services
             _clientSession.Start(stoppingToken);
         }
 
-        private void ProcessUserMessage(int sSockIndex, string sData)
+        private void ProcessUserMessage(int sSockIndex, byte[] data)
         {
+            var dataMsg = HUtil32.GetString(data, 0, data.Length);
             _clientSession.Enqueue(new UserSessionData()
             {
                 SoketId = sSockIndex,
-                Msg = sData
+                Msg = dataMsg
             });
         }
 
@@ -186,8 +185,13 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ReceiveOpenUser(int sSockIndex, string sIPaddr, GateInfo gateInfo)
+        private void ReceiveOpenUser(int sSockIndex, byte[] data, GateInfo gateInfo)
         {
+            if (data == null || data.Length <= 0)
+            {
+                return;
+            }
+            var sIPaddr = HUtil32.GetString(data, 0, data.Length);
             UserInfo userInfo;
             var sUserIPaddr = string.Empty;
             const string sOpenMsg = "Open: {0}/{1}";
