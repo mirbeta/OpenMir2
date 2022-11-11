@@ -13,18 +13,18 @@ namespace GameSvr.Services
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ClientScoket _clientScoket;
-        private static int _packetLen;
-        private byte[] _recvBuff;
-        private bool _socketWorking;
+        private int PacketLen{ get; set; }
+        private byte[] RecvBuff { get; set; }
+        private bool SocketWorking { get; set; }
 
         public DBService()
         {
-            _clientScoket = new ClientScoket(new IPEndPoint(IPAddress.Parse(M2Share.Config.sDBAddr), M2Share.Config.nDBPort));
+            _clientScoket = new ClientScoket(new IPEndPoint(IPAddress.Parse(M2Share.Config.sDBAddr), M2Share.Config.nDBPort), 4096);
             _clientScoket.OnConnected += DbScoketConnected;
             _clientScoket.OnDisconnected += DbScoketDisconnected;
             _clientScoket.OnReceivedData += DBSocketRead;
             _clientScoket.OnError += DBSocketError;
-            _socketWorking = false;
+            SocketWorking = false;
         }
 
         public void Start()
@@ -56,7 +56,7 @@ namespace GameSvr.Services
             {
                 return false;
             }
-            _recvBuff = null;
+            RecvBuff = null;
 
             var requestPacket = new ServerRequestData();
             requestPacket.QueryId = nQueryID;
@@ -100,42 +100,42 @@ namespace GameSvr.Services
 
         private void DBSocketRead(object sender, DSCClientDataInEventArgs e)
         {
+            //todo 粘包处理有问题，大量数据包会导致数据解析错乱
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
                 var data = e.Buff;
-                if (_packetLen == 0 && data[0] == (byte)'#')
+                if (PacketLen == 0 && data[0] == (byte)'#')
                 {
-                    _packetLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
+                    PacketLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
                 }
-                if (_recvBuff != null && _recvBuff.Length > 0)
+                if (RecvBuff != null && RecvBuff.Length > 0)
                 {
-                    var tempBuff = new byte[_recvBuff.Length + e.BuffLen];
-                    Buffer.BlockCopy(_recvBuff, 0, tempBuff, 0, _recvBuff.Length);
-                    Buffer.BlockCopy(e.Buff, 0, tempBuff, _recvBuff.Length, e.BuffLen);
-                    _recvBuff = tempBuff;
+                    var tempBuff = new byte[RecvBuff.Length + e.BuffLen];
+                    Buffer.BlockCopy(RecvBuff, 0, tempBuff, 0, RecvBuff.Length);
+                    Buffer.BlockCopy(data, 0, tempBuff, RecvBuff.Length, e.BuffLen);
+                    RecvBuff = tempBuff;
                 }
                 else
                 {
-                    _recvBuff = e.Buff;
+                    RecvBuff = data;
                 }
-                var len = _recvBuff.Length - _packetLen;
+                var len = RecvBuff.Length - PacketLen;
                 if (len > 0)
                 {
-                    var tempBuff = new byte[len];
-                    Buffer.BlockCopy(_recvBuff, _packetLen, tempBuff, 0, len);
-                    data = _recvBuff[.._packetLen];
-                    _recvBuff = tempBuff;
-                    _socketWorking = true;
-                    ProcessData(data.ToArray());
-                    _packetLen = tempBuff.Length;
+                    data = RecvBuff[..PacketLen];
+                    SocketWorking = true;
+                    ProcessData(data);
+                    RecvBuff = RecvBuff.AsSpan().Slice(PacketLen, len).ToArray();
+                    PacketLen = RecvBuff.Length;
+                    PacketLen = 0;
                 }
                 else if (len == 0)
                 {
-                    _socketWorking = true;
-                    ProcessData(_recvBuff);
-                    _recvBuff = null;
-                    _packetLen = 0;
+                    SocketWorking = true;
+                    ProcessData(RecvBuff);
+                    RecvBuff = null;
+                    PacketLen = 0;
                 }
             }
             finally
@@ -148,7 +148,7 @@ namespace GameSvr.Services
         {
             try
             {
-                if (!_socketWorking) return;
+                if (!SocketWorking) return;
                 var responsePacket = Packets.ToPacket<ServerRequestData>(data);
                 if (responsePacket != null && responsePacket.PacketLen > 0)
                 {
@@ -175,10 +175,14 @@ namespace GameSvr.Services
                         }
                     }
                 }
+                else
+                {
+                    _logger.Error("错误的封包数据");
+                }
             }
             finally
             {
-                _socketWorking = false;
+                SocketWorking = false;
             }
         }
     }

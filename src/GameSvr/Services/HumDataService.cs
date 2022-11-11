@@ -9,6 +9,9 @@ namespace GameSvr.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly ConcurrentDictionary<int, ServerRequestData> ReceivedMap = new ConcurrentDictionary<int, ServerRequestData>();
+        private static readonly Queue<int> queryProcessList = new Queue<int>();
+        private static readonly Queue<int> saveProcessList = new Queue<int>();
+        private static readonly ConcurrentDictionary<int, LoadPlayerDataPacket> loadPlayDataMap = new ConcurrentDictionary<int, LoadPlayerDataPacket>();
 
         public static bool SocketConnected()
         {
@@ -38,12 +41,15 @@ namespace GameSvr.Services
                 HUtil32.EnterCriticalSection(M2Share.UserDBSection);
                 try
                 {
-                    if (ReceivedMap.TryGetValue(queryId, out respPack))
+                    if (ReceivedMap.ContainsKey(queryId))
                     {
-                        if (respPack == null)
+                        if (ReceivedMap.TryGetValue(queryId, out respPack))
                         {
-                            Thread.Sleep(1);
-                            continue;
+                            if (respPack == null)
+                            {
+                                Thread.Sleep(1);
+                                continue;
+                            }
                         }
                     }
                     else
@@ -56,7 +62,7 @@ namespace GameSvr.Services
                 {
                     HUtil32.LeaveCriticalSection(M2Share.UserDBSection);
                 }
-                if (respPack.PacketLen > 0)
+                if (respPack != null && respPack.PacketLen > 0)
                 {
                     var serverPacket = ProtoBufDecoder.DeSerialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
                     if (serverPacket == null)
@@ -83,7 +89,17 @@ namespace GameSvr.Services
             return result;
         }
 
-        public static bool LoadHumRcdFromDB(string sAccount, string sChrName, string sStr, ref PlayerDataInfo HumanRcd, int nCertCode)
+        public static bool GetPlayData(int queryId,ref PlayerDataInfo playerData)
+        {
+            if (loadPlayDataMap.ContainsKey(queryId))
+            {
+                playerData = loadPlayDataMap[queryId].HumDataInfo;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool LoadHumRcdFromDB(string sAccount, string sChrName, string sStr, ref int queryId, int nCertCode)
         {
             var result = false;
             var loadHum = new LoadPlayerDataMessage()
@@ -93,14 +109,15 @@ namespace GameSvr.Services
                 UserAddr = sStr,
                 SessionID = nCertCode
             };
-            if (LoadRcd(loadHum, ref HumanRcd))
+            if (LoadRcd(loadHum, ref queryId))
             {
-                HumanRcd.Data.ChrName = sChrName;
+                result = true;
+                /*HumanRcd.Data.ChrName = sChrName;
                 HumanRcd.Data.Account = sAccount;
                 if (HumanRcd.Data.ChrName == sChrName && (string.IsNullOrEmpty(HumanRcd.Data.Account) || HumanRcd.Data.Account == sAccount))
                 {
                     result = true;
-                }
+                }*/
             }
             M2Share.Config.nLoadDBCount++;
             return result;
@@ -130,17 +147,7 @@ namespace GameSvr.Services
             saveHumData.HumDataInfo = HumanRcd;
             if (M2Share.DataServer.SendRequest(nQueryId, packet, saveHumData))
             {
-                if (GetDBSockMsg(nQueryId, ref nIdent, ref nRecog, ref data, 5000, false))
-                {
-                    if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
-                    {
-                        result = true;
-                    }
-                    else
-                    {
-                        Logger.Error($"[RunDB] 保存人物({chrName})数据失败");
-                    }
-                }
+                saveProcessList.Enqueue(nQueryId);
             }
             else
             {
@@ -149,40 +156,71 @@ namespace GameSvr.Services
             return result;
         }
 
-        private static bool LoadRcd(LoadPlayerDataMessage loadHuman, ref PlayerDataInfo HumanRcd)
+        public static void ProcessSaveList()
         {
-            var result = false;
-            var nIdent = 0;
-            var nRecog = 0;
-            byte[] humRespData = null;
-            var nQueryID = GetQueryId();
-            var packet = new ServerRequestMessage(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
-            if (M2Share.DataServer.SendRequest(nQueryID, packet, loadHuman))
+            while (saveProcessList.Count > 0)
             {
-                if (GetDBSockMsg(nQueryID, ref nIdent, ref nRecog, ref humRespData, 5000, true))
+                var queryId = saveProcessList.Dequeue();
+                var nIdent = 0;
+                var nRecog = 0;
+                byte[] data = null;
+                if (GetDBSockMsg(queryId, ref nIdent, ref nRecog, ref data, 5000, false))
+                {
+                    if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
+                    {
+                        // result = true;
+                    }
+                    else
+                    {
+                        // Logger.Error($"[RunDB] 保存人物({chrName})数据失败");
+                    }
+                }
+            }
+        }
+
+        public static void ProcessQueryList()
+        {
+            while (queryProcessList.Count > 0)
+            {
+                var queryId = queryProcessList.Dequeue();
+                var nIdent = 0;
+                var nRecog = 0;
+                byte[] data = null;
+                if (GetDBSockMsg(queryId, ref nIdent, ref nRecog, ref data, 5000, true))
                 {
                     if (nIdent == Grobal2.DBR_LOADHUMANRCD)
                     {
                         if (nRecog == 1)
                         {
-                            humRespData = EDCode.DecodeBuff(humRespData);
+                            var humRespData = EDCode.DecodeBuff(data);
                             var responsePacket = ProtoBufDecoder.DeSerialize<LoadPlayerDataPacket>(humRespData);
-                            var chrName = EDCode.DeCodeString(responsePacket.ChrName);
+                            responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
+                            loadPlayDataMap.TryAdd(queryId, responsePacket);
+                            /*var chrName = EDCode.DeCodeString(responsePacket.ChrName);
                             if (chrName == loadHuman.ChrName)
                             {
                                 HumanRcd = new PlayerDataInfo();
                                 HumanRcd = responsePacket.HumDataInfo;
                                 result = true;
-                            }
+                            }*/
                         }
                     }
                 }
             }
-            else
+        }
+
+        private static bool LoadRcd(LoadPlayerDataMessage loadHuman, ref int queryId)
+        {
+            var nQueryId = GetQueryId();
+            var packet = new ServerRequestMessage(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
+            if (M2Share.DataServer.SendRequest(nQueryId, packet, loadHuman))
             {
-                Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+                queryProcessList.Enqueue(nQueryId);
+                queryId = nQueryId;
+                return true;
             }
-            return result;
+            Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+            return false;
         }
 
         private static int GetQueryId()

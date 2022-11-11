@@ -295,7 +295,7 @@ namespace GameSvr.World
             return result;
         }
 
-        private PlayObject ProcessHumans_MakeNewHuman(UserOpenInfo userOpenInfo)
+        private PlayObject ProcessHumansMakeNewHuman(UserOpenInfo userOpenInfo)
         {
             PlayObject result = null;
             PlayObject playObject = null;
@@ -550,13 +550,20 @@ namespace GameSvr.World
                     HUtil32.EnterCriticalSection(LoadPlaySection);
                     try
                     {
+                        //没有进入游戏前 不删除和清空列表
+                        var tempList = new List<int>();
                         for (var i = 0; i < LoadPlayList.Count; i++)
                         {
                             UserOpenInfo userOpenInfo;
                             if (!M2Share.FrontEngine.IsFull() && !ProcessHumansIsLogined(LoadPlayList[i].sChrName))
                             {
                                 userOpenInfo = LoadPlayList[i];
-                                playObject = ProcessHumans_MakeNewHuman(userOpenInfo);
+                                if (!PlayerDataService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
+                                {
+                                   continue;
+                                }
+                                tempList.Add(i);
+                                playObject = ProcessHumansMakeNewHuman(userOpenInfo);
                                 if (playObject != null)
                                 {
                                     if (playObject.IsRobot)
@@ -580,7 +587,11 @@ namespace GameSvr.World
                             }
                             LoadPlayList[i] = null;
                         }
-                        LoadPlayList.Clear();
+                        for (int i = 0; i < tempList.Count; i++)
+                        {
+                            LoadPlayList.RemoveAt(i);
+                        }
+                        //LoadPlayList.Clear();
                         for (var i = 0; i < _mChangeHumanDbGoldList.Count; i++)
                         {
                             var goldChangeInfo = _mChangeHumanDbGoldList[i];
