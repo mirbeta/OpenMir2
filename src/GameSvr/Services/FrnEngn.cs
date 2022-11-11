@@ -157,6 +157,8 @@ namespace GameSvr.Services
             }
             if (PlayerDataService.SocketConnected())
             {
+                PlayerDataService.ProcessQueryList();
+                PlayerDataService.ProcessSaveList();
                 for (var i = 0; i < m_SaveRcdTempList.Count; i++)
                 {
                     SavePlayerRcd SaveRcd = m_SaveRcdTempList[i];
@@ -314,7 +316,7 @@ namespace GameSvr.Services
 
         private bool LoadHumFromDB(LoadDBInfo LoadUser, ref bool boReTry)
         {
-            PlayerDataInfo HumanRcd = null;
+            int queryId = 0;
             var result = false;
             boReTry = false;
             if (InSaveRcdList(LoadUser.ChrName))
@@ -328,7 +330,7 @@ namespace GameSvr.Services
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return result;
             }
-            if (!PlayerDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
+            if (!PlayerDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref queryId, LoadUser.nSessionID))
             {
                 M2Share.GateMgr.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
             }
@@ -338,7 +340,8 @@ namespace GameSvr.Services
                 {
                     sChrName = LoadUser.ChrName,
                     LoadUser = LoadUser,
-                    HumanRcd = HumanRcd
+                    HumanRcd = null,
+                    QueryId = queryId
                 };
                 M2Share.WorldEngine.AddUserOpenInfo(userOpenInfo);
                 result = true;
@@ -430,7 +433,7 @@ namespace GameSvr.Services
         {
             PlayerDataInfo HumanRcd = null;
             var result = false;
-            if (PlayerDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
+            /*if (PlayerDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
             {
                 if (HumanRcd.Data.Gold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.Gold + GoldChangeInfo.nGold < 2000000000)
                 {
@@ -441,7 +444,7 @@ namespace GameSvr.Services
                         result = true;
                     }
                 }
-            }
+            }*/
             return result;
         }
 
