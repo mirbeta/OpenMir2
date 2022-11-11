@@ -11,8 +11,8 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Player
 {

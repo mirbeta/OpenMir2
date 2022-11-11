@@ -371,6 +371,10 @@ namespace LoginSvr.Services
             for (int i = 0; i < _serverList.Count; i++)
             {
                 var sessionServer = _serverList[i];
+                if (sessionServer == null)
+                {
+                    continue;
+                }
                 if (sessionServer.PayMentMode == 3)
                 {
                     for (var j = sessionServer.SessionList.Count - 1; j >= 0; j--)
@@ -378,9 +382,9 @@ namespace LoginSvr.Services
                         var connInfo = sessionServer.SessionList[j];
                         if (!connInfo.Kicked && !_config.TestServer && !connInfo.IsPayMent)
                         {
-                            if (HUtil32.GetTickCount() - connInfo.dwStartTick > 60 * 60 * 1000)
+                            if (HUtil32.GetTickCount() - connInfo.StartTick > 60 * 60 * 1000)
                             {
-                                connInfo.dwStartTick = HUtil32.GetTickCount();
+                                connInfo.StartTick = HUtil32.GetTickCount();
                                 if (!connInfo.IsPayMent) //todo 完善处理方式，如果游戏是付费，但账号是免费模式则需要额外处理
                                 {
                                     SendServerMsg(Grobal2.SS_KICKUSER, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
@@ -689,7 +693,7 @@ namespace LoginSvr.Services
         public IList<SessionConnInfo> SessionList;
     }
 
-    public struct LimitServerUserInfo
+    public class LimitServerUserInfo
     {
         /// <summary>
         /// 服务器名称

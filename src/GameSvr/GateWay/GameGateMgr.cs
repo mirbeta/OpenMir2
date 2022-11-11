@@ -8,8 +8,8 @@ using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
-using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 
@@ -28,7 +28,7 @@ namespace GameSvr.GateWay
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
             _GateMap = new ConcurrentDictionary<int, GameGate>();
-            _gateSocket = new SocketServer(10, 255);
+            _gateSocket = new SocketServer(100, 1024);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
             _gateSocket.OnClientRead += GateSocketClientRead;

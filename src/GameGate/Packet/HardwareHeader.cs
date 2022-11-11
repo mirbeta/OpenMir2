@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using SystemModule.Packet;
+using SystemModule.Packets;
 
 namespace GameGate.Packet
 {

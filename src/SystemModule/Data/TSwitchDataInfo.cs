@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule.Data
 {

@@ -4,7 +4,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace DBSvr.Storage.MongoDB
 {

@@ -1,7 +1,7 @@
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace GameSvr.Services
 {
@@ -33,7 +33,7 @@ namespace GameSvr.Services
                     Execute();
                     Thread.Sleep(20);
                 }
-            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         private void Execute()

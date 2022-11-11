@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using SystemModule.Sockets.Event;
 
 namespace SystemModule.Sockets.AsyncSocketClient
@@ -24,10 +25,10 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 连接是否成功
         /// </summary>
         public bool IsConnected;
-        public string Host = string.Empty;
-        public int Port = 0;
         public bool IsBusy = false;
-        public IPEndPoint EndPoint;
+        public IPEndPoint RemoteEndPoint;
+        private int totalBytesRead;
+        private int totalBytesWrite;
         /// <summary>
         /// 连接成功事件
         /// </summary>
@@ -50,7 +51,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             _databuffer = new byte[Buffersize];
         }
         
-        public ClientScoket(IPEndPoint endPoint,int buffSize)
+        public ClientScoket(IPEndPoint endPoint, int buffSize = 0)
         {
             if (buffSize <= 0)
             {
@@ -58,30 +59,42 @@ namespace SystemModule.Sockets.AsyncSocketClient
             }
             Buffersize = buffSize;
             _databuffer = new byte[Buffersize];
-            Host = endPoint.Address.ToString();
-            Port = endPoint.Port;
-            EndPoint = endPoint;
+            RemoteEndPoint = endPoint;
         }
 
         public void Connect()
         {
-            if (!string.IsNullOrEmpty(Host) && Port > 0)
+            if (RemoteEndPoint != null)
             {
-                Connect(Host, Port);
+                Connect(RemoteEndPoint);
                 return;
             }
             throw new Exception("IP地址或端口号错误");
         }
 
+        /// <summary>
+        /// 获取接收到的字节总数
+        /// </summary>
+        public long TotalBytesRead
+        {
+            get { return totalBytesRead; }
+        }
+        
+        /// <summary>
+        /// 获取发送的字节总数
+        /// </summary>
+        public long TotalBytesWrite
+        {
+            get { return totalBytesWrite; }
+        }
+        
         public void Connect(IPEndPoint endPoint)//连接到终结点
         {
             try
             {
                 _cli = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IsBusy = true;
-                Host = endPoint.Address.ToString();
-                Port = endPoint.Port;
-                EndPoint = endPoint;
+                RemoteEndPoint = endPoint;
                 _cli.BeginConnect(endPoint, HandleConnect, _cli);//开始异步连接
             }
             catch (ObjectDisposedException)
@@ -103,9 +116,9 @@ namespace SystemModule.Sockets.AsyncSocketClient
             try
             {
                 this._cli = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                EndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+                RemoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
                 IsBusy = true;
-                _cli.BeginConnect(EndPoint, HandleConnect, _cli);//开始异步连接
+                _cli.BeginConnect(RemoteEndPoint, HandleConnect, _cli);//开始异步连接
             }
             catch (ObjectDisposedException)
             {
@@ -130,7 +143,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 if (null != OnConnected)
                 {
                     IsConnected = true;
-                    EndPoint = (IPEndPoint)_cli.RemoteEndPoint;
+                    RemoteEndPoint = (IPEndPoint)_cli.RemoteEndPoint;
                     OnConnected(this, new DSCClientConnectedEventArgs(_cli)); //引发连接成功事件
                 }
                 StartWaitingForData(asyncState); //开始接收数据
@@ -187,6 +200,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 else
                 {
+                    // 增加接收到的字节总数
+                    Interlocked.Add(ref totalBytesRead, length);
                     Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
                     for (var i = 0; i < length; i++)
                     {
@@ -225,6 +240,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             try
             {
                 //开始异步发送数据
+                
                 _cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, HandleSendFinished, _cli);
             }
             catch (ObjectDisposedException)
@@ -245,7 +261,9 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             try
             {
-                ((Socket)parameter.AsyncState).EndSend(parameter);//结束异步发送数据
+               var length= ((Socket)parameter.AsyncState).EndSend(parameter);//结束异步发送数据
+               // 增加发送计数器
+               Interlocked.Add(ref totalBytesWrite, length);
             }
             catch (ObjectDisposedException)
             {

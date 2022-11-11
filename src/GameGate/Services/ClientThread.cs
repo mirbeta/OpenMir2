@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Packet;
+using SystemModule.Packets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -62,8 +62,6 @@ namespace GameGate.Services
         /// 接收总字节数
         /// </summary>
         private int ReceiveBytes { get; set; }
-        private int TotalBytesRead { get; set; }
-        private int TotalBytesWrite { get; set; }
         private int CheckRecviceTick { get; set; }
         private int CheckServerTick { get; set; }
         private int CheckServerTimeMin { get; set; }
@@ -98,7 +96,7 @@ namespace GameGate.Services
 
         public bool IsConnected => ClientSocket.IsConnected;
 
-        public string EndPoint => $"{ClientSocket.Host}:{ClientSocket.Port}";
+        public string EndPoint => $"{ClientSocket.RemoteEndPoint}";
 
         public void Start()
         {
@@ -199,22 +197,21 @@ namespace GameGate.Services
                 ProcessServerPacket(packetData, nMsgLen);
             }
             ReceiveBytes += nMsgLen;
-            TotalBytesRead += nMsgLen;
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
         {
             switch (e.ErrorCode)
             {
-                case System.Net.Sockets.SocketError.ConnectionRefused:
+                case SocketError.ConnectionRefused:
                     Logger.Log($"游戏网关[{GateEndPoint}]链接游戏引擎[{EndPoint}]拒绝链接...", 1);
                     Connected = false;
                     break;
-                case System.Net.Sockets.SocketError.ConnectionReset:
+                case SocketError.ConnectionReset:
                     Logger.Log($"游戏引擎[{EndPoint}]主动关闭连接游戏网关[{GateEndPoint}]...", 1);
                     Connected = false;
                     break;
-                case System.Net.Sockets.SocketError.TimedOut:
+                case SocketError.TimedOut:
                     Logger.Log($"游戏网关[{GateEndPoint}]链接游戏引擎时[{EndPoint}]超时...", 1);
                     Connected = false;
                     break;
@@ -394,7 +391,6 @@ namespace GameGate.Services
                 return;
             }
             SendBytes += sendBuffer.Length;
-            TotalBytesWrite += SendBytes;
             ClientSocket.Send(sendBuffer);
         }
 
@@ -490,8 +486,8 @@ namespace GameGate.Services
             return receiveStr;
         }
 
-        public string TotalReceive => $"↓{HUtil32.FormatBytesValue(TotalBytesRead)}";
+        public string TotalReceive => $"↓{HUtil32.FormatBytesValue(ClientSocket.TotalBytesRead)}";
 
-        public string TotalSend => $"↑{HUtil32.FormatBytesValue(TotalBytesWrite)}";
+        public string TotalSend => $"↑{HUtil32.FormatBytesValue(ClientSocket.TotalBytesWrite)}";
     }
 }

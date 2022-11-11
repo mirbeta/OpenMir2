@@ -13,8 +13,8 @@ using System.Collections;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace GameSvr.World
 {

@@ -1,6 +1,6 @@
 using DBSvr.Storage.Model;
 using System.Collections.Specialized;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace DBSvr.Storage
 {

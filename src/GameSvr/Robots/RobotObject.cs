@@ -1,7 +1,7 @@
 ﻿using GameSvr.Player;
 using SystemModule;
 using SystemModule.Common;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Robots
 {

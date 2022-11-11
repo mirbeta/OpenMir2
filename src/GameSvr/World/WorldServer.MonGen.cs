@@ -6,7 +6,7 @@ using GameSvr.Npc;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.World
 {

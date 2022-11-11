@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace SystemModule.Packet
+namespace SystemModule.Packets
 {
     public abstract class Packets
     {

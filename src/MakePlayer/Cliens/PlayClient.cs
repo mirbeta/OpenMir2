@@ -1,6 +1,7 @@
+using System.Net;
 using SystemModule;
-using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -118,7 +119,7 @@ namespace MakePlayer.Cliens
 
         private void SocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            MainOutMessage($"{LoginAccount}[{ClientSocket.Host}:{ClientSocket.Port}] 断开链接");
+            MainOutMessage($"{LoginAccount}[{ClientSocket.RemoteEndPoint}] 断开链接");
         }
 
         private void SocketRead(object sender, DSCClientDataInEventArgs e)
@@ -143,13 +144,13 @@ namespace MakePlayer.Cliens
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    Console.WriteLine("游戏[" + ClientSocket.Host + ":" + ClientSocket.Port + "]拒绝链接...");
+                    Console.WriteLine("游戏[" + ClientSocket.RemoteEndPoint + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    Console.WriteLine("游戏[" + ClientSocket.Host + ":" + ClientSocket.Port + "]关闭连接...");
+                    Console.WriteLine("游戏[" + ClientSocket.RemoteEndPoint + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    Console.WriteLine("游戏[" + ClientSocket.Host + ":" + ClientSocket.Port + "]链接超时...");
+                    Console.WriteLine("游戏[" + ClientSocket.RemoteEndPoint + "]链接超时...");
                     break;
             }
         }
@@ -301,8 +302,7 @@ namespace MakePlayer.Cliens
             MainOutMessage($"[{LoginAccount}] 准备进入游戏");
             //ClientSocket.ClientType = ClientSocket.ctNonBlocking;
             //ClientSocket.Close();
-            ClientSocket.Host = m_sRunServerAddr;
-            ClientSocket.Port = m_nRunServerPort;
+            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(m_sRunServerAddr), m_nRunServerPort);
             ClientSocket.Connect();
             //ClientSocket.Active = true;
         }
@@ -426,8 +426,7 @@ namespace MakePlayer.Cliens
             //ClientSocket.Disconnect();
             ConnectionStep = TConnectionStep.cnsQueryChr;
             //ClientSocket.Close();
-            ClientSocket.Host = m_sSelChrAddr;
-            ClientSocket.Port = m_nSelChrPort;
+            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(m_sSelChrAddr), m_nSelChrPort);
             ClientSocket.Connect();
             //ClientSocket.Active = true;
             // ClientSocket.Socket.SendText('#' + '+' + '!');

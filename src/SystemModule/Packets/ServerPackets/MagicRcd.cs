@@ -1,7 +1,7 @@
 ﻿using ProtoBuf;
 using System.IO;
 
-namespace SystemModule.Packet.ServerPackets
+namespace SystemModule.Packets.ServerPackets
 {
     [ProtoContract]
     public class MagicRcd : Packets

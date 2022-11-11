@@ -1,7 +1,7 @@
 using System.IO;
 using SystemModule.Extensions;
 
-namespace SystemModule.Packet.ClientPackets
+namespace SystemModule.Packets.ClientPackets
 {
     public class UserEntry : Packets
     {

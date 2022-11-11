@@ -4,8 +4,8 @@ using GameGate.Packet;
 using System;
 using System.Collections.Generic;
 using SystemModule;
-using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameGate.Services
 {

@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace SystemModule.Packet.ServerPackets
+namespace SystemModule.Packets.ServerPackets
 {
     /// <summary>
     /// 服务消息头

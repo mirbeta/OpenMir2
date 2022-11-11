@@ -1,4 +1,5 @@
 using NLog;
+using System.Net;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -32,7 +33,7 @@ namespace GameSvr.Planes
 
         private PlanesClient()
         {
-            _msgClient = new ClientScoket();
+            _msgClient = new ClientScoket(new IPEndPoint(IPAddress.Parse(M2Share.Config.MsgSrvAddr), M2Share.Config.MsgSrvPort));
             _msgClient.OnConnected += MsgClientConnect;
             _msgClient.OnReceivedData += MsgClientRead;
             _msgClient.OnError += MsgClientError;
@@ -42,8 +43,6 @@ namespace GameSvr.Planes
 
         public void ConnectMsgServer()
         {
-            _msgClient.Host = M2Share.Config.MsgSrvAddr;
-            _msgClient.Port = M2Share.Config.MsgSrvPort;
             _msgClient.Connect();
         }
 
@@ -133,13 +132,13 @@ namespace GameSvr.Planes
             switch (e.ErrorCode)
             {
                 case SocketError.ConnectionRefused:
-                    _logger.Error("主游戏引擎[" + _msgClient.Host + ":" + _msgClient.Port + "]拒绝链接...");
+                    _logger.Error("主游戏引擎[" + _msgClient.RemoteEndPoint + "]拒绝链接...");
                     break;
                 case SocketError.ConnectionReset:
-                    _logger.Error("主游戏引擎[" + _msgClient.Host + ":" + _msgClient.Port + "]关闭连接...");
+                    _logger.Error("主游戏引擎[" + _msgClient.RemoteEndPoint + "]关闭连接...");
                     break;
                 case SocketError.TimedOut:
-                    _logger.Error("主游戏引擎[" + _msgClient.Host + ":" + _msgClient.Port + "]链接超时...");
+                    _logger.Error("主游戏引擎[" + _msgClient.RemoteEndPoint + "]链接超时...");
                     break;
             }
         }

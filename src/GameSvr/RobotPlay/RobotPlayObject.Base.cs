@@ -5,7 +5,7 @@ using GameSvr.Maps;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Enums;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.RobotPlay
 {

@@ -1,8 +1,7 @@
-﻿
-using System.IO;
+﻿using System.IO;
 using SystemModule.Data;
 
-namespace SystemModule.Packet.ClientPackets
+namespace SystemModule.Packets.ClientPackets
 {
     public class ClientMagic : Packets
     {

@@ -2,7 +2,7 @@ using LoginSvr.Conf;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using SystemModule.Common;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace LoginSvr
 {
@@ -200,8 +200,8 @@ namespace LoginSvr
         public bool boPayCost;
         public bool IsPayMent;
         public byte PayMenMode;
-        public long dwKickTick;
-        public long dwStartTick;
+        public long KickTick;
+        public long StartTick;
         public bool Kicked;
         public int nLockCount;
     }

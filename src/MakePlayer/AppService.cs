@@ -2,6 +2,7 @@
 using MakePlayer.Option;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.Net;
 using SystemModule;
 
 namespace MakePlayer
@@ -77,8 +78,7 @@ namespace MakePlayer
                             playClient.ChrName = playClient.LoginAccount;
                             playClient.ServerName = _options.ServerName;
                             //playClient.ClientSocket.Close();
-                            playClient.ClientSocket.Host = _options.Address;
-                            playClient.ClientSocket.Port = _options.Port;
+                            playClient.ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(_options.Address), _options.Port);
                             playClient.ConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
                             _clientManager.AddClient(playClient.SessionId, playClient);
                             _loginIndex++;

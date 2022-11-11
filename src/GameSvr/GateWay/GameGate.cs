@@ -6,8 +6,8 @@ using System.Net.Sockets;
 using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.GateWay
 {
@@ -330,7 +330,7 @@ namespace GameSvr.GateWay
             var nClientVersion = 0;
             var nPayMent = 0;
             var nPayMode = 0;
-            var nPlayTime = 0l;
+            var nPlayTime = 0L;
             byte[] HWID = MD5.EmptyDigest;
             TSessInfo SessInfo;
             const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification";

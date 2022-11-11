@@ -1,4 +1,4 @@
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace SystemModule.Data
 {

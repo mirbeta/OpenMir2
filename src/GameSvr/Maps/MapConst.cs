@@ -1,6 +1,6 @@
 ﻿using GameSvr.Actor;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Maps
 {

@@ -2,7 +2,7 @@ using ProtoBuf;
 using System;
 using System.IO;
 
-namespace SystemModule.Packet.ServerPackets
+namespace SystemModule.Packets.ServerPackets
 {
     [ProtoContract]
     public class ServerRequestData : Packets

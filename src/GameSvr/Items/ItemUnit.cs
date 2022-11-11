@@ -1,5 +1,5 @@
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Items
 {

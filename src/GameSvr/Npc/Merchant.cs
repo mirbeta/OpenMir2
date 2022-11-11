@@ -4,7 +4,7 @@ using GameSvr.Player;
 using GameSvr.Script;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Npc
 {

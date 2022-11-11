@@ -1,8 +1,9 @@
 ﻿using NLog;
+using System.Net;
 using SystemModule;
-using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -18,7 +19,7 @@ namespace GameSvr.Services
 
         public DBService()
         {
-            _clientScoket = new ClientScoket();
+            _clientScoket = new ClientScoket(new IPEndPoint(IPAddress.Parse(M2Share.Config.sDBAddr), M2Share.Config.nDBPort));
             _clientScoket.OnConnected += DbScoketConnected;
             _clientScoket.OnDisconnected += DbScoketDisconnected;
             _clientScoket.OnReceivedData += DBSocketRead;
@@ -28,7 +29,7 @@ namespace GameSvr.Services
 
         public void Start()
         {
-            _clientScoket.Connect(M2Share.Config.sDBAddr, M2Share.Config.nDBPort);
+            _clientScoket.Connect();
         }
 
         public void Stop()
