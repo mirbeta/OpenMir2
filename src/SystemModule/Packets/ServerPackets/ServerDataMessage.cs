@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SystemModule.Packet.ServerPackets
+namespace SystemModule.Packets.ServerPackets
 {
     public class ServerDataMessage : Packets
     {

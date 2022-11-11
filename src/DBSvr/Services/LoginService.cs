@@ -1,6 +1,7 @@
 using DBSvr.Conf;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -24,7 +25,7 @@ namespace DBSvr.Services
         {
             _logger = logger;
             _conf = conf;
-            _clientScoket = new ClientScoket();
+            _clientScoket = new ClientScoket(new IPEndPoint(IPAddress.Parse(_conf.LoginServerAddr), _conf.LoginServerPort));
             _clientScoket.OnReceivedData += LoginSocketRead;
             _clientScoket.OnConnected += LoginSocketConnected;
             _clientScoket.OnDisconnected += LoginSocketDisconnected;
@@ -60,7 +61,7 @@ namespace DBSvr.Services
 
         public void Start()
         {
-            _clientScoket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
+            _clientScoket.Connect();
         }
 
         public void Stop()
@@ -81,7 +82,7 @@ namespace DBSvr.Services
             {
                 return;
             }
-            _logger.DebugLog($"重新链接账号服务器[{_clientScoket.EndPoint}].");
+            _logger.DebugLog($"重新链接账号服务器[{_clientScoket.RemoteEndPoint}].");
             _clientScoket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
         }
 

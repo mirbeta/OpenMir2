@@ -1,10 +1,9 @@
 ﻿using System.IO;
 using SystemModule.Extensions;
-using SystemModule.Packet;
 
 namespace SystemModule.Data
 {
-    public class MagicInfo : Packets
+    public class MagicInfo : Packets.Packets
     {
         /// <summary>
         /// 技能ID

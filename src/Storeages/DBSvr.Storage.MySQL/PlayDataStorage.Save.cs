@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace DBSvr.Storage.MySQL
 {

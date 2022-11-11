@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace DBSvr.Storage.MySQL
 {

@@ -1,9 +1,9 @@
 ﻿using ProtoBuf;
 using System.Runtime.Serialization;
 using SystemModule.Data;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
-namespace SystemModule.Packet.ServerPackets
+namespace SystemModule.Packets.ServerPackets
 {
     [ProtoContract]
     public class PlayerDataInfo

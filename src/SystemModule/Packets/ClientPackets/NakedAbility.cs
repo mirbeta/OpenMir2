@@ -1,7 +1,7 @@
 ﻿using ProtoBuf;
 using System.IO;
 
-namespace SystemModule.Packet.ClientPackets
+namespace SystemModule.Packets.ClientPackets
 {
     [ProtoContract]
     public class NakedAbility : Packets

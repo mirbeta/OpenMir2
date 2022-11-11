@@ -1,8 +1,8 @@
 using System;
 using System.Text;
 using System.Threading;
-using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace SystemModule
 {

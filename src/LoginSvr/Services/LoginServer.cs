@@ -8,8 +8,8 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packet;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 
@@ -225,7 +225,6 @@ namespace LoginSvr.Services
                 userInfo.Socket = gateInfo.Socket;
                 userInfo.ClientTick = HUtil32.GetTickCount();
                 gateInfo.UserList.Add(userInfo);
-                //_clientManager.AddSession(sSockIndex, gateInfo);
                 _logger.DebugLog(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
             }
             catch (Exception ex)
@@ -244,7 +243,7 @@ namespace LoginSvr.Services
             for (var i = sessionList.Length - 1; i >= 0; i--)
             {
                 var connInfo = sessionList[i];
-                if (connInfo.Kicked && HUtil32.GetTickCount() - connInfo.dwKickTick > 5 * 1000)
+                if (connInfo.Kicked && (HUtil32.GetTickCount() - connInfo.KickTick) > 5 * 1000)
                 {
                     sessionList[i] = null;
                 }

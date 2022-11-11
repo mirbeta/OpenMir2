@@ -8,7 +8,7 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace LoginGate.Services
 {

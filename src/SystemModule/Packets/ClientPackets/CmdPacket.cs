@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Packet.ClientPackets
+﻿namespace SystemModule.Packets.ClientPackets
 {
     public class RequestPacket
     {

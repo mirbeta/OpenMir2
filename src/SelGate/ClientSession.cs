@@ -5,9 +5,9 @@ using System;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace SelGate
 {

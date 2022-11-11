@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packet;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 

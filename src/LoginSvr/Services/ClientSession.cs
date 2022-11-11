@@ -7,9 +7,9 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 
 namespace LoginSvr.Services
@@ -705,7 +705,7 @@ namespace LoginSvr.Services
             if (connInfo != null && !connInfo.Kicked)
             {
                 _sessionService.SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
-                connInfo.dwKickTick = HUtil32.GetTickCount();
+                connInfo.KickTick = HUtil32.GetTickCount();
                 connInfo.Kicked = true;
             }
         }
@@ -718,8 +718,8 @@ namespace LoginSvr.Services
             connInfo.SessionID = nSessionId;
             connInfo.boPayCost = boPayCost;
             connInfo.IsPayMent = payMent;
-            connInfo.dwKickTick = HUtil32.GetTickCount();
-            connInfo.dwStartTick = HUtil32.GetTickCount();
+            connInfo.KickTick = HUtil32.GetTickCount();
+            connInfo.StartTick = HUtil32.GetTickCount();
             connInfo.Kicked = false;
             _sessionManager.AddSession(nSessionId, connInfo);
         }

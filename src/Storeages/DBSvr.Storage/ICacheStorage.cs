@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace DBSvr.Storage
 {

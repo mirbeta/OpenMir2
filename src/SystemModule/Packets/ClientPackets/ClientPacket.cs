@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace SystemModule.Packet.ClientPackets
+namespace SystemModule.Packets.ClientPackets
 {
     /// <summary>
     /// 客户端消息

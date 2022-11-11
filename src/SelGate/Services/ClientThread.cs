@@ -1,9 +1,10 @@
 using SelGate.Package;
 using System;
+using System.Net;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packet;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -64,13 +65,11 @@ namespace SelGate.Services
             _logQueue = logQueue;
             SessionArray = new TSessionInfo[MaxSession];
             _sessionManager = sessionManager;
-            _clientSocket = new ClientScoket();
+            _clientSocket = new ClientScoket(new IPEndPoint(IPAddress.Parse(serverAddr), serverPort), 512);
             _clientSocket.OnConnected += ClientSocketConnect;
             _clientSocket.OnDisconnected += ClientSocketDisconnect;
             _clientSocket.OnReceivedData += ClientSocketRead;
             _clientSocket.OnError += ClientSocketError;
-            _clientSocket.Host = serverAddr;
-            _clientSocket.Port = serverPort;
             SockThreadStutas = SockThreadStutas.Connecting;
             KeepAliveTick = HUtil32.GetTickCount();
             KeepAlive = true;
@@ -80,7 +79,7 @@ namespace SelGate.Services
 
         public string GetEndPoint()
         {
-            return _clientSocket.EndPoint.ToString();
+            return _clientSocket.RemoteEndPoint.ToString();
         }
 
         public void Start()
@@ -182,13 +181,13 @@ namespace SelGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.Host}:{_clientSocket.Port}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
+                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.Host}:{_clientSocket.Port}]关闭连接...失败[{CheckServerFailCount}]次", 1);
+                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]关闭连接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.Host}:{_clientSocket.Port}]链接超时...失败[{CheckServerFailCount}]次", 1);
+                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]链接超时...失败[{CheckServerFailCount}]次", 1);
                     break;
             }
         }

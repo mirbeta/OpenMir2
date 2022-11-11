@@ -5,8 +5,8 @@ using System.Net;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packet;
-using SystemModule.Packet.ServerPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -53,7 +53,7 @@ namespace LoginGate.Services
 
         public bool IsConnected => _clientSocket.IsConnected;
 
-        public IPEndPoint EndPoint => _clientSocket.EndPoint;
+        public IPEndPoint EndPoint => _clientSocket.RemoteEndPoint;
 
         public void Start(GameGateInfo gateInfo)
         {

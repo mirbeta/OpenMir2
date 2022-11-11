@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using SystemModule.Extensions;
 
-namespace SystemModule.Packet.ClientPackets
+namespace SystemModule.Packets.ClientPackets
 {
     /// <summary>
     /// 客户端元宝寄售数据结构
