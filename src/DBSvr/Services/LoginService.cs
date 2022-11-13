@@ -287,8 +287,7 @@ namespace DBSvr.Services
             globaSessionInfo.dwAddTick = HUtil32.GetTickCount();
             globaSessionInfo.dAddDate = DateTime.Now;
             _globaSessionList.Add(globaSessionInfo);
-
-            _logger.DebugLog("收到账号中心同步会话消息.");
+            //_logger.DebugLog("收到账号中心同步会话消息.");
         }
 
         private void ProcessDelSession(string sData)

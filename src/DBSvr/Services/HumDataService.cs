@@ -71,11 +71,11 @@ namespace DBSvr.Services
         {
             for (var i = 0; i < _serverList.Count; i++)
             {
-                if (_serverList[i].nSckHandle == (int)e.Socket.Handle)
+                var serverInfo = _serverList[i];
+                if (serverInfo.nSckHandle == (int)e.Socket.Handle)
                 {
                     ClearSocket(e.Socket);
-                    _serverList.RemoveAt(i);
-                    _serverList[i] = null;
+                    _serverList.Remove(serverInfo);
                     break;
                 }
             }
@@ -325,6 +325,7 @@ namespace DBSvr.Services
                 var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
                 SendRequest(Socket, responsePack, loadHumData);
+                _logger.DebugLog($"获取玩家[{loadHumanPacket.ChrName}]数据成功");
             }
             else
             {
@@ -336,57 +337,64 @@ namespace DBSvr.Services
 
         private void SaveHumanRcd(int queryId, int nRecog, byte[] sMsg, Socket Socket)
         {
-            var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SavePlayerDataMessage>(sMsg);
-            if (saveHumDataPacket == null)
+            try
             {
-                _logger.LogError("保存玩家数据出错.");
-                return;
-            }
-            var sUserID = saveHumDataPacket.Account;
-            var sChrName = saveHumDataPacket.ChrName;
-            var humanRcd = saveHumDataPacket.HumDataInfo;
-            bool bo21 = humanRcd == null;
-            if (!bo21)
-            {
-                bo21 = true;
-                var nIndex = _playDataStorage.Index(sChrName);
-                if (nIndex < 0)
+                var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SavePlayerDataMessage>(sMsg);
+                if (saveHumDataPacket == null)
                 {
-                    humanRcd.Header.Name = sChrName;
-                    _playDataStorage.Add(humanRcd);
-                    nIndex = _playDataStorage.Index(sChrName);
+                    _logger.LogError("保存玩家数据出错.");
+                    return;
                 }
-                if (nIndex >= 0)
+                var sUserID = saveHumDataPacket.Account;
+                var sChrName = saveHumDataPacket.ChrName;
+                var humanRcd = saveHumDataPacket.HumDataInfo;
+                bool bo21 = humanRcd == null;
+                if (!bo21)
                 {
-                    humanRcd.Header.Name = sChrName;
-                    _memoryStorageServive.Add(sChrName, humanRcd);
-                    _playDataStorage.Update(sChrName, humanRcd);
-                    bo21 = false;
-                }
-                _loginSvrService.SetSessionSaveRcd(sUserID);
-            }
-            var responsePack = new ServerRequestData();
-            responsePack.QueryId = queryId;
-            if (!bo21)
-            {
-                for (var i = 0; i < _playSessionList.Count; i++)
-                {
-                    THumSession HumSession = _playSessionList[i];
-                    if ((HumSession.sChrName == sChrName) && (HumSession.nIndex == nRecog))
+                    bo21 = true;
+                    var nIndex = _playDataStorage.Index(sChrName);
+                    if (nIndex < 0)
                     {
-                        HumSession.lastSessionTick = HUtil32.GetTickCount();
-                        break;
+                        humanRcd.Header.Name = sChrName;
+                        _playDataStorage.Add(humanRcd);
+                        nIndex = _playDataStorage.Index(sChrName);
                     }
+                    if (nIndex >= 0)
+                    {
+                        humanRcd.Header.Name = sChrName;
+                        _memoryStorageServive.Add(sChrName, humanRcd);
+                        _playDataStorage.Update(sChrName, humanRcd);
+                        bo21 = false;
+                    }
+                    _loginSvrService.SetSessionSaveRcd(sUserID);
                 }
-                var messagePacket = new ServerRequestMessage(Grobal2.DBR_SAVEHUMANRCD, 1, 0, 0, 0);
-                responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                SendRequest(Socket, responsePack);
+                var responsePack = new ServerRequestData();
+                responsePack.QueryId = queryId;
+                if (!bo21)
+                {
+                    for (var i = 0; i < _playSessionList.Count; i++)
+                    {
+                        THumSession HumSession = _playSessionList[i];
+                        if ((HumSession.sChrName == sChrName) && (HumSession.nIndex == nRecog))
+                        {
+                            HumSession.lastSessionTick = HUtil32.GetTickCount();
+                            break;
+                        }
+                    }
+                    var messagePacket = new ServerRequestMessage(Grobal2.DBR_SAVEHUMANRCD, 1, 0, 0, 0);
+                    responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
+                    SendRequest(Socket, responsePack);
+                }
+                else
+                {
+                    var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 0, 0, 0, 0);
+                    responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
+                    SendRequest(Socket, responsePack);
+                }
             }
-            else
+            catch (Exception e)
             {
-                var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 0, 0, 0, 0);
-                responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                SendRequest(Socket, responsePack);
+                _logger.LogError(e);
             }
         }
 
