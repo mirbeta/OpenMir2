@@ -215,13 +215,13 @@ namespace DBSvr
         private async Task ShowServerStatus()
         {
             DBShare.ShowLog = false;
-            var userSoc = Host.Services.GetService<GateUserService>();
-            if (userSoc == null)
+            var userService = Host.Services.GetService<GateUserService>();
+            if (userService == null)
             {
                 return;
             }
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var serverList = userSoc.GateList.Values.ToList();
+            var serverList = userService.GetGates.ToArray();
             var table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]ServerName[/]");
             table.AddColumn("[yellow]EndPoint[/]");
@@ -244,7 +244,7 @@ namespace DBSvr
 
                      while (await _timer.WaitForNextTickAsync())
                      {
-                         for (int i = 0; i < serverList.Count; i++)
+                         for (int i = 0; i < serverList.Length; i++)
                          {
                              var (serverIp, status, sessionCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
 

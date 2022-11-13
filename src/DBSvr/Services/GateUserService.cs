@@ -33,8 +33,8 @@ namespace DBSvr.Services
         private readonly IPlayRecordStorage _playRecordStorage;
         private readonly SocketServer _userSocket;
         private readonly LoginSessionServer _loginService;
-        private readonly Channel<GateUserMessage> _messageQueue;
-        public readonly Dictionary<string, SelGateInfo> GateList;
+        private readonly Channel<UserMessage> _reviceQueue;
+        private readonly Dictionary<string, SelGateInfo> _gateMap;
 
         public GateUserService(MirLogger logger, DBSvrConf conf, LoginSessionServer loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
@@ -42,9 +42,9 @@ namespace DBSvr.Services
             _loginService = loginService;
             _playRecordStorage = playRecord;
             _playDataStorage = playData;
-            GateList = new Dictionary<string, SelGateInfo>(StringComparer.OrdinalIgnoreCase);
+            _gateMap = new Dictionary<string, SelGateInfo>(StringComparer.OrdinalIgnoreCase);
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            _messageQueue = Channel.CreateUnbounded<GateUserMessage>();
+            _reviceQueue = Channel.CreateUnbounded<UserMessage>();
             _userSocket = new SocketServer(byte.MaxValue, 1024);
             _userSocket.OnClientConnect += UserSocketClientConnect;
             _userSocket.OnClientDisconnect += UserSocketClientDisconnect;
@@ -67,7 +67,7 @@ namespace DBSvr.Services
 
         public void Stop()
         {
-            var gateList = GateList.Values.ToList();
+            var gateList = _gateMap.Values.ToList();
             for (var i = 0; i < gateList.Count; i++)
             {
                 var gateInfo = gateList[i];
@@ -82,6 +82,8 @@ namespace DBSvr.Services
             }
         }
 
+        public IEnumerable<SelGateInfo> GetGates => _gateMap.Values;
+
         /// <summary>
         /// 处理客户端请求消息
         /// </summary>
@@ -89,18 +91,18 @@ namespace DBSvr.Services
         {
             Task.Factory.StartNew(async () =>
             {
-                while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
+                while (await _reviceQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (_messageQueue.Reader.TryRead(out var message))
+                    if (_reviceQueue.Reader.TryRead(out var message))
                     {
                         try
                         {
-                            var selGata = GateList[message.ConnectionId];
+                            var selGata = _gateMap[message.ConnectionId];
                             if (selGata == null)
                             {
                                 continue;
                             }
-                            ProcessGateMsg(selGata, message.Message);
+                            ProcessGateMsg(selGata, message.Packet);
                         }
                         catch (Exception e)
                         {
@@ -185,7 +187,7 @@ namespace DBSvr.Services
             selGateInfo.RemoteEndPoint = e.EndPoint;
             selGateInfo.UserList = new List<SessionUserInfo>();
             selGateInfo.nGateID = DBShare.GetGateID(sIPaddr);
-            GateList.Add(e.ConnectionId, selGateInfo);
+            _gateMap.Add(e.ConnectionId, selGateInfo);
             _logger.LogInformation(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
         }
 
@@ -195,9 +197,9 @@ namespace DBSvr.Services
         private void UserSocketClientDisconnect(object sender, AsyncUserToken e)
         {
             var gateIndex = -1;
-            if (GateList.ContainsKey(e.ConnectionId))
+            if (_gateMap.ContainsKey(e.ConnectionId))
             {
-                if (GateList.TryGetValue(e.ConnectionId, out var gateInfo))
+                if (_gateMap.TryGetValue(e.ConnectionId, out var gateInfo))
                 {
                     if (gateInfo != null && gateInfo.UserList != null)
                     {
@@ -210,7 +212,7 @@ namespace DBSvr.Services
                     _logger.LogInformation(string.Format(sGateClose, gateIndex, e.RemoteIPaddr, e.RemotePort));
                 }
                 gateIndex++;
-                GateList.Remove(e.ConnectionId);
+                _gateMap.Remove(e.ConnectionId);
             }
         }
 
@@ -221,7 +223,7 @@ namespace DBSvr.Services
 
         private void UserSocketClientRead(object sender, AsyncUserToken e)
         {
-            if (GateList.ContainsKey(e.ConnectionId))
+            if (_gateMap.ContainsKey(e.ConnectionId))
             {
                 var nReviceLen = e.BytesReceived;
                 var data = new byte[nReviceLen];
@@ -232,17 +234,17 @@ namespace DBSvr.Services
                     _logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
                     return;
                 }
-                var message = new GateUserMessage();
+                var message = new UserMessage();
                 message.ConnectionId = e.ConnectionId;
-                message.Message = Packets.ToPacket<ServerDataMessage>(data);
-                _messageQueue.Writer.TryWrite(message);
+                message.Packet = Packets.ToPacket<ServerDataMessage>(data);
+                _reviceQueue.Writer.TryWrite(message);
             }
         }
 
         public int GetUserCount()
         {
             var nUserCount = 0;
-            var gateList = GateList.Values.ToList();
+            var gateList = _gateMap.Values.ToList();
             for (var i = 0; i < gateList.Count; i++)
             {
                 var gateInfo = gateList[i];
@@ -874,11 +876,11 @@ namespace DBSvr.Services
         /// 获取游戏网关
         /// </summary>
         /// <returns></returns>
-        private string GetGameGateRoute(GateRouteInfo routeInfo, ref int gatePort)
+        private string GetGameGateRoute(GateRouteInfo routeInfo, ref int nGatePort)
         {
             var nGateIndex = RandomNumber.GetInstance().Random(routeInfo.GateCount);
             var result = routeInfo.GameGateIP[nGateIndex];
-            gatePort = routeInfo.GameGatePort[nGateIndex];
+            nGatePort = routeInfo.GameGatePort[nGateIndex];
             return result;
         }
 
@@ -949,9 +951,9 @@ namespace DBSvr.Services
         }
     }
 
-    public struct GateUserMessage
+    public struct UserMessage
     {
-        public ServerDataMessage Message;
+        public ServerDataMessage Packet;
         public string ConnectionId;
     }
 }
