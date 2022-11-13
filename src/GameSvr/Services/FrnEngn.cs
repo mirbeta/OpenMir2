@@ -322,13 +322,13 @@ namespace GameSvr.Services
             if (InSaveRcdList(LoadUser.ChrName))
             {
                 boReTry = true;// 反回TRUE,则重新加入队列
-                return result;
+                return false;
             }
             if (M2Share.WorldEngine.GetPlayObjectEx(LoadUser.ChrName) != null)
             {
                 M2Share.WorldEngine.KickPlayObjectEx(LoadUser.ChrName);
                 boReTry = true;// 反回TRUE,则重新加入队列
-                return result;
+                return false;
             }
             if (!PlayerDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref queryId, LoadUser.nSessionID))
             {
@@ -338,7 +338,7 @@ namespace GameSvr.Services
             {
                 var userOpenInfo = new UserOpenInfo
                 {
-                    sChrName = LoadUser.ChrName,
+                    ChrName = LoadUser.ChrName,
                     LoadUser = LoadUser,
                     HumanRcd = null,
                     QueryId = queryId

@@ -5,7 +5,7 @@
     "Port": 7000,
     "ChrCount": 10,
     "TotalChrCount": 8000,
-    "NewAccount": true,
+    "NewAccount": false,
     "LoginAccount": "play"
   }
 }

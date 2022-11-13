@@ -848,7 +848,7 @@ namespace DBSvr.Services
                 SendUserSocket(userInfo.Socket, userInfo.sConnID, sDefMsg + sRouteMsg);
                 _loginService.SetGlobaSessionPlay(userInfo.nSessionID);
                 result = true;
-                _logger.DebugLog($"玩家使用游戏网关信息 GameRun:{sRouteIp} Port:{nRoutePort + nMapIndex}");
+                //_logger.DebugLog($"玩家使用游戏网关信息 GameRun:{sRouteIp} Port:{nRoutePort + nMapIndex}");
             }
             else
             {

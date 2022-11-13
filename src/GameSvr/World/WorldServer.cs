@@ -312,9 +312,9 @@ namespace GameSvr.World
                 SwitchDataInfo switchDataInfo;
                 if (!M2Share.Config.VentureServer)
                 {
-                    userOpenInfo.sChrName = string.Empty;
+                    userOpenInfo.ChrName = string.Empty;
                     userOpenInfo.LoadUser.nSessionID = 0;
-                    switchDataInfo = GetSwitchData(userOpenInfo.sChrName, userOpenInfo.LoadUser.nSessionID);
+                    switchDataInfo = GetSwitchData(userOpenInfo.ChrName, userOpenInfo.LoadUser.nSessionID);
                 }
                 else
                 {
@@ -554,13 +554,24 @@ namespace GameSvr.World
                         var tempList = new List<int>();
                         for (var i = 0; i < LoadPlayList.Count; i++)
                         {
-                            UserOpenInfo userOpenInfo;
-                            if (!M2Share.FrontEngine.IsFull() && !ProcessHumansIsLogined(LoadPlayList[i].sChrName))
+                            UserOpenInfo userOpenInfo = LoadPlayList[i];
+                            if (userOpenInfo == null)
                             {
-                                userOpenInfo = LoadPlayList[i];
+                                continue;
+                            }
+                            if (!M2Share.FrontEngine.IsFull() && !ProcessHumansIsLogined(userOpenInfo.ChrName))
+                            {
+                                if (userOpenInfo.FailCount >= 50) //超过错误查询次数
+                                {
+                                    _logger.Warn($"获取玩家数据[{userOpenInfo.ChrName}]失败.");
+                                    tempList.Add(i);
+                                    M2Share.GateMgr.SendOutConnectMsg(userOpenInfo.LoadUser.nGateIdx, userOpenInfo.LoadUser.nSocket, userOpenInfo.LoadUser.nGSocketIdx);
+                                    continue;
+                                }
                                 if (!PlayerDataService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
                                 {
-                                   continue;
+                                    userOpenInfo.FailCount++;
+                                    continue;
                                 }
                                 tempList.Add(i);
                                 playObject = ProcessHumansMakeNewHuman(userOpenInfo);
@@ -580,8 +591,7 @@ namespace GameSvr.World
                             }
                             else
                             {
-                                KickOnlineUser(LoadPlayList[i].sChrName);
-                                userOpenInfo = LoadPlayList[i];
+                                KickOnlineUser(userOpenInfo.ChrName);
                                 ListOfGateIdx.Add(userOpenInfo.LoadUser.nGateIdx);
                                 ListOfSocket.Add(userOpenInfo.LoadUser.nSocket);
                             }
@@ -622,7 +632,7 @@ namespace GameSvr.World
                 catch (Exception e)
                 {
                     _logger.Error(sExceptionMsg1);
-                    _logger.Error(e.Message);
+                    _logger.Error(e.StackTrace);
                 }
             }
 

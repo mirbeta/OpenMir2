@@ -15,6 +15,7 @@ namespace GameSvr.Services
         private readonly ClientScoket _clientScoket;
         private int PacketLen{ get; set; }
         private byte[] RecvBuff { get; set; }
+        public int DataLen { get; set; }
         private bool SocketWorking { get; set; }
 
         public DBService()
@@ -25,6 +26,7 @@ namespace GameSvr.Services
             _clientScoket.OnReceivedData += DBSocketRead;
             _clientScoket.OnError += DBSocketError;
             SocketWorking = false;
+            RecvBuff = new byte[10000];
         }
 
         public void Start()
@@ -56,8 +58,6 @@ namespace GameSvr.Services
             {
                 return false;
             }
-            RecvBuff = null;
-
             var requestPacket = new ServerRequestData();
             requestPacket.QueryId = nQueryID;
             requestPacket.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(message));
@@ -100,7 +100,6 @@ namespace GameSvr.Services
 
         private void DBSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            //todo 粘包处理有问题，大量数据包会导致数据解析错乱
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
@@ -109,34 +108,46 @@ namespace GameSvr.Services
                 {
                     PacketLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
                 }
-                if (RecvBuff != null && RecvBuff.Length > 0)
+                if (DataLen > 0)
                 {
-                    var tempBuff = new byte[RecvBuff.Length + e.BuffLen];
-                    Buffer.BlockCopy(RecvBuff, 0, tempBuff, 0, RecvBuff.Length);
-                    Buffer.BlockCopy(data, 0, tempBuff, RecvBuff.Length, e.BuffLen);
-                    RecvBuff = tempBuff;
+                    Buffer.BlockCopy(data, 0, RecvBuff, DataLen, data.Length);
                 }
                 else
                 {
-                    RecvBuff = data;
+                    Buffer.BlockCopy(data, 0, RecvBuff, 0, data.Length);
+                    DataLen += e.BuffLen;
+                    return;
                 }
-                var len = RecvBuff.Length - PacketLen;
+                var len = PacketLen - DataLen;
                 if (len > 0)
                 {
                     data = RecvBuff[..PacketLen];
                     SocketWorking = true;
                     ProcessData(data);
-                    RecvBuff = RecvBuff.AsSpan().Slice(PacketLen, len).ToArray();
-                    PacketLen = RecvBuff.Length;
-                    PacketLen = 0;
+                    var unData = RecvBuff[PacketLen..];
+                    if (unData[0] == (byte)'#')
+                    {
+                        DataLen = unData.Length;
+                        PacketLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
+                        Buffer.BlockCopy(unData, 0, RecvBuff, 0, unData.Length);
+                        return;
+                    }
+                    else
+                    {
+                        PacketLen = 0;
+                        DataLen = 0;
+                        return;
+                    }
                 }
                 else if (len == 0)
                 {
                     SocketWorking = true;
                     ProcessData(RecvBuff);
-                    RecvBuff = null;
                     PacketLen = 0;
+                    DataLen = 0;
+                    return;
                 }
+                DataLen += e.BuffLen;
             }
             finally
             {
@@ -168,6 +179,7 @@ namespace GameSvr.Services
                         if (signatureId == BitConverter.ToInt16(sginBuff))
                         {
                             PlayerDataService.Enqueue(respCheckCode, responsePacket);
+                            _logger.Info($"[{respCheckCode}]读取成功");
                         }
                         else
                         {
