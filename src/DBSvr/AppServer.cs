@@ -51,33 +51,33 @@ namespace DBSvr
             Logger.Info("数据库配置文件读取完成...");
             if (!Enum.TryParse<StoragePolicy>(_config.StoreageType, true, out var storagePolicy))
             {
-                throw new Exception("Storage存储配置文件错误或者不支持该存储类型");
+                throw new Exception("数据存储配置文件错误或者不支持该存储类型");
             }
-            services.AddSingleton(_config);
-            services.AddSingleton<MirLogger>();
-            services.AddSingleton<LoginService>();
-            services.AddSingleton<UserService>();
-            services.AddSingleton<PlayerDataService>();
-            services.AddSingleton<ICacheStorage, CacheStorageService>();
             switch (storagePolicy)
             {
                 case StoragePolicy.MySQL:
                     LoadAssembly(services, "MySQL");
-                    Logger.Info("当前使用[MySQL]数据存储.");
+                    Logger.Info("使用[MySQL]数据存储.");
                     break;
                 case StoragePolicy.MongoDB:
                     LoadAssembly(services, "MongoDB");
-                    Logger.Info("当前使用[MongoDB]数据存储.");
+                    Logger.Info("使用[MongoDB]数据存储.");
                     break;
                 case StoragePolicy.Sqlite:
                     LoadAssembly(services, "Sqlite");
-                    Logger.Info("当前使用[Sqlite]数据存储.");
+                    Logger.Info("使用[Sqlite]数据存储.");
                     break;
                 case StoragePolicy.Local:
                     LoadAssembly(services, "Local");
-                    Logger.Info("当前使用[Local]数据存储.");
+                    Logger.Info("使用[Local]数据存储.");
                     break;
             }
+            services.AddSingleton(_config);
+            services.AddSingleton<MirLogger>();
+            services.AddSingleton<LoginSessionServer>();
+            services.AddSingleton<GateUserService>();
+            services.AddSingleton<PlayerDataService>();
+            services.AddSingleton<ICacheStorage, CacheStorageService>();
             services.AddHostedService<TimedService>();
             services.AddHostedService<AppService>();
         }
@@ -215,9 +215,13 @@ namespace DBSvr
         private async Task ShowServerStatus()
         {
             DBShare.ShowLog = false;
-            var userSoc = Host.Services.GetService<UserService>();
+            var userSoc = Host.Services.GetService<GateUserService>();
+            if (userSoc == null)
+            {
+                return;
+            }
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var serverList = userSoc?.GateList;
+            var serverList = userSoc.GateList.Values.ToList();
             var table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]ServerName[/]");
             table.AddColumn("[yellow]EndPoint[/]");

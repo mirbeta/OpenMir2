@@ -4,7 +4,7 @@ using DBSvr.Storage.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Sockets;
+using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -24,7 +24,7 @@ namespace DBSvr.Services
     /// 角色数据服务
     /// DBSvr-SelGate-Client
     /// </summary>
-    public class UserService
+    public class GateUserService
     {
         private readonly MirLogger _logger;
         private readonly DBSvrConf _conf;
@@ -32,19 +32,19 @@ namespace DBSvr.Services
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
         private readonly SocketServer _userSocket;
-        private readonly LoginService _loginService;
-        private readonly Channel<UserMessage> _reviceQueue;
-        public readonly IList<TGateInfo> GateList;
+        private readonly LoginSessionServer _loginService;
+        private readonly Channel<GateUserMessage> _messageQueue;
+        public readonly Dictionary<string, SelGateInfo> GateList;
 
-        public UserService(MirLogger logger, DBSvrConf conf, LoginService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
+        public GateUserService(MirLogger logger, DBSvrConf conf, LoginSessionServer loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
             _logger = logger;
             _loginService = loginService;
             _playRecordStorage = playRecord;
             _playDataStorage = playData;
-            GateList = new List<TGateInfo>();
+            GateList = new Dictionary<string, SelGateInfo>(StringComparer.OrdinalIgnoreCase);
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            _reviceQueue = Channel.CreateUnbounded<UserMessage>();
+            _messageQueue = Channel.CreateUnbounded<GateUserMessage>();
             _userSocket = new SocketServer(byte.MaxValue, 1024);
             _userSocket.OnClientConnect += UserSocketClientConnect;
             _userSocket.OnClientDisconnect += UserSocketClientDisconnect;
@@ -67,9 +67,10 @@ namespace DBSvr.Services
 
         public void Stop()
         {
-            for (var i = 0; i < GateList.Count; i++)
+            var gateList = GateList.Values.ToList();
+            for (var i = 0; i < gateList.Count; i++)
             {
-                var gateInfo = GateList[i];
+                var gateInfo = gateList[i];
                 if (gateInfo != null)
                 {
                     for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
@@ -78,7 +79,6 @@ namespace DBSvr.Services
                     }
                     gateInfo.UserList = null;
                 }
-                GateList.RemoveAt(i);
             }
         }
 
@@ -89,17 +89,29 @@ namespace DBSvr.Services
         {
             Task.Factory.StartNew(async () =>
             {
-                while (await _reviceQueue.Reader.WaitToReadAsync(stoppingToken))
+                while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (_reviceQueue.Reader.TryRead(out var message))
+                    if (_messageQueue.Reader.TryRead(out var message))
                     {
-                        ProcessGateMsg(message.GateInfo, message.Packet);
+                        try
+                        {
+                            var selGata = GateList[message.ConnectionId];
+                            if (selGata == null)
+                            {
+                                continue;
+                            }
+                            ProcessGateMsg(selGata, message.Message);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e);
+                        }
                     }
                 }
             }, stoppingToken);
         }
 
-        private void ProcessGateMsg(TGateInfo gateInfo, ServerDataMessage packet)
+        private void ProcessGateMsg(SelGateInfo gateInfo, ServerDataMessage packet)
         {
             var s0C = string.Empty;
             var sData = string.Empty;
@@ -114,7 +126,7 @@ namespace DBSvr.Services
             {
                 case ServerDataType.KeepAlive:
                     _logger.DebugLog("Received SelGate Heartbeat.");
-                    SendKeepAlivePacket(gateInfo.Socket);
+                    SendKeepAlivePacket(gateInfo.ConnectionId);
                     //dwKeepAliveTick = HUtil32.GetTickCount();
                     break;
                 case ServerDataType.Data:
@@ -123,7 +135,7 @@ namespace DBSvr.Services
                         var userInfo = gateInfo.UserList[i];
                         if (userInfo != null)
                         {
-                            if (userInfo.sConnID == packet.SocketId)
+                            if (userInfo.SessionId == packet.SocketId)
                             {
                                 userInfo.sText += sText;
                                 if (sText.IndexOf("!", StringComparison.OrdinalIgnoreCase) < 1)
@@ -167,12 +179,13 @@ namespace DBSvr.Services
                 _logger.LogWarning("非法网关连接: " + sIPaddr);
                 return;
             }
-            var gateInfo = new TGateInfo();
-            gateInfo.Socket = e.Socket;
-            gateInfo.RemoteEndPoint = e.EndPoint;
-            gateInfo.UserList = new List<TUserInfo>();
-            gateInfo.nGateID = DBShare.GetGateID(sIPaddr);
-            GateList.Add(gateInfo);
+            var selGateInfo = new SelGateInfo();
+            selGateInfo.Socket = e.Socket;
+            selGateInfo.ConnectionId = e.ConnectionId;
+            selGateInfo.RemoteEndPoint = e.EndPoint;
+            selGateInfo.UserList = new List<SessionUserInfo>();
+            selGateInfo.nGateID = DBShare.GetGateID(sIPaddr);
+            GateList.Add(e.ConnectionId, selGateInfo);
             _logger.LogInformation(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
         }
 
@@ -181,20 +194,23 @@ namespace DBSvr.Services
 
         private void UserSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            for (var i = 0; i < GateList.Count; i++)
+            var gateIndex = -1;
+            if (GateList.ContainsKey(e.ConnectionId))
             {
-                var gateInfo = GateList[i];
-                if (gateInfo != null && gateInfo.UserList != null)
+                if (GateList.TryGetValue(e.ConnectionId, out var gateInfo))
                 {
-                    for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
+                    if (gateInfo != null && gateInfo.UserList != null)
                     {
-                        gateInfo.UserList[ii] = null;
+                        for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
+                        {
+                            gateInfo.UserList[ii] = null;
+                        }
+                        gateInfo.UserList = null;
                     }
-                    gateInfo.UserList = null;
+                    _logger.LogInformation(string.Format(sGateClose, gateIndex, e.RemoteIPaddr, e.RemotePort));
                 }
-                _logger.LogInformation(string.Format(sGateClose, i, e.RemoteIPaddr, e.RemotePort));
-                GateList.RemoveAt(i);
-                break;
+                gateIndex++;
+                GateList.Remove(e.ConnectionId);
             }
         }
 
@@ -205,10 +221,8 @@ namespace DBSvr.Services
 
         private void UserSocketClientRead(object sender, AsyncUserToken e)
         {
-            for (var i = 0; i < GateList.Count; i++)
+            if (GateList.ContainsKey(e.ConnectionId))
             {
-                if (GateList[i].Socket != e.Socket)
-                    continue;
                 var nReviceLen = e.BytesReceived;
                 var data = new byte[nReviceLen];
                 Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
@@ -216,22 +230,22 @@ namespace DBSvr.Services
                 if (packet == null)
                 {
                     _logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
-                    continue;
+                    return;
                 }
-                var message = new UserMessage();
-                message.Packet = Packets.ToPacket<ServerDataMessage>(data);
-                message.GateInfo = GateList[i];
-                _reviceQueue.Writer.TryWrite(message);
+                var message = new GateUserMessage();
+                message.ConnectionId = e.ConnectionId;
+                message.Message = Packets.ToPacket<ServerDataMessage>(data);
+                _messageQueue.Writer.TryWrite(message);
             }
         }
 
         public int GetUserCount()
         {
-            TGateInfo gateInfo;
             var nUserCount = 0;
-            for (var i = 0; i < GateList.Count; i++)
+            var gateList = GateList.Values.ToList();
+            for (var i = 0; i < gateList.Count; i++)
             {
-                gateInfo = GateList[i];
+                var gateInfo = gateList[i];
                 nUserCount += gateInfo.UserList.Count;
             }
             return nUserCount;
@@ -256,7 +270,6 @@ namespace DBSvr.Services
 
         private void LoadServerInfo()
         {
-            var sLineText = string.Empty;
             var sSelGateIPaddr = string.Empty;
             var sGameGateIPaddr = string.Empty;
             var sGameGate = string.Empty;
@@ -279,7 +292,7 @@ namespace DBSvr.Services
             var nGateIdx = 0;
             for (var i = 0; i < loadList.Count; i++)
             {
-                sLineText = loadList[i].Trim();
+                var sLineText = loadList[i].Trim();
                 if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                 {
                     sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
@@ -287,19 +300,19 @@ namespace DBSvr.Services
                     {
                         continue;
                     }
-                    DBShare.RouteInfo[nRouteIdx] = new TRouteInfo();
-                    DBShare.RouteInfo[nRouteIdx].sSelGateIP = sSelGateIPaddr.Trim();
-                    DBShare.RouteInfo[nRouteIdx].nGateCount = 0;
+                    DBShare.RouteInfo[nRouteIdx] = new GateRouteInfo();
+                    DBShare.RouteInfo[nRouteIdx].SelGateIP = sSelGateIPaddr.Trim();
+                    DBShare.RouteInfo[nRouteIdx].GateCount = 0;
                     nGateIdx = 0;
                     while ((sGameGate != ""))
                     {
                         sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
                         sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
-                        DBShare.RouteInfo[nRouteIdx].sGameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
-                        DBShare.RouteInfo[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
+                        DBShare.RouteInfo[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
+                        DBShare.RouteInfo[nRouteIdx].GameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
                         nGateIdx++;
                     }
-                    DBShare.RouteInfo[nRouteIdx].nGateCount = nGateIdx;
+                    DBShare.RouteInfo[nRouteIdx].GateCount = nGateIdx;
                     nRouteIdx++;
                     _logger.LogInformation($"读取网关配置信息.GameGateIP:[{sGameGateIPaddr}:{sGameGatePort}]");
                 }
@@ -312,7 +325,7 @@ namespace DBSvr.Services
                 loadList.LoadFromFile(_conf.MapFile);
                 for (var i = 0; i < loadList.Count; i++)
                 {
-                    sLineText = loadList[i];
+                    var sLineText = loadList[i];
                     if ((sLineText != "") && (sLineText[0] == '['))
                     {
                         sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
@@ -374,15 +387,15 @@ namespace DBSvr.Services
             }
         }
 
-        private void SendKeepAlivePacket(Socket socket)
+        private void SendKeepAlivePacket(string connectionId)
         {
             var gataPacket = new ServerDataMessage();
             gataPacket.Type = ServerDataType.KeepAlive;
             gataPacket.SocketId = 0;
-            SendPacket(socket, gataPacket);
+            SendPacket(connectionId, gataPacket);
         }
 
-        private void ProcessUserMsg(TGateInfo gateInfo, ref TUserInfo userInfo)
+        private void ProcessUserMsg(SelGateInfo gateInfo, ref SessionUserInfo userInfo)
         {
             var sData = string.Empty;
             var nC = 0;
@@ -412,16 +425,16 @@ namespace DBSvr.Services
         /// <summary>
         /// 用户打开会话
         /// </summary>
-        private void OpenUser(int sId, string sIp, ref TGateInfo gateInfo)
+        private void OpenUser(int sessionId, string sIp, ref SelGateInfo gateInfo)
         {
             var sUserIPaddr = string.Empty;
             var sGateIPaddr = HUtil32.GetValidStr3(sIp, ref sUserIPaddr, HUtil32.Backslash);
-            TUserInfo userInfo;
+            SessionUserInfo userInfo;
             var success = false;
             for (var i = 0; i < gateInfo.UserList.Count; i++)
             {
                 userInfo = gateInfo.UserList[i];
-                if ((userInfo != null) && (userInfo.sConnID == sId))
+                if ((userInfo != null) && (userInfo.SessionId == sessionId))
                 {
                     success = true;
                     break;
@@ -429,13 +442,13 @@ namespace DBSvr.Services
             }
             if (!success)
             {
-                userInfo = new TUserInfo();
+                userInfo = new SessionUserInfo();
                 userInfo.sAccount = string.Empty;
                 userInfo.sUserIPaddr = sUserIPaddr;
                 userInfo.sGateIPaddr = sGateIPaddr;
-                userInfo.sConnID = sId;
+                userInfo.SessionId = sessionId;
                 userInfo.nSessionID = 0;
-                userInfo.Socket = gateInfo.Socket;
+                userInfo.ConnectionId = gateInfo.ConnectionId;
                 userInfo.sText = string.Empty;
                 userInfo.dwTick34 = HUtil32.GetTickCount();
                 userInfo.dwChrTick = HUtil32.GetTickCount();
@@ -446,12 +459,12 @@ namespace DBSvr.Services
             }
         }
 
-        private void CloseUser(int connId, ref TGateInfo gateInfo)
+        private void CloseUser(int connId, ref SelGateInfo gateInfo)
         {
             for (var i = 0; i < gateInfo.UserList.Count; i++)
             {
                 var userInfo = gateInfo.UserList[i];
-                if ((userInfo != null) && (userInfo.sConnID == connId))
+                if ((userInfo != null) && (userInfo.SessionId == connId))
                 {
                     if (!_loginService.GetGlobaSessionStatus(userInfo.nSessionID))
                     {
@@ -465,7 +478,7 @@ namespace DBSvr.Services
             }
         }
 
-        private void DeCodeUserMsg(string sData, TGateInfo gateInfo, ref TUserInfo userInfo)
+        private void DeCodeUserMsg(string sData, SelGateInfo gateInfo, ref SessionUserInfo userInfo)
         {
             var sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
             var sText = sData.Substring(Grobal2.DEFBLOCKSIZE, sData.Length - Grobal2.DEFBLOCKSIZE);
@@ -558,7 +571,7 @@ namespace DBSvr.Services
         /// 查询角色
         /// </summary>
         /// <returns></returns>
-        private bool QueryChr(string sData, ref TUserInfo userInfo, ref TGateInfo curGate)
+        private bool QueryChr(string sData, ref SessionUserInfo userInfo, ref SelGateInfo curGate)
         {
             var sAccount = string.Empty;
             var sSendMsg = string.Empty;
@@ -604,13 +617,13 @@ namespace DBSvr.Services
                     }
                 }
                 chrList = null;
-                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDCode.EncodeString(sSendMsg));
+                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDCode.EncodeString(sSendMsg));
                 result = true;
             }
             else
             {
-                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
-                CloseUser(userInfo.sConnID, ref curGate);
+                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
+                CloseUser(userInfo.SessionId, ref curGate);
             }
             return result;
         }
@@ -618,11 +631,11 @@ namespace DBSvr.Services
         /// <summary>
         /// 会话错误
         /// </summary>
-        private void OutOfConnect(TUserInfo userInfo)
+        private void OutOfConnect(SessionUserInfo userInfo)
         {
             var msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             var sMsg = EDCode.EncodeMessage(msg);
-            SendUserSocket(userInfo.Socket, userInfo.sConnID, sMsg);
+            SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
         }
 
         private int DelChrSnameToLevel(string sName)
@@ -641,7 +654,7 @@ namespace DBSvr.Services
         /// <summary>
         /// 删除角色
         /// </summary>
-        private void DeleteChr(string sData, ref TUserInfo userInfo)
+        private void DeleteChr(string sData, ref SessionUserInfo userInfo)
         {
             ClientMesaagePacket msg;
             var sChrName = EDCode.DeCodeString(sData);
@@ -672,13 +685,13 @@ namespace DBSvr.Services
                 msg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELCHR_FAIL, 0, 0, 0, 0);
             }
             var sMsg = EDCode.EncodeMessage(msg);
-            SendUserSocket(userInfo.Socket, userInfo.sConnID, sMsg);
+            SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
         }
 
         /// <summary>
         /// 新建角色
         /// </summary>
-        private bool NewChr(string sData, ref TUserInfo userInfo)
+        private bool NewChr(string sData, ref SessionUserInfo userInfo)
         {
             var sAccount = string.Empty;
             var sChrName = string.Empty;
@@ -779,7 +792,7 @@ namespace DBSvr.Services
                 msg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
             }
             var sMsg = EDCode.EncodeMessage(msg);
-            SendUserSocket(userInfo.Socket, userInfo.sConnID, sMsg);
+            SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
             return nCode == 1 ? true : false;
         }
 
@@ -787,7 +800,7 @@ namespace DBSvr.Services
         /// 选择角色
         /// </summary>
         /// <returns></returns>
-        private bool SelectChr(string sData, TGateInfo curGate, ref TUserInfo userInfo)
+        private bool SelectChr(string sData, SelGateInfo curGate, ref SessionUserInfo userInfo)
         {
             var sAccount = string.Empty;
             var sCurMap = string.Empty;
@@ -845,14 +858,14 @@ namespace DBSvr.Services
                     sRouteIp = userInfo.sGateIPaddr;
                 }
                 var sRouteMsg = EDCode.EncodeString(sRouteIp + "/" + (nRoutePort + nMapIndex));
-                SendUserSocket(userInfo.Socket, userInfo.sConnID, sDefMsg + sRouteMsg);
+                SendUserSocket(curGate.ConnectionId, userInfo.SessionId, sDefMsg + sRouteMsg);
                 _loginService.SetGlobaSessionPlay(userInfo.nSessionID);
                 result = true;
                 //_logger.DebugLog($"玩家使用游戏网关信息 GameRun:{sRouteIp} Port:{nRoutePort + nMapIndex}");
             }
             else
             {
-                SendUserSocket(userInfo.Socket, userInfo.sConnID, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0)));
+                SendUserSocket(curGate.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0)));
             }
             return result;
         }
@@ -861,11 +874,11 @@ namespace DBSvr.Services
         /// 获取游戏网关
         /// </summary>
         /// <returns></returns>
-        private string GetGameGateRoute(TRouteInfo routeInfo, ref int nGatePort)
+        private string GetGameGateRoute(GateRouteInfo routeInfo, ref int gatePort)
         {
-            var nGateIndex = RandomNumber.GetInstance().Random(routeInfo.nGateCount);
-            var result = routeInfo.sGameGateIP[nGateIndex];
-            nGatePort = routeInfo.nGameGatePort[nGateIndex];
+            var nGateIndex = RandomNumber.GetInstance().Random(routeInfo.GateCount);
+            var result = routeInfo.GameGateIP[nGateIndex];
+            gatePort = routeInfo.GameGatePort[nGateIndex];
             return result;
         }
 
@@ -880,7 +893,7 @@ namespace DBSvr.Services
                 {
                     continue;
                 }
-                if (routeInfo.sSelGateIP == sGateIp)
+                if (routeInfo.SelGateIP == sGateIp)
                 {
                     result = GetGameGateRoute(routeInfo, ref nPort);
                     break;
@@ -898,14 +911,14 @@ namespace DBSvr.Services
             return _mapList.ContainsKey(sMap) ? _mapList[sMap] : 0;
         }
 
-        private void SendUserSocket(Socket socket, int sessionId, string sSendMsg)
+        private void SendUserSocket(string connectionId, int sessionId, string sSendMsg)
         {
             var packet = new ServerDataMessage();
             packet.SocketId = sessionId;
             packet.Body = HUtil32.GetBytes("#" + sSendMsg + "!");
             packet.BuffLen = (short)packet.Body.Length;
             packet.Type = ServerDataType.Data;
-            SendPacket(socket, packet);
+            SendPacket(connectionId, packet);
         }
 
         /// <summary>
@@ -926,19 +939,19 @@ namespace DBSvr.Services
             return result;
         }
 
-        private void SendPacket(Socket socket, ServerDataMessage packet)
+        private void SendPacket(string connectionId, ServerDataMessage packet)
         {
-            if (!socket.Connected)
+            if (!_userSocket.IsOnline(connectionId))
                 return;
             packet.StartChar = '%';
             packet.EndChar = '$';
-            socket.Send(packet.GetBuffer());
+            _userSocket.Send(connectionId, packet.GetBuffer());
         }
     }
 
-    public class UserMessage
+    public struct GateUserMessage
     {
-        public ServerDataMessage Packet;
-        public TGateInfo GateInfo;
+        public ServerDataMessage Message;
+        public string ConnectionId;
     }
 }

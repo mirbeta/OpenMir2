@@ -515,6 +515,16 @@ namespace SystemModule.Sockets.AsyncSocketServer
             }
         }
 
+        public void CloseSocket(string connectionId)
+        {
+            AsyncUserToken token;
+            if (!this._mTokens.TryRemove(connectionId, out token))
+            {
+                throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
+            }
+            token.Socket.Close();
+        }
+
         public void Send(string connectionId, byte[] buffer)
         {
             AsyncUserToken token;
