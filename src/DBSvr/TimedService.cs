@@ -19,13 +19,13 @@ namespace DBSvr
         private int _lastClearTick;
         private int _syncSaveTick;
         private readonly MirLogger _logger;
-        private readonly UserService _userSoc;
-        private readonly LoginService _loginSoc;
+        private readonly GateUserService _userSoc;
+        private readonly LoginSessionServer _loginSoc;
         private readonly PlayerDataService _dataService;
         private readonly ICacheStorage _cacheStorage;
         private readonly IPlayDataStorage _playDataStorage;
 
-        public TimedService(MirLogger logger, UserService userSoc, LoginService loginSoc, PlayerDataService dataService, ICacheStorage cacheStorage, IPlayDataStorage playDataStorage)
+        public TimedService(MirLogger logger, GateUserService userSoc, LoginSessionServer loginSoc, PlayerDataService dataService, ICacheStorage cacheStorage, IPlayDataStorage playDataStorage)
         {
             _logger = logger;
             _userSoc = userSoc;

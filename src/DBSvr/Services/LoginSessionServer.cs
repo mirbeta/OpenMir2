@@ -10,10 +10,9 @@ using SystemModule.Sockets.Event;
 namespace DBSvr.Services
 {
     /// <summary>
-    /// 账号中心
-    /// 会话同步服务(DBSvr-LoginSvr)
+    /// 登陆会话同步服务(DBSvr-LoginSvr)
     /// </summary>
-    public class LoginService
+    public class LoginSessionServer
     {
         private readonly MirLogger _logger;
         private readonly ClientScoket _clientScoket;
@@ -21,7 +20,7 @@ namespace DBSvr.Services
         private readonly DBSvrConf _conf;
         private string _sockMsg = string.Empty;
 
-        public LoginService(MirLogger logger, DBSvrConf conf)
+        public LoginSessionServer(MirLogger logger, DBSvrConf conf)
         {
             _logger = logger;
             _conf = conf;

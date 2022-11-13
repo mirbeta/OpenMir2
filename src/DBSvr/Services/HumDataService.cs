@@ -2,7 +2,6 @@
 using DBSvr.Storage;
 using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Packets;
@@ -13,28 +12,27 @@ using SystemModule.Sockets.AsyncSocketServer;
 namespace DBSvr.Services
 {
     /// <summary>
-    /// 玩家数据查询保存
+    /// 玩家数据服务
     /// DBSvr->GameSvr
     /// </summary>
     public class PlayerDataService
     {
         private readonly MirLogger _logger;
-        private readonly IList<TServerInfo> _serverList;
-        private readonly IList<THumSession> _playSessionList;
+        private readonly IList<ServerDataInfo> _serverList;
         private readonly IPlayDataStorage _playDataStorage;
-        private readonly ICacheStorage _memoryStorageServive;
+        private readonly ICacheStorage _cacheStorage;
         private readonly SocketServer _serverSocket;
-        private readonly LoginService _loginSvrService;
+        private readonly LoginSessionServer _loginSvrService;
         private readonly DBSvrConf _conf;
+        private IList<THumSession> PlaySessionList { get; set; }
 
-        public PlayerDataService(MirLogger logger, DBSvrConf conf, LoginService loginSvrService, IPlayDataStorage playDataStorage, ICacheStorage memoryStorageServive)
+        public PlayerDataService(MirLogger logger, DBSvrConf conf, LoginSessionServer loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
         {
             _logger = logger;
-            _loginSvrService = loginSvrService;
+            _loginSvrService = loginService;
             _playDataStorage = playDataStorage;
-            _memoryStorageServive = memoryStorageServive;
-            _serverList = new List<TServerInfo>();
-            _playSessionList = new List<THumSession>();
+            _cacheStorage = cacheStorage;
+            _serverList = new List<ServerDataInfo>();
             _serverSocket = new SocketServer(byte.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
@@ -45,6 +43,7 @@ namespace DBSvr.Services
 
         public void Start()
         {
+            PlaySessionList = new List<THumSession>();
             _serverSocket.Init();
             _serverSocket.Start(_conf.ServerAddr, _conf.ServerPort);
             _playDataStorage.LoadQuickList();
@@ -60,10 +59,9 @@ namespace DBSvr.Services
                 e.Socket.Close();
                 return;
             }
-            var serverInfo = new TServerInfo();
-            serverInfo.nSckHandle = (int)e.Socket.Handle;
+            var serverInfo = new ServerDataInfo();
             serverInfo.Data = null;
-            serverInfo.Socket = e.Socket;
+            serverInfo.ConnectionId = e.ConnectionId;
             _serverList.Add(serverInfo);
         }
 
@@ -72,9 +70,9 @@ namespace DBSvr.Services
             for (var i = 0; i < _serverList.Count; i++)
             {
                 var serverInfo = _serverList[i];
-                if (serverInfo.nSckHandle == (int)e.Socket.Handle)
+                if (serverInfo.ConnectionId == e.ConnectionId)
                 {
-                    ClearSocket(e.Socket);
+                    ClearSocket(e.ConnectionId);
                     _serverList.Remove(serverInfo);
                     break;
                 }
@@ -91,48 +89,56 @@ namespace DBSvr.Services
             for (var i = 0; i < _serverList.Count; i++)
             {
                 var serverInfo = _serverList[i];
-                if (serverInfo.nSckHandle == (int)e.Socket.Handle)
+                if (serverInfo.ConnectionId == e.ConnectionId)
                 {
                     var nReviceLen = e.BytesReceived;
                     var data = new byte[nReviceLen];
                     Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    if (serverInfo.DataLen == 0 && data[0] == (byte)'#')
+                    if (serverInfo.PacketLen == 0 && data[0] == (byte)'#')
                     {
-                        serverInfo.DataLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
+                        serverInfo.PacketLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
+                        serverInfo.Data = new byte[serverInfo.PacketLen];
+                        Buffer.BlockCopy(data, 0, serverInfo.Data, 0, nReviceLen);
                     }
-                    if (serverInfo.Data != null && serverInfo.Data.Length > 0)
+                    else if (serverInfo.Data != null && serverInfo.Data.Length > 0)
                     {
-                        var tempBuff = new byte[serverInfo.Data.Length + nReviceLen];
-                        Buffer.BlockCopy(serverInfo.Data, 0, tempBuff, 0, serverInfo.Data.Length);
-                        Buffer.BlockCopy(data, 0, tempBuff, serverInfo.Data.Length, data.Length);
-                        serverInfo.Data = tempBuff;
+                        Buffer.BlockCopy(data, 0, serverInfo.Data, serverInfo.ReviceLen, nReviceLen);
                     }
-                    else
+                    if (serverInfo.Data == null || serverInfo.Data.Length <= 0)
                     {
-                        serverInfo.Data = data;
+                        continue;
                     }
-                    var len = serverInfo.Data.Length - serverInfo.DataLen;
+                    var len = serverInfo.ReviceLen - serverInfo.PacketLen;
                     if (len > 0)
                     {
-                        var tempBuff = new byte[len];
-                        Buffer.BlockCopy(serverInfo.Data, serverInfo.DataLen, tempBuff, 0, len);
-                        data = serverInfo.Data[..serverInfo.DataLen];
-                        serverInfo.Data = tempBuff;
+                        data = serverInfo.Data[..serverInfo.PacketLen];
                         ProcessServerPacket(serverInfo, data);
-                        serverInfo.DataLen = tempBuff.Length;
+                        var dataBuff = serverInfo.Data[len..];
+                        if (dataBuff[0] == (byte)'#')
+                        {
+                            Buffer.BlockCopy(dataBuff, 0, serverInfo.Data, 0, dataBuff.Length);
+                            serverInfo.PacketLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
+                            serverInfo.ReviceLen += dataBuff.Length;
+                            continue;
+                        }
+                        serverInfo.PacketLen = 0;
+                        serverInfo.ReviceLen = 0;
+                        break;
                     }
-                    else if (len == 0)
+                    if (len == 0)
                     {
                         ProcessServerPacket(serverInfo, serverInfo.Data);
-                        serverInfo.Data = null;
-                        serverInfo.DataLen = 0;
+                        serverInfo.PacketLen = 0;
+                        serverInfo.ReviceLen = 0;
+                        break;
                     }
+                    serverInfo.ReviceLen += nReviceLen;
                     break;
                 }
             }
         }
 
-        private void ProcessServerPacket(TServerInfo serverInfo, byte[] data)
+        private void ProcessServerPacket(ServerDataInfo serverInfo, byte[] data)
         {
             var nQueryId = 0;
             if (data.Length > 0)
@@ -150,12 +156,12 @@ namespace DBSvr.Services
                     var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
                     if (queryId <= 0)
                     {
-                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
+                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.ConnectionId);
                         return;
                     }
                     if (requestPacket.Sgin.Length <= 0)
                     {
-                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
+                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.ConnectionId);
                         return;
                     }
                     var signatureBuff = BitConverter.GetBytes(queryId);
@@ -164,10 +170,10 @@ namespace DBSvr.Services
                     var sgin = BitConverter.ToInt16(sginBuff);
                     if (sgin == signatureId)
                     {
-                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.Socket);
+                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.ConnectionId);
                         return;
                     }
-                    serverInfo.Socket.Close();
+                    _serverSocket.CloseSocket(serverInfo.ConnectionId);
                     _logger.LogWarning("关闭错误的查询请求.");
                     return;
                 }
@@ -176,11 +182,10 @@ namespace DBSvr.Services
             responsePack.QueryId = nQueryId;
             var messagePacket = new ServerRequestMessage(Grobal2.DBR_FAIL, 0, 0, 0, 0);
             responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-            SendRequest(serverInfo.Socket, responsePack);
-            serverInfo.Data = null;
+            SendRequest(serverInfo.ConnectionId, responsePack);
         }
 
-        private void SendRequest(Socket socket, ServerRequestData requestPacket)
+        private void SendRequest(string connectionId, ServerRequestData requestPacket)
         {
             var queryPart = 0;
             if (requestPacket.Packet != null)
@@ -195,10 +200,10 @@ namespace DBSvr.Services
             var nCheckCode = BitConverter.GetBytes(queryPart);
             requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
             var pk = requestPacket.GetBuffer();
-            socket.Send(pk, pk.Length, SocketFlags.None);
+            _serverSocket.Send(connectionId, pk);
         }
 
-        private void SendRequest<T>(Socket socket, ServerRequestData requestPacket, T packet) where T : class, new()
+        private void SendRequest<T>(string connectionId, ServerRequestData requestPacket, T packet) where T : class, new()
         {
             if (packet != null)
             {
@@ -207,7 +212,7 @@ namespace DBSvr.Services
             var s = HUtil32.MakeLong((ushort)(requestPacket.QueryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
             var pk = requestPacket.GetBuffer();
-            socket.Send(pk, pk.Length, SocketFlags.None);
+            _serverSocket.Send(connectionId, pk);
         }
 
         /// <summary>
@@ -218,11 +223,11 @@ namespace DBSvr.Services
             int i = 0;
             while (true)
             {
-                if (_playSessionList.Count <= i)
+                if (PlaySessionList.Count <= i)
                 {
                     break;
                 }
-                THumSession HumSession = _playSessionList[i];
+                THumSession HumSession = PlaySessionList[i];
                 if (!HumSession.bo24)
                 {
                     if (HumSession.bo2C)
@@ -230,7 +235,7 @@ namespace DBSvr.Services
                         if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 20 * 1000)
                         {
                             HumSession = null;
-                            _playSessionList.RemoveAt(i);
+                            PlaySessionList.RemoveAt(i);
                             continue;
                         }
                     }
@@ -239,7 +244,7 @@ namespace DBSvr.Services
                         if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 2 * 60 * 1000)
                         {
                             HumSession = null;
-                            _playSessionList.RemoveAt(i);
+                            PlaySessionList.RemoveAt(i);
                             continue;
                         }
                     }
@@ -247,38 +252,38 @@ namespace DBSvr.Services
                 if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 40 * 60 * 1000)
                 {
                     HumSession = null;
-                    _playSessionList.RemoveAt(i);
+                    PlaySessionList.RemoveAt(i);
                     continue;
                 }
                 i++;
             }
         }
 
-        private void ProcessServerMsg(int nQueryId, ServerRequestMessage packet, byte[] sData, Socket Socket)
+        private void ProcessServerMsg(int nQueryId, ServerRequestMessage packet, byte[] sData, string connectionId)
         {
             sData = EDCode.DecodeBuff(sData);
             switch (packet.Ident)
             {
                 case Grobal2.DB_LOADHUMANRCD:
-                    LoadHumanRcd(nQueryId, sData, Socket);
+                    LoadHumanRcd(nQueryId, sData, connectionId);
                     break;
                 case Grobal2.DB_SAVEHUMANRCD:
-                    SaveHumanRcd(nQueryId, packet.Recog, sData, Socket);
+                    SaveHumanRcd(nQueryId, packet.Recog, sData, connectionId);
                     break;
                 case Grobal2.DB_SAVEHUMANRCDEX:
-                    SaveHumanRcdEx(nQueryId, sData, packet.Recog, Socket);
+                    SaveHumanRcdEx(nQueryId, sData, packet.Recog, connectionId);
                     break;
                 default:
                     var responsePack = new ServerRequestData();
                     responsePack.QueryId = nQueryId;
                     var messagePacket = new ServerRequestMessage(Grobal2.DBR_FAIL, 0, 0, 0, 0);
                     responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                    SendRequest(Socket, responsePack);
+                    SendRequest(connectionId, responsePack);
                     break;
             }
         }
 
-        private void LoadHumanRcd(int queryId, byte[] data, Socket Socket)
+        private void LoadHumanRcd(int queryId, byte[] data, string connectionId)
         {
             var loadHumanPacket = ProtoBufDecoder.DeSerialize<LoadPlayerDataMessage>(data);
             if (loadHumanPacket == null)
@@ -301,7 +306,7 @@ namespace DBSvr.Services
                 int nIndex = _playDataStorage.Index(loadHumanPacket.ChrName);
                 if (nIndex >= 0)
                 {
-                    HumanRCD = _memoryStorageServive.Get(loadHumanPacket.ChrName);
+                    HumanRCD = _cacheStorage.Get(loadHumanPacket.ChrName);
                     if (HumanRCD == null)
                     {
                         if (!_playDataStorage.Get(loadHumanPacket.ChrName, ref HumanRCD))
@@ -324,18 +329,18 @@ namespace DBSvr.Services
                 loadHumData.HumDataInfo = HumanRCD;
                 var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                SendRequest(Socket, responsePack, loadHumData);
+                SendRequest(connectionId, responsePack, loadHumData);
                 _logger.DebugLog($"获取玩家[{loadHumanPacket.ChrName}]数据成功");
             }
             else
             {
                 var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                SendRequest(Socket, responsePack);
+                SendRequest(connectionId, responsePack);
             }
         }
 
-        private void SaveHumanRcd(int queryId, int nRecog, byte[] sMsg, Socket Socket)
+        private void SaveHumanRcd(int queryId, int nRecog, byte[] sMsg, string connectionId)
         {
             try
             {
@@ -362,7 +367,7 @@ namespace DBSvr.Services
                     if (nIndex >= 0)
                     {
                         humanRcd.Header.Name = sChrName;
-                        _memoryStorageServive.Add(sChrName, humanRcd);
+                        _cacheStorage.Add(sChrName, humanRcd);
                         _playDataStorage.Update(sChrName, humanRcd);
                         bo21 = false;
                     }
@@ -372,9 +377,9 @@ namespace DBSvr.Services
                 responsePack.QueryId = queryId;
                 if (!bo21)
                 {
-                    for (var i = 0; i < _playSessionList.Count; i++)
+                    for (var i = 0; i < PlaySessionList.Count; i++)
                     {
-                        THumSession HumSession = _playSessionList[i];
+                        THumSession HumSession = PlaySessionList[i];
                         if ((HumSession.sChrName == sChrName) && (HumSession.nIndex == nRecog))
                         {
                             HumSession.lastSessionTick = HUtil32.GetTickCount();
@@ -383,13 +388,13 @@ namespace DBSvr.Services
                     }
                     var messagePacket = new ServerRequestMessage(Grobal2.DBR_SAVEHUMANRCD, 1, 0, 0, 0);
                     responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                    SendRequest(Socket, responsePack);
+                    SendRequest(connectionId, responsePack);
                 }
                 else
                 {
                     var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 0, 0, 0, 0);
                     responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                    SendRequest(Socket, responsePack);
+                    SendRequest(connectionId, responsePack);
                 }
             }
             catch (Exception e)
@@ -398,7 +403,7 @@ namespace DBSvr.Services
             }
         }
 
-        private void SaveHumanRcdEx(int nQueryId, byte[] sMsg, int nRecog, Socket Socket)
+        private void SaveHumanRcdEx(int nQueryId, byte[] sMsg, int nRecog, string connectionId)
         {
             var saveHumDataPacket = ProtoBufDecoder.DeSerialize<SavePlayerDataMessage>(sMsg);
             if (saveHumDataPacket == null)
@@ -407,36 +412,36 @@ namespace DBSvr.Services
                 return;
             }
             var sChrName = saveHumDataPacket.ChrName;
-            for (var i = 0; i < _playSessionList.Count; i++)
+            for (var i = 0; i < PlaySessionList.Count; i++)
             {
-                THumSession HumSession = _playSessionList[i];
+                THumSession HumSession = PlaySessionList[i];
                 if ((HumSession.sChrName == sChrName) && (HumSession.nIndex == nRecog))
                 {
                     HumSession.bo24 = false;
-                    HumSession.Socket = Socket;
+                    HumSession.ConnectionId = connectionId;
                     HumSession.bo2C = true;
                     HumSession.lastSessionTick = HUtil32.GetTickCount();
                     break;
                 }
             }
-            SaveHumanRcd(nQueryId, nRecog, sMsg, Socket);
+            SaveHumanRcd(nQueryId, nRecog, sMsg, connectionId);
         }
 
-        private void ClearSocket(Socket Socket)
+        private void ClearSocket(string connectionId)
         {
             THumSession HumSession;
             int nIndex = 0;
             while (true)
             {
-                if (_playSessionList.Count <= nIndex)
+                if (PlaySessionList.Count <= nIndex)
                 {
                     break;
                 }
-                HumSession = _playSessionList[nIndex];
-                if (HumSession.Socket == Socket)
+                HumSession = PlaySessionList[nIndex];
+                if (HumSession.ConnectionId == connectionId)
                 {
                     HumSession = null;
-                    _playSessionList.RemoveAt(nIndex);
+                    PlaySessionList.RemoveAt(nIndex);
                     continue;
                 }
                 nIndex++;

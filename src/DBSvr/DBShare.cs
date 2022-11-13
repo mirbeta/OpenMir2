@@ -18,7 +18,7 @@ namespace DBSvr
         private static Hashtable _serverIpList = null;
         private static Dictionary<string, short> _gateIdList = null;
         public static readonly StringList ClearMakeIndex = null;
-        public static readonly TRouteInfo[] RouteInfo = new TRouteInfo[20];
+        public static readonly GateRouteInfo[] RouteInfo = new GateRouteInfo[20];
         public static bool ShowLog = true;
 
         private static void LoadGateID()
@@ -196,19 +196,19 @@ namespace DBSvr
         }
     }
 
-    public class TServerInfo
+    public class ServerDataInfo
     {
-        public int nSckHandle;
         public byte[] Data;
-        public int DataLen;
-        public Socket Socket;
+        public int ReviceLen;
+        public int PacketLen;
+        public string ConnectionId;
     }
 
     public class THumSession
     {
         public string sChrName;
         public int nIndex;
-        public Socket Socket;
+        public string ConnectionId;
         public bool bo24;
         public bool bo2C;
         public long lastSessionTick;
@@ -225,12 +225,13 @@ namespace DBSvr
         public bool boStartPlay;
     }
 
-    public class TGateInfo
+    public class SelGateInfo
     {
+        public string ConnectionId;
         public Socket Socket;
         public EndPoint RemoteEndPoint;
         public EndPoint LoclEndPoint;
-        public IList<TUserInfo> UserList;
+        public IList<SessionUserInfo> UserList;
         /// <summary>
         /// 网关ID
         /// </summary>
@@ -248,14 +249,14 @@ namespace DBSvr
         }
     }
 
-    public class TUserInfo
+    public class SessionUserInfo
     {
         public string sAccount;
         public string sUserIPaddr;
         public string sGateIPaddr;
-        public int sConnID;
+        public int SessionId;
         public int nSessionID;
-        public Socket Socket;
+        public string ConnectionId;
         public string sText;
         public bool boChrSelected;
         public bool boChrQueryed;
@@ -264,17 +265,26 @@ namespace DBSvr
         public short nSelGateID;
     }
 
-    public class TRouteInfo
+    public class GateRouteInfo
     {
-        public int nGateCount;
-        public string sSelGateIP;
-        public string[] sGameGateIP;
-        public int[] nGameGatePort;
+        public int GateCount;
+        /// <summary>
+        /// 角色网关IP
+        /// </summary>
+        public string SelGateIP;
+        /// <summary>
+        /// 游戏网关
+        /// </summary>
+        public string[] GameGateIP;
+        /// <summary>
+        /// 游戏网关端口
+        /// </summary>
+        public int[] GameGatePort;
 
-        public TRouteInfo()
+        public GateRouteInfo()
         {
-            sGameGateIP = new string[8];
-            nGameGatePort = new int[8];
+            GameGateIP = new string[8];
+            GameGatePort = new int[8];
         }
     }
 }
