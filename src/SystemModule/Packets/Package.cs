@@ -116,6 +116,15 @@ namespace SystemModule.Packets
             stream.Read(data, 0, data.Length);
             return data;
         }
+        
+        public int GetPacketSize()
+        {
+            using MemoryStream stream = new MemoryStream();
+            using BinaryWriter writer = new BinaryWriter(stream);
+            WritePacket(writer);
+            stream.Seek(0, SeekOrigin.Begin);
+            return (int)stream.Length;
+        }
 
         public static T ToPacket<T>(byte[] rawBytes) where T : Packets, new()
         {

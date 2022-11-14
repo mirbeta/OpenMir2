@@ -206,12 +206,20 @@ namespace LoginSvr
         public int nLockCount;
     }
 
-    public class GateInfo
+    public class LoginGateInfo
     {
         public Socket Socket;
+        public string ConnectionId;
         public string sIPaddr;
+        public byte[] Data;
+        public int DataLen;
         public IList<UserInfo> UserList;
         public long KeepAliveTick;
+
+        public LoginGateInfo()
+        {
+            Data = new byte[1024 * 10];
+        }
     }
 
     public struct CertUser

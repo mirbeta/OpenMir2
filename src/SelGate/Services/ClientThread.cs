@@ -172,7 +172,7 @@ namespace SelGate.Services
             }
             var message = new TMessageData();
             message.SessionId = packet.SocketId;
-            message.Body = packet.Body;
+            message.Body = packet.Data;
             _sessionManager.SendQueue.TryWrite(message);
         }
 
@@ -209,11 +209,10 @@ namespace SelGate.Services
         public void SendKeepAlive()
         {
             var accountPacket = new ServerDataMessage();
-            accountPacket.Body = Array.Empty<byte>();
-            accountPacket.StartChar = '%';
+            accountPacket.Data = Array.Empty<byte>();
             accountPacket.Type = ServerDataType.KeepAlive;
             accountPacket.SocketId = 0;
-            accountPacket.EndChar = '$';
+            accountPacket.PacketLen = accountPacket.GetPacketSize();
             SendSocket(accountPacket.GetBuffer());
             _logQueue.DebugLog("Send DBSvr Heartbeat.");
         }

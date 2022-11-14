@@ -206,8 +206,8 @@ namespace LoginGate.Services
 
         public void SendPacket(ServerDataMessage packet)
         {
-            packet.StartChar = '%';
-            packet.EndChar = '$';
+            packet.PacketCode = Grobal2.RUNGATECODE;
+            packet.PacketLen = packet.GetPacketSize();
             SendSocket(packet.GetBuffer());
         }
 

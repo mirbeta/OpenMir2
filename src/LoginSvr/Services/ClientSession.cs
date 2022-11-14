@@ -97,7 +97,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ProcessUserMsg(GateInfo gateInfo, UserInfo userInfo, string sMsg)
+        private void ProcessUserMsg(LoginGateInfo gateInfo, UserInfo userInfo, string sMsg)
         {
             var sDefMsg = sMsg[..Grobal2.DEFBLOCKSIZE];
             var sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE);
@@ -525,7 +525,7 @@ namespace LoginSvr.Services
                     else
                     {
                         userInfo.SelServer = false;
-                        _sessionManager.Delete(userInfo.SessionID);
+                        _sessionManager.Delete(userInfo.Account, userInfo.SessionID);
                         defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0);
                         SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
                     }
@@ -739,7 +739,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private void KickUser(GateInfo gateInfo, ref UserInfo userInfo)
+        private void KickUser(LoginGateInfo gateInfo, ref UserInfo userInfo)
         {
             const string sKickMsg = "Kick: {0}";
             _logger.DebugLog(string.Format(sKickMsg, userInfo.UserIPaddr));

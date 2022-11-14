@@ -45,11 +45,11 @@ namespace LoginSvr.Services
             return false;
         }
 
-        public void Delete(int sessionId)
+        public void Delete(string account, int sessionId)
         {
             if (sessionMap.Remove(sessionId))
             {
-
+                sessionAccountMap.Remove(account);
             }
         }
 

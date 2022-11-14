@@ -5,39 +5,44 @@ namespace SystemModule.Packets.ServerPackets
 {
     public class ServerDataMessage : Packets
     {
+        public uint PacketCode { get; set; }
+        public int PacketLen { get; set; }
         public ServerDataType Type { get; set; }
         public int SocketId { get; set; }
-        public short BuffLen { get; set; }
-        public byte[] Body { get; set; }
-        public char StartChar { get; set; }
-        public char EndChar { get; set; }
+        public short DataLen { get; set; }
+        public byte[] Data { get; set; }
+
+        /// <summary>
+        /// 消息头固定大小
+        /// </summary>
+        public const int HeaderPacketSize = 8;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            StartChar = reader.ReadChar();
+            PacketCode = reader.ReadUInt32();
+            PacketLen = reader.ReadInt32();
             Type = (ServerDataType)reader.ReadByte();
             SocketId = reader.ReadInt32();
-            BuffLen = reader.ReadInt16();
-            Body = reader.ReadBytes(BuffLen);
-            EndChar = reader.ReadChar();
+            DataLen = reader.ReadInt16();
+            Data = reader.ReadBytes(DataLen);
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(StartChar);
+            writer.Write(PacketCode);
+            writer.Write(PacketLen);
             writer.Write((byte)Type);
             writer.Write(SocketId);
-            if (Body == null || Body.Length <= 0)
+            if (Data == null || Data.Length <= 0)
             {
                 writer.Write((short)0);
                 writer.Write(Array.Empty<byte>());
             }
             else
             {
-                writer.Write(BuffLen);
-                writer.Write(Body);
+                writer.Write(DataLen);
+                writer.Write(Data);
             }
-            writer.Write(EndChar);
         }
     }
 

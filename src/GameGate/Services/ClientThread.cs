@@ -151,6 +151,7 @@ namespace GameGate.Services
             Connected = true;
             ReceiveBytes = 0;
             SendBytes = 0;
+            ReceiveBuffer = new byte[2048];
             Logger.Log($"[{GateEndPoint}] 游戏引擎[{e.RemoteEndPoint}]链接成功.", 1);
             Logger.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
         }
@@ -185,12 +186,10 @@ namespace GameGate.Services
         {
             var nMsgLen = e.BuffLen;
             var packetData = e.Buff[..nMsgLen];
-            if (BuffLen > 0 && ReceiveBuffer != null)
+            if (BuffLen > 0)
             {
-                byte[] tempBuff = new byte[BuffLen + nMsgLen];
-                MemoryCopy.BlockCopy(ReceiveBuffer, 0, tempBuff, 0, ReceiveBuffer.Length);
-                MemoryCopy.BlockCopy(packetData, 0, tempBuff, BuffLen, packetData.Length);
-                ProcessServerPacket(tempBuff, tempBuff.Length);
+                MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
+                ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
             }
             else
             {
@@ -306,12 +305,12 @@ namespace GameGate.Services
                 }
                 if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
-                    ReceiveBuffer = dataBuff[..nLen].ToArray();
+                    //ReceiveBuffer = dataBuff[..nLen].ToArray();
+                    MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
                     BuffLen = nLen;
                 }
                 else
                 {
-                    ReceiveBuffer = null;
                     BuffLen = 0;
                 }
             }

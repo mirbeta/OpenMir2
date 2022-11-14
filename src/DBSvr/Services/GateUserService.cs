@@ -117,12 +117,7 @@ namespace DBSvr.Services
         {
             var s0C = string.Empty;
             var sData = string.Empty;
-            if (packet.EndChar != '$')
-            {
-                _logger.LogWarning("非法数据包.");
-                return;
-            }
-            var sText = HUtil32.GetString(packet.Body, 0, packet.BuffLen);
+            var sText = HUtil32.GetString(packet.Data, 0, packet.DataLen);
             HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
             switch (packet.Type)
             {
@@ -221,23 +216,86 @@ namespace DBSvr.Services
 
         }
 
+        private void ProcessGateData(byte[] data, int nLen,string connectionId, ref SelGateInfo gateInfo)
+        {
+            var srcOffset = 0;
+            Span<byte> dataBuff = data;
+            try
+            {
+                while (nLen >= ServerDataMessage.HeaderPacketSize)
+                {
+                    Span<byte> packetHead = dataBuff[..ServerDataMessage.HeaderPacketSize];
+                    var packetCode = BitConverter.ToUInt32(packetHead[..4]);
+                    if (packetCode != Grobal2.RUNGATECODE)
+                    {
+                        srcOffset++;
+                        dataBuff = dataBuff.Slice(srcOffset, ServerDataMessage.HeaderPacketSize);
+                        nLen -= 1;
+                        _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        continue;
+                    }
+                    var messageLen = BitConverter.ToInt32(packetHead.Slice(4, 4));
+                    var nCheckMsgLen = Math.Abs(messageLen);
+                    if (nCheckMsgLen > nLen)
+                    {
+                        break;
+                    }
+                    var packet = Packets.ToPacket<ServerDataMessage>(gateInfo.Data[..messageLen]);
+                    if (packet == null)
+                    {
+                        //_logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
+                        return;
+                    }
+                    var message = new UserMessage();
+                    message.ConnectionId = connectionId;
+                    message.Packet = packet;
+                    _reviceQueue.Writer.TryWrite(message);
+                    nLen -= nCheckMsgLen;
+                    if (nLen <= 0)
+                    {
+                        break;
+                    }
+                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                    gateInfo.DataLen = nLen;
+                    srcOffset = 0;
+                    if (nLen < ServerDataMessage.HeaderPacketSize)
+                    {
+                        break;
+                    }
+                }
+                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+                {
+                    MemoryCopy.BlockCopy(dataBuff, 0, gateInfo.Data, 0, nLen);
+                    gateInfo.DataLen = nLen;
+                }
+                else
+                {
+                    gateInfo.DataLen = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+            }
+        }
+
         private void UserSocketClientRead(object sender, AsyncUserToken e)
         {
-            if (_gateMap.ContainsKey(e.ConnectionId))
+            if (_gateMap.TryGetValue(e.ConnectionId, out var gateInfo))
             {
-                var nReviceLen = e.BytesReceived;
-                var data = new byte[nReviceLen];
-                Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                var packet = Packets.ToPacket<ServerDataMessage>(data);
-                if (packet == null)
+                var nMsgLen = e.BytesReceived;
+                if (gateInfo.DataLen > 0)
                 {
-                    _logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
-                    return;
+                    var packetData = new byte[e.BytesReceived];
+                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
+                    MemoryCopy.BlockCopy(packetData, 0, gateInfo.Data, gateInfo.DataLen, packetData.Length);
+                    ProcessGateData(gateInfo.Data, gateInfo.DataLen + nMsgLen, e.ConnectionId, ref gateInfo);
                 }
-                var message = new UserMessage();
-                message.ConnectionId = e.ConnectionId;
-                message.Packet = Packets.ToPacket<ServerDataMessage>(data);
-                _reviceQueue.Writer.TryWrite(message);
+                else
+                {
+                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, gateInfo.Data, 0, nMsgLen);
+                    ProcessGateData(gateInfo.Data, nMsgLen, e.ConnectionId, ref gateInfo);
+                }
             }
         }
 
@@ -917,8 +975,8 @@ namespace DBSvr.Services
         {
             var packet = new ServerDataMessage();
             packet.SocketId = sessionId;
-            packet.Body = HUtil32.GetBytes("#" + sSendMsg + "!");
-            packet.BuffLen = (short)packet.Body.Length;
+            packet.Data = HUtil32.GetBytes("#" + sSendMsg + "!");
+            packet.DataLen = (short)packet.Data.Length;
             packet.Type = ServerDataType.Data;
             SendPacket(connectionId, packet);
         }
@@ -945,8 +1003,8 @@ namespace DBSvr.Services
         {
             if (!_userSocket.IsOnline(connectionId))
                 return;
-            packet.StartChar = '%';
-            packet.EndChar = '$';
+            packet.PacketCode = Grobal2.RUNGATECODE;
+            packet.PacketLen = packet.GetPacketSize();
             _userSocket.Send(connectionId, packet.GetBuffer());
         }
     }

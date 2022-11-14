@@ -76,12 +76,11 @@ namespace SelGate
                 case Grobal2.CM_SELCHR:
                     _clientTimeOutTick = HUtil32.GetTickCount();
                     var accountPacket = new ServerDataMessage();
-                    accountPacket.Body = userData.Body;
-                    accountPacket.BuffLen = (byte)userData.Body.Length;
-                    accountPacket.StartChar = '%';
+                    accountPacket.Data = userData.Body;
+                    accountPacket.DataLen = (byte)userData.Body.Length;
                     accountPacket.Type = ServerDataType.Data;
                     accountPacket.SocketId = Session.SocketId;
-                    accountPacket.EndChar = '$';
+                    accountPacket.PacketLen = accountPacket.GetPacketSize();
                     _lastDbSvr.SendSocket(accountPacket.GetBuffer());
                     break;
                 default:
@@ -187,12 +186,11 @@ namespace SelGate
             var sendStr = $"%K{_session.SocketId}/{_session.ClientIP}/{_session.ClientIP}$";
             var body = HUtil32.GetBytes(sendStr);
             var accountPacket = new ServerDataMessage();
-            accountPacket.Body = body;
-            accountPacket.BuffLen = (short)body.Length;
-            accountPacket.StartChar = '%';
+            accountPacket.Data = body;
+            accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Enter;
             accountPacket.SocketId = Session.SocketId;
-            accountPacket.EndChar = '$';
+            accountPacket.PacketLen = accountPacket.GetPacketSize();
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());
             _logger.DebugLog("[UserEnter] " + sendStr);
         }
@@ -209,12 +207,11 @@ namespace SelGate
             var sendStr = $"%L{_session.SocketId}$";
             var body = HUtil32.GetBytes(sendStr);
             var accountPacket = new ServerDataMessage();
-            accountPacket.Body = body;
-            accountPacket.BuffLen = (short)body.Length;
-            accountPacket.StartChar = '%';
+            accountPacket.Data = body;
+            accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Leave;
             accountPacket.SocketId = Session.SocketId;
-            accountPacket.EndChar = '$';
+            accountPacket.PacketLen = accountPacket.GetPacketSize();
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());
             _kickFlag = false;
             _logger.DebugLog("[UserLeave] " + sendStr);
