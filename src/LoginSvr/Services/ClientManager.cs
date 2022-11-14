@@ -6,11 +6,11 @@ namespace LoginSvr.Services
     public class ClientManager
     {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ConcurrentDictionary<int, GateInfo> _gateInfos = new ConcurrentDictionary<int, GateInfo>();
+        private readonly ConcurrentDictionary<int, LoginGateInfo> _gateInfos = new ConcurrentDictionary<int, LoginGateInfo>();
 
         public int Gates => _gateInfos.Count;
 
-        public GateInfo GetSession(int sessionId)
+        public LoginGateInfo GetSession(int sessionId)
         {
             if (_gateInfos.TryGetValue(sessionId, out var userInfo))
             {
@@ -19,7 +19,7 @@ namespace LoginSvr.Services
             return null;
         }
 
-        public bool AddSession(int socketId, GateInfo userInfo)
+        public bool AddSession(int socketId, LoginGateInfo userInfo)
         {
             if (_gateInfos.ContainsKey(socketId))
             {

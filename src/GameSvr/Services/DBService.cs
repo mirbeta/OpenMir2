@@ -116,7 +116,7 @@ namespace GameSvr.Services
                         _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
-                    var queryId = BitConverter.ToUInt16(packetHead.Slice(4, 4));
+                    var queryId = BitConverter.ToUInt32(packetHead.Slice(4, 4));
                     var messageLen = BitConverter.ToInt16(packetHead.Slice(8, 2));
                     var nCheckMsgLen = Math.Abs(messageLen);
                     if (nCheckMsgLen > nLen)

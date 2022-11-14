@@ -15,10 +15,10 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace LoginSvr.Services
 {
-    public struct LoginPacket
+    public struct LoginGatePacket
     {
-        public int SocketId;
-        public byte[] Pakcet;
+        public int ConnectionId;
+        public ServerDataMessage Pakcet;
     }
 
     /// <summary>
@@ -33,7 +33,8 @@ namespace LoginSvr.Services
         private readonly ClientSession _clientSession;
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
-        private readonly Channel<LoginPacket> _messageQueue;
+        private readonly Channel<LoginGatePacket> _messageQueue;
+        private readonly Dictionary<string, LoginGateInfo> _loginGateMap = new Dictionary<string, LoginGateInfo>();
 
         public LoginServer(MirLogger logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager, SessionManager sessionManager)
         {
@@ -42,7 +43,7 @@ namespace LoginSvr.Services
             _clientManager = clientManager;
             _sessionManager = sessionManager;
             _config = configManager.Config;
-            _messageQueue = Channel.CreateUnbounded<LoginPacket>();
+            _messageQueue = Channel.CreateUnbounded<LoginGatePacket>();
             _serverSocket = new SocketServer(short.MaxValue, 2048);
             _serverSocket.OnClientConnect += GSocketClientConnect;
             _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
@@ -59,17 +60,20 @@ namespace LoginSvr.Services
 
         private void GSocketClientConnect(object sender, AsyncUserToken e)
         {
-            var gateInfo = new GateInfo();
+            var gateInfo = new LoginGateInfo();
             gateInfo.Socket = e.Socket;
+            gateInfo.ConnectionId = e.ConnectionId;
             gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, e.RemoteIPaddr);//应该改为按策略获取一个对外的公开网关地址
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.KeepAliveTick = HUtil32.GetTickCount();
             _clientManager.AddSession(e.SocHandle, gateInfo);
             _logger.LogInformation($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
+            _loginGateMap.Add(e.ConnectionId, gateInfo);
         }
 
         private void GSocketClientDisconnect(object sender, AsyncUserToken e)
         {
+            _loginGateMap.Remove(e.ConnectionId);
             _clientManager.Delete(e.SocHandle);
             _logger.LogWarning($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
         }
@@ -81,13 +85,93 @@ namespace LoginSvr.Services
 
         private void GSocketClientRead(object sender, AsyncUserToken e)
         {
-            var data = new byte[e.BytesReceived];
-            Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, data.Length);
-            _messageQueue.Writer.TryWrite(new LoginPacket()
+            if (_loginGateMap.TryGetValue(e.ConnectionId, out var gateInfo))
             {
-                SocketId = e.SocHandle,
-                Pakcet = data
-            });
+                var nMsgLen = e.BytesReceived;
+                if (gateInfo.DataLen > 0)
+                {
+                    var packetData = new byte[e.BytesReceived];
+                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
+                    MemoryCopy.BlockCopy(packetData, 0, gateInfo.Data, gateInfo.DataLen, packetData.Length);
+                    ProcessGateData(gateInfo.Data, gateInfo.DataLen + nMsgLen, e.SocHandle, ref gateInfo);
+                }
+                else
+                {
+                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, gateInfo.Data, 0, nMsgLen);
+                    ProcessGateData(gateInfo.Data, nMsgLen, e.SocHandle, ref gateInfo);
+                }
+            }
+        }
+
+        private void ProcessGateData(byte[] data, int nLen, int socketId, ref LoginGateInfo gateInfo)
+        {
+            var srcOffset = 0;
+            Span<byte> dataBuff = data;
+            try
+            {
+                while (nLen >= ServerDataMessage.HeaderPacketSize)
+                {
+                    Span<byte> packetHead = dataBuff[..ServerDataMessage.HeaderPacketSize];
+                    var packetCode = BitConverter.ToUInt32(packetHead[..4]);
+                    if (packetCode != Grobal2.RUNGATECODE)
+                    {
+                        srcOffset++;
+                        dataBuff = dataBuff.Slice(srcOffset, ServerDataMessage.HeaderPacketSize);
+                        nLen -= 1;
+                        _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        continue;
+                    }
+                    var messageLen = BitConverter.ToInt32(packetHead.Slice(4, 4));
+                    var nCheckMsgLen = Math.Abs(messageLen);
+                    if (nCheckMsgLen > nLen)
+                    {
+                        break;
+                    }
+                    var packet = Packets.ToPacket<ServerDataMessage>(gateInfo.Data[..messageLen]);
+                    if (packet == null)
+                    {
+                        //_logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
+                        return;
+                    }
+                    if (packet.Type == ServerDataType.Data)
+                    {
+                        ProcessUserMessage(socketId, packet.SocketId, packet.Data);
+                    }
+                    else
+                    {
+                        _messageQueue.Writer.TryWrite(new LoginGatePacket()
+                        {
+                            ConnectionId = socketId,
+                            Pakcet = packet
+                        });
+                    }
+                    nLen -= nCheckMsgLen;
+                    if (nLen <= 0)
+                    {
+                        break;
+                    }
+                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                    gateInfo.DataLen = nLen;
+                    srcOffset = 0;
+                    if (nLen < ServerDataMessage.HeaderPacketSize)
+                    {
+                        break;
+                    }
+                }
+                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+                {
+                    MemoryCopy.BlockCopy(dataBuff, 0, gateInfo.Data, 0, nLen);
+                    gateInfo.DataLen = nLen;
+                }
+                else
+                {
+                    gateInfo.DataLen = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+            }
         }
 
         /// <summary>
@@ -100,45 +184,26 @@ namespace LoginSvr.Services
             {
                 while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    while (_messageQueue.Reader.TryRead(out var clientPacket))
+                    while (_messageQueue.Reader.TryRead(out var loginPacket))
                     {
                         try
                         {
-                            var packet = Packets.ToPacket<ServerDataMessage>(clientPacket.Pakcet);
-                            if (packet == null)
+                            var packet = loginPacket.Pakcet;
+                            var gateInfo = _clientManager.GetSession(loginPacket.ConnectionId);
+                            switch (packet.Type)
                             {
-                                continue;
+                                case ServerDataType.KeepAlive:
+                                    SendKeepAlivePacket(gateInfo.ConnectionId);
+                                    gateInfo.KeepAliveTick = HUtil32.GetTickCount();
+                                    break;
+                                case ServerDataType.Enter:
+                                    ReceiveOpenUser(packet.SocketId, packet.Data, gateInfo);
+                                    break;
+                                case ServerDataType.Leave:
+                                    ReceiveCloseUser(packet.SocketId, gateInfo);
+                                    break;
                             }
-                            if (packet.Type == ServerDataType.Data)
-                            {
-                                ProcessUserMessage(clientPacket.SocketId, packet.SocketId, packet.Body);
-                            }
-                            else
-                            {
-                                var gateInfo = _clientManager.GetSession(clientPacket.SocketId);
-                                if (packet.Body != null)
-                                {
-                                    if (packet.EndChar != '$' && packet.StartChar != '%')
-                                    {
-                                        _logger.LogWarning("丢弃错误的封包数据");
-                                        continue;
-                                    }
-                                    switch (packet.Type)
-                                    {
-                                        case ServerDataType.KeepAlive:
-                                            SendKeepAlivePacket(gateInfo.Socket);
-                                            gateInfo.KeepAliveTick = HUtil32.GetTickCount();
-                                            break;
-                                        case ServerDataType.Enter:
-                                            ReceiveOpenUser(packet.SocketId, packet.Body, gateInfo);
-                                            break;
-                                        case ServerDataType.Leave:
-                                            ReceiveCloseUser(packet.SocketId, gateInfo);
-                                            break;
-                                    }
-                                }
-                                _config.sGateIPaddr = gateInfo.sIPaddr;
-                            }
+                            _config.sGateIPaddr = gateInfo.sIPaddr;
                         }
                         catch (Exception e)
                         {
@@ -150,7 +215,7 @@ namespace LoginSvr.Services
             _clientSession.Start(stoppingToken);
         }
 
-        private void ProcessUserMessage(int sessionId,int sSockIndex, byte[] data)
+        private void ProcessUserMessage(int sessionId, int sSockIndex, byte[] data)
         {
             var dataMsg = HUtil32.GetString(data, 0, data.Length);
             _clientSession.Enqueue(new UserSessionData()
@@ -161,16 +226,15 @@ namespace LoginSvr.Services
             });
         }
 
-        private void SendKeepAlivePacket(Socket socket)
+        private void SendKeepAlivePacket(string connectionId)
         {
-            if (socket.Connected)
+            if (_serverSocket.IsOnline(connectionId))
             {
-                socket.Send(HUtil32.GetBytes("%++$"));
+                _serverSocket.Send(connectionId, HUtil32.GetBytes("%++$"));
             }
-            _logger.DebugLog($"心跳消息 链接状态:[{socket.Connected}]");
         }
 
-        private void ReceiveCloseUser(int sSockIndex, GateInfo gateInfo)
+        private void ReceiveCloseUser(int sSockIndex, LoginGateInfo gateInfo)
         {
             const string sCloseMsg = "Close: {0}";
             for (var i = 0; i < gateInfo.UserList.Count; i++)
@@ -181,7 +245,7 @@ namespace LoginSvr.Services
                     _logger.DebugLog(string.Format(sCloseMsg, userInfo.UserIPaddr));
                     if (!userInfo.SelServer)
                     {
-                        SessionDel(userInfo.SessionID);
+                        SessionDel(userInfo.Account, userInfo.SessionID);
                     }
                     gateInfo.UserList[i] = null;
                     gateInfo.UserList.RemoveAt(i);
@@ -190,7 +254,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ReceiveOpenUser(int sSockIndex, byte[] data, GateInfo gateInfo)
+        private void ReceiveOpenUser(int sSockIndex, byte[] data, LoginGateInfo gateInfo)
         {
             if (data == null || data.Length <= 0)
             {
@@ -250,9 +314,9 @@ namespace LoginSvr.Services
             }
         }
 
-        private void SessionDel(int nSessionId)
+        private void SessionDel(string account, int nSessionId)
         {
-            _sessionManager.Delete(nSessionId);
+            _sessionManager.Delete(account, nSessionId);
             /*for (var i = 0; i < _config.SessionList.Count; i++)
             {
                 if (_config.SessionList[i].SessionID == nSessionId)

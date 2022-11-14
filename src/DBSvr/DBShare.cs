@@ -228,6 +228,8 @@ namespace DBSvr
     {
         public string ConnectionId;
         public Socket Socket;
+        public byte[] Data;
+        public int DataLen;
         public EndPoint RemoteEndPoint;
         public EndPoint LoclEndPoint;
         public IList<SessionUserInfo> UserList;
@@ -236,6 +238,11 @@ namespace DBSvr
         /// </summary>
         public short nGateID;
         public int ConnectTick;
+
+        public SelGateInfo()
+        {
+            Data = new byte[1024 * 10];
+        }
 
         public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string queueCount) GetStatus()
         {
