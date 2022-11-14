@@ -36,6 +36,10 @@ namespace GameSvr
                 _application.ShowHelp();
                 return 0;
             });
+            _application.Command("save", command =>
+            {
+                command.OnExecute(SavePlayer);
+            });
             _application.Command("s", command =>
             {
                 command.OnExecuteAsync(async (cancellationToken) =>
@@ -115,10 +119,8 @@ namespace GameSvr
             Environment.ExitCode = _exitCode.GetValueOrDefault(-1);
         }
 
-        private void OnShutdown()
+        private void SavePlayer()
         {
-            _logger.LogDebug("Application is stopping");
-            M2Share.StartReady = false;
             if (M2Share.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
                 _logger.LogInformation("保存玩家数据");
@@ -128,6 +130,13 @@ namespace GameSvr
                 }
                 _logger.LogInformation("数据保存完毕.");
             }
+        }
+
+        private void OnShutdown()
+        {
+            _logger.LogDebug("Application is stopping");
+            M2Share.StartReady = false;
+            SavePlayer();
 
             _logger.LogInformation("检查是否有其他可用服务器.");
             //如果有多机负载转移在线玩家到新服务器
@@ -247,8 +256,7 @@ namespace GameSvr
                     }
                 });
         }
-
-
+        
         private static Task ShowServerStatus(CancellationToken cancellationToken)
         {
             //GateShare.ShowLog = false;

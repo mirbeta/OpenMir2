@@ -3,7 +3,7 @@
 namespace SystemModule.Packets.ServerPackets
 {
     /// <summary>
-    /// 服务消息头
+    /// 请求消息定义
     /// </summary>
     [ProtoContract]
     public class ServerRequestMessage
