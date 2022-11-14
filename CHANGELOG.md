@@ -1,3 +1,19 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [1.1.3](http://10.10.0.202/mir2/OpenMir2/compare/v1.1.3-alpha.1...v1.1.3) (2022-11-14)
+
+
+### Bug Fixes
+
+* 尝试修复GameGate客户端断开链接可能导致空指针的问题 ([a7855a9](http://10.10.0.202/mir2/OpenMir2/commit/a7855a905191ebd24fe0caeb9bf5e4f6dc80d461))
+* 尝试Socket问题 ([f18760f](http://10.10.0.202/mir2/OpenMir2/commit/f18760fedcc66983fba0574b91b1b4b26d940e89))
+* 修复无法进入游戏的问题 ([2c122a2](http://10.10.0.202/mir2/OpenMir2/commit/2c122a2b667ae5719635db01866bc46d116379ef))
+* 修复重构LoginSvr代码带来的账号注册登陆问题 ([03cc58a](http://10.10.0.202/mir2/OpenMir2/commit/03cc58a26196544437b36ce001f0187fa585b9bd))
+* 修复DBSvr编译问题 ([f475f42](http://10.10.0.202/mir2/OpenMir2/commit/f475f4230ba2f661f806bb8908ed66fa35ba1189))
+* 修复LoginSvr账号封包重复处理问题 ([fb1bf9c](http://10.10.0.202/mir2/OpenMir2/commit/fb1bf9c23b49dcdeffb24d852c7382b749e38076))
+
 ## [1.1.3-alpha.1](http://10.10.0.202/mir2/OpenMir2/compare/v1.1.3-alpha.0...v1.1.3-alpha.1) (2022-11-05)
 
 
