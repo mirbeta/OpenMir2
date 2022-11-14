@@ -139,6 +139,10 @@ namespace GameGate.Services
         {
             var sRemoteAddr = e.RemoteIPaddr;
             var clientSession = SessionMgr.GetSession(e.SocHandle);
+            if (clientSession == null)
+            {
+                return;
+            }
             var clientThread = clientSession.ServerThread;
             if (clientThread != null)
             {
@@ -151,11 +155,11 @@ namespace GameGate.Services
                     if (clientThread.SessionArray[i].SckHandle == e.SocHandle)
                     {
                         clientThread.SessionArray[i].Socket.Close();
-                        clientThread.SessionArray[i].Socket = null;
                         clientThread.SessionArray[i].UserListIndex = 0;
                         clientThread.SessionArray[i].ReceiveTick = 0;
                         clientThread.SessionArray[i].SckHandle = 0;
                         clientThread.SessionArray[i].SessionId = 0;
+                        clientThread.SessionArray[i].Socket = null;
                         clientThread.SessionArray[i] = null;
                         break;
                     }

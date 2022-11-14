@@ -89,7 +89,17 @@ namespace SystemModule.Sockets
             }
         }
 
-        public int SocHandle => (int)Socket.Handle;
+        public int SocHandle
+        {
+            get
+            {
+                if (Socket == null)
+                {
+                    return 0;
+                }
+                return (int)Socket.Handle;
+            }
+        }
 
         /// <summary>
         /// 获取或设置通讯中使用的连接ID号
