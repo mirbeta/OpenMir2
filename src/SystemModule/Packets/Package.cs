@@ -126,6 +126,23 @@ namespace SystemModule.Packets
             return (int)stream.Length;
         }
 
+        public static T ToPacket<T>(Span<byte> rawBytes) where T : Packets, new()
+        {
+            Packets packet = Activator.CreateInstance<T>();
+            using var stream = new MemoryStream(rawBytes.ToArray());
+            using var reader = new BinaryReader(stream);
+            try
+            {
+                if (packet == null) return null;
+                packet.ReadPacket(reader);
+            }
+            catch
+            {
+                return null;
+            }
+            return (T)packet;
+        }
+        
         public static T ToPacket<T>(byte[] rawBytes) where T : Packets, new()
         {
             Packets packet = Activator.CreateInstance<T>();

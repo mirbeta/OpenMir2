@@ -187,7 +187,7 @@ namespace GameSvr.Services
             try
             {
                 if (!SocketWorking) return;
-                var responsePacket = Packets.ToPacket<ServerRequestData>(data.ToArray());
+                var responsePacket = Packets.ToPacket<ServerRequestData>(data);
                 if (responsePacket != null && responsePacket.PacketLen > 0)
                 {
                     var respCheckCode = responsePacket.QueryId;

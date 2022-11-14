@@ -240,7 +240,7 @@ namespace DBSvr.Services
                     {
                         break;
                     }
-                    var packet = Packets.ToPacket<ServerDataMessage>(gateInfo.Data[..messageLen]);
+                    var packet = Packets.ToPacket<ServerDataMessage>(dataBuff[..messageLen]);
                     if (packet == null)
                     {
                         //_logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
