@@ -399,19 +399,19 @@ namespace GameGate.Services
         /// </summary>
         public void ProcessIdleSession()
         {
+            var currentTick = HUtil32.GetTickCount();
             for (var j = 0; j < SessionArray.Length; j++)
             {
                 var userSession = SessionArray[j];
                 if (userSession != null && userSession.Socket != null)
                 {
-                    if ((HUtil32.GetTickCount() - userSession.ReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 
+                    if ((currentTick - userSession.ReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 
                     {
                         userSession.Socket.Close();
-                        userSession.Socket = null;
                         userSession.SckHandle = -1;
+                        userSession.Socket = null;
                     }
                 }
-
                 CheckServerTimeMin = HUtil32.GetTickCount() - CheckServerTick;
                 if (CheckServerTimeMax < CheckServerTimeMin)
                 {

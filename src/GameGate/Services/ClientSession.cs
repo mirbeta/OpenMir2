@@ -73,6 +73,7 @@ namespace GameGate.Services
         /// </summary>
         public void ProcessPacket(MessagePacket messagePacket)
         {
+            _session.ReceiveTick = HUtil32.GetTickCount();
             var sMsg = string.Empty;
             int currentTick;
             if (KickFlag)

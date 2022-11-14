@@ -44,7 +44,7 @@ namespace GameGate
                 var currentTick = HUtil32.GetTickCount();
                 OutMianMessage();
                 ProcessDelayMsg(currentTick);
-                ClearSession(currentTick);
+                ClearIdleSession(currentTick);
                 KeepAlive(currentTick);
                 ProcessDelayClose(currentTick);
             }
@@ -141,7 +141,7 @@ namespace GameGate
         /// <summary>
         /// 清理过期会话
         /// </summary>
-        private void ClearSession(int currentTick)
+        private void ClearIdleSession(int currentTick)
         {
             if (currentTick - ProcessClearSessionTick > 120000)
             {
