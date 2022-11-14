@@ -212,6 +212,7 @@ namespace SelGate.Services
             accountPacket.Data = Array.Empty<byte>();
             accountPacket.Type = ServerDataType.KeepAlive;
             accountPacket.SocketId = 0;
+            accountPacket.PacketCode = Grobal2.RUNGATECODE;
             accountPacket.PacketLen = accountPacket.GetPacketSize();
             SendSocket(accountPacket.GetBuffer());
             _logQueue.DebugLog("Send DBSvr Heartbeat.");

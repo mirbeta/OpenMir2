@@ -71,7 +71,7 @@ namespace LoginSvr.Services
                             return;
                         if (sMsg.Length < Grobal2.DEFBLOCKSIZE)
                             return;
-                        sMsg = sMsg.AsSpan().Slice(1, sMsg.Length - 1).ToString();
+                        sMsg = sMsg.AsSpan()[1..sMsg.Length].ToString();
 
                         var clientSession = _clientManager.GetSession(message.SessionId);
                         if (clientSession == null)

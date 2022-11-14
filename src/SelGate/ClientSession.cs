@@ -80,6 +80,7 @@ namespace SelGate
                     accountPacket.DataLen = (byte)userData.Body.Length;
                     accountPacket.Type = ServerDataType.Data;
                     accountPacket.SocketId = Session.SocketId;
+                    accountPacket.PacketCode = Grobal2.RUNGATECODE;
                     accountPacket.PacketLen = accountPacket.GetPacketSize();
                     _lastDbSvr.SendSocket(accountPacket.GetBuffer());
                     break;
@@ -190,6 +191,7 @@ namespace SelGate
             accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Enter;
             accountPacket.SocketId = Session.SocketId;
+            accountPacket.PacketCode = Grobal2.RUNGATECODE;
             accountPacket.PacketLen = accountPacket.GetPacketSize();
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());
             _logger.DebugLog("[UserEnter] " + sendStr);
@@ -211,6 +213,7 @@ namespace SelGate
             accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Leave;
             accountPacket.SocketId = Session.SocketId;
+            accountPacket.PacketCode = Grobal2.RUNGATECODE;
             accountPacket.PacketLen = accountPacket.GetPacketSize();
             _lastDbSvr.SendSocket(accountPacket.GetBuffer());
             _kickFlag = false;

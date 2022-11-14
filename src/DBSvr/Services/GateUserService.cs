@@ -452,6 +452,7 @@ namespace DBSvr.Services
             var gataPacket = new ServerDataMessage();
             gataPacket.Type = ServerDataType.KeepAlive;
             gataPacket.SocketId = 0;
+            gataPacket.PacketCode = Grobal2.RUNGATECODE;
             SendPacket(connectionId, gataPacket);
         }
 
@@ -978,6 +979,7 @@ namespace DBSvr.Services
             packet.Data = HUtil32.GetBytes("#" + sSendMsg + "!");
             packet.DataLen = (short)packet.Data.Length;
             packet.Type = ServerDataType.Data;
+            packet.PacketCode = Grobal2.RUNGATECODE;
             SendPacket(connectionId, packet);
         }
 
