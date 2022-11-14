@@ -60,7 +60,7 @@ namespace DBSvr.Services
                 return;
             }
             var serverInfo = new ServerDataInfo();
-            serverInfo.Data = null;
+            serverInfo.Data = new byte[1024 * 10];
             serverInfo.ConnectionId = e.ConnectionId;
             _serverList.Add(serverInfo);
         }
@@ -84,6 +84,61 @@ namespace DBSvr.Services
 
         }
 
+        private void ProcessServerData(byte[] data, int nLen,ref ServerDataInfo serverInfo)
+        {
+            var srcOffset = 0;
+            Span<byte> dataBuff = data;
+            try
+            {
+                while (nLen >= ServerRequestData.HeaderMessageSize)
+                {
+                    Span<byte> packetHead = dataBuff[..ServerRequestData.HeaderMessageSize];
+                    var packetCode = BitConverter.ToUInt32(packetHead[..4]);
+                    if (packetCode != Grobal2.RUNGATECODE)
+                    {
+                        srcOffset++;
+                        dataBuff = dataBuff.Slice(srcOffset, ServerRequestData.HeaderMessageSize);
+                        nLen -= 1;
+                        _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        continue;
+                    }
+                    var queryId = BitConverter.ToUInt16(packetHead.Slice(4, 4));
+                    var messageLen = BitConverter.ToInt16(packetHead.Slice(8, 2));
+                    var nCheckMsgLen = Math.Abs(messageLen);
+                    if (nCheckMsgLen > nLen)
+                    {
+                        break;
+                    }
+                    ProcessServerPacket(serverInfo, queryId, serverInfo.Data[..messageLen]);
+                    nLen -= nCheckMsgLen;
+                    if (nLen <= 0)
+                    {
+                        break;
+                    }
+                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                    serverInfo.DataLen = nLen;
+                    srcOffset = 0;
+                    if (nLen < ServerRequestData.HeaderMessageSize)
+                    {
+                        break;
+                    }
+                }
+                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+                {
+                    MemoryCopy.BlockCopy(dataBuff, 0, serverInfo.Data, 0, nLen);
+                    serverInfo.DataLen = nLen;
+                }
+                else
+                {
+                    serverInfo.DataLen = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+            }
+        }
+
         private void ServerSocketClientRead(object sender, AsyncUserToken e)
         {
             for (var i = 0; i < _serverList.Count; i++)
@@ -91,128 +146,94 @@ namespace DBSvr.Services
                 var serverInfo = _serverList[i];
                 if (serverInfo.ConnectionId == e.ConnectionId)
                 {
-                    var nReviceLen = e.BytesReceived;
-                    var data = new byte[nReviceLen];
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    if (serverInfo.PacketLen == 0 && data[0] == (byte)'#')
+                    var nMsgLen = e.BytesReceived;
+                    if (serverInfo.DataLen > 0)
                     {
-                        serverInfo.PacketLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
-                        serverInfo.Data = new byte[serverInfo.PacketLen];
-                        Buffer.BlockCopy(data, 0, serverInfo.Data, 0, nReviceLen);
+                        var packetData = new byte[e.BytesReceived];
+                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
+                        MemoryCopy.BlockCopy(packetData, 0, serverInfo.Data, serverInfo.DataLen, packetData.Length);
+                        ProcessServerData(serverInfo.Data, serverInfo.DataLen + nMsgLen, ref serverInfo);
                     }
-                    else if (serverInfo.Data != null && serverInfo.Data.Length > 0)
+                    else
                     {
-                        Buffer.BlockCopy(data, 0, serverInfo.Data, serverInfo.ReviceLen, nReviceLen);
+                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, serverInfo.Data, 0, nMsgLen);
+                        ProcessServerData(serverInfo.Data, nMsgLen, ref serverInfo);
                     }
-                    if (serverInfo.Data == null || serverInfo.Data.Length <= 0)
-                    {
-                        continue;
-                    }
-                    var len = serverInfo.ReviceLen - serverInfo.PacketLen;
-                    if (len > 0)
-                    {
-                        data = serverInfo.Data[..serverInfo.PacketLen];
-                        ProcessServerPacket(serverInfo, data);
-                        var dataBuff = serverInfo.Data[len..];
-                        if (dataBuff[0] == (byte)'#')
-                        {
-                            Buffer.BlockCopy(dataBuff, 0, serverInfo.Data, 0, dataBuff.Length);
-                            serverInfo.PacketLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
-                            serverInfo.ReviceLen += dataBuff.Length;
-                            continue;
-                        }
-                        serverInfo.PacketLen = 0;
-                        serverInfo.ReviceLen = 0;
-                        break;
-                    }
-                    if (len == 0)
-                    {
-                        ProcessServerPacket(serverInfo, serverInfo.Data);
-                        serverInfo.PacketLen = 0;
-                        serverInfo.ReviceLen = 0;
-                        break;
-                    }
-                    serverInfo.ReviceLen += nReviceLen;
-                    break;
                 }
             }
         }
 
-        private void ProcessServerPacket(ServerDataInfo serverInfo, byte[] data)
+        private void ProcessServerPacket(ServerDataInfo serverInfo,int nQueryId, byte[] data)
         {
-            var nQueryId = 0;
-            if (data.Length > 0)
+            var requestData = Packets.ToPacket<ServerRequestData>(data);
+            if (requestData == null)
             {
-                var requestPacket = Packets.ToPacket<ServerRequestData>(data);
-                if (requestPacket == null)
-                {
-                    return;
-                }
-                nQueryId = requestPacket.QueryId;
-                var packet = ProtoBufDecoder.DeSerialize<ServerRequestMessage>(EDCode.DecodeBuff(requestPacket.Message));
-                var packetLen = requestPacket.Message.Length + requestPacket.Packet.Length + 6;
-                if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0)
-                {
-                    var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
-                    if (queryId <= 0)
-                    {
-                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.ConnectionId);
-                        return;
-                    }
-                    if (requestPacket.Sgin.Length <= 0)
-                    {
-                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.ConnectionId);
-                        return;
-                    }
-                    var signatureBuff = BitConverter.GetBytes(queryId);
-                    var signatureId = BitConverter.ToInt16(signatureBuff);
-                    var sginBuff = EDCode.DecodeBuff(requestPacket.Sgin);
-                    var sgin = BitConverter.ToInt16(sginBuff);
-                    if (sgin == signatureId)
-                    {
-                        ProcessServerMsg(nQueryId, packet, requestPacket.Packet, serverInfo.ConnectionId);
-                        return;
-                    }
-                    _serverSocket.CloseSocket(serverInfo.ConnectionId);
-                    _logger.LogWarning("关闭错误的查询请求.");
-                    return;
-                }
+                return;
             }
-            var responsePack = new ServerRequestData();
-            responsePack.QueryId = nQueryId;
+            var requestMessage = ProtoBufDecoder.DeSerialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
+            var packetLen = requestData.Message.Length + requestData.Packet.Length + 6;
+            if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0)
+            {
+                var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
+                if (queryId <= 0)
+                {
+                    ProcessServerMsg(nQueryId, requestMessage, requestData.Packet, serverInfo.ConnectionId);
+                    return;
+                }
+                if (requestData.Sgin.Length <= 0)
+                {
+                    ProcessServerMsg(nQueryId, requestMessage, requestData.Packet, serverInfo.ConnectionId);
+                    return;
+                }
+                var signatureBuff = BitConverter.GetBytes(queryId);
+                var signatureId = BitConverter.ToInt16(signatureBuff);
+                var sginBuff = EDCode.DecodeBuff(requestData.Sgin);
+                var sgin = BitConverter.ToInt16(sginBuff);
+                if (sgin == signatureId)
+                {
+                    ProcessServerMsg(nQueryId, requestMessage, requestData.Packet, serverInfo.ConnectionId);
+                    return;
+                }
+                _serverSocket.CloseSocket(serverInfo.ConnectionId);
+                _logger.LogWarning("关闭错误的查询请求.");
+                return;
+            }
+            /*var responsePack = new ServerRequestData();
             var messagePacket = new ServerRequestMessage(Grobal2.DBR_FAIL, 0, 0, 0, 0);
             responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-            SendRequest(serverInfo.ConnectionId, responsePack);
+            SendRequest(serverInfo.ConnectionId, nQueryId, responsePack);*/
         }
 
-        private void SendRequest(string connectionId, ServerRequestData requestPacket)
+        private void SendRequest(string connectionId, int queryId, ServerRequestData requestPacket)
         {
+            requestPacket.QueryId = queryId;
+            requestPacket.PacketCode = Grobal2.RUNGATECODE;
             var queryPart = 0;
             if (requestPacket.Packet != null)
             {
-                queryPart = HUtil32.MakeLong((ushort)(requestPacket.QueryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             }
             else
             {
                 requestPacket.Packet = Array.Empty<byte>();
-                queryPart = HUtil32.MakeLong((ushort)(requestPacket.QueryId ^ 170), (ushort)(requestPacket.Message.Length + 6));
+                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + 6));
             }
             var nCheckCode = BitConverter.GetBytes(queryPart);
             requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
-            var pk = requestPacket.GetBuffer();
-            _serverSocket.Send(connectionId, pk);
+            _serverSocket.Send(connectionId, requestPacket.GetBuffer());
         }
 
-        private void SendRequest<T>(string connectionId, ServerRequestData requestPacket, T packet) where T : class, new()
+        private void SendRequest<T>(string connectionId, int queryId, ServerRequestData requestPacket, T packet) where T : class, new()
         {
+            requestPacket.QueryId = queryId;
+            requestPacket.PacketCode = Grobal2.RUNGATECODE;
             if (packet != null)
             {
                 requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
             }
-            var s = HUtil32.MakeLong((ushort)(requestPacket.QueryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+            var s = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
-            var pk = requestPacket.GetBuffer();
-            _serverSocket.Send(connectionId, pk);
+            _serverSocket.Send(connectionId, requestPacket.GetBuffer());
         }
 
         /// <summary>
@@ -275,10 +296,9 @@ namespace DBSvr.Services
                     break;
                 default:
                     var responsePack = new ServerRequestData();
-                    responsePack.QueryId = nQueryId;
                     var messagePacket = new ServerRequestMessage(Grobal2.DBR_FAIL, 0, 0, 0, 0);
                     responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                    SendRequest(connectionId, responsePack);
+                    SendRequest(connectionId, nQueryId, responsePack);
                     break;
             }
         }
@@ -321,7 +341,6 @@ namespace DBSvr.Services
                 }
             }
             var responsePack = new ServerRequestData();
-            responsePack.QueryId = queryId;
             if ((nCheckCode == 1) || boFoundSession)
             {
                 var loadHumData = new LoadPlayerDataPacket();
@@ -329,14 +348,14 @@ namespace DBSvr.Services
                 loadHumData.HumDataInfo = HumanRCD;
                 var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                SendRequest(connectionId, responsePack, loadHumData);
+                SendRequest(connectionId, queryId, responsePack, loadHumData);
                 _logger.DebugLog($"获取玩家[{loadHumanPacket.ChrName}]数据成功");
             }
             else
             {
                 var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
                 responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                SendRequest(connectionId, responsePack);
+                SendRequest(connectionId, queryId, responsePack);
             }
         }
 
@@ -374,7 +393,6 @@ namespace DBSvr.Services
                     _loginSvrService.SetSessionSaveRcd(sUserID);
                 }
                 var responsePack = new ServerRequestData();
-                responsePack.QueryId = queryId;
                 if (!bo21)
                 {
                     for (var i = 0; i < PlaySessionList.Count; i++)
@@ -388,13 +406,13 @@ namespace DBSvr.Services
                     }
                     var messagePacket = new ServerRequestMessage(Grobal2.DBR_SAVEHUMANRCD, 1, 0, 0, 0);
                     responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                    SendRequest(connectionId, responsePack);
+                    SendRequest(connectionId, queryId, responsePack);
                 }
                 else
                 {
                     var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 0, 0, 0, 0);
                     responsePack.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(messagePacket));
-                    SendRequest(connectionId, responsePack);
+                    SendRequest(connectionId, queryId, responsePack);
                 }
             }
             catch (Exception e)

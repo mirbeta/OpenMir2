@@ -199,8 +199,7 @@ namespace DBSvr
     public class ServerDataInfo
     {
         public byte[] Data;
-        public int ReviceLen;
-        public int PacketLen;
+        public int DataLen;
         public string ConnectionId;
     }
 

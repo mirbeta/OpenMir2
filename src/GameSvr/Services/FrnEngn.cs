@@ -166,6 +166,10 @@ namespace GameSvr.Services
                     {
                         continue;
                     }
+                    if (InSaveRcdList(SaveRcd.sChrName))
+                    {
+                        continue;
+                    }
                     if (PlayerDataService.SaveHumRcdToDB(SaveRcd.sAccount, SaveRcd.sChrName, SaveRcd.nSessionID, SaveRcd.HumanRcd) || SaveRcd.nReTryCount > 50)
                     {
                         if (SaveRcd.PlayObject != null)

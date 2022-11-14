@@ -29,7 +29,12 @@ namespace SystemModule.Packets.ServerPackets
         public string ChrName { get; set; }
         [ProtoMember(3)]
         public PlayerDataInfo HumDataInfo { get; set; }
-        
+
+        public SavePlayerDataMessage()
+        {
+            
+        }
+
         public SavePlayerDataMessage(string account, string chrName, PlayerDataInfo humDataInfo)
         {
             Account = account;

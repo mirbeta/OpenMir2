@@ -13,9 +13,8 @@ namespace GameSvr.Services
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ClientScoket _clientScoket;
-        private int PacketLen{ get; set; }
-        private byte[] RecvBuff { get; set; }
-        public int DataLen { get; set; }
+        private byte[] ReceiveBuffer { get; set; }
+        public int BuffLen { get; set; }
         private bool SocketWorking { get; set; }
 
         public DBService()
@@ -26,7 +25,7 @@ namespace GameSvr.Services
             _clientScoket.OnReceivedData += DBSocketRead;
             _clientScoket.OnError += DBSocketError;
             SocketWorking = false;
-            RecvBuff = new byte[10000];
+            ReceiveBuffer = new byte[10000];
         }
 
         public void Start()
@@ -52,18 +51,18 @@ namespace GameSvr.Services
             _clientScoket.Connect(M2Share.Config.sDBAddr, M2Share.Config.nDBPort);
         }
 
-        public bool SendRequest<T>(int nQueryID, ServerRequestMessage message, T packet) where T : RequestPacket
+        public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet) where T : RequestPacket
         {
             if (!_clientScoket.IsConnected)
             {
                 return false;
             }
             var requestPacket = new ServerRequestData();
-            requestPacket.QueryId = nQueryID;
+            requestPacket.PacketCode = Grobal2.RUNGATECODE;
+            requestPacket.QueryId = queryId;
             requestPacket.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(message));
             requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
-
-            var sginId = HUtil32.MakeLong((ushort)(nQueryID ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+            var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
             _clientScoket.Send(requestPacket.GetBuffer());
             return true;
@@ -98,56 +97,84 @@ namespace GameSvr.Services
             }
         }
 
+        private void ProcessServerPacket(byte[] buff, int buffLen)
+        {
+            try
+            {   
+                var srcOffset = 0;
+                var nLen = buffLen;
+                Span<byte> dataBuff = buff;
+                while (nLen >= ServerRequestData.HeaderMessageSize)
+                {
+                    Span<byte> packetHead = dataBuff[..ServerRequestData.HeaderMessageSize];
+                    var packetCode = BitConverter.ToUInt32(packetHead[..4]);
+                    if (packetCode != Grobal2.RUNGATECODE)
+                    {
+                        srcOffset++;
+                        dataBuff = dataBuff.Slice(srcOffset, ServerRequestData.HeaderMessageSize);
+                        nLen -= 1;
+                        _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        continue;
+                    }
+                    var queryId = BitConverter.ToUInt16(packetHead.Slice(4, 4));
+                    var messageLen = BitConverter.ToInt16(packetHead.Slice(8, 2));
+                    var nCheckMsgLen = Math.Abs(messageLen);
+                    if (nCheckMsgLen > nLen)
+                    {
+                        break;
+                    }
+                    SocketWorking = true;
+                    ProcessData(dataBuff[..messageLen]);
+                    nLen -= nCheckMsgLen;
+                    if (nLen <= 0)
+                    {
+                        break;
+                    }
+                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                    BuffLen = nLen;
+                    srcOffset = 0;
+                    if (nLen < ServerRequestData.HeaderMessageSize)
+                    {
+                        break;
+                    }
+                }
+                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+                {
+                    MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
+                    //ReceiveBuffer = dataBuff[..nLen].ToArray();
+                    BuffLen = nLen;
+                }
+                else
+                {
+                    BuffLen = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+        }
+
         private void DBSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
-                var data = e.Buff;
-                if (PacketLen == 0 && data[0] == (byte)'#')
+                var nMsgLen = e.BuffLen;
+                var packetData = e.Buff[..nMsgLen];
+                if (BuffLen > 0)
                 {
-                    PacketLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
-                }
-                if (DataLen > 0)
-                {
-                    Buffer.BlockCopy(data, 0, RecvBuff, DataLen, data.Length);
+                    MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
+                    ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
                 }
                 else
                 {
-                    Buffer.BlockCopy(data, 0, RecvBuff, 0, data.Length);
-                    DataLen += e.BuffLen;
-                    return;
+                    ProcessServerPacket(packetData, nMsgLen);
                 }
-                var len = PacketLen - DataLen;
-                if (len > 0)
-                {
-                    data = RecvBuff[..PacketLen];
-                    SocketWorking = true;
-                    ProcessData(data);
-                    var unData = RecvBuff[PacketLen..];
-                    if (unData[0] == (byte)'#')
-                    {
-                        DataLen = unData.Length;
-                        PacketLen = BitConverter.ToInt32(data.AsSpan()[1..5]);
-                        Buffer.BlockCopy(unData, 0, RecvBuff, 0, unData.Length);
-                        return;
-                    }
-                    else
-                    {
-                        PacketLen = 0;
-                        DataLen = 0;
-                        return;
-                    }
-                }
-                else if (len == 0)
-                {
-                    SocketWorking = true;
-                    ProcessData(RecvBuff);
-                    PacketLen = 0;
-                    DataLen = 0;
-                    return;
-                }
-                DataLen += e.BuffLen;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception);
             }
             finally
             {
@@ -155,12 +182,12 @@ namespace GameSvr.Services
             }
         }
 
-        private void ProcessData(byte[] data)
+        private void ProcessData(Span<byte> data)
         {
             try
             {
                 if (!SocketWorking) return;
-                var responsePacket = Packets.ToPacket<ServerRequestData>(data);
+                var responsePacket = Packets.ToPacket<ServerRequestData>(data.ToArray());
                 if (responsePacket != null && responsePacket.PacketLen > 0)
                 {
                     var respCheckCode = responsePacket.QueryId;
