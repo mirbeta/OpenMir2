@@ -1,30 +1,26 @@
-﻿using ProtoBuf;
+﻿using MemoryPack;
 using System.IO;
 
 namespace SystemModule.Packets.ServerPackets
 {
-    [ProtoContract]
-    public class MagicRcd : Packets
+    [MemoryPackable]
+    public partial class MagicRcd : Packets
     {
         /// <summary>
         /// 技能ID
         /// </summary>
-        [ProtoMember(1)]
         public ushort MagIdx;
         /// <summary>
         /// 等级
         /// </summary>
-        [ProtoMember(2)]
         public byte Level;
         /// <summary>
         /// 技能快捷键
         /// </summary>
-        [ProtoMember(3)]
         public char MagicKey;
         /// <summary>
         /// 当前修练值
         /// </summary>
-        [ProtoMember(4)]
         public int TranPoint;
 
         protected override void ReadPacket(BinaryReader reader)

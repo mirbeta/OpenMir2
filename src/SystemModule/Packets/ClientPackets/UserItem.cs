@@ -1,4 +1,4 @@
-﻿using ProtoBuf;
+﻿using MemoryPack;
 using System.IO;
 
 namespace SystemModule.Packets.ClientPackets
@@ -11,39 +11,29 @@ namespace SystemModule.Packets.ClientPackets
         public const int WeaponUpgrade = 10;
     }
 
-    [ProtoContract]
-    public class UserItem : Packets
+    public partial class UserItem : Packets
     {
         /// <summary>
         /// 唯一ID
         /// </summary>
-        [ProtoMember(1)]
-        public int MakeIndex;
+        public int MakeIndex { get; set; }
         /// <summary>
         /// 物品ID
         /// </summary>
-        [ProtoMember(2)]
-        public ushort Index;
+        public ushort Index { get; set; }
         /// <summary>
         /// 当前持久值
         /// </summary>
-        [ProtoMember(3)]
-        public ushort Dura;
+        public ushort Dura { get; set; }
         /// <summary>
         /// 最大持久值
         /// </summary>
-        [ProtoMember(4)]
-        public ushort DuraMax;
-        [ProtoMember(5)]
-        public byte[] Desc;
-        [ProtoMember(6)]
-        public byte ColorR;
-        [ProtoMember(7)]
-        public byte ColorG;
-        [ProtoMember(8)]
-        public byte ColorB;
-        [ProtoMember(9)]
-        public char[] Prefix;
+        public ushort DuraMax { get; set; }
+        public byte[] Desc { get; set; }
+        public byte ColorR { get; set; }
+        public byte ColorG { get; set; }
+        public byte ColorB { get; set; }
+        public char[] Prefix { get; set; }
 
         public UserItem()
         {
@@ -51,6 +41,7 @@ namespace SystemModule.Packets.ClientPackets
             Prefix = new char[13];
         }
 
+        [MemoryPackConstructor]
         public UserItem(UserItem userItem)
         {
             MakeIndex = userItem.MakeIndex;

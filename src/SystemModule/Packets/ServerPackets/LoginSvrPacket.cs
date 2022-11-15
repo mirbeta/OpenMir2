@@ -1,8 +1,10 @@
+using MemoryPack;
 using System.IO;
 
 namespace SystemModule.Packets.ServerPackets
 {
-    public class LoginSvrPacket : Packets
+    [MemoryPackable]
+    public partial class LoginSvrPacket : Packets
     {
         public int ConnectionId { get; set; }
         public short PackLen { get; set; }

@@ -1,90 +1,69 @@
-﻿using ProtoBuf;
+﻿using MemoryPack;
 using System;
 using System.IO;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    [ProtoContract]
-    public class Ability : Packets, ICloneable
+    [MemoryPackable]
+    public partial class Ability : Packets, ICloneable
     {
-        [ProtoMember(1)]
-        public byte Level;
-        [ProtoMember(2)]
-        public byte Reserved1;
-        [ProtoMember(3)]
-        public ushort AC;
-        [ProtoMember(4)]
-        public ushort MAC;
-        [ProtoMember(5)]
-        public ushort DC;
-        [ProtoMember(6)]
-        public ushort MC;
-        [ProtoMember(7)]
-        public ushort SC;
+        public byte Level{ get; set; }
+        public byte Reserved1{ get; set; }
+        public ushort AC{ get; set; }
+        public ushort MAC{ get; set; }
+        public ushort DC{ get; set; }
+        public ushort MC{ get; set; }
+        public ushort SC{ get; set; }
         /// <summary>
         /// 生命值
         /// </summary>
-        [ProtoMember(8)]
-        public ushort HP;
+        public ushort HP{ get; set; }
         /// <summary>
         /// 魔法值
         /// </summary>
-        [ProtoMember(9)]
-        public ushort MP;
+        public ushort MP{ get; set; }
         /// <summary>
         /// 最大血量
         /// </summary>
-        [ProtoMember(10)]
-        public ushort MaxHP;
+        public ushort MaxHP{ get; set; }
         /// <summary>
         /// 最大魔法值
         /// </summary>
-        [ProtoMember(11)]
-        public ushort MaxMP;
-        [ProtoMember(12)]
-        public byte ExpCount;
-        [ProtoMember(13)]
-        public byte ExpMaxCount;
+        public ushort MaxMP{ get; set; }
+        public byte ExpCount{ get; set; }
+        public byte ExpMaxCount{ get; set; }
         /// <summary>
         /// 当前经验
         /// </summary>
-        [ProtoMember(14)]
-        public int Exp;
+        public int Exp{ get; set; }
         /// <summary>
         /// 最大经验
         /// </summary>
-        [ProtoMember(15)]
-        public int MaxExp;
+        public int MaxExp{ get; set; }
         /// <summary>
         /// 背包重
         /// </summary>
-        [ProtoMember(16)]
-        public ushort Weight;
+        public ushort Weight{ get; set; }
         /// <summary>
         /// 背包最大重量
         /// </summary>
-        [ProtoMember(17)]
-        public ushort MaxWeight;
+        public ushort MaxWeight{ get; set; }
         /// <summary>
         /// 当前负重
         /// </summary>
-        [ProtoMember(18)]
-        public byte WearWeight;
+        public byte WearWeight{ get; set; }
         /// <summary>
         /// 最大负重
         /// </summary>
-        [ProtoMember(19)]
-        public byte MaxWearWeight;
+        public byte MaxWearWeight{ get; set; }
         /// <summary>
         /// 腕力
         /// </summary>
-        [ProtoMember(20)]
-        public byte HandWeight;
+        public byte HandWeight{ get; set; }
         /// <summary>
         /// 最大腕力
         /// </summary>
-        [ProtoMember(21)]
-        public byte MaxHandWeight;
+        public byte MaxHandWeight{ get; set; }
 
         public Ability() { }
 

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using MemoryPack;
+using System;
 using System.IO;
 
 namespace SystemModule.Packets.ServerPackets
 {
-    public class ServerDataMessage : Packets
+    [MemoryPackable]
+    public partial class ServerDataMessage : Packets
     {
         public uint PacketCode { get; set; }
         public int PacketLen { get; set; }
