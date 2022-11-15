@@ -19,8 +19,6 @@ namespace SystemModule.Packets
             binaryReader = new BinaryReader(new MemoryStream(segment));
         }
 
-        public BinaryReader BinaryReader => binaryReader;
-
         public string ReadPascalString(int size)
         {
             var packegeLen = binaryReader.ReadByte();

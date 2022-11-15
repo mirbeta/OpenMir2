@@ -11,7 +11,7 @@ namespace SystemModule
             return MemoryPackSerializer.Serialize(origin);
         }
 
-        public T Deserialize<T>(byte[] bytes)
+        public static T Deserialize<T>(byte[] bytes)
         {
             return MemoryPackSerializer.Deserialize<T>(bytes)!;
         }

@@ -5,7 +5,7 @@
         <IsPackable>false</IsPackable>
         <Company />
         <Product />
-        <LangVersion>default</LangVersion>
+        <LangVersion>10.0</LangVersion>
         <RootNamespace>SystemModule</RootNamespace>
     </PropertyGroup>
 
@@ -18,11 +18,11 @@
       <DefineConstants>TRACE;ISWOL</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
+      <PackageReference Include="MemoryPack" Version="1.7.4" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
       <PackageReference Include="NLog" Version="5.0.5" />
       <PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
-      <PackageReference Include="protobuf-net" Version="3.1.25" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     </ItemGroup>
     <ItemGroup>

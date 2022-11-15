@@ -1,10 +1,11 @@
-using ProtoBuf;
+using MemoryPack;
 using System;
 using System.IO;
 
 namespace SystemModule.Packets.ServerPackets
 {
-    public class ServerRequestData : Packets
+    [MemoryPackable]
+    public partial class ServerRequestData : Packets
     {
         public uint PacketCode { get; set; }
         public int QueryId { get; set; }
@@ -72,12 +73,10 @@ namespace SystemModule.Packets.ServerPackets
         }
     }
 
-    [ProtoContract]
-    public class LoadPlayerDataPacket
+    [MemoryPackable]
+    public partial class LoadPlayerDataPacket
     {
-        [ProtoMember(1)]
         public string ChrName { get; set; }
-        [ProtoMember(2)]
         public PlayerDataInfo HumDataInfo { get; set; }
     }
 }

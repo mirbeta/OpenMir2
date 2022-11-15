@@ -1,31 +1,21 @@
-﻿using ProtoBuf;
+﻿using MemoryPack;
 using System.IO;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    [ProtoContract]
-    public class NakedAbility : Packets
+    [MemoryPackable]
+    public partial class NakedAbility : Packets
     {
-        [ProtoMember(1)]
-        public ushort DC;
-        [ProtoMember(2)]
-        public ushort MC;
-        [ProtoMember(3)]
-        public ushort SC;
-        [ProtoMember(4)]
-        public ushort AC;
-        [ProtoMember(5)]
-        public ushort MAC;
-        [ProtoMember(6)]
-        public ushort HP;
-        [ProtoMember(7)]
-        public ushort MP;
-        [ProtoMember(8)]
-        public byte Hit;
-        [ProtoMember(9)]
-        public int Speed;
-        [ProtoMember(10)]
-        public byte Reserved;
+        public ushort DC{ get; set; }
+        public ushort MC{ get; set; }
+        public ushort SC{ get; set; }
+        public ushort AC{ get; set; }
+        public ushort MAC{ get; set; }
+        public ushort HP{ get; set; }
+        public ushort MP{ get; set; }
+        public byte Hit{ get; set; }
+        public int Speed{ get; set; }
+        public byte Reserved{ get; set; }
 
         protected override void ReadPacket(BinaryReader reader)
         {

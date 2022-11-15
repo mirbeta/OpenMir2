@@ -60,8 +60,8 @@ namespace GameSvr.Services
             var requestPacket = new ServerRequestData();
             requestPacket.PacketCode = Grobal2.RUNGATECODE;
             requestPacket.QueryId = queryId;
-            requestPacket.Message = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(message));
-            requestPacket.Packet = EDCode.EncodeBuffer(ProtoBufDecoder.Serialize(packet));
+            requestPacket.Message = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(message));
+            requestPacket.Packet = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(packet));
             var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
             _clientScoket.Send(requestPacket.GetBuffer());

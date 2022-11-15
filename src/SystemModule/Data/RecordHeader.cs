@@ -1,23 +1,16 @@
-﻿using ProtoBuf;
+﻿using MemoryPack;
 
 namespace SystemModule.Data
 {
-    [ProtoContract]
-    public class RecordHeader
+    [MemoryPackable]
+    public partial class RecordHeader
     {
-        [ProtoMember(1)]
-        public string sAccount;
-        [ProtoMember(2)]
-        public string Name;
-        [ProtoMember(3)]
-        public int SelectID;
-        [ProtoMember(4)]
-        public double dCreateDate;
-        [ProtoMember(5)]
-        public bool Deleted;
-        [ProtoMember(6)]
-        public double UpdateDate;
-        [ProtoMember(7)]
-        public double CreateDate;
+        public string sAccount { get; set; }
+        public string Name { get; set; }
+        public int SelectID { get; set; }
+        public double dCreateDate { get; set; }
+        public bool Deleted { get; set; }
+        public double UpdateDate { get; set; }
+        public double CreateDate { get; set; }
     }
 }
