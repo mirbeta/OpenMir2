@@ -126,8 +126,8 @@ namespace GameSvr.Services
 
         private void ProcessGameDate()
         {
-            IList<TGoldChangeInfo> ChangeGoldList = null;
-            var boReTryLoadDB = false;
+            IList<TGoldChangeInfo> changeGoldList = null;
+            var boReTryLoadDb = false;
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
             {
@@ -143,10 +143,10 @@ namespace GameSvr.Services
                 m_LoadRcdList = TempList;
                 if (m_ChangeGoldList.Any())
                 {
-                    ChangeGoldList = new List<TGoldChangeInfo>();
+                    changeGoldList = new List<TGoldChangeInfo>();
                     for (var i = 0; i < m_ChangeGoldList.Count; i++)
                     {
-                        ChangeGoldList.Add(m_ChangeGoldList[i]);
+                        changeGoldList.Add(m_ChangeGoldList[i]);
                     }
                     m_ChangeGoldList.Clear();
                 }
@@ -224,20 +224,20 @@ namespace GameSvr.Services
             m_SaveRcdTempList.Clear();
             for (var i = 0; i < m_LoadRcdTempList.Count; i++)
             {
-                var LoadDBInfo = m_LoadRcdTempList[i];
-                if (LoadDBInfo == null)
+                var loadDbInfo = m_LoadRcdTempList[i];
+                if (loadDbInfo == null)
                 {
                     continue;
                 }
-                if (!LoadHumFromDB(LoadDBInfo, ref boReTryLoadDB))
+                if (!LoadHumFromDB(loadDbInfo, ref boReTryLoadDb))
                 {
-                    M2Share.GateMgr.CloseUser(LoadDBInfo.nGateIdx, LoadDBInfo.nSocket);
+                    M2Share.GateMgr.CloseUser(loadDbInfo.nGateIdx, loadDbInfo.nSocket);
                 }
                 else
                 {
-                    if (!boReTryLoadDB)
+                    if (!boReTryLoadDb)
                     {
-                        DisPose(LoadDBInfo);
+                        DisPose(loadDbInfo);
                     }
                     else
                     {
@@ -245,7 +245,7 @@ namespace GameSvr.Services
                         HUtil32.EnterCriticalSection(m_UserCriticalSection);
                         try
                         {
-                            m_LoadRcdList.Add(LoadDBInfo);
+                            m_LoadRcdList.Add(loadDbInfo);
                         }
                         finally
                         {
@@ -255,17 +255,17 @@ namespace GameSvr.Services
                 }
             }
             m_LoadRcdTempList.Clear();
-            if (ChangeGoldList != null)
+            if (changeGoldList != null)
             {
-                for (var i = 0; i < ChangeGoldList.Count; i++)
+                for (var i = 0; i < changeGoldList.Count; i++)
                 {
-                    var GoldChangeInfo = ChangeGoldList[i];
-                    if (GoldChangeInfo == null)
+                    var goldChangeInfo = changeGoldList[i];
+                    if (goldChangeInfo == null)
                     {
                         continue;
                     }
-                    ChangeUserGoldInDB(GoldChangeInfo);
-                    DisPose(GoldChangeInfo);
+                    ChangeUserGoldInDB(goldChangeInfo);
+                    DisPose(goldChangeInfo);
                 }
             }
         }
@@ -276,7 +276,7 @@ namespace GameSvr.Services
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
             {
-                if (m_SaveRcdList.Count >= 1000)
+                if (m_SaveRcdList.Count >= ushort.MaxValue)
                 {
                     result = true;
                 }

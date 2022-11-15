@@ -12,11 +12,12 @@ namespace GameSvr
         /// 运行时间
         /// </summary>
         private int _runTimeTick;
-        protected readonly ILogger<ServerBase> _logger;
+        protected readonly ILogger<ServerBase> Logger;
+        private Thread _worldThread;
 
         protected ServerBase(ILogger<ServerBase> logger)
         {
-            _logger = logger;
+            Logger = logger;
             _runTimeTick = HUtil32.GetTickCount();
         }
 
@@ -25,14 +26,9 @@ namespace GameSvr
             M2Share.DataServer.Start();
             M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
             M2Share.GateMgr.Start(stoppingToken);
-            Task.Factory.StartNew(() =>
-            {
-                while (M2Share.StartReady)
-                {
-                    Execute();
-                    Thread.Sleep(20);
-                }
-            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            _worldThread = new Thread(Execute);
+            _worldThread.IsBackground = true;
+            _worldThread.Start();
         }
 
         public void Stop()
@@ -43,17 +39,21 @@ namespace GameSvr
 
         private void Execute()
         {
-            M2Share.GateMgr.Run();
-            IdSrvClient.Instance.Run();
-            M2Share.WorldEngine.Run();
-            ProcessGameRun();
-            if (M2Share.ServerIndex == 0)
+            while (M2Share.StartReady)
             {
-                PlanesServer.Instance.Run();
-            }
-            else
-            {
-                PlanesClient.Instance.Run();
+                M2Share.GateMgr.Run();
+                IdSrvClient.Instance.Run();
+                M2Share.WorldEngine.Run();
+                ProcessGameRun();
+                if (M2Share.ServerIndex == 0)
+                {
+                    PlanesServer.Instance.Run();
+                }
+                else
+                {
+                    PlanesClient.Instance.Run();
+                }
+                Thread.Sleep(20);
             }
         }
 
@@ -100,7 +100,7 @@ namespace GameSvr
                         {
                             if (M2Share.DenySayMsgList.TryRemove(denyList[i], out var denyName))
                             {
-                                _logger.LogDebug($"解除玩家[{denyList[i]}]禁言");
+                                Logger.LogDebug($"解除玩家[{denyList[i]}]禁言");
                             }
                         }
                     }

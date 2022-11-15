@@ -10,7 +10,7 @@ namespace GameSvr
     {
         private readonly ILogger<TimedService> _logger;
         private readonly GameApp _mirApp;
-        private readonly PeriodicTimer _timer;
+        private PeriodicTimer _timer;
         private int _checkIntervalTime;
         private int _saveIntervalTime;
         private int _clearIntervalTime;
@@ -24,16 +24,21 @@ namespace GameSvr
         {
             _logger = logger;
             _mirApp = mirApp;
-            _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public override Task StartAsync(CancellationToken cancellationToken)
         {
+            _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
             var currentTick = HUtil32.GetTickCount();
             _checkIntervalTime = currentTick;
             _saveIntervalTime = currentTick;
             _clearIntervalTime = currentTick;
             _scheduledSaveIntervalTime = currentTick;
+            return base.StartAsync(cancellationToken);
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
             while (await _timer.WaitForNextTickAsync(stoppingToken))
             {
                 ServerRunTimer();
@@ -42,28 +47,31 @@ namespace GameSvr
 
         private void ServerRunTimer()
         {
-            var currentTick = HUtil32.GetTickCount();
-            if ((currentTick - _checkIntervalTime) > 3 * 1000) //3s一次检查链接
+            if (M2Share.StartReady)
             {
-                M2Share.DataServer.CheckConnected();
-                IdSrvClient.Instance.CheckConnected();
-                PlanesClient.Instance.CheckConnected();
-                _checkIntervalTime = HUtil32.GetTickCount();
-            }
-            if ((currentTick - _saveIntervalTime) > 50 * 1000) //保存游戏变量等
-            {
-                _mirApp.SaveItemNumber();
-                _saveIntervalTime = HUtil32.GetTickCount();
-            }
-            if ((currentTick - _clearIntervalTime) > 60 * 100) //定时清理游戏对象
-            {
-                M2Share.ActorMgr.ClearObject();
-                _clearIntervalTime = HUtil32.GetTickCount();
-            }
-            if (currentTick - _scheduledSaveIntervalTime > 60 * 10000) //定时保存玩家数据
-            {
-                TimingSaveData();
-                _scheduledSaveIntervalTime = HUtil32.GetTickCount();
+                var currentTick = HUtil32.GetTickCount();
+                if ((currentTick - _checkIntervalTime) > 3 * 1000) //3s一次检查链接
+                {
+                    M2Share.DataServer.CheckConnected();
+                    IdSrvClient.Instance.CheckConnected();
+                    PlanesClient.Instance.CheckConnected();
+                    _checkIntervalTime = HUtil32.GetTickCount();
+                }
+                if ((currentTick - _saveIntervalTime) > 50 * 1000) //保存游戏变量等
+                {
+                    _mirApp.SaveItemNumber();
+                    _saveIntervalTime = HUtil32.GetTickCount();
+                }
+                if ((currentTick - _clearIntervalTime) > 60 * 100) //定时清理游戏对象
+                {
+                    M2Share.ActorMgr.ClearObject();
+                    _clearIntervalTime = HUtil32.GetTickCount();
+                }
+                if (currentTick - _scheduledSaveIntervalTime > 60 * 10000) //定时保存玩家数据
+                {
+                    TimingSaveData();
+                    _scheduledSaveIntervalTime = HUtil32.GetTickCount();
+                }
             }
         }
 

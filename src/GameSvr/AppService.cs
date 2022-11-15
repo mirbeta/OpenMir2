@@ -132,45 +132,34 @@ namespace GameSvr
             }
         }
 
-        private void OnShutdown()
+        private void StopService(string sIPaddr, int nPort, bool isTransfer)
         {
-            _logger.LogDebug("Application is stopping");
-            M2Share.StartReady = false;
-            SavePlayer();
-
-            _logger.LogInformation("检查是否有其他可用服务器.");
-            //如果有多机负载转移在线玩家到新服务器
-            var sIPaddr = string.Empty;
-            var nPort = 0;
-            var isMultiServer = M2Share.GetMultiServerAddrPort(M2Share.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
-            if (isMultiServer)
+            var playerCount = M2Share.WorldEngine.PlayObjectCount;
+            if (playerCount > 0)
             {
-                //todo 通知网关断开链接.停止新玩家进入游戏
-                _logger.LogInformation($"转移到新服务器[{sIPaddr}:{nPort}]");
-                var playerCount = M2Share.WorldEngine.PlayObjectCount;
-                if (playerCount > 0)
+                Task.Factory.StartNew(async () =>
                 {
-                    Task.Factory.StartNew(async () =>
+                    var shutdownSeconds = M2Share.Config.CloseCountdown;
+                    while (true)
                     {
-                        var shutdownSeconds = M2Share.Config.CloseCountdown;
-                        while (true)
+                        if (playerCount <= 0)
                         {
-                            if (playerCount <= 0)
-                            {
-                                break;
-                            }
-                            foreach (var playObject in M2Share.WorldEngine.PlayObjects)
-                            {
-                                var closeStr = $"服务器关闭倒计时[{shutdownSeconds}]. 关闭后自动转移到其他大区，请勿退出游戏。";
-                                playObject.SysMsg(closeStr, MsgColor.Red, MsgType.Notice);
-                                _logger.LogInformation(closeStr);
-                                shutdownSeconds--;
-                            }
-                            if (shutdownSeconds > 0)
-                            {
-                                await Task.Delay(TimeSpan.FromSeconds(1));
-                            }
-                            else
+                            break;
+                        }
+                        foreach (var playObject in M2Share.WorldEngine.PlayObjects)
+                        {
+                            var closeMsg = isTransfer ? $"服务器关闭倒计时[{shutdownSeconds}]. 关闭后自动转移到其他大区，请勿退出游戏。" : $"服务器关闭倒计时[{shutdownSeconds}].";
+                            playObject.SysMsg(closeMsg, MsgColor.Red, MsgType.Notice);
+                            _logger.LogInformation(closeMsg);
+                            shutdownSeconds--;
+                        }
+                        if (shutdownSeconds > 0)
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds(1));
+                        }
+                        else
+                        {
+                            if (isTransfer)
                             {
                                 foreach (var playObject in M2Share.WorldEngine.PlayObjects)
                                 {
@@ -185,9 +174,34 @@ namespace GameSvr
                                 break;
                             }
                         }
-                        _logger.LogInformation("玩家转移完毕，关闭游戏服务器.");
-                        _mirApp.Stop();
-                    }, _cancellationTokenSource.Token);
+                    }
+                    _mirApp.Stop();
+                    _logger.LogInformation("游戏服务已停止...");
+                }, _cancellationTokenSource.Token);
+            }
+        }
+
+        private void OnShutdown()
+        {
+            _logger.LogDebug("Application is stopping");
+            M2Share.StartReady = false;
+            SavePlayer();
+            if (M2Share.ServerIndex == 0)
+            {
+                StopService("", 0, false);
+            }
+            else if (M2Share.ServerIndex > 0)
+            {
+                _logger.LogInformation("检查是否有其他可用服务器.");
+                //如果有多机负载转移在线玩家到新服务器
+                var sIPaddr = string.Empty;
+                var nPort = 0;
+                var isMultiServer = M2Share.GetMultiServerAddrPort(M2Share.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
+                if (isMultiServer)
+                {
+                    //todo 通知网关断开链接.停止新玩家进入游戏
+                    _logger.LogInformation($"转移到新服务器[{sIPaddr}:{nPort}]");
+                    StopService(sIPaddr, nPort, true);
                 }
             }
             else
