@@ -30,10 +30,6 @@ namespace GameSvr.Castle
                     userCastle.EnvirList.Add(sMap);
                 }
             }
-            for (var i = 0; i < userCastle.EnvirList.Count; i++)
-            {
-                userCastle.EnvirList[i] = M2Share.MapMgr.FindMap(userCastle.EnvirList[i]).MapName;
-            }
             userCastle.MapName = ReadString("Defense", "CastleMap", "3");
             userCastle.HomeMap = ReadString("Defense", "CastleHomeMap", userCastle.HomeMap);
             userCastle.HomeX = ReadInteger("Defense", "CastleHomeX", userCastle.HomeX);

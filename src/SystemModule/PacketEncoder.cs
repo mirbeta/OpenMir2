@@ -101,7 +101,7 @@ namespace SystemModule
             var result = dstPos - dstOffset;
             return result;
         }
-
+                
         public static byte[] DecodeBuf(byte[] Buf, int Len, ref int decodeLen)
         {
             byte temp;
@@ -149,7 +149,7 @@ namespace SystemModule
             }
             return dstBuffer;
         }
-
+        
         public static byte[] DecodeBuf(Span<byte> Buf, int Len, ref int decodeLen)
         {
             byte temp;
