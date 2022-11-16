@@ -47,7 +47,7 @@ namespace LoginGate
                     {
                         continue;
                     }
-                    _clientManager.ProcessClientThreadHeartbeat(clientList[i]);
+                    _clientManager.ProcessClientHeart(clientList[i]);
                 }
             }
         }

@@ -83,10 +83,22 @@ namespace LoginGate.Services
                 {
                     if (_messageQueue.Reader.TryRead(out var message))
                     {
-                        var clientSession = _sessionManager.GetSession(message.ConnectionId);
+                        var userSession = _sessionManager.GetSession(message.ConnectionId);
+                        if (userSession == null)
+                        {
+                            _logger.LogWarning("非法攻击: " + message.ClientIP);
+                            _logger.DebugLog($"获取用户对应会话失败 RemoteAddr:[{message.ClientIP}] ConnectionId:[{message.ConnectionId}]");
+                            continue;
+                        }
+                        if (!userSession.ClientThread.ConnectState)
+                        {
+                            _logger.LogInformation("未就绪: " + message.ClientIP, 5);
+                            _logger.DebugLog($"账号服务器链接失败 Server:[{userSession.ClientThread.EndPoint}] ConnectionId:[{message.ConnectionId}]");
+                            continue;
+                        }
                         try
                         {
-                            clientSession?.HandleClientPacket(message);
+                            userSession.HandleClientPacket(message);
                         }
                         catch (Exception e)
                         {
