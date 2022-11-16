@@ -8,6 +8,7 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Logger;
+using SystemModule.Packets;
 using SystemModule.Packets.ServerPackets;
 
 namespace LoginGate.Services
@@ -17,7 +18,7 @@ namespace LoginGate.Services
     /// </summary>
     public class ClientManager
     {
-        private readonly Channel<MessageData> _sendQueue;
+        private readonly Channel<byte[]> _sendQueue;
         private readonly SessionManager _sessionManager;
         private readonly MirLogger _logger;
         private readonly IList<ClientThread> _serverGateList;
@@ -31,7 +32,7 @@ namespace LoginGate.Services
             _sessionManager = sessionManager;
             _configManager = configManager;
             _serverManager = serverManager;
-            _sendQueue = Channel.CreateUnbounded<MessageData>();
+            _sendQueue = Channel.CreateUnbounded<byte[]>();
             _serverGateList = new List<ClientThread>();
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
         }
@@ -77,7 +78,7 @@ namespace LoginGate.Services
         /// 添加到发送队列
         /// </summary>
         /// <param name="messageData"></param>
-        public void SendQueue(MessageData messageData)
+        public void SendQueue(byte[] messageData)
         {
             _sendQueue.Writer.TryWrite(messageData);
         }
@@ -93,12 +94,17 @@ namespace LoginGate.Services
                 {
                     if (_sendQueue.Reader.TryRead(out var message))
                     {
-                        var userSession = _sessionManager.GetSession(message.ConnectionId);
+                        var clientPacket = Packets.ToPacket<LoginSvrPacket>(message);
+                        if (clientPacket == null)
+                        {
+                            continue;
+                        }
+                        var userSession = _sessionManager.GetSession(clientPacket.ConnectionId);
                         if (userSession == null)
                         {
                             continue;
                         }
-                        userSession.ProcessSvrData(message);
+                        userSession.ProcessSvrData(clientPacket.ClientPacket);
                     }
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
@@ -158,7 +164,7 @@ namespace LoginGate.Services
         /// 检查客户端和服务端之间的状态以及心跳维护
         /// </summary>
         /// <param name="clientThread"></param>
-        public void ProcessClientThreadHeartbeat(ClientThread clientThread)
+        public void ProcessClientHeart(ClientThread clientThread)
         {
             if (clientThread.ConnectState)
             {

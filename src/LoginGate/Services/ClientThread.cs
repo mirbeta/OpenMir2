@@ -148,8 +148,7 @@ namespace LoginGate.Services
             {
                 return;
             }
-            ReceiveBytes += e.BuffLen;
-            if (e.Buff[1] == (byte)'+') //收到LoginSvr发过来的关闭会话请求
+            if (e.Buff[0] == (byte)'%' && e.Buff[1] == (byte)'+')//收到LoginSvr发过来的关闭会话请求
             {
                 if (e.Buff[2] == (byte)'-')
                 {
@@ -163,14 +162,8 @@ namespace LoginGate.Services
                 }
                 return;
             }
-            var loginSvrPacket = Packets.ToPacket<LoginSvrPacket>(e.Buff);
-            if (loginSvrPacket != null)
-            {
-                var userData = new MessageData();
-                userData.ConnectionId = loginSvrPacket.ConnectionId;
-                userData.Body = loginSvrPacket.ClientPacket;
-                _clientManager.SendQueue(userData);
-            }
+            _clientManager.SendQueue(e.Buff);
+            ReceiveBytes += e.BuffLen;
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)

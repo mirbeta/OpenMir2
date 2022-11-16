@@ -166,7 +166,7 @@ namespace LoginGate.Services
         /// <summary>
         /// 处理服务端发送过来的消息并发送到游戏客户端
         /// </summary>
-        public void ProcessSvrData(MessageData sendData)
+        public void ProcessSvrData(byte[] sendData)
         {
             if (m_KickFlag)
             {
@@ -176,7 +176,7 @@ namespace LoginGate.Services
             }
             if (_session.Socket != null && _session.Socket.Connected)
             {
-                _session.Socket.Send(sendData.Body);
+                _session.Socket.Send(sendData);
             }
             else
             {
