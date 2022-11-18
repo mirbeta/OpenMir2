@@ -1,35 +1,18 @@
 using MemoryPack;
-using System.IO;
+using System;
 
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
-    public partial class LoginSvrPacket : Packets
+    public partial class LoginSvrPacket
     {
         public int ConnectionId { get; set; }
         public short PackLen { get; set; }
         public byte[] ClientPacket { get; set; }
 
-        protected override void ReadPacket(BinaryReader reader)
+        public int GetPacketSize()
         {
-            ConnectionId = reader.ReadInt32();
-            PackLen = reader.ReadInt16();
-            ClientPacket = reader.ReadBytes(PackLen);
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(ConnectionId);
-            if (ClientPacket.Length > 0)
-            {
-                writer.Write((short)ClientPacket.Length);
-                writer.Write(ClientPacket);
-            }
-            else
-            {
-                writer.Write((ushort)0);
-                writer.Write((byte)0);
-            }
+            return 6 + ClientPacket.Length;
         }
     }
 }

@@ -3,7 +3,7 @@ using SystemModule.Extensions;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class UserEntryAdd : Packets
+    public class UserEntryAdd : ClientPackage
     {
         public string Quiz2;
         public string Answer2;

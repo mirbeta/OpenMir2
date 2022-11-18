@@ -4,6 +4,7 @@ using System.Net;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
@@ -157,7 +158,7 @@ namespace SelGate.Services
             {
                 return;
             }
-            var packet = Packets.ToPacket<ServerDataMessage>(e.Buff);
+            var packet = ServerPackSerializer.Deserialize<ServerDataMessage>(e.Buff);
             if (packet == null)
             {
                 return;
@@ -214,7 +215,7 @@ namespace SelGate.Services
             accountPacket.SocketId = 0;
             accountPacket.PacketCode = Grobal2.RUNGATECODE;
             accountPacket.PacketLen = accountPacket.GetPacketSize();
-            SendSocket(accountPacket.GetBuffer());
+            SendSocket(ServerPackSerializer.Serialize(accountPacket));
             _logQueue.DebugLog("Send DBSvr Heartbeat.");
         }
 

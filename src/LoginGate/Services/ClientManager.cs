@@ -94,7 +94,7 @@ namespace LoginGate.Services
                 {
                     if (_sendQueue.Reader.TryRead(out var message))
                     {
-                        var clientPacket = Packets.ToPacket<LoginSvrPacket>(message);
+                        var clientPacket = ServerPackSerializer.Deserialize<LoginSvrPacket>(message);
                         if (clientPacket == null)
                         {
                             continue;

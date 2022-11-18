@@ -6,7 +6,7 @@ namespace SystemModule.Packets.ClientPackets
     /// <summary>
     /// 客户端元宝寄售数据结构
     /// </summary>
-    public class ClientDealOffInfo : Packets
+    public class ClientDealOffInfo : ClientPackage
     {
         /// <summary>
         /// 寄售人

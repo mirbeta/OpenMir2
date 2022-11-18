@@ -3,7 +3,7 @@ using SystemModule.Data;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class ClientMagic : Packets
+    public class ClientMagic : ClientPackage
     {
         public char Key;
         public byte Level;

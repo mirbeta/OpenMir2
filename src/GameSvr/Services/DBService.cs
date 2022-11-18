@@ -51,7 +51,7 @@ namespace GameSvr.Services
             _clientScoket.Connect(M2Share.Config.sDBAddr, M2Share.Config.nDBPort);
         }
 
-        public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet) where T : RequestPacket
+        public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet) where T : ServerPacket
         {
             if (!_clientScoket.IsConnected)
             {
@@ -64,7 +64,7 @@ namespace GameSvr.Services
             requestPacket.Packet = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(packet));
             var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
-            _clientScoket.Send(requestPacket.GetBuffer());
+            _clientScoket.Send(ServerPackSerializer.Serialize(requestPacket));
             return true;
         }
 
@@ -187,7 +187,7 @@ namespace GameSvr.Services
             try
             {
                 if (!SocketWorking) return;
-                var responsePacket = Packets.ToPacket<ServerRequestData>(data);
+                var responsePacket = ServerPackSerializer.Deserialize<ServerRequestData>(data);
                 if (responsePacket != null && responsePacket.PacketLen > 0)
                 {
                     var respCheckCode = responsePacket.QueryId;

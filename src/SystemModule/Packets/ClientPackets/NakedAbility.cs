@@ -4,7 +4,7 @@ using System.IO;
 namespace SystemModule.Packets.ClientPackets
 {
     [MemoryPackable]
-    public partial class NakedAbility : Packets
+    public partial class NakedAbility : ClientPackage
     {
         public ushort DC{ get; set; }
         public ushort MC{ get; set; }

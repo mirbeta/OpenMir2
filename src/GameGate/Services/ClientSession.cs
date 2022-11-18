@@ -1154,7 +1154,7 @@ namespace GameGate.Services
                             SendKickMsg(4);
                             return;
                         }
-                        HardwareHeader pHardwareHeader = Packets.ToPacket<HardwareHeader>(dest);
+                        HardwareHeader pHardwareHeader = ClientPackage.ToPacket<HardwareHeader>(dest);
                         //todo session会话里面需要存用户ip
                         Logger.Log($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {addr}", 1);
                         if (pHardwareHeader.dwMagicCode == 0x13F13F13)

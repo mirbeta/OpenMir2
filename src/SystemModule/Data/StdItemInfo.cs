@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule.Data
 {
@@ -38,7 +39,7 @@ namespace SystemModule.Data
         }
     }
 
-    public class TEvaAbil : Packets.Packets
+    public class TEvaAbil : ClientPackage
     {
         public byte btType;
         public byte btValue;

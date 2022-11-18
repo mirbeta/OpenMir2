@@ -6,6 +6,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+		<LangVersion>10</LangVersion>
 	</PropertyGroup>
 	<Choose>
 		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">

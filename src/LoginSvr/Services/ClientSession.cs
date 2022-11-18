@@ -7,7 +7,6 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
@@ -370,7 +369,7 @@ namespace LoginSvr.Services
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
-                var userFullEntry = Packets.ToPacket<UserFullEntry>(accountBuff);
+                var userFullEntry = ClientPackage.ToPacket<UserFullEntry>(accountBuff);
                 var nErrCode = -1;
                 if (LsShare.CheckAccountName(userFullEntry.UserEntry.Account))
                 {
@@ -556,7 +555,7 @@ namespace LoginSvr.Services
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
-                var userFullEntry = Packets.ToPacket<UserFullEntry>(accountBuff);
+                var userFullEntry = ClientPackage.ToPacket<UserFullEntry>(accountBuff);
                 var nCode = -1;
                 if (string.Compare(userInfo.Account, userFullEntry.UserEntry.Account, StringComparison.OrdinalIgnoreCase) == 0 && LsShare.CheckAccountName(userFullEntry.UserEntry.Account))
                 {
@@ -731,7 +730,7 @@ namespace LoginSvr.Services
                 var packet = new LoginSvrPacket();
                 packet.ConnectionId = sSockIndex;
                 packet.ClientPacket = HUtil32.GetBytes("#" + sMsg + "!$");
-                socket.SendBuffer(packet.GetBuffer());
+                socket.SendBuffer(ServerPackSerializer.Serialize(packet));
             }
             else
             {

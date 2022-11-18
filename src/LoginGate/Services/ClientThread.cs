@@ -201,7 +201,7 @@ namespace LoginGate.Services
         {
             packet.PacketCode = Grobal2.RUNGATECODE;
             packet.PacketLen = packet.GetPacketSize();
-            SendSocket(packet.GetBuffer());
+            SendSocket(ServerPackSerializer.Serialize(packet));
         }
 
         private void SendSocket(byte[] sendBuffer)

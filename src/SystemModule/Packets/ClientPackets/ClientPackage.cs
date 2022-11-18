@@ -2,15 +2,15 @@
 using System.IO;
 using System.Text;
 
-namespace SystemModule.Packets
+namespace SystemModule.Packets.ClientPackets
 {
-    public abstract class Packets
+    public abstract class ClientPackage
     {
         private readonly BinaryReader binaryReader;
 
-        public Packets() { }
+        public ClientPackage() { }
 
-        public Packets(byte[] segment)
+        public ClientPackage(byte[] segment)
         {
             if (segment == null)
             {
@@ -124,9 +124,9 @@ namespace SystemModule.Packets
             return (int)stream.Length;
         }
 
-        public static T ToPacket<T>(Span<byte> rawBytes) where T : Packets, new()
+        public static T ToPacket<T>(Span<byte> rawBytes) where T : ClientPackage, new()
         {
-            Packets packet = Activator.CreateInstance<T>();
+            ClientPackage packet = Activator.CreateInstance<T>();
             using var stream = new MemoryStream(rawBytes.ToArray());
             using var reader = new BinaryReader(stream);
             try
@@ -141,9 +141,9 @@ namespace SystemModule.Packets
             return (T)packet;
         }
         
-        public static T ToPacket<T>(byte[] rawBytes) where T : Packets, new()
+        public static T ToPacket<T>(byte[] rawBytes) where T : ClientPackage, new()
         {
-            Packets packet = Activator.CreateInstance<T>();
+            ClientPackage packet = Activator.CreateInstance<T>();
             using var stream = new MemoryStream(rawBytes, 0, rawBytes.Length);
             using var reader = new BinaryReader(stream);
             try

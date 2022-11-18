@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
@@ -165,7 +166,7 @@ namespace DBSvr.Services
 
         private void ProcessServerPacket(ServerDataInfo serverInfo,int nQueryId, byte[] data)
         {
-            var requestData = Packets.ToPacket<ServerRequestData>(data);
+            var requestData = ServerPackSerializer.Deserialize<ServerRequestData>(data);
             if (requestData == null)
             {
                 return;
@@ -220,7 +221,7 @@ namespace DBSvr.Services
             }
             var nCheckCode = BitConverter.GetBytes(queryPart);
             requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
-            _serverSocket.Send(connectionId, requestPacket.GetBuffer());
+            _serverSocket.Send(connectionId, ServerPackSerializer.Serialize(requestPacket));
         }
 
         private void SendRequest<T>(string connectionId, int queryId, ServerRequestData requestPacket, T packet) where T : class, new()
@@ -233,7 +234,7 @@ namespace DBSvr.Services
             }
             var s = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
-            _serverSocket.Send(connectionId, requestPacket.GetBuffer());
+            _serverSocket.Send(connectionId, ServerPackSerializer.Serialize(requestPacket));
         }
 
         /// <summary>

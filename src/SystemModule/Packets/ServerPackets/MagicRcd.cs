@@ -1,10 +1,9 @@
 ﻿using MemoryPack;
-using System.IO;
 
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
-    public partial class MagicRcd : Packets
+    public partial class MagicRcd : ServerPacket
     {
         /// <summary>
         /// 技能ID
@@ -23,20 +22,9 @@ namespace SystemModule.Packets.ServerPackets
         /// </summary>
         public int TranPoint;
 
-        protected override void ReadPacket(BinaryReader reader)
+        public override int GetPacketSize()
         {
-            MagIdx = reader.ReadUInt16();
-            Level = reader.ReadByte();
-            MagicKey = reader.ReadChar();
-            TranPoint = reader.ReadInt32();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(MagIdx);
-            writer.Write(Level);
-            writer.Write(MagicKey);
-            writer.Write(TranPoint);
+            throw new System.NotImplementedException();
         }
     }
 }

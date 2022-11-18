@@ -2,7 +2,7 @@
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class ClientConf : Packets
+    public class ClientConf : ClientPackage
     {
         public bool boGameAssist;
         public bool boWhisperRecord;
