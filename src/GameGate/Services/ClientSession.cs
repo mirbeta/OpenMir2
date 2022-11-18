@@ -14,7 +14,7 @@ namespace GameGate.Services
     /// </summary>
     public class ClientSession : IDisposable
     {
-        private readonly SessionSpeed _gameSpeed;
+        private readonly SessionSpeedRule _gameSpeed;
         private readonly SessionInfo _session;
         private readonly object _syncObj;
         private ClientThread ClientThread { get; set; }
@@ -45,12 +45,12 @@ namespace GameGate.Services
             Stat = CheckStep.CheckLogin;
             LastDirection = -1;
             _syncObj = new object();
-            _gameSpeed = new SessionSpeed();
+            _gameSpeed = new SessionSpeedRule();
             SessionKey = Guid.NewGuid().ToString("N");
             _authenticator = new DynamicAuthenticator();
         }
 
-        public SessionSpeed GetGameSpeed()
+        public SessionSpeedRule GetGameSpeed()
         {
             return _gameSpeed;
         }
@@ -602,7 +602,8 @@ namespace GameGate.Services
                     cmdPack.PackLength = ClientMesaagePacket.PackSize + tLen + 1;
                     bodyBuffer = new byte[GameServerPacket.PacketSize + cmdPack.PackLength];
                     Buffer.BlockCopy(decodeBuff, 0, bodyBuffer, GameServerPacket.PacketSize, ClientMesaagePacket.PackSize);
-                    Buffer.BlockCopy(tempBuff.ToArray(), 16, bodyBuffer, 32, tLen); //消息体
+                    //Buffer.BlockCopy(tempBuff.ToArray(), 16, bodyBuffer, 32, tLen); //消息体
+                    MemoryCopy.BlockCopy(tempBuff, 16, bodyBuffer, 32, tLen);
                 }
                 else
                 {
@@ -864,62 +865,43 @@ namespace GameGate.Services
         /// </summary>
         public void ProcessServerPacket(MessagePacket clientPacket)
         {
-            switch (clientPacket.BufferLen)
+            if (clientPacket.BufferLen <= 0)//小包 走路 攻击等
             {
-                case < 0://小包 走路 攻击等
-                    {
-                        var buffLen = -clientPacket.BufferLen;
-                        var packetBuffer = new byte[buffLen + 2];
-                        packetBuffer[0] = (byte)'#';
-                        Buffer.BlockCopy(clientPacket.Buffer, 0, packetBuffer, 1, buffLen);
-                        packetBuffer[buffLen + 1] = (byte)'!';
-                        var sendData = packetBuffer[..(buffLen + 2)];
-                        SendPacketData(sendData);
-                        break;
-                    }
-                case < 1024://普通正常游戏数据包，正常的游戏操作
-                    {
-                        var packetBuffer = new byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
-                        packetBuffer[0] = (byte)'#';
-                        var packetBuff = clientPacket.Buffer;
-                        var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, packetBuffer, 1);//消息头
-                        if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
-                        {
-                            var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
-                            MemoryCopy.BlockCopy(tempBuffer, 0, packetBuffer, nLen + 1, tempBuffer.Length);
-                            nLen = tempBuffer.Length + nLen;
-                        }
-                        packetBuffer[nLen + 1] = (byte)'!';
-                        var sendData = packetBuffer[..(nLen + 2)];
-                        SendPacketData(sendData);
-                        break;
-                    }
-                case > 1024://大型游戏数据包
-                    {
-                        var packBuff = new byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
-                        packBuff[0] = (byte)'#';
-                        var packetBuff = clientPacket.Buffer;
-                        var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, packBuff, 1);//消息头
-                        if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
-                        {
-                            var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
-                            MemoryCopy.BlockCopy(tempBuffer, 0, packBuff, nLen + 1, tempBuffer.Length);
-                            nLen = tempBuffer.Length + nLen;
-                        }
-                        packBuff[nLen + 1] = (byte)'!';
-                        var sendData = packBuff[..(nLen + 2)];
-                        SendPacketData(sendData);
-                        break;
-                    }
+                var buffLen = -clientPacket.BufferLen;
+                var packetBuffer = new byte[buffLen + 2];
+                packetBuffer[0] = (byte)'#';
+                Buffer.BlockCopy(clientPacket.Buffer, 0, packetBuffer, 1, buffLen);
+                packetBuffer[buffLen + 1] = (byte)'!';
+                var sendData = packetBuffer[..(buffLen + 2)];
+                SendPacketData(sendData);
+            }
+            else
+            {
+                var packetBuffer = new byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
+                packetBuffer[0] = (byte)'#';
+                var packetBuff = clientPacket.Buffer;
+                var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, packetBuffer, 1);//消息头
+                if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
+                {
+                    MemoryCopy.BlockCopy(packetBuff, ClientMesaagePacket.PackSize, packetBuffer, nLen + 1, packetBuff.Length - ClientMesaagePacket.PackSize);
+                    nLen = packetBuff.Length - ClientMesaagePacket.PackSize + nLen;
+                    /*var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
+                    MemoryCopy.BlockCopy(tempBuffer, 0, packBuff, nLen + 1, tempBuffer.Length);
+                     nLen = packetBuff.Length + nLen;
+                     */
+                }
+                packetBuffer[nLen + 1] = (byte)'!';
+                var sendData = packetBuffer[..(nLen + 2)];
+                SendPacketData(sendData);
             }
 
-            var messagePacket = clientPacket.Buffer.AsSpan();
-            if (messagePacket.Length > 10)
+            if (-clientPacket.BufferLen > 10)
             {
+                var messagePacket = clientPacket.Buffer.AsSpan();
                 var recog = BitConverter.ToInt32(messagePacket[..4]);
                 var ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
-                var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
-                var tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
+                //var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
+                //var tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
                 int series;
                 switch (ident)
                 {
@@ -1291,7 +1273,7 @@ namespace GameGate.Services
         CheckTick
     }
 
-    public class SessionSpeed
+    public class SessionSpeedRule
     {
         /// <summary>
         /// 是否速度限制
@@ -1412,7 +1394,7 @@ namespace GameGate.Services
         public long GameTick;
         public int WaringTick;
 
-        public SessionSpeed()
+        public SessionSpeedRule()
         {
             var dwCurrentTick = HUtil32.GetTickCount();
             ErrorCount = dwCurrentTick;
