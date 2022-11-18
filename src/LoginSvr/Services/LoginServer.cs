@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
@@ -127,7 +128,7 @@ namespace LoginSvr.Services
                     {
                         break;
                     }
-                    var packet = Packets.ToPacket<ServerDataMessage>(dataBuff[..messageLen]);
+                    var packet = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[..messageLen]);
                     if (packet == null)
                     {
                         //_logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");

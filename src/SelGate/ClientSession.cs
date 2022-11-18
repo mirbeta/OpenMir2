@@ -63,7 +63,7 @@ namespace SelGate
             var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             var nDeCodeLen = 0;
             var packBuff = PacketEncoder.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
-            var cltCmd = Packets.ToPacket<ClientMesaagePacket>(packBuff);
+            var cltCmd = ClientPackage.ToPacket<ClientMesaagePacket>(packBuff);
             if (cltCmd == null)
             {
                 return;
@@ -82,7 +82,7 @@ namespace SelGate
                     accountPacket.SocketId = Session.SocketId;
                     accountPacket.PacketCode = Grobal2.RUNGATECODE;
                     accountPacket.PacketLen = accountPacket.GetPacketSize();
-                    _lastDbSvr.SendSocket(accountPacket.GetBuffer());
+                    _lastDbSvr.SendSocket(ServerPackSerializer.Serialize(accountPacket));
                     break;
                 default:
                     _logger.DebugLog($"错误的数据包索引:[{cltCmd.Cmd}]");
@@ -193,7 +193,7 @@ namespace SelGate
             accountPacket.SocketId = Session.SocketId;
             accountPacket.PacketCode = Grobal2.RUNGATECODE;
             accountPacket.PacketLen = accountPacket.GetPacketSize();
-            _lastDbSvr.SendSocket(accountPacket.GetBuffer());
+            _lastDbSvr.SendSocket(ServerPackSerializer.Serialize(accountPacket));
             _logger.DebugLog("[UserEnter] " + sendStr);
         }
 
@@ -215,7 +215,7 @@ namespace SelGate
             accountPacket.SocketId = Session.SocketId;
             accountPacket.PacketCode = Grobal2.RUNGATECODE;
             accountPacket.PacketLen = accountPacket.GetPacketSize();
-            _lastDbSvr.SendSocket(accountPacket.GetBuffer());
+            _lastDbSvr.SendSocket(ServerPackSerializer.Serialize(accountPacket));
             _kickFlag = false;
             _logger.DebugLog("[UserLeave] " + sendStr);
         }

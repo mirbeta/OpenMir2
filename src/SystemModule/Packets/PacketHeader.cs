@@ -6,7 +6,7 @@ namespace SystemModule.Packets
     /// <summary>
     /// 封包消息头
     /// </summary>
-    public class GameServerPacket : Packets
+    public class GameServerPacket : ClientPackage
     {
         public uint PacketCode;
         /// <summary>
@@ -44,7 +44,7 @@ namespace SystemModule.Packets
         }
     }
 
-    public class ClientOutMessage : Packets
+    public class ClientOutMessage : ClientPackage
     {
         private readonly GameServerPacket MessageHeader;
         private readonly ClientMesaagePacket clientMesaage;

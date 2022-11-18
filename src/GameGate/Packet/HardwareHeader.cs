@@ -1,10 +1,11 @@
 using System;
 using System.IO;
 using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameGate.Packet
 {
-    public class HardwareHeader : Packets
+    public class HardwareHeader : ClientPackage
     {
         public uint dwMagicCode;
         public byte[] xMd5Digest;

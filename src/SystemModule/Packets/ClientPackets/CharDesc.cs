@@ -2,7 +2,7 @@
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class CharDesc : Packets
+    public class CharDesc : ClientPackage
     {
         public int Feature;
         public int Status;

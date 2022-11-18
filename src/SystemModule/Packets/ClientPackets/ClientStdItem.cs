@@ -3,7 +3,7 @@ using SystemModule.Extensions;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class ClientStdItem : Packets
+    public class ClientStdItem : ClientPackage
     {
         public string Name;
         public byte StdMode;
@@ -61,7 +61,7 @@ namespace SystemModule.Packets.ClientPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.WriteAsciiString(Name, PacketConst.ItemNameLen);
+            writer.WriteAsciiString(Name, ClientPacketConst.ItemNameLen);
             writer.Write(StdMode);
             writer.Write(Shape);
             writer.Write(Weight);
@@ -110,11 +110,11 @@ namespace SystemModule.Packets.ClientPackets
             writer.Write(ItemSet);
             if (string.IsNullOrEmpty(Reference))
             {
-                writer.WriteAsciiString("", PacketConst.ItemNameLen);
+                writer.WriteAsciiString("", ClientPacketConst.ItemNameLen);
             }
             else
             {
-                writer.WriteAsciiString(Reference, PacketConst.ItemNameLen);
+                writer.WriteAsciiString(Reference, ClientPacketConst.ItemNameLen);
             }
             writer.Write((byte)0);
         }

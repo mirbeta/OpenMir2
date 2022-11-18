@@ -71,11 +71,7 @@ namespace LoginGate
                     for (var j = 0; j < clientList[i].SessionArray.Length; j++)
                     {
                         var session = clientList[i].SessionArray[j];
-                        if (session == null)
-                        {
-                            continue;
-                        }
-                        if (session.Socket == null)
+                        if (session?.Socket == null)
                         {
                             continue;
                         }

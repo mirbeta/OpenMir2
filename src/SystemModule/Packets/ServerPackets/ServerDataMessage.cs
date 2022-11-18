@@ -1,11 +1,11 @@
 ﻿using MemoryPack;
 using System;
-using System.IO;
 
 namespace SystemModule.Packets.ServerPackets
 {
+    [Serializable]
     [MemoryPackable]
-    public partial class ServerDataMessage : Packets
+    public partial class ServerDataMessage 
     {
         public uint PacketCode { get; set; }
         public int PacketLen { get; set; }
@@ -19,32 +19,9 @@ namespace SystemModule.Packets.ServerPackets
         /// </summary>
         public const int HeaderPacketSize = 8;
 
-        protected override void ReadPacket(BinaryReader reader)
+        public int GetPacketSize()
         {
-            PacketCode = reader.ReadUInt32();
-            PacketLen = reader.ReadInt32();
-            Type = (ServerDataType)reader.ReadByte();
-            SocketId = reader.ReadInt32();
-            DataLen = reader.ReadInt16();
-            Data = reader.ReadBytes(DataLen);
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(PacketCode);
-            writer.Write(PacketLen);
-            writer.Write((byte)Type);
-            writer.Write(SocketId);
-            if (Data == null || Data.Length <= 0)
-            {
-                writer.Write((short)0);
-                writer.Write(Array.Empty<byte>());
-            }
-            else
-            {
-                writer.Write(DataLen);
-                writer.Write(Data);
-            }
+            return HeaderPacketSize + 7 + Data.Length;
         }
     }
 

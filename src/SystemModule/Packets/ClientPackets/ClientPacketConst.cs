@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Packets.ClientPackets
 {
-    public static class PacketConst
+    public static class ClientPacketConst
     {
         /// <summary>
         /// 物品名称长度

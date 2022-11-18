@@ -2,7 +2,7 @@
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class MessageBodyW : Packets
+    public class MessageBodyW : ClientPackage
     {
         public ushort Param1;
         public ushort Param2;

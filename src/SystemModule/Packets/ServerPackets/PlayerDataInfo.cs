@@ -19,7 +19,7 @@ namespace SystemModule.Packets.ServerPackets
     }
 
     [MemoryPackable]
-    public partial class SavePlayerDataMessage : RequestPacket
+    public partial class SavePlayerDataMessage : ServerPacket
     {
         public string Account { get; set; }
         public string ChrName { get; set; }
@@ -31,19 +31,29 @@ namespace SystemModule.Packets.ServerPackets
             ChrName = chrName;
             HumDataInfo = humDataInfo;
         }
+
+        public override int GetPacketSize()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     [MemoryPackable]
-    public partial class LoadPlayerDataMessage : RequestPacket
+    public partial class LoadPlayerDataMessage : ServerPacket
     {
         public string Account { get; set; }
         public string ChrName { get; set; }
         public string UserAddr { get; set; }
         public int SessionID { get; set; }
+
+        public override int GetPacketSize()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     [MemoryPackable]
-    public partial class PlayerInfoData
+    public partial class PlayerInfoData: ServerPacket
     {
         public byte ServerIndex { get; set; }
         public string ChrName { get; set; }
@@ -147,6 +157,11 @@ namespace SystemModule.Packets.ServerPackets
                     Magic[i] = new MagicRcd();
                 }
             }
+        }
+
+        public override int GetPacketSize()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

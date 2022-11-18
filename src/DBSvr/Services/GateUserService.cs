@@ -33,7 +33,7 @@ namespace DBSvr.Services
         private readonly IPlayRecordStorage _playRecordStorage;
         private readonly SocketServer _userSocket;
         private readonly LoginSessionServer _loginService;
-        private readonly Channel<UserMessage> _reviceQueue;
+        private readonly Channel<UserGateMessage> _reviceQueue;
         private readonly Dictionary<string, SelGateInfo> _gateMap;
 
         public GateUserService(MirLogger logger, DBSvrConf conf, LoginSessionServer loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
@@ -44,7 +44,7 @@ namespace DBSvr.Services
             _playDataStorage = playData;
             _gateMap = new Dictionary<string, SelGateInfo>(StringComparer.OrdinalIgnoreCase);
             _mapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            _reviceQueue = Channel.CreateUnbounded<UserMessage>();
+            _reviceQueue = Channel.CreateUnbounded<UserGateMessage>();
             _userSocket = new SocketServer(byte.MaxValue, 1024);
             _userSocket.OnClientConnect += UserSocketClientConnect;
             _userSocket.OnClientDisconnect += UserSocketClientDisconnect;
@@ -240,13 +240,13 @@ namespace DBSvr.Services
                     {
                         break;
                     }
-                    var packet = Packets.ToPacket<ServerDataMessage>(dataBuff[..messageLen]);
+                    var packet = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[..messageLen]);
                     if (packet == null)
                     {
                         //_logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
                         return;
                     }
-                    var message = new UserMessage();
+                    var message = new UserGateMessage();
                     message.ConnectionId = connectionId;
                     message.Packet = packet;
                     _reviceQueue.Writer.TryWrite(message);
@@ -1007,11 +1007,11 @@ namespace DBSvr.Services
                 return;
             packet.PacketCode = Grobal2.RUNGATECODE;
             packet.PacketLen = packet.GetPacketSize();
-            _userSocket.Send(connectionId, packet.GetBuffer());
+            _userSocket.Send(connectionId, ServerPackSerializer.Serialize(packet));
         }
     }
 
-    public struct UserMessage
+    public struct UserGateMessage
     {
         public ServerDataMessage Packet;
         public string ConnectionId;

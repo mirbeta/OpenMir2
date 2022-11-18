@@ -11,7 +11,7 @@ namespace SystemModule.Packets.ClientPackets
         public const int WeaponUpgrade = 10;
     }
 
-    public partial class UserItem : Packets
+    public partial class UserItem : ClientPackage
     {
         /// <summary>
         /// 唯一ID

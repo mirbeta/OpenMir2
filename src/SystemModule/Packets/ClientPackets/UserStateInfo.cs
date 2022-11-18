@@ -4,7 +4,7 @@ using SystemModule.Extensions;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class UserStateInfo : Packets
+    public class UserStateInfo : ClientPackage
     {
         public int Feature;
         public string UserName;

@@ -345,7 +345,7 @@ namespace MakePlayer.Cliens
             m_btJob = (byte)DefMsg.Param;
             m_nGameGold = HUtil32.MakeLong(DefMsg.Tag, DefMsg.Series);
             var buff = EDCode.DecodeBuffer(sData);
-            m_Abil = Packets.ToPacket<Ability>(buff);
+            m_Abil = ClientPackage.ToPacket<Ability>(buff);
         }
 
         private void ClientGetWinExp(ClientMesaagePacket DefMsg)

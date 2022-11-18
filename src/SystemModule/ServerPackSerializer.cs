@@ -1,4 +1,5 @@
 using MemoryPack;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace SystemModule
@@ -12,6 +13,11 @@ namespace SystemModule
         }
 
         public static T Deserialize<T>(byte[] bytes)
+        {
+            return MemoryPackSerializer.Deserialize<T>(bytes)!;
+        }
+        
+        public static T Deserialize<T>(Span<byte> bytes)
         {
             return MemoryPackSerializer.Deserialize<T>(bytes)!;
         }

@@ -15,10 +15,11 @@ namespace SystemModule.Extensions
             IFormatter formatter = new BinaryFormatter();
             using (var stream = new MemoryStream())
             {
-                formatter.Serialize(stream, obj);
+                /*formatter.Serialize(stream, obj);
                 stream.Seek(0, SeekOrigin.Begin);
-                return (T)formatter.Deserialize(stream);
+                return (T)formatter.Deserialize(stream);*/
             }
+            return default(T);
         }
     }
 }

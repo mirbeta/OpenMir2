@@ -5,7 +5,7 @@ namespace SystemModule.Packets.ClientPackets
     /// <summary>
     /// 客户端消息
     /// </summary>
-    public class ClientMesaagePacket : Packets
+    public class ClientMesaagePacket : ClientPackage
     {
         public int UID;
         public ushort Cmd;
