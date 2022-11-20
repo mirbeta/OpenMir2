@@ -112,7 +112,7 @@ namespace LoginSvr.Services
             {
                 while (nLen >= ServerDataMessage.HeaderPacketSize)
                 {
-                    Span<byte> packetHead = dataBuff[..ServerDataMessage.HeaderPacketSize];
+                    Span<byte> packetHead = dataBuff.Slice(1, ServerDataMessage.HeaderPacketSize);
                     var packetCode = BitConverter.ToUInt32(packetHead[..4]);
                     if (packetCode != Grobal2.RUNGATECODE)
                     {

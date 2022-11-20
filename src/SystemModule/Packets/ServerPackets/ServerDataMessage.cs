@@ -3,7 +3,6 @@ using System;
 
 namespace SystemModule.Packets.ServerPackets
 {
-    [Serializable]
     [MemoryPackable]
     public partial class ServerDataMessage 
     {
@@ -21,7 +20,7 @@ namespace SystemModule.Packets.ServerPackets
 
         public int GetPacketSize()
         {
-            return HeaderPacketSize + 7 + Data.Length;
+            return HeaderPacketSize + 7 + (Data?.Length ?? 0);
         }
     }
 
