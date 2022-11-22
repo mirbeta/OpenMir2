@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SystemModule;
 using SystemModule.Consts;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace BotSvr.Objects
 {

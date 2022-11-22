@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 
 namespace BotSvr
 {

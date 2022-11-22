@@ -1,6 +1,6 @@
 ﻿using System;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -23,7 +23,7 @@ namespace BotSvr.Scenes.Scene
             ClientSocket = new ClientScoket();
             ClientSocket.OnConnected += CSocketConnect;
             ClientSocket.OnDisconnected += CSocketDisconnect;
-            ClientSocket.ReceivedDatagram += CSocketRead;
+            ClientSocket.OnReceivedData += CSocketRead;
             ClientSocket.OnError += CSocketError;
         }
 
@@ -231,7 +231,7 @@ namespace BotSvr.Scenes.Scene
             }
             else
             {
-                MainOutMessage($"Socket Close {ClientSocket.Host}:{ClientSocket.Port}");
+                MainOutMessage($"Socket Close {ClientSocket.RemoteEndPoint}");
             }
         }
 
@@ -262,13 +262,13 @@ namespace BotSvr.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    Console.WriteLine($"角色服务器[{ClientSocket.EndPoint}拒绝链接...");
+                    Console.WriteLine($"角色服务器[{ClientSocket.RemoteEndPoint}拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    Console.WriteLine($"角色服务器[{ClientSocket.EndPoint}关闭连接...");
+                    Console.WriteLine($"角色服务器[{ClientSocket.RemoteEndPoint}关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    Console.WriteLine($"角色服务器[{ClientSocket.EndPoint}链接超时...");
+                    Console.WriteLine($"角色服务器[{ClientSocket.RemoteEndPoint}链接超时...");
                     break;
             }
         }

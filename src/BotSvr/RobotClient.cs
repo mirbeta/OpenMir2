@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -167,11 +167,11 @@ namespace BotSvr
             }
             ClientSocket.OnConnected -= CSocketConnect;
             ClientSocket.OnDisconnected -= CSocketDisconnect;
-            ClientSocket.ReceivedDatagram -= CSocketRead;
+            ClientSocket.OnReceivedData -= CSocketRead;
             ClientSocket.OnError -= CSocketError;
             ClientSocket.OnConnected += CSocketConnect;
             ClientSocket.OnDisconnected += CSocketDisconnect;
-            ClientSocket.ReceivedDatagram += CSocketRead;
+            ClientSocket.OnReceivedData += CSocketRead;
             ClientSocket.OnError += CSocketError;
             ClientSocket.Connect(MShare.g_sRunServerAddr, MShare.g_nRunServerPort);
         }
@@ -224,13 +224,13 @@ namespace BotSvr
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    Console.WriteLine($"游戏服务器[{ClientSocket.EndPoint}]拒绝链接...");
+                    Console.WriteLine($"游戏服务器[{ClientSocket.RemoteEndPoint}]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    Console.WriteLine($"游戏服务器[{ClientSocket.EndPoint}]关闭连接...");
+                    Console.WriteLine($"游戏服务器[{ClientSocket.RemoteEndPoint}]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    Console.WriteLine($"游戏服务器[{ClientSocket.EndPoint}]链接超时...");
+                    Console.WriteLine($"游戏服务器[{ClientSocket.RemoteEndPoint}]链接超时...");
                     break;
             }
             if (DScreen.CurrentScene == g_PlayScene)
@@ -2332,7 +2332,7 @@ namespace BotSvr
             }
             else
             {
-                MainOutMessage($"socket close {ClientSocket.Host}:{ClientSocket.Port}");
+                MainOutMessage($"socket close {ClientSocket.RemoteEndPoint}");
             }
         }
 
@@ -2393,12 +2393,12 @@ namespace BotSvr
                                         {
                                             g_MoveStep = 1;
                                             //TimerAutoMove.Enabled = true;
-                                            DScreen.AddChatBoardString(string.Format("自动移动至坐标({0}:{1})，点击鼠标任意键停止……", MShare.g_MySelf.m_nTagX, MShare.g_MySelf.m_nTagY), GetRGB(5));
+                                            DScreen.AddChatBoardString($"自动移动至坐标({MShare.g_MySelf.m_nTagX}:{MShare.g_MySelf.m_nTagY})，点击鼠标任意键停止……", GetRGB(5));
                                         }
                                         else
                                         {
                                             //TimerAutoMove.Enabled = false;
-                                            DScreen.AddChatBoardString(string.Format("自动移动坐标点({0}:{1})不可到达", MShare.g_MySelf.m_nTagX, MShare.g_MySelf.m_nTagY), GetRGB(5));
+                                            DScreen.AddChatBoardString($"自动移动坐标点({MShare.g_MySelf.m_nTagX}:{MShare.g_MySelf.m_nTagY})不可到达", GetRGB(5));
                                             MShare.g_MySelf.m_nTagX = 0;
                                             MShare.g_MySelf.m_nTagY = 0;
                                         }
