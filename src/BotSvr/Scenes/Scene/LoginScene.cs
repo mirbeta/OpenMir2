@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Net;
 using SystemModule;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -21,14 +22,13 @@ namespace BotSvr.Scenes.Scene
             _clientSocket = new ClientScoket();
             _clientSocket.OnConnected += CSocketConnect;
             _clientSocket.OnDisconnected += CSocketDisconnect;
-            _clientSocket.ReceivedDatagram += CSocketRead;
+            _clientSocket.OnReceivedData += CSocketRead;
             _clientSocket.OnError += CSocketError;
         }
 
         public override void OpenScene()
         {
-            _clientSocket.Host = MShare.g_sGameIPaddr;
-            _clientSocket.Port = MShare.g_nGamePort;
+            _clientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(MShare.g_sGameIPaddr), MShare.g_nGamePort);
             SetNotifyEvent(Login, 1000);
         }
 
@@ -183,7 +183,7 @@ namespace BotSvr.Scenes.Scene
             }
             else
             {
-                MainOutMessage($"Socket Close: {_clientSocket.EndPoint}");
+                MainOutMessage($"Socket Close: {_clientSocket.RemoteEndPoint}");
             }
         }
 
@@ -233,13 +233,13 @@ namespace BotSvr.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    Console.WriteLine($"游戏服务器[{_clientSocket.EndPoint}]拒绝链接...");
+                    Console.WriteLine($"游戏服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    Console.WriteLine($"游戏服务器[{_clientSocket.EndPoint}]关闭连接...");
+                    Console.WriteLine($"游戏服务器[{_clientSocket.RemoteEndPoint}]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    Console.WriteLine($"游戏服务器[{_clientSocket.EndPoint}]链接超时...");
+                    Console.WriteLine($"游戏服务器[{_clientSocket.RemoteEndPoint}]链接超时...");
                     break;
             }
         }
