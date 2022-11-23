@@ -159,10 +159,6 @@ namespace SelGate.Services
                 return;
             }
             var packet = ServerPackSerializer.Deserialize<ServerDataMessage>(e.Buff);
-            if (packet == null)
-            {
-                return;
-            }
             if (packet.Type == ServerDataType.KeepAlive)
             {
                 _logQueue.DebugLog("DBSvr Heartbeat Response");

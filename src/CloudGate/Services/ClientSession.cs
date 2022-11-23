@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using SystemModule;
-using SystemModule.Packet;
-using SystemModule.Packet.ClientPackets;
+using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 
 namespace CloudGate.Services
 {
@@ -134,7 +134,7 @@ namespace CloudGate.Services
                         var nDeCodeLen = 0;
                         var packBuff = PacketEncoder.DecodeBuf(tempBuff, tempBuff.Length, ref nDeCodeLen);
 
-                        var CltCmd = Packets.ToPacket<ClientMesaagePacket>(packBuff);
+                        var CltCmd = ClientPackage.ToPacket<ClientMesaagePacket>(packBuff);
                         switch (CltCmd.Cmd)
                         {
                             case Grobal2.CM_GUILDUPDATENOTICE:
@@ -836,7 +836,7 @@ namespace CloudGate.Services
                 Debug.WriteLine(HUtil32.GetString(pzsSendBuf, 0, pzsSendBuf.Length));
                 return;
             }
-            var packet = Packets.ToPacket<ClientMesaagePacket>(message.Buffer);
+            var packet = ClientPackage.ToPacket<ClientMesaagePacket>(message.Buffer);
             switch (packet.Cmd)
             {
                 case Grobal2.SM_RUSH:

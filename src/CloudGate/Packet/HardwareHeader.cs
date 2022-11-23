@@ -1,10 +1,10 @@
 using System;
 using System.IO;
-using SystemModule.Packet;
+using SystemModule.Packets.ClientPackets;
 
 namespace CloudGate.Packet
 {
-    public class HardwareHeader : Packets
+    public class HardwareHeader : ClientPackage
     {
         public uint dwMagicCode;
         public byte[] xMd5Digest;

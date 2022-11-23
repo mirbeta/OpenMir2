@@ -110,40 +110,35 @@ namespace LoginSvr.Services
             Span<byte> dataBuff = data;
             try
             {
-                while (nLen >= ServerDataMessage.HeaderPacketSize)
+                while (nLen >= ServerDataMessage.FixedHeaderLen)
                 {
-                    Span<byte> packetHead = dataBuff.Slice(1, ServerDataMessage.HeaderPacketSize);
+                    Span<byte> packetHead = dataBuff.Slice(1, ServerDataMessage.FixedHeaderLen);
                     var packetCode = BitConverter.ToUInt32(packetHead[..4]);
                     if (packetCode != Grobal2.RUNGATECODE)
                     {
                         srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, ServerDataMessage.HeaderPacketSize);
+                        dataBuff = dataBuff.Slice(srcOffset, ServerDataMessage.FixedHeaderLen);
                         nLen -= 1;
                         _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
-                    var messageLen = BitConverter.ToInt32(packetHead.Slice(4, 4));
-                    var nCheckMsgLen = Math.Abs(messageLen);
+                    var packetLen = BitConverter.ToInt16(packetHead.Slice(4, 2));
+                    var nCheckMsgLen = Math.Abs(packetLen);
                     if (nCheckMsgLen > nLen)
                     {
                         break;
                     }
-                    var packet = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[..messageLen]);
-                    if (packet == null)
+                    var serverDataMessage = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff);
+                    if (serverDataMessage.Type == ServerDataType.Data)
                     {
-                        //_logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
-                        return;
-                    }
-                    if (packet.Type == ServerDataType.Data)
-                    {
-                        ProcessUserMessage(socketId, packet.SocketId, packet.Data);
+                        ProcessUserMessage(socketId, serverDataMessage);
                     }
                     else
                     {
                         _messageQueue.Writer.TryWrite(new LoginGatePacket()
                         {
                             ConnectionId = socketId,
-                            Pakcet = packet
+                            Pakcet = serverDataMessage
                         });
                     }
                     nLen -= nCheckMsgLen;
@@ -154,7 +149,7 @@ namespace LoginSvr.Services
                     dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
                     gateInfo.DataLen = nLen;
                     srcOffset = 0;
-                    if (nLen < ServerDataMessage.HeaderPacketSize)
+                    if (nLen < ServerDataMessage.FixedHeaderLen)
                     {
                         break;
                     }
@@ -216,13 +211,13 @@ namespace LoginSvr.Services
             _clientSession.Start(stoppingToken);
         }
 
-        private void ProcessUserMessage(int sessionId, int sSockIndex, byte[] data)
+        private void ProcessUserMessage(int sessionId, ServerDataMessage dataMessage)
         {
-            var dataMsg = HUtil32.GetString(data, 0, data.Length);
+            var dataMsg = HUtil32.GetString(dataMessage.Data, 0, dataMessage.DataLen);
             _clientSession.Enqueue(new UserSessionData()
             {
                 SessionId = sessionId,
-                SoketId = sSockIndex,
+                SoketId = dataMessage.SocketId,
                 Msg = dataMsg
             });
         }
