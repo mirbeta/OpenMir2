@@ -222,14 +222,14 @@ namespace DBSvr.Services
             Span<byte> dataBuff = data;
             try
             {
-                while (nLen >= ServerDataMessage.HeaderPacketSize)
+                while (nLen >= ServerDataMessage.FixedHeaderLen)
                 {
-                    Span<byte> packetHead = dataBuff[..ServerDataMessage.HeaderPacketSize];
+                    Span<byte> packetHead = dataBuff[..ServerDataMessage.FixedHeaderLen];
                     var packetCode = BitConverter.ToUInt32(packetHead[..4]);
                     if (packetCode != Grobal2.RUNGATECODE)
                     {
                         srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, ServerDataMessage.HeaderPacketSize);
+                        dataBuff = dataBuff.Slice(srcOffset, ServerDataMessage.FixedHeaderLen);
                         nLen -= 1;
                         _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
@@ -241,11 +241,6 @@ namespace DBSvr.Services
                         break;
                     }
                     var packet = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[..messageLen]);
-                    if (packet == null)
-                    {
-                        //_logger.LogWarning($"错误的消息封包码:{HUtil32.GetString(data, 0, data.Length)} EndPoint:{e.EndPoint}");
-                        return;
-                    }
                     var message = new UserGateMessage();
                     message.ConnectionId = connectionId;
                     message.Packet = packet;
@@ -258,7 +253,7 @@ namespace DBSvr.Services
                     dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
                     gateInfo.DataLen = nLen;
                     srcOffset = 0;
-                    if (nLen < ServerDataMessage.HeaderPacketSize)
+                    if (nLen < ServerDataMessage.FixedHeaderLen)
                     {
                         break;
                     }

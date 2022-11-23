@@ -1,13 +1,18 @@
 ﻿using MemoryPack;
-using System;
 
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
-    public partial class ServerDataMessage 
+    public partial struct ServerDataMessage 
     {
+        /// <summary>
+        /// 封包标识码
+        /// </summary>
         public uint PacketCode { get; set; }
-        public int PacketLen { get; set; }
+        /// <summary>
+        /// 封包总长度
+        /// </summary>
+        public short PacketLen { get; set; }
         public ServerDataType Type { get; set; }
         public int SocketId { get; set; }
         public short DataLen { get; set; }
@@ -16,11 +21,11 @@ namespace SystemModule.Packets.ServerPackets
         /// <summary>
         /// 消息头固定大小
         /// </summary>
-        public const int HeaderPacketSize = 8;
+        public const int FixedHeaderLen = 6;
 
-        public int GetPacketSize()
+        public short GetPacketSize()
         {
-            return HeaderPacketSize + 7 + (Data?.Length ?? 0);
+            return (short)(FixedHeaderLen + 7 + (Data?.Length ?? 5));
         }
     }
 
