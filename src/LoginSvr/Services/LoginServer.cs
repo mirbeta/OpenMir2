@@ -1,15 +1,13 @@
 using LoginSvr.Conf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packets;
-using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
@@ -184,19 +182,18 @@ namespace LoginSvr.Services
                     {
                         try
                         {
-                            var packet = loginPacket.Pakcet;
                             var gateInfo = _clientManager.GetSession(loginPacket.ConnectionId);
-                            switch (packet.Type)
+                            switch (loginPacket.Pakcet.Type)
                             {
                                 case ServerDataType.KeepAlive:
                                     SendKeepAlivePacket(gateInfo.ConnectionId);
                                     gateInfo.KeepAliveTick = HUtil32.GetTickCount();
                                     break;
                                 case ServerDataType.Enter:
-                                    ReceiveOpenUser(packet.SocketId, packet.Data, gateInfo);
+                                    ReceiveOpenUser(loginPacket.Pakcet, gateInfo);
                                     break;
                                 case ServerDataType.Leave:
-                                    ReceiveCloseUser(packet.SocketId, gateInfo);
+                                    ReceiveCloseUser(loginPacket.Pakcet.SocketId, gateInfo);
                                     break;
                             }
                             _config.sGateIPaddr = gateInfo.sIPaddr;
@@ -250,13 +247,10 @@ namespace LoginSvr.Services
             }
         }
 
-        private void ReceiveOpenUser(int sSockIndex, byte[] data, LoginGateInfo gateInfo)
+        private void ReceiveOpenUser(ServerDataMessage dataMessage, LoginGateInfo gateInfo)
         {
-            if (data == null || data.Length <= 0)
-            {
-                return;
-            }
-            var sIPaddr = HUtil32.GetString(data, 0, data.Length);
+            var sSockIndex = dataMessage.SocketId;
+            var sIPaddr = HUtil32.GetString(dataMessage.Data, 0, dataMessage.Data.Length);
             UserInfo userInfo;
             var sUserIPaddr = string.Empty;
             const string sOpenMsg = "Open: {0}/{1}";

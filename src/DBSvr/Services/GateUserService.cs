@@ -224,7 +224,7 @@ namespace DBSvr.Services
             {
                 while (nLen >= ServerDataMessage.FixedHeaderLen)
                 {
-                    Span<byte> packetHead = dataBuff[..ServerDataMessage.FixedHeaderLen];
+                    Span<byte> packetHead = dataBuff.Slice(1, ServerDataMessage.FixedHeaderLen);
                     var packetCode = BitConverter.ToUInt32(packetHead[..4]);
                     if (packetCode != Grobal2.RUNGATECODE)
                     {
