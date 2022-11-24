@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](http://10.10.0.202/mir2/OpenMir2/compare/v1.1.3...v1.1.4) (2022-11-24)
+
+
+### Bug Fixes
+
+* 修复编译启动报错 ([13a37eb](http://10.10.0.202/mir2/OpenMir2/commit/13a37eb50363cfa0cdfe9cf0dfdfe1407481c1a6))
+* 修复封包无法解析问题 ([8bd7064](http://10.10.0.202/mir2/OpenMir2/commit/8bd7064175da0d7ffac6767d1cb2d94098bf4fa0))
+* 修复替换MemoryPack后封包处理问题 ([9f9911c](http://10.10.0.202/mir2/OpenMir2/commit/9f9911c2bfb4717c8896e049f0b8227fad0d92a4))
+
 ### [1.1.3](http://10.10.0.202/mir2/OpenMir2/compare/v1.1.3-alpha.1...v1.1.3) (2022-11-14)
 
 
