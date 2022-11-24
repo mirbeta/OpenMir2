@@ -148,11 +148,11 @@ namespace LoginGate.Services
             {
                 return;
             }
-            if (e.Buff[0] == (byte)'%' && e.Buff[1] == (byte)'+')//收到LoginSvr发过来的关闭会话请求
+            if (e.Buff[0] == (byte)'%' && e.Buff[1] == (byte)'+')
             {
                 if (e.Buff[2] == (byte)'-')
                 {
-                    var sessionId = BitConverter.ToInt32(e.Buff[2..6]);
+                    var sessionId = BitConverter.ToInt32(e.Buff.AsSpan()[2..6]);
                     _sessionManager.CloseSession(sessionId);
                     _logger.LogInformation("收到LoginSvr关闭会话请求", 1);
                 }
