@@ -7,10 +7,10 @@ This project refers to the network Delphi code, which can be used with the origi
 
 ### How to use    
 ## Client
->  Use Delphi source code to compile or use the client code provided by us (development).  
+>  (https://github.com/mirbeta/MirClient) Here，Use Delphi XE 10.4.
 
 ## Server
-> You can download various game versions on the search engine or download our basic version to experience.  
+> (https://github.com/mirbeta/MirServer) Here，Basic File.
 
 ## Startup sequence and project description. 
 1. DBSvr (database service, responsible for data storage). 
