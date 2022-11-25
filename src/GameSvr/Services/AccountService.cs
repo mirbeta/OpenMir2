@@ -1,29 +1,29 @@
+using NLog;
 using System.Collections;
+using System.Net;
 using SystemModule;
-using SystemModule.Sockets;
+using SystemModule.Data;
+using SystemModule.Sockets.AsyncSocketClient;
+using SystemModule.Sockets.Event;
 
-namespace GameSvr
+namespace GameSvr.Services
 {
     public class AccountService
     {
-        private int _dwClearEmptySessionTick = 0;
-        private readonly IList<TSessInfo> m_SessionList = null;
-        private readonly IClientScoket _clientScoket;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private int _dwClearEmptySessionTick;
+        private readonly IList<TSessInfo> _sessionList;
+        private readonly ClientScoket _clientScoket;
 
         public AccountService()
         {
-            m_SessionList = new List<TSessInfo>();
-            M2Share.g_Config.boIDSocketConnected = false;
-            _clientScoket = new IClientScoket();
+            _sessionList = new List<TSessInfo>();
+            M2Share.Config.boIDSocketConnected = false;
+            _clientScoket = new ClientScoket(new IPEndPoint(IPAddress.Parse(M2Share.Config.sIDSAddr), M2Share.Config.nIDSPort));
             _clientScoket.OnConnected += IDSocketConnect;
             _clientScoket.OnDisconnected += IDSocketDisconnect;
             _clientScoket.OnError += IDSocketError;
-            _clientScoket.ReceivedDatagram += IdSocketRead;
-            if (M2Share.g_Config != null)
-            {
-                _clientScoket.Host = M2Share.g_Config.sIDSAddr;
-                _clientScoket.Port = M2Share.g_Config.nIDSPort;
-            }
+            _clientScoket.OnReceivedData += IdSocketRead;
         }
 
         public void CheckConnected()
@@ -36,19 +36,20 @@ namespace GameSvr
             {
                 return;
             }
-            _clientScoket.Connect(_clientScoket.Host, _clientScoket.Port);
+            _clientScoket.Connect();
         }
 
         private void IdSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            HUtil32.EnterCriticalSection(M2Share.g_Config.UserIDSection);
+            HUtil32.EnterCriticalSection(M2Share.Config.UserIDSection);
             try
             {
-                M2Share.g_Config.sIDSocketRecvText += HUtil32.GetString(e.Buff, 0, e.BuffLen);
+                var recvText = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+                M2Share.Config.sIDSocketRecvText += recvText;
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(M2Share.g_Config.UserIDSection);
+                HUtil32.LeaveCriticalSection(M2Share.Config.UserIDSection);
             }
         }
 
@@ -57,13 +58,13 @@ namespace GameSvr
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]拒绝链接...");
+                    _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]关闭连接...");
+                    _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]链接超时...");
+                    _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]链接超时...");
                     break;
             }
         }
@@ -71,6 +72,7 @@ namespace GameSvr
         public void Initialize()
         {
             CheckConnected();
+            _logger.Debug("登录服务器连接初始化完成...");
         }
 
         private void SendSocket(string sSendMsg)
@@ -83,9 +85,9 @@ namespace GameSvr
         public void SendHumanLogOutMsg(string sUserId, int nId)
         {
             const string sFormatMsg = "({0}/{1}/{2})";
-            for (int i = 0; i < m_SessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                var sessInfo = m_SessionList[i];
+                var sessInfo = _sessionList[i];
                 if (sessInfo.nSessionID == nId && sessInfo.sAccount == sUserId)
                 {
                     break;
@@ -96,9 +98,9 @@ namespace GameSvr
 
         public void SendHumanLogOutMsgA(string sUserID, int nID)
         {
-            for (var i = m_SessionList.Count - 1; i >= 0; i--)
+            for (var i = _sessionList.Count - 1; i >= 0; i--)
             {
-                var sessInfo = m_SessionList[i];
+                var sessInfo = _sessionList[i];
                 if (sessInfo.nSessionID == nID && sessInfo.sAccount == sUserID)
                 {
                     break;
@@ -109,13 +111,19 @@ namespace GameSvr
         public void SendLogonCostMsg(string sAccount, int nTime)
         {
             const string sFormatMsg = "({0}/{1}/{2})";
-            SendSocket(string.Format(sFormatMsg, new object[] { Grobal2.SS_LOGINCOST, sAccount, nTime }));
+            SendSocket(string.Format(sFormatMsg, Grobal2.SS_LOGINCOST, sAccount, nTime));
         }
 
         public void SendOnlineHumCountMsg(int nCount)
         {
+            const string sFormatMsg = "({0}/{1}/{2}/{3}/{4})";
+            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.Config.ServerName, M2Share.ServerIndex, nCount, M2Share.Config.PayMentMode));
+        }
+
+        public void SendUserPlayTime(string account, long playTime)
+        {
             const string sFormatMsg = "({0}/{1}/{2}/{3})";
-            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.g_Config.sServerName, M2Share.nServerIndex, nCount));
+            SendSocket(string.Format(sFormatMsg, Grobal2.ISM_GAMETIMEOFTIMECARDUSER, M2Share.Config.ServerName, account, playTime));
         }
 
         public void Run()
@@ -123,8 +131,8 @@ namespace GameSvr
             string sSocketText;
             var sData = string.Empty;
             var sCode = string.Empty;
-            const string sExceptionMsg = "[Exception] TFrmIdSoc::DecodeSocStr";
-            var Config = M2Share.g_Config;
+            const string sExceptionMsg = "[Exception] AccountService:DecodeSocStr";
+            var Config = M2Share.Config;
             HUtil32.EnterCriticalSection(Config.UserIDSection);
             try
             {
@@ -153,7 +161,7 @@ namespace GameSvr
                         break;
                     }
                     var sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
-                    switch (HUtil32.Str_ToInt(sCode, 0))
+                    switch (HUtil32.StrToInt(sCode, 0))
                     {
                         case Grobal2.SS_OPENSESSION:// 100
                             GetPasswdSuccess(sBody);
@@ -171,6 +179,12 @@ namespace GameSvr
                             break;
                         case Grobal2.SS_SERVERLOAD:// 113
                             GetServerLoad(sBody);
+                            break;
+                        case Grobal2.ISM_ACCOUNTEXPIRED:
+                            GetAccountExpired(sBody);
+                            break;
+                        case Grobal2.ISM_QUERYPLAYTIME:
+                            QueryAccountExpired(sBody);
                             break;
                     }
                     if (sSocketText.IndexOf(')') <= 0)
@@ -190,11 +204,46 @@ namespace GameSvr
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
             if ((HUtil32.GetTickCount() - _dwClearEmptySessionTick) > 10000)
             {
                 _dwClearEmptySessionTick = HUtil32.GetTickCount();
+            }
+        }
+
+        private void QueryAccountExpired(string sData)
+        {
+            var account = string.Empty;
+            var certstr = HUtil32.GetValidStr3(sData, ref account, '/');
+            var cert = HUtil32.StrToInt(certstr, 0);
+            if (!M2Share.Config.TestServer)
+            {
+                var playTime = M2Share.WorldEngine.GetPlayExpireTime(account);
+                if (playTime >= 3600 || playTime < 1800) //大于一个小时或者小于半个小时都不处理
+                {
+                    return;
+                }
+                if (cert <= 1800)//小于30分钟一分钟查询一次，否则10分钟或者半个小时同步一次都行
+                {
+                    M2Share.WorldEngine.SetPlayExpireTime(account, cert);
+                }
+                else
+                {
+                    M2Share.WorldEngine.SetPlayExpireTime(account, cert);
+                }
+            }
+        }
+
+        private void GetAccountExpired(string sData)
+        {
+            var account = string.Empty;
+            var certstr = HUtil32.GetValidStr3(sData, ref account, '/');
+            var cert = HUtil32.StrToInt(certstr, 0);
+            if (!M2Share.Config.TestServer)
+            {
+                M2Share.WorldEngine.AccountExpired(account);
+                DelSession(cert);
             }
         }
 
@@ -205,51 +254,55 @@ namespace GameSvr
             var sPayCost = string.Empty;
             var sIPaddr = string.Empty;
             var sPayMode = string.Empty;
-            const string sExceptionMsg = "[Exception] TFrmIdSoc::GetPasswdSuccess";
+            var sPlayTime = string.Empty;
+            const string sExceptionMsg = "[Exception] AccountService:GetPasswdSuccess";
             try
             {
+                //todo 这里要获取账号剩余游戏时间
                 sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
                 sData = HUtil32.GetValidStr3(sData, ref sSessionID, HUtil32.Backslash);
                 sData = HUtil32.GetValidStr3(sData, ref sPayCost, HUtil32.Backslash);// boPayCost
                 sData = HUtil32.GetValidStr3(sData, ref sPayMode, HUtil32.Backslash);// nPayMode
                 sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);// sIPaddr
-                NewSession(sAccount, sIPaddr, HUtil32.Str_ToInt(sSessionID, 0), HUtil32.Str_ToInt(sPayCost, 0), HUtil32.Str_ToInt(sPayMode, 0));
+                sData = HUtil32.GetValidStr3(sData, ref sPlayTime, HUtil32.Backslash);// playTime
+                NewSession(sAccount, sIPaddr, HUtil32.StrToInt(sSessionID, 0), HUtil32.StrToInt(sPayCost, 0), HUtil32.StrToInt(sPayMode, 0), HUtil32.StrToInt(sPlayTime, 0));
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
         }
 
         private void GetCancelAdmission(string sData)
         {
             var sC = string.Empty;
-            const string sExceptionMsg = "[Exception] TFrmIdSoc::GetCancelAdmission";
+            const string sExceptionMsg = "[Exception] AccountService:GetCancelAdmission";
             try
             {
                 var sSessionID = HUtil32.GetValidStr3(sData, ref sC, HUtil32.Backslash);
-                DelSession(HUtil32.Str_ToInt(sSessionID, 0));
+                DelSession(HUtil32.StrToInt(sSessionID, 0));
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(e.Message);
             }
         }
 
-        private void NewSession(string sAccount, string sIPaddr, int nSessionID, int nPayMent, int nPayMode)
+        private void NewSession(string sAccount, string sIPaddr, int nSessionID, int nPayMent, int nPayMode, long playTime)
         {
             var sessInfo = new TSessInfo();
             sessInfo.sAccount = sAccount;
             sessInfo.sIPaddr = sIPaddr;
             sessInfo.nSessionID = nSessionID;
-            sessInfo.nPayMent = nPayMent;
-            sessInfo.nPayMode = nPayMode;
-            sessInfo.nSessionStatus = 0;
+            sessInfo.PayMent = nPayMent;
+            sessInfo.PayMode = nPayMode;
+            sessInfo.SessionStatus = 0;
             sessInfo.dwStartTick = HUtil32.GetTickCount();
-            sessInfo.dwActiveTick = HUtil32.GetTickCount();
+            sessInfo.ActiveTick = HUtil32.GetTickCount();
             sessInfo.nRefCount = 1;
-            m_SessionList.Add(sessInfo);
+            sessInfo.PlayTime = playTime;
+            _sessionList.Add(sessInfo);
         }
 
         private void DelSession(int nSessionID)
@@ -259,51 +312,51 @@ namespace GameSvr
             const string sExceptionMsg = "[Exception] FrmIdSoc::DelSession";
             try
             {
-                for (var i = 0; i < m_SessionList.Count; i++)
+                for (var i = 0; i < _sessionList.Count; i++)
                 {
-                    SessInfo = m_SessionList[i];
+                    SessInfo = _sessionList[i];
                     if (SessInfo.nSessionID == nSessionID)
                     {
                         sAccount = SessInfo.sAccount;
-                        m_SessionList.RemoveAt(i);
+                        _sessionList.RemoveAt(i);
                         SessInfo = null;
                         break;
                     }
                 }
                 if (!string.IsNullOrEmpty(sAccount))
                 {
-                    M2Share.GateManager.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.nPayMode);
+                    M2Share.GateMgr.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.PayMode);
                 }
             }
             catch (Exception e)
             {
-                M2Share.ErrorMessage(sExceptionMsg);
-                M2Share.ErrorMessage(e.Message);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(e.Message);
             }
         }
 
         private void ClearSession()
         {
-            for (var i = 0; i < m_SessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                m_SessionList[i] = null;
+                _sessionList[i] = null;
             }
-            m_SessionList.Clear();
+            _sessionList.Clear();
         }
 
-        public TSessInfo GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent)
+        public TSessInfo GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent, ref long playTime)
         {
             TSessInfo result = null;
             var boFound = false;
             const string sGetFailMsg = "[非法登录] 全局会话验证失败({0}/{1}/{2})";
             nPayMent = 0;
             nPayMode = 0;
-            for (var i = 0; i < m_SessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                var SessInfo = m_SessionList[i];
-                if (SessInfo.nSessionID == nSessionID && SessInfo.sAccount == sAccount)
+                var sessInfo = _sessionList[i];
+                if (sessInfo.nSessionID == nSessionID && sessInfo.sAccount == sAccount)
                 {
-                    switch (SessInfo.nPayMent)
+                    switch (sessInfo.PayMent)
                     {
                         case 2:
                             nPayMent = 3;
@@ -315,22 +368,23 @@ namespace GameSvr
                             nPayMent = 1;
                             break;
                     }
-                    result = SessInfo;
-                    nPayMode = SessInfo.nPayMode;
+                    result = sessInfo;
+                    nPayMode = sessInfo.PayMode;
+                    playTime = sessInfo.PlayTime;
                     boFound = true;
                     break;
                 }
             }
-            if (M2Share.g_Config.boViewAdmissionFailure && !boFound)
+            if (M2Share.Config.ViewAdmissionFailure && !boFound)
             {
-                M2Share.ErrorMessage(string.Format(sGetFailMsg, new object[] { sAccount, sIPaddr, nSessionID }));
+                _logger.Error(string.Format(sGetFailMsg, sAccount, sIPaddr, nSessionID));
             }
             return result;
         }
 
         private void SetTotalHumanCount(string sData)
         {
-            M2Share.g_nTotalHumCount = HUtil32.Str_ToInt(sData, 0);
+            M2Share.g_nTotalHumCount = HUtil32.StrToInt(sData, 0);
         }
 
         private void GetCancelAdmissionA(string sData)
@@ -340,16 +394,16 @@ namespace GameSvr
             try
             {
                 var sSessionID = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-                var nSessionID = HUtil32.Str_ToInt(sSessionID, 0);
-                if (!M2Share.g_Config.boTestServer)
+                var nSessionID = HUtil32.StrToInt(sSessionID, 0);
+                if (!M2Share.Config.TestServer)
                 {
-                    M2Share.UserEngine.HumanExpire(sAccount);
+                    M2Share.WorldEngine.AccountExpired(sAccount);
                     DelSession(nSessionID);
                 }
             }
             catch
             {
-                M2Share.ErrorMessage(sExceptionMsg);
+                _logger.Error(sExceptionMsg);
             }
         }
 
@@ -374,9 +428,9 @@ namespace GameSvr
 
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            M2Share.g_Config.boIDSocketConnected = true;
-            M2Share.MainOutMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]连接成功...", messageColor: ConsoleColor.Green);
-            SendOnlineHumCountMsg(M2Share.UserEngine.OnlinePlayObject);
+            M2Share.Config.boIDSocketConnected = true;
+            _logger.Info("登录服务器[" + _clientScoket.RemoteEndPoint + "]连接成功...");
+            SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
         }
 
         private void IDSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -386,9 +440,9 @@ namespace GameSvr
             //     return;
             // }
             ClearSession();
-            M2Share.g_Config.boIDSocketConnected = false;
+            M2Share.Config.boIDSocketConnected = false;
             _clientScoket.IsConnected = false;
-            M2Share.ErrorMessage("登录服务器[" + _clientScoket.Host + ":" + _clientScoket.Port + "]断开连接...");
+            _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]断开连接...");
         }
 
         public void Close()
@@ -398,24 +452,21 @@ namespace GameSvr
 
         public int GetSessionCount()
         {
-            return m_SessionList.Count;
+            return _sessionList.Count;
         }
 
         public void GetSessionList(ArrayList List)
         {
-            for (var i = 0; i < m_SessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                List.Add(m_SessionList[i]);
+                List.Add(_sessionList[i]);
             }
         }
     }
-}
 
-namespace GameSvr
-{
     public class IdSrvClient
     {
-        private static AccountService instance = null;
+        private static AccountService instance;
 
         public static AccountService Instance
         {

@@ -1,7 +1,9 @@
-﻿using SystemModule;
+﻿using GameSvr.Npc;
+using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Maps
 {
     public class Maps
     {
@@ -9,22 +11,19 @@ namespace GameSvr
         {
             var sFlag = string.Empty;
             var s34 = string.Empty;
-            var s38 = string.Empty;
+            var sLine = string.Empty;
             var sMapName = string.Empty;
-            var s44 = string.Empty;
             var sMapDesc = string.Empty;
-            var s4C = string.Empty;
             var sReConnectMap = string.Empty;
-            int n14;
+            int nX;
             int n18;
             int n1C;
             int n20;
             int nServerIndex;
-            TMapFlag MapFlag = null;
             Merchant QuestNPC;
             string sMapInfoFile;
             var result = -1;
-            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MapInfo.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MapInfo.txt");
             if (File.Exists(sFileName))
             {
                 var LoadList = new StringList();
@@ -40,9 +39,9 @@ namespace GameSvr
                     {
                         break;
                     }
-                    if (HUtil32.CompareLStr("ConnectMapInfo", LoadList[count], "ConnectMapInfo".Length))
+                    if (HUtil32.CompareLStr("ConnectMapInfo", LoadList[count]))
                     {
-                        sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new string[] { " ", "\t" });
+                        sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { " ", "\t" });
                         LoadList.RemoveAt(count);
                         if (sMapInfoFile != "")
                         {
@@ -59,18 +58,18 @@ namespace GameSvr
                     if (!string.IsNullOrEmpty(sFlag) && sFlag[0] == '[')
                     {
                         sMapName = "";
-                        MapFlag = new TMapFlag
+                        TMapFlag MapFlag = new TMapFlag
                         {
                             boSAFE = false
                         };
                         sFlag = HUtil32.ArrestStringEx(sFlag, "[", "]", ref sMapName);
-                        sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, new string[] { " ", ",", "\t" });
+                        sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, new[] { " ", ",", "\t" });
                         if (sMapDesc != "" && sMapDesc[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMapDesc, "\"", "\"", ref sMapDesc);
                         }
-                        s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, new string[] { " ", ",", "\t" }).Trim();
-                        nServerIndex = HUtil32.Str_ToInt(s4C, 0);
+                        string s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, new[] { " ", ",", "\t" }).Trim();
+                        nServerIndex = HUtil32.StrToInt(s4C, 0);
                         if (sMapName == "")
                         {
                             continue;
@@ -87,7 +86,7 @@ namespace GameSvr
                             {
                                 break;
                             }
-                            sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new string[] { " ", ",", "\t" });
+                            sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { " ", ",", "\t" });
                             if (s34 == "")
                             {
                                 break;
@@ -122,125 +121,124 @@ namespace GameSvr
                                 MapFlag.boQUIZ = true;
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "NORECONNECT", "NORECONNECT".Length))
+                            if (HUtil32.CompareLStr(s34, "NORECONNECT"))
                             {
                                 MapFlag.boNORECONNECT = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref sReConnectMap);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sReConnectMap);
                                 MapFlag.sNoReConnectMap = sReConnectMap;
                                 if (MapFlag.sNoReConnectMap == "")
                                 {
-                                    result = -11;
                                 }
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "CHECKQUEST", "CHECKQUEST".Length))
+                            if (HUtil32.CompareLStr(s34, "CHECKQUEST"))
                             {
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                QuestNPC = LoadMapInfo_LoadMapQuest(s38);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                QuestNPC = LoadMapInfo_LoadMapQuest(sLine);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "NEEDSET_ON", "NEEDSET_ON".Length))
+                            if (HUtil32.CompareLStr(s34, "NEEDSET_ON"))
                             {
                                 MapFlag.nNeedONOFF = 1;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nNEEDSETONFlag = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nNEEDSETONFlag = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "NEEDSET_OFF", "NEEDSET_OFF".Length))
+                            if (HUtil32.CompareLStr(s34, "NEEDSET_OFF"))
                             {
                                 MapFlag.nNeedONOFF = 0;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nNEEDSETONFlag = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nNEEDSETONFlag = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "MUSIC", "MUSIC".Length))
+                            if (HUtil32.CompareLStr(s34, "MUSIC"))
                             {
                                 MapFlag.boMUSIC = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nMUSICID = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nMUSICID = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "EXPRATE", "EXPRATE".Length))
+                            if (HUtil32.CompareLStr(s34, "EXPRATE"))
                             {
                                 MapFlag.boEXPRATE = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nEXPRATE = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nEXPRATE = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "PKWINLEVEL", "PKWINLEVEL".Length))
+                            if (HUtil32.CompareLStr(s34, "PKWINLEVEL"))
                             {
                                 MapFlag.boPKWINLEVEL = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nPKWINLEVEL = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nPKWINLEVEL = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "PKWINEXP", "PKWINEXP".Length))
+                            if (HUtil32.CompareLStr(s34, "PKWINEXP"))
                             {
                                 MapFlag.boPKWINEXP = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nPKWINEXP = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nPKWINEXP = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "PKLOSTLEVEL", "PKLOSTLEVEL".Length))
+                            if (HUtil32.CompareLStr(s34, "PKLOSTLEVEL"))
                             {
                                 MapFlag.boPKLOSTLEVEL = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nPKLOSTLEVEL = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nPKLOSTLEVEL = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "PKLOSTEXP", "PKLOSTEXP".Length))
+                            if (HUtil32.CompareLStr(s34, "PKLOSTEXP"))
                             {
                                 MapFlag.boPKLOSTEXP = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nPKLOSTEXP = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nPKLOSTEXP = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "DECHP", "DECHP".Length))
+                            if (HUtil32.CompareLStr(s34, "DECHP"))
                             {
                                 MapFlag.boDECHP = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nDECHPPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
-                                MapFlag.nDECHPTIME = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nDECHPPOINT = HUtil32.StrToInt(HUtil32.GetValidStr3(sLine, ref sLine, HUtil32.Backslash), -1);
+                                MapFlag.nDECHPTIME = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "INCHP", "INCHP".Length))
+                            if (HUtil32.CompareLStr(s34, "INCHP"))
                             {
                                 MapFlag.boINCHP = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nINCHPPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
-                                MapFlag.nINCHPTIME = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nINCHPPOINT = HUtil32.StrToInt(HUtil32.GetValidStr3(sLine, ref sLine, HUtil32.Backslash), -1);
+                                MapFlag.nINCHPTIME = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "DECGAMEGOLD", "DECGAMEGOLD".Length))
+                            if (HUtil32.CompareLStr(s34, "DECGAMEGOLD"))
                             {
                                 MapFlag.boDECGAMEGOLD = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nDECGAMEGOLD = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
-                                MapFlag.nDECGAMEGOLDTIME = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nDECGAMEGOLD = HUtil32.StrToInt(HUtil32.GetValidStr3(sLine, ref sLine, HUtil32.Backslash), -1);
+                                MapFlag.nDECGAMEGOLDTIME = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "DECGAMEPOINT", "DECGAMEPOINT".Length))
+                            if (HUtil32.CompareLStr(s34, "DECGAMEPOINT"))
                             {
                                 MapFlag.boDECGAMEPOINT = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nDECGAMEPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
-                                MapFlag.nDECGAMEPOINTTIME = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nDECGAMEPOINT = HUtil32.StrToInt(HUtil32.GetValidStr3(sLine, ref sLine, HUtil32.Backslash), -1);
+                                MapFlag.nDECGAMEPOINTTIME = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "INCGAMEGOLD", "INCGAMEGOLD".Length))
+                            if (HUtil32.CompareLStr(s34, "INCGAMEGOLD"))
                             {
                                 MapFlag.boINCGAMEGOLD = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nINCGAMEGOLD = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
-                                MapFlag.nINCGAMEGOLDTIME = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nINCGAMEGOLD = HUtil32.StrToInt(HUtil32.GetValidStr3(sLine, ref sLine, HUtil32.Backslash), -1);
+                                MapFlag.nINCGAMEGOLDTIME = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "INCGAMEPOINT", "INCGAMEPOINT".Length))
+                            if (HUtil32.CompareLStr(s34, "INCGAMEPOINT"))
                             {
                                 MapFlag.boINCGAMEPOINT = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nINCGAMEPOINT = HUtil32.Str_ToInt(HUtil32.GetValidStr3(s38, ref s38, HUtil32.Backslash), -1);
-                                MapFlag.nINCGAMEPOINTTIME = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nINCGAMEPOINT = HUtil32.StrToInt(HUtil32.GetValidStr3(sLine, ref sLine, HUtil32.Backslash), -1);
+                                MapFlag.nINCGAMEPOINTTIME = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
                             if (s34.Equals("RUNHUMAN", StringComparison.OrdinalIgnoreCase))
@@ -323,14 +321,14 @@ namespace GameSvr
                                 MapFlag.boNOCHAT = true;
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "KILLFUNC", "KILLFUNC".Length))
+                            if (HUtil32.CompareLStr(s34, "KILLFUNC"))
                             {
                                 MapFlag.boKILLFUNC = true;
-                                HUtil32.ArrestStringEx(s34, '(', ')', ref s38);
-                                MapFlag.nKILLFUNCNO = HUtil32.Str_ToInt(s38, -1);
+                                HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
+                                MapFlag.nKILLFUNCNO = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
-                            if (HUtil32.CompareLStr(s34, "NOHUMNOMON", "NOHUMNOMON".Length))
+                            if (HUtil32.CompareLStr(s34, "NOHUMNOMON"))
                             {
                                 // 有人才开始刷怪
                                 MapFlag.boNOHUMNOMON = true;
@@ -338,38 +336,37 @@ namespace GameSvr
                             }
                             if (s34[0] == 'L')
                             {
-                                MapFlag.nL = HUtil32.Str_ToInt(s34.Substring(1, s34.Length - 1), 1);
+                                MapFlag.nL = HUtil32.StrToInt(s34.Substring(1, s34.Length - 1), 1);
                             }
                         }
-                        if (M2Share.MapManager.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)
+                        if (M2Share.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)
                         {
-                            result = -10;
                         }
                         result = 1;
                     }
                 }
+
                 // 加载地图连接点
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sFlag = LoadList[i];
-                    if (sFlag != "" && sFlag[0] != '[' && sFlag[0] != ';')
+                    if (!string.IsNullOrEmpty(sFlag) && sFlag[0] != '[' && sFlag[0] != ';')
                     {
-                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new string[] { " ", ",", "\t" });
+                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, HUtil32.Separator);
                         sMapName = s34;
-                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new string[] { " ", ",", "\t" });
-                        n14 = HUtil32.Str_ToInt(s34, 0);
-                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new string[] { " ", ",", "\t" });
-                        n18 = HUtil32.Str_ToInt(s34, 0);
-                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new string[] { " ", ",", "-", ">", "\t" });
-                        s44 = s34;
-                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new string[] { " ", ",", "\t" });
-                        n1C = HUtil32.Str_ToInt(s34, 0);
-                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new string[] { " ", ",", ";", "\t" });
-                        n20 = HUtil32.Str_ToInt(s34, 0);
-                        M2Share.MapManager.AddMapRoute(sMapName, n14, n18, s44, n1C, n20);
+                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, HUtil32.Separator);
+                        nX = HUtil32.StrToInt(s34, 0);
+                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, HUtil32.Separator);
+                        n18 = HUtil32.StrToInt(s34, 0);
+                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { " ", ",", "-", ">", "\t" });
+                        string s44 = s34;
+                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, HUtil32.Separator);
+                        n1C = HUtil32.StrToInt(s34, 0);
+                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { " ", ",", ";", "\t" });
+                        n20 = HUtil32.StrToInt(s34, 0);
+                        M2Share.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
                     }
                 }
-                LoadList = null;
             }
             return result;
         }
@@ -379,7 +376,7 @@ namespace GameSvr
             var sMapNO = string.Empty;
             var sMapIdx = string.Empty;
             var result = 0;
-            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MiniMap.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MiniMap.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.MiniMapList.Clear();
@@ -390,17 +387,17 @@ namespace GameSvr
                     var tStr = tMapList[i];
                     if (tStr != "" && tStr[0] != ';')
                     {
-                        tStr = HUtil32.GetValidStr3(tStr, ref sMapNO, new string[] { " ", "\t" });
-                        tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx, new string[] { " ", "\t" });
-                        var nIdx = HUtil32.Str_ToInt(sMapIdx, 0);
+                        tStr = HUtil32.GetValidStr3(tStr, ref sMapNO, new[] { " ", "\t" });
+                        tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx, new[] { " ", "\t" });
+                        var nIdx = HUtil32.StrToInt(sMapIdx, 0);
                         if (nIdx > 0)
                         {
                             if (M2Share.MiniMapList.ContainsKey(sMapNO))
                             {
-                                M2Share.ErrorMessage($"重复小地图配置信息[{sMapNO}]");
+                                M2Share.Log.LogError($"重复小地图配置信息[{sMapNO}]");
                                 continue;
                             }
-                            M2Share.MiniMapList.Add(sMapNO, nIdx);
+                            M2Share.MiniMapList.TryAdd(sMapNO, nIdx);
                         }
                     }
                 }
@@ -412,17 +409,17 @@ namespace GameSvr
         {
             var questNPC = new Merchant
             {
-                m_sMapName = "0",
-                m_nCurrX = 0,
-                m_nCurrY = 0,
-                m_sCharName = sName,
+                MapName = "0",
+                CurrX = 0,
+                CurrY = 0,
+                ChrName = sName,
                 m_nFlag = 0,
-                m_wAppr = 0,
+                Appr = 0,
                 m_sFilePath = "MapQuest_def",
                 m_boIsHide = true,
                 m_boIsQuest = false
             };
-            M2Share.UserEngine.QuestNPCList.Add(questNPC);
+            M2Share.WorldEngine.QuestNpcList.Add(questNPC);
             return questNPC;
         }
 
@@ -430,7 +427,7 @@ namespace GameSvr
         {
             string sFilePatchName;
             StringList LoadMapList;
-            string sFileDir = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "MapInfo");
+            string sFileDir = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MapInfo");
             if (!Directory.Exists(sFileDir))
             {
                 Directory.CreateDirectory(sFileDir);
@@ -444,7 +441,6 @@ namespace GameSvr
                 {
                     LoadList.Add(LoadMapList[i]);
                 }
-                LoadMapList = null;
             }
         }
 

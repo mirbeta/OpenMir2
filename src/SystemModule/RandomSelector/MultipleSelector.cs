@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
 
-namespace SystemModule
+namespace SystemModule.RandomSelector
 {
     /// <summary>
     /// 多选器
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal class MultipleSelector<T> : SelectorBase<T>
+    public class MultipleSelector<T> : SelectorBase<T>
     {
-        internal MultipleSelector(WeightedSelector<T> weightedSelector) : base(weightedSelector)
+        public MultipleSelector(WeightedSelector<T> weightedSelector) : base(weightedSelector)
         {
+
         }
 
-        internal List<T> Select(int count)
+        public List<T> Select(int count)
         {
             Validate(ref count);
             var items = new List<WeightedItem<T>>(WeightedSelector.Items);

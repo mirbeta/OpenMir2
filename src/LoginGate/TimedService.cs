@@ -1,90 +1,81 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using LoginGate.Services;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Logger;
 
 namespace LoginGate
 {
     public class TimedService : BackgroundService
     {
-        private LogQueue _logQueue => LogQueue.Instance;
-        private ServerManager ServerManager => ServerManager.Instance;
-        private SessionManager SessionManager => SessionManager.Instance;
-        private ClientManager ClientManager => ClientManager.Instance;
         private int _processDelayTick = 0;
+        private int _heartInterval = 0;
+        private readonly MirLogger _logger;
+        private readonly SessionManager _sessionManager;
+        private readonly ClientManager _clientManager;
 
-        public TimedService()
+        public TimedService(MirLogger logger, ClientManager clientManager, SessionManager sessionManager)
         {
-
+            _logger = logger;
+            _clientManager = clientManager;
+            _sessionManager = sessionManager;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _processDelayTick = HUtil32.GetTickCount();
+            _heartInterval = HUtil32.GetTickCount();
             while (!stoppingToken.IsCancellationRequested)
             {
-                OutMianMessage();
                 ProcessDelayMsg();
-                await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
+                ProcessHeartbeat();
+                await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
             }
         }
 
-        private void OutMianMessage()
+        private void ProcessHeartbeat()
         {
-            while (!_logQueue.MessageLog.IsEmpty)
+            if (HUtil32.GetTickCount() - _heartInterval > 10000)
             {
-                string message;
-
-                if (!_logQueue.MessageLog.TryDequeue(out message)) continue;
-
-                Console.WriteLine(message);
-            }
-
-            while (!_logQueue.DebugLog.IsEmpty)
-            {
-                string message;
-
-                if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
-
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.WriteLine(message);
-                Console.ResetColor();
+                _heartInterval = HUtil32.GetTickCount();
+                var clientList = _clientManager.ServerGateList();
+                for (var i = 0; i < clientList.Count; i++)
+                {
+                    if (clientList[i] == null)
+                    {
+                        continue;
+                    }
+                    _clientManager.ProcessClientHeart(clientList[i]);
+                }
             }
         }
 
         private void ProcessDelayMsg()
         {
-            if (HUtil32.GetTickCount() - _processDelayTick > 2000)
+            if (HUtil32.GetTickCount() - _processDelayTick > 1000)
             {
                 _processDelayTick = HUtil32.GetTickCount();
-                var _clientList = ServerManager.GetServerList();
-                for (var i = 0; i < _clientList.Count; i++)
+                var clientList = _clientManager.ServerGateList();
+                for (var i = 0; i < clientList.Count; i++)
                 {
-                    if (_clientList[i] == null)
+                    if (clientList[i] == null)
                     {
                         continue;
                     }
-                    if (_clientList[i].ClientThread == null)
+                    if (clientList[i].SessionArray == null)
                     {
                         continue;
                     }
-                    ClientManager.CheckSessionStatus(_clientList[i].ClientThread);
-                    if (_clientList[i].ClientThread.SessionArray == null)
+                    for (var j = 0; j < clientList[i].SessionArray.Length; j++)
                     {
-                        continue;
-                    }
-                    for (var j = 0; j < _clientList[i].ClientThread.SessionArray.Length; j++)
-                    {
-                        var session = _clientList[i].ClientThread.SessionArray[j];
-                        if (session == null)
+                        var session = clientList[i].SessionArray[j];
+                        if (session?.Socket == null)
                         {
                             continue;
                         }
-                        if (session.Socket == null)
-                        {
-                            continue;
-                        }
-                        var userSession = SessionManager.GetSession(session.SocketId);
+                        var userSession = _sessionManager.GetSession(session.ConnectionId);
                         if (userSession == null)
                         {
                             continue;
@@ -93,18 +84,13 @@ namespace LoginGate
                         userSession.HandleDelayMsg(ref success);
                         if (success)
                         {
-                            SessionManager.CloseSession(session.SocketId);
-                            _clientList[i].ClientThread.SessionArray[j].Socket = null;
-                            _clientList[i].ClientThread.SessionArray[j] = null;
+                            _sessionManager.CloseSession(session.ConnectionId);
+                            clientList[i].SessionArray[j].Socket = null;
+                            clientList[i].SessionArray[j] = null;
                         }
                     }
                 }
             }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
         }
     }
 }

@@ -1,4 +1,6 @@
-using System.Net.Sockets;
+using GameGate.Services;
+using System;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
@@ -6,59 +8,64 @@ namespace GameGate
 {
     public class SendQueue
     {
-        private readonly Channel<SendQueueData> _sendQueue;
-        private readonly LogQueue _logQueue = LogQueue.Instance;
+        private readonly Channel<ClientOutPacketData> _sendQueue;
+        private readonly ServerManager ServerMgr = ServerManager.Instance;
 
         public SendQueue()
         {
-            _sendQueue = Channel.CreateUnbounded<SendQueueData>();
+            _sendQueue = Channel.CreateUnbounded<ClientOutPacketData>();
         }
 
-        public int GetQueueCount => _sendQueue.Reader.Count;
+        /// <summary>
+        /// 获取待发送队列数量
+        /// </summary>
+        public int QueueCount => _sendQueue.Reader.Count;
 
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddToQueue(TSessionInfo session, byte[] buffer)
+        public void AddClientQueue(string connectionId, int threadId, byte[] buffer)
         {
-            _sendQueue.Writer.TryWrite(new SendQueueData()
-            {
-                Session = session,
-                Buffer = buffer
-            });
+            var sendPacket = new ClientOutPacketData(connectionId, threadId, buffer);
+            _sendQueue.Writer.TryWrite(sendPacket);
         }
 
         /// <summary>
-        /// 将队列消息发送到客户端
+        /// 消息发送队列
         /// </summary>
-        public async Task ProcessSendQueue()
+        public void StartProcessQueueSend(CancellationToken stoppingToken)
         {
-            while (await _sendQueue.Reader.WaitToReadAsync())
+            Task.Factory.StartNew(async () =>
             {
-                if (_sendQueue.Reader.TryRead(out var queueData))
+                while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    var resp = queueData.SendBuffer();
-                    if (resp != queueData.Buffer.Length)
+                    if (_sendQueue.Reader.TryRead(out var sendPacket))
                     {
-                        _logQueue.Enqueue("向客户端发送数据包失败", 5);
+                        try
+                        {
+                            ServerMgr.AddPacketOutQueue(sendPacket);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.StackTrace);
+                        }
                     }
                 }
-            }
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
     }
 
-    public struct SendQueueData
+    public readonly struct ClientOutPacketData
     {
-        public TSessionInfo Session;
-        public byte[] Buffer;
+        public readonly string ConnectId;
+        public readonly int ThreadId;
+        public readonly byte[] Buffer;
 
-        public int SendBuffer()
+        public ClientOutPacketData(string connectId, int threadId, byte[] buff)
         {
-            if (Session.Socket == null || !Session.Socket.Connected)
-            {
-                return 0;
-            }
-            return Session.Socket.Send(Buffer, 0, Buffer.Length, SocketFlags.None);
+            ConnectId = connectId;
+            ThreadId = threadId;
+            Buffer = buff;
         }
     }
 }

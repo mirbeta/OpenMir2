@@ -10,11 +10,26 @@ namespace SystemModule.Sockets
     /// </summary>
     internal class BufferManager
     {
-        private readonly int m_numBytes;                 // 被缓冲区池管理的字节总数
-        private byte[] m_buffer;                // 被BufferManager维持的基础字节数组
-        private readonly Stack<int> m_freeIndexPool;     // 释放的索引池
-        private int m_currentIndex;             //当前索引
-        private readonly int m_bufferSize;               //缓冲区大小
+        /// <summary>
+        /// 被缓冲区池管理的字节总数
+        /// </summary>
+        private readonly int _numBytes;
+        /// <summary>
+        /// 被BufferManager维持的基础字节数组
+        /// </summary>
+        private byte[] _buffer;
+        /// <summary>
+        /// 释放的索引池
+        /// </summary>
+        private readonly Stack<int> _freeIndexPool;
+        /// <summary>
+        /// 当前索引
+        /// </summary>
+        private int _currentIndex;
+        /// <summary>
+        /// 缓冲区大小
+        /// </summary>
+        private readonly int _bufferSize;
 
         /// <summary>
         /// 初始化缓冲区管理对象
@@ -23,10 +38,10 @@ namespace SystemModule.Sockets
         /// <param name="bufferSize">每个缓冲区大小</param>
         public BufferManager(int totalBytes, int bufferSize)
         {
-            m_numBytes = totalBytes;
-            m_currentIndex = 0;
-            m_bufferSize = bufferSize;
-            m_freeIndexPool = new Stack<int>();
+            _numBytes = totalBytes;
+            _currentIndex = 0;
+            _bufferSize = bufferSize;
+            _freeIndexPool = new Stack<int>();
         }
 
         /// <summary>
@@ -35,29 +50,28 @@ namespace SystemModule.Sockets
         public void InitBuffer()
         {
             // 创建一个大的大缓冲区并且划分给每一个SocketAsyncEventArgs对象
-            m_buffer = new byte[m_numBytes];
+            _buffer = new byte[_numBytes];
         }
 
         /// <summary>
         /// 从缓冲区池中分配一个缓冲区给指定的SocketAsyncEventArgs对象
         /// </summary>
         /// <returns>如果缓冲区被成功设置返回真否则返回假</returns>
-        public bool SetBuffer(SocketAsyncEventArgs args)
+        public void SetBuffer(SocketAsyncEventArgs args)
         {
-            if (m_freeIndexPool.Count > 0)
+            if (_freeIndexPool.Count > 0)
             {
-                args.SetBuffer(m_buffer, m_freeIndexPool.Pop(), m_bufferSize);
+                args.SetBuffer(_buffer, _freeIndexPool.Pop(), _bufferSize);
             }
             else
             {
-                if ((m_numBytes - m_bufferSize) < m_currentIndex)
+                if ((_numBytes - _bufferSize) < _currentIndex)
                 {
-                    return false;
+                    return;
                 }
-                args.SetBuffer(m_buffer, m_currentIndex, m_bufferSize);
-                m_currentIndex += m_bufferSize;
+                args.SetBuffer(_buffer, _currentIndex, _bufferSize);
+                _currentIndex += _bufferSize;
             }
-            return true;
         }
 
         /// <summary>
@@ -65,7 +79,7 @@ namespace SystemModule.Sockets
         /// </summary>
         public void FreeBuffer(SocketAsyncEventArgs args)
         {
-            m_freeIndexPool.Push(args.Offset);
+            _freeIndexPool.Push(args.Offset);
             args.SetBuffer(null, 0, 0);
         }
     }

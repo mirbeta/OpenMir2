@@ -1,12 +1,25 @@
-﻿using SystemModule;
+﻿using GameSvr.Player;
+using SystemModule;
 using SystemModule.Common;
+using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.Robots
 {
-    public class RobotObject : TPlayObject
+    public class RobotObject : PlayObject
     {
-        public string m_sScriptFileName = string.Empty;
-        private IList<AutoRunInfo> m_AutoRunList = null;
+        public string ScriptFileName = string.Empty;
+        private readonly IList<AutoRunInfo> AutoRunList;
+
+        public RobotObject() : base()
+        {
+            AutoRunList = new List<AutoRunInfo>();
+            this.SuperMan = true;
+        }
+
+        ~RobotObject()
+        {
+            ClearScript();
+        }
 
         private void AutoRun(AutoRunInfo AutoRunInfo)
         {
@@ -83,13 +96,10 @@ namespace GameSvr
             var sLineText = AutoRunInfo.sParam1;
             sLineText = HUtil32.GetValidStr3(sLineText, ref sHour, ":");
             sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ":");
-            var nHour = HUtil32.Str_ToInt(sHour, -1);
-            var nMin = HUtil32.Str_ToInt(sMin, -1);
-            var sLabel = AutoRunInfo.sParam2;
+            var nHour = HUtil32.StrToInt(sHour, -1);
+            var nMin = HUtil32.StrToInt(sMin, -1);
             var wHour = DateTime.Now.Hour;
             var wMin = DateTime.Now.Minute;
-            var wSec = DateTime.Now.Second;
-            var wMSec = DateTime.Now.Millisecond;
             if (nHour >= 0 && nHour <= 24 && nMin >= 0 && nMin <= 60)
             {
                 if (wHour == nHour)
@@ -129,14 +139,11 @@ namespace GameSvr
             sLineText = HUtil32.GetValidStr3(sLineText, ref sWeek, ":");
             sLineText = HUtil32.GetValidStr3(sLineText, ref sHour, ":");
             sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ":");
-            var nWeek = HUtil32.Str_ToInt(sWeek, -1);
-            var nHour = HUtil32.Str_ToInt(sHour, -1);
-            var nMin = HUtil32.Str_ToInt(sMin, -1);
-            var sLabel = AutoRunInfo.sParam2;
+            var nWeek = HUtil32.StrToInt(sWeek, -1);
+            var nHour = HUtil32.StrToInt(sHour, -1);
+            var nMin = HUtil32.StrToInt(sMin, -1);
             var wHour = DateTime.Now.Hour;
             var wMin = DateTime.Now.Minute;
-            var wSec = DateTime.Now.Second;
-            var wMSec = DateTime.Now.Millisecond;
             var wWeek = DateTime.Now.DayOfWeek;
             if (nWeek >= 1 && nWeek <= 7 && nHour >= 0 && nHour <= 24 && nMin >= 0 && nMin <= 60)
             {
@@ -158,28 +165,15 @@ namespace GameSvr
 
         private void ClearScript()
         {
-            for (var i = 0; i < m_AutoRunList.Count; i++)
+            for (var i = 0; i < AutoRunList.Count; i++)
             {
-                m_AutoRunList[i] = null;
+                AutoRunList[i] = null;
             }
-            m_AutoRunList.Clear();
-        }
-
-        public RobotObject() : base()
-        {
-            m_AutoRunList = new List<AutoRunInfo>();
-            this.m_boSuperMan = true;
-        }
-
-        ~RobotObject()
-        {
-            ClearScript();
-            m_AutoRunList = null;
+            AutoRunList.Clear();
         }
 
         public void LoadScript()
         {
-            StringList LoadList;
             string sLineText;
             var sActionType = string.Empty;
             var sRunCmd = string.Empty;
@@ -188,29 +182,28 @@ namespace GameSvr
             var sParam2 = string.Empty;
             var sParam3 = string.Empty;
             var sParam4 = string.Empty;
-            AutoRunInfo AutoRunInfo;
-            var sFileName = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sEnvirDir, "Robot_def", $"{m_sScriptFileName}.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot_def", $"{ScriptFileName}.txt");
             if (File.Exists(sFileName))
             {
-                LoadList = new StringList();
+                var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    if (sLineText != "" && sLineText[0] != ';')
+                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sActionType, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRunCmd, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMoethod, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam1, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam2, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam3, new string[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam4, new string[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sActionType, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRunCmd, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMoethod, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam1, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam2, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam3, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam4, new[] { " ", "/", "\t" });
                         if (string.Compare(sActionType, Robot.sROAUTORUN, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (string.Compare(sRunCmd, Robot.sRONPCLABLEJMP, StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                AutoRunInfo = new AutoRunInfo();
+                                var AutoRunInfo = new AutoRunInfo();
                                 AutoRunInfo.dwRunTick = HUtil32.GetTickCount();
                                 AutoRunInfo.dwRunTimeLen = 0;
                                 AutoRunInfo.boStatus = false;
@@ -255,23 +248,20 @@ namespace GameSvr
                                 AutoRunInfo.sParam2 = sParam2;
                                 AutoRunInfo.sParam3 = sParam3;
                                 AutoRunInfo.sParam4 = sParam4;
-                                AutoRunInfo.nParam1 = HUtil32.Str_ToInt(sParam1, 1);
-                                m_AutoRunList.Add(AutoRunInfo);
+                                AutoRunInfo.nParam1 = HUtil32.StrToInt(sParam1, 1);
+                                AutoRunList.Add(AutoRunInfo);
                             }
                         }
                     }
                 }
-                LoadList = null;
             }
         }
 
         private void ProcessAutoRun()
         {
-            AutoRunInfo AutoRunInfo;
-            for (var i = m_AutoRunList.Count - 1; i >= 0; i--)
+            for (var i = AutoRunList.Count - 1; i >= 0; i--)
             {
-                AutoRunInfo = m_AutoRunList[i];
-                AutoRun(AutoRunInfo);
+                AutoRun(AutoRunList[i]);
             }
         }
 
@@ -286,7 +276,7 @@ namespace GameSvr
             ProcessAutoRun();
         }
 
-        internal override void SendSocket(ClientPacket DefMsg, string sMsg)
+        internal override void SendSocket(ClientMesaagePacket DefMsg, string sMsg)
         {
 
         }

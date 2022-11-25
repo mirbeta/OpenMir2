@@ -1,55 +1,71 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace GameGate
+namespace GameGate.Services
 {
     public class SessionManager
     {
         private static readonly SessionManager instance = new SessionManager();
-
         public static SessionManager Instance => instance;
+        private static MirLog Logger => MirLog.Instance;
 
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<TMessageData> _sendMsgList = null;
+        private Channel<MessagePacket> ProcessMsgQueue { get; }
+
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
         private SessionManager()
         {
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
-            _sendMsgList = Channel.CreateUnbounded<TMessageData>();
+            ProcessMsgQueue = Channel.CreateUnbounded<MessagePacket>();
         }
+
+        /// <summary>
+        /// 获取待处理的队列数量
+        /// </summary>
+        public int QueueCount => ProcessMsgQueue.Reader.Count;
 
         /// <summary>
         /// 添加到消息处理队列
         /// </summary>
-        /// <param name="messageData"></param>
-        public void AddToQueue(TMessageData messageData)
+        public void Enqueue(MessagePacket sessionPacket)
         {
-            _sendMsgList.Writer.TryWrite(messageData);
+            ProcessMsgQueue.Writer.TryWrite(sessionPacket);
         }
 
         /// <summary>
-        /// 处理M2发过来的消息
+        /// 转发GameSvr封包消息
         /// </summary>
-        public async Task ProcessSendMessage()
+        public void ProcessSendMessage(CancellationToken stoppingToken)
         {
-            while (await _sendMsgList.Reader.WaitToReadAsync())
+            Task.Factory.StartNew(async () =>
             {
-                if (_sendMsgList.Reader.TryRead(out var message))
+                while (await ProcessMsgQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    var userSession = GetSession(message.MessageId);
-                    if (userSession == null)
+                    if (ProcessMsgQueue.Reader.TryRead(out var message))
                     {
-                        return;
+                        var userSession = GetSession(message.SessionId);
+                        if (userSession == null)
+                        {
+                            continue;
+                        }
+                        try
+                        {
+                            userSession.ProcessServerPacket(message);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogError(e);
+                        }
                     }
-                    userSession.ProcessSvrData(message);
                 }
-            }
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         public void AddSession(int sessionId, ClientSession clientSession)
@@ -59,11 +75,7 @@ namespace GameGate
 
         public ClientSession GetSession(int sessionId)
         {
-            if (_sessionMap.ContainsKey(sessionId))
-            {
-                return _sessionMap[sessionId];
-            }
-            return null;
+            return _sessionMap.ContainsKey(sessionId) ? _sessionMap[sessionId] : null;
         }
 
         public void CloseSession(int sessionId)
@@ -83,9 +95,9 @@ namespace GameGate
             return false;
         }
 
-        public IList<ClientSession> GetAllSession()
+        public ICollection<ClientSession> GetSessions()
         {
-            return _sessionMap.Values.ToList();
+            return _sessionMap.Values;
         }
     }
 }

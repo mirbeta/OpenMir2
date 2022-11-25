@@ -1,75 +1,84 @@
 using LoginGate.Conf;
+using LoginGate.Packet;
 using System;
+using System.Net;
 using SystemModule;
+using SystemModule.Logger;
 using SystemModule.Sockets;
+using SystemModule.Sockets.AsyncSocketServer;
 
-namespace LoginGate
+namespace LoginGate.Services
 {
     /// <summary>
     /// 客户端服务端(Mir2-LoginGate)
     /// </summary>
     public class ServerService
     {
-        private LogQueue _logQueue => LogQueue.Instance;
-        private readonly ISocketServer _serverSocket;
-        private readonly string GateAddress;
-        private readonly int GatePort = 0;
-        private readonly ClientThread _clientThread;
-        private SessionManager _sessionManager => SessionManager.Instance;
-        private ClientManager _clientManager => ClientManager.Instance;
-        private ServerManager _serverManager => ServerManager.Instance;
-        private readonly ConfigManager _configManager = ConfigManager.Instance;
+        private readonly MirLogger _logger;
+        private readonly SocketServer _serverSocket;
+        private readonly SessionManager _sessionManager;
+        private readonly ClientManager _clientManager;
+        private readonly ServerManager _serverManager;
+        private IPEndPoint _serverEndPoint;
 
-        public ServerService(int i, GameGateInfo gameGate)
+        public ServerService(MirLogger logger, ServerManager serverManager, ClientManager clientManager, SessionManager sessionManager)
         {
-            _clientThread = new ClientThread(i, gameGate);
-            GateAddress = gameGate.sServerAdress;
-            GatePort = gameGate.nGatePort;
-            _serverSocket = new ISocketServer(ushort.MaxValue, 2048);
+            _logger = logger;
+            _serverManager = serverManager;
+            _clientManager = clientManager;
+            _sessionManager = sessionManager;
+            _serverSocket = new SocketServer(short.MaxValue, 1024);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
-            _serverSocket.Init();
         }
 
-        public ClientThread ClientThread => _clientThread;
+        public IPEndPoint EndPoint => _serverEndPoint;
 
-        public void Start()
+        public void Start(GameGateInfo gateInfo)
         {
-            _serverSocket.Start(GateAddress, GatePort);
-            _clientThread.Start();
-            _clientThread.RestSessionArray();
-            _logQueue.Enqueue($"登录网关[{GateAddress}:{GatePort}]已启动...", 1);
+            _serverEndPoint = new IPEndPoint(IPAddress.Parse(gateInfo.GateAddress), gateInfo.GatePort);
+            _serverSocket.Init();
+            _serverSocket.Start(_serverEndPoint);
+            _logger.LogInformation($"登录网关[{_serverEndPoint}]已启动...", 1);
         }
 
         public void Stop()
         {
-            _clientThread.Stop();
             _serverSocket.Shutdown();
-            _logQueue.Enqueue($"登录网关[{GateAddress}:{GatePort}]停止服务...", 1);
+            _logger.LogInformation($"登录网关[{_serverEndPoint}]停止服务...", 1);
         }
 
+        /// <summary>
+        /// Mir2链接
+        /// </summary>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
+            var sRemoteAddress = e.RemoteIPaddr;
             var clientThread = _clientManager.GetClientThread();
             if (clientThread == null)
             {
-                _logQueue.EnqueueDebugging("获取服务器实例失败。");
+                _logger.DebugLog("获取登陆服务失败。");
                 return;
             }
-            var sRemoteAddress = e.RemoteIPaddr;
-            _logQueue.EnqueueDebugging($"用户[{sRemoteAddress}]分配到账号服务器[{clientThread.ClientId}] Server:{clientThread.GetSocketIp()}");
+            if (!clientThread.ConnectState)
+            {
+                _logger.LogInformation("未就绪: " + sRemoteAddress, 5);
+                _logger.DebugLog($"游戏引擎链接失败 Server:[{clientThread.EndPoint}] ConnectionId:[{e.ConnectionId}]");
+                return;
+            }
+            _logger.DebugLog($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
             TSessionInfo sessionInfo = null;
-            for (var nIdx = 0; nIdx < clientThread.MaxSession; nIdx++)
+            for (var nIdx = 0; nIdx < GateShare.MaxSession; nIdx++)
             {
                 sessionInfo = clientThread.SessionArray[nIdx];
                 if (sessionInfo == null)
                 {
                     sessionInfo = new TSessionInfo();
                     sessionInfo.Socket = e.Socket;
-                    sessionInfo.SocketId = e.ConnectionId;
-                    sessionInfo.dwReceiveTick = HUtil32.GetTickCount();
+                    sessionInfo.ConnectionId = e.SocHandle;
+                    sessionInfo.ReceiveTick = HUtil32.GetTickCount();
                     sessionInfo.ClientIP = e.RemoteIPaddr;
                     clientThread.SessionArray[nIdx] = sessionInfo;
                     break;
@@ -77,71 +86,52 @@ namespace LoginGate
             }
             if (sessionInfo != null)
             {
-                _logQueue.Enqueue("开始连接: " + sRemoteAddress, 5);
-                _clientManager.AddClientThread(e.ConnectionId, clientThread);//链接成功后建立对应关系
-                var userSession = new ClientSession(_configManager, sessionInfo, clientThread);
-                userSession.UserEnter();
-                _sessionManager.AddSession(sessionInfo.SocketId, userSession);
+                _logger.LogInformation("开始连接: " + sRemoteAddress, 5);
+                _sessionManager.AddSession(sessionInfo, clientThread);
             }
             else
             {
                 e.Socket.Close();
-                _logQueue.Enqueue("禁止连接: " + sRemoteAddress, 1);
+                _logger.LogInformation("禁止连接: " + sRemoteAddress, 1);
             }
         }
 
+        /// <summary>
+        /// 游戏客户端断开链接
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            var sRemoteAddr = e.RemoteIPaddr;
-            var nSockIndex = e.ConnectionId;
-            var clientThread = _clientManager.GetClientThread(nSockIndex);
-            if (clientThread != null && clientThread.boGateReady)
+            var userSession = _sessionManager.GetSession(e.SocHandle);
+            if (userSession != null)
             {
-                var userSession = _sessionManager.GetSession(nSockIndex);
-                if (userSession != null)
-                {
-                    var clientSession = _sessionManager.GetSession(e.ConnectionId);
-                    clientSession?.UserLeave();
-                    clientSession?.CloseSession();
-                    _logQueue.Enqueue("断开连接: " + sRemoteAddr, 5);
-                }
-                _sessionManager.CloseSession(nSockIndex);
+                userSession.UserLeave();
+                userSession.CloseSession();
+                _logger.LogInformation("断开连接: " + e.RemoteIPaddr, 5);
+                _logger.DebugLog($"用户[{e.RemoteIPaddr}] 会话ID:[{e.SocHandle}] 断开链接.");
             }
-            else
-            {
-                _logQueue.Enqueue("断开链接: " + sRemoteAddr, 5);
-                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}]");
-            }
-            _clientManager.DeleteClientThread(e.ConnectionId);
+            _sessionManager.CloseSession(e.SocHandle);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
-            _logQueue.Enqueue($"客户端链接错误.[{e.Exception.ErrorCode}]", 5);
+            _logger.LogError($"客户端链接错误.[{e.Exception.ErrorCode}]");
         }
 
+        /// <summary>
+        /// 读取游戏客户端数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="token"></param>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            var connectionId = token.ConnectionId;
-            var userClient = _clientManager.GetClientThread(connectionId);
-            var sRemoteAddress = token.RemoteIPaddr;
-            if (userClient == null)
-            {
-                _logQueue.Enqueue("非法攻击: " + sRemoteAddress, 5);
-                _logQueue.EnqueueDebugging($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
-                return;
-            }
-            if (!userClient.boGateReady)
-            {
-                _logQueue.Enqueue("未就绪: " + sRemoteAddress, 5);
-                _logQueue.EnqueueDebugging($"账号服务器链接失败 Server:[{userClient.GetSocketIp()}] ConnectionId:[{connectionId}]");
-                return;
-            }
             var data = new byte[token.BytesReceived];
             Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-            var message = new TMessageData();
+            var message = new MessageData();
+            message.ClientIP = token.RemoteIPaddr;
             message.Body = data;
-            message.MessageId = connectionId;
+            message.ConnectionId = token.SocHandle;
             _serverManager.SendQueue(message);
         }
     }

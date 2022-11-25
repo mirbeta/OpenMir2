@@ -1,0 +1,41 @@
+{
+  "name": "openmir2",
+  "version": "1.1.4",
+  "description": "[EN](https://github.com/dwbeta/OpenMir2/blob/master/README.md)  | [中文](https://github.com/dwbeta/OpenMir2/blob/master/README.cn.md)",
+  "main": "index.js",
+  "scripts": {
+    "commit": "git-cz && git push",
+    "release": "standard-version",
+    "changelog": "conventional-changelog -p custom-config -i CHANGELOG.md -s -r 0  -n ./changelog-option.js",
+    "alpha": "npm run release -- --prerelease alpha",
+    "publish": "git push --follow-tags origin dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://10.10.0.202/mir2/OpenMir2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "commitizen": "^4.2.5",
+    "conventional-changelog-cli": "^2.2.2",
+    "conventional-changelog-cmyr-config": "^2.0.4",
+    "conventional-changelog-custom-config": "^0.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "cz-conventional-changelog-cmyr": "^1.0.0",
+    "release-it": "^15.5.0",
+    "standard-version": "^9.5.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "changelog": {
+    "bugsUrl": "https://github.com/mirbeta/OpenMir2/issues/",
+    "authorName": true,
+    "authorEmail": true,
+    "language": "zh"
+  }
+}

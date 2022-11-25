@@ -1,23 +1,33 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using GameGate.Conf;
+using GameGate.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace GameGate
 {
-    class Program
+    internal class Program
     {
+        private static Logger _logger;
         private static PeriodicTimer _timer;
-        private static readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private static readonly CancellationTokenSource CancellationToken = new CancellationTokenSource();
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
 
             ThreadPool.SetMaxThreads(200, 200);
             ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
@@ -36,19 +46,32 @@ namespace GameGate
                 }
                 AnsiConsole.Reset();
             };
+
+            var config = new ConfigurationBuilder().Build();
+
+            _logger = LogManager.Setup()
+                .SetupExtensions(ext => ext.RegisterConfigSettings(config))
+                .GetCurrentClassLogger();
+
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
+                    //services.AddSingleton<CloudClient>();
                     services.AddSingleton<ServerApp>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
+                }).ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                    logging.AddNLog(config);
                 });
-            await builder.StartAsync(cts.Token);
+            await builder.StartAsync(CancellationToken.Token);
             await ProcessLoopAsync();
             Stop();
         }
 
-        static void Stop()
+        private static void Stop()
         {
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
@@ -56,9 +79,9 @@ namespace GameGate
             });
         }
 
-        static async Task ProcessLoopAsync()
+        private static async Task ProcessLoopAsync()
         {
-            string? input = null;
+            string input = null;
             do
             {
                 input = Console.ReadLine();
@@ -77,6 +100,9 @@ namespace GameGate
                 if (firstTwoCharacters switch
                 {
                     "/s" => ShowServerStatus(),
+                    "/c" => ClearConsole(),
+                    "/r" => ReLoadConfig(),
+                    "/q" => Exit(),
                     _ => null
                 } is Task task)
                 {
@@ -87,19 +113,43 @@ namespace GameGate
             } while (input is not "/exit");
         }
 
+        private static Task Exit()
+        {
+            CancellationToken.CancelAfter(3000);
+            Environment.Exit(Environment.ExitCode);
+            return Task.CompletedTask;
+        }
+
+        private static Task ClearConsole()
+        {
+            Console.Clear();
+            AnsiConsole.Clear();
+            return Task.CompletedTask;
+        }
+
+        private static Task ReLoadConfig()
+        {
+            ConfigManager.Instance.ReLoadConfig();
+            ServerManager.Instance.StartMessageWorkThread(CancellationToken.Token);
+            Console.WriteLine("重新读取配置文件完成...");
+            return Task.CompletedTask;
+        }
+
         private static async Task ShowServerStatus()
         {
             GateShare.ShowLog = false;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             var serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);
-            table.AddColumn("[yellow]Address[/]");
-            table.AddColumn("[yellow]Port[/]");
+            table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
-            table.AddColumn("[yellow]Count[/]");
+            table.AddColumn("[yellow]Online[/]");
             table.AddColumn("[yellow]Send[/]");
             table.AddColumn("[yellow]Revice[/]");
+            table.AddColumn("[yellow]Total Send[/]");
+            table.AddColumn("[yellow]Total Revice[/]");
             table.AddColumn("[yellow]Queue[/]");
+            table.AddColumn("[yellow]WorkThread[/]");
 
             await AnsiConsole.Live(table)
                  .AutoClear(true)
@@ -109,29 +159,31 @@ namespace GameGate
                  {
                      foreach (var _ in Enumerable.Range(0, 10))
                      {
-                         table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
+                         table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
 
-                     while (await _timer.WaitForNextTickAsync(cts.Token))
+                     while (await _timer.WaitForNextTickAsync(CancellationToken.Token))
                      {
-                         for (int i = 0; i < serverList.Count; i++)
+                         for (var i = 0; i < serverList.Length; i++)
                          {
-                             var (serverIp, serverPort, Status, playCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
+                             var (endPoint, status, playCount, reviceTotal, sendTotal, totalrevice, totalSend, queueCount, threads) = serverList[i].GetStatus();
 
-                             table.UpdateCell(i, 0, $"[bold]{serverIp}[/]");
-                             table.UpdateCell(i, 1, ($"[bold]{serverPort}[/]"));
-                             table.UpdateCell(i, 2, ($"[bold]{Status}[/]"));
-                             table.UpdateCell(i, 3, ($"[bold]{playCount}[/]"));
-                             table.UpdateCell(i, 4, ($"[bold]{sendTotal}[/]"));
-                             table.UpdateCell(i, 5, ($"[bold]{reviceTotal}[/]"));
-                             table.UpdateCell(i, 6, ($"[bold]{queueCount}[/]"));
+                             table.UpdateCell(i, 0, $"[bold]{endPoint}[/]");
+                             table.UpdateCell(i, 1, $"[bold]{status}[/]");
+                             table.UpdateCell(i, 2, $"[bold]{playCount}[/]");
+                             table.UpdateCell(i, 3, $"[bold]{sendTotal}[/]");
+                             table.UpdateCell(i, 4, $"[bold]{reviceTotal}[/]");
+                             table.UpdateCell(i, 5, $"[bold]{totalSend}[/]");
+                             table.UpdateCell(i, 6, $"[bold]{totalrevice}[/]");
+                             table.UpdateCell(i, 7, $"[bold]{queueCount}[/]");
+                             table.UpdateCell(i, 8, $"[bold]{threads}[/]");
                          }
                          ctx.Refresh();
                      }
                  });
         }
 
-        static void PrintUsage()
+        private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
             using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("GameGate.logo.png");
@@ -156,8 +208,13 @@ namespace GameGate
                 Color = Color.Aqua
             };
 
-            var markup = new Markup(
-                "[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
+            var sb = new StringBuilder();
+            sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
+            sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
+            sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
+            sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
+            var markup = new Markup(sb.ToString());
+
             table.AddColumn(new TableColumn("Two"));
 
             var rightTable = new Table()

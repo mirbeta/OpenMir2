@@ -1,13 +1,17 @@
 using System;
 using System.IO;
 
-namespace GameGate
+namespace GameGate.Conf
 {
     /// <summary>
     /// 网关配置类
     /// </summary>
     public class GateConfig
     {
+        /// <summary>
+        /// 是否启用OTP动态加密
+        /// </summary>
+        public bool EnableOtp;
         public bool m_fAddLog;
         /// <summary>
         /// 日志等级
@@ -18,9 +22,31 @@ namespace GameGate
         /// </summary>
         public bool ShowDebugLog;
         /// <summary>
-        /// 网关数
+        /// 是否使用云网关
         /// </summary>
-        public int GateCount;
+        public bool UseCloudGate;
+        /// <summary>
+        /// 云网关服务地址
+        /// </summary>
+        public string CloudAddr;
+        /// <summary>
+        /// 云网关服务地址端口
+        /// </summary>
+        public int CloudPort;
+        /// <summary>
+        /// 云网关授权码
+        /// </summary>
+        public string LicenseCode;
+        /// <summary>
+        /// 消息工作线程数
+        /// 最多255个工作线程
+        /// </summary>
+        public int MessageWorkThread;
+        /// <summary>
+        /// 网关数
+        /// 最多255个线程
+        /// </summary>
+        public int ServerWorkThread;
         /// <summary>
         /// 检查空会话
         /// </summary>
@@ -197,12 +223,14 @@ namespace GameGate
         public int ClientAttackSpeedRate;
         public TPunishMethod OverSpeedPunishMethod;
         public TBlockIPMethod BlockIPMethod;
-        public TChatFilterMethod ChatFilterMethod;
-        public TOverSpeedMsgMethod SpeedHackWarnMethod;
+        public ChatFilterMethod ChatFilterMethod;
+        public OverSpeedMsgMethod SpeedHackWarnMethod;
 
         public GateConfig()
         {
+            EnableOtp = false;
             CheckNullSession = true;
+            UseCloudGate = false;
             IsOverSpeedSendBack = false;
             IsDefenceCCPacket = false;
             IsKickOverSpeed = false;
@@ -259,8 +287,8 @@ namespace GameGate
             PunishMoveInterval = 150;
             PunishSpellInterval = 150;
             PunishAttackInterval = 150;
-            ChatFilterMethod = TChatFilterMethod.ctReplaceAll;
-            SpeedHackWarnMethod = TOverSpeedMsgMethod.ptSysmsg;
+            ChatFilterMethod = ChatFilterMethod.ReplaceAll;
+            SpeedHackWarnMethod = OverSpeedMsgMethod.ptSysmsg;
             MaxItemSpeed = 6;
             MaxItemSpeedRate = 60;
             ClientShowHintNewType = true;
@@ -270,6 +298,7 @@ namespace GameGate
             ClientSpellSpeedRate = 0;
             ClientAttackSpeedRate = 0;
             ShowDebugLog = false;
+            MessageWorkThread = 1;
         }
     }
 }

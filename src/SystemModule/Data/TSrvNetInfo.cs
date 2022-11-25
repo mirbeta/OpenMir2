@@ -1,7 +1,8 @@
-﻿namespace SystemModule;
-
-public struct TSrvNetInfo
+﻿namespace SystemModule.Data
 {
-    public string sIPaddr;
-    public int nPort;
+    public struct TSrvNetInfo
+    {
+        public string sIPaddr;
+        public int nPort;
+    }
 }

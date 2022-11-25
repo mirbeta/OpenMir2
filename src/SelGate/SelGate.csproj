@@ -1,16 +1,51 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
-    </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+	</PropertyGroup>
+	<Choose>
+		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+			<PropertyGroup>
+				<OutputPath>D:\MirServer\SelGate</OutputPath>
+			</PropertyGroup>
+		</When>
+		<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+			<PropertyGroup>
+				<OutputPath>/Volumes/Data/Mirserver/SelGate</OutputPath>
+			</PropertyGroup>
+		</When>
+		<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+			<PropertyGroup>
+				<OutputPath>/Volumes/opt/Mirserver/SelGate</OutputPath>
+			</PropertyGroup>
+		</When>
+	</Choose>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-    </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+		<PackageReference Include="NLog" Version="5.0.5" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
+		<PackageReference Include="Spectre.Console" Version="0.45.0" />
+		<PackageReference Include="Spectre.Console.ImageSharp" Version="0.45.0" />
+	</ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
-    </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="..\..\logo.png" Link="logo.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\nlog.config">
+			<Link>nlog.config</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

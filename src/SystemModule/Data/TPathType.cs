@@ -1,13 +1,14 @@
-﻿namespace SystemModule;
-
-public enum TPathType
+﻿namespace SystemModule.Data
 {
-    /// <summary>
-    /// 动态
-    /// </summary>
-    t_Dynamic,
-    /// <summary>
-    /// 固定
-    /// </summary>
-    t_Fixed
+    public enum TPathType
+    {
+        /// <summary>
+        /// 动态
+        /// </summary>
+        t_Dynamic,
+        /// <summary>
+        /// 固定
+        /// </summary>
+        t_Fixed
+    }
 }

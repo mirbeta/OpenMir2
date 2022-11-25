@@ -1,9 +1,10 @@
-﻿namespace SystemModule;
-
-public class TMonSayMsg
+﻿namespace SystemModule.Data
 {
-    public MonStatus State;
-    public MsgColor Color;
-    public int nRate;
-    public string sSayMsg;
+    public class TMonSayMsg
+    {
+        public MonStatus State;
+        public MsgColor Color;
+        public int nRate;
+        public string sSayMsg;
+    }
 }

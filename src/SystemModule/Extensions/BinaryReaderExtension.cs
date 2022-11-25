@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SystemModule
+namespace SystemModule.Extensions
 {
     public static class BinaryReaderExtension
     {
@@ -13,9 +13,9 @@ namespace SystemModule
         {
             var buffLen = 0;
             var data = binaryReader.ReadBytes(size);
-            return Misc.DecodeBuf(data, data.Length, ref buffLen);
+            return PacketEncoder.DecodeBuf(data, data.Length, ref buffLen);
         }
-        
+
         public static string ReadPascalString(this BinaryReader binaryReader, int size)
         {
             var packegeLen = binaryReader.ReadByte();

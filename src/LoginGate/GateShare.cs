@@ -1,5 +1,6 @@
-using System.Collections.Concurrent;
+using System;
 using System.Collections.Generic;
+using SystemModule;
 using SystemModule.Common;
 
 namespace LoginGate
@@ -7,9 +8,17 @@ namespace LoginGate
     public class GateShare
     {
         /// <summary>
-        ///  网关游戏服务器之间检测超时时间长度
+        /// 最大用户数
         /// </summary>
-        public static long dwCheckServerTimeOutTime = 3 * 60 * 1000;
+        public const int MaxSession = 10000;
+        /// <summary>
+        /// 网关游戏服务器之间检测超时时间长度
+        /// </summary>
+        public const int CheckServerTimeOutTime = 10 * 1000;
+        /// <summary>
+        /// 心跳响应超时时间
+        /// </summary>
+        public const int KeepAliveTickTimeOut = 30 * 1000;
         /// <summary>
         /// 禁止连接IP列表
         /// </summary>
@@ -19,7 +28,6 @@ namespace LoginGate
         /// </summary>
         public static IList<string> TempBlockIPList = null;
         public static int nMaxConnOfIPaddr = 50;
-        public static ConcurrentDictionary<int, ClientThread> ServerGateList;
 
         public static void LoadBlockIPFile()
         {
@@ -36,7 +44,49 @@ namespace LoginGate
         {
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
-            ServerGateList = new ConcurrentDictionary<int, ClientThread>();
+        }
+
+        private bool IsBlockIP(string sIPaddr)
+        {
+            bool result = false;
+            string sBlockIPaddr;
+            for (var i = 0; i < TempBlockIPList.Count; i++)
+            {
+                sBlockIPaddr = TempBlockIPList[i];
+                if (string.Compare(sIPaddr, sBlockIPaddr, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    result = true;
+                    break;
+                }
+            }
+            for (var i = 0; i < BlockIPList.Count; i++)
+            {
+                sBlockIPaddr = BlockIPList[i];
+                if (HUtil32.CompareLStr(sIPaddr, sBlockIPaddr))
+                {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
+
+        private bool IsConnLimited(string sIPaddr)
+        {
+            bool result = false;
+            int nCount = 0;
+            //for (var i = 0; i < ServerSocket.Socket.ActiveConnections; i++)
+            //{
+            //    if ((sIPaddr).CompareTo((ServerSocket.Connections[i].RemoteAddress)) == 0)
+            //    {
+            //        nCount++;
+            //    }
+            //}
+            if (nCount > nMaxConnOfIPaddr)
+            {
+                result = true;
+            }
+            return result;
         }
     }
 }

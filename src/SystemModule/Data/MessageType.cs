@@ -1,7 +1,8 @@
-﻿namespace SystemModule;
-
-public enum MessageType
+﻿namespace SystemModule.Data
 {
-    Success = 0,
-    Error = 1
+    public enum MessageType
+    {
+        Success = 0,
+        Error = 1
+    }
 }

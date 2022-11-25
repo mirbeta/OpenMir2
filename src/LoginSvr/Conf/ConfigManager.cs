@@ -4,75 +4,58 @@ using System.IO;
 using SystemModule;
 using SystemModule.Common;
 
-namespace LoginSvr
+namespace LoginSvr.Conf
 {
     public class ConfigManager : IniFile
     {
-        private static string fileName = Path.Combine(AppContext.BaseDirectory, "Logsrv.conf");
-        private static readonly ConfigManager instance = new ConfigManager(fileName);
-
-        public static ConfigManager Instance
-        {
-            get { return instance; }
-        }
-
-        const string sSectionServer = "Server";
-        const string sSectionDB = "DB";
+        private const string sSectionServer = "Server";
         private const string sDB = "DataBase";
-        const string sIdentDBServer = "DBServer";
-        const string sIdentFeeServer = "FeeServer";
-        const string sIdentLogServer = "LogServer";
-        const string sIdentGateAddr = "GateAddr";
-        const string sIdentGatePort = "GatePort";
-        const string sIdentServerAddr = "ServerAddr";
-        const string sIdentServerPort = "ServerPort";
-        const string sIdentMonAddr = "MonAddr";
-        const string sIdentMonPort = "MonPort";
-        const string sIdentDBSPort = "DBSPort";
-        const string sIdentFeePort = "FeePort";
-        const string sIdentLogPort = "LogPort";
-        const string sIdentReadyServers = "ReadyServers";
-        const string sIdentTestServer = "TestServer";
-        const string sIdentDynamicIPMode = "DynamicIPMode";
-        const string sIdentFeedIDList = "FeedIDList";
-        const string sIdentFeedIPList = "FeedIPList";
+        private const string sIdentDBServer = "DBServer";
+        private const string sIdentFeeServer = "FeeServer";
+        private const string sIdentLogServer = "LogServer";
+        private const string sIdentGateAddr = "GateAddr";
+        private const string sIdentGatePort = "GatePort";
+        private const string sIdentServerAddr = "ServerAddr";
+        private const string sIdentServerPort = "ServerPort";
+        private const string sIdentMonAddr = "MonAddr";
+        private const string sIdentMonPort = "MonPort";
+        private const string sIdentDBSPort = "DBSPort";
+        private const string sIdentFeePort = "FeePort";
+        private const string sIdentLogPort = "LogPort";
+        private const string sIdentTestServer = "TestServer";
+        private const string sIdentDynamicIPMode = "DynamicIPMode";
 
-        public Config Config;
+        public readonly Config Config;
 
         public ConfigManager(string fileName) : base(fileName)
         {
             Load();
             Config = new Config();
-            Config.SessionList = new List<TConnInfo>();
             Config.ServerNameList = new List<string>();
-            Config.AccountCostList = new Dictionary<string, int>();
-            Config.IPaddrCostList = new Dictionary<string, int>();
         }
 
         public void LoadConfig()
         {
-            Config.sDBServer = LoadConfig_LoadConfigString(sSectionServer, sIdentDBServer, Config.sDBServer);
-            Config.sFeeServer = LoadConfig_LoadConfigString(sSectionServer, sIdentFeeServer, Config.sFeeServer);
-            Config.sLogServer = LoadConfig_LoadConfigString(sSectionServer, sIdentLogServer, Config.sLogServer);
-            Config.sGateAddr = LoadConfig_LoadConfigString(sSectionServer, sIdentGateAddr, Config.sGateAddr);
-            Config.nGatePort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentGatePort, Config.nGatePort);
-            Config.sServerAddr = LoadConfig_LoadConfigString(sSectionServer, sIdentServerAddr, Config.sServerAddr);
-            Config.nServerPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentServerPort, Config.nServerPort);
-            Config.sMonAddr = LoadConfig_LoadConfigString(sSectionServer, sIdentMonAddr, Config.sMonAddr);
-            Config.nMonPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentMonPort, Config.nMonPort);
-            Config.nDBSPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentDBSPort, Config.nDBSPort);
-            Config.nFeePort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentFeePort, Config.nFeePort);
-            Config.nLogPort = LoadConfig_LoadConfigInteger(sSectionServer, sIdentLogPort, Config.nLogPort);
-            Config.nReadyServers = LoadConfig_LoadConfigInteger(sSectionServer, sIdentReadyServers, Config.nReadyServers);
-            Config.boEnableMakingID = LoadConfig_LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.boEnableMakingID);
-            Config.boDynamicIPMode = LoadConfig_LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.boDynamicIPMode);
-            Config.sFeedIDList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIDList, Config.sFeedIDList);
-            Config.sFeedIPList = LoadConfig_LoadConfigString(sSectionDB, sIdentFeedIPList, Config.sFeedIPList);
-            Config.ConnctionString = LoadConfig_LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
-            Config.ShowDetailMsg = LoadConfig_LoadConfigBoolean(sSectionServer, "ShowDetailMsg", Config.ShowDetailMsg);
+            Config.sDBServer = LoadConfigString(sSectionServer, sIdentDBServer, Config.sDBServer);
+            Config.sFeeServer = LoadConfigString(sSectionServer, sIdentFeeServer, Config.sFeeServer);
+            Config.sLogServer = LoadConfigString(sSectionServer, sIdentLogServer, Config.sLogServer);
+            Config.sGateAddr = LoadConfigString(sSectionServer, sIdentGateAddr, Config.sGateAddr);
+            Config.nGatePort = LoadConfigInteger(sSectionServer, sIdentGatePort, Config.nGatePort);
+            Config.sServerAddr = LoadConfigString(sSectionServer, sIdentServerAddr, Config.sServerAddr);
+            Config.nServerPort = LoadConfigInteger(sSectionServer, sIdentServerPort, Config.nServerPort);
+            Config.sMonAddr = LoadConfigString(sSectionServer, sIdentMonAddr, Config.sMonAddr);
+            Config.nMonPort = LoadConfigInteger(sSectionServer, sIdentMonPort, Config.nMonPort);
+            Config.nDBSPort = LoadConfigInteger(sSectionServer, sIdentDBSPort, Config.nDBSPort);
+            Config.nFeePort = LoadConfigInteger(sSectionServer, sIdentFeePort, Config.nFeePort);
+            Config.nLogPort = LoadConfigInteger(sSectionServer, sIdentLogPort, Config.nLogPort);
+            Config.EnableMakingID = LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.EnableMakingID);
+            Config.DynamicIPMode = LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.DynamicIPMode);
+            Config.ConnctionString = LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
+            Config.ShowLogLevel = ReadInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
+            Config.ShowDebugLog = ReadBool("Server", "ShowDebugLog", Config.ShowDebugLog);
         }
 
-        private string LoadConfig_LoadConfigString(string sSection, string sIdent, string sDefault)
+        private string LoadConfigString(string sSection, string sIdent, string sDefault)
         {
             string result;
             string sString = ReadString(sSection, sIdent, "");
@@ -88,11 +71,10 @@ namespace LoginSvr
             return result;
         }
 
-        private int LoadConfig_LoadConfigInteger(string sSection, string sIdent, int nDefault)
+        private int LoadConfigInteger(string sSection, string sIdent, int nDefault)
         {
             int result;
-            int nLoadInteger;
-            nLoadInteger = ReadInteger(sSection, sIdent, -1);
+            var nLoadInteger = ReadInteger(sSection, sIdent, -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger(sSection, sIdent, nDefault);
@@ -105,11 +87,10 @@ namespace LoginSvr
             return result;
         }
 
-        private bool LoadConfig_LoadConfigBoolean(string sSection, string sIdent, bool boDefault)
+        private bool LoadConfigBoolean(string sSection, string sIdent, bool boDefault)
         {
             bool result;
-            int nLoadInteger;
-            nLoadInteger = ReadInteger(sSection, sIdent, -1);
+            var nLoadInteger = ReadInteger(sSection, sIdent, -1);
             if (nLoadInteger < 0)
             {
                 WriteBool(sSection, sIdent, boDefault);
@@ -133,7 +114,7 @@ namespace LoginSvr
             string sRemote = string.Empty;
             string sPublic = string.Empty;
             string sGatePort = string.Empty;
-            string sFileName = "!AddrTable.txt";
+            string sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AddrTable.txt");
             StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
@@ -142,7 +123,7 @@ namespace LoginSvr
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
-                    if (sLineText != "" && sLineText[0] != ';')
+                    if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, new string[] { " " });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sTitle, new string[] { " " });
@@ -151,11 +132,11 @@ namespace LoginSvr
                         sLineText = sLineText.Trim();
                         if (sTitle != "" && sRemote != "" && sPublic != "" && nRouteIdx < 60)
                         {
-                            Config.GateRoute[nRouteIdx] = new TGateRoute();
-                            Config.GateRoute[nRouteIdx].sServerName = sServerName;
-                            Config.GateRoute[nRouteIdx].sTitle = sTitle;
-                            Config.GateRoute[nRouteIdx].sRemoteAddr = sRemote;
-                            Config.GateRoute[nRouteIdx].sPublicAddr = sPublic;
+                            Config.GateRoute[nRouteIdx] = new GateRoute();
+                            Config.GateRoute[nRouteIdx].ServerName = sServerName;
+                            Config.GateRoute[nRouteIdx].Title = sTitle;
+                            Config.GateRoute[nRouteIdx].RemoteAddr = sRemote;
+                            Config.GateRoute[nRouteIdx].PublicAddr = sPublic;
                             nSelGateIdx = 0;
                             while (sLineText != "")
                             {
@@ -177,7 +158,7 @@ namespace LoginSvr
                                     }
                                     sGatePort = HUtil32.GetValidStr3(sGate, ref sGate, new string[] { ":" });
                                     Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].sIPaddr = sGate;
-                                    Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].nPort = HUtil32.Str_ToInt(sGatePort, 0);
+                                    Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].nPort = HUtil32.StrToInt(sGatePort, 0);
                                     Config.GateRoute[nRouteIdx].nSelIdx = 0;
                                     nSelGateIdx++;
                                 }
@@ -187,7 +168,7 @@ namespace LoginSvr
                         }
                     }
                 }
-                Config.nRouteCount = nRouteIdx;
+                Config.RouteCount = nRouteIdx;
             }
             LoadList = null;
             GenServerNameList(Config);
@@ -196,19 +177,19 @@ namespace LoginSvr
         private void GenServerNameList(Config Config)
         {
             Config.ServerNameList.Clear();
-            for (var i = 0; i < Config.nRouteCount; i++)
+            for (var i = 0; i < Config.RouteCount; i++)
             {
                 bool boD = true;
                 for (var j = 0; j < Config.ServerNameList.Count; j++)
                 {
-                    if (Config.ServerNameList[j] == Config.GateRoute[i].sServerName)
+                    if (Config.ServerNameList[j] == Config.GateRoute[i].ServerName)
                     {
                         boD = false;
                     }
                 }
                 if (boD)
                 {
-                    Config.ServerNameList.Add(Config.GateRoute[i].sServerName);
+                    Config.ServerNameList.Add(Config.GateRoute[i].ServerName);
                 }
             }
         }

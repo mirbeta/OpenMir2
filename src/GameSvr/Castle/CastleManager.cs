@@ -1,131 +1,111 @@
-﻿using System.Collections;
+﻿using GameSvr.Actor;
+using GameSvr.GameCommand;
+using GameSvr.Maps;
+using NLog;
 using SystemModule.Common;
 
-namespace GameSvr
+namespace GameSvr.Castle
 {
     public class CastleManager
     {
-        private readonly IList<TUserCastle> _castleList;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private readonly IList<UserCastle> _castleList;
 
         public CastleManager()
         {
-            _castleList = new List<TUserCastle>();
+            _castleList = new List<UserCastle>();
         }
 
-        public TUserCastle Find(string sCastleName)
+        public UserCastle Find(string sCastleName)
         {
-            TUserCastle result = null;
-            TUserCastle Castle = null;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                if (string.Compare(Castle.m_sName, sCastleName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(_castleList[i].sName, sCastleName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    result = Castle;
-                    break;
+                    return _castleList[i];
                 }
             }
-
-            return result;
+            return null;
         }
 
         // 取得角色所在座标的城堡
-        public TUserCastle InCastleWarArea(TBaseObject BaseObject)
+        public UserCastle InCastleWarArea(BaseObject BaseObject)
         {
-            TUserCastle result = null;
-            TUserCastle Castle = null;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                if (Castle.InCastleWarArea(BaseObject.m_PEnvir, BaseObject.m_nCurrX, BaseObject.m_nCurrY))
+                if (_castleList[i].InCastleWarArea(BaseObject.Envir, BaseObject.CurrX, BaseObject.CurrY))
                 {
-                    result = Castle;
-                    break;
+                    return _castleList[i];
                 }
             }
-            return result;
+            return null;
         }
 
-        public TUserCastle InCastleWarArea(Envirnoment Envir, int nX, int nY)
+        public UserCastle InCastleWarArea(Envirnoment Envir, int nX, int nY)
         {
-            TUserCastle result = null;
-            TUserCastle Castle = null;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                if (Castle.InCastleWarArea(Envir, nX, nY))
+                if (_castleList[i].InCastleWarArea(Envir, nX, nY))
                 {
-                    result = Castle;
-                    break;
+                    return _castleList[i];
                 }
             }
-            return result;
+            return null;
         }
 
         public void Initialize()
         {
-            TUserCastle Castle;
+            UserCastle castle;
             if (_castleList.Count <= 0)
             {
-                Castle = new TUserCastle(M2Share.g_Config.sCastleDir);
-                _castleList.Add(Castle);
-                Castle.Initialize();
-                Castle.m_sConfigDir = "0";
-                Castle.m_EnvirList.Add("0151");
-                Castle.m_EnvirList.Add("0152");
-                Castle.m_EnvirList.Add("0153");
-                Castle.m_EnvirList.Add("0154");
-                Castle.m_EnvirList.Add("0155");
-                Castle.m_EnvirList.Add("0156");
-                for (var i = 0; i < Castle.m_EnvirList.Count; i++)
-                {
-                    Castle.m_EnvirList[i] = M2Share.MapManager.FindMap(Castle.m_EnvirList[i]).sMapName;
-                }
+                castle = new UserCastle(M2Share.Config.CastleDir);
+                castle.Initialize();
+                castle.ConfigDir = "0";
+                castle.EnvirList.Add("0151");
+                castle.EnvirList.Add("0152");
+                castle.EnvirList.Add("0153");
+                castle.EnvirList.Add("0154");
+                castle.EnvirList.Add("0155");
+                castle.EnvirList.Add("0156");
+                _castleList.Add(castle);
                 Save();
                 return;
             }
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                Castle.Initialize();
+                castle = _castleList[i];
+                castle.Initialize();
             }
+            _logger.Debug("城堡城初始完成...");
         }
 
         // 城堡皇宫所在地图
-        public TUserCastle IsCastlePalaceEnvir(Envirnoment Envir)
+        public UserCastle IsCastlePalaceEnvir(Envirnoment Envir)
         {
-            TUserCastle result = null;
-            TUserCastle Castle = null;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                if (Castle.m_MapPalace == Envir)
+                if (_castleList[i].PalaceEnvir == Envir)
                 {
-                    result = Castle;
-                    break;
+                    return _castleList[i];
                 }
             }
-            return result;
+            return null;
         }
 
         // 城堡所在地图
-        public TUserCastle IsCastleEnvir(Envirnoment Envir)
+        public UserCastle IsCastleEnvir(Envirnoment Envir)
         {
-            TUserCastle result = null;
-            TUserCastle Castle = null;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                if (Castle.m_MapCastle == Envir)
+                if (_castleList[i].CastleEnvir == Envir)
                 {
-                    result = Castle;
-                    break;
+                    return _castleList[i];
                 }
             }
-            return result;
+            return null;
         }
 
-        public TUserCastle IsCastleMember(TBaseObject BaseObject)
+        public UserCastle IsCastleMember(BaseObject BaseObject)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
@@ -145,29 +125,28 @@ namespace GameSvr
             }
         }
 
-        public void GetCastleGoldInfo(ArrayList List)
+        public void GetCastleGoldInfo(IList<string> List)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {
-                TUserCastle Castle = _castleList[i];
-                List.Add(string.Format(M2Share.g_sGameCommandSbkGoldShowMsg, Castle.m_sName, Castle.m_nTotalGold, Castle.m_nTodayIncome));
+                var castle = _castleList[i];
+                List.Add(string.Format(CommandHelp.GameCommandSbkGoldShowMsg, castle.sName, castle.TotalGold, castle.TodayIncome));
             }
         }
 
         public void Save()
         {
-            TUserCastle Castle;
             SaveCastleList();
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                Castle.Save();
+                var castle = _castleList[i];
+                castle.Save();
             }
         }
 
         public void LoadCastleList()
         {
-            var castleFile = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleFile);
+            var castleFile = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
             if (File.Exists(castleFile))
             {
                 using (var loadList = new StringList())
@@ -178,22 +157,22 @@ namespace GameSvr
                         var sCastleDir = loadList[i].Trim();
                         if (!string.IsNullOrEmpty(sCastleDir))
                         {
-                            var castle = new TUserCastle(sCastleDir);
+                            var castle = new UserCastle(sCastleDir);
                             _castleList.Add(castle);
                         }
                     }
                 }
-                M2Share.MainOutMessage($"已读取 [{_castleList.Count}] 个城堡信息...", messageColor: ConsoleColor.Green);
+                _logger.Info($"已读取 [{_castleList.Count}] 个城堡信息...");
             }
             else
             {
-                M2Share.MainOutMessage("城堡列表文件未找到!!!");
+                _logger.Error("城堡列表文件未找到!!!");
             }
         }
 
         private void SaveCastleList()
         {
-            var castleDirPath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleDir);
+            var castleDirPath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir);
             if (!Directory.Exists(castleDirPath))
             {
                 Directory.CreateDirectory(castleDirPath);
@@ -203,37 +182,32 @@ namespace GameSvr
             {
                 loadList.Add(i.ToString());
             }
-            var savePath = Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sCastleFile);
+            var savePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
             loadList.SaveToFile(savePath);
         }
 
-        public TUserCastle GetCastle(int nIndex)
+        public UserCastle GetCastle(int nIndex)
         {
-            TUserCastle result = null;
             if (nIndex >= 0 && nIndex < _castleList.Count)
             {
-                result = _castleList[nIndex];
+                return _castleList[nIndex];
             }
-            return result;
+            return null;
         }
 
         public void GetCastleNameList(IList<string> List)
         {
-            TUserCastle Castle;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                List.Add(Castle.m_sName);
+                List.Add(_castleList[i].sName);
             }
         }
 
         public void IncRateGold(int nGold)
         {
-            TUserCastle Castle;
             for (var i = 0; i < _castleList.Count; i++)
             {
-                Castle = _castleList[i];
-                Castle.IncRateGold(nGold);
+                _castleList[i].IncRateGold(nGold);
             }
         }
     }

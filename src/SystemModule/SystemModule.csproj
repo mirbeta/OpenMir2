@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net7</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Company />
-        <Product />
-        <LangVersion>default</LangVersion>
+        <LangVersion>11.0</LangVersion>
+        <RootNamespace>SystemModule</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,10 +16,17 @@
       <DefineConstants>TRACE;ISWOL</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
-      <None Remove="System.Data.SQLite.Core" />
+      <PackageReference Include="MemoryPack" Version="1.7.6" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+      <PackageReference Include="NLog" Version="5.0.5" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
+      <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="protobuf-net" Version="3.0.101" />
-      <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+      <None Remove="AsyncSocket\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="AsyncSocket\" />
     </ItemGroup>
 </Project>

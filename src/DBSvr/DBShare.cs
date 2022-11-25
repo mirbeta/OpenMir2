@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Common;
@@ -10,58 +11,40 @@ namespace DBSvr
 {
     public class DBShare
     {
-        public static int nServerPort = 6000;
-        public static string sServerAddr = "*";
-        public static int g_nGatePort = 5100;
-        public static string g_sGateAddr = "*";
-        public static int nIDServerPort = 5600;
-        public static string sIDServerAddr = "127.0.0.1";
-        public static bool g_boEnglishNames = false;
-        public static string sServerName = "热血传奇";
-        public static string sGateConfFileName = "!ServerInfo.txt";
-        private static string sServerIPConfFileNmae = "!AddrTable.txt";
-        private static string sGateIDConfFileName = "SelectID.txt";
-        public static string sMapFile = string.Empty;
+        public static readonly string GateConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServerInfo.txt");
+        private static readonly string ServerIpConfFileNmae = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AddrTable.txt");
+        private static readonly string GateIdConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SelectID.txt");
         public static StringList DenyChrNameList = null;
-        private static Hashtable ServerIPList = null;
-        private static Dictionary<string, short> GateIDList = null;
-        public static int dwInterval = 3000;
-        public static bool g_boDynamicIPMode = false;
-        public static StringList g_ClearMakeIndex = null;
-        public static TRouteInfo[] g_RouteInfo = new TRouteInfo[20];
-        /// <summary>
-        /// 是否禁止检测玩家名字
-        /// </summary>
-        public static bool boDenyChrName = true;
-        public static int nDELMaxLevel = 30;
-        public static string DBConnection = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
+        private static Hashtable _serverIpList = null;
+        private static Dictionary<string, short> _gateIdList = null;
+        public static readonly StringList ClearMakeIndex = null;
+        public static readonly GateRouteInfo[] RouteInfo = new GateRouteInfo[20];
+        public static bool ShowLog = true;
 
         private static void LoadGateID()
         {
-            StringList LoadList;
-            string sLineText;
             string sID = string.Empty;
             string sIPaddr = string.Empty;
-            GateIDList.Clear();
-            if (File.Exists(sGateIDConfFileName))
+            _gateIdList.Clear();
+            if (File.Exists(GateIdConfFileName))
             {
-                LoadList = new StringList();
-                LoadList.LoadFromFile(sGateIDConfFileName);
+                var LoadList = new StringList();
+                LoadList.LoadFromFile(GateIdConfFileName);
                 for (var i = 0; i < LoadList.Count; i++)
                 {
-                    sLineText = LoadList[i];
+                    var sLineText = LoadList[i];
                     if ((sLineText == "") || (sLineText[0] == ';'))
                     {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sID, new string[] { " ", "\09" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sIPaddr, new string[] { " ", "\09" });
-                    int nID = HUtil32.Str_ToInt(sID, -1);
+                    int nID = HUtil32.StrToInt(sID, -1);
                     if (nID < 0)
                     {
                         continue;
                     }
-                    GateIDList.Add(sIPaddr, (short)nID);
+                    _gateIdList.Add(sIPaddr, (short)nID);
                 }
                 LoadList = null;
             }
@@ -70,33 +53,33 @@ namespace DBSvr
         public static short GetGateID(string sIPaddr)
         {
             short result = 0;
-            if (GateIDList.ContainsKey(sIPaddr))
+            if (_gateIdList.ContainsKey(sIPaddr))
             {
-                return GateIDList[sIPaddr];
+                return _gateIdList[sIPaddr];
             }
             return result;
         }
 
         private static void LoadIPTable()
         {
-            ServerIPList.Clear();
+            _serverIpList.Clear();
             try
             {
                 var stringList = new StringList();
-                stringList.LoadFromFile(sServerIPConfFileNmae);
+                stringList.LoadFromFile(ServerIpConfFileNmae);
                 for (var i = 0; i < stringList.Count; i++)
                 {
-                    if (ServerIPList.ContainsKey(stringList[i]))
+                    if (_serverIpList.ContainsKey(stringList[i]))
                     {
                         continue;
                     }
-                    ServerIPList.Add(stringList[i], stringList[i]);
+                    _serverIpList.Add(stringList[i], stringList[i]);
                 }
                 stringList = null;
             }
             catch
             {
-                MainOutMessage("加载IP列表文件 " + sServerIPConfFileNmae + " 出错!!!");
+                //MainOutMessage("加载IP列表文件 " + ServerIpConfFileNmae + " 出错!!!");
             }
         }
 
@@ -184,7 +167,7 @@ namespace DBSvr
         public static bool InClearMakeIndexList(int nIndex)
         {
             bool result = false;
-            for (var i = 0; i < g_ClearMakeIndex.Count; i++)
+            for (var i = 0; i < ClearMakeIndex.Count; i++)
             {
                 //if (nIndex == ((int)g_ClearMakeIndex.Values[i]))
                 //{
@@ -198,55 +181,39 @@ namespace DBSvr
         public static bool CheckServerIP(string sIP)
         {
             bool result = false;
-            if (ServerIPList.ContainsKey(sIP))
+            if (_serverIpList.ContainsKey(sIP))
             {
                 return true;
             }
             return result;
         }
 
-        public static void MainOutMessage(string sMsg)
-        {
-            Console.WriteLine(sMsg);
-        }
-
         public static void Initialization()
         {
             DenyChrNameList = new StringList();
-            ServerIPList = new Hashtable();
-            GateIDList = new Dictionary<string, short>();
+            _serverIpList = new Hashtable();
+            _gateIdList = new Dictionary<string, short>();
         }
     }
 
-    public class TServerInfo
+    public class ServerDataInfo
     {
-        public int nSckHandle;
         public byte[] Data;
         public int DataLen;
-        public Socket Socket;
+        public string ConnectionId;
     }
 
     public class THumSession
     {
         public string sChrName;
         public int nIndex;
-        public Socket Socket;
+        public string ConnectionId;
         public bool bo24;
         public bool bo2C;
         public long lastSessionTick;
     }
 
-    public struct HumRecordData
-    {
-        public int Id;
-        public TRecordHeader Header;
-        public string sChrName;
-        public string sAccount;
-        public bool boDeleted;
-        public byte boSelected;
-    }
-
-    public class TGlobaSessionInfo
+    public class GlobaSessionInfo
     {
         public string sAccount;
         public string sIPaddr;
@@ -257,26 +224,45 @@ namespace DBSvr
         public bool boStartPlay;
     }
 
-    public class TGateInfo
+    public class SelGateInfo
     {
+        public string ConnectionId;
         public Socket Socket;
-        public string sGateaddr;
-        public IList<TUserInfo> UserList;
-        public long dwTick10;
+        public byte[] Data;
+        public int DataLen;
+        public EndPoint RemoteEndPoint;
+        public EndPoint LoclEndPoint;
+        public IList<SessionUserInfo> UserList;
         /// <summary>
         /// 网关ID
         /// </summary>
         public short nGateID;
+        public int ConnectTick;
+
+        public SelGateInfo()
+        {
+            Data = new byte[1024 * 10];
+        }
+
+        public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string queueCount) GetStatus()
+        {
+            return (RemoteEndPoint.ToString(), GetConnected(), UserList.Count.ToString(), "", "", "");
+        }
+
+        private string GetConnected()
+        {
+            return Socket.Connected ? "[green]Connected[/]" : "[red]Not Connected[/]";
+        }
     }
 
-    public class TUserInfo
+    public class SessionUserInfo
     {
         public string sAccount;
         public string sUserIPaddr;
         public string sGateIPaddr;
-        public string sConnID;
+        public int SessionId;
         public int nSessionID;
-        public Socket Socket;
+        public string ConnectionId;
         public string sText;
         public bool boChrSelected;
         public bool boChrQueryed;
@@ -285,26 +271,26 @@ namespace DBSvr
         public short nSelGateID;
     }
 
-    public class TRouteInfo
+    public class GateRouteInfo
     {
-        public int nGateCount;
-        public string sSelGateIP;
-        public string[] sGameGateIP;
-        public int[] nGameGatePort;
+        public int GateCount;
+        /// <summary>
+        /// 角色网关IP
+        /// </summary>
+        public string SelGateIP;
+        /// <summary>
+        /// 游戏网关
+        /// </summary>
+        public string[] GameGateIP;
+        /// <summary>
+        /// 游戏网关端口
+        /// </summary>
+        public int[] GameGatePort;
 
-        public TRouteInfo()
+        public GateRouteInfo()
         {
-            sGameGateIP = new string[8];
-            nGameGatePort = new int[8];
+            GameGateIP = new string[8];
+            GameGatePort = new int[8];
         }
-    }
-
-    public class TQueryChr
-    {
-        public byte btJob;
-        public byte btHair;
-        public byte btSex;
-        public ushort wLevel;
-        public string sName;
     }
 }

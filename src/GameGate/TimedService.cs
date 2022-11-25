@@ -1,134 +1,139 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using GameGate.Services;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Packages;
 
 namespace GameGate
 {
     public class TimedService : BackgroundService
     {
-        private LogQueue _logQueue => LogQueue.Instance;
-        private ClientManager _clientManager => ClientManager.Instance;
-        private SessionManager _sessionManager => SessionManager.Instance;
-        private ServerManager _serverManager => ServerManager.Instance;
+        private readonly ILogger<TimedService> _logger;
+        private static MirLog LogQueue => MirLog.Instance;
+        private static ClientManager ClientManager => ClientManager.Instance;
+        private static SessionManager SessionManager => SessionManager.Instance;
+        private static ServerManager ServerManager => ServerManager.Instance;
+        private int ProcessDelayTick { get; set; }
+        private int ProcessDelayCloseTick { get; set; }
+        private int ProcessClearSessionTick { get; set; }
+        private int CheckServerConnectTick { get; set; }
+        private int KepAliveTick { get; set; }
 
-        private int _processDelayTick = 0;
-        private int _processDelayCloseTick = 0;
-        private int _processClearSessionTick = 0;
-        private int _kepAliveTick = 0;
+        private readonly PeriodicTimer _periodicTimer;
 
-        public TimedService()
+        public TimedService(ILogger<TimedService> logger)
         {
-            _kepAliveTick = HUtil32.GetTickCount();
+            _logger = logger;
+            KepAliveTick = HUtil32.GetTickCount();
+            _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(10));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            var startTick = HUtil32.GetTickCount();
+            ProcessDelayTick = startTick;
+            ProcessDelayCloseTick = startTick;
+            ProcessClearSessionTick = startTick;
+            KepAliveTick = startTick;
+            CheckServerConnectTick = startTick;
+            while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
             {
+                var currentTick = HUtil32.GetTickCount();
                 OutMianMessage();
-                ProcessDelayMsg();
-                ClearSession();
-                KeepAlive();
-                await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
+                ProcessDelayMsg(currentTick);
+                ClearIdleSession(currentTick);
+                KeepAlive(currentTick);
+                ProcessDelayClose(currentTick);
             }
         }
 
         private void OutMianMessage()
         {
-            if (GateShare.ShowLog)
-            {
-                while (!_logQueue.MessageLog.IsEmpty)
-                {
-                    string message;
-                    if (!_logQueue.MessageLog.TryDequeue(out message)) continue;
-                    Console.WriteLine(message);
-                }
+            if (!GateShare.ShowLog)
+                return;
 
-                while (!_logQueue.DebugLog.IsEmpty)
-                {
-                    string message;
-                    if (!_logQueue.DebugLog.TryDequeue(out message)) continue;
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine(message);
-                    Console.ResetColor();
-                }
+            while (!LogQueue.MessageLogQueue.IsEmpty)
+            {
+                string message;
+                if (!LogQueue.MessageLogQueue.TryDequeue(out message)) continue;
+                _logger.LogInformation(message);
+            }
+
+            while (!LogQueue.DebugLogQueue.IsEmpty)
+            {
+                string message;
+                if (!LogQueue.DebugLogQueue.TryDequeue(out message)) continue;
+                _logger.LogDebug(message);
             }
         }
 
         /// <summary>
         /// GameGate->GameSvr 心跳
         /// </summary>
-        private void KeepAlive()
+        private void KeepAlive(int currentTick)
         {
-            if (HUtil32.GetTickCount() - _kepAliveTick > 10 * 10000)
+            if (currentTick - CheckServerConnectTick > 10000)
             {
-                _kepAliveTick = HUtil32.GetTickCount();
-                var _serverList = _serverManager.GetServerList();
-                for (int i = 0; i < _serverList.Count; i++)
+                CheckServerConnectTick = HUtil32.GetTickCount();
+                var clientList = ClientManager.GetClients();
+                if (clientList.Count == 0)
                 {
-                    if (_serverList[i] == null)
+                    return;
+                }
+                var clients = clientList.ToArray();
+                for (var i = 0; i < clients.Length; i++)
+                {
+                    if (clients[i] == null)
                     {
                         continue;
                     }
-                    if (_serverList[i].ClientThread == null)
-                    {
-                        continue;
-                    }
-                    if (!_serverList[i].ClientThread.IsConnected)
-                    {
-                        continue;
-                    }
-                    var cmdPacket = new PacketHeader();
-                    cmdPacket.PacketCode = Grobal2.RUNGATECODE;
-                    cmdPacket.Socket = 0;
-                    cmdPacket.Ident = Grobal2.GM_CHECKCLIENT;
-                    cmdPacket.PackLength = 0;
-                    _serverList[i].ClientThread.SendBuffer(cmdPacket.GetBuffer());
+                    clients[i].CheckConnectedState();
                 }
             }
         }
 
         /// <summary>
-        /// 处理网关延时消息
+        /// 处理会话延时消息
         /// </summary>
-        private void ProcessDelayMsg()
+        private void ProcessDelayMsg(int currentTick)
         {
-            if (HUtil32.GetTickCount() - _processDelayTick > 100)
+            if (currentTick - ProcessDelayTick > 200)
             {
-                _processDelayTick = HUtil32.GetTickCount();
-                var _serverList = _serverManager.GetServerList();
-                for (var i = 0; i < _serverList.Count; i++)
+                ProcessDelayTick = currentTick;
+                var sessionList = SessionManager.GetSessions();
+                if (sessionList.Count == 0)
                 {
-                    if (_serverList[i] == null)
+                    return;
+                }
+                var sessions = sessionList.ToArray();
+                for (var i = 0; i < sessions.Length; i++)
+                {
+                    var clientSession = sessions[i];
+                    if (clientSession?.Session?.Socket == null || !clientSession.Session.Socket.Connected)
                     {
                         continue;
                     }
-                    if (HUtil32.GetTickCount() - _processDelayCloseTick > 2000) //加入网关延时发送关闭消息
-                    {
-                        _processDelayCloseTick = HUtil32.GetTickCount();
-                        _serverList[i].ProcessCloseList();
-                    }
-                    if (_serverList[i].ClientThread == null)
+                    clientSession.ProcessDelayMessage();
+                }
+            }
+        }
+
+        private void ProcessDelayClose(int currentTick)
+        {
+            if (currentTick - ProcessDelayCloseTick > 4000)
+            {
+                ProcessDelayCloseTick = HUtil32.GetTickCount();
+                var serverList = ServerManager.GetServerList();
+                for (var i = 0; i < serverList.Length; i++)
+                {
+                    if (serverList[i] == null)
                     {
                         continue;
                     }
-                    if (_serverList[i].ClientThread.SessionArray == null)
-                    {
-                        continue;
-                    }
-                    for (var j = 0; j < _serverList[i].ClientThread.SessionArray.Length; j++)
-                    {
-                        var session = _serverList[i].ClientThread.SessionArray[j];
-                        if (session?.Socket == null)
-                        {
-                            continue;
-                        }
-                        var userClient = _sessionManager.GetSession(session.SessionId);
-                        userClient?.HandleDelayMsg();
-                    }
+                    serverList[i].CloseWaitList();
                 }
             }
         }
@@ -136,32 +141,26 @@ namespace GameGate
         /// <summary>
         /// 清理过期会话
         /// </summary>
-        private void ClearSession()
+        private void ClearIdleSession(int currentTick)
         {
-            if (HUtil32.GetTickCount() - _processClearSessionTick > 20000)
+            if (currentTick - ProcessClearSessionTick > 120000)
             {
-                _processClearSessionTick = HUtil32.GetTickCount();
-                _logQueue.EnqueueDebugging("清理超时会话开始工作...");
-                var serverList = _serverManager.GetServerList();
-                for (var i = 0; i < serverList.Count; i++)
+                ProcessClearSessionTick = HUtil32.GetTickCount();
+                var clientList = ClientManager.GetClients();
+                if (clientList.Count == 0)
                 {
-                    if (serverList[i] == null)
-                    {
-                        continue;
-                    }
-                    if (serverList[i].ClientThread == null)
-                    {
-                        continue;
-                    }
-                    ClientThread clientThread = serverList[i].ClientThread;
-                    if (clientThread == null)
-                    {
-                        continue;
-                    }
-                    clientThread.CheckTimeOutSession();
-                    _clientManager.CheckSessionStatus(serverList[i].ClientThread);
+                    return;
                 }
-                _logQueue.EnqueueDebugging("清理超时会话工作完成...");
+                var clients = clientList.ToArray();
+                for (var i = 0; i < clients.Length; i++)
+                {
+                    if (clients[i] == null)
+                    {
+                        continue;
+                    }
+                    clients[i].ProcessIdleSession();
+                }
+                LogQueue.DebugLog("清理超时无效会话...");
             }
         }
 

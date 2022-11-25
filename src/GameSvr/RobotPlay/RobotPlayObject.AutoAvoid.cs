@@ -1,6 +1,8 @@
+using GameSvr.Actor;
 using SystemModule;
+using SystemModule.Enums;
 
-namespace GameSvr
+namespace GameSvr.RobotPlay
 {
     public partial class RobotPlayObject
     {
@@ -14,17 +16,16 @@ namespace GameSvr
             bool result = false;
             try
             {
-                if (HUtil32.GetTickCount() - m_dwAutoAvoidTick > 1100 && m_boIsUseMagic && !m_boDeath)
+                if (HUtil32.GetTickCount() - m_dwAutoAvoidTick > 1100 && m_boIsUseMagic && !Death)
                 {
-                    // 血低于15%时,必定要躲 20080711
-                    if (m_btJob > 0 && (m_nSelectMagic == 0 || m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.15)))
+                    if (Job > 0 && (m_nSelectMagic == 0 || WAbil.HP <= Math.Round(WAbil.MaxHP * 0.15)))// 血低于15%时,必定要躲 
                     {
                         m_dwAutoAvoidTick = HUtil32.GetTickCount();
-                        if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22) // 22级前道法不躲避
+                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22) // 22级前道法不躲避
                         {
-                            if (m_btJob == 1)// 法放魔法后要躲
+                            if ((byte)Job == 1)// 法放魔法后要躲
                             {
-                                if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
+                                if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                 {
                                     result = true;
                                     return result;
@@ -33,23 +34,23 @@ namespace GameSvr
                         }
                         else
                         {
-                            switch (m_btJob)
+                            switch (Job)
                             {
-                                case 1:
-                                    if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
+                                case PlayJob.Wizard:
+                                    if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                     {
                                         result = true;
                                         return result;
                                     }
                                     break;
-                                case 2:
-                                    if (m_TargetCret != null)
+                                case PlayJob.Taoist:
+                                    if (TargetCret != null)
                                     {
-                                        if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪 20090108
+                                        if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) // 22级砍血量的怪
                                         {
-                                            if (m_TargetCret.m_WAbil.MaxHP >= 700)
+                                            if (TargetCret.WAbil.MaxHP >= 700)
                                             {
-                                                if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
+                                                if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                                 {
                                                     result = true;
                                                     return result;
@@ -58,7 +59,7 @@ namespace GameSvr
                                         }
                                         else
                                         {
-                                            if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
+                                            if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                             {
                                                 result = true;
                                                 return result;
@@ -67,7 +68,7 @@ namespace GameSvr
                                     }
                                     else
                                     {
-                                        if (CheckTargetXYCount(m_nCurrX, m_nCurrY, 4) > 0)
+                                        if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                         {
                                             result = true;
                                             return result;
@@ -81,7 +82,7 @@ namespace GameSvr
             }
             catch
             {
-                M2Share.MainOutMessage("TAIPlayObject.IsNeedAvoid");
+                M2Share.Log.LogError("RobotPlayObject.IsNeedAvoid");
             }
             return result;
         }
@@ -91,64 +92,64 @@ namespace GameSvr
         private int CheckTargetXYCountOfDirection(int nX, int nY, int nDir, int nRange)
         {
             int result = 0;
-            TBaseObject BaseObject;
-            if (m_VisibleActors.Count > 0)
+            BaseObject BaseObject;
+            if (VisibleActors.Count > 0)
             {
-                for (var i = 0; i < m_VisibleActors.Count; i++)
+                for (var i = 0; i < VisibleActors.Count; i++)
                 {
-                    BaseObject = m_VisibleActors[i].BaseObject;
+                    BaseObject = VisibleActors[i].BaseObject;
                     if (BaseObject != null)
                     {
-                        if (!BaseObject.m_boDeath)
+                        if (!BaseObject.Death)
                         {
-                            if (IsProperTarget(BaseObject) && (!BaseObject.m_boHideMode || m_boCoolEye))
+                            if (IsProperTarget(BaseObject) && (!BaseObject.HideMode || CoolEye))
                             {
                                 switch (nDir)
                                 {
                                     case Grobal2.DR_UP:
-                                        if (Math.Abs(nX - BaseObject.m_nCurrX) <= nRange && BaseObject.m_nCurrY - nY >= 0 && BaseObject.m_nCurrY - nY <= nRange)
+                                        if (Math.Abs(nX - BaseObject.CurrX) <= nRange && BaseObject.CurrY - nY >= 0 && BaseObject.CurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_UPRIGHT:
-                                        if (BaseObject.m_nCurrX - nX >= 0 && BaseObject.m_nCurrX - nX <= nRange && BaseObject.m_nCurrY - nY >= 0 && BaseObject.m_nCurrY - nY <= nRange)
+                                        if (BaseObject.CurrX - nX >= 0 && BaseObject.CurrX - nX <= nRange && BaseObject.CurrY - nY >= 0 && BaseObject.CurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_RIGHT:
-                                        if (BaseObject.m_nCurrX - nX >= 0 && BaseObject.m_nCurrX - nX <= nRange && Math.Abs(nY - BaseObject.m_nCurrY) <= nRange)
+                                        if (BaseObject.CurrX - nX >= 0 && BaseObject.CurrX - nX <= nRange && Math.Abs(nY - BaseObject.CurrY) <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_DOWNRIGHT:
-                                        if (BaseObject.m_nCurrX - nX >= 0 && BaseObject.m_nCurrX - nX <= nRange && nY - BaseObject.m_nCurrY >= 0 && nY - BaseObject.m_nCurrY <= nRange)
+                                        if (BaseObject.CurrX - nX >= 0 && BaseObject.CurrX - nX <= nRange && nY - BaseObject.CurrY >= 0 && nY - BaseObject.CurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_DOWN:
-                                        if (Math.Abs(nX - BaseObject.m_nCurrX) <= nRange && nY - BaseObject.m_nCurrY >= 0 && nY - BaseObject.m_nCurrY <= nRange)
+                                        if (Math.Abs(nX - BaseObject.CurrX) <= nRange && nY - BaseObject.CurrY >= 0 && nY - BaseObject.CurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_DOWNLEFT:
-                                        if (nX - BaseObject.m_nCurrX >= 0 && nX - BaseObject.m_nCurrX <= nRange && nY - BaseObject.m_nCurrY >= 0 && nY - BaseObject.m_nCurrY <= nRange)
+                                        if (nX - BaseObject.CurrX >= 0 && nX - BaseObject.CurrX <= nRange && nY - BaseObject.CurrY >= 0 && nY - BaseObject.CurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_LEFT:
-                                        if (nX - BaseObject.m_nCurrX >= 0 && nX - BaseObject.m_nCurrX <= nRange && Math.Abs(nY - BaseObject.m_nCurrY) <= nRange)
+                                        if (nX - BaseObject.CurrX >= 0 && nX - BaseObject.CurrX <= nRange && Math.Abs(nY - BaseObject.CurrY) <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Grobal2.DR_UPLEFT:
-                                        if (nX - BaseObject.m_nCurrX >= 0 && nX - BaseObject.m_nCurrX <= nRange && BaseObject.m_nCurrY - nY >= 0 && BaseObject.m_nCurrY - nY <= nRange)
+                                        if (nX - BaseObject.CurrX >= 0 && nX - BaseObject.CurrX <= nRange && BaseObject.CurrY - nY >= 0 && BaseObject.CurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
@@ -170,42 +171,42 @@ namespace GameSvr
         {
             int n10;
             int n14;
-            n10 = m_TargetCret.m_nCurrX;
-            n14 = m_TargetCret.m_nCurrY;
+            n10 = TargetCret.CurrX;
+            n14 = TargetCret.CurrY;
             int result = Grobal2.DR_DOWN;
-            if (n10 > m_nCurrX)
+            if (n10 > CurrX)
             {
                 result = Grobal2.DR_LEFT;
-                if (n14 > m_nCurrY)
+                if (n14 > CurrY)
                 {
                     result = Grobal2.DR_DOWNLEFT;
                 }
-                if (n14 < m_nCurrY)
+                if (n14 < CurrY)
                 {
                     result = Grobal2.DR_UPLEFT;
                 }
             }
             else
             {
-                if (n10 < m_nCurrX)
+                if (n10 < CurrX)
                 {
                     result = Grobal2.DR_RIGHT;
-                    if (n14 > m_nCurrY)
+                    if (n14 > CurrY)
                     {
                         result = Grobal2.DR_DOWNRIGHT;
                     }
-                    if (n14 < m_nCurrY)
+                    if (n14 < CurrY)
                     {
                         result = Grobal2.DR_UPRIGHT;
                     }
                 }
                 else
                 {
-                    if (n14 > m_nCurrY)
+                    if (n14 > CurrY)
                     {
                         result = Grobal2.DR_UP;
                     }
-                    else if (n14 < m_nCurrY)
+                    else if (n14 < CurrY)
                     {
                         result = Grobal2.DR_DOWN;
                     }
@@ -219,39 +220,39 @@ namespace GameSvr
             int n10 = nTargetX;
             int n14 = nTargetY;
             byte result = Grobal2.DR_DOWN;
-            if (n10 > m_nCurrX)
+            if (n10 > CurrX)
             {
                 result = Grobal2.DR_RIGHT;
-                if (n14 > m_nCurrY)
+                if (n14 > CurrY)
                 {
                     result = Grobal2.DR_DOWNRIGHT;
                 }
-                if (n14 < m_nCurrY)
+                if (n14 < CurrY)
                 {
                     result = Grobal2.DR_UPRIGHT;
                 }
             }
             else
             {
-                if (n10 < m_nCurrX)
+                if (n10 < CurrX)
                 {
                     result = Grobal2.DR_LEFT;
-                    if (n14 > m_nCurrY)
+                    if (n14 > CurrY)
                     {
                         result = Grobal2.DR_DOWNLEFT;
                     }
-                    if (n14 < m_nCurrY)
+                    if (n14 < CurrY)
                     {
                         result = Grobal2.DR_UPLEFT;
                     }
                 }
                 else
                 {
-                    if (n14 > m_nCurrY)
+                    if (n14 > CurrY)
                     {
                         result = Grobal2.DR_DOWN;
                     }
-                    else if (n14 < m_nCurrY)
+                    else if (n14 < CurrY)
                     {
                         result = Grobal2.DR_UP;
                     }
@@ -268,7 +269,7 @@ namespace GameSvr
                 switch (nDir)
                 {
                     case Grobal2.DR_UP:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetY -= 2;
                             break;
@@ -284,7 +285,7 @@ namespace GameSvr
                             continue;
                         }
                     case Grobal2.DR_UPRIGHT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
                             nTargetY -= 2;
@@ -302,7 +303,7 @@ namespace GameSvr
                             continue;
                         }
                     case Grobal2.DR_RIGHT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
                             break;
@@ -318,7 +319,7 @@ namespace GameSvr
                             continue;
                         }
                     case Grobal2.DR_DOWNRIGHT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
                             nTargetY += 2;
@@ -336,7 +337,7 @@ namespace GameSvr
                             continue;
                         }
                     case Grobal2.DR_DOWN:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetY += 2;
                             break;
@@ -352,7 +353,7 @@ namespace GameSvr
                             continue;
                         }
                     case Grobal2.DR_DOWNLEFT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
                             nTargetY += 2;
@@ -370,7 +371,7 @@ namespace GameSvr
                             continue;
                         }
                     case Grobal2.DR_LEFT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
                             break;
@@ -386,7 +387,7 @@ namespace GameSvr
                             continue;
                         }
                     case Grobal2.DR_UPLEFT:
-                        if (m_PEnvir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
+                        if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
                             nTargetY -= 2;
@@ -429,7 +430,7 @@ namespace GameSvr
                 }
                 nTargetX = nX;
                 nTargetY = nY;
-                nDir = (byte)new System.Random(7).Next();
+                nDir = M2Share.RandomNumber.RandomByte(7);
                 result = AutoAvoid_GetGotoXY(nDir, ref nTargetX, ref nTargetY);
                 n10++;
             }
@@ -444,12 +445,12 @@ namespace GameSvr
         private bool AutoAvoid()
         {
             bool result = true;
-            if (m_TargetCret != null && !m_TargetCret.m_boDeath)
+            if (TargetCret != null && !TargetCret.Death)
             {
-                byte nDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
+                byte nDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                 nDir = GetBackDir(nDir);
-                m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, nDir, 5, ref m_nTargetX, ref m_nTargetY);
-                result = GotoTargetXY(m_nTargetX, m_nTargetY, 1);
+                Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, 5, ref TargetX, ref TargetY);
+                result = GotoTargetXY(TargetX, TargetY, 1);
             }
             return result;
         }

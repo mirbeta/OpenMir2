@@ -1,4 +1,4 @@
-namespace SystemModule
+namespace SystemModule.RandomSelector
 {
     public class WeightedItem<T>
     {
@@ -15,7 +15,7 @@ namespace SystemModule
         /// <summary>
         /// 累计权重
         /// </summary>
-        internal int CumulativeWeight;
+        protected int CumulativeWeight;
 
         public WeightedItem(T value, int weight)
         {

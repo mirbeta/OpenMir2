@@ -1,10 +1,11 @@
-﻿namespace SystemModule;
-
-public class TDoorStatus
+﻿namespace SystemModule.Data
 {
-    public bool bo01;
-    public int n04;
-    public bool boOpened;
-    public int dwOpenTick;
-    public int nRefCount;
+    public class DoorStatus
+    {
+        public bool bo01;
+        public int n04;
+        public bool Opened;
+        public int OpenTick;
+        public int nRefCount;
+    }
 }

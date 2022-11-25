@@ -1,7 +1,8 @@
-﻿namespace SystemModule;
-
-public class TDeleteItem
+﻿namespace SystemModule.Data
 {
-    public string sItemName;
-    public int MakeIndex;
+    public class DeleteItem
+    {
+        public string ItemName;
+        public int MakeIndex;
+    }
 }

@@ -1,44 +1,57 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using LoginSvr.Conf;
+using LoginSvr.Services;
+using LoginSvr.Storage;
+using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule.Logger;
 
 namespace LoginSvr
 {
     public class AppService : BackgroundService
     {
-        private readonly AppServer _serverApp;
+        private readonly MirLogger _logger;
+        private readonly ConfigManager _configManager;
+        private readonly SessionServer _masSocService;
+        private readonly LoginServer _loginService;
+        private readonly AccountStorage _accountStorage;
 
-        private LogQueue _logQueue => LogQueue.Instance;
-        private MasSocService _masSocService => MasSocService.Instance;
-        private MonSocService _monSocService => MonSocService.Instance;
-        private LoginService _loginService => LoginService.Instance;
-
-        public AppService(AppServer appServer)
+        public AppService(MirLogger logger, SessionServer masSocService, LoginServer loginService, AccountStorage accountStorage, ConfigManager configManager)
         {
-            _serverApp = appServer;
+            _logger = logger;
+            _masSocService = masSocService;
+            _loginService = loginService;
+            _accountStorage = accountStorage;
+            _configManager = configManager;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logQueue.EnqueueDebugging($"LoginSvr is stopping."));
-            await _loginService.StartConsumer();
+            stoppingToken.Register(() => _logger.DebugLog("LoginSvr is stopping."));
+            _loginService.Start(stoppingToken);
+            return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logQueue.EnqueueDebugging($"LoginSvr is starting.");
-            LSShare.Initialization();
-            _serverApp.Start();
-            _monSocService.Start();
-            _loginService.LoadConfig();
-            _loginService.Start();
-            _masSocService.Start();
+            _logger.DebugLog("LoginSvr is starting.");
+            LsShare.Initialization();
+            LoadConfig();
+            _loginService.StartServer();
+            _masSocService.StartServer();
+            _accountStorage.Initialization();
             return base.StartAsync(cancellationToken);
+        }
+
+        private void LoadConfig()
+        {
+            _configManager.LoadConfig();
+            _configManager.LoadAddrTable();
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logQueue.EnqueueDebugging($"LoginSvr is stopping.");
+            _logger.DebugLog("LoginSvr is stopping.");
             return base.StopAsync(cancellationToken);
         }
     }

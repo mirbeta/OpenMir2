@@ -1,12 +1,11 @@
 using SystemModule.Common;
 
-namespace GameSvr
+namespace GameSvr.Notices
 {
     public struct NoticeMsg
     {
         public string sMsg;
         public StringList sList;
-        public bool bo0C;
     }
 }
 

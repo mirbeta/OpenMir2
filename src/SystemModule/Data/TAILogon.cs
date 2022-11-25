@@ -1,17 +1,43 @@
-﻿namespace SystemModule;
-
-/// <summary>
-/// 假人登陆结构
-/// </summary>
-public class TAILogon
+﻿namespace SystemModule.Data
 {
-    public string sCharName;//名字
-    public string sMapName;//地图
-    public string sConfigFileName;//人物配置路径
-    public string sHeroConfigFileName;//英雄配置路径
-    public string sFilePath;
-    public string sConfigListFileName;//人物配置列表目录
-    public string sHeroConfigListFileName;//英雄配置列表目录
-    public short nX;//X坐标
-    public short nY;//Y坐标
+    /// <summary>
+    /// 假人登陆结构
+    /// </summary>
+    public class RoBotLogon
+    {
+        /// <summary>
+        /// 名字
+        /// </summary>
+        public string sChrName;
+        /// <summary>
+        /// 地图
+        /// </summary>
+        public string sMapName;
+        /// <summary>
+        /// 人物配置路径
+        /// </summary>
+        public string sConfigFileName;
+        /// <summary>
+        /// 英雄配置路径
+        /// </summary>
+        public string sHeroConfigFileName;
+        public string sFilePath;
+        /// <summary>
+        /// 人物配置列表目录
+        /// </summary>
+        /// <returns></returns>
+        public string sConfigListFileName;
+        /// <summary>
+        /// 英雄配置列表目录
+        /// </summary>
+        public string sHeroConfigListFileName;
+        /// <summary>
+        /// X坐标
+        /// </summary>
+        public short nX;
+        /// <summary>
+        /// Y坐标
+        /// </summary>
+        public short nY;
+    }
 }

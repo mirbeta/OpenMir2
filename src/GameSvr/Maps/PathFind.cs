@@ -33,10 +33,10 @@
 // 将地图数据的读取和估价函数封装成一个类使用。
 // *******************************************************************************)
 
-namespace GameSvr
+namespace GameSvr.Maps
 {
     // 路径数组
-    public class TPathMapCell
+    public class PathcellSuccess
     {
         // 路径图元
         public int Distance;
@@ -44,32 +44,32 @@ namespace GameSvr
         public int Direction;
     }
 
-    public class TPathMap
+    public class PathMap
     {
-        public TPathMapCell[,] PathMapArray;
+        protected PathcellSuccess[,] PathMapArray;
         /// <summary>
         /// 地图高(X最大值)
         /// </summary>
-        public int Height = 0;
+        protected int Height;
         /// <summary>
         /// 地图宽(Y最大值)
         /// </summary>        
-        public int Width = 0;
-        public TGetCostFunc GetCostFunc = null;
-        public TRect ClientRect = null;
+        protected int Width;
+        private readonly GetCostFunc _getCostFunc;
+        protected TRect ClientRect;
         /// <summary>
         /// 寻找范围
         /// </summary>
-        public int ScopeValue = 0;
+        private readonly int _scopeValue;
         /// <summary>
         /// 开始寻路
         /// </summary>
-        public bool StartFind = false;
+        protected bool StartFind;
 
-        public TPathMap() : base()
+        public PathMap() : base()
         {
-            ScopeValue = 1000; // 寻路范围
-            GetCostFunc = null;
+            _scopeValue = 1000; // 寻路范围
+            _getCostFunc = null;
         }
 
         // *************************************************************
@@ -78,17 +78,18 @@ namespace GameSvr
         // 6  X  2
         // 5  4  3
         // *************************************************************
-        private short DirToDX(int Direction)
+        private short DirToDx(int direction)
         {
             short result;
-            switch (Direction)
+            switch (direction)
             {
                 case 0:
                 case 4:
                     result = 0;
                     break;
-                // Modify the A .. B: 1 .. 3
                 case 1:
+                case 2:
+                case 3:
                     result = 1;
                     break;
                 default:
@@ -98,17 +99,18 @@ namespace GameSvr
             return result;
         }
 
-        private short DirToDY(int Direction)
+        private short DirToDy(int direction)
         {
             short result;
-            switch (Direction)
+            switch (direction)
             {
                 case 2:
                 case 6:
                     result = 0;
                     break;
-                // Modify the A .. B: 3 .. 5
                 case 3:
+                case 4:
+                case 5:
                     result = 1;
                     break;
                 default:
@@ -121,22 +123,20 @@ namespace GameSvr
         // *************************************************************
         // 从TPathMap中找出 TPath
         // *************************************************************
-        public PointInfo[] FindPathOnMap(short X, short Y, bool Run)
+        protected PointInfo[] FindPathOnMap(short x, short y, bool run)
         {
-            PointInfo[] result = null;
-            int Direction;
             int nCount = 0;
-            short nX = LoaclX(X);
-            short nY = LoaclY(Y);
+            short nX = LoaclX(x);
+            short nY = LoaclY(y);
             if ((nX < 0) || (nY < 0) || (nX >= ClientRect.Right - ClientRect.Left) || (nY >= ClientRect.Bottom - ClientRect.Top))
             {
-                return result;
+                return null;
             }
             if ((PathMapArray.Length <= 0) || (PathMapArray[nY, nX].Distance < 0))
             {
-                return result;
+                return null;
             }
-            result = new PointInfo[PathMapArray[nY, nX].Distance + 1];
+            var result = new PointInfo[PathMapArray[nY, nX].Distance + 1];
             while (PathMapArray[nY, nX].Distance > 0)
             {
                 if (!StartFind)
@@ -144,13 +144,13 @@ namespace GameSvr
                     break;
                 }
                 result[PathMapArray[nY, nX].Distance] = new PointInfo(nX, nY);
-                Direction = PathMapArray[nY, nX].Direction;
-                nX = (short)(nX - DirToDX(Direction));
-                nY = (short)(nY - DirToDY(Direction));
+                var direction = PathMapArray[nY, nX].Direction;
+                nX = (short)(nX - DirToDx(direction));
+                nY = (short)(nY - DirToDy(direction));
                 nCount++;
             }
             result[0] = new PointInfo(nX, nY);
-            if (Run)
+            if (run)
             {
                 result = WalkToRun(result);
             }
@@ -163,15 +163,15 @@ namespace GameSvr
             byte result;
             int flagx;
             int flagy;
-            const int DR_UP = 0;
-            const int DR_UPRIGHT = 1;
-            const int DR_RIGHT = 2;
-            const int DR_DOWNRIGHT = 3;
-            const int DR_DOWN = 4;
-            const int DR_DOWNLEFT = 5;
-            const int DR_LEFT = 6;
-            const int DR_UPLEFT = 7;
-            result = DR_DOWN;
+            const int drUp = 0;
+            const int drUpright = 1;
+            const int drRight = 2;
+            const int drDownright = 3;
+            const int drDown = 4;
+            const int drDownleft = 5;
+            const int drLeft = 6;
+            const int drUpleft = 7;
+            result = drDown;
             if (sx < dx)
             {
                 flagx = 1;
@@ -212,55 +212,47 @@ namespace GameSvr
             }
             if ((flagx == 0) && (flagy == -1))
             {
-                result = DR_UP;
+                result = drUp;
             }
             if ((flagx == 1) && (flagy == -1))
             {
-                result = DR_UPRIGHT;
+                result = drUpright;
             }
             if ((flagx == 1) && (flagy == 0))
             {
-                result = DR_RIGHT;
+                result = drRight;
             }
             if ((flagx == 1) && (flagy == 1))
             {
-                result = DR_DOWNRIGHT;
+                result = drDownright;
             }
             if ((flagx == 0) && (flagy == 1))
             {
-                result = DR_DOWN;
+                result = drDown;
             }
             if ((flagx == -1) && (flagy == 1))
             {
-                result = DR_DOWNLEFT;
+                result = drDownleft;
             }
             if ((flagx == -1) && (flagy == 0))
             {
-                result = DR_LEFT;
+                result = drLeft;
             }
             if ((flagx == -1) && (flagy == -1))
             {
-                result = DR_UPLEFT;
+                result = drUpleft;
             }
             return result;
         }
 
-        public PointInfo[] WalkToRun(PointInfo[] Path)
+        private PointInfo[] WalkToRun(PointInfo[] path)
         {
-            PointInfo[] result;
-            int nDir1;
-            int nDir2;
             int I;
-            int n01;
-            PointInfo[] WalkPath;
-            int nStep;
-            result = null;
-            WalkPath = null;
-            if ((Path != null) && (Path.Length > 1))
+            PointInfo[] result = null;
+            if ((path != null) && (path.Length > 1))
             {
-                WalkPath = new PointInfo[Path.Length];
-                WalkPath = Path;
-                nStep = 0;
+                PointInfo[] walkPath = path;
+                var nStep = 0;
                 I = 0;
                 while (true)
                 {
@@ -268,18 +260,18 @@ namespace GameSvr
                     {
                         break;
                     }
-                    if (I >= WalkPath.Length)
+                    if (I >= walkPath.Length)
                     {
                         break;
                     }
                     if (nStep >= 2)
                     {
-                        nDir1 = WalkToRun_GetNextDirection(WalkPath[I - 2].nX, WalkPath[I - 2].nX, WalkPath[I - 1].nX, WalkPath[I - 1].nX);
-                        nDir2 = WalkToRun_GetNextDirection(WalkPath[I - 1].nX, WalkPath[I - 1].nX, WalkPath[I].nX, WalkPath[I].nX);
+                        int nDir1 = WalkToRun_GetNextDirection(walkPath[I - 2].nX, walkPath[I - 2].nX, walkPath[I - 1].nX, walkPath[I - 1].nX);
+                        int nDir2 = WalkToRun_GetNextDirection(walkPath[I - 1].nX, walkPath[I - 1].nX, walkPath[I].nX, walkPath[I].nX);
                         if (nDir1 == nDir2)
                         {
-                            WalkPath[I - 1].nX = -1;
-                            WalkPath[I - 1].nX = -1;
+                            walkPath[I - 1].nX = -1;
+                            walkPath[I - 1].nX = -1;
                             nStep = 0;
                         }
                         else
@@ -293,29 +285,28 @@ namespace GameSvr
                     nStep++;
                     I++;
                 }
-                n01 = 0;
-                for (I = 0; I < WalkPath.Length; I++)
+                var n01 = 0;
+                for (I = 0; I < walkPath.Length; I++)
                 {
-                    if ((WalkPath[I].nX != -1) && (WalkPath[I].nX != -1))
+                    if ((walkPath[I].nX != -1) && (walkPath[I].nX != -1))
                     {
                         n01++;
                         result = new PointInfo[n01];
-                        result[n01 - 1] = WalkPath[I];
+                        result[n01 - 1] = walkPath[I];
                     }
                 }
                 return result;
             }
-            if ((Path != null) && (Path.Length > 0))
+            if ((path != null) && (path.Length > 0))
             {
-                result = new PointInfo[Path.Length - 1];
-                for (I = 0; I < Path.Length; I++)
+                result = new PointInfo[path.Length - 1];
+                for (I = 0; I < path.Length; I++)
                 {
-                    result[I - 1] = Path[I];
+                    result[I - 1] = path[I];
                 }
             }
             else
             {
-                result = new PointInfo[0];
                 result = null;
             }
             return result;
@@ -326,80 +317,80 @@ namespace GameSvr
         // 寻路算法
         // X1,Y1为路径运算起点，X2，Y2为路径运算终点
         // *************************************************************
-        public int MapX(int X)
+        public int MapX(int x)
         {
-            return X + ClientRect.Left;
+            return x + ClientRect.Left;
         }
 
-        public int MapY(int Y)
+        public int MapY(int y)
         {
-            return Y + ClientRect.Top;
+            return y + ClientRect.Top;
         }
 
-        public short LoaclX(short X)
+        public short LoaclX(short x)
         {
-            return (short)(X - ClientRect.Left);
+            return (short)(x - ClientRect.Left);
         }
 
-        public short LoaclY(short Y)
+        public short LoaclY(short y)
         {
-            return (short)(Y - ClientRect.Top);
+            return (short)(y - ClientRect.Top);
         }
 
-        public void GetClientRect(int X, int Y)
+        public void GetClientRect(int x, int y)
         {
             ClientRect = new TRect(0, 0, Width, Height);
             // Bounds定义一个矩形
-            if (Width > ScopeValue)
+            if (Width > _scopeValue)
             {
-                ClientRect.Left = Math.Max(0, X - ScopeValue / 2);
-                ClientRect.Right = ClientRect.Left + Math.Min(Width, X + ScopeValue / 2);
+                ClientRect.Left = Math.Max(0, x - _scopeValue / 2);
+                ClientRect.Right = ClientRect.Left + Math.Min(Width, x + _scopeValue / 2);
             }
-            if (Height > ScopeValue)
+            if (Height > _scopeValue)
             {
-                ClientRect.Top = Math.Max(0, Y - ScopeValue / 2);
-                ClientRect.Bottom = ClientRect.Top + Math.Min(Height, Y + ScopeValue / 2);
+                ClientRect.Top = Math.Max(0, y - _scopeValue / 2);
+                ClientRect.Bottom = ClientRect.Top + Math.Min(Height, y + _scopeValue / 2);
             }
         }
 
-        public void GetClientRect(int X1, int Y1, int X2, int Y2)
+        public void GetClientRect(int x1, int y1, int x2, int y2)
         {
-            int X;
-            int Y;
-            if (X1 > X2)
+            int x;
+            int y;
+            if (x1 > x2)
             {
-                X = X2 + (X1 - X2) / 2;
+                x = x2 + (x1 - x2) / 2;
             }
-            else if (X1 < X2)
+            else if (x1 < x2)
             {
-                X = X1 + (X2 - X1) / 2;
-            }
-            else
-            {
-                X = X1;
-            }
-            if (Y1 > Y2)
-            {
-                Y = Y2 + (Y1 - Y2) / 2;
-            }
-            else if (Y1 < Y2)
-            {
-                Y = Y1 + (Y2 - Y1) / 2;
+                x = x1 + (x2 - x1) / 2;
             }
             else
             {
-                Y = Y1;
+                x = x1;
+            }
+            if (y1 > y2)
+            {
+                y = y2 + (y1 - y2) / 2;
+            }
+            else if (y1 < y2)
+            {
+                y = y1 + (y2 - y1) / 2;
+            }
+            else
+            {
+                y = y1;
             }
             ClientRect = new TRect(0, 0, Width, Height);
-            if (Width > ScopeValue)
+            if (Width > _scopeValue)
             {
-                ClientRect.Left = Math.Max(0, X - ScopeValue / 2);
-                ClientRect.Right = ClientRect.Left + Math.Min(Width, X + ScopeValue / 2);
+                ClientRect.Left = Math.Max(0, x - _scopeValue / 2);
+                ClientRect.Right = ClientRect.Left + Math.Min(Width, x + _scopeValue / 2);
             }
-            if (Height > ScopeValue)
+            if (Height > _scopeValue)
             {
-                ClientRect.Top = Math.Max(0, Y - ScopeValue / 2);
-                ClientRect.Bottom = ClientRect.Top + Math.Min(Height, Y + ScopeValue / 2);
+                ClientRect.Top = Math.Max(0, y - _scopeValue / 2);
+                ClientRect.Bottom = ClientRect.Top + Math.Min(Height, y + _scopeValue / 2);
             }
         }
 
@@ -407,103 +398,94 @@ namespace GameSvr
         /// 初始化PathMapArray
         /// </summary>
         /// <param name="result"></param>
-        public void FillPathMap_PreparePathMap(ref TPathMapCell[,] result)
+        private void FillPathMap_PreparePathMap(ref PathcellSuccess[,] result)
         {
             int nWidth = ClientRect.Right - ClientRect.Left;
             int nHeight = ClientRect.Bottom - ClientRect.Top;
-            result = new TPathMapCell[nHeight, nWidth];
-            for (var Y = 0; Y < nHeight; Y++)
+            result = new PathcellSuccess[nHeight, nWidth];
+            for (var y = 0; y < nHeight; y++)
             {
-                for (var X = 0; X < nWidth; X++)
+                for (var x = 0; x < nWidth; x++)
                 {
-                    result[Y, X] = new TPathMapCell();
-                    result[Y, X].Distance = -1;
+                    result[y, x] = new PathcellSuccess();
+                    result[y, x].Distance = -1;
                 }
             }
         }
 
         // 计算相邻8个节点的权cost，并合法点加入NewWave(),并更新最小cost
         // 合法点是指非障碍物且Result[X，Y]中未访问的点
-        public void FillPathMap_TestNeighbours(TWave OldWave, TWave NewWave, ref TPathMapCell[,] result)
+        private void FillPathMap_TestNeighbours(Wave oldWave, Wave newWave, ref PathcellSuccess[,] result)
         {
-            int X;
-            int Y;
-            int C;
-            int D;
-            for (D = 0; D <= 7; D++)
+            for (var i = 0; i < 8; i++)
             {
-                X = OldWave.Item.X + DirToDX(D);
-                Y = OldWave.Item.Y + DirToDY(D);
-                C = GetCost(X, Y, D);
-                if ((C >= 0) && (result[Y, X].Distance < 0))
+                var x = oldWave.Item.X + DirToDx(i);
+                var y = oldWave.Item.Y + DirToDy(i);
+                var c = GetCost(x, y, i);
+                if ((c >= 0) && (result[y, x].Distance < 0))
                 {
-                    NewWave.Add(X, Y, C, D);
+                    newWave.Add(x, y, c, i);
                 }
             }
         }
 
-        public void FillPathMap_ExchangeWaves(TWave OldWave, TWave NewWave)
+        private void FillPathMap_ExchangeWaves(Wave oldWave, Wave newWave)
         {
-            TWave W;
-            W = OldWave;
-            OldWave = NewWave;
-            NewWave = W;
-            NewWave.Clear();
+            var w = oldWave;
+            newWave = w;
+            newWave.Clear();
         }
 
         // *************************************************************
         // 寻路算法
         // X1,Y1为路径运算起点，X2，Y2为路径运算终点
         // *************************************************************
-        protected TPathMapCell[,] FillPathMap(short X1, short Y1, short X2, short Y2)
+        protected PathcellSuccess[,] FillPathMap(short x1, short y1, short x2, short y2)
         {
-            TPathMapCell[,] result = null;
-            TWave OldWave;
-            TWave NewWave;
-            bool Finished;
-            TWaveCell I;
-            GetClientRect(X1, Y1);
-            short nX1 = LoaclX(X1);
-            short nY1 = LoaclY(Y1);
-            short nX2 = LoaclX(X2);
-            short nY2 = LoaclY(Y2);
-            if (X2 < 0)
+            PathcellSuccess[,] result = null;
+            Wave oldWave;
+            Wave newWave;
+            bool finished;
+            WaveCell I;
+            GetClientRect(x1, y1);
+            short nX1 = LoaclX(x1);
+            short nY1 = LoaclY(y1);
+            short nX2 = LoaclX(x2);
+            short nY2 = LoaclY(y2);
+            if (x2 < 0)
             {
-                nX2 = X2;
+                nX2 = x2;
             }
-            if (Y2 < 0)
+            if (y2 < 0)
             {
-                nY2 = Y2;
+                nY2 = y2;
             }
-            if ((X2 >= 0) && (Y2 >= 0))
+            if ((x2 >= 0) && (y2 >= 0))
             {
                 if ((Math.Abs(nX1 - nX2) > (ClientRect.Right - ClientRect.Left)) || (Math.Abs(nY1 - nY2) > (ClientRect.Bottom - ClientRect.Top)))
                 {
-                    result = new TPathMapCell[0, 0];
+                    result = new PathcellSuccess[0, 0];
                     return result;
                 }
             }
             FillPathMap_PreparePathMap(ref result);
             // 初始化PathMapArray ,Distance:=-1
-            OldWave = new TWave();
-            NewWave = new TWave();
+            oldWave = new Wave();
+            newWave = new Wave();
             try
             {
-                result[nY1, nX1].Distance = 0;
-                // 起点Distance:=0
-                OldWave.Add(nX1, nY1, 0, 0);
-                // 将起点加入OldWave
-                FillPathMap_TestNeighbours(OldWave, NewWave, ref result);
-                Finished = ((nX1 == nX2) && (nY1 == nY2));
-                // 检验是否到达终点
-                while (!Finished)
+                result[nY1, nX1].Distance = 0;// 起点Distance:=0
+                oldWave.Add(nX1, nY1, 0, 0);// 将起点加入OldWave
+                FillPathMap_TestNeighbours(oldWave, newWave, ref result);
+                finished = (nX1 == nX2) && (nY1 == nY2);// 检验是否到达终点
+                while (!finished)
                 {
-                    FillPathMap_ExchangeWaves(OldWave, NewWave);
+                    FillPathMap_ExchangeWaves(oldWave, newWave);
                     if (!StartFind)
                     {
                         break;
                     }
-                    if (!OldWave.Start())
+                    if (!oldWave.Start())
                     {
                         break;
                     }
@@ -513,14 +495,14 @@ namespace GameSvr
                         {
                             break;
                         }
-                        I = OldWave.Item;
-                        I.Cost = I.Cost - OldWave.MinCost;
+                        I = oldWave.Item;
+                        I.Cost = I.Cost - oldWave.MinCost;
                         // 如果大于MinCost
                         if (I.Cost > 0)
                         {
                             // 加入NewWave
                             // 更新Cost= cost-MinCost
-                            NewWave.Add(I.X, I.Y, I.Cost, I.Direction);
+                            newWave.Add(I.X, I.Y, I.Cost, I.Direction);
                         }
                         else
                         {
@@ -529,18 +511,18 @@ namespace GameSvr
                             {
                                 continue;
                             }
-                            result[I.Y, I.X].Distance = result[I.Y - DirToDY(I.Direction), I.X - DirToDX(I.Direction)].Distance + 1;
+                            result[I.Y, I.X].Distance = result[I.Y - DirToDy(I.Direction), I.X - DirToDx(I.Direction)].Distance + 1;
                             // 此点 Distance:=上一个点Distance+1
                             result[I.Y, I.X].Direction = I.Direction;
-                            Finished = ((I.X == nX2) && (I.Y == nY2));
+                            finished = (I.X == nX2) && (I.Y == nY2);
                             // 检验是否到达终点
-                            if (Finished)
+                            if (finished)
                             {
                                 break;
                             }
-                            FillPathMap_TestNeighbours(OldWave, NewWave, ref result);
+                            FillPathMap_TestNeighbours(oldWave, newWave, ref result);
                         }
-                    } while (!(!OldWave.Next()));
+                    } while (!!oldWave.Next());
                 }
             }
             finally
@@ -550,43 +532,44 @@ namespace GameSvr
             return result;
         }
 
-        public virtual int GetCost(int X, int Y, int Direction)
+        protected virtual int GetCost(int x, int y, int direction)
         {
             int result;
-            Direction = (Direction & 7);
-            if ((X < 0) || (X >= Width) || (Y < 0) || (Y >= Height))
+            direction = direction & 7;
+            if ((x < 0) || (x >= Width) || (y < 0) || (y >= Height))
             {
                 result = -1;
             }
             else
             {
-                result = GetCostFunc(X, Y, Direction, 0);
+                result = _getCostFunc(x, y, direction, 0);
             }
             return result;
         }
     }
 
-    public class TFindPath : TPathMap
+    public class FindPath : PathMap
     {
         public PointInfo[] Path
         {
             get
             {
-                return FPath;
+                return _path;
             }
             set
             {
-                FPath = value;
+                _path = value;
             }
         }
-        private PointInfo[] FPath;
-        private Envirnoment FEnvir = null;
-        public int BeginX = 0;
-        public int BeginY = 0;
-        public int EndX = 0;
-        public int EndY = 0;
 
-        public TFindPath() : base()
+        private PointInfo[] _path;
+        private Envirnoment _pathEnvir;
+        public int BeginX;
+        public int BeginY;
+        public int EndX;
+        public int EndY;
+
+        public FindPath() : base()
         {
             this.StartFind = false;
         }
@@ -598,60 +581,56 @@ namespace GameSvr
             BeginY = -1;
             EndX = -1;
             EndY = -1;
-            this.PathMapArray = new TPathMapCell[0, 0];
+            this.PathMapArray = new PathcellSuccess[0, 0];
             this.PathMapArray = null;
         }
 
-        public PointInfo[] FindPath(short StopX, short StopY, bool Run)
+        public PointInfo[] Find(short stopX, short stopY, bool run)
         {
-            PointInfo[] result;
-            EndX = StopX;
-            EndY = StopY;
-            result = this.FindPathOnMap(StopX, StopY, Run);
-            return result;
+            EndX = stopX;
+            EndY = stopY;
+            return this.FindPathOnMap(stopX, stopY, run);
         }
 
-        public PointInfo[] FindPath(Envirnoment Envir, short StartX, short StartY, short StopX, short StopY, bool Run)
+        public PointInfo[] Find(Envirnoment envir, short startX, short startY, short stopX, short stopY, bool run)
         {
-            PointInfo[] result;
-            this.Width = Envir.wWidth;
-            this.Height = Envir.wHeight;
-            BeginX = StartX;
-            BeginY = StartY;
-            EndX = StopX;
-            EndY = StopY;
-            FPath = null;
-            FEnvir = Envir;
+            this.Width = envir.Width;
+            this.Height = envir.Height;
+            BeginX = startX;
+            BeginY = startY;
+            EndX = stopX;
+            EndY = stopY;
+            _path = null;
+            _pathEnvir = envir;
             this.StartFind = true;
-            this.PathMapArray = this.FillPathMap(StartX, StartY, StopX, StopY);
-            result = this.FindPathOnMap(StopX, StopY, Run);
-            return result;
+            this.PathMapArray = this.FillPathMap(startX, startY, stopX, stopY);
+            return this.FindPathOnMap(stopX, stopY, run);
         }
 
-        public void SetStartPos(short StartX, short StartY)
+        public void SetStartPos(short startX, short startY)
         {
-            BeginX = StartX;
-            BeginY = StartY;
-            this.PathMapArray = this.FillPathMap(StartX, StartY, -1, -1);
+            BeginX = startX;
+            BeginY = startY;
+            this.PathMapArray = this.FillPathMap(startX, startY, -1, -1);
         }
 
-        public int GetCost(short X, short Y, int Direction)
+        public int GetCost(short x, short y, int direction)
         {
             int result;
             int nX;
             int nY;
-            if (FEnvir != null)
+            if (_pathEnvir != null)
             {
-                Direction = (Direction & 7);
-                if ((X < 0) || (X >= this.ClientRect.Right - this.ClientRect.Left) || (Y < 0) || (Y >= this.ClientRect.Bottom - this.ClientRect.Top))
+                direction = direction & 7;
+                if ((x < 0) || (x >= this.ClientRect.Right - this.ClientRect.Left) || (y < 0) || (y >= this.ClientRect.Bottom - this.ClientRect.Top))
                 {
                     result = -1;
                 }
                 else
                 {
-                    nX = this.MapX(X);
-                    nY = this.MapY(Y);
-                    if (FEnvir.CanWalkEx(nX, nY, false))
+                    nX = this.MapX(x);
+                    nY = this.MapY(y);
+                    if (_pathEnvir.CanWalkEx(nX, nY, false))
                     {
                         result = 4;
                     }
@@ -660,7 +639,7 @@ namespace GameSvr
                         result = -1;
                     }
                     // 如果是斜方向,则COST增加
-                    if (((Direction & 1) == 1) && (result > 0))
+                    if (((direction & 1) == 1) && (result > 0))
                     {
                         result = result + (result >> 1); // 应为Result*sqt(2),此处近似为1.5
                     }
@@ -674,7 +653,7 @@ namespace GameSvr
         }
     }
 
-    public struct TWaveCell
+    public struct WaveCell
     {
         // 路线点
         public int X;
@@ -683,67 +662,67 @@ namespace GameSvr
         public int Direction;
     }
 
-    public class TWave
+    public class Wave
     {
-        public TWaveCell Item => GetItem();
-        public int MinCost => FMinCost;
+        public WaveCell Item => GetItem();
+        public int MinCost => _fMinCost;
 
-        private TWaveCell[] FData = new TWaveCell[0];
-        private int FPos = 0;
-        private int FCount = 0;
-        private int FMinCost = 0;
+        private WaveCell[] _fData = new WaveCell[0];
+        private int _fPos;
+        private int _fCount;
+        private int _fMinCost;
 
-        public TWave()
+        public Wave()
         {
             Clear();
         }
 
-        ~TWave()
+        ~Wave()
         {
-            FData = null;
+            _fData = null;
         }
 
-        private TWaveCell GetItem()
+        private WaveCell GetItem()
         {
-            return FData[FPos];
+            return _fData[_fPos];
         }
 
-        public void Add(int NewX, int NewY, int NewCost, int NewDirection)
+        public void Add(int newX, int newY, int newCost, int newDirection)
         {
-            if (FCount >= FData.Length)
+            if (_fCount >= _fData.Length)
             {
-                FData = new TWaveCell[FData.Length + 30];
+                _fData = new WaveCell[_fData.Length + 30];
             }
-            FData[FCount].X = NewX;
-            FData[FCount].Y = NewY;
-            FData[FCount].Cost = NewCost;
-            FData[FCount].Direction = NewDirection;
-            if (NewCost < FMinCost)
+            _fData[_fCount].X = newX;
+            _fData[_fCount].Y = newY;
+            _fData[_fCount].Cost = newCost;
+            _fData[_fCount].Direction = newDirection;
+            if (newCost < _fMinCost)
             {
-                FMinCost = NewCost;
+                _fMinCost = newCost;
             }
-            FCount++;
+            _fCount++;
         }
 
         public void Clear()
         {
-            FPos = 0;
-            FCount = 0;
-            FMinCost = Int32.MaxValue;
+            _fPos = 0;
+            _fCount = 0;
+            _fMinCost = int.MaxValue;
         }
 
         public bool Start()
         {
-            FPos = 0;
-            return FCount > 0; ;
+            _fPos = 0;
+            return _fCount > 0; ;
         }
 
         public bool Next()
         {
-            FPos++;
-            return (FPos < FCount);
+            _fPos++;
+            return _fPos < _fCount;
         }
     }
 
-    public delegate int TGetCostFunc(int X, int Y, int Direction, int PathWidth);
+    public delegate int GetCostFunc(int x, int y, int direction, int pathWidth);
 }

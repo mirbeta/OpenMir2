@@ -1,24 +1,32 @@
-﻿using SystemModule;
+﻿using GameSvr.Event.Events;
+using GameSvr.Npc;
+using SystemModule;
+using SystemModule.Data;
 
-namespace GameSvr
+namespace GameSvr.Maps
 {
     public class MapManager
     {
-        private readonly Dictionary<string, Envirnoment> m_MapList = new Dictionary<string, Envirnoment>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Envirnoment> _mapList = new Dictionary<string, Envirnoment>(StringComparer.OrdinalIgnoreCase);
+        /// <summary>
+        /// 地图上门列表
+        /// </summary>
+        private readonly IList<Envirnoment> _mapDoorList = new List<Envirnoment>();
+        /// <summary>
+        /// 矿物地图列表
+        /// </summary>
+        private readonly IList<Envirnoment> _mapMineList = new List<Envirnoment>();
 
-        public IList<Envirnoment> Maps => m_MapList.Values.ToList();
+        public IList<Envirnoment> Maps => _mapList.Values.ToList();
 
         public void MakeSafePkZone()
         {
-            SafeEvent SafeEvent;
-            TStartPoint StartPoint;
-            Envirnoment Envir;
             for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                StartPoint = M2Share.StartPointList[i];
+                var StartPoint = M2Share.StartPointList[i];
                 if (StartPoint != null && StartPoint.m_nType > 0)
                 {
-                    Envir = FindMap(StartPoint.m_sMapName);
+                    var Envir = FindMap(StartPoint.m_sMapName);
                     if (Envir != null)
                     {
                         int nMinX = StartPoint.m_nCurrX - StartPoint.m_nRange;
@@ -31,8 +39,8 @@ namespace GameSvr
                             {
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                                 {
-                                    SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.m_nType);
-                                    M2Share.EventManager.AddEvent(SafeEvent);
+                                    var SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.m_nType);
+                                    M2Share.EventMgr.AddEvent(SafeEvent);
                                 }
                             }
                         }
@@ -43,44 +51,28 @@ namespace GameSvr
 
         public IList<Envirnoment> GetMineMaps()
         {
-            var list = new List<Envirnoment>();
-            foreach (var item in m_MapList.Values)
-            {
-                if (item.Flag.boMINE || item.Flag.boMINE2)
-                {
-                    list.Add(item);
-                }
-            }
-            return list;
+            return _mapMineList;
         }
 
         public IList<Envirnoment> GetDoorMapList()
         {
-            var list = new List<Envirnoment>();
-            foreach (var item in m_MapList.Values)
-            {
-                if (item.m_DoorList.Count > 0)
-                {
-                    list.Add(item);
-                }
-            }
-            return list;
+            return _mapDoorList;
         }
 
-        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, TMapFlag MapFlag, object QuestNPC)
+        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, TMapFlag MapFlag, Merchant QuestNPC)
         {
-            var m_sMapFileName = string.Empty;
+            var sMapFileName = string.Empty;
             var sTempName = sMapName;
             if (sTempName.IndexOf('|') > -1)
             {
-                m_sMapFileName = HUtil32.GetValidStr3(sTempName, ref sMapName, new[] { '|' });
+                sMapFileName = HUtil32.GetValidStr3(sTempName, ref sMapName, new[] { '|' });
             }
             else
             {
-                sTempName = HUtil32.ArrestStringEx(sTempName, '<', '>', ref m_sMapFileName);
-                if (m_sMapFileName == "")
+                sTempName = HUtil32.ArrestStringEx(sTempName, "<", ">", ref sMapFileName);
+                if (sMapFileName == "")
                 {
-                    m_sMapFileName = sMapName;
+                    sMapFileName = sMapName;
                 }
                 else
                 {
@@ -89,31 +81,39 @@ namespace GameSvr
             }
             var envirnoment = new Envirnoment
             {
-                sMapName = sMapName,
-                m_sMapFileName = m_sMapFileName,
-                sMapDesc = sMapDesc,
-                nServerIndex = nServerNumber,
+                MapName = sMapName,
+                MapFileName = sMapFileName,
+                MapDesc = sMapDesc,
+                ServerIndex = nServerNumber,
                 Flag = MapFlag,
-                QuestNPC = QuestNPC
+                QuestNpc = QuestNPC
             };
-            if (M2Share.MiniMapList.TryGetValue(envirnoment.sMapName, out var minMap))
+            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out var minMap))
             {
-                envirnoment.nMinMap = minMap;
+                envirnoment.MinMap = minMap;
             }
-            if (envirnoment.LoadMapData(Path.Combine(M2Share.sConfigPath, M2Share.g_Config.sMapDir, m_sMapFileName + ".map")))
+            if (envirnoment.LoadMapData(Path.Combine(M2Share.BasePath, M2Share.Config.MapDir, sMapFileName + ".map")))
             {
-                if (!m_MapList.ContainsKey(sMapName))
+                if (!_mapList.ContainsKey(sMapName))
                 {
-                    m_MapList.Add(sMapName, envirnoment);
+                    _mapList.Add(sMapName, envirnoment);
                 }
                 else
                 {
-                    M2Share.ErrorMessage("地图名称重复 [" + sMapName + "]，请确认配置文件是否正确.");
+                    M2Share.Log.LogError("地图名称重复 [" + sMapName + "]，请确认配置文件是否正确.");
+                }
+                if (envirnoment.DoorList.Count > 0)
+                {
+                    _mapDoorList.Add(envirnoment);
+                }
+                if (envirnoment.Flag.boMINE || envirnoment.Flag.boMINE2)
+                {
+                    _mapMineList.Add(envirnoment);
                 }
             }
             else
             {
-                M2Share.ErrorMessage("地图文件: " + M2Share.g_Config.sMapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
+                M2Share.Log.LogError("地图文件: " + M2Share.Config.MapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
             }
             return envirnoment;
         }
@@ -125,14 +125,14 @@ namespace GameSvr
             Envirnoment DEnvir = FindMap(sDMapNO);
             if (SEnvir != null && DEnvir != null)
             {
-                var GateObj = new TGateObj
+                var GateObj = new GateObject
                 {
                     boFlag = false,
-                    DEnvir = DEnvir,
-                    nDMapX = (short)nDMapX,
-                    nDMapY = (short)nDMapY
+                    Envir = DEnvir,
+                    nX = (short)nDMapX,
+                    nY = (short)nDMapY
                 };
-                SEnvir.AddToMap(nSMapX, nSMapY, CellType.OS_GATEOBJECT, GateObj);
+                SEnvir.AddToMap(nSMapX, nSMapY, CellType.Route, GateObj);
                 result = true;
             }
             return result;
@@ -140,16 +140,16 @@ namespace GameSvr
 
         public Envirnoment FindMap(string sMapName)
         {
-            Envirnoment Map = null;
-            return m_MapList.TryGetValue(sMapName, out Map) ? Map : null;
+            Envirnoment Map;
+            return _mapList.TryGetValue(sMapName, out Map) ? Map : null;
         }
 
         public Envirnoment GetMapInfo(int nServerIdx, string sMapName)
         {
             Envirnoment result = null;
-            if (m_MapList.TryGetValue(sMapName, out var envirnoment))
+            if (_mapList.TryGetValue(sMapName, out var envirnoment))
             {
-                if (envirnoment.nServerIndex == nServerIdx)
+                if (envirnoment.ServerIndex == nServerIdx)
                 {
                     result = envirnoment;
                 }
@@ -164,9 +164,9 @@ namespace GameSvr
         /// <returns></returns>
         public int GetMapOfServerIndex(string sMapName)
         {
-            if (m_MapList.TryGetValue(sMapName, out var envirnoment))
+            if (_mapList.TryGetValue(sMapName, out var envirnoment))
             {
-                return envirnoment.nServerIndex;
+                return envirnoment.ServerIndex;
             }
             return 0;
         }
@@ -181,6 +181,7 @@ namespace GameSvr
 
         public void ProcessMapDoor()
         {
+
         }
 
         public void ReSetMinMap()

@@ -1,7 +1,10 @@
+using GameSvr.Magic;
 using System.Collections;
 using SystemModule;
+using SystemModule.Data;
+using SystemModule.Enums;
 
-namespace GameSvr
+namespace GameSvr.RobotPlay
 {
     public partial class RobotPlayObject
     {
@@ -12,11 +15,10 @@ namespace GameSvr
             int nMastrRange;
             int nMonCount;
             TMapWalkXY MapWalkXY = null;
-            TMapWalkXY MapWalkXYA = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if (WalkStep[i].nWalkStep > 0 && Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) >= nRange && Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY) >= nRange)
+                if (WalkStep[i].nWalkStep > 0 && Math.Abs(WalkStep[i].nX - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].nY - TargetCret.CurrY) >= nRange)
                 {
                     if (WalkStep[i].nMonCount < n10)
                     {
@@ -25,16 +27,16 @@ namespace GameSvr
                     }
                 }
             }
-            if (MapWalkXY != null && m_Master != null)
+            if (MapWalkXY != null && Master != null)
             {
                 nMonCount = MapWalkXY.nMonCount;
                 nMastrRange = MapWalkXY.nMastrRange;
                 n10 = int.MaxValue;
-                MapWalkXYA = MapWalkXY;
+                TMapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
                 for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
-                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount && Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) >= nRange && Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY) >= nRange)
+                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount && Math.Abs(WalkStep[i].nX - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].nY - TargetCret.CurrY) >= nRange)
                     {
                         if (WalkStep[i].nMastrRange < n10 && WalkStep[i].nMastrRange < nMastrRange)
                         {
@@ -74,7 +76,7 @@ namespace GameSvr
                     }
                 }
             }
-            if (MapWalkXY != null && m_Master != null)
+            if (MapWalkXY != null && Master != null)
             {
                 nMonCount = MapWalkXY.nMonCount;
                 nMastrRange = MapWalkXY.nMastrRange;
@@ -111,13 +113,12 @@ namespace GameSvr
             int n1C;
             int nMonCount;
             TMapWalkXY MapWalkXY = null;
-            TMapWalkXY MapWalkXYA = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
                 if (WalkStep[i].nWalkStep > 0)
                 {
-                    n1C = Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) + Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY);
+                    n1C = Math.Abs(WalkStep[i].nX - TargetCret.CurrX) + Math.Abs(WalkStep[i].nY - TargetCret.CurrY);
                     if (n1C < n10)
                     {
                         n10 = n1C;
@@ -128,13 +129,13 @@ namespace GameSvr
             if (MapWalkXY != null)
             {
                 nMonCount = MapWalkXY.nMonCount;
-                MapWalkXYA = MapWalkXY;
+                TMapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
                 for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
                     if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount)
                     {
-                        n1C = Math.Abs(WalkStep[i].nX - m_TargetCret.m_nCurrX) + Math.Abs(WalkStep[i].nY - m_TargetCret.m_nCurrY);
+                        n1C = Math.Abs(WalkStep[i].nX - TargetCret.CurrX) + Math.Abs(WalkStep[i].nY - TargetCret.CurrY);
                         if (n1C <= n10)
                         {
                             n10 = n1C;
@@ -160,12 +161,12 @@ namespace GameSvr
             short nCurrX = 0;
             short nCurrY = 0;
             bool result = false;
-            if (m_PEnvir.GetNextPosition(nX, nY, btDir, 1, ref nCurrX, ref nCurrY) && CanMove(nX, nY, nCurrX, nCurrY, false) && !boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir))
+            if (Envir.GetNextPosition(nX, nY, btDir, 1, ref nCurrX, ref nCurrY) && CanMove(nX, nY, nCurrX, nCurrY, false) && !boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
             {
                 result = true;
                 return result;
             }
-            if (m_PEnvir.GetNextPosition(nX, nY, btDir, 2, ref nCurrX, ref nCurrY) && CanMove(nX, nY, nCurrX, nCurrY, false) && !boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir))
+            if (Envir.GetNextPosition(nX, nY, btDir, 2, ref nCurrX, ref nCurrY) && CanMove(nX, nY, nCurrX, nCurrY, false) && !boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
             {
                 result = true;
                 return result;
@@ -182,14 +183,14 @@ namespace GameSvr
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
+                if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir))
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
-                        WalkStep[i].nMonRange = Math.Abs(nCurrX - m_TargetCret.m_nCurrX) + Math.Abs(nCurrY - m_TargetCret.m_nCurrY);
+                        WalkStep[i].nMonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
                         WalkStep[i].nMonCount = GetNearTargetCount(nCurrX, nCurrY);
                         WalkStep[i].nMastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
@@ -208,14 +209,14 @@ namespace GameSvr
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
+                if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, (byte)i, boFlag))
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
-                        WalkStep[i].nMonRange = Math.Abs(nCurrX - m_TargetCret.m_nCurrX) + Math.Abs(nCurrY - m_TargetCret.m_nCurrY);
+                        WalkStep[i].nMonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
                         WalkStep[i].nMonCount = GetNearTargetCount(nCurrX, nCurrY);
                         WalkStep[i].nMastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
@@ -225,7 +226,7 @@ namespace GameSvr
             return result;
         }
 
-        public bool ActThink_FindPosOfTarget(TMapWalkXY[] WalkStep, short nTargetX, short nTargetY, int nRange, bool boFlag)
+        private bool ActThink_FindPosOfTarget(TMapWalkXY[] WalkStep, short nTargetX, short nTargetY, int nRange, bool boFlag)
         {
             bool result = false;
             byte btDir = 0;
@@ -234,9 +235,9 @@ namespace GameSvr
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if (m_PEnvir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && m_PEnvir.CanWalkEx(nCurrX, nCurrY, false))
+                if (Envir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && Envir.CanWalkEx(nCurrX, nCurrY, false))
                 {
-                    if ((!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir)) && IsGotoXY(m_nCurrX, m_nCurrY, nCurrX, nCurrY))
+                    if ((!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) && IsGotoXY(CurrX, CurrY, nCurrX, nCurrY))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
@@ -260,14 +261,14 @@ namespace GameSvr
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
+                if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir))
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
-                        WalkStep[i].nMonRange = Math.Abs(nCurrX - m_TargetCret.m_nCurrX) + Math.Abs(nCurrY - m_TargetCret.m_nCurrY);
+                        WalkStep[i].nMonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
                         WalkStep[i].nMonCount = GetNearTargetCount(nCurrX, nCurrY);
                         WalkStep[i].nMastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
@@ -281,14 +282,14 @@ namespace GameSvr
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
+                if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir))
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
-                        WalkStep[i].nMonRange = Math.Abs(nCurrX - m_TargetCret.m_nCurrX) + Math.Abs(nCurrY - m_TargetCret.m_nCurrY);
+                        WalkStep[i].nMonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
                         WalkStep[i].nMonCount = GetNearTargetCount(nCurrX, nCurrY);
                         WalkStep[i].nMastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
@@ -307,14 +308,14 @@ namespace GameSvr
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
+                if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, (byte)i, boFlag))
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
-                        WalkStep[i].nMonRange = Math.Abs(nCurrX - m_TargetCret.m_nCurrX) + Math.Abs(nCurrY - m_TargetCret.m_nCurrY);
+                        WalkStep[i].nMonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
                         WalkStep[i].nMonCount = GetNearTargetCount(nCurrX, nCurrY);
                         WalkStep[i].nMastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
@@ -328,14 +329,14 @@ namespace GameSvr
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
             for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
             {
-                if (m_PEnvir.GetNextPosition(m_nCurrX, m_nCurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
+                if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, m_TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, (byte)i, boFlag))
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
                     {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
-                        WalkStep[i].nMonRange = Math.Abs(nCurrX - m_TargetCret.m_nCurrX) + Math.Abs(nCurrY - m_TargetCret.m_nCurrY);
+                        WalkStep[i].nMonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
                         WalkStep[i].nMonCount = GetNearTargetCount(nCurrX, nCurrY);
                         WalkStep[i].nMastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
@@ -354,8 +355,8 @@ namespace GameSvr
             bool result = false;
             try
             {
-                boFlag = m_btRaceServer == 108 || new ArrayList(new int[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2, SpellsDef.SKILL_FIRECHARM }).Contains(wMagicID) || m_btJob == 0;
-                if (m_btJob == 0 || wMagicID <= 0)
+                boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || Job == 0;
+                if (Job == 0 || wMagicID <= 0)
                 {
                     nRange = 1;
                     if (wMagicID == 43)
@@ -372,13 +373,13 @@ namespace GameSvr
                     }
                     for (var i = nRange; i >= 1; i--)
                     {
-                        if (ActThink_FindPosOfTarget(WalkStep, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, i, boFlag))
+                        if (ActThink_FindPosOfTarget(WalkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                             if (MapWalkXY.nWalkStep > 0)
                             {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
-                                if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                                if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                                 {
                                     m_RunPos.btDirection = 0;
                                     result = true;
@@ -391,7 +392,7 @@ namespace GameSvr
                     {
                         if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
                         {
-                            if (m_Master != null)
+                            if (Master != null)
                             {
                                 MapWalkXY = ActThink_FindGoodPathB(WalkStep, 1);
                             }
@@ -402,7 +403,7 @@ namespace GameSvr
                             if (MapWalkXY.nWalkStep > 0)
                             {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
-                                if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                                if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                                 {
                                     m_RunPos.btDirection = 0;
                                     result = true;
@@ -422,7 +423,7 @@ namespace GameSvr
                     {
                         nRange = 1;
                     }
-                    boFlag = m_btRaceServer == 108 || new ArrayList(new int[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2, SpellsDef.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
+                    boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
                     for (var i = 2; i >= 1; i--)
                     {
                         if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
@@ -430,7 +431,7 @@ namespace GameSvr
                             MapWalkXY = ActThink_FindGoodPathA(WalkStep, nRange, 0);
                             if (MapWalkXY.nWalkStep > 0)
                             {
-                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                                 {
                                     m_RunPos.btDirection = 0;
                                     result = true;
@@ -446,7 +447,7 @@ namespace GameSvr
                             MapWalkXY = ActThink_FindMinRange(WalkStep);
                             if (MapWalkXY.nWalkStep > 0)
                             {
-                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                                 {
                                     m_RunPos.btDirection = 0;
                                     result = true;
@@ -457,12 +458,12 @@ namespace GameSvr
                     }
                     for (var i = nRange; i >= 1; i--)
                     {
-                        if (ActThink_FindPosOfTarget(WalkStep, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, i, boFlag))
+                        if (ActThink_FindPosOfTarget(WalkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
                         {
                             MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                             if (MapWalkXY.nWalkStep > 0)
                             {
-                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                                 {
                                     m_RunPos.btDirection = 0;
                                     result = true;
@@ -475,7 +476,7 @@ namespace GameSvr
             }
             catch
             {
-                M2Share.MainOutMessage("WalkToRightPos:" + m_sCharName);
+                M2Share.Log.LogError("WalkToRightPos:" + ChrName);
             }
             return result;
         }
@@ -487,8 +488,8 @@ namespace GameSvr
             bool boFlag;
             TMapWalkXY[] WalkStep = null;
             bool result = false;
-            int nRange = HUtil32._MAX(new System.Random(3).Next(), 2);
-            boFlag = m_btRaceServer == 108 || new ArrayList(new short[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2, SpellsDef.SKILL_FIRECHARM }).Contains(wMagicID);
+            int nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
+            boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
             TMapWalkXY MapWalkXY;
             for (var i = nRange; i >= 1; i--)
@@ -498,17 +499,17 @@ namespace GameSvr
                     MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                     if (MapWalkXY.nWalkStep > 0)
                     {
-                        btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, MapWalkXY.nX, MapWalkXY.nY);
-                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                        btDir = M2Share.GetNextDirection(CurrX, CurrY, MapWalkXY.nX, MapWalkXY.nY);
+                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                         {
-                            if (m_btRaceServer != 108)
+                            if (Race != 108)
                             {
                                 for (var j = nRange; j >= 1; j--)
                                 {
                                     // 再跑1次
-                                    if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount)
+                                    if (Envir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount)
                                     {
-                                        GotoNextOne(nX, nY, m_btRaceServer != 108);
+                                        GotoNextOne(nX, nY, Race != 108);
                                         break;
                                     }
                                 }
@@ -527,17 +528,17 @@ namespace GameSvr
                     MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                     if (MapWalkXY.nWalkStep > 0)
                     {
-                        btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, MapWalkXY.nX, MapWalkXY.nY);
-                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                        btDir = M2Share.GetNextDirection(CurrX, CurrY, MapWalkXY.nX, MapWalkXY.nY);
+                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                         {
                             for (var j = nRange; j >= 1; j--)
                             {
                                 // 再跑1次
-                                if (m_PEnvir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && m_PEnvir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount)
+                                if (Envir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount)
                                 {
                                     MapWalkXY.nX = nX;
                                     MapWalkXY.nY = nY;
-                                    GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108);
+                                    GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108);
                                     break;
                                 }
                             }
@@ -557,7 +558,7 @@ namespace GameSvr
             TMapWalkXY[] WalkStep = null;
             TMapWalkXY MapWalkXY;
             bool result = false;
-            bool boFlag = m_btRaceServer == 108 || new ArrayList(new short[] { SpellsDef.SKILL_FIREBALL, SpellsDef.SKILL_FIREBALL2, SpellsDef.SKILL_FIRECHARM }).Contains(wMagicID);
+            bool boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             for (var i = nRange; i >= 1; i--)
             {
                 if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
@@ -565,7 +566,7 @@ namespace GameSvr
                     MapWalkXY = ActThink_FindMinRange(WalkStep);
                     if (MapWalkXY.nWalkStep > 0)
                     {
-                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                         {
                             m_RunPos.btDirection = 0;
                             result = true;
@@ -581,7 +582,7 @@ namespace GameSvr
                     MapWalkXY = ActThink_FindMinRange(WalkStep);
                     if (MapWalkXY.nWalkStep > 0)
                     {
-                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                         {
                             m_RunPos.btDirection = 0;
                             result = true;
@@ -599,16 +600,16 @@ namespace GameSvr
             short nTargetX = 0;
             short nTargetY = 0;
             byte btNewDir;
-            if (m_TargetCret == null || m_Master == null)
+            if (TargetCret == null || Master == null)
             {
                 return result;
             }
-            if (GetPoseCreate() == m_TargetCret || m_TargetCret.GetPoseCreate() == this)
+            if (GetPoseCreate() == TargetCret || TargetCret.GetPoseCreate() == this)
             {
-                btNewDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
-                if (m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, btNewDir, 1, ref nTargetX, ref nTargetY))
+                btNewDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, btNewDir, 1, ref nTargetX, ref nTargetY))
                 {
-                    if (m_PEnvir.CanWalk(nTargetX, nTargetY, true))
+                    if (Envir.CanWalk(nTargetX, nTargetY, true))
                     {
                         result = true;
                         return result;
@@ -625,13 +626,13 @@ namespace GameSvr
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            if (m_PEnvir.GetNextPosition(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, nDir, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false) && (boFlag && CanLineAttack(nCurrX, nCurrY) || !boFlag) && IsGotoXY(m_nCurrX, m_nCurrY, nCurrX, nCurrY))
+            if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false) && (boFlag && CanLineAttack(nCurrX, nCurrY) || !boFlag) && IsGotoXY(CurrX, CurrY, nCurrX, nCurrY))
             {
                 result = new TMapWalkXY();
                 result.nWalkStep = nRange;
                 result.nX = nCurrX;
                 result.nY = nCurrY;
-                result.nMonRange = Math.Abs(nCurrX - m_TargetCret.m_nCurrX) + Math.Abs(nCurrY - m_TargetCret.m_nCurrY);
+                result.nMonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
                 result.nMonCount = GetNearTargetCount(nCurrX, nCurrY);
                 result.nMastrRange = GetMasterRange(nCurrX, nCurrY);
             }
@@ -712,11 +713,11 @@ namespace GameSvr
             bool boFlag;
             int nNearTargetCount;
             bool result = false;
-            byte btDir = M2Share.GetNextDirection(m_nCurrX, m_nCurrY, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
+            byte btDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
             byte btNewDir1 = ActThink_RunPosAttack_GetNextRunPos(btDir, true);
             byte btNewDir2 = ActThink_RunPosAttack_GetNextRunPos(btDir, false);
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 2, 0);
-            if (m_btJob == 0)
+            if (Job == 0)
             {
                 nRange = 1;
                 if (wMagicID == 43)
@@ -741,7 +742,7 @@ namespace GameSvr
                 WalkStep[0] = ActThink_FindPosOfDir(btNewDir1, nRange, boFlag);
                 WalkStep[1] = ActThink_FindPosOfDir(btNewDir2, nRange, boFlag);
             }
-            nNearTargetCount = GetNearTargetCount(m_nCurrX, m_nCurrY);
+            nNearTargetCount = GetNearTargetCount(CurrX, CurrY);
             MapWalkXY = null;
             if (WalkStep[0].nWalkStep > 0 && WalkStep[1].nWalkStep > 0)
             {
@@ -790,7 +791,7 @@ namespace GameSvr
             }
             if (MapWalkXY != null)
             {
-                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, m_btRaceServer != 108))
+                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
                 {
                     result = true;
                 }
@@ -811,13 +812,13 @@ namespace GameSvr
             {
                 while (true)
                 {
-                    if (m_TargetCret == null || wMagicID > 255)
+                    if (TargetCret == null || wMagicID > 255)
                     {
                         break;
                     }
                     nThinkCount = nThinkCount + 1;
                     nCode = DoThink(wMagicID);
-                    switch (m_btJob)
+                    switch (Job)
                     {
                         case 0:
                             switch (nCode)
@@ -846,8 +847,8 @@ namespace GameSvr
                                     break;
                             }
                             break;
-                        case 1:
-                        case 2:
+                        case PlayJob.Wizard:
+                        case PlayJob.Taoist:
                             switch (nCode)
                             {
                                 case 1:
@@ -896,7 +897,7 @@ namespace GameSvr
             }
             catch
             {
-                M2Share.MainOutMessage(format("TAIPlayObject::ActThink Name:{0} Code:{1} ", new object[] { m_sCharName, nCode }));
+                M2Share.Log.LogError(Format("RobotPlayObject::ActThink Name:{0} Code:{1} ", new object[] { ChrName, nCode }));
             }
             return result;
         }

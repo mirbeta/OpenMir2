@@ -1,41 +1,43 @@
+using GameSvr.Magic;
 using SystemModule;
+using SystemModule.Consts;
+using SystemModule.Enums;
+using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr
+namespace GameSvr.RobotPlay
 {
     public partial class RobotPlayObject
     {
         /// <summary>
         /// 物理攻击
         /// </summary>
-        /// <param name="wHitMode"></param>
         /// <returns></returns>
         private bool WarrAttackTarget1(short wHitMode)
         {
             bool result = false;
             byte bt06 = 0;
-            bool boHit;
             try
             {
-                if (m_TargetCret != null)
+                if (TargetCret != null)
                 {
-                    boHit = GetAttackDir(m_TargetCret, ref bt06);
+                    var boHit = GetAttackDir(TargetCret, ref bt06);
                     if (!boHit && (wHitMode == 4 || wHitMode == 15))
                     {
-                        boHit = GetAttackDir(m_TargetCret, 2, ref bt06);// 防止隔位刺杀无效果
+                        boHit = GetAttackDir(TargetCret, 2, ref bt06);// 防止隔位刺杀无效果
                     }
                     if (boHit)
                     {
-                        m_dwTargetFocusTick = HUtil32.GetTickCount();
-                        AttackDir(m_TargetCret, wHitMode, bt06);
+                        TargetFocusTick = HUtil32.GetTickCount();
+                        AttackDir(TargetCret, wHitMode, bt06);
                         m_dwActionTick = HUtil32.GetTickCount();
                         BreakHolySeizeMode();
                         result = true;
                     }
                     else
                     {
-                        if (m_TargetCret.m_PEnvir == m_PEnvir)
+                        if (TargetCret.Envir == Envir)
                         {
-                            SetTargetXY(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY);
+                            SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
                         }
                         else
                         {
@@ -46,7 +48,7 @@ namespace GameSvr
             }
             catch
             {
-                M2Share.MainOutMessage("TAIPlayObject.WarrAttackTarget");
+                M2Share.Log.LogError("RobotPlayObject.WarrAttackTarget");
             }
             return result;
         }
@@ -57,25 +59,25 @@ namespace GameSvr
         /// <returns></returns>
         private bool WarrorAttackTarget1()
         {
-            TUserMagic UserMagic;
+            UserMagic UserMagic;
             bool result = false;
             try
             {
                 m_wHitMode = 0;
-                if (m_WAbil.MP > 0)
+                if (WAbil.MP > 0)
                 {
-                    if (m_TargetCret != null)
+                    if (TargetCret != null)
                     {
-                        if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.25) || m_TargetCret.m_boCrazyMode)
+                        if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.25) || TargetCret.CrazyMode)
                         {
                             // 注释,战不躲避
                             if (AllowUseMagic(12))
                             {
                                 // 血少时或目标疯狂模式时，做隔位刺杀 
-                                if (!(Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 0 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 1 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 2 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 1 || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) == 0 && Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) == 2))
+                                if (!(Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 2 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 2))
                                 {
-                                    GetGotoXY(m_TargetCret, 2);
-                                    GotoTargetXY(m_nTargetX, m_nTargetY, 0);
+                                    GetGotoXY(TargetCret, 2);
+                                    GotoTargetXY(TargetX, TargetY, 0);
                                 }
                             }
                         }
@@ -86,7 +88,7 @@ namespace GameSvr
                         UserMagic = FindMagic(m_nSelectMagic);
                         if (UserMagic != null)
                         {
-                            if (UserMagic.btKey == 0)
+                            if (UserMagic.Key == 0)
                             {
                                 switch (m_nSelectMagic)
                                 {
@@ -98,10 +100,10 @@ namespace GameSvr
                                     case 60:
                                     case 68:
                                     case 75:
-                                        if (m_TargetCret != null)
+                                        if (TargetCret != null)
                                         {
-                                            result = UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret); // 战士魔法
-                                            m_dwHitTick = HUtil32.GetTickCount();
+                                            result = UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 战士魔法
+                                            AttackTick = HUtil32.GetTickCount();
                                             return result;
                                         }
                                         break;
@@ -115,7 +117,7 @@ namespace GameSvr
                                         m_wHitMode = 5;
                                         break;
                                     case 26: // 圆月弯刀(四级半月弯刀)
-                                        if (UseSpell(UserMagic, m_nCurrX, m_nCurrY, m_TargetCret))
+                                        if (UseSpell(UserMagic, CurrX, CurrY, TargetCret))
                                         {
                                             m_wHitMode = 7;
                                         }
@@ -124,13 +126,13 @@ namespace GameSvr
                                         m_wHitMode = 8;
                                         break;
                                     case 43: // 抱月刀法
-                                        if (UseSpell(UserMagic, m_nCurrX, m_nCurrY, m_TargetCret))
+                                        if (UseSpell(UserMagic, CurrX, CurrY, TargetCret))
                                         {
                                             m_wHitMode = 9;
                                         }
                                         break;
                                     case 42: // 开天斩
-                                        if (UseSpell(UserMagic, m_nCurrX, m_nCurrY, m_TargetCret))
+                                        if (UseSpell(UserMagic, CurrX, CurrY, TargetCret))
                                         {
                                             m_wHitMode = 12;
                                         }
@@ -144,12 +146,12 @@ namespace GameSvr
                 result = WarrAttackTarget1(m_wHitMode);
                 if (result)
                 {
-                    m_dwHitTick = HUtil32.GetTickCount();
+                    AttackTick = HUtil32.GetTickCount();
                 }
             }
             catch
             {
-                // M2Share.MainOutMessage(format("{%s} TAIPlayObject.WarrorAttackTarget Code:%d", new byte[] { nCode }));
+                // M2Share.MainOutMessage(format("{%s} RobotPlayObject.WarrorAttackTarget Code:%d", new byte[] { nCode }));
             }
             return result;
         }
@@ -160,7 +162,6 @@ namespace GameSvr
         /// <returns></returns>
         private bool WizardAttackTarget1()
         {
-            TUserMagic UserMagic;
             bool result = false;
             try
             {
@@ -172,30 +173,30 @@ namespace GameSvr
                 }
                 if (m_nSelectMagic > 0)
                 {
-                    if (m_TargetCret != null)
+                    if (TargetCret != null)
                     {
-                        if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret) || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)
+                        if (!MagCanHitTarget(CurrX, CurrY, TargetCret) || Math.Abs(TargetCret.CurrX - CurrX) > 7 || Math.Abs(TargetCret.CurrY - CurrY) > 7)
                         {
                             // 魔法不能打到怪
                             if (m_nSelectMagic != 10)// 除疾光电影外
                             {
-                                GetGotoXY(m_TargetCret, 3);// 法只走向目标3格范围
-                                GotoTargetXY(m_nTargetX, m_nTargetY, 0);
+                                GetGotoXY(TargetCret, 3);// 法只走向目标3格范围
+                                GotoTargetXY(TargetX, TargetY, 0);
                             }
                         }
                     }
-                    UserMagic = FindMagic(m_nSelectMagic);
+                    var UserMagic = FindMagic(m_nSelectMagic);
                     if (UserMagic != null)
                     {
-                        if (UserMagic.btKey == 0)// 技能打开状态才能使用
+                        if (UserMagic.Key == 0)// 技能打开状态才能使用
                         {
-                            m_dwHitTick = HUtil32.GetTickCount();
-                            return UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret);
+                            AttackTick = HUtil32.GetTickCount();
+                            return UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret);
                         }
                     }
                 }
-                m_dwHitTick = HUtil32.GetTickCount();
-                if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22)
+                AttackTick = HUtil32.GetTickCount();
+                if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22)
                 {
                     m_boIsUseMagic = false;// 是否能躲避
                     result = WarrAttackTarget1(m_wHitMode);
@@ -203,7 +204,7 @@ namespace GameSvr
             }
             catch
             {
-                M2Share.MainOutMessage("TAIPlayObject.WizardAttackTarget");
+                M2Share.Log.LogError("RobotPlayObject.WizardAttackTarget");
             }
             return result;
         }
@@ -215,15 +216,15 @@ namespace GameSvr
         private bool TaoistAttackTarget()
         {
             bool result = false;
-            TUserMagic UserMagic;
+            UserMagic UserMagic;
             try
             {
                 m_wHitMode = 0;
-                if (m_TargetCret != null)
+                if (TargetCret != null)
                 {
-                    if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT) // 22级砍血量的怪 
+                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) // 22级砍血量的怪 
                     {
-                        if (m_TargetCret.m_WAbil.MaxHP >= 700)
+                        if (TargetCret.WAbil.MaxHP >= 700)
                         {
                             SearchMagic();// 查询魔法
                         }
@@ -251,39 +252,39 @@ namespace GameSvr
                 }
                 if (m_nSelectMagic > 0)
                 {
-                    if (m_TargetCret != null)
+                    if (TargetCret != null)
                     {
-                        if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret) || Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 7 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 7)
+                        if (!MagCanHitTarget(CurrX, CurrY, TargetCret) || Math.Abs(TargetCret.CurrX - CurrX) > 7 || Math.Abs(TargetCret.CurrY - CurrY) > 7)
                         {
                             // 魔法不能打到怪
-                            if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪
+                            if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪
                             {
-                                if (m_TargetCret.m_WAbil.MaxHP >= 700)
+                                if (TargetCret.WAbil.MaxHP >= 700)
                                 {
-                                    GetGotoXY(m_TargetCret, 3); // 道只走向目标3格范围
-                                    GotoTargetXY(m_nTargetX, m_nTargetY, 0);
+                                    GetGotoXY(TargetCret, 3); // 道只走向目标3格范围
+                                    GotoTargetXY(TargetX, TargetY, 0);
                                 }
                             }
                             else
                             {
-                                GetGotoXY(m_TargetCret, 3); // 道只走向目标3格范围
-                                GotoTargetXY(m_nTargetX, m_nTargetY, 0);
+                                GetGotoXY(TargetCret, 3); // 道只走向目标3格范围
+                                GotoTargetXY(TargetX, TargetY, 0);
                             }
                         }
                     }
                     switch (m_nSelectMagic)
                     {
-                        case SpellsDef.SKILL_HEALLING:// 治愈术 
-                            if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7))
+                        case MagicConst.SKILL_HEALLING:// 治愈术 
+                            if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
-                                if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
+                                if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
                                 {
-                                    UseSpell(UserMagic, m_nCurrX, m_nCurrY, null);
-                                    m_dwHitTick = HUtil32.GetTickCount();
-                                    if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪
+                                    UseSpell(UserMagic, CurrX, CurrY, null);
+                                    AttackTick = HUtil32.GetTickCount();
+                                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪
                                     {
-                                        if (m_TargetCret.m_WAbil.MaxHP >= 700)
+                                        if (TargetCret.WAbil.MaxHP >= 700)
                                         {
                                             m_boIsUseMagic = true;
                                             return result;
@@ -301,17 +302,17 @@ namespace GameSvr
                                 }
                             }
                             break;
-                        case SpellsDef.SKILL_BIGHEALLING:// 群体治疗术
-                            if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.7))
+                        case MagicConst.SKILL_BIGHEALLING:// 群体治疗术
+                            if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.7))
                             {
                                 UserMagic = FindMagic(m_nSelectMagic);
-                                if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
+                                if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
                                 {
-                                    UseSpell(UserMagic, m_nCurrX, m_nCurrY, this);
-                                    m_dwHitTick = HUtil32.GetTickCount();
-                                    if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪 
+                                    UseSpell(UserMagic, CurrX, CurrY, this);
+                                    AttackTick = HUtil32.GetTickCount();
+                                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪 
                                     {
-                                        if (m_TargetCret.m_WAbil.MaxHP >= 700)
+                                        if (TargetCret.WAbil.MaxHP >= 700)
                                         {
                                             m_boIsUseMagic = true;// 能躲避
                                             return result;
@@ -329,34 +330,34 @@ namespace GameSvr
                                 }
                             }
                             break;
-                        case SpellsDef.SKILL_FIRECHARM:// 灵符火符
-                            if (!MagCanHitTarget(m_nCurrX, m_nCurrY, m_TargetCret))
+                        case MagicConst.SKILL_FIRECHARM:// 灵符火符
+                            if (!MagCanHitTarget(CurrX, CurrY, TargetCret))
                             {
-                                GetGotoXY(m_TargetCret, 3);
-                                GotoTargetXY(m_nTargetX, m_nTargetY, 1);
+                                GetGotoXY(TargetCret, 3);
+                                GotoTargetXY(TargetX, TargetY, 1);
                             }
                             break;
-                        case SpellsDef.SKILL_AMYOUNSUL:
-                        case SpellsDef.SKILL_GROUPAMYOUNSUL:
-                            if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0)
+                        case MagicConst.SKILL_AMYOUNSUL:
+                        case MagicConst.SKILL_GROUPAMYOUNSUL:
+                            if (TargetCret.StatusArr[PoisonState.DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0)
                             {
                                 n_AmuletIndx = 1;
                             }
-                            else if (m_TargetCret.m_wStatusTimeArr[Grobal2.POISON_DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0)
+                            else if (TargetCret.StatusArr[PoisonState.DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0)
                             {
                                 n_AmuletIndx = 2;
                             }
                             break;
-                        case SpellsDef.SKILL_CLOAK:
-                        case SpellsDef.SKILL_BIGCLOAK: // 集体隐身术  隐身术
+                        case MagicConst.SKILL_CLOAK:
+                        case MagicConst.SKILL_BIGCLOAK: // 集体隐身术  隐身术
                             UserMagic = FindMagic(m_nSelectMagic);
-                            if (UserMagic != null && UserMagic.btKey == 0)// 技能打开状态才能使用
+                            if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
                             {
-                                UseSpell(UserMagic, m_nCurrX, m_nCurrY, this);
-                                m_dwHitTick = HUtil32.GetTickCount();
-                                if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)// 22级砍血量的怪 
+                                UseSpell(UserMagic, CurrX, CurrY, this);
+                                AttackTick = HUtil32.GetTickCount();
+                                if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪 
                                 {
-                                    if (m_TargetCret.m_WAbil.MaxHP >= 700)
+                                    if (TargetCret.WAbil.MaxHP >= 700)
                                     {
                                         m_boIsUseMagic = false;
                                         return result;
@@ -373,17 +374,17 @@ namespace GameSvr
                                 }
                             }
                             break;
-                        case SpellsDef.SKILL_SKELLETON:
-                        case SpellsDef.SKILL_SINSU:
+                        case MagicConst.SKILL_SKELLETON:
+                        case MagicConst.SKILL_SINSU:
                             UserMagic = FindMagic(m_nSelectMagic);
-                            if (UserMagic != null && UserMagic.btKey == 0)
+                            if (UserMagic != null && UserMagic.Key == 0)
                             {
-                                UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret); // 使用魔法
-                                m_dwHitTick = HUtil32.GetTickCount();
-                                if (M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                                UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法
+                                AttackTick = HUtil32.GetTickCount();
+                                if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)
                                 {
                                     // 22级砍血量的怪
-                                    if (m_TargetCret.m_WAbil.MaxHP >= 700)
+                                    if (TargetCret.WAbil.MaxHP >= 700)
                                     {
                                         m_boIsUseMagic = true; // 能躲避
                                         return result;
@@ -404,31 +405,31 @@ namespace GameSvr
                     UserMagic = FindMagic(m_nSelectMagic);
                     if (UserMagic != null)
                     {
-                        if (UserMagic.btKey == 0)   // 技能打开状态才能使用 
+                        if (UserMagic.Key == 0)   // 技能打开状态才能使用 
                         {
-                            m_dwHitTick = HUtil32.GetTickCount();
-                            result = UseSpell(UserMagic, m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, m_TargetCret); // 使用魔法
-                            if (m_TargetCret.m_WAbil.MaxHP >= 700 || !M2Share.g_Config.boHeroAttackTao)
+                            AttackTick = HUtil32.GetTickCount();
+                            result = UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法
+                            if (TargetCret.WAbil.MaxHP >= 700 || !M2Share.Config.boHeroAttackTao)
                             {
                                 return result;
                             }
                         }
                     }
                 }
-                m_dwHitTick = HUtil32.GetTickCount();
-                if (m_WAbil.HP <= Math.Round(m_WAbil.MaxHP * 0.15))
+                AttackTick = HUtil32.GetTickCount();
+                if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.15))
                 {
                     m_boIsUseMagic = true;
                 }
                 // 是否能躲避 
                 // 增加人形条件
-                if (M2Share.g_Config.boHeroAttackTarget && m_Abil.Level < 22 || m_TargetCret.m_WAbil.MaxHP < 700 && M2Share.g_Config.boHeroAttackTao && m_TargetCret.m_btRaceServer != Grobal2.RC_PLAYOBJECT)
+                if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || TargetCret.WAbil.MaxHP < 700 && M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)
                 {
                     // 20090106 道士22级前是否物理攻击  怪等级小于英雄时
-                    if (Math.Abs(m_TargetCret.m_nCurrX - m_nCurrX) > 1 || Math.Abs(m_TargetCret.m_nCurrY - m_nCurrY) > 1)
+                    if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)
                     {
                         // 道走近目标砍 
-                        GotoTargetXY(m_TargetCret.m_nCurrX, m_TargetCret.m_nCurrY, 0);
+                        GotoTargetXY(TargetCret.CurrX, TargetCret.CurrY, 0);
                     }
                     m_boIsUseMagic = false;// 是否能躲避
                     result = WarrAttackTarget1(m_wHitMode);
@@ -436,7 +437,7 @@ namespace GameSvr
             }
             catch
             {
-                // M2Share.MainOutMessage('{异常} TAIPlayObject.TaoistAttackTarget');
+                // M2Share.MainOutMessage('{异常} RobotPlayObject.TaoistAttackTarget');
             }
             return result;
         }
@@ -446,40 +447,40 @@ namespace GameSvr
             bool result = false;
             try
             {
-                if (m_TargetCret != null)
+                if (TargetCret != null)
                 {
                     if (InSafeZone())// 英雄进入安全区内就不打PK目标
                     {
-                        if (m_TargetCret.m_btRaceServer == Grobal2.RC_PLAYOBJECT)
+                        if (TargetCret.Race == ActorRace.Play)
                         {
-                            m_TargetCret = null;
+                            TargetCret = null;
                             return result;
                         }
                     }
-                    if (m_TargetCret == this) // 防止英雄自己打自己
+                    if (TargetCret == this) // 防止英雄自己打自己
                     {
-                        m_TargetCret = null;
+                        TargetCret = null;
                         return result;
                     }
                 }
-                m_dwTargetFocusTick = HUtil32.GetTickCount();
-                if (m_boDeath || m_boGhost)
+                TargetFocusTick = HUtil32.GetTickCount();
+                if (Death || Ghost)
                 {
                     return result;
                 }
-                switch (m_btJob)
+                switch (Job)
                 {
-                    case 0:
-                        if (HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAIWarrorAttackTime)
+                    case PlayJob.Warrior:
+                        if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAIWarrorAttackTime)
                         {
                             m_boIsUseMagic = false;// 是否能躲避
                             result = WarrorAttackTarget1();
                         }
                         break;
-                    case 1:
-                        if (HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAIWizardAttackTime)// 连击也不受间隔控制
+                    case PlayJob.Wizard:
+                        if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAIWizardAttackTime)// 连击也不受间隔控制
                         {
-                            m_dwHitTick = HUtil32.GetTickCount();
+                            AttackTick = HUtil32.GetTickCount();
                             m_boIsUseMagic = false;// 是否能躲避
                             result = WizardAttackTarget1();
                             m_nSelectMagic = 0;
@@ -487,10 +488,10 @@ namespace GameSvr
                         }
                         m_nSelectMagic = 0;
                         break;
-                    case 2:
-                        if (HUtil32.GetTickCount() - m_dwHitTick > M2Share.g_Config.nAITaoistAttackTime)
+                    case PlayJob.Taoist:
+                        if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAITaoistAttackTime)
                         {
-                            m_dwHitTick = HUtil32.GetTickCount();
+                            AttackTick = HUtil32.GetTickCount();
                             m_boIsUseMagic = false; // 是否能躲避
                             result = TaoistAttackTarget();
                             m_nSelectMagic = 0;
@@ -502,10 +503,9 @@ namespace GameSvr
             }
             catch
             {
-                M2Share.MainOutMessage("TAIPlayObject.AttackTarget");
+                M2Share.Log.LogError("RobotPlayObject.AttackTarget");
             }
             return result;
         }
-
     }
 }

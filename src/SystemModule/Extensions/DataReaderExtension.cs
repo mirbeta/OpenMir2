@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace SystemModule
+namespace SystemModule.Extensions
 {
     public static class DataReaderExtension
     {
@@ -40,6 +40,20 @@ namespace SystemModule
                     return -1;
                 }
                 return Convert.ToInt32(dr[idx]);
+            }
+            return -1;
+        }
+
+        public static long GetInt64(this IDataReader dr, string name)
+        {
+            var idx = GetOrdinal(dr, name);
+            if (idx > -1)
+            {
+                if (dr.IsDBNull(idx))
+                {
+                    return -1;
+                }
+                return Convert.ToInt64(dr[idx]);
             }
             return -1;
         }

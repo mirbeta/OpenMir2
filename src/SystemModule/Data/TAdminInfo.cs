@@ -1,8 +1,9 @@
-﻿namespace SystemModule;
-
-public struct TAdminInfo
+﻿namespace SystemModule.Data
 {
-    public int nLv;
-    public string sChrName;
-    public string sIPaddr;
+    public struct TAdminInfo
+    {
+        public int nLv;
+        public string sChrName;
+        public string sIPaddr;
+    }
 }

@@ -1,8 +1,9 @@
-﻿namespace SystemModule;
-
-public enum MessageColor
+﻿namespace SystemModule.Data
 {
-    Red = 0,
-    Black = 1,
-    Green = 2
+    public enum MessageColor
+    {
+        Red = 0,
+        Black = 1,
+        Green = 2
+    }
 }

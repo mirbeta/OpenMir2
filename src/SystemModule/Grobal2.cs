@@ -1,72 +1,73 @@
+using SystemModule.Packets.ClientPackets;
+
 namespace SystemModule
 {
     public class Grobal2
     {
-        public const int VERSION_NUMBER = 20020522;
         public const int CLIENT_VERSION_NUMBER = 120040918;
-        public const int CM_POWERBLOCK = 0;
-        public const int MapNameLen = 16;
-        public const int ActorNameLen = 14;
-        public const int DR_UP = 0;
-        public const int DR_UPRIGHT = 1;
-        public const int DR_RIGHT = 2;
-        public const int DR_DOWNRIGHT = 3;
-        public const int DR_DOWN = 4;
-        public const int DR_DOWNLEFT = 5;
-        public const int DR_LEFT = 6;
-        public const int DR_UPLEFT = 7;
+
+        public const byte DR_UP = 0;
+        public const byte DR_UPRIGHT = 1;
+        public const byte DR_RIGHT = 2;
+        public const byte DR_DOWNRIGHT = 3;
+        public const byte DR_DOWN = 4;
+        public const byte DR_DOWNLEFT = 5;
+        public const byte DR_LEFT = 6;
+        public const byte DR_UPLEFT = 7;
+
         /// <summary>
         /// 衣服
         /// </summary>
-        public const int U_DRESS = 0;
+        public const byte U_DRESS = 0;
         /// <summary>
         /// 武器
         /// </summary>
-        public const int U_WEAPON = 1;
+        public const byte U_WEAPON = 1;
         /// <summary>
         /// 右手
         /// </summary>
-        public const int U_RIGHTHAND = 2;
+        public const byte U_RIGHTHAND = 2;
         /// <summary>
         /// 项链
         /// </summary>
-        public const int U_NECKLACE = 3;
+        public const byte U_NECKLACE = 3;
         /// <summary>
         /// 头盔
         /// </summary>
-        public const int U_HELMET = 4;
+        public const byte U_HELMET = 4;
         /// <summary>
         /// 左手手镯,符
         /// </summary>
-        public const int U_ARMRINGL = 5;
+        public const byte U_ARMRINGL = 5;
         /// <summary>
         /// 右手手镯
         /// </summary>
-        public const int U_ARMRINGR = 6;
+        public const byte U_ARMRINGR = 6;
         /// <summary>
         /// 左戒指
         /// </summary>
-        public const int U_RINGL = 7;
+        public const byte U_RINGL = 7;
         /// <summary>
         /// 右戒指
         /// </summary>
-        public const int U_RINGR = 8;
+        public const byte U_RINGR = 8;
         /// <summary>
         /// 物品
         /// </summary>
-        public const int U_BUJUK = 9;
+        public const byte U_BUJUK = 9;
         /// <summary>
         /// 腰带
         /// </summary>
-        public const int U_BELT = 10;
+        public const byte U_BELT = 10;
         /// <summary>
         /// 鞋
         /// </summary>
-        public const int U_BOOTS = 11;
+        public const byte U_BOOTS = 11;
         /// <summary>
         /// 宝石
         /// </summary>
-        public const int U_CHARM = 12;
+        public const byte U_CHARM = 12;
+
         public const int DEFBLOCKSIZE = 16;
         public const int BUFFERSIZE = 10000;
         public const int LOGICALMAPUNIT = 40;
@@ -74,11 +75,11 @@ namespace SystemModule
         public const int UNITY = 32;
         public const int HALFX = 24;
         public const int HALFY = 16;
-        public const int MAXBAGITEM = 52;
+        public const int MAXBAGITEM = 46;
         public const int HOWMANYMAGICS = 20;
 
         //摆摊
-        public const int CM_SENDSELL = 9050;   //开始摆摊
+        public const int CM_SENDSELL = 9050;
         public const int SM_SENDSELL = 9051;
         public const int RM_SENDSELL = 9052;
         public const int CM_MYSHOPEXIT = 9053;
@@ -97,59 +98,14 @@ namespace SystemModule
         /// <summary>
         /// 用户最大的物品
         /// </summary>
-        public const int USERITEMMAX = 46;
-        public const int MaxSkillLevel = 3;
+        public const byte USERITEMMAX = 46;
+        public const byte MaxSkillLevel = 3;
 
         /// <summary>
         /// 物品类型(物品属性读取)
         /// </summary>
-        public const int MAX_STATUS_ATTRIBUTE = 12;
-        /// <summary>
-        /// 中毒类型 - 绿毒
-        /// </summary>
-        public const int POISON_DECHEALTH = 0;
-        /// <summary>
-        /// 中毒类型 - 红毒
-        /// </summary>
-        public const int POISON_DAMAGEARMOR = 1;
-        /// <summary>
-        /// 中毒类型 - 不能使用技能
-        /// </summary>
-        public const int POISON_LOCKSPELL = 2;
-        /// <summary>
-        /// 中毒类型 - 禁止移动
-        /// </summary>
-        public const int POISON_DONTMOVE = 4;
-        /// <summary>
-        /// 中毒类型 - 防麻
-        /// </summary>
-        public const int POISON_STONE = 5;
-        /// <summary>
-        /// 不能跑动(中蛛网)
-        /// </summary>
-        public const int STATE_LOCKRUN = 3;
-        public const int POISON_68 = 68;
-        /// <summary>
-        /// 隐身
-        /// </summary>
-        public const int STATE_TRANSPARENT = 8;
-        /// <summary>
-        /// 神圣战甲术  防御力
-        /// </summary>
-        public const int STATE_DEFENCEUP = 9;
-        /// <summary>
-        /// 幽灵盾  魔御力
-        /// </summary>
-        public const int STATE_MAGDEFENCEUP = 10;
-        /// <summary>
-        /// 魔法盾
-        /// </summary>
-        public const int STATE_BUBBLEDEFENCEUP = 11;
-        /// <summary>
-        /// 被石化
-        /// </summary>
-        public const int STATE_STONE_MODE = 0x00000001;
-        public const int STATE_OPENHEATH = 0x00000002;
+        public const byte MAX_STATUS_ATTRIBUTE = 12;
+
         public const int ET_DIGOUTZOMBI = 1;
         public const int ET_MINE = 2;
         public const int ET_PILESTONES = 3;
@@ -190,7 +146,7 @@ namespace SystemModule
         public const int CM_USERBUYITEM = 1014;
         public const int CM_USERGETDETAILITEM = 1015;
         public const int CM_DROPGOLD = 1016;
-        public const int CM_1017 = 1017;
+        public const int CM_TEST = 1017;
         /// <summary>
         /// 检测客户是否有下载好的client
         /// </summary>
@@ -343,6 +299,8 @@ namespace SystemModule
         public const int SM_SENDMYMAGIC = 211;
         public const int SM_DELMAGIC = 212;
         public const int SM_ATTACKMODE = 213;
+        public const int SM_QUERYVALUE = 215;
+
         public const int CM_CHECKTIME = 15999;
         /// <summary>
         /// 攻击模式成功
@@ -403,6 +361,9 @@ namespace SystemModule
         public const int SM_TAKEOFF_FAIL = 620;
         public const int SM_SENDUSEITEMS = 621;
         public const int SM_WEIGHTCHANGED = 622;
+        public const int SM_QUERYITEMDLG = 623;
+        public const int SM_ITEMDLGSELECT = 624;
+
         public const int SM_CLEAROBJECTS = 633;
         public const int SM_CHANGEMAP = 634;
         public const int SM_EAT_OK = 635;
@@ -536,7 +497,7 @@ namespace SystemModule
         /// <summary>
         /// 发送服务器配置信息
         /// </summary>
-        public const int SM_SERVERCONFIG = 5007;
+        public const int SM_SERVERCONFIG = 11029;
         public const int SM_GAMEGOLDNAME = 5008;
         public const int SM_PASSWORD = 5009;
         public const int SM_HORSERUN = 5010;
@@ -546,6 +507,12 @@ namespace SystemModule
         public const int SS_KEEPALIVE = 104;
         public const int SS_KICKUSER = 111;
         public const int SS_SERVERLOAD = 113;
+        public const int ISM_ACCOUNTEXPIRED = 114;
+        /// <summary>
+        /// 查询账号剩余游戏时间
+        /// </summary>
+        public const int ISM_QUERYACCOUNTEXPIRETIME = 115;
+        public const int ISM_QUERYPLAYTIME = 116;
         public const int SS_200 = 200;
         public const int SS_201 = 201;
         public const int SS_202 = 202;
@@ -563,13 +530,18 @@ namespace SystemModule
         public const int SS_214 = 214;
         public const int SS_WHISPER = 299;
         /// <summary>
-        /// 获取服务器信息
+        /// 同步服务器信息
         /// </summary>
         public const int SS_SERVERINFO = 103;
         /// <summary>
         /// 客户端退出游戏
         /// </summary>
         public const int SS_SOFTOUTSESSION = 102;
+        /// <summary>
+        /// 减少或更新账号游戏时间
+        /// </summary>
+        public const int ISM_GAMETIMEOFTIMECARDUSER = 112;
+        public const int ISM_CHECKTIMEACCOUNT = 116;
         public const int SS_LOGINCOST = 30002;
         public const int DBR_FAIL = 2000;
         public const int DB_LOADHUMANRCD = 100;
@@ -577,23 +549,15 @@ namespace SystemModule
         public const int DB_SAVEHUMANRCDEX = 102;
         public const int DBR_LOADHUMANRCD = 1100;
         public const int DBR_SAVEHUMANRCD = 1102;
-        public const int SG_FORMHANDLE = 32001;
-        public const int SG_STARTNOW = 32002;
-        public const int SG_STARTOK = 32003;
-        public const int SG_CHECKCODEADDR = 32004;
-        public const int SG_USERACCOUNT = 32005;
-        public const int SG_USERACCOUNTCHANGESTATUS = 32006;
-        public const int SG_USERACCOUNTNOTFOUND = 32007;
-        public const int GS_QUIT = 32101;
-        public const int GS_USERACCOUNT = 32102;
-        public const int GS_CHANGEACCOUNTINFO = 32103;
-        public const int WM_SENDPROCMSG = 32104;
+
         public const uint RUNGATECODE = 0xAA55AA55 + 0x00450045;
-        public const int GM_OPEN = 1;
-        public const int GM_CLOSE = 2;
-        public const int GM_CHECKSERVER = 3;
-        public const int GM_CHECKCLIENT = 4;
-        public const int GM_DATA = 5;
+
+        public const byte GM_OPEN = 1;
+        public const byte GM_CLOSE = 2;
+        public const byte GM_CHECKSERVER = 3;
+        public const byte GM_CHECKCLIENT = 4;
+        public const byte GM_DATA = 5;
+
         public const int GM_SERVERUSERINDEX = 6;
         public const int GM_RECEIVE_OK = 7;
         public const int SM_RUNGATELOGOUT = 599;
@@ -601,6 +565,8 @@ namespace SystemModule
         public const int GM_TEST = 20;
         public const int GROUPMAX = 11;
         public const int CM_42HIT = 42;
+
+        public const int CM_QUERYVAL = 1065;
         public const int CM_PASSWORD = 2001;
         public const int CM_CHGPASSWORD = 2002;
         public const int CM_SETPASSWORD = 2004;
@@ -613,62 +579,22 @@ namespace SystemModule
         public const int SM_PASSWORDSTATUS = 8002;
         public const int SM_NEEDPASSWORD = 8003;
         public const int SM_GETREGINFO = 8004;
-        public const int DATA_BUFSIZE = 1024;
-        public const int MAXMAGIC = 54;
+        public const byte MaxMagicCount = 54;
         public const string sSTRING_GOLDNAME = "金币";
-        public const short MAXLEVEL = short.MaxValue;
-        public const int MAXCHANGELEVEL = 1000;
-        public const int SLAVEMAXLEVEL = 50;
-        public const int LOG_GAMEGOLD = 1;
-        public const int LOG_GAMEPOINT = 2;
         /// <summary>
-        /// 玩家
+        /// 最高等级
         /// </summary>
-        public const int RC_PLAYOBJECT = 0;
+        public const byte MaxLevel = byte.MaxValue;
         /// <summary>
-        /// 守卫
+        /// 最高经验等级
         /// </summary>
-        public const int RC_GUARD = 11;
+        public const ushort MaxChangeLevel = 1000;
         /// <summary>
-        /// NPC
+        /// 属下最高等级
         /// </summary>
-        public const int RC_PEACENPC = 15;
-        /// <summary>
-        /// 怪物
-        /// </summary>
-        public const int RC_ANIMAL = 50;
-        /// <summary>
-        /// 练功师
-        /// </summary>
-        public const int RC_EXERCISE = 55;
-        /// <summary>
-        /// 人型怪物
-        /// </summary>
-        public const int RC_PLAYCLONE = 60;
-        /// <summary>
-        /// 普通怪物
-        /// </summary>
-        public const int RC_MONSTER = 80;
-        /// <summary>
-        /// NPC
-        /// </summary>
-        public const int RC_NPC = 10;
-        /// <summary>
-        /// 守卫
-        /// </summary>
-        public const int RC_ARCHERGUARD = 112;
-        /// <summary>
-        /// 魔王岭弓箭手
-        /// </summary>
-        public const int RC_135 = 135;
-        /// <summary>
-        /// 魔王岭弓箭手
-        /// </summary>        
-        public const int RC_136 = 136;
-        /// <summary>
-        /// 任务怪物
-        /// </summary>
-        public const int RC_153 = 153;
+        public const ushort SlaveMaxLevel = 50;
+        public const ushort LOG_GAMEGOLD = 1;
+        public const ushort LOG_GAMEPOINT = 2;
         public const int RM_TURN = 10001;
         public const int RM_WALK = 10002;
         public const int RM_HORSERUN = 50003;
@@ -689,7 +615,7 @@ namespace SystemModule
         public const int RM_ABILITY = 10051;
         public const int RM_HEALTHSPELLCHANGED = 10052;
         public const int RM_DAYCHANGING = 10053;
-        public const int RM_10101 = 10101;
+        public const int RM_REFMESSAGE = 10101;
         public const int RM_WEIGHTCHANGED = 10115;
         public const int RM_FEATURECHANGED = 10116;
         public const int RM_BUTCH = 10119;
@@ -724,7 +650,7 @@ namespace SystemModule
         public const int RM_MAKEDRUG_SUCCESS = 10150;
         public const int RM_MAKEDRUG_FAIL = 10151;
         public const int RM_ALIVE = 10153;
-        public const int RM_10155 = 10155;
+        public const int RM_RANDOMSPACEMOVE = 10155;
         public const int RM_DIGUP = 10200;
         public const int RM_DIGDOWN = 10201;
         public const int RM_FLYAXE = 10202;
@@ -800,7 +726,6 @@ namespace SystemModule
         public const int RM_43 = 9043;
         public const int RM_MOVEMESSAGE = 10099;
 
-        // -------Start Inter Server Msg-------
         public const int ISM_GROUPSERVERHEART = 100;
         public const int ISM_USERSERVERCHANGE = 200;
         public const int ISM_USERLOGON = 201;
@@ -816,23 +741,19 @@ namespace SystemModule
         public const int ISM_CHANGECASTLEOWNER = 211;
         public const int ISM_RELOADCASTLEINFO = 212;
         public const int ISM_RELOADADMIN = 213;
-        // -------End Inter Server Msg-------
-        // Friend System -------------
+
         public const int ISM_FRIEND_INFO = 214;
         public const int ISM_FRIEND_DELETE = 215;
         public const int ISM_FRIEND_OPEN = 216;
         public const int ISM_FRIEND_CLOSE = 217;
         public const int ISM_FRIEND_RESULT = 218;
-        // Tag System ----------------
         public const int ISM_TAG_SEND = 219;
         public const int ISM_TAG_RESULT = 220;
-        // User System --------------
         public const int ISM_USER_INFO = 221;
         public const int ISM_CHANGESERVERRECIEVEOK = 222;
         public const int ISM_RELOADCHATLOG = 223;
         public const int ISM_MARKETOPEN = 224;
         public const int ISM_MARKETCLOSE = 225;
-        // relationship --------------
         public const int ISM_LM_DELETE = 226;
         public const int ISM_RELOADMAKEITEMLIST = 227;
         public const int ISM_GUILDMEMBER_RECALL = 228;
@@ -915,9 +836,9 @@ namespace SystemModule
         public const int SM_SMUGGLE = 41900; // 夹带数据
         public const int LA_UNDEAD = 1;
 
-        public static ClientPacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
+        public static ClientMesaagePacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
         {
-            var result = new ClientPacket();
+            var result = new ClientMesaagePacket();
             result.Ident = (ushort)msg;
             result.Param = (ushort)param;
             result.Tag = (ushort)tag;

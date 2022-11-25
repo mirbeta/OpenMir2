@@ -1,50 +1,43 @@
-﻿using System;
+﻿using GameGate.Conf;
+using System;
 using System.Collections.Concurrent;
 
 namespace GameGate
 {
-    public class LogQueue
+    public class MirLog
     {
-        private static readonly LogQueue instance = new LogQueue();
+        private static readonly MirLog instance = new MirLog();
 
-        public static LogQueue Instance
-        {
-            get { return instance; }
-        }
+        public static MirLog Instance => instance;
 
-        private ConfigManager _configManager => ConfigManager.Instance;
-        public readonly ConcurrentQueue<string> MessageLog = new ConcurrentQueue<string>();
-        public readonly ConcurrentQueue<string> DebugLog = new ConcurrentQueue<string>();
+        private static GateConfig Config => ConfigManager.Instance.GateConfig;
+        public readonly ConcurrentQueue<string> MessageLogQueue = new ConcurrentQueue<string>();
+        public readonly ConcurrentQueue<string> DebugLogQueue = new ConcurrentQueue<string>();
 
-        public LogQueue()
+        public MirLog()
         {
 
         }
 
-        private bool ShowDebugLog => _configManager.GateConfig.ShowDebugLog;
-        private int ShowLogLevel => _configManager.GateConfig.ShowLogLevel;
-
-        public void Enqueue(string msg, int msgLevel)
+        public void Log(string msg, int msgLevel)
         {
-            if (ShowLogLevel >= msgLevel)
+            if (Config.ShowLogLevel >= msgLevel)
             {
-                if (MessageLog.Count < 100)
-                    MessageLog.Enqueue(string.Format("[{0}]: {1}", DateTime.Now, msg));
+                MessageLogQueue.Enqueue(msg);
             }
         }
 
-        public void Enqueue(Exception ex)
+        public void LogError(Exception ex)
         {
-            if (MessageLog.Count < 100)
-                MessageLog.Enqueue(string.Format("[{0}]: {1} - {2}", DateTime.Now, ex.TargetSite, ex));
+            MessageLogQueue.Enqueue($"{ex.TargetSite} - {ex}");
         }
 
-        public void EnqueueDebugging(string msg)
+        public void DebugLog(string msg)
         {
-            if (ShowDebugLog)
+            if (Config.ShowDebugLog)
             {
-                if (DebugLog.Count < 100)
-                    DebugLog.Enqueue(string.Format("[{0}]: {1}", DateTime.Now, msg));
+                if (DebugLogQueue.Count < 100)
+                    DebugLogQueue.Enqueue(msg);
             }
         }
     }

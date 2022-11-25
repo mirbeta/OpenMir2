@@ -1,6 +1,6 @@
 using System.Net.Sockets;
 
-namespace SelGate
+namespace SelGate.Package
 {
     public class TSessionInfo
     {

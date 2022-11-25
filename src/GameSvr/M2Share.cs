@@ -1,14 +1,31 @@
-using GameSvr.CommandSystem;
-using GameSvr.Configs;
+using GameSvr.Actor;
+using GameSvr.Castle;
+using GameSvr.Conf;
+using GameSvr.Conf.Model;
+using GameSvr.DataSource;
+using GameSvr.Event;
+using GameSvr.GateWay;
+using GameSvr.Guild;
+using GameSvr.Items;
+using GameSvr.Magic;
+using GameSvr.Maps;
+using GameSvr.Notices;
+using GameSvr.Npc;
+using GameSvr.Robots;
+using GameSvr.Script;
+using GameSvr.Services;
+using GameSvr.World;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
+using SystemModule.Logger;
 
 namespace GameSvr
 {
-    public struct TItemBind
+    public class TItemBind
     {
         public int nMakeIdex;
         public int nItemIdx;
@@ -20,54 +37,55 @@ namespace GameSvr
         /// <summary>
         /// 服务器编号
         /// </summary>
-        public static int nServerIndex = 0;
+        public static byte ServerIndex = 0;
         /// <summary>
         /// 服务器启动时间
         /// </summary>
-        public static int g_dwStartTick = 0;
+        public static int StartTick = 0;
         public static int ShareFileNameNum = 0;
-        public static int g_nServerTickDifference = 0;
-        public static ObjectManager ObjectManager = null;
-        public static ServerConfig ServerConf = null;
-        public static GameCmdConfig CommandConf = null;
-        public static StringConfig StringConf = null;
-        public static ExpsConfig ExpConf = null;
-        public static GlobalConfig GlobalConf = null;
+        public static int ServerTickDifference = 0;
+        public static readonly ReaderWriterLockWrapper SyncLock = new ReaderWriterLockWrapper();
+        public static ActorMgr ActorMgr = null;
+        public static ServerConf ServerConf;
+        private static readonly StringConf StringConf;
+        private static readonly ExpsConf ExpConf;
+        private static readonly GlobalConf GlobalConf;
+        private static readonly GameSettingConf GameSetting;
         /// <summary>
         /// 寻路
         /// </summary>
-        public static TFindPath g_FindPath;
+        public static FindPath FindPath;
         /// <summary>
-        /// 游戏命令系统
+        /// 地图对象管理
         /// </summary>
-        public static CommandManager CommandSystem = null;
-        public static LocalDB LocalDB = null;
-        public static CommonDB CommonDB = null;
-        public static MirLog LogSystem = null;
-        public static RandomNumber RandomNumber = null;
+        public static CellObjectMgr CellObjectSystem;
+        public static LocalDB LocalDb;
+        public static CommonDB CommonDb;
+        public static readonly MirLogger Log;
+        public static readonly RandomNumber RandomNumber;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
-        public static GateManager GateManager = null;
-        public static ArrayList LogStringList = null;
-        public static ArrayList LogonCostLogList = null;
-        public static MapManager MapManager = null;
-        public static ItemUnit ItemUnit = null;
-        public static MagicManager MagicManager = null;
-        public static NoticeManager NoticeManager = null;
-        public static AssociationManager GuildManager = null;
-        public static EventManager EventManager = null;
-        public static CastleManager CastleManager = null;
+        public static GameGateMgr GateMgr = null;
+        public static GameEventSource EventSource;
+        public static MapManager MapMgr = null;
+        public static CustomItem CustomItemMgr = null;
+        public static MagicManager MagicMgr = null;
+        public static NoticeManager NoticeMgr = null;
+        public static GuildManager GuildMgr = null;
+        public static EventManager EventMgr = null;
+        public static CastleManager CastleMgr = null;
         public static TFrontEngine FrontEngine = null;
-        public static UserEngine UserEngine = null;
-        public static RobotManage RobotManage = null;
-        public static Dictionary<string, IList<TMakeItem>> g_MakeItemList = null;
-        public static IList<TStartPoint> StartPointList = null;
-        public static TStartPoint g_RedStartPoint = null;
+        public static WorldServer WorldEngine = null;
+        public static RobotManage RobotMgr = null;
+        public static Dictionary<string, IList<MakeItem>> MakeItemList = null;
+        public static IList<StartPoint> StartPointList = null;
+        public static StartPoint g_RedStartPoint = null;
         public static TRouteInfo[] ServerTableList = null;
-        public static ConcurrentDictionary<string, long> g_DenySayMsgList = null;
-        public static Dictionary<string, int> MiniMapList = null;
+        public static ConcurrentDictionary<string, long> DenySayMsgList = null;
+        public static ConcurrentDictionary<string, int> MiniMapList = null;
         public static Dictionary<int, string> g_UnbindList = null;
-        public static IList<TDealOffInfo> sSellOffItemList = null;
+        public static IList<DealOffInfo> sSellOffItemList = null;
+        public static ArrayList LogonCostLogList = null;
         /// <summary>
         /// 游戏公告列表
         /// </summary>
@@ -93,7 +111,7 @@ namespace GameSvr
         /// <summary>
         /// 禁止移动地图列表
         /// </summary>
-        public static IList<string> g_DisableMoveMapList = null;
+        public static StringList g_DisableMoveMapList = null;
         /// <summary>
         /// 禁止发信息名称列表
         /// </summary>
@@ -101,25 +119,38 @@ namespace GameSvr
         /// <summary>
         /// 怪物爆物品限制
         /// </summary>
-        public static Dictionary<string, TMonDrop> g_MonDropLimitLIst = null;
+        public static ConcurrentDictionary<string, TMonDrop> g_MonDropLimitLIst = null;
         /// <summary>
         /// 禁止取下物品列表
         /// </summary>
-        public static IList<string> g_DisableTakeOffList = null;
-        public static IList<string> g_ChatLoggingList = null;
+        public static Dictionary<int, string> g_DisableTakeOffList = null;
         public static IList<TItemBind> g_ItemBindIPaddr = null;
+        public static IList<TItemBind> g_ItemBindDieNoDropName = null;
         public static IList<TItemBind> g_ItemBindAccount = null;
-        public static IList<TItemBind> g_ItemBindCharName = null;
+        public static IList<TItemBind> g_ItemBindChrName = null;
+        /// <summary>
+        /// 出师记录表
+        /// </summary>
         public static IList<string> g_UnMasterList = null;
-        // 出师记录表
+        /// <summary>
+        /// 强行出师记录表
+        /// </summary>
         public static IList<string> g_UnForceMasterList = null;
-        // 强行出师记录表
-        public static IList<string> g_GameLogItemNameList = null;
-        // 游戏日志物品名
-        public static bool g_boGameLogGold = false;
-        public static bool g_boGameLogGameGold = false;
-        public static bool g_boGameLogGamePoint = false;
-        public static bool g_boGameLogHumanDie = false;
+        /// <summary>
+        /// 游戏日志物品名
+        /// </summary>
+        public static IList<string> GameLogItemNameList = null;
+
+        public static readonly HashSet<byte> ItemDamageRevivalMap = new HashSet<byte>() { 114, 160, 161, 162 };
+        public static readonly HashSet<byte> IsAccessoryMap = new HashSet<byte> { 19, 20, 21, 22, 23, 24, 26 };
+        public static readonly HashSet<byte> StdModeMap = new HashSet<byte>() { 15, 19, 20, 21, 22, 23, 24, 26 };
+        public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
+
+        public static bool GameLogGold = true;
+        public static bool GameLogGameGold = true;
+        public static bool GameLogGamePoint = true;
+        public static bool boGameLogHumanDie = true;
+
         public static IList<string> g_DenyIPAddrList = null;
         // IP过滤列表
         public static IList<string> g_DenyChrNameList = null;
@@ -130,7 +161,6 @@ namespace GameSvr
         // 不清除怪物列表
         public static IList<string> g_NoHptoexpMonLIst = null;
         // 不清除怪物列表
-        public static object LogMsgCriticalSection = null;
         public static object ProcessMsgCriticalSection = null;
         public static object UserDBSection = null;
         public static object ProcessHumanCriticalSection = null;
@@ -139,7 +169,7 @@ namespace GameSvr
         public static string g_sMissionMap = string.Empty;
         public static short g_nMissionX = 0;
         public static short g_nMissionY = 0;
-        public static bool boStartReady = false;
+        public static bool StartReady = false;
         public static bool boFilterWord = false;
         public static int g_nBaseObjTimeMin = 0;
         public static int g_nBaseObjTimeMax = 0;
@@ -151,19 +181,14 @@ namespace GameSvr
         public static int dwUsrRotCountMax = 0;
         public static int g_dwUsrRotCountTick = 0;
         public static int g_nProcessHumanLoopTime = 0;
-        public static int g_dwHumLimit = 30;
-        public static int g_dwMonLimit = 30;
-        public static int g_dwZenLimit = 5;
-        public static int g_dwNpcLimit = 5;
-        public static int g_dwSocLimit = 10;
+        public static int HumLimit = 30;
+        public static int MonLimit = 30;
+        public static int ZenLimit = 5;
+        public static int NpcLimit = 5;
+        public static int SocLimit = 10;
         public static int g_dwSocCheckTimeOut = 50;
         public static int nDecLimit = 20;
-        public static string sConfigPath = "";
-        public const string sConfigFileName = "Server.conf";
-        public const string sExpConfigFileName = "Exps.conf";
-        public const string sCommandFileName = "Command.conf";
-        public const string sStringFileName = "String.conf";
-        public const string sGlobalConfigFileName = "Global.conf";
+        public static string BasePath;
         public static int dwRunDBTimeMax = 0;
         public static int g_nGameTime = 0;
         public static NormNpc g_ManageNPC = null;
@@ -180,9 +205,8 @@ namespace GameSvr
         public static object g_HighSCHuman = null;
         public static object g_HighOnlineHuman = null;
         public static int g_dwSpiritMutinyTick = 0;
-        public static GameSvrConfig g_Config = null;
-        public static int[] g_dwOldNeedExps = new int[Grobal2.MAXCHANGELEVEL];
-        public static TGameCommand g_GameCommand = new TGameCommand();
+        public static GameSvrConf Config;
+        public static int[] g_dwOldNeedExps = new int[Grobal2.MaxChangeLevel];
         public static string sClientSoftVersionError = "游戏版本错误!!!";
         public static string sDownLoadNewClientSoft = "请到网站上下载最新版本游戏客户端软件。";
         public static string sForceDisConnect = "连接被强行中断!!!";
@@ -214,8 +238,8 @@ namespace GameSvr
         public static string sFireSpiritsFail = "召唤烈火精灵失败";
         public static string sSpiritsGone = "召唤烈火结束!!!";
         public static string sMateDoTooweak = "冲撞力不够!!!";
-        public static string g_sTheWeaponBroke = "武器破碎!!!";
-        public static string sTheWeaponRefineSuccessfull = "升级成功!!!";
+        public static string TheWeaponBroke = "武器破碎!!!";
+        public static string TheWeaponRefineSuccessfull = "升级成功!!!";
         public static string sYouPoisoned = "中毒了!!!";
         public static string sPetRest = "下属：休息";
         public static string sPetAttack = "下属：攻击";
@@ -225,7 +249,7 @@ namespace GameSvr
         public static string sWearWeightNot = "负重力不够!!!";
         public static string g_sItemIsNotThisAccount = "此物品不为此帐号所有!!!";
         public static string g_sItemIsNotThisIPaddr = "此物品不为此IP所有!!!";
-        public static string g_sItemIsNotThisCharName = "此物品不为你所有!!!";
+        public static string g_sItemIsNotThisChrName = "此物品不为你所有!!!";
         public static string g_sLevelNot = "等级不够!!!";
         public static string g_sJobOrLevelNot = "职业不对或等级不够!!!";
         public static string g_sJobOrDCNot = "职业不对或攻击力不够!!!";
@@ -365,38 +389,14 @@ namespace GameSvr
         public static string g_sNotWinLotteryMsg = "等下次机会吧!!!";
         public static string g_sWeaptonMakeLuck = "武器被加幸运了...";
         public static string g_sWeaptonNotMakeLuck = "无效!!!";
-        public static string g_sTheWeaponIsCursed = "你的武器被诅咒了!!!";
+        public static string g_sTheWeaponIsCursed = "您的武器被诅咒了。";
         public static string g_sCanotTakeOffItem = "无法取下物品!!!";
         public static string g_sJoinGroup = "{0} 已加入小组.";
         public static string g_sTryModeCanotUseStorage = "试玩模式不可以使用仓库功能!!!";
         public static string g_sCanotGetItems = "无法携带更多的东西!!!";
-        public static string g_sEnableDearRecall = "允许夫妻传送!!!";
-        public static string g_sDisableDearRecall = "禁止夫妻传送!!!";
-        public static string g_sEnableMasterRecall = "允许师徒传送!!!";
-        public static string g_sDisableMasterRecall = "禁止师徒传送!!!";
-        public static string g_sNowCurrDateTime = "当前日期时间: ";
-        public static string g_sEnableHearWhisper = "[允许私聊]";
-        public static string g_sDisableHearWhisper = "[禁止私聊]";
-        public static string g_sEnableShoutMsg = "[允许群聊]";
-        public static string g_sDisableShoutMsg = "[禁止群聊]";
-        public static string g_sEnableDealMsg = "[允许交易]";
-        public static string g_sDisableDealMsg = "[禁止交易]";
-        public static string g_sEnableGuildChat = "[允许行会聊天]";
-        public static string g_sDisableGuildChat = "[禁止行会聊天]";
-        public static string g_sEnableJoinGuild = "[允许加入行会]";
-        public static string g_sDisableJoinGuild = "[禁止加入行会]";
-        public static string g_sEnableAuthAllyGuild = "[允许行会联盟]";
-        public static string g_sDisableAuthAllyGuild = "[禁止行会联盟]";
-        public static string g_sEnableGroupRecall = "[允许天地合一]";
-        public static string g_sDisableGroupRecall = "[禁止天地合一]";
-        public static string g_sEnableGuildRecall = "[允许行会合一]";
-        public static string g_sDisableGuildRecall = "[禁止行会合一]";
-        public static string g_sPleaseInputPassword = "请输入密码:";
-        public static string g_sTheMapDisableMove = "地图{0}({1})不允许传送!!!";
-        public static string g_sTheMapNotFound = "{0} 此地图号不存在!!!";
         public static string g_sYourIPaddrDenyLogon = "你当前登录的IP地址已被禁止登录了!!!";
         public static string g_sYourAccountDenyLogon = "你当前登录的帐号已被禁止登录了!!!";
-        public static string g_sYourCharNameDenyLogon = "你当前登录的人物已被禁止登录了!!!";
+        public static string g_sYourChrNameDenyLogon = "你当前登录的人物已被禁止登录了!!!";
         public static string g_sCanotPickUpItem = "在一定时间以内无法捡起此物品!!!";
         public static string g_sQUERYBAGITEMS = "一定时间内不能连续刷新背包物品...";
         public static string g_sCanotSendmsg = "无法发送信息.";
@@ -440,1137 +440,24 @@ namespace GameSvr
         public static string g_sYouIsDisableSendMsg = "禁止聊天!!!";
         public static string g_sYouMurderedMsg = "你犯了谋杀罪!!!";
         public static string g_sYouKilledByMsg = "你被{0}杀害了!!!";
-        public static string g_sYouProtectedByLawOfDefense = "[你受到正当规则保护。]";
+        public static string g_sYouprotectedByLawOfDefense = "[你受到正当规则保护。]";
         public static string g_sYourUseItemIsNul = "你的{0}处没有放上装备!!!";
 
         public const string g_sVersion = "引擎版本: 1.00 Build 20161001";
         public const string g_sUpDateTime = "更新日期: 2016/10/01";
-
         private const string sSTATUS_FAIL = "+FL/{0}";
         private const string sSTATUS_GOOD = "+GD/{0}";
 
-        public const int MAXUPLEVEL = 500;
-        public const int MAXHUMPOWER = 1000;
-        public const int BODYLUCKUNIT = 5000;
-        public const int HAM_ALL = 0;
-        public const int HAM_PEACE = 1;
-        public const int HAM_DEAR = 2;
-        public const int HAM_MASTER = 3;
-        public const int HAM_GROUP = 4;
-        public const int HAM_GUILD = 5;
-        /// <summary>
-        /// 红名攻击模式
-        /// </summary>
-        public const int HAM_PKATTACK = 6;
-        public const int DEFHIT = 5;
-        public const int DEFSPEED = 15;
-        public const int jWarr = 0;
-        public const int jWizard = 1;
-        public const int jTaos = 2;
-        public const int SIZEOFTHUMAN = 3588;
-        public const int MONSTER_SANDMOB = 3;
-        public const int MONSTER_ROCKMAN = 4;
-        public const int MONSTER_RON = 9;
-        public const int MONSTER_MINORNUMA = 18;
-        public const int ARCHER_POLICE = 20;
-        public const int SUPREGUARD = 11;
-        public const int PETSUPREGUARD = 12;
-        public const int ANIMAL_CHICKEN = 51;
-        public const int ANIMAL_DEER = 52;
-        public const int ANIMAL_WOLF = 53;
-        public const int TRAINER = 55;
-        public const int MONSTER_OMA = 80;
-        public const int MONSTER_OMAKNIGHT = 81;
-        public const int MONSTER_SPITSPIDER = 82;
-        public const int MONSTER_STICK = 85;
-        public const int MONSTER_DUALAXE = 87;
-        public const int MONSTER_THONEDARK = 93;
-        public const int MONSTER_LIGHTZOMBI = 94;
-        public const int MONSTER_DIGOUTZOMBI = 95;
-        public const int MONSTER_ZILKINZOMBI = 96;
-        public const int MONSTER_WHITESKELETON = 100;
-        public const int MONSTER_BEEQUEEN = 103;
-        public const int MONSTER_BEE = 125;
-        public const int MONSTER_MAGUNGSA = 143;
-        public const int MONSTER_SCULTURE = 101;
-        public const int MONSTER_SCULTUREKING = 102;
-        public const int MONSTER_ARCHERGUARD = 112;
-        public const int MONSTER_ELFMONSTER = 113;
-        public const int MONSTER_ELFWARRIOR = 114;
-        public const string sMAN = "MAN";
-        public const string sSUNRAISE = "SUNRAISE";
-        public const string sDAY = "DAY";
-        public const string sSUNSET = "SUNSET";
-        public const string sNIGHT = "NIGHT";
-        public const string sWarrior = "Warrior";
-        public const string sWizard = "Wizard";
-        public const string sTaos = "Taoist";
-        public const string sSUN = "SUN";
-        public const string sMON = "MON";
-        public const string sTUE = "TUE";
-        public const string sWED = "WED";
-        public const string sTHU = "THU";
-        public const string sFRI = "FRI";
-        public const string sSAT = "SAT";
-        // 脚本常量
-        public const string sCHECK = "CHECK";
-        public const int nCHECK = 1;
-        public const string sRANDOM = "RANDOM";
-        public const int nRANDOM = 2;
-        public const string sGENDER = "GENDER";
-        public const int nGENDER = 3;
-        public const string sDAYTIME = "DAYTIME";
-        public const int nDAYTIME = 4;
-        public const string sCHECKOPEN = "CHECKOPEN";
-        public const int nCHECKOPEN = 5;
-        public const string sCHECKUNIT = "CHECKUNIT";
-        public const int nCHECKUNIT = 6;
-        public const string sCHECKLEVEL = "CHECKLEVEL";
-        public const int nCHECKLEVEL = 7;
-        public const string sCHECKJOB = "CHECKJOB";
-        public const int nCHECKJOB = 8;
-        public const string sCHECKBBCOUNT = "CHECKBBCOUNT";
-        public const int nCHECKBBCOUNT = 9;
-        public const string sCHECKITEM = "CHECKITEM";
-        public const int nCHECKITEM = 20;
-        public const string sCHECKITEMW = "CHECKITEMW";
-        public const int nCHECKITEMW = 21;
-        public const string sCHECKGOLD = "CHECKGOLD";
-        public const int nCHECKGOLD = 22;
-        public const string sISTAKEITEM = "ISTAKEITEM";
-        public const int nISTAKEITEM = 23;
-        public const string sCHECKDURA = "CHECKDURA";
-        public const int nCHECKDURA = 24;
-        public const string sCHECKDURAEVA = "CHECKDURAEVA";
-        public const int nCHECKDURAEVA = 25;
-        public const string sDAYOFWEEK = "DAYOFWEEK";
-        public const int nDAYOFWEEK = 26;
-        public const string sHOUR = "HOUR";
-        public const int nHOUR = 27;
-        public const string sMIN = "MIN";
-        public const int nMIN = 28;
-        public const string sCHECKPKPOINT = "CHECKPKPOINT";
-        public const int nCHECKPKPOINT = 29;
-        public const string sCHECKLUCKYPOINT = "CHECKLUCKYPOINT";
-        public const int nCHECKLUCKYPOINT = 30;
-        public const string sCHECKMONMAP = "CHECKMONMAP";
-        public const int nCHECKMONMAP = 31;
-        public const string sCHECKMONAREA = "CHECKMONAREA";
-        public const int nCHECKMONAREA = 32;
-        public const string sCHECKHUM = "CHECKHUM";
-        public const int nCHECKHUM = 33;
-        public const string sCHECKBAGGAGE = "CHECKBAGGAGE";
-        public const int nCHECKBAGGAGE = 34;
-        public const string sEQUAL = "EQUAL";
-        public const int nEQUAL = 35;
-        public const string sLARGE = "LARGE";
-        public const int nLARGE = 36;
-        public const string sSMALL = "SMALL";
-        public const int nSMALL = 37;
-        public const string sSC_CHECKMAGIC = "CHECKMAGIC";
-        public const int nSC_CHECKMAGIC = 38;
-        public const string sSC_CHKMAGICLEVEL = "CHKMAGICLEVEL";
-        public const int nSC_CHKMAGICLEVEL = 39;
-        public const string sSC_CHECKMONRECALL = "CHECKMONRECALL";
-        public const int nSC_CHECKMONRECALL = 40;
-        public const string sSC_CHECKHORSE = "CHECKHORSE";
-        public const int nSC_CHECKHORSE = 41;
-        public const string sSC_CHECKRIDING = "CHECKRIDING";
-        public const int nSC_CHECKRIDING = 42;
-        public const string sSC_STARTDAILYQUEST = "STARTDAILYQUEST";
-        public const int nSC_STARTDAILYQUEST = 45;
-        public const string sSC_CHECKDAILYQUEST = "CHECKDAILYQUEST";
-        public const int nSC_CHECKDAILYQUEST = 46;
-        public const string sSC_RANDOMEX = "RANDOMEX";
-        public const int nSC_RANDOMEX = 47;
-        public const string sCHECKNAMELIST = "CHECKNAMELIST";
-        public const int nCHECKNAMELIST = 48;
-        public const string sSC_CHECKWEAPONLEVEL = "CHECKWEAPONLEVEL";
-        public const int nSC_CHECKWEAPONLEVEL = 49;
-        public const string sSC_CHECKWEAPONATOM = "CHECKWEAPONATOM";
-        public const int nSC_CHECKWEAPONATOM = 50;
-        public const string sSC_CHECKREFINEWEAPON = "CHECKREFINEWEAPON";
-        public const int nSC_CHECKREFINEWEAPON = 51;
-        public const string sSC_CHECKWEAPONMCTYPE = "CHECKWEAPONMCTYPE";
-        public const int nSC_CHECKWEAPONMCTYPE = 52;
-        public const string sSC_CHECKREFINEITEM = "CHECKREFINEITEM";
-        public const int nSC_CHECKREFINEITEM = 53;
-        public const string sSC_HASWEAPONATOM = "HASWEAPONATOM";
-        public const int nSC_HASWEAPONATOM = 54;
-        public const string sSC_ISGUILDMASTER = "ISGUILDMASTER";
-        public const int nSC_ISGUILDMASTER = 55;
-        public const string sSC_CANPROPOSECASTLEWAR = "CANPROPOSECASTLEWAR";
-        public const int nSC_CANPROPOSECASTLEWAR = 56;
-        public const string sSC_CANHAVESHOOTER = "CANHAVESHOOTER";
-        public const int nSC_CANHAVESHOOTER = 57;
-        public const string sSC_CHECKFAME = "CHECKFAME";
-        public const int nSC_CHECKFAME = 58;
-        public const string sSC_ISONCASTLEWAR = "ISONCASTLEWAR";
-        public const int nSC_ISONCASTLEWAR = 59;
-        public const string sSC_ISONREADYCASTLEWAR = "ISONREADYCASTLEWAR";
-        public const int nSC_ISONREADYCASTLEWAR = 60;
-        public const string sSC_ISCASTLEGUILD = "ISCASTLEGUILD";
-        public const int nSC_ISCASTLEGUILD = 61;
-        public const string sSC_ISATTACKGUILD = "ISATTACKGUILD";
-        // 是否为攻城方
-        public const int nSC_ISATTACKGUILD = 63;
-        public const string sSC_ISDEFENSEGUILD = "ISDEFENSEGUILD";
-        // 是否为守城方
-        public const int nSC_ISDEFENSEGUILD = 65;
-        public const string sSC_CHECKSHOOTER = "CHECKSHOOTER";
-        public const int nSC_CHECKSHOOTER = 66;
-        public const string sSC_CHECKSAVEDSHOOTER = "CHECKSAVEDSHOOTER";
-        public const int nSC_CHECKSAVEDSHOOTER = 67;
-        public const string sSC_HASGUILD = "HAVEGUILD";
-        // 是否加入行会
-        public const int nSC_HASGUILD = 68;
-        public const string sSC_CHECKCASTLEDOOR = "CHECKCASTLEDOOR";
-        // 检查城门
-        public const int nSC_CHECKCASTLEDOOR = 69;
-        public const string sSC_CHECKCASTLEDOOROPEN = "CHECKCASTLEDOOROPEN";
-        // 城门是否打开
-        public const int nSC_CHECKCASTLEDOOROPEN = 70;
-        public const string sSC_CHECKPOS = "CHECKPOS";
-        public const int nSC_CHECKPOS = 71;
-        public const string sSC_CANCHARGESHOOTER = "CANCHARGESHOOTER";
-        public const int nSC_CANCHARGESHOOTER = 72;
-        public const string sSC_ISATTACKALLYGUILD = "ISATTACKALLYGUILD";
-        // 是否为攻城方联盟行会
-        public const int nSC_ISATTACKALLYGUILD = 73;
-        public const string sSC_ISDEFENSEALLYGUILD = "ISDEFENSEALLYGUILD";
-        // 是否为守城方联盟行会
-        public const int nSC_ISDEFENSEALLYGUILD = 74;
-        public const string sSC_TESTTEAM = "TESTTEAM";
-        public const int nSC_TESTTEAM = 75;
-        public const string sSC_ISSYSOP = "ISSYSOP";
-        public const int nSC_ISSYSOP = 76;
-        public const string sSC_ISADMIN = "ISADMIN";
-        public const int nSC_ISADMIN = 77;
-        public const string sSC_CHECKBONUS = "CHECKBONUS";
-        public const int nSC_CHECKBONUS = 78;
-        public const string sSC_CHECKMARRIAGE = "CHECKMARRIAGE";
-        public const int nSC_CHECKMARRIAGE = 79;
-        public const string sSC_CHECKMARRIAGERING = "CHECKMARRIAGERING";
-        public const int nSC_CHECKMARRIAGERING = 80;
-        public const string sSC_CHECKGMETERM = "CHECKGMETERM";
-        public const int nSC_CHECKGMETERM = 100;
-        public const string sSC_CHECKOPENGME = "CHECKOPENGME";
-        public const int nSC_CHECKOPENGME = 101;
-        public const string sSC_CHECKENTERGMEMAP = "CHECKENTERGMEMAP";
-        public const int nSC_CHECKENTERGMEMAP = 102;
-        public const string sSC_CHECKSERVER = "CHECKSERVER";
-        public const int nSC_CHECKSERVER = 103;
-        public const string sSC_ELARGE = "ELARGE";
-        public const int nSC_ELARGE = 104;
-        public const string sSC_ESMALL = "ESMALL";
-        public const int nSC_ESMALL = 105;
-        public const string sSC_CHECKGROUPCOUNT = "CHECKGROUPCOUNT";
-        public const int nSC_CHECKGROUPCOUNT = 106;
-        public const string sSC_CHECKACCESSORY = "CHECKACCESSORY";
-        public const int nSC_CHECKACCESSORY = 107;
-        public const string sSC_ONERROR = "ONERROR";
-        public const int nSC_ONERROR = 108;
-        public const string sSC_CHECKARMOR = "CHECKARMOR";
-        public const int nSC_CHECKARMOR = 109;
-        public const string sCHECKACCOUNTLIST = "CHECKACCOUNTLIST";
-        public const int nCHECKACCOUNTLIST = 135;
-        public const string sCHECKIPLIST = "CHECKIPLIST";
-        public const int nCHECKIPLIST = 136;
-        public const string sCHECKCREDITPOINT = "CHECKCREDITPOINT";
-        public const int nCHECKCREDITPOINT = 137;
-        public const string sSC_CHECKPOSEDIR = "CHECKPOSEDIR";
-        public const int nSC_CHECKPOSEDIR = 138;
-        public const string sSC_CHECKPOSELEVEL = "CHECKPOSELEVEL";
-        public const int nSC_CHECKPOSELEVEL = 139;
-        public const string sSC_CHECKPOSEGENDER = "CHECKPOSEGENDER";
-        public const int nSC_CHECKPOSEGENDER = 140;
-        public const string sSC_CHECKLEVELEX = "CHECKLEVELEX";
-        public const int nSC_CHECKLEVELEX = 141;
-        public const string sSC_CHECKBONUSPOINT = "CHECKBONUSPOINT";
-        public const int nSC_CHECKBONUSPOINT = 142;
-        public const string sSC_CHECKMARRY = "CHECKMARRY";
-        public const int nSC_CHECKMARRY = 143;
-        public const string sSC_CHECKPOSEMARRY = "CHECKPOSEMARRY";
-        public const int nSC_CHECKPOSEMARRY = 144;
-        public const string sSC_CHECKMARRYCOUNT = "CHECKMARRYCOUNT";
-        public const int nSC_CHECKMARRYCOUNT = 145;
-        public const string sSC_CHECKMASTER = "CHECKMASTER";
-        public const int nSC_CHECKMASTER = 146;
-        public const string sSC_HAVEMASTER = "HAVEMASTER";
-        public const int nSC_HAVEMASTER = 147;
-        public const string sSC_CHECKPOSEMASTER = "CHECKPOSEMASTER";
-        public const int nSC_CHECKPOSEMASTER = 148;
-        public const string sSC_POSEHAVEMASTER = "POSEHAVEMASTER";
-        public const int nSC_POSEHAVEMASTER = 149;
-        public const string sSC_CHECKISMASTER = "CHECKPOSEISMASTER";
-        public const int nSC_CHECKISMASTER = 150;
-        public const string sSC_CHECKPOSEISMASTER = "CHECKISMASTER";
-        public const int nSC_CHECKPOSEISMASTER = 151;
-        public const string sSC_CHECKNAMEIPLIST = "CHECKNAMEIPLIST";
-        public const int nSC_CHECKNAMEIPLIST = 152;
-        public const string sSC_CHECKACCOUNTIPLIST = "CHECKACCOUNTIPLIST";
-        public const int nSC_CHECKACCOUNTIPLIST = 153;
-        public const string sSC_CHECKSLAVECOUNT = "CHECKSLAVECOUNT";
-        public const int nSC_CHECKSLAVECOUNT = 154;
-        public const string sSC_CHECKCASTLEMASTER = "ISCASTLEMASTER";
-        public const int nSC_CHECKCASTLEMASTER = 155;
-        public const string sSC_ISNEWHUMAN = "ISNEWHUMAN";
-        public const int nSC_ISNEWHUMAN = 156;
-        public const string sSC_CHECKMEMBERTYPE = "CHECKMEMBERTYPE";
-        public const int nSC_CHECKMEMBERTYPE = 157;
-        public const string sSC_CHECKMEMBERLEVEL = "CHECKMEMBERLEVEL";
-        public const int nSC_CHECKMEMBERLEVEL = 158;
-        public const string sSC_CHECKGAMEGOLD = "CHECKGAMEGOLD";
-        public const int nSC_CHECKGAMEGOLD = 159;
-        public const string sSC_CHECKGAMEPOINT = "CHECKGAMEPOINT";
-        public const int nSC_CHECKGAMEPOINT = 160;
-        public const string sSC_CHECKNAMELISTPOSITION = "CHECKNAMELISTPOSITION";
-        public const int nSC_CHECKNAMELISTPOSITION = 161;
-        public const string sSC_CHECKGUILDLIST = "CHECKGUILDLIST";
-        public const int nSC_CHECKGUILDLIST = 162;
-        public const string sSC_CHECKRENEWLEVEL = "CHECKRENEWLEVEL";
-        public const int nSC_CHECKRENEWLEVEL = 163;
-        public const string sSC_CHECKSLAVELEVEL = "CHECKSLAVELEVEL";
-        public const int nSC_CHECKSLAVELEVEL = 164;
-        public const string sSC_CHECKSLAVENAME = "CHECKSLAVENAME";
-        public const int nSC_CHECKSLAVENAME = 165;
-        public const string sSC_CHECKCREDITPOINT = "CHECKCREDITPOINT";
-        public const int nSC_CHECKCREDITPOINT = 166;
-        public const string sSC_CHECKOFGUILD = "CHECKOFGUILD";
-        public const int nSC_CHECKOFGUILD = 167;
-        public const string sSC_CHECKPAYMENT = "CHECKPAYMENT";
-        public const int nSC_CHECKPAYMENT = 168;
-        public const string sSC_CHECKUSEITEM = "CHECKUSEITEM";
-        public const int nSC_CHECKUSEITEM = 169;
-        public const string sSC_CHECKBAGSIZE = "CHECKBAGSIZE";
-        public const int nSC_CHECKBAGSIZE = 170;
-        public const string sSC_CHECKLISTCOUNT = "CHECKLISTCOUNT";
-        public const int nSC_CHECKLISTCOUNT = 171;
-        public const string sSC_CHECKDC = "CHECKDC";
-        public const int nSC_CHECKDC = 172;
-        public const string sSC_CHECKMC = "CHECKMC";
-        public const int nSC_CHECKMC = 173;
-        public const string sSC_CHECKSC = "CHECKSC";
-        public const int nSC_CHECKSC = 174;
-        public const string sSC_CHECKHP = "CHECKHP";
-        public const int nSC_CHECKHP = 175;
-        public const string sSC_CHECKMP = "CHECKMP";
-        public const int nSC_CHECKMP = 176;
-        public const string sSC_CHECKITEMTYPE = "CHECKITEMTYPE";
-        public const int nSC_CHECKITEMTYPE = 180;
-        public const string sSC_CHECKEXP = "CHECKEXP";
-        public const int nSC_CHECKEXP = 181;
-        public const string sSC_CHECKCASTLEGOLD = "CHECKCASTLEGOLD";
-        public const int nSC_CHECKCASTLEGOLD = 182;
-        public const string sSC_PASSWORDERRORCOUNT = "PASSWORDERRORCOUNT";
-        public const int nSC_PASSWORDERRORCOUNT = 183;
-        public const string sSC_ISLOCKPASSWORD = "ISLOCKPASSWORD";
-        public const int nSC_ISLOCKPASSWORD = 184;
-        public const string sSC_ISLOCKSTORAGE = "ISLOCKSTORAGE";
-        public const int nSC_ISLOCKSTORAGE = 185;
-        public const string sSC_CHECKBUILDPOINT = "CHECKGUILDBUILDPOINT";
-        public const int nSC_CHECKBUILDPOINT = 186;
-        public const string sSC_CHECKAURAEPOINT = "CHECKGUILDAURAEPOINT";
-        public const int nSC_CHECKAURAEPOINT = 187;
-        public const string sSC_CHECKSTABILITYPOINT = "CHECKGUILDSTABILITYPOINT";
-        public const int nSC_CHECKSTABILITYPOINT = 188;
-        public const string sSC_CHECKFLOURISHPOINT = "CHECKGUILDFLOURISHPOINT";
-        public const int nSC_CHECKFLOURISHPOINT = 189;
-        public const string sSC_CHECKCONTRIBUTION = "CHECKCONTRIBUTION";
-        // 贡献度
-        public const int nSC_CHECKCONTRIBUTION = 190;
-        public const string sSC_CHECKRANGEMONCOUNT = "CHECKRANGEMONCOUNT";
-        // 检查一个区域中有多少怪
-        public const int nSC_CHECKRANGEMONCOUNT = 191;
-        public const string sSC_CHECKITEMADDVALUE = "CHECKITEMADDVALUE";
-        public const int nSC_CHECKITEMADDVALUE = 192;
-        public const string sSC_CHECKINMAPRANGE = "CHECKINMAPRANGE";
-        public const int nSC_CHECKINMAPRANGE = 193;
-        public const string sSC_CASTLECHANGEDAY = "CASTLECHANGEDAY";
-        public const int nSC_CASTLECHANGEDAY = 194;
-        public const string sSC_CASTLEWARDAY = "CASTLEWARAY";
-        public const int nSC_CASTLEWARDAY = 195;
-        public const string sSC_ONLINELONGMIN = "ONLINELONGMIN";
-        public const int nSC_ONLINELONGMIN = 196;
-        public const string sSC_CHECKGUILDCHIEFITEMCOUNT = "CHECKGUILDCHIEFITEMCOUNT";
-        public const int nSC_CHECKGUILDCHIEFITEMCOUNT = 197;
-        public const string sSC_CHECKNAMEDATELIST = "CHECKNAMEDATELIST";
-        public const int nSC_CHECKNAMEDATELIST = 198;
-        public const string sSC_CHECKMAPHUMANCOUNT = "CHECKMAPHUMANCOUNT";
-        public const int nSC_CHECKMAPHUMANCOUNT = 199;
-        public const string sSC_CHECKMAPMONCOUNT = "CHECKMAPMONCOUNT";
-        public const int nSC_CHECKMAPMONCOUNT = 200;
-        public const string sSC_CHECKVAR = "CHECKVAR";
-        public const int nSC_CHECKVAR = 201;
-        public const string sSC_CHECKSERVERNAME = "CHECKSERVERNAME";
-        public const int nSC_CHECKSERVERNAME = 202;
-        public const string sSC_CHECKMAP = "CHECKMAP";
-        public const int nSC_CHECKMAP = 203;
-        public const string sSC_REVIVESLAVE = "REVIVESLAVES";
-        public const int nSC_REVIVESLAVE = 206;
-        public const string sSC_CHECKMAGICLVL = "CHECKMAGICLVL";
-        public const int nSC_CHECKMAGICLVL = 207;
-        public const string sSC_CHECKGROUPCLASS = "CHECKGROUPCLASS";
-        public const int nSC_CHECKGROUPCLASS = 208;
-        // ==================================================================
-        public const string sCheckDiemon = "CHECKDIEMON";
-        // 检查人物死亡被指定怪物杀死
-        public const int nCheckDiemon = 209;
-        public const string scheckkillplaymon = "CHECKKILLPLAYMON";
-        // 检查杀死怪物
-        public const int ncheckkillplaymon = 210;
-        public const string sSC_CHECKRANDOMNO = "CHECKRANDOMNO";
-        // 检测输入的验证码是否正确
-        public const int nSC_CHECKRANDOMNO = 212;
-        public const string sSC_CHECKISONMAP = "ISONMAP";
-        // 检测当前人是否在MAP地图上
-        public const int nSC_CHECKISONMAP = 213;
-        public const string sSC_KILLBYHUM = "KILLBYHUM";
-        // 是否被人杀
-        public const int nSC_KILLBYHUM = 214;
-        public const string sSC_KILLBYMON = "KILLBYMON";
-        // 是否被怪杀
-        public const int nSC_KILLBYMON = 215;
-        public const string sSC_CHECKINSAFEZONE = "INSAFEZONE";
-        // 检测人物是否在安全区
-        public const int nSC_CHECKINSAFEZONE = 216;
-        public const string sSC_ISGROUPMASTER = "ISGROUPMASTER";
-        // 检测是否组长
-        public const int nSC_ISGROUPMASTER = 217;
-        // Action
-        public const string sSET = "SET";
-        public const int nSET = 1;
-        public const string sTAKE = "TAKE";
-        public const int nTAKE = 2;
-        public const string sSC_GIVE = "GIVE";
-        public const int nSC_GIVE = 3;
-        public const string sTAKEW = "TAKEW";
-        public const int nTAKEW = 4;
-        public const string sCLOSE = "CLOSE";
-        public const int nCLOSE = 5;
-        public const string sRESET = "RESET";
-        public const int nRESET = 6;
-        public const string sSETOPEN = "SETOPEN";
-        public const int nSETOPEN = 7;
-        public const string sSETUNIT = "SETUNIT";
-        public const int nSETUNIT = 8;
-        public const string sRESETUNIT = "RESETUNIT";
-        public const int nRESETUNIT = 9;
-        public const string sBREAK = "BREAK";
-        public const int nBREAK = 10;
-        public const string sTIMERECALL = "TIMERECALL";
-        public const int nTIMERECALL = 11;
-        public const string sSC_PARAM1 = "PARAM1";
-        public const int nSC_PARAM1 = 12;
-        public const string sSC_PARAM2 = "PARAM2";
-        public const int nSC_PARAM2 = 13;
-        public const string sSC_PARAM3 = "PARAM3";
-        public const int nSC_PARAM3 = 14;
-        public const string sSC_PARAM4 = "PARAM4";
-        public const int nSC_PARAM4 = 15;
-        public const string sSC_EXEACTION = "EXEACTION";
-        public const int nSC_EXEACTION = 16;
-        public const string sMAPMOVE = "MAPMOVE";
-        public const int nMAPMOVE = 19;
-        public const string sMAP = "MAP";
-        public const int nMAP = 20;
-        public const string sTAKECHECKITEM = "TAKECHECKITEM";
-        public const int nTAKECHECKITEM = 21;
-        public const string sMONGEN = "MONGEN";
-        public const int nMONGEN = 22;
-        public const string sSC_MONGENP = "MONGENP";
-        public const int nSC_MONGENP = 23;
-        public const string sMONCLEAR = "MONCLEAR";
-        public const int nMONCLEAR = 24;
-        public const string sMOV = "MOV";
-        public const int nMOV = 25;
-        public const string sINC = "INC";
-        public const int nINC = 26;
-        public const string sDEC = "DEC";
-        public const int nDEC = 27;
-        public const string sSUM = "SUM";
-        public const int nSUM = 28;
-        /// <summary>
-        /// 变量运算 除法
-        /// </summary>
-        public const string sSC_DIV = "DIV";
-        public const int nSC_DIV = 241;
-        /// <summary>
-        /// 变量运算 乘法
-        /// </summary>
-        public const string sSC_MUL = "MUL";
-        public const int nSC_MUL = 242;
-        /// <summary>
-        /// 量运算 百分比
-        /// </summary>
-        public const string sSC_PERCENT = "PERCENT";
-        public const int nSC_PERCENT = 243;
-        public const string sBREAKTIMERECALL = "BREAKTIMERECALL";
-        public const int nBREAKTIMERECALL = 29;
-        public const string sSENDMSG = "SENDMSG";
-        public const int nSENDMSG = 30;
-        public const string sCHANGEMODE = "CHANGEMODE";
-        public const int nCHANGEMODE = 31;
-        public const string sPKPOINT = "PKPOINT";
-        public const int nPKPOINT = 32;
-        public const string sCHANGEXP = "CHANGEXP";
-        public const int nCHANGEXP = 33;
-        public const string sSC_RECALLMOB = "RECALLMOB";
-        public const int nSC_RECALLMOB = 34;
-        public const string sKICK = "KICK";
-        public const int nKICK = 35;
-        public const string sMOVR = "MOVR";
-        public const int nMOVR = 50;
-        public const string sEXCHANGEMAP = "EXCHANGEMAP";
-        public const int nEXCHANGEMAP = 51;
-        public const string sRECALLMAP = "RECALLMAP";
-        public const int nRECALLMAP = 52;
-        public const string sADDBATCH = "ADDBATCH";
-        public const int nADDBATCH = 53;
-        public const string sBATCHDELAY = "BATCHDELAY";
-        public const int nBATCHDELAY = 54;
-        public const string sBATCHMOVE = "BATCHMOVE";
-        public const int nBATCHMOVE = 55;
-        public const string sPLAYDICE = "PLAYDICE";
-        public const int nPLAYDICE = 56;
-        public const string sSC_PASTEMAP = "PASTEMAP";
-        public const string sSC_LOADGEN = "LOADGEN";
-        public const string sADDNAMELIST = "ADDNAMELIST";
-        public const int nADDNAMELIST = 57;
-        public const string sDELNAMELIST = "DELNAMELIST";
-        public const int nDELNAMELIST = 58;
-        public const string sADDGUILDLIST = "ADDGUILDLIST";
-        public const int nADDGUILDLIST = 59;
-        public const string sDELGUILDLIST = "DELGUILDLIST";
-        public const int nDELGUILDLIST = 60;
-        public const string sADDACCOUNTLIST = "ADDACCOUNTLIST";
-        public const int nADDACCOUNTLIST = 61;
-        public const string sDELACCOUNTLIST = "DELACCOUNTLIST";
-        public const int nDELACCOUNTLIST = 62;
-        public const string sADDIPLIST = "ADDIPLIST";
-        public const int nADDIPLIST = 63;
-        public const string sDELIPLIST = "DELIPLIST";
-        public const int nDELIPLIST = 64;
-        public const string sGOQUEST = "GOQUEST";
-        public const int nGOQUEST = 100;
-        public const string sENDQUEST = "ENDQUEST";
-        public const int nENDQUEST = 101;
-        public const string sGOTO = "GOTO";
-        public const int nGOTO = 102;
-        public const string sSC_HAIRCOLOR = "HAIRCOLOR";
-        public const int nSC_HAIRCOLOR = 104;
-        public const string sSC_WEARCOLOR = "WEARCOLOR";
-        public const int nSC_WEARCOLOR = 105;
-        public const string sSC_HAIRSTYLE = "HAIRSTYLE";
-        public const int nSC_HAIRSTYLE = 106;
-        public const string sSC_MONRECALL = "MONRECALL";
-        public const int nSC_MONRECALL = 107;
-        public const string sSC_HORSECALL = "HORSECALL";
-        public const int nSC_HORSECALL = 108;
-        public const string sSC_HAIRRNDCOL = "HAIRRNDCOL";
-        public const int nSC_HAIRRNDCOL = 109;
-        public const string sSC_RANDSETDAILYQUEST = "RANDSETDAILYQUEST";
-        public const int nSC_RANDSETDAILYQUEST = 110;
-        public const string sSC_REFINEWEAPON = "REFINEWEAPON";
-        public const int nSC_REFINEWEAPON = 113;
-        public const string sSC_RECALLGROUPMEMBERS = "RECALLGROUPMEMBERS";
-        public const int nSC_RECALLGROUPMEMBERS = 117;
-        public const string sSC_MAPTING = "MAPTING";
-        public const int nSC_MAPTING = 118;
-        public const string sSC_WRITEWEAPONNAME = "WRITEWEAPONNAME";
-        public const int nSC_WRITEWEAPONNAME = 119;
-        public const string sSC_DELAYGOTO = "DELAYGOTO";
-        public const int nSC_DELAYGOTO = 120;
-        public const string sSC_ENABLECMD = "ENABLECMD";
-        public const int nSC_ENABLECMD = 121;
-        public const string sSC_LINEMSG = "LINEMSG";
-        public const int nSC_LINEMSG = 122;
-        public const string sSC_EVENTMSG = "EVENTMSG";
-        public const int nSC_EVENTMSG = 123;
-        public const string sSC_SOUNDMSG = "SOUNDMSG";
-        public const int nSC_SOUNDMSG = 124;
-        public const string sSC_SETMISSION = "SETMISSION";
-        public const int nSC_SETMISSION = 125;
-        public const string sSC_CLEARMISSION = "CLEARMISSION";
-        public const int nSC_CLEARMISSION = 126;
-        public const string sSC_MONPWR = "MONPWR";
-        public const int nSC_MONPWR = 127;
-        public const string sSC_ENTER_OK = "ENTER_OK";
-        public const int nSC_ENTER_OK = 128;
-        public const string sSC_ENTER_FAIL = "ENTER_FAIL";
-        public const int nSC_ENTER_FAIL = 129;
-        public const string sSC_MONADDITEM = "MONADDITEM";
-        public const int nSC_MONADDITEM = 130;
-        public const string sSC_CHANGEWEATHER = "CHANGEWEATHER";
-        public const int nSC_CHANGEWEATHER = 131;
-        public const string sSC_CHANGEWEAPONATOM = "CHANGEWEAPONATOM";
-        public const int nSC_CHANGEWEAPONATOM = 132;
-        public const string sSC_GETREPAIRCOST = "GETREPAIRCOST";
-        public const int nSC_GETREPAIRCOST = 134;
-        public const string sSC_KILLHORSE = "KILLHORSE";
-        public const int nSC_KILLHORSE = 133;
-        public const string sSC_REPAIRITEM = "REPAIRITEM";
-        public const int nSC_REPAIRITEM = 135;
-        public const string sSC_USEREMERGENCYCLOSE = "USEREMERGENCYCLOSE";
-        public const int nSC_USEREMERGENCYCLOSE = 138;
-        public const string sSC_BUILDGUILD = "BUILDGUILD";
-        public const int nSC_BUILDGUILD = 139;
-        public const string sSC_GUILDWAR = "GUILDWAR";
-        public const int nSC_GUILDWAR = 140;
-        public const string sSC_CHANGEUSERNAME = "CHANGEUSERNAME";
-        public const int nSC_CHANGEUSERNAME = 141;
-        public const string sSC_CHANGEMONLEVEL = "CHANGEMONLEVEL";
-        public const int nSC_CHANGEMONLEVEL = 142;
-        public const string sSC_DROPITEMMAP = "DROPITEMMAP";
-        public const int nSC_DROPITEMMAP = 143;
-        public const string sSC_CLEARITEMMAP = "CLEARITEMMAP";
-        public const int nSC_CLEARITEMMAP = 170;
-        public const string sSC_PROPOSECASTLEWAR = "PROPOSECASTLEWAR";
-        public const int nSC_PROPOSECASTLEWAR = 144;
-        public const string sSC_FINISHCASTLEWAR = "FINISHCASTLEWAR";
-        public const int nSC_FINISHCASTLEWAR = 145;
-        public const string sSC_MOVENPC = "MOVENPC";
-        public const int nSC_MOVENPC = 146;
-        public const string sSC_SPEAK = "SPEAK";
-        public const int nSC_SPEAK = 147;
-        public const string sSC_SENDCMD = "SENDCMD";
-        public const int nSC_SENDCMD = 148;
-        public const string sSC_INCFAME = "INCFAME";
-        public const int nSC_INCFAME = 149;
-        public const string sSC_DECFAME = "DECFAME";
-        public const int nSC_DECFAME = 150;
-        public const string sSC_CAPTURECASTLEFLAG = "CAPTURECASTLEFLAG";
-        public const int nSC_CAPTURECASTLEFLAG = 151;
-        public const string sSC_MAKESHOOTER = "MAKESHOOTER";
-        public const int nSC_MAKESHOOTER = 153;
-        public const string sSC_KILLSHOOTER = "KILLSHOOTER";
-        public const int nSC_KILLSHOOTER = 154;
-        public const string sSC_LEAVESHOOTER = "LEAVESHOOTER";
-        public const int nSC_LEAVESHOOTER = 155;
-        public const string sSC_CHANGEMAPATTR = "CHANGEMAPATTR";
-        public const int nSC_CHANGEMAPATTR = 157;
-        public const string sSC_RESETMAPATTR = "RESETMAPATTR";
-        public const int nSC_RESETMAPATTR = 158;
-        public const string sSC_MAKECASTLEDOOR = "MAKECASTLEDOOR";
-        public const int nSC_MAKECASTLEDOOR = 159;
-        public const string sSC_REPAIRCASTLEDOOR = "REPAIRCASTLEDOOR";
-        public const int nSC_REPAIRCASTLEDOOR = 160;
-        public const string sSC_CHARGESHOOTER = "CHARGESHOOTER";
-        public const int nSC_CHARGESHOOTER = 161;
-        public const string sSC_SETAREAATTR = "SETAREAATTR";
-        public const int nSC_SETAREAATTR = 162;
-        public const string sSC_CLEARDELAYGOTO = "CLEARDELAYGOTO";
-        public const int nSC_CLEARDELAYGOTO = 163;
-        public const string sSC_TESTFLAG = "TESTFLAG";
-        public const int nSC_TESTFLAG = 164;
-        public const string sSC_APPLYFLAG = "APPLYFLAG";
-        public const int nSC_APPLYFLAG = 165;
-        public const string sSC_PASTEFLAG = "PASTEFLAG";
-        public const int nSC_PASTEFLAG = 166;
-        public const string sSC_GETBACKCASTLEGOLD = "GETBACKCASTLEGOLD";
-        public const int nSC_GETBACKCASTLEGOLD = 167;
-        public const string sSC_GETBACKUPGITEM = "GETBACKUPGITEM";
-        public const int nSC_GETBACKUPGITEM = 168;
-        public const string sSC_TINGWAR = "TINGWAR";
-        public const int nSC_TINGWAR = 169;
-        public const string sSC_SAVEPASSWD = "SAVEPASSWD";
-        public const int nSC_SAVEPASSWD = 171;
-        public const string sSC_CREATENPC = "CREATENPC";
-        public const int nSC_CREATENPC = 172;
-        public const string sSC_TAKEBONUS = "TAKEBONUS";
-        public const int nSC_TAKEBONUS = 173;
-        public const string sSC_SYSMSG = "SYSMSG";
-        public const int nSC_SYSMSG = 174;
-        public const string sSC_LOADVALUE = "LOADVALUE";
-        public const int nSC_LOADVALUE = 175;
-        public const string sSC_SAVEVALUE = "SAVEVALUE";
-        public const int nSC_SAVEVALUE = 176;
-        public const string sSC_SAVELOG = "SAVELOG";
-        public const int nSC_SAVELOG = 177;
-        public const string sSC_GETMARRIED = "GETMARRIED";
-        public const int nSC_GETMARRIED = 178;
-        public const string sSC_DIVORCE = "DIVORCE";
-        public const int nSC_DIVORCE = 189;
-        public const string sSC_CAPTURESAYING = "CAPTURESAYING";
-        public const int nSC_CAPTURESAYING = 190;
-        public const string sSC_CANCELMARRIAGERING = "CANCELMARRIAGERING";
-        public const int nSC_CANCELMARRIAGERING = 191;
-        public const string sSC_OPENUSERMARKET = "OPENUSERMARKET";
-        public const int nSC_OPENUSERMARKET = 192;
-        public const string sSC_SETTYPEUSERMARKET = "SETTYPEUSERMARKET";
-        public const int nSC_SETTYPEUSERMARKET = 193;
-        public const string sSC_CHECKSOLDITEMSUSERMARKET = "CHECKSOLDITEMSUSERMARKET";
-        public const int nSC_CHECKSOLDITEMSUSERMARKET = 194;
-        public const string sSC_SETGMEMAP = "SETGMEMAP";
-        public const int nSC_SETGMEMAP = 200;
-        public const string sSC_SETGMEPOINT = "SETGMEPOINT";
-        public const int nSC_SETGMEPOINT = 201;
-        public const string sSC_SETGMETIME = "SETGMETIME";
-        public const int nSC_SETGMETIME = 209;
-        public const string sSC_STARTNEWGME = "STARTNEWGME";
-        public const int nSC_STARTNEWGME = 202;
-        public const string sSC_MOVETOGMEMAP = "MOVETOGMEMAP";
-        public const int mSC_MOVETOGMEMAP = 203;
-        public const string sSC_FINISHGME = "FINISHGME";
-        public const int nSC_FINISHGME = 204;
-        public const string sSC_CONTINUEGME = "CONTINUEGME";
-        public const int nSC_CONTINUEGME = 205;
-        public const string sSC_SETGMEPLAYTIME = "SETGMEPLAYTIME";
-        public const int nSC_SETGMEPLAYTIME = 206;
-        public const string sSC_SETGMEPAUSETIME = "SETGMEPAUSETIME";
-        public const int nSC_SETGMEPAUSETIME = 207;
-        public const string sSC_SETGMELIMITUSER = "SETGMELIMITUSER";
-        public const int nSC_SETGMELIMITUSER = 208;
-        public const string sSC_SETEVENTMAP = "SETEVENTMAP";
-        public const int nSC_SETEVENTMAP = 210;
-        public const string sSC_RESETEVENTMAP = "RESETEVENTMAP";
-        public const int nSC_RESETEVENTMAP = 211;
-        public const string sSC_TESTREFINEPOINTS = "TESTREFINEPOINTS";
-        public const int nSC_TESTREFINEPOINTS = 220;
-        public const string sSC_RESETREFINEWEAPON = "RESETREFINEWEAPON";
-        public const int nSC_RESETREFINEWEAPON = 221;
-        public const string sSC_TESTREFINEACCESSORIES = "TESTREFINEACCESSORIES";
-        public const int nSC_TESTREFINEACCESSORIES = 222;
-        public const string sSC_REFINEACCESSORIES = "REFINEACCESSORIES";
-        public const int nSC_REFINEACCESSORIES = 223;
-        public const string sSC_APPLYMONMISSION = "APPLYMONMISSION";
-        public const int nSC_APPLYMONMISSION = 225;
-        public const string sSC_MAPMOVER = "MAPMOVER";
-        public const int nSC_MAPMOVER = 226;
-        public const string sSC_ADDSTR = "ADDSTR";
-        public const int nSC_ADDSTR = 227;
-        public const string sSC_SETEVENTDAMAGE = "SETEVENTDAMAGE";
-        public const int nSC_SETEVENTDAMAGE = 228;
-        public const string sSC_FORMATSTR = "FORMATSTR";
-        public const int nSC_FORMATSTR = 229;
-        public const string sSC_CLEARPATH = "CLEARPATH";
-        public const int nSC_CLEARPATH = 230;
-        public const string sSC_ADDPATH = "ADDPATH";
-        public const int nSC_ADDPATH = 231;
-        public const string sSC_APPLYPATH = "APPLYPATH";
-        public const int nSC_APPLYPATH = 232;
-        public const string sSC_MAPSPELL = "MAPSPELL";
-        public const int nSC_MAPSPELL = 233;
-        public const string sSC_GIVEEXP = "GIVEEXP";
-        public const int nSC_GIVEEXP = 234;
-        public const string sSC_GROUPMOVE = "GROUPMOVE";
-        public const int nSC_GROUPMOVE = 235;
-        public const string sSC_GIVEEXPMAP = "GIVEEXPMAP";
-        public const int nSC_GIVEEXPMAP = 236;
-        public const string sSC_APPLYMONEX = "APPLYMONEX";
-        public const int nSC_APPLYMONEX = 237;
-        public const string sSC_CLEARNAMELIST = "CLEARNAMELIST";
-        public const int nSC_CLEARNAMELIST = 238;
-        public const string sSC_TINGCASTLEVISITOR = "TINGCASTLEVISITOR";
-        public const int nSC_TINGCASTLEVISITOR = 239;
-        public const string sSC_MAKEHEALZONE = "MAKEHEALZONE";
-        public const int nSC_MAKEHEALZONE = 240;
-        public const string sSC_MAKEDAMAGEZONE = "MAKEDAMAGEZONE";
-        public const int nSC_MAKEDAMAGEZONE = 241;
-        public const string sSC_CLEARZONE = "CLEARZONE";
-        public const int nSC_CLEARZONE = 242;
-        public const string sSC_READVALUESQL = "READVALUESQL";
-        public const int nSC_READVALUESQL = 250;
-        public const string sSC_READSTRINGSQL = "READSTRINGSQL";
-        public const int nSC_READSTRINGSQL = 255;
-        public const string sSC_WRITEVALUESQL = "WRITEVALUESQL";
-        public const int nSC_WRITEVALUESQL = 251;
-        public const string sSC_INCVALUESQL = "INCVALUESQL";
-        public const int nSC_INCVALUESQL = 252;
-        public const string sSC_DECVALUESQL = "DECVALUESQL";
-        public const int nSC_DECVALUESQL = 253;
-        public const string sSC_UPDATEVALUESQL = "UPDATEVALUESQL";
-        public const int nSC_UPDATEVALUESQL = 254;
-        public const string sSC_KILLSLAVE = "KILLSLAVE";
-        public const int nSC_KILLSLAVE = 260;
-        public const string sSC_SETITEMEVENT = "SETITEMEVENT";
-        public const int nSC_SETITEMEVENT = 261;
-        public const string sSC_REMOVEITEMEVENT = "REMOVEITEMEVENT";
-        public const int nSC_REMOVEITEMEVENT = 262;
-        public const string sSC_RETURN = "RETURN";
-        public const int nSC_RETURN = 263;
-        public const string sSC_CLEARCASTLEOWNER = "CLEARCASTLEOWNER";
-        public const int nSC_CLEARCASTLEOWNER = 270;
-        public const string sSC_DISSOLUTIONGUILD = "DISSOLUTIONGUILD";
-        public const int nSC_DISSOLUTIONGUILD = 271;
-        public const string sSC_CHANGEGENDER = "CHANGEGENDER";
-        public const int nSC_CHANGEGENDER = 272;
-        public const string sSC_SETFAME = "SETFAME";
-        public const int nSC_SETFAME = 273;
-        public const string sSC_CHANGELEVEL = "CHANGELEVEL";
-        public const int nSC_CHANGELEVEL = 300;
-        public const string sSC_MARRY = "MARRY";
-        public const int nSC_MARRY = 301;
-        public const string sSC_UNMARRY = "UNMARRY";
-        public const int nSC_UNMARRY = 302;
-        public const string sSC_GETMARRY = "GETMARRY";
-        public const int nSC_GETMARRY = 303;
-        public const string sSC_GETMASTER = "GETMASTER";
-        public const int nSC_GETMASTER = 304;
-        public const string sSC_CLEARSKILL = "CLEARSKILL";
-        public const int nSC_CLEARSKILL = 305;
-        public const string sSC_DELNOJOBSKILL = "DELNOJOBSKILL";
-        public const int nSC_DELNOJOBSKILL = 306;
-        public const string sSC_DELSKILL = "DELSKILL";
-        public const int nSC_DELSKILL = 307;
-        public const string sSC_ADDSKILL = "ADDSKILL";
-        public const int nSC_ADDSKILL = 308;
-        public const string sSC_SKILLLEVEL = "SKILLLEVEL";
-        public const int nSC_SKILLLEVEL = 309;
-        public const string sSC_CHANGEPKPOINT = "CHANGEPKPOINT";
-        public const int nSC_CHANGEPKPOINT = 310;
-        public const string sSC_CHANGEEXP = "CHANGEEXP";
-        public const int nSC_CHANGEEXP = 311;
-        public const string sSC_CHANGEJOB = "CHANGEJOB";
-        public const int nSC_CHANGEJOB = 312;
-        public const string sSC_MISSION = "MISSION";
-        public const int nSC_MISSION = 313;
-        public const string sSC_MOBPLACE = "MOBPLACE";
-        public const int nSC_MOBPLACE = 314;
-        public const string sSC_SETMEMBERTYPE = "SETMEMBERTYPE";
-        public const int nSC_SETMEMBERTYPE = 315;
-        public const string sSC_SETMEMBERLEVEL = "SETMEMBERLEVEL";
-        public const int nSC_SETMEMBERLEVEL = 316;
-        public const string sSC_GAMEGOLD = "GAMEGOLD";
-        public const int nSC_GAMEGOLD = 317;
-        public const string sSC_AUTOADDGAMEGOLD = "AUTOADDGAMEGOLD";
-        public const int nSC_AUTOADDGAMEGOLD = 318;
-        public const string sSC_AUTOSUBGAMEGOLD = "AUTOSUBGAMEGOLD";
-        public const int nSC_AUTOSUBGAMEGOLD = 319;
-        public const string sSC_CHANGENAMECOLOR = "CHANGENAMECOLOR";
-        public const int nSC_CHANGENAMECOLOR = 320;
-        public const string sSC_CLEARPASSWORD = "CLEARPASSWORD";
-        public const int nSC_CLEARPASSWORD = 321;
-        public const string sSC_RENEWLEVEL = "RENEWLEVEL";
-        public const int nSC_RENEWLEVEL = 322;
-        public const string sSC_KILLMONEXPRATE = "KILLMONEXPRATE";
-        public const int nSC_KILLMONEXPRATE = 323;
-        public const string sSC_POWERRATE = "POWERRATE";
-        public const int nSC_POWERRATE = 324;
-        public const string sSC_CHANGEMODE = "CHANGEMODE";
-        public const int nSC_CHANGEMODE = 325;
-        public const string sSC_CHANGEPERMISSION = "CHANGEPERMISSION";
-        public const int nSC_CHANGEPERMISSION = 326;
-        public const string sSC_KILL = "KILL";
-        public const int nSC_KILL = 327;
-        public const string sSC_KICK = "KICK";
-        public const int nSC_KICK = 328;
-        public const string sSC_BONUSPOINT = "BONUSPOINT";
-        public const int nSC_BONUSPOINT = 329;
-        public const string sSC_RESTRENEWLEVEL = "RESTRENEWLEVEL";
-        public const int nSC_RESTRENEWLEVEL = 330;
-        public const string sSC_DELMARRY = "DELMARRY";
-        public const int nSC_DELMARRY = 331;
-        public const string sSC_DELMASTER = "DELMASTER";
-        public const int nSC_DELMASTER = 332;
-        public const string sSC_MASTER = "MASTER";
-        public const int nSC_MASTER = 333;
-        public const string sSC_UNMASTER = "UNMASTER";
-        public const int nSC_UNMASTER = 334;
-        public const string sSC_CREDITPOINT = "CREDITPOINT";
-        public const int nSC_CREDITPOINT = 335;
-        public const string sSC_CLEARNEEDITEMS = "CLEARNEEDITEMS";
-        public const int nSC_CLEARNEEDITEMS = 336;
-        public const string sSC_CLEARMAKEITEMS = "CLEARMAKEITEMS";
-        public const int nSC_CLEARMAEKITEMS = 337;
-        public const string sSC_SETSENDMSGFLAG = "SETSENDMSGFLAG";
-        public const int nSC_SETSENDMSGFLAG = 338;
-        public const string sSC_UPGRADEITEMS = "UPGRADEITEM";
-        public const int nSC_UPGRADEITEMS = 339;
-        public const string sSC_UPGRADEITEMSEX = "UPGRADEITEMEX";
-        public const int nSC_UPGRADEITEMSEX = 340;
-        public const string sSC_MONGENEX = "MONGENEX";
-        public const int nSC_MONGENEX = 341;
-        public const string sSC_CLEARMAPMON = "CLEARMAPMON";
-        public const int nSC_CLEARMAPMON = 342;
-        public const string sSC_SETMAPMODE = "SETMPAMODE";
-        public const int nSC_SETMAPMODE = 343;
-        public const string sSC_GAMEPOINT = "GAMEPOINT";
-        public const int nSC_GAMEPOINT = 344;
-        public const string sSC_PKZONE = "PKZONE";
-        public const int nSC_PKZONE = 345;
-        public const string sSC_RESTBONUSPOINT = "RESTBONUSPOINT";
-        public const int nSC_RESTBONUSPOINT = 346;
-        public const string sSC_TAKECASTLEGOLD = "TAKECASTLEGOLD";
-        public const int nSC_TAKECASTLEGOLD = 347;
-        public const string sSC_HUMANHP = "HUMANHP";
-        public const int nSC_HUMANHP = 348;
-        public const string sSC_HUMANMP = "HUMANMP";
-        public const int nSC_HUMANMP = 349;
-        public const string sSC_BUILDPOINT = "GUILDBUILDPOINT";
-        public const int nSC_BUILDPOINT = 350;
-        public const string sSC_AURAEPOINT = "GUILDAURAEPOINT";
-        public const int nSC_AURAEPOINT = 351;
-        public const string sSC_STABILITYPOINT = "GUILDSTABILITYPOINT";
-        public const int nSC_STABILITYPOINT = 352;
-        public const string sSC_FLOURISHPOINT = "GUILDFLOURISHPOINT";
-        public const int nSC_FLOURISHPOINT = 353;
-        // 'OPENMAGICBOX'
-        public const string sSC_OPENMAGICBOX = "OPENITEMBOX";
-        public const int nSC_OPENMAGICBOX = 354;
-        public const string sSC_SETRANKLEVELNAME = "SETRANKLEVELNAME";
-        public const int nSC_SETRANKLEVELNAME = 355;
-        public const string sSC_GMEXECUTE = "GMEXECUTE";
-        public const int nSC_GMEXECUTE = 356;
-        public const string sSC_GUILDCHIEFITEMCOUNT = "GUILDCHIEFITEMCOUNT";
-        public const int nSC_GUILDCHIEFITEMCOUNT = 357;
-        public const string sSC_ADDNAMEDATELIST = "ADDNAMEDATELIST";
-        public const int nSC_ADDNAMEDATELIST = 358;
-        public const string sSC_DELNAMEDATELIST = "DELNAMEDATELIST";
-        public const int nSC_DELNAMEDATELIST = 359;
-        public const string sSC_MOBFIREBURN = "MOBFIREBURN";
-        public const int nSC_MOBFIREBURN = 360;
-        public const string sSC_MESSAGEBOX = "MESSAGEBOX";
-        public const int nSC_MESSAGEBOX = 361;
-        public const string sSC_SETSCRIPTFLAG = "SETSCRIPTFLAG";
-        // 设置用于NPC输入框操作的控制标志
-        public const int nSC_SETSCRIPTFLAG = 362;
-        public const string sSC_SETAUTOGETEXP = "SETAUTOGETEXP";
-        public const int nSC_SETAUTOGETEXP = 363;
-        public const string sSC_VAR = "VAR";
-        public const int nSC_VAR = 364;
-        public const string sSC_LOADVAR = "LOADVAR";
-        public const int nSC_LOADVAR = 365;
-        public const string sSC_SAVEVAR = "SAVEVAR";
-        public const int nSC_SAVEVAR = 366;
-        public const string sSC_CALCVAR = "CALCVAR";
-        public const int nSC_CALCVAR = 367;
-        public const string sSC_GUILDRECALL = "GUILDRECALL";
-        public const int nSC_GUILDRECALL = 368;
-        public const string sSC_GROUPADDLIST = "GROUPADDLIST";
-        public const int nSC_GROUPADDLIST = 369;
-        public const string sSC_CLEARLIST = "CLEARLIST";
-        public const int nSC_CLEARLIST = 370;
-        public const string sSC_GROUPRECALL = "GROUPRECALL";
-        public const int nSC_GROUPRECALL = 371;
-        public const string sSC_GROUPMOVEMAP = "GROUPMOVEMAP";
-        public const int nSC_GROUPMOVEMAP = 372;
-        public const string sSC_SAVESLAVES = "SAVESLAVES";
-        public const int nSC_SAVESLAVES = 373;
-        // =========================================================
-        public const string sCHECKUSERDATE = "CHECKUSERDATE";
-        // 检查会员时间
-        public const int nCHECKUSERDATE = 375;
-        public const string sADDUSERDATE = "ADDUSERDATE";
-        // 加入会员人物及时间
-        public const int nADDUSERDATE = 376;
-        public const string sDELUSERDATE = "DELUSERDATE";
-        // 删除会员人物及时间
-        public const int nDELUSERDATE = 377;
-        public const string sSC_OffLine = "OFFLINE";
-        // 增加挂机
-        public const int nSC_OffLine = 379;
-        public const string sSC_REPAIRALL = "REPAIRALL";
-        // 特修身上所有装备
-        public const int nSC_REPAIRALL = 380;
-        public const string sSC_SETRANDOMNO = "SETRANDOMNO";
-        // 产生一个随机数字
-        public const int nSC_SETRANDOMNO = 381;
-        public const string sSC_QUERYBAGITEMS = "QUERYBAGITEMS";
-        // 刷新包裹物品命令
-        public const int nSC_QUERYBAGITEMS = 382;
-        public const string sSC_ISHIGH = "ISHIGH";
-        public const int nSC_ISHIGH = 383;
-        /// <summary>
-        /// 将指定物品刷新到指定地图坐标范围内
-        /// </summary>
-        public const string sTHROWITEM = "THROWITEM";
-        public const string sDROPITEMMAP = "DROPITEMMAP";
-        public const int nTHROWITEM = 384;
-        /// <summary>
-        /// 开通元宝交易
-        /// </summary>
-        public const string sOPENYBDEAL = "OPENYBDEAL";
-        /// <summary>
-        /// 查询正在出售的物品
-        /// </summary>        
-        public const int nOPENYBDEAL = 252;
-        public const string sQUERYYBSELL = "QUERYYBSELL";
-        /// <summary>
-        /// 查询可以的购买物品
-        /// </summary>        
-        public const int nQUERYYBSELL = 253;
-        public const string sQUERYYBDEAL = "QUERYYBDEAL";
-        public const int nQUERYYBDEAL = 254;
-        /// <summary>
-        /// 延时跳转
-        /// </summary>
-        public const string sDELAYGOTO = "DELAYGOTO";
-        public const string sDELAYCALL = "DELAYCALL";
-        public const int nDELAYGOTO = 255;
-        public const string sCLEARDELAYGOTO = "CLEARDELAYGOTO";
-        public const int nCLEARDELAYGOTO = 256;
-        /// <summary>
-        /// 检查已杀死怪物
-        /// </summary>
-        public const string sSCHECKDEATHPLAYMON = "CHECKDEATHPLAYMON";
-        /// <summary>
-        /// 检查已杀死怪物
-        /// </summary>
-        public const string sSCHECKKILLMOBNAME = "CHECKKILLMONNAME";
-        public const int nSCHECKDEATHPLAYMON = 257;
+        public const byte MAXUPLEVEL = byte.MaxValue;
+        public const ushort MAXHUMPOWER = 1000;
+        public const ushort BODYLUCKUNIT = 5000;
+        public const ushort DEFHIT = 5;
+        public const ushort DEFSPEED = 15;
 
-        // =================================================================
-        /// <summary>
-        /// 元宝寄售:出售物品
-        /// </summary>
-        public const string sDealYBme = "@dealybme";
-        /// <summary>
-        /// 元宝寄售
-        /// </summary>        
-        public const string sybdeal = "@ybdeal";
+        public const byte AM_FIREBALL = 1;
+        public const byte AM_HEALING = 2;
+        public const short INDEX_MIRBOOTS = 477;
 
-
-        public const string sOFFLINEMSG = "@@offlinemsg";
-        // 增加挂机
-        public const string sSL_SENDMSG = "@@sendmsg";
-        public const string sSUPERREPAIR = "@s_repair";
-        public const string sSUPERREPAIROK = "~@s_repair";
-        public const string sSUPERREPAIRFAIL = "@fail_s_repair";
-        public const string sREPAIR = "@repair";
-        public const string sREPAIROK = "~@repair";
-        public const string sBUY = "@buy";
-        public const string sSELL = "@sell";
-        public const string sMAKEDURG = "@makedrug";
-        public const string sPRICES = "@prices";
-        public const string sSTORAGE = "@storage";
-        public const string sGETBACK = "@getback";
-        public const string sUPGRADENOW = "@upgradenow";
-        public const string sUPGRADEING = "~@upgradenow_ing";
-        public const string sUPGRADEOK = "~@upgradenow_ok";
-        public const string sUPGRADEFAIL = "~@upgradenow_fail";
-        public const string sGETBACKUPGNOW = "@getbackupgnow";
-        public const string sGETBACKUPGOK = "~@getbackupgnow_ok";
-        public const string sGETBACKUPGFAIL = "~@getbackupgnow_fail";
-        public const string sGETBACKUPGFULL = "~@getbackupgnow_bagfull";
-        public const string sGETBACKUPGING = "~@getbackupgnow_ing";
-        public const string sEXIT = "@exit";
-        public const string sBACK = "@back";
-        public const string sMAIN = "@main";
-        public const string sFAILMAIN = "~@main";
-        public const string sGETMASTER = "@@getmaster";
-        public const string sGETMARRY = "@@getmarry";
-        public const string sUSEITEMNAME = "@@useitemname";
-        public const string sBUILDGUILDNOW = "@@buildguildnow";
-        public const string sSCL_GUILDWAR = "@@guildwar";
-        public const string sDONATE = "@@donate";
-        public const string sREQUESTCASTLEWAR = "@requestcastlewarnow";
-        public const string sCASTLENAME = "@@castlename";
-        public const string sWITHDRAWAL = "@@withdrawal";
-        public const string sRECEIPTS = "@@receipts";
-        public const string sOPENMAINDOOR = "@openmaindoor";
-        public const string sCLOSEMAINDOOR = "@closemaindoor";
-        public const string sREPAIRDOORNOW = "@repairdoornow";
-        public const string sREPAIRWALLNOW1 = "@repairwallnow1";
-        public const string sREPAIRWALLNOW2 = "@repairwallnow2";
-        public const string sREPAIRWALLNOW3 = "@repairwallnow3";
-        public const string sHIREARCHERNOW = "@hirearchernow";
-        public const string sHIREGUARDNOW = "@hireguardnow";
-        public const string sHIREGUARDOK = "@hireguardok";
-        public const string sMarket_Def = "Market_Def";
-        public const string sNpc_def = "Npc_def";
-        public const string g_sGameLogMsg1 = "{0}\09{1}\09{2}\09{3}\09{4}\09{5}\09{6}\09{7}\09{8}";
-        public const string g_sHumanDieEvent = "人物死亡事件";
-        public const string g_sHitOverSpeed = "[攻击超速] {0} 间隔:{1} 数量:{2}";
-        public const string g_sRunOverSpeed = "[跑步超速] {0} 间隔:{1} 数量:{2}";
-        public const string g_sWalkOverSpeed = "[行走超速] {0} 间隔:{1} 数量:{2}";
-        public const string g_sSpellOverSpeed = "[魔法超速] {0} 间隔:{1} 数量:{2}";
-        public const string g_sBunOverSpeed = "[游戏超速] {0} 间隔:{1} 数量:{2}";
-        public const string g_sGameCommandPermissionTooLow = "权限不够!!!";
-        public const string g_sGameCommandParamUnKnow = "命令格式: @{0} {1}";
-        public const string g_sGameCommandMoveHelpMsg = "地图号";
-        public const string g_sGameCommandPositionMoveHelpMsg = "地图号 座标X 座标Y";
-        public const string g_sGameCommandPositionMoveCanotMoveToMap = "无法移动到地图: {0} X:{1} Y:{2}";
-        public const string g_sGameCommandInfoHelpMsg = "人物名称";
-        public const string g_sNowNotOnLineOrOnOtherServer = "{0} 现在不在线，或在其它服务器上!!!";
-        public const string g_sGameCommandMobCountHelpMsg = "地图号";
-        public const string g_sGameCommandMobCountMapNotFound = "指定的地图不存在!!!";
-        public const string g_sGameCommandMobCountMonsterCount = "怪物数量：{0}";
-        public const string g_sGameCommandHumanCountHelpMsg = "地图号";
-        public const string g_sGameCommandKickHumanHelpMsg = "人物名称";
-        public const string g_sGameCommandTingHelpMsg = "人物名称";
-        public const string g_sGameCommandSuperTingHelpMsg = "人物名称 范围(0-10)";
-        public const string g_sGameCommandMapMoveHelpMsg = "源地图  目标地图";
-        public const string g_sGameCommandMapMoveMapNotFound = "地图{0}不存在!!!";
-        public const string g_sGameCommandShutupHelpMsg = "人物名称  时间长度(分钟)";
-        public const string g_sGameCommandShutupHumanMsg = "{0} 已被禁言{1}分钟";
-        public const string g_sGameCommandGamePointHelpMsg = "人物名称 控制符(+,-,=) 游戏点数(1-100000000)";
-        public const string g_sGameCommandGamePointHumanMsg = "你的游戏点已增加{0}点，当前总点数为{1}点。";
-        public const string g_sGameCommandGamePointGMMsg = "{0}的游戏点已增加{1}点，当前总点数为{2}点。";
-        public const string g_sGameCommandCreditPointHelpMsg = "人物名称 控制符(+,-,=) 声望点数(0-255)";
-        public const string g_sGameCommandCreditPointHumanMsg = "你的声望点已增加{0}点，当前总声望点数为{1}点。";
-        public const string g_sGameCommandCreditPointGMMsg = "{0}的声望点已增加{1}点，当前总声望点数为{2}点。";
-        public const string g_sGameCommandGameGoldHelpMsg = " 人物名称 控制符(+,-,=) 游戏币(1-200000000)";
-        public const string g_sGameCommandGameGoldHumanMsg = "你的{0}已增加{1}，当前拥有{2}{3}。";
-        public const string g_sGameCommandGameGoldGMMsg = "{0}的{1}已增加{2}，当前拥有{3}{4}。";
-        public const string g_sGameCommandMapInfoMsg = "地图名称: {0}({1})";
-        public const string g_sGameCommandMapInfoSizeMsg = "地图大小: X({0}) Y({1})";
-        public const string g_sGameCommandShutupReleaseHelpMsg = "人物名称";
-        public const string g_sGameCommandShutupReleaseCanSendMsg = "你已经恢复聊天功能!!!";
-        public const string g_sGameCommandShutupReleaseHumanCanSendMsg = "{0} 已经恢复聊天。";
-        public const string g_sGameCommandShutupListIsNullMsg = "禁言列表为空!!!";
-        public const string g_sGameCommandLevelConsoleMsg = "[等级调整] {0} ({1} -> {2})";
-        public const string g_sGameCommandSbkGoldHelpMsg = "城堡名称 控制符(=、-、+) 金币数(1-100000000)";
-        public const string g_sGameCommandSbkGoldCastleNotFoundMsg = "城堡{0}未找到!!!";
-        public const string g_sGameCommandSbkGoldShowMsg = "{0}的金币数为: {1} 今天收入: {2}";
-        public const string g_sGameCommandRecallHelpMsg = "人物名称";
-        public const string g_sGameCommandReGotoHelpMsg = "人物名称";
-        public const string g_sGameCommandShowHumanFlagHelpMsg = "人物名称 标识号";
-        public const string g_sGameCommandShowHumanFlagONMsg = "{0}: [{1}] = ON";
-        public const string g_sGameCommandShowHumanFlagOFFMsg = "{0}: [{1}] = OFF";
-        public const string g_sGameCommandShowHumanUnitHelpMsg = "人物名称 单元号";
-        public const string g_sGameCommandShowHumanUnitONMsg = "{0}: [{1}] = ON";
-        public const string g_sGameCommandShowHumanUnitOFFMsg = "{0}: [{1}] = OFF";
-        public const string g_sGameCommandMobHelpMsg = "怪物名称 数量 等级";
-        public const string g_sGameCommandMobMsg = "怪物名称不正确或其它未问题!!!";
-        public const string g_sGameCommandMobNpcHelpMsg = "NPC名称 脚本文件名 外形(数字) 属沙城(0,1)";
-        public const string g_sGameCommandNpcScriptHelpMsg = "？？？？";
-        public const string g_sGameCommandDelNpcMsg = "命令使用方法不正确，必须与NPC面对面，才能使用此命令!!!";
-        public const string g_sGameCommandRecallMobHelpMsg = "怪物名称 数量 等级";
-        public const string g_sGameCommandLuckPointHelpMsg = "人物名称 控制符 幸运点数";
-        public const string g_sGameCommandLuckPointMsg = "{0} 的幸运点数为:{1}/{2} 幸运值为:{3}";
-        public const string g_sGameCommandLotteryTicketMsg = "已中彩票数:{0} 未中彩票数:{1} 一等奖:{2} 二等奖:{3} 三等奖:{4} 四等奖:{5} 五等奖:{6} 六等奖:{7} ";
-        public const string g_sGameCommandReloadGuildHelpMsg = "行会名称";
-        public const string g_sGameCommandReloadGuildOnMasterserver = "此命令只能在主游戏服务器上执行!!!";
-        public const string g_sGameCommandReloadGuildNotFoundGuildMsg = "未找到行会{0}!!!";
-        public const string g_sGameCommandReloadGuildSuccessMsg = "行会{0}重加载成功...";
-        public const string g_sGameCommandReloadLineNoticeSuccessMsg = "重新加载公告设置信息完成。";
-        public const string g_sGameCommandReloadLineNoticeFailMsg = "重新加载公告设置信息失败!!!";
-        public const string g_sGameCommandFreePKHelpMsg = "人物名称";
-        public const string g_sGameCommandFreePKHumanMsg = "你的PK值已经被清除...";
-        public const string g_sGameCommandFreePKMsg = "{0}的PK值已经被清除...";
-        public const string g_sGameCommandPKPointHelpMsg = "人物名称";
-        public const string g_sGameCommandPKPointMsg = "{0}的PK点数为:{1}";
-        public const string g_sGameCommandIncPkPointHelpMsg = "人物名称 PK点数";
-        public const string g_sGameCommandIncPkPointAddPointMsg = "{0}的PK值已增加%d点...";
-        public const string g_sGameCommandIncPkPointDecPointMsg = "{0}的PK值已减少%d点...";
-        public const string g_sGameCommandHumanLocalHelpMsg = "人物名称";
-        public const string g_sGameCommandHumanLocalMsg = "{0}来自:{1}";
-        public const string g_sGameCommandPrvMsgHelpMsg = "人物名称";
-        public const string g_sGameCommandPrvMsgUnLimitMsg = "{0} 已从禁止私聊列表中删除...";
-        public const string g_sGameCommandPrvMsgLimitMsg = "{0} 已被加入禁止私聊列表...";
-        public const string g_sGamecommandMakeHelpMsg = " 物品名称  数量";
-        public const string g_sGamecommandMakeItemNameOrPerMissionNot = "输入的物品名称不正确，或权限不够!!!";
-        public const string g_sGamecommandMakeInCastleWarRange = "攻城区域，禁止使用此功能!!!";
-        public const string g_sGamecommandMakeInSafeZoneRange = "非安全区，禁止使用此功能!!!";
-        public const string g_sGamecommandMakeItemNameNotFound = "{0} 物品名称不正确!!!";
-        public const string g_sGamecommandSuperMakeHelpMsg = "身上没指定物品!!!";
-        public const string g_sGameCommandViewWhisperHelpMsg = " 人物名称";
-        public const string g_sGameCommandViewWhisperMsg1 = "已停止侦听{0}的私聊信息...";
-        public const string g_sGameCommandViewWhisperMsg2 = "正在侦听{0}的私聊信息...";
-        public const string g_sGameCommandReAliveHelpMsg = " 人物名称";
-        public const string g_sGameCommandReAliveMsg = "{0} 已获重生.";
-        public const string g_sGameCommandChangeJobHelpMsg = " 人物名称 职业类型(Warr Wizard Taos)";
-        public const string g_sGameCommandChangeJobMsg = "{0} 的职业更改成功。";
-        public const string g_sGameCommandChangeJobHumanMsg = "职业更改成功。";
-        public const string g_sGameCommandTestGetBagItemsHelpMsg = "(用于测试升级武器方面参数)";
-        public const string g_sGameCommandShowUseItemInfoHelpMsg = "人物名称";
-        public const string g_sGameCommandBindUseItemHelpMsg = "人物名称 物品类型 绑定方法";
-        public const string g_sGameCommandBindUseItemNoItemMsg = "{0}的{1}没有戴物品!!!";
-        public const string g_sGameCommandBindUseItemAlreadBindMsg = "{0}的{1}上的物品早已绑定过了!!!";
-        public const string g_sGameCommandMobFireBurnHelpMsg = "命令格式: {0} {1} {2} {3} {4} {5} {6}";
-        public const string g_sGameCommandMobFireBurnMapNotFountMsg = "地图{0} 不存在";
-        public static string sGetSellOffGlod = "{0} {1}增加";
         public const string U_DRESSNAME = "衣服";
         public const string U_WEAPONNAME = "武器";
         public const string U_RIGHTHANDNAME = "照明物";
@@ -1585,39 +472,26 @@ namespace GameSvr
         public const string U_BOOTSNAME = "鞋子";
         public const string U_CHARMNAME = "宝石";
 
-        public static string GetGoodTick => string.Format(sSTATUS_GOOD, HUtil32.GetTickCount());
+        public static bool boSecondCardSystem = false;
+        public static byte g_nExpErienceLevel = 7;
+        public static string BADMANHOMEMAP = "3";
+        public static short BADMANSTARTX = 845;
+        public static short BADMANSTARTY = 674;
+        public static string RECHARGINGMAP = "kaiqu";  //充值地图名称
+        public static bool boSafeZoneStall = false;
 
-        public static void CopyStdItemToOStdItem(TStdItem StdItem, TOStdItem OStdItem)
-        {
-            OStdItem.Name = StdItem.Name;
-            OStdItem.StdMode = StdItem.StdMode;
-            OStdItem.Shape = StdItem.Shape;
-            OStdItem.Weight = StdItem.Weight;
-            OStdItem.AniCount = StdItem.AniCount;
-            OStdItem.Source = (byte)StdItem.Source;
-            OStdItem.Reserved = StdItem.reserved;
-            OStdItem.NeedIdentify = StdItem.NeedIdentify;
-            OStdItem.Looks = StdItem.Looks;
-            OStdItem.DuraMax = (ushort)StdItem.DuraMax;
-            OStdItem.AC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.AC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.AC)));
-            OStdItem.MAC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.MAC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.MAC)));
-            OStdItem.DC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.DC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.DC)));
-            OStdItem.MC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.MC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.MC)));
-            OStdItem.SC = HUtil32.MakeWord(HUtil32._MIN(byte.MaxValue, HUtil32.LoWord(StdItem.SC)), HUtil32._MIN(byte.MaxValue, HUtil32.HiWord(StdItem.SC)));
-            OStdItem.Need = (byte)StdItem.Need;
-            OStdItem.NeedLevel = (byte)StdItem.NeedLevel;
-            OStdItem.Price = (int)StdItem.Price;
-        }
+        public static string GetGoodTick => string.Format(sSTATUS_GOOD, HUtil32.GetTickCount());
+        public static int CurrentMerchantIndex = 0;
 
         public static bool LoadLineNotice(string FileName)
         {
             var result = false;
             int i;
             string sText;
-            StringList LoadList = null;
             if (File.Exists(FileName))
             {
-                LoadList = new StringList();
+                LineNoticeList.Clear();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(FileName);
                 i = 0;
                 while (true)
@@ -1643,33 +517,36 @@ namespace GameSvr
         /// <summary>
         /// 随机获取其他服务器
         /// </summary>
-        /// <param name="btServerIndex"></param>
-        /// <param name="sIPaddr"></param>
-        /// <param name="nPort"></param>
         /// <returns></returns>
-        public static bool GetMultiServerAddrPort(byte btServerIndex, ref string sIPaddr, ref int nPort)
+        public static bool GetMultiServerAddrPort(byte serverIndex, ref string sIPaddr, ref int nPort)
         {
-            TRouteInfo RouteInfo;
             var result = false;
             for (var i = 0; i < ServerTableList.Length; i++)
             {
-                RouteInfo = ServerTableList[i];
-                if (RouteInfo == null)
+                var routeInfo = ServerTableList[i];
+                if (routeInfo == null)
                 {
                     continue;
                 }
-                if (RouteInfo.nGateCount <= 0)
+                if (routeInfo.nGateCount <= 0)
                 {
                     continue;
                 }
-                if (RouteInfo.nServerIdx == btServerIndex)
+                if (routeInfo.nServerIdx == serverIndex)
                 {
-                    sIPaddr = GetRandpmRoute(RouteInfo, ref nPort);
+                    sIPaddr = GetRandpmRoute(routeInfo, ref nPort);
                     result = true;
                     break;
                 }
             }
             return result;
+        }
+
+        private static readonly Regex scriptRegex = new Regex("(?<=(<))[.\\s\\S]*?(?=(>))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
+
+        public static MatchCollection MatchScriptLabel(string script)
+        {
+            return scriptRegex.Matches(script);
         }
 
         private static string GetRandpmRoute(TRouteInfo RouteInfo, ref int nGatePort)
@@ -1681,56 +558,25 @@ namespace GameSvr
 
         static M2Share()
         {
-            //todo 优化配置文件读取方式
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                sConfigPath = "/Volumes/Data/MirServer/Mir200";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
-            {
-                sConfigPath = "/opt/MirServer/Mir200";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                sConfigPath = "D:/MirServer/Mir200";
-            }
-            else
-            {
-                throw new Exception("不受支持的操作系统");
-            }
-            ServerConf = new ServerConfig(Path.Combine(sConfigPath, sConfigFileName));
-            CommandConf = new GameCmdConfig(Path.Combine(sConfigPath, sCommandFileName));
-            StringConf = new StringConfig(Path.Combine(sConfigPath, sStringFileName));
-            ExpConf = new ExpsConfig(Path.Combine(sConfigPath, sExpConfigFileName));
-            GlobalConf = new GlobalConfig(Path.Combine(sConfigPath, sGlobalConfigFileName));
-            LogSystem = new MirLog();
-            g_Config = new GameSvrConfig();
+            BasePath = AppContext.BaseDirectory;
+            ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.sConfigFileName));
+            StringConf = new StringConf(Path.Combine(BasePath, ConfConst.sStringFileName));
+            ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.sExpConfigFileName));
+            GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.sGlobalConfigFileName));
+            GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.sGameSettingFileName));
+            Log = new MirLogger();
+            Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
-        }
-
-        public static void MainOutMessage(string Msg)
-        {
-            Console.WriteLine("[" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "] " + Msg);
-        }
-
-        public static void MainOutMessage(string Msg, MessageType messageType = MessageType.Success, MessageLevel messageLevel = MessageLevel.None, ConsoleColor messageColor = ConsoleColor.White)
-        {
-            LogSystem.LogInfo(Msg, messageType, messageLevel: messageLevel, messageColor: messageColor);
-        }
-
-        public static void ErrorMessage(string Msg, MessageType messageType = MessageType.Error, MessageLevel messageLevel = MessageLevel.None, ConsoleColor messageColor = ConsoleColor.Red)
-        {
-            LogSystem.LogInfo(Msg, messageType, messageLevel: messageLevel, messageColor: messageColor);
         }
 
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)
         {
             var result = 0;
-            if (nVersionDate > 100000000)
+            if (nVersionDate > 10000000)
             {
-                while (nVersionDate > 100000000)
+                while (nVersionDate > 10000000)
                 {
-                    nVersionDate -= 100000000;
+                    nVersionDate -= 10000;
                     result += 100000000;
                 }
             }
@@ -1738,10 +584,10 @@ namespace GameSvr
             return result;
         }
 
-        public static byte GetNextDirection(int sx, int sy, int dx, int dy)
+        public static byte GetNextDirection(short sx, short sy, short dx, short dy)
         {
-            int flagx;
-            int flagy;
+            short flagx;
+            short flagy;
             byte result = Grobal2.DR_DOWN;
             if (sx < dx)
             {
@@ -1816,7 +662,7 @@ namespace GameSvr
             return result;
         }
 
-        public static bool CheckUserItems(int nIdx, GoodItem StdItem)
+        public static bool CheckUserItems(int nIdx, Items.StdItem StdItem)
         {
             var result = false;
             switch (nIdx)
@@ -1963,19 +809,18 @@ namespace GameSvr
         // 金币在地上显示的外形ID
         public static int GetRandomLook(int nBaseLook, int nRage)
         {
-            var result = nBaseLook + RandomNumber.Random(nRage);
-            return result;
+            return nBaseLook + RandomNumber.Random(nRage);
         }
 
         public static bool CheckGuildName(string sGuildName)
         {
             var result = true;
-            if (sGuildName.Length > g_Config.nGuildNameLen)
+            if (sGuildName.Length > Config.GuildNameLen)
             {
                 result = false;
                 return result;
             }
-            for (var i = 0; i <= sGuildName.Length - 1; i++)
+            for (var i = 0; i < sGuildName.Length - 1; i++)
             {
                 if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' '
                     || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
@@ -1988,43 +833,41 @@ namespace GameSvr
 
         public static int GetItemNumber()
         {
-            g_Config.nItemNumber++;
-            if (g_Config.nItemNumber > int.MaxValue / 2 - 1)
+            Config.ItemNumber++;
+            if (Config.ItemNumber > int.MaxValue / 2 - 1)
             {
-                g_Config.nItemNumber = 1;
+                Config.ItemNumber = 1;
             }
-            return g_Config.nItemNumber;
+            return Config.ItemNumber + HUtil32.GetTickCount();
         }
 
         public static int GetItemNumberEx()
         {
-            g_Config.nItemNumberEx++;
-            if (g_Config.nItemNumberEx < int.MaxValue / 2)
+            Config.ItemNumberEx++;
+            if (Config.ItemNumberEx < int.MaxValue / 2)
             {
-                g_Config.nItemNumberEx = int.MaxValue / 2;
+                Config.ItemNumberEx = int.MaxValue / 2;
             }
-            if (g_Config.nItemNumberEx > int.MaxValue - 1)
+            if (Config.ItemNumberEx > int.MaxValue - 1)
             {
-                g_Config.nItemNumberEx = int.MaxValue / 2;
+                Config.ItemNumberEx = int.MaxValue / 2;
             }
-            return g_Config.nItemNumberEx;
+            return Config.ItemNumberEx + HUtil32.GetTickCount();
         }
 
         public static string FilterShowName(string sName)
         {
             var result = "";
-            var sC = "";
             var bo11 = false;
             if (string.IsNullOrEmpty(sName))
             {
                 return sName;
             }
-            for (var i = 0; i <= sName.Length - 1; i++)
+            for (var i = 0; i < sName.Length; i++)
             {
                 if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
                 {
-                    result = sName.Substring(0, i);
-                    sC = sName.Substring(i, sName.Length - i);
+                    result = sName[..i];
                     bo11 = true;
                     break;
                 }
@@ -2036,11 +879,6 @@ namespace GameSvr
             return result;
         }
 
-        public static byte sub_4B2F80(int nDir, int nRage)
-        {
-            return (byte)((nDir + nRage) % 8);
-        }
-
         /// <summary>
         /// 获取服务器变量
         /// </summary>
@@ -2050,6 +888,7 @@ namespace GameSvr
         {
             var result = -1;
             int nValNo;
+            var ValText = sText.AsSpan();
             if (sText.Length >= 2)
             {
                 var valType = char.ToUpper(sText[0]);
@@ -2058,7 +897,7 @@ namespace GameSvr
                     case 'P':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo;
@@ -2066,7 +905,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo;
@@ -2076,7 +915,7 @@ namespace GameSvr
                     case 'G':
                         if (sText.Length == 4)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 3), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(1, 3), -1);
                             if ((nValNo < 500) && (nValNo > 99))
                             {
                                 result = nValNo + 700;
@@ -2084,7 +923,7 @@ namespace GameSvr
                         }
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 100;
@@ -2092,7 +931,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 100;
@@ -2102,7 +941,7 @@ namespace GameSvr
                     case 'M':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 300;
@@ -2110,7 +949,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 300;
@@ -2120,7 +959,7 @@ namespace GameSvr
                     case 'I':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 400;
@@ -2128,7 +967,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 400;
@@ -2138,7 +977,7 @@ namespace GameSvr
                     case 'D':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 200;
@@ -2146,7 +985,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 200;
@@ -2156,7 +995,7 @@ namespace GameSvr
                     case 'N':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 500;
@@ -2164,7 +1003,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 500;
@@ -2174,7 +1013,7 @@ namespace GameSvr
                     case 'S':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 2), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(2 - 1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 600;
@@ -2182,7 +1021,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 600;
@@ -2192,7 +1031,7 @@ namespace GameSvr
                     case 'A':
                         if (sText.Length == 4)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(1, 3), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(1, 3), -1);
                             if ((nValNo < 500) && (nValNo > 99))
                             {
                                 result = nValNo + 1100;
@@ -2202,7 +1041,7 @@ namespace GameSvr
                         {
                             if (sText.Length == 3)
                             {
-                                nValNo = HUtil32.Str_ToInt(sText.Substring(1, 2), -1);
+                                nValNo = HUtil32.StrToInt(ValText.Slice(1, 2), -1);
                                 if ((nValNo >= 0) && (nValNo < 100))
                                 {
                                     result = nValNo + 700;
@@ -2210,7 +1049,7 @@ namespace GameSvr
                             }
                             else
                             {
-                                nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                                nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                                 if ((nValNo >= 0) && (nValNo < 10))
                                 {
                                     result = nValNo + 700;
@@ -2221,7 +1060,7 @@ namespace GameSvr
                     case 'T':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 3), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(2 - 1, 3), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 700;
@@ -2229,7 +1068,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 700;
@@ -2239,7 +1078,7 @@ namespace GameSvr
                     case 'E':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 2), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(2 - 1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 1600;
@@ -2247,7 +1086,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 1600;
@@ -2257,7 +1096,7 @@ namespace GameSvr
                     case 'W':
                         if (sText.Length == 3)
                         {
-                            nValNo = HUtil32.Str_ToInt(sText.Substring(2 - 1, 2), -1);
+                            nValNo = HUtil32.StrToInt(ValText.Slice(2 - 1, 2), -1);
                             if ((nValNo >= 0) && (nValNo < 100))
                             {
                                 result = nValNo + 1700;
@@ -2265,7 +1104,7 @@ namespace GameSvr
                         }
                         else
                         {
-                            nValNo = HUtil32.Str_ToInt(sText[1].ToString(), -1);
+                            nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
                             if ((nValNo >= 0) && (nValNo < 10))
                             {
                                 result = nValNo + 1700;
@@ -2277,11 +1116,11 @@ namespace GameSvr
             return result;
         }
 
-        public static bool IsAccessory(int nIndex)
+        public static bool IsAccessory(ushort nIndex)
         {
             bool result;
-            var Item = UserEngine.GetStdItem(nIndex);
-            if (new ArrayList(new byte[] { 19, 20, 21, 22, 23, 24, 26 }).Contains(Item.StdMode))// 修正错误
+            var item = WorldEngine.GetStdItem(nIndex);
+            if (IsAccessoryMap.Contains(item.StdMode))
             {
                 result = true;
             }
@@ -2292,9 +1131,9 @@ namespace GameSvr
             return result;
         }
 
-        public static IList<TMakeItem> GetMakeItemInfo(string sItemName)
+        public static IList<MakeItem> GetMakeItemInfo(string sItemName)
         {
-            if (g_MakeItemList.TryGetValue(sItemName, out var itemList))
+            if (MakeItemList.TryGetValue(sItemName, out var itemList))
             {
                 return itemList;
             }
@@ -2319,30 +1158,9 @@ namespace GameSvr
             return result;
         }
 
-        public static void AddGameDataLog(string sMsg)
-        {
-            HUtil32.EnterCriticalSection(LogMsgCriticalSection);
-            try
-            {
-                LogStringList.Add(sMsg);
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(LogMsgCriticalSection);
-            }
-        }
-
         public static void AddLogonCostLog(string sMsg)
         {
-            HUtil32.EnterCriticalSection(LogMsgCriticalSection);
-            try
-            {
-                LogonCostLogList.Add(sMsg);
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(LogMsgCriticalSection);
-            }
+            LogonCostLogList.Add(sMsg);
         }
 
         public static void TrimStringList(StringList sList)
@@ -2445,65 +1263,61 @@ namespace GameSvr
 
         public static bool LoadItemBindIPaddr()
         {
-            bool result;
-            ArrayList LoadList;
-            var sFileName = string.Empty;
-            var sLineText = string.Empty;
+            StringList LoadList = null;
             var sMakeIndex = string.Empty;
             var sItemIndex = string.Empty;
             var sBindName = string.Empty;
-            result = false;
-            sFileName = g_Config.sEnvirDir + "ItemBindIPaddr.txt";
-            LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    g_ItemBindIPaddr.__Lock();
-            //    try {
-            //        for (I = 0; I < g_ItemBindIPaddr.Count; I++)
-            //        {
-            //            Dispose(((g_ItemBindIPaddr[I]) as TItemBind));
-            //        }
-            //        g_ItemBindIPaddr.Clear();
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I++)
-            //        {
-            //            sLineText = LoadList[I].Trim();
-            //            if (sLineText[1] == ';')
-            //            {
-            //                continue;
-            //            }
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
-            //            nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-            //            nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
-            //            if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
-            //            {
-            //                ItemBind = new TItemBind();
-            //                ItemBind.nMakeIdex = nMakeIndex;
-            //                ItemBind.nItemIdx = nItemIndex;
-            //                ItemBind.sBindName = sBindName;
-            //                g_ItemBindIPaddr.Add(ItemBind);
-            //            }
-            //        }
-            //    } finally {
-            //        g_ItemBindIPaddr.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            bool result = false;
+            var sFileName = Path.Combine(Config.EnvirDir, "ItemBindIPaddr.txt");
+            if (File.Exists(sFileName))
+            {
+                LoadList = new StringList();
+                try
+                {
+                    for (var i = 0; i < g_ItemBindIPaddr.Count; i++)
+                    {
+                        g_ItemBindIPaddr[i] = null;
+                    }
+                    g_ItemBindIPaddr.Clear();
+                    LoadList.LoadFromFile(sFileName);
+                    for (var i = 0; i < LoadList.Count; i++)
+                    {
+                        var sLineText = LoadList[i].Trim();
+                        if (sLineText[0] == ';')
+                        {
+                            continue;
+                        }
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
+                        var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                        var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                        if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
+                        {
+                            var ItemBind = new TItemBind();
+                            ItemBind.nMakeIdex = nMakeIndex;
+                            ItemBind.nItemIdx = nItemIndex;
+                            ItemBind.sBindName = sBindName;
+                            g_ItemBindIPaddr.Add(ItemBind);
+                        }
+                    }
+                }
+                finally
+                {
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveItemBindIPaddr()
         {
             bool result;
-            result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "ItemBindIPaddr.txt";
+            var sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindIPaddr.txt";
             //SaveList = new StringList();
             //try {
             //    for (I = 0; I < g_ItemBindIPaddr.Count; I++)
@@ -2521,61 +1335,60 @@ namespace GameSvr
 
         public static bool LoadItemBindAccount()
         {
-            ArrayList LoadList;
+            StringList LoadList = null;
             var sMakeIndex = string.Empty;
-            var sItemInde = string.Empty;
+            var sItemIndex = string.Empty;
             var sBindName = string.Empty;
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "ItemBindAccount.txt";
-            LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    g_ItemBindAccount.__Lock();
-            //    try {
-            //        for (I = 0; I < g_ItemBindAccount.Count; I++)
-            //        {
-            //            Dispose(((g_ItemBindAccount[I]) as TItemBind));
-            //        }
-            //        g_ItemBindAccount.Clear();
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I++)
-            //        {
-            //            sLineText = LoadList[I].Trim();
-            //            if (sLineText[1] == ';')
-            //            {
-            //                continue;
-            //            }
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
-            //            nMakeIndex = HUtil32.Str_ToInt(sMakeIndex, -1);
-            //            nItemIndex = HUtil32.Str_ToInt(sItemIndex, -1);
-            //            if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
-            //            {
-            //                ItemBind = new TItemBind();
-            //                ItemBind.nMakeIdex = nMakeIndex;
-            //                ItemBind.nItemIdx = nItemIndex;
-            //                ItemBind.sBindName = sBindName;
-            //                g_ItemBindAccount.Add(ItemBind);
-            //            }
-            //        }
-            //    } finally {
-            //        g_ItemBindAccount.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "ItemBindAccount.txt");
+            if (File.Exists(sFileName))
+            {
+                LoadList = new StringList();
+                try
+                {
+                    for (var i = 0; i < g_ItemBindAccount.Count; i++)
+                    {
+                        g_ItemBindAccount[i] = null;
+                    }
+                    g_ItemBindAccount.Clear();
+                    LoadList.LoadFromFile(sFileName);
+                    for (var i = 0; i < LoadList.Count; i++)
+                    {
+                        var sLineText = LoadList[i].Trim();
+                        if (sLineText[0] == ';')
+                        {
+                            continue;
+                        }
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
+                        var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                        var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                        if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
+                        {
+                            var ItemBind = new TItemBind();
+                            ItemBind.nMakeIdex = nMakeIndex;
+                            ItemBind.nItemIdx = nItemIndex;
+                            ItemBind.sBindName = sBindName;
+                            g_ItemBindAccount.Add(ItemBind);
+                        }
+                    }
+                }
+                finally
+                {
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveItemBindAccount()
         {
-            var result = false;
-            var sFileName = g_Config.sEnvirDir + "ItemBindAccount.txt";
+            var sFileName = Config.EnvirDir + "ItemBindAccount.txt";
             //SaveList = new StringList();
             //g_ItemBindAccount.__Lock();
             //try {
@@ -2591,76 +1404,70 @@ namespace GameSvr
             //SaveList.SaveToFile(sFileName);
 
             //SaveList.Free;
-            result = true;
+            bool result = true;
             return result;
         }
 
-        public static bool LoadItemBindCharName()
+        public static bool LoadItemBindChrName()
         {
             var sMakeIndex = string.Empty;
+            var sItemIndex = string.Empty;
             var sBindName = string.Empty;
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "ItemBindChrName.txt";
-            //if (File.Exists(sFileName))
-            //{
-            //    g_ItemBindCharName.__Lock();
-            //    try {
-            //        for (I = 0; I < g_ItemBindCharName.Count; I ++ )
-            //        {
-            //            Dispose(((g_ItemBindCharName[I]) as TItemBind));
-            //        }
-            //        g_ItemBindCharName.Clear();
-
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I ++ )
-            //        {
-            //            sLineText = LoadList[I].Trim();
-            //            if (sLineText[1] == ';')
-            //            {
-            //                continue;
-            //            }
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] {" ", ",", "\t"});
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] {" ", ",", "\t"});
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] {" ", ",", "\t"});
-            //            nMakeIndex = HUtil32.Str_ToInt(sMakeIndex,  -1);
-            //            nItemIndex = HUtil32.Str_ToInt(sItemIndex,  -1);
-            //            if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
-            //            {
-            //                ItemBind = new TItemBind();
-            //                ItemBind.nMakeIdex = nMakeIndex;
-            //                ItemBind.nItemIdx = nItemIndex;
-            //                ItemBind.sBindName = sBindName;
-            //                g_ItemBindCharName.Add(ItemBind);
-            //            }
-            //        }
-            //    } finally {
-            //        g_ItemBindCharName.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-
-            //    LoadList.SaveToFile(sFileName);
-            //}
-
-            //LoadList.Free;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "ItemBindChrName.txt");
+            StringList LoadList = null;
+            if (File.Exists(sFileName))
+            {
+                LoadList = new StringList();
+                for (var I = 0; I < g_ItemBindChrName.Count; I++)
+                {
+                    g_ItemBindChrName[I] = null;
+                }
+                g_ItemBindChrName.Clear();
+                LoadList.LoadFromFile(sFileName);
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    var sLineText = LoadList[i].Trim();
+                    if (sLineText[0] == ';')
+                    {
+                        continue;
+                    }
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
+                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
+                    {
+                        var ItemBind = new TItemBind();
+                        ItemBind.nMakeIdex = nMakeIndex;
+                        ItemBind.nItemIdx = nItemIndex;
+                        ItemBind.sBindName = sBindName;
+                        g_ItemBindChrName.Add(ItemBind);
+                    }
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
-        public static bool SaveItemBindCharName()
+        public static bool SaveItemBindChrName()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "ItemBindChrName.txt";
-            //g_ItemBindCharName.__Lock();
+            var sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindChrName.txt";
+            //g_ItemBindChrName.__Lock();
             //try {
-            //    for (I = 0; I < g_ItemBindCharName.Count; I++)
+            //    for (I = 0; I < g_ItemBindChrName.Count; I++)
             //    {
-            //        ItemBind = g_ItemBindCharName[I];
+            //        ItemBind = g_ItemBindChrName[I];
             //        SaveList.Add((ItemBind.nItemIdx).ToString() + "\t" + (ItemBind.nMakeIdex).ToString() + "\t" + ItemBind.sBindName);
             //    }
             //} finally {
-            //    g_ItemBindCharName.UnLock();
+            //    g_ItemBindChrName.UnLock();
             //}
             //SaveList.SaveToFile(sFileName);
             ////SaveList.Free;
@@ -2671,7 +1478,7 @@ namespace GameSvr
         public static bool LoadDisableMakeItem()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableMakeItem.txt";
+            var sFileName = M2Share.BasePath + Config.EnvirDir + "DisableMakeItem.txt";
             var LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -2698,7 +1505,7 @@ namespace GameSvr
 
         public static bool SaveDisableMakeItem()
         {
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableMakeItem.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "DisableMakeItem.txt";
             //g_DisableMakeItemList.SaveToFile(sFileName);
             return true;
         }
@@ -2706,7 +1513,7 @@ namespace GameSvr
         public static bool LoadUnMasterList()
         {
             bool result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "UnMaster.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "UnMaster.txt";
             ArrayList LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -2734,7 +1541,7 @@ namespace GameSvr
 
         public static bool SaveUnMasterList()
         {
-            string sFileName = g_Config.sEnvirDir + "UnMaster.txt";
+            string sFileName = Config.EnvirDir + "UnMaster.txt";
             //g_UnMasterList.SaveToFile(sFileName);
             return true;
         }
@@ -2742,33 +1549,29 @@ namespace GameSvr
         public static bool LoadUnForceMasterList()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "UnForceMaster.txt";
-            //if (File.Exists(sFileName))
-            //{
-            //    g_UnForceMasterList.__Lock();
-            //    try {
-            //        g_UnForceMasterList.Clear();
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I++)
-            //        {
-            //            g_UnForceMasterList.Add(LoadList[I].Trim());
-            //        }
-            //    } finally {
-            //        g_UnForceMasterList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "UnForceMaster.txt");
+            StringList LoadList = null;
+            if (File.Exists(sFileName))
+            {
+                g_UnForceMasterList.Clear();
+                LoadList = new StringList();
+                LoadList.LoadFromFile(sFileName);
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    g_UnForceMasterList.Add(LoadList[i].Trim());
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveUnForceMasterList()
         {
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "UnForceMaster.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "UnForceMaster.txt";
             //g_UnForceMasterList.SaveToFile(sFileName);
             return true;
         }
@@ -2776,7 +1579,7 @@ namespace GameSvr
         public static bool LoadEnableMakeItem()
         {
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "EnableMakeItem.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "EnableMakeItem.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_EnableMakeItemList.__Lock();
@@ -2802,7 +1605,7 @@ namespace GameSvr
 
         public static bool SaveEnableMakeItem()
         {
-            string sFileName = g_Config.sEnvirDir + "EnableMakeItem.txt";
+            string sFileName = Config.EnvirDir + "EnableMakeItem.txt";
             //g_EnableMakeItemList.SaveToFile(sFileName);
             return true;
         }
@@ -2810,68 +1613,66 @@ namespace GameSvr
         public static bool LoadDisableMoveMap()
         {
             var result = false;
-            var sFileName = g_Config.sEnvirDir + "DisableMoveMap.txt";
-            //if (File.Exists(sFileName))
-            //{
-            //    g_DisableMoveMapList.__Lock();
-            //    try {
-            //        g_DisableMoveMapList.Clear();
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (var I = 0; I < LoadList.Count; I++)
-            //        {
-            //            g_DisableMoveMapList.Add(LoadList[I].Trim());
-            //        }
-            //    } finally {
-            //        g_DisableMoveMapList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(Config.EnvirDir, "DisableMoveMap.txt");
+            StringList LoadList = null;
+            if (File.Exists(sFileName))
+            {
+                LoadList = new StringList();
+                g_DisableMoveMapList.Clear();
+                LoadList.LoadFromFile(sFileName);
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    g_DisableMoveMapList.Add(LoadList[i].Trim());
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveDisableMoveMap()
         {
-            string sFileName = g_Config.sEnvirDir + "DisableMoveMap.txt";
-            //g_DisableMoveMapList.SaveToFile(sFileName);
+            string sFileName = Path.Combine(Config.EnvirDir, "DisableMoveMap.txt");
+            g_DisableMoveMapList.SaveToFile(sFileName);
             return true;
         }
 
         public static bool LoadAllowSellOffItem()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableSellOffItem.txt";
-            //if (File.Exists(sFileName))
-            //{
-            //    g_DisableSellOffList.__Lock();
-            //    try {
-            //        g_DisableSellOffList.Clear();
-
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I ++ )
-            //        {
-            //            g_DisableSellOffList.Add(LoadList[I].Trim());
-            //        }
-            //    } finally {
-            //        g_DisableSellOffList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableSellOffItem.txt");
+            StringList LoadList;
+            if (File.Exists(sFileName))
+            {
+                try
+                {
+                    LoadList = new StringList();
+                    g_DisableSellOffList.Clear();
+                    LoadList.LoadFromFile(sFileName);
+                    for (var i = 0; i < LoadList.Count; i++)
+                    {
+                        g_DisableSellOffList.Add(LoadList[i].Trim());
+                    }
+                }
+                finally
+                {
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList = new StringList();
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveAllowSellOffItem()
         {
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableSellOffItem.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "DisableSellOffItem.txt";
             //g_DisableSellOffList.SaveToFile(sFileName);
             return true;
         }
@@ -3006,7 +1807,7 @@ namespace GameSvr
         public static bool LoadDisableSendMsgList()
         {
             var result = false;
-            string sFileName = g_Config.sEnvirDir + "DisableSendMsgList.txt";
+            string sFileName = Config.EnvirDir + "DisableSendMsgList.txt";
             ArrayList LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -3029,159 +1830,125 @@ namespace GameSvr
 
         public static bool LoadMonDropLimitList()
         {
-            var sLineText = string.Empty;
             var sItemName = string.Empty;
             var sItemCount = string.Empty;
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "MonDropLimitList.txt";
-            var LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    g_MonDropLimitLIst.Clear();
-            //    LoadList.LoadFromFile(sFileName);
-            //    for (I = 0; I < LoadList.Count; I ++ )
-            //    {
-            //        sLineText = LoadList[I].Trim();
-            //        if ((sLineText == "") || (sLineText[1] == ';'))
-            //        {
-            //            continue;
-            //        }
-            //        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] {" ", "/", ",", "\t"});
-            //        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new string[] {" ", "/", ",", "\t"});
-            //        nItemCount = HUtil32.Str_ToInt(sItemCount,  -1);
-            //        if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
-            //        {
-            //            MonDrop = new TMonDrop();
-            //            MonDrop.sItemName = sItemName;
-            //            MonDrop.nDropCount = 0;
-            //            MonDrop.nNoDropCount = 0;
-            //            MonDrop.nCountLimit = nItemCount;
-            //            g_MonDropLimitLIst.Add(sItemName, MonDrop);
-            //        }
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "MonDropLimitList.txt");
+            var LoadList = new StringList();
+            if (File.Exists(sFileName))
+            {
+                g_MonDropLimitLIst.Clear();
+                LoadList.LoadFromFile(sFileName);
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    string sLineText = LoadList[i].Trim();
+                    if ((sLineText == "") || (sLineText[0] == ';'))
+                    {
+                        continue;
+                    }
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "/", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new string[] { " ", "/", ",", "\t" });
+                    var nItemCount = HUtil32.StrToInt(sItemCount, -1);
+                    if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
+                    {
+                        var MonDrop = new TMonDrop();
+                        MonDrop.sItemName = sItemName;
+                        MonDrop.nDropCount = 0;
+                        MonDrop.nNoDropCount = 0;
+                        MonDrop.nCountLimit = nItemCount;
+                        g_MonDropLimitLIst.TryAdd(sItemName, MonDrop);
+                    }
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveMonDropLimitList()
         {
-            bool result;
-            var sFileName = g_Config.sEnvirDir + "MonDropLimitList.txt";
-            var LoadList = new ArrayList();
-            //for (I = 0; I < g_MonDropLimitLIst.Count; I ++ )
-            //{
-
-            //    MonDrop = ((TMonDrop)(g_MonDropLimitLIst.Values[I]));
-            //    sLineText = MonDrop.sItemName + "\t" + (MonDrop.nCountLimit).ToString();
-            //    LoadList.Add(sLineText);
-            //}
-            //LoadList.SaveToFile(sFileName);
-            //LoadList.Free;
-            result = true;
-            return result;
+            var sFileName = Config.EnvirDir + "MonDropLimitList.txt";
+            StringList LoadList = new StringList();
+            foreach (var item in g_MonDropLimitLIst)
+            {
+                var monDrop = item.Value;
+                var sLineText = monDrop.sItemName + "\t" + (monDrop.nCountLimit).ToString();
+                LoadList.Add(sLineText);
+            }
+            LoadList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool LoadDisableTakeOffList()
         {
             var sItemName = string.Empty;
+            var sItemIdx = string.Empty;
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableTakeOffList.txt";
-            var LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    LoadList.LoadFromFile(sFileName);
-            //    g_DisableTakeOffList.__Lock();
-            //    try {
-            //        g_DisableTakeOffList.Clear();
-            //        for (I = 0; I < LoadList.Count; I ++ )
-            //        {
-            //            sLineText = LoadList[I].Trim();
-            //            if ((sLineText == "") || (sLineText[1] == ';'))
-            //            {
-            //                continue;
-            //            }
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] {" ", "/", ",", "\t"});
-            //            sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new string[] {" ", "/", ",", "\t"});
-            //            nItemIdx = HUtil32.Str_ToInt(sItemIdx,  -1);
-            //            if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
-            //            {
-            //                g_DisableTakeOffList.Add(sItemName, ((nItemIdx) as Object));
-            //            }
-            //        }
-            //    } finally {
-            //        g_DisableTakeOffList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableTakeOffList.txt");
+            var LoadList = new StringList();
+            if (File.Exists(sFileName))
+            {
+                LoadList.LoadFromFile(sFileName);
+                g_DisableTakeOffList.Clear();
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    var sLineText = LoadList[i].Trim();
+                    if ((sLineText == "") || (sLineText[0] == ';'))
+                    {
+                        continue;
+                    }
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "/", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new string[] { " ", "/", ",", "\t" });
+                    var nItemIdx = HUtil32.StrToInt(sItemIdx, -1);
+                    if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
+                    {
+                        g_DisableTakeOffList.Add(nItemIdx, sItemName);
+                    }
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static bool SaveDisableTakeOffList()
         {
-            bool result;
-            ArrayList LoadList;
-            string sFileName;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableTakeOffList.txt";
-            LoadList = new ArrayList();
-            //g_DisableTakeOffList.__Lock();
-            //try {
-            //    for (I = 0; I < g_DisableTakeOffList.Count; I++)
-            //    {
-            //        sLineText = g_DisableTakeOffList[I] + "\t" + (((int)g_DisableTakeOffList.Values[I])).ToString();
-            //        LoadList.Add(sLineText);
-            //    }
-            //} finally {
-            //    g_DisableTakeOffList.UnLock();
-            //}
-            //LoadList.SaveToFile(sFileName);
-            //LoadList.Free;
-            result = true;
-            return result;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableTakeOffList.txt");
+            StringList LoadList = new StringList();
+            foreach (var item in g_DisableTakeOffList)
+            {
+                var sLineText = item.Value + "\t" + item.Key;
+                LoadList.Add(sLineText);
+            }
+            LoadList.SaveToFile(sFileName);
+            return true;
         }
 
         public static bool InDisableTakeOffList(int nItemIdx)
         {
-            bool result = false;
-            //for (I = 0; I < g_DisableTakeOffList.Count; I ++ )
-            //{
-            //    if (((int)g_DisableTakeOffList.Values[I]) == nItemIdx - 1)
-            //    {
-            //        result = true;
-            //        break;
-            //    }
-            //}
-            return result;
+            return g_DisableTakeOffList.ContainsKey(nItemIdx - 1);
         }
 
-        public static bool SaveDisableSendMsgList()
+        public static void SaveDisableSendMsgList()
         {
-            bool result;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DisableSendMsgList.txt";
-            ArrayList LoadList = new ArrayList();
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableSendMsgList.txt");
+            StringList LoadList = new StringList();
             for (var i = 0; i < g_DisableSendMsgList.Count; i++)
             {
                 LoadList.Add(g_DisableSendMsgList[i]);
             }
-            //LoadList.SaveToFile(sFileName);
-            result = true;
-            return result;
+            LoadList.SaveToFile(sFileName);
         }
 
         public static bool GetDisableSendMsgList(string sHumanName)
         {
-            bool result;
-            result = false;
+            bool result = false;
             //for (I = 0; I < g_DisableSendMsgList.Count; I ++ )
             //{
             //    if ((sHumanName).CompareTo((g_DisableSendMsgList[I])) == 0)
@@ -3196,50 +1963,52 @@ namespace GameSvr
         public static bool LoadGameLogItemNameList()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "GameLogItemNameList.txt";
-            var LoadList = new ArrayList();
-            //if (File.Exists(sFileName))
-            //{
-            //    g_GameLogItemNameList.__Lock();
-            //    try {
-            //        g_GameLogItemNameList.Clear();
-
-            //        LoadList.LoadFromFile(sFileName);
-            //        for (I = 0; I < LoadList.Count; I ++ )
-            //        {
-            //            g_GameLogItemNameList.Add(LoadList[I].Trim());
-            //        }
-            //    } finally {
-            //        g_GameLogItemNameList.UnLock();
-            //    }
-            //    result = true;
-            //}
-            //else
-            //{
-            //    LoadList.SaveToFile(sFileName);
-            //}
-            //LoadList.Free;
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "GameLogItemNameList.txt");
+            var LoadList = new StringList();
+            if (File.Exists(sFileName))
+            {
+                GameLogItemNameList.Clear();
+                LoadList.LoadFromFile(sFileName);
+                if (LoadList.Count == 1 && LoadList[0].StartsWith("*"))
+                {
+                    GameLogItemNameList.Add("*");
+                    return true;
+                }
+                for (var i = 0; i < LoadList.Count; i++)
+                {
+                    GameLogItemNameList.Add(LoadList[i].Trim());
+                }
+                result = true;
+            }
+            else
+            {
+                LoadList.SaveToFile(sFileName);
+            }
             return result;
         }
 
         public static byte GetGameLogItemNameList(string sItemName)
         {
             byte result = 0;
-            //for (I = 0; I < g_GameLogItemNameList.Count; I ++ )
-            //{
-            //    if ((sItemName).CompareTo((g_GameLogItemNameList[I])) == 0)
-            //    {
-            //        result = 1;
-            //        break;
-            //    }
-            //}
+            if (GameLogItemNameList.Count == 1 && GameLogItemNameList[0].StartsWith("*"))
+            {
+                return 1;
+            }
+            for (var i = 0; i < GameLogItemNameList.Count; i++)
+            {
+                if (string.Compare(sItemName, GameLogItemNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    result = 1;
+                    break;
+                }
+            }
             return result;
         }
 
         public static bool SaveGameLogItemNameList()
         {
             bool result;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "GameLogItemNameList.txt";
+            var sFileName = M2Share.BasePath + Config.EnvirDir + "GameLogItemNameList.txt";
             try
             {
 
@@ -3255,7 +2024,7 @@ namespace GameSvr
         public static bool LoadDenyIPAddrList()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyIPAddrList.txt";
+            var sFileName = M2Share.BasePath + Config.EnvirDir + "DenyIPAddrList.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_DenyIPAddrList.__Lock();
@@ -3301,34 +2070,30 @@ namespace GameSvr
 
         public static bool SaveDenyIPAddrList()
         {
-            bool result;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyIPAddrList.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "DenyIPAddrList.txt";
             //SaveList = new StringList();
             //g_DenyIPAddrList.__Lock();
             //try {
             //    for (I = 0; I < g_DenyIPAddrList.Count; I ++ )
             //    {
-
             //        if (((int)g_DenyIPAddrList.Values[I]) != 0)
             //        {
             //            SaveList.Add(g_DenyIPAddrList[I]);
             //        }
             //    }
-
             //    SaveList.SaveToFile(sFileName);
             //} finally {
             //    g_DenyIPAddrList.UnLock();
             //}
-
             //SaveList.Free;
-            result = true;
+            var result = true;
             return result;
         }
 
         public static bool LoadDenyChrNameList()
         {
             var result = false;
-            string sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyChrNameList.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "DenyChrNameList.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_DenyChrNameList.__Lock();
@@ -3355,8 +2120,7 @@ namespace GameSvr
 
         public static bool GetDenyChrNameList(string sChrName)
         {
-            bool result;
-            result = false;
+            bool result = false;
             try
             {
                 //for (I = 0; I < g_DenyChrNameList.Count; I ++ )
@@ -3376,34 +2140,29 @@ namespace GameSvr
 
         public static bool SaveDenyChrNameList()
         {
-            bool result;
-            string sFileName;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyChrNameList.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "DenyChrNameList.txt";
             //SaveList = new StringList();
             //g_DenyChrNameList.__Lock();
             //try {
             //    for (I = 0; I < g_DenyChrNameList.Count; I ++ )
             //    {
-
             //        if (((int)g_DenyChrNameList.Values[I]) != 0)
             //        {
             //            SaveList.Add(g_DenyChrNameList[I]);
             //        }
             //    }
-
             //    SaveList.SaveToFile(sFileName);
             //} finally {
             //    g_DenyChrNameList.UnLock();
             //}
             //SaveList.Free;
-            result = true;
-            return result;
+            return true;
         }
 
         public static bool LoadDenyAccountList()
         {
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyAccountList.txt";
+            var sFileName = M2Share.BasePath + Config.EnvirDir + "DenyAccountList.txt";
             new ArrayList();
             if (File.Exists(sFileName))
             {
@@ -3453,7 +2212,7 @@ namespace GameSvr
         {
             bool result;
             string sFileName;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "DenyAccountList.txt";
+            sFileName = M2Share.BasePath + Config.EnvirDir + "DenyAccountList.txt";
             //SaveList = new StringList();
             //g_DenyAccountList.__Lock();
             //try {
@@ -3476,7 +2235,7 @@ namespace GameSvr
         public static bool LoadNoClearMonList()
         {
             var result = false;
-            var sFileName = Path.Combine(M2Share.sConfigPath, g_Config.sEnvirDir, "NoClearMonList.txt");
+            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "NoClearMonList.txt");
             StringList LoadList = null;
             if (File.Exists(sFileName))
             {
@@ -3498,8 +2257,7 @@ namespace GameSvr
 
         public static bool GetNoHptoexpMonList(string sMonName)
         {
-            bool result;
-            result = false;
+            bool result = false;
             try
             {
                 //for (var i = 0; i < g_NoHptoexpMonLIst.Count; i++)
@@ -3535,7 +2293,7 @@ namespace GameSvr
         {
             bool result;
             string sFileName;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "NoHptoExpMonList.txt";
+            sFileName = M2Share.BasePath + Config.EnvirDir + "NoHptoExpMonList.txt";
             //SaveList = new StringList();
             //g_NoHptoexpMonLIst.__Lock();
             //try {
@@ -3558,7 +2316,7 @@ namespace GameSvr
             int I;
             string sFileName;
             StringList SaveList;
-            sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "NoClearMonList.txt";
+            sFileName = M2Share.BasePath + Config.EnvirDir + "NoClearMonList.txt";
             SaveList = new StringList();
             try
             {
@@ -3590,7 +2348,7 @@ namespace GameSvr
             string sLineText;
             TMonSayMsg MonSayMsg;
             var result = false;
-            var sFileName = M2Share.sConfigPath + g_Config.sEnvirDir + "GenMsg.txt";
+            var sFileName = M2Share.BasePath + Config.EnvirDir + "GenMsg.txt";
             if (File.Exists(sFileName))
             {
                 g_MonSayMsgList.Clear();
@@ -3608,9 +2366,9 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new string[] { " ", "/", ",", "\t" });
                         if (sStatus != "" && sRate != "" && sColor != "" && sMonName != "" && sSayMsg != "")
                         {
-                            nStatus = HUtil32.Str_ToInt(sStatus, -1);
-                            nRate = HUtil32.Str_ToInt(sRate, -1);
-                            nColor = HUtil32.Str_ToInt(sColor, -1);
+                            nStatus = HUtil32.StrToInt(sStatus, -1);
+                            nRate = HUtil32.StrToInt(sRate, -1);
+                            nColor = HUtil32.StrToInt(sColor, -1);
                             if (nStatus >= 0 && nRate >= 0 && nColor >= 0)
                             {
                                 MonSayMsg = new TMonSayMsg();
@@ -3684,6 +2442,7 @@ namespace GameSvr
             StringConf.LoadString();
             ExpConf.LoadConfig();
             GlobalConf.LoadConfig();
+            GameSetting.LoadConfig();
         }
 
         public static string GetIPLocal(string sIPaddr)

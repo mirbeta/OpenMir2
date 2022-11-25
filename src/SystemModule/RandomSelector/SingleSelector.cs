@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule
+namespace SystemModule.RandomSelector
 {
     /// <summary>
     /// 单选器
@@ -10,6 +10,7 @@ namespace SystemModule
     {
         internal SingleSelector(WeightedSelector<T> weightedSelector) : base(weightedSelector)
         {
+
         }
 
         internal T Select()

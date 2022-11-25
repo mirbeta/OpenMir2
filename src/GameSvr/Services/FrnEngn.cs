@@ -1,59 +1,59 @@
+using GameSvr.Player;
 using SystemModule;
+using SystemModule.Data;
+using SystemModule.Packets.ServerPackets;
 
-namespace GameSvr
+namespace GameSvr.Services
 {
     public class TFrontEngine
     {
-        private readonly object m_UserCriticalSection = null;
-        private IList<TLoadDBInfo> m_LoadRcdList = null;
-        private readonly IList<TSaveRcd> m_SaveRcdList = null;
-        private readonly IList<TGoldChangeInfo> m_ChangeGoldList = null;
-        private IList<TLoadDBInfo> m_LoadRcdTempList = null;
-        private readonly IList<TSaveRcd> m_SaveRcdTempList = null;
-        private readonly Thread _frontEngine;
+        private readonly object m_UserCriticalSection;
+        private IList<LoadDBInfo> m_LoadRcdList;
+        private readonly IList<SavePlayerRcd> m_SaveRcdList;
+        private readonly IList<TGoldChangeInfo> m_ChangeGoldList;
+        private IList<LoadDBInfo> m_LoadRcdTempList;
+        private readonly IList<SavePlayerRcd> m_SaveRcdTempList;
 
         public TFrontEngine()
         {
             m_UserCriticalSection = new object();
-            m_LoadRcdList = new List<TLoadDBInfo>();
-            m_SaveRcdList = new List<TSaveRcd>();
+            m_LoadRcdList = new List<LoadDBInfo>();
+            m_SaveRcdList = new List<SavePlayerRcd>();
             m_ChangeGoldList = new List<TGoldChangeInfo>();
-            m_LoadRcdTempList = new List<TLoadDBInfo>();
-            m_SaveRcdTempList = new List<TSaveRcd>();
-            _frontEngine = new Thread(Execute)
-            {
-                IsBackground = true
-            };
+            m_LoadRcdTempList = new List<LoadDBInfo>();
+            m_SaveRcdTempList = new List<SavePlayerRcd>();
         }
 
-        public void Start()
+        public void Start(CancellationToken stoppingToken)
         {
-            _frontEngine.Start();
+            Task.Factory.StartNew(() =>
+            {
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    Execute();
+                    Thread.Sleep(20);
+                }
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
         private void Execute()
         {
             const string sExceptionMsg = "[Exception] TFrontEngine::Execute";
-            while (true)
+            try
             {
-                try
-                {
-                    ProcessGameDate();
-                    GetGameTime();
-                }
-                catch (Exception ex)
-                {
-                    M2Share.ErrorMessage(sExceptionMsg);
-                    M2Share.ErrorMessage(ex.StackTrace);
-                }
-                Thread.Sleep(200);
+                ProcessGameDate();
+                GetGameTime();
+            }
+            catch (Exception ex)
+            {
+                M2Share.Log.LogError(sExceptionMsg);
+                M2Share.Log.LogError(ex.StackTrace);
             }
         }
 
         private void GetGameTime()
         {
-            var Hour = DateTime.Now.Hour;
-            switch (Hour)
+            switch (DateTime.Now.Hour)
             {
                 case 5:
                 case 6:
@@ -126,9 +126,8 @@ namespace GameSvr
 
         private void ProcessGameDate()
         {
-            IList<TGoldChangeInfo> ChangeGoldList = null;
-            TSaveRcd SaveRcd = null;
-            var boReTryLoadDB = false;
+            IList<TGoldChangeInfo> changeGoldList = null;
+            var boReTryLoadDb = false;
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
             {
@@ -139,15 +138,15 @@ namespace GameSvr
                         m_SaveRcdTempList.Add(m_SaveRcdList[i]);
                     }
                 }
-                IList<TLoadDBInfo> TempList = m_LoadRcdTempList;
+                IList<LoadDBInfo> TempList = m_LoadRcdTempList;
                 m_LoadRcdTempList = m_LoadRcdList;
                 m_LoadRcdList = TempList;
                 if (m_ChangeGoldList.Any())
                 {
-                    ChangeGoldList = new List<TGoldChangeInfo>();
+                    changeGoldList = new List<TGoldChangeInfo>();
                     for (var i = 0; i < m_ChangeGoldList.Count; i++)
                     {
-                        ChangeGoldList.Add(m_ChangeGoldList[i]);
+                        changeGoldList.Add(m_ChangeGoldList[i]);
                     }
                     m_ChangeGoldList.Clear();
                 }
@@ -156,20 +155,26 @@ namespace GameSvr
             {
                 HUtil32.LeaveCriticalSection(m_UserCriticalSection);
             }
-            if (HumDataService.DBSocketConnected())
+            if (PlayerDataService.SocketConnected())
             {
+                PlayerDataService.ProcessQueryList();
+                PlayerDataService.ProcessSaveList();
                 for (var i = 0; i < m_SaveRcdTempList.Count; i++)
                 {
-                    SaveRcd = m_SaveRcdTempList[i];
+                    SavePlayerRcd SaveRcd = m_SaveRcdTempList[i];
                     if (SaveRcd == null)
                     {
                         continue;
                     }
-                    if (HumDataService.SaveHumRcdToDB(SaveRcd.sAccount, SaveRcd.sChrName, SaveRcd.nSessionID, SaveRcd.HumanRcd) || SaveRcd.nReTryCount > 50)
+                    if (InSaveRcdList(SaveRcd.sChrName))
+                    {
+                        continue;
+                    }
+                    if (PlayerDataService.SaveHumRcdToDB(SaveRcd.sAccount, SaveRcd.sChrName, SaveRcd.nSessionID, SaveRcd.HumanRcd) || SaveRcd.nReTryCount > 50)
                     {
                         if (SaveRcd.PlayObject != null)
                         {
-                            SaveRcd.PlayObject.m_boRcdSaved = true;
+                            ((PlayObject)SaveRcd.PlayObject).m_boRcdSaved = true;
                         }
                         HUtil32.EnterCriticalSection(m_UserCriticalSection);
                         try
@@ -198,7 +203,7 @@ namespace GameSvr
             else
             {
                 // 如果DB已经关闭，不在保存
-                M2Share.ErrorMessage("DBSvr 断开链接，保存数据失败.");
+                M2Share.Log.LogError("DBSvr 断开链接，保存数据失败.");
                 HUtil32.EnterCriticalSection(m_UserCriticalSection);
                 try
                 {
@@ -219,20 +224,20 @@ namespace GameSvr
             m_SaveRcdTempList.Clear();
             for (var i = 0; i < m_LoadRcdTempList.Count; i++)
             {
-                TLoadDBInfo LoadDBInfo = m_LoadRcdTempList[i];
-                if (LoadDBInfo == null)
+                var loadDbInfo = m_LoadRcdTempList[i];
+                if (loadDbInfo == null)
                 {
                     continue;
                 }
-                if (!LoadHumFromDB(LoadDBInfo, ref boReTryLoadDB))
+                if (!LoadHumFromDB(loadDbInfo, ref boReTryLoadDb))
                 {
-                    M2Share.GateManager.CloseUser(LoadDBInfo.nGateIdx, LoadDBInfo.nSocket);
+                    M2Share.GateMgr.CloseUser(loadDbInfo.nGateIdx, loadDbInfo.nSocket);
                 }
                 else
                 {
-                    if (!boReTryLoadDB)
+                    if (!boReTryLoadDb)
                     {
-                        DisPose(LoadDBInfo);
+                        DisPose(loadDbInfo);
                     }
                     else
                     {
@@ -240,7 +245,7 @@ namespace GameSvr
                         HUtil32.EnterCriticalSection(m_UserCriticalSection);
                         try
                         {
-                            m_LoadRcdList.Add(LoadDBInfo);
+                            m_LoadRcdList.Add(loadDbInfo);
                         }
                         finally
                         {
@@ -250,19 +255,18 @@ namespace GameSvr
                 }
             }
             m_LoadRcdTempList.Clear();
-            if (ChangeGoldList != null)
+            if (changeGoldList != null)
             {
-                for (var i = 0; i < ChangeGoldList.Count; i++)
+                for (var i = 0; i < changeGoldList.Count; i++)
                 {
-                    TGoldChangeInfo GoldChangeInfo = ChangeGoldList[i];
-                    if (GoldChangeInfo == null)
+                    var goldChangeInfo = changeGoldList[i];
+                    if (goldChangeInfo == null)
                     {
                         continue;
                     }
-                    ChangeUserGoldInDB(GoldChangeInfo);
-                    DisPose(GoldChangeInfo);
+                    ChangeUserGoldInDB(goldChangeInfo);
+                    DisPose(goldChangeInfo);
                 }
-                ChangeGoldList = null;
             }
         }
 
@@ -272,7 +276,7 @@ namespace GameSvr
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
             {
-                if (m_SaveRcdList.Count >= 1000)
+                if (m_SaveRcdList.Count >= ushort.MaxValue)
                 {
                     result = true;
                 }
@@ -284,12 +288,12 @@ namespace GameSvr
             return result;
         }
 
-        public void AddToLoadRcdList(string sAccount, string sChrName, string sIPaddr, bool boFlag, int nSessionID, int nPayMent, int nPayMode, int nSoftVersionDate, int nSocket, ushort nGSocketIdx, int nGateIdx)
+        public void AddToLoadRcdList(string sAccount, string sChrName, string sIPaddr, bool boFlag, int nSessionID, int nPayMent, int nPayMode, int nSoftVersionDate, int nSocket, ushort nGSocketIdx, int nGateIdx, long playTime)
         {
-            TLoadDBInfo LoadRcdInfo = new TLoadDBInfo
+            var loadRcdInfo = new LoadDBInfo
             {
-                sAccount = sAccount,
-                sCharName = sChrName,
+                Account = sAccount,
+                ChrName = sChrName,
                 sIPaddr = sIPaddr,
                 nSessionID = nSessionID,
                 nSoftVersionDate = nSoftVersionDate,
@@ -300,12 +304,13 @@ namespace GameSvr
                 nGateIdx = nGateIdx,
                 dwNewUserTick = HUtil32.GetTickCount(),
                 PlayObject = null,
-                nReLoadCount = 0
+                nReLoadCount = 0,
+                PlayTime = playTime
             };
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
             {
-                m_LoadRcdList.Add(LoadRcdInfo);
+                m_LoadRcdList.Add(loadRcdInfo);
             }
             finally
             {
@@ -313,40 +318,46 @@ namespace GameSvr
             }
         }
 
-        private bool LoadHumFromDB(TLoadDBInfo LoadUser, ref bool boReTry)
+        private bool LoadHumFromDB(LoadDBInfo LoadUser, ref bool boReTry)
         {
-            THumDataInfo HumanRcd = null;
+            int queryId = 0;
             var result = false;
             boReTry = false;
-            if (InSaveRcdList(LoadUser.sCharName))
+            if (InSaveRcdList(LoadUser.ChrName))
             {
                 boReTry = true;// 反回TRUE,则重新加入队列
-                return result;
+                return false;
             }
-            if (M2Share.UserEngine.GetPlayObjectEx(LoadUser.sCharName) != null)
+            if (M2Share.WorldEngine.GetPlayObjectEx(LoadUser.ChrName) != null)
             {
-                M2Share.UserEngine.KickPlayObjectEx(LoadUser.sCharName);
+                M2Share.WorldEngine.KickPlayObjectEx(LoadUser.ChrName);
                 boReTry = true;// 反回TRUE,则重新加入队列
-                return result;
+                return false;
             }
-            if (!HumDataService.LoadHumRcdFromDB(LoadUser.sAccount, LoadUser.sCharName, LoadUser.sIPaddr, ref HumanRcd, LoadUser.nSessionID))
+            if (!PlayerDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref queryId, LoadUser.nSessionID))
             {
-                M2Share.GateManager.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
+                M2Share.GateMgr.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
             }
             else
             {
-                var UserOpenInfo = new TUserOpenInfo
+                var userOpenInfo = new UserOpenInfo
                 {
-                    sChrName = LoadUser.sCharName,
+                    ChrName = LoadUser.ChrName,
                     LoadUser = LoadUser,
-                    HumanRcd = HumanRcd
+                    HumanRcd = null,
+                    QueryId = queryId
                 };
-                M2Share.UserEngine.AddUserOpenInfo(UserOpenInfo);
+                M2Share.WorldEngine.AddUserOpenInfo(userOpenInfo);
                 result = true;
             }
             return result;
         }
 
+        /// <summary>
+        /// 检查是否在保存队列中
+        /// </summary>
+        /// <param name="sChrName"></param>
+        /// <returns></returns>
         public bool InSaveRcdList(string sChrName)
         {
             var result = false;
@@ -355,7 +366,7 @@ namespace GameSvr
             {
                 for (var i = 0; i < m_SaveRcdList.Count; i++)
                 {
-                    if (m_SaveRcdList[i].sChrName == sChrName)
+                    if (string.Compare(m_SaveRcdList[i].sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = true;
                         break;
@@ -369,9 +380,12 @@ namespace GameSvr
             return result;
         }
 
+        /// <summary>
+        /// 添加到加载队列中
+        /// </summary>
         public void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold)
         {
-            TGoldChangeInfo GoldInfo = new TGoldChangeInfo
+            var GoldInfo = new TGoldChangeInfo
             {
                 sGameMasterName = sGameMasterName,
                 sGetGoldUser = sGetGoldUserName,
@@ -380,7 +394,10 @@ namespace GameSvr
             m_ChangeGoldList.Add(GoldInfo);
         }
 
-        public void AddToSaveRcdList(TSaveRcd SaveRcd)
+        /// <summary>
+        /// 添加到保存队列中
+        /// </summary>
+        public void AddToSaveRcdList(SavePlayerRcd SaveRcd)
         {
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
@@ -395,7 +412,7 @@ namespace GameSvr
 
         public void DeleteHuman(int nGateIndex, int nSocket)
         {
-            TLoadDBInfo LoadRcdInfo;
+            LoadDBInfo LoadRcdInfo;
             HUtil32.EnterCriticalSection(m_UserCriticalSection);
             try
             {
@@ -418,26 +435,25 @@ namespace GameSvr
 
         private bool ChangeUserGoldInDB(TGoldChangeInfo GoldChangeInfo)
         {
-            THumDataInfo HumanRcd = null;
+            PlayerDataInfo HumanRcd = null;
             var result = false;
-            if (HumDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
+            /*if (PlayerDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
             {
-                if (HumanRcd.Data.nGold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.nGold + GoldChangeInfo.nGold < 2000000000)
+                if (HumanRcd.Data.Gold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.Gold + GoldChangeInfo.nGold < 2000000000)
                 {
-                    HumanRcd.Data.nGold += GoldChangeInfo.nGold;
-                    if (HumDataService.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, HumanRcd))
+                    HumanRcd.Data.Gold += GoldChangeInfo.nGold;
+                    if (PlayerDataService.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, HumanRcd))
                     {
-                        M2Share.UserEngine.sub_4AE514(GoldChangeInfo);
+                        M2Share.WorldEngine.sub_4AE514(GoldChangeInfo);
                         result = true;
                     }
                 }
-            }
+            }*/
             return result;
         }
 
         private void DisPose(object obj)
         {
-            obj = null;
         }
     }
 }

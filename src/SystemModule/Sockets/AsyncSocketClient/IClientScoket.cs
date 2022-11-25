@@ -2,52 +2,100 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
+using SystemModule.Sockets.Event;
 
-namespace SystemModule.Sockets
+namespace SystemModule.Sockets.AsyncSocketClient
 {
-    public class IClientScoket
+    public class ClientScoket
     {
-        private readonly int buffersize = 1024;//缓冲区大小
-        private Socket cli = null;//客户端Socket
-        private readonly byte[] databuffer;//缓冲区
-        public bool IsConnected;//连接是否成功
-        public string Host = string.Empty;
-        public int Port = 0;
+        /// <summary>
+        /// 缓冲区大小
+        /// </summary>
+        private int Buffersize = 1024;
+        /// <summary>
+        /// 客户端Socket
+        /// </summary>
+        private Socket _cli = null;
+        /// <summary>
+        /// 缓冲区
+        /// </summary>
+        private readonly byte[] _databuffer;
+        /// <summary>
+        /// 连接是否成功
+        /// </summary>
+        public bool IsConnected;
         public bool IsBusy = false;
+        public IPEndPoint RemoteEndPoint;
+        private int totalBytesRead;
+        private int totalBytesWrite;
+        /// <summary>
+        /// 连接成功事件
+        /// </summary>
+        public event DSCClientOnConnectedHandler OnConnected;
+        /// <summary>
+        /// 错误事件
+        /// </summary>
+        public event DSCClientOnErrorHandler OnError;
+        /// <summary>
+        /// 接收到数据事件
+        /// </summary>
+        public event DSCClientOnReceiveHandler OnReceivedData;
+        /// <summary>
+        /// 断开连接事件
+        /// </summary>
+        public event DSCClientOnDisconnectedHandler OnDisconnected;
 
-        public event DSCClientOnConnectedHandler OnConnected;//连接成功事件
-
-        public event DSCClientOnErrorHandler OnError;//错误事件
-
-        public event DSCClientOnDataInHandler ReceivedDatagram;//接收到数据事件
-
-        public event DSCClientOnDisconnectedHandler OnDisconnected;//断开连接事件
-
-        public IClientScoket()
+        public ClientScoket()
         {
-            this.databuffer = new byte[this.buffersize];//创建缓冲区
+            _databuffer = new byte[Buffersize];
+        }
+        
+        public ClientScoket(IPEndPoint endPoint, int buffSize = 0)
+        {
+            if (buffSize <= 0)
+            {
+                buffSize = 1024;
+            }
+            Buffersize = buffSize;
+            _databuffer = new byte[Buffersize];
+            RemoteEndPoint = endPoint;
         }
 
         public void Connect()
         {
-            if (!string.IsNullOrEmpty(Host) && Port > 0)
+            if (RemoteEndPoint != null)
             {
-                Connect(Host, Port);
+                Connect(RemoteEndPoint);
+                return;
             }
-            else
-            {
-                throw new Exception("IP地址或端口号错误");
-            }
+            throw new Exception("IP地址或端口号错误");
         }
 
-        public void Connect(string ip, int port)//连接到终结点
+        /// <summary>
+        /// 获取接收到的字节总数
+        /// </summary>
+        public long TotalBytesRead
         {
-            this.cli = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse(ip), port);
+            get { return totalBytesRead; }
+        }
+        
+        /// <summary>
+        /// 获取发送的字节总数
+        /// </summary>
+        public long TotalBytesWrite
+        {
+            get { return totalBytesWrite; }
+        }
+        
+        public void Connect(IPEndPoint endPoint)//连接到终结点
+        {
             try
             {
+                _cli = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IsBusy = true;
-                this.cli.BeginConnect(remoteEP, this.HandleConnect, this.cli);//开始异步连接
+                RemoteEndPoint = endPoint;
+                _cli.BeginConnect(endPoint, HandleConnect, _cli);//开始异步连接
             }
             catch (ObjectDisposedException)
             {
@@ -57,9 +105,32 @@ namespace SystemModule.Sockets
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//引发断开连接事件
+                    RaiseDisconnectedEvent();//引发断开连接事件
                 }
-                this.RaiseErrorEvent(exception);//引发错误事件
+                RaiseErrorEvent(exception);//引发错误事件
+            }
+        }
+
+        public void Connect(string ip, int port)//连接到终结点
+        {
+            try
+            {
+                this._cli = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                RemoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+                IsBusy = true;
+                _cli.BeginConnect(RemoteEndPoint, HandleConnect, _cli);//开始异步连接
+            }
+            catch (ObjectDisposedException)
+            {
+                RaiseDisconnectedEvent();
+            }
+            catch (SocketException exception)
+            {
+                if (exception.ErrorCode == (int)SocketError.ConnectionReset)
+                {
+                    RaiseDisconnectedEvent();//引发断开连接事件
+                }
+                RaiseErrorEvent(exception);//引发错误事件
             }
         }
 
@@ -69,14 +140,15 @@ namespace SystemModule.Sockets
             try
             {
                 asyncState.EndConnect(iar); //结束异步连接
-                if (null != this.OnConnected)
+                if (null != OnConnected)
                 {
                     IsConnected = true;
-                    this.OnConnected(this, new DSCClientConnectedEventArgs(this.cli)); //引发连接成功事件
+                    RemoteEndPoint = (IPEndPoint)_cli.RemoteEndPoint;
+                    OnConnected(this, new DSCClientConnectedEventArgs(_cli)); //引发连接成功事件
                 }
-                this.StartWaitingForData(asyncState); //开始接收数据
+                StartWaitingForData(asyncState); //开始接收数据
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
                 RaiseDisconnectedEvent();
                 IsConnected = false;
@@ -85,9 +157,9 @@ namespace SystemModule.Sockets
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent(); //引发断开连接事件
+                    RaiseDisconnectedEvent(); //引发断开连接事件
                 }
-                this.RaiseErrorEvent(exception); //引发错误事件
+                RaiseErrorEvent(exception); //引发错误事件
             }
             finally
             {
@@ -100,7 +172,7 @@ namespace SystemModule.Sockets
             try
             {
                 //开始异步接收数据
-                soc.BeginReceive(this.databuffer, 0, this.buffersize, SocketFlags.None, this.HandleIncomingData, soc);
+                soc.BeginReceive(_databuffer, 0, Buffersize, SocketFlags.None, HandleIncomingData, soc);
             }
             catch (ObjectDisposedException)
             {
@@ -110,9 +182,9 @@ namespace SystemModule.Sockets
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//引发断开连接事件
+                    RaiseDisconnectedEvent();//引发断开连接事件
                 }
-                this.RaiseErrorEvent(exception);//引发错误事件
+                RaiseErrorEvent(exception);//引发错误事件
             }
         }
 
@@ -124,27 +196,32 @@ namespace SystemModule.Sockets
                 var length = asyncState.EndReceive(parameter);//结束异步接收数据
                 if (0 == length)
                 {
-                    this.RaiseDisconnectedEvent();//引发断开连接事件
+                    RaiseDisconnectedEvent();//引发断开连接事件
                 }
                 else
                 {
-                    var destinationArray = new byte[length];//目的字节数组
-                    Array.Copy(this.databuffer, 0, destinationArray, 0, length);
-                    ReceivedDatagram?.Invoke(this, new DSCClientDataInEventArgs(this.cli, destinationArray)); //引发接收数据事件
-                    this.StartWaitingForData(asyncState);//继续接收数据
+                    // 增加接收到的字节总数
+                    Interlocked.Add(ref totalBytesRead, length);
+                    Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
+                    for (var i = 0; i < length; i++)
+                    {
+                        destinationArray[i] = _databuffer[i];
+                    }
+                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(_cli, destinationArray.ToArray(), length)); //引发接收数据事件
+                    StartWaitingForData(asyncState);//继续接收数据
                 }
             }
             catch (ObjectDisposedException)
             {
-                this.RaiseDisconnectedEvent();//引发断开连接事件
+                RaiseDisconnectedEvent();//引发断开连接事件
             }
             catch (SocketException exception)
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//引发断开连接事件
+                    RaiseDisconnectedEvent();//引发断开连接事件
                 }
-                this.RaiseErrorEvent(exception);//引发错误事件
+                RaiseErrorEvent(exception);//引发错误事件
             }
         }
 
@@ -163,19 +240,20 @@ namespace SystemModule.Sockets
             try
             {
                 //开始异步发送数据
-                this.cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, this.HandleSendFinished, this.cli);
+                
+                _cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, HandleSendFinished, _cli);
             }
             catch (ObjectDisposedException)
             {
-                this.RaiseDisconnectedEvent();//引发断开连接事件
+                RaiseDisconnectedEvent();//引发断开连接事件
             }
             catch (SocketException exception)
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//引发断开连接事件
+                    RaiseDisconnectedEvent();//引发断开连接事件
                 }
-                this.RaiseErrorEvent(exception);//引发错误事件
+                RaiseErrorEvent(exception);//引发错误事件
             }
         }
 
@@ -183,19 +261,21 @@ namespace SystemModule.Sockets
         {
             try
             {
-                ((Socket)parameter.AsyncState).EndSend(parameter);//结束异步发送数据
+               var length= ((Socket)parameter.AsyncState).EndSend(parameter);//结束异步发送数据
+               // 增加发送计数器
+               Interlocked.Add(ref totalBytesWrite, length);
             }
             catch (ObjectDisposedException)
             {
-                this.RaiseDisconnectedEvent();
+                RaiseDisconnectedEvent();
             }
             catch (SocketException exception)
             {
                 if (exception.ErrorCode == (int)SocketError.ConnectionReset)
                 {
-                    this.RaiseDisconnectedEvent();//引发断开连接事件
+                    RaiseDisconnectedEvent();//引发断开连接事件
                 }
-                this.RaiseErrorEvent(exception);
+                RaiseErrorEvent(exception);
             }
             catch (Exception exception_debug)
             {
@@ -205,18 +285,34 @@ namespace SystemModule.Sockets
 
         private void RaiseDisconnectedEvent()
         {
-            if (null != this.OnDisconnected)
-            {
-                this.OnDisconnected(this, new DSCClientConnectedEventArgs(this.cli));
-            }
             IsConnected = false;
+            if (null != OnDisconnected)
+            {
+                OnDisconnected(this, new DSCClientConnectedEventArgs(_cli));
+            }
         }
 
         private void RaiseErrorEvent(SocketException error)
         {
-            if (null != this.OnError)
+            if (null != OnError)
             {
-                this.OnError(this.cli.RemoteEndPoint, new DSCClientErrorEventArgs(Host, Port, error.ErrorCode, error));
+                OnError(_cli.RemoteEndPoint, new DSCClientErrorEventArgs(_cli.RemoteEndPoint, error.SocketErrorCode, error));
+            }
+            IsConnected = false;
+        }
+
+        public void SendBuffer(byte[] data)
+        {
+            Send(data);
+        }
+
+        public void Close()
+        {
+            if (_cli != null)
+            {
+                _cli.Shutdown(SocketShutdown.Both);
+                _cli.Disconnect(true);//scoket 复用
+                _cli.Close();
             }
         }
 
@@ -224,12 +320,12 @@ namespace SystemModule.Sockets
         {
             try
             {
-                if (cli != null)
+                if (_cli != null)
                 {
-                    this.cli.Shutdown(SocketShutdown.Both);
-                    this.cli.Close();
+                    _cli.Shutdown(SocketShutdown.Both);
+                    _cli.Disconnect(true);//scoket 复用
+                    _cli.Close();
                 }
-
             }
             catch (Exception) { }
         }

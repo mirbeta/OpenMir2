@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SystemModule
 {
-    public class MD5
+    public static class MD5
     {
-        public static byte[] g_MD5EmptyDigest = { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00 };
+        public static readonly byte[] EmptyDigest = { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00 };
 
         private static byte[] _padding = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -80,8 +80,8 @@ namespace SystemModule
             {
                 var t = Source[c];
                 Target[i] = ((uint)(t | (s[c + 1] << 8)));
-                Target[i] = (uint)(Target[i] | (s[c + 2] << 16));
-                Target[i] = (uint)(Target[i] | (s[c + 3] << 24));
+                Target[i] = (Target[i] | (uint)(s[c + 2] << 16));
+                Target[i] = (Target[i] | (uint)(s[c + 3] << 24));
                 c += 4;
             }
         }
@@ -177,10 +177,10 @@ namespace SystemModule
             ii(ref d, a, b, c, Block[11], 10, 0xBD3AF235);
             ii(ref c, d, a, b, Block[2], 15, 0x2AD7D2BB);
             ii(ref b, c, d, a, Block[9], 21, 0xEB86D391);
-            State[0] += (uint)a;
-            State[1] += (uint)b;
-            State[2] += (uint)c;
-            State[3] += (uint)d;
+            State[0] += a;
+            State[1] += b;
+            State[2] += c;
+            State[3] += d;
         }
 
         private static void MD5Init(ref MD5Context Context)
@@ -221,7 +221,7 @@ namespace SystemModule
             {
                 i = 0;
             }
-            Array.Copy(Input, 0, Context.Buffer, 0, (int)PartLen);
+            Array.Copy(Input, 0, Context.Buffer, 0, PartLen);
         }
 
         private static void MD5Final(ref MD5Context Context, ref byte[] Digest)
@@ -259,7 +259,7 @@ namespace SystemModule
         {
             char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
             var result = "";
-            for (var i = 0; i <= 15; i++)
+            for (var i = 0; i < 15; i++)
             {
                 result = result + digits[(d[i] >> 4) & 0x0F] + digits[d[i] & 0x0F];
             }

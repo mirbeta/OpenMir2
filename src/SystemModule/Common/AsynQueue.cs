@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace SystemModule.Common
 {
     [Serializable]
-    public class EventArgs<T> : System.EventArgs
+    public class EventArgs<T> : EventArgs
     {
         public T Argument;
 
@@ -201,7 +201,7 @@ namespace SystemModule.Common
             this.enabled = false;
         }
 
-        private void OnProcessException(System.Exception ex)
+        private void OnProcessException(Exception ex)
         {
             var tempException = ProcessException;
             Interlocked.CompareExchange(ref ProcessException, null, null);

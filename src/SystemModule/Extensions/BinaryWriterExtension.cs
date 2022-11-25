@@ -1,33 +1,57 @@
 ﻿using System;
 using System.IO;
 
-namespace SystemModule
+namespace SystemModule.Extensions
 {
     public static class BinaryWriterExtension
     {
         /// <summary>
-        /// 字符串转Byte数组
+        /// 写入Ascii字符串
         /// </summary>
         /// <returns></returns>
-        public static void Write(this BinaryWriter binaryWriter, string value, int defaultSize)
+        public static void WriteAsciiString(this BinaryWriter binaryWriter, string value, int defaultSize)
         {
-            var buffer = HUtil32.StringToByteAry(value, out int strLen);
-            var reSize = value.Length + 1;
-            var tempSize = defaultSize + 1;
-            if (string.IsNullOrEmpty(value))
+            if (binaryWriter == null)
+                throw new ArgumentNullException(nameof(binaryWriter));
+            if (defaultSize == 0)
+                throw new ArgumentNullException(nameof(defaultSize));
+
+            byte[] buffer;
+            if (string.IsNullOrEmpty(value) && defaultSize > 0)
             {
-                buffer[0] = (byte)defaultSize;
-                reSize = tempSize;
+                buffer = new byte[defaultSize];
             }
             else
             {
-                buffer[0] = (byte)strLen;
-                if (reSize < tempSize)
+                buffer = HUtil32.StringToByte(value);
+            }
+
+            var reSize = buffer.Length + 1;
+            var tempSize = defaultSize;
+            if (reSize < tempSize)
+            {
+                reSize = tempSize;
+            }
+            if (buffer.Length > defaultSize)
+            {
+                Array.Resize(ref buffer, defaultSize);
+                binaryWriter.Write((byte)defaultSize);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(value))
                 {
-                    reSize = tempSize;
+                    binaryWriter.Write((byte)0);
+                }
+                else
+                {
+                    binaryWriter.Write((byte)buffer.Length);
+                }
+                if (buffer.Length != defaultSize)
+                {
+                    Array.Resize(ref buffer, defaultSize);
                 }
             }
-            Array.Resize(ref buffer, reSize);
             binaryWriter.Write(buffer, 0, buffer.Length);
         }
     }

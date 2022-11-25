@@ -1,9 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace LoginSvr
+namespace LoginSvr.Conf
 {
     public class Config
     {
+        /// <summary>
+        /// 是否显示调试日志
+        /// </summary>
+        public bool ShowDebugLog;
+        /// <summary>
+        /// 日志等级
+        /// </summary>
+        public int ShowLogLevel;
         public string sDBServer;
         public int nDBSPort;
         public string sFeeServer;
@@ -17,22 +25,18 @@ namespace LoginSvr
         public string sMonAddr;
         public int nMonPort;
         public string sGateIPaddr;
-        public string sFeedIDList;
-        public string sFeedIPList;
+        /// <summary>
+        /// 测试
+        /// </summary>
         public bool TestServer;
         /// <summary>
         /// 是否允许创建账号
         /// </summary>
-        public bool boEnableMakingID;
-        public bool boDynamicIPMode;
-        public int nReadyServers;
-        public IList<TConnInfo> SessionList;
+        public bool EnableMakingID;
+        public bool DynamicIPMode;
         public IList<string> ServerNameList;
-        public Dictionary<string, int> AccountCostList;
-        public Dictionary<string, int> IPaddrCostList;
-        public bool ShowDetailMsg;
-        public int nRouteCount;
-        public TGateRoute[] GateRoute;
+        public int RouteCount;
+        public GateRoute[] GateRoute;
         public string ConnctionString;
 
         public Config()
@@ -49,17 +53,14 @@ namespace LoginSvr
             nServerPort = 5600;
             sMonAddr = "*";
             nMonPort = 3000;
-            sFeedIDList = "FeedIDList.txt";
-            sFeedIPList = "FeedIPList.txt";
             TestServer = true;
-            boEnableMakingID = true;
-            boDynamicIPMode = false;
-            nReadyServers = 0;
-            ShowDetailMsg = false;
-            GateRoute = new TGateRoute[60];
-            ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=Mir2;";
+            EnableMakingID = true;
+            DynamicIPMode = false;
+            GateRoute = new GateRoute[60];
+            ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2_account;";
+            ShowDebugLog = false;
+            ShowLogLevel = 1;
         }
     }
-
 }
 

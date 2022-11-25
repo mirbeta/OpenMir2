@@ -1,3 +1,5 @@
+using GameGate.Conf;
+using GameGate.Filters;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 using System.Threading;
@@ -8,44 +10,38 @@ namespace GameGate
     public class AppService : BackgroundService
     {
         private readonly ServerApp _serverApp;
-        private LogQueue LogQueue => LogQueue.Instance;
-        private ConfigManager ConfigManager => ConfigManager.Instance;
+        private static MirLog LogQueue => MirLog.Instance;
+        private static ConfigManager ConfigManager => ConfigManager.Instance;
 
         public AppService(ServerApp serverApp)
         {
             _serverApp = serverApp;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => Debug.WriteLine($"GameGate is stopping."));
-            LogQueue.Enqueue("服务已启动成功...", 2);
-            LogQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);
-            LogQueue.Enqueue("网站:http://www.gameofmir.com", 0);
-            LogQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
-            LogQueue.Enqueue("智能反外挂程序已启动...", 0);
-            LogQueue.Enqueue("智能反外挂程序云端已连接...", 0);
-            _serverApp.StartService();
-            await _serverApp.Start();
+            _serverApp.StartService(stoppingToken);
+            return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            LogQueue.EnqueueDebugging("GameGate is starting.");
-            LogQueue.Enqueue("正在启动服务...", 2);
-            LogQueue.Enqueue("正在加载配置信息...", 3);
+            LogQueue.DebugLog("GameGate is starting.");
+            LogQueue.Log("正在启动服务...", 2);
+            LogQueue.Log("正在加载配置信息...", 3);
             ConfigManager.LoadConfig();
-            GateShare.HWFilter = new HardwareFilter();
-            LogQueue.Enqueue("配置信息加载完成...", 3);
+            GateShare.HardwareFilter = new HardwareFilter();
+            LogQueue.Log("配置信息加载完成...", 3);
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             Debug.WriteLine("GameGate is stopping.");
-            LogQueue.Enqueue("正在停止服务...", 2);
+            LogQueue.Log("正在停止服务...", 2);
             _serverApp.StopService();
-            LogQueue.Enqueue("服务停止成功...", 2);
+            LogQueue.Log("服务停止成功...", 2);
             return base.StopAsync(cancellationToken);
         }
     }

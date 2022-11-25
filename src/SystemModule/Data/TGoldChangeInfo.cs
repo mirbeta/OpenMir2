@@ -1,8 +1,9 @@
-﻿namespace SystemModule;
-
-public class TGoldChangeInfo
+﻿namespace SystemModule.Data
 {
-    public string sGameMasterName;
-    public string sGetGoldUser;
-    public int nGold;
+    public class TGoldChangeInfo
+    {
+        public string sGameMasterName;
+        public string sGetGoldUser;
+        public int nGold;
+    }
 }

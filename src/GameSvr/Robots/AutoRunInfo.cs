@@ -1,4 +1,4 @@
-﻿namespace GameSvr
+﻿namespace GameSvr.Robots
 {
     public class AutoRunInfo
     {

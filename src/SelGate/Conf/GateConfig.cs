@@ -6,7 +6,7 @@ namespace SelGate.Conf
     /// </summary>
     public class GateConfig
     {
-        public int m_nShowLogLevel = 0;
+        public int ShowLogLevel = 0;
         public bool ShowDebugLog = false;
         public int m_nGateCount = 0;
         public bool m_fCheckNewIDOfIP = false;
@@ -54,7 +54,7 @@ namespace SelGate.Conf
 
         public GateConfig()
         {
-            m_nShowLogLevel = 3;
+            ShowLogLevel = 3;
             m_nGateCount = 1;
             m_fCheckNewIDOfIP = true;
             m_fCheckNullSession = true;

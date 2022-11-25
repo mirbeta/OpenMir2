@@ -1,4 +1,8 @@
-﻿using SystemModule;
+﻿using GameSvr.Planes;
+using GameSvr.Services;
+using Microsoft.Extensions.Logging;
+using SystemModule;
+using SystemModule.Data;
 
 namespace GameSvr
 {
@@ -7,50 +11,59 @@ namespace GameSvr
         /// <summary>
         /// 运行时间
         /// </summary>
-        private int _runTimeTick = 0;
+        private int _runTimeTick;
+        protected readonly ILogger<ServerBase> Logger;
+        private Thread _worldThread;
 
-        protected ServerBase()
+        protected ServerBase(ILogger<ServerBase> logger)
         {
+            Logger = logger;
             _runTimeTick = HUtil32.GetTickCount();
         }
 
-        public void StartService()
+        public void StartWorld(CancellationToken stoppingToken)
         {
-            M2Share.UserEngine.Start();
             M2Share.DataServer.Start();
             M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
+            M2Share.GateMgr.Start(stoppingToken);
+            _worldThread = new Thread(Execute);
+            _worldThread.IsBackground = true;
+            _worldThread.Start();
         }
 
         public void Stop()
         {
             M2Share.DataServer.Stop();
-            M2Share.GateManager.Stop();
-            M2Share.UserEngine.Stop();
+            M2Share.GateMgr.Stop();
         }
 
-        public void Run()
+        private void Execute()
         {
-            M2Share.GateManager.Run();
-            IdSrvClient.Instance.Run();
-            M2Share.UserEngine.Run();
-            ProcessGameRun();
-            if (M2Share.nServerIndex == 0)
+            while (M2Share.StartReady)
             {
-                SnapsmService.Instance.Run();
-            }
-            else
-            {
-                SnapsmClient.Instance.Run();
+                M2Share.GateMgr.Run();
+                IdSrvClient.Instance.Run();
+                M2Share.WorldEngine.Run();
+                ProcessGameRun();
+                if (M2Share.ServerIndex == 0)
+                {
+                    PlanesServer.Instance.Run();
+                }
+                else
+                {
+                    PlanesClient.Instance.Run();
+                }
+                Thread.Sleep(20);
             }
         }
 
         private void ProcessGameNotice()
         {
-            if (M2Share.g_Config.boSendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.g_Config.dwSendOnlineTime)
+            if (M2Share.Config.SendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.Config.SendOnlineTime)
             {
                 M2Share.g_dwSendOnlineTick = HUtil32.GetTickCount();
-                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.UserEngine.OnlinePlayObject * (M2Share.g_Config.nSendOnlineCountRate / 10)));
-                M2Share.UserEngine.SendBroadCastMsg(sMsg, MsgType.System);
+                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (M2Share.Config.SendOnlineCountRate / 10)));
+                M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }
 
@@ -65,26 +78,30 @@ namespace GameSvr
             HUtil32.EnterCriticalSections(M2Share.ProcessHumanCriticalSection);
             try
             {
-                M2Share.EventManager.Run();
-                M2Share.RobotManage.Run();
+                M2Share.WorldEngine.Execute();
+                M2Share.RobotMgr.Run();
+                M2Share.EventMgr.Run();
                 if ((HUtil32.GetTickCount() - _runTimeTick) > 10000)
                 {
                     _runTimeTick = HUtil32.GetTickCount();
-                    M2Share.GuildManager.Run();
-                    M2Share.CastleManager.Run();
-                    var denyList = new List<string>(M2Share.g_DenySayMsgList.Count);
-                    foreach (var item in M2Share.g_DenySayMsgList)
+                    M2Share.GuildMgr.Run();
+                    M2Share.CastleMgr.Run();
+                    if (M2Share.DenySayMsgList.Count > 0)
                     {
-                        if (HUtil32.GetTickCount() > item.Value)
+                        var denyList = new List<string>(M2Share.DenySayMsgList.Count);
+                        foreach (var item in M2Share.DenySayMsgList)
                         {
-                            denyList.Add(item.Key);
+                            if (HUtil32.GetTickCount() > item.Value)
+                            {
+                                denyList.Add(item.Key);
+                            }
                         }
-                    }
-                    for (var i = 0; i < denyList.Count; i++)
-                    {
-                        if (M2Share.g_DenySayMsgList.TryRemove(denyList[i], out var denyName))
+                        for (var i = 0; i < denyList.Count; i++)
                         {
-                            M2Share.MainOutMessage($"解除玩家[{denyList[i]}]禁言");
+                            if (M2Share.DenySayMsgList.TryRemove(denyList[i], out var denyName))
+                            {
+                                Logger.LogDebug($"解除玩家[{denyList[i]}]禁言");
+                            }
                         }
                     }
                 }

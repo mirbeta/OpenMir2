@@ -1,9 +1,10 @@
-﻿namespace SystemModule;
-
-public enum MonStatus
+﻿namespace SystemModule.Data
 {
-    KillHuman,
-    UnderFire,
-    Die,
-    MonGen
+    public enum MonStatus
+    {
+        KillHuman,
+        UnderFire,
+        Die,
+        MonGen
+    }
 }

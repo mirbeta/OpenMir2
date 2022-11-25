@@ -1,45 +1,66 @@
 using LoginGate.Conf;
+using LoginGate.Services;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule.Logger;
 
 namespace LoginGate
 {
     public class AppService : BackgroundService
     {
-        private readonly ServerApp _serverApp;
-        private readonly LogQueue _logQueue = LogQueue.Instance;
-        private ConfigManager ConfigManager => ConfigManager.Instance;
+        private readonly MirLogger _logger;
+        private readonly ConfigManager _configManager;
+        private readonly ServerManager _serverManager;
+        private readonly ClientManager _clientManager;
 
-        public AppService(ServerApp serverApp)
+        public AppService(MirLogger logger, ConfigManager configManager, ServerManager serverManager, ClientManager clientManager)
         {
-            _serverApp = serverApp;
+            _logger = logger;
+            _configManager = configManager;
+            _serverManager = serverManager;
+            _clientManager = clientManager;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logQueue.EnqueueDebugging($"GameGate is stopping."));
-            await _serverApp.Start();
+            stoppingToken.Register(() => _logger.DebugLog("LoginGate is stopping."));
+            _serverManager.Start();
+            _clientManager.Start();
+            _serverManager.ProcessLoginMessage(stoppingToken);
+            _clientManager.ProcessSendMessage(stoppingToken);
+            return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logQueue.EnqueueDebugging($"GameGate is starting.");
-            _logQueue.Enqueue("正在启动服务...", 2);
             GateShare.Initialization();
-            ConfigManager.LoadConfig();
-            _serverApp.StartService();
-            _logQueue.Enqueue("服务已启动成功...", 2);
-            _logQueue.Enqueue("欢迎使用翎风系列游戏软件...", 0);
-            _logQueue.Enqueue("网站:http://www.gameofmir.com", 0);
-            _logQueue.Enqueue("论坛:http://bbs.gameofmir.com", 0);
-            return base.StartAsync(cancellationToken);
+            _configManager.LoadConfig();
+            Initialization();
+            _serverManager.Start();
+            _clientManager.Start();
+            _serverManager.ProcessLoginMessage(cancellationToken);
+            _clientManager.ProcessSendMessage(cancellationToken);
+            _logger.LogInformation("服务已启动成功...", 2);
+            _logger.LogInformation("欢迎使用翎风系列游戏软件...", 0);
+            _logger.LogInformation("网站:http://www.gameofmir.com", 0);
+            _logger.LogInformation("论坛:http://bbs.gameofmir.com", 0);
+            return Task.CompletedTask;
+        }
+
+        private void Initialization()
+        {
+            _serverManager.Initialization();
+            _clientManager.Initialization();
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logQueue.EnqueueDebugging($"GameGate is stopping.");
-            _serverApp.StopService();
+            _logger.DebugLog("LoginGate is stopping.");
+            _logger.LogInformation("正在停止服务...", 2);
+            _serverManager.Stop();
+            _clientManager.Stop();
+            _logger.LogInformation("服务停止成功...", 2);
             return base.StopAsync(cancellationToken);
         }
     }

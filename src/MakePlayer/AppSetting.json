@@ -1,0 +1,11 @@
+{
+  "MakePlay": {
+    "ServerName": "热血传奇",
+    "Address": "10.10.0.102",
+    "Port": 7000,
+    "ChrCount": 1,
+    "TotalChrCount": 5000,
+    "NewAccount": false,
+    "LoginAccount": "play"
+  }
+}
