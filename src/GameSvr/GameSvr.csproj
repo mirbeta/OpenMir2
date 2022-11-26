@@ -13,22 +13,36 @@
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 		<Description>网络游戏数据处理引擎</Description>
 	</PropertyGroup>
+	
 	<Choose>
-		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+		<When Condition="$(Configuration)=='Release'">
 			<PropertyGroup>
-				<OutputPath>D:\MirServer\Mir200</OutputPath>
+				<DebugSymbols>false</DebugSymbols>
+				<Optimize>true</Optimize>
+				<DefineConstants>TRACE</DefineConstants>
 			</PropertyGroup>
 		</When>
-		<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-			<PropertyGroup>
-				<OutputPath>/Volumes/Data/Mirserver/Mir200</OutputPath>
-			</PropertyGroup>
+
+		<When Condition="$(Configuration)=='Debug'">
+			<Choose>
+				<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+					<PropertyGroup>
+						<OutputPath>D:\MirServer\Mir200</OutputPath>
+					</PropertyGroup>
+				</When>
+				<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+					<PropertyGroup>
+						<OutputPath>/Volumes/Data/Mirserver/Mir200</OutputPath>
+					</PropertyGroup>
+				</When>
+				<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+					<PropertyGroup>
+						<OutputPath>/Volumes/opt/Mirserver/Mir200</OutputPath>
+					</PropertyGroup>
+				</When>
+			</Choose>
 		</When>
-		<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-			<PropertyGroup>
-				<OutputPath>/Volumes/opt/Mirserver/Mir200</OutputPath>
-			</PropertyGroup>
-		</When>
+		
 	</Choose>
 
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
