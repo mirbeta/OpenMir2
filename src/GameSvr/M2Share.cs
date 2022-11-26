@@ -442,7 +442,6 @@ namespace GameSvr
         public static string g_sYouKilledByMsg = "你被{0}杀害了!!!";
         public static string g_sYouprotectedByLawOfDefense = "[你受到正当规则保护。]";
         public static string g_sYourUseItemIsNul = "你的{0}处没有放上装备!!!";
-
         public const string g_sVersion = "引擎版本: 1.00 Build 20161001";
         public const string g_sUpDateTime = "更新日期: 2016/10/01";
         private const string sSTATUS_FAIL = "+FL/{0}";
