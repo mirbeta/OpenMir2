@@ -8,21 +8,34 @@
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 		<LangVersion>10</LangVersion>
 	</PropertyGroup>
+	
 	<Choose>
-		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+		<When Condition="$(Configuration)=='Release'">
 			<PropertyGroup>
-				<OutputPath>D:\MirServer\LoginGate</OutputPath>
+				<DebugSymbols>false</DebugSymbols>
+				<Optimize>true</Optimize>
+				<DefineConstants>TRACE</DefineConstants>
 			</PropertyGroup>
 		</When>
-		<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-			<PropertyGroup>
-				<OutputPath>/Volumes/Data/Mirserver/LoginGate</OutputPath>
-			</PropertyGroup>
-		</When>
-		<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-			<PropertyGroup>
-				<OutputPath>/Volumes/opt/Mirserver/LoginGate</OutputPath>
-			</PropertyGroup>
+
+		<When Condition="$(Configuration)=='Debug'">
+			<Choose>
+				<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+					<PropertyGroup>
+						<OutputPath>D:\MirServer\LoginGate</OutputPath>
+					</PropertyGroup>
+				</When>
+				<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+					<PropertyGroup>
+						<OutputPath>/Volumes/Data/Mirserver/LoginGate</OutputPath>
+					</PropertyGroup>
+				</When>
+				<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+					<PropertyGroup>
+						<OutputPath>/Volumes/opt/Mirserver/LoginGate</OutputPath>
+					</PropertyGroup>
+				</When>
+			</Choose>
 		</When>
 	</Choose>
 	
