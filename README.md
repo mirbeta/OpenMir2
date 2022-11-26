@@ -17,7 +17,7 @@ This project refers to the network Delphi code, which can be used with the origi
 2. LoginSvr (account login service, responsible for account registration, login, server selection, etc.). 
 3. GameSvr (game data engine, responsible for game data processing interaction, spell casting, walking, etc.). 
 4. GameGate (game gateway, responsible for sending player data to the game engine, the data interacted by players are all in this service and then forwarded to the data engine for processing). 
-5. SelGate (role gateway, responsible for role query, new creation, deletion, etc., and finally processed by DBSvr, the service will not be able to obtain character data after the client logs in if the service is not activated). 
+5. SelGate (character gateway, responsible for player query, new creation, deletion, etc., and finally processed by DBSvr, the service will not be able to obtain character data after the client logs in if the service is not activated). 
 6. LoginGate (login gateway, responsible for forwarding the login data to LoginSvr for processing, the service does not start the client and cannot connect to the game). 
 
 ### Images
