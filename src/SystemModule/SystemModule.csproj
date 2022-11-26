@@ -16,7 +16,7 @@
       <DefineConstants>TRACE;ISWOL</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="MemoryPack" Version="1.7.6" />
+      <PackageReference Include="MemoryPack" Version="1.8.8" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
       <PackageReference Include="NLog" Version="5.0.5" />
