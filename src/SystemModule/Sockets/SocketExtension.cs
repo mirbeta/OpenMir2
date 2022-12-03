@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using SystemModule.Packets.ServerPackets;
 
 namespace SystemModule.Sockets
 {
@@ -15,8 +17,7 @@ namespace SystemModule.Sockets
             }
             if (socket.Connected)
             {
-                var buff = Encoding.GetEncoding("gb2312").GetBytes(str);
-                socket.Send(buff);
+                socket.Send(HUtil32.GetBytes(str));
                 return true;
             }
             return false;
@@ -30,18 +31,7 @@ namespace SystemModule.Sockets
             }
             if (socket.Connected)
             {
-                var buff = Encoding.GetEncoding("gb2312").GetBytes(str);
-                socket.Send(buff);
-                return true;
-            }
-            return false;
-        }
-
-        public static bool SendBuffer(this Socket socket, byte[] buffer)
-        {
-            if (socket.Connected)
-            {
-                socket.Send(buffer);
+                socket.Send( HUtil32.GetBytes(str));
                 return true;
             }
             return false;
@@ -53,8 +43,7 @@ namespace SystemModule.Sockets
             {
                 throw new Exception("endPoint is null");
             }
-            var ipEndPoint = ((IPEndPoint)endPoint);
-            return ipEndPoint.Address.ToString();
+            return ((IPEndPoint)endPoint).Address.ToString();
         }
 
         public static int GetPort(this EndPoint endPoint)

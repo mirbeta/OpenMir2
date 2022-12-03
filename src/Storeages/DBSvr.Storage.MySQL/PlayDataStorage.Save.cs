@@ -169,7 +169,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void ComparerUserItem(UserItem[] newItems, UserItem[] oldItems, ref UserItem[] chg, ref UserItem[] del)
+        private void ComparerUserItem(ServerUserItem[] newItems, ServerUserItem[] oldItems, ref ServerUserItem[] chg, ref ServerUserItem[] del)
         {
             for (var i = 0; i < newItems.Length; i++)
             {
@@ -202,15 +202,15 @@ namespace DBSvr.Storage.MySQL
         private const string ClearUseItemSql = "UPDATE characters_item SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
         private const string UpdateUseItemSql = "UPDATE characters_item SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax WHERE PlayerId = @PlayerId AND Position = @Position;";
 
-        private void SaveItem(StorageContext context, int playerId, UserItem[] userItems)
+        private void SaveItem(StorageContext context, int playerId, ServerUserItem[] userItems)
         {
             var useSize = userItems.Length;
             var playData = new PlayerDataInfo();
             GetItemRecord(playerId, context, ref playData);
             var oldItems = playData.Data.HumItems;
             var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
-            var delItem = new UserItem[useSize];
-            var chgList = new UserItem[useSize];
+            var delItem = new ServerUserItem[useSize];
+            var chgList = new ServerUserItem[useSize];
             ComparerUserItem(userItems, oldItems, ref chgList, ref delItem);
             try
             {
@@ -280,7 +280,7 @@ namespace DBSvr.Storage.MySQL
         private const string ClearBagItemSql = "UPDATE characters_bagitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
         private const string UpdateBagItemSql = "UPDATE characters_bagitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax WHERE PlayerId = @PlayerId AND Position = @Position;";
 
-        private void SaveBagItem(StorageContext context, int playerId, UserItem[] bagItems)
+        private void SaveBagItem(StorageContext context, int playerId, ServerUserItem[] bagItems)
         {
             try
             {
@@ -289,8 +289,8 @@ namespace DBSvr.Storage.MySQL
                 var oldItems = playData.Data.BagItems;
                 var bagSize = bagItems.Length;
                 var newItems = bagItems;
-                var delItem = new UserItem[bagSize];
-                var chgList = new UserItem[bagSize];
+                var delItem = new ServerUserItem[bagSize];
+                var chgList = new ServerUserItem[bagSize];
                 ComparerUserItem(newItems, oldItems, ref chgList, ref delItem);
                 if (delItem.Length > 0)
                 {
@@ -356,7 +356,7 @@ namespace DBSvr.Storage.MySQL
         private const string ClearStorageItemSql = "UPDATE characters_storageitem SET Position = @Position, MakeIndex = 0, StdIndex = 0, Dura = 0, DuraMax = 0 WHERE PlayerId = @PlayerId  AND Position = @Position AND MakeIndex = @MakeIndex AND StdIndex = @StdIndex;";
         private const string UpdateStorageItemSql = "UPDATE characters_storageitem SET Position = @Position, MakeIndex =@MakeIndex, StdIndex = @StdIndex, Dura = @Dura, DuraMax = @DuraMax WHERE PlayerId = @PlayerId AND Position = @Position;";
 
-        private void SaveStorageItem(StorageContext context, int playerId, UserItem[] storageItems)
+        private void SaveStorageItem(StorageContext context, int playerId, ServerUserItem[] storageItems)
         {
             try
             {
@@ -365,8 +365,8 @@ namespace DBSvr.Storage.MySQL
                 GetStorageRecord(playerId, context, ref playData);
                 var oldItems = playData.Data.StorageItems;
                 var newItems = storageItems;
-                var delItem = new UserItem[storageSize];
-                var chgList = new UserItem[storageSize];
+                var delItem = new ServerUserItem[storageSize];
+                var chgList = new ServerUserItem[storageSize];
                 ComparerUserItem(newItems, oldItems, ref chgList, ref delItem);
                 if (delItem.Length > 0)
                 {
@@ -539,7 +539,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void UpdateItemAttr(StorageContext context, int playerId, UserItem[] userItems)
+        private void UpdateItemAttr(StorageContext context, int playerId, ServerUserItem[] userItems)
         {
             try
             {

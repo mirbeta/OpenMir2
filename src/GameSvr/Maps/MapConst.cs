@@ -32,7 +32,7 @@ namespace GameSvr.Maps
         /// 可以拾取的时间
         /// </summary>
         public int CanPickUpTick;
-        public UserItem UserItem;
+        public ClientUserItem UserItem;
     }
 
     /// <summary>

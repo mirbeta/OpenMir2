@@ -384,7 +384,7 @@ namespace DBSvr.Storage.MySQL
                 while (dr.Read())
                 {
                     var nPosition = dr.GetInt32("Position");
-                    humanRcd.Data.HumItems[nPosition] = new UserItem();
+                    humanRcd.Data.HumItems[nPosition] = new ServerUserItem();
                     humanRcd.Data.HumItems[nPosition].MakeIndex = dr.GetInt32("MakeIndex");
                     humanRcd.Data.HumItems[nPosition].Index = dr.GetUInt16("StdIndex");
                     humanRcd.Data.HumItems[nPosition].Dura = dr.GetUInt16("Dura");
@@ -412,7 +412,7 @@ namespace DBSvr.Storage.MySQL
                 while (dr.Read())
                 {
                     var nPosition = dr.GetInt32("Position");
-                    humanRcd.Data.BagItems[nPosition] = new UserItem();
+                    humanRcd.Data.BagItems[nPosition] = new ServerUserItem();
                     humanRcd.Data.BagItems[nPosition].MakeIndex = dr.GetInt32("MakeIndex");
                     humanRcd.Data.BagItems[nPosition].Index = dr.GetUInt16("StdIndex");
                     humanRcd.Data.BagItems[nPosition].Dura = dr.GetUInt16("Dura");
@@ -440,7 +440,7 @@ namespace DBSvr.Storage.MySQL
                 while (dr.Read())
                 {
                     var nPosition = dr.GetInt32("Position");
-                    humanRcd.Data.StorageItems[nPosition] = new UserItem();
+                    humanRcd.Data.StorageItems[nPosition] = new ServerUserItem();
                     humanRcd.Data.StorageItems[nPosition].MakeIndex = dr.GetInt32("MakeIndex");
                     humanRcd.Data.StorageItems[nPosition].Index = dr.GetUInt16("StdIndex");
                     humanRcd.Data.StorageItems[nPosition].Dura = dr.GetUInt16("Dura");
@@ -607,7 +607,7 @@ namespace DBSvr.Storage.MySQL
             return true;
         }
 
-        private void QueryItemAttr(StorageContext context, int playerId, ref UserItem[] userItems)
+        private void QueryItemAttr(StorageContext context, int playerId, ref ServerUserItem[] userItems)
         {
             var makeIndexs = userItems.Where(x => x != null && x.MakeIndex > 0).Select(x => x.MakeIndex).ToList();
             if (!makeIndexs.Any())

@@ -32,40 +32,27 @@ namespace GameSvr.Services
         private static bool GetDBSockMsg(int queryId, ref int nIdent, ref int nRecog, ref byte[] data, int dwTimeOut, bool boLoadRcd)
         {
             var result = false;
-            var boLoadDBOK = false;
-            ServerRequestData respPack = null;
-            const string sLoadDBTimeOut = "[RunDB] 读取人物数据超时...";
-            const string sSaveDBTimeOut = "[RunDB] 保存人物数据超时...";
-            var timeOutTick = HUtil32.GetTickCount();
-            if ((HUtil32.GetTickCount() - timeOutTick) > dwTimeOut)
-            {
-                Logger.Debug("获取DBServer消息超时...");
-                return false;
-            }
             HUtil32.EnterCriticalSection(M2Share.UserDBSection);
             try
             {
                 if (ReceivedMap.ContainsKey(queryId))
                 {
+                    ServerRequestData respPack;
                     if (ReceivedMap.TryGetValue(queryId, out respPack))
                     {
                         if (respPack == null)
                         {
                             return false;
                         }
-                        if (respPack.PacketLen > 0)
+                        var serverPacket = ServerPackSerializer.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
+                        if (serverPacket == null)
                         {
-                            var serverPacket = ServerPackSerializer.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
-                            if (serverPacket == null)
-                            {
-                                return false;
-                            }
-                            nIdent = serverPacket.Ident;
-                            nRecog = serverPacket.Recog;
-                            data = respPack.Packet;
-                            boLoadDBOK = true;
-                            result = true;
+                            return false;
                         }
+                        nIdent = serverPacket.Ident;
+                        nRecog = serverPacket.Recog;
+                        data = respPack.Packet;
+                        result = true;
                     }
                     ReceivedMap.TryRemove(queryId, out var delData);
                 }
@@ -74,18 +61,10 @@ namespace GameSvr.Services
             {
                 HUtil32.LeaveCriticalSection(M2Share.UserDBSection);
             }
-            /*if (!boLoadDBOK)
-            {
-                M2Share.Log.LogError(boLoadRcd ? sLoadDBTimeOut : sSaveDBTimeOut);
-            }
-            if ((HUtil32.GetTickCount() - timeOutTick) > M2Share.dwRunDBTimeMax)
-            {
-                M2Share.dwRunDBTimeMax = HUtil32.GetTickCount() - timeOutTick;
-            }*/
             return result;
         }
 
-        public static bool GetPlayData(int queryId,ref PlayerDataInfo playerData)
+        public static bool GetPlayData(int queryId, ref PlayerDataInfo playerData)
         {
             if (!loadPlayDataMap.ContainsKey(queryId))
                 return false;
@@ -244,4 +223,3 @@ namespace GameSvr.Services
         }
     }
 }
-

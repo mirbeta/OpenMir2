@@ -101,7 +101,7 @@ namespace GameSvr.Items
             return result;
         }
 
-        private void UpgradeRandomWeapon(UserItem pu)
+        private void UpgradeRandomWeapon(ClientUserItem pu)
         {
             var up = GetUpgrade(12, 15);
             if (M2Share.RandomNumber.Random(15) == 0)
@@ -153,7 +153,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void UpgradeRandomDress(UserItem pu)
+        private void UpgradeRandomDress(ClientUserItem pu)
         {
             var up = GetUpgrade(6, 15);
             if (M2Share.RandomNumber.Random(30) == 0)
@@ -189,7 +189,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void UpgradeRandomNecklace(UserItem pu)
+        private void UpgradeRandomNecklace(ClientUserItem pu)
         {
             var up = GetUpgrade(6, 30);
             if (M2Share.RandomNumber.Random(60) == 0)
@@ -225,7 +225,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void UpgradeRandomBarcelet(UserItem pu)
+        private void UpgradeRandomBarcelet(ClientUserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(20) == 0)
@@ -261,7 +261,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void UpgradeRandomNecklace19(UserItem pu)
+        private void UpgradeRandomNecklace19(ClientUserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
@@ -297,7 +297,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void UpgradeRandomRings(UserItem pu)
+        private void UpgradeRandomRings(ClientUserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(30) == 0)
@@ -323,7 +323,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void UpgradeRandomRings23(UserItem pu)
+        private void UpgradeRandomRings23(ClientUserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
@@ -359,7 +359,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void UpgradeRandomHelmet(UserItem pu)
+        private void UpgradeRandomHelmet(ClientUserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
@@ -395,7 +395,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void RandomSetUnknownHelmet(UserItem pu)
+        private void RandomSetUnknownHelmet(ClientUserItem pu)
         {
             var up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
             if (up > 0)
@@ -469,7 +469,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void RandomSetUnknownRing(UserItem pu)
+        private void RandomSetUnknownRing(ClientUserItem pu)
         {
             var up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
             if (up > 0)
@@ -525,7 +525,7 @@ namespace GameSvr.Items
             }
         }
 
-        private void RandomSetUnknownBracelet(UserItem pu)
+        private void RandomSetUnknownBracelet(ClientUserItem pu)
         {
             var up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
             if (up > 0)
@@ -650,7 +650,7 @@ namespace GameSvr.Items
             clientStdItem.Item.Reference = Reference;
         }
 
-        public int GetUpgradeStdItem(UserItem userItem, ref ClientItem clientItem)
+        public int GetUpgradeStdItem(ClientUserItem userItem, ref ClientItem clientItem)
         {
             CopyItemToClientItem(ref clientItem);
             var UCount = 0;
@@ -1100,7 +1100,7 @@ namespace GameSvr.Items
             return (byte)NaturalAttackSpeed(iTemp);
         }
 
-        public void RandomUpgradeItem(UserItem pu)
+        public void RandomUpgradeItem(ClientUserItem pu)
         {
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(pu.Index);
             if (stdItem != null)
@@ -1139,7 +1139,7 @@ namespace GameSvr.Items
             }
         }
 
-        public void RandomSetUnknownItem(UserItem pu)
+        public void RandomSetUnknownItem(ClientUserItem pu)
         {
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(pu.Index);
             if (stdItem != null)

@@ -15,12 +15,13 @@
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
       <DefineConstants>TRACE;ISWOL</DefineConstants>
     </PropertyGroup>
+
     <ItemGroup>
-      <PackageReference Include="MemoryPack" Version="1.8.8" />
+      <PackageReference Include="MemoryPack" Version="1.8.13" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-      <PackageReference Include="NLog" Version="5.0.5" />
-      <PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
+      <PackageReference Include="NLog" Version="5.1.0" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="5.2.0" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     </ItemGroup>
     <ItemGroup>

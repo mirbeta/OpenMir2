@@ -1,5 +1,5 @@
-﻿using MemoryPack;
-using System.IO;
+﻿using System.IO;
+using SystemModule.Packets.ServerPackets;
 
 namespace SystemModule.Packets.ClientPackets
 {
@@ -11,7 +11,7 @@ namespace SystemModule.Packets.ClientPackets
         public const int WeaponUpgrade = 10;
     }
 
-    public partial class UserItem : ClientPackage
+    public class ClientUserItem : ClientPackage
     {
         /// <summary>
         /// 唯一ID
@@ -35,14 +35,13 @@ namespace SystemModule.Packets.ClientPackets
         public byte ColorB { get; set; }
         public char[] Prefix { get; set; }
 
-        public UserItem()
+        public ClientUserItem()
         {
             Desc = new byte[14];
             Prefix = new char[13];
         }
 
-        [MemoryPackConstructor]
-        public UserItem(UserItem userItem)
+        public ClientUserItem(ClientUserItem userItem)
         {
             MakeIndex = userItem.MakeIndex;
             Index = userItem.Index;
@@ -71,6 +70,22 @@ namespace SystemModule.Packets.ClientPackets
             writer.Write(ColorG);
             writer.Write(ColorB);
             writer.Write(Prefix);
+        }
+
+        public ServerUserItem ToServerItem()
+        {
+            return new ServerUserItem
+            {
+                MakeIndex = MakeIndex,
+                Index = Index,
+                Dura = Dura,
+                DuraMax = DuraMax,
+                Desc = Desc,
+                ColorR = ColorR,
+                ColorG = ColorG,
+                ColorB = ColorB,
+                Prefix = Prefix
+            };
         }
     }
 }

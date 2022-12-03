@@ -1,4 +1,3 @@
-using SelGate.Package;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.Packets.ServerPackets;
 
 namespace SelGate.Services
 {
@@ -15,16 +15,16 @@ namespace SelGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<TMessageData> _sendQueue = null;
+        private readonly Channel<ServerDataMessage> _sendQueue = null;
         private readonly ConcurrentDictionary<int, ClientSession> _connectionSessions;
 
         public SessionManager()
         {
             _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
-            _sendQueue = Channel.CreateUnbounded<TMessageData>();
+            _sendQueue = Channel.CreateUnbounded<ServerDataMessage>();
         }
 
-        public ChannelWriter<TMessageData> SendQueue => _sendQueue.Writer;
+        public ChannelWriter<ServerDataMessage> SendQueue => _sendQueue.Writer;
 
         /// <summary>
         /// 处理DBSvr发送过来的消息
@@ -37,25 +37,12 @@ namespace SelGate.Services
                 {
                     while (_sendQueue.Reader.TryRead(out var message))
                     {
-                        var userSession = GetSession(message.SessionId);
+                        var userSession = GetSession(message.SocketId);
                         if (userSession == null)
                         {
                             continue;
                         }
-                        if (message.Body[0] == (byte)'+')//收到DB服务器发过来的关闭会话请求
-                        {
-                            if (message.Body[1] == (byte)'-')
-                            {
-                                userSession.CloseSession();
-                                Console.WriteLine("收到DBSvr关闭会话请求");
-                            }
-                            else
-                            {
-                                userSession.ClientThread.KeepAliveTick = HUtil32.GetTickCount();
-                            }
-                            continue;
-                        }
-                        userSession.ProcessSvrData(message);
+                        userSession.ProcessSvrData(message.Data);
                     }
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);

@@ -1989,7 +1989,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearNeedItems(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            UserItem UserItem;
+            ClientUserItem UserItem;
             var nNeed = HUtil32.StrToInt(QuestActionInfo.sParam1, -1);
             if (nNeed < 0)
             {
@@ -2022,7 +2022,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearMakeItems(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            UserItem UserItem;
+            ClientUserItem UserItem;
             string sItemName = QuestActionInfo.sParam1;
             var nMakeIndex = QuestActionInfo.nParam2;
             var boMatchName = QuestActionInfo.sParam3 == "1";
@@ -2613,7 +2613,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGiveItem(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            UserItem UserItem;
+            ClientUserItem UserItem;
             var sItemName = QuestActionInfo.sParam1;
             var nItemCount = QuestActionInfo.nParam2;
             if (string.IsNullOrEmpty(sItemName) || nItemCount <= 0)
@@ -2643,7 +2643,7 @@ namespace GameSvr.Npc
                     // nItemCount 为0时出死循环
                     if (PlayObject.IsEnoughBag())
                     {
-                        UserItem = new UserItem();
+                        UserItem = new ClientUserItem();
                         if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
                             PlayObject.ItemList.Add(UserItem);
@@ -2661,7 +2661,7 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        UserItem = new UserItem();
+                        UserItem = new ClientUserItem();
                         if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                         {
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
@@ -3386,7 +3386,7 @@ namespace GameSvr.Npc
             Envirnoment Envir;
             MapItem MapItem;
             MapItem MapItemA;
-            UserItem UserItem = null;
+            ClientUserItem UserItem = null;
             try
             {
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref sMap))
@@ -3475,7 +3475,7 @@ namespace GameSvr.Npc
                                     UserItem.Dura = (ushort)idura;
                                 }
                                 MapItem = new MapItem();
-                                MapItem.UserItem = new UserItem(UserItem);
+                                MapItem.UserItem = new ClientUserItem(UserItem);
                                 MapItem.Name = StdItem.Name;
                                 var NameCorlr = "@" + M2Share.CustomItemMgr.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
                                 var sUserItemName = "";

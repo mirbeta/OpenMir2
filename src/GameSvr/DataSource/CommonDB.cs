@@ -292,7 +292,7 @@ namespace GameSvr.DataSource
                             DealOffInfo.sBuyChrName = sBuyChrName;
                             DealOffInfo.dSellDateTime = dSellDateTime;
                             DealOffInfo.nSellGold = nSellGold;
-                            DealOffInfo.UseItems = JsonSerializer.Deserialize<UserItem[]>(sUseItems);
+                            DealOffInfo.UseItems = JsonSerializer.Deserialize<ClientUserItem[]>(sUseItems);
                             DealOffInfo.Flag = nState;
                             M2Share.sSellOffItemList.Add(DealOffInfo);
                         }

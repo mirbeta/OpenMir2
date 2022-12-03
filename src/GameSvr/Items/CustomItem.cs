@@ -110,7 +110,7 @@ namespace GameSvr.Items
         /// </summary>
         /// <param name="userItem"></param>
         /// <returns></returns>
-        public static string GetItemName(UserItem userItem)
+        public static string GetItemName(ClientUserItem userItem)
         {
             var result = string.Empty;
             if (userItem.Desc[13] == 1)
@@ -144,7 +144,7 @@ namespace GameSvr.Items
         /// </summary>
         /// <param name="UserItem"></param>
         /// <returns></returns>
-        public int GetItemAddValuePointColor(UserItem UserItem)
+        public int GetItemAddValuePointColor(ClientUserItem UserItem)
         {
             int result = 0;
             // if (M2Share.g_Config.boRandomnameColor)

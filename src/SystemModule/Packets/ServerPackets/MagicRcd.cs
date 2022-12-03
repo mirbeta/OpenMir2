@@ -3,7 +3,7 @@
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
-    public partial class MagicRcd : ServerPacket
+    public partial class MagicRcd 
     {
         /// <summary>
         /// 技能ID
@@ -21,10 +21,5 @@ namespace SystemModule.Packets.ServerPackets
         /// 当前修练值
         /// </summary>
         public int TranPoint;
-
-        public override int GetPacketSize()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

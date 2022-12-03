@@ -18,7 +18,7 @@ namespace LoginGate.Services
     /// </summary>
     public class ClientManager
     {
-        private readonly Channel<byte[]> _sendQueue;
+        private readonly Channel<ServerDataMessage> _sendQueue;
         private readonly SessionManager _sessionManager;
         private readonly MirLogger _logger;
         private readonly IList<ClientThread> _serverGateList;
@@ -32,7 +32,7 @@ namespace LoginGate.Services
             _sessionManager = sessionManager;
             _configManager = configManager;
             _serverManager = serverManager;
-            _sendQueue = Channel.CreateUnbounded<byte[]>();
+            _sendQueue = Channel.CreateUnbounded<ServerDataMessage>();
             _serverGateList = new List<ClientThread>();
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
         }
@@ -77,10 +77,10 @@ namespace LoginGate.Services
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        /// <param name="messageData"></param>
-        public void SendQueue(byte[] messageData)
+        /// <param name="message"></param>
+        public void SendQueue(ServerDataMessage message)
         {
-            _sendQueue.Writer.TryWrite(messageData);
+            _sendQueue.Writer.TryWrite(message);
         }
 
         /// <summary>
@@ -94,17 +94,12 @@ namespace LoginGate.Services
                 {
                     if (_sendQueue.Reader.TryRead(out var message))
                     {
-                        var clientPacket = ServerPackSerializer.Deserialize<LoginSvrPacket>(message);
-                        if (clientPacket == null)
-                        {
-                            continue;
-                        }
-                        var userSession = _sessionManager.GetSession(clientPacket.ConnectionId);
+                        var userSession = _sessionManager.GetSession(message.SocketId);
                         if (userSession == null)
                         {
                             continue;
                         }
-                        userSession.ProcessSvrData(clientPacket.ClientPacket);
+                        userSession.ProcessSvrData(message.Data);
                     }
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);

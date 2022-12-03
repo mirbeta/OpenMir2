@@ -37,7 +37,7 @@ namespace GameSvr.GameCommand.Commands
             // 如纯度不填,则随机给纯度
             for (var i = 0; i < nMineCount; i++)
             {
-                var UserItem = new UserItem();
+                var UserItem = new ClientUserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sMineName, ref UserItem))
                 {
                     var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);

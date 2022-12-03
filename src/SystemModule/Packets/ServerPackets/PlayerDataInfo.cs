@@ -1,5 +1,5 @@
-﻿using MemoryPack;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using MemoryPack;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
@@ -19,7 +19,7 @@ namespace SystemModule.Packets.ServerPackets
     }
 
     [MemoryPackable]
-    public partial class SavePlayerDataMessage : ServerPacket
+    public partial class SavePlayerDataMessage
     {
         public string Account { get; set; }
         public string ChrName { get; set; }
@@ -31,29 +31,19 @@ namespace SystemModule.Packets.ServerPackets
             ChrName = chrName;
             HumDataInfo = humDataInfo;
         }
-
-        public override int GetPacketSize()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
     [MemoryPackable]
-    public partial class LoadPlayerDataMessage : ServerPacket
+    public partial class LoadPlayerDataMessage 
     {
         public string Account { get; set; }
         public string ChrName { get; set; }
         public string UserAddr { get; set; }
         public int SessionID { get; set; }
-
-        public override int GetPacketSize()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
     [MemoryPackable]
-    public partial class PlayerInfoData: ServerPacket
+    public partial class PlayerInfoData
     {
         public byte ServerIndex { get; set; }
         public string ChrName { get; set; }
@@ -103,9 +93,9 @@ namespace SystemModule.Packets.ServerPackets
         public byte[] QuestUnit { get; set; }
         public byte[] QuestFlag { get; set; }
         public byte MarryCount { get; set; }
-        public UserItem[] HumItems;
-        public UserItem[] BagItems;
-        public UserItem[] StorageItems;
+        public ServerUserItem[] HumItems;
+        public ServerUserItem[] BagItems;
+        public ServerUserItem[] StorageItems;
         public MagicRcd[] Magic { get; set; }
 
         public PlayerInfoData()
@@ -113,9 +103,9 @@ namespace SystemModule.Packets.ServerPackets
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
-            HumItems = new UserItem[13];
-            BagItems = new UserItem[46];
-            StorageItems = new UserItem[50];
+            HumItems = new ServerUserItem[13];
+            BagItems = new ServerUserItem[46];
+            StorageItems = new ServerUserItem[50];
             Magic = new MagicRcd[20];
             Abil = new Ability();
             BonusAbil = new NakedAbility();
@@ -125,29 +115,29 @@ namespace SystemModule.Packets.ServerPackets
         [OnSerializing]
         public void Serialized(StreamingContext streamingContext)
         {
-            HumItems ??= new UserItem[13];
-            BagItems ??= new UserItem[46];
-            StorageItems ??= new UserItem[50];
+            HumItems ??= new ServerUserItem[13];
+            BagItems ??= new ServerUserItem[46];
+            StorageItems ??= new ServerUserItem[50];
             Magic ??= new MagicRcd[20];
             for (int i = 0; i < HumItems.Length; i++)
             {
                 if (HumItems[i] == null)
                 {
-                    HumItems[i] = new UserItem();
+                    HumItems[i] = new ServerUserItem();
                 }
             }
             for (int i = 0; i < BagItems.Length; i++)
             {
                 if (BagItems[i] == null)
                 {
-                    BagItems[i] = new UserItem();
+                    BagItems[i] = new ServerUserItem();
                 }
             }
             for (int i = 0; i < StorageItems.Length; i++)
             {
                 if (StorageItems[i] == null)
                 {
-                    StorageItems[i] = new UserItem();
+                    StorageItems[i] = new ServerUserItem();
                 }
             }
             for (int i = 0; i < Magic.Length; i++)
@@ -157,11 +147,6 @@ namespace SystemModule.Packets.ServerPackets
                     Magic[i] = new MagicRcd();
                 }
             }
-        }
-
-        public override int GetPacketSize()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

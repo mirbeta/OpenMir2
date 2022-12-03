@@ -1097,14 +1097,14 @@ namespace GameSvr.World
             }
         }
 
-        public bool CopyToUserItemFromName(string sItemName, ref UserItem item)
+        public bool CopyToUserItemFromName(string sItemName, ref ClientUserItem item)
         {
             if (string.IsNullOrEmpty(sItemName)) return false;
             for (var i = 0; i < StdItemList.Count; i++)
             {
                 var stdItem = StdItemList[i];
                 if (!stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase)) continue;
-                if (item == null) item = new UserItem();
+                if (item == null) item = new ClientUserItem();
                 item.Index = (ushort)(i + 1);
                 item.MakeIndex = M2Share.GetItemNumber();
                 item.Dura = stdItem.DuraMax;
@@ -1474,15 +1474,8 @@ namespace GameSvr.World
 
         private void GetHumData(PlayObject playObject, ref PlayerDataInfo humanRcd)
         {
-            PlayerInfoData humData;
-            UserItem[] humItems;
-            UserItem[] bagItems;
-            MagicRcd[] humMagic;
-            MagicInfo magicInfo;
-            UserMagic userMagic;
-            UserItem[] storageItems;
-            UserItem userItem;
-            humData = humanRcd.Data;
+            var humData = humanRcd.Data;
+            playObject.UserID = humData.Account;
             playObject.ChrName = humData.ChrName;
             playObject.MapName = humData.CurMap;
             playObject.CurrX = humData.CurX;
@@ -1517,7 +1510,7 @@ namespace GameSvr.World
             playObject.m_boMaster = humData.IsMaster;
             playObject.m_sDearName = humData.DearName;
             playObject.m_sStoragePwd = humData.StoragePwd;
-            if (playObject.m_sStoragePwd != "")
+            if (!string.IsNullOrEmpty(playObject.m_sStoragePwd))
             {
                 playObject.m_boPasswordLocked = true;
             }
@@ -1525,21 +1518,13 @@ namespace GameSvr.World
             playObject.m_nGamePoint = humData.GamePoint;
             playObject.m_nPayMentPoint = humData.PayMentPoint;
             playObject.PkPoint = humData.PKPoint;
-            if (humData.AllowGroup > 0)
-            {
-                playObject.AllowGroup = true;
-            }
-            else
-            {
-                playObject.AllowGroup = false;
-            }
+            playObject.AllowGroup = humData.AllowGroup > 0;
             playObject.BtB2 = humData.btF9;
             playObject.AttatckMode = (AttackMode)humData.AttatckMode;
             playObject.IncHealth = humData.IncHealth;
             playObject.IncSpell = humData.IncSpell;
             playObject.IncHealing = humData.IncHealing;
             playObject.FightZoneDieCount = humData.FightZoneDieCount;
-            playObject.UserID = humData.Account;
             playObject.m_boLockLogon = humData.LockLogon;
             playObject.m_wContribution = humData.Contribution;
             playObject.HungerStatus = humData.HungerStatus;
@@ -1550,21 +1535,21 @@ namespace GameSvr.World
             playObject.QuestUnitOpen = humData.QuestUnitOpen;
             playObject.QuestUnit = humData.QuestUnit;
             playObject.QuestFlag = humData.QuestFlag;
-            humItems = humanRcd.Data.HumItems;
-            playObject.UseItems[Grobal2.U_DRESS] = humItems[Grobal2.U_DRESS];
-            playObject.UseItems[Grobal2.U_WEAPON] = humItems[Grobal2.U_WEAPON];
-            playObject.UseItems[Grobal2.U_RIGHTHAND] = humItems[Grobal2.U_RIGHTHAND];
-            playObject.UseItems[Grobal2.U_NECKLACE] = humItems[Grobal2.U_HELMET];
-            playObject.UseItems[Grobal2.U_HELMET] = humItems[Grobal2.U_NECKLACE];
-            playObject.UseItems[Grobal2.U_ARMRINGL] = humItems[Grobal2.U_ARMRINGL];
-            playObject.UseItems[Grobal2.U_ARMRINGR] = humItems[Grobal2.U_ARMRINGR];
-            playObject.UseItems[Grobal2.U_RINGL] = humItems[Grobal2.U_RINGL];
-            playObject.UseItems[Grobal2.U_RINGR] = humItems[Grobal2.U_RINGR];
-            playObject.UseItems[Grobal2.U_BUJUK] = humItems[Grobal2.U_BUJUK];
-            playObject.UseItems[Grobal2.U_BELT] = humItems[Grobal2.U_BELT];
-            playObject.UseItems[Grobal2.U_BOOTS] = humItems[Grobal2.U_BOOTS];
-            playObject.UseItems[Grobal2.U_CHARM] = humItems[Grobal2.U_CHARM];
-            bagItems = humanRcd.Data.BagItems;
+            ServerUserItem[] humItems = humanRcd.Data.HumItems;
+            playObject.UseItems[Grobal2.U_DRESS] = humItems[Grobal2.U_DRESS].ToClientItem();
+            playObject.UseItems[Grobal2.U_WEAPON] = humItems[Grobal2.U_WEAPON].ToClientItem();
+            playObject.UseItems[Grobal2.U_RIGHTHAND] = humItems[Grobal2.U_RIGHTHAND].ToClientItem();
+            playObject.UseItems[Grobal2.U_NECKLACE] = humItems[Grobal2.U_HELMET].ToClientItem();
+            playObject.UseItems[Grobal2.U_HELMET] = humItems[Grobal2.U_NECKLACE].ToClientItem();
+            playObject.UseItems[Grobal2.U_ARMRINGL] = humItems[Grobal2.U_ARMRINGL].ToClientItem();
+            playObject.UseItems[Grobal2.U_ARMRINGR] = humItems[Grobal2.U_ARMRINGR].ToClientItem();
+            playObject.UseItems[Grobal2.U_RINGL] = humItems[Grobal2.U_RINGL].ToClientItem();
+            playObject.UseItems[Grobal2.U_RINGR] = humItems[Grobal2.U_RINGR].ToClientItem();
+            playObject.UseItems[Grobal2.U_BUJUK] = humItems[Grobal2.U_BUJUK].ToClientItem();
+            playObject.UseItems[Grobal2.U_BELT] = humItems[Grobal2.U_BELT].ToClientItem();
+            playObject.UseItems[Grobal2.U_BOOTS] = humItems[Grobal2.U_BOOTS].ToClientItem();
+            playObject.UseItems[Grobal2.U_CHARM] = humItems[Grobal2.U_CHARM].ToClientItem();
+            ServerUserItem[] bagItems = humanRcd.Data.BagItems;
             if (bagItems != null)
             {
                 for (var i = 0; i < bagItems.Length; i++)
@@ -1575,12 +1560,11 @@ namespace GameSvr.World
                     }
                     if (bagItems[i].Index > 0)
                     {
-                        userItem = bagItems[i];
-                        playObject.ItemList.Add(userItem);
+                        playObject.ItemList.Add(bagItems[i].ToClientItem());
                     }
                 }
             }
-            humMagic = humanRcd.Data.Magic;
+            var humMagic = humanRcd.Data.Magic;
             if (humMagic != null)
             {
                 for (var i = 0; i < humMagic.Length; i++)
@@ -1589,10 +1573,10 @@ namespace GameSvr.World
                     {
                         continue;
                     }
-                    magicInfo = FindMagic(humMagic[i].MagIdx);
+                    var magicInfo = FindMagic(humMagic[i].MagIdx);
                     if (magicInfo != null)
                     {
-                        userMagic = new UserMagic();
+                        var userMagic = new UserMagic();
                         userMagic.Magic = magicInfo;
                         userMagic.MagIdx = humMagic[i].MagIdx;
                         userMagic.Level = humMagic[i].Level;
@@ -1602,7 +1586,7 @@ namespace GameSvr.World
                     }
                 }
             }
-            storageItems = humanRcd.Data.StorageItems;
+            ServerUserItem[] storageItems = humanRcd.Data.StorageItems;
             if (storageItems != null)
             {
                 for (var i = 0; i < storageItems.Length; i++)
@@ -1613,8 +1597,7 @@ namespace GameSvr.World
                     }
                     if (storageItems[i].Index > 0)
                     {
-                        userItem = storageItems[i];
-                        playObject.StorageItemList.Add(userItem);
+                        playObject.StorageItemList.Add(storageItems[i].ToClientItem());
                     }
                 }
             }
@@ -1683,38 +1666,38 @@ namespace GameSvr.World
             var HumItems = humanRcd.Data.HumItems;
             if (HumItems == null)
             {
-                HumItems = new UserItem[13];
+                HumItems = new ServerUserItem[13];
             }
-            HumItems[Grobal2.U_DRESS] = playObject.UseItems[Grobal2.U_DRESS] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_DRESS];
-            HumItems[Grobal2.U_WEAPON] = playObject.UseItems[Grobal2.U_WEAPON] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_WEAPON];
-            HumItems[Grobal2.U_RIGHTHAND] = playObject.UseItems[Grobal2.U_RIGHTHAND] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_RIGHTHAND];
-            HumItems[Grobal2.U_HELMET] = playObject.UseItems[Grobal2.U_NECKLACE] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_NECKLACE];
-            HumItems[Grobal2.U_NECKLACE] = playObject.UseItems[Grobal2.U_HELMET] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_HELMET];
-            HumItems[Grobal2.U_ARMRINGL] = playObject.UseItems[Grobal2.U_ARMRINGL] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_ARMRINGL];
-            HumItems[Grobal2.U_ARMRINGR] = playObject.UseItems[Grobal2.U_ARMRINGR] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_ARMRINGR];
-            HumItems[Grobal2.U_RINGL] = playObject.UseItems[Grobal2.U_RINGL] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_RINGL];
-            HumItems[Grobal2.U_RINGR] = playObject.UseItems[Grobal2.U_RINGR] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_RINGR];
-            HumItems[Grobal2.U_BUJUK] = playObject.UseItems[Grobal2.U_BUJUK] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_BUJUK];
-            HumItems[Grobal2.U_BELT] = playObject.UseItems[Grobal2.U_BELT] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_BELT];
-            HumItems[Grobal2.U_BOOTS] = playObject.UseItems[Grobal2.U_BOOTS] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_BOOTS];
-            HumItems[Grobal2.U_CHARM] = playObject.UseItems[Grobal2.U_CHARM] == null ? HUtil32.DelfautItem : playObject.UseItems[Grobal2.U_CHARM];
+            HumItems[Grobal2.U_DRESS] = playObject.UseItems[Grobal2.U_DRESS] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_DRESS].ToServerItem();
+            HumItems[Grobal2.U_WEAPON] = playObject.UseItems[Grobal2.U_WEAPON] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_WEAPON].ToServerItem();
+            HumItems[Grobal2.U_RIGHTHAND] = playObject.UseItems[Grobal2.U_RIGHTHAND] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_RIGHTHAND].ToServerItem();
+            HumItems[Grobal2.U_HELMET] = playObject.UseItems[Grobal2.U_NECKLACE] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_NECKLACE].ToServerItem();
+            HumItems[Grobal2.U_NECKLACE] = playObject.UseItems[Grobal2.U_HELMET] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_HELMET].ToServerItem();
+            HumItems[Grobal2.U_ARMRINGL] = playObject.UseItems[Grobal2.U_ARMRINGL] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_ARMRINGL].ToServerItem();
+            HumItems[Grobal2.U_ARMRINGR] = playObject.UseItems[Grobal2.U_ARMRINGR] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_ARMRINGR].ToServerItem();
+            HumItems[Grobal2.U_RINGL] = playObject.UseItems[Grobal2.U_RINGL] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_RINGL].ToServerItem();
+            HumItems[Grobal2.U_RINGR] = playObject.UseItems[Grobal2.U_RINGR] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_RINGR].ToServerItem();
+            HumItems[Grobal2.U_BUJUK] = playObject.UseItems[Grobal2.U_BUJUK] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_BUJUK].ToServerItem();
+            HumItems[Grobal2.U_BELT] = playObject.UseItems[Grobal2.U_BELT] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_BELT].ToServerItem();
+            HumItems[Grobal2.U_BOOTS] = playObject.UseItems[Grobal2.U_BOOTS] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_BOOTS].ToServerItem();
+            HumItems[Grobal2.U_CHARM] = playObject.UseItems[Grobal2.U_CHARM] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_CHARM].ToServerItem();
             var BagItems = humanRcd.Data.BagItems;
             if (BagItems == null)
             {
-                BagItems = new UserItem[Grobal2.MAXBAGITEM];
+                BagItems = new ServerUserItem[Grobal2.MAXBAGITEM];
             }
             for (var i = 0; i < playObject.ItemList.Count; i++)
             {
                 if (i < Grobal2.MAXBAGITEM)
                 {
-                    BagItems[i] = playObject.ItemList[i];
+                    BagItems[i] = playObject.ItemList[i].ToServerItem();
                 }
             }
             for (var i = 0; i < BagItems.Length; i++)
             {
                 if (BagItems[i] == null)
                 {
-                    BagItems[i] = HUtil32.DelfautItem;
+                    BagItems[i] = HUtil32.DelfautItem.ToServerItem();
                 }
             }
             var HumMagic = humanRcd.Data.Magic;
@@ -1748,7 +1731,7 @@ namespace GameSvr.World
             var StorageItems = humanRcd.Data.StorageItems;
             if (StorageItems == null)
             {
-                StorageItems = new UserItem[50];
+                StorageItems = new ServerUserItem[50];
             }
             for (var i = 0; i < playObject.StorageItemList.Count; i++)
             {
@@ -1756,13 +1739,13 @@ namespace GameSvr.World
                 {
                     break;
                 }
-                StorageItems[i] = playObject.StorageItemList[i];
+                StorageItems[i] = playObject.StorageItemList[i].ToServerItem();
             }
             for (var i = 0; i < StorageItems.Length; i++)
             {
                 if (StorageItems[i] == null)
                 {
-                    StorageItems[i] = HUtil32.DelfautItem;
+                    StorageItems[i] = HUtil32.DelfautItem.ToServerItem();
                 }
             }
         }

@@ -718,11 +718,11 @@ namespace GameSvr.Actor
         /// <summary>
         /// 物品列表
         /// </summary>
-        public IList<UserItem> ItemList;
+        public IList<ClientUserItem> ItemList;
         /// <summary>
         /// 交易列表
         /// </summary>
-        public IList<UserItem> DealItemList;
+        public IList<ClientUserItem> DealItemList;
         /// <summary>
         /// 交易的金币数量
         /// </summary>
@@ -738,12 +738,12 @@ namespace GameSvr.Actor
         /// <summary>
         /// 身上物品
         /// </summary>
-        public UserItem[] UseItems;
+        public ClientUserItem[] UseItems;
         public IList<TMonSayMsg> SayMsgList;
         /// <summary>
         /// 仓库物品列表
         /// </summary>
-        internal readonly IList<UserItem> StorageItemList;
+        internal readonly IList<ClientUserItem> StorageItemList;
         /// <summary>
         /// 走路速度
         /// </summary>
@@ -928,14 +928,14 @@ namespace GameSvr.Actor
             VisibleActors = new List<VisibleBaseObject>();
             VisibleItems = new List<VisibleMapItem>();
             VisibleEvents = new List<EventInfo>();
-            ItemList = new List<UserItem>();
-            DealItemList = new List<UserItem>();
+            ItemList = new List<ClientUserItem>();
+            DealItemList = new List<ClientUserItem>();
             IsVisibleActive = false;
             ProcessRunCount = 0;
             DealGolds = 0;
             MagicList = new List<UserMagic>();
-            StorageItemList = new List<UserItem>();
-            UseItems = new UserItem[13];
+            StorageItemList = new List<ClientUserItem>();
+            UseItems = new ClientUserItem[13];
             GroupOwner = null;
             Castle = null;
             Master = null;
@@ -1102,7 +1102,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool DropItemDown(UserItem userItem, int nScatterRange, bool boDieDrop, BaseObject itemOfCreat,
+        public bool DropItemDown(ClientUserItem userItem, int nScatterRange, bool boDieDrop, BaseObject itemOfCreat,
             BaseObject dropCreat)
         {
             var result = false;
@@ -1127,7 +1127,7 @@ namespace GameSvr.Actor
                 }
                 var mapItem = new MapItem
                 {
-                    UserItem = new UserItem(userItem),
+                    UserItem = new ClientUserItem(userItem),
                     Name = CustomItem.GetItemName(userItem),// 取自定义物品名称
                     Looks = stdItem.Looks
                 };
@@ -2108,7 +2108,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public bool AddItemToBag(UserItem userItem)
+        public bool AddItemToBag(ClientUserItem userItem)
         {
             var result = false;
             if (ItemList.Count < Grobal2.MAXBAGITEM)
@@ -5190,9 +5190,9 @@ namespace GameSvr.Actor
             return true;
         }
 
-        public UserItem CheckItemCount(string sItemName, ref int nCount)
+        public ClientUserItem CheckItemCount(string sItemName, ref int nCount)
         {
-            UserItem result = null;
+            ClientUserItem result = null;
             nCount = 0;
             for (var i = 0; i < UseItems.Length; i++)
             {
@@ -5210,7 +5210,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public UserItem CheckItems(string sItemName)
+        public ClientUserItem CheckItems(string sItemName)
         {
             for (var i = 0; i < ItemList.Count; i++)
             {
@@ -5613,7 +5613,7 @@ namespace GameSvr.Actor
                     break;
             }
 
-            UseItems = new UserItem[8];
+            UseItems = new ClientUserItem[8];
             for (var i = 0; i < ItemList.Count; i++)
             {
                 ItemList[i] = null;

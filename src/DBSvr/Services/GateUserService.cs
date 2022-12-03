@@ -102,7 +102,7 @@ namespace DBSvr.Services
                             {
                                 continue;
                             }
-                            ProcessGateMsg(selGata, message.Packet);
+                            ProcessMessage(selGata, message.Packet);
                         }
                         catch (Exception e)
                         {
@@ -110,60 +110,44 @@ namespace DBSvr.Services
                         }
                     }
                 }
-            }, stoppingToken);
+            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
-        private void ProcessGateMsg(SelGateInfo gateInfo, ServerDataMessage packet)
+        private void ProcessMessage(SelGateInfo gateInfo, ServerDataMessage packet)
         {
-            var s0C = string.Empty;
-            var sData = string.Empty;
+            var sTemp = string.Empty;
             var sText = HUtil32.GetString(packet.Data, 0, packet.DataLen);
-            HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
-            switch (packet.Type)
+            HUtil32.ArrestStringEx(sText, "%", "$", ref sTemp);
+            for (var i = 0; i < gateInfo.UserList.Count; i++)
             {
-                case ServerDataType.KeepAlive:
-                    _logger.DebugLog("Received SelGate Heartbeat.");
-                    SendKeepAlivePacket(gateInfo.ConnectionId);
-                    //dwKeepAliveTick = HUtil32.GetTickCount();
-                    break;
-                case ServerDataType.Data:
-                    for (var i = 0; i < gateInfo.UserList.Count; i++)
+                var userInfo = gateInfo.UserList[i];
+                if (userInfo != null)
+                {
+                    if (userInfo.SessionId == packet.SocketId)
                     {
-                        var userInfo = gateInfo.UserList[i];
-                        if (userInfo != null)
+                        userInfo.sText += sText;
+                        if (sText.IndexOf("!", StringComparison.OrdinalIgnoreCase) < 1)
                         {
-                            if (userInfo.SessionId == packet.SocketId)
-                            {
-                                userInfo.sText += sText;
-                                if (sText.IndexOf("!", StringComparison.OrdinalIgnoreCase) < 1)
-                                {
-                                    continue;
-                                }
-                                ProcessUserMsg(gateInfo, ref userInfo);
-                                break;
-                            }
+                            continue;
+                        }
+                        var sData = string.Empty;
+                        if (HUtil32.TagCount(userInfo.sText, '!') <= 0)
+                        {
+                            return;
+                        }
+                        userInfo.sText = HUtil32.ArrestStringEx(userInfo.sText, "#", "!", ref sData);
+                        if (string.IsNullOrEmpty(sData))
+                        {
+                            userInfo.sText = string.Empty;
+                            continue;
+                        }
+                        sData = sData.Substring(1, sData.Length - 1);
+                        if (sData.Length >= Grobal2.DEFBLOCKSIZE)
+                        {
+                            DeCodeUserMsg(sData, gateInfo, ref userInfo);
                         }
                     }
-                    break;
-                case ServerDataType.Enter:
-                    sData = HUtil32.GetValidStr3(sData, ref s0C, HUtil32.Backslash);
-                    OpenUser(packet.SocketId, sData, ref gateInfo);
-                    /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
-                    if (dwCheckUserSocTimeMax < dwCheckUserSocTimeMin)
-                    {
-                        dwCheckUserSocTimeMax = dwCheckUserSocTimeMin;
-                        dwCheckUserSocTick = HUtil32.GetTickCount();
-                    }*/
-                    break;
-                case ServerDataType.Leave:
-                    CloseUser(packet.SocketId, ref gateInfo);
-                    /*dwCheckUserSocTimeMin = GetTickCount - dwCheckUserSocTick;
-                    if (dwCheckUserSocTimeMax < dwCheckUserSocTimeMin)
-                    {
-                        dwCheckUserSocTimeMax = dwCheckUserSocTimeMin;
-                        dwCheckUserSocTick = HUtil32.GetTickCount();
-                    }*/
-                    break;
+                }
             }
         }
 
@@ -222,29 +206,48 @@ namespace DBSvr.Services
             Span<byte> dataBuff = data;
             try
             {
-                while (nLen >= ServerDataMessage.FixedHeaderLen)
+                while (nLen >= ServerDataPacket.FixedHeaderLen)
                 {
-                    Span<byte> packetHead = dataBuff.Slice(1, ServerDataMessage.FixedHeaderLen);
-                    var packetCode = BitConverter.ToUInt32(packetHead[..4]);
-                    if (packetCode != Grobal2.RUNGATECODE)
+                    var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                    var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
+                    if (message.PacketCode != Grobal2.RUNGATECODE)
                     {
                         srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, ServerDataMessage.FixedHeaderLen);
+                        dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
                         nLen -= 1;
                         _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
-                    var messageLen = BitConverter.ToInt32(packetHead.Slice(4, 4));
-                    var nCheckMsgLen = Math.Abs(messageLen);
+                    var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
                     if (nCheckMsgLen > nLen)
                     {
                         break;
+                    } 
+                    var messageData = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                    switch (messageData.Type)
+                    {
+                        case ServerDataType.KeepAlive:
+                            SendKeepAlivePacket(gateInfo.ConnectionId);
+                            _logger.DebugLog("Received SelGate Heartbeat.");
+                            break;
+                        case ServerDataType.Enter:
+                            var sData = string.Empty;
+                            var sTemp = string.Empty;
+                            var sText = HUtil32.GetString(messageData.Data, 0, messageData.DataLen);
+                            HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
+                            sData = HUtil32.GetValidStr3(sData, ref sTemp, HUtil32.Backslash);
+                            OpenUser(messageData.SocketId, sData, ref gateInfo);
+                            break;
+                        case ServerDataType.Leave:
+                            CloseUser(messageData.SocketId, ref gateInfo);
+                            break;
+                        case ServerDataType.Data:
+                            var userMessage = new UserGateMessage();
+                            userMessage.ConnectionId = connectionId;
+                            userMessage.Packet = messageData;
+                            _reviceQueue.Writer.TryWrite(userMessage);
+                            break;
                     }
-                    var packet = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[..messageLen]);
-                    var message = new UserGateMessage();
-                    message.ConnectionId = connectionId;
-                    message.Packet = packet;
-                    _reviceQueue.Writer.TryWrite(message);
                     nLen -= nCheckMsgLen;
                     if (nLen <= 0)
                     {
@@ -253,7 +256,7 @@ namespace DBSvr.Services
                     dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
                     gateInfo.DataLen = nLen;
                     srcOffset = 0;
-                    if (nLen < ServerDataMessage.FixedHeaderLen)
+                    if (nLen < ServerDataPacket.FixedHeaderLen)
                     {
                         break;
                     }
@@ -444,38 +447,9 @@ namespace DBSvr.Services
 
         private void SendKeepAlivePacket(string connectionId)
         {
-            var gataPacket = new ServerDataMessage();
-            gataPacket.Type = ServerDataType.KeepAlive;
-            gataPacket.SocketId = 0;
-            gataPacket.PacketCode = Grobal2.RUNGATECODE;
-            SendPacket(connectionId, gataPacket);
-        }
-
-        private void ProcessUserMsg(SelGateInfo gateInfo, ref SessionUserInfo userInfo)
-        {
-            var sData = string.Empty;
-            var nC = 0;
-            if (HUtil32.TagCount(userInfo.sText, '!') <= 0)
-            {
-                return;
-            }
-            userInfo.sText = HUtil32.ArrestStringEx(userInfo.sText, "#", "!", ref sData);
-            if (!string.IsNullOrEmpty(sData))
-            {
-                sData = sData.Substring(1, sData.Length - 1);
-                if (sData.Length >= Grobal2.DEFBLOCKSIZE)
-                {
-                    DeCodeUserMsg(sData, gateInfo, ref userInfo);
-                }
-            }
-            else
-            {
-                if (nC >= 1)
-                {
-                    userInfo.sText = string.Empty;
-                }
-                nC++;
-            }
+            var message = new ServerDataMessage();
+            message.Type = ServerDataType.KeepAlive;
+            SendPacket(connectionId, message);
         }
 
         /// <summary>
@@ -864,7 +838,7 @@ namespace DBSvr.Services
             var result = false;
             var sChrName = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
             var boDataOk = false;
-            if (userInfo.sAccount == sAccount)
+            if (string.Compare(userInfo.sAccount, sAccount, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 int nIndex;
                 IList<PlayQuick> chrList = new List<PlayQuick>();
@@ -969,13 +943,12 @@ namespace DBSvr.Services
 
         private void SendUserSocket(string connectionId, int sessionId, string sSendMsg)
         {
-            var packet = new ServerDataMessage();
-            packet.SocketId = sessionId;
-            packet.Data = HUtil32.GetBytes("#" + sSendMsg + "!");
-            packet.DataLen = (short)packet.Data.Length;
-            packet.Type = ServerDataType.Data;
-            packet.PacketCode = Grobal2.RUNGATECODE;
-            SendPacket(connectionId, packet);
+            var message = new ServerDataMessage();
+            message.SocketId = sessionId;
+            message.Data = HUtil32.GetBytes("#" + sSendMsg + "!");
+            message.DataLen = (short)message.Data.Length;
+            message.Type = ServerDataType.Data;
+            SendPacket(connectionId, message);
         }
 
         /// <summary>
@@ -1000,9 +973,24 @@ namespace DBSvr.Services
         {
             if (!_userSocket.IsOnline(connectionId))
                 return;
-            packet.PacketCode = Grobal2.RUNGATECODE;
-            packet.PacketLen = packet.GetPacketSize();
-            _userSocket.Send(connectionId, ServerPackSerializer.Serialize(packet));
+            SendMessage(connectionId, ServerPackSerializer.Serialize(packet));
+        }
+        
+        private void SendMessage(string connectionId, byte[] sendBuffer)
+        {
+            using var memoryStream = new MemoryStream();
+            using var backingStream = new BinaryWriter(memoryStream);
+            var serverMessage = new ServerDataPacket
+            {
+                PacketCode = Grobal2.RUNGATECODE,
+                PacketLen = (short)sendBuffer.Length
+            };
+            backingStream.Write(serverMessage.GetBuffer());
+            backingStream.Write(sendBuffer);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            _userSocket.Send(connectionId, data);
         }
     }
 

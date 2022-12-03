@@ -442,7 +442,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 元宝寄售物品列表
         /// </summary>
-        private IList<UserItem> m_SellOffItemList;
+        private IList<ClientUserItem> m_SellOffItemList;
 
 
         public PlayObject() : base()
@@ -684,7 +684,7 @@ namespace GameSvr.Player
         /// </summary>
         public void UserLogon()
         {
-            UserItem UserItem;
+            ClientUserItem UserItem;
             var sIPaddr = "127.0.0.1";
             const string sExceptionMsg = "[Exception] TPlayObject::UserLogon";
             const string sCheckIPaddrFail = "登录IP地址不匹配!!!";
@@ -739,7 +739,7 @@ namespace GameSvr.Player
                 }
                 if (m_boNewHuman)
                 {
-                    UserItem = new UserItem();
+                    UserItem = new ClientUserItem();
                     if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.Candle, ref UserItem))
                     {
                         ItemList.Add(UserItem);
@@ -748,7 +748,7 @@ namespace GameSvr.Player
                     {
                         Dispose(UserItem);
                     }
-                    UserItem = new UserItem();
+                    UserItem = new ClientUserItem();
                     if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.BasicDrug, ref UserItem))
                     {
                         ItemList.Add(UserItem);
@@ -757,7 +757,7 @@ namespace GameSvr.Player
                     {
                         Dispose(UserItem);
                     }
-                    UserItem = new UserItem();
+                    UserItem = new ClientUserItem();
                     if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.WoodenSword, ref UserItem))
                     {
                         ItemList.Add(UserItem);
@@ -766,7 +766,7 @@ namespace GameSvr.Player
                     {
                         Dispose(UserItem);
                     }
-                    UserItem = new UserItem();
+                    UserItem = new ClientUserItem();
                     var sItem = Gender == PlayGender.Man
                         ? M2Share.Config.ClothsMan
                         : M2Share.Config.ClothsWoman;
@@ -1684,7 +1684,7 @@ namespace GameSvr.Player
         protected override void ScatterBagItems(BaseObject ItemOfCreat)
         {
             const int DropWide = 2;
-            UserItem pu;
+            ClientUserItem pu;
             const string sExceptionMsg = "[Exception] TPlayObject::ScatterBagItems";
             IList<DeleteItem> DelList = null;
             if (AngryRing || NoDropItem || Envir.Flag.boNODROPITEM)
