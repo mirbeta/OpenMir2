@@ -1,10 +1,15 @@
 ﻿using MemoryPack;
+using System.IO;
 
 namespace SystemModule.Packets.ServerPackets
 {
-    [MemoryPackable]
-    public partial struct ServerDataMessage 
+    public class ServerDataPacket : ServerPacket
     {
+        /// <summary>
+        /// 消息头固定大小
+        /// </summary>
+        public const int FixedHeaderLen = 6;
+
         /// <summary>
         /// 封包标识码
         /// </summary>
@@ -13,20 +18,27 @@ namespace SystemModule.Packets.ServerPackets
         /// 封包总长度
         /// </summary>
         public short PacketLen { get; set; }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            PacketCode = reader.ReadUInt32();
+            PacketLen = reader.ReadInt16();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(PacketCode);
+            writer.Write(PacketLen);
+        }
+    }
+
+    [MemoryPackable]
+    public partial class ServerDataMessage 
+    {
         public ServerDataType Type { get; set; }
         public int SocketId { get; set; }
         public short DataLen { get; set; }
         public byte[] Data { get; set; }
-
-        /// <summary>
-        /// 消息头固定大小
-        /// </summary>
-        public const int FixedHeaderLen = 6;
-
-        public short GetPacketSize()
-        {
-            return (short)(FixedHeaderLen + 7 + (Data?.Length ?? 5));
-        }
     }
 
     public enum ServerDataType : byte

@@ -199,7 +199,7 @@ namespace GameSvr.Player
             return WAbil.Weight + nWeight <= WAbil.MaxWeight;
         }
 
-        public void SendAddItem(UserItem UserItem)
+        public void SendAddItem(ClientUserItem UserItem)
         {
             var Item = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if (Item == null)
@@ -1750,7 +1750,7 @@ namespace GameSvr.Player
             SendSocket(m_DefMsg, EDCode.EncodeString(s10));
         }
 
-        public void SendDelItems(UserItem UserItem)
+        public void SendDelItems(ClientUserItem UserItem)
         {
             var stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if (stdItem != null)
@@ -1770,7 +1770,7 @@ namespace GameSvr.Player
             }
         }
 
-        public void SendUpdateItem(UserItem UserItem)
+        public void SendUpdateItem(ClientUserItem UserItem)
         {
             var stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if (stdItem != null)
@@ -1790,7 +1790,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void SendUpdateItemWithLevel(UserItem UserItem, byte level)
+        private void SendUpdateItemWithLevel(ClientUserItem UserItem, byte level)
         {
             var stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if (stdItem != null)
@@ -1811,7 +1811,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void SendUpdateItemByJob(UserItem UserItem, byte level)
+        private void SendUpdateItemByJob(ClientUserItem UserItem, byte level)
         {
             var stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if (stdItem != null)
@@ -2149,7 +2149,7 @@ namespace GameSvr.Player
             return n14;
         }
 
-        private bool EatItems(StdItem StdItem, UserItem userItem)
+        private bool EatItems(StdItem StdItem, ClientUserItem userItem)
         {
             var result = false;
             if (Envir.Flag.boNODRUG)
@@ -2467,7 +2467,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void SendDelDealItem(UserItem UserItem)
+        private void SendDelDealItem(ClientUserItem UserItem)
         {
             if (DealCreat != null)
             {
@@ -2493,7 +2493,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void SendAddDealItem(UserItem UserItem)
+        private void SendAddDealItem(ClientUserItem UserItem)
         {
             SendDefMessage(Grobal2.SM_DEALADDITEM_OK, 0, 0, 0, 0, "");
             if (DealCreat != null)
@@ -2553,7 +2553,7 @@ namespace GameSvr.Player
         /// </summary>
         private void MakeMine()
         {
-            UserItem UserItem = null;
+            ClientUserItem UserItem = null;
             if (ItemList.Count >= Grobal2.MAXBAGITEM)
             {
                 return;
@@ -2561,7 +2561,7 @@ namespace GameSvr.Player
             var nRandom = M2Share.RandomNumber.Random(M2Share.Config.StoneTypeRate);
             if (nRandom >= M2Share.Config.GoldStoneMin && nRandom <= M2Share.Config.GoldStoneMax)
             {
-                UserItem = new UserItem();
+                UserItem = new ClientUserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.GoldStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
@@ -2577,7 +2577,7 @@ namespace GameSvr.Player
             }
             if (nRandom >= M2Share.Config.SilverStoneMin && nRandom <= M2Share.Config.SilverStoneMax)
             {
-                UserItem = new UserItem();
+                UserItem = new ClientUserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.SilverStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
@@ -2593,7 +2593,7 @@ namespace GameSvr.Player
             }
             if (nRandom >= M2Share.Config.SteelStoneMin && nRandom <= M2Share.Config.SteelStoneMax)
             {
-                UserItem = new UserItem();
+                UserItem = new ClientUserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.SteelStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
@@ -2609,7 +2609,7 @@ namespace GameSvr.Player
             }
             if (nRandom >= M2Share.Config.BlackStoneMin && nRandom <= M2Share.Config.BlackStoneMax)
             {
-                UserItem = new UserItem();
+                UserItem = new ClientUserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.BlackStone, ref UserItem))
                 {
                     UserItem.Dura = MakeMineRandomDrua();
@@ -2623,7 +2623,7 @@ namespace GameSvr.Player
                 }
                 return;
             }
-            UserItem = new UserItem();
+            UserItem = new ClientUserItem();
             if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.CopperStone, ref UserItem))
             {
                 UserItem.Dura = MakeMineRandomDrua();
@@ -2646,7 +2646,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            UserItem mineItem = null;
+            ClientUserItem mineItem = null;
             var mineRate = M2Share.RandomNumber.Random(120);
             if (HUtil32.RangeInDefined(mineRate, 1, 2))
             {
@@ -2710,9 +2710,9 @@ namespace GameSvr.Player
         /// 检查任务物品
         /// </summary>
         /// <returns></returns>
-        public UserItem QuestCheckItem(string sItemName, ref int nCount, ref int nParam, ref int nDura)
+        public ClientUserItem QuestCheckItem(string sItemName, ref int nCount, ref int nParam, ref int nDura)
         {
-            UserItem result = null;
+            ClientUserItem result = null;
             nParam = 0;
             nDura = 0;
             nCount = 0;
@@ -2737,7 +2737,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        public bool QuestTakeCheckItem(UserItem CheckItem)
+        public bool QuestTakeCheckItem(ClientUserItem CheckItem)
         {
             var result = false;
             for (var i = 0; i < ItemList.Count; i++)
@@ -3386,7 +3386,7 @@ namespace GameSvr.Player
             return sMyInfo;
         }
 
-        private bool CheckItemBindUse(UserItem UserItem)
+        private bool CheckItemBindUse(ClientUserItem UserItem)
         {
             TItemBind ItemBind;
             var result = true;

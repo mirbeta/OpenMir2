@@ -4,7 +4,7 @@
     "Address": "10.10.0.102",
     "Port": 7000,
     "ChrCount": 1,
-    "TotalChrCount": 5000,
+    "TotalChrCount": 1,
     "NewAccount": false,
     "LoginAccount": "play"
   }

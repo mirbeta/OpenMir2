@@ -10,7 +10,7 @@ namespace SystemModule
     {
         public const string Backslash = "/";
         public static readonly string[] Separator = { " ", ",", "\t" };
-        public static readonly UserItem DelfautItem = new UserItem();
+        public static readonly ClientUserItem DelfautItem = new ClientUserItem();
         public static readonly MagicRcd DetailtMagicRcd = new MagicRcd();
 
         /// <summary>
@@ -581,11 +581,11 @@ namespace SystemModule
 
         public static int TagCount(string source, char tag)
         {
-            var tcount = 0;
+            var count = 0;
             for (var i = 0; i < source.Length; i++)
                 if (source[i] == tag)
-                    tcount++;
-            return tcount;
+                    count++;
+            return count;
         }
 
         public static string BoolToStr(bool boo)

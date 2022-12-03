@@ -1,5 +1,5 @@
-﻿using MemoryPack;
-using System.IO;
+﻿using System.IO;
+using MemoryPack;
 
 namespace SystemModule.Packets.ClientPackets
 {

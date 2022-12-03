@@ -14,12 +14,6 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace LoginSvr.Services
 {
-    public struct LoginGatePacket
-    {
-        public int ConnectionId;
-        public ServerDataMessage Pakcet;
-    }
-
     /// <summary>
     /// 账号服务 处理来自LoginGate的客户端登陆 注册 等登陆封包消息
     /// 处理账号注册 登录 找回密码等
@@ -32,7 +26,7 @@ namespace LoginSvr.Services
         private readonly ClientSession _clientSession;
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
-        private readonly Channel<LoginGatePacket> _messageQueue;
+        private readonly Channel<MessagePacket> _messageQueue;
         private readonly Dictionary<string, LoginGateInfo> _loginGateMap = new Dictionary<string, LoginGateInfo>();
 
         public LoginServer(MirLogger logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager, SessionManager sessionManager)
@@ -42,7 +36,7 @@ namespace LoginSvr.Services
             _clientManager = clientManager;
             _sessionManager = sessionManager;
             _config = configManager.Config;
-            _messageQueue = Channel.CreateUnbounded<LoginGatePacket>();
+            _messageQueue = Channel.CreateUnbounded<MessagePacket>();
             _serverSocket = new SocketServer(short.MaxValue, 2048);
             _serverSocket.OnClientConnect += GSocketClientConnect;
             _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
@@ -84,21 +78,28 @@ namespace LoginSvr.Services
 
         private void GSocketClientRead(object sender, AsyncUserToken e)
         {
-            if (_loginGateMap.TryGetValue(e.ConnectionId, out var gateInfo))
+            try
             {
-                var nMsgLen = e.BytesReceived;
-                if (gateInfo.DataLen > 0)
+                if (_loginGateMap.TryGetValue(e.ConnectionId, out var gateInfo))
                 {
-                    var packetData = new byte[e.BytesReceived];
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
-                    MemoryCopy.BlockCopy(packetData, 0, gateInfo.Data, gateInfo.DataLen, packetData.Length);
-                    ProcessGateData(gateInfo.Data, gateInfo.DataLen + nMsgLen, e.SocHandle, ref gateInfo);
+                    var nMsgLen = e.BytesReceived;
+                    if (gateInfo.DataLen > 0)
+                    {
+                        var packetData = new byte[e.BytesReceived];
+                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
+                        MemoryCopy.BlockCopy(packetData, 0, gateInfo.Data, gateInfo.DataLen, packetData.Length);
+                        ProcessGateData(gateInfo.Data, gateInfo.DataLen + nMsgLen, e.SocHandle, ref gateInfo);
+                    }
+                    else
+                    {
+                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, gateInfo.Data, 0, nMsgLen);
+                        ProcessGateData(gateInfo.Data, nMsgLen, e.SocHandle, ref gateInfo);
+                    }
                 }
-                else
-                {
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, gateInfo.Data, 0, nMsgLen);
-                    ProcessGateData(gateInfo.Data, nMsgLen, e.SocHandle, ref gateInfo);
-                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
             }
         }
 
@@ -106,66 +107,56 @@ namespace LoginSvr.Services
         {
             var srcOffset = 0;
             Span<byte> dataBuff = data;
-            try
+            while (nLen > ServerDataPacket.FixedHeaderLen)
             {
-                while (nLen >= ServerDataMessage.FixedHeaderLen)
+                var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
+                if (message.PacketCode != Grobal2.RUNGATECODE)
                 {
-                    Span<byte> packetHead = dataBuff.Slice(1, ServerDataMessage.FixedHeaderLen);
-                    var packetCode = BitConverter.ToUInt32(packetHead[..4]);
-                    if (packetCode != Grobal2.RUNGATECODE)
-                    {
-                        srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, ServerDataMessage.FixedHeaderLen);
-                        nLen -= 1;
-                        _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
-                        continue;
-                    }
-                    var packetLen = BitConverter.ToInt16(packetHead.Slice(4, 2));
-                    var nCheckMsgLen = Math.Abs(packetLen);
-                    if (nCheckMsgLen > nLen)
-                    {
-                        break;
-                    }
-                    var serverDataMessage = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff);
-                    if (serverDataMessage.Type == ServerDataType.Data)
-                    {
-                        ProcessUserMessage(socketId, serverDataMessage);
-                    }
-                    else
-                    {
-                        _messageQueue.Writer.TryWrite(new LoginGatePacket()
-                        {
-                            ConnectionId = socketId,
-                            Pakcet = serverDataMessage
-                        });
-                    }
-                    nLen -= nCheckMsgLen;
-                    if (nLen <= 0)
-                    {
-                        break;
-                    }
-                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
-                    gateInfo.DataLen = nLen;
-                    srcOffset = 0;
-                    if (nLen < ServerDataMessage.FixedHeaderLen)
-                    {
-                        break;
-                    }
+                    srcOffset++;
+                    dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
+                    nLen -= 1;
+                    _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                    continue;
                 }
-                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+                var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
+                if (nCheckMsgLen > nLen)
                 {
-                    MemoryCopy.BlockCopy(dataBuff, 0, gateInfo.Data, 0, nLen);
-                    gateInfo.DataLen = nLen;
+                    break;
+                } 
+                var messageData = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                AddToQueue(socketId, messageData);
+                nLen -= nCheckMsgLen;
+                if (nLen <= 0)
+                {
+                    break;
                 }
-                else
+                dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                gateInfo.DataLen = nLen;
+                srcOffset = 0;
+                if (nLen < ServerDataPacket.FixedHeaderLen)
                 {
-                    gateInfo.DataLen = 0;
+                    break;
                 }
             }
-            catch (Exception ex)
+            if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
             {
-                _logger.LogError(ex);
+                MemoryCopy.BlockCopy(dataBuff, 0, gateInfo.Data, 0, nLen);
+                gateInfo.DataLen = nLen;
             }
+            else
+            {
+                gateInfo.DataLen = 0;
+            }
+        }
+
+        private void AddToQueue(int socketId, ServerDataMessage messageData)
+        {
+            _messageQueue.Writer.TryWrite(new MessagePacket()
+            {
+                ConnectionId = socketId,
+                Pakcet = messageData
+            });
         }
 
         /// <summary>
@@ -185,6 +176,9 @@ namespace LoginSvr.Services
                             var gateInfo = _clientManager.GetSession(loginPacket.ConnectionId);
                             switch (loginPacket.Pakcet.Type)
                             {
+                                case ServerDataType.Data:
+                                    ProcessUserMessage(loginPacket.ConnectionId, loginPacket.Pakcet);
+                                    break;
                                 case ServerDataType.KeepAlive:
                                     SendKeepAlivePacket(gateInfo.ConnectionId);
                                     gateInfo.KeepAliveTick = HUtil32.GetTickCount();
@@ -221,9 +215,29 @@ namespace LoginSvr.Services
 
         private void SendKeepAlivePacket(string connectionId)
         {
+            var messagePacket = new ServerDataMessage();
+            messagePacket.Type = ServerDataType.KeepAlive;
+            SendMessage(connectionId, ServerPackSerializer.Serialize(messagePacket));
+        }
+
+        private void SendMessage(string connectionId, byte[] sendBuffer)
+        {
+            using var memoryStream = new MemoryStream();
+            using var backingStream = new BinaryWriter(memoryStream);
+            var serverMessage = new ServerDataPacket
+            {
+                PacketCode = Grobal2.RUNGATECODE,
+                PacketLen = (short)sendBuffer.Length
+            };
+            backingStream.Write(serverMessage.GetBuffer());
+            backingStream.Write(sendBuffer);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+
             if (_serverSocket.IsOnline(connectionId))
             {
-                _serverSocket.Send(connectionId, HUtil32.GetBytes("%++$"));
+                _serverSocket.Send(connectionId, data);
             }
         }
 
@@ -316,6 +330,12 @@ namespace LoginSvr.Services
                     break;
                 }
             }*/
+        }
+        
+        public struct MessagePacket
+        {
+            public int ConnectionId;
+            public ServerDataMessage Pakcet;
         }
     }
 }

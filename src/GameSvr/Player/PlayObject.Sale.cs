@@ -180,7 +180,7 @@ namespace GameSvr.Player
         {
             DealOffInfo DealOffInfo;
             StdItem StdItem;
-            UserItem UserItem;
+            ClientUserItem UserItem;
             try
             {
                 if (M2Share.sSellOffItemList == null || M2Share.sSellOffItemList.Count == 0 || !IsEnoughBag())
@@ -282,7 +282,7 @@ namespace GameSvr.Player
         private void ClientBuySellOffItme(string dealChrName)
         {
             StdItem StdItem;
-            UserItem UserItem;
+            ClientUserItem UserItem;
             PlayObject PlayObject;
             try
             {
@@ -520,7 +520,7 @@ namespace GameSvr.Player
         /// <param name="nCode">金刚石特征,类型上限表示</param>
         private void ClientSellOffEnd(string sBuyChrName, int nSellGold, int nGameDiamond, int nCode)
         {
-            UserItem UserItem;
+            ClientUserItem UserItem;
             StdItem StdItem;
             DealOffInfo DealOffInfo;
             m_boSellOffOK = true;
@@ -529,7 +529,7 @@ namespace GameSvr.Player
                 && string.Compare(sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 // 不能自己寄售给自己
-                DealOffInfo = new DealOffInfo() { UseItems = new UserItem[9] };
+                DealOffInfo = new DealOffInfo() { UseItems = new ClientUserItem[9] };
                 if (m_SellOffItemList.Count > 0)
                 {
                     for (var i = 0; i < m_SellOffItemList.Count; i++)
@@ -610,7 +610,7 @@ namespace GameSvr.Player
         {
             if (m_SellOffItemList == null)
             {
-                m_SellOffItemList = new List<UserItem>();
+                m_SellOffItemList = new List<ClientUserItem>();
             }
             if (m_SellOffItemList.Count > 0)
             {

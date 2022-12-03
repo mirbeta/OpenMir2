@@ -3,9 +3,9 @@ using SystemModule.Packets.ClientPackets;
 
 namespace DBSvr.Storage.MySQL.EqualityComparer
 {
-    public class UserItemComparer : IEqualityComparer<UserItem>
+    public class UserItemComparer : IEqualityComparer<ClientUserItem>
     {
-        public bool Equals(UserItem x, UserItem y)
+        public bool Equals(ClientUserItem x, ClientUserItem y)
         {
             if (ReferenceEquals(x, y))
                 return true;
@@ -18,7 +18,7 @@ namespace DBSvr.Storage.MySQL.EqualityComparer
             return x.MakeIndex == y.MakeIndex || x.Index == y.Index;
         }
 
-        public int GetHashCode(UserItem obj)
+        public int GetHashCode(ClientUserItem obj)
         {
             unchecked
             {

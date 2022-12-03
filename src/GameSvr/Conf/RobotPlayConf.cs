@@ -28,7 +28,7 @@ namespace GameSvr.Conf
             string sItemName;
             string sSayMsg;
             IList<string> TempList;
-            UserItem UserItem;
+            ClientUserItem UserItem;
             MagicInfo Magic;
             UserMagic UserMagic;
             StdItem StdItem;
@@ -95,7 +95,7 @@ namespace GameSvr.Conf
                         StdItem = M2Share.WorldEngine.GetStdItem(sItemName);
                         if (StdItem != null)
                         {
-                            UserItem = new UserItem();
+                            UserItem = new ClientUserItem();
                             if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                             {
                                 if (M2Share.StdModeMap.Contains(StdItem.StdMode))
@@ -152,7 +152,7 @@ namespace GameSvr.Conf
                     StdItem = M2Share.WorldEngine.GetStdItem(playObject.m_UseItemNames[i]);
                     if (StdItem != null)
                     {
-                        UserItem = new UserItem();
+                        UserItem = new ClientUserItem();
                         if (M2Share.WorldEngine.CopyToUserItemFromName(playObject.m_UseItemNames[i], ref UserItem))
                         {
                             if (M2Share.StdModeMap.Contains(StdItem.StdMode))

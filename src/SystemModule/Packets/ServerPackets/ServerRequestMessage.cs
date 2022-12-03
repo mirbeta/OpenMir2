@@ -6,7 +6,7 @@ namespace SystemModule.Packets.ServerPackets
     /// 请求消息定义
     /// </summary>
     [MemoryPackable]
-    public partial class ServerRequestMessage : ServerPacket
+    public partial class ServerRequestMessage
     {
         public int Recog { get; set; }
         public ushort Ident { get; set; }
@@ -21,11 +21,6 @@ namespace SystemModule.Packets.ServerPackets
             Param = (ushort)param;
             Tag = (ushort)tag;
             Series = (ushort)series;
-        }
-
-        public override int GetPacketSize()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

@@ -240,7 +240,6 @@ namespace SystemModule.Sockets.AsyncSocketClient
             try
             {
                 //开始异步发送数据
-                
                 _cli.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, HandleSendFinished, _cli);
             }
             catch (ObjectDisposedException)

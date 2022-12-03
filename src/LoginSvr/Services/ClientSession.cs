@@ -1,6 +1,7 @@
 ﻿using LoginSvr.Conf;
 using LoginSvr.Storage;
 using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
@@ -59,13 +60,12 @@ namespace LoginSvr.Services
                 {
                     try
                     {
-                        var userData = message.Msg;
                         var sMsg = string.Empty;
-                        if (!userData.EndsWith("!"))
+                        if (!message.Msg.EndsWith("!"))
                         {
                             return;
                         }
-                        HUtil32.ArrestStringEx(userData, "#", "!", ref sMsg);
+                        HUtil32.ArrestStringEx(message.Msg, "#", "!", ref sMsg);
                         if (string.IsNullOrEmpty(sMsg))
                             return;
                         if (sMsg.Length < Grobal2.DEFBLOCKSIZE)
@@ -727,15 +727,35 @@ namespace LoginSvr.Services
         {
             if (socket.Connected)
             {
-                var packet = new LoginSvrPacket();
-                packet.ConnectionId = sSockIndex;
-                packet.ClientPacket = HUtil32.GetBytes("#" + sMsg + "!$");
-                socket.SendBuffer(ServerPackSerializer.Serialize(packet));
+                var packet = new ServerDataMessage();
+                packet.SocketId = sSockIndex;
+                packet.Data = HUtil32.GetBytes("#" + sMsg + "!$");
+                packet.DataLen = (short)packet.Data.Length;
+                packet.Type = ServerDataType.Data;
+                var sendBuffer = ServerPackSerializer.Serialize(packet);
+                SendMessage(socket, sendBuffer);
             }
             else
             {
                 _logger.LogError("登陆网关链接断开，消息发送失败");
             }
+        }
+
+        private void SendMessage(Socket socket, byte[] sendBuffer)
+        {
+            using var memoryStream = new MemoryStream();
+            using var backingStream = new BinaryWriter(memoryStream);
+            var serverMessage = new ServerDataPacket
+            {
+                PacketCode = Grobal2.RUNGATECODE,
+                PacketLen = (short)sendBuffer.Length
+            };
+            backingStream.Write(serverMessage.GetBuffer());
+            backingStream.Write(sendBuffer);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            socket.Send(data);
         }
 
         private void KickUser(LoginGateInfo gateInfo, ref UserInfo userInfo)

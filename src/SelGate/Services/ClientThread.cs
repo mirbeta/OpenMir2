@@ -1,5 +1,6 @@
 using SelGate.Package;
 using System;
+using System.IO;
 using System.Net;
 using SystemModule;
 using SystemModule.Logger;
@@ -58,12 +59,20 @@ namespace SelGate.Services
         /// <summary>
         /// Logger
         /// </summary>
-        private static MirLogger _logQueue;
-
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, MirLogger logQueue)
+        private static MirLogger _logger;
+        /// <summary>
+        /// 数据缓冲区
+        /// </summary>
+        private byte[] DataBuff;
+        /// <summary>
+        /// 缓存缓冲长度
+        /// </summary>
+        private int DataLen;
+        
+        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, MirLogger logger)
         {
             ClientId = clientId;
-            _logQueue = logQueue;
+            _logger = logger;
             SessionArray = new TSessionInfo[MaxSession];
             _sessionManager = sessionManager;
             _clientSocket = new ClientScoket(new IPEndPoint(IPAddress.Parse(serverAddr), serverPort), 512);
@@ -74,6 +83,7 @@ namespace SelGate.Services
             SockThreadStutas = SockThreadStutas.Connecting;
             KeepAliveTick = HUtil32.GetTickCount();
             KeepAlive = true;
+            DataBuff = new byte[10 * 1024];
         }
 
         public bool IsConnected => isConnected;
@@ -122,8 +132,8 @@ namespace SelGate.Services
             KeepAliveTick = HUtil32.GetTickCount();
             GateShare.CheckServerTick = HUtil32.GetTickCount();
             GateShare.ServerGateList.Add(this);
-            _logQueue.LogInformation($"数据库服务器[{e.RemoteEndPoint}]链接成功.", 1);
-            _logQueue.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
+            _logger.LogInformation($"数据库服务器[{e.RemoteEndPoint}]链接成功.", 1);
+            _logger.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -143,7 +153,7 @@ namespace SelGate.Services
             }
             RestSessionArray();
             GateShare.ServerGateList.Remove(this);
-            _logQueue.LogInformation($"数据库服务器[{e.RemoteEndPoint}]断开链接.", 1);
+            _logger.LogInformation($"数据库服务器[{e.RemoteEndPoint}]断开链接.", 1);
             boGateReady = false;
             isConnected = false;
             CheckServerFail = true;
@@ -154,23 +164,23 @@ namespace SelGate.Services
         /// </summary>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            if (e.BuffLen <= 0)
+            var nMsgLen = e.BuffLen;
+            if (nMsgLen <= 0)
             {
                 return;
             }
-            var packet = ServerPackSerializer.Deserialize<ServerDataMessage>(e.Buff);
-            if (packet.Type == ServerDataType.KeepAlive)
+            if (DataLen > 0)
             {
-                _logQueue.DebugLog("DBSvr Heartbeat Response");
-                CheckServerFail = false;
-                boGateReady = true;
-                isConnected = true;
-                return;
+                var packetData = new byte[nMsgLen];
+                Buffer.BlockCopy(e.Buff, 0, packetData, 0, nMsgLen);
+                MemoryCopy.BlockCopy(packetData, 0, DataBuff, DataLen, nMsgLen);
+                ProcessServerData(DataBuff, DataLen + nMsgLen, e.SocketId);
             }
-            var message = new TMessageData();
-            message.SessionId = packet.SocketId;
-            message.Body = packet.Data;
-            _sessionManager.SendQueue.TryWrite(message);
+            else
+            {
+                Buffer.BlockCopy(e.Buff, 0, DataBuff, 0, nMsgLen);
+                ProcessServerData(DataBuff, nMsgLen, e.SocketId);
+            }
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -178,17 +188,92 @@ namespace SelGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
+                    _logger.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]关闭连接...失败[{CheckServerFailCount}]次", 1);
+                    _logger.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]关闭连接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logQueue.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]链接超时...失败[{CheckServerFailCount}]次", 1);
+                    _logger.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]链接超时...失败[{CheckServerFailCount}]次", 1);
                     break;
             }
         }
 
+        private void ProcessServerData(byte[] data, int nLen, int socketId)
+        {
+            var srcOffset = 0;
+            Span<byte> dataBuff = data;
+            while (nLen > ServerDataPacket.FixedHeaderLen)
+            {
+                var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
+                if (message.PacketCode != Grobal2.RUNGATECODE)
+                {
+                    srcOffset++;
+                    dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
+                    nLen -= 1;
+                    _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                    continue;
+                }
+                var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
+                if (nCheckMsgLen > nLen)
+                {
+                    break;
+                } 
+                var messageData = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                switch (messageData.Type)
+                {
+                    case ServerDataType.KeepAlive:
+                        KeepAliveTick = HUtil32.GetTickCount();
+                        CheckServerFail = false;
+                        boGateReady = true;
+                        isConnected = true;
+                        _logger.DebugLog("DBSvr Heartbeat Response");
+                        break;
+                    case ServerDataType.Leave:
+                        _sessionManager.CloseSession(messageData.SocketId);
+                        /*if (message.Body[0] == (byte)'+')//收到DB服务器发过来的关闭会话请求
+                        {
+                            if (message.Body[1] == (byte)'-')
+                            {
+                                userSession.CloseSession();
+                                Console.WriteLine("收到DBSvr关闭会话请求");
+                            }
+                            else
+                            {
+                                userSession.ClientThread.KeepAliveTick = HUtil32.GetTickCount();
+                            }
+                            continue;
+                        }*/
+                        break;
+                    case ServerDataType.Data:
+                        _sessionManager.SendQueue.TryWrite(messageData);
+                        break;
+                }
+                nLen -= nCheckMsgLen;
+                if (nLen <= 0)
+                {
+                    break;
+                }
+                dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                DataLen = nLen;
+                srcOffset = 0;
+                if (nLen < ServerDataPacket.FixedHeaderLen)
+                {
+                    break;
+                }
+            }
+            if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+            {
+                MemoryCopy.BlockCopy(dataBuff, 0, DataBuff, 0, nLen);
+                DataLen = nLen;
+            }
+            else
+            {
+                DataLen = 0;
+            }
+        }
+                
         public void RestSessionArray()
         {
             for (var i = 0; i < MaxSession; i++)
@@ -205,14 +290,10 @@ namespace SelGate.Services
 
         public void SendKeepAlive()
         {
-            var accountPacket = new ServerDataMessage();
-            accountPacket.Data = Array.Empty<byte>();
-            accountPacket.Type = ServerDataType.KeepAlive;
-            accountPacket.SocketId = 0;
-            accountPacket.PacketCode = Grobal2.RUNGATECODE;
-            accountPacket.PacketLen = accountPacket.GetPacketSize();
-            SendSocket(ServerPackSerializer.Serialize(accountPacket));
-            _logQueue.DebugLog("Send DBSvr Heartbeat.");
+            var messageData = new ServerDataMessage();
+            messageData.Type = ServerDataType.KeepAlive;
+            SendSocket(ServerPackSerializer.Serialize(messageData));
+            _logger.DebugLog("Send DBSvr Heartbeat.");
         }
 
         public void SendBuffer(string sendText)
@@ -222,10 +303,28 @@ namespace SelGate.Services
 
         public void SendSocket(byte[] buffer)
         {
-            if (_clientSocket.IsConnected)
+            if (!_clientSocket.IsConnected)
             {
-                _clientSocket.Send(buffer);
+               return;
             }
+            SendMessage(buffer);
+        }
+        
+        private void SendMessage(byte[] sendBuffer)
+        {
+            using var memoryStream = new MemoryStream();
+            using var backingStream = new BinaryWriter(memoryStream);
+            var serverMessage = new ServerDataPacket
+            {
+                PacketCode = Grobal2.RUNGATECODE,
+                PacketLen = (short)sendBuffer.Length
+            };
+            backingStream.Write(serverMessage.GetBuffer());
+            backingStream.Write(sendBuffer);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            _clientSocket.Send(data);
         }
     }
 

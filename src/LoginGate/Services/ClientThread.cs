@@ -1,6 +1,7 @@
 using LoginGate.Conf;
 using LoginGate.Packet;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using SystemModule;
@@ -37,6 +38,14 @@ namespace LoginGate.Services
         /// Session管理
         /// </summary>
         private readonly SessionManager _sessionManager;
+        /// <summary>
+        /// 数据缓冲区
+        /// </summary>
+        private byte[] DataBuff;
+        /// <summary>
+        /// 缓存缓冲长度
+        /// </summary>
+        private int DataLen;
 
         public ClientThread(MirLogger logger, SessionManager sessionManager, ClientManager clientManager)
         {
@@ -49,6 +58,7 @@ namespace LoginGate.Services
             _clientSocket.OnReceivedData += ClientSocketRead;
             _clientSocket.OnError += ClientSocketError;
             SessionArray = new TSessionInfo[GateShare.MaxSession];
+            DataBuff = new byte[10 * 1024];
         }
 
         public bool IsConnected => _clientSocket.IsConnected;
@@ -144,26 +154,82 @@ namespace LoginGate.Services
         /// </summary>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            if (e.BuffLen <= 0)
+            var nMsgLen = e.BuffLen;
+            if (nMsgLen <= 0)
             {
                 return;
             }
-            if (e.Buff[0] == (byte)'%' && e.Buff[1] == (byte)'+')
+            if (DataLen > 0)
             {
-                if (e.Buff[2] == (byte)'-')
-                {
-                    var sessionId = BitConverter.ToInt32(e.Buff.AsSpan()[2..6]);
-                    _sessionManager.CloseSession(sessionId);
-                    _logger.LogInformation("收到LoginSvr关闭会话请求", 1);
-                }
-                else
-                {
-                    KeepAliveTick = HUtil32.GetTickCount();
-                }
-                return;
+                var packetData = new byte[nMsgLen];
+                Buffer.BlockCopy(e.Buff, 0, packetData, 0, nMsgLen);
+                MemoryCopy.BlockCopy(packetData, 0, DataBuff, DataLen, nMsgLen);
+                ProcessServerData(DataBuff, DataLen + nMsgLen, e.SocketId);
             }
-            _clientManager.SendQueue(e.Buff);
-            ReceiveBytes += e.BuffLen;
+            else
+            {
+                Buffer.BlockCopy(e.Buff, 0, DataBuff, 0, nMsgLen);
+                ProcessServerData(DataBuff, nMsgLen, e.SocketId);
+            }
+            ReceiveBytes += nMsgLen;
+        }
+        
+        private void ProcessServerData(byte[] data, int nLen, int socketId)
+        {
+            var srcOffset = 0;
+            Span<byte> dataBuff = data;
+            while (nLen > ServerDataPacket.FixedHeaderLen)
+            {
+                var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
+                if (message.PacketCode != Grobal2.RUNGATECODE)
+                {
+                    srcOffset++;
+                    dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
+                    nLen -= 1;
+                    _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                    continue;
+                }
+                var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
+                if (nCheckMsgLen > nLen)
+                {
+                    break;
+                } 
+                var messageData = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                switch (messageData.Type)
+                {
+                    case ServerDataType.KeepAlive:
+                        KeepAliveTick = HUtil32.GetTickCount();
+                        break;
+                    case ServerDataType.Leave:
+                        _sessionManager.CloseSession(messageData.SocketId);
+                        break;
+                    case ServerDataType.Data:
+                        _clientManager.SendQueue(messageData);
+                        break;
+                }
+                nLen -= nCheckMsgLen;
+                if (nLen <= 0)
+                {
+                    break;
+                }
+                dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                DataLen = nLen;
+                srcOffset = 0;
+                if (nLen < ServerDataPacket.FixedHeaderLen)
+                {
+                    break;
+                }
+            }
+            if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+            {
+                MemoryCopy.BlockCopy(dataBuff, 0, DataBuff, 0, nLen);
+                DataLen = nLen;
+            }
+            else
+            {
+                DataLen = 0;
+            }
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -199,18 +265,30 @@ namespace LoginGate.Services
 
         public void SendPacket(ServerDataMessage packet)
         {
-            packet.PacketCode = Grobal2.RUNGATECODE;
-            packet.PacketLen = packet.GetPacketSize();
-            SendSocket(ServerPackSerializer.Serialize(packet));
+            if (!IsConnected)
+            {
+                return;
+            }
+            var sendData = ServerPackSerializer.Serialize(packet);
+            SendMessage(sendData);
         }
 
-        private void SendSocket(byte[] sendBuffer)
+        private void SendMessage(byte[] sendBuffer)
         {
-            if (IsConnected)
+            using var memoryStream = new MemoryStream();
+            using var backingStream = new BinaryWriter(memoryStream);
+            var serverMessage = new ServerDataPacket
             {
-                _clientSocket.Send(sendBuffer);
-                SendBytes += sendBuffer.Length;
-            }
+                PacketCode = Grobal2.RUNGATECODE,
+                PacketLen = (short)sendBuffer.Length
+            };
+            backingStream.Write(serverMessage.GetBuffer());
+            backingStream.Write(sendBuffer);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            _clientSocket.Send(data);
+            SendBytes += data.Length;
         }
 
         private string SendStatistics()

@@ -641,7 +641,7 @@ namespace GameSvr.RobotPlay
         private bool SearchPickUpItem_PickUpItem(int nX, int nY)
         {
             bool result = false;
-            UserItem UserItem = null;
+            ClientUserItem UserItem = null;
             MapItem MapItem = Envir.GetItem(nX, nY);
             if (MapItem == null)
             {
@@ -677,7 +677,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (Envir.DeleteFromMap(nX, nY, CellType.Item, MapItem) == 1)
                     {
-                        UserItem = new UserItem();
+                        UserItem = new ClientUserItem();
                         UserItem = MapItem.UserItem;
                         StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                         if (StdItem != null && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(UserItem.Index)))
@@ -1658,7 +1658,7 @@ namespace GameSvr.RobotPlay
             bool result = false;
             if (nIndex >= 0 && nIndex < ItemList.Count)
             {
-                UserItem UserItem = ItemList[nIndex];
+                ClientUserItem UserItem = ItemList[nIndex];
                 if (UseItems[Grobal2.U_ARMRINGL].Index > 0)
                 {
                     StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].Index);
@@ -1671,7 +1671,7 @@ namespace GameSvr.RobotPlay
                         else
                         {
                             ItemList.RemoveAt(nIndex);
-                            UserItem AddUserItem = UseItems[Grobal2.U_ARMRINGL];
+                            ClientUserItem AddUserItem = UseItems[Grobal2.U_ARMRINGL];
                             if (AddItemToBag(AddUserItem))
                             {
                                 UseItems[Grobal2.U_ARMRINGL] = UserItem;
@@ -4201,7 +4201,7 @@ namespace GameSvr.RobotPlay
         private bool CheckHeroAmulet(int nType, int nCount)
         {
             bool result = false;
-            UserItem UserItem;
+            ClientUserItem UserItem;
             StdItem AmuletStdItem;
             try
             {

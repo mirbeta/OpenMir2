@@ -1087,7 +1087,7 @@ namespace GameSvr.Actor
             }
         }
 
-        private void ApplyItemParameters(UserItem uitem, StdItem stdItem, ref AddAbility aabil)
+        private void ApplyItemParameters(ClientUserItem uitem, StdItem stdItem, ref AddAbility aabil)
         {
             var item = M2Share.WorldEngine.GetStdItem(uitem.Index);
             if (item != null)
@@ -1291,7 +1291,7 @@ namespace GameSvr.Actor
             }
         }
 
-        private void ApplyItemParametersEx(UserItem uitem, ref Ability aWabil)
+        private void ApplyItemParametersEx(ClientUserItem uitem, ref Ability aWabil)
         {
             StdItem item = M2Share.WorldEngine.GetStdItem(uitem.Index);
             if (item != null)
@@ -1595,7 +1595,7 @@ namespace GameSvr.Actor
             }
         }
 
-        private void ApplyItemParametersByJob(UserItem uitem, ref ClientItem std)
+        private void ApplyItemParametersByJob(ClientUserItem uitem, ref ClientItem std)
         {
             var item = M2Share.WorldEngine.GetStdItem(uitem.Index);
             if (item != null)

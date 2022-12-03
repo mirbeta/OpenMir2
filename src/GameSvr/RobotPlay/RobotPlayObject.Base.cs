@@ -17,7 +17,7 @@ namespace GameSvr.RobotPlay
             int nPercent;
             int nValue;
             StdItem StdItem;
-            UserItem UserItem;
+            ClientUserItem UserItem;
             bool boRecalcAbilitys;
             bool boFind = false;
             try
@@ -168,7 +168,7 @@ namespace GameSvr.RobotPlay
                                             StdItem = M2Share.WorldEngine.GetStdItem(m_UseItemNames[nWhere]);
                                             if (StdItem != null)
                                             {
-                                                UserItem = new UserItem();
+                                                UserItem = new ClientUserItem();
                                                 if (M2Share.WorldEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref UserItem))
                                                 {
                                                     boRecalcAbilitys = true;
@@ -208,7 +208,7 @@ namespace GameSvr.RobotPlay
                                             }
                                             if (!boFind)
                                             {
-                                                UserItem = new UserItem();
+                                                UserItem = new ClientUserItem();
                                                 if (M2Share.WorldEngine.CopyToUserItemFromName(m_BagItemNames[i], ref UserItem))
                                                 {
                                                     if (!AddItemToBag(UserItem))

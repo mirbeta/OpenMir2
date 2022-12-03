@@ -2,6 +2,8 @@
 using DBSvr.Storage;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Packets;
@@ -85,32 +87,31 @@ namespace DBSvr.Services
 
         }
 
-        private void ProcessServerData(byte[] data, int nLen,ref ServerDataInfo serverInfo)
+        private void ProcessServerData(byte[] data, int nLen, ref ServerDataInfo serverInfo)
         {
             var srcOffset = 0;
             Span<byte> dataBuff = data;
             try
             {
-                while (nLen >= ServerRequestData.HeaderMessageSize)
+                while (nLen >= ServerDataPacket.FixedHeaderLen)
                 {
-                    Span<byte> packetHead = dataBuff[..ServerRequestData.HeaderMessageSize];
-                    var packetCode = BitConverter.ToUInt32(packetHead[..4]);
-                    if (packetCode != Grobal2.RUNGATECODE)
+                    var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                    var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
+                    if (message.PacketCode != Grobal2.RUNGATECODE)
                     {
                         srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, ServerRequestData.HeaderMessageSize);
+                        dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
                         nLen -= 1;
                         _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
-                    var queryId = BitConverter.ToInt32(packetHead.Slice(4, 4));
-                    var messageLen = BitConverter.ToInt16(packetHead.Slice(8, 2));
-                    var nCheckMsgLen = Math.Abs(messageLen);
+                    var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
                     if (nCheckMsgLen > nLen)
                     {
                         break;
                     }
-                    ProcessServerPacket(serverInfo, queryId, serverInfo.Data[..messageLen]);
+                    var messageData = ServerPackSerializer.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                    ProcessMessagePacket(serverInfo, messageData);
                     nLen -= nCheckMsgLen;
                     if (nLen <= 0)
                     {
@@ -119,7 +120,7 @@ namespace DBSvr.Services
                     dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
                     serverInfo.DataLen = nLen;
                     srcOffset = 0;
-                    if (nLen < ServerRequestData.HeaderMessageSize)
+                    if (nLen < ServerDataPacket.FixedHeaderLen)
                     {
                         break;
                     }
@@ -139,38 +140,10 @@ namespace DBSvr.Services
                 _logger.LogError(ex);
             }
         }
-
-        private void ServerSocketClientRead(object sender, AsyncUserToken e)
+        
+        private void ProcessMessagePacket(ServerDataInfo serverInfo, ServerRequestData requestData)
         {
-            for (var i = 0; i < _serverList.Count; i++)
-            {
-                var serverInfo = _serverList[i];
-                if (serverInfo.ConnectionId == e.ConnectionId)
-                {
-                    var nMsgLen = e.BytesReceived;
-                    if (serverInfo.DataLen > 0)
-                    {
-                        var packetData = new byte[e.BytesReceived];
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
-                        MemoryCopy.BlockCopy(packetData, 0, serverInfo.Data, serverInfo.DataLen, packetData.Length);
-                        ProcessServerData(serverInfo.Data, serverInfo.DataLen + nMsgLen, ref serverInfo);
-                    }
-                    else
-                    {
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, serverInfo.Data, 0, nMsgLen);
-                        ProcessServerData(serverInfo.Data, nMsgLen, ref serverInfo);
-                    }
-                }
-            }
-        }
-
-        private void ProcessServerPacket(ServerDataInfo serverInfo,int nQueryId, byte[] data)
-        {
-            var requestData = ServerPackSerializer.Deserialize<ServerRequestData>(data);
-            if (requestData == null)
-            {
-                return;
-            }
+            int nQueryId = requestData.QueryId;
             var requestMessage = ServerPackSerializer.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
             var packetLen = requestData.Message.Length + requestData.Packet.Length + 6;
             if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0 && requestData.Packet != null && requestData.Sgin != null)
@@ -206,38 +179,30 @@ namespace DBSvr.Services
             SendRequest(serverInfo.ConnectionId, nQueryId, responsePack);
         }
 
-        private void SendRequest(string connectionId, int queryId, ServerRequestData requestPacket)
+        private void ServerSocketClientRead(object sender, AsyncUserToken e)
         {
-            requestPacket.QueryId = queryId;
-            requestPacket.PacketCode = Grobal2.RUNGATECODE;
-            var queryPart = 0;
-            if (requestPacket.Packet != null)
+            for (var i = 0; i < _serverList.Count; i++)
             {
-                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+                var serverInfo = _serverList[i];
+                if (serverInfo.ConnectionId == e.ConnectionId)
+                {
+                    var nMsgLen = e.BytesReceived;
+                    if (serverInfo.DataLen > 0)
+                    {
+                        var packetData = new byte[e.BytesReceived];
+                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
+                        MemoryCopy.BlockCopy(packetData, 0, serverInfo.Data, serverInfo.DataLen, packetData.Length);
+                        ProcessServerData(serverInfo.Data, serverInfo.DataLen + nMsgLen, ref serverInfo);
+                    }
+                    else
+                    {
+                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, serverInfo.Data, 0, nMsgLen);
+                        ProcessServerData(serverInfo.Data, nMsgLen, ref serverInfo);
+                    }
+                }
             }
-            else
-            {
-                requestPacket.Packet = Array.Empty<byte>();
-                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + 6));
-            }
-            var nCheckCode = BitConverter.GetBytes(queryPart);
-            requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
-            _serverSocket.Send(connectionId, ServerPackSerializer.Serialize(requestPacket));
         }
-
-        private void SendRequest<T>(string connectionId, int queryId, ServerRequestData requestPacket, T packet) where T : class, new()
-        {
-            requestPacket.QueryId = queryId;
-            requestPacket.PacketCode = Grobal2.RUNGATECODE;
-            if (packet != null)
-            {
-                requestPacket.Packet = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(packet));
-            }
-            var s = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
-            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
-            _serverSocket.Send(connectionId, ServerPackSerializer.Serialize(requestPacket));
-        }
-
+        
         /// <summary>
         /// 清理超时会话
         /// </summary>
@@ -465,6 +430,53 @@ namespace DBSvr.Services
                 }
                 nIndex++;
             }
+        }
+           
+        private void SendRequest(string connectionId, int queryId, ServerRequestData requestPacket)
+        {
+            requestPacket.QueryId = queryId;
+            var queryPart = 0;
+            if (requestPacket.Packet != null)
+            {
+                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+            }
+            else
+            {
+                requestPacket.Packet = Array.Empty<byte>();
+                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + 6));
+            }
+            var nCheckCode = BitConverter.GetBytes(queryPart);
+            requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
+            SendMessage(connectionId, ServerPackSerializer.Serialize(requestPacket));
+        }
+
+        private void SendRequest<T>(string connectionId, int queryId, ServerRequestData requestPacket, T packet) where T : new()
+        {
+            requestPacket.QueryId = queryId;
+            if (packet != null)
+            {
+                requestPacket.Packet = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(packet));
+            }
+            var s = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
+            SendMessage(connectionId, ServerPackSerializer.Serialize(requestPacket));
+        }
+
+        private void SendMessage(string connectionId, byte[] sendBuffer)
+        {
+            using var memoryStream = new MemoryStream();
+            using var backingStream = new BinaryWriter(memoryStream);
+            var serverMessage = new ServerDataPacket
+            {
+                PacketCode = Grobal2.RUNGATECODE,
+                PacketLen = (short)sendBuffer.Length
+            };
+            backingStream.Write(serverMessage.GetBuffer());
+            backingStream.Write(sendBuffer);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            _serverSocket.Send(connectionId, data);
         }
     }
 }
