@@ -11,21 +11,34 @@
     </PropertyGroup>
 
     <Choose>
-        <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <When Condition="$(Configuration)=='Release'">
             <PropertyGroup>
-                <OutputPath>D:\MirServer\LogServer</OutputPath>
+                <DebugSymbols>false</DebugSymbols>
+                <Optimize>true</Optimize>
+                <DefineConstants>TRACE</DefineConstants>
             </PropertyGroup>
         </When>
-        <When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-            <PropertyGroup>
-                <OutputPath>/Volumes/Data/Mirserver/LogServer</OutputPath>
-            </PropertyGroup>
+
+        <When Condition="$(Configuration)=='Debug'">
+            <Choose>
+                <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+                    <PropertyGroup>
+                        <OutputPath>D:\MirServer\LogServer</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/Data/Mirserver/LogServer</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/opt/Mirserver/LogServer</OutputPath>
+                    </PropertyGroup>
+                </When>
+            </Choose>
         </When>
-        <When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <PropertyGroup>
-                <OutputPath>/Volumes/opt/Mirserver/LogServer</OutputPath>
-            </PropertyGroup>
-        </When>
+        
     </Choose>
     
     <ItemGroup>

@@ -7,21 +7,33 @@
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 	</PropertyGroup>
+	
 	<Choose>
-		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+		<When Condition="$(Configuration)=='Release'">
 			<PropertyGroup>
-				<OutputPath>D:\MirServer\SelGate</OutputPath>
+				<DebugSymbols>false</DebugSymbols>
+				<Optimize>true</Optimize>
+				<DefineConstants>TRACE</DefineConstants>
 			</PropertyGroup>
 		</When>
-		<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-			<PropertyGroup>
-				<OutputPath>/Volumes/Data/Mirserver/SelGate</OutputPath>
-			</PropertyGroup>
-		</When>
-		<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-			<PropertyGroup>
-				<OutputPath>/Volumes/opt/Mirserver/SelGate</OutputPath>
-			</PropertyGroup>
+		<When Condition="$(Configuration)=='Debug'">
+			<Choose>
+				<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+					<PropertyGroup>
+						<OutputPath>D:\MirServer\SelGate</OutputPath>
+					</PropertyGroup>
+				</When>
+				<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+					<PropertyGroup>
+						<OutputPath>/Volumes/Data/Mirserver/SelGate</OutputPath>
+					</PropertyGroup>
+				</When>
+				<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+					<PropertyGroup>
+						<OutputPath>/Volumes/opt/Mirserver/SelGate</OutputPath>
+					</PropertyGroup>
+				</When>
+			</Choose>
 		</When>
 	</Choose>
 
