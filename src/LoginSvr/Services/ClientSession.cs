@@ -706,6 +706,7 @@ namespace LoginSvr.Services
                 _sessionService.SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
                 connInfo.KickTick = HUtil32.GetTickCount();
                 connInfo.Kicked = true;
+                connInfo.SessionID = connInfo.SessionID;
             }
         }
 
