@@ -286,14 +286,17 @@ namespace LoginSvr.Services
         /// </summary>
         public void SessionClearKick()
         {
-            var sessionList = _sessionManager.GetSessions.ToArray();
-            for (var i = sessionList.Length - 1; i >= 0; i--)
+            var sessionList = _sessionManager.GetSessions();
+            if (sessionList != null)
             {
-                var connInfo = sessionList[i];
-                if (connInfo.Kicked && (HUtil32.GetTickCount() - connInfo.KickTick) > 5 * 1000)
+                for (var i = sessionList.Length - 1; i >= 0; i--)
                 {
-                    SessionDel(connInfo.Account, connInfo.SessionID);
-                    sessionList[i] = null;
+                    var connInfo = sessionList[i];
+                    if (connInfo.Kicked && (HUtil32.GetTickCount() - connInfo.KickTick) > 5 * 1000)
+                    {
+                        SessionDel(connInfo.Account, connInfo.SessionID);
+                        sessionList[i] = null;
+                    }
                 }
             }
         }

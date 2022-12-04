@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LoginSvr.Services
 {
@@ -53,6 +54,9 @@ namespace LoginSvr.Services
             }
         }
 
-        public IEnumerable<SessionConnInfo> GetSessions => sessionMap.Values;
+        public SessionConnInfo[] GetSessions()
+        {
+            return sessionMap.Count > 0 ? sessionMap.Values.ToArray() : null;
+        }
     }
 }

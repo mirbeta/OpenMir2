@@ -33,13 +33,13 @@ namespace LoginSvr
             {
                 _loginService.SessionClearKick();
                 _sessionService.SessionClearNoPayMent();
-                ProcessMonSoc();
+                SystemStatus();
                 CheckServerStatus();
                 await Task.Delay(TimeSpan.FromMilliseconds(10), stoppingToken);
             }
         }
 
-        private void ProcessMonSoc()
+        private void SystemStatus()
         {
             if (HUtil32.GetTickCount() - _processMonSocTick > 20000)
             {
@@ -49,10 +49,9 @@ namespace LoginSvr
                 for (var i = 0; i < serverListCount; i++)
                 {
                     var msgServer = _sessionService.ServerList[i];
-                    var sServerName = msgServer.ServerName;
-                    if (!string.IsNullOrEmpty(sServerName))
+                    if (!string.IsNullOrEmpty(msgServer.ServerName))
                     {
-                        builder.Append(sServerName + "/" + msgServer.ServerIndex + "/" + msgServer.OnlineCount + "/");
+                        builder.Append(msgServer.ServerName + "/" + msgServer.ServerIndex + "/" + msgServer.OnlineCount + "/");
                         if (msgServer.ServerIndex == 99)
                         {
                             builder.Append("DB/");
@@ -60,23 +59,23 @@ namespace LoginSvr
                         else
                         {
                             builder.Append("Game/");
+                            switch (msgServer.PayMentMode)
+                            {
+                                case 0:
+                                    builder.Append("免费/");
+                                    break;
+                                case 1:
+                                    builder.Append("试玩/");
+                                    break;
+                                case 2:
+                                    builder.Append("测试/");
+                                    break;
+                                case 3:
+                                    builder.Append("付费/");
+                                    break;
+                            }
                         }
                         builder.Append($"Online:{msgServer.OnlineCount}/");
-                        switch (msgServer.PayMentMode)
-                        {
-                            case 0:
-                                builder.Append("免费/");
-                                break;
-                            case 1:
-                                builder.Append("试玩/");
-                                break;
-                            case 2:
-                                builder.Append("测试/");
-                                break;
-                            case 3:
-                                builder.Append("付费/");
-                                break;
-                        }
                         if ((HUtil32.GetTickCount() - msgServer.KeepAliveTick) < 30000)
                         {
                             builder.Append("正常");
