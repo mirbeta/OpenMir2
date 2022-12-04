@@ -53,6 +53,6 @@ namespace LoginSvr.Services
             }
         }
 
-        public ICollection<SessionConnInfo> GetSessions => sessionMap.Values;
+        public IEnumerable<SessionConnInfo> GetSessions => sessionMap.Values;
     }
 }

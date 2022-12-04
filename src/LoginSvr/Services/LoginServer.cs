@@ -219,28 +219,7 @@ namespace LoginSvr.Services
             messagePacket.Type = ServerDataType.KeepAlive;
             SendMessage(connectionId, ServerPackSerializer.Serialize(messagePacket));
         }
-
-        private void SendMessage(string connectionId, byte[] sendBuffer)
-        {
-            using var memoryStream = new MemoryStream();
-            using var backingStream = new BinaryWriter(memoryStream);
-            var serverMessage = new ServerDataPacket
-            {
-                PacketCode = Grobal2.RUNGATECODE,
-                PacketLen = (short)sendBuffer.Length
-            };
-            backingStream.Write(serverMessage.GetBuffer());
-            backingStream.Write(sendBuffer);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var data = new byte[memoryStream.Length];
-            memoryStream.Read(data, 0, data.Length);
-
-            if (_serverSocket.IsOnline(connectionId))
-            {
-                _serverSocket.Send(connectionId, data);
-            }
-        }
-
+        
         private void ReceiveCloseUser(int sSockIndex, LoginGateInfo gateInfo)
         {
             const string sCloseMsg = "Close: {0}";
@@ -313,6 +292,7 @@ namespace LoginSvr.Services
                 var connInfo = sessionList[i];
                 if (connInfo.Kicked && (HUtil32.GetTickCount() - connInfo.KickTick) > 5 * 1000)
                 {
+                    SessionDel(connInfo.Account, connInfo.SessionID);
                     sessionList[i] = null;
                 }
             }
@@ -321,18 +301,29 @@ namespace LoginSvr.Services
         private void SessionDel(string account, int nSessionId)
         {
             _sessionManager.Delete(account, nSessionId);
-            /*for (var i = 0; i < _config.SessionList.Count; i++)
-            {
-                if (_config.SessionList[i].SessionID == nSessionId)
-                {
-                    _config.SessionList[i] = null;
-                    _config.SessionList.RemoveAt(i);
-                    break;
-                }
-            }*/
         }
         
-        public struct MessagePacket
+        private void SendMessage(string connectionId, byte[] sendBuffer)
+        {
+            using var memoryStream = new MemoryStream();
+            using var backingStream = new BinaryWriter(memoryStream);
+            var serverMessage = new ServerDataPacket
+            {
+                PacketCode = Grobal2.RUNGATECODE,
+                PacketLen = (short)sendBuffer.Length
+            };
+            backingStream.Write(serverMessage.GetBuffer());
+            backingStream.Write(sendBuffer);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var data = new byte[memoryStream.Length];
+            memoryStream.Read(data, 0, data.Length);
+            if (_serverSocket.IsOnline(connectionId))
+            {
+                _serverSocket.Send(connectionId, data);
+            }
+        }
+
+        private struct MessagePacket
         {
             public int ConnectionId;
             public ServerDataMessage Pakcet;
