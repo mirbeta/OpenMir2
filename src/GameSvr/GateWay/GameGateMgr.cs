@@ -62,7 +62,7 @@ namespace GameSvr.GateWay
 
         private void AddGate(AsyncUserToken e)
         {
-            const string sGateOpen = "游戏网关({0})已打开...";
+            const string sGateOpen = "游戏网关{0}已打开...";
             const string sKickGate = "服务器未就绪: {0}";
             if (M2Share.StartReady)
             {
@@ -191,7 +191,7 @@ namespace GameSvr.GateWay
 
         private void CloseGate(AsyncUserToken e)
         {
-            const string sGateClose = "游戏网关({0}:{1})已关闭...";
+            const string sGateClose = "游戏网关{0}已关闭...";
             HUtil32.EnterCriticalSection(m_RunSocketSection);
             try
             {
@@ -232,7 +232,7 @@ namespace GameSvr.GateWay
                     gateInfo.UserList = null;
                     gateInfo.BoUsed = false;
                     gateInfo.Socket = null;
-                    _logger.Error(string.Format(sGateClose, e.EndPoint.Address, e.EndPoint.Port));
+                    _logger.Error(string.Format(sGateClose, e.EndPoint));
                     if (_GateMap.Remove(e.SocHandle, out var gameGate))
                     {
                         gameGate.Stop();
@@ -283,13 +283,13 @@ namespace GameSvr.GateWay
             var dwRunTick = HUtil32.GetTickCount();
             if (M2Share.StartReady)
             {
-                if (_GateMap.Count > 0)
+                if (_GateMap.IsEmpty)
                 {
                     var gateServiceList = _GateMap.Values.ToList();
                     foreach (var gateService in gateServiceList)
                     {
                         var gateInfo = gateService.GateInfo;
-                        if (gateInfo.Socket != null)
+                        if (gateInfo.Socket != null && gateInfo.Socket.Connected)
                         {
                             if (HUtil32.GetTickCount() - gateInfo.dwSendTick >= 1000)
                             {

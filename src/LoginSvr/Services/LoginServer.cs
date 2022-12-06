@@ -248,37 +248,29 @@ namespace LoginSvr.Services
             var sUserIPaddr = string.Empty;
             const string sOpenMsg = "Open: {0}/{1}";
             var sGateIPaddr = HUtil32.GetValidStr3(sIPaddr, ref sUserIPaddr, new[] { "/" });
-            try
+            for (var i = 0; i < gateInfo.UserList.Count; i++)
             {
-                for (var i = 0; i < gateInfo.UserList.Count; i++)
+                userInfo = gateInfo.UserList[i];
+                if (userInfo.SockIndex == sSockIndex)
                 {
-                    userInfo = gateInfo.UserList[i];
-                    if (userInfo.SockIndex == sSockIndex)
-                    {
-                        userInfo.UserIPaddr = sUserIPaddr;
-                        userInfo.GateIPaddr = sGateIPaddr;
-                        userInfo.Account = string.Empty;
-                        userInfo.SessionID = 0;
-                        userInfo.ClientTick = HUtil32.GetTickCount();
-                        break;
-                    }
+                    userInfo.UserIPaddr = sUserIPaddr;
+                    userInfo.GateIPaddr = sGateIPaddr;
+                    userInfo.Account = string.Empty;
+                    userInfo.SessionID = 0;
+                    userInfo.ClientTick = HUtil32.GetTickCount();
+                    break;
                 }
-                userInfo = new UserInfo();
-                userInfo.Account = string.Empty;
-                userInfo.UserIPaddr = sUserIPaddr;
-                userInfo.GateIPaddr = sGateIPaddr;
-                userInfo.SockIndex = sSockIndex;
-                userInfo.SessionID = 0;
-                userInfo.Socket = gateInfo.Socket;
-                userInfo.ClientTick = HUtil32.GetTickCount();
-                gateInfo.UserList.Add(userInfo);
-                _logger.DebugLog(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
             }
-            catch (Exception ex)
-            {
-                _logger.LogError("[Exception] LoginService.ReceiveOpenUser ");
-                _logger.LogError(ex);
-            }
+            userInfo = new UserInfo();
+            userInfo.Account = string.Empty;
+            userInfo.UserIPaddr = sUserIPaddr;
+            userInfo.GateIPaddr = sGateIPaddr;
+            userInfo.SockIndex = sSockIndex;
+            userInfo.SessionID = 0;
+            userInfo.Socket = gateInfo.Socket;
+            userInfo.ClientTick = HUtil32.GetTickCount();
+            gateInfo.UserList.Add(userInfo);
+            _logger.DebugLog(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
         }
 
         /// <summary>

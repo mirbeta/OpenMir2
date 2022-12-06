@@ -1,6 +1,7 @@
 using GameGate.Conf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameGate.Services
 {
@@ -69,9 +70,9 @@ namespace GameGate.Services
             _clientThreadMap.TryRemove(connectionId, out var userClinet);
         }
 
-        public ICollection<ClientThread> GetClients()
+        public ClientThread[] GetClients()
         {
-            return _clientThreadMap.Values;
+            return _clientThreadMap.IsEmpty ? _clientThreadMap.Values.ToArray() : null;
         }
 
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -95,9 +96,9 @@ namespace GameGate.Services
             return false;
         }
 
-        public ICollection<ClientSession> GetSessions()
+        public ClientSession[] GetSessions()
         {
-            return _sessionMap.Values;
+            return _sessionMap.IsEmpty ? null : _sessionMap.Values.ToArray();
         }
     }
 }
