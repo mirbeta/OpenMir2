@@ -1,6 +1,6 @@
 using System.Net.Sockets;
 
-namespace GameSvr.GateWay
+namespace GameSvr.GameGate
 {
     public class GameGateInfo
     {
@@ -53,5 +53,7 @@ namespace GameSvr.GateWay
         /// 上次心跳时间
         /// </summary>
         public int dwSendCheckTick;
+        public byte[] GateBuff;
+        public int BuffLen;
     }
 }

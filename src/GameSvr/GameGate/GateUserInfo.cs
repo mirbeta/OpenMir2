@@ -3,7 +3,7 @@ using GameSvr.Services;
 using GameSvr.World;
 using SystemModule.Data;
 
-namespace GameSvr.GateWay
+namespace GameSvr.GameGate
 {
     public class GateUserInfo
     {

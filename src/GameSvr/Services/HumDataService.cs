@@ -1,6 +1,7 @@
 using NLog;
 using System.Collections.Concurrent;
 using SystemModule;
+using SystemModule.Data;
 using SystemModule.Packets.ServerPackets;
 
 namespace GameSvr.Services
@@ -100,20 +101,20 @@ namespace GameSvr.Services
         /// 保存玩家数据到DB
         /// </summary>
         /// <returns></returns>
-        public static bool SaveHumRcdToDB(string account, string chrName, int sessionId, PlayerDataInfo HumanRcd)
+        public static bool SaveHumRcdToDB(SavePlayerRcd saveRcd, ref int queryId)
         {
             M2Share.Config.nSaveDBCount++;
-            return SaveRcd(account, chrName, sessionId, HumanRcd);
+            return SaveRcd(saveRcd, ref queryId);
         }
 
-        private static bool SaveRcd(string account, string chrName, int sessionId, PlayerDataInfo HumanRcd)
+        private static bool SaveRcd(SavePlayerRcd saveRcd, ref int queryId)
         {
-            var nQueryId = GetQueryId();
-            var packet = new ServerRequestMessage(Grobal2.DB_SAVEHUMANRCD, sessionId, 0, 0, 0);
-            var saveHumData = new SavePlayerDataMessage(account, chrName, HumanRcd);
-            if (M2Share.DataServer.SendRequest(nQueryId, packet, saveHumData))
+            queryId = GetQueryId();
+            var packet = new ServerRequestMessage(Grobal2.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
+            var saveHumData = new SavePlayerDataMessage(saveRcd.Account, saveRcd.ChrName, saveRcd.HumanRcd);
+            if (M2Share.DataServer.SendRequest(queryId, packet, saveHumData))
             {
-                //saveProcessList.Enqueue(nQueryId);
+                saveProcessList.Enqueue(queryId);
             }
             else
             {
@@ -135,11 +136,7 @@ namespace GameSvr.Services
                 {
                     if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
                     {
-                        // result = true;
-                    }
-                    else
-                    {
-                        // Logger.Error($"[RunDB] 保存人物({chrName})数据失败");
+                        M2Share.FrontEngine.RemoveSaveList(queryId);
                     }
                 }
                 else

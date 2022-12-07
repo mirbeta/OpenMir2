@@ -505,12 +505,11 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-
         private void SaveStatus(StorageContext context, int playerId, ushort[] statusTimeArr)
         {
             try
             {
-                const string updatrStatusSql = "UPDATE characters_status SET Status0=@Status0,Status1=@Status1,Status2=@Status2,Status3=@Status3,Status4=@Status4,Status5=@Status5,Status6=@Status6,Status7=@Status7,Status8=@Status8,Status9=@Status9,Status10=@Status10,Status11=@Status11,Status12=@Status12,Status13=@Status13,Status14=@Status14,Status15=@Status15 WHERE PlayerId=@PlayerId;";
+                const string updatrStatusSql = "UPDATE characters_status SET Status0=@Status0,Status1=@Status1,Status2=@Status2,Status3=@Status3,Status4=@Status4,Status5=@Status5,Status6=@Status6,Status7=@Status7,Status8=@Status8,Status9=@Status9,Status10=@Status10,Status11=@Status11,Status12=@Status12,Status13=@Status13,Status14=@Status14 WHERE PlayerId=@PlayerId;";
                 var command = context.CreateCommand();
                 command.CommandText = updatrStatusSql;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
@@ -529,12 +528,11 @@ namespace DBSvr.Storage.MySQL
                 command.Parameters.AddWithValue("@Status12", statusTimeArr[12]);
                 command.Parameters.AddWithValue("@Status13", statusTimeArr[13]);
                 command.Parameters.AddWithValue("@Status14", statusTimeArr[14]);
-                command.Parameters.AddWithValue("@Status15", statusTimeArr[15]);
                 command.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.UpdateStatus (INSERT characters_status)");
+                _logger.Error("[Exception] PlayDataStorage.UpdateStatus (Update characters_status)");
                 _logger.Error(ex.StackTrace);
             }
         }

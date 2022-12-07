@@ -1,10 +1,10 @@
-﻿using GameSvr.Player;
-using GameSvr.Services;
-using NLog;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Channels;
+using GameSvr.Player;
+using GameSvr.Services;
+using NLog;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -13,7 +13,7 @@ using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 
-namespace GameSvr.GateWay
+namespace GameSvr.GameGate
 {
     public class GameGateMgr
     {

@@ -4,12 +4,14 @@ namespace SystemModule.Data
 {
     public class SavePlayerRcd
     {
-        public string sAccount;
-        public string sChrName;
-        public int nSessionID;
+        public string Account;
+        public string ChrName;
+        public int SessionID;
         public object PlayObject;
         public PlayerDataInfo HumanRcd;
-        public int nReTryCount;
+        public int ReTryCount;
+        public bool IsSaveing;
+        public int QueryId;
 
         public SavePlayerRcd()
         {

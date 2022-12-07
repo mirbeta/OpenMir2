@@ -122,6 +122,26 @@ namespace GameSvr.Services
             return result;
         }
 
+        public void RemoveSaveList(int queryId)
+        {
+            HUtil32.EnterCriticalSection(UserCriticalSection);
+            try
+            {
+                for (var j = 0; j < m_SaveRcdList.Count; j++)
+                {
+                    if (m_SaveRcdList[j].QueryId == queryId)
+                    {
+                        m_SaveRcdList.RemoveAt(j);
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                HUtil32.LeaveCriticalSection(UserCriticalSection);
+            }
+        }
+
         private void ProcessGameDate()
         {
             IList<TGoldChangeInfo> changeGoldList = null;
@@ -159,42 +179,26 @@ namespace GameSvr.Services
                 PlayerDataService.ProcessSaveList();
                 for (var i = 0; i < m_SaveRcdTempList.Count; i++)
                 {
-                    SavePlayerRcd SaveRcd = m_SaveRcdTempList[i];
+                    var SaveRcd = m_SaveRcdTempList[i];
                     if (SaveRcd == null)
                     {
                         continue;
                     }
-                    if (InSaveRcdList(SaveRcd.sChrName))
+                    if (SaveRcd.IsSaveing)
                     {
                         continue;
                     }
-                    if (PlayerDataService.SaveHumRcdToDB(SaveRcd.sAccount, SaveRcd.sChrName, SaveRcd.nSessionID, SaveRcd.HumanRcd) || SaveRcd.nReTryCount > 50)
+                    SaveRcd.IsSaveing = true;
+                    if (!PlayerDataService.SaveHumRcdToDB(SaveRcd, ref SaveRcd.QueryId) || SaveRcd.ReTryCount > 50)
+                    {
+                        SaveRcd.ReTryCount++;
+                    }
+                    else
                     {
                         if (SaveRcd.PlayObject != null)
                         {
                             ((PlayObject)SaveRcd.PlayObject).m_boRcdSaved = true;
                         }
-                        HUtil32.EnterCriticalSection(UserCriticalSection);
-                        try
-                        {
-                            for (var j = 0; j < m_SaveRcdList.Count; j++)
-                            {
-                                if (m_SaveRcdList[j] == SaveRcd)
-                                {
-                                    m_SaveRcdList.RemoveAt(j);
-                                    DisPose(SaveRcd);
-                                    break;
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            HUtil32.LeaveCriticalSection(UserCriticalSection);
-                        }
-                    }
-                    else
-                    {
-                        SaveRcd.nReTryCount++;
                     }
                 }
             }
@@ -230,6 +234,7 @@ namespace GameSvr.Services
                 if (!LoadHumFromDB(loadDbInfo, ref boReTryLoadDb))
                 {
                     M2Share.GateMgr.CloseUser(loadDbInfo.nGateIdx, loadDbInfo.nSocket);
+                    Console.WriteLine("读取用户数据失败，踢出用户.");
                 }
                 else
                 {
@@ -364,7 +369,7 @@ namespace GameSvr.Services
             {
                 for (var i = 0; i < m_SaveRcdList.Count; i++)
                 {
-                    if (string.Compare(m_SaveRcdList[i].sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(m_SaveRcdList[i].ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         result = true;
                         break;

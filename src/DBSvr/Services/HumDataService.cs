@@ -63,7 +63,7 @@ namespace DBSvr.Services
                 return;
             }
             var serverInfo = new ServerDataInfo();
-            serverInfo.Data = new byte[1024 * 10];
+            serverInfo.Data = new byte[1024 * 20];
             serverInfo.ConnectionId = e.ConnectionId;
             _serverList.Add(serverInfo);
         }

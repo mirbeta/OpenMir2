@@ -85,8 +85,8 @@ namespace SystemModule.AsyncSocket
             Console.WriteLine($"UserToken SetException: {Id} TaskID: {completionSource.Task.Id}");
 #endif
         }
-        
-        public void SetCanceled()
+
+        private void SetCanceled()
         {
             if (completionSource.Task.IsCompleted)
                 return;

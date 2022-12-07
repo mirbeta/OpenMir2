@@ -1456,9 +1456,9 @@ namespace GameSvr.World
             }
             var saveRcd = new SavePlayerRcd
             {
-                sAccount = playObject.UserID,
-                sChrName = playObject.ChrName,
-                nSessionID = playObject.m_nSessionID,
+                Account = playObject.UserID,
+                ChrName = playObject.ChrName,
+                SessionID = playObject.m_nSessionID,
                 PlayObject = playObject,
                 HumanRcd = new PlayerDataInfo()
             };
