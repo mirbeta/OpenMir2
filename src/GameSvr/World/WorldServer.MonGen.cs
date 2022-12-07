@@ -48,8 +48,8 @@ namespace GameSvr.World
                 }
             }
 
-            var monsterNames = monsterGenMap.Keys.ToList();
-            for (int i = 0; i < monsterNames.Count; i++)
+            var monsterNames = monsterGenMap.Keys.ToArray();
+            for (int i = 0; i < monsterNames.Length; i++)
             {
                 var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
                 var monName = monsterNames[i];
@@ -69,7 +69,6 @@ namespace GameSvr.World
                     }
                     MonGenInfoThreadMap.Add(threadId, monsterList);
                 }
-
                 if (!MonsterThreadMap.ContainsKey(MonGenList[i].MonName))
                 {
                     MonsterThreadMap.Add(MonGenList[i].MonName, threadId);
@@ -296,36 +295,27 @@ namespace GameSvr.World
                                             if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
                                             {
                                                 monster.SearchTick = HUtil32.GetTickCount();
-                                                if (!monster.Death)
+                                                if (monster.Death)
                                                 {
-                                                    //怪物主动搜索视觉范围，修改为被动搜索，能够降低CPU和内存使用率，从而提升效率
+                                                    monster.SearchViewRangeDeath();
+                                                }
+                                                else
+                                                {
+                                                    //怪物主动搜索视觉范围，修改为被动搜索，能够降低CPU和内存使用率，从而提升运行处理效率
                                                     //要区分哪些怪物是主动攻击，哪些怪物是被动攻击
                                                     //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
                                                     //其余怪物均为主动攻击
                                                     //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
                                                     //由玩家找出附近的怪物，然后添加到怪物列表
-                                                    //monster.SearchViewRange();
-
-                                                    if (monster.IsSlave) //如果是作为玩家的下属，也有主动搜索附近的精灵
+                                                    if ((monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster) || monster.IsSlave) // 守卫和下属主动搜索附近的精灵
                                                     {
-                                                        if (monster.VisibleActors.Count > 0)//优先使用上一次的视觉范围,下属需要注意如果离角色远然后飞到角色身边的时候可能会使用上一次的视觉范围
-                                                        {
-                                                            continue;
-                                                        }
-                                                        monster.SearchViewRange();
-                                                        continue;
-                                                    }
-                                                    if (monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster) //守卫才主动搜索附近的精灵
-                                                    {
-                                                        if (monster.VisibleActors.Count > 0)//优先使用上一次的视觉范围
+                                                        if (monster.VisibleActors.Count > 3)//超过3个目标，优先使用上次的目标
                                                         {
                                                             continue;
                                                         }
                                                         monster.SearchViewRange();
                                                     }
-                                                    continue;
                                                 }
-                                                monster.SearchViewRangeDeath();
                                             }
                                             monster.ProcessRunCount = 0;
                                             monster.Run();
@@ -505,7 +495,6 @@ namespace GameSvr.World
             int n1C;
             short n20;
             short n24;
-            BaseObject outofrange;
             BaseObject cert = null;
             var map = M2Share.MapMgr.FindMap(sMapName);
             if (map == null) return null;
@@ -720,63 +709,62 @@ namespace GameSvr.World
                     break;
             }
 
-            if (cert != null)
+            if (cert == null)
+                return null;
+            ApplyMonsterAbility(cert, sMonName);
+            cert.Envir = map;
+            cert.MapName = sMapName;
+            cert.CurrX = nX;
+            cert.CurrY = nY;
+            cert.Direction = M2Share.RandomNumber.RandomByte(8);
+            cert.ChrName = sMonName;
+            cert.WAbil = cert.Abil;
+            cert.OnEnvirnomentChanged();
+            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
+            MonGetRandomItems(cert);
+            cert.Initialize();
+            if (cert.AddtoMapSuccess)
             {
-                ApplyMonsterAbility(cert, sMonName);
-                cert.Envir = map;
-                cert.MapName = sMapName;
-                cert.CurrX = nX;
-                cert.CurrY = nY;
-                cert.Direction = M2Share.RandomNumber.RandomByte(8);
-                cert.ChrName = sMonName;
-                cert.WAbil = cert.Abil;
-                cert.OnEnvirnomentChanged();
-                if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
-                MonGetRandomItems(cert);
-                cert.Initialize();
-                if (cert.AddtoMapSuccess)
+                BaseObject outofrange = null;
+                n20 = cert.Envir.Width < 50 ? (short)2 : (short)3;
+                if (cert.Envir.Height < 250)
                 {
-                    outofrange = null;
-                    n20 = cert.Envir.Width < 50 ? (short)2 : (short)3;
-                    if (cert.Envir.Height < 250)
+                    n24 = cert.Envir.Height < 30 ? (short)2 : (short)20;
+                }
+                else
+                {
+                    n24 = 50;
+                }
+                n1C = 0;
+                while (true)
+                {
+                    if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false))
                     {
-                        n24 = cert.Envir.Height < 30 ? (short)2 : (short)20;
-                    }
-                    else
-                    {
-                        n24 = 50;
-                    }
-                    n1C = 0;
-                    while (true)
-                    {
-                        if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false))
+                        if ((cert.Envir.Width - n24 - 1) > cert.CurrX)
                         {
-                            if ((cert.Envir.Width - n24 - 1) > cert.CurrX)
-                            {
-                                cert.CurrX += n20;
-                            }
-                            else
-                            {
-                                cert.CurrX = (short)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
-                                if (cert.Envir.Height - n24 - 1 > cert.CurrY)
-                                    cert.CurrY += n20;
-                                else
-                                    cert.CurrY = (short)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
-                            }
+                            cert.CurrX += n20;
                         }
                         else
                         {
-                            outofrange = (BaseObject)cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.Monster, cert);
-                            break;
+                            cert.CurrX = (short)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
+                            if (cert.Envir.Height - n24 - 1 > cert.CurrY)
+                                cert.CurrY += n20;
+                            else
+                                cert.CurrY = (short)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
                         }
-                        n1C++;
-                        if (n1C >= 31) break;
                     }
-                    if (outofrange == null)
+                    else
                     {
-                        //_logger.Error($"创建怪物失败 名称:{sMonName} 地图:[{sMapName}] X:{nX} Y:{nY} ");
-                        return null;
+                        outofrange = (BaseObject)cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.Monster, cert);
+                        break;
                     }
+                    n1C++;
+                    if (n1C >= 31) break;
+                }
+                if (outofrange == null)
+                {
+                    //_logger.Error($"创建怪物失败 名称:{sMonName} 地图:[{sMapName}] X:{nX} Y:{nY} ");
+                    return null;
                 }
             }
             return cert;
