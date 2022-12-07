@@ -115,11 +115,9 @@ namespace GameSvr.Services
             if (M2Share.DataServer.SendRequest(queryId, packet, saveHumData))
             {
                 saveProcessList.Enqueue(queryId);
+                return true;
             }
-            else
-            {
-                Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
-            }
+            Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             return false;
         }
 

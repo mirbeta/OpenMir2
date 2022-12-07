@@ -3,6 +3,7 @@ using GameSvr.GameCommand;
 using GameSvr.Items;
 using GameSvr.Npc;
 using GameSvr.Services;
+using GameSvr.World;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -95,10 +96,10 @@ namespace GameSvr.Player
                 if (m_boDelayCall && (HUtil32.GetTickCount() - m_dwDelayCallTick) > m_nDelayCall)
                 {
                     m_boDelayCall = false;
-                    NormNpc normNpc = M2Share.WorldEngine.FindMerchant<Merchant>(m_DelayCallNPC);
+                    NormNpc normNpc = WorldServer.FindMerchant<Merchant>(m_DelayCallNPC);
                     if (normNpc == null)
                     {
-                        normNpc = M2Share.WorldEngine.FindNpc<NormNpc>(m_DelayCallNPC);
+                        normNpc = WorldServer.FindNpc<NormNpc>(m_DelayCallNPC);
                     }
                     if (normNpc != null)
                     {

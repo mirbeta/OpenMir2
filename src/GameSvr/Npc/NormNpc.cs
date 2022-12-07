@@ -246,7 +246,7 @@ namespace GameSvr.Npc
                 HUtil32.ArrestStringEx(sMsg, "<", ">", ref sVariable);
                 if (!string.IsNullOrEmpty(sVariable))
                 {
-                    if (sVariable[1] == '$')
+                    if (sVariable[0] == '$')
                     {
                         GetVariableText(PlayObject, ref sMsg, sVariable);
                     }

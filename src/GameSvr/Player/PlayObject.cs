@@ -7,6 +7,7 @@ using GameSvr.Maps;
 using GameSvr.Npc;
 using GameSvr.Services;
 using System.Text.RegularExpressions;
+using GameSvr.World;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -749,7 +750,7 @@ namespace GameSvr.Player
             if (HUtil32.GetTickCount() - m_dwClickNpcTime > M2Share.Config.ClickNpcTime)
             {
                 m_dwClickNpcTime = HUtil32.GetTickCount();
-                var normNpc = M2Share.WorldEngine.FindMerchant<NormNpc>(actorId) ?? M2Share.WorldEngine.FindNpc<NormNpc>(actorId);
+                var normNpc = WorldServer.FindMerchant<Merchant>(actorId) ?? WorldServer.FindNpc<NormNpc>(actorId);
                 if (normNpc != null)
                 {
                     if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
@@ -3701,10 +3702,10 @@ namespace GameSvr.Player
             switch (m_btValNPCType)
             {
                 case 0:
-                    NormNpc = M2Share.WorldEngine.FindMerchant<Merchant>(Npc);
+                    NormNpc = WorldServer.FindMerchant<Merchant>(Npc);
                     if (NormNpc == null)
                     {
-                        NormNpc = M2Share.WorldEngine.FindNpc<NormNpc>(Npc);
+                        NormNpc = WorldServer.FindNpc<NormNpc>(Npc);
                     }
                     if (NormNpc != null)
                     {
@@ -3739,10 +3740,10 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                NormNpc Npc = M2Share.WorldEngine.FindMerchant<Merchant>(nParam1);
+                NormNpc Npc = WorldServer.FindMerchant<Merchant>(nParam1);
                 if (Npc == null)
                 {
-                    Npc = M2Share.WorldEngine.FindNpc<NormNpc>(nParam1);
+                    Npc = WorldServer.FindNpc<NormNpc>(nParam1);
                 }
                 if (Npc != null)
                 {

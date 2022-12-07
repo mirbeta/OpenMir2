@@ -49,7 +49,7 @@ namespace GameSvr.Actor
             return actor;
         }
 
-        public void Remove(int actorId)
+        private void Remove(int actorId)
         {
             BaseObject ghostactor;
             _actorsMap.TryRemove(actorId, out ghostactor);

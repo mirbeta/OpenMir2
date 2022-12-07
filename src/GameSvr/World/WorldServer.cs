@@ -1342,34 +1342,33 @@ namespace GameSvr.World
             return result;
         }
 
-        public T FindMerchant<T>(int merchantId)
+        public static T FindMerchant<T>(int merchantId)
         {
             var normNpc = M2Share.ActorMgr.Get(merchantId);
             var npcType = normNpc.GetType();
             if (npcType == typeof(Merchant))
             {
-                return (T)Convert.ChangeType(normNpc, typeof(Merchant));
+                return (T)Convert.ChangeType(normNpc, typeof(T));
             }
             if (npcType == typeof(GuildOfficial))
             {
-                return (T)Convert.ChangeType(normNpc, typeof(GuildOfficial));
+                return (T)Convert.ChangeType(normNpc, typeof(T));
             }
             if (npcType == typeof(CastleOfficial))
             {
-                return (T)Convert.ChangeType(normNpc, typeof(CastleOfficial));
+                return (T)Convert.ChangeType(normNpc, typeof(T));
             }
             if (npcType == typeof(NormNpc))
             {
-                return (T)Convert.ChangeType(normNpc, typeof(NormNpc));
+                return (T)Convert.ChangeType(normNpc, typeof(T));
             }
-            return (T)Convert.ChangeType(normNpc, typeof(NormNpc));
+            return (T)Convert.ChangeType(normNpc, typeof(T));
         }
 
-        public T FindNpc<T>(int npcId)
+        public static T FindNpc<T>(int npcId)
         {
             var normNpc = M2Share.ActorMgr.Get(npcId);
-            var npcType = normNpc.GetType();
-            return (T)Convert.ChangeType(normNpc, typeof(NormNpc));
+            return (T)Convert.ChangeType(normNpc, typeof(T));
         }
 
         /// <summary>
