@@ -129,7 +129,7 @@ namespace GameSvr.World
         /// </summary>
         public void InitializationMonsterThread()
         {
-            _logger.Info($"Monster Run threads:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
+            _logger.Info($"Run monster threads:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
 
             var monsterThreads = M2Share.Config.ProcessMonsterMultiThreadLimit; //处理线程+预留线程
 
@@ -186,7 +186,7 @@ namespace GameSvr.World
         }
 
         /// <summary>
-        /// 刷新怪物
+        /// 刷新怪物和怪物行动
         /// </summary>
         private void ProcessMonsters(MonsterThread monsterThread)
         {

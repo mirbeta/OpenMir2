@@ -40,12 +40,7 @@ namespace GameSvr.Actor
             };
             VisibleActors.Add(visibleBaseObject);
         }
-
-        public void ClearMonsterVisible(BaseObject baseObject)
-        {
-
-        }
-
+        
         protected virtual void UpdateVisibleGay(BaseObject baseObject)
         {
             bool boIsVisible = false;
@@ -150,13 +145,9 @@ namespace GameSvr.Actor
         /// 如：鹿 鸡 羊
         /// </summary>
         /// <returns></returns>
-        private bool IsPassiveAttack(BaseObject monsterObject)
+        private static bool IsPassiveAttack(BaseObject monsterObject)
         {
-            if (monsterObject.Race <= 52)
-            {
-                return true;
-            }
-            return false;
+            return monsterObject.Race <= 52;
         }
 
         public virtual void SearchViewRange()
@@ -215,7 +206,7 @@ namespace GameSvr.Actor
                                         {
                                             if (!baseObject.Death && !baseObject.Invisible)
                                             {
-                                                if (this.Race == ActorRace.Guard || this.Race == ActorRace.ArcherGuard) //守卫和护卫怪不搜索温和怪物
+                                                if (this.Race == ActorRace.Guard || this.Race == ActorRace.ArcherGuard) //守卫和护卫不搜索不主动攻击的怪物
                                                 {
                                                     if (IsPassiveAttack(baseObject))
                                                     {

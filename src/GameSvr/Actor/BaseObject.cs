@@ -506,7 +506,7 @@ namespace GameSvr.Actor
         /// </summary>
         public bool AdminMode;
         /// <summary>
-        /// 隐身模式
+        /// 隐身模式（GM模式）
         /// </summary>
         public bool ObMode;
         /// <summary>
