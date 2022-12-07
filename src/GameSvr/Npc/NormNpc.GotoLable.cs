@@ -20,7 +20,6 @@ namespace GameSvr.Npc
             string sSendMsg;
             TScript Script = null;
             SayingRecord SayingRecord;
-            SayingProcedure SayingProcedure;
             ClientUserItem UserItem = null;
             string sC = string.Empty;
             if (PlayObject.m_NPC != this)
@@ -76,15 +75,15 @@ namespace GameSvr.Npc
                     {
                         return;
                     }
-                    sSendMsg = "";
+                    sSendMsg = string.Empty;
                     for (var i = 0; i < SayingRecord.ProcedureList.Count; i++)
                     {
-                        SayingProcedure = SayingRecord.ProcedureList[i];
+                        var sayingProcedure = SayingRecord.ProcedureList[i];
                         bo11 = false;
-                        if (GotoLableQuestCheckCondition(PlayObject, SayingProcedure.ConditionList, ref sC, ref UserItem))
+                        if (GotoLableQuestCheckCondition(PlayObject, sayingProcedure.ConditionList, ref sC, ref UserItem))
                         {
-                            sSendMsg = sSendMsg + SayingProcedure.sSayMsg;
-                            if (!GotoLableQuestActionProcess(PlayObject, SayingProcedure.ActionList, ref sC, ref UserItem, ref bo11))
+                            sSendMsg = sSendMsg + sayingProcedure.sSayMsg;
+                            if (!GotoLableQuestActionProcess(PlayObject, sayingProcedure.ActionList, ref sC, ref UserItem, ref bo11))
                             {
                                 break;
                             }
@@ -95,8 +94,8 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            sSendMsg = sSendMsg + SayingProcedure.sElseSayMsg;
-                            if (!GotoLableQuestActionProcess(PlayObject, SayingProcedure.ElseActionList, ref sC, ref UserItem, ref bo11))
+                            sSendMsg = sSendMsg + sayingProcedure.sElseSayMsg;
+                            if (!GotoLableQuestActionProcess(PlayObject, sayingProcedure.ElseActionList, ref sC, ref UserItem, ref bo11))
                             {
                                 break;
                             }
@@ -393,7 +392,7 @@ namespace GameSvr.Npc
                     {
                         var s50 = QuestConditionInfo.sParam1;
                         QuestConditionInfo.sParam1 = '<' + QuestConditionInfo.sParam1 + '>';
-                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam1, s50);
+                        GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam1);
                     }
                     else if (QuestConditionInfo.sParam1.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
@@ -406,7 +405,7 @@ namespace GameSvr.Npc
                     {
                         var s50 = QuestConditionInfo.sParam2;
                         QuestConditionInfo.sParam2 = '<' + QuestConditionInfo.sParam2 + '>';
-                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam2, s50);
+                        GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam2);
                     }
                     else if (QuestConditionInfo.sParam2.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
@@ -419,7 +418,7 @@ namespace GameSvr.Npc
                     {
                         var s50 = QuestConditionInfo.sParam3;
                         QuestConditionInfo.sParam3 = '<' + QuestConditionInfo.sParam3 + '>';
-                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam3, s50);
+                        GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam3);
                     }
                     else if (QuestConditionInfo.sParam3.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
@@ -432,7 +431,7 @@ namespace GameSvr.Npc
                     {
                         var s50 = QuestConditionInfo.sParam4;
                         QuestConditionInfo.sParam4 = '<' + QuestConditionInfo.sParam4 + '>';
-                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam4, s50);
+                        GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam4);
                     }
                     else if (QuestConditionInfo.sParam4.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
@@ -445,7 +444,7 @@ namespace GameSvr.Npc
                     {
                         var s50 = QuestConditionInfo.sParam5;
                         QuestConditionInfo.sParam5 = '<' + QuestConditionInfo.sParam5 + '>';
-                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam5, s50);
+                        GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam5);
                     }
                     else if (QuestConditionInfo.sParam5.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
@@ -458,7 +457,7 @@ namespace GameSvr.Npc
                     {
                         var s50 = QuestConditionInfo.sParam6;
                         QuestConditionInfo.sParam6 = '<' + QuestConditionInfo.sParam6 + '>';
-                        GetVariableText(PlayObject, ref QuestConditionInfo.sParam6, s50);
+                        GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam6);
                     }
                     else if (QuestConditionInfo.sParam6.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                     {
@@ -475,7 +474,7 @@ namespace GameSvr.Npc
                         {
                             var s50 = QuestConditionInfo.sOpName;
                             QuestConditionInfo.sOpName = '<' + QuestConditionInfo.sOpName + '>';
-                            GetVariableText(PlayObject, ref QuestConditionInfo.sOpName, s50);
+                            GetVariableText(PlayObject, s50, ref QuestConditionInfo.sOpName);
                         }
                         else if (QuestConditionInfo.sOpName.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
                         {
@@ -2553,23 +2552,7 @@ namespace GameSvr.Npc
 
         private void GotoLableSendMerChantSayMsg(PlayObject PlayObject, string sMsg, bool boFlag)
         {
-            string sVariable = string.Empty;
-            string sSource = sMsg;
-            int nC = 0;
-            while (true)
-            {
-                if (HUtil32.TagCount(sSource, '>') < 1)
-                {
-                    break;
-                }
-                sSource = HUtil32.ArrestStringEx(sSource, "<", ">", ref sVariable);
-                GetVariableText(PlayObject, ref sMsg, sVariable);
-                nC++;
-                if (nC >= 101)
-                {
-                    break;
-                }
-            }
+            sMsg = GetLineVariableText(PlayObject, sMsg);
             PlayObject.GetScriptLabel(sMsg);
             if (boFlag)
             {

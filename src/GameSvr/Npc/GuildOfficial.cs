@@ -23,9 +23,9 @@ namespace GameSvr.Npc
             base.Click(PlayObject);
         }
 
-        protected override void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
+        protected override void GetVariableText(PlayObject PlayObject, string sVariable, ref string sMsg)
         {
-            base.GetVariableText(PlayObject, ref sMsg, sVariable);
+            base.GetVariableText(PlayObject, sVariable, ref sMsg);
             if (sVariable == "$REQUESTCASTLELIST")
             {
                 var sText = "";

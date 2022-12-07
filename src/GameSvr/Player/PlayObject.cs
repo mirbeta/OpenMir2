@@ -3044,20 +3044,16 @@ namespace GameSvr.Player
                     break;
                 }
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sText, "\\");
-                if (!string.IsNullOrEmpty(sText))
+                if (string.IsNullOrEmpty(sText)) continue;
+                var matchs = M2Share.MatchScriptLabel(sText);
+                if (matchs.Count <= 0) continue;
+                foreach (Match item in matchs)
                 {
-                    var match = M2Share.MatchScriptLabel(sText);
-                    if (match.Count > 0)
+                    var sCmdStr = item.Value;
+                    var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, HUtil32.Backslash);
+                    if (!string.IsNullOrEmpty(sLabel) && !m_CanJmpScriptLableList.ContainsKey(sLabel))
                     {
-                        foreach (Match item in match)
-                        {
-                            var sCmdStr = item.Value;
-                            var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, HUtil32.Backslash);
-                            if (!string.IsNullOrEmpty(sLabel) && !m_CanJmpScriptLableList.ContainsKey(sLabel))
-                            {
-                                m_CanJmpScriptLableList.Add(sLabel, sLabel);
-                            }
-                        }
+                        m_CanJmpScriptLableList.Add(sLabel, sLabel);
                     }
                 }
             }

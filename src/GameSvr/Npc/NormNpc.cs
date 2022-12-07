@@ -236,7 +236,7 @@ namespace GameSvr.Npc
         public string GetLineVariableText(PlayObject PlayObject, string sMsg)
         {
             var nCount = 0;
-            string sVariable = string.Empty;
+            var sVariable = string.Empty;
             while (true)
             {
                 if (sMsg.IndexOf('>', StringComparison.Ordinal) < 1)
@@ -248,7 +248,7 @@ namespace GameSvr.Npc
                 {
                     if (sVariable[0] == '$')
                     {
-                        GetVariableText(PlayObject, ref sMsg, sVariable);
+                        GetVariableText(PlayObject, sVariable, ref sMsg);
                     }
                 }
                 nCount++;
@@ -263,7 +263,7 @@ namespace GameSvr.Npc
         /// <summary>
         /// 获取全局变量信息
         /// </summary>
-        protected virtual void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
+        protected virtual void GetVariableText(PlayObject PlayObject, string sVariable, ref string sMsg)
         {
             string s14 = string.Empty;
             TDynamicVar DynamicVar;
