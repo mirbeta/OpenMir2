@@ -115,10 +115,10 @@ namespace GameSvr.Player
             {
                 return;
             }
-            NormNpc npc = (NormNpc)M2Share.WorldEngine.FindMerchant(nParam1);
+            NormNpc npc = M2Share.WorldEngine.FindMerchant<Merchant>(nParam1);
             if (npc == null)
             {
-                npc = (NormNpc)M2Share.WorldEngine.FindNpc(nParam1);
+                npc = M2Share.WorldEngine.FindNpc<NormNpc>(nParam1);
             }
             if (npc == null)
             {
@@ -152,7 +152,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            Merchant merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
+            Merchant merchant = M2Share.WorldEngine.FindMerchant<Merchant>(nParam1);
             if (merchant == null)
             {
                 return;
@@ -173,7 +173,7 @@ namespace GameSvr.Player
                     var sUserItemName = CustomItem.GetItemName(userItem);
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
+                        var merchant = M2Share.WorldEngine.FindMerchant<Merchant>(nParam1);
                         if (merchant != null && merchant.m_boSell && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
                         {
                             if (merchant.ClientSellItem(this, userItem))
@@ -202,7 +202,7 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
+                var merchant = M2Share.WorldEngine.FindMerchant<Merchant>(nParam1);
                 if (merchant == null || !merchant.m_boBuy || merchant.Envir != Envir || Math.Abs(merchant.CurrX - CurrX) > 15 || Math.Abs(merchant.CurrY - CurrY) > 15)
                 {
                     return;
@@ -1210,7 +1210,7 @@ namespace GameSvr.Player
 
         private void ClientMakeDrugItem(int objectId, string nItemName)
         {
-            var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(objectId);
+            var merchant = M2Share.WorldEngine.FindMerchant<Merchant>(objectId);
             if (merchant == null || !merchant.m_boMakeDrug)
             {
                 return;
@@ -1574,7 +1574,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
+            var merchant = M2Share.WorldEngine.FindMerchant<Merchant>(nParam1);
             if (merchant != null && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
             {
                 merchant.ClientQueryRepairCost(this, userItemA);
@@ -1597,7 +1597,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            Merchant merchant = (Merchant)M2Share.WorldEngine.FindMerchant(nParam1);
+            Merchant merchant = M2Share.WorldEngine.FindMerchant<Merchant>(nParam1);
             if (merchant != null && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
             {
                 merchant.ClientRepairItem(this, userItem);
@@ -1616,7 +1616,7 @@ namespace GameSvr.Player
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Merchant merchant = (Merchant)M2Share.WorldEngine.FindMerchant(objectId);
+            Merchant merchant = M2Share.WorldEngine.FindMerchant<Merchant>(objectId);
             for (var i = 0; i < ItemList.Count; i++)
             {
                 var userItem = ItemList[i];
@@ -1656,7 +1656,7 @@ namespace GameSvr.Player
         private void ClientTakeBackStorageItem(int npc, int nItemIdx, string sMsg)
         {
             var bo19 = false;
-            var merchant = (Merchant)M2Share.WorldEngine.FindMerchant(npc);
+            var merchant = M2Share.WorldEngine.FindMerchant<Merchant>(npc);
             if (merchant == null)
             {
                 return;

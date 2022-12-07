@@ -95,10 +95,10 @@ namespace GameSvr.Player
                 if (m_boDelayCall && (HUtil32.GetTickCount() - m_dwDelayCallTick) > m_nDelayCall)
                 {
                     m_boDelayCall = false;
-                    NormNpc normNpc = (Merchant)M2Share.WorldEngine.FindMerchant(m_DelayCallNPC);
+                    NormNpc normNpc = M2Share.WorldEngine.FindMerchant<Merchant>(m_DelayCallNPC);
                     if (normNpc == null)
                     {
-                        normNpc = (NormNpc)M2Share.WorldEngine.FindNpc(m_DelayCallNPC);
+                        normNpc = M2Share.WorldEngine.FindNpc<NormNpc>(m_DelayCallNPC);
                     }
                     if (normNpc != null)
                     {
