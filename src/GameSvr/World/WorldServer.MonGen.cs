@@ -1,4 +1,5 @@
-﻿using GameSvr.Actor;
+﻿using System.Diagnostics.CodeAnalysis;
+using GameSvr.Actor;
 using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
@@ -307,7 +308,11 @@ namespace GameSvr.World
                                                     //其余怪物均为主动攻击
                                                     //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
                                                     //由玩家找出附近的怪物，然后添加到怪物列表
-                                                    if ((monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster) || monster.IsSlave) // 守卫和下属主动搜索附近的精灵
+                                                    if (monster.IsSlave)
+                                                    {
+                                                        monster.SearchViewRange();
+                                                    }
+                                                    else if ((monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster)) // 守卫和下属主动搜索附近的精灵
                                                     {
                                                         if (monster.VisibleActors.Count > 3)//超过3个目标，优先使用上次的目标
                                                         {
