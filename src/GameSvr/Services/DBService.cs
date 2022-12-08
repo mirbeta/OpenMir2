@@ -220,7 +220,6 @@ namespace GameSvr.Services
                         if (signatureId == BitConverter.ToInt16(sginBuff))
                         {
                             PlayerDataService.Enqueue(respCheckCode, responsePacket);
-                            _logger.Info($"[{respCheckCode}]读取成功");
                         }
                         else
                         {
