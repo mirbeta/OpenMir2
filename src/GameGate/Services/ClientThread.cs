@@ -151,7 +151,7 @@ namespace GameGate.Services
             Connected = true;
             ReceiveBytes = 0;
             SendBytes = 0;
-            ReceiveBuffer = new byte[2048];
+            ReceiveBuffer = new byte[4096 * 10];
             Logger.Log($"[{GateEndPoint}] 游戏引擎[{e.RemoteEndPoint}]链接成功.", 1);
             Logger.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
         }

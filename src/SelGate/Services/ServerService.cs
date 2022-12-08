@@ -33,7 +33,7 @@ namespace SelGate.Services
             _clientManager = clientManager;
             _configManager = configManager;
             _sendQueue = Channel.CreateUnbounded<TMessageData>();
-            _serverSocket = new SocketServer(ushort.MaxValue, 512);
+            _serverSocket = new SocketServer(short.MaxValue, 512);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -89,7 +89,7 @@ namespace SelGate.Services
                     sessionInfo.Socket = e.Socket;
                     sessionInfo.SocketId = e.SocHandle;
                     sessionInfo.dwReceiveTick = HUtil32.GetTickCount();
-                    sessionInfo.ClientIP = e.RemoteIPaddr;
+                    sessionInfo.ClientIP = sRemoteAddress;
                     break;
                 }
             }
@@ -118,9 +118,8 @@ namespace SelGate.Services
                 var userSession = _sessionManager.GetSession(nSockIndex);
                 if (userSession != null)
                 {
-                    var clientSession = _sessionManager.GetSession(nSockIndex);
-                    clientSession?.UserLeave();
-                    clientSession?.CloseSession();
+                    userSession.UserLeave();
+                    userSession.CloseSession();
                     _logger.LogInformation("断开连接: " + sRemoteAddr, 5);
                 }
                 _sessionManager.CloseSession(nSockIndex);
