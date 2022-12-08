@@ -35,7 +35,7 @@ namespace GameSvr.World
         public void InitializeMonster()
         {
             var monsterGenMap = new Dictionary<string, IList<MonGenInfo>>(StringComparer.OrdinalIgnoreCase); //临时存放怪物刷新映射,这样也能知道每一个怪要刷新几个和统计
-
+            
             for (int i = 0; i < MonGenList.Count; i++)
             {
                 var monName = MonGenList[i].MonName;
@@ -48,33 +48,48 @@ namespace GameSvr.World
                     monsterGenMap.Add(monName, new List<MonGenInfo>() { MonGenList[i] });
                 }
             }
-
-            var monsterNames = monsterGenMap.Keys.ToArray();
-            for (int i = 0; i < monsterNames.Length; i++)
+            
+            if (monsterGenMap.Count <= 0)
             {
-                var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
-                var monName = monsterNames[i];
-                if (MonGenInfoThreadMap.ContainsKey(threadId))
+                for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                 {
-                    for (int j = 0; j < monsterGenMap[monName].Count; j++)
+                    if (MonGenInfoThreadMap.ContainsKey(i))
                     {
-                        MonGenInfoThreadMap[threadId].Add(monsterGenMap[monName][j]);
+                        continue;
                     }
-                }
-                else
-                {
-                    var monsterList = new List<MonGenInfo>();
-                    for (int j = 0; j < monsterGenMap[monName].Count; j++)
-                    {
-                        monsterList.Add(monsterGenMap[monName][j]);
-                    }
-                    MonGenInfoThreadMap.Add(threadId, monsterList);
-                }
-                if (!MonsterThreadMap.ContainsKey(MonGenList[i].MonName))
-                {
-                    MonsterThreadMap.Add(MonGenList[i].MonName, threadId);
+                    MonGenInfoThreadMap.Add(i, new List<MonGenInfo>());
                 }
             }
+            else
+            {
+                var monsterNames = monsterGenMap.Keys.ToArray();
+                for (int i = 0; i < monsterNames.Length; i++)
+                {
+                    var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+                    var monName = monsterNames[i];
+                    if (MonGenInfoThreadMap.ContainsKey(threadId))
+                    {
+                        for (int j = 0; j < monsterGenMap[monName].Count; j++)
+                        {
+                            MonGenInfoThreadMap[threadId].Add(monsterGenMap[monName][j]);
+                        }
+                    }
+                    else
+                    {
+                        var monsterList = new List<MonGenInfo>();
+                        for (int j = 0; j < monsterGenMap[monName].Count; j++)
+                        {
+                            monsterList.Add(monsterGenMap[monName][j]);
+                        }
+                        MonGenInfoThreadMap.Add(threadId, monsterList);
+                    }
+                    if (!MonsterThreadMap.ContainsKey(MonGenList[i].MonName))
+                    {
+                        MonsterThreadMap.Add(MonGenList[i].MonName, threadId);
+                    }
+                }
+            }
+
 
             var monsterName = MonsterList.Values.ToList();
             for (int i = 0; i < monsterName.Count; i++)

@@ -132,7 +132,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 视觉范围大小
         /// </summary>
-        protected byte ViewRange;
+        public byte ViewRange;
         /// <summary>
         /// 人物状态属性值 
         /// 0-绿毒(减HP) 1-红毒(减MP) 2-防、魔防为0(唯我独尊3级) 3-不能跑动(中蛛网)

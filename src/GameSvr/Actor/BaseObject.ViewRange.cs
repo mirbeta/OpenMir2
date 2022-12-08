@@ -206,7 +206,7 @@ namespace GameSvr.Actor
                                         {
                                             if (!baseObject.Death && !baseObject.Invisible)
                                             {
-                                                if (this.Race == ActorRace.Guard || this.Race == ActorRace.ArcherGuard) //守卫和护卫不搜索不主动攻击的怪物
+                                                if (this.Race == ActorRace.Guard || this.Race == ActorRace.ArcherGuard)//守卫和护卫不搜索不主动攻击的怪物
                                                 {
                                                     if (IsPassiveAttack(baseObject))
                                                     {

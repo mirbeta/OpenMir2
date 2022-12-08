@@ -1320,7 +1320,11 @@ namespace GameSvr.Player
                                                     UpdateVisibleGay(BaseObject);
                                                     if (BaseObject.MapCell == CellType.Monster && this.MapCell == CellType.Play && !this.ObMode && !BaseObject.FixedHideMode)
                                                     {
-                                                        BaseObject.UpdateMonsterVisible(this);
+                                                        //我的视野 进入对方的攻击范围
+                                                        if (Math.Abs(BaseObject.CurrX - CurrX) <= (ViewRange - BaseObject.ViewRange) && Math.Abs(BaseObject.CurrY - CurrY) <= (ViewRange - BaseObject.ViewRange))
+                                                        {
+                                                            BaseObject.UpdateMonsterVisible(this);
+                                                        }
                                                     }
                                                 }
                                             }
