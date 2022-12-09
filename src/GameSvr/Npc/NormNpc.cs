@@ -1067,7 +1067,7 @@ namespace GameSvr.Npc
             {
                 int MonGenCount = 0;
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                var MapName = HUtil32.GetValidStr3(s14, ref s14, new string[] { "/" });
+                var MapName = HUtil32.GetValidStr3(s14, ref s14, '/');
                 var MonsterName = s14;
                 if (MapName.StartsWith("$")) // $MAPMOSTERCOUNT[怪物名字/地图号]
                 {

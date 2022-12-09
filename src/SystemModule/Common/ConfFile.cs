@@ -352,7 +352,7 @@ namespace SystemModule.Common
             }
             if ((pos > 0) && (pos < str.Length))
             {
-                return new string[] { str.Substring(0, pos), str.Substring(pos + 1) };
+                return new[] { str.Substring(0, pos), str.Substring(pos + 1) };
             }
             return null;
         }

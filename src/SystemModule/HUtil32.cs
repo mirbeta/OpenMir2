@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
@@ -10,7 +9,7 @@ namespace SystemModule
     public class HUtil32
     {
         public const char Backslash = '/';
-        public static readonly string[] Separator = { " ", ",", "\t" };
+        public static readonly char[] Separator = { ' ', ',', '\t' };
         public static readonly ClientUserItem DelfautItem = new ClientUserItem();
         public static readonly MagicRcd DetailtMagicRcd = new MagicRcd();
 
@@ -258,17 +257,19 @@ namespace SystemModule
             var bDecode = false;
             if (string.IsNullOrEmpty(str)) return 0;
             for (var i = 0; i < str.Length; i++)
+            {
                 if (str[i] >> 8 != 0)
                 {
                     bDecode = true;
                     break;
                 }
-
+            }
             var nLen = 0;
             if (bDecode)
                 nLen = Encoding.GetEncoding("gb2312").GetByteCount(str);
             else
                 nLen = str.Length;
+            
             if (retby == null)
                 return nLen;
 
@@ -293,50 +294,58 @@ namespace SystemModule
             string result;
             int st;
             int et;
-            int c;
-            int len;
-            int i;
-            if (source == "")
+            if (string.IsNullOrEmpty(source))
             {
-                rdstr = "";
-                result = "";
-                return result;
+                return string.Empty;
             }
-            c = 1;
-            len = source.Length;
+            var c = 1;
+            var len = source.Length;
             while (source[c] == ' ')
+            {
                 if (c < len)
+                {
                     c++;
+                }
                 else
+                {
                     break;
+                }
+            }
             if (source[c] == '\"' && c < len)
             {
                 st = c + 1;
                 et = len;
-                for (i = c + 1; i <= len; i++)
+                for (var i = c + 1; i <= len; i++)
+                {
                     if (source[i] == '\"')
                     {
                         et = i - 1;
                         break;
                     }
+                }
             }
             else
             {
                 st = c;
                 et = len;
-                for (i = c; i <= len; i++)
+                for (var i = c; i <= len; i++)
+                {
                     if (source[i] == ' ')
                     {
                         et = i - 1;
                         break;
                     }
+                }
             }
-
             rdstr = source.Substring(st - 1, et - st + 1);
             if (len >= et + 2)
+            {
                 result = source.Substring(et + 2 - 1, len - (et + 1));
+            }
             else
-                result = "";
+            {
+                result = string.Empty;
+            }
             return result;
         }
 
@@ -369,45 +378,32 @@ namespace SystemModule
             return result;
         }
 
-        public static string GetValidStr3(string str, ref string dest, char divider)
+        public static string GetValidStr3(string source, ref string dest, char divider)
         {
-            var ary = str.Split(divider, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            dest = ary.Length > 0 ? ary[0] : ""; //目标置为第一个
-            return ary.Length > 1 ? ary[1] : ""; //返回第二个
+            var ary = source.Split(divider, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : string.Empty; //目标置为第一个
+            return ary.Length > 1 ? ary[1] : string.Empty; //返回第二个
         }
 
-        public static string GetValidStr3(string str, ref string dest, char[] dividerAry)
+        public static string GetValidStr3(string source, ref string dest, char[] dividerAry)
         {
             var div = new char[dividerAry.Length];
             for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i];
-            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            dest = ary.Length > 0 ? ary[0] : ""; //目标置为第一个
-            return ary.Length > 1 ? ary[1] : ""; //返回第二个
+            var ary = source.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : string.Empty; //目标置为第一个
+            return ary.Length > 1 ? ary[1] : string.Empty; //返回第二个
         }
 
-        public static string GetValidStr3(string str, ref string dest, string[] dividerAry)
+        public static string GetValidStr3(string source, ref string dest, string[] dividerAry)
         {
             var div = new char[dividerAry.Length];
             for (var i = 0; i < dividerAry.Length; i++)
             {
                 div[i] = dividerAry[i][0];
             }
-            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            dest = ary.Length > 0 ? ary[0] : "";
-            return ary.Length > 1 ? ary[1] : "";
-        }
-
-        public static string GetValidStr3(string str, ref int dest, string[] dividerAry)
-        {
-            var div = new char[dividerAry.Length];
-            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i][0];
-            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            if (ary.Length <= 0) return ary.Length > 1 ? ary[1] : "";
-            if (!int.TryParse(ary[0], out dest))
-            {
-                dest = -1;
-            }
-            return ary.Length > 1 ? ary[1] : "";
+            var ary = source.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : string.Empty;//目标置为第一个
+            return ary.Length > 1 ? ary[1] : string.Empty;//返回第二个
         }
 
         public static string GetValidStr3(string str, ref string dest, string dividerAry)

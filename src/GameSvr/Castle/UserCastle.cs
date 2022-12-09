@@ -300,7 +300,7 @@ namespace GameSvr.Castle
             for (var i = 0; i < loadList.Count; i++)
             {
                 var sData = loadList[i];
-                var s20 = HUtil32.GetValidStr3(sData, ref guildName, new[] { " ", "\t" });
+                var s20 = HUtil32.GetValidStr3(sData, ref guildName, new[] { ' ', '\t' });
                 var guild = M2Share.GuildMgr.FindGuild(guildName);
                 if (guild == null) continue;
                 var attackerInfo = new AttackerInfo();

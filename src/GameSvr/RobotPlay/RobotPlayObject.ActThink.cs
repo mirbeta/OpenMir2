@@ -367,7 +367,7 @@ namespace GameSvr.RobotPlay
                     {
                         nRange = 2;
                     }
-                    if (new ArrayList(new int[] { 60, 61, 62 }).Contains(wMagicID))
+                    if (new ArrayList(new[] { 60, 61, 62 }).Contains(wMagicID))
                     {
                         nRange = 6;
                     }
@@ -728,7 +728,7 @@ namespace GameSvr.RobotPlay
                 {
                     nRange = 2;
                 }
-                if (new ArrayList(new int[] { 60, 61, 62 }).Contains(wMagicID))
+                if (new ArrayList(new[] { 60, 61, 62 }).Contains(wMagicID))
                 {
                     nRange = 6;
                 }

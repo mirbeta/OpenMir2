@@ -12,7 +12,7 @@ namespace GameSvr.Script
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
-        private readonly char[] TextSpitConst = new char[] { ' ', '\t' };
+        private readonly char[] TextSpitConst = new[] { ' ', '\t' };
 
         public int LoadScript(NormNpc NPC, string sPatch, string sScritpName)
         {
@@ -1525,7 +1525,7 @@ namespace GameSvr.Script
                             {
                                 while (sScript != "")
                                 {
-                                    sScript = HUtil32.GetValidStr3(sScript, ref s30, new[] { " ", ",", "\t" });
+                                    sScript = HUtil32.GetValidStr3(sScript, ref s30, new[] { ' ', ',', '\t' });
                                     if (s30.Equals(ScriptConst.sBUY, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boBuy = true;
@@ -1607,8 +1607,8 @@ namespace GameSvr.Script
                     {
                         if (HUtil32.CompareLStr(sScript, "{Quest"))
                         {
-                            s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { " ", "}", "\t" });
-                            HUtil32.GetValidStr3(s38, ref s3C, new[] { " ", "}", "\t" });
+                            s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { ' ', '}', '\t' });
+                            HUtil32.GetValidStr3(s38, ref s3C, new[] { ' ', '}', '\t' });
                             n70 = HUtil32.StrToInt(s3C, 0);
                             Script = LoadMakeNewScript(NPC);
                             Script.nQuest = n70;
@@ -1621,13 +1621,13 @@ namespace GameSvr.Script
                     }
                     if (scriptType == 1 && Script != null && sScript.StartsWith("#"))
                     {
-                        s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { "=", " ", "\t" });
+                        s38 = HUtil32.GetValidStr3(sScript, ref s3C, new[] { '=', ' ', '\t' });
                         Script.boQuest = true;
                         if (HUtil32.CompareLStr(sScript, "#IF"))
                         {
                             HUtil32.ArrestStringEx(sScript, "[", "]", ref s40);
                             Script.QuestInfo[nQuestIdx].wFlag = (short)HUtil32.StrToInt(s40, 0);
-                            HUtil32.GetValidStr3(s38, ref s44, new[] { "=", " ", "\t" });
+                            HUtil32.GetValidStr3(s38, ref s44, new[] { '=', ' ', '\t' });
                             n24 = HUtil32.StrToInt(s44, 0);
                             if (n24 != 0)
                             {
@@ -2248,7 +2248,7 @@ namespace GameSvr.Script
             var result = sLabel;
             if (sLabel.IndexOf(")", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                HUtil32.GetValidStr3(sLabel, ref result, new[] { "(" });
+                HUtil32.GetValidStr3(sLabel, ref result, '(');
                 boChange = true;
             }
             return result;

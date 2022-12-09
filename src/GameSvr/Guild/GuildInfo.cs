@@ -258,7 +258,7 @@ namespace GameSvr.Guild
                     if (s18[0] == '#')
                     {
                         s18 = s18.AsSpan()[1..].ToString();
-                        s18 = HUtil32.GetValidStr3(s18, ref s1C, new char[] { ' ', ',' });
+                        s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
                         n2C = HUtil32.StrToInt(s1C, 0);
                         s24 = s18.Trim();
                         GuildRank = null;
@@ -274,7 +274,7 @@ namespace GameSvr.Guild
                     case 2:
                         while (s18 != "")
                         {
-                            s18 = HUtil32.GetValidStr3(s18, ref s1C, new char[] { ' ', ',' });
+                            s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
                             if (s1C == "")
                             {
                                 break;
@@ -297,8 +297,8 @@ namespace GameSvr.Guild
                     case 3:
                         while (s18 != "")
                         {
-                            s18 = HUtil32.GetValidStr3(s18, ref s1C, new char[] { ' ', ',' });
-                            s18 = HUtil32.GetValidStr3(s18, ref s20, new char[] { ' ', ',' });
+                            s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
+                            s18 = HUtil32.GetValidStr3(s18, ref s20, new[] { ' ', ',' });
                             if (s1C == "")
                             {
                                 break;
@@ -329,7 +329,7 @@ namespace GameSvr.Guild
                             }
                             while (s18 != "")
                             {
-                                s18 = HUtil32.GetValidStr3(s18, ref s1C, new char[] { ' ', ',' });
+                                s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
                                 if (string.IsNullOrEmpty(s1C))
                                 {
                                     break;
@@ -747,8 +747,8 @@ namespace GameSvr.Guild
                 if (sRankInfo[0] == '#')// 取得职称的名称
                 {
                     sRankInfo = sRankInfo.AsSpan()[1..].ToString();
-                    sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sRankNo, new char[] { ' ', '<' });
-                    sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sRankName, new char[] { '<', '>' });
+                    sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sRankNo, new[] { ' ', '<' });
+                    sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sRankName, new[] { '<', '>' });
                     if (sRankName.Length > 30)
                     {
                         sRankName = sRankName[..30]; // Jacky 限制职倍的长度
@@ -777,7 +777,7 @@ namespace GameSvr.Guild
                     {
                         break;
                     }
-                    sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sMemberName, new char[] { ' ', ',' });
+                    sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sMemberName, new[] { ' ', ',' });
                     if (sMemberName != "")
                     {
                         GuildRank.MemberList.Add(new GuildMember()

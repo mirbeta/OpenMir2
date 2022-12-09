@@ -354,7 +354,7 @@ namespace SystemModule.Common
             }
             if ((pos > 0) && (pos < str.Length))
             {
-                return new string[] { str[..pos], str[(pos + 1)..] };
+                return new[] { str[..pos], str[(pos + 1)..] };
             }
             return null;
         }

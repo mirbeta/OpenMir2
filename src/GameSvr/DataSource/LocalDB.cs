@@ -24,8 +24,8 @@ namespace GameSvr.DataSource
 
     public class LocalDB
     {
-        private readonly char[] TextSpitConst = new char[] { ' ', '\t' };
-        private readonly char[] MonsterSpitConst = new char[] { ' ', '/', '\t' };
+        private readonly char[] TextSpitConst = { ' ', '\t' };
+        private readonly char[] MonsterSpitConst = { ' ', '/', '\t' };
 
         public bool LoadAdminList()
         {

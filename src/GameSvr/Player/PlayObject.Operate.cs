@@ -271,7 +271,7 @@ namespace GameSvr.Player
             if (sItemName.IndexOf(' ') > 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
-                HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { " " });
+                HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { ' ' });
             }
             if ((HUtil32.GetTickCount() - DealLastTick) > 3000)
             {
@@ -964,7 +964,7 @@ namespace GameSvr.Player
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
-                HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { " " });
+                HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { ' ' });
             }
             var dealSuccess = false;
             if (!DealCreat.DealSuccess)
@@ -1007,7 +1007,7 @@ namespace GameSvr.Player
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
-                HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { " " });
+                HUtil32.GetValidStr3(sItemName, ref sItemName, new[] { ' ' });
             }
             bool bo11 = false;
             if (!DealCreat.DealSuccess)
@@ -1428,7 +1428,7 @@ namespace GameSvr.Player
             MyGuild.NoticeList.Clear();
             while (!string.IsNullOrEmpty(sNotict))
             {
-                sNotict = HUtil32.GetValidStr3(sNotict, ref sC, new[] { "\r" });
+                sNotict = HUtil32.GetValidStr3(sNotict, ref sC, '\r');
                 MyGuild.NoticeList.Add(sC);
             }
             MyGuild.SaveGuildInfoFile();
@@ -1610,7 +1610,7 @@ namespace GameSvr.Player
             var bo19 = false;
             if (sMsg.IndexOf(' ') >= 0)
             {
-                HUtil32.GetValidStr3(sMsg, ref sMsg, new[] { " " });
+                HUtil32.GetValidStr3(sMsg, ref sMsg, new[] { ' ' });
             }
             if (PayMent == 1 && !M2Share.Config.TryModeUseStorage)
             {

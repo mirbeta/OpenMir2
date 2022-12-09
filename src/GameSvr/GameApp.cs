@@ -326,7 +326,7 @@ namespace GameSvr
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIdx, new[] { " ", "\09" });
                         string sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
-                        if (sIdx == "" || sGameGate == "" || sSelGateIPaddr == "")
+                        if (string.IsNullOrEmpty(sIdx) || string.IsNullOrEmpty(sGameGate) || string.IsNullOrEmpty(sSelGateIPaddr))
                         {
                             continue;
                         }

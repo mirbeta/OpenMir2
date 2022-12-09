@@ -247,7 +247,7 @@ namespace LoginSvr.Services
             UserInfo userInfo;
             var sUserIPaddr = string.Empty;
             const string sOpenMsg = "Open: {0}/{1}";
-            var sGateIPaddr = HUtil32.GetValidStr3(sIPaddr, ref sUserIPaddr, new[] { "/" });
+            var sGateIPaddr = HUtil32.GetValidStr3(sIPaddr, ref sUserIPaddr, '/');
             for (var i = 0; i < gateInfo.UserList.Count; i++)
             {
                 userInfo = gateInfo.UserList[i];

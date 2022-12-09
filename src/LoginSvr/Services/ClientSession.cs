@@ -195,7 +195,7 @@ namespace LoginSvr.Services
             try
             {
                 userInfo.Seconds = 0;
-                var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginId, new[] { "/" });
+                var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginId,'/');
                 var nCode = 0;
                 var boNeedUpdate = false;
                 var accountIndex = _accountStorage.Index(sLoginId);
@@ -607,12 +607,12 @@ namespace LoginSvr.Services
             ClientMesaagePacket defMsg;
             AccountRecord accountRecord = null;
             var sMsg = EDCode.DeCodeString(sData);
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "\09" });
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest1, new[] { "\09" });
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer1, new[] { "\09" });
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest2, new[] { "\09" });
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer2, new[] { "\09" });
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sBirthDay, new[] { "\09" });
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest1, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer1, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest2, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer2, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sBirthDay, "\09");
             var nCode = 0;
             if (!string.IsNullOrEmpty(sAccount))
             {

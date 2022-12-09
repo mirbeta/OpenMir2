@@ -33,8 +33,8 @@ namespace GameSvr.Robots
             {
                 var sLineText = LoadList[i];
                 if (sLineText == "" || sLineText[0] == ';') continue;
-                sLineText = HUtil32.GetValidStr3(sLineText, ref sRobotName, new[] { " ", "/", "\t" });
-                sLineText = HUtil32.GetValidStr3(sLineText, ref sScriptFileName, new[] { " ", "/", "\t" });
+                sLineText = HUtil32.GetValidStr3(sLineText, ref sRobotName, new[] { ' ', '/', '\t' });
+                sLineText = HUtil32.GetValidStr3(sLineText, ref sScriptFileName, new[] { ' ', '/', '\t' });
                 if (sRobotName == "" || sScriptFileName == "") continue;
                 var RobotHuman = new RobotObject();
                 RobotHuman.ChrName = sRobotName;

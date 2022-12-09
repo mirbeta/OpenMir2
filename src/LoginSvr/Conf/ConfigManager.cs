@@ -125,10 +125,10 @@ namespace LoginSvr.Conf
                     sLineText = LoadList[i];
                     if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, new string[] { " " });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sTitle, new string[] { " " });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRemote, new string[] { " " });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sPublic, new string[] { " " });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, new[] { ' ' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sTitle, new[] { ' ' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRemote, new[] { ' ' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sPublic, new[] { ' ' });
                         sLineText = sLineText.Trim();
                         if (sTitle != "" && sRemote != "" && sPublic != "" && nRouteIdx < 60)
                         {
@@ -144,7 +144,7 @@ namespace LoginSvr.Conf
                                 {
                                     break;
                                 }
-                                sLineText = HUtil32.GetValidStr3(sLineText, ref sGate, new string[] { " " });
+                                sLineText = HUtil32.GetValidStr3(sLineText, ref sGate, new[] { ' ' });
                                 if (sGate != "")
                                 {
                                     if (sGate[0] == '*')
@@ -156,7 +156,7 @@ namespace LoginSvr.Conf
                                     {
                                         Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].boEnable = true;
                                     }
-                                    sGatePort = HUtil32.GetValidStr3(sGate, ref sGate, new string[] { ":" });
+                                    sGatePort = HUtil32.GetValidStr3(sGate, ref sGate, ':');
                                     Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].sIPaddr = sGate;
                                     Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].nPort = HUtil32.StrToInt(sGatePort, 0);
                                     Config.GateRoute[nRouteIdx].nSelIdx = 0;

@@ -1286,9 +1286,9 @@ namespace GameSvr
                         {
                             continue;
                         }
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new[] { ' ', ',', '\t' });
                         var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                         var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                         if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
@@ -1358,9 +1358,9 @@ namespace GameSvr
                         {
                             continue;
                         }
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new[] { ' ', ',', '\t' });
                         var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                         var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                         if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
@@ -1431,9 +1431,9 @@ namespace GameSvr
                     {
                         continue;
                     }
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", ",", "\t" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", ",", "\t" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new string[] { " ", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', ',', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', ',', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new[] { ' ', ',', '\t' });
                     var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
@@ -1845,8 +1845,8 @@ namespace GameSvr
                     {
                         continue;
                     }
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "/", ",", "\t" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new string[] { " ", "/", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new[] { ' ', '/', ',', '\t' });
                     var nItemCount = HUtil32.StrToInt(sItemCount, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
                     {
@@ -1899,8 +1899,8 @@ namespace GameSvr
                     {
                         continue;
                     }
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "/", ",", "\t" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new string[] { " ", "/", ",", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new[] { ' ', '/', ',', '\t' });
                     var nItemIdx = HUtil32.StrToInt(sItemIdx, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
                     {
@@ -2358,11 +2358,11 @@ namespace GameSvr
                     sLineText = LoadList[i].Trim();
                     if (sLineText != "" && sLineText[1] < ';')
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, new string[] { " ", "/", ",", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, new string[] { " ", "/", ",", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, new string[] { " ", "/", ",", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, new string[] { " ", "/", ",", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new string[] { " ", "/", ",", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, new[] { ' ', '/', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, new[] { ' ', '/', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, new[] { ' ', '/', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, new[] { ' ', '/', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new[] { ' ', '/', ',', '\t' });
                         if (sStatus != "" && sRate != "" && sColor != "" && sMonName != "" && sSayMsg != "")
                         {
                             nStatus = HUtil32.StrToInt(sStatus, -1);

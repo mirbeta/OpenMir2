@@ -192,13 +192,13 @@ namespace GameSvr.Robots
                     sLineText = LoadList[i];
                     if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sActionType, new[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRunCmd, new[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMoethod, new[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam1, new[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam2, new[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam3, new[] { " ", "/", "\t" });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam4, new[] { " ", "/", "\t" });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sActionType, new[] { ' ', '/', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRunCmd, new[] { ' ', '/', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMoethod, new[] { ' ', '/', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam1, new[] { ' ', '/', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam2, new[] { ' ', '/', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam3, new[] { ' ', '/', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sParam4, new[] { ' ', '/', '\t' });
                         if (string.Compare(sActionType, Robot.sROAUTORUN, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (string.Compare(sRunCmd, Robot.sRONPCLABLEJMP, StringComparison.OrdinalIgnoreCase) == 0)

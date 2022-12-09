@@ -299,8 +299,8 @@ namespace GameSvr.Npc
             for (var i = 0; i < LoadList.Count; i++)
             {
                 sLineText = LoadList[i].Trim();
-                sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new[] { " ", "\t" });
-                sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new[] { " ", "\t" });
+                sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new[] { ' ', '\t' });
+                sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new[] { ' ', '\t' });
                 if (string.Compare(sHumName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     LoadList[i] = PlayObject.ChrName + "\t" + DateTime.Today;
@@ -344,8 +344,8 @@ namespace GameSvr.Npc
             for (var i = 0; i < LoadList.Count; i++)
             {
                 sLineText = LoadList[i].Trim();
-                sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new[] { " ", "\t" });
-                sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new[] { " ", "\t" });
+                sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new[] { ' ', '\t' });
+                sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new[] { ' ', '\t' });
                 if (string.Compare(sHumName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     LoadList.RemoveAt(i);
