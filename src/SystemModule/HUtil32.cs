@@ -34,6 +34,11 @@ namespace SystemModule
             return Environment.TickCount;
         }
 
+        public static long GetTimeTick()
+        {
+            return DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        }
+
         public static int MakeLong(short lowPart, short highPart)
         {
             return (int)(((ushort)lowPart) | (uint)(highPart << 16));

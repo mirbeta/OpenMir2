@@ -779,7 +779,11 @@ namespace GameSvr.Maps
                                 }
                                 if (_cellArray.Span[n24 + nH] == null)
                                 {
-                                    _cellArray.Span[n24 + nH] = new MapCellInfo();
+                                    _cellArray.Span[n24 + nH] = new MapCellInfo()
+                                    {
+                                        ObjList = new PooledList<CellObject>(),
+                                        Attribute = CellAttribute.Walk
+                                    };
                                 }
                                 // btDoorIndex
                                 if ((buffer[buffIndex + 6] & 0x80) != 0)
@@ -846,7 +850,11 @@ namespace GameSvr.Maps
                                 }
                                 if (_cellArray.Span[n24 + nH] == null)
                                 {
-                                    _cellArray.Span[n24 + nH] = new MapCellInfo();
+                                    _cellArray.Span[n24 + nH] = new MapCellInfo()
+                                    {
+                                        ObjList = new PooledList<CellObject>(),
+                                        Attribute = CellAttribute.Walk
+                                    };
                                 }
                                 // btDoorIndex
                                 if ((buffer[buffIndex + 6] & 0x80) != 0)
