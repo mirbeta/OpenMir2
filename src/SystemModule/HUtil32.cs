@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
@@ -8,7 +9,7 @@ namespace SystemModule
 {
     public class HUtil32
     {
-        public const string Backslash = "/";
+        public const char Backslash = '/';
         public static readonly string[] Separator = { " ", ",", "\t" };
         public static readonly ClientUserItem DelfautItem = new ClientUserItem();
         public static readonly MagicRcd DetailtMagicRcd = new MagicRcd();
@@ -370,7 +371,7 @@ namespace SystemModule
 
         public static string GetValidStr3(string str, ref string dest, char divider)
         {
-            var ary = str.Split('/'); //返回不包含空的值
+            var ary = str.Split(divider, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
             dest = ary.Length > 0 ? ary[0] : ""; //目标置为第一个
             return ary.Length > 1 ? ary[1] : ""; //返回第二个
         }
@@ -387,7 +388,10 @@ namespace SystemModule
         public static string GetValidStr3(string str, ref string dest, string[] dividerAry)
         {
             var div = new char[dividerAry.Length];
-            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i][0];
+            for (var i = 0; i < dividerAry.Length; i++)
+            {
+                div[i] = dividerAry[i][0];
+            }
             var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
             dest = ary.Length > 0 ? ary[0] : "";
             return ary.Length > 1 ? ary[1] : "";
@@ -408,6 +412,7 @@ namespace SystemModule
 
         public static string GetValidStr3(string str, ref string dest, string dividerAry)
         {
+            //var ss = Regex.Split(str, Regex.Escape(dividerAry), RegexOptions.IgnorePatternWhitespace);
             var div = new char[dividerAry.Length];
             for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i];
             var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
@@ -415,21 +420,47 @@ namespace SystemModule
             return ary.Length > 1 ? ary[1] : "";
         }
 
-        public static string GetValidStrCap(string str, ref string dest, string[] divider)
+        public static string GetValidStrCap(string str, ref string dest, char divider)
         {
             string result;
-            str = str.TrimStart();
-            if (str != "")
+            if (!string.IsNullOrEmpty(str))
             {
-                if (str[0] == '\"')
-                    result = CaptureString(str, ref dest);
-                else
-                    result = GetValidStr3(str, ref dest, divider);
+                result = str[0] == '\"' ? CaptureString(str, ref dest) : GetValidStr3(str, ref dest, divider);
             }
             else
             {
-                result = "";
-                dest = "";
+                result = string.Empty;
+                dest = string.Empty;
+            }
+            return result;
+        }
+        
+        public static string GetValidStrCap(string str, ref string dest, char[] divider)
+        {
+            string result;
+            if (!string.IsNullOrEmpty(str))
+            {
+                result = str[0] == '\"' ? CaptureString(str, ref dest) : GetValidStr3(str, ref dest, divider);
+            }
+            else
+            {
+                result = string.Empty;
+                dest = string.Empty;
+            }
+            return result;
+        }
+        
+        public static string GetValidStrCap(string str, ref string dest, string[] divider)
+        {
+            string result;
+            if (!string.IsNullOrEmpty(str))
+            {
+                result = str[0] == '\"' ? CaptureString(str, ref dest) : GetValidStr3(str, ref dest, divider);
+            }
+            else
+            {
+                result = string.Empty;
+                dest = string.Empty;
             }
             return result;
         }

@@ -800,7 +800,7 @@ namespace GameSvr.Npc
                 {
                     if (!PlayObject.Death && !string.IsNullOrEmpty(sData) && sData[0] == '@')
                     {
-                        var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
+                        var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                         PlayObject.ScriptLable = sData;
                         var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                         if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)

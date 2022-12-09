@@ -738,7 +738,7 @@ namespace GameSvr.Guild
                 {
                     break;
                 }
-                sRankData = HUtil32.GetValidStr3(sRankData, ref sRankInfo, new char[] { '\r' });
+                sRankData = HUtil32.GetValidStr3(sRankData, ref sRankInfo, '\r');
                 sRankInfo = sRankInfo.Trim();
                 if (sRankInfo == "")
                 {

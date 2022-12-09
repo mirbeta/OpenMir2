@@ -94,8 +94,8 @@ namespace GameSvr.Robots
             var sMin = string.Empty;
             var sHour = string.Empty;
             var sLineText = AutoRunInfo.sParam1;
-            sLineText = HUtil32.GetValidStr3(sLineText, ref sHour, ":");
-            sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ":");
+            sLineText = HUtil32.GetValidStr3(sLineText, ref sHour, ':');
+            sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ':');
             var nHour = HUtil32.StrToInt(sHour, -1);
             var nMin = HUtil32.StrToInt(sMin, -1);
             var wHour = DateTime.Now.Hour;
@@ -136,9 +136,9 @@ namespace GameSvr.Robots
             var sHour = string.Empty;
             var sWeek = string.Empty;
             var sLineText = AutoRunInfo.sParam1;
-            sLineText = HUtil32.GetValidStr3(sLineText, ref sWeek, ":");
-            sLineText = HUtil32.GetValidStr3(sLineText, ref sHour, ":");
-            sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ":");
+            sLineText = HUtil32.GetValidStr3(sLineText, ref sWeek, ':');
+            sLineText = HUtil32.GetValidStr3(sLineText, ref sHour, ':');
+            sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ':');
             var nWeek = HUtil32.StrToInt(sWeek, -1);
             var nHour = HUtil32.StrToInt(sHour, -1);
             var nMin = HUtil32.StrToInt(sMin, -1);

@@ -1645,7 +1645,7 @@ namespace GameSvr.Npc
             PlayObject.m_nScriptGotoCount = 0;
             if (!string.IsNullOrEmpty(sData) && sData[0] == '@')// 处理脚本命令 @back 返回上级标签内容
             {
-                HUtil32.GetValidStr3(sData, ref sLabel, new[] { '\r' });
+                HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                 if (PlayObject.m_sScriptCurrLable != sLabel)
                 {
                     if (sLabel != ScriptConst.sBACK)

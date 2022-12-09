@@ -12,7 +12,7 @@ namespace GameSvr.Script
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
-        private readonly string[] TextSpitConst = new[] { " ", "\t" };
+        private readonly char[] TextSpitConst = new char[] { ' ', '\t' };
 
         public int LoadScript(NormNpc NPC, string sPatch, string sScritpName)
         {
@@ -228,13 +228,13 @@ namespace GameSvr.Script
             if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1) //支持脚本变量
             {
                 var sActName = string.Empty;
-                sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
+                sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                 if (!string.IsNullOrEmpty(sActName))
                 {
                     QuestConditionInfo.sOpName = sActName;
                     if (".".IndexOf(sCmd, StringComparison.OrdinalIgnoreCase) > -1)
                     {
-                        sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
+                        sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                         if (string.Compare(sActName, "H", StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             QuestConditionInfo.sOpHName = "H";
@@ -750,13 +750,13 @@ namespace GameSvr.Script
             if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1) //支持脚本变量
             {
                 var sActName = string.Empty;
-                sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
+                sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                 if (!string.IsNullOrEmpty(sActName))
                 {
                     QuestActionInfo.sOpName = sActName;
                     if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1)
                     {
-                        sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, new[] { "." });
+                        sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                         if (string.Compare(sActName, "H", StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             QuestActionInfo.sOpHName = "H";

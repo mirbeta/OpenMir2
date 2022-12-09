@@ -3043,7 +3043,7 @@ namespace GameSvr.Player
                 {
                     break;
                 }
-                sMsg = HUtil32.GetValidStr3(sMsg, ref sText, "\\");
+                sMsg = HUtil32.GetValidStr3(sMsg, ref sText, '\\');
                 if (string.IsNullOrEmpty(sText)) continue;
                 var matchs = M2Share.MatchScriptLabel(sText);
                 if (matchs.Count <= 0) continue;

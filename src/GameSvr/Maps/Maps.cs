@@ -63,12 +63,12 @@ namespace GameSvr.Maps
                             boSAFE = false
                         };
                         sFlag = HUtil32.ArrestStringEx(sFlag, "[", "]", ref sMapName);
-                        sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, new[] { " ", ",", "\t" });
+                        sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, new char[] { ' ', ',', '\t' });
                         if (sMapDesc != "" && sMapDesc[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMapDesc, "\"", "\"", ref sMapDesc);
                         }
-                        string s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, new[] { " ", ",", "\t" }).Trim();
+                        var s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, new char[] { ' ', ',', '\t' }).Trim();
                         nServerIndex = HUtil32.StrToInt(s4C, 0);
                         if (sMapName == "")
                         {

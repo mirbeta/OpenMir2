@@ -324,6 +324,9 @@ namespace GameSvr.Conf.Model
         public int SendOnlineTime;
         public int SaveHumanRcdTime;
         public int HumanFreeDelayTime;
+        /// <summary>
+        /// 死亡对象清理时间
+        /// </summary>
         public int MakeGhostTime;
         public int ClearDropOnFloorItemTime;
         public int FloorItemCanPickUpTime;

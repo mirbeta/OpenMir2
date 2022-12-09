@@ -123,68 +123,74 @@ namespace GameSvr.Services
 
         public static void ProcessSaveList()
         {
-            var tempList = new List<int>();
-            while (saveProcessList.Count > 0)
+            if (saveProcessList.Count > 0)
             {
-                var queryId = saveProcessList.Dequeue();
-                var nIdent = 0;
-                var nRecog = 0;
-                byte[] data = null;
-                if (GetDBSockMsg(queryId, ref nIdent, ref nRecog, ref data, 5000, false))
+                IList<int> tempList = new List<int>();
+                while (saveProcessList.Count > 0)
                 {
-                    if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
+                    var queryId = saveProcessList.Dequeue();
+                    var nIdent = 0;
+                    var nRecog = 0;
+                    byte[] data = null;
+                    if (GetDBSockMsg(queryId, ref nIdent, ref nRecog, ref data, 5000, false))
                     {
-                        M2Share.FrontEngine.RemoveSaveList(queryId);
+                        if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
+                        {
+                            M2Share.FrontEngine.RemoveSaveList(queryId);
+                        }
+                    }
+                    else
+                    {
+                        tempList.Add(queryId);
                     }
                 }
-                else
+                if (tempList.Count > 0)
                 {
-                    tempList.Add(queryId);
-                }
-            }
-            if (tempList.Count > 0)
-            {
-                for (int i = 0; i < tempList.Count; i++)
-                {
-                    saveProcessList.Enqueue(tempList[i]);
+                    for (int i = 0; i < tempList.Count; i++)
+                    {
+                        saveProcessList.Enqueue(tempList[i]);
+                    }
                 }
             }
         }
 
         public static void ProcessQueryList()
         {
-            var tempList = new List<QueryPlayData>();
-            while (queryProcessList.Count > 0)
+            if (queryProcessList.Count > 0)
             {
-                var queryData = queryProcessList.Dequeue();
-                if (queryData.QuetyCount >= 50)
+                IList<QueryPlayData> tempList = new List<QueryPlayData>();
+                while (queryProcessList.Count > 0)
                 {
-                    continue;
-                }
-                var nIdent = 0;
-                var nRecog = 0;
-                byte[] data = null;
-                if (GetDBSockMsg(queryData.QueryId, ref nIdent, ref nRecog, ref data, 5000, true))
-                {
-                    if (nIdent == Grobal2.DBR_LOADHUMANRCD && nRecog == 1)
+                    var queryData = queryProcessList.Dequeue();
+                    if (queryData.QuetyCount >= 50)
                     {
-                        var humRespData = EDCode.DecodeBuff(data);
-                        var responsePacket = ServerPackSerializer.Deserialize<LoadPlayerDataPacket>(humRespData);
-                        responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
-                        loadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
+                        continue;
+                    }
+                    var nIdent = 0;
+                    var nRecog = 0;
+                    byte[] data = null;
+                    if (GetDBSockMsg(queryData.QueryId, ref nIdent, ref nRecog, ref data, 5000, true))
+                    {
+                        if (nIdent == Grobal2.DBR_LOADHUMANRCD && nRecog == 1)
+                        {
+                            var humRespData = EDCode.DecodeBuff(data);
+                            var responsePacket = ServerPackSerializer.Deserialize<LoadPlayerDataPacket>(humRespData);
+                            responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
+                            loadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
+                        }
+                    }
+                    else
+                    {
+                        queryData.QuetyCount++;
+                        tempList.Add(queryData);
                     }
                 }
-                else
+                if (tempList.Count > 0)
                 {
-                    queryData.QuetyCount++;
-                    tempList.Add(queryData);
-                }
-            }
-            if (tempList.Count > 0)
-            {
-                for (int i = 0; i < tempList.Count; i++)
-                {
-                    queryProcessList.Enqueue(tempList[i]);
+                    for (int i = 0; i < tempList.Count; i++)
+                    {
+                        queryProcessList.Enqueue(tempList[i]);
+                    }
                 }
             }
         }

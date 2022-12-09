@@ -1253,7 +1253,7 @@ namespace GameSvr.World
         public void OtherServerUserLogon(int sNum, string uname)
         {
             var name = string.Empty;
-            var apmode = HUtil32.GetValidStr3(uname, ref name, ":");
+            var apmode = HUtil32.GetValidStr3(uname, ref name, ':');
             OtherUserNameList.Remove(name);
             OtherUserNameList.Add(name, new ServerGruopInfo()
             {
@@ -1265,7 +1265,7 @@ namespace GameSvr.World
         public void OtherServerUserLogout(int sNum, string uname)
         {
             var name = string.Empty;
-            var apmode = HUtil32.GetValidStr3(uname, ref name, ":");
+            var apmode = HUtil32.GetValidStr3(uname, ref name, ':');
             OtherUserNameList.Remove(name);
             // for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
             // {

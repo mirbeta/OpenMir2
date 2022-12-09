@@ -25,7 +25,7 @@ namespace GameSvr.Castle
             {
                 while (!string.IsNullOrEmpty(sMapList))
                 {
-                    sMapList = HUtil32.GetValidStr3(sMapList, ref sMap, new[] { ',' });
+                    sMapList = HUtil32.GetValidStr3(sMapList, ref sMap, ',');
                     if (string.IsNullOrEmpty(sMap)) break;
                     userCastle.EnvirList.Add(sMap);
                 }

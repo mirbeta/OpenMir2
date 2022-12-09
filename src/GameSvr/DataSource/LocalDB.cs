@@ -24,8 +24,8 @@ namespace GameSvr.DataSource
 
     public class LocalDB
     {
-        private readonly string[] TextSpitConst = new[] { " ", "\t" };
-        private readonly string[] MonsterSpitConst = new[] { " ", "/", "\t" };
+        private readonly char[] TextSpitConst = new char[] { ' ', '\t' };
+        private readonly char[] MonsterSpitConst = new char[] { ' ', '/', '\t' };
 
         public bool LoadAdminList()
         {
@@ -130,12 +130,12 @@ namespace GameSvr.DataSource
                         var sLine = guardList[i];
                         if (!string.IsNullOrEmpty(sLine) && sLine[0] != ';')
                         {
-                            sLine = HUtil32.GetValidStrCap(sLine, ref monName, new[] { " " });
+                            sLine = HUtil32.GetValidStrCap(sLine, ref monName, ' ');
                             if (!string.IsNullOrEmpty(monName) && monName[0] == '\"')
                             {
                                 HUtil32.ArrestStringEx(monName, "\"", "\"", ref monName);
                             }
-                            sLine = HUtil32.GetValidStr3(sLine, ref mapName, new[] { ' ' });
+                            sLine = HUtil32.GetValidStr3(sLine, ref mapName, ' ');
                             sLine = HUtil32.GetValidStr3(sLine, ref cX, new[] { ' ', ',' });
                             sLine = HUtil32.GetValidStr3(sLine, ref cY, new[] { ' ', ',', ':' });
                             sLine = HUtil32.GetValidStr3(sLine, ref direction, new[] { ' ', ':' });

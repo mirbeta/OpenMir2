@@ -65,7 +65,7 @@ namespace GameSvr.Maps
             var sTempName = sMapName;
             if (sTempName.IndexOf('|') > -1)
             {
-                sMapFileName = HUtil32.GetValidStr3(sTempName, ref sMapName, new[] { '|' });
+                sMapFileName = HUtil32.GetValidStr3(sTempName, ref sMapName, '|');
             }
             else
             {

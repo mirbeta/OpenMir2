@@ -33,23 +33,25 @@ namespace GameSvr.Maps
 
         public void Add(CellObject cell, EntityId entityId)
         {
-            using (M2Share.SyncLock.EnterWriteLock())
+            /*using (M2Share.SyncLock.EnterWriteLock())
             {
-                ObjList.Add(cell);
-                M2Share.CellObjectSystem.Add(cell.CellObjId, entityId);
-            }
+     
+            }*/
+            ObjList.Add(cell);
+            M2Share.CellObjectSystem.Add(cell.CellObjId, entityId);
         }
 
         public void Remove(CellObject cell)
         {
-            using (M2Share.SyncLock.EnterReadLock())
+            /*using (M2Share.SyncLock.EnterReadLock())
             {
-                if (ObjList != null && cell != null)
-                {
-                    ObjList.Remove(cell);
-                    M2Share.CellObjectSystem.Remove(cell.CellObjId);
-                    cell = null;
-                }
+   
+            }*/
+            if (ObjList != null && cell != null)
+            {
+                ObjList.Remove(cell);
+                M2Share.CellObjectSystem.Remove(cell.CellObjId);
+                cell = null;
             }
         }
 

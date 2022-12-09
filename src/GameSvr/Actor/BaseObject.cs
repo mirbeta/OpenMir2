@@ -3786,7 +3786,7 @@ namespace GameSvr.Actor
                     case '[':// 顶部滚动公告
                         {
                             sMsg = HUtil32.ArrestStringEx(sMsg, "[", "]", ref str);
-                            bColor = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
+                            bColor = HUtil32.GetValidStrCap(str, ref fColor, ',');
                             if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
@@ -3797,7 +3797,7 @@ namespace GameSvr.Actor
                     case '<':// 聊天框彩色公告
                         {
                             sMsg = HUtil32.ArrestStringEx(sMsg, "<", ">", ref str);
-                            bColor = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
+                            bColor = HUtil32.GetValidStrCap(str, ref fColor, ',');
                             if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
@@ -3808,9 +3808,9 @@ namespace GameSvr.Actor
                     case '{': // 屏幕居中公告
                         {
                             sMsg = HUtil32.ArrestStringEx(sMsg, "{", "}", ref str);
-                            str = HUtil32.GetValidStrCap(str, ref fColor, new[] { "," });
-                            str = HUtil32.GetValidStrCap(str, ref bColor, new[] { "," });
-                            str = HUtil32.GetValidStrCap(str, ref nTime, new[] { "," });
+                            str = HUtil32.GetValidStrCap(str, ref fColor, ',');
+                            str = HUtil32.GetValidStrCap(str, ref bColor, ',');
+                            str = HUtil32.GetValidStrCap(str, ref nTime, ',');
                             if (M2Share.Config.ShowPreFixMsg)
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
