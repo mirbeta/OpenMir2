@@ -1,5 +1,7 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using NLog;
 using SystemModule;
 using SystemModule.Enums;
 
@@ -12,7 +14,8 @@ namespace GameSvr.Actor
     {
         private readonly IdWorker _idWorker = new IdWorker(M2Share.RandomNumber.Random(15));
         private readonly ConcurrentQueue<int> _idQueue = new ConcurrentQueue<int>();
-        private Thread IdWorkThread;
+        private readonly Thread IdWorkThread;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 精灵列表
         /// </summary>
@@ -21,13 +24,18 @@ namespace GameSvr.Actor
         /// 其他对象
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohter = new ConcurrentDictionary<int, object>();
+        private readonly IList<int> ActorIds = new Collection<int>();
 
-        public void Start()
+        public ActorMgr()
         {
             IdWorkThread = new Thread(Initialization)
             {
                 IsBackground = true
             };
+        }
+
+        public void Start()
+        {
             IdWorkThread.Start();
         }
 
@@ -91,23 +99,13 @@ namespace GameSvr.Actor
             return actor;
         }
 
-        private void Remove(int actorId)
-        {
-            BaseObject ghostactor;
-            _actorsMap.TryRemove(actorId, out ghostactor);
-            if (ghostactor != null)
-            {
-                Debug.WriteLine($"清理死亡对象 名称:[{ghostactor.ChrName}] 地图:{ghostactor.MapName} 坐标:{ghostactor.CurrX}:{ghostactor.CurrY}");
-            }
-        }
-
         public void RevomeOhter(int actorId)
         {
             object actor;
             _ohter.TryRemove(actorId, out actor);
             if (actor != null)
             {
-                Debug.WriteLine($"清理死亡对象 [{actorId}]");
+                _logger.Debug($"清理死亡对象 [{actorId}]");
             }
         }
 
@@ -116,32 +114,23 @@ namespace GameSvr.Actor
         /// </summary>
         public void ClearObject()
         {
-            var actorIds = _actorsMap.Keys;
-            var playCount = 0;
-            var monsterCount = 0;
-            foreach (var actorId in actorIds)
+            ActorIds.Clear();
+            var actors = _actorsMap.GetEnumerator();
+            while (actors.MoveNext())
             {
-                BaseObject actor;
-                if (_actorsMap.TryGetValue(actorId, out actor))
+                BaseObject actor = actors.Current.Value;
+                if (!actor.Ghost || actor.GhostTick <= 0) continue;
+                if ((HUtil32.GetTickCount() - actor.DeathTick) <= M2Share.Config.MakeGhostTime) continue; //死亡对象清理时间
                 {
-                    if (actor.Race == ActorRace.Play)
-                    {
-                        playCount++;
-                    }
-                    else
-                    {
-                        monsterCount++;
-                    }
-                    if (actor.Ghost && actor.GhostTick > 0)
-                    {
-                        if ((HUtil32.GetTickCount() - actor.DeathTick) > M2Share.Config.MakeGhostTime) //超过清理时间
-                        {
-                            Remove(actorId);
-                        }
-                    }
+                    ActorIds.Add(actors.Current.Key);
                 }
+                actors.Dispose();
             }
-            Debug.WriteLine($"在线人物:[{playCount}] 怪物总数:[{monsterCount}]");
+            foreach (var actorId in ActorIds)
+            {
+                _actorsMap.TryRemove(actorId, out var actor);
+                _logger.Debug($"清理死亡对象 名称:[{actor.ChrName}] 地图:{actor.MapName} 坐标:{actor.CurrX}:{actor.CurrY}");
+            }
         }
     }
 }

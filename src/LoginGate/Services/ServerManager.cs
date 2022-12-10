@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using NLog;
 using SystemModule.Logger;
 
 namespace LoginGate.Services
@@ -14,7 +15,7 @@ namespace LoginGate.Services
     /// </summary>
     public class ServerManager
     {
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<ServerService> _serverServices;
         private readonly ConfigManager _configManager;
         private readonly SessionManager _sessionManager;
@@ -24,9 +25,8 @@ namespace LoginGate.Services
         /// </summary>
         private readonly Channel<MessageData> _messageQueue;
 
-        public ServerManager(MirLogger logger, IServiceProvider serviceProvider, SessionManager sessionManager, ConfigManager configManager)
+        public ServerManager(IServiceProvider serviceProvider, SessionManager sessionManager, ConfigManager configManager)
         {
-            _logger = logger;
             _serviceProvider = serviceProvider;
             _sessionManager = sessionManager;
             _configManager = configManager;
@@ -86,14 +86,14 @@ namespace LoginGate.Services
                         var userSession = _sessionManager.GetSession(message.ConnectionId);
                         if (userSession == null)
                         {
-                            _logger.LogWarning("非法攻击: " + message.ClientIP);
-                            _logger.DebugLog($"获取用户对应会话失败 RemoteAddr:[{message.ClientIP}] ConnectionId:[{message.ConnectionId}]");
+                            _logger.Warn("非法攻击: " + message.ClientIP);
+                            _logger.Debug($"获取用户对应会话失败 RemoteAddr:[{message.ClientIP}] ConnectionId:[{message.ConnectionId}]");
                             continue;
                         }
                         if (!userSession.ClientThread.ConnectState)
                         {
-                            _logger.LogInformation("未就绪: " + message.ClientIP, 5);
-                            _logger.DebugLog($"账号服务器链接失败 Server:[{userSession.ClientThread.EndPoint}] ConnectionId:[{message.ConnectionId}]");
+                            _logger.Info("未就绪: " + message.ClientIP);
+                            _logger.Debug($"账号服务器链接失败 Server:[{userSession.ClientThread.EndPoint}] ConnectionId:[{message.ConnectionId}]");
                             continue;
                         }
                         try
@@ -102,7 +102,7 @@ namespace LoginGate.Services
                         }
                         catch (Exception e)
                         {
-                            _logger.LogError(e);
+                            _logger.Error(e);
                         }
                     }
                 }
@@ -116,7 +116,7 @@ namespace LoginGate.Services
                 var gateService = (ServerService)_serviceProvider.GetService(typeof(ServerService));
                 AddServer(gateService);
             }
-            _logger.DebugLog($"初始化网关服务完成.[{_serverServices.Count}]");
+            _logger.Debug($"初始化网关服务完成.[{_serverServices.Count}]");
         }
 
         private void AddServer(ServerService serverService)

@@ -2,6 +2,7 @@ using LoginGate.Conf;
 using LoginGate.Packet;
 using System;
 using System.Net.Sockets;
+using NLog;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Packets;
@@ -17,15 +18,14 @@ namespace LoginGate.Services
     {
         private readonly TSessionInfo _session;
         private readonly ClientThread _lastLoginSvr;
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigManager _configManager;
         private bool m_KickFlag = false;
         private readonly int m_nSvrObject = 0;
         private int m_dwClientTimeOutTick = 0;
 
-        public ClientSession(MirLogger logger, TSessionInfo session, ClientThread clientThread, ConfigManager configManager)
+        public ClientSession(TSessionInfo session, ClientThread clientThread, ConfigManager configManager)
         {
-            _logger = logger;
             _session = session;
             _lastLoginSvr = clientThread;
             _configManager = configManager;
@@ -149,7 +149,7 @@ namespace LoginGate.Services
                     SendDefMessage(Grobal2.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0);
                     m_KickFlag = true;
                     //BlockUser(this);
-                    _logger.DebugLog($"Client Connect TimeOut: {Session.ClientIP}");
+                    _logger.Debug($"Client Connect TimeOut: {Session.ClientIP}");
                     success = true;
                 }
             }
@@ -180,7 +180,7 @@ namespace LoginGate.Services
             }
             else
             {
-                _logger.LogInformation("Scoket会话失效，无法处理登陆封包", 5);
+                _logger.Info("Scoket会话失效，无法处理登陆封包", 5);
             }
         }
 
@@ -252,7 +252,7 @@ namespace LoginGate.Services
         {
             if (_session.Socket == null)
             {
-                _logger.DebugLog($"会话[{_session.ConnectionId}]已经关闭");
+                _logger.Debug($"会话[{_session.ConnectionId}]已经关闭");
                 return;
             }
             _session.Socket.Close();

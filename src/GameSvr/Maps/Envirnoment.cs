@@ -783,7 +783,11 @@ namespace GameSvr.Maps
                                 }
                                 if (_cellArray.Span[n24 + nH] == null)
                                 {
-                                    _cellArray.Span[n24 + nH] = new MapCellInfo();
+                                    _cellArray.Span[n24 + nH] = new MapCellInfo()
+                                    {
+                                        ObjList = new PooledList<CellObject>(),
+                                        Attribute = CellAttribute.Walk
+                                    };
                                 }
                                 // btDoorIndex
                                 if ((buffer[buffIndex + 6] & 0x80) != 0)
@@ -851,7 +855,11 @@ namespace GameSvr.Maps
                                 }
                                 if (_cellArray.Span[n24 + nH] == null)
                                 {
-                                    _cellArray.Span[n24 + nH] = new MapCellInfo();
+                                    _cellArray.Span[n24 + nH] = new MapCellInfo()
+                                    {
+                                        ObjList = new PooledList<CellObject>(),
+                                        Attribute = CellAttribute.Walk
+                                    };
                                 }
                                 // btDoorIndex
                                 if ((buffer[buffIndex + 6] & 0x80) != 0)
@@ -923,8 +931,8 @@ namespace GameSvr.Maps
                         {
                             continue;
                         }
-                        line = HUtil32.GetValidStr3(line, ref sX, new[] { ",", "\t" });
-                        line = HUtil32.GetValidStr3(line, ref sY, new[] { ",", "\t" });
+                        line = HUtil32.GetValidStr3(line, ref sX, new[] { ',', '\t' });
+                        line = HUtil32.GetValidStr3(line, ref sY, new[] { ',', '\t' });
                         var nX = (short)HUtil32.StrToInt(sX, -1);
                         var nY = (short)HUtil32.StrToInt(sY, -1);
                         if (nX >= 0 && nY >= 0 && nX < Width && nY < Height)

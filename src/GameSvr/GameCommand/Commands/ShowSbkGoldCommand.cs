@@ -44,7 +44,7 @@ namespace GameSvr.GameCommand.Commands
             }
             var Ctr = sCtr[1];
             var nGold = HUtil32.StrToInt(sGold, -1);
-            if (!new List<char>(new char[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
+            if (!new List<char>(new[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.GameCommand.Name, CommandHelp.GameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;

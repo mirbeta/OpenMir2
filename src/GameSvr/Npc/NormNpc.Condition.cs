@@ -33,7 +33,7 @@ namespace GameSvr.Npc
                     {
                         continue;
                     }
-                    sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new string[] { " ", "/", "\t" });
+                    sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new[] { ' ', '/', '\t' });
                     sIPaddr = sIPaddr.Trim();
                     if ((sName == sCharAccount) && (sIPaddr == sCharIPaddr))
                     {
@@ -1442,7 +1442,7 @@ namespace GameSvr.Npc
                     {
                         continue;
                     }
-                    sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new string[] { " ", "/", "\t" });
+                    sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new[] { ' ', '/', '\t' });
                     sIPaddr = sIPaddr.Trim();
                     if ((sName == sChrName) && (sIPaddr == sCharIPaddr))
                     {
@@ -2347,8 +2347,8 @@ namespace GameSvr.Npc
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i].Trim();
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\t" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new[] { ' ', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new[] { ' ', '\t' });
                     if ((string.Compare(sHumName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0) || boNoCompareHumanName)
                     {
                         nDay = int.MaxValue;

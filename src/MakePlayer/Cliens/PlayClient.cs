@@ -295,7 +295,7 @@ namespace MakePlayer.Cliens
         private void ClientGetStartPlay(string sData)
         {
             var sText = EDCode.DeCodeString(sData);
-            var sRunPort = HUtil32.GetValidStr3(sText, ref m_sRunServerAddr, new[] { "/" });
+            var sRunPort = HUtil32.GetValidStr3(sText, ref m_sRunServerAddr, '/');
             m_nRunServerPort = Convert.ToInt32(sRunPort);
             //ClientSocket.Disconnect();
             ConnectionStep = TConnectionStep.cnsPlay;
@@ -418,9 +418,9 @@ namespace MakePlayer.Cliens
             var sCertification = string.Empty;
             MainOutMessage($"[{LoginAccount}] 帐号登录成功！");
             var sText = EDCode.DeCodeString(sData);
-            sText = HUtil32.GetValidStr3(sText, ref m_sSelChrAddr, new[] { "/" });
-            sText = HUtil32.GetValidStr3(sText, ref sSelChrPort, new[] { "/" });
-            sText = HUtil32.GetValidStr3(sText, ref sCertification, new[] { "/" });
+            sText = HUtil32.GetValidStr3(sText, ref m_sSelChrAddr, '/');
+            sText = HUtil32.GetValidStr3(sText, ref sSelChrPort, '/');
+            sText = HUtil32.GetValidStr3(sText, ref sCertification, '/');
             Certification = Convert.ToInt32(sCertification);
             m_nSelChrPort = Convert.ToInt32(sSelChrPort);
             //ClientSocket.Disconnect();
@@ -512,11 +512,11 @@ namespace MakePlayer.Cliens
             var nSelect = 0;
             for (var i = 0; i < m_ChrArr.Length; i++)
             {
-                sText = HUtil32.GetValidStr3(sText, ref sName, new[] { "/" });
-                sText = HUtil32.GetValidStr3(sText, ref sJob, new[] { "/" });
-                sText = HUtil32.GetValidStr3(sText, ref sHair, new[] { "/" });
-                sText = HUtil32.GetValidStr3(sText, ref sLevel, new[] { "/" });
-                sText = HUtil32.GetValidStr3(sText, ref sSex, new[] { "/" });
+                sText = HUtil32.GetValidStr3(sText, ref sName, '/');
+                sText = HUtil32.GetValidStr3(sText, ref sJob, '/');
+                sText = HUtil32.GetValidStr3(sText, ref sHair, '/');
+                sText = HUtil32.GetValidStr3(sText, ref sLevel, '/');
+                sText = HUtil32.GetValidStr3(sText, ref sSex, '/');
                 nSelect = 0;
                 if ((sName != "") && (sLevel != "") && (sSex != ""))
                 {
@@ -597,8 +597,8 @@ namespace MakePlayer.Cliens
             var nCount = HUtil32._MIN(6, DefMsg.Series);
             for (var i = 0; i < nCount; i++)
             {
-                sBody = HUtil32.GetValidStr3(sBody, ref sServerName, new[] { "/" });
-                sBody = HUtil32.GetValidStr3(sBody, ref sServerStatus, new[] { "/" });
+                sBody = HUtil32.GetValidStr3(sBody, ref sServerName, '/');
+                sBody = HUtil32.GetValidStr3(sBody, ref sServerStatus, '/');
                 if (sServerName == ServerName)
                 {
                     SendSelectServer(sServerName);
@@ -617,7 +617,7 @@ namespace MakePlayer.Cliens
             var sServerName = string.Empty;
             MainOutMessage($"[{LoginAccount}] 帐号登录成功！");
             var sText = EDCode.DeCodeString(sData);
-            HUtil32.GetValidStr3(sText, ref sServerName, new[] { "/" });
+            HUtil32.GetValidStr3(sText, ref sServerName, '/');
             SendSelectServer(sServerName);
         }
 

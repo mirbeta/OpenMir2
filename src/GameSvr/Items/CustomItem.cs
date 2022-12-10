@@ -86,9 +86,9 @@ namespace GameSvr.Items
                 for (var i = 0; i < loadList.Count; i++)
                 {
                     string sLineText = loadList[i].Trim();
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new string[] { " ", "\t" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new string[] { " ", "\t" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new string[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '\t' });
                     var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if (nMakeIndex < 0 || nItemIndex < 0) continue;

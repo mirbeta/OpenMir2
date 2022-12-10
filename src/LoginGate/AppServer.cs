@@ -40,7 +40,6 @@ namespace LoginGate
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<MirLogger>();
             services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
             services.AddSingleton<ServerService>();
             services.AddSingleton<ClientManager>();

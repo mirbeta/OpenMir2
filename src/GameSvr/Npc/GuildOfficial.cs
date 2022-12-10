@@ -65,7 +65,7 @@ namespace GameSvr.Npc
             {
                 if (!string.IsNullOrEmpty(sData) && sData.StartsWith("@"))
                 {
-                    string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, "\r");
+                    var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                     var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                     GotoLable(PlayObject, sLabel, !boCanJmp);
                     if (!boCanJmp)

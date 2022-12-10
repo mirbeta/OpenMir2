@@ -26,7 +26,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 Ctr = sCtr[0];
             }
-            if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new char[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > int.MaxValue
+            if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new[] { '=', '+', '-' }).Contains(Ctr) || nPoint < 0 || nPoint > int.MaxValue
                 || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

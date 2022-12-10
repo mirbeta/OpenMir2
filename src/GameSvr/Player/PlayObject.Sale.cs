@@ -67,7 +67,7 @@ namespace GameSvr.Player
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
-                HUtil32.GetValidStr3(sItemName, ref sItemName, new char[] { ' ' });
+                HUtil32.GetValidStr3(sItemName, ref sItemName, ' ');
             }
             bo11 = false;
             if (!m_boSellOffOK)
@@ -129,7 +129,7 @@ namespace GameSvr.Player
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
-                HUtil32.GetValidStr3(sItemName, ref sItemName, new char[] { ' ' });
+                HUtil32.GetValidStr3(sItemName, ref sItemName, ' ');
             }
             bool bo11 = false;
             if (!m_boSellOffOK)

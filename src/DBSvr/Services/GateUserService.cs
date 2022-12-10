@@ -354,7 +354,7 @@ namespace DBSvr.Services
                 if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                 {
                     sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
-                    if ((sGameGate == "") || (sSelGateIPaddr == ""))
+                    if ((string.IsNullOrEmpty(sGameGate)) || (string.IsNullOrEmpty(sSelGateIPaddr)))
                     {
                         continue;
                     }
@@ -384,11 +384,11 @@ namespace DBSvr.Services
                 for (var i = 0; i < loadList.Count; i++)
                 {
                     var sLineText = loadList[i];
-                    if ((sLineText != "") && (sLineText[0] == '['))
+                    if ((!string.IsNullOrEmpty(sLineText)) && (sLineText[0] == '['))
                     {
                         sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
                         sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new[] { " ", "\09" });
-                        sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new[] { " ", "\09" }).Trim();
+                        sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new[] { " ", "\09" });
                         var nServerIndex = HUtil32.StrToInt(sServerIndex, 0);
                         _mapList.Add(sMapName, nServerIndex);
                     }

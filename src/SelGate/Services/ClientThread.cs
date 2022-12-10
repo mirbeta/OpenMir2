@@ -83,7 +83,7 @@ namespace SelGate.Services
             SockThreadStutas = SockThreadStutas.Connecting;
             KeepAliveTick = HUtil32.GetTickCount();
             KeepAlive = true;
-            DataBuff = new byte[10 * 1024];
+            DataBuff = new byte[2048 * 10];
         }
 
         public bool IsConnected => isConnected;
@@ -171,15 +171,12 @@ namespace SelGate.Services
             }
             if (DataLen > 0)
             {
-                var packetData = new byte[nMsgLen];
-                Buffer.BlockCopy(e.Buff, 0, packetData, 0, nMsgLen);
-                MemoryCopy.BlockCopy(packetData, 0, DataBuff, DataLen, nMsgLen);
-                ProcessServerData(DataBuff, DataLen + nMsgLen, e.SocketId);
+                MemoryCopy.BlockCopy(e.Buff, 0, DataBuff, DataLen, nMsgLen);
+                ProcessServerData(DataBuff, DataLen + nMsgLen);
             }
             else
             {
-                Buffer.BlockCopy(e.Buff, 0, DataBuff, 0, nMsgLen);
-                ProcessServerData(DataBuff, nMsgLen, e.SocketId);
+                ProcessServerData(e.Buff, nMsgLen);
             }
         }
 
@@ -199,7 +196,7 @@ namespace SelGate.Services
             }
         }
 
-        private void ProcessServerData(byte[] data, int nLen, int socketId)
+        private void ProcessServerData(byte[] data, int nLen)
         {
             var srcOffset = 0;
             Span<byte> dataBuff = data;

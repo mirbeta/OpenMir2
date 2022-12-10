@@ -81,7 +81,7 @@ namespace GameSvr.Player
         public void WhisperRe(string SayStr, byte MsgType)
         {
             var sendwho = string.Empty;
-            HUtil32.GetValidStr3(SayStr, ref sendwho, new string[] { "[", " ", "=", ">" });
+            HUtil32.GetValidStr3(SayStr, ref sendwho, new[] { '[', ' ', '=', '>' });
             if (HearWhisper && !IsBlockWhisper(sendwho))
             {
                 switch (MsgType)
@@ -153,7 +153,7 @@ namespace GameSvr.Player
                         case '/':
                             {
                                 sText = sData.AsSpan()[1..].ToString();
-                                sText = HUtil32.GetValidStr3(sText, ref sParam1, new[] { " " });
+                                sText = HUtil32.GetValidStr3(sText, ref sParam1, new[] { ' ' });
                                 if (!m_boFilterSendMsg)
                                 {
                                     Whisper(sParam1, sText);
@@ -376,34 +376,34 @@ namespace GameSvr.Player
                     return;
                 }
                 sC = sData.AsSpan()[1..].ToString();
-                sC = HUtil32.GetValidStr3(sC, ref sCMD, new[] { " ", ":", ",", "\t" });
+                sC = HUtil32.GetValidStr3(sC, ref sCMD, new[] { ' ', ':', ',', '\t' });
                 if (sC != "")
                 {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam1, new[] { " ", ":", ",", "\t" });
+                    sC = HUtil32.GetValidStr3(sC, ref sParam1, new[] { ' ', ':', ',', '\t' });
                 }
                 if (sC != "")
                 {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam2, new[] { " ", ":", ",", "\t" });
+                    sC = HUtil32.GetValidStr3(sC, ref sParam2, new[] { ' ', ':', ',', '\t' });
                 }
                 if (sC != "")
                 {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam3, new[] { " ", ":", ",", "\t" });
+                    sC = HUtil32.GetValidStr3(sC, ref sParam3, new[] { ' ', ':', ',', '\t' });
                 }
                 if (sC != "")
                 {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam4, new[] { " ", ":", ",", "\t" });
+                    sC = HUtil32.GetValidStr3(sC, ref sParam4, new[] { ' ', ':', ',', '\t' });
                 }
                 if (sC != "")
                 {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam5, new[] { " ", ":", ",", "\t" });
+                    sC = HUtil32.GetValidStr3(sC, ref sParam5, new[] { ' ', ':', ',', '\t' });
                 }
                 if (sC != "")
                 {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam6, new[] { " ", ":", ",", "\t" });
+                    sC = HUtil32.GetValidStr3(sC, ref sParam6, new[] { ' ', ':', ',', '\t' });
                 }
                 if (sC != "")
                 {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam7, new[] { " ", ":", ",", "\t" });
+                    sC = HUtil32.GetValidStr3(sC, ref sParam7, new[] { ' ', ':', ',', '\t' });
                 }
                 if (CommandMgr.GetInstance().ExecCmd(sData, this))
                 {

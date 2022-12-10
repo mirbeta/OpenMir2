@@ -532,7 +532,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 if (cellObject != null)
                                 {
-                                    if (!cellObject.Dispose)
+                                    if (!cellObject.IsDispose)
                                     {
                                         switch (cellObject.CellType)
                                         {
@@ -540,7 +540,7 @@ namespace GameSvr.RobotPlay
                                             case CellType.Monster:
                                                 if (HUtil32.GetTickCount() - cellObject.AddTime >= 60000)
                                                 {
-                                                    cellObject.Dispose = true;
+                                                    cellObject.IsDispose = true;
                                                     cellInfo.Remove(cellObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
@@ -572,7 +572,7 @@ namespace GameSvr.RobotPlay
                                                         }
                                                         if (cellObject != null)
                                                         {
-                                                            cellObject.Dispose = true;
+                                                            cellObject.IsDispose = true;
                                                         }
                                                         cellInfo.Remove(cellObject);
                                                         if (cellInfo.Count <= 0)

@@ -425,7 +425,7 @@ namespace GameSvr.RobotPlay
                     if (sData[0] == '/')
                     {
                         SC = sData.Substring(1, sData.Length - 1);
-                        SC = HUtil32.GetValidStr3(SC, ref sParam1, new char[] { ' ' });
+                        SC = HUtil32.GetValidStr3(SC, ref sParam1, ' ');
                         if (!m_boFilterSendMsg)
                         {
                             Whisper(sParam1, SC);

@@ -1067,7 +1067,7 @@ namespace GameSvr.Npc
             {
                 int MonGenCount = 0;
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                var MapName = HUtil32.GetValidStr3(s14, ref s14, new string[] { "/" });
+                var MapName = HUtil32.GetValidStr3(s14, ref s14, '/');
                 var MonsterName = s14;
                 if (MapName.StartsWith("$")) // $MAPMOSTERCOUNT[怪物名字/地图号]
                 {
@@ -1645,7 +1645,7 @@ namespace GameSvr.Npc
             PlayObject.m_nScriptGotoCount = 0;
             if (!string.IsNullOrEmpty(sData) && sData[0] == '@')// 处理脚本命令 @back 返回上级标签内容
             {
-                HUtil32.GetValidStr3(sData, ref sLabel, new[] { '\r' });
+                HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                 if (PlayObject.m_sScriptCurrLable != sLabel)
                 {
                     if (sLabel != ScriptConst.sBACK)

@@ -27,10 +27,12 @@ namespace GameSvr
 {
     public class GameApp : ServerBase
     {
-        private readonly Thread makeStoneMinesThread;
+        private readonly Thread _makeStoneMinesThread;
         
         public GameApp(ILogger<ServerBase> logger) : base(logger)
         {
+            M2Share.ActorMgr = new ActorMgr();
+            M2Share.ActorMgr.Start();
             M2Share.LocalDb = new LocalDB();
             M2Share.CommonDb = new CommonDB();
             M2Share.g_nSockCountMax = 0;
@@ -61,7 +63,6 @@ namespace GameSvr
             M2Share.Config.WinLotteryLevel5 = 0;
             M2Share.Config.WinLotteryLevel6 = 0;
             M2Share.DataServer = new DBService();
-            M2Share.ActorMgr = new ActorMgr();
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.GateMgr = new GameGateMgr();
             M2Share.FindPath = new FindPath();
@@ -113,8 +114,7 @@ namespace GameSvr
             M2Share.g_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.sSellOffItemList = new List<DealOffInfo>();
             M2Share.dwRunDBTimeMax = HUtil32.GetTickCount();
-            M2Share.ActorMgr.Start();
-            makeStoneMinesThread = new Thread(MakeStoneMines) { IsBackground = true };
+            _makeStoneMinesThread = new Thread(MakeStoneMines) { IsBackground = true };
         }
 
         public void Initialize()
@@ -248,7 +248,7 @@ namespace GameSvr
             {
                 M2Share.MapMgr.LoadMapDoor();
                 Logger.LogInformation("地图环境加载成功...");
-                makeStoneMinesThread.Start();
+                _makeStoneMinesThread.Start();
                 M2Share.LocalDb.LoadMerchant();
                 Logger.LogInformation("交易NPC列表加载成功...");
                 M2Share.LocalDb.LoadNpcs();
@@ -335,7 +335,7 @@ namespace GameSvr
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIdx, new[] { " ", "\09" });
                         string sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
-                        if (sIdx == "" || sGameGate == "" || sSelGateIPaddr == "")
+                        if (string.IsNullOrEmpty(sIdx) || string.IsNullOrEmpty(sGameGate) || string.IsNullOrEmpty(sSelGateIPaddr))
                         {
                             continue;
                         }

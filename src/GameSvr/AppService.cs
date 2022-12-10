@@ -223,7 +223,7 @@ namespace GameSvr
                 }
                 try
                 {
-                    _application.Execute(new string[] { cmdline });
+                    _application.Execute(new[] { cmdline });
                 }
                 catch
                 {

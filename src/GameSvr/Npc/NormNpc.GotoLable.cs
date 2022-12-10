@@ -351,7 +351,7 @@ namespace GameSvr.Npc
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     string sText = LoadList[i].Trim();
-                    sText = HUtil32.GetValidStrCap(sText, ref Name, new string[] { " ", "\t" });
+                    sText = HUtil32.GetValidStrCap(sText, ref Name, new[] { ' ', '\t' });
                     Name = Name.Trim();
                     if (ChrName == Name)
                     {
@@ -1455,7 +1455,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < LoadList.Count; i++)
             {
                 sText = LoadList[i].Trim();
-                sText = HUtil32.GetValidStrCap(sText, ref s10, new string[] { " ", "\t" });
+                sText = HUtil32.GetValidStrCap(sText, ref s10, new[] { ' ', '\t' });
                 if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     bo15 = true;
@@ -1523,7 +1523,7 @@ namespace GameSvr.Npc
             for (var i = 0; i < LoadList.Count; i++)
             {
                 sText = LoadList[i].Trim();
-                sText = HUtil32.GetValidStrCap(sText, ref s10, new string[] { " ", "\t" });
+                sText = HUtil32.GetValidStrCap(sText, ref s10, new[] { ' ', '\t' });
                 if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     bo15 = true;

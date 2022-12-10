@@ -5,16 +5,19 @@
         /// <summary>
         /// 上一次运行时间记录
         /// </summary>
-        public int dwRunTick;
+        public long RunTick;
         /// <summary>
-        /// 运行间隔时间长
+        /// 执行时间
         /// </summary>        
-        public int dwRunTimeLen;
+        public long RunTimeTick;
         /// <summary>
         /// 自动运行类型
         /// </summary>
-        public int nRunCmd;
-        public int nMoethod;
+        public int RunCmd;
+        /// <summary>
+        /// 运行类型
+        /// </summary>
+        public int Moethod;
         /// <summary>
         /// 运行脚本标签
         /// </summary>

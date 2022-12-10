@@ -131,19 +131,19 @@ namespace LoginSvr.Services
                         {
                             break;
                         }
-                        sMsg = HUtil32.GetValidStr3(sMsg, ref sCode, new[] { "/" });
+                        sMsg = HUtil32.GetValidStr3(sMsg, ref sCode, '/');
                         var nCode = HUtil32.StrToInt(sCode, -1);
                         switch (nCode)
                         {
                             case Grobal2.SS_SOFTOUTSESSION:
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, '/');
                                 CloseUser(msgServer, sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
                             case Grobal2.SS_SERVERINFO:
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sIndex, new[] { "/" });
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sOnlineCount, new[] { "/" });
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sPayMentMode, new[] { "/" });
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, '/');
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sIndex, '/');
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sOnlineCount, '/');
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sPayMentMode, '/');
                                 msgServer.ServerName = sServerName;
                                 msgServer.ServerIndex = HUtil32.StrToInt(sIndex, 0);
                                 msgServer.OnlineCount = HUtil32.StrToInt(sOnlineCount, 0);
@@ -159,16 +159,16 @@ namespace LoginSvr.Services
                                 RefServerLimit(sServerName);
                                 break;
                             case Grobal2.ISM_GAMETIMEOFTIMECARDUSER:
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, new[] { "/" });
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, '/');
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, '/');
                                 ChanggePlayTimeUser(msgServer, sServerName, sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
                             case Grobal2.ISM_QUERYACCOUNTEXPIRETIME:
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, '/');
                                 QueryPlayTime(msgServer, sAccount);
                                 break;
                             case Grobal2.ISM_CHECKTIMEACCOUNT:
-                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, new[] { "/" });
+                                sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, '/');
                                 CheckTimeAccount(msgServer, sAccount);
                                 break;
                             case Grobal2.UNKNOWMSG:

@@ -41,7 +41,7 @@ namespace GameSvr.Maps
                     }
                     if (HUtil32.CompareLStr("ConnectMapInfo", LoadList[count]))
                     {
-                        sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { " ", "\t" });
+                        sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { ' ', '\t' });
                         LoadList.RemoveAt(count);
                         if (sMapInfoFile != "")
                         {
@@ -63,12 +63,12 @@ namespace GameSvr.Maps
                             boSAFE = false
                         };
                         sFlag = HUtil32.ArrestStringEx(sFlag, "[", "]", ref sMapName);
-                        sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, new[] { " ", ",", "\t" });
-                        if (sMapDesc != "" && sMapDesc[0] == '\"')
+                        sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, new[] { ' ', ',', '\t' });
+                        if (!string.IsNullOrEmpty(sMapDesc) && sMapDesc[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMapDesc, "\"", "\"", ref sMapDesc);
                         }
-                        string s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, new[] { " ", ",", "\t" }).Trim();
+                        var s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, new[] { ' ', ',', '\t' }).Trim();
                         nServerIndex = HUtil32.StrToInt(s4C, 0);
                         if (sMapName == "")
                         {
@@ -86,7 +86,7 @@ namespace GameSvr.Maps
                             {
                                 break;
                             }
-                            sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { " ", ",", "\t" });
+                            sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { ' ', ',', '\t' });
                             if (s34 == "")
                             {
                                 break;
@@ -358,11 +358,11 @@ namespace GameSvr.Maps
                         nX = HUtil32.StrToInt(s34, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref s34, HUtil32.Separator);
                         n18 = HUtil32.StrToInt(s34, 0);
-                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { " ", ",", "-", ">", "\t" });
+                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { ' ', ',', '-', '>', '\t' });
                         string s44 = s34;
                         sFlag = HUtil32.GetValidStr3(sFlag, ref s34, HUtil32.Separator);
                         n1C = HUtil32.StrToInt(s34, 0);
-                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { " ", ",", ";", "\t" });
+                        sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { ' ', ',', ';', '\t' });
                         n20 = HUtil32.StrToInt(s34, 0);
                         M2Share.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
                     }
@@ -387,8 +387,8 @@ namespace GameSvr.Maps
                     var tStr = tMapList[i];
                     if (tStr != "" && tStr[0] != ';')
                     {
-                        tStr = HUtil32.GetValidStr3(tStr, ref sMapNO, new[] { " ", "\t" });
-                        tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx, new[] { " ", "\t" });
+                        tStr = HUtil32.GetValidStr3(tStr, ref sMapNO, new[]{ ' ', '\t' });
+                        tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx,new[] { ' ', '\t' });
                         var nIdx = HUtil32.StrToInt(sMapIdx, 0);
                         if (nIdx > 0)
                         {

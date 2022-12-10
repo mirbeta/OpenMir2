@@ -106,7 +106,7 @@ namespace GameSvr.Npc
                 string s18;
                 if (sData != "" && sData[0] == '@')
                 {
-                    var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, new char[] { '\r' });
+                    var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                     s18 = "";
                     PlayObject.ScriptLable = sData;
                     if (Castle.IsMasterGuild(PlayObject.MyGuild) && PlayObject.IsGuildMaster())
