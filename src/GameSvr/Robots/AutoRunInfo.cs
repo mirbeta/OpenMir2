@@ -5,11 +5,11 @@
         /// <summary>
         /// 上一次运行时间记录
         /// </summary>
-        public int RunTick;
+        public long RunTick;
         /// <summary>
-        /// 运行间隔时间长
+        /// 执行时间
         /// </summary>        
-        public int RunTimeLen;
+        public long RunTimeTick;
         /// <summary>
         /// 自动运行类型
         /// </summary>
