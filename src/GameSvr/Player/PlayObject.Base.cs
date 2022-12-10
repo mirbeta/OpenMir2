@@ -1344,7 +1344,7 @@ namespace GameSvr.Player
                                                 cellInfo.Dispose();
                                                 break;
                                             }
-                                            var mapItem = (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId); ;
+                                            var mapItem = (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
                                             UpdateVisibleItem(nX, nY, mapItem);
                                             if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
                                             {

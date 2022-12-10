@@ -169,6 +169,10 @@ namespace GameSvr.Maps
                             CellObjId = mapObject.ActorId,
                             AddTime = HUtil32.GetTickCount()
                         };
+                        if (cellObject.CellObjId == 0)
+                        {
+                            return null;
+                        }
                         if (cellType is CellType.Play or CellType.Monster or CellType.Merchant)
                         {
                             var baseObject = (BaseObject)mapObject;
@@ -185,7 +189,7 @@ namespace GameSvr.Maps
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 M2Share.Log.LogError(sExceptionMsg);
             }
@@ -789,6 +793,7 @@ namespace GameSvr.Maps
                                     {
                                         door = new DoorInfo
                                         {
+                                            ActorId = M2Share.ActorMgr.Dequeue(),
                                             nX = nW,
                                             nY = nH,
                                             n08 = point,
@@ -856,6 +861,7 @@ namespace GameSvr.Maps
                                     {
                                         door = new DoorInfo
                                         {
+                                            ActorId = M2Share.ActorMgr.Dequeue(),
                                             nX = nW,
                                             nY = nH,
                                             n08 = point,

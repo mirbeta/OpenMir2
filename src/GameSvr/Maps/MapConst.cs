@@ -1,4 +1,5 @@
 ﻿using GameSvr.Actor;
+using System.Diagnostics;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 
@@ -33,6 +34,11 @@ namespace GameSvr.Maps
         /// </summary>
         public int CanPickUpTick;
         public ClientUserItem UserItem;
+
+        public MapItem()
+        {
+            ActorId = M2Share.ActorMgr.Dequeue();
+        }
     }
 
     /// <summary>

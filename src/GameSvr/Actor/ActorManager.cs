@@ -10,6 +10,9 @@ namespace GameSvr.Actor
     /// </summary>
     public class ActorMgr
     {
+        private readonly IdWorker _idWorker = new IdWorker(M2Share.RandomNumber.Random(15));
+        private readonly ConcurrentQueue<int> _idQueue = new ConcurrentQueue<int>();
+        private Thread IdWorkThread;
         /// <summary>
         /// 精灵列表
         /// </summary>
@@ -19,9 +22,48 @@ namespace GameSvr.Actor
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohter = new ConcurrentDictionary<int, object>();
 
-        public void Add(int actorId, BaseObject actor)
+        public void Start()
         {
+            IdWorkThread = new Thread(Initialization)
+            {
+                IsBackground = true
+            };
+            IdWorkThread.Start();
+        }
+
+        private void Initialization(object obj)
+        {
+            while (true)
+            {
+                if (_idQueue.Count < 1000)
+                {
+                    for (var i = 0; i < 100000; i++)
+                    {
+                        _idQueue.Enqueue((int)_idWorker.NextId());
+                    }
+                }
+                Thread.Sleep(5000);
+            }
+        }
+
+        public int Dequeue()
+        {
+            if (_idQueue.TryDequeue(out var sequence))
+            {
+                return sequence;
+            }
+            return (int)_idWorker.NextId();
+        }
+        
+        public int Add(BaseObject actor)
+        {
+            var actorId = Dequeue();
+            if (_actorsMap.ContainsKey(actorId))
+            {
+                actorId = Dequeue();
+            }
             _actorsMap.TryAdd(actorId, actor);
+            return actorId;
         }
 
         public void AddOhter(int objectId, object obj)

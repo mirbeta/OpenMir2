@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections;
 using System.Collections.Concurrent;
 using GameSvr.GameGate;
+using System.Diagnostics;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -26,6 +27,8 @@ namespace GameSvr
 {
     public class GameApp : ServerBase
     {
+        private readonly Thread makeStoneMinesThread;
+        
         public GameApp(ILogger<ServerBase> logger) : base(logger)
         {
             M2Share.LocalDb = new LocalDB();
@@ -110,6 +113,8 @@ namespace GameSvr
             M2Share.g_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.sSellOffItemList = new List<DealOffInfo>();
             M2Share.dwRunDBTimeMax = HUtil32.GetTickCount();
+            M2Share.ActorMgr.Start();
+            makeStoneMinesThread = new Thread(MakeStoneMines) { IsBackground = true };
         }
 
         public void Initialize()
@@ -243,8 +248,7 @@ namespace GameSvr
             {
                 M2Share.MapMgr.LoadMapDoor();
                 Logger.LogInformation("地图环境加载成功...");
-                MakeStoneMines();
-                Logger.LogInformation("矿物数据初始成功...");
+                makeStoneMinesThread.Start();
                 M2Share.LocalDb.LoadMerchant();
                 Logger.LogInformation("交易NPC列表加载成功...");
                 M2Share.LocalDb.LoadNpcs();
@@ -289,7 +293,10 @@ namespace GameSvr
 
         private void MakeStoneMines()
         {
+            var sw = new Stopwatch();
+            sw.Start();
             var mineMapList = M2Share.MapMgr.GetMineMaps();
+            Logger.LogInformation($"初始化地图矿物数据...[{mineMapList.Count}]");
             for (var i = 0; i < mineMapList.Count; i++)
             {
                 var envir = mineMapList[i];
@@ -305,6 +312,8 @@ namespace GameSvr
                     }
                 }
             }
+            sw.Stop();
+            Logger.LogInformation($"地图矿物数据初始化完成. 耗时:{sw.Elapsed}");
         }
 
         private void LoadServerTable()

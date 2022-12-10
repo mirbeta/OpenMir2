@@ -1027,7 +1027,7 @@ namespace GameSvr.Actor
             FastParalysis = false;
             NastyMode = false;
             MagicArr = new UserMagic[100];
-            M2Share.ActorMgr.Add(ActorId, this);
+            ActorId = M2Share.ActorMgr.Add(this);
         }
 
         public void ChangePkStatus(bool boWarFlag)

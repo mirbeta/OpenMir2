@@ -549,7 +549,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                                                baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                                 if (baseObject != null)
                                                 {
                                                     if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)

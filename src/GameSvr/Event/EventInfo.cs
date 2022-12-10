@@ -50,6 +50,7 @@ namespace GameSvr.Event
 
         public EventInfo(Envirnoment envir, short ntX, short ntY, byte nType, int dwETime, bool boVisible)
         {
+            ActorId = M2Share.ActorMgr.Dequeue();
             Id = HUtil32.Sequence();
             OpenStartTick = HUtil32.GetTickCount();
             EventType = nType;

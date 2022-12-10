@@ -1832,9 +1832,9 @@ namespace GameSvr.World
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
                             var cellObject = cellInfo.ObjList[i];
-                            if (cellObject != null && cellObject.CellType == CellType.Monster || cellObject.CellType == CellType.Play)
+                            if (cellObject != null && (cellObject.CellType == CellType.Monster || cellObject.CellType == CellType.Play))
                             {
-                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == ActorRace.Play)
                                 {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0, "");

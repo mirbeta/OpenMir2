@@ -273,7 +273,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
         /// 启动异步Socket服务器
         /// </summary>
         /// <param name="localEndPoint">要绑定的本地终结点</param>
-        private void StartSocket(IPEndPoint localEndPoint)// 启动
+        private void StartSocket(EndPoint localEndPoint)// 启动
         {
             try
             {

@@ -16,12 +16,7 @@ namespace GameSvr.Maps
 
         public EntityId Get(int cellId)
         {
-            EntityId cell;
-            if (_cellObject.TryGetValue(cellId, out cell))
-            {
-                return cell;
-            }
-            return null;
+            return _cellObject.TryGetValue(cellId, out var cell) ? cell : null;
         }
 
         public void Remove(int cellId)
