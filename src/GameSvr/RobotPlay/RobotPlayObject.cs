@@ -19,6 +19,7 @@ namespace GameSvr.RobotPlay
     /// </summary>
     public partial class RobotPlayObject : PlayObject
     {
+        public long DwTick3F4 = 0;
         public long m_dwSearchTargetTick = 0;
         /// <summary>
         /// 假人启动

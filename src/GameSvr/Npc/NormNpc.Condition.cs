@@ -69,7 +69,7 @@ namespace GameSvr.Npc
         {
             var result = false;
             var nTotlePoint = BonusAbil.DC + BonusAbil.MC + BonusAbil.SC + BonusAbil.AC + BonusAbil.MAC + BonusAbil.HP + BonusAbil.MP + BonusAbil.Hit + BonusAbil.Speed + BonusAbil.Reserved;
-            nTotlePoint += BonusPoint;
+            nTotlePoint += PlayObject.BonusPoint;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {

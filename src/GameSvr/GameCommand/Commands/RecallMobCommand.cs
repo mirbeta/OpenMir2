@@ -62,7 +62,7 @@ namespace GameSvr.GameCommand.Commands
                     else if (nFixColor > 0)
                     {
                         mon.FixColor = true;
-                        mon.FixColorIdx = nFixColor - 1;
+                        mon.FixColorIdx = (byte)(nFixColor - 1);
                     }
                     mon.RecalcAbilitys();
                     mon.RefNameColor();

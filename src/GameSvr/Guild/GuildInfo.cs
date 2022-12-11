@@ -436,8 +436,6 @@ namespace GameSvr.Guild
 
         public void SendGuildMsg(string sMsg)
         {
-            GuildRank GuildRank;
-            BaseObject BaseObject;
             try
             {
                 if (M2Share.Config.ShowPreFixMsg)
@@ -446,17 +444,17 @@ namespace GameSvr.Guild
                 }
                 for (var i = 0; i < m_RankList.Count; i++)
                 {
-                    GuildRank = m_RankList[i];
-                    for (var j = 0; j < GuildRank.MemberList.Count; j++)
+                    var guildRank = m_RankList[i];
+                    for (var j = 0; j < guildRank.MemberList.Count; j++)
                     {
-                        BaseObject = GuildRank.MemberList[j].PlayObject;
-                        if (BaseObject == null)
+                        var guildMember = guildRank.MemberList[j].PlayObject;
+                        if (guildMember == null)
                         {
                             continue;
                         }
-                        if (BaseObject.BanGuildChat)
+                        if (guildMember.BanGuildChat)
                         {
-                            BaseObject.SendMsg(BaseObject, Grobal2.RM_GUILDMESSAGE, 0, M2Share.Config.GuildMsgFColor, M2Share.Config.GuildMsgBColor, 0, sMsg);
+                            guildMember.SendMsg(guildMember, Grobal2.RM_GUILDMESSAGE, 0, M2Share.Config.GuildMsgFColor, M2Share.Config.GuildMsgBColor, 0, sMsg);
                         }
                     }
                 }

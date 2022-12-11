@@ -2,7 +2,6 @@
 using GameSvr.Castle;
 using GameSvr.DataSource;
 using GameSvr.Event;
-using GameSvr.Event.Events;
 using GameSvr.GameCommand;
 using GameSvr.Guild;
 using GameSvr.Items;
@@ -17,7 +16,6 @@ using GameSvr.World;
 using System.Collections;
 using System.Collections.Concurrent;
 using GameSvr.GameGate;
-using System.Diagnostics;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -165,8 +163,7 @@ namespace GameSvr
             }
             _logger.Info($"加载技能数据库成功...[{M2Share.WorldEngine.MagicList.Count}]");
             _logger.Info("正在加载怪物刷新配置信息...");
-            var mongenCount = 0;
-            nCode = M2Share.LocalDb.LoadMonGen(out mongenCount);
+            nCode = M2Share.LocalDb.LoadMonGen(out var mongenCount);
             if (nCode < 0)
             {
                 _logger.Info("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
@@ -292,11 +289,11 @@ namespace GameSvr
             var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.BaseDir, "!servertable.txt");
             if (File.Exists(sFileName))
             {
-                var LoadList = new StringList();
-                LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                var loadList = new StringList();
+                loadList.LoadFromFile(sFileName);
+                for (var i = 0; i < loadList.Count; i++)
                 {
-                    string sLineText = LoadList[i];
+                    string sLineText = loadList[i];
                     if (sLineText != "" && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIdx, new[] { " ", "\09" });
@@ -335,16 +332,16 @@ namespace GameSvr
         /// <summary>
         /// 读取文字过滤配置
         /// </summary>
-        /// <param name="FileName"></param>
+        /// <param name="fileName"></param>
         /// <returns></returns>
-        private bool LoadAbuseInformation(string FileName)
+        private bool LoadAbuseInformation(string fileName)
         {
             int lineCount = 0;
             var result = false;
-            if (File.Exists(FileName))
+            if (File.Exists(fileName))
             {
                 M2Share.AbuseTextList.Clear();
-                M2Share.AbuseTextList.LoadFromFile(FileName);
+                M2Share.AbuseTextList.LoadFromFile(fileName);
                 while (true)
                 {
                     if (M2Share.AbuseTextList.Count <= lineCount)

@@ -299,6 +299,7 @@ namespace GameSvr.World
                                             {
                                                 if (monster.ReAliveEx(monster.MonGen))
                                                 {
+                                                    monster.ProcessRunCount = 0;
                                                     monster.ReAliveTick = HUtil32.GetTickCount();
                                                 }
                                             }

@@ -56,18 +56,6 @@ namespace GameSvr.Actor
         public int CharStatus;
         protected int CharStatusEx;
         /// <summary>
-        /// 回城地图
-        /// </summary>
-        public string HomeMap;
-        /// <summary>
-        /// 回城座标X
-        /// </summary>
-        public short HomeX = 0;
-        /// <summary>
-        /// 回城座标Y
-        /// </summary>
-        public short HomeY = 0;
-        /// <summary>
         /// 骑马
         /// </summary>
         public bool OnHorse;
@@ -76,22 +64,13 @@ namespace GameSvr.Actor
         /// </summary>
         public byte HorseType;
         /// <summary>
-        /// /衣服特效(如天外飞仙衣服效果)
+        /// 衣服特效(如天外飞仙衣服效果)
         /// </summary>
         private readonly byte DressEffType;
         /// <summary>
         /// 人物的PK值
         /// </summary>
         public int PkPoint;
-        /// <summary>
-        /// 允许组队
-        /// </summary>
-        public bool AllowGroup;
-        /// <summary>
-        /// 允许加入行会
-        /// </summary>        
-        internal bool AllowGuild;
-        public byte BtB2;
         public int IncHealth;
         public int IncSpell;
         public int IncHealing;
@@ -100,16 +79,12 @@ namespace GameSvr.Actor
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
-        public int FightZoneDieCount;
+        public ushort FightZoneDieCount;
         public NakedAbility BonusAbil;
         private readonly NakedAbility CurBonusAbil;
-        public int BonusPoint = 0;
-        public int HungerStatus = 0;
-        public bool AllowGuildReCall = false;
         public double BodyLuck;
         public int BodyLuckLevel;
         public short GroupRcallTime;
-        public bool AllowGroupReCall;
         public byte[] QuestUnitOpen;
         public byte[] QuestUnit;
         public byte[] QuestFlag;
@@ -219,10 +194,6 @@ namespace GameSvr.Actor
         /// </summary>
         private byte GreenPoisoningPoint;
         /// <summary>
-        /// 人物身上最多可带金币数
-        /// </summary>
-        public int GoldMax;
-        /// <summary>
         /// 敏捷度
         /// </summary>
         public byte SpeedPoint;
@@ -251,30 +222,6 @@ namespace GameSvr.Actor
         /// 组成员
         /// </summary>
         public IList<PlayObject> GroupMembers;
-        /// <summary>
-        /// 允许私聊
-        /// </summary>
-        public bool HearWhisper;
-        /// <summary>
-        /// 允许群聊
-        /// </summary>
-        public bool BanShout;
-        /// <summary>
-        /// 拒绝行会聊天
-        /// </summary>
-        public bool BanGuildChat;
-        /// <summary>
-        /// 是不允许交易
-        /// </summary>
-        internal bool AllowDeal;
-        /// <summary>
-        /// 禁止私聊人员列表
-        /// </summary>
-        public IList<string> LockWhisperList;
-        /// <summary>
-        /// 喊话消息间隔
-        /// </summary>
-        protected int ShoutMsgTick;
         /// <summary>
         /// 是否被召唤(主人)
         /// </summary>
@@ -319,7 +266,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 亮度
         /// </summary>
-        public int Light;
+        public byte Light;
         /// <summary>
         /// 行会占争范围
         /// </summary>
@@ -409,14 +356,6 @@ namespace GameSvr.Actor
         /// 心灵启示有效时长
         /// </summary>
         public int ShowHpInterval = 0;
-        /// <summary>
-        /// 检查重叠人物使用
-        /// </summary>
-        public bool BoDuplication;
-        /// <summary>
-        /// 检查重叠人物间隔
-        /// </summary>
-        public int DupStartTick = 0;
         public Envirnoment Envir;
         /// <summary>
         /// 尸体清除
@@ -465,14 +404,6 @@ namespace GameSvr.Actor
         /// </summary>
         public bool SpaceMoved;
         /// <summary>
-        /// 正在交易
-        /// </summary>
-        protected bool Dealing;
-        /// <summary>
-        /// 交易最后操作时间
-        /// </summary>
-        internal int DealLastTick = 0;
-        /// <summary>
         /// 交易对象
         /// </summary>
         protected PlayObject DealCreat;
@@ -493,10 +424,6 @@ namespace GameSvr.Actor
         /// 石像化(被麻痹)
         /// </summary>
         public bool StoneMode;
-        /// <summary>
-        /// 是否用了神水
-        /// </summary>
-        protected bool UserUnLockDurg;
         /// <summary>
         /// 魔法隐身了
         /// </summary>
@@ -577,10 +504,7 @@ namespace GameSvr.Actor
         /// 祈祷
         /// </summary>
         protected bool MBopirit = false;
-        /// <summary>
-        /// 掉物品
-        /// </summary>
-        public bool NoDropItem = false;
+
         /// <summary>
         /// 死亡是不是掉装备
         /// </summary>
@@ -589,10 +513,6 @@ namespace GameSvr.Actor
         /// 经验物品
         /// </summary>
         protected bool BoExpItem = false;
-        /// <summary>
-        /// 力量物品(影响力量的物品)
-        /// </summary>
-        protected bool BoPowerItem = false;
         /// <summary>
         /// 经验物品值
         /// </summary>
@@ -651,14 +571,6 @@ namespace GameSvr.Actor
         public int LastHiterTick;
         public BaseObject ExpHitter;
         protected int ExpHitterTick;
-        /// <summary>
-        /// 传送戒指使用间隔
-        /// </summary>
-        public int TeleportTick;
-        /// <summary>
-        /// 探测项链使用间隔
-        /// </summary>
-        public int ProbeTick;
         protected int MapMoveTick;
         /// <summary>
         /// 人物攻击变色标志
@@ -688,7 +600,6 @@ namespace GameSvr.Actor
         protected int DecLightItemDrugTick;
         protected int VerifyTick;
         protected int CheckRoyaltyTick;
-        protected int DecHungerPointTick;
         protected int MDwHpmpTick;
         protected readonly IList<SendMessage> MsgList;
         private readonly IList<BaseObject> VisibleHumanList;
@@ -708,10 +619,6 @@ namespace GameSvr.Actor
         /// </summary>
         public bool IsVisibleActive;
         /// <summary>
-        /// 当前处理数量
-        /// </summary>
-        public int ProcessRunCount;
-        /// <summary>
         /// 可见精灵列表
         /// </summary>
         public readonly IList<VisibleBaseObject> VisibleActors;
@@ -719,18 +626,6 @@ namespace GameSvr.Actor
         /// 物品列表
         /// </summary>
         public IList<ClientUserItem> ItemList;
-        /// <summary>
-        /// 交易列表
-        /// </summary>
-        public IList<ClientUserItem> DealItemList;
-        /// <summary>
-        /// 交易的金币数量
-        /// </summary>
-        public int DealGolds;
-        /// <summary>
-        /// 确认交易标志
-        /// </summary>
-        public bool DealSuccess = false;
         /// <summary>
         /// 技能表
         /// </summary>
@@ -741,10 +636,6 @@ namespace GameSvr.Actor
         public ClientUserItem[] UseItems;
         public IList<TMonSayMsg> SayMsgList;
         /// <summary>
-        /// 仓库物品列表
-        /// </summary>
-        internal readonly IList<ClientUserItem> StorageItemList;
-        /// <summary>
         /// 走路速度
         /// </summary>
         public int WalkSpeed;
@@ -752,13 +643,7 @@ namespace GameSvr.Actor
         /// 行走步伐
         /// </summary>
         public int WalkStep = 0;
-        protected int WalkCount;
         public int WalkWait = 0;
-        protected int WalkWaitTick;
-        /// <summary>
-        /// 步行等待锁定
-        /// </summary>
-        protected bool WalkWaitLocked;
         /// <summary>
         /// 下次攻击时间
         /// </summary>
@@ -789,43 +674,18 @@ namespace GameSvr.Actor
         public bool DelFormMaped = false;
         public bool AutoChangeColor;
         protected int AutoChangeColorTick;
-        protected int AutoChangeIdx;
+        protected byte AutoChangeIdx;
         /// <summary>
         /// 固定颜色
         /// </summary>
         public bool FixColor;
-        public int FixColorIdx;
+        public byte FixColorIdx;
         protected int FixStatus;
         /// <summary>
         /// 快速麻痹，受攻击后麻痹立即消失
         /// </summary>
         protected bool FastParalysis;
-        protected bool SmashSet = false;
-        protected bool HwanDevilSet = false;
-        protected bool PuritySet = false;
-        protected bool MundaneSet = false;
-        protected bool NokChiSet = false;
-        protected bool TaoBuSet = false;
-        protected bool FiveStringSet = false;
-        /// <summary>
-        /// 挂机
-        /// </summary>
-        public bool OffLineFlag = false;
-        /// <summary>
-        /// 挂机字符
-        /// </summary>
-        public string MSOffLineLeaveword = string.Empty;
-        public int KickOffLineTick = 0;
         public bool NastyMode;
-        /// <summary>
-        /// 气血石
-        /// </summary>
-        protected int AutoAddHpmpMode = 0;
-        public int CheckHpmpTick = 0;
-        public long DwTick3F4 = 0;
-        public byte m_btValNPCType;
-        public byte m_btValType;
-        public byte m_btValLabel;
         /// <summary>
         /// 是否机器人
         /// </summary>
@@ -847,7 +707,6 @@ namespace GameSvr.Actor
             Appr = 0;
             HoldPlace = true;
             ViewRange = 5;
-            HomeMap = "0";
             Permission = 0;
             Light = 0;
             NameColor = 255;
@@ -887,7 +746,6 @@ namespace GameSvr.Actor
             IncHealthSpellTick = HUtil32.GetTickCount();
             GreenPoisoningPoint = 0;
             FightZoneDieCount = 0;
-            GoldMax = M2Share.Config.HumanMaxGold;
             CharStatus = 0;
             CharStatusEx = 0;
             StatusArr = new ushort[15];
@@ -897,9 +755,6 @@ namespace GameSvr.Actor
             ExtraAbilFlag = new byte[7];
             BonusAbil = new NakedAbility();
             CurBonusAbil = new NakedAbility();
-            AllowGroup = false;
-            AllowGuild = false;
-            BtB2 = 0;
             AttatckMode = 0;
             InFreePkArea = false;
             GuildWarArea = false;
@@ -910,7 +765,6 @@ namespace GameSvr.Actor
             HolySeize = false;
             CrazyMode = false;
             ShowHp = false;
-            BoDuplication = false;
             Animal = false;
             NoItem = false;
             BodyLeathery = 50;
@@ -929,12 +783,8 @@ namespace GameSvr.Actor
             VisibleItems = new List<VisibleMapItem>();
             VisibleEvents = new List<EventInfo>();
             ItemList = new List<ClientUserItem>();
-            DealItemList = new List<ClientUserItem>();
             IsVisibleActive = false;
-            ProcessRunCount = 0;
-            DealGolds = 0;
             MagicList = new List<UserMagic>();
-            StorageItemList = new List<ClientUserItem>();
             UseItems = new ClientUserItem[13];
             GroupOwner = null;
             Castle = null;
@@ -942,12 +792,6 @@ namespace GameSvr.Actor
             KillMonCount = 0;
             SlaveExpLevel = 0;
             GroupMembers = new List<PlayObject>();
-            HearWhisper = true;
-            BanShout = true;
-            BanGuildChat = true;
-            AllowDeal = true;
-            AllowGroupReCall = false;
-            LockWhisperList = new List<string>();
             SlaveList = new List<BaseObject>();
             Abil = new Ability();
             QuestUnitOpen = new byte[128];
@@ -971,17 +815,13 @@ namespace GameSvr.Actor
                 MaxWeight = 100
             };
             WantRefMsg = false;
-            Dealing = false;
             DealCreat = null;
             MyGuild = null;
             GuildRankNo = 0;
-            GuildRankName = "";
-            ScriptLable = "";
             Mission = false;
             HideMode = false;
             StoneMode = false;
             CoolEye = false;
-            UserUnLockDurg = false;
             Transparent = false;
             AdminMode = false;
             ObMode = false;
@@ -994,18 +834,11 @@ namespace GameSvr.Actor
             PoisoningTick = HUtil32.GetTickCount();
             VerifyTick = HUtil32.GetTickCount();
             CheckRoyaltyTick = HUtil32.GetTickCount();
-            DecHungerPointTick = HUtil32.GetTickCount();
             MDwHpmpTick = HUtil32.GetTickCount();
-            ShoutMsgTick = 0;
-            TeleportTick = 0;
-            ProbeTick = 0;
             MapMoveTick = HUtil32.GetTickCount();
             MasterTick = 0;
             WalkSpeed = 1400;
             NextHitTime = 2000;
-            WalkCount = 0;
-            WalkWaitTick = HUtil32.GetTickCount();
-            WalkWaitLocked = false;
             HealthTick = 0;
             SpellTick = 0;
             TargetCret = null;
@@ -1580,7 +1413,7 @@ namespace GameSvr.Actor
             }
             if (Race == ActorRace.Play)
             {
-                PlayObject playObject = this as PlayObject;
+                var playObject = this as PlayObject;
                 result = HUtil32.Round(result * (playObject.m_nPowerRate / 100));
                 if (playObject.BoPowerItem)
                 {
@@ -5554,7 +5387,6 @@ namespace GameSvr.Actor
 
             MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
             //m_nBodyLeathery = m_nPerBodyLeathery;
-            ProcessRunCount = 0;
             //m_nPushedCount = 0;
             //m_nBodyState = 0;
 

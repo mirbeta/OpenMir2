@@ -14,8 +14,100 @@ namespace GameSvr.Player
 {
     public partial class PlayObject
     {
+        /// <summary>
+        /// 人物身上最多可带金币数
+        /// </summary>
+        public int GoldMax;
+        /// <summary>
+        /// 允许行会传送
+        /// </summary>
+        public bool AllowGuildReCall = false;
+        /// <summary>
+        /// 允许私聊
+        /// </summary>
+        public bool HearWhisper;
+        /// <summary>
+        /// 允许群聊
+        /// </summary>
+        public bool BanShout;
+        /// <summary>
+        /// 拒绝行会聊天
+        /// </summary>
+        public bool BanGuildChat;
+        /// <summary>
+        /// 是不允许交易
+        /// </summary>
+        internal bool AllowDeal;
+        /// <summary>
+        /// 检查重叠人物使用
+        /// </summary>
+        public bool BoDuplication;
+        /// <summary>
+        /// 检查重叠人物间隔
+        /// </summary>
+        public int DupStartTick = 0;
+        /// <summary>
+        /// 是否用了神水
+        /// </summary>
+        protected bool UserUnLockDurg;
+        /// <summary>
+        /// 允许组队
+        /// </summary>
+        public bool AllowGroup;
+        /// <summary>
+        /// 允许加入行会
+        /// </summary>        
+        internal bool AllowGuild;
+        /// <summary>
+        /// 正在交易
+        /// </summary>
+        protected bool Dealing;
+        /// <summary>
+        /// 交易最后操作时间
+        /// </summary>
+        internal int DealLastTick = 0;
+        /// <summary>
+        /// 交易的金币数量
+        /// </summary>
+        public int DealGolds;
+        /// <summary>
+        /// 确认交易标志
+        /// </summary>
+        public bool DealSuccess = false;
+        /// <summary>
+        /// 回城地图
+        /// </summary>
+        public string HomeMap;
+        /// <summary>
+        /// 回城座标X
+        /// </summary>
+        public short HomeX = 0;
+        /// <summary>
+        /// 回城座标Y
+        /// </summary>
+        public short HomeY = 0;
         public ClientMesaagePacket m_DefMsg;
-        public string m_sOldSayMsg = string.Empty;
+        /// <summary>
+        /// 交易列表
+        /// </summary>
+        public IList<ClientUserItem> DealItemList;
+        /// <summary>
+        /// 仓库物品列表
+        /// </summary>
+        internal readonly IList<ClientUserItem> StorageItemList;
+        /// <summary>
+        /// 禁止私聊人员列表
+        /// </summary>
+        public IList<string> LockWhisperList;
+        /// <summary>
+        /// 力量物品(影响力量的物品)
+        /// </summary>
+        public bool BoPowerItem = false;
+        public bool AllowGroupReCall;
+        public int HungerStatus = 0;
+        public int BonusPoint = 0;
+        public byte BtB2;
+        public string m_sOldSayMsg;
         public int m_nSayMsgCount = 0;
         public int m_dwSayMsgTick;
         public bool m_boDisableSayMsg;
@@ -24,6 +116,47 @@ namespace GameSvr.Player
         public int dwTick578;
         public int dwTick57C;
         public bool m_boInSafeArea;
+        /// <summary>
+        /// 喊话消息间隔
+        /// </summary>
+        protected int ShoutMsgTick;
+        protected bool SmashSet = false;
+        protected bool HwanDevilSet = false;
+        protected bool PuritySet = false;
+        protected bool MundaneSet = false;
+        protected bool NokChiSet = false;
+        protected bool TaoBuSet = false;
+        protected bool FiveStringSet = false;
+        public byte m_btValNPCType;
+        public byte m_btValType;
+        public byte m_btValLabel;
+        /// <summary>
+        /// 掉物品
+        /// </summary>
+        public bool NoDropItem = false;
+        /// <summary>
+        /// 探测项链使用间隔
+        /// </summary>
+        public int ProbeTick;
+        /// <summary>
+        /// 传送戒指使用间隔
+        /// </summary>
+        public int TeleportTick;
+        protected int DecHungerPointTick;
+        /// <summary>
+        /// 气血石
+        /// </summary>
+        protected int AutoAddHpmpMode = 0;
+        public int CheckHpmpTick = 0;
+        public int KickOffLineTick = 0;
+        /// <summary>
+        /// 挂机
+        /// </summary>
+        public bool OffLineFlag = false;
+        /// <summary>
+        /// 挂机字符
+        /// </summary>
+        public string MSOffLineLeaveword = string.Empty;
         /// <summary>
         /// 登录帐号名
         /// </summary>
@@ -447,6 +580,11 @@ namespace GameSvr.Player
         public PlayObject() : base()
         {
             Race = ActorRace.Play;
+            HomeMap = "0";
+            DealGolds = 0;
+            DealItemList = new List<ClientUserItem>();
+            StorageItemList = new List<ClientUserItem>();
+            LockWhisperList = new List<string>();
             m_boEmergencyClose = false;
             m_boSwitchData = false;
             m_boReconnection = false;
@@ -454,6 +592,7 @@ namespace GameSvr.Player
             m_boSoftClose = false;
             m_boReadyRun = false;
             m_dwSaveRcdTick = HUtil32.GetTickCount();
+            DecHungerPointTick = HUtil32.GetTickCount();
             WantRefMsg = true;
             m_boRcdSaved = false;
             m_boDieInFight3Zone = false;
@@ -471,6 +610,8 @@ namespace GameSvr.Player
             RunTime = 250;
             SearchTime = 1000;
             SearchTick = HUtil32.GetTickCount();
+            AllowGroup = false;
+            AllowGuild = false;
             ViewRange = 12;
             m_boNewHuman = false;
             m_boLoginNoticeOK = false;
@@ -565,6 +706,10 @@ namespace GameSvr.Player
             m_sString = new string[100];
             m_ServerStrVal = new string[100];
             m_ServerIntVal = new int[100];
+            HearWhisper = true;
+            BanShout = true;
+            BanGuildChat = true;
+            AllowDeal = true;
             m_dwAutoGetExpTick = HUtil32.GetTickCount();
             m_nAutoGetExpPoint = 0;
             m_AutoGetExpEnvir = null;
@@ -593,6 +738,7 @@ namespace GameSvr.Player
             QueryExpireTick = 60 * 1000;
             AccountExpiredTick = HUtil32.GetTickCount();
             m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
+            GoldMax = M2Share.Config.HumanMaxGold;
         }
 
         private void SendNotice()

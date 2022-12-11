@@ -3143,7 +3143,7 @@ namespace GameSvr.Npc
                 else if (QuestActionInfo.nParam5 > 0)
                 {
                     Mon.FixColor = true;
-                    Mon.FixColorIdx = QuestActionInfo.nParam5 - 1;
+                    Mon.FixColorIdx = (byte)(QuestActionInfo.nParam5 - 1);
                 }
             }
         }

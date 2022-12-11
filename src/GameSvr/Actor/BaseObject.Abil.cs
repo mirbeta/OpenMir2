@@ -1833,9 +1833,9 @@ namespace GameSvr.Actor
             //AccuracyPoint = 15;
         }
 
-        private int GetMyLight()
+        private byte GetMyLight()
         {
-            var currentLight = 0;
+            byte currentLight = 0;
             if (Race == ActorRace.Play)
             {
                 if (this is PlayObject)

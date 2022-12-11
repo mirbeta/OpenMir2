@@ -17,7 +17,17 @@ namespace GameSvr.Actor
         public bool m_boRunAwayMode;
         public int m_dwRunAwayStart;
         public int m_dwRunAwayTime;
-
+        protected int WalkCount;
+        protected int WalkWaitTick;
+        /// <summary>
+        /// 步行等待锁定
+        /// </summary>
+        protected bool WalkWaitLocked;
+        /// <summary>
+        /// 当前处理数量
+        /// </summary>
+        public int ProcessRunCount;
+        
         public AnimalObject() : base()
         {
             m_nNotProcessCount = 0;
@@ -29,6 +39,10 @@ namespace GameSvr.Actor
             m_boRunAwayMode = false;
             m_dwRunAwayStart = HUtil32.GetTickCount();
             m_dwRunAwayTime = 0;
+            WalkCount = 0;
+            WalkWaitTick = HUtil32.GetTickCount();
+            WalkWaitLocked = false;
+            ProcessRunCount = 0;
             MapCell = CellType.Monster;
         }
 
