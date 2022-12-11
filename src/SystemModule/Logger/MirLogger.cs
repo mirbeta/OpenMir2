@@ -5,12 +5,7 @@ namespace SystemModule.Logger
 {
     public class MirLogger
     {
-        private readonly ILogger _logger;
-
-        public MirLogger()
-        {
-            _logger = LogManager.GetCurrentClassLogger();
-        }
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public void LogInformation(string msg)
         {

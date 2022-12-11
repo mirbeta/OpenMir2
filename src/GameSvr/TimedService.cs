@@ -50,7 +50,7 @@ namespace GameSvr
             if (M2Share.StartReady)
             {
                 var currentTick = HUtil32.GetTickCount();
-                if ((currentTick - _checkIntervalTime) > 3 * 1000) //3s一次检查链接
+                if ((currentTick - _checkIntervalTime) > 10 * 1000) //10s一次检查链接
                 {
                     M2Share.DataServer.CheckConnected();
                     IdSrvClient.Instance.CheckConnected();

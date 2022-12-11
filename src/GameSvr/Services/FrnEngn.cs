@@ -1,4 +1,5 @@
 using GameSvr.Player;
+using NLog;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets.ServerPackets;
@@ -7,6 +8,7 @@ namespace GameSvr.Services
 {
     public class TFrontEngine
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly object UserCriticalSection;
         private readonly IList<SavePlayerRcd> m_SaveRcdList;
         private readonly IList<TGoldChangeInfo> m_ChangeGoldList;
@@ -47,6 +49,7 @@ namespace GameSvr.Services
                     }
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
+            _logger.Info("人物数据引擎启动成功...");
         }
 
 

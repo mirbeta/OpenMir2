@@ -1,6 +1,6 @@
 ﻿using GameSvr.Planes;
 using GameSvr.Services;
-using Microsoft.Extensions.Logging;
+using NLog;
 using SystemModule;
 using SystemModule.Data;
 
@@ -12,12 +12,11 @@ namespace GameSvr
         /// 运行时间
         /// </summary>
         private int _runTimeTick;
-        protected readonly ILogger<ServerBase> Logger;
         private Thread _worldThread;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        protected ServerBase(ILogger<ServerBase> logger)
+        protected ServerBase()
         {
-            Logger = logger;
             _runTimeTick = HUtil32.GetTickCount();
         }
 
@@ -100,7 +99,7 @@ namespace GameSvr
                         {
                             if (M2Share.DenySayMsgList.TryRemove(denyList[i], out var denyName))
                             {
-                                Logger.LogDebug($"解除玩家[{denyList[i]}]禁言");
+                                _logger.Debug($"解除玩家[{denyList[i]}]禁言");
                             }
                         }
                     }

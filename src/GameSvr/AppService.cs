@@ -1,6 +1,6 @@
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using NLog;
 using Spectre.Console;
 using SystemModule.Data;
 
@@ -8,7 +8,7 @@ namespace GameSvr
 {
     public class AppService : IHostedService, IDisposable
     {
-        private readonly ILogger<AppService> _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly GameApp _mirApp;
         private Task _applicationTask;
@@ -17,16 +17,15 @@ namespace GameSvr
         private readonly CommandLineApplication _application = new CommandLineApplication();
         private PeriodicTimer _timer;
 
-        public AppService(ILogger<AppService> logger, IHostApplicationLifetime lifetime, GameApp serverApp)
+        public AppService(IHostApplicationLifetime lifetime, GameApp serverApp)
         {
-            _logger = logger;
             _appLifetime = lifetime;
             _mirApp = serverApp;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
-            _logger.LogDebug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
+            _logger.Debug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
 
             _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
 
@@ -73,14 +72,14 @@ namespace GameSvr
 
             _appLifetime.ApplicationStarted.Register(() =>
             {
-                _logger.LogDebug("Application has started");
+                _logger.Debug("Application has started");
                 _applicationTask = Task.Run(() =>
                 {
                     try
                     {
-                        _logger.LogInformation("正在读取配置信息...");
+                        _logger.Info("正在读取配置信息...");
                         _mirApp.Initialize();
-                        _logger.LogInformation("读取配置信息完成...");
+                        _logger.Info("读取配置信息完成...");
                         _mirApp.StartServer(stoppingToken);
                         _mirApp.StartWorld(stoppingToken);
                         _exitCode = 0;
@@ -91,8 +90,8 @@ namespace GameSvr
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Unhandled exception!");
-                        _logger.LogError(ex.StackTrace);
+                        _logger.Error(ex, "Unhandled exception!");
+                        _logger.Error(ex.StackTrace);
                         _exitCode = 1;
                     }
                 }, stoppingToken);
@@ -113,7 +112,7 @@ namespace GameSvr
                 await _applicationTask;
             }
 
-            _logger.LogDebug($"Exiting with return code: {_exitCode}");
+            _logger.Debug($"Exiting with return code: {_exitCode}");
 
             // Exit code may be null if the user cancelled via Ctrl+C/SIGTERM
             Environment.ExitCode = _exitCode.GetValueOrDefault(-1);
@@ -123,12 +122,12 @@ namespace GameSvr
         {
             if (M2Share.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
-                _logger.LogInformation("保存玩家数据");
+                _logger.Info("保存玩家数据");
                 foreach (var play in M2Share.WorldEngine.PlayObjects)
                 {
                     M2Share.WorldEngine.SaveHumanRcd(play);
                 }
-                _logger.LogInformation("数据保存完毕.");
+                _logger.Info("数据保存完毕.");
             }
         }
 
@@ -150,7 +149,7 @@ namespace GameSvr
                         {
                             var closeMsg = isTransfer ? $"服务器关闭倒计时[{shutdownSeconds}]. 关闭后自动转移到其他大区，请勿退出游戏。" : $"服务器关闭倒计时[{shutdownSeconds}].";
                             playObject.SysMsg(closeMsg, MsgColor.Red, MsgType.Notice);
-                            _logger.LogInformation(closeMsg);
+                            _logger.Info(closeMsg);
                             shutdownSeconds--;
                         }
                         if (shutdownSeconds > 0)
@@ -176,14 +175,14 @@ namespace GameSvr
                         }
                     }
                     _mirApp.Stop();
-                    _logger.LogInformation("游戏服务已停止...");
+                    _logger.Info("游戏服务已停止...");
                 }, _cancellationTokenSource.Token);
             }
         }
 
         private void OnShutdown()
         {
-            _logger.LogDebug("Application is stopping");
+            _logger.Debug("Application is stopping");
             M2Share.StartReady = false;
             SavePlayer();
             if (M2Share.ServerIndex == 0)
@@ -192,7 +191,7 @@ namespace GameSvr
             }
             else if (M2Share.ServerIndex > 0)
             {
-                _logger.LogInformation("检查是否有其他可用服务器.");
+                _logger.Info("检查是否有其他可用服务器.");
                 //如果有多机负载转移在线玩家到新服务器
                 var sIPaddr = string.Empty;
                 var nPort = 0;
@@ -200,13 +199,13 @@ namespace GameSvr
                 if (isMultiServer)
                 {
                     //todo 通知网关断开链接.停止新玩家进入游戏
-                    _logger.LogInformation($"转移到新服务器[{sIPaddr}:{nPort}]");
+                    _logger.Info($"转移到新服务器[{sIPaddr}:{nPort}]");
                     StopService(sIPaddr, nPort, true);
                 }
             }
             else
             {
-                _logger.LogInformation("没有可用服务器，即将关闭游戏服务器.");
+                _logger.Info("没有可用服务器，即将关闭游戏服务器.");
                 _mirApp.Stop();
             }
             _cancellationTokenSource?.CancelAfter(3000);

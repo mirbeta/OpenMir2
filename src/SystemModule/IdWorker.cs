@@ -1,16 +1,7 @@
 using System;
-using System.Collections.Concurrent;
 
 namespace SystemModule
 {
-    public class IdWorkerMgr
-    {
-        private readonly IdWorker _idWorker = new IdWorker(RandomNumber.GetInstance().Random(15));
-
- 
-
-    }
-
     public class IdWorker
     {
         //机器ID
@@ -64,8 +55,7 @@ namespace SystemModule
                 }
 
                 lastTimestamp = timestamp; //把当前时间戳保存为最后生成ID的时间戳
-                long nextId = (timestamp - twepoch << timestampLeftShift) | workerId << workerIdShift | sequence;
-                return nextId;
+                return (timestamp - twepoch << timestampLeftShift) | workerId << workerIdShift | sequence;
             }
         }
 

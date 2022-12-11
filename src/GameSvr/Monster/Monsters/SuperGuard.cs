@@ -47,7 +47,7 @@ namespace GameSvr.Monster.Monsters
             return result;
         }
 
-        public SuperGuard() : base()
+        public SuperGuard()
         {
             this.ViewRange = 7;
             this.Light = 4;

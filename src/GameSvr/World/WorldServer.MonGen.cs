@@ -145,7 +145,7 @@ namespace GameSvr.World
         /// </summary>
         public void InitializationMonsterThread()
         {
-            _logger.Info($"Run monster threads:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
+            _logger.Debug($"Run monster threads:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
 
             var monsterThreads = M2Share.Config.ProcessMonsterMultiThreadLimit; //处理线程+预留线程
 
@@ -168,6 +168,7 @@ namespace GameSvr.World
                 MobThreading[i] = new Thread(() => ProcessMonsters(mobThread)) { IsBackground = true };
                 MobThreading[i].Start();
             }
+            _logger.Info("怪物线程初始化完成...");
         }
 
         /// <summary>
@@ -216,7 +217,7 @@ namespace GameSvr.World
             {
                 return;
             }
-            _logger.Info($"Monster Thread:{monsterThread.Id} Monsters:{mongenList.Count} starting work.");
+            _logger.Debug($"Monster Thread:{monsterThread.Id} Monsters:{mongenList.Count} starting work.");
 
             while (true)
             {

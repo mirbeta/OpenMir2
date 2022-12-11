@@ -444,7 +444,6 @@ namespace GameSvr.Player
         /// </summary>
         private IList<ClientUserItem> m_SellOffItemList;
 
-
         public PlayObject() : base()
         {
             Race = ActorRace.Play;

@@ -12,10 +12,10 @@ namespace GameSvr.Actor
     /// </summary>
     public class ActorMgr
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IdWorker _idWorker = new IdWorker(M2Share.RandomNumber.Random(15));
         private readonly ConcurrentQueue<int> _idQueue = new ConcurrentQueue<int>();
         private readonly Thread IdWorkThread;
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 精灵列表
         /// </summary>
@@ -28,18 +28,14 @@ namespace GameSvr.Actor
 
         public ActorMgr()
         {
-            IdWorkThread = new Thread(Initialization)
+            IdWorkThread = new Thread(GenerateId)
             {
                 IsBackground = true
             };
-        }
-
-        public void Start()
-        {
             IdWorkThread.Start();
         }
 
-        private void Initialization(object obj)
+        private void GenerateId(object obj)
         {
             while (true)
             {
@@ -66,10 +62,6 @@ namespace GameSvr.Actor
         public int Add(BaseObject actor)
         {
             var actorId = Dequeue();
-            if (_actorsMap.ContainsKey(actorId))
-            {
-                actorId = Dequeue();
-            }
             _actorsMap.TryAdd(actorId, actor);
             return actorId;
         }

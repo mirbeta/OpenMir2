@@ -1026,7 +1026,7 @@ namespace GameSvr.Actor
             FixStatus = -1;
             FastParalysis = false;
             NastyMode = false;
-            MagicArr = new UserMagic[100];
+            MagicArr = new UserMagic[50];
             ActorId = M2Share.ActorMgr.Add(this);
         }
 
