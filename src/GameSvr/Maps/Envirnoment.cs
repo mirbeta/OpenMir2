@@ -35,7 +35,7 @@ namespace GameSvr.Maps
         /// 进入本地图所需等级
         /// </summary>
         public readonly int RequestLevel = 0;
-        public TMapFlag Flag;
+        public MapInfoFlag Flag;
         public bool Bo2C;
         /// <summary>
         /// 门
@@ -54,7 +54,7 @@ namespace GameSvr.Maps
         {
             ServerIndex = 0;
             MinMap = 0;
-            Flag = new TMapFlag();
+            Flag = new MapInfoFlag();
             _monCount = 0;
             _humCount = 0;
             DoorList = new List<DoorInfo>();

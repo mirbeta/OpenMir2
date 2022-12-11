@@ -1,5 +1,6 @@
 ﻿using GameSvr.Conf;
 using GameSvr.Player;
+using NLog;
 using System.Reflection;
 using SystemModule.Data;
 
@@ -7,6 +8,7 @@ namespace GameSvr.GameCommand
 {
     public class CommandMgr
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly GameCmdConf CommandConf;
         public static readonly GameCommands Commands = new GameCommands();
         private static readonly Dictionary<string, Command> CommandMaps = new Dictionary<string, Command>(StringComparer.OrdinalIgnoreCase);
@@ -35,6 +37,7 @@ namespace GameSvr.GameCommand
             CommandConf.LoadConfig();
             Dictionary<string, GameCmd> customCommandMap = RegisterCustomCommand();
             RegisterCommandGroups(customCommandMap);
+            _logger.Info("读取游戏命令配置完成...");
         }
 
         /// <summary>

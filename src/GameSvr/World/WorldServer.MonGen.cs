@@ -168,7 +168,7 @@ namespace GameSvr.World
                 MobThreading[i] = new Thread(() => ProcessMonsters(mobThread)) { IsBackground = true };
                 MobThreading[i].Start();
             }
-            _logger.Info("怪物线程初始化完成...");
+            _logger.Info($"怪物线程初始化完成...[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
         }
 
         /// <summary>

@@ -29,8 +29,8 @@ namespace SystemModule
 
         public long NextId()
         {
-            lock (this)
-            {
+            //lock (this)
+            //{
                 long timestamp = TimeGen();
                 if (lastTimestamp == timestamp)
                 {
@@ -56,7 +56,7 @@ namespace SystemModule
 
                 lastTimestamp = timestamp; //把当前时间戳保存为最后生成ID的时间戳
                 return (timestamp - twepoch << timestampLeftShift) | workerId << workerIdShift | sequence;
-            }
+            //}
         }
 
         /// <summary>

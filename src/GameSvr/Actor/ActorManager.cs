@@ -41,10 +41,13 @@ namespace GameSvr.Actor
             {
                 if (_idQueue.Count < 1000)
                 {
-                    for (var i = 0; i < 100000; i++)
+                    Parallel.For(0, 100, i =>
                     {
-                        _idQueue.Enqueue((int)_idWorker.NextId());
-                    }
+                        for (var j = 0; j < 100000; j++)
+                        {
+                            _idQueue.Enqueue((int)_idWorker.NextId());
+                        }
+                    });
                 }
                 Thread.Sleep(5000);
             }

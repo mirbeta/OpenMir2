@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class TMapFlag
+    public class MapInfoFlag
     {
         public bool boSAFE;
         public int nL;

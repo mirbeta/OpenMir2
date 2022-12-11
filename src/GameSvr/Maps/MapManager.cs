@@ -1,5 +1,6 @@
 ﻿using GameSvr.Event.Events;
 using GameSvr.Npc;
+using NLog;
 using SystemModule;
 using SystemModule.Data;
 
@@ -7,6 +8,7 @@ namespace GameSvr.Maps
 {
     public class MapManager
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, Envirnoment> _mapList = new Dictionary<string, Envirnoment>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// 地图上门列表
@@ -59,7 +61,7 @@ namespace GameSvr.Maps
             return _mapDoorList;
         }
 
-        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, TMapFlag MapFlag, Merchant QuestNPC)
+        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, MapInfoFlag MapFlag, Merchant QuestNPC)
         {
             var sMapFileName = string.Empty;
             var sTempName = sMapName;
@@ -141,8 +143,7 @@ namespace GameSvr.Maps
 
         public Envirnoment FindMap(string sMapName)
         {
-            Envirnoment Map;
-            return _mapList.TryGetValue(sMapName, out Map) ? Map : null;
+            return _mapList.TryGetValue(sMapName, out var map) ? map : null;
         }
 
         public Envirnoment GetMapInfo(int nServerIdx, string sMapName)
@@ -178,6 +179,7 @@ namespace GameSvr.Maps
             {
                 this.Maps[i].AddDoorToMap();
             }
+            _logger.Info("地图环境加载成功...");
         }
 
         public void ProcessMapDoor()
