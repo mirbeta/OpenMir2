@@ -1,9 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using NLog;
+using System.Diagnostics;
 using SystemModule;
-using SystemModule.Enums;
 
 namespace GameSvr.Actor
 {
@@ -41,13 +40,18 @@ namespace GameSvr.Actor
             {
                 if (_idQueue.Count < 1000)
                 {
-                    Parallel.For(0, 100, i =>
+                    var sw = new Stopwatch();
+                    sw.Start();
+                    Parallel.For(0, 10, i =>
                     {
-                        for (var j = 0; j < 100000; j++)
+                        _logger.Debug($"线程[{i}]开始生成Id");
+                        for (var j = 0; j < 5000; j++)
                         {
                             _idQueue.Enqueue((int)_idWorker.NextId());
                         }
                     });
+                    sw.Stop();
+                    _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed}");
                 }
                 Thread.Sleep(5000);
             }
@@ -76,22 +80,12 @@ namespace GameSvr.Actor
 
         public object GetOhter(int objectId)
         {
-            object obj;
-            if (_ohter.TryGetValue(objectId, out obj))
-            {
-                return obj;
-            }
-            return null;
+            return _ohter.TryGetValue(objectId, out var obj) ? obj : null;
         }
 
         public BaseObject Get(int actorId)
         {
-            BaseObject actor;
-            if (_actorsMap.TryGetValue(actorId, out actor))
-            {
-                return actor;
-            }
-            return actor;
+            return _actorsMap.TryGetValue(actorId, out var actor) ? actor : null;
         }
 
         public void RevomeOhter(int actorId)
@@ -115,16 +109,19 @@ namespace GameSvr.Actor
             {
                 BaseObject actor = actors.Current.Value;
                 if (!actor.Ghost || actor.GhostTick <= 0) continue;
-                if ((HUtil32.GetTickCount() - actor.DeathTick) <= M2Share.Config.MakeGhostTime) continue; //死亡对象清理时间
+                if ((HUtil32.GetTickCount() - actor.DeathTick) <= M2Share.Config.MakeGhostTime)
                 {
-                    ActorIds.Add(actors.Current.Key);
+                    continue; //死亡对象清理时间
                 }
+                ActorIds.Add(actors.Current.Key);
                 actors.Dispose();
             }
             foreach (var actorId in ActorIds)
             {
-                _actorsMap.TryRemove(actorId, out var actor);
-                _logger.Debug($"清理死亡对象 名称:[{actor.ChrName}] 地图:{actor.MapName} 坐标:{actor.CurrX}:{actor.CurrY}");
+                if (_actorsMap.TryRemove(actorId, out var actor))
+                {
+                    _logger.Debug($"清理死亡对象 名称:[{actor.ChrName}] 地图:{actor.MapName} 坐标:{actor.CurrX}:{actor.CurrY}");
+                }
             }
         }
     }
