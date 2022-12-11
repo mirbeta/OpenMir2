@@ -16,18 +16,16 @@ namespace GameSvr.Npc
     {
         private void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp, string sMsg)
         {
-            bool bo11;
-            string sSendMsg;
-            TScript Script = null;
-            SayingRecord SayingRecord;
-            ClientUserItem UserItem = null;
-            string sC = string.Empty;
             if (PlayObject.m_NPC != this)
             {
                 PlayObject.m_NPC = null;
                 PlayObject.m_Script = null;
             }
-            if (string.Compare(sLabel, "@main", StringComparison.OrdinalIgnoreCase) == 0)
+            TScript Script = null;
+            SayingRecord SayingRecord;
+            ClientUserItem UserItem = null;
+            string sC = string.Empty;
+            if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 for (var i = 0; i < m_ScriptList.Count; i++)
                 {
@@ -75,11 +73,11 @@ namespace GameSvr.Npc
                     {
                         return;
                     }
-                    sSendMsg = string.Empty;
+                    var sSendMsg = string.Empty;
                     for (var i = 0; i < SayingRecord.ProcedureList.Count; i++)
                     {
                         var sayingProcedure = SayingRecord.ProcedureList[i];
-                        bo11 = false;
+                        var bo11 = false;
                         if (GotoLableQuestCheckCondition(PlayObject, sayingProcedure.ConditionList, ref sC, ref UserItem))
                         {
                             sSendMsg = sSendMsg + sayingProcedure.sSayMsg;
@@ -115,32 +113,31 @@ namespace GameSvr.Npc
 
         public void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp)
         {
-            GotoLable(PlayObject, sLabel, boExtJmp, "");
+            GotoLable(PlayObject, sLabel, boExtJmp, string.Empty);
         }
 
         private bool CheckGotoLableQuestStatus(PlayObject PlayObject, TScript ScriptInfo)
         {
-            bool result = true;
-            int I;
+            var result = true;
             if (!ScriptInfo.boQuest)
             {
                 return result;
             }
-            I = 0;
+            var nIndex = 0;
             while (true)
             {
-                if ((ScriptInfo.QuestInfo[I].nRandRage > 0) && (M2Share.RandomNumber.Random(ScriptInfo.QuestInfo[I].nRandRage) != 0))
+                if ((ScriptInfo.QuestInfo[nIndex].nRandRage > 0) && (M2Share.RandomNumber.Random(ScriptInfo.QuestInfo[nIndex].nRandRage) != 0))
                 {
                     result = false;
                     break;
                 }
-                if (PlayObject.GetQuestFalgStatus(ScriptInfo.QuestInfo[I].wFlag) != ScriptInfo.QuestInfo[I].btValue)
+                if (PlayObject.GetQuestFalgStatus(ScriptInfo.QuestInfo[nIndex].wFlag) != ScriptInfo.QuestInfo[nIndex].btValue)
                 {
                     result = false;
                     break;
                 }
-                I++;
-                if (I >= 10)
+                nIndex++;
+                if (nIndex >= 10)
                 {
                     break;
                 }
