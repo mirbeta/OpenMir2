@@ -84,7 +84,6 @@ namespace GameSvr.Actor
         private readonly NakedAbility CurBonusAbil;
         public double BodyLuck;
         public int BodyLuckLevel;
-        public short GroupRcallTime;
         public byte[] QuestUnitOpen;
         public byte[] QuestUnit;
         public byte[] QuestFlag;
@@ -165,10 +164,6 @@ namespace GameSvr.Actor
         /// 双倍攻击伤害(烈火专用)
         /// </summary>
         private ushort HitDouble;
-        /// <summary>
-        /// 记忆使用间隔
-        /// </summary>
-        public int GroupRcallTick;
         /// <summary>
         /// 记忆全套
         /// </summary>
@@ -270,7 +265,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 行会占争范围
         /// </summary>
-        protected bool GuildWarArea;
+        private bool GuildWarArea;
         /// <summary>
         /// 所属城堡
         /// </summary>
@@ -408,7 +403,7 @@ namespace GameSvr.Actor
         /// </summary>
         protected PlayObject DealCreat;
         public GuildInfo MyGuild;
-        public int GuildRankNo;
+        public short GuildRankNo;
         public string GuildRankName = string.Empty;
         public string ScriptLable = string.Empty;
         protected byte AttackSkillCount;
@@ -421,7 +416,7 @@ namespace GameSvr.Actor
         /// </summary>
         public bool HideMode;
         /// <summary>
-        /// 石像化(被麻痹)
+        /// 石像化
         /// </summary>
         public bool StoneMode;
         /// <summary>
@@ -493,19 +488,6 @@ namespace GameSvr.Actor
         /// </summary>
         public bool ProbeNecklace = false;
         /// <summary>
-        /// 行会传送
-        /// </summary>
-        public bool GuildMove = false;
-        /// <summary>
-        /// 无敌(未完全)物品
-        /// </summary>
-        protected bool SuperManItem;
-        /// <summary>
-        /// 祈祷
-        /// </summary>
-        protected bool MBopirit = false;
-
-        /// <summary>
         /// 死亡是不是掉装备
         /// </summary>
         public bool NoDropUseItem = false;
@@ -520,7 +502,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 力量物品值
         /// </summary>
-        protected int PowerItem = 0;
+        protected byte PowerItem = 0;
         /// <summary>
         /// PK 死亡掉经验，不够经验就掉等级
         /// </summary>
@@ -579,7 +561,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 人物攻击变色时间长度
         /// </summary>
-        protected int MDwPkTick;
+        protected int MDwPvpTick;
         /// <summary>
         /// 魔血一套
         /// </summary>
@@ -650,16 +632,10 @@ namespace GameSvr.Actor
         public int NextHitTime;
         protected UserMagic[] MagicArr;
         protected bool PowerHit;
-        protected bool UseThrusting;
-        protected bool UseHalfMoon;
-        protected bool RedUseHalfMoon;
         protected bool FireHitSkill;
-        protected bool CrsHitkill = false;
-        public bool TwinHitSkill;
-        public bool MBo43Kill = false;
-        public int LatestFireHitTick = 0;
-        public int DoMotaeboTick = 0;
-        public int LatestTwinHitTick = 0;
+        protected bool TwinHitSkill;
+        protected int LatestFireHitTick = 0;
+        protected int LatestTwinHitTick = 0;
         /// <summary>
         /// 是否刷新在地图上信息
         /// </summary>
@@ -713,16 +689,11 @@ namespace GameSvr.Actor
             HitPlus = 0;
             HitDouble = 0;
             BodyLuck = 0;
-            GroupRcallTime = 0;
-            GroupRcallTick = HUtil32.GetTickCount();
             RecallSuite = false;
             BoRace = false;
             BoFearFire = false;
             AbilSeeHealGauge = false;
             PowerHit = false;
-            UseThrusting = false;
-            UseHalfMoon = false;
-            RedUseHalfMoon = false;
             FireHitSkill = false;
             TwinHitSkill = false;
             HitPoint = 5;
@@ -1207,7 +1178,7 @@ namespace GameSvr.Actor
             return (Abil.Level * M2Share.Config.MonUpLvRate) - Abil.Level + M2Share.Config.MonUpLvNeedKillBase + tCount;
         }
 
-        private void GainSlaveExp(int nLevel)
+        private void GainSlaveExp(byte nLevel)
         {
             KillMonCount += nLevel;
             if (GainSlaveUpKillCount() < KillMonCount)
@@ -2388,14 +2359,14 @@ namespace GameSvr.Actor
         /// </summary>
         /// <param name="userMagic"></param>
         /// <returns></returns>
-        private ushort GetMagicSpell(UserMagic userMagic)
+        private static ushort GetMagicSpell(UserMagic userMagic)
         {
             return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1));
         }
 
         private void CheckPkStatus()
         {
-            if (PvpFlag && ((HUtil32.GetTickCount() - MDwPkTick) > M2Share.Config.dwPKFlagTime)) // 60 * 1000
+            if (PvpFlag && ((HUtil32.GetTickCount() - MDwPvpTick) > M2Share.Config.dwPKFlagTime)) // 60 * 1000
             {
                 PvpFlag = false;
                 RefNameColor();
@@ -3883,7 +3854,7 @@ namespace GameSvr.Actor
             if ((PvpLevel() < 2) && (baseObject.PvpLevel() < 2) && (!Envir.Flag.boFightZone) &&
                 (!Envir.Flag.boFight3Zone) && !PvpFlag)
             {
-                baseObject.MDwPkTick = HUtil32.GetTickCount();
+                baseObject.MDwPvpTick = HUtil32.GetTickCount();
                 if (!baseObject.PvpFlag)
                 {
                     baseObject.PvpFlag = true;

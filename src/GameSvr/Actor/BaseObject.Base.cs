@@ -731,10 +731,6 @@ namespace GameSvr.Actor
             {
                 return;
             }
-            if (SuperManItem)
-            {
-                return;
-            }
             Death = true;
             DeathTick = HUtil32.GetTickCount();
             if (Master != null)

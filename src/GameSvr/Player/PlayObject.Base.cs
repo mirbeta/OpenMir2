@@ -86,7 +86,29 @@ namespace GameSvr.Player
         /// 回城座标Y
         /// </summary>
         public short HomeY = 0;
+        /// <summary>
+        /// 记忆使用间隔
+        /// </summary>
+        public int GroupRcallTick;
+        public short GroupRcallTime;
+        /// <summary>
+        /// 行会传送
+        /// </summary>
+        public bool GuildMove = false;
         public ClientMesaagePacket m_DefMsg;
+        /// <summary>
+        /// 祈祷
+        /// </summary>
+        protected bool MBopirit = false;
+        /// <summary>
+        /// 野蛮冲撞间隔
+        /// </summary>
+        public int DoMotaeboTick = 0;
+        protected bool CrsHitkill = false;
+        public bool MBo43Kill = false;
+        protected bool RedUseHalfMoon;
+        protected bool UseThrusting;
+        protected bool UseHalfMoon;
         /// <summary>
         /// 交易列表
         /// </summary>
@@ -593,6 +615,7 @@ namespace GameSvr.Player
             m_boReadyRun = false;
             m_dwSaveRcdTick = HUtil32.GetTickCount();
             DecHungerPointTick = HUtil32.GetTickCount();
+            GroupRcallTick = HUtil32.GetTickCount();
             WantRefMsg = true;
             m_boRcdSaved = false;
             m_boDieInFight3Zone = false;

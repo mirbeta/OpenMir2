@@ -2295,7 +2295,7 @@ namespace GameSvr.World
 
         public void GuildMemberReGetRankName(GuildInfo guild)
         {
-            var nRankNo = 0;
+            short nRankNo = 0;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
                 if (PlayObjectList[i].MyGuild == guild)

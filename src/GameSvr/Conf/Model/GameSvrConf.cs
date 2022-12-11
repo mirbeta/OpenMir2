@@ -1108,7 +1108,7 @@ namespace GameSvr.Conf.Model
             SpellFillTime = 800;
             MonUpLvNeedKillBase = 100;
             MonUpLvRate = 16;
-            MonUpLvNeedKillCount = new[] { 0, 0, 50, 100, 200, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800, 153600 };
+            MonUpLvNeedKillCount = new [] { 0, 0, 50, 100, 200, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800, 153600 };
             SlaveColor = new byte[] { 0xFF, 0xFE, 0x93, 0x9A, 0xE5, 0xA8, 0xB4, 0xFC, 249, 250, 250, 250, 250, 250, 250 };
             NeedExps = new int[Grobal2.MaxChangeLevel];
             WideAttack = new byte[] { 7, 1, 2 };

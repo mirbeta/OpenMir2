@@ -208,7 +208,6 @@ namespace GameSvr.Guild
             var s1C = string.Empty;
             var s20 = string.Empty;
             int n28;
-            int n2C;
             WarGuild GuildWar;
             GuildInfo Guild;
             GuildRank GuildRank = null;
@@ -226,7 +225,7 @@ namespace GameSvr.Guild
             GuildWarList.Clear();
             GuildAllList.Clear();
             n28 = 0;
-            n2C = 0;
+            short n2C = 0;
             string s24 = "";
             LoadList = new StringList();
             LoadList.LoadFromFile(sFileName);
@@ -259,7 +258,7 @@ namespace GameSvr.Guild
                     {
                         s18 = s18.AsSpan()[1..].ToString();
                         s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
-                        n2C = HUtil32.StrToInt(s1C, 0);
+                        n2C = (short)HUtil32.StrToInt(s1C, 0);
                         s24 = s18.Trim();
                         GuildRank = null;
                     }
@@ -485,7 +484,7 @@ namespace GameSvr.Guild
             return true;
         }
 
-        public string GetRankName(PlayObject PlayObject, ref int nRankNo)
+        public string GetRankName(PlayObject PlayObject, ref short nRankNo)
         {
             var result = string.Empty;
             GuildRank GuildRank;
@@ -757,7 +756,7 @@ namespace GameSvr.Guild
                     }
                     GuildRank = new GuildRank
                     {
-                        nRankNo = HUtil32.StrToInt(sRankNo, 99),
+                        nRankNo = (short)HUtil32.StrToInt(sRankNo, 99),
                         sRankName = sRankName.Trim(),
                         MemberList = new List<GuildMember>()
                     };

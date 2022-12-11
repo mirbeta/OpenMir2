@@ -2766,7 +2766,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        public void RefRankInfo(int nRankNo, string sRankName)
+        public void RefRankInfo(short nRankNo, string sRankName)
         {
             GuildRankNo = nRankNo;
             GuildRankName = sRankName;

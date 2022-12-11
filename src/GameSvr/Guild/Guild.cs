@@ -4,7 +4,7 @@ namespace GameSvr.Guild
 {
     public class GuildRank
     {
-        public int nRankNo;
+        public short nRankNo;
         public string sRankName;
         public IList<GuildMember> MemberList;
     }
