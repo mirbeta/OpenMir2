@@ -1,4 +1,5 @@
-﻿using SystemModule;
+﻿using GameSvr.Maps;
+using SystemModule;
 
 namespace GameSvr.Monster.Monsters
 {
@@ -8,6 +9,7 @@ namespace GameSvr.Monster.Monsters
     public class CastleDoor : GuardUnit
     {
         public bool IsOpened;
+        //public bool HoldPlace;
 
         public CastleDoor() : base()
         {
@@ -15,6 +17,7 @@ namespace GameSvr.Monster.Monsters
             StickMode = true;
             IsOpened = false;
             AntiPoison = 200;
+            MapCell = CellType.Door;
         }
 
         private void SetMapXyFlag(int nFlag)

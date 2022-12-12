@@ -81,7 +81,6 @@ namespace GameSvr.Actor
         /// </summary>
         public ushort FightZoneDieCount;
         public NakedAbility BonusAbil;
-        private readonly NakedAbility CurBonusAbil;
         public double BodyLuck;
         public int BodyLuckLevel;
         public byte[] QuestUnitOpen;
@@ -725,7 +724,6 @@ namespace GameSvr.Actor
             ExtraAbilTimes = new int[7];
             ExtraAbilFlag = new byte[7];
             BonusAbil = new NakedAbility();
-            CurBonusAbil = new NakedAbility();
             AttatckMode = 0;
             InFreePkArea = false;
             GuildWarArea = false;

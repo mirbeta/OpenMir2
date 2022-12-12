@@ -118,7 +118,11 @@ namespace GameSvr.Maps
         /// <summary>
         /// 下属
         /// </summary>
-        SavleMonster = 10
+        SavleMonster = 10,
+        /// <summary>
+        /// 沙巴克城门
+        /// </summary>
+        CastleDoor = 11
     }
 
     public enum CellAttribute : byte
