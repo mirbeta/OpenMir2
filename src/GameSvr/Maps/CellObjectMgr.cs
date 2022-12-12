@@ -7,14 +7,14 @@ namespace GameSvr.Maps
     public class CellObjectMgr
     {
         //todo 从当前地图获取地图对象，而不是统一管理
-        private readonly ConcurrentDictionary<int, EntityId> _cellObject = new ConcurrentDictionary<int, EntityId>();
+        private readonly ConcurrentDictionary<int, ActorEntity> _cellObject = new ConcurrentDictionary<int, ActorEntity>();
 
-        public void Add(int cellId, EntityId cell)
+        public void Add(int cellId, ActorEntity cell)
         {
             _cellObject.TryAdd(cellId, cell);
         }
 
-        public EntityId Get(int cellId)
+        public ActorEntity Get(int cellId)
         {
             return _cellObject.TryGetValue(cellId, out var cell) ? cell : null;
         }

@@ -13,7 +13,7 @@ namespace GameSvr.Actor
     {
         public virtual void Run()
         {
-            ProcessMessage ProcessMsg = null;
+            ProcessMessage ProcessMsg;
             const string sExceptionMsg0 = "[Exception] TBaseObject::Run 0";
             const string sExceptionMsg1 = "[Exception] TBaseObject::Run 1";
             const string sExceptionMsg2 = "[Exception] TBaseObject::Run 2";
@@ -25,7 +25,7 @@ namespace GameSvr.Actor
             var dwRunTick = HUtil32.GetTickCount();
             try
             {
-                while (GetMessage(ref ProcessMsg))
+                while (GetMessage(out ProcessMsg))
                 {
                     Operate(ProcessMsg);
                 }
@@ -806,7 +806,7 @@ namespace GameSvr.Actor
                                         }
                                     }
                                 }
-                                QuestNPC = Envir.GetQuestNpc(ExpHitter, ChrName, "", false);
+                                QuestNPC = Envir.GetQuestNpc((PlayObject)ExpHitter, ChrName, "", false);
                                 if (QuestNPC != null)
                                 {
                                     QuestNPC.Click(ExpHitter as PlayObject);

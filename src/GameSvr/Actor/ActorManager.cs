@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NLog;
 using System.Diagnostics;
 using SystemModule;
+using System.Collections.Generic;
 
 namespace GameSvr.Actor
 {
@@ -63,14 +64,12 @@ namespace GameSvr.Actor
             {
                 return sequence;
             }
-            return (int)_idWorker.NextId();
+            return HUtil32.Sequence();
         }
         
-        public int Add(BaseObject actor)
+        public void Add(BaseObject actor)
         {
-            var actorId = Dequeue();
-            _actorsMap.TryAdd(actorId, actor);
-            return actorId;
+            _actorsMap.TryAdd(actor.ActorId, actor);
         }
 
         public void AddOhter(int objectId, object obj)

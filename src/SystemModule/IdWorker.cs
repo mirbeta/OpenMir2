@@ -6,11 +6,11 @@ namespace SystemModule
     {
         //机器ID
         private static long workerId;
-        private static readonly long twepoch = 1670681089L; //唯一时间，这是一个避免重复的随机量，自行设定不要大于当前时间戳
+        private static readonly long twepoch = 1670824316286L; //唯一时间，这是一个避免重复的随机量，自行设定不要大于当前时间戳
         private static long sequence = 0L;
         private static readonly int workerIdBits = 4; //机器码字节数。4个字节用来保存机器码(定义为Long类型会出现，最大偏移64位，所以左移64位没有意义)
         public static long maxWorkerId = -1L ^ -1L << workerIdBits; //最大机器ID
-        private static readonly int sequenceBits = 10; //计数器字节数，10个字节用来保存计数码
+        private static readonly int sequenceBits = 3; //计数器字节数，10个字节用来保存计数码
         private static readonly int workerIdShift = sequenceBits; //机器码数据左移位数，就是后面计数器占用的位数
         private static readonly int timestampLeftShift = sequenceBits + workerIdBits; //时间戳左移动位数就是机器码和计数器总字节数
         public static long sequenceMask = -1L ^ -1L << sequenceBits; //一微秒内可以产生计数，如果达到该值则等到下一微妙在进行生成
@@ -24,13 +24,13 @@ namespace SystemModule
         {
             if (workerId > maxWorkerId || workerId < 0)
                 throw new Exception($"worker Id can't be greater than {workerId} or less than 0 ");
-            IdWorker.workerId = workerId;
+            IdWorker.workerId = 2;
         }
 
         public long NextId()
         {
-            //lock (this)
-            //{
+            lock (this)
+            {
                 long timestamp = TimeGen();
                 if (lastTimestamp == timestamp)
                 {
@@ -55,8 +55,13 @@ namespace SystemModule
                 }
 
                 lastTimestamp = timestamp; //把当前时间戳保存为最后生成ID的时间戳
-                return (timestamp - twepoch << timestampLeftShift) | workerId << workerIdShift | sequence;
-            //}
+                var result = ((timestamp - twepoch << timestampLeftShift) | workerId << workerIdShift | sequence);
+                if (result <= 0)
+                {
+                    return result + HUtil32.Sequence();
+                }
+                return result;
+            }
         }
 
         /// <summary>
@@ -80,7 +85,7 @@ namespace SystemModule
         /// <returns></returns>
         private long TimeGen()
         {
-            return DateTimeOffset.Now.ToUnixTimeSeconds();
+            return DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
     }
 }

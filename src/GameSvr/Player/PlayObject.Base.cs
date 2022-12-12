@@ -598,7 +598,10 @@ namespace GameSvr.Player
         /// 元宝寄售物品列表
         /// </summary>
         private IList<ClientUserItem> m_SellOffItemList;
-
+        public byte[] QuestUnitOpen;
+        public byte[] QuestUnit;
+        public byte[] QuestFlag;
+        
         public PlayObject() : base()
         {
             Race = ActorRace.Play;
@@ -760,8 +763,11 @@ namespace GameSvr.Player
             MapCell = CellType.Play;
             QueryExpireTick = 60 * 1000;
             AccountExpiredTick = HUtil32.GetTickCount();
-            m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
             GoldMax = M2Share.Config.HumanMaxGold;
+            QuestUnitOpen = new byte[128];
+            QuestUnit = new byte[128];
+            QuestFlag = new byte[128];
+            m_sRandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
 
         private void SendNotice()
@@ -782,7 +788,7 @@ namespace GameSvr.Player
 
         public void RunNotice()
         {
-            ProcessMessage Msg = null;
+            ProcessMessage Msg;
             const string sExceptionMsg = "[Exception] TPlayObject::RunNotice";
             if (m_boEmergencyClose || m_boKickFlag || m_boSoftClose)
             {
@@ -808,7 +814,7 @@ namespace GameSvr.Player
                         {
                             m_boEmergencyClose = true;
                         }
-                        while (GetMessage(ref Msg))
+                        while (GetMessage(out Msg))
                         {
                             if (Msg.wIdent == Grobal2.CM_LOGINNOTICEOK)
                             {
@@ -829,7 +835,7 @@ namespace GameSvr.Player
         private void SendLogon()
         {
             var MessageBodyWL = new MessageBodyWL();
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, (ushort)Light));
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
             MessageBodyWL.Param1 = GetFeatureToLong();
             MessageBodyWL.Param2 = CharStatus;
             if (AllowGroup)
@@ -1929,6 +1935,147 @@ namespace GameSvr.Player
                     AccountExpired = true;
                     SysMsg("您的账号游戏时间已到，请访问(https://mir2.sdo.com)进行充值，全服务器账号共享游戏时间。", MsgColor.Blue, MsgType.System);
                     break;
+            }
+        }
+        
+                public int GetQuestFalgStatus(int nFlag)
+        {
+            var result = 0;
+            nFlag -= 1;
+            if (nFlag < 0)
+            {
+                return result;
+            }
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
+            if ((n10 - QuestFlag.Length) < 0)
+            {
+                if (((128 >> n14) & QuestFlag[n10]) != 0)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = 0;
+                }
+            }
+            return result;
+        }
+
+        public void SetQuestFlagStatus(int nFlag, int nValue)
+        {
+            nFlag -= 1;
+            if (nFlag < 0)
+            {
+                return;
+            }
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
+            if ((n10 - QuestFlag.Length) < 0)
+            {
+                var bt15 = QuestFlag[n10];
+                if (nValue == 0)
+                {
+                    QuestFlag[n10] = (byte)((~(128 >> n14)) & bt15);
+                }
+                else
+                {
+                    QuestFlag[n10] = (byte)((128 >> n14) | bt15);
+                }
+            }
+        }
+
+        public int GetQuestUnitOpenStatus(int nFlag)
+        {
+            var result = 0;
+            nFlag -= 1;
+            if (nFlag < 0)
+            {
+                return result;
+            }
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
+            if ((n10 - QuestUnitOpen.Length) < 0)
+            {
+                if (((128 >> n14) & QuestUnitOpen[n10]) != 0)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = 0;
+                }
+            }
+            return result;
+        }
+
+        public void SetQuestUnitOpenStatus(int nFlag, int nValue)
+        {
+            nFlag -= 1;
+            if (nFlag < 0)
+            {
+                return;
+            }
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
+            if ((n10 - QuestUnitOpen.Length) < 0)
+            {
+                var bt15 = QuestUnitOpen[n10];
+                if (nValue == 0)
+                {
+                    QuestUnitOpen[n10] = (byte)((~(128 >> n14)) & bt15);
+                }
+                else
+                {
+                    QuestUnitOpen[n10] = (byte)((128 >> n14) | bt15);
+                }
+            }
+        }
+
+        public int GetQuestUnitStatus(int nFlag)
+        {
+            var result = 0;
+            nFlag -= 1;
+            if (nFlag < 0)
+            {
+                return result;
+            }
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
+            if ((n10 - QuestUnit.Length) < 0)
+            {
+                if (((128 >> n14) & QuestUnit[n10]) != 0)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = 0;
+                }
+            }
+            return result;
+        }
+
+        public void SetQuestUnitStatus(int nFlag, int nValue)
+        {
+            nFlag -= 1;
+            if (nFlag < 0)
+            {
+                return;
+            }
+            var n10 = nFlag / 8;
+            var n14 = nFlag % 8;
+            if ((n10 - QuestUnit.Length) < 0)
+            {
+                var bt15 = QuestUnit[n10];
+                if (nValue == 0)
+                {
+                    QuestUnit[n10] = (byte)((~(128 >> n14)) & bt15);
+                }
+                else
+                {
+                    QuestUnit[n10] = (byte)((128 >> n14) | bt15);
+                }
             }
         }
     }

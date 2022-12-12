@@ -129,7 +129,6 @@ namespace GameSvr.Maps
             {
                 var GateObj = new GateObject
                 {
-                    ActorId = M2Share.ActorMgr.Dequeue(),
                     boFlag = false,
                     Envir = DEnvir,
                     nX = (short)nDMapX,

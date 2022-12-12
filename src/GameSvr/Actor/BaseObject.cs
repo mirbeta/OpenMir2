@@ -14,7 +14,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Actor
 {
-    public partial class BaseObject : EntityId
+    public partial class BaseObject : ActorEntity
     {
         public string MapName;
         public string MapFileName;
@@ -83,9 +83,6 @@ namespace GameSvr.Actor
         public NakedAbility BonusAbil;
         public double BodyLuck;
         public int BodyLuckLevel;
-        public byte[] QuestUnitOpen;
-        public byte[] QuestUnit;
-        public byte[] QuestFlag;
         /// <summary>
         /// 怪物经验值
         /// </summary>
@@ -275,7 +272,6 @@ namespace GameSvr.Actor
         /// 无敌模式
         /// </summary>
         public bool SuperMan;
-        public bool HoldPlace;
         public bool BoFearFire;
         /// <summary>
         /// 是否是动物
@@ -680,7 +676,6 @@ namespace GameSvr.Actor
             Job = PlayJob.Warrior;
             Gold = 0;
             Appr = 0;
-            HoldPlace = true;
             ViewRange = 5;
             Permission = 0;
             Light = 0;
@@ -763,9 +758,6 @@ namespace GameSvr.Actor
             GroupMembers = new List<PlayObject>();
             SlaveList = new List<BaseObject>();
             Abil = new Ability();
-            QuestUnitOpen = new byte[128];
-            QuestUnit = new byte[128];
-            QuestFlag = new byte[128];
             Abil = new Ability
             {
                 Level = 1,
@@ -829,7 +821,7 @@ namespace GameSvr.Actor
             FastParalysis = false;
             NastyMode = false;
             MagicArr = new UserMagic[50];
-            ActorId = M2Share.ActorMgr.Add(this);
+            M2Share.ActorMgr.Add(this);
         }
 
         public void ChangePkStatus(bool boWarFlag)
@@ -1936,147 +1928,6 @@ namespace GameSvr.Actor
             }
         }
 
-        public int GetQuestFalgStatus(int nFlag)
-        {
-            var result = 0;
-            nFlag -= 1;
-            if (nFlag < 0)
-            {
-                return result;
-            }
-            var n10 = nFlag / 8;
-            var n14 = nFlag % 8;
-            if ((n10 - QuestFlag.Length) < 0)
-            {
-                if (((128 >> n14) & QuestFlag[n10]) != 0)
-                {
-                    result = 1;
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
-            return result;
-        }
-
-        public void SetQuestFlagStatus(int nFlag, int nValue)
-        {
-            nFlag -= 1;
-            if (nFlag < 0)
-            {
-                return;
-            }
-            var n10 = nFlag / 8;
-            var n14 = nFlag % 8;
-            if ((n10 - QuestFlag.Length) < 0)
-            {
-                var bt15 = QuestFlag[n10];
-                if (nValue == 0)
-                {
-                    QuestFlag[n10] = (byte)((~(128 >> n14)) & bt15);
-                }
-                else
-                {
-                    QuestFlag[n10] = (byte)((128 >> n14) | bt15);
-                }
-            }
-        }
-
-        public int GetQuestUnitOpenStatus(int nFlag)
-        {
-            var result = 0;
-            nFlag -= 1;
-            if (nFlag < 0)
-            {
-                return result;
-            }
-            var n10 = nFlag / 8;
-            var n14 = nFlag % 8;
-            if ((n10 - QuestUnitOpen.Length) < 0)
-            {
-                if (((128 >> n14) & QuestUnitOpen[n10]) != 0)
-                {
-                    result = 1;
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
-            return result;
-        }
-
-        public void SetQuestUnitOpenStatus(int nFlag, int nValue)
-        {
-            nFlag -= 1;
-            if (nFlag < 0)
-            {
-                return;
-            }
-            var n10 = nFlag / 8;
-            var n14 = nFlag % 8;
-            if ((n10 - QuestUnitOpen.Length) < 0)
-            {
-                var bt15 = QuestUnitOpen[n10];
-                if (nValue == 0)
-                {
-                    QuestUnitOpen[n10] = (byte)((~(128 >> n14)) & bt15);
-                }
-                else
-                {
-                    QuestUnitOpen[n10] = (byte)((128 >> n14) | bt15);
-                }
-            }
-        }
-
-        public int GetQuestUnitStatus(int nFlag)
-        {
-            var result = 0;
-            nFlag -= 1;
-            if (nFlag < 0)
-            {
-                return result;
-            }
-            var n10 = nFlag / 8;
-            var n14 = nFlag % 8;
-            if ((n10 - QuestUnit.Length) < 0)
-            {
-                if (((128 >> n14) & QuestUnit[n10]) != 0)
-                {
-                    result = 1;
-                }
-                else
-                {
-                    result = 0;
-                }
-            }
-            return result;
-        }
-
-        public void SetQuestUnitStatus(int nFlag, int nValue)
-        {
-            nFlag -= 1;
-            if (nFlag < 0)
-            {
-                return;
-            }
-            var n10 = nFlag / 8;
-            var n14 = nFlag % 8;
-            if ((n10 - QuestUnit.Length) < 0)
-            {
-                var bt15 = QuestUnit[n10];
-                if (nValue == 0)
-                {
-                    QuestUnit[n10] = (byte)((~(128 >> n14)) & bt15);
-                }
-                else
-                {
-                    QuestUnit[n10] = (byte)((128 >> n14) | bt15);
-                }
-            }
-        }
-
         private bool KillFunc()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::KillFunc";
@@ -2755,19 +2606,19 @@ namespace GameSvr.Actor
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                var sendMessage = new SendMessage
-                {
-                    wIdent = wIdent,
-                    wParam = wParam,
-                    nParam1 = nParam1,
-                    nParam2 = nParam2,
-                    nParam3 = nParam3,
-                    DeliveryTime = 0,
-                    BaseObject = baseObject.ActorId,
-                    LateDelivery = false
-                };
                 if (!Ghost)
                 {
+                    var sendMessage = new SendMessage
+                    {
+                        wIdent = wIdent,
+                        wParam = wParam,
+                        nParam1 = nParam1,
+                        nParam2 = nParam2,
+                        nParam3 = nParam3,
+                        DeliveryTime = 0,
+                        BaseObject = baseObject.ActorId,
+                        LateDelivery = false
+                    };
                     if (!string.IsNullOrEmpty(sMsg))
                     {
                         sendMessage.Buff = sMsg;
@@ -2955,11 +2806,12 @@ namespace GameSvr.Actor
             SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
-        protected virtual bool GetMessage(ref ProcessMessage msg)
+        protected virtual bool GetMessage(out ProcessMessage msg)
         {
             var result = false;
             int I;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+            msg = null;
             try
             {
                 I = 0;
@@ -2997,7 +2849,6 @@ namespace GameSvr.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-
             return result;
         }
 
@@ -3388,7 +3239,7 @@ namespace GameSvr.Actor
                                             {
                                                 if (M2Share.ServerIndex == gateObj.Envir.ServerIndex)
                                                 {
-                                                    if (!EnterAnotherMap(gateObj.Envir, gateObj.nX, gateObj.nY))
+                                                    if (!EnterAnotherMap(((PlayObject)this), gateObj.Envir, gateObj.nX, gateObj.nY))
                                                     {
                                                         result = false;
                                                     }
@@ -3450,7 +3301,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 切换地图
         /// </summary>
-        private bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY)
+        private bool EnterAnotherMap(PlayObject playObject, Envirnoment envir, short nDMapX, short nDMapY)
         {
             var result = false;
             const string sExceptionMsg = "[Exception] TBaseObject::EnterAnotherMap";
@@ -3467,7 +3318,7 @@ namespace GameSvr.Actor
                 }
                 if (envir.Flag.nNEEDSETONFlag >= 0)
                 {
-                    if (GetQuestFalgStatus(envir.Flag.nNEEDSETONFlag) != envir.Flag.nNeedONOFF)
+                    if (playObject.GetQuestFalgStatus(envir.Flag.nNEEDSETONFlag) != envir.Flag.nNeedONOFF)
                     {
                         return false;
                     }
@@ -5599,6 +5450,7 @@ namespace GameSvr.Actor
 
         protected void Dispose(object obj)
         {
+            obj = null;
         }
 
         protected string Format(string str, params object[] par)

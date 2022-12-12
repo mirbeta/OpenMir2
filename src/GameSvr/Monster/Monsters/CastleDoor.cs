@@ -9,7 +9,7 @@ namespace GameSvr.Monster.Monsters
     public class CastleDoor : GuardUnit
     {
         public bool IsOpened;
-        //public bool HoldPlace;
+        public bool HoldPlace;
 
         public CastleDoor() : base()
         {

@@ -25,8 +25,8 @@ namespace GameSvr.GameCommand.Commands
             var nAutoChangeColor = @Params.Length > 4 ? Convert.ToInt32(@Params[4]) : 0;
             var nFixColor = @Params.Length > 5 ? Convert.ToInt32(@Params[5]) : 0;
 
-            short n10 = 0;
-            short n14 = 0;
+            short nX = 0;
+            short nY = 0;
             BaseObject mon;
             if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
@@ -47,11 +47,12 @@ namespace GameSvr.GameCommand.Commands
                 {
                     break;
                 }
-                PlayObject.GetFrontPosition(ref n10, ref n14);
-                mon = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, n10, n14, sMonName);
+                PlayObject.GetFrontPosition(ref nX, ref nY);
+                mon = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, nX, nY, sMonName);
                 if (mon != null)
                 {
                     mon.Master = PlayObject;
+                    mon.IsSlave = true;
                     mon.MasterRoyaltyTick = nTick;
                     mon.SlaveMakeLevel = 3;
                     mon.SlaveExpLevel = (byte)nLevel;

@@ -29,7 +29,6 @@ namespace GameSvr
 
         public GameApp()
         {
-            M2Share.ActorMgr = new ActorMgr();
             M2Share.LocalDb = new LocalDB();
             M2Share.CommonDb = new CommonDB();
             M2Share.g_nSockCountMax = 0;

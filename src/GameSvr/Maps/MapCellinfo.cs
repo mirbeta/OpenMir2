@@ -33,7 +33,7 @@ namespace GameSvr.Maps
 
         private bool disposed;
 
-        public void Add(CellObject cell, EntityId entityId)
+        public void Add(CellObject cell, ActorEntity entityId)
         {
             ObjList.Add(cell);
             M2Share.CellObjectSystem.Add(cell.CellObjId, entityId);

@@ -2005,10 +2005,10 @@ namespace GameSvr.World
                         if (monGen == null) continue;
                         for (var k = 0; k < monGen.CertList.Count; k++)
                         {
-                            BaseObject baseObject = monGen.CertList[k];
-                            if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir)
+                            BaseObject monObject = monGen.CertList[k];
+                            if (!monObject.Death && !monObject.Ghost && monObject.Envir == envir)
                             {
-                                list.Add(baseObject);
+                                list.Add(monObject);
                                 result++;
                             }
                         }

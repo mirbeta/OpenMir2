@@ -5,6 +5,8 @@ using GameSvr.Event.Events;
 using GameSvr.Npc;
 using System.Buffers;
 using System.Text;
+using GameSvr.Monster.Monsters;
+using GameSvr.Player;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -110,7 +112,7 @@ namespace GameSvr.Maps
         /// 添加对象到地图
         /// </summary>
         /// <returns></returns>
-        public object AddToMap(int nX, int nY, CellType cellType, EntityId mapObject)
+        public object AddToMap(int nX, int nY, CellType cellType, ActorEntity mapObject)
         {
             object result = null;
             const string sExceptionMsg = "[Exception] TEnvirnoment::AddToMap";
@@ -260,10 +262,21 @@ namespace GameSvr.Maps
                                     var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
                                     {
-                                        if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                        if (baseObject.MapCell == CellType.CastleDoor)
                                         {
-                                            moveSuccess = false;
-                                            break;
+                                            if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                            {
+                                                moveSuccess = false;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                            {
+                                                moveSuccess = false;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
@@ -373,10 +386,21 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
-                                if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                if (baseObject.MapCell == CellType.CastleDoor)
                                 {
-                                    result = false;
-                                    break;
+                                    if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                    {
+                                        result = false;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                    {
+                                        result = false;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -416,10 +440,21 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                             if (baseObject != null)
                             {
-                                if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                if (baseObject.MapCell == CellType.CastleDoor)
                                 {
-                                    result = false;
-                                    break;
+                                    if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                    {
+                                        result = false;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                    {
+                                        result = false;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -496,10 +531,21 @@ namespace GameSvr.Maps
                                             }
                                     }
                                 }
-                                if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                if (baseObject.MapCell == CellType.CastleDoor)
                                 {
-                                    result = false;
-                                    break;
+                                    if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                    {
+                                        result = false;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                    {
+                                        result = false;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -513,7 +559,7 @@ namespace GameSvr.Maps
         /// 从地图指定坐标上删除对象
         /// </summary>
         /// <returns></returns>
-        public int DeleteFromMap(int nX, int nY, CellType cellType, EntityId pRemoveObject)
+        public int DeleteFromMap(int nX, int nY, CellType cellType, ActorEntity pRemoveObject)
         {
             const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
             var result = -1;
@@ -797,7 +843,6 @@ namespace GameSvr.Maps
                                     {
                                         door = new DoorInfo
                                         {
-                                            ActorId = M2Share.ActorMgr.Dequeue(),
                                             nX = nW,
                                             nY = nH,
                                             n08 = point,
@@ -869,7 +914,6 @@ namespace GameSvr.Maps
                                     {
                                         door = new DoorInfo
                                         {
-                                            ActorId = M2Share.ActorMgr.Dequeue(),
                                             nX = nW,
                                             nY = nH,
                                             n08 = point,
@@ -1016,9 +1060,19 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject != null)
                         {
-                            if (!baseObject.Ghost && baseObject.HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                            if (baseObject.MapCell == CellType.CastleDoor)
                             {
-                                result++;
+                                if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                {
+                                    result++;
+                                }
+                            }
+                            else
+                            {
+                                if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                {
+                                    result++;
+                                }
                             }
                         }
                     }
@@ -1151,11 +1205,25 @@ namespace GameSvr.Maps
                     var cellObject = cellInfo.ObjList[i];
                     if (cellObject.ActorObject)
                     {
-                        var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
-                        if (baseObject != null && !baseObject.Ghost && baseObject.HoldPlace && (!boFlag || !baseObject.Death))
+                        var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        if (baseObject != null && !baseObject.Ghost)
                         {
-                            result = baseObject;
-                            break;
+                            if (baseObject.MapCell == CellType.CastleDoor)
+                            {
+                                if (((CastleDoor)baseObject).HoldPlace && (!boFlag || !baseObject.Death))
+                                {
+                                    result = baseObject;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                if ((!boFlag || !baseObject.Death))
+                                {
+                                    result = baseObject;
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -1163,7 +1231,7 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public Merchant GetQuestNpc(BaseObject baseObject, string sChrName, string sItem, bool boFlag)
+        public Merchant GetQuestNpc(PlayObject baseObject, string sChrName, string sItem, bool boFlag)
         {
             bool bo1D;
             for (var i = 0; i < _questList.Count; i++)
@@ -1332,10 +1400,19 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject != null)
                         {
-                            
-                            if (!baseObject.Ghost && baseObject.HoldPlace && !boFlag || !baseObject.Death)
+                            if (baseObject.MapCell == CellType.CastleDoor)
                             {
-                                baseObjectList.Add(baseObject);
+                                if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !boFlag || !baseObject.Death)
+                                {
+                                    baseObjectList.Add(baseObject);
+                                }
+                            }
+                            else
+                            {
+                                if (!baseObject.Ghost && !boFlag || !baseObject.Death)
+                                {
+                                    baseObjectList.Add(baseObject);
+                                }
                             }
                         }
                     }

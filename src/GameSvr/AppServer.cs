@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using GameSvr.Actor;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
@@ -49,6 +50,7 @@ namespace GameSvr
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
+            M2Share.ActorMgr = new ActorMgr();
             await Builder.RunConsoleAsync(cancellationToken);
             //await ProcessLoopAsync();
             //Stop();

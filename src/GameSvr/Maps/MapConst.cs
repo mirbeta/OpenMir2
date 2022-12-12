@@ -1,11 +1,19 @@
 ﻿using GameSvr.Actor;
-using System.Diagnostics;
 using SystemModule;
+using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Maps
 {
-    public class MapItem : EntityId
+    public class DoorInfo : ActorEntity
+    {
+        public int nX;
+        public int nY;
+        public DoorStatus Status;
+        public int n08;
+    }
+
+    public class MapItem : ActorEntity
     {
         /// <summary>
         /// 物品名称
@@ -34,17 +42,12 @@ namespace GameSvr.Maps
         /// </summary>
         public int CanPickUpTick;
         public ClientUserItem UserItem;
-
-        public MapItem()
-        {
-            ActorId = M2Share.ActorMgr.Dequeue();
-        }
     }
 
     /// <summary>
     /// 地图连接
     /// </summary>
-    public class GateObject : EntityId
+    public class GateObject : ActorEntity
     {
         public Envirnoment Envir;
         public short nX;
