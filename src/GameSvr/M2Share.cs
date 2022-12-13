@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 using GameSvr.GameGate;
+using NLog;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -61,7 +62,7 @@ namespace GameSvr
         public static CellObjectMgr CellObjectSystem;
         public static LocalDB LocalDb;
         public static CommonDB CommonDb;
-        public static readonly MirLogger Log;
+        public static readonly Logger Log;
         public static readonly RandomNumber RandomNumber;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
@@ -563,7 +564,7 @@ namespace GameSvr
             ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.sExpConfigFileName));
             GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.sGlobalConfigFileName));
             GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.sGameSettingFileName));
-            Log = new MirLogger();
+            Log = LogManager.GetCurrentClassLogger();
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
         }

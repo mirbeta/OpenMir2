@@ -40,8 +40,8 @@ namespace GameSvr.Services
                     }
                     catch (Exception ex)
                     {
-                        M2Share.Log.LogError(sExceptionMsg);
-                        M2Share.Log.LogError(ex.StackTrace);
+                        M2Share.Log.Error(sExceptionMsg);
+                        M2Share.Log.Error(ex.StackTrace);
                     }
                     finally
                     {
@@ -208,7 +208,7 @@ namespace GameSvr.Services
             else
             {
                 // 如果DB已经关闭，不在保存
-                M2Share.Log.LogError("DBSvr 断开链接，保存数据失败.");
+                M2Share.Log.Error("DBSvr 断开链接，保存数据失败.");
                 HUtil32.EnterCriticalSection(UserCriticalSection);
                 try
                 {

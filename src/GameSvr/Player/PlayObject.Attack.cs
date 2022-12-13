@@ -150,8 +150,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(sExceptionMsg);
-                M2Share.Log.LogError(e.StackTrace);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.StackTrace);
             }
             return result;
         }

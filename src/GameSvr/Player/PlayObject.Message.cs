@@ -272,7 +272,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg1);
+                M2Share.Log.Error(sExceptionMsg1);
             }
             try
             {
@@ -317,9 +317,9 @@ namespace GameSvr.Player
                     {
                         MakeGhost(); //用于处理 人物异常退出，但人物还在游戏中问题
                     }
-                    M2Share.Log.LogError(Format(sExceptionMsg2, ChrName, ProcessMsg.wIdent, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.Msg));
+                    M2Share.Log.Error(Format(sExceptionMsg2, ChrName, ProcessMsg.wIdent, ProcessMsg.BaseObject, ProcessMsg.wParam, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.Msg));
                 }
-                M2Share.Log.LogError(e.Message);
+                M2Share.Log.Error(e.Message);
             }
             var boTakeItem = false;
             // 检查身上的装备有没不符合
@@ -670,7 +670,7 @@ namespace GameSvr.Player
             }
             catch (Exception)
             {
-                M2Share.Log.LogError(sExceptionMsg3);
+                M2Share.Log.Error(sExceptionMsg3);
             }
             if (M2Share.Config.ReNewChangeColor && m_btReLevel > 0 && (HUtil32.GetTickCount() - m_dwReColorTick) > M2Share.Config.ReNewNameColorTime)
             {
@@ -729,8 +729,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(sExceptionMsg4);
-                M2Share.Log.LogError(e.Message);
+                M2Share.Log.Error(sExceptionMsg4);
+                M2Share.Log.Error(e.Message);
             }
             if (m_nAutoGetExpPoint > 0 && (m_AutoGetExpEnvir == null || m_AutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - m_dwAutoGetExpTick) > m_nAutoGetExpTime)
             {
@@ -825,7 +825,7 @@ namespace GameSvr.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Log.LogWarning(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                         M2Share.Log.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -975,7 +975,7 @@ namespace GameSvr.Player
                     ClientGuildUpdateRankInfo(ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_1042:
-                    M2Share.Log.LogWarning("[非法数据] " + ChrName);
+                     M2Share.Log.Warn("[非法数据] " + ChrName);
                     break;
                 case Grobal2.CM_ADJUST_BONUS:
                     ClientAdjustBonus(ProcessMsg.nParam1, ProcessMsg.Msg);
@@ -1013,7 +1013,7 @@ namespace GameSvr.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Log.LogWarning(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                        M2Share.Log.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -1064,7 +1064,7 @@ namespace GameSvr.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Log.LogWarning(Format(CommandHelp.WalkOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                         M2Share.Log.Warn(Format(CommandHelp.WalkOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -1123,7 +1123,7 @@ namespace GameSvr.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Log.LogWarning(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                         M2Share.Log.Warn(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
@@ -1171,7 +1171,7 @@ namespace GameSvr.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Log.LogWarning(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                         M2Share.Log.Warn(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
@@ -1234,7 +1234,7 @@ namespace GameSvr.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Log.LogWarning(Format(CommandHelp.HitOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                         M2Share.Log.Warn(Format(CommandHelp.HitOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -1289,7 +1289,7 @@ namespace GameSvr.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Log.LogWarning(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                         M2Share.Log.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -1344,7 +1344,7 @@ namespace GameSvr.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Log.LogWarning(Format(CommandHelp.SpellOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                         M2Share.Log.Warn(Format(CommandHelp.SpellOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -2168,8 +2168,8 @@ namespace GameSvr.Player
             }
             catch (Exception ex)
             {
-                M2Share.Log.LogError(sExceptionMsg);
-                M2Share.Log.LogError(ex.StackTrace);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(ex.StackTrace);
             }
         }
 

@@ -167,7 +167,7 @@ namespace GameSvr.Maps
             }
             catch (Exception ex)
             {
-                M2Share.Log.LogError(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return result;
         }
@@ -325,8 +325,8 @@ namespace GameSvr.Maps
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(sExceptionMsg);
-                M2Share.Log.LogError(e.StackTrace);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.StackTrace);
             }
             return result;
         }
@@ -580,7 +580,7 @@ namespace GameSvr.Maps
                 }
                 catch
                 {
-                    M2Share.Log.LogError(string.Format(sExceptionMsg1, cellType));
+                    M2Share.Log.Error(string.Format(sExceptionMsg1, cellType));
                 }
             }
             else
@@ -713,7 +713,7 @@ namespace GameSvr.Maps
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return null;
         }
@@ -749,7 +749,7 @@ namespace GameSvr.Maps
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
         }
 
@@ -965,7 +965,7 @@ namespace GameSvr.Maps
             }
             catch (Exception)
             {
-                M2Share.Log.LogError("[Exception] TEnvirnoment.LoadMapData");
+                M2Share.Log.Error("[Exception] TEnvirnoment.LoadMapData");
             }
             return result;
         }
@@ -1375,7 +1375,7 @@ namespace GameSvr.Maps
             var nEndX = nX + nRage;
             var nStartY = nY - nRage;
             var nEndY = nY + nRage;
-            M2Share.Log.LogError("todo GetMapBaseObjects");
+            M2Share.Log.Error("todo GetMapBaseObjects");
             return true;
         }
 

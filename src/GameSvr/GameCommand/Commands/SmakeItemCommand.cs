@@ -69,7 +69,7 @@ namespace GameSvr.GameCommand.Commands
                     PlayObject.SysMsg(sShowMsg, MsgColor.Blue, MsgType.Hint);
                     if (M2Share.Config.ShowMakeItemMsg)
                     {
-                        M2Share.Log.LogWarning("[物品调整] " + PlayObject.ChrName + '(' + StdItem.Name + " -> " + sShowMsg + ')');
+                         M2Share.Log.Warn("[物品调整] " + PlayObject.ChrName + '(' + StdItem.Name + " -> " + sShowMsg + ')');
                     }
                 }
                 else

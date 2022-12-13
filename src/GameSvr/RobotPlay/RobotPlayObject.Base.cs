@@ -310,7 +310,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception ex)
             {
-                M2Share.Log.LogError(ex.StackTrace);
+                M2Share.Log.Error(ex.StackTrace);
             }
             base.Run();
         }
@@ -620,7 +620,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.LogError(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
+                M2Share.Log.Error(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
                 KickException();
             }
             try
@@ -714,7 +714,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.LogError(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
+                M2Share.Log.Error(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
                 KickException();
             }
             try
@@ -815,7 +815,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.LogError(ChrName + ',' + MapName + ',' + CurrX + ',' + CurrY + ',' + " SearchViewRange");
+                M2Share.Log.Error(ChrName + ',' + MapName + ',' + CurrX + ',' + CurrY + ',' + " SearchViewRange");
                 KickException();
             }
         }

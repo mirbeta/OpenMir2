@@ -126,7 +126,6 @@ namespace GameSvr.Actor
         /// 角色外形
         /// </summary>
         public byte RaceImg;
-        public bool BoRace;
         /// <summary>
         /// 人物攻击准确度
         /// </summary>
@@ -583,7 +582,6 @@ namespace GameSvr.Actor
             NameColor = 255;
             HitPlus = 0;
             HitDouble = 0;
-            BoRace = false;
             BoFearFire = false;
             AbilSeeHealGauge = false;
             PowerHit = false;
@@ -969,8 +967,8 @@ namespace GameSvr.Actor
             }
             catch (Exception ex)
             {
-                M2Share.Log.LogError(sExceptionMsg);
-                M2Share.Log.LogError(ex.StackTrace);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(ex.StackTrace);
             }
             return result;
         }
@@ -1100,9 +1098,6 @@ namespace GameSvr.Actor
                 }
                 result = true;
             }
-            else
-            {
-            }
             return result;
         }
 
@@ -1224,7 +1219,7 @@ namespace GameSvr.Actor
         /// <param name="nDamage"></param>
         private void DamageHealth(ushort nDamage)
         {
-            if ((LastHiter == null || LastHiter.Race == ActorRace.Play) && !(LastHiter as PlayObject).UnMagicShield)
+            if ((LastHiter == null) || ((LastHiter.Race == ActorRace.Play) && !(LastHiter as PlayObject).UnMagicShield))
             {
                 if (Race == ActorRace.Play && (this as PlayObject).MagicShield && (nDamage > 0) && (WAbil.MP > 0))
                 {
@@ -1807,8 +1802,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(sExceptionMsg);
-                M2Share.Log.LogError(e.Message);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.Message);
             }
             return result;
         }
@@ -1863,7 +1858,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
         }
 
@@ -2696,7 +2691,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return true;
         }
@@ -2706,7 +2701,7 @@ namespace GameSvr.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
             if (Envir == null)
             {
-                M2Share.Log.LogError(ChrName + " SendRefMsg nil PEnvir ");
+                M2Share.Log.Error(ChrName + " SendRefMsg nil PEnvir ");
                 return;
             }
             if (ObMode || FixedHideMode)
@@ -2781,8 +2776,8 @@ namespace GameSvr.Actor
                                                         {
                                                             cellInfo.Dispose();
                                                         }
-                                                        M2Share.Log.LogError(Format(sExceptionMsg, ChrName));
-                                                        M2Share.Log.LogError(e.Message);
+                                                        M2Share.Log.Error(Format(sExceptionMsg, ChrName));
+                                                        M2Share.Log.Error(e.Message);
                                                     }
                                                 }
                                             }
@@ -2861,40 +2856,6 @@ namespace GameSvr.Actor
                 nWeapon += (byte)Gender;
                 var nHair = (byte)(Hair * 2 + (byte)Gender);
                 return Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
-            }
-            var bo25 = baseObject != null && baseObject.BoRace;
-            if (bo25)
-            {
-                var nRaceImg = RaceImg;
-                var nAppr = (byte)Appr;
-                switch (nAppr)
-                {
-                    case 0:
-                        nRaceImg = 12;
-                        nAppr = 5;
-                        break;
-                    case 1:
-                        nRaceImg = 11;
-                        nAppr = 9;
-                        break;
-                    case 160:
-                        nRaceImg = 10;
-                        nAppr = 0;
-                        break;
-                    case 161:
-                        nRaceImg = 10;
-                        nAppr = 1;
-                        break;
-                    case 162:
-                        nRaceImg = 11;
-                        nAppr = 6;
-                        break;
-                    case 163:
-                        nRaceImg = 11;
-                        nAppr = 3;
-                        break;
-                }
-                return Grobal2.MakeMonsterFeature(nRaceImg, MonsterWeapon, nAppr);
             }
             return Grobal2.MakeMonsterFeature(RaceImg, MonsterWeapon, Appr);
         }
@@ -3008,7 +2969,7 @@ namespace GameSvr.Actor
             var result = true;
             if (Envir == null)
             {
-                M2Share.Log.LogError("Walk nil PEnvir");
+                M2Share.Log.Error("Walk nil PEnvir");
                 return true;
             }
             try
@@ -3091,8 +3052,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
-                M2Share.Log.LogError(e.Message);
+                M2Share.Log.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                M2Share.Log.Error(e.Message);
             }
             return result;
         }
@@ -3190,7 +3151,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return result;
         }
@@ -5009,14 +4970,11 @@ namespace GameSvr.Actor
             RecalcAbilitys();
             Death = false;
             Invisible = false;
-
             SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, GetFeatureToLong(), "");
-
             if (M2Share.Config.MonSayMsg)
             {
                 MonsterSayMsg(null, MonStatus.MonGen);
             }
-
             return true;
         }
 

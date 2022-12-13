@@ -77,7 +77,7 @@ namespace GameSvr.GameCommand
                 }
                 if (customCommandMap.ContainsKey(commandInfo.Name))
                 {
-                    M2Share.Log.LogError($"重复定义游戏命令[{commandInfo.Name}]");
+                    M2Share.Log.Error($"重复定义游戏命令[{commandInfo.Name}]");
                     continue;
                 }
                 customCommandMap.Add(commandInfo.Name, customCmd);
@@ -104,7 +104,7 @@ namespace GameSvr.GameCommand
                 var groupAttribute = attributes[0];
                 if (CommandMaps.ContainsKey(groupAttribute.Name))
                 {
-                    M2Share.Log.LogError($"重复游戏命令: {groupAttribute.Name}");
+                    M2Share.Log.Error($"重复游戏命令: {groupAttribute.Name}");
                 }
 
                 if (customCommands.TryGetValue(groupAttribute.Name, out var customCommand))

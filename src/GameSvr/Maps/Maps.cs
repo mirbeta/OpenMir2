@@ -405,7 +405,7 @@ namespace GameSvr.Maps
                         {
                             if (M2Share.MiniMapList.ContainsKey(sMapNO))
                             {
-                                M2Share.Log.LogError($"重复小地图配置信息[{sMapNO}]");
+                                M2Share.Log.Error($"重复小地图配置信息[{sMapNO}]");
                                 continue;
                             }
                             M2Share.MiniMapList.TryAdd(sMapNO, nIdx);

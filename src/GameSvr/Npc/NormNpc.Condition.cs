@@ -2342,7 +2342,7 @@ namespace GameSvr.Npc
                 }
                 catch
                 {
-                    M2Share.Log.LogError("loading fail.... => " + sListFileName);
+                    M2Share.Log.Error("loading fail.... => " + sListFileName);
                 }
                 for (var i = 0; i < LoadList.Count; i++)
                 {
@@ -2442,7 +2442,7 @@ namespace GameSvr.Npc
                                 }
                                 catch
                                 {
-                                    M2Share.Log.LogError("Save fail.... => " + sListFileName);
+                                    M2Share.Log.Error("Save fail.... => " + sListFileName);
                                 }
                             }
                         }
@@ -2454,7 +2454,7 @@ namespace GameSvr.Npc
             }
             else
             {
-                M2Share.Log.LogError("file not found => " + sListFileName);
+                M2Share.Log.Error("file not found => " + sListFileName);
             }
             return result;
         }

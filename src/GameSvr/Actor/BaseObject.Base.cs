@@ -32,8 +32,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(sExceptionMsg0);
-                M2Share.Log.LogError(e.StackTrace);
+                M2Share.Log.Error(sExceptionMsg0);
+                M2Share.Log.Error(e.StackTrace);
             }
             try
             {
@@ -127,8 +127,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(sExceptionMsg1);
-                M2Share.Log.LogError(e.Message);
+                M2Share.Log.Error(sExceptionMsg1);
+                M2Share.Log.Error(e.Message);
             }
             try
             {
@@ -230,7 +230,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg2);
+                M2Share.Log.Error(sExceptionMsg2);
             }
             // 血气石处理开始
             try
@@ -329,7 +329,7 @@ namespace GameSvr.Actor
             }
             catch (Exception)
             {
-                M2Share.Log.LogError(sExceptionMsg7);
+                M2Share.Log.Error(sExceptionMsg7);
             }
             // 血气石处理结束
             // TBaseObject.Run 3 清理目标对象
@@ -476,7 +476,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg3);
+                M2Share.Log.Error(sExceptionMsg3);
             }
             try
             {
@@ -553,8 +553,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(sExceptionMsg4);
-                M2Share.Log.LogError(e.Message);
+                M2Share.Log.Error(sExceptionMsg4);
+                M2Share.Log.Error(e.Message);
             }
             try
             {
@@ -618,7 +618,7 @@ namespace GameSvr.Actor
             }
             catch (Exception)
             {
-                M2Share.Log.LogError(sExceptionMsg5);
+                M2Share.Log.Error(sExceptionMsg5);
             }
             try
             {
@@ -640,7 +640,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg6);
+                M2Share.Log.Error(sExceptionMsg6);
             }
             M2Share.g_nBaseObjTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (M2Share.g_nBaseObjTimeMax < M2Share.g_nBaseObjTimeMin)
@@ -793,8 +793,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(sExceptionMsg1);
-                M2Share.Log.LogError(e.Message);
+                M2Share.Log.Error(sExceptionMsg1);
+                M2Share.Log.Error(e.Message);
             }
             try
             {
@@ -893,7 +893,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg2);
+                M2Share.Log.Error(sExceptionMsg2);
             }
             try
             {
@@ -996,7 +996,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg3);
+                M2Share.Log.Error(sExceptionMsg3);
             }
         }
 
@@ -1100,7 +1100,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
         }
 
@@ -1202,8 +1202,8 @@ namespace GameSvr.Actor
             }
             catch (Exception ex)
             {
-                M2Share.Log.LogError(sExceptionMsg + $" 地图名称:{Envir.MapName} 怪物名称:{ChrName} X:{CurrX} Y:{CurrY}");
-                M2Share.Log.LogError(ex.StackTrace);
+                M2Share.Log.Error(sExceptionMsg + $" 地图名称:{Envir.MapName} 怪物名称:{ChrName} X:{CurrX} Y:{CurrY}");
+                M2Share.Log.Error(ex.StackTrace);
             }
         }
 
@@ -1452,15 +1452,15 @@ namespace GameSvr.Actor
                         break;
 #if DEBUG
                     default:
-                        M2Share.Log.LogWarning(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", ChrName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
+                         M2Share.Log.Warn(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", ChrName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
                         break;
 #endif
                 }
             }
             catch (Exception e)
             {
-                M2Share.Log.LogError(sExceptionMsg);
-                M2Share.Log.LogError(e.Message);
+                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(e.Message);
             }
             return false;
         }

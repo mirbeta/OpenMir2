@@ -35,7 +35,6 @@ namespace GameSvr
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<MirLogger>();
             services.AddSingleton<GameApp>();
             services.AddHostedService<AppService>();
             services.AddHostedService<TimedService>();

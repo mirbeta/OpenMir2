@@ -490,7 +490,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.LogError(Format(sExceptionMsg, new object[] { sData }));
+                M2Share.Log.Error(Format(sExceptionMsg, new object[] { sData }));
             }
         }
 
@@ -601,7 +601,7 @@ namespace GameSvr.RobotPlay
                             sSendMsg = sMsg.Substring(nPos + 3 - 1, sMsg.Length - nPos - 2);
                             Whisper(sChrName, "你猜我是谁.");
                             //Whisper(sChrName, m_AISayMsgList[(M2Share.RandomNumber.Random(m_AISayMsgList.Count)).Next()]);
-                            M2Share.Log.LogError("TODO Hear...");
+                            M2Share.Log.Error("TODO Hear...");
                         }
                     }
                     break;
@@ -846,7 +846,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.LogError("RobotPlayObject.SearchPickUpItem");
+                M2Share.Log.Error("RobotPlayObject.SearchPickUpItem");
             }
             return result;
         }
@@ -1363,7 +1363,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception ex)
             {
-                M2Share.Log.LogError(ex.Message);
+                M2Share.Log.Error(ex.Message);
             }
             return result;
         }
@@ -2079,7 +2079,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.LogError(Format("RobotPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.MagIdx, nTargetX, nTargetY }));
+                M2Share.Log.Error(Format("RobotPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { UserMagic.MagIdx, nTargetX, nTargetY }));
             }
             return result;
         }
@@ -2137,7 +2137,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.LogError("RobotPlayObject.Thinking");
+                M2Share.Log.Error("RobotPlayObject.Thinking");
             }
             return result;
         }
@@ -2598,7 +2598,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.LogError(sExceptionMsg);
+                M2Share.Log.Error(sExceptionMsg);
             }
             return result;
         }
@@ -4316,7 +4316,7 @@ namespace GameSvr.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Log.LogError("RobotPlayObject.CheckHeroAmulet");
+                M2Share.Log.Error("RobotPlayObject.CheckHeroAmulet");
             }
             return result;
         }

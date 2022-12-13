@@ -102,7 +102,7 @@ namespace GameSvr.Maps
                 }
                 else
                 {
-                    M2Share.Log.LogError("地图名称重复 [" + sMapName + "]，请确认配置文件是否正确.");
+                    M2Share.Log.Error("地图名称重复 [" + sMapName + "]，请确认配置文件是否正确.");
                 }
                 if (envirnoment.DoorList.Count > 0)
                 {
@@ -115,7 +115,7 @@ namespace GameSvr.Maps
             }
             else
             {
-                M2Share.Log.LogError("地图文件: " + M2Share.Config.MapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
+                M2Share.Log.Error("地图文件: " + M2Share.Config.MapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
             }
             return envirnoment;
         }
