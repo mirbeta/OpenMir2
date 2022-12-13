@@ -34,6 +34,7 @@ namespace GameSvr.Maps
         {
             if (_cellObject.TryGetValue(cellId, out var cell))
             {
+                cell.Dispose();
             }
         }
 

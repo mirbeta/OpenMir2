@@ -29,8 +29,7 @@ namespace GameSvr.Maps
         public string MapFileName = string.Empty;
         public string MapName = string.Empty;
         public string MapDesc = string.Empty;
-        private Memory<MapCellInfo> _cellArray;
-        private ArrayPool<MapCellInfo> _cellPool;
+        private MapCellInfo[] _cellArray;
         public int MinMap;
         public int ServerIndex;
         /// <summary>
@@ -47,7 +46,7 @@ namespace GameSvr.Maps
         /// <summary>
         /// 任务
         /// </summary>
-        private readonly IList<TMapQuestInfo> _questList;
+        private readonly IList<TMapQuestInfo> QuestList;
         private int _monCount;
         private int _humCount;
         public readonly IList<PointInfo> PointList;
@@ -56,42 +55,17 @@ namespace GameSvr.Maps
         {
             ServerIndex = 0;
             MinMap = 0;
-            Flag = new MapInfoFlag();
             _monCount = 0;
             _humCount = 0;
+            Flag = new MapInfoFlag();
             DoorList = new List<DoorInfo>();
-            _questList = new List<TMapQuestInfo>();
+            QuestList = new List<TMapQuestInfo>();
             PointList = new List<PointInfo>();
         }
 
         ~Envirnoment()
         {
             Dispose(false);
-        }
-
-        private void Initialize(short nWidth, short nHeight)
-        {
-            if (nWidth > 1 && nHeight > 1)
-            {
-                if (!_cellArray.IsEmpty)
-                {
-                    for (var nW = 0; nW < Width; nW++)
-                    {
-                        for (var nH = 0; nH < Height; nH++)
-                        {
-                            if (_cellArray.Span[nW * Height + nH].ObjList != null)
-                            {
-                                _cellArray.Span[nW * Height + nH].Dispose();
-                            }
-                        }
-                    }
-                    _cellArray = null;
-                }
-                Width = nWidth;
-                Height = nHeight;
-                _cellPool = ArrayPool<MapCellInfo>.Create();
-                _cellArray = _cellPool.Rent(nWidth * nHeight);
-            }
         }
 
         public bool AllowMagics(string magicName)
@@ -212,7 +186,7 @@ namespace GameSvr.Maps
             bool result;
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
-                cellInfo = _cellArray.Span[nX * Height + nY];
+                cellInfo = _cellArray[nX * Height + nY];
                 result = true;
             }
             else
@@ -226,7 +200,7 @@ namespace GameSvr.Maps
         {
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
-                MapCellInfo cellInfo = _cellArray.Span[nX * Height + nY];
+                MapCellInfo cellInfo = _cellArray[nX * Height + nY];
                 if (cellInfo == null)
                 {
                     success = false;
@@ -654,7 +628,7 @@ namespace GameSvr.Maps
 
         public bool IsCheapStuff()
         {
-            return _questList.Count > 0;
+            return QuestList.Count > 0;
         }
 
         public bool AddToMapItemEvent(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent)
@@ -783,33 +757,26 @@ namespace GameSvr.Maps
         {
             var result = false;
             int n24;
-            byte[] buffer;
             int point;
             DoorInfo door;
-            const byte muiSize = 12;//固定大小
             try
             {
                 if (File.Exists(sMapFile))
                 {
                     using var fileStream = new FileStream(sMapFile, FileMode.Open, FileAccess.Read);
-                    using var binReader = new BinaryReader(fileStream);
-
-                    var bytData = new byte[52];
-                    var read = binReader.Read(bytData, 0, bytData.Length);
-                    if (read <= 0)
+                    if (fileStream.Length <= 52)
                     {
+                        fileStream.Close();
+                        fileStream.Dispose();
                         return false;
                     }
-                    Width = BitConverter.ToInt16(bytData, 0);
-                    Height = BitConverter.ToInt16(bytData, 2);
-
+                    using var binReader = new BinaryReader(fileStream);
+                    Width = binReader.ReadInt16();
+                    Height = binReader.ReadInt16();
                     Initialize(Width, Height);
+                    fileStream.Position = 52;
 
-                    var nMapSize = Width * muiSize * Height;
-                    buffer = new byte[nMapSize];
-                    binReader.Read(buffer, 0, nMapSize);
-                    var buffIndex = 0;
-
+                    MapUnitInfo mapUnitInfo = new MapUnitInfo();
                     if (Flag.boMINE || Flag.boMINE2)
                     {
                         for (var nW = 0; nW < Width; nW++)
@@ -817,28 +784,35 @@ namespace GameSvr.Maps
                             n24 = nW * Height;
                             for (var nH = 0; nH < Height; nH++)
                             {
-                                // wBkImg High
-                                if ((buffer[buffIndex + 1] & 0x80) != 0)
+                                mapUnitInfo.wBkImg = binReader.ReadUInt16();
+                                mapUnitInfo.wMidImg = binReader.ReadUInt16();
+                                mapUnitInfo.wFrImg = binReader.ReadUInt16();
+                                mapUnitInfo.btDoorIndex = binReader.ReadByte();
+                                mapUnitInfo.btDoorOffset= binReader.ReadByte();
+                                mapUnitInfo.btAniFrame= binReader.ReadByte();
+                                mapUnitInfo.btAniTick= binReader.ReadByte();
+                                mapUnitInfo.btArea= binReader.ReadByte();
+                                mapUnitInfo.btLight= binReader.ReadByte();
+                                
+                                if ((mapUnitInfo.wBkImg & 0x8000) !=0)// wBkImg High
                                 {
-                                    _cellArray.Span[n24 + nH] = new MapCellInfo() { Attribute = CellAttribute.HighWall };
+                                    _cellArray[n24 + nH] = new MapCellInfo() { Attribute = CellAttribute.HighWall };
                                 }
-                                // wFrImg High
-                                if ((buffer[buffIndex + 5] & 0x80) != 0)
+                                if ((mapUnitInfo.wFrImg & 0x8000) != 0)// wFrImg High
                                 {
-                                    _cellArray.Span[n24 + nH] = new MapCellInfo() { Attribute = CellAttribute.LowWall };
+                                    _cellArray[n24 + nH] = new MapCellInfo() { Attribute = CellAttribute.LowWall };
                                 }
-                                if (_cellArray.Span[n24 + nH] == null)
+                                if (_cellArray[n24 + nH] == null)
                                 {
-                                    _cellArray.Span[n24 + nH] = new MapCellInfo()
+                                    _cellArray[n24 + nH] = new MapCellInfo()
                                     {
                                         ObjList = new PooledList<CellObject>(),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
-                                // btDoorIndex
-                                if ((buffer[buffIndex + 6] & 0x80) != 0)
+                                if ((mapUnitInfo.btDoorIndex & 0x80) != 0)
                                 {
-                                    point = buffer[buffIndex + 6] & 0x7F;
+                                    point = mapUnitInfo.btDoorIndex & 0x7F;
                                     if (point > 0)
                                     {
                                         door = new DoorInfo
@@ -877,7 +851,6 @@ namespace GameSvr.Maps
                                         DoorList.Add(door);
                                     }
                                 }
-                                buffIndex += muiSize;
                             }
                         }
                     }
@@ -888,28 +861,34 @@ namespace GameSvr.Maps
                             n24 = nW * Height;
                             for (var nH = 0; nH < Height; nH++)
                             {
-                                // wBkImg High
-                                if ((buffer[buffIndex + 1] & 0x80) != 0)
-                                {
-                                    _cellArray.Span[n24 + nH] = MapCellInfo.HighWall;
+                                mapUnitInfo.wBkImg = binReader.ReadUInt16();
+                                mapUnitInfo.wMidImg = binReader.ReadUInt16();
+                                mapUnitInfo.wFrImg = binReader.ReadUInt16();
+                                mapUnitInfo.btDoorIndex = binReader.ReadByte();
+                                mapUnitInfo.btDoorOffset= binReader.ReadByte();
+                                mapUnitInfo.btAniFrame= binReader.ReadByte();
+                                mapUnitInfo.btAniTick= binReader.ReadByte();
+                                mapUnitInfo.btArea= binReader.ReadByte();
+                                mapUnitInfo.btLight= binReader.ReadByte();
+                                if ((mapUnitInfo.wBkImg & 0x8000) !=0)// wBkImg High
+                                { 
+                                    _cellArray[n24 + nH] = MapCellInfo.HighWall;
                                 }
-                                // wFrImg High
-                                if ((buffer[buffIndex + 5] & 0x80) != 0)
+                                if ((mapUnitInfo.wFrImg & 0x8000) != 0)// wFrImg High
                                 {
-                                    _cellArray.Span[n24 + nH] = MapCellInfo.LowWall;
+                                    _cellArray[n24 + nH] = MapCellInfo.LowWall;
                                 }
-                                if (_cellArray.Span[n24 + nH] == null)
+                                if (_cellArray[n24 + nH] == null)
                                 {
-                                    _cellArray.Span[n24 + nH] = new MapCellInfo()
+                                    _cellArray[n24 + nH] = new MapCellInfo()
                                     {
                                         ObjList = new PooledList<CellObject>(),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
-                                // btDoorIndex
-                                if ((buffer[buffIndex + 6] & 0x80) != 0)
+                                if ((mapUnitInfo.btDoorIndex & 0x80) != 0)
                                 {
-                                    point = buffer[buffIndex + 6] & 0x7F;
+                                    point = mapUnitInfo.btDoorIndex & 0x7F;
                                     if (point > 0)
                                     {
                                         door = new DoorInfo
@@ -948,7 +927,6 @@ namespace GameSvr.Maps
                                         DoorList.Add(door);
                                     }
                                 }
-                                buffIndex += muiSize;
                             }
                         }
                     }
@@ -957,7 +935,6 @@ namespace GameSvr.Maps
                     binReader.Dispose();
                     fileStream.Close();
                     fileStream.Dispose();
-                    buffer = null;
                     result = true;
                 }
 
@@ -991,6 +968,30 @@ namespace GameSvr.Maps
                 M2Share.Log.LogError("[Exception] TEnvirnoment.LoadMapData");
             }
             return result;
+        }
+
+        private void Initialize(short nWidth, short nHeight)
+        {
+            if (nWidth > 1 && nHeight > 1)
+            {
+                if (_cellArray != null)
+                {
+                    for (var nW = 0; nW < Width; nW++)
+                    {
+                        for (var nH = 0; nH < Height; nH++)
+                        {
+                            if (_cellArray[nW * Height + nH].ObjList != null)
+                            {
+                                _cellArray[nW * Height + nH].Dispose();
+                            }
+                        }
+                    }
+                    _cellArray = null;
+                }
+                Width = nWidth;
+                Height = nHeight;
+                _cellArray = new MapCellInfo[nWidth * nHeight];
+            }
         }
 
         public bool CreateQuest(int nFlag, int nValue, string sMonName, string sItem, string sQuest, bool boGrouped)
@@ -1037,7 +1038,7 @@ namespace GameSvr.Maps
             };
             M2Share.WorldEngine.QuestNpcList.Add(mapMerchant);
             mapQuest.NPC = mapMerchant;
-            _questList.Add(mapQuest);
+            QuestList.Add(mapQuest);
             return true;
         }
 
@@ -1234,9 +1235,9 @@ namespace GameSvr.Maps
         public Merchant GetQuestNpc(PlayObject baseObject, string sChrName, string sItem, bool boFlag)
         {
             bool bo1D;
-            for (var i = 0; i < _questList.Count; i++)
+            for (var i = 0; i < QuestList.Count; i++)
             {
-                var mapQuestFlag = _questList[i];
+                var mapQuestFlag = QuestList[i];
                 var nFlagValue = baseObject.GetQuestFalgStatus(mapQuestFlag.nFlag);
                 if (nFlagValue == mapQuestFlag.nValue)
                 {
@@ -1571,7 +1572,7 @@ namespace GameSvr.Maps
         {
             if (disposing)
             {
-                _cellPool.Return(_cellArray.ToArray());
+                _cellArray = null;
             }
         }
 
@@ -1579,6 +1580,19 @@ namespace GameSvr.Maps
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+        
+        private struct MapUnitInfo
+        {
+            public ushort wBkImg;
+            public ushort wMidImg;
+            public ushort wFrImg;
+            public byte btDoorIndex;
+            public byte btDoorOffset;
+            public byte btAniFrame;
+            public byte btAniTick;
+            public byte btArea;
+            public byte btLight;
         }
     }
 }

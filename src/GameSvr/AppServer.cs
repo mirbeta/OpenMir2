@@ -121,7 +121,7 @@ namespace GameSvr
 
         public override void Dispose()
         {
-            throw new NotImplementedException();
+             
         }
     }
 }

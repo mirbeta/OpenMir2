@@ -4,6 +4,8 @@ using NLog;
 using System.Diagnostics;
 using SystemModule;
 using System.Collections.Generic;
+using SystemModule.Enums;
+using System.Linq;
 
 namespace GameSvr.Actor
 {
@@ -13,7 +15,7 @@ namespace GameSvr.Actor
     public class ActorMgr
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IdWorker _idWorker = new IdWorker(M2Share.RandomNumber.Random(15));
+        private readonly IdWorker _idWorker = new IdWorker(1);
         private readonly ConcurrentQueue<int> _idQueue = new ConcurrentQueue<int>();
         private readonly Thread IdWorkThread;
         /// <summary>
@@ -25,6 +27,8 @@ namespace GameSvr.Actor
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohter = new ConcurrentDictionary<int, object>();
         private readonly IList<int> ActorIds = new Collection<int>();
+        private int MonsterDieCount = 0;
+        private int PlayerCount = 0;
 
         public ActorMgr()
         {
@@ -39,20 +43,22 @@ namespace GameSvr.Actor
         {
             while (true)
             {
-                if (_idQueue.Count < 1000)
+                if (_idQueue.Count < 20000)
                 {
                     var sw = new Stopwatch();
                     sw.Start();
-                    Parallel.For(0, 10, i =>
+                    for (int i = 0; i < 50000; i++)
                     {
-                        _logger.Debug($"线程[{i}]开始生成Id");
-                        for (var j = 0; j < 5000; j++)
+                        var sequence = Environment.TickCount + HUtil32.Sequence();
+                        while (sequence < 0)
                         {
-                            _idQueue.Enqueue((int)_idWorker.NextId());
+                            sequence = Environment.TickCount + HUtil32.Sequence();
+                            if (sequence > 0) break;
                         }
-                    });
+                        _idQueue.Enqueue(sequence);
+                    }
                     sw.Stop();
-                    _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed}");
+                    _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 当前可用ID数:[{_idQueue.Count}]");
                 }
                 Thread.Sleep(5000);
             }
@@ -66,7 +72,7 @@ namespace GameSvr.Actor
             }
             return HUtil32.Sequence();
         }
-        
+
         public void Add(BaseObject actor)
         {
             _actorsMap.TryAdd(actor.ActorId, actor);
@@ -119,9 +125,18 @@ namespace GameSvr.Actor
             {
                 if (_actorsMap.TryRemove(actorId, out var actor))
                 {
+                    if (actor.Race != ActorRace.Play)
+                    {
+                        MonsterDieCount++;
+                    }
+                    else
+                    {
+                        PlayerCount++;
+                    }
                     _logger.Debug($"清理死亡对象 名称:[{actor.ChrName}] 地图:{actor.MapName} 坐标:{actor.CurrX}:{actor.CurrY}");
                 }
             }
+            _logger.Debug($"当前总对象:[{_actorsMap.Count}] 累计角色死亡次数:[{PlayerCount}] 累计怪物死亡次数:[{MonsterDieCount}]");
         }
     }
 }

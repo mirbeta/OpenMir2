@@ -62,7 +62,7 @@ namespace GameSvr
                     _mirApp.SaveItemNumber();
                     _saveIntervalTime = HUtil32.GetTickCount();
                 }
-                if ((currentTick - _clearIntervalTime) > 60 * 100) //定时清理游戏对象
+                if ((currentTick - _clearIntervalTime) > 600000) //定时清理游戏对象
                 {
                     M2Share.ActorMgr.ClearObject();
                     _clearIntervalTime = HUtil32.GetTickCount();
