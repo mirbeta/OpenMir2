@@ -1,4 +1,5 @@
 ﻿using GameSvr.Actor;
+using GameSvr.Player;
 using SystemModule;
 using SystemModule.Enums;
 
@@ -10,7 +11,14 @@ namespace GameSvr.Monster.Monsters
     public class GuardUnit : AnimalObject
     {
         public sbyte GuardDirection;
+        public bool BoCrimeforCastle;
+        public int CrimeforCastleTime = 0;
 
+        public GuardUnit()
+        {
+            Race = ActorRace.Guard;
+        }
+        
         public override void Struck(BaseObject hiter)
         {
             base.Struck(hiter);
@@ -30,20 +38,24 @@ namespace GameSvr.Monster.Monsters
                 {
                     result = true;
                 }
-                if (baseObject.BoCrimeforCastle)
+                if (baseObject.Race == ActorRace.Guard)
                 {
-                    if ((HUtil32.GetTickCount() - baseObject.CrimeforCastleTime) < (2 * 60 * 1000))
+                    var guardObject = baseObject as GuardUnit;
+                    if (guardObject.BoCrimeforCastle)
                     {
-                        result = true;
-                    }
-                    else
-                    {
-                        baseObject.BoCrimeforCastle = false;
-                    }
-                    if (baseObject.Castle != null)
-                    {
-                        baseObject.BoCrimeforCastle = false;
-                        result = false;
+                        if ((HUtil32.GetTickCount() - guardObject.CrimeforCastleTime) < (2 * 60 * 1000))
+                        {
+                            result = true;
+                        }
+                        else
+                        {
+                            guardObject.BoCrimeforCastle = false;
+                        }
+                        if (guardObject.Castle != null)
+                        {
+                            guardObject.BoCrimeforCastle = false;
+                            result = false;
+                        }
                     }
                 }
                 if (Castle.UnderWar)
@@ -81,19 +93,22 @@ namespace GameSvr.Monster.Monsters
             }
             if (LastHiter == baseObject)
             {
-                result = true;
+                return true;
             }
             if (baseObject.TargetCret != null && baseObject.TargetCret.Race == 112)
             {
-                result = true;
+                return true;
             }
-            if (baseObject.PvpLevel() >= 2)
+            if (baseObject.Race == ActorRace.Play)
             {
-                result = true;
+                if ((baseObject as PlayObject).PvpLevel() >= 2)
+                {
+                    return true;
+                }
             }
             if (baseObject.AdminMode || baseObject.StoneMode || baseObject == this)
             {
-                result = false;
+                return false;
             }
             return result;
         }

@@ -1286,9 +1286,9 @@ namespace GameSvr
                         {
                             continue;
                         }
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new[] { ' ', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, HUtil32.Separator);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
                         var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                         var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                         if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
@@ -1358,9 +1358,9 @@ namespace GameSvr
                         {
                             continue;
                         }
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new[] { ' ', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, HUtil32.Separator);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
                         var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                         var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                         if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
@@ -1431,9 +1431,9 @@ namespace GameSvr
                     {
                         continue;
                     }
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', ',', '\t' });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', ',', '\t' });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, new[] { ' ', ',', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, HUtil32.Separator);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
                     var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))

@@ -71,13 +71,13 @@ namespace GameSvr.Maps
                             boSAFE = false
                         };
                         sFlag = HUtil32.ArrestStringEx(sFlag, "[", "]", ref sMapName);
-                        var sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, new[] { ' ', ',', '\t' });
+                        var sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, HUtil32.Separator);
                         if (!string.IsNullOrEmpty(sMapDesc) && sMapDesc[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMapDesc, "\"", "\"", ref sMapDesc);
                         }
-                        var s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, new[] { ' ', ',', '\t' }).Trim();
-                        var nServerIndex = HUtil32.StrToInt(s4C, 0);
+                        var s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, HUtil32.Separator).Trim();
+                        var nServerIndex = (byte)HUtil32.StrToInt(s4C, 0);
                         if (sMapName == "")
                         {
                             continue;
@@ -94,7 +94,7 @@ namespace GameSvr.Maps
                             {
                                 break;
                             }
-                            sFlag = HUtil32.GetValidStr3(sFlag, ref s34, new[] { ' ', ',', '\t' });
+                            sFlag = HUtil32.GetValidStr3(sFlag, ref s34, HUtil32.Separator);
                             if (s34 == "")
                             {
                                 break;

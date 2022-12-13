@@ -61,7 +61,7 @@ namespace GameSvr.Maps
             return _mapDoorList;
         }
 
-        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, int nServerNumber, MapInfoFlag MapFlag, Merchant QuestNPC)
+        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, byte nServerNumber, MapInfoFlag MapFlag, Merchant QuestNPC)
         {
             var sMapFileName = string.Empty;
             var sTempName = sMapName;

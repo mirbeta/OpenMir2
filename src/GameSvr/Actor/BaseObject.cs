@@ -16,8 +16,6 @@ namespace GameSvr.Actor
 {
     public partial class BaseObject : ActorEntity
     {
-        public string MapName;
-        public string MapFileName;
         /// <summary>
         /// 名称
         /// </summary>
@@ -34,6 +32,14 @@ namespace GameSvr.Actor
         /// 所在方向
         /// </summary>
         public byte Direction;
+        /// <summary>
+        /// 所在地图名称
+        /// </summary>
+        public string MapName;
+        /// <summary>
+        /// 地图文件名称
+        /// </summary>
+        public string MapFileName;
         /// <summary>
         /// 性别
         /// </summary>
@@ -67,22 +73,12 @@ namespace GameSvr.Actor
         /// 衣服特效(如天外飞仙衣服效果)
         /// </summary>
         private readonly byte DressEffType;
-        /// <summary>
-        /// 人物的PK值
-        /// </summary>
-        public int PkPoint;
-        public int IncHealth;
-        public int IncSpell;
-        public int IncHealing;
+        public ushort IncHealth;
+        public ushort IncSpell;
+        public ushort IncHealing;
         private int IncHpStoneTime;
         private int IncMpStoneTime;
-        /// <summary>
-        /// 在行会占争地图中死亡次数
-        /// </summary>
-        public ushort FightZoneDieCount;
         public NakedAbility BonusAbil;
-        public double BodyLuck;
-        public int BodyLuckLevel;
         /// <summary>
         /// 怪物经验值
         /// </summary>
@@ -98,7 +94,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 附加属性
         /// </summary>
-        private AddAbility AddAbil;
+        internal AddAbility AddAbil;
         /// <summary>
         /// 视觉范围大小
         /// </summary>
@@ -114,23 +110,6 @@ namespace GameSvr.Actor
         /// 人物状态持续的开始时间
         /// </summary>
         internal int[] StatusArrTick;
-        /// <summary>
-        /// 0-攻击力增加 1-魔法增加  2-道术增加(无极真气) 3-攻击速度 4-HP增加(酒气护体)
-        /// 5-增加MP上限 6-减攻击力 7-减魔法 8-减道术 9-减HP 10-减MP 11-敏捷 12-增加防
-        /// 13-增加魔防 14-增加道术上限(虎骨酒) 15-连击伤害增加(醉八打) 16-内力恢复速度增加(何首养气酒)
-        /// 17-内力瞬间恢复增加(何首凝神酒) 18-增加斗转上限(培元酒) 19-不死状态 21-弟子心法激活
-        /// 22-移动减速 23-定身(十步一杀)
-        /// </summary>
-        internal ushort[] ExtraAbil;
-        internal byte[] ExtraAbilFlag;
-        /// <summary>
-        /// 0-攻击力增加 1-魔法增加  2-道术增加(无极真气) 3-攻击速度 4-HP增加(酒气护体)
-        /// 5-增加MP上限 6-减攻击力 7-减魔法 8-减道术 9-减HP 10-减MP 11-敏捷 12-增加防
-        /// 13-增加魔防 14-增加道术上限(虎骨酒) 15-连击伤害增加(醉八打) 16-内力恢复速度增加(何首养气酒)
-        /// 17-内力瞬间恢复增加(何首凝神酒) 18-增加斗转上限(培元酒) 19-不死状态 20-道术+上下限(除魔药剂类) 21-弟子心法激活
-        /// 22-移动减速 23-定身(十步一杀)
-        /// </summary>
-        internal int[] ExtraAbilTimes;
         /// <summary>
         /// 外观代码
         /// </summary>
@@ -160,10 +139,6 @@ namespace GameSvr.Actor
         /// 双倍攻击伤害(烈火专用)
         /// </summary>
         private ushort HitDouble;
-        /// <summary>
-        /// 记忆全套
-        /// </summary>
-        public bool RecallSuite;
         public ushort HealthRecover;
         public ushort SpellRecover;
         public byte AntiPoison;
@@ -173,9 +148,9 @@ namespace GameSvr.Actor
         /// 人物的幸运值
         /// </summary>
         public int Luck;
-        public int PerHealth;
-        public int PerHealing;
-        public int PerSpell;
+        public byte PerHealth;
+        public byte PerHealing;
+        public byte PerSpell;
         /// <summary>
         /// 增加攻击的间隔
         /// </summary>
@@ -261,13 +236,11 @@ namespace GameSvr.Actor
         /// <summary>
         /// 行会占争范围
         /// </summary>
-        private bool GuildWarArea;
+        public bool GuildWarArea;
         /// <summary>
         /// 所属城堡
         /// </summary>
         public UserCastle Castle;
-        public bool BoCrimeforCastle;
-        public int CrimeforCastleTime = 0;
         /// <summary>
         /// 无敌模式
         /// </summary>
@@ -393,10 +366,6 @@ namespace GameSvr.Actor
         /// 换地图时，跑走不考虑坐标
         /// </summary>
         public bool SpaceMoved;
-        /// <summary>
-        /// 交易对象
-        /// </summary>
-        protected PlayObject DealCreat;
         public GuildInfo MyGuild;
         public short GuildRankNo;
         public string GuildRankName = string.Empty;
@@ -427,61 +396,9 @@ namespace GameSvr.Actor
         /// </summary>
         public bool ObMode;
         /// <summary>
-        /// 传送戒指
-        /// </summary>
-        public bool Teleport = false;
-        /// <summary>
-        /// 麻痹戒指
-        /// </summary>
-        protected bool Paralysis = false;
-        /// <summary>
-        /// 防麻痹
-        /// </summary>
-        internal bool UnParalysis = false;
-        /// <summary>
-        /// 复活戒指
-        /// </summary>
-        private bool Revival = false;
-        /// <summary>
-        /// 防复活
-        /// </summary>
-        private readonly bool UnRevival = false;
-        /// <summary>
         /// 复活戒指使用间隔计数
         /// </summary>
         private int RevivalTick = 0;
-        /// <summary>
-        /// 火焰戒指
-        /// </summary>
-        private bool FlameRing = false;
-        /// <summary>
-        /// 治愈戒指
-        /// </summary>
-        private bool RecoveryRing;
-        /// <summary>
-        /// 未知戒指
-        /// </summary>
-        protected bool AngryRing = false;
-        /// <summary>
-        /// 护身戒指
-        /// </summary>
-        private bool MagicShield = false;
-        /// <summary>
-        /// 防护身
-        /// </summary>
-        private readonly bool UnMagicShield = false;
-        /// <summary>
-        /// 活力戒指
-        /// </summary>
-        private bool MuscleRing = false;
-        /// <summary>
-        /// 技巧项链
-        /// </summary>
-        private bool FastTrain = false;
-        /// <summary>
-        /// 探测项链
-        /// </summary>
-        public bool ProbeNecklace = false;
         /// <summary>
         /// 死亡是不是掉装备
         /// </summary>
@@ -505,7 +422,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// PK 死亡掉等级
         /// </summary>
-        protected int PkDieLostLevel;
+        protected byte PkDieLostLevel;
         /// <summary>
         /// 心灵启示
         /// </summary>
@@ -550,14 +467,6 @@ namespace GameSvr.Actor
         protected int ExpHitterTick;
         protected int MapMoveTick;
         /// <summary>
-        /// 人物攻击变色标志
-        /// </summary>
-        protected bool PvpFlag;
-        /// <summary>
-        /// 人物攻击变色时间长度
-        /// </summary>
-        protected int MDwPvpTick;
-        /// <summary>
         /// 魔血一套
         /// </summary>
         protected int MoXieSuite;
@@ -570,27 +479,14 @@ namespace GameSvr.Actor
         /// 中毒处理间隔时间
         /// </summary>
         protected int PoisoningTick;
-        /// <summary>
-        /// 减PK值时间`
-        /// </summary>
-        private int DecPkPointTick;
         protected int DecLightItemDrugTick;
         protected int VerifyTick;
         protected int CheckRoyaltyTick;
         protected int MDwHpmpTick;
         protected readonly IList<SendMessage> MsgList;
-        private readonly IList<BaseObject> VisibleHumanList;
+        protected readonly IList<BaseObject> VisibleHumanList;
         protected readonly IList<VisibleMapItem> VisibleItems;
         protected readonly IList<EventInfo> VisibleEvents;
-        protected int SendRefMsgTick;
-        /// <summary>
-        /// 是否在开行会战
-        /// </summary>
-        protected bool InFreePkArea;
-        protected int AttackTick = 0;
-        protected int WalkTick;
-        protected int SearchEnemyTick = 0;
-        protected bool NameColorChanged;
         /// <summary>
         /// 是否在可视范围内有人物,及宝宝
         /// </summary>
@@ -612,15 +508,20 @@ namespace GameSvr.Actor
         /// </summary>
         public ClientUserItem[] UseItems;
         public IList<TMonSayMsg> SayMsgList;
+        private int SendRefMsgTick;
+        /// <summary>
+        /// 攻击间隔
+        /// </summary>
+        protected int AttackTick = 0;
+        /// <summary>
+        /// 走路间隔
+        /// </summary>
+        protected int WalkTick;
+        protected bool NameColorChanged;
         /// <summary>
         /// 走路速度
         /// </summary>
         public int WalkSpeed;
-        /// <summary>
-        /// 行走步伐
-        /// </summary>
-        public int WalkStep = 0;
-        public int WalkWait = 0;
         /// <summary>
         /// 下次攻击时间
         /// </summary>
@@ -682,8 +583,6 @@ namespace GameSvr.Actor
             NameColor = 255;
             HitPlus = 0;
             HitDouble = 0;
-            BodyLuck = 0;
-            RecallSuite = false;
             BoRace = false;
             BoFearFire = false;
             AbilSeeHealGauge = false;
@@ -710,19 +609,13 @@ namespace GameSvr.Actor
             PerSpell = 5;
             IncHealthSpellTick = HUtil32.GetTickCount();
             GreenPoisoningPoint = 0;
-            FightZoneDieCount = 0;
             CharStatus = 0;
             CharStatusEx = 0;
             StatusArr = new ushort[15];
             StatusArrTick = new int[15];
-            ExtraAbil = new ushort[7];
-            ExtraAbilTimes = new int[7];
-            ExtraAbilFlag = new byte[7];
             BonusAbil = new NakedAbility();
             AttatckMode = 0;
-            InFreePkArea = false;
             GuildWarArea = false;
-            BoCrimeforCastle = false;
             SuperMan = false;
             Skeleton = false;
             RushMode = false;
@@ -736,7 +629,6 @@ namespace GameSvr.Actor
             StickMode = false;
             NoAttackMode = false;
             NoTame = false;
-            PvpFlag = false;
             MoXieSuite = 0;
             SuckupEnemyHealthRate = 0;
             SuckupEnemyHealth = 0;
@@ -776,7 +668,6 @@ namespace GameSvr.Actor
                 MaxWeight = 100
             };
             WantRefMsg = false;
-            DealCreat = null;
             MyGuild = null;
             GuildRankNo = 0;
             Mission = false;
@@ -790,7 +681,6 @@ namespace GameSvr.Actor
             RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(2000) + 2000;
             SearchTick = HUtil32.GetTickCount();
-            DecPkPointTick = HUtil32.GetTickCount();
             DecLightItemDrugTick = HUtil32.GetTickCount();
             PoisoningTick = HUtil32.GetTickCount();
             VerifyTick = HUtil32.GetTickCount();
@@ -808,7 +698,6 @@ namespace GameSvr.Actor
             SayMsgList = null;
             DenyRefStatus = false;
             HorseType = 0;
-            DressEffType = 0;
             PkDieLostExp = 0;
             PkDieLostLevel = 0;
             AddToMaped = true;
@@ -822,15 +711,6 @@ namespace GameSvr.Actor
             NastyMode = false;
             MagicArr = new UserMagic[50];
             M2Share.ActorMgr.Add(this);
-        }
-
-        public void ChangePkStatus(bool boWarFlag)
-        {
-            if (InFreePkArea != boWarFlag)
-            {
-                InFreePkArea = boWarFlag;
-                NameColorChanged = true;
-            }
         }
 
         /// <summary>
@@ -1112,12 +992,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-
-        public int PvpLevel()
-        {
-            return PkPoint / 100;
-        }
-
+        
         protected void HealthSpellChanged()
         {
             if (Race == ActorRace.Play)
@@ -1262,56 +1137,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-
-        protected void IncPkPoint(int nPoint)
-        {
-            var oldPvpLevel = PvpLevel();
-            PkPoint += nPoint;
-            if (PvpLevel() != oldPvpLevel)
-            {
-                if (PvpLevel() <= 2)
-                {
-                    RefNameColor();
-                }
-            }
-        }
-
-        private void DecPkPoint(int nPoint)
-        {
-            var pvpLevel = PvpLevel();
-            PkPoint -= nPoint;
-            if (PkPoint < 0)
-            {
-                PkPoint = 0;
-            }
-            if ((PvpLevel() != pvpLevel) && (pvpLevel > 0) && (pvpLevel <= 2))
-            {
-                RefNameColor();
-            }
-        }
-
-        protected void AddBodyLuck(double dLuck)
-        {
-            if ((dLuck > 0) && (BodyLuck < 5 * M2Share.BODYLUCKUNIT))
-            {
-                BodyLuck = BodyLuck + dLuck;
-            }
-            if ((dLuck < 0) && (BodyLuck > -(5 * M2Share.BODYLUCKUNIT)))
-            {
-                BodyLuck = BodyLuck + dLuck;
-            }
-            var n = Convert.ToInt32(BodyLuck / M2Share.BODYLUCKUNIT);
-            if (n > 5)
-            {
-                n = 5;
-            }
-            if (n < -10)
-            {
-                n = -10;
-            }
-            BodyLuckLevel = n;
-        }
-
+        
         protected void MakeWeaponUnlock()
         {
             if (UseItems[Grobal2.U_WEAPON] == null)
@@ -1398,21 +1224,24 @@ namespace GameSvr.Actor
         /// <param name="nDamage"></param>
         private void DamageHealth(ushort nDamage)
         {
-            if (((LastHiter == null) || !LastHiter.UnMagicShield) && MagicShield && (nDamage > 0) && (WAbil.MP > 0))
+            if ((LastHiter == null || LastHiter.Race == ActorRace.Play) && !(LastHiter as PlayObject).UnMagicShield)
             {
-                var nSpdam = HUtil32.Round(nDamage * 1.5);
-                if (WAbil.MP >= nSpdam)
+                if (Race == ActorRace.Play && (this as PlayObject).MagicShield && (nDamage > 0) && (WAbil.MP > 0))
                 {
-                    WAbil.MP = (ushort)(WAbil.MP - nSpdam);
-                    nSpdam = 0;
+                    var nSpdam = HUtil32.Round(nDamage * 1.5);
+                    if (WAbil.MP >= nSpdam)
+                    {
+                        WAbil.MP = (ushort)(WAbil.MP - nSpdam);
+                        nSpdam = 0;
+                    }
+                    else
+                    {
+                        nSpdam = nSpdam - WAbil.MP;
+                        WAbil.MP = 0;
+                    }
+                    nDamage = (ushort)HUtil32.Round(nSpdam / 1.5);
+                    HealthSpellChanged();
                 }
-                else
-                {
-                    nSpdam = nSpdam - WAbil.MP;
-                    WAbil.MP = 0;
-                }
-                nDamage = (ushort)HUtil32.Round(nSpdam / 1.5);
-                HealthSpellChanged();
             }
             if (nDamage > 0)
             {
@@ -2159,7 +1988,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        private void AddItemSkill(int nIndex)
+        internal void AddItemSkill(int nIndex)
         {
             MagicInfo magic = null;
             switch (nIndex)
@@ -2213,15 +2042,6 @@ namespace GameSvr.Actor
             return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1));
         }
 
-        private void CheckPkStatus()
-        {
-            if (PvpFlag && ((HUtil32.GetTickCount() - MDwPvpTick) > M2Share.Config.dwPKFlagTime)) // 60 * 1000
-            {
-                PvpFlag = false;
-                RefNameColor();
-            }
-        }
-
         /// <summary>
         /// 减少魔法值
         /// </summary>
@@ -2266,7 +2086,7 @@ namespace GameSvr.Actor
             }
         }
 
-        private void DelItemSkill(int nIndex)
+        internal void DelItemSkill(int nIndex)
         {
             if (Race != ActorRace.Play)
             {
@@ -2365,9 +2185,9 @@ namespace GameSvr.Actor
             {
                 case ActorRace.Play:
                     {
-                        if (baseObject.PvpLevel() < 2)
+                        if ((baseObject as PlayObject).PvpLevel() < 2)
                         {
-                            if (baseObject.PvpFlag)
+                            if ((baseObject as PlayObject).PvpFlag)
                             {
                                 result = M2Share.Config.btPKFlagNameColor;
                             }
@@ -2384,42 +2204,21 @@ namespace GameSvr.Actor
                             }
                             if (baseObject.Envir.Flag.boFight3Zone)
                             {
-                                if (MyGuild == baseObject.MyGuild)
-                                {
-                                    result = M2Share.Config.btAllyAndGuildNameColor;
-                                }
-                                else
-                                {
-                                    result = M2Share.Config.WarGuildNameColor;
-                                }
+                                result = MyGuild == baseObject.MyGuild ? M2Share.Config.btAllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
                             }
                         }
-                        var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
-                        if ((castle != null) && castle.UnderWar && InFreePkArea && baseObject.InFreePkArea)
+                        if (baseObject.Race == ActorRace.Play)
                         {
-                            result = M2Share.Config.InFreePKAreaNameColor;
-                            GuildWarArea = true;
-                            if (MyGuild == null)
+                            var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
+                            if ((castle != null) && castle.UnderWar && (this as PlayObject).InFreePkArea && (baseObject as PlayObject).InFreePkArea)
                             {
-                                return result;
-                            }
-                            if (castle.IsMasterGuild(MyGuild))
-                            {
-                                if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
+                                result = M2Share.Config.InFreePKAreaNameColor;
+                                GuildWarArea = true;
+                                if (MyGuild == null)
                                 {
-                                    result = M2Share.Config.btAllyAndGuildNameColor;
+                                    return result;
                                 }
-                                else
-                                {
-                                    if (castle.IsAttackGuild(baseObject.MyGuild))
-                                    {
-                                        result = M2Share.Config.WarGuildNameColor;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (castle.IsAttackGuild(MyGuild))
+                                if (castle.IsMasterGuild(MyGuild))
                                 {
                                     if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
                                     {
@@ -2427,9 +2226,26 @@ namespace GameSvr.Actor
                                     }
                                     else
                                     {
-                                        if (castle.IsMember(baseObject))
+                                        if (castle.IsAttackGuild(baseObject.MyGuild))
                                         {
                                             result = M2Share.Config.WarGuildNameColor;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (castle.IsAttackGuild(MyGuild))
+                                    {
+                                        if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
+                                        {
+                                            result = M2Share.Config.btAllyAndGuildNameColor;
+                                        }
+                                        else
+                                        {
+                                            if (castle.IsMember(baseObject))
+                                            {
+                                                result = M2Share.Config.WarGuildNameColor;
+                                            }
                                         }
                                     }
                                 }
@@ -2488,20 +2304,9 @@ namespace GameSvr.Actor
             return result;
         }
 
-        private byte GetNamecolor()
+        protected virtual byte GetNamecolor()
         {
-            var result = NameColor;
-            var pvpLevel = PvpLevel();
-            switch (pvpLevel)
-            {
-                case 1:
-                    result = M2Share.Config.btPKLevel1NameColor;
-                    break;
-                case >= 2:
-                    result = M2Share.Config.btPKLevel2NameColor;
-                    break;
-            }
-            return result;
+            return NameColor;
         }
 
         public void HearMsg(string sMsg)
@@ -3026,16 +2831,7 @@ namespace GameSvr.Actor
 
         public ushort GetFeatureEx()
         {
-            ushort result;
-            if (OnHorse)
-            {
-                result = HUtil32.MakeWord(HorseType, DressEffType);
-            }
-            else
-            {
-                result = HUtil32.MakeWord(0, DressEffType);
-            }
-            return result;
+            return HUtil32.MakeWord(OnHorse ? HorseType : (byte)0, DressEffType);
         }
 
         public int GetFeature(BaseObject baseObject)
@@ -3143,7 +2939,10 @@ namespace GameSvr.Actor
                 AddtoMapSuccess = false;
             }
             CharStatus = GetCharStatus();
-            AddBodyLuck(0);
+            if (Race == ActorRace.Play)
+            {
+                (this as PlayObject).AddBodyLuck(0);
+            }
             LoadSayMsg();
             if (M2Share.Config.MonSayMsg)
             {
@@ -3698,23 +3497,13 @@ namespace GameSvr.Actor
             }
         }
 
-        public void SetPkFlag(BaseObject baseObject)
-        {
-            if ((PvpLevel() < 2) && (baseObject.PvpLevel() < 2) && (!Envir.Flag.boFightZone) &&
-                (!Envir.Flag.boFight3Zone) && !PvpFlag)
-            {
-                baseObject.MDwPvpTick = HUtil32.GetTickCount();
-                if (!baseObject.PvpFlag)
-                {
-                    baseObject.PvpFlag = true;
-                    baseObject.RefNameColor();
-                }
-            }
-        }
-
         protected bool IsGoodKilling(BaseObject cert)
         {
-            return cert.PvpFlag;
+            if (cert.Race == ActorRace.Play)
+            {
+                return (cert as PlayObject).PvpFlag;
+            }
+            return false;
         }
 
         /// <summary>
@@ -3806,150 +3595,6 @@ namespace GameSvr.Actor
                         }
                         break;
                     }
-                case ActorRace.Play:
-                    switch (AttatckMode)
-                    {
-                        case AttackMode.HAM_ALL:
-                            if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
-                            {
-                                result = true;
-                            }
-                            if (M2Share.Config.PveServer)
-                            {
-                                result = true;
-                            }
-                            break;
-                        case AttackMode.HAM_PEACE:
-                            if (baseObject.Race >= ActorRace.Animal)
-                            {
-                                result = true;
-                            }
-                            break;
-                        case AttackMode.HAM_DEAR:
-                            if (baseObject != ((PlayObject)this).m_DearHuman)
-                            {
-                                result = true;
-                            }
-                            break;
-                        case AttackMode.HAM_MASTER:
-                            if (baseObject.Race == ActorRace.Play)
-                            {
-                                result = true;
-                                if (((PlayObject)this).m_boMaster)
-                                {
-                                    for (var i = 0; i < ((PlayObject)this).m_MasterList.Count; i++)
-                                    {
-                                        if (((PlayObject)this).m_MasterList[i] == baseObject)
-                                        {
-                                            result = false;
-                                            break;
-                                        }
-                                    }
-                                }
-                                if (((PlayObject)baseObject).m_boMaster)
-                                {
-                                    for (var i = 0; i < ((PlayObject)baseObject).m_MasterList.Count; i++)
-                                    {
-                                        if (((PlayObject)baseObject).m_MasterList[i] == this)
-                                        {
-                                            result = false;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                result = true;
-                            }
-                            break;
-                        case AttackMode.HAM_GROUP:
-                            if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
-                            {
-                                result = true;
-                            }
-                            if (baseObject.Race == ActorRace.Play)
-                            {
-                                if (IsGroupMember(baseObject))
-                                {
-                                    result = false;
-                                }
-                            }
-
-                            if (M2Share.Config.PveServer)
-                            {
-                                result = true;
-                            }
-
-                            break;
-                        case AttackMode.HAM_GUILD:
-                            if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
-                            {
-                                result = true;
-                            }
-
-                            if (baseObject.Race == ActorRace.Play)
-                            {
-                                if (MyGuild != null)
-                                {
-                                    if (MyGuild.IsMember(baseObject.ChrName))
-                                    {
-                                        result = false;
-                                    }
-
-                                    if (GuildWarArea && (baseObject.MyGuild != null))
-                                    {
-                                        if (MyGuild.IsAllyGuild(baseObject.MyGuild))
-                                        {
-                                            result = false;
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (M2Share.Config.PveServer)
-                            {
-                                result = true;
-                            }
-
-                            break;
-                        case AttackMode.HAM_PKATTACK:
-                            if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
-                            {
-                                result = true;
-                            }
-                            if (baseObject.Race == ActorRace.Play)
-                            {
-                                if (PvpLevel() >= 2)
-                                {
-                                    if (baseObject.PvpLevel() < 2)
-                                    {
-                                        result = true;
-                                    }
-                                    else
-                                    {
-                                        result = false;
-                                    }
-                                }
-                                else
-                                {
-                                    if (baseObject.PvpLevel() >= 2)
-                                    {
-                                        result = true;
-                                    }
-                                    else
-                                    {
-                                        result = false;
-                                    }
-                                }
-                            }
-                            if (M2Share.Config.PveServer)
-                            {
-                                result = true;
-                            }
-                            break;
-                    }
-                    break;
                 default:
                     result = true;
                     break;
@@ -4129,16 +3774,7 @@ namespace GameSvr.Actor
 
             return result;
         }
-
-        public void TrainSkill(UserMagic userMagic, int nTranPoint)
-        {
-            if (FastTrain)
-            {
-                nTranPoint = nTranPoint * 3;
-            }
-            userMagic.TranPoint += nTranPoint;
-        }
-
+        
         public bool CheckMagicLevelup(UserMagic userMagic)
         {
             var result = false;
@@ -4698,16 +4334,16 @@ namespace GameSvr.Actor
                         {
                             result = true;
                         }
-                        if (PvpLevel() >= 2)
+                        if ((this as PlayObject).PvpLevel() >= 2)
                         {
-                            if (cret.PvpLevel() < 2)
+                            if ((cret as PlayObject).PvpLevel() < 2)
                             {
                                 result = true;
                             }
                         }
                         else
                         {
-                            if (cret.PvpLevel() >= 2)
+                            if ((cret as PlayObject).PvpLevel() >= 2)
                             {
                                 result = true;
                             }
@@ -4787,11 +4423,9 @@ namespace GameSvr.Actor
 
         public bool AttPowerUp(int nPower, int nTime)
         {
-            ExtraAbil[0] = (ushort)nPower;
-            ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
-            var nMin = nTime / 60;
-            var nSec = nTime % 60;
-            SysMsg(Format(M2Share.g_sAttPowerUpTime, nMin, nSec), MsgColor.Green, MsgType.Hint);
+            (this as PlayObject).ExtraAbil[0] = (ushort)nPower;
+            (this as PlayObject).ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
+            SysMsg(Format(M2Share.g_sAttPowerUpTime,  nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return true;

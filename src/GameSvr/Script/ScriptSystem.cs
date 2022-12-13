@@ -1525,7 +1525,7 @@ namespace GameSvr.Script
                             {
                                 while (sScript != "")
                                 {
-                                    sScript = HUtil32.GetValidStr3(sScript, ref s30, new[] { ' ', ',', '\t' });
+                                    sScript = HUtil32.GetValidStr3(sScript, ref s30, HUtil32.Separator);
                                     if (s30.Equals(ScriptConst.sBUY, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).m_boBuy = true;

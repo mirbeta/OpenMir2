@@ -77,13 +77,16 @@ namespace GameSvr.Actor
                     }
                     if (WAbil.HP == 0)
                     {
-                        if (((LastHiter == null) || !LastHiter.UnRevival) && Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))// 60 * 1000
+                        if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !(LastHiter as PlayObject).UnRevival))
                         {
-                            RevivalTick = HUtil32.GetTickCount();
-                            ItemDamageRevivalRing();
-                            WAbil.HP = WAbil.MaxHP;
-                            HealthSpellChanged();
-                            SysMsg(M2Share.g_sRevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
+                            if (Race == ActorRace.Play && (this as PlayObject).Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))
+                            {
+                                RevivalTick = HUtil32.GetTickCount();
+                                ItemDamageRevivalRing();
+                                WAbil.HP = WAbil.MaxHP;
+                                HealthSpellChanged();
+                                SysMsg(M2Share.g_sRevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
+                            }
                         }
                         if (WAbil.HP == 0)
                         {
@@ -182,8 +185,8 @@ namespace GameSvr.Actor
                                 nHP += PerHealing;
                                 IncHealing -= PerHealing;
                             }
-                            PerHealth = WAbil.Level / 10 + 5;
-                            PerSpell = WAbil.Level / 10 + 5;
+                            PerHealth = (byte)(WAbil.Level / 10 + 5);
+                            PerSpell = (byte)(WAbil.Level / 10 + 5);
                             PerHealing = 5;
                             IncHealthSpell(nHP, nMP);
                             if (WAbil.HP == WAbil.MaxHP)
@@ -255,13 +258,13 @@ namespace GameSvr.Actor
                                 }
                                 if (nCount > dCount)
                                 {
-                                    IncHealth += dCount;
+                                    IncHealth += (ushort)dCount;
                                     UseItems[Grobal2.U_CHARM].Dura -= (ushort)HUtil32.Round(dCount / 10);
                                 }
                                 else
                                 {
                                     nCount = 0;
-                                    IncHealth += nCount;
+                                    IncHealth += (ushort)nCount;
                                     UseItems[Grobal2.U_CHARM].Dura = 0;
                                 }
                                 if (UseItems[Grobal2.U_CHARM].Dura >= 1000)
@@ -294,13 +297,13 @@ namespace GameSvr.Actor
                                 }
                                 if (nCount > dCount)
                                 {
-                                    IncSpell += dCount;
+                                    IncSpell += (ushort)dCount;
                                     UseItems[Grobal2.U_CHARM].Dura -= (ushort)HUtil32.Round(dCount / 10);
                                 }
                                 else
                                 {
                                     nCount = 0;
-                                    IncSpell += nCount;
+                                    IncSpell += (ushort)nCount;
                                     UseItems[Grobal2.U_CHARM].Dura = 0;
                                 }
                                 if (UseItems[Grobal2.U_CHARM].Dura >= 1000)
@@ -477,22 +480,13 @@ namespace GameSvr.Actor
             }
             try
             {
-                // 减少PK值开始
-                if ((HUtil32.GetTickCount() - DecPkPointTick) > M2Share.Config.DecPkPointTime)// 120000
-                {
-                    DecPkPointTick = HUtil32.GetTickCount();
-                    if (PkPoint > 0)
-                    {
-                        DecPkPoint(M2Share.Config.DecPkPointCount);
-                    }
-                }
                 if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.DecLightItemDrugTime)
                 {
                     DecLightItemDrugTick += M2Share.Config.DecLightItemDrugTime;
                     if (Race == ActorRace.Play)
                     {
                         UseLamp();
-                        CheckPkStatus();
+                        (this as PlayObject).CheckPkStatus();
                     }
                 }
                 if ((HUtil32.GetTickCount() - CheckRoyaltyTick) > 10000)
@@ -550,11 +544,7 @@ namespace GameSvr.Actor
                             }
                         }
                     }
-                    // 检查交易双方 状态
-                    if ((DealCreat != null) && DealCreat.Ghost)
-                    {
-                        DealCreat = null;
-                    }
+
                     if (!DenyRefStatus)
                     {
                         Envir.VerifyMapTime(CurrX, CurrY, this);// 刷新在地图上位置的时间
@@ -611,67 +601,6 @@ namespace GameSvr.Actor
                                     SysMsg("魔法防御力" + StatusArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 }
-                            }
-                        }
-                    }
-                }
-                for (var i = 0; i < ExtraAbil.Length; i++)
-                {
-                    if (ExtraAbil[i] > 0)
-                    {
-                        if (HUtil32.GetTickCount() > ExtraAbilTimes[i])
-                        {
-                            ExtraAbil[i] = 0;
-                            ExtraAbilFlag[i] = 0;
-                            boNeedRecalc = true;
-                            switch (i)
-                            {
-                                case 0:
-                                    SysMsg("攻击力恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case 1:
-                                    SysMsg("魔法力恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case 2:
-                                    SysMsg("精神力恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case 3:
-                                    SysMsg("攻击速度恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case 4:
-                                    SysMsg("体力值恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case 5:
-                                    SysMsg("魔法值恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case 6:
-                                    SysMsg("攻击能力恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                            }
-                        }
-                        else if (ExtraAbilFlag[i] == 0 && HUtil32.GetTickCount() > ExtraAbilTimes[i] - 10000)
-                        {
-                            ExtraAbilFlag[i] = 1;
-                            switch (i)
-                            {
-                                case AbilConst.EABIL_DCUP:
-                                    SysMsg("攻击力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case AbilConst.EABIL_MCUP:
-                                    SysMsg("魔法力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case AbilConst.EABIL_SCUP:
-                                    SysMsg("精神力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case AbilConst.EABIL_HITSPEEDUP:
-                                    SysMsg("攻击速度10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case AbilConst.EABIL_HPUP:
-                                    SysMsg("体力值10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case AbilConst.EABIL_MPUP:
-                                    SysMsg("魔法值10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                    break;
                             }
                         }
                     }
@@ -872,7 +801,7 @@ namespace GameSvr.Actor
                 var boPK = false;
                 if (!M2Share.Config.VentureServer && !Envir.Flag.boFightZone && !Envir.Flag.boFight3Zone)
                 {
-                    if (Race == ActorRace.Play && LastHiter != null && PvpLevel() < 2)
+                    if (Race == ActorRace.Play && LastHiter != null && (this as PlayObject).PvpLevel() < 2)
                     {
                         if ((LastHiter.Race == ActorRace.Play) || (LastHiter.Race == ActorRace.NPC))//允许NPC杀死人物
                         {
@@ -899,7 +828,7 @@ namespace GameSvr.Actor
                         }
                     }
                     var Castle = M2Share.CastleMgr.InCastleWarArea(this);
-                    if (Castle != null && Castle.UnderWar || InFreePkArea)
+                    if (Castle != null && Castle.UnderWar || (Race == ActorRace.Play && (this as PlayObject).InFreePkArea))
                     {
                         guildwarkill = true;
                     }
@@ -913,15 +842,18 @@ namespace GameSvr.Actor
                         {
                             if (!LastHiter.IsGoodKilling(this))
                             {
-                                LastHiter.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
-                                LastHiter.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
-                                SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
-                                LastHiter.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
-                                if (PvpLevel() < 1)
+                                if (this.Race == ActorRace.Play)
                                 {
-                                    if (M2Share.RandomNumber.Random(5) == 0)
+                                    (LastHiter as PlayObject).IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
+                                    LastHiter.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
+                                    (LastHiter as PlayObject).AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
+                                    if ((this as PlayObject).PvpLevel() < 1)
                                     {
-                                        LastHiter.MakeWeaponUnlock();
+                                        if (M2Share.RandomNumber.Random(5) == 0)
+                                        {
+                                            LastHiter.MakeWeaponUnlock();
+                                        }
                                     }
                                 }
                             }
@@ -937,7 +869,7 @@ namespace GameSvr.Actor
                             {
                                 if (Abil.Exp >= LastHiter.PkDieLostExp)
                                 {
-                                    Abil.Exp -= (short)LastHiter.PkDieLostExp;
+                                    Abil.Exp -= LastHiter.PkDieLostExp;
                                 }
                                 else
                                 {
@@ -948,7 +880,7 @@ namespace GameSvr.Actor
                             {
                                 if (Abil.Level >= LastHiter.PkDieLostLevel)
                                 {
-                                    Abil.Level -= (byte)LastHiter.PkDieLostLevel;
+                                    Abil.Level -= LastHiter.PkDieLostLevel;
                                 }
                                 else
                                 {
@@ -1008,13 +940,15 @@ namespace GameSvr.Actor
                                 ScatterGolds(null);
                             }
                         }
-                        AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
+                        if (this.Race == ActorRace.Play)
+                        {
+                            (this as PlayObject).AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
+                        }
                     }
                 }
                 string tStr;
                 if (Envir.Flag.boFight3Zone)
                 {
-                    FightZoneDieCount++;
                     if (MyGuild != null)
                     {
                         MyGuild.TeamFightWhoDead(ChrName);
@@ -1072,56 +1006,16 @@ namespace GameSvr.Actor
             SendRefMsg(Grobal2.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
         }
 
-        protected virtual bool IsProtectTarget(BaseObject BaseObject)
+        protected virtual bool IsProtectTarget(BaseObject targetObject)
         {
             var result = true;
-            if (BaseObject == null)
+            if (targetObject == null)
             {
                 return true;
             }
-            if (InSafeZone() || BaseObject.InSafeZone())
+            if (InSafeZone() || targetObject.InSafeZone())
             {
                 result = false;
-            }
-            if (!BaseObject.InFreePkArea)
-            {
-                if (M2Share.Config.boPKLevelProtect)// 新人保护
-                {
-                    if (Abil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
-                    {
-                        if (!BaseObject.PvpFlag && BaseObject.WAbil.Level <= M2Share.Config.nPKProtectLevel && BaseObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
-                        {
-                            return false;
-                        }
-                    }
-                    if (Abil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
-                    {
-                        if (!BaseObject.PvpFlag && BaseObject.WAbil.Level > M2Share.Config.nPKProtectLevel && BaseObject.PvpLevel() < 2)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
-                if (PvpLevel() >= 2 && Abil.Level > M2Share.Config.nRedPKProtectLevel)
-                {
-                    if (BaseObject.Abil.Level <= M2Share.Config.nRedPKProtectLevel && BaseObject.PvpLevel() < 2)
-                    {
-                        return false;
-                    }
-                }
-                // 小于指定级别的非红名人物不可以杀指定级别红名人物。
-                if (Abil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
-                {
-                    if (BaseObject.PvpLevel() >= 2 && BaseObject.Abil.Level > M2Share.Config.nRedPKProtectLevel)
-                    {
-                        return false;
-                    }
-                }
-                if (((HUtil32.GetTickCount() - MapMoveTick) < 3000) || ((HUtil32.GetTickCount() - BaseObject.MapMoveTick) < 3000))
-                {
-                    result = false;
-                }
             }
             return result;
         }
@@ -1258,7 +1152,11 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                nRate = PvpLevel() > 2 ? 15 : 30; //掉落几率
+                nRate = 15;
+                if (this.Race == ActorRace.Play)
+                {
+                    nRate = (this as PlayObject).PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
+                }
                 nC = 0;
                 while (true)
                 {
@@ -1336,10 +1234,10 @@ namespace GameSvr.Actor
             }
         }
 
-        public virtual bool IsProperFriend(BaseObject BaseObject)
+        public virtual bool IsProperFriend(BaseObject attackTarget)
         {
             bool result = false;
-            if (BaseObject == null)
+            if (attackTarget == null)
             {
                 return false;
             }
@@ -1347,11 +1245,11 @@ namespace GameSvr.Actor
             {
                 case >= ActorRace.Animal:
                     {
-                        if (BaseObject.Race >= ActorRace.Animal)
+                        if (attackTarget.Race >= ActorRace.Animal)
                         {
                             result = true;
                         }
-                        if (BaseObject.Master != null)
+                        if (attackTarget.Master != null)
                         {
                             result = false;
                         }
@@ -1359,18 +1257,18 @@ namespace GameSvr.Actor
                     }
                 case ActorRace.Play:
                     {
-                        result = IsProperIsFriend(BaseObject);
-                        if (BaseObject.Race < ActorRace.Animal)
+                        result = IsProperIsFriend(attackTarget);
+                        if (attackTarget.Race < ActorRace.Animal)
                         {
                             return result;
                         }
-                        if (BaseObject.Master == this)
+                        if (attackTarget.Master == this)
                         {
                             return true;
                         }
-                        if (BaseObject.Master != null)
+                        if (attackTarget.Master != null)
                         {
-                            return IsProperIsFriend(BaseObject.Master);
+                            return IsProperIsFriend(attackTarget.Master);
                         }
                         break;
                     }
@@ -1467,12 +1365,12 @@ namespace GameSvr.Actor
                         {
                             if (Race == ActorRace.Play)
                             {
-                                IncHealing += processMsg.nParam1;
+                                IncHealing += (ushort)processMsg.nParam1;
                                 PerHealing = 5;
                             }
                             else
                             {
-                                IncHealing += processMsg.nParam1;
+                                IncHealing += (ushort)processMsg.nParam1;
                                 PerHealing = 5;
                             }
                         }
@@ -1535,7 +1433,7 @@ namespace GameSvr.Actor
                                 SetTargetCreat(TargetBaseObject);
                                 if ((Race == ActorRace.Play) && (TargetBaseObject.Race == ActorRace.Play))
                                 {
-                                    SetPkFlag(TargetBaseObject);
+                                    (this as PlayObject).SetPkFlag((PlayObject)TargetBaseObject);
                                 }
                                 SetLastHiter(TargetBaseObject);
                             }
@@ -1552,9 +1450,11 @@ namespace GameSvr.Actor
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
+#if DEBUG
                     default:
                         M2Share.Log.LogWarning(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", ChrName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
                         break;
+#endif
                 }
             }
             catch (Exception e)
@@ -1567,8 +1467,7 @@ namespace GameSvr.Actor
 
         public virtual string GetShowName()
         {
-            var sShowName = ChrName;
-            var result = M2Share.FilterShowName(sShowName);
+            var result = M2Share.FilterShowName(ChrName);
             if ((Master != null) && !Master.ObMode)
             {
                 result = result + '(' + Master.ChrName + ')';

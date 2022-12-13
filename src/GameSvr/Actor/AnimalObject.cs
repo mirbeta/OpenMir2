@@ -1,4 +1,5 @@
 ﻿using GameSvr.Maps;
+using GameSvr.Player;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -17,6 +18,12 @@ namespace GameSvr.Actor
         public bool m_boRunAwayMode;
         public int m_dwRunAwayStart;
         public int m_dwRunAwayTime;
+        protected int SearchEnemyTick = 0;
+        /// <summary>
+        /// 行走步伐
+        /// </summary>
+        public int WalkStep = 0;
+        public int WalkWait = 0;
         protected int WalkCount;
         protected int WalkWaitTick;
         /// <summary>
@@ -32,10 +39,10 @@ namespace GameSvr.Actor
         {
             m_nNotProcessCount = 0;
             TargetX = -1;
-            this.Race = ActorRace.Animal;
-            this.AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
-            this.WalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
-            this.SearchEnemyTick = HUtil32.GetTickCount();
+            Race = ActorRace.Animal;
+            AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
+            WalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
+            SearchEnemyTick = HUtil32.GetTickCount();
             m_boRunAwayMode = false;
             m_dwRunAwayStart = HUtil32.GetTickCount();
             m_dwRunAwayTime = 0;
@@ -147,7 +154,7 @@ namespace GameSvr.Actor
                     this.BreakHolySeizeMode();
                     if (this.Master != null && struckObject != this.Master && struckObject.Race == ActorRace.Play)
                     {
-                        this.Master.SetPkFlag(struckObject);
+                        (this.Master as PlayObject).SetPkFlag((PlayObject)struckObject);
                     }
                     if (M2Share.Config.MonSayMsg)
                     {

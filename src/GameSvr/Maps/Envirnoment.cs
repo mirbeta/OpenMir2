@@ -31,7 +31,7 @@ namespace GameSvr.Maps
         public string MapDesc = string.Empty;
         private MapCellInfo[] _cellArray;
         public int MinMap;
-        public int ServerIndex;
+        public byte ServerIndex;
         /// <summary>
         /// 进入本地图所需等级
         /// </summary>

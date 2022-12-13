@@ -1,6 +1,7 @@
 ﻿using GameSvr.Actor;
 using GameSvr.GameCommand;
 using GameSvr.Items;
+using GameSvr.Monster.Monsters;
 using GameSvr.Npc;
 using GameSvr.Services;
 using GameSvr.World;
@@ -82,6 +83,72 @@ namespace GameSvr.Player
                         }
                     }
                 }
+                var boNeedRecalc = false;
+                for (var i = 0; i < ExtraAbil.Length; i++)
+                {
+                    if (ExtraAbil[i] > 0)
+                    {
+                        if (HUtil32.GetTickCount() > ExtraAbilTimes[i])
+                        {
+                            ExtraAbil[i] = 0;
+                            ExtraAbilFlag[i] = 0;
+                            boNeedRecalc = true;
+                            switch (i)
+                            {
+                                case 0:
+                                    SysMsg("攻击力恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case 1:
+                                    SysMsg("魔法力恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case 2:
+                                    SysMsg("精神力恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case 3:
+                                    SysMsg("攻击速度恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case 4:
+                                    SysMsg("体力值恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case 5:
+                                    SysMsg("魔法值恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case 6:
+                                    SysMsg("攻击能力恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                            }
+                        }
+                        else if (ExtraAbilFlag[i] == 0 && HUtil32.GetTickCount() > ExtraAbilTimes[i] - 10000)
+                        {
+                            ExtraAbilFlag[i] = 1;
+                            switch (i)
+                            {
+                                case AbilConst.EABIL_DCUP:
+                                    SysMsg("攻击力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_MCUP:
+                                    SysMsg("魔法力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_SCUP:
+                                    SysMsg("精神力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_HITSPEEDUP:
+                                    SysMsg("攻击速度10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_HPUP:
+                                    SysMsg("体力值10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                                case AbilConst.EABIL_MPUP:
+                                    SysMsg("魔法值10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    break;
+                            }
+                        }
+                    }
+                }
+                if (boNeedRecalc)
+                {
+                    HealthSpellChanged();
+                }
                 if (m_boTimeGoto && (HUtil32.GetTickCount() > m_dwTimeGotoTick)) //Delaygoto延时跳转
                 {
                     m_boTimeGoto = false;
@@ -104,6 +171,14 @@ namespace GameSvr.Player
                     if (normNpc != null)
                     {
                         normNpc.GotoLable(this, m_sDelayCallLabel, false);
+                    }
+                }
+                if ((HUtil32.GetTickCount() - DecPkPointTick) > M2Share.Config.DecPkPointTime)// 减少PK值
+                {
+                    DecPkPointTick = HUtil32.GetTickCount();
+                    if (PkPoint > 0)
+                    {
+                        DecPkPoint(M2Share.Config.DecPkPointCount);
                     }
                 }
                 if ((HUtil32.GetTickCount() - m_dwCheckDupObjTick) > 3000)
@@ -134,9 +209,9 @@ namespace GameSvr.Player
                 {
                     ChangePkStatus(true);
                 }
-                if ((HUtil32.GetTickCount() - dwTick578) > 1000)
+                if ((HUtil32.GetTickCount() - DiscountForNightTick) > 1000)
                 {
-                    dwTick578 = HUtil32.GetTickCount();
+                    DiscountForNightTick = HUtil32.GetTickCount();
                     var wHour = DateTime.Now.Hour;
                     var wMin = DateTime.Now.Minute;
                     var wSec = DateTime.Now.Second;
@@ -193,10 +268,6 @@ namespace GameSvr.Player
                         RefUserState();
                         RefShowName();
                     }
-                }
-                if ((HUtil32.GetTickCount() - dwTick57C) > 500)
-                {
-                    dwTick57C = HUtil32.GetTickCount();
                 }
             }
             catch
@@ -377,6 +448,10 @@ namespace GameSvr.Player
             if (tObjCount != m_nGameGold)
             {
                 SendUpdateMsg(this, Grobal2.RM_GOLDCHANGED, 0, 0, 0, 0, "");
+            }
+            if (Envir.Flag.boFight3Zone)
+            {
+                FightZoneDieCount++;
             }
             if (Envir.Flag.boINCGAMEPOINT)
             {
@@ -643,6 +718,12 @@ namespace GameSvr.Player
                         {
                             m_MasterHuman = null;
                         }
+                    }
+                    
+                    // 检查交易双方 状态
+                    if ((DealCreat != null) && DealCreat.Ghost)
+                    {
+                        DealCreat = null;
                     }
                 }
             }
@@ -1469,14 +1550,17 @@ namespace GameSvr.Player
                             {
                                 if (M2Share.ActorMgr.Get(ProcessMsg.nParam3).Race == ActorRace.Play)
                                 {
-                                    SetPkFlag(M2Share.ActorMgr.Get(ProcessMsg.nParam3));
+                                    SetPkFlag((PlayObject)M2Share.ActorMgr.Get(ProcessMsg.nParam3));
                                 }
                                 SetLastHiter(M2Share.ActorMgr.Get(ProcessMsg.nParam3));
                             }
                             if (M2Share.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(ProcessMsg.nParam3) != null)
                             {
-                                M2Share.ActorMgr.Get(ProcessMsg.nParam3).BoCrimeforCastle = true;
-                                M2Share.ActorMgr.Get(ProcessMsg.nParam3).CrimeforCastleTime = HUtil32.GetTickCount();
+                                if (M2Share.ActorMgr.Get(ProcessMsg.nParam3).Race == ActorRace.Guard)
+                                {
+                                    ((GuardUnit)M2Share.ActorMgr.Get(ProcessMsg.nParam3)).BoCrimeforCastle = true;
+                                    ((GuardUnit)M2Share.ActorMgr.Get(ProcessMsg.nParam3)).CrimeforCastleTime = HUtil32.GetTickCount();
+                                }
                             }
                             HealthTick = 0;
                             SpellTick = 0;

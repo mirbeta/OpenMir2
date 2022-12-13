@@ -70,13 +70,13 @@ namespace GameSvr.Actor
 
     public class AbilConst
     {
-        public const byte EABIL_DCUP = 0;   //鉴埃利栏肺 颇鲍仿阑 棵覆 (老沥 矫埃)
+        public const byte EABIL_DCUP = 0;   
         public const byte EABIL_MCUP = 1;
         public const byte EABIL_SCUP = 2;
         public const byte EABIL_HITSPEEDUP = 3;
         public const byte EABIL_HPUP = 4;
         public const byte EABIL_MPUP = 5;
-        public const byte EABIL_PWRRATE = 6;   // 傍拜仿 饭捞飘 炼沥 
+        public const byte EABIL_PWRRATE = 6;
     }
 
     public class EfftypeConst

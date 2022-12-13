@@ -2,6 +2,7 @@ using GameSvr.Actor;
 using GameSvr.Event;
 using GameSvr.Items;
 using GameSvr.Maps;
+using GameSvr.Player;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Enums;
@@ -370,27 +371,14 @@ namespace GameSvr.RobotPlay
                     {
                         if (BaseObject.Race == ActorRace.Play)
                         {
+                            var targetPvpLevel = (BaseObject as PlayObject).PvpLevel();
                             if (PvpLevel() >= 2)
                             {
-                                if (BaseObject.PvpLevel() < 2)
-                                {
-                                    result = true;
-                                }
-                                else
-                                {
-                                    result = false;
-                                }
+                                result = targetPvpLevel < 2;
                             }
                             else
                             {
-                                if (BaseObject.PvpLevel() >= 2)
-                                {
-                                    result = true;
-                                }
-                                else
-                                {
-                                    result = false;
-                                }
+                                result = targetPvpLevel >= 2;
                             }
                         }
                         if (IsRobot && !result)
@@ -431,7 +419,7 @@ namespace GameSvr.RobotPlay
                         {
                             result = false;
                         }
-                        if (BaseObject.IsRobot && (!InFreePkArea || BaseObject.PvpLevel() < 2))// 假人不攻击假人,行会战除外
+                        if (BaseObject.IsRobot && (!InFreePkArea || (BaseObject as PlayObject).PvpLevel() < 2)) // 假人不攻击假人,行会战除外
                         {
                             result = false;
                         }

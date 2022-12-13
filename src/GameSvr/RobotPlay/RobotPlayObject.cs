@@ -3,6 +3,7 @@ using GameSvr.Conf;
 using GameSvr.Items;
 using GameSvr.Magic;
 using GameSvr.Maps;
+using GameSvr.Monster.Monsters;
 using GameSvr.Player;
 using System.Collections;
 using SystemModule;
@@ -1333,7 +1334,7 @@ namespace GameSvr.RobotPlay
                         {
                             if (AttackBaseObject.Race == ActorRace.Play)
                             {
-                                SetPkFlag(AttackBaseObject);
+                                SetPkFlag((PlayObject)AttackBaseObject);
                             }
                             SetLastHiter(AttackBaseObject);
                             Struck(AttackBaseObject);
@@ -1341,8 +1342,11 @@ namespace GameSvr.RobotPlay
                         }
                         if (M2Share.CastleMgr.IsCastleMember(this) != null && AttackBaseObject != null)
                         {
-                            AttackBaseObject.BoCrimeforCastle = true;
-                            AttackBaseObject.CrimeforCastleTime = HUtil32.GetTickCount();
+                            if (AttackBaseObject.Race == ActorRace.Guard)
+                            {
+                                ((GuardUnit)AttackBaseObject).BoCrimeforCastle = true;
+                                ((GuardUnit)AttackBaseObject).CrimeforCastleTime = HUtil32.GetTickCount();
+                            }
                         }
                         HealthTick = 0;
                         SpellTick = 0;
@@ -3901,7 +3905,7 @@ namespace GameSvr.RobotPlay
                         }
                     }
                     if (TargetCret.StatusArr[PoisonState.DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
-                                                                                                                                                       || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
+                            || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
                     {
                         // 对于血量超过100的怪用 不毒城墙
@@ -3986,17 +3990,23 @@ namespace GameSvr.RobotPlay
                                     m_SkillUseTick[13] = HUtil32.GetTickCount();
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && TargetCret.ExtraAbil[(byte)TargetCret.Job + 6] == 0) // 诅咒术
+                                if (AllowUseMagic(52)) // 诅咒术
                                 {
-                                    result = 52;// 英雄诅咒术
-                                    return result;
+                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)TargetCret.Job + 6] == 0)
+                                    {
+                                        result = 52;// 英雄诅咒术
+                                        return result;
+                                    }
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(52) && TargetCret.ExtraAbil[(byte)TargetCret.Job + 6] == 0) // 诅咒术
+                                if (AllowUseMagic(52)) // 诅咒术
                                 {
-                                    result = 52;
-                                    return result;
+                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)TargetCret.Job + 6] == 0)
+                                    {
+                                        result = 52;// 英雄诅咒术
+                                        return result;
+                                    }
                                 }
                                 if (AllowUseMagic(94))
                                 {
@@ -4032,10 +4042,13 @@ namespace GameSvr.RobotPlay
                                     result = 59;// 英雄噬血术
                                     return result;
                                 }
-                                if (AllowUseMagic(52) && TargetCret.ExtraAbil[(byte)TargetCret.Job + 6] == 0)// 诅咒术
+                                if (AllowUseMagic(52))// 诅咒术
                                 {
-                                    result = 52;
-                                    return result;
+                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)TargetCret.Job + 6] == 0)
+                                    {
+                                        result = 52;
+                                        return result;
+                                    }
                                 }
                                 break;
                         }
@@ -4070,10 +4083,13 @@ namespace GameSvr.RobotPlay
                             result = 13;
                             return result;
                         }
-                        if (AllowUseMagic(52) && TargetCret.ExtraAbil[(byte)TargetCret.Job + 6] == 0)// 诅咒术
+                        if (AllowUseMagic(52))// 诅咒术
                         {
-                            result = 52;
-                            return result;
+                            if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)TargetCret.Job + 6] == 0)
+                            {
+                                result = 52;
+                                return result;
+                            }
                         }
                     }
                     break;

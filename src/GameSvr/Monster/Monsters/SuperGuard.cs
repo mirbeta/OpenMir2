@@ -1,5 +1,6 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Npc;
+using GameSvr.Player;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -76,28 +77,25 @@ namespace GameSvr.Monster.Monsters
                 for (var i = 0; i < this.VisibleActors.Count; i++)
                 {
                     var attackObject = this.VisibleActors[i].BaseObject;
+                    if (attackObject == null)
+                    {
+                        continue;
+                    }
                     if (attackObject.Death || attackObject.Ghost || CanAttckTarget(attackObject))
                     {
                         VisibleActors.RemoveAt(i);
                         continue;
                     }
-                    if (attackObject.Race >= ActorRace.Monster || attackObject.PvpLevel() >= 2 && !attackObject.Mission)
+                    if (attackObject.Race == ActorRace.Play)
                     {
-                        if (AttackPet)
+                        if ((attackObject as PlayObject).PvpLevel() >= 2 && !attackObject.Mission)
                         {
-                            this.SetTargetCreat(attackObject);
-                            break;
+                            SetAttackTarget(attackObject);
                         }
-                        if (attackObject.Master == null)
-                        {
-                            this.SetTargetCreat(attackObject);
-                            break;
-                        }
-                        if (attackObject.TargetCret == this)
-                        {
-                            this.SetTargetCreat(attackObject);
-                            break;
-                        }
+                    }
+                    else if (attackObject.Race >= ActorRace.Monster && !attackObject.Mission)
+                    {
+                        SetAttackTarget(attackObject);
                     }
                 }
             }
@@ -113,6 +111,25 @@ namespace GameSvr.Monster.Monsters
                 }
             }
             base.Run();
+        }
+
+        private void SetAttackTarget(BaseObject attackObject)
+        {
+            if (AttackPet)
+            {
+                this.SetTargetCreat(attackObject);
+                return;
+            }
+            if (attackObject.Master == null)
+            {
+                this.SetTargetCreat(attackObject);
+                return;
+            }
+            if (attackObject.TargetCret == this)
+            {
+                this.SetTargetCreat(attackObject);
+                return;
+            }
         }
     }
 }

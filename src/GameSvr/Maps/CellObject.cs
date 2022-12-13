@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace GameSvr.Maps
+﻿namespace GameSvr.Maps
 {
     /// <summary>
     /// 地图上的对象

@@ -1243,16 +1243,15 @@ namespace GameSvr.Magic
                                 {
                                     if (TargeTBaseObject.Race == ActorRace.Play)
                                     {
-                                        BaseObject.SetPkFlag(BaseObject);
+                                        (BaseObject as PlayObject).SetPkFlag((PlayObject)BaseObject);
                                         BaseObject.SetTargetCreat(TargeTBaseObject);
                                     }
                                     TargeTBaseObject.SetLastHiter(BaseObject);
                                     nPower = TargeTBaseObject.GetMagStruckDamage(BaseObject, nPower);
                                     BaseObject.SendDelayMsg(BaseObject, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, TargeTBaseObject.ActorId, "", 600);
-                                    if (!TargeTBaseObject.UnParalysis)
+                                    if (TargeTBaseObject.Race == ActorRace.Play && !(TargeTBaseObject as PlayObject).UnParalysis)
                                     {
-                                        // 中毒类型 - 麻痹
-                                        TargeTBaseObject.SendDelayMsg(BaseObject, Grobal2.RM_POISON, PoisonState.STONE, nPower / M2Share.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), BaseObject.ActorId, nLevel, "", 650);
+                                        TargeTBaseObject.SendDelayMsg(BaseObject, Grobal2.RM_POISON, PoisonState.STONE, nPower / M2Share.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), BaseObject.ActorId, nLevel, "", 650); // 中毒类型 - 麻痹
                                     }
                                     result = true;
                                 }
