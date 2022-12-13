@@ -836,7 +836,7 @@ namespace GameSvr.Actor
                     {
                         if ((M2Share.Config.IsKillHumanWinLevel || M2Share.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP) && LastHiter.Race == ActorRace.Play)
                         {
-                            (this as PlayObject).PKDie(LastHiter as PlayObject);
+                            (this as PlayObject).PkDie(LastHiter as PlayObject);
                         }
                         else
                         {
@@ -1433,7 +1433,7 @@ namespace GameSvr.Actor
                                 SetTargetCreat(TargetBaseObject);
                                 if ((Race == ActorRace.Play) && (TargetBaseObject.Race == ActorRace.Play))
                                 {
-                                    (this as PlayObject).SetPkFlag((PlayObject)TargetBaseObject);
+                                    (this as PlayObject).SetPkFlag(TargetBaseObject);
                                 }
                                 SetLastHiter(TargetBaseObject);
                             }

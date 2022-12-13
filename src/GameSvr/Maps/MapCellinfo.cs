@@ -45,7 +45,7 @@ namespace GameSvr.Maps
             {
                 ObjList.Remove(cell);
                 M2Share.CellObjectSystem.Remove(cell.CellObjId);
-                cell = null;
+                cell.Dispose();
             }
         }
         

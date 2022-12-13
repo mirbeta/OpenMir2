@@ -1503,6 +1503,12 @@ namespace GameSvr.Player
             }
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            this.AddBodyLuck(0);
+        }
+
         public override void RecalcAbilitys()
         {
             base.RecalcAbilitys();
@@ -3237,17 +3243,18 @@ namespace GameSvr.Player
             BodyLuckLevel = n;
         }
         
-        public void SetPkFlag(PlayObject baseObject)
+        public void SetPkFlag(BaseObject baseObject)
         {
             if (baseObject.Race == ActorRace.Play)
             {
-                if ((PvpLevel() < 2) && ((baseObject as PlayObject).PvpLevel() < 2) && (!Envir.Flag.boFightZone) && (!Envir.Flag.boFight3Zone) && !PvpFlag)
+                var targetObject = baseObject as PlayObject;
+                if ((PvpLevel() < 2) && (targetObject.PvpLevel() < 2) && (!Envir.Flag.boFightZone) && (!Envir.Flag.boFight3Zone) && !PvpFlag)
                 {
-                    baseObject.PvpNameColorTick = HUtil32.GetTickCount();
-                    if (!baseObject.PvpFlag)
+                    targetObject.PvpNameColorTick = HUtil32.GetTickCount();
+                    if (!targetObject.PvpFlag)
                     {
-                        baseObject.PvpFlag = true;
-                        baseObject.RefNameColor();
+                        targetObject.PvpFlag = true;
+                        targetObject.RefNameColor();
                     }
                 }
             }

@@ -142,6 +142,16 @@ namespace GameSvr.Actor
             }
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            LoadSayMsg();
+            if (M2Share.Config.MonSayMsg)
+            {
+                MonsterSayMsg(null, MonStatus.MonGen);
+            }
+        }
+
         protected override bool Operate(ProcessMessage ProcessMsg)
         {
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK)
@@ -154,7 +164,7 @@ namespace GameSvr.Actor
                     this.BreakHolySeizeMode();
                     if (this.Master != null && struckObject != this.Master && struckObject.Race == ActorRace.Play)
                     {
-                        (this.Master as PlayObject).SetPkFlag((PlayObject)struckObject);
+                        (this.Master as PlayObject).SetPkFlag(struckObject);
                     }
                     if (M2Share.Config.MonSayMsg)
                     {

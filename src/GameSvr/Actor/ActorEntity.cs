@@ -38,14 +38,6 @@ namespace SystemModule
         }
 
         /// <summary>
-        /// 非必需的，只是为了更符合其他语言的规范，如C++、java
-        /// </summary>
-        public void Close()
-        {
-            Dispose();
-        }
-
-        /// <summary>
         /// 非密封类可重写的Dispose方法，方便子类继承时可重写
         /// </summary>
         /// <param name="disposing"></param>

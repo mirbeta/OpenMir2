@@ -1334,7 +1334,7 @@ namespace GameSvr.RobotPlay
                         {
                             if (AttackBaseObject.Race == ActorRace.Play)
                             {
-                                SetPkFlag((PlayObject)AttackBaseObject);
+                                SetPkFlag(AttackBaseObject);
                             }
                             SetLastHiter(AttackBaseObject);
                             Struck(AttackBaseObject);
@@ -1999,7 +1999,7 @@ namespace GameSvr.RobotPlay
                     BaseObject = null;
                     if (UserMagic.MagIdx >= 60 && UserMagic.MagIdx <= 65)
                     {
-                        if (CretInNearXY(TargeTBaseObject, nTargetX, nTargetY))// 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
+                        if (CretInNearXy(TargeTBaseObject, nTargetX, nTargetY))// 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                         {
                             BaseObject = TargeTBaseObject;
                             nTargetX = BaseObject.CurrX;
@@ -2040,7 +2040,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 break;
                             default:
-                                if (CretInNearXY(TargeTBaseObject, nTargetX, nTargetY))
+                                if (CretInNearXy(TargeTBaseObject, nTargetX, nTargetY))
                                 {
                                     BaseObject = TargeTBaseObject;
                                     nTargetX = BaseObject.CurrX;

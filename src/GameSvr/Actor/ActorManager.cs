@@ -27,8 +27,8 @@ namespace GameSvr.Actor
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohter = new ConcurrentDictionary<int, object>();
         private readonly IList<int> ActorIds = new Collection<int>();
-        private int MonsterDieCount = 0;
-        private int PlayerCount = 0;
+        private int MonsterGhostCount = 0;
+        private int PlayerGhostCount = 0;
 
         public ActorMgr()
         {
@@ -47,7 +47,7 @@ namespace GameSvr.Actor
                 {
                     var sw = new Stopwatch();
                     sw.Start();
-                    for (int i = 0; i < 50000; i++)
+                    for (var i = 0; i < 50000; i++)
                     {
                         var sequence = Environment.TickCount + HUtil32.Sequence();
                         while (sequence < 0)
@@ -66,11 +66,7 @@ namespace GameSvr.Actor
 
         public int Dequeue()
         {
-            if (_idQueue.TryDequeue(out var sequence))
-            {
-                return sequence;
-            }
-            return HUtil32.Sequence();
+            return _idQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
         }
 
         public void Add(BaseObject actor)
@@ -127,16 +123,16 @@ namespace GameSvr.Actor
                 {
                     if (actor.Race != ActorRace.Play)
                     {
-                        MonsterDieCount++;
+                        MonsterGhostCount++;
                     }
                     else
                     {
-                        PlayerCount++;
+                        PlayerGhostCount++;
                     }
                     _logger.Debug($"清理死亡对象 名称:[{actor.ChrName}] 地图:{actor.MapName} 坐标:{actor.CurrX}:{actor.CurrY}");
                 }
             }
-            _logger.Debug($"当前总对象:[{_actorsMap.Count}] 累计角色死亡次数:[{PlayerCount}] 累计怪物死亡次数:[{MonsterDieCount}]");
+            _logger.Debug($"当前总对象:[{_actorsMap.Count}] 累计角色死亡次数:[{PlayerGhostCount}] 累计怪物死亡次数:[{MonsterGhostCount}]");
         }
     }
 }

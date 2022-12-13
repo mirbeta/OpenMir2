@@ -1550,7 +1550,7 @@ namespace GameSvr.Player
                             {
                                 if (M2Share.ActorMgr.Get(ProcessMsg.nParam3).Race == ActorRace.Play)
                                 {
-                                    SetPkFlag((PlayObject)M2Share.ActorMgr.Get(ProcessMsg.nParam3));
+                                    SetPkFlag(M2Share.ActorMgr.Get(ProcessMsg.nParam3));
                                 }
                                 SetLastHiter(M2Share.ActorMgr.Get(ProcessMsg.nParam3));
                             }

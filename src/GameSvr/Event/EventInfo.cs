@@ -99,10 +99,5 @@ namespace GameSvr.Event
             }
             Envir = null;
         }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
     }
 }

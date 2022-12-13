@@ -458,7 +458,7 @@ namespace GameSvr.Player
                 default:
                     Direction = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
                     BaseObject BaseObject = null;
-                    if (CretInNearXY(TargeTBaseObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
+                    if (CretInNearXy(TargeTBaseObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {
                         BaseObject = TargeTBaseObject;
                         nTargetX = BaseObject.CurrX;

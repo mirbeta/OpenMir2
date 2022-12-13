@@ -17,7 +17,7 @@ namespace GameSvr.Player
         private void ClientQueryUserName(int targetId, int x, int y)
         {
             var baseObject = M2Share.ActorMgr.Get(targetId);
-            if (CretInNearXY(baseObject, x, y))
+            if (CretInNearXy(baseObject, x, y))
             {
                 var nameColor = GetChrColor(baseObject);
                 var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, baseObject.ActorId, nameColor, 0, 0);
@@ -67,7 +67,7 @@ namespace GameSvr.Player
         private void ClientQueryUserInformation(int charId, int nX, int nY)
         {
             var playObject = (PlayObject)M2Share.ActorMgr.Get(charId);
-            if (!CretInNearXY(playObject, nX, nY))
+            if (!CretInNearXy(playObject, nX, nY))
             {
                 return;
             }

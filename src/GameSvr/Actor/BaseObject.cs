@@ -2900,21 +2900,12 @@ namespace GameSvr.Actor
                 AddtoMapSuccess = false;
             }
             CharStatus = GetCharStatus();
-            if (Race == ActorRace.Play)
-            {
-                (this as PlayObject).AddBodyLuck(0);
-            }
-            LoadSayMsg();
-            if (M2Share.Config.MonSayMsg)
-            {
-                MonsterSayMsg(null, MonStatus.MonGen);
-            }
         }
 
         /// <summary>
         /// 取怪物说话信息列表
         /// </summary>
-        private void LoadSayMsg()
+        internal void LoadSayMsg()
         {
             for (var i = 0; i < M2Share.g_MonSayMsgList.Count; i++)
             {
@@ -3290,11 +3281,11 @@ namespace GameSvr.Actor
         /// <param name="monStatus"></param>
         protected void MonsterSayMsg(BaseObject attackBaseObject, MonStatus monStatus)
         {
-            if (SayMsgList == null)
+            if (Race == ActorRace.Play)
             {
                 return;
             }
-            if (Race == ActorRace.Play)
+            if (SayMsgList == null)
             {
                 return;
             }
