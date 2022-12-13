@@ -2099,13 +2099,13 @@ namespace GameSvr.Player
         protected override void DropUseItems(BaseObject BaseObject)
         {
             const string sExceptionMsg = "[Exception] TPlayObject::DropUseItems";
-            IList<DeleteItem> delList = new List<DeleteItem>();
             try
             {
                 if (AngryRing || NoDropUseItem)
                 {
                     return;
                 }
+                IList<DeleteItem> DropItemList = new List<DeleteItem>();
                 StdItem StdItem;
                 for (var i = 0; i < UseItems.Length; i++)
                 {
@@ -2118,7 +2118,7 @@ namespace GameSvr.Player
                     {
                         if ((StdItem.ItemDesc & 8) != 0)
                         {
-                            delList.Add(new DeleteItem() { MakeIndex = this.UseItems[i].MakeIndex });
+                            DropItemList.Add(new DeleteItem() { MakeIndex = this.UseItems[i].MakeIndex });
                             if (StdItem.NeedIdentify == 1)
                             {
                                 M2Share.EventSource.AddEventLog(16, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
@@ -2148,7 +2148,7 @@ namespace GameSvr.Player
                             {
                                 if (Race == ActorRace.Play)
                                 {
-                                    delList.Add(new DeleteItem()
+                                    DropItemList.Add(new DeleteItem()
                                     {
                                         ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index),
                                         MakeIndex = this.UseItems[i].MakeIndex
@@ -2159,10 +2159,10 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                if (delList != null)
+                if (DropItemList != null)
                 {
                     var ObjectId = HUtil32.Sequence();
-                    M2Share.ActorMgr.AddOhter(ObjectId, delList);
+                    M2Share.ActorMgr.AddOhter(ObjectId, DropItemList);
                     this.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }

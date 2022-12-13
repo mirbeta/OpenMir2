@@ -5,6 +5,7 @@ using GameSvr.Maps;
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Consts;
+using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -911,6 +912,59 @@ namespace GameSvr.RobotPlay
                 m_boAIStart = false;
             }
             base.Die();
+        }
+
+        protected override void DropUseItems(BaseObject BaseObject)
+        {
+            const byte MaxUseItem = 8;
+            if (NoDropUseItem)
+            {
+                return;
+            }
+            IList<DeleteItem> DropItemList = new List<DeleteItem>();
+            var nRate = PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
+            var nC = 0;
+            while (true)
+            {
+                if (M2Share.RandomNumber.Random(nRate) == 0)
+                {
+                    if (UseItems[nC] == null)
+                    {
+                        nC++;
+                        continue;
+                    }
+                    if (DropItemDown(UseItems[nC], 2, true, BaseObject, this))
+                    {
+                        var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
+                        if (StdItem != null)
+                        {
+                            if ((StdItem.ItemDesc & 10) == 0)
+                            {
+                                if (Race == ActorRace.Play)
+                                {
+                                    DropItemList.Add(new DeleteItem()
+                                    {
+                                        ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].Index),
+                                        MakeIndex = UseItems[nC].MakeIndex
+                                    });
+                                }
+                                UseItems[nC].Index = 0;
+                            }
+                        }
+                    }
+                }
+                nC++;
+                if (nC >= MaxUseItem)
+                {
+                    break;
+                }
+            }
+            if (DropItemList.Count > 0)
+            {
+                var ObjectId = HUtil32.Sequence();
+                M2Share.ActorMgr.AddOhter(ObjectId, DropItemList);
+                SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+            }
         }
     }
 }
