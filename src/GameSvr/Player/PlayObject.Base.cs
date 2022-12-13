@@ -17,6 +17,10 @@ namespace GameSvr.Player
     public partial class PlayObject
     {
         /// <summary>
+        /// 权限等级
+        /// </summary>
+        public byte Permission;
+        /// <summary>
         /// 人物身上最多可带金币数
         /// </summary>
         public int GoldMax;

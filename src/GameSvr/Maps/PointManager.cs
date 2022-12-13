@@ -44,7 +44,6 @@ namespace GameSvr.Maps
             FBaseObject = ABaseObject;
             FPointList = new ArrayList();
             FPathType = TPathType.t_Dynamic;
-            // t_Fixed; //t_Dynamic;
             m_PEnvir = null;
         }
 
@@ -59,7 +58,7 @@ namespace GameSvr.Maps
             m_nPostion = 0;
         }
 
-        public byte GetPoint_GetNextDir(byte btDir)
+        public byte GetNextDir(byte btDir)
         {
             byte result = 0;
             switch (btDir)
@@ -131,7 +130,7 @@ namespace GameSvr.Maps
                 btDir = m_btDirection;
                 while (true)
                 {
-                    btDir = GetPoint_GetNextDir(btDir);
+                    btDir = GetNextDir(btDir);
                     for (var i = 2; i >= 1; i--)
                     {
                         if (FBaseObject.Envir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))

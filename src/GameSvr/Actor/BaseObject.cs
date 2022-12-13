@@ -163,10 +163,6 @@ namespace GameSvr.Actor
         /// </summary>
         public byte SpeedPoint;
         /// <summary>
-        /// 权限等级
-        /// </summary>
-        public byte Permission;
-        /// <summary>
         /// 攻击速度
         /// </summary>
         protected ushort HitSpeed;
@@ -577,7 +573,6 @@ namespace GameSvr.Actor
             Gold = 0;
             Appr = 0;
             ViewRange = 5;
-            Permission = 0;
             Light = 0;
             NameColor = 255;
             HitPlus = 0;
@@ -4518,10 +4513,19 @@ namespace GameSvr.Actor
             }
         }
 
+        private bool AdminCanRun()
+        {
+            if (Race == ActorRace.Play)
+            {
+                return (((this as PlayObject).Permission > 9) && M2Share.Config.boGMRunAll);
+            }
+            return false;
+        }
+
         public bool CanRun(short nCurrX, short nCurrY, short nX, short nY, bool boFlag)
         {
             var btDir = M2Share.GetNextDirection(nCurrX, nCurrY, nX, nY);
-            var canWalk = (M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
+            var canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Grobal2.DR_UP:
@@ -4588,7 +4592,7 @@ namespace GameSvr.Actor
         private bool CanRun(short nX, short nY, bool boFlag)
         {
             var btDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
-            var canWalk = (M2Share.Config.DiableHumanRun || ((Permission > 9) && M2Share.Config.boGMRunAll)) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
+            var canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Grobal2.DR_UP:
