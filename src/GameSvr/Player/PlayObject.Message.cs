@@ -452,6 +452,20 @@ namespace GameSvr.Player
             if (Envir.Flag.boFight3Zone)
             {
                 FightZoneDieCount++;
+                if (MyGuild != null)
+                {
+                    MyGuild.TeamFightWhoDead(ChrName);
+                }
+                if (LastHiter != null && LastHiter.Race== ActorRace.Play)
+                {
+                    var lastHiterPlay = LastHiter as PlayObject;
+                    if (lastHiterPlay.MyGuild != null && MyGuild != null)
+                    {
+                        lastHiterPlay.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
+                        var tStr = lastHiterPlay.MyGuild.sGuildName + ':' + lastHiterPlay.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
+                        M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
+                    }
+                }
             }
             if (Envir.Flag.boINCGAMEPOINT)
             {

@@ -6,6 +6,7 @@ using GameSvr.Magic;
 using GameSvr.Maps;
 using GameSvr.Script;
 using System.Collections;
+using GameSvr.Guild;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -163,6 +164,9 @@ namespace GameSvr.Player
         /// 是否在开行会战
         /// </summary>
         public bool InFreePkArea;
+        public GuildInfo MyGuild;
+        public short GuildRankNo;
+        public string GuildRankName = string.Empty;
         public string m_sOldSayMsg;
         public int m_nSayMsgCount = 0;
         public int m_dwSayMsgTick;
@@ -3135,9 +3139,9 @@ namespace GameSvr.Player
                             {
                                 result = false;
                             }
-                            if (GuildWarArea && (baseObject.MyGuild != null))
+                            if (GuildWarArea && ((baseObject as PlayObject).MyGuild != null))
                             {
-                                if (MyGuild.IsAllyGuild(baseObject.MyGuild))
+                                if (MyGuild.IsAllyGuild((baseObject as PlayObject).MyGuild))
                                 {
                                     result = false;
                                 }
@@ -3176,47 +3180,239 @@ namespace GameSvr.Player
 
         public override bool IsProperFriend(BaseObject attackTarget)
         {
-            var result = base.IsProperFriend(attackTarget);
-            if (attackTarget.Race > ActorRace.Play) return result;
-            var targetObject = attackTarget as PlayObject;
-            if (!targetObject.InFreePkArea)
+            if (attackTarget.Race == ActorRace.Play)
             {
-                if (M2Share.Config.boPKLevelProtect)// 新人保护
+                var result = this.IsProperIsFriend(attackTarget);
+                if (attackTarget.Race < ActorRace.Animal)
                 {
-                    if (Abil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
+                    return result;
+                }
+                if (attackTarget.Master == this)
+                {
+                    return true;
+                }
+                if (attackTarget.Master != null)
+                {
+                    return this.IsProperIsFriend(attackTarget.Master);
+                }
+                if (attackTarget.Race > ActorRace.Play) return result;
+                var targetObject = attackTarget as PlayObject;
+                if (!targetObject.InFreePkArea)
+                {
+                    if (M2Share.Config.boPKLevelProtect)// 新人保护
                     {
-                        if (!targetObject.PvpFlag && targetObject.WAbil.Level <= M2Share.Config.nPKProtectLevel && targetObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
+                        if (Abil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
+                        {
+                            if (!targetObject.PvpFlag && targetObject.WAbil.Level <= M2Share.Config.nPKProtectLevel && targetObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
+                            {
+                                return false;
+                            }
+                        }
+                        if (Abil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
+                        {
+                            if (!targetObject.PvpFlag && targetObject.WAbil.Level > M2Share.Config.nPKProtectLevel && targetObject.PvpLevel() < 2)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
+                    if (PvpLevel() >= 2 && Abil.Level > M2Share.Config.nRedPKProtectLevel)
+                    {
+                        if (targetObject.Abil.Level <= M2Share.Config.nRedPKProtectLevel && targetObject.PvpLevel() < 2)
                         {
                             return false;
                         }
                     }
-                    if (Abil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
+                    // 小于指定级别的非红名人物不可以杀指定级别红名人物。
+                    if (Abil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
                     {
-                        if (!targetObject.PvpFlag && targetObject.WAbil.Level > M2Share.Config.nPKProtectLevel && targetObject.PvpLevel() < 2)
+                        if (targetObject.PvpLevel() >= 2 && targetObject.Abil.Level > M2Share.Config.nRedPKProtectLevel)
                         {
                             return false;
                         }
                     }
-                }
-                // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
-                if (PvpLevel() >= 2 && Abil.Level > M2Share.Config.nRedPKProtectLevel)
-                {
-                    if (targetObject.Abil.Level <= M2Share.Config.nRedPKProtectLevel && targetObject.PvpLevel() < 2)
+                    if (((HUtil32.GetTickCount() - MapMoveTick) < 3000) || ((HUtil32.GetTickCount() - targetObject.MapMoveTick) < 3000))
                     {
-                        return false;
+                        result = false;
                     }
                 }
-                // 小于指定级别的非红名人物不可以杀指定级别红名人物。
-                if (Abil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
+                return result;
+            }
+            return base.IsProperFriend(attackTarget);
+        }
+
+        protected override byte GetChrColor(BaseObject baseObject)
+        {
+            if (baseObject.Race == ActorRace.Play)
+            {
+                byte result = NameColor;
+                var targetObject = baseObject as PlayObject;
+                if (targetObject.PvpLevel() < 2)
                 {
-                    if (targetObject.PvpLevel() >= 2 && targetObject.Abil.Level > M2Share.Config.nRedPKProtectLevel)
+                    if (targetObject.PvpFlag)
                     {
-                        return false;
+                        result = M2Share.Config.btPKFlagNameColor;
+                    }
+                    var n10 = GetGuildRelation(this, targetObject);
+                    switch (n10)
+                    {
+                        case 1:
+                        case 3:
+                            result = M2Share.Config.btAllyAndGuildNameColor;
+                            break;
+                        case 2:
+                            result = M2Share.Config.WarGuildNameColor;
+                            break;
+                    }
+                    if (targetObject.Envir.Flag.boFight3Zone)
+                    {
+                        result = MyGuild == targetObject.MyGuild ? M2Share.Config.btAllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
                     }
                 }
-                if (((HUtil32.GetTickCount() - MapMoveTick) < 3000) || ((HUtil32.GetTickCount() - targetObject.MapMoveTick) < 3000))
+                var castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
+                if ((castle != null) && castle.UnderWar && this.InFreePkArea && targetObject.InFreePkArea)
                 {
-                    result = false;
+                    result = M2Share.Config.InFreePKAreaNameColor;
+                    GuildWarArea = true;
+                    if (MyGuild == null)
+                    {
+                        return result;
+                    }
+                    if (castle.IsMasterGuild(MyGuild))
+                    {
+                        if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
+                        {
+                            result = M2Share.Config.btAllyAndGuildNameColor;
+                        }
+                        else
+                        {
+                            if (castle.IsAttackGuild(targetObject.MyGuild))
+                            {
+                                result = M2Share.Config.WarGuildNameColor;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (castle.IsAttackGuild(MyGuild))
+                        {
+                            if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
+                            {
+                                result = M2Share.Config.btAllyAndGuildNameColor;
+                            }
+                            else
+                            {
+                                if (castle.IsMember(targetObject))
+                                {
+                                    result = M2Share.Config.WarGuildNameColor;
+                                }
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            return base.GetChrColor(baseObject);
+        }
+
+        private bool IsProperIsFriend(BaseObject cret)
+        {
+            var result = false;
+            if (cret.Race == ActorRace.Play)
+            {
+                switch (AttatckMode)
+                {
+                    case AttackMode.HAM_ALL:
+                        result = true;
+                        break;
+                    case AttackMode.HAM_PEACE:
+                        result = true;
+                        break;
+                    case AttackMode.HAM_DEAR:
+                        if ((this == cret) || (cret == this.m_DearHuman))
+                        {
+                            result = true;
+                        }
+                        break;
+                    case AttackMode.HAM_MASTER:
+                        if (this == cret)
+                        {
+                            result = true;
+                        }
+                        else if (this.m_boMaster)
+                        {
+                            for (var i = 0; i < this.m_MasterList.Count; i++)
+                            {
+                                if (this.m_MasterList[i] == cret)
+                                {
+                                    result = true;
+                                    break;
+                                }
+                            }
+                        }
+                        else if (((PlayObject)cret).m_boMaster)
+                        {
+                            for (var i = 0; i < ((PlayObject)cret).m_MasterList.Count; i++)
+                            {
+                                if (((PlayObject)cret).m_MasterList[i] == this)
+                                {
+                                    result = true;
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    case AttackMode.HAM_GROUP:
+                        if (cret == this)
+                        {
+                            result = true;
+                        }
+                        if (IsGroupMember(cret))
+                        {
+                            result = true;
+                        }
+                        break;
+                    case AttackMode.HAM_GUILD:
+                        if (cret == this)
+                        {
+                            result = true;
+                        }
+                        if (MyGuild != null)
+                        {
+                            if (MyGuild.IsMember(cret.ChrName))
+                            {
+                                result = true;
+                            }
+                            if (GuildWarArea && ((cret as PlayObject).MyGuild != null))
+                            {
+                                if (MyGuild.IsAllyGuild((cret as PlayObject).MyGuild))
+                                {
+                                    result = true;
+                                }
+                            }
+                        }
+                        break;
+                    case AttackMode.HAM_PKATTACK:
+                        if (cret == this)
+                        {
+                            result = true;
+                        }
+                        if (this.PvpLevel() >= 2)
+                        {
+                            if ((cret as PlayObject).PvpLevel() < 2)
+                            {
+                                result = true;
+                            }
+                        }
+                        else
+                        {
+                            if ((cret as PlayObject).PvpLevel() >= 2)
+                            {
+                                result = true;
+                            }
+                        }
+                        break;
                 }
             }
             return result;
@@ -3318,6 +3514,11 @@ namespace GameSvr.Player
                 nTranPoint = nTranPoint * 3;
             }
             userMagic.TranPoint += nTranPoint;
+        }
+
+        public bool IsGuildMaster()
+        {
+            return (MyGuild != null) && (GuildRankNo == 1);
         }
     }
 }

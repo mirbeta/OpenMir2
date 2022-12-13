@@ -181,6 +181,11 @@ namespace GameSvr.Actor
             base.Run();
         }
 
+        protected override byte GetNamecolor()
+        {
+            return base.GetNamecolor();
+        }
+
         public virtual void Struck(BaseObject Hiter)
         {
             byte btDir = 0;

@@ -467,9 +467,9 @@ namespace GameSvr.Castle
             return false;
         }
 
-        public bool IsMember(BaseObject cert)
+        public bool IsMember(PlayObject member)
         {
-            return IsMasterGuild(cert.MyGuild);
+            return IsMasterGuild(member.MyGuild);
         }
 
         // 检查是否为攻城方行会的联盟行会
@@ -628,10 +628,15 @@ namespace GameSvr.Castle
             return MapName;
         }
 
-        public bool CheckInPalace(int nX, int nY, BaseObject cert)
+        public bool CheckInPalace(int nX, int nY, PlayObject targetObject)
         {
-            var result = IsMasterGuild(cert.MyGuild);
-            if (result) return result;
+            var result = IsMasterGuild(targetObject.MyGuild);
+            return result ? result : CheckInPalace(nX, nY);
+        }
+        
+        public bool CheckInPalace(int nX, int nY)
+        {
+            var result = false;
             ArcherUnit ObjUnit = LeftWall;
             if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.Death && ObjUnit.BaseObject.CurrX == nX &&
                 ObjUnit.BaseObject.CurrY == nY) result = true;

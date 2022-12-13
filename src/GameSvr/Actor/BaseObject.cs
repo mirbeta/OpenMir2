@@ -240,6 +240,9 @@ namespace GameSvr.Actor
         /// 无敌模式
         /// </summary>
         public bool SuperMan;
+        /// <summary>
+        /// 不进入火墙
+        /// </summary>
         public bool BoFearFire;
         /// <summary>
         /// 是否是动物
@@ -361,9 +364,6 @@ namespace GameSvr.Actor
         /// 换地图时，跑走不考虑坐标
         /// </summary>
         public bool SpaceMoved;
-        public GuildInfo MyGuild;
-        public short GuildRankNo;
-        public string GuildRankName = string.Empty;
         public string ScriptLable = string.Empty;
         protected byte AttackSkillCount;
         protected byte AttackSkillPointCount;
@@ -661,8 +661,6 @@ namespace GameSvr.Actor
                 MaxWeight = 100
             };
             WantRefMsg = false;
-            MyGuild = null;
-            GuildRankNo = 0;
             Mission = false;
             HideMode = false;
             StoneMode = false;
@@ -872,7 +870,7 @@ namespace GameSvr.Actor
             var result = false;
             if (HolySeize)
             {
-                return result;
+                return false;
             }
             try
             {
@@ -1095,32 +1093,32 @@ namespace GameSvr.Actor
             return result;
         }
 
-        private int GetGuildRelation(BaseObject cert1, BaseObject cert2)
+        internal int GetGuildRelation(PlayObject play, PlayObject target)
         {
-            var result = 0;
             GuildWarArea = false;
-            if ((cert1.MyGuild == null) || (cert2.MyGuild == null))
+            if ((play.MyGuild == null) || (target.MyGuild == null))
             {
                 return 0;
             }
-            if (cert1.InSafeArea() || cert2.InSafeArea())
+            if (play.InSafeArea() || target.InSafeArea())
             {
                 return 0;
             }
-            if (cert1.MyGuild.GuildWarList.Count <= 0)
+            if (play.MyGuild.GuildWarList.Count <= 0)
             {
                 return 0;
             }
             GuildWarArea = true;
-            if (cert1.MyGuild.IsWarGuild(cert2.MyGuild) && cert2.MyGuild.IsWarGuild(cert1.MyGuild))
+            var result = 0;
+            if (play.MyGuild.IsWarGuild(target.MyGuild) && target.MyGuild.IsWarGuild(play.MyGuild))
             {
                 result = 2;
             }
-            if (cert1.MyGuild == cert2.MyGuild)
+            if (play.MyGuild == target.MyGuild)
             {
                 result = 1;
             }
-            if (cert1.MyGuild.IsAllyGuild(cert2.MyGuild) && cert2.MyGuild.IsAllyGuild(cert1.MyGuild))
+            if (play.MyGuild.IsAllyGuild(target.MyGuild) && target.MyGuild.IsAllyGuild(play.MyGuild))
             {
                 result = 3;
             }
@@ -2167,116 +2165,25 @@ namespace GameSvr.Actor
             }
         }
 
-        protected byte GetChrColor(BaseObject baseObject)
+        protected virtual byte GetChrColor(BaseObject baseObject)
         {
-            var result = baseObject.GetNamecolor();
-            switch (baseObject.Race)
+            if (baseObject.Race == ActorRace.NPC) //增加NPC名字颜色单独控制
             {
-                case ActorRace.Play:
-                    {
-                        if ((baseObject as PlayObject).PvpLevel() < 2)
-                        {
-                            if ((baseObject as PlayObject).PvpFlag)
-                            {
-                                result = M2Share.Config.btPKFlagNameColor;
-                            }
-                            var n10 = GetGuildRelation(this, baseObject);
-                            switch (n10)
-                            {
-                                case 1:
-                                case 3:
-                                    result = M2Share.Config.btAllyAndGuildNameColor;
-                                    break;
-                                case 2:
-                                    result = M2Share.Config.WarGuildNameColor;
-                                    break;
-                            }
-                            if (baseObject.Envir.Flag.boFight3Zone)
-                            {
-                                result = MyGuild == baseObject.MyGuild ? M2Share.Config.btAllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
-                            }
-                        }
-                        if (baseObject.Race == ActorRace.Play)
-                        {
-                            var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
-                            if ((castle != null) && castle.UnderWar && (this as PlayObject).InFreePkArea && (baseObject as PlayObject).InFreePkArea)
-                            {
-                                result = M2Share.Config.InFreePKAreaNameColor;
-                                GuildWarArea = true;
-                                if (MyGuild == null)
-                                {
-                                    return result;
-                                }
-                                if (castle.IsMasterGuild(MyGuild))
-                                {
-                                    if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
-                                    {
-                                        result = M2Share.Config.btAllyAndGuildNameColor;
-                                    }
-                                    else
-                                    {
-                                        if (castle.IsAttackGuild(baseObject.MyGuild))
-                                        {
-                                            result = M2Share.Config.WarGuildNameColor;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (castle.IsAttackGuild(MyGuild))
-                                    {
-                                        if ((MyGuild == baseObject.MyGuild) || MyGuild.IsAllyGuild(baseObject.MyGuild))
-                                        {
-                                            result = M2Share.Config.btAllyAndGuildNameColor;
-                                        }
-                                        else
-                                        {
-                                            if (castle.IsMember(baseObject))
-                                            {
-                                                result = M2Share.Config.WarGuildNameColor;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    }
-                case ActorRace.NPC://增加NPC名字颜色单独控制
-                    {
-                        result = M2Share.Config.NpcNameColor;
-                        if (baseObject.CrazyMode) //疯狂模式(红名)
-                        {
-                            result = 0xF9;
-                        }
-                        if (baseObject.HolySeize) //不能走动模式(困魔咒)
-                        {
-                            result = 0x7D;
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        if (baseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
-                        {
-                            result = M2Share.Config.SlaveColor[baseObject.SlaveExpLevel];
-                        }
-                        else
-                        {
-                            result = 255;
-                        }
-                        if (baseObject.CrazyMode)
-                        {
-                            result = 0xF9;
-                        }
-                        if (baseObject.HolySeize)
-                        {
-                            result = 0x7D;
-                        }
-                        break;
-                    }
+                return M2Share.Config.NpcNameColor;
             }
-            return result;
+            if (baseObject.CrazyMode)
+            {
+                return 0xF9;
+            }
+            if (baseObject.HolySeize)
+            {
+                return 0x7D;
+            }
+            if (baseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
+            {
+                return M2Share.Config.SlaveColor[baseObject.SlaveExpLevel];
+            }
+            return baseObject.GetNamecolor();
         }
 
         public int GetLevelExp(int nLevel)
@@ -3077,7 +2984,7 @@ namespace GameSvr.Actor
                 var castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
                 if ((castle != null) && (Race == ActorRace.Play))
                 {
-                    if (!castle.CheckInPalace(CurrX, CurrY, this))
+                    if (!castle.CheckInPalace(CurrX, CurrY))
                     {
                         return false;
                     }
@@ -3467,85 +3374,79 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            switch (Race)
+            if (baseObject.Race >= ActorRace.Animal)
             {
-                case >= ActorRace.Animal:
+                if (Master != null)
+                {
+                    if ((Master.LastHiter == baseObject) || (Master.ExpHitter == baseObject) || (Master.TargetCret == baseObject))
                     {
-                        if (Master != null)
-                        {
-                            if ((Master.LastHiter == baseObject) || (Master.ExpHitter == baseObject) || (Master.TargetCret == baseObject))
-                            {
-                                result = true;
-                            }
-                            if (baseObject.TargetCret != null)
-                            {
-                                if ((baseObject.TargetCret == Master) || (baseObject.TargetCret.Master == Master) && (baseObject.Race != ActorRace.Play))
-                                {
-                                    result = true;
-                                }
-                            }
-                            if ((baseObject.TargetCret == this) && (baseObject.Race >= ActorRace.Animal))
-                            {
-                                result = true;
-                            }
-                            if (baseObject.Master != null)
-                            {
-                                if ((baseObject.Master == Master.LastHiter) || (baseObject.Master == Master.TargetCret))
-                                {
-                                    result = true;
-                                }
-                            }
-                            if (baseObject.Master == Master)
-                            {
-                                result = false;
-                            }
-                            if (baseObject.HolySeize)
-                            {
-                                result = false;
-                            }
-                            if (Master.SlaveRelax)
-                            {
-                                result = false;
-                            }
-                            if (baseObject.Race == ActorRace.Play)
-                            {
-                                if (baseObject.InSafeZone())
-                                {
-                                    result = false;
-                                }
-                            }
-                            BreakCrazyMode();
-                        }
-                        else
-                        {
-                            if (baseObject.Race == ActorRace.Play)
-                            {
-                                result = true;
-                            }
-                            if ((Race > ActorRace.PeaceNpc) && (Race < ActorRace.Animal))
-                            {
-                                result = true;
-                            }
-                            if (baseObject.Master != null)
-                            {
-                                result = true;
-                            }
-                        }
-                        if (CrazyMode && ((baseObject.Race == ActorRace.Play) || (baseObject.Race > ActorRace.PeaceNpc)))
-                        {
-                            result = true;
-                        }
-                        if (NastyMode && ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc)))
-                        {
-                            result = true;
-                        }
-                        break;
+                        result = true;
                     }
-                default:
+                    if (baseObject.TargetCret != null)
+                    {
+                        if ((baseObject.TargetCret == Master) || (baseObject.TargetCret.Master == Master) && (baseObject.Race != ActorRace.Play))
+                        {
+                            result = true;
+                        }
+                    }
+                    if ((baseObject.TargetCret == this) && (baseObject.Race >= ActorRace.Animal))
+                    {
+                        result = true;
+                    }
+                    if (baseObject.Master != null)
+                    {
+                        if ((baseObject.Master == Master.LastHiter) || (baseObject.Master == Master.TargetCret))
+                        {
+                            result = true;
+                        }
+                    }
+                    if (baseObject.Master == Master)
+                    {
+                        result = false;
+                    }
+                    if (baseObject.HolySeize)
+                    {
+                        result = false;
+                    }
+                    if (Master.SlaveRelax)
+                    {
+                        result = false;
+                    }
+                    if (baseObject.Race == ActorRace.Play)
+                    {
+                        if (baseObject.InSafeZone())
+                        {
+                            result = false;
+                        }
+                    }
+                    BreakCrazyMode();
+                }
+                else
+                {
+                    if (baseObject.Race == ActorRace.Play)
+                    {
+                        result = true;
+                    }
+                    if ((Race > ActorRace.PeaceNpc) && (Race < ActorRace.Animal))
+                    {
+                        result = true;
+                    }
+                    if (baseObject.Master != null)
+                    {
+                        result = true;
+                    }
+                }
+                if (CrazyMode && ((baseObject.Race == ActorRace.Play) || (baseObject.Race > ActorRace.PeaceNpc)))
+                {
                     result = true;
-                    break;
+                }
+                if (NastyMode && ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc)))
+                {
+                    result = true;
+                }
+                return result;
             }
-            return result;
+            return true;
         }
 
         public virtual bool IsProperTarget(BaseObject baseObject)
@@ -4156,11 +4057,6 @@ namespace GameSvr.Actor
             }
         }
 
-        public bool IsGuildMaster()
-        {
-            return (MyGuild != null) && (GuildRankNo == 1);
-        }
-
         public bool MagCanHitTarget(short nX, short nY, BaseObject targeBaseObject)
         {
             var result = false;
@@ -4193,109 +4089,6 @@ namespace GameSvr.Actor
                     break;
                 }
                 n14++;
-            }
-            return result;
-        }
-
-        private bool IsProperIsFriend(BaseObject cret)
-        {
-            var result = false;
-            if (cret.Race == ActorRace.Play)
-            {
-                switch (AttatckMode)
-                {
-                    case AttackMode.HAM_ALL:
-                        result = true;
-                        break;
-                    case AttackMode.HAM_PEACE:
-                        result = true;
-                        break;
-                    case AttackMode.HAM_DEAR:
-                        if ((this == cret) || (cret == ((PlayObject)this).m_DearHuman))
-                        {
-                            result = true;
-                        }
-                        break;
-                    case AttackMode.HAM_MASTER:
-                        if (this == cret)
-                        {
-                            result = true;
-                        }
-                        else if (((PlayObject)this).m_boMaster)
-                        {
-                            for (var i = 0; i < ((PlayObject)this).m_MasterList.Count; i++)
-                            {
-                                if (((PlayObject)this).m_MasterList[i] == cret)
-                                {
-                                    result = true;
-                                    break;
-                                }
-                            }
-                        }
-                        else if (((PlayObject)cret).m_boMaster)
-                        {
-                            for (var i = 0; i < ((PlayObject)cret).m_MasterList.Count; i++)
-                            {
-                                if (((PlayObject)cret).m_MasterList[i] == this)
-                                {
-                                    result = true;
-                                    break;
-                                }
-                            }
-                        }
-                        break;
-                    case AttackMode.HAM_GROUP:
-                        if (cret == this)
-                        {
-                            result = true;
-                        }
-                        if (IsGroupMember(cret))
-                        {
-                            result = true;
-                        }
-                        break;
-                    case AttackMode.HAM_GUILD:
-                        if (cret == this)
-                        {
-                            result = true;
-                        }
-
-                        if (MyGuild != null)
-                        {
-                            if (MyGuild.IsMember(cret.ChrName))
-                            {
-                                result = true;
-                            }
-                            if (GuildWarArea && (cret.MyGuild != null))
-                            {
-                                if (MyGuild.IsAllyGuild(cret.MyGuild))
-                                {
-                                    result = true;
-                                }
-                            }
-                        }
-                        break;
-                    case AttackMode.HAM_PKATTACK:
-                        if (cret == this)
-                        {
-                            result = true;
-                        }
-                        if ((this as PlayObject).PvpLevel() >= 2)
-                        {
-                            if ((cret as PlayObject).PvpLevel() < 2)
-                            {
-                                result = true;
-                            }
-                        }
-                        else
-                        {
-                            if ((cret as PlayObject).PvpLevel() >= 2)
-                            {
-                                result = true;
-                            }
-                        }
-                        break;
-                }
             }
             return result;
         }

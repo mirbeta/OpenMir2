@@ -1463,38 +1463,42 @@ namespace GameSvr.Player
             try
             {
                 var n8 = -1;
-                BaseObject baseObjectC = GetPoseCreate();
-                if (baseObjectC != null && baseObjectC.MyGuild != null && baseObjectC.Race == ActorRace.Play && baseObjectC.GetPoseCreate() == this)
+                var poseObject = GetPoseCreate();
+                if (poseObject != null && poseObject.Race == ActorRace.Play)
                 {
-                    if (baseObjectC.MyGuild.m_boEnableAuthAlly)
+                    var posePlay = poseObject as PlayObject;
+                    if (posePlay.MyGuild != null && posePlay.GetPoseCreate() == this)
                     {
-                        if (baseObjectC.IsGuildMaster() && IsGuildMaster())
+                        if (posePlay.MyGuild.m_boEnableAuthAlly)
                         {
-                            if (MyGuild.IsNotWarGuild(baseObjectC.MyGuild) && baseObjectC.MyGuild.IsNotWarGuild(MyGuild))
+                            if (posePlay.IsGuildMaster() && IsGuildMaster())
                             {
-                                MyGuild.AllyGuild(baseObjectC.MyGuild);
-                                baseObjectC.MyGuild.AllyGuild(MyGuild);
-                                MyGuild.SendGuildMsg(baseObjectC.MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
-                                baseObjectC.MyGuild.SendGuildMsg(MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
-                                MyGuild.RefMemberName();
-                                baseObjectC.MyGuild.RefMemberName();
-                                M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
-                                M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, baseObjectC.MyGuild.sGuildName);
-                                n8 = 0;
+                                if (MyGuild.IsNotWarGuild(posePlay.MyGuild) && posePlay.MyGuild.IsNotWarGuild(MyGuild))
+                                {
+                                    MyGuild.AllyGuild(posePlay.MyGuild);
+                                    posePlay.MyGuild.AllyGuild(MyGuild);
+                                    MyGuild.SendGuildMsg(posePlay.MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
+                                    posePlay.MyGuild.SendGuildMsg(MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
+                                    MyGuild.RefMemberName();
+                                    posePlay.MyGuild.RefMemberName();
+                                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, posePlay.MyGuild.sGuildName);
+                                    n8 = 0;
+                                }
+                                else
+                                {
+                                    n8 = -2;
+                                }
                             }
                             else
                             {
-                                n8 = -2;
+                                n8 = -3;
                             }
                         }
                         else
                         {
-                            n8 = -3;
+                            n8 = -4;
                         }
-                    }
-                    else
-                    {
-                        n8 = -4;
                     }
                 }
                 if (n8 == 0)

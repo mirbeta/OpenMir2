@@ -66,21 +66,27 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (baseObject.Master == null)
                     {
-                        if (Castle.MasterGuild == baseObject.MyGuild || Castle.MasterGuild.IsAllyGuild(baseObject.MyGuild))
+                        if (baseObject.Race == ActorRace.Play)
                         {
-                            if (LastHiter != baseObject)
+                            if (Castle.MasterGuild == (baseObject as PlayObject).MyGuild || Castle.MasterGuild.IsAllyGuild((baseObject as PlayObject).MyGuild))
                             {
-                                result = false;
+                                if (LastHiter != baseObject)
+                                {
+                                    result = false;
+                                }
                             }
                         }
                     }
                     else
                     {
-                        if (Castle.MasterGuild == baseObject.Master.MyGuild || Castle.MasterGuild.IsAllyGuild(baseObject.Master.MyGuild))
+                        if (baseObject.Master.Race == ActorRace.Play)
                         {
-                            if (LastHiter != baseObject.Master && LastHiter != baseObject)
+                            if (Castle.MasterGuild == (baseObject.Master as PlayObject).MyGuild || Castle.MasterGuild.IsAllyGuild((baseObject.Master as PlayObject).MyGuild))
                             {
-                                result = false;
+                                if (LastHiter != baseObject.Master && LastHiter != baseObject)
+                                {
+                                    result = false;
+                                }
                             }
                         }
                     }

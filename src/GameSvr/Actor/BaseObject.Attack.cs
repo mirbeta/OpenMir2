@@ -293,7 +293,7 @@ namespace GameSvr.Actor
                 {
                     AttackTarget.StruckDamage(nPower);
                     AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nPower, AttackTarget.WAbil.HP, AttackTarget.WAbil.MaxHP, ActorId, "", 200);
-                    if (AttackTarget.Race == ActorRace.Play)
+                    if (AttackTarget.Race == ActorRace.Play && this.Race == ActorRace.Play)
                     {
                         if (!(AttackTarget as PlayObject).UnParalysis && (this as PlayObject).Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
                         {

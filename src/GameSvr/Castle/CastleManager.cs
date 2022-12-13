@@ -1,6 +1,7 @@
 ﻿using GameSvr.Actor;
 using GameSvr.GameCommand;
 using GameSvr.Maps;
+using GameSvr.Player;
 using NLog;
 using SystemModule.Common;
 
@@ -28,7 +29,11 @@ namespace GameSvr.Castle
             return null;
         }
 
-        // 取得角色所在座标的城堡
+        /// <summary>
+        /// 是否沙巴克攻城战役区域
+        /// </summary>
+        /// <param name="BaseObject"></param>
+        /// <returns></returns>
         public UserCastle InCastleWarArea(BaseObject BaseObject)
         {
             for (var i = 0; i < _castleList.Count; i++)
@@ -105,7 +110,7 @@ namespace GameSvr.Castle
             return null;
         }
 
-        public UserCastle IsCastleMember(BaseObject BaseObject)
+        public UserCastle IsCastleMember(PlayObject BaseObject)
         {
             for (var i = 0; i < _castleList.Count; i++)
             {

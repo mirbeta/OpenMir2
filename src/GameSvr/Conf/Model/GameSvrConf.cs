@@ -670,7 +670,13 @@ namespace GameSvr.Conf.Model
         public byte btPKFlagNameColor;
         public byte btPKLevel1NameColor;
         public byte btPKLevel2NameColor;
+        /// <summary>
+        /// 结盟行会名字颜色
+        /// </summary>
         public byte btAllyAndGuildNameColor;
+        /// <summary>
+        /// 敌对行会名字颜色
+        /// </summary>
         public byte WarGuildNameColor;
         public byte InFreePKAreaNameColor;
         public bool SpiritMutiny;

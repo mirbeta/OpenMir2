@@ -820,11 +820,14 @@ namespace GameSvr.Actor
                 if (boPK && LastHiter != null)
                 {
                     var guildwarkill = false;
-                    if (MyGuild != null && LastHiter.MyGuild != null)
+                    if (Race == ActorRace.Play && LastHiter.Race == ActorRace.Play)
                     {
-                        if (GetGuildRelation(this, LastHiter) == 2)
+                        if ((this as PlayObject).MyGuild != null && (LastHiter as PlayObject).MyGuild != null)
                         {
-                            guildwarkill = true;
+                            if (GetGuildRelation(this as PlayObject, LastHiter as PlayObject) == 2)
+                            {
+                                guildwarkill = true;
+                            }
                         }
                     }
                     var Castle = M2Share.CastleMgr.InCastleWarArea(this);
@@ -946,25 +949,9 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                string tStr;
-                if (Envir.Flag.boFight3Zone)
-                {
-                    if (MyGuild != null)
-                    {
-                        MyGuild.TeamFightWhoDead(ChrName);
-                    }
-                    if (LastHiter != null)
-                    {
-                        if (LastHiter.MyGuild != null && MyGuild != null)
-                        {
-                            LastHiter.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
-                            tStr = LastHiter.MyGuild.sGuildName + ':' + LastHiter.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
-                            M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
-                        }
-                    }
-                }
                 if (Race == ActorRace.Play)
                 {
+                    string tStr;
                     if (GroupOwner != null)
                     {
                         GroupOwner.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
@@ -1141,40 +1128,17 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            switch (Race)
+            if (Race >= ActorRace.Animal)
             {
-                case >= ActorRace.Animal:
-                    {
-                        if (attackTarget.Race >= ActorRace.Animal)
-                        {
-                            result = true;
-                        }
-                        if (attackTarget.Master != null)
-                        {
-                            result = false;
-                        }
-                        return result;
-                    }
-                case ActorRace.Play:
-                    {
-                        result = IsProperIsFriend(attackTarget);
-                        if (attackTarget.Race < ActorRace.Animal)
-                        {
-                            return result;
-                        }
-                        if (attackTarget.Master == this)
-                        {
-                            return true;
-                        }
-                        if (attackTarget.Master != null)
-                        {
-                            return IsProperIsFriend(attackTarget.Master);
-                        }
-                        break;
-                    }
-                default:
+                if (attackTarget.Race >= ActorRace.Animal)
+                {
                     result = true;
-                    break;
+                }
+                if (attackTarget.Master != null)
+                {
+                    result = false;
+                }
+                return result;
             }
             return result;
         }

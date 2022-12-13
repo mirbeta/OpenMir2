@@ -9,7 +9,13 @@
         public int nMUSICID;
         public bool boDarkness;
         public bool boDayLight;
+        /// <summary>
+        /// 行会战争地图
+        /// </summary>
         public bool boFightZone;
+        /// <summary>
+        /// 行会战争地图
+        /// </summary>
         public bool boFight3Zone;
         public bool boQUIZ;
         public bool boNORECONNECT;
