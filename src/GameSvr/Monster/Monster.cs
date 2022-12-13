@@ -8,7 +8,7 @@ namespace GameSvr.Monster
     {
         private int m_dwThinkTick;
         private bool m_boDupMode;
-        
+
         public MonsterObject() : base()
         {
             m_boDupMode = false;

@@ -25,12 +25,12 @@
         /// 对象释放已释放
         /// </summary>
         public bool IsDispose;
-        
+
         /// <summary>
         /// 保证多次调用Dispose方式不会抛出异常
         /// </summary>
-        private bool disposed = false;  
-        
+        private bool disposed = false;
+
         /// <summary>
         /// 为了防止忘记显式的调用Dispose方法
         /// </summary>
@@ -70,7 +70,7 @@
             //清理托管资源
             if (disposing)
             {
-                
+
             }
             //告诉自己已经被释放
             disposed = true;

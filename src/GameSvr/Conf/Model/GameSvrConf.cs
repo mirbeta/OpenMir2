@@ -613,11 +613,29 @@ namespace GameSvr.Conf.Model
         /// 普通修理掉持久数(特持久上限减下限再除以此数为减的数值)
         /// </summary>        
         public int RepairItemDecDura;
+        /// <summary>
+        /// 死亡是否掉落包裹物品
+        /// </summary>
         public bool DieScatterBag;
+        /// <summary>
+        /// 死亡包裹物品掉落机率
+        /// </summary>
         public int DieScatterBagRate;
+        /// <summary>
+        /// 红名死亡掉落所有包裹物品
+        /// </summary>
         public bool DieRedScatterBagAll;
+        /// <summary>
+        /// 死亡掉落身上装备机率
+        /// </summary>
         public int DieDropUseItemRate;
+        /// <summary>
+        /// 红名掉落身上装备机率
+        /// </summary>
         public int DieRedDropUseItemRate;
+        /// <summary>
+        /// 死亡是否掉落金币
+        /// </summary>
         public bool DieDropGold;
         public bool KillByHumanDropUseItem;
         public bool KillByMonstDropUseItem;
@@ -1108,7 +1126,7 @@ namespace GameSvr.Conf.Model
             SpellFillTime = 800;
             MonUpLvNeedKillBase = 100;
             MonUpLvRate = 16;
-            MonUpLvNeedKillCount = new [] { 0, 0, 50, 100, 200, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800, 153600 };
+            MonUpLvNeedKillCount = new[] { 0, 0, 50, 100, 200, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800, 153600 };
             SlaveColor = new byte[] { 0xFF, 0xFE, 0x93, 0x9A, 0xE5, 0xA8, 0xB4, 0xFC, 249, 250, 250, 250, 250, 250, 250 };
             NeedExps = new int[Grobal2.MaxChangeLevel];
             WideAttack = new byte[] { 7, 1, 2 };

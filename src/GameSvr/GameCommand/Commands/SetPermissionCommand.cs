@@ -34,7 +34,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (M2Share.Config.ShowMakeItemMsg)
             {
-                 M2Share.Log.Warn(string.Format(sOutFormatMsg, PlayObject.ChrName, m_PlayObject.ChrName, m_PlayObject.Permission, nPerission));
+                M2Share.Log.Warn(string.Format(sOutFormatMsg, PlayObject.ChrName, m_PlayObject.ChrName, m_PlayObject.Permission, nPerission));
             }
             m_PlayObject.Permission = (byte)nPerission;
             PlayObject.SysMsg(sHumanName + " 当前权限为: " + m_PlayObject.Permission, MsgColor.Red, MsgType.Hint);

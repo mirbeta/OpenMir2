@@ -989,7 +989,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         protected void HealthSpellChanged()
         {
             if (Race == ActorRace.Play)
@@ -1131,7 +1131,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         protected void MakeWeaponUnlock()
         {
             if (UseItems[Grobal2.U_WEAPON] == null)
@@ -3725,7 +3725,7 @@ namespace GameSvr.Actor
 
             return result;
         }
-        
+
         public bool CheckMagicLevelup(UserMagic userMagic)
         {
             var result = false;
@@ -4376,7 +4376,7 @@ namespace GameSvr.Actor
         {
             (this as PlayObject).ExtraAbil[0] = (ushort)nPower;
             (this as PlayObject).ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
-            SysMsg(Format(M2Share.g_sAttPowerUpTime,  nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
+            SysMsg(Format(M2Share.g_sAttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return true;

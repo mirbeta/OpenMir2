@@ -20,10 +20,10 @@ namespace GameSvr.GameCommand.Commands
             var sMonName = @Params[0];
             var OleMap = @Params[1];
             var NewMap = @Params[2];
-            var nX = @Params[3] == null ? (short)0 : System.Convert.ToInt16(@Params[3]);
-            var nY = @Params[4] == null ? (short)0 : System.Convert.ToInt16(@Params[4]);
-            var OnX = @Params[5] == null ? (short)0 : System.Convert.ToInt16(@Params[5]);
-            var OnY = @Params[6] == null ? (short)0 : System.Convert.ToInt16(@Params[6]);
+            var nX = @Params[3] == null ? (short)0 : Convert.ToInt16(@Params[3]);
+            var nY = @Params[4] == null ? (short)0 : Convert.ToInt16(@Params[4]);
+            var OnX = @Params[5] == null ? (short)0 : Convert.ToInt16(@Params[5]);
+            var OnY = @Params[6] == null ? (short)0 : Convert.ToInt16(@Params[6]);
             BaseObject MoveMon;
             if (sMonName == "" || OleMap == "" || NewMap == "" || sMonName != "" && sMonName[0] == '?')
             {

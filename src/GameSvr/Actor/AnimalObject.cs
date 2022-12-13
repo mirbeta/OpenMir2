@@ -34,7 +34,7 @@ namespace GameSvr.Actor
         /// 当前处理数量
         /// </summary>
         public int ProcessRunCount;
-        
+
         public AnimalObject() : base()
         {
             m_nNotProcessCount = 0;

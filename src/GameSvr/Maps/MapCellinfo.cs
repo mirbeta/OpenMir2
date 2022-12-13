@@ -48,12 +48,12 @@ namespace GameSvr.Maps
                 cell.Dispose();
             }
         }
-        
+
         public MapCellInfo()
         {
             Attribute = CellAttribute.Walk;
         }
-        
+
         /// <summary>
         /// 为了防止忘记显式的调用Dispose方法
         /// </summary>

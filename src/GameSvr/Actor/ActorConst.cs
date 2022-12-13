@@ -70,7 +70,7 @@ namespace GameSvr.Actor
 
     public class AbilConst
     {
-        public const byte EABIL_DCUP = 0;   
+        public const byte EABIL_DCUP = 0;
         public const byte EABIL_MCUP = 1;
         public const byte EABIL_SCUP = 2;
         public const byte EABIL_HITSPEEDUP = 3;

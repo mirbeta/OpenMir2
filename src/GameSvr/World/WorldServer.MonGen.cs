@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using GameSvr.Actor;
+﻿using GameSvr.Actor;
 using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
@@ -35,7 +34,7 @@ namespace GameSvr.World
         public void InitializeMonster()
         {
             var monsterGenMap = new Dictionary<string, IList<MonGenInfo>>(StringComparer.OrdinalIgnoreCase); //临时存放怪物刷新映射,这样也能知道每一个怪要刷新几个和统计
-            
+
             for (int i = 0; i < MonGenList.Count; i++)
             {
                 var monName = MonGenList[i].MonName;
@@ -48,7 +47,7 @@ namespace GameSvr.World
                     monsterGenMap.Add(monName, new List<MonGenInfo>() { MonGenList[i] });
                 }
             }
-            
+
             if (monsterGenMap.Count <= 0)
             {
                 for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)

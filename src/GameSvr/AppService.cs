@@ -269,7 +269,7 @@ namespace GameSvr
                     }
                 });
         }
-        
+
         private static Task ShowServerStatus(CancellationToken cancellationToken)
         {
             //GateShare.ShowLog = false;

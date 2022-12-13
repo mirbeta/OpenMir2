@@ -2811,45 +2811,42 @@ namespace GameSvr.Player
         protected override void ScatterBagItems(BaseObject ItemOfCreat)
         {
             const int DropWide = 2;
-            UserItem pu;
-            const string sExceptionMsg = "[Exception] TPlayObject::ScatterBagItems";
-            IList<DeleteItem> DelList = null;
             if (AngryRing || NoDropItem || Envir.Flag.boNODROPITEM)
             {
                 return;// 不死戒指
             }
-            var boDropall = M2Share.Config.DieRedScatterBagAll && PvpLevel() >= 2;
+            const string sExceptionMsg = "[Exception] TPlayObject::ScatterBagItems";
             try
             {
-                for (var i = ItemList.Count - 1; i >= 0; i--)
+                if (ItemList.Count > 0)
                 {
-                    if (boDropall || M2Share.RandomNumber.Random(M2Share.Config.DieScatterBagRate) == 0)
+                    IList<DeleteItem> DelList = new List<DeleteItem>();
+                    var boDropall = M2Share.Config.DieRedScatterBagAll && PvpLevel() >= 2;
+                    for (var i = ItemList.Count - 1; i >= 0; i--)
                     {
-                        if (DropItemDown(ItemList[i], DropWide, true, ItemOfCreat, this))
+                        if (boDropall || M2Share.RandomNumber.Random(M2Share.Config.DieScatterBagRate) == 0)
                         {
-                            pu = ItemList[i];
-                            if (Race == ActorRace.Play)
+                            if (DropItemDown(ItemList[i], DropWide, true, ItemOfCreat, this))
                             {
-                                if (DelList == null)
+                                if (Race == ActorRace.Play)
                                 {
-                                    DelList = new List<DeleteItem>();
+                                    DelList.Add(new DeleteItem()
+                                    {
+                                        ItemName = M2Share.WorldEngine.GetStdItemName(ItemList[i].Index),
+                                        MakeIndex = ItemList[i].MakeIndex
+                                    });
                                 }
-                                DelList.Add(new DeleteItem()
-                                {
-                                    ItemName = M2Share.WorldEngine.GetStdItemName(pu.Index),
-                                    MakeIndex = pu.MakeIndex
-                                });
+                                Dispose(ItemList[i]);
+                                ItemList.RemoveAt(i);
                             }
-                            Dispose(ItemList[i]);
-                            ItemList.RemoveAt(i);
                         }
                     }
-                }
-                if (DelList != null)
-                {
-                    var ObjectId = HUtil32.Sequence();
-                    M2Share.ActorMgr.AddOhter(ObjectId, DelList);
-                    this.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                    if (DelList != null)
+                    {
+                        var ObjectId = HUtil32.Sequence();
+                        M2Share.ActorMgr.AddOhter(ObjectId, DelList);
+                        this.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                    }
                 }
             }
             catch
@@ -3242,7 +3239,7 @@ namespace GameSvr.Player
             }
             BodyLuckLevel = n;
         }
-        
+
         public void SetPkFlag(BaseObject baseObject)
         {
             if (baseObject.Race == ActorRace.Play)
@@ -3309,7 +3306,7 @@ namespace GameSvr.Player
                 RefNameColor();
             }
         }
-        
+
         public void TrainSkill(UserMagic userMagic, int nTranPoint)
         {
             if (FastTrain)

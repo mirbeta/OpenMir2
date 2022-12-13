@@ -2,11 +2,10 @@
 using GameSvr.Actor;
 using GameSvr.Event;
 using GameSvr.Event.Events;
-using GameSvr.Npc;
-using System.Buffers;
-using System.Text;
 using GameSvr.Monster.Monsters;
+using GameSvr.Npc;
 using GameSvr.Player;
+using System.Text;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -165,7 +164,7 @@ namespace GameSvr.Maps
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 M2Share.Log.Error(sExceptionMsg);
             }
@@ -788,13 +787,13 @@ namespace GameSvr.Maps
                                 mapUnitInfo.wMidImg = binReader.ReadUInt16();
                                 mapUnitInfo.wFrImg = binReader.ReadUInt16();
                                 mapUnitInfo.btDoorIndex = binReader.ReadByte();
-                                mapUnitInfo.btDoorOffset= binReader.ReadByte();
-                                mapUnitInfo.btAniFrame= binReader.ReadByte();
-                                mapUnitInfo.btAniTick= binReader.ReadByte();
-                                mapUnitInfo.btArea= binReader.ReadByte();
-                                mapUnitInfo.btLight= binReader.ReadByte();
-                                
-                                if ((mapUnitInfo.wBkImg & 0x8000) !=0)// wBkImg High
+                                mapUnitInfo.btDoorOffset = binReader.ReadByte();
+                                mapUnitInfo.btAniFrame = binReader.ReadByte();
+                                mapUnitInfo.btAniTick = binReader.ReadByte();
+                                mapUnitInfo.btArea = binReader.ReadByte();
+                                mapUnitInfo.btLight = binReader.ReadByte();
+
+                                if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo() { Attribute = CellAttribute.HighWall };
                                 }
@@ -865,13 +864,13 @@ namespace GameSvr.Maps
                                 mapUnitInfo.wMidImg = binReader.ReadUInt16();
                                 mapUnitInfo.wFrImg = binReader.ReadUInt16();
                                 mapUnitInfo.btDoorIndex = binReader.ReadByte();
-                                mapUnitInfo.btDoorOffset= binReader.ReadByte();
-                                mapUnitInfo.btAniFrame= binReader.ReadByte();
-                                mapUnitInfo.btAniTick= binReader.ReadByte();
-                                mapUnitInfo.btArea= binReader.ReadByte();
-                                mapUnitInfo.btLight= binReader.ReadByte();
-                                if ((mapUnitInfo.wBkImg & 0x8000) !=0)// wBkImg High
-                                { 
+                                mapUnitInfo.btDoorOffset = binReader.ReadByte();
+                                mapUnitInfo.btAniFrame = binReader.ReadByte();
+                                mapUnitInfo.btAniTick = binReader.ReadByte();
+                                mapUnitInfo.btArea = binReader.ReadByte();
+                                mapUnitInfo.btLight = binReader.ReadByte();
+                                if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
+                                {
                                     _cellArray[n24 + nH] = MapCellInfo.HighWall;
                                 }
                                 if ((mapUnitInfo.wFrImg & 0x8000) != 0)// wFrImg High
@@ -1581,7 +1580,7 @@ namespace GameSvr.Maps
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
+
         private struct MapUnitInfo
         {
             public ushort wBkImg;

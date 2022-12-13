@@ -23,7 +23,7 @@ namespace GameSvr.Robots
         {
             ClearScript();
         }
-        
+
         private void AutoRun(AutoRunInfo AutoRunInfo)
         {
             if (M2Share.g_RobotNPC == null)
@@ -289,7 +289,7 @@ namespace GameSvr.Robots
             runTime = GetSundayDate(runWeekTime).ToUnixTimeMilliseconds();
             return true;
         }
-        
+
         private bool GetDayTime(string param, ref long runTime)
         {
             if (!DateTimeOffset.TryParse(param, out var runDayTime)) return false;
@@ -303,14 +303,14 @@ namespace GameSvr.Robots
             runTime = DateTimeOffset.Now.AddHours(runHour).ToUnixTimeMilliseconds();
             return true;
         }
-        
+
         private bool GetMinuteTime(string param, ref long runTime)
         {
             if (!int.TryParse(param, out var runHour)) return false;
             runTime = DateTimeOffset.Now.AddMinutes(runHour).ToUnixTimeMilliseconds();
             return true;
         }
-        
+
         private bool GetSecondTime(string param, ref long runTime)
         {
             if (!int.TryParse(param, out var runHour)) return false;

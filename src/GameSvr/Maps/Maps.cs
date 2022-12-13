@@ -349,7 +349,7 @@ namespace GameSvr.Maps
                         }
                         if (M2Share.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)
                         {
-                            
+
                         }
                         result = 1;
                     }
@@ -398,8 +398,8 @@ namespace GameSvr.Maps
                     var tStr = tMapList[i];
                     if (tStr != "" && tStr[0] != ';')
                     {
-                        tStr = HUtil32.GetValidStr3(tStr, ref sMapNO, new[]{ ' ', '\t' });
-                        tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx,new[] { ' ', '\t' });
+                        tStr = HUtil32.GetValidStr3(tStr, ref sMapNO, new[] { ' ', '\t' });
+                        tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx, new[] { ' ', '\t' });
                         var nIdx = HUtil32.StrToInt(sMapIdx, 0);
                         if (nIdx > 0)
                         {

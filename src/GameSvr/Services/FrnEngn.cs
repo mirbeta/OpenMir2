@@ -2,7 +2,6 @@ using GameSvr.Player;
 using NLog;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Packets.ServerPackets;
 
 namespace GameSvr.Services
 {
@@ -441,7 +440,6 @@ namespace GameSvr.Services
 
         private bool ChangeUserGoldInDB(TGoldChangeInfo GoldChangeInfo)
         {
-            PlayerDataInfo HumanRcd = null;
             var result = false;
             /*if (PlayerDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
             {

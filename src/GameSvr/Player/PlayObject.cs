@@ -1,13 +1,12 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Event.Events;
 using GameSvr.GameCommand;
-using GameSvr.Guild;
 using GameSvr.Items;
 using GameSvr.Maps;
 using GameSvr.Npc;
 using GameSvr.Services;
-using System.Text.RegularExpressions;
 using GameSvr.World;
+using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -1747,7 +1746,7 @@ namespace GameSvr.Player
             {
                 s10 = s10 + itemList[i].ItemName + '/' + itemList[i].MakeIndex + '/';
             }
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEMS, 0, 0, 0, (short)itemList.Count);
+            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEMS, 0, 0, 0, itemList.Count);
             SendSocket(m_DefMsg, EDCode.EncodeString(s10));
         }
 

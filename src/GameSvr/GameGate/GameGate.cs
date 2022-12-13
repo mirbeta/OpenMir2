@@ -1,9 +1,9 @@
-﻿using System.Net.Sockets;
-using System.Threading.Channels;
-using GameSvr.Player;
+﻿using GameSvr.Player;
 using GameSvr.Services;
 using GameSvr.World;
 using NLog;
+using System.Net.Sockets;
+using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets;
@@ -21,7 +21,7 @@ namespace GameSvr.GameGate
         private readonly CancellationTokenSource _cancellation;
         private readonly GameServerPacket packetHeader;
         private readonly ClientMesaagePacket clientMesaagePacket;
-        
+
         public GameGate(int gateIdx, GameGateInfo gateInfo)
         {
             _gateIdx = gateIdx;

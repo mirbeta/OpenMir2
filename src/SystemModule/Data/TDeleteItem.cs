@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class DeleteItem
+    public struct DeleteItem
     {
         public string ItemName;
         public int MakeIndex;

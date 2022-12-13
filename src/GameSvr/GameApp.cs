@@ -1,8 +1,8 @@
-﻿using GameSvr.Actor;
-using GameSvr.Castle;
+﻿using GameSvr.Castle;
 using GameSvr.DataSource;
 using GameSvr.Event;
 using GameSvr.GameCommand;
+using GameSvr.GameGate;
 using GameSvr.Guild;
 using GameSvr.Items;
 using GameSvr.Magic;
@@ -13,13 +13,12 @@ using GameSvr.Robots;
 using GameSvr.Script;
 using GameSvr.Services;
 using GameSvr.World;
+using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
-using GameSvr.GameGate;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
-using NLog;
 
 namespace GameSvr
 {
@@ -90,7 +89,7 @@ namespace GameSvr
             M2Share.g_DisableSellOffList = new List<string>();
             M2Share.g_DisableMoveMapList = new StringList();
             M2Share.g_DisableSendMsgList = new List<string>();
-            M2Share.g_MonDropLimitLIst = new ConcurrentDictionary<string, TMonDrop>(StringComparer.OrdinalIgnoreCase);
+            M2Share.g_MonDropLimitLIst = new ConcurrentDictionary<string, MonsterLimitDrop>(StringComparer.OrdinalIgnoreCase);
             M2Share.g_DisableTakeOffList = new Dictionary<int, string>();
             M2Share.g_UnMasterList = new List<string>();
             M2Share.g_UnForceMasterList = new List<string>();
@@ -277,7 +276,7 @@ namespace GameSvr
                 _logger.Error(ex.StackTrace);
             }
         }
-        
+
         private void LoadServerTable()
         {
             var nRouteIdx = 0;

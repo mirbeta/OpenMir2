@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
         {
             Race = ActorRace.Guard;
         }
-        
+
         public override void Struck(BaseObject hiter)
         {
             base.Struck(hiter);

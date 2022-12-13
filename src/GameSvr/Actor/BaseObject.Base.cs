@@ -1059,29 +1059,27 @@ namespace GameSvr.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
             {
-                var dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
                 if ((Race == ActorRace.PlayClone) && (Master != null))
                 {
                     return;
                 }
+                var dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
                 for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    var UserItem = ItemList[i];
-                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
                     var boCanNotDrop = false;
                     if (StdItem != null)
                     {
-                        TMonDrop MonDrop = null;
-                        if (M2Share.g_MonDropLimitLIst.TryGetValue(StdItem.Name, out MonDrop))
+                        if (M2Share.g_MonDropLimitLIst.TryGetValue(StdItem.Name, out var MonDrop))
                         {
-                            if (MonDrop.nDropCount < MonDrop.nCountLimit)
+                            if (MonDrop.DropCount < MonDrop.CountLimit)
                             {
-                                MonDrop.nDropCount++;
+                                MonDrop.DropCount++;
                                 M2Share.g_MonDropLimitLIst[StdItem.Name] = MonDrop;
                             }
                             else
                             {
-                                MonDrop.nNoDropCount++;
+                                MonDrop.NoDropCount++;
                                 boCanNotDrop = true;
                             }
                             break;
@@ -1091,9 +1089,9 @@ namespace GameSvr.Actor
                     {
                         continue;
                     }
-                    if (DropItemDown(UserItem, dropWide, true, ItemOfCreat, this))
+                    if (DropItemDown(ItemList[i], dropWide, true, ItemOfCreat, this))
                     {
-                        Dispose(UserItem);
+                        Dispose(ItemList[i]);
                         ItemList.RemoveAt(i);
                     }
                 }
@@ -1354,7 +1352,7 @@ namespace GameSvr.Actor
                         break;
 #if DEBUG
                     default:
-                         M2Share.Log.Warn(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", ChrName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
+                        M2Share.Log.Warn(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", ChrName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
                         break;
 #endif
                 }

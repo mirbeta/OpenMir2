@@ -40,7 +40,7 @@ namespace GameSvr.Actor
             };
             VisibleActors.Add(visibleBaseObject);
         }
-        
+
         protected virtual void UpdateVisibleGay(BaseObject baseObject)
         {
             bool boIsVisible = false;

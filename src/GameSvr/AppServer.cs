@@ -7,7 +7,6 @@ using Spectre.Console;
 using System.Reflection;
 using System.Text;
 using SystemModule.Hosts;
-using SystemModule.Logger;
 
 namespace GameSvr
 {
@@ -120,7 +119,7 @@ namespace GameSvr
 
         public override void Dispose()
         {
-             
+
         }
     }
 }
