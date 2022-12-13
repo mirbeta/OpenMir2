@@ -18,8 +18,8 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            ClientUserItem UserItem;
-            ClientUserItem UserItem1;
+            UserItem UserItem;
+            UserItem UserItem1;
             string s14;
             if (string.IsNullOrEmpty(sHumanName))
             {

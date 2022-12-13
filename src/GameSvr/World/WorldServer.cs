@@ -1097,14 +1097,14 @@ namespace GameSvr.World
             }
         }
 
-        public bool CopyToUserItemFromName(string sItemName, ref ClientUserItem item)
+        public bool CopyToUserItemFromName(string sItemName, ref UserItem item)
         {
             if (string.IsNullOrEmpty(sItemName)) return false;
             for (var i = 0; i < StdItemList.Count; i++)
             {
                 var stdItem = StdItemList[i];
                 if (!stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase)) continue;
-                if (item == null) item = new ClientUserItem();
+                if (item == null) item = new UserItem();
                 item.Index = (ushort)(i + 1);
                 item.MakeIndex = M2Share.GetItemNumber();
                 item.Dura = stdItem.DuraMax;

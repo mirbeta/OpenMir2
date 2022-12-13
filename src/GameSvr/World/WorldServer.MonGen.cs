@@ -483,7 +483,7 @@ namespace GameSvr.World
                         else
                         {
                             if (string.IsNullOrEmpty(itemName)) itemName = monItem.ItemName;
-                            ClientUserItem userItem = null;
+                            UserItem userItem = null;
                             if (CopyToUserItemFromName(itemName, ref userItem))
                             {
                                 userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100 * (20 + M2Share.RandomNumber.Random(80)));

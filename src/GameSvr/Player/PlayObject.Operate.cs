@@ -35,7 +35,7 @@ namespace GameSvr.Player
             string sSendMsg = string.Empty;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                ClientUserItem userItem = ItemList[i];
+                UserItem userItem = ItemList[i];
                 StdItem item = M2Share.WorldEngine.GetStdItem(userItem.Index);
                 if (item != null)
                 {
@@ -133,9 +133,9 @@ namespace GameSvr.Player
 
         private void ClientMerchantQuerySellPrice(int nParam1, int nMakeIndex, string sMsg)
         {
-            ClientUserItem userItem;
+            UserItem userItem;
             string sUserItemName;
-            ClientUserItem userItem18 = null;
+            UserItem userItem18 = null;
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];
@@ -384,7 +384,7 @@ namespace GameSvr.Player
         {
             var itemIndex = -1;
             var n18 = 0;
-            ClientUserItem userItem = null;
+            UserItem userItem = null;
             StdItem stdItem = null;
             ClientItem clientItem = null;
             for (var i = 0; i < ItemList.Count; i++)
@@ -413,7 +413,7 @@ namespace GameSvr.Player
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     if (CheckTakeOnItems(btWhere, ref clientItem) && CheckItemBindUse(userItem))
                     {
-                        ClientUserItem takeOffItem = null;
+                        UserItem takeOffItem = null;
                         if (btWhere <= 12)
                         {
                             if (UseItems[btWhere] != null && UseItems[btWhere].Index > 0)
@@ -596,7 +596,7 @@ namespace GameSvr.Player
             var result = false;
             for (var i = 0; i < nCount; i++)
             {
-                var userItem = new ClientUserItem();
+                var userItem = new UserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
                 {
                     ItemList.Add(userItem);
@@ -1114,7 +1114,7 @@ namespace GameSvr.Player
                 }
                 if (bo11)
                 {
-                    ClientUserItem userItem;
+                    UserItem userItem;
                     StdItem stdItem;
                     for (var i = 0; i < DealItemList.Count; i++)
                     {
@@ -1556,7 +1556,7 @@ namespace GameSvr.Player
 
         private void ClientQueryRepairCost(int nParam1, int nInt, string sMsg)
         {
-            ClientUserItem userItemA = null;
+            UserItem userItemA = null;
             string sUserItemName;
             for (var i = 0; i < ItemList.Count; i++)
             {
@@ -1584,7 +1584,7 @@ namespace GameSvr.Player
 
         private void ClientRepairItem(int nParam1, int nInt, string sMsg)
         {
-            ClientUserItem userItem = null;
+            UserItem userItem = null;
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];

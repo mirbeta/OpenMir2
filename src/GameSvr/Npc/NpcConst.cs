@@ -8,7 +8,7 @@ namespace GameSvr.Npc
     public class WeaponUpgradeInfo
     {
         public string UserName;
-        public ClientUserItem UserItem;
+        public UserItem UserItem;
         public byte Dc;
         public byte Sc;
         public byte Mc;

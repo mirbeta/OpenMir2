@@ -503,7 +503,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 检查武器升级状态
         /// </summary>
-        private void CheckWeaponUpgradeStatus(ref ClientUserItem userItem)
+        private void CheckWeaponUpgradeStatus(ref UserItem userItem)
         {
             if ((userItem.Desc[0] + userItem.Desc[1] + userItem.Desc[2]) < M2Share.Config.UpgradeWeaponMaxPoint)
             {
@@ -535,7 +535,7 @@ namespace GameSvr.Actor
         {
             if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0) //检车武器是否升级
             {
-                var useItems = new ClientUserItem(UseItems[Grobal2.U_WEAPON]);
+                var useItems = new UserItem(UseItems[Grobal2.U_WEAPON]);
                 CheckWeaponUpgradeStatus(ref UseItems[Grobal2.U_WEAPON]);
                 PlayObject PlayObject;
                 StdItem StdItem;

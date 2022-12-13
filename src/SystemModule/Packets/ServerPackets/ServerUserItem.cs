@@ -34,9 +34,9 @@ namespace SystemModule.Packets.ServerPackets
             Prefix = new char[13];
         }
 
-        public ClientUserItem ToClientItem()
+        public UserItem ToClientItem()
         {
-            return new ClientUserItem
+            return new UserItem
             {
                 MakeIndex = MakeIndex,
                 Index = Index,

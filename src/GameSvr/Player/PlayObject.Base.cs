@@ -122,11 +122,11 @@ namespace GameSvr.Player
         /// <summary>
         /// 交易列表
         /// </summary>
-        public IList<ClientUserItem> DealItemList;
+        public IList<UserItem> DealItemList;
         /// <summary>
         /// 仓库物品列表
         /// </summary>
-        internal readonly IList<ClientUserItem> StorageItemList;
+        internal readonly IList<UserItem> StorageItemList;
         /// <summary>
         /// 禁止私聊人员列表
         /// </summary>
@@ -701,7 +701,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 元宝寄售物品列表
         /// </summary>
-        private IList<ClientUserItem> m_SellOffItemList;
+        private IList<UserItem> m_SellOffItemList;
         public byte[] QuestUnitOpen;
         public byte[] QuestUnit;
         public byte[] QuestFlag;
@@ -711,8 +711,8 @@ namespace GameSvr.Player
             Race = ActorRace.Play;
             HomeMap = "0";
             DealGolds = 0;
-            DealItemList = new List<ClientUserItem>();
-            StorageItemList = new List<ClientUserItem>();
+            DealItemList = new List<UserItem>();
+            StorageItemList = new List<UserItem>();
             LockWhisperList = new List<string>();
             m_boEmergencyClose = false;
             m_boSwitchData = false;
@@ -967,7 +967,7 @@ namespace GameSvr.Player
         /// </summary>
         public void UserLogon()
         {
-            ClientUserItem UserItem;
+            UserItem UserItem;
             var sIPaddr = "127.0.0.1";
             const string sExceptionMsg = "[Exception] TPlayObject::UserLogon";
             const string sCheckIPaddrFail = "登录IP地址不匹配!!!";
@@ -1022,7 +1022,7 @@ namespace GameSvr.Player
                 }
                 if (m_boNewHuman)
                 {
-                    UserItem = new ClientUserItem();
+                    UserItem = new UserItem();
                     if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.Candle, ref UserItem))
                     {
                         ItemList.Add(UserItem);
@@ -1031,7 +1031,7 @@ namespace GameSvr.Player
                     {
                         Dispose(UserItem);
                     }
-                    UserItem = new ClientUserItem();
+                    UserItem = new UserItem();
                     if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.BasicDrug, ref UserItem))
                     {
                         ItemList.Add(UserItem);
@@ -1040,7 +1040,7 @@ namespace GameSvr.Player
                     {
                         Dispose(UserItem);
                     }
-                    UserItem = new ClientUserItem();
+                    UserItem = new UserItem();
                     if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.WoodenSword, ref UserItem))
                     {
                         ItemList.Add(UserItem);
@@ -1049,7 +1049,7 @@ namespace GameSvr.Player
                     {
                         Dispose(UserItem);
                     }
-                    UserItem = new ClientUserItem();
+                    UserItem = new UserItem();
                     var sItem = Gender == PlayGender.Man
                         ? M2Share.Config.ClothsMan
                         : M2Share.Config.ClothsWoman;
@@ -2811,7 +2811,7 @@ namespace GameSvr.Player
         protected override void ScatterBagItems(BaseObject ItemOfCreat)
         {
             const int DropWide = 2;
-            ClientUserItem pu;
+            UserItem pu;
             const string sExceptionMsg = "[Exception] TPlayObject::ScatterBagItems";
             IList<DeleteItem> DelList = null;
             if (AngryRing || NoDropItem || Envir.Flag.boNODROPITEM)

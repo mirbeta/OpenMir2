@@ -39,7 +39,7 @@ namespace GameSvr.GameCommand.Commands
             }
             var nCount = HUtil32.StrToInt(sItemCount, 0);
             var nType = HUtil32.StrToInt(sType, 0);
-            ClientUserItem UserItem;
+            UserItem UserItem;
             switch (nType)
             {
                 case 0:
@@ -58,7 +58,7 @@ namespace GameSvr.GameCommand.Commands
                             {
                                 break;
                             }
-                            UserItem = new ClientUserItem(); ;
+                            UserItem = new UserItem(); ;
                             UserItem = m_PlayObject.UseItems[i];
                             m_PlayObject.ItemList.Add(UserItem);
                             m_PlayObject.SendAddItem(UserItem);

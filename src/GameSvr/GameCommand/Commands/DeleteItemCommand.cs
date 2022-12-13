@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             var sItemName = @Params.Length > 1 ? @Params[1] : ""; //物品名称
             var nCount = @Params.Length > 2 ? int.Parse(@Params[2]) : 0; //数量
             Items.StdItem StdItem;
-            ClientUserItem UserItem;
+            UserItem UserItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

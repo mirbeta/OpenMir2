@@ -10,7 +10,7 @@ namespace SystemModule
     {
         public const char Backslash = '/';
         public static readonly char[] Separator = { ' ', ',', '\t' };
-        public static readonly ClientUserItem DelfautItem = new ClientUserItem();
+        public static readonly UserItem DelfautItem = new UserItem();
         public static readonly MagicRcd DetailtMagicRcd = new MagicRcd();
 
         /// <summary>

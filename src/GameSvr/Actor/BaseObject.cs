@@ -497,7 +497,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 物品列表
         /// </summary>
-        public IList<ClientUserItem> ItemList;
+        public IList<UserItem> ItemList;
         /// <summary>
         /// 技能表
         /// </summary>
@@ -505,7 +505,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 身上物品
         /// </summary>
-        public ClientUserItem[] UseItems;
+        public UserItem[] UseItems;
         public IList<TMonSayMsg> SayMsgList;
         private int SendRefMsgTick;
         /// <summary>
@@ -636,10 +636,10 @@ namespace GameSvr.Actor
             VisibleActors = new List<VisibleBaseObject>();
             VisibleItems = new List<VisibleMapItem>();
             VisibleEvents = new List<EventInfo>();
-            ItemList = new List<ClientUserItem>();
+            ItemList = new List<UserItem>();
             IsVisibleActive = false;
             MagicList = new List<UserMagic>();
-            UseItems = new ClientUserItem[13];
+            UseItems = new UserItem[13];
             GroupOwner = null;
             Castle = null;
             Master = null;
@@ -774,16 +774,15 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool DropItemDown(ClientUserItem userItem, int nScatterRange, bool boDieDrop, BaseObject itemOfCreat,
-            BaseObject dropCreat)
+        public bool DropItemDown(UserItem userItem, int nScatterRange, bool boDieDrop, BaseObject itemOfCreat, BaseObject dropCreat)
         {
-            var result = false;
-            var dx = 0;
-            var dy = 0;
             if (userItem == null)
             {
                 return false;
             }
+            var result = false;
+            var dx = 0;
+            var dy = 0;
             var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
@@ -799,7 +798,7 @@ namespace GameSvr.Actor
                 }
                 var mapItem = new MapItem
                 {
-                    UserItem = new ClientUserItem(userItem),
+                    UserItem = new UserItem(userItem),
                     Name = CustomItem.GetItemName(userItem),// 取自定义物品名称
                     Looks = stdItem.Looks
                 };
@@ -1726,7 +1725,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public bool AddItemToBag(ClientUserItem userItem)
+        public bool AddItemToBag(UserItem userItem)
         {
             var result = false;
             if (ItemList.Count < Grobal2.MAXBAGITEM)
@@ -4429,9 +4428,9 @@ namespace GameSvr.Actor
             return true;
         }
 
-        public ClientUserItem CheckItemCount(string sItemName, ref int nCount)
+        public UserItem CheckItemCount(string sItemName, ref int nCount)
         {
-            ClientUserItem result = null;
+            UserItem result = null;
             nCount = 0;
             for (var i = 0; i < UseItems.Length; i++)
             {
@@ -4449,7 +4448,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public ClientUserItem CheckItems(string sItemName)
+        public UserItem CheckItems(string sItemName)
         {
             for (var i = 0; i < ItemList.Count; i++)
             {
@@ -4851,7 +4850,7 @@ namespace GameSvr.Actor
                     break;
             }
 
-            UseItems = new ClientUserItem[8];
+            UseItems = new UserItem[8];
             for (var i = 0; i < ItemList.Count; i++)
             {
                 ItemList[i] = null;

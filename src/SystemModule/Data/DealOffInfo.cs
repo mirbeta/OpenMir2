@@ -27,7 +27,7 @@ namespace SystemModule.Data
         /// <summary>
         /// 物品
         /// </summary>        
-        public ClientUserItem[] UseItems;
+        public UserItem[] UseItems;
         public byte Flag;
     }
 }
