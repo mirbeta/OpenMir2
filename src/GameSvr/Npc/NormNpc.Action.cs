@@ -445,8 +445,8 @@ namespace GameSvr.Npc
         private void ActionOfOffLine(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
-            PlayObject.DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
-            PlayObject.SendSocket(PlayObject.DefMsg, EDCode.EncodeString(sOffLineStartMsg));
+            PlayObject.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
+            PlayObject.SendSocket(PlayObject.ClientMsg, EDCode.EncodeString(sOffLineStartMsg));
             var nTime = HUtil32.StrToInt(QuestActionInfo.sParam1, 5);
             var nPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, 500);
             var nKickOffLine = HUtil32.StrToInt(QuestActionInfo.sParam3, 1440 * 15);

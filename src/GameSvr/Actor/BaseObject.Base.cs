@@ -1057,11 +1057,11 @@ namespace GameSvr.Actor
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
-#if DEBUG
-                    default:
-                        M2Share.Log.Warn(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", ChrName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
-                        break;
-#endif
+//#if DEBUG
+//                    default:
+//                        M2Share.Log.Warn(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", ChrName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
+//                        break;
+//#endif
                 }
             }
             catch (Exception e)

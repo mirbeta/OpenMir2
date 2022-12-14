@@ -14,7 +14,7 @@ namespace GameSvr.GameGate
     public class GameGate
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly int _gateIdx;
+        private readonly int GateIdx;
         private readonly GameGateInfo _gateInfo;
         private readonly GateSendQueue _sendQueue;
         private readonly object _runSocketSection;
@@ -24,7 +24,7 @@ namespace GameSvr.GameGate
 
         public GameGate(int gateIdx, GameGateInfo gateInfo)
         {
-            _gateIdx = gateIdx;
+            GateIdx = gateIdx;
             _gateInfo = gateInfo;
             _runSocketSection = new object();
             _sendQueue = new GateSendQueue(gateInfo);
@@ -267,11 +267,11 @@ namespace GameSvr.GameGate
         {
             if (packet.PackLength == 0)
             {
-                ExecGateMessage(_gateIdx, GateInfo, packet, null, packet.PackLength);
+                ExecGateMessage(GateIdx, GateInfo, packet, null, packet.PackLength);
             }
             else
             {
-                ExecGateMessage(_gateIdx, GateInfo, packet, data, packet.PackLength);
+                ExecGateMessage(GateIdx, GateInfo, packet, data, packet.PackLength);
             }
         }
 
@@ -350,17 +350,25 @@ namespace GameSvr.GameGate
                                 GateUser.Certification = true;
                                 GateUser.Account = sAccount.Trim();
                                 GateUser.sChrName = sChrName.Trim();
-                                GateUser.nSessionID = nSessionID;
-                                GateUser.nClientVersion = nClientVersion;
+                                GateUser.SessionID = nSessionID;
+                                GateUser.ClientVersion = nClientVersion;
                                 GateUser.SessInfo = SessInfo;
-                                try
+                                var loadRcdInfo = new LoadDBInfo
                                 {
-                                    M2Share.FrontEngine.AddToLoadRcdList(sAccount, sChrName, GateUser.sIPaddr, boFlag, nSessionID, nPayMent, nPayMode, nClientVersion, nSocket, GateUser.SocketId, GateIdx, nPlayTime);
-                                }
-                                catch
-                                {
-                                    _logger.Error(sExceptionMsg);
-                                }
+                                    Account = sAccount,
+                                    ChrName = sChrName,
+                                    sIPaddr = GateUser.sIPaddr,
+                                    SessionID = nSessionID,
+                                    SoftVersionDate = nClientVersion,
+                                    PayMent = nPayMent,
+                                    PayMode = nPayMode,
+                                    SocketId = nSocket,
+                                    GSocketIdx = GateUser.SocketId,
+                                    GateIdx = GateIdx,
+                                    NewUserTick = HUtil32.GetTickCount(),
+                                    PlayTime = nPlayTime
+                                };
+                                M2Share.FrontEngine.AddToLoadRcdList(loadRcdInfo);
                             }
                             else
                             {
@@ -417,11 +425,11 @@ namespace GameSvr.GameGate
                                 }
                                 if (GateUser.PlayObject != null && GateUser.PlayObject.Ghost && !GateUser.PlayObject.BoReconnection)
                                 {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.nSessionID);
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.SessionID);
                                 }
                                 if (GateUser.PlayObject != null && GateUser.PlayObject.BoSoftClose && GateUser.PlayObject.BoReconnection && GateUser.PlayObject.BoEmergencyClose)
                                 {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.nSessionID);
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.SessionID);
                                 }
                                 GateInfo.UserList[i] = null;
                                 GateInfo.nUserCount -= 1;
@@ -447,7 +455,7 @@ namespace GameSvr.GameGate
                 sIPaddr = sIPaddr,
                 nSocket = socket,
                 SocketId = socketId,
-                nSessionID = 0,
+                SessionID = 0,
                 UserEngine = null,
                 FrontEngine = null,
                 PlayObject = null,

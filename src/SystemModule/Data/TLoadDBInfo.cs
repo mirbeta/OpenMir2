@@ -1,23 +1,21 @@
 ﻿namespace SystemModule.Data
 {
-    public class LoadDBInfo
+    public struct LoadDBInfo
     {
-        public int nGateIdx;
-        public int nSocket;
+        public int GateIdx;
+        public int SocketId;
         public string Account;
         public string ChrName;
-        public int nSessionID;
+        public int SessionID;
         public string sIPaddr;
-        public int nSoftVersionDate;
-        public int nPayMent;
-        public int nPayMode;
+        public int SoftVersionDate;
+        public int PayMent;
+        public int PayMode;
         /// <summary>
         /// 账号剩余游戏时间
         /// </summary>
         public long PlayTime;
-        public ushort nGSocketIdx;
-        public int dwNewUserTick;
-        public object PlayObject;
-        public int nReLoadCount;
+        public ushort GSocketIdx;
+        public int NewUserTick;
     }
 }

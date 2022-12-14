@@ -229,14 +229,14 @@ namespace GameSvr.Services
             for (var i = 0; i < m_LoadRcdTempList.Count; i++)
             {
                 var loadDbInfo = m_LoadRcdTempList[i];
-                if (loadDbInfo == null)
+                if (loadDbInfo.SessionID == 0)
                 {
                     continue;
                 }
                 if (!LoadHumFromDB(loadDbInfo, ref boReTryLoadDb))
                 {
-                    M2Share.GateMgr.CloseUser(loadDbInfo.nGateIdx, loadDbInfo.nSocket);
-                    Console.WriteLine("读取用户数据失败，踢出用户.");
+                    M2Share.GateMgr.CloseUser(loadDbInfo.GateIdx, loadDbInfo.SocketId);
+                    _logger.Debug("读取用户数据失败，踢出用户.");
                 }
                 else
                 {
@@ -293,25 +293,8 @@ namespace GameSvr.Services
             return result;
         }
 
-        public void AddToLoadRcdList(string sAccount, string sChrName, string sIPaddr, bool boFlag, int nSessionID, int nPayMent, int nPayMode, int nSoftVersionDate, int nSocket, ushort nGSocketIdx, int nGateIdx, long playTime)
+        public void AddToLoadRcdList(LoadDBInfo loadRcdInfo)
         {
-            var loadRcdInfo = new LoadDBInfo
-            {
-                Account = sAccount,
-                ChrName = sChrName,
-                sIPaddr = sIPaddr,
-                nSessionID = nSessionID,
-                nSoftVersionDate = nSoftVersionDate,
-                nPayMent = nPayMent,
-                nPayMode = nPayMode,
-                nSocket = nSocket,
-                nGSocketIdx = nGSocketIdx,
-                nGateIdx = nGateIdx,
-                dwNewUserTick = HUtil32.GetTickCount(),
-                PlayObject = null,
-                nReLoadCount = 0,
-                PlayTime = playTime
-            };
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
             {
@@ -339,9 +322,9 @@ namespace GameSvr.Services
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return false;
             }
-            if (!PlayerDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref queryId, LoadUser.nSessionID))
+            if (!PlayerDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref queryId, LoadUser.SessionID))
             {
-                M2Share.GateMgr.SendOutConnectMsg(LoadUser.nGateIdx, LoadUser.nSocket, LoadUser.nGSocketIdx);
+                M2Share.GateMgr.SendOutConnectMsg(LoadUser.GateIdx, LoadUser.SocketId, LoadUser.GSocketIdx);
             }
             else
             {
@@ -424,7 +407,7 @@ namespace GameSvr.Services
                 for (var i = 0; i < m_LoadRcdList.Count; i++)
                 {
                     LoadRcdInfo = m_LoadRcdList[i];
-                    if (LoadRcdInfo.nGateIdx == nGateIndex && LoadRcdInfo.nSocket == nSocket)
+                    if (LoadRcdInfo.GateIdx == nGateIndex && LoadRcdInfo.SocketId == nSocket)
                     {
                         DisPose(LoadRcdInfo);
                         m_LoadRcdList.RemoveAt(i);

@@ -103,12 +103,12 @@ namespace GameSvr.Actor
             while (actors.MoveNext())
             {
                 var actor = actors.Current.Value;
-                if (actors.Current.Value.Death)
+                if (actor.Death)
                 {
                     MonsterDeathCount++;
                 }
                 if (!actor.Ghost || actor.GhostTick <= 0) continue;
-                if ((HUtil32.GetTickCount() - actor.DeathTick) <= M2Share.Config.MakeGhostTime)
+                if ((HUtil32.GetTickCount() - actor.GhostTick) <= 20000)
                 {
                     continue; //死亡对象清理时间
                 }

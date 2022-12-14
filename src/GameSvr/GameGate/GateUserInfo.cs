@@ -11,7 +11,7 @@ namespace GameSvr.GameGate
         /// 人物对象
         /// </summary>
         public PlayObject PlayObject;
-        public int nSessionID;
+        public int SessionID;
         /// <summary>
         /// 账号
         /// </summary>
@@ -32,7 +32,7 @@ namespace GameSvr.GameGate
         /// <summary>
         /// 客户端版本号
         /// </summary>
-        public int nClientVersion;
+        public int ClientVersion;
         /// <summary>
         /// 当前会话信息
         /// </summary>

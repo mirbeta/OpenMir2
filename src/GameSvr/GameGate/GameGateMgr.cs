@@ -21,13 +21,13 @@ namespace GameSvr.GameGate
         private readonly SocketServer _gateSocket;
         private readonly object m_RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;
-        private readonly ConcurrentDictionary<int, GameGate> _GateMap;
+        private readonly ConcurrentDictionary<int, GameGate> GameGateMap;
 
         public GameGateMgr()
         {
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
-            _GateMap = new ConcurrentDictionary<int, GameGate>();
+            GameGateMap = new ConcurrentDictionary<int, GameGate>();
             _gateSocket = new SocketServer(100, 1024);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
@@ -66,7 +66,7 @@ namespace GameSvr.GameGate
             const string sKickGate = "服务器未就绪: {0}";
             if (M2Share.StartReady)
             {
-                if (_GateMap.Count > 20)
+                if (GameGateMap.Count > 20)
                 {
                     e.Socket.Close();
                     return;
@@ -86,8 +86,8 @@ namespace GameSvr.GameGate
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
                 _logger.Info(string.Format(sGateOpen, e.EndPoint));
-                _GateMap.TryAdd(e.SocHandle, new GameGate(e.SocHandle, gateInfo));
-                _GateMap[e.SocHandle].StartGateQueue();
+                GameGateMap.TryAdd(e.SocHandle, new GameGate(e.SocHandle, gateInfo));
+                GameGateMap[e.SocHandle].StartGateQueue();
             }
             else
             {
@@ -101,9 +101,9 @@ namespace GameSvr.GameGate
 
         public void CloseUser(int gateIdx, int nSocket)
         {
-            if (_GateMap.ContainsKey(gateIdx))
+            if (GameGateMap.ContainsKey(gateIdx))
             {
-                _GateMap[gateIdx].CloseUser(nSocket);
+                GameGateMap[gateIdx].CloseUser(nSocket);
             }
             else
             {
@@ -117,10 +117,10 @@ namespace GameSvr.GameGate
             const string sKickUserMsg = "当前登录帐号正在其它位置登录，本机已被强行离线!!!";
             try
             {
-                var keys = _GateMap.Keys.ToList();
-                for (int i = 0; i < _GateMap.Count; i++)
+                var keys = GameGateMap.Keys.ToList();
+                for (int i = 0; i < GameGateMap.Count; i++)
                 {
-                    var gateInfo = _GateMap[keys[i]].GateInfo;
+                    var gateInfo = GameGateMap[keys[i]].GateInfo;
                     if (gateInfo.BoUsed && gateInfo.Socket != null && gateInfo.UserList != null)
                     {
                         HUtil32.EnterCriticalSection(m_RunSocketSection);
@@ -133,7 +133,7 @@ namespace GameSvr.GameGate
                                 {
                                     continue;
                                 }
-                                if (gateUserInfo.Account == sAccount || gateUserInfo.nSessionID == nSessionID)
+                                if (gateUserInfo.Account == sAccount || gateUserInfo.SessionID == nSessionID)
                                 {
                                     if (gateUserInfo.FrontEngine != null)
                                     {
@@ -174,10 +174,10 @@ namespace GameSvr.GameGate
 
         public void CloseAllGate()
         {
-            var keys = _GateMap.Keys.ToList();
-            for (int i = 0; i < _GateMap.Count; i++)
+            var keys = GameGateMap.Keys.ToList();
+            for (int i = 0; i < GameGateMap.Count; i++)
             {
-                _GateMap[keys[i]].GateInfo.Socket.Close();
+                GameGateMap[keys[i]].GateInfo.Socket.Close();
             }
         }
 
@@ -195,16 +195,16 @@ namespace GameSvr.GameGate
             HUtil32.EnterCriticalSection(m_RunSocketSection);
             try
             {
-                if (!_GateMap.ContainsKey(e.SocHandle))
+                if (!GameGateMap.ContainsKey(e.SocHandle))
                 {
                     return;
                 }
-                if (_GateMap[e.SocHandle] == null)
+                if (GameGateMap[e.SocHandle] == null)
                 {
                     Debug.WriteLine("非法请求");
                     return;
                 }
-                var gateInfo = _GateMap[e.SocHandle].GateInfo;
+                var gateInfo = GameGateMap[e.SocHandle].GateInfo;
                 if (gateInfo.Socket == null)
                 {
                     Debug.WriteLine("Scoket为空，无需关闭");
@@ -223,7 +223,7 @@ namespace GameSvr.GameGate
                                 gateUser.PlayObject.BoEmergencyClose = true;
                                 if (!gateUser.PlayObject.BoReconnection)
                                 {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.nSessionID);
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                 }
                             }
                             userList[i] = null;
@@ -233,7 +233,7 @@ namespace GameSvr.GameGate
                     gateInfo.BoUsed = false;
                     gateInfo.Socket = null;
                     _logger.Error(string.Format(sGateClose, e.EndPoint));
-                    if (_GateMap.Remove(e.SocHandle, out var gameGate))
+                    if (GameGateMap.Remove(e.SocHandle, out var gameGate))
                     {
                         gameGate.Stop();
                     }
@@ -270,12 +270,12 @@ namespace GameSvr.GameGate
         /// </summary>
         public void SetGateUserList(int nGateIdx, int nSocket, PlayObject PlayObject)
         {
-            if (!_GateMap.ContainsKey(nGateIdx))
+            if (GameGateMap.TryGetValue(nGateIdx, out var runGate))
             {
+                runGate.SetGateUserList(nSocket, PlayObject);
                 return;
             }
-            var gameGate = _GateMap[nGateIdx];
-            gameGate.SetGateUserList(nSocket, PlayObject);
+            _logger.Debug("设置用户对应网关失败,网关ID不存在.");
         }
 
         public void Run()
@@ -283,9 +283,9 @@ namespace GameSvr.GameGate
             var dwRunTick = HUtil32.GetTickCount();
             if (M2Share.StartReady)
             {
-                if (_GateMap.IsEmpty)
+                if (GameGateMap.IsEmpty)
                 {
-                    var gateServiceList = _GateMap.Values.ToList();
+                    var gateServiceList = GameGateMap.Values.ToList();
                     foreach (var gateService in gateServiceList)
                     {
                         var gateInfo = gateService.GateInfo;
@@ -367,13 +367,13 @@ namespace GameSvr.GameGate
         /// <returns></returns>
         public bool AddGateBuffer(int gateIdx, byte[] buffer)
         {
-            var result = false;
-            if (_GateMap.ContainsKey(gateIdx))
+            if (GameGateMap.TryGetValue(gateIdx, out GameGate value))
             {
-                _GateMap[gateIdx].HandleSendBuffer(buffer);
-                result = true;
+                value.HandleSendBuffer(buffer);
+                return true;
             }
-            return result;
+            _logger.Error("发送网关消息失败，用户对应网关ID不存在.");
+            return false;
         }
 
         /// <summary>
@@ -426,7 +426,7 @@ namespace GameSvr.GameGate
 
         private void GateSocketClientRead(object sender, AsyncUserToken e)
         {
-            if (_GateMap.ContainsKey(e.SocHandle))
+            if (GameGateMap.TryGetValue(e.SocHandle, out var runGate))
             {
                 var nMsgLen = e.BytesReceived;
                 if (nMsgLen <= 0)
@@ -435,7 +435,7 @@ namespace GameSvr.GameGate
                 }
                 Span<byte> data = stackalloc byte[e.BytesReceived];
                 MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
-                _GateMap[e.SocHandle].ProcessReceiveBuffer(nMsgLen, data);
+                runGate.ProcessReceiveBuffer(nMsgLen, data);
             }
             else
             {

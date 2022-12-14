@@ -433,7 +433,7 @@ namespace GameSvr.Actor
         protected int VerifyTick;
         protected int CheckRoyaltyTick;
         protected int MDwHpmpTick;
-        protected readonly PriorityQueue<SendMessage, byte> MsgQueue;
+        protected readonly PriorityQueue<SendMessage, int> MsgQueue;
         protected readonly IList<BaseObject> VisibleHumanList;
         protected readonly IList<VisibleMapItem> VisibleItems;
         protected readonly IList<EventInfo> VisibleEvents;
@@ -571,7 +571,7 @@ namespace GameSvr.Actor
             NoAttackMode = false;
             NoTame = false;
             AddAbil = new AddAbility();
-            MsgQueue = new PriorityQueue<SendMessage, byte>();
+            MsgQueue = new PriorityQueue<SendMessage, int>();
             VisibleHumanList = new List<BaseObject>();
             VisibleActors = new List<VisibleBaseObject>();
             VisibleItems = new List<VisibleMapItem>();
@@ -2048,7 +2048,7 @@ namespace GameSvr.Actor
                         BaseObject = baseObject.ActorId,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage, 0);
+                    MsgQueue.Enqueue(sendMessage, 1);
                 }
             }
             finally
@@ -2077,7 +2077,7 @@ namespace GameSvr.Actor
                         LateDelivery = false,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage, 1);
+                    MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
             finally
@@ -2108,7 +2108,7 @@ namespace GameSvr.Actor
                         LateDelivery = true,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage, 1);
+                    MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
             finally
@@ -2140,7 +2140,7 @@ namespace GameSvr.Actor
                         Buff = sMsg
                     };
                     sendMessage.BaseObject = baseObject == Grobal2.RM_STRUCK ? Grobal2.RM_STRUCK : baseObject;
-                    MsgQueue.Enqueue(sendMessage, 1);
+                    MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
             finally

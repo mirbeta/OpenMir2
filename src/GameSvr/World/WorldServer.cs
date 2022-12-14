@@ -313,8 +313,8 @@ namespace GameSvr.World
                 if (!M2Share.Config.VentureServer)
                 {
                     userOpenInfo.ChrName = string.Empty;
-                    userOpenInfo.LoadUser.nSessionID = 0;
-                    switchDataInfo = GetSwitchData(userOpenInfo.ChrName, userOpenInfo.LoadUser.nSessionID);
+                    userOpenInfo.LoadUser.SessionID = 0;
+                    switchDataInfo = GetSwitchData(userOpenInfo.ChrName, userOpenInfo.LoadUser.SessionID);
                 }
                 else
                 {
@@ -421,10 +421,10 @@ namespace GameSvr.World
                     envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);//切换其他服务器
                     if (envir == null)
                     {
-                        playObject.SessionId = userOpenInfo.LoadUser.nSessionID;
-                        playObject.SocketId = userOpenInfo.LoadUser.nSocket;
-                        playObject.GateIdx = (byte)userOpenInfo.LoadUser.nGateIdx;
-                        playObject.SocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
+                        playObject.SessionId = userOpenInfo.LoadUser.SessionID;
+                        playObject.SocketId = userOpenInfo.LoadUser.SocketId;
+                        playObject.GateIdx = userOpenInfo.LoadUser.GateIdx;
+                        playObject.SocketIdx = userOpenInfo.LoadUser.GSocketIdx;
                         playObject.WAbil = playObject.Abil;
                         playObject.ServerIndex = (byte)M2Share.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
@@ -514,18 +514,18 @@ namespace GameSvr.World
                 playObject.UserAccount = userOpenInfo.LoadUser.Account;
                 playObject.LoginIpAddr = userOpenInfo.LoadUser.sIPaddr;
                 playObject.LoginIpLocal = M2Share.GetIPLocal(playObject.LoginIpAddr);
-                playObject.SocketId = userOpenInfo.LoadUser.nSocket;
-                playObject.SocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
-                playObject.GateIdx = (byte)userOpenInfo.LoadUser.nGateIdx;
-                playObject.SessionId = userOpenInfo.LoadUser.nSessionID;
-                playObject.PayMent = (byte)userOpenInfo.LoadUser.nPayMent;
-                playObject.PayMode = (byte)userOpenInfo.LoadUser.nPayMode;
+                playObject.SocketId = userOpenInfo.LoadUser.SocketId;
+                playObject.SocketIdx = userOpenInfo.LoadUser.GSocketIdx;
+                playObject.GateIdx = userOpenInfo.LoadUser.GateIdx;
+                playObject.SessionId = userOpenInfo.LoadUser.SessionID;
+                playObject.PayMent = (byte)userOpenInfo.LoadUser.PayMent;
+                playObject.PayMode = (byte)userOpenInfo.LoadUser.PayMode;
                 playObject.ExpireTime = userOpenInfo.LoadUser.PlayTime;
                 playObject.ExpireCount = (int)Math.Round(TimeSpan.FromSeconds(playObject.ExpireTime).TotalMinutes, 1);
-                playObject.MDwLoadTick = userOpenInfo.LoadUser.dwNewUserTick;
+                playObject.MDwLoadTick = userOpenInfo.LoadUser.NewUserTick;
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
-                playObject.SoftVersionDate = userOpenInfo.LoadUser.nSoftVersionDate;
-                playObject.SoftVersionDateEx = userOpenInfo.LoadUser.nSoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
+                playObject.SoftVersionDate = userOpenInfo.LoadUser.SoftVersionDate;
+                playObject.SoftVersionDateEx = userOpenInfo.LoadUser.SoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 result = playObject;
             }
             catch (Exception ex)
@@ -565,7 +565,7 @@ namespace GameSvr.World
                                 {
                                     _logger.Warn($"获取玩家数据[{userOpenInfo.ChrName}]失败.");
                                     tempList.Add(i);
-                                    M2Share.GateMgr.SendOutConnectMsg(userOpenInfo.LoadUser.nGateIdx, userOpenInfo.LoadUser.nSocket, userOpenInfo.LoadUser.nGSocketIdx);
+                                    M2Share.GateMgr.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
                                     continue;
                                 }
                                 if (!PlayerDataService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
@@ -592,8 +592,8 @@ namespace GameSvr.World
                             else
                             {
                                 KickOnlineUser(userOpenInfo.ChrName);
-                                ListOfGateIdx.Add(userOpenInfo.LoadUser.nGateIdx);
-                                ListOfSocket.Add(userOpenInfo.LoadUser.nSocket);
+                                ListOfGateIdx.Add(userOpenInfo.LoadUser.GateIdx);
+                                ListOfSocket.Add(userOpenInfo.LoadUser.SocketId);
                             }
                             LoadPlayList[i] = null;
                         }

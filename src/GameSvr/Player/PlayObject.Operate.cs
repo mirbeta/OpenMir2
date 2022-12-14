@@ -54,8 +54,8 @@ namespace GameSvr.Player
             }
             if (!string.IsNullOrEmpty(sSendMsg))
             {
-                DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BAGITEMS, ActorId, 0, 0, (short)ItemList.Count);
-                SendSocket(DefMsg, sSendMsg);
+                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BAGITEMS, ActorId, 0, 0, (short)ItemList.Count);
+                SendSocket(ClientMsg, sSendMsg);
             }
         }
 
@@ -106,8 +106,8 @@ namespace GameSvr.Player
                     userState.UseItems[i] = clientItem;
                 }
             }
-            DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
-            SendSocket(DefMsg, EDCode.EncodeBuffer(userState));
+            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
+            SendSocket(ClientMsg, EDCode.EncodeBuffer(userState));
         }
 
         private void ClientMerchantDlgSelect(int nParam1, string sMsg)
@@ -1263,8 +1263,8 @@ namespace GameSvr.Player
                     }
                     sC = sC + MyGuild.GuildAllList[i] + '\r';
                 }
-                DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OPENGUILDDLG, 0, 0, 0, 1);
-                SendSocket(DefMsg, EDCode.EncodeString(sC));
+                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OPENGUILDDLG, 0, 0, 0, 1);
+                SendSocket(ClientMsg, EDCode.EncodeString(sC));
             }
             else
             {
@@ -1297,8 +1297,8 @@ namespace GameSvr.Player
                     sSendMsg = sSendMsg + guildRank.MemberList[j].sMemberName + '/';
                 }
             }
-            DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
-            SendSocket(DefMsg, EDCode.EncodeString(sSendMsg));
+            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
+            SendSocket(ClientMsg, EDCode.EncodeString(sSendMsg));
         }
 
         private void ClientGuildAddMember(string sHumName)

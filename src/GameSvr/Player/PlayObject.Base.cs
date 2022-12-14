@@ -140,7 +140,7 @@ namespace GameSvr.Player
         /// 行会传送
         /// </summary>
         public bool GuildMove = false;
-        public ClientMesaagePacket DefMsg;
+        public ClientMesaagePacket ClientMsg;
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
@@ -212,7 +212,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 是否在安全区域
         /// </summary>
-        private bool InSafeArea;
+        private bool IsSafeArea;
         /// <summary>
         /// 喊话消息间隔
         /// </summary>
@@ -265,7 +265,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 人物所在网关号
         /// </summary>
-        public byte GateIdx = 0;
+        public int GateIdx = 0;
         public int SoftVersionDate = 0;
         /// <summary>
         /// 登录时间
@@ -816,7 +816,7 @@ namespace GameSvr.Player
             IsSendNotice = false;
             CheckDupObjTick = HUtil32.GetTickCount();
             DiscountForNightTick = HUtil32.GetTickCount();
-            InSafeArea = false;
+            IsSafeArea = false;
             MDwMagicAttackTick = HUtil32.GetTickCount();
             MDwMagicAttackInterval = 0;
             MDwAttackTick = HUtil32.GetTickCount();
@@ -948,6 +948,7 @@ namespace GameSvr.Player
 
         private void SendNotice()
         {
+            //todo 优化
             var loadList = new List<string>();
             M2Share.NoticeMgr.GetNoticeMsg("Notice", loadList);
             var sNoticeMsg = string.Empty;
@@ -963,7 +964,6 @@ namespace GameSvr.Player
 
         public void RunNotice()
         {
-            ProcessMessage msg;
             const string sExceptionMsg = "[Exception] TPlayObject::RunNotice";
             if (BoEmergencyClose || BoKickFlag || BoSoftClose)
             {
@@ -989,7 +989,7 @@ namespace GameSvr.Player
                         {
                             BoEmergencyClose = true;
                         }
-                        while (GetMessage(out msg))
+                        while (GetMessage(out var msg))
                         {
                             if (msg.wIdent == Grobal2.CM_LOGINNOTICEOK)
                             {
@@ -1010,7 +1010,7 @@ namespace GameSvr.Player
         private void SendLogon()
         {
             var messageBodyWl = new MessageBodyWL();
-            DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
+            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
             messageBodyWl.Param1 = GetFeatureToLong();
             messageBodyWl.Param2 = CharStatus;
             if (AllowGroup)
@@ -1022,7 +1022,7 @@ namespace GameSvr.Player
                 messageBodyWl.Tag1 = 0;
             }
             messageBodyWl.Tag2 = 0;
-            SendSocket(DefMsg, EDCode.EncodeBuffer(messageBodyWl));
+            SendSocket(ClientMsg, EDCode.EncodeBuffer(messageBodyWl));
             var nRecog = GetFeatureToLong();
             SendDefMessage(Grobal2.SM_FEATURECHANGED, ActorId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
             SendDefMessage(Grobal2.SM_ATTACKMODE, (byte)AttatckMode, 0, 0, 0, "");

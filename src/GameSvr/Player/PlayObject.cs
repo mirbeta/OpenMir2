@@ -223,8 +223,8 @@ namespace GameSvr.Player
                     clientItem.Item.Shape = 130;
                 }
             }
-            DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ActorId, 0, 0, 1);
-            SendSocket(DefMsg, EDCode.EncodeBuffer(clientItem));
+            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDITEM, ActorId, 0, 0, 1);
+            SendSocket(ClientMsg, EDCode.EncodeBuffer(clientItem));
         }
 
         internal bool IsBlockWhisper(string sName)
@@ -332,14 +332,14 @@ namespace GameSvr.Player
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)
         {
-            DefMsg = Grobal2.MakeDefaultMsg(wIdent, nRecog, nParam, nTag, nSeries);
+            ClientMsg = Grobal2.MakeDefaultMsg(wIdent, nRecog, nParam, nTag, nSeries);
             if (!string.IsNullOrEmpty(sMsg))
             {
-                SendSocket(DefMsg, EDCode.EncodeString(sMsg));
+                SendSocket(ClientMsg, EDCode.EncodeString(sMsg));
             }
             else
             {
-                SendSocket(DefMsg);
+                SendSocket(ClientMsg);
             }
         }
 
@@ -1151,8 +1151,8 @@ namespace GameSvr.Player
             }
             if (sSendMsg != "")
             {
-                DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSEITEMS, 0, 0, 0, 0);
-                SendSocket(DefMsg, sSendMsg);
+                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSEITEMS, 0, 0, 0, 0);
+                SendSocket(ClientMsg, sSendMsg);
             }
         }
 
@@ -1171,8 +1171,8 @@ namespace GameSvr.Player
             }
             if (!string.IsNullOrEmpty(sSendMsg))
             {
-                DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDMYMAGIC, 0, 0, 0, (short)MagicList.Count);
-                SendSocket(DefMsg, sSendMsg);
+                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDMYMAGIC, 0, 0, 0, (short)MagicList.Count);
+                SendSocket(ClientMsg, sSendMsg);
             }
         }
 
@@ -1308,8 +1308,8 @@ namespace GameSvr.Player
                     sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofTaos) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofTaos);
                     break;
             }
-            DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADJUST_BONUS, BonusPoint, 0, 0, 0);
-            SendSocket(DefMsg, sSendMsg);
+            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADJUST_BONUS, BonusPoint, 0, 0, 0);
+            SendSocket(ClientMsg, sSendMsg);
         }
 
         private void PvpDie(PlayObject playObject)
@@ -1720,8 +1720,8 @@ namespace GameSvr.Player
                         sSendMsg = sSendMsg + EDCode.EncodeBuffer(clientItem) + '/';
                     }
                 }
-                DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, merchantId, 0, p, (page - 1) < 0 ? 0 : page - 1);
-                SendSocket(DefMsg, sSendMsg);
+                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SAVEITEMLIST, merchantId, 0, p, (page - 1) < 0 ? 0 : page - 1);
+                SendSocket(ClientMsg, sSendMsg);
             }
         }
 
@@ -1744,8 +1744,8 @@ namespace GameSvr.Player
             {
                 s10 = s10 + itemList[i].ItemName + '/' + itemList[i].MakeIndex + '/';
             }
-            DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEMS, 0, 0, 0, itemList.Count);
-            SendSocket(DefMsg, EDCode.EncodeString(s10));
+            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEMS, 0, 0, 0, itemList.Count);
+            SendSocket(ClientMsg, EDCode.EncodeString(s10));
         }
 
         public void SendDelItems(UserItem userItem)
@@ -1763,8 +1763,8 @@ namespace GameSvr.Player
                 {
                     clientItem.Item.Name = clientItem.Item.Name + " #" + userItem.Dura;
                 }
-                DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ActorId, 0, 0, 1);
-                SendSocket(DefMsg, EDCode.EncodeBuffer(clientItem));
+                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELITEM, ActorId, 0, 0, 1);
+                SendSocket(ClientMsg, EDCode.EncodeBuffer(clientItem));
             }
         }
 
@@ -1783,8 +1783,8 @@ namespace GameSvr.Player
                 {
                     clientItem.Item.Name = clientItem.Item.Name + " #" + userItem.Dura;
                 }
-                DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
-                SendSocket(DefMsg, EDCode.EncodeBuffer(clientItem));
+                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
+                SendSocket(ClientMsg, EDCode.EncodeBuffer(clientItem));
             }
         }
 
@@ -1804,8 +1804,8 @@ namespace GameSvr.Player
                     clientItem.Item.Name = clientItem.Item.Name + " #" + userItem.Dura;
                 }
                 ChangeItemWithLevel(ref clientItem, level);
-                DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
-                SendSocket(DefMsg, EDCode.EncodeBuffer(clientItem));
+                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
+                SendSocket(ClientMsg, EDCode.EncodeBuffer(clientItem));
             }
         }
 
@@ -1825,8 +1825,8 @@ namespace GameSvr.Player
                     clientItem.Item.Name = clientItem.Item.Name + " #" + userItem.Dura;
                 }
                 ChangeItemByJob(ref clientItem, level);
-                DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
-                SendSocket(DefMsg, EDCode.EncodeBuffer(clientItem));
+                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_UPDATEITEM, ActorId, 0, 0, 1);
+                SendSocket(ClientMsg, EDCode.EncodeBuffer(clientItem));
             }
         }
 
@@ -2314,14 +2314,14 @@ namespace GameSvr.Player
                 CurTrain = userMagic.TranPoint,
                 Def = userMagic.Magic
             };
-            DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDMAGIC, 0, 0, 0, 1);
-            SendSocket(DefMsg, EDCode.EncodeBuffer(clientMagic));
+            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ADDMAGIC, 0, 0, 0, 1);
+            SendSocket(ClientMsg, EDCode.EncodeBuffer(clientMagic));
         }
 
         internal void SendDelMagic(UserMagic userMagic)
         {
-            DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELMAGIC, userMagic.MagIdx, 0, 0, 1);
-            SendSocket(DefMsg);
+            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELMAGIC, userMagic.MagIdx, 0, 0, 1);
+            SendSocket(ClientMsg);
         }
 
         /// <summary>
@@ -2470,8 +2470,8 @@ namespace GameSvr.Player
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
-                    DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEDELITEM, ActorId, 0, 0, 1);
-                    DealCreat.SendSocket(DefMsg, EDCode.EncodeBuffer(clientItem));
+                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEDELITEM, ActorId, 0, 0, 1);
+                    DealCreat.SendSocket(ClientMsg, EDCode.EncodeBuffer(clientItem));
                     DealCreat.DealLastTick = HUtil32.GetTickCount();
                     DealLastTick = HUtil32.GetTickCount();
                 }
@@ -2497,8 +2497,8 @@ namespace GameSvr.Player
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
-                    DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEADDITEM, ActorId, 0, 0, 1);
-                    DealCreat.SendSocket(DefMsg, EDCode.EncodeBuffer(clientItem));
+                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEALREMOTEADDITEM, ActorId, 0, 0, 1);
+                    DealCreat.SendSocket(ClientMsg, EDCode.EncodeBuffer(clientItem));
                     DealCreat.DealLastTick = HUtil32.GetTickCount();
                     DealLastTick = HUtil32.GetTickCount();
                 }
