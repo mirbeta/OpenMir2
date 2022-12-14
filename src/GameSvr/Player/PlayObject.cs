@@ -142,10 +142,6 @@ namespace GameSvr.Player
                 {
                     dwExp = HUtil32.Round(Envir.Flag.nEXPRATE / 100 * dwExp);// 地图上指定杀怪经验倍数
                 }
-                if (BoExpItem) // 物品经验倍数
-                {
-                    dwExp = HUtil32.Round(ExpItem * dwExp);
-                }
                 GetExp(dwExp);
             }
         }

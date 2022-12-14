@@ -199,6 +199,7 @@ namespace GameSvr.Player
         public GuildInfo MyGuild;
         public short GuildRankNo;
         public string GuildRankName = string.Empty;
+        public string ScriptLable = string.Empty;
         public string MSOldSayMsg;
         public int MNSayMsgCount = 0;
         public int MDwSayMsgTick;
@@ -413,7 +414,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 治愈戒指
         /// </summary>
-        private bool _recoveryRing;
+        private bool RecoveryRing;
         /// <summary>
         /// 未知戒指
         /// </summary>
@@ -442,6 +443,15 @@ namespace GameSvr.Player
         /// 记忆全套
         /// </summary>
         public bool RecallSuite;
+        /// <summary>
+        /// 魔血一套
+        /// </summary>
+        protected int MoXieSuite;
+        /// <summary>
+        /// 虹魔一套
+        /// </summary>
+        internal int SuckupEnemyHealthRate;
+        internal double SuckupEnemyHealth;
         public double BodyLuck;
         public int BodyLuckLevel;
         public bool MBoDieInFight3Zone;
@@ -1533,9 +1543,12 @@ namespace GameSvr.Player
                 var mhRing = false;
                 var mhBracelet = false;
                 var mhNecklace = false;
-                _recoveryRing = false;
+                RecoveryRing = false;
                 AngryRing = false;
                 MagicShield = false;
+                MoXieSuite = 0;
+                SuckupEnemyHealthRate = 0;
+                SuckupEnemyHealth = 0;
                 bool[] cghi = new bool[4] { false, false, false, false };
                 var shRing = false;
                 var shBracelet = false;
@@ -1757,7 +1770,7 @@ namespace GameSvr.Player
                                                 _flameRing = true;
                                                 break;
                                             case ItemShapeConst.RING_HEALING_ITEM:
-                                                _recoveryRing = true;
+                                                RecoveryRing = true;
                                                 break;
                                             case ItemShapeConst.RING_ANGERENERGY_ITEM:
                                                 AngryRing = true;
@@ -2265,7 +2278,7 @@ namespace GameSvr.Player
                 {
                     DelItemSkill(M2Share.AM_FIREBALL);
                 }
-                if (_recoveryRing)
+                if (RecoveryRing)
                 {
                     AddItemSkill(M2Share.AM_HEALING);
                 }
@@ -2284,6 +2297,19 @@ namespace GameSvr.Player
                     else
                     {
                         WAbil.MaxHandWeight = (byte)(WAbil.MaxHandWeight * 2);
+                    }
+                }
+                if (MoXieSuite > 0)
+                {
+                    if (MoXieSuite >= WAbil.MaxMP)
+                    {
+                        MoXieSuite = WAbil.MaxMP - 1;
+                    }
+                    WAbil.MaxMP = (ushort)(WAbil.MaxMP - MoXieSuite);
+                    WAbil.MaxHP = (ushort)(WAbil.MaxHP + MoXieSuite);
+                    if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP))
+                    {
+                        WAbil.HP = WAbil.MaxHP;
                     }
                 }
                 if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))

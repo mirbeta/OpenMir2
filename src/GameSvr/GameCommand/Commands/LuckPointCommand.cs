@@ -36,7 +36,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandLuckPointMsg, sHumanName, mPlayObject.BodyLuckLevel, mPlayObject.BodyLuck, mPlayObject.Luck), MsgColor.Green, MsgType.Hint);
                 return;
             }
-            var nPoint = HUtil32.StrToInt(sPoint, 0);
+            var nPoint = (byte)HUtil32.StrToInt(sPoint, 0);
             var cMethod = sCtr[0];
             switch (cMethod)
             {

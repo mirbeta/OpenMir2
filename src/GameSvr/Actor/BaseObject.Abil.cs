@@ -165,9 +165,6 @@ namespace GameSvr.Actor
             HitSpeed = 0;
             var oldhmode = HideMode;
             HideMode = false;
-            MoXieSuite = 0;
-            SuckupEnemyHealthRate = 0;
-            SuckupEnemyHealth = 0;
             if (Transparent && (StatusArr[PoisonState.STATE_TRANSPARENT] > 0))
             {
                 HideMode = true;
@@ -206,8 +203,8 @@ namespace GameSvr.Actor
             HealthRecover = (ushort)(HealthRecover + AddAbil.HealthRecover);
             SpellRecover = (ushort)(SpellRecover + AddAbil.SpellRecover);
             AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
-            Luck = Luck + AddAbil.Luck;
-            Luck = Luck - AddAbil.UnLuck;
+            Luck = (byte)(Luck + AddAbil.Luck);
+            Luck = (byte)(Luck - AddAbil.UnLuck);
             HitSpeed = AddAbil.HitSpeed;
             WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
             WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
@@ -223,19 +220,6 @@ namespace GameSvr.Actor
             if (StatusArr[PoisonState.MAGDEFENCEUP] > 0)
             {
                 WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + StatusArrTick[PoisonState.MAGDEFENCEUP]));
-            }
-            if (MoXieSuite > 0)
-            {
-                if (MoXieSuite >= WAbil.MaxMP)
-                {
-                    MoXieSuite = WAbil.MaxMP - 1;
-                }
-                WAbil.MaxMP = (ushort)(WAbil.MaxMP - MoXieSuite);
-                WAbil.MaxHP = (ushort)(WAbil.MaxHP + MoXieSuite);
-                if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP))
-                {
-                    WAbil.HP = WAbil.MaxHP;
-                }
             }
             if (Race >= ActorRace.Animal)
             {

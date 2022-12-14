@@ -104,7 +104,7 @@ namespace GameSvr.Npc
                     return;
                 }
                 string s18;
-                if (sData != "" && sData[0] == '@')
+                if (!string.IsNullOrEmpty(sData) && sData[0] == '@')
                 {
                     var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                     s18 = "";

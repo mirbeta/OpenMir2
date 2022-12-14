@@ -144,7 +144,7 @@ namespace GameSvr.Actor
             }
         }
 
-        protected bool _Attack(ref short wHitMode, BaseObject AttackTarget)
+        protected virtual bool _Attack(ref short wHitMode, BaseObject AttackTarget)
         {
             int n20;
             bool result = false;
@@ -300,18 +300,18 @@ namespace GameSvr.Actor
                             AttackTarget.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
                         }
                     }
-                    if (SuckupEnemyHealthRate > 0)// 虹魔，吸血
-                    {
-                        SuckupEnemyHealth = nPower / 100 * SuckupEnemyHealthRate;
-                        if (SuckupEnemyHealth >= 2.0)
-                        {
-                            n20 = Convert.ToInt32(SuckupEnemyHealth);
-                            SuckupEnemyHealth = n20;
-                            DamageHealth((ushort)-n20);
-                        }
-                    }
                     if (Race == ActorRace.Play)
                     {
+                        if (((PlayObject)this).SuckupEnemyHealthRate > 0)// 虹魔，吸血
+                        {
+                            ((PlayObject)this).SuckupEnemyHealth = nPower / 100 * ((PlayObject)this).SuckupEnemyHealthRate;
+                            if (((PlayObject)this).SuckupEnemyHealth >= 2.0)
+                            {
+                                n20 = Convert.ToInt32(((PlayObject)this).SuckupEnemyHealth);
+                                ((PlayObject)this).SuckupEnemyHealth = n20;
+                                DamageHealth((ushort)-n20);
+                            }
+                        }
                         UserMagic attackMagic;
                         if (MagicArr[MagicConst.SKILL_ILKWANG] != null)
                         {

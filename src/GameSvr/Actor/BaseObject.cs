@@ -133,7 +133,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 人物的幸运值
         /// </summary>
-        public int Luck;
+        public byte Luck;
         public byte PerHealth;
         public byte PerHealing;
         public byte PerSpell;
@@ -267,7 +267,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 身体坚韧性
         /// </summary>
-        public int BodyLeathery;
+        public byte BodyLeathery;
         /// <summary>
         /// 不能走动模式(困魔咒)
         /// </summary>
@@ -351,7 +351,6 @@ namespace GameSvr.Actor
         /// 换地图时，跑走不考虑坐标
         /// </summary>
         public bool SpaceMoved;
-        public string ScriptLable = string.Empty;
         protected byte AttackSkillCount;
         protected byte AttackSkillPointCount;
         public bool Mission;
@@ -385,14 +384,6 @@ namespace GameSvr.Actor
         /// 死亡是不是掉装备
         /// </summary>
         public bool NoDropUseItem = false;
-        /// <summary>
-        /// 经验物品
-        /// </summary>
-        protected bool BoExpItem = false;
-        /// <summary>
-        /// 经验物品值
-        /// </summary>
-        protected int ExpItem = 0;
         /// <summary>
         /// 力量物品值
         /// </summary>
@@ -448,15 +439,6 @@ namespace GameSvr.Actor
         public BaseObject ExpHitter;
         protected int ExpHitterTick;
         protected int MapMoveTick;
-        /// <summary>
-        /// 魔血一套
-        /// </summary>
-        protected int MoXieSuite;
-        /// <summary>
-        /// 虹魔一套
-        /// </summary>
-        protected int SuckupEnemyHealthRate;
-        protected double SuckupEnemyHealth;
         /// <summary>
         /// 中毒处理间隔时间
         /// </summary>
@@ -607,9 +589,6 @@ namespace GameSvr.Actor
             StickMode = false;
             NoAttackMode = false;
             NoTame = false;
-            MoXieSuite = 0;
-            SuckupEnemyHealthRate = 0;
-            SuckupEnemyHealth = 0;
             AddAbil = new AddAbility();
             MsgList = new List<SendMessage>();
             VisibleHumanList = new List<BaseObject>();
