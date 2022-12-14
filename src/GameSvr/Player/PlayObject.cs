@@ -18,7 +18,7 @@ namespace GameSvr.Player
 {
     public partial class PlayObject : AnimalObject
     {
-        private bool ClientPickUpItem_IsSelf(int actorId)
+        private bool ClientPickUpItemIsSelf(int actorId)
         {
             bool result;
             if (actorId == 0 || this.ActorId == actorId)
@@ -32,7 +32,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientPickUpItem_IsOfGroup(int actorId)
+        private bool ClientPickUpItemIsOfGroup(int actorId)
         {
             if (GroupOwner == null)
             {
@@ -64,7 +64,7 @@ namespace GameSvr.Player
             {
                 mapItem.OfBaseObject = 0;
             }
-            if (!ClientPickUpItem_IsSelf(mapItem.OfBaseObject) && !ClientPickUpItem_IsOfGroup(mapItem.OfBaseObject))
+            if (!ClientPickUpItemIsSelf(mapItem.OfBaseObject) && !ClientPickUpItemIsOfGroup(mapItem.OfBaseObject))
             {
                 SysMsg(M2Share.g_sCanotPickUpItem, MsgColor.Red, MsgType.Hint);
                 return false;
@@ -137,7 +137,7 @@ namespace GameSvr.Player
             {
                 dwExp = M2Share.Config.KillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
                 dwExp = MNKillMonExpMultiple * dwExp; // 人物指定的杀怪经验倍数
-                dwExp = HUtil32.Round(MNKillMonExpRate / 100 * dwExp);// 人物指定的杀怪经验倍数
+                dwExp = HUtil32.Round(KillMonExpRate / 100 * dwExp);// 人物指定的杀怪经验倍数
                 if (Envir.Flag.boEXPRATE)
                 {
                     dwExp = HUtil32.Round(Envir.Flag.nEXPRATE / 100 * dwExp);// 地图上指定杀怪经验倍数
@@ -921,7 +921,7 @@ namespace GameSvr.Player
                 + " 仓库密码:" + MSStoragePwd + " 登录IP:" + LoginIpAddr + '(' + LoginIpLocal + ')' + " 登录帐号:" + UserAccount + " 登录时间:" + MDLogonTime
                 + " 在线时长(分钟):" + (HUtil32.GetTickCount() - MDwLogonTick) / 60000 + " 登录模式:" + PayMent + ' ' + M2Share.Config.GameGoldName + ':' + MNGameGold
                 + ' ' + M2Share.Config.GamePointName + ':' + MNGamePoint + ' ' + M2Share.Config.PayMentPointName + ':' + MNPayMentPoint + " 会员类型:" + MNMemberType
-                + " 会员等级:" + MNMemberLevel + " 经验倍数:" + MNKillMonExpRate / 100 + " 攻击倍数:" + MNPowerRate / 100 + " 声望值:" + MBtCreditPoint;
+                + " 会员等级:" + MNMemberLevel + " 经验倍数:" + KillMonExpRate / 100 + " 攻击倍数:" + PowerRate / 100 + " 声望值:" + MBtCreditPoint;
         }
 
         private int GetDigUpMsgCount()
@@ -1004,7 +1004,7 @@ namespace GameSvr.Player
             MNSwitchMapX = nX;
             MNSwitchMapY = nY;
             MBoSwitchData = true;
-            MNServerIndex = envir.ServerIndex;
+            ServerIndex = envir.ServerIndex;
             MBoEmergencyClose = true;
             MBoReconnection = true;
         }

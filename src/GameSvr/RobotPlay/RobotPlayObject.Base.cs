@@ -914,7 +914,7 @@ namespace GameSvr.RobotPlay
             base.Die();
         }
 
-        protected override void DropUseItems(BaseObject baseObject)
+        internal override void DropUseItems(BaseObject baseObject)
         {
             const byte maxUseItem = 8;
             if (NoDropUseItem)

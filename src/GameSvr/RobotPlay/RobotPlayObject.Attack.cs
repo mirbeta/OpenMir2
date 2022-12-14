@@ -37,7 +37,7 @@ namespace GameSvr.RobotPlay
                     {
                         if (TargetCret.Envir == Envir)
                         {
-                            SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
+                            SetTargetXy(TargetCret.CurrX, TargetCret.CurrY);
                         }
                         else
                         {

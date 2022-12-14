@@ -165,11 +165,6 @@ namespace GameSvr.Actor
         /// 是否可以看到隐身人物
         /// </summary>
         public bool CoolEye;
-        public BaseObject GroupOwner;
-        /// <summary>
-        /// 组成员
-        /// </summary>
-        public IList<PlayObject> GroupMembers;
         /// <summary>
         /// 是否被召唤(主人)
         /// </summary>
@@ -388,14 +383,6 @@ namespace GameSvr.Actor
         /// </summary>
         protected byte PowerItem = 0;
         /// <summary>
-        /// PK 死亡掉经验，不够经验就掉等级
-        /// </summary>
-        protected int PkDieLostExp;
-        /// <summary>
-        /// PK 死亡掉等级
-        /// </summary>
-        protected byte PkDieLostLevel;
-        /// <summary>
         /// 心灵启示
         /// </summary>
         public bool AbilSeeHealGauge;
@@ -431,7 +418,7 @@ namespace GameSvr.Actor
         public BaseObject TargetCret;
         public int TargetFocusTick = 0;
         /// <summary>
-        /// 人物被对方杀害时对方指针
+        /// 人物被对方杀害时对方对象
         /// </summary>
         public BaseObject LastHiter;
         public int LastHiterTick;
@@ -592,12 +579,10 @@ namespace GameSvr.Actor
             ItemList = new List<UserItem>();
             IsVisibleActive = false;
             UseItems = new UserItem[13];
-            GroupOwner = null;
             Castle = null;
             Master = null;
             KillMonCount = 0;
             SlaveExpLevel = 0;
-            GroupMembers = new List<PlayObject>();
             SlaveList = new List<BaseObject>();
             Abil = new Ability();
             Abil = new Ability
@@ -645,8 +630,6 @@ namespace GameSvr.Actor
             ExpHitter = null;
             SayMsgList = null;
             DenyRefStatus = false;
-            PkDieLostExp = 0;
-            PkDieLostLevel = 0;
             AddToMaped = true;
             AutoChangeColor = false;
             AutoChangeColorTick = HUtil32.GetTickCount();
@@ -920,25 +903,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-
-        protected bool IsGroupMember(BaseObject target)
-        {
-            var result = false;
-            if (GroupOwner == null)
-            {
-                return false;
-            }
-            for (var i = 0; i < GroupOwner.GroupMembers.Count; i++)
-            {
-                if (GroupOwner.GroupMembers[i] == target)
-                {
-                    result = true;
-                    break;
-                }
-            }
-            return result;
-        }
-
+        
         protected void HealthSpellChanged()
         {
             if (Race == ActorRace.Play)
@@ -952,7 +917,7 @@ namespace GameSvr.Actor
             }
         }
 
-        private int CalcGetExp(int nLevel, int nExp)
+        internal int CalcGetExp(int nLevel, int nExp)
         {
             int result;
             if (M2Share.Config.HighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
@@ -1081,7 +1046,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        protected void MakeWeaponUnlock()
+        internal void MakeWeaponUnlock()
         {
             if (UseItems[Grobal2.U_WEAPON] == null)
             {
@@ -1144,7 +1109,7 @@ namespace GameSvr.Actor
             if (Race == ActorRace.Play)
             {
                 var playObject = this as PlayObject;
-                result = HUtil32.Round(result * (playObject.MNPowerRate / 100));
+                result = HUtil32.Round(result * (playObject.PowerRate / 100));
                 if (playObject.BoPowerItem)
                 {
                     result = HUtil32.Round(PowerItem * result);
@@ -1699,62 +1664,6 @@ namespace GameSvr.Actor
             }
         }
 
-        private bool KillFunc()
-        {
-            const string sExceptionMsg = "[Exception] TBaseObject::KillFunc";
-            var result = false;
-            try
-            {
-                if ((M2Share.g_FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
-                {
-                    if (Race != ActorRace.Play)
-                    {
-                        if (ExpHitter != null)
-                        {
-                            if (ExpHitter.Race == ActorRace.Play)
-                            {
-                                M2Share.g_FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                            }
-
-                            if (ExpHitter.Master != null)
-                            {
-                                M2Share.g_FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                            }
-                        }
-                        else
-                        {
-                            if (LastHiter != null)
-                            {
-                                if (LastHiter.Race == ActorRace.Play)
-                                {
-                                    M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                                }
-
-                                if (LastHiter.Master != null)
-                                {
-                                    M2Share.g_FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
-                        {
-                            M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
-                        }
-                    }
-                    result = true;
-                }
-            }
-            catch (Exception e)
-            {
-                M2Share.Log.Error(sExceptionMsg);
-                M2Share.Log.Error(e.Message);
-            }
-            return result;
-        }
-
         /// <summary>
         /// 蜡烛勋章减少持久
         /// </summary>
@@ -1953,7 +1862,6 @@ namespace GameSvr.Actor
         /// <summary>
         /// 减少魔法值
         /// </summary>
-        /// <param name="nSpellPoint"></param>
         protected void DamageSpell(ushort nSpellPoint)
         {
             if (nSpellPoint > 0)
@@ -1979,43 +1887,7 @@ namespace GameSvr.Actor
                 }
             }
         }
-
-        public void DelMember(BaseObject baseObject)
-        {
-            if (GroupOwner != baseObject)
-            {
-                for (var i = 0; i < GroupMembers.Count; i++)
-                {
-                    if (GroupMembers[i] == baseObject)
-                    {
-                        baseObject.LeaveGroup();
-                        GroupMembers.RemoveAt(i);
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                for (var i = GroupMembers.Count - 1; i >= 0; i--)
-                {
-                    GroupMembers[i].LeaveGroup();
-                    GroupMembers.RemoveAt(i);
-                }
-            }
-            if (this.Race == ActorRace.Play)
-            {
-                var playObject = (PlayObject)this;
-                if (!playObject.CancelGroup())
-                {
-                    playObject.SendDefMessage(Grobal2.SM_GROUPCANCEL, 0, 0, 0, 0, "");
-                }
-                else
-                {
-                    playObject.SendGroupMembers();
-                }
-            }
-        }
-
+        
         protected void DoDamageWeapon(ushort nWeaponDamage)
         {
             if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].Index <= 0)
@@ -3059,10 +2931,12 @@ namespace GameSvr.Actor
         /// <summary>
         /// 怪物说话
         /// </summary>
-        /// <param name="attackBaseObject"></param>
-        /// <param name="monStatus"></param>
         protected void MonsterSayMsg(BaseObject attackBaseObject, MonStatus monStatus)
         {
+            if (!M2Share.Config.MonSayMsg)
+            {
+                return;
+            }
             if (Race == ActorRace.Play)
             {
                 return;
@@ -3112,20 +2986,7 @@ namespace GameSvr.Actor
                 }
             }
         }
-
-        public void SendGroupText(string sMsg)
-        {
-            sMsg = M2Share.Config.GroupMsgPreFix + sMsg;
-            if (GroupOwner != null)
-            {
-                for (var i = 0; i < GroupOwner.GroupMembers.Count; i++)
-                {
-                    GroupOwner.GroupMembers[i].SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.Config.GroupMsgFColor,
-                        M2Share.Config.GroupMsgBColor, 0, sMsg);
-                }
-            }
-        }
-
+        
         /// <summary>
         /// 设置肉的品质
         /// </summary>
@@ -3172,7 +3033,7 @@ namespace GameSvr.Actor
         /// 散落金币
         /// </summary>
         /// <param name="goldOfCreat"></param>
-        private void ScatterGolds(BaseObject goldOfCreat)
+        internal void ScatterGolds(BaseObject goldOfCreat)
         {
             int I;
             int nGold;
@@ -3232,7 +3093,7 @@ namespace GameSvr.Actor
             }
         }
 
-        protected bool IsGoodKilling(BaseObject cert)
+        internal bool IsGoodKilling(BaseObject cert)
         {
             if (cert.Race == ActorRace.Play)
             {
@@ -3477,14 +3338,6 @@ namespace GameSvr.Actor
                 CrazyMode = false;
                 RefNameColor();
             }
-        }
-
-        private void LeaveGroup()
-        {
-            const string sExitGropMsg = "{0} 已经退出了本组.";
-            SendGroupText(Format(sExitGropMsg, ChrName));
-            GroupOwner = null;
-            SendMsg(this, Grobal2.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
         
         public bool CheckMagicLevelup(UserMagic userMagic)
@@ -4604,10 +4457,7 @@ namespace GameSvr.Actor
             Death = false;
             Invisible = false;
             SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, GetFeatureToLong(), "");
-            if (M2Share.Config.MonSayMsg)
-            {
-                MonsterSayMsg(null, MonStatus.MonGen);
-            }
+            MonsterSayMsg(null, MonStatus.MonGen);
             return true;
         }
 

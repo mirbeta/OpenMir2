@@ -41,16 +41,16 @@ namespace GameSvr.Monster.Monsters
                     }
                     if (baseObject1C != null)
                     {
-                        m_boRunAwayMode = true;
+                        MBoRunAwayMode = true;
                         TargetCret = baseObject1C;
                     }
                     else
                     {
-                        m_boRunAwayMode = false;
+                        MBoRunAwayMode = false;
                         TargetCret = null;
                     }
                 }
-                if (m_boRunAwayMode && TargetCret != null && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
+                if (MBoRunAwayMode && TargetCret != null && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
                     if (Math.Abs(CurrX - baseObject.CurrX) <= 6 && Math.Abs(CurrX - baseObject.CurrX) <= 6)
                     {

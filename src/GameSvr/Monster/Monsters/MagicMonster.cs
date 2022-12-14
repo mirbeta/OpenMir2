@@ -83,7 +83,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         if (TargetCret.Envir == Envir)
                         {
-                            SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
+                            SetTargetXy(TargetCret.CurrX, TargetCret.CurrY);
                         }
                         else
                         {
@@ -123,7 +123,7 @@ namespace GameSvr.Monster.Monsters
                         WalkWaitLocked = true;
                         WalkWaitTick = HUtil32.GetTickCount();
                     }
-                    if (!m_boRunAwayMode)
+                    if (!MBoRunAwayMode)
                     {
                         if (!NoAttackMode)
                         {
@@ -172,10 +172,10 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if (m_dwRunAwayTime > 0 && (HUtil32.GetTickCount() - m_dwRunAwayStart) > m_dwRunAwayTime)
+                        if (MDwRunAwayTime > 0 && (HUtil32.GetTickCount() - MDwRunAwayStart) > MDwRunAwayTime)
                         {
-                            m_boRunAwayMode = false;
-                            m_dwRunAwayTime = 0;
+                            MBoRunAwayMode = false;
+                            MDwRunAwayTime = 0;
                         }
                     }
                     if (Master != null && Master.SlaveRelax)
@@ -185,7 +185,7 @@ namespace GameSvr.Monster.Monsters
                     }
                     if (TargetX != -1)
                     {
-                        GotoTargetXY();
+                        GotoTargetXy();
                     }
                     else
                     {

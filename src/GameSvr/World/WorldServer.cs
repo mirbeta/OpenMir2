@@ -423,16 +423,16 @@ namespace GameSvr.World
                     {
                         playObject.MNSessionId = userOpenInfo.LoadUser.nSessionID;
                         playObject.MNSocket = userOpenInfo.LoadUser.nSocket;
-                        playObject.MNGateIdx = userOpenInfo.LoadUser.nGateIdx;
+                        playObject.MNGateIdx = (byte)userOpenInfo.LoadUser.nGateIdx;
                         playObject.MNGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
                         playObject.WAbil = playObject.Abil;
-                        playObject.MNServerIndex = M2Share.MapMgr.GetMapOfServerIndex(playObject.MapName);
+                        playObject.ServerIndex = (byte)M2Share.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
                         {
-                            _logger.Warn(string.Format(sChangeServerFail1, new object[] { M2Share.ServerIndex, playObject.MNServerIndex, playObject.MapName }));
+                            _logger.Warn(string.Format(sChangeServerFail1, new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
                         }
-                        SendSwitchData(playObject, playObject.MNServerIndex);
-                        SendChangeServer(playObject, (byte)playObject.MNServerIndex);
+                        SendSwitchData(playObject, playObject.ServerIndex);
+                        SendChangeServer(playObject, (byte)playObject.ServerIndex);
                         playObject = null;
                         return result;
                     }
@@ -449,7 +449,7 @@ namespace GameSvr.World
                     if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                     {
                         _logger.Warn(string.Format(sChangeServerFail2,
-                            new object[] { M2Share.ServerIndex, playObject.MNServerIndex, playObject.MapName }));
+                            new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
                         playObject.MapName = M2Share.Config.HomeMap;
                         envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                         playObject.CurrX = M2Share.Config.HomeX;
@@ -479,7 +479,7 @@ namespace GameSvr.World
                     Envirnoment envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
-                        _logger.Warn(string.Format(sChangeServerFail3, new object[] { M2Share.ServerIndex, playObject.MNServerIndex, playObject.MapName }));
+                        _logger.Warn(string.Format(sChangeServerFail3, new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
                         playObject.MapName = M2Share.Config.HomeMap;
                         envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                         playObject.CurrX = M2Share.Config.HomeX;
@@ -489,7 +489,7 @@ namespace GameSvr.World
                     {
                         if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                         {
-                            _logger.Warn(string.Format(sChangeServerFail4, new object[] { M2Share.ServerIndex, playObject.MNServerIndex, playObject.MapName }));
+                            _logger.Warn(string.Format(sChangeServerFail4, new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
                             playObject.MapName = M2Share.Config.HomeMap;
                             envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                             playObject.CurrX = M2Share.Config.HomeX;
@@ -516,10 +516,10 @@ namespace GameSvr.World
                 playObject.LoginIpLocal = M2Share.GetIPLocal(playObject.LoginIpAddr);
                 playObject.MNSocket = userOpenInfo.LoadUser.nSocket;
                 playObject.MNGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
-                playObject.MNGateIdx = userOpenInfo.LoadUser.nGateIdx;
+                playObject.MNGateIdx = (byte)userOpenInfo.LoadUser.nGateIdx;
                 playObject.MNSessionId = userOpenInfo.LoadUser.nSessionID;
-                playObject.PayMent = userOpenInfo.LoadUser.nPayMent;
-                playObject.MNPayMode = userOpenInfo.LoadUser.nPayMode;
+                playObject.PayMent = (byte)userOpenInfo.LoadUser.nPayMent;
+                playObject.MNPayMode = (byte)userOpenInfo.LoadUser.nPayMode;
                 playObject.ExpireTime = userOpenInfo.LoadUser.PlayTime;
                 playObject.ExpireCount = (int)Math.Round(TimeSpan.FromSeconds(playObject.ExpireTime).TotalMinutes, 1);
                 playObject.MDwLoadTick = userOpenInfo.LoadUser.dwNewUserTick;
@@ -664,7 +664,7 @@ namespace GameSvr.World
                     }
                     if (playObject.MBoSwitchData && playObject.MBoRcdSaved)
                     {
-                        if (SendSwitchData(playObject, playObject.MNServerIndex) || playObject.MNWriteChgDataErrCount > 20)
+                        if (SendSwitchData(playObject, playObject.ServerIndex) || playObject.MNWriteChgDataErrCount > 20)
                         {
                             playObject.MBoSwitchData = false;
                             playObject.MBoSwitchDataOk = true;
@@ -679,7 +679,7 @@ namespace GameSvr.World
                     if (playObject.MBoSwitchDataSended && HUtil32.GetTickCount() - playObject.MDwChgDataWritedTick > 100)
                     {
                         playObject.MBoSwitchDataSended = false;
-                        SendChangeServer(playObject, (byte)playObject.MNServerIndex);
+                        SendChangeServer(playObject, (byte)playObject.ServerIndex);
                     }
                 }
             }

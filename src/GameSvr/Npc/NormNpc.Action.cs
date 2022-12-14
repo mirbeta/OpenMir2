@@ -3207,11 +3207,11 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_KILLMONEXPRATE);
                 return;
             }
-            PlayObject.MNKillMonExpRate = nRate;
-            PlayObject.MDwKillMonExpRateTime = nTime;
+            PlayObject.KillMonExpRate = nRate;
+            PlayObject.KillMonExpRateTime = nTime;
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sChangeKillMonExpRateMsg, PlayObject.MNKillMonExpRate / 100, PlayObject.MDwKillMonExpRateTime), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sChangeKillMonExpRateMsg, PlayObject.KillMonExpRate / 100, PlayObject.KillMonExpRateTime), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3297,11 +3297,11 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_POWERRATE);
                 return;
             }
-            PlayObject.MNPowerRate = nRate;
-            PlayObject.MDwPowerRateTime = nTime;
+            PlayObject.PowerRate = nRate;
+            PlayObject.PowerRateTime = nTime;
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sChangePowerRateMsg, new object[] { PlayObject.MNPowerRate / 100, PlayObject.MDwPowerRateTime }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sChangePowerRateMsg, new object[] { PlayObject.PowerRate / 100, PlayObject.PowerRateTime }), MsgColor.Green, MsgType.Hint);
             }
         }
 

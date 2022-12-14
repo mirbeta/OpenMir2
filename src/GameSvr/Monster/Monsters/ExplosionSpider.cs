@@ -65,7 +65,7 @@ namespace GameSvr.Monster.Monsters
             {
                 if (TargetCret.Envir == Envir)
                 {
-                    SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
+                    SetTargetXy(TargetCret.CurrX, TargetCret.CurrY);
                 }
                 else
                 {

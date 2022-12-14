@@ -60,7 +60,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (Math.Abs(CurrX - TargetCret.CurrX) <= 11 && Math.Abs(CurrX - TargetCret.CurrX) <= 11)
                     {
-                        SetTargetXY(TargetCret.CurrX, TargetCret.CurrY);
+                        SetTargetXy(TargetCret.CurrX, TargetCret.CurrY);
                     }
                 }
                 else

@@ -313,7 +313,7 @@ namespace GameSvr.RobotPlay
             {
                 dwExp = M2Share.Config.KillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
                 dwExp = MNKillMonExpMultiple * dwExp; // 人物指定的杀怪经验倍数
-                dwExp = HUtil32.Round(MNKillMonExpRate / 100 * dwExp); // 人物指定的杀怪经验倍数
+                dwExp = HUtil32.Round(KillMonExpRate / 100 * dwExp); // 人物指定的杀怪经验倍数
                 if (Envir.Flag.boEXPRATE)
                 {
                     dwExp = HUtil32.Round(Envir.Flag.nEXPRATE / 100 * dwExp); // 地图上指定杀怪经验倍数
@@ -424,7 +424,7 @@ namespace GameSvr.RobotPlay
                     {
                         SC = sData.Substring(1, sData.Length - 1);
                         SC = HUtil32.GetValidStr3(SC, ref sParam1, ' ');
-                        if (!MBoFilterSendMsg)
+                        if (!FilterSendMsg)
                         {
                             Whisper(sParam1, SC);
                         }
@@ -462,7 +462,7 @@ namespace GameSvr.RobotPlay
                                 ShoutMsgTick = HUtil32.GetTickCount();
                                 SC = sData.Substring(1, sData.Length - 1);
                                 string sCryCryMsg = "(!)" + ChrName + ": " + SC;
-                                if (MBoFilterSendMsg)
+                                if (FilterSendMsg)
                                 {
                                     SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
                                 }
@@ -478,7 +478,7 @@ namespace GameSvr.RobotPlay
                         SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
-                    if (!MBoFilterSendMsg)
+                    if (!FilterSendMsg)
                     {
                         SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + sData);
                     }

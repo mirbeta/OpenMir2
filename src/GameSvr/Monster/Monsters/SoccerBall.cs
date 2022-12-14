@@ -63,7 +63,7 @@ namespace GameSvr.Monster.Monsters
             }
             if (TargetX != -1)
             {
-                GotoTargetXY();
+                GotoTargetXy();
                 if (TargetX == CurrX && TargetY == CurrY)
                 {
                     N550 = 0;

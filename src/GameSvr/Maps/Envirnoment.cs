@@ -627,7 +627,7 @@ namespace GameSvr.Maps
 
         public bool IsCheapStuff()
         {
-            return QuestList.Count > 0;
+            return QuestList.Any();
         }
 
         public bool AddToMapItemEvent(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent)
@@ -1231,9 +1231,8 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public Merchant GetQuestNpc(PlayObject baseObject, string sChrName, string sItem, bool boFlag)
+        public Merchant GetQuestNpc(PlayObject baseObject, string sChrName, string itemName, bool boFlag)
         {
-            bool bo1D;
             for (var i = 0; i < QuestList.Count; i++)
             {
                 var mapQuestFlag = QuestList[i];
@@ -1242,24 +1241,24 @@ namespace GameSvr.Maps
                 {
                     if (boFlag == mapQuestFlag.boGrouped || !boFlag)
                     {
-                        bo1D = false;
+                        var bo1D = false;
                         if (!string.IsNullOrEmpty(mapQuestFlag.sMonName) && !string.IsNullOrEmpty(mapQuestFlag.sItemName))
                         {
-                            if (mapQuestFlag.sMonName == sChrName && mapQuestFlag.sItemName == sItem)
+                            if (mapQuestFlag.sMonName == sChrName && mapQuestFlag.sItemName == itemName)
                             {
                                 bo1D = true;
                             }
                         }
                         if (!string.IsNullOrEmpty(mapQuestFlag.sMonName) && string.IsNullOrEmpty(mapQuestFlag.sItemName))
                         {
-                            if (mapQuestFlag.sMonName == sChrName && string.IsNullOrEmpty(sItem))
+                            if (mapQuestFlag.sMonName == sChrName && string.IsNullOrEmpty(itemName))
                             {
                                 bo1D = true;
                             }
                         }
                         if (string.IsNullOrEmpty(mapQuestFlag.sMonName) && !string.IsNullOrEmpty(mapQuestFlag.sItemName))
                         {
-                            if (mapQuestFlag.sItemName == sItem)
+                            if (mapQuestFlag.sItemName == itemName)
                             {
                                 bo1D = true;
                             }

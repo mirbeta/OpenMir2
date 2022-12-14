@@ -524,27 +524,6 @@ namespace GameSvr.Actor
                 if ((HUtil32.GetTickCount() - VerifyTick) > 30 * 1000)
                 {
                     VerifyTick = HUtil32.GetTickCount();
-                    // 清组队已死亡成员
-                    if (GroupOwner != null)
-                    {
-                        if (GroupOwner.Death || GroupOwner.Ghost)
-                        {
-                            GroupOwner = null;
-                        }
-                    }
-
-                    if (GroupOwner == this)
-                    {
-                        for (var i = GroupMembers.Count - 1; i >= 0; i--)
-                        {
-                            BaseObject BaseObject = GroupMembers[i];
-                            if (BaseObject.Death || BaseObject.Ghost)
-                            {
-                                GroupMembers.RemoveAt(i);
-                            }
-                        }
-                    }
-
                     if (!DenyRefStatus)
                     {
                         Envir.VerifyMapTime(CurrX, CurrY, this);// 刷新在地图上位置的时间
@@ -648,14 +627,9 @@ namespace GameSvr.Actor
                 M2Share.g_nBaseObjTimeMax = M2Share.g_nBaseObjTimeMin;
             }
         }
-
+        
         public virtual void Die()
         {
-            int tExp;
-            bool tCheck;
-            const string sExceptionMsg1 = "[Exception] TBaseObject::Die 1";
-            const string sExceptionMsg2 = "[Exception] TBaseObject::Die 2";
-            const string sExceptionMsg3 = "[Exception] TBaseObject::Die 3";
             if (SuperMan)
             {
                 return;
@@ -683,306 +657,88 @@ namespace GameSvr.Actor
             IncHealth = 0;
             IncHealing = 0;
             KillFunc();
+            if (LastHiter != null && Race != ActorRace.Play )
+            {
+                MonsterSayMsg(LastHiter, MonStatus.Die);
+            }
+            else if (LastHiter != null && Race == ActorRace.Play)
+            {
+                LastHiter.MonsterSayMsg(this, MonStatus.KillHuman);
+            }
+            Master = null;
+            if (Master == null && !DelFormMaped) // 减少地图上的计数
+            {
+                Envir.DelObjectCount(this);
+                DelFormMaped = true;
+            }
+            SendRefMsg(Grobal2.RM_DEATH, Direction, CurrX, CurrY, 1, "");
+        }
+        
+        private void KillTarget( )
+        {
+            if (ExpHitter != null && ExpHitter.Master != null)//如果是角色下属杀死对象
+            {
+                ((PlayObject)ExpHitter.Master).KillTargetTrigger(this);
+            }
+            if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
+            {
+                ((PlayObject)ExpHitter).KillTargetTrigger(this);
+            }
+        }
+        
+        private void KillFunc()
+        {
+            const string sExceptionMsg = "[Exception] TBaseObject::KillFunc";
             try
             {
-                if (Race != ActorRace.Play && LastHiter != null)
+                KillTarget();
+                if ((M2Share.g_FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
                 {
-                    if (M2Share.Config.MonSayMsg)
+                    if (Race != ActorRace.Play)
                     {
-                        MonsterSayMsg(LastHiter, MonStatus.Die);
-                    }
-                    if (ExpHitter != null)
-                    {
-                        if (ExpHitter.Race == ActorRace.Play)
+                        if (ExpHitter != null)
                         {
-                            if (M2Share.g_FunctionNPC != null)
+                            if (ExpHitter.Race == ActorRace.Play)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(ExpHitter as PlayObject, "@PlayKillMob", false);
+                                M2Share.g_FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
-                            tExp = ExpHitter.CalcGetExp(WAbil.Level, FightExp);
-                            if (!M2Share.Config.VentureServer)
+
+                            if (ExpHitter.Master != null)
                             {
-                                if (ExpHitter.IsRobot)
-                                {
-                                    ((RobotPlayObject)ExpHitter).GainExp(tExp);
-                                }
-                                else
-                                {
-                                    ((PlayObject)ExpHitter).GainExp(tExp);
-                                }
-                            }
-                            // 是否执行任务脚本
-                            if (Envir.IsCheapStuff())
-                            {
-                                Merchant QuestNPC;
-                                if (ExpHitter.GroupOwner != null)
-                                {
-                                    for (var i = 0; i < ExpHitter.GroupOwner.GroupMembers.Count; i++)
-                                    {
-                                        PlayObject GroupHuman = ExpHitter.GroupOwner.GroupMembers[i];
-                                        if (!GroupHuman.Death && ExpHitter.Envir == GroupHuman.Envir && Math.Abs(ExpHitter.CurrX - GroupHuman.CurrX) <= 12 && Math.Abs(ExpHitter.CurrX - GroupHuman.CurrX) <= 12 && ExpHitter == GroupHuman)
-                                        {
-                                            tCheck = false;
-                                        }
-                                        else
-                                        {
-                                            tCheck = true;
-                                        }
-                                        QuestNPC = Envir.GetQuestNpc(GroupHuman, ChrName, "", tCheck);
-                                        if (QuestNPC != null)
-                                        {
-                                            QuestNPC.Click(GroupHuman);
-                                        }
-                                    }
-                                }
-                                QuestNPC = Envir.GetQuestNpc((PlayObject)ExpHitter, ChrName, "", false);
-                                if (QuestNPC != null)
-                                {
-                                    QuestNPC.Click(ExpHitter as PlayObject);
-                                }
+                                M2Share.g_FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                         }
                         else
                         {
-                            if (ExpHitter.Master != null)
+                            if (LastHiter != null)
                             {
-                                ExpHitter.GainSlaveExp(WAbil.Level);
-                                tExp = ExpHitter.Master.CalcGetExp(WAbil.Level, FightExp);
-                                if (!M2Share.Config.VentureServer)
+                                if (LastHiter.Race == ActorRace.Play)
                                 {
-                                    if (ExpHitter.Master.IsRobot)
-                                    {
-                                        ((RobotPlayObject)ExpHitter.Master).GainExp(tExp);
-                                    }
-                                    else
-                                    {
-                                        ((PlayObject)ExpHitter.Master).GainExp(tExp);
-                                    }
+                                    M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                }
+                                if (LastHiter.Master != null)
+                                {
+                                    M2Share.g_FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                                 }
                             }
                         }
                     }
                     else
                     {
-                        if (LastHiter.Race == ActorRace.Play)
+                        if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
                         {
-                            if (M2Share.g_FunctionNPC != null)
-                            {
-                                M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@PlayKillMob", false);
-                            }
-                            tExp = LastHiter.CalcGetExp(WAbil.Level, FightExp);
-                            if (!M2Share.Config.VentureServer)
-                            {
-                                if (LastHiter.IsRobot)
-                                {
-                                    ((RobotPlayObject)LastHiter).GainExp(tExp);
-                                }
-                                else
-                                {
-                                    ((PlayObject)LastHiter).GainExp(tExp);
-                                }
-                            }
+                            M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
                         }
                     }
                 }
-                if (M2Share.Config.MonSayMsg && Race == ActorRace.Play && LastHiter != null)
-                {
-                    LastHiter.MonsterSayMsg(this, MonStatus.KillHuman);
-                }
-                Master = null;
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg1);
+                M2Share.Log.Error(sExceptionMsg);
                 M2Share.Log.Error(e.Message);
             }
-            try
-            {
-                var boPK = false;
-                if (!M2Share.Config.VentureServer && !Envir.Flag.boFightZone && !Envir.Flag.boFight3Zone)
-                {
-                    if (Race == ActorRace.Play && LastHiter != null && ((PlayObject)this).PvpLevel() < 2)
-                    {
-                        if ((LastHiter.Race == ActorRace.Play) || (LastHiter.Race == ActorRace.NPC))//允许NPC杀死人物
-                        {
-                            boPK = true;
-                        }
-                        if (LastHiter.Master != null)
-                        {
-                            if (LastHiter.Master.Race == ActorRace.Play)
-                            {
-                                LastHiter = LastHiter.Master;
-                                boPK = true;
-                            }
-                        }
-                    }
-                }
-                if (boPK && LastHiter != null && Race == ActorRace.Play && LastHiter.Race == ActorRace.Play)
-                {
-                    var guildwarkill = false;
-                    var playObject = ((PlayObject)this);
-                    var targetObject = ((PlayObject)LastHiter);
-                    if (playObject.MyGuild != null && targetObject.MyGuild != null)
-                    {
-                        if (GetGuildRelation(playObject, targetObject) == 2)
-                        {
-                            guildwarkill = true;
-                        }
-                    }
-                    var Castle = M2Share.CastleMgr.InCastleWarArea(this);
-                    if (Castle != null && Castle.UnderWar || (playObject.InFreePkArea))
-                    {
-                        guildwarkill = true;
-                    }
-                    if (!guildwarkill)
-                    {
-                        if ((M2Share.Config.IsKillHumanWinLevel || M2Share.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP))
-                        {
-                            playObject.PkDie(targetObject);
-                        }
-                        else
-                        {
-                            if (!LastHiter.IsGoodKilling(this))
-                            {
-                                targetObject.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
-                                LastHiter.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
-                                SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
-                                targetObject.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
-                                if (playObject.PvpLevel() < 1)
-                                {
-                                    if (M2Share.RandomNumber.Random(5) == 0)
-                                    {
-                                        LastHiter.MakeWeaponUnlock();
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                LastHiter.SysMsg(M2Share.g_sYouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
-                            }
-                        }
-                        // 检查攻击人是否用了着经验或等级装备
-                        if (LastHiter.Race == ActorRace.Play)
-                        {
-                            if (LastHiter.PkDieLostExp > 0)
-                            {
-                                if (Abil.Exp >= LastHiter.PkDieLostExp)
-                                {
-                                    Abil.Exp -= LastHiter.PkDieLostExp;
-                                }
-                                else
-                                {
-                                    Abil.Exp = 0;
-                                }
-                            }
-                            if (LastHiter.PkDieLostLevel > 0)
-                            {
-                                if (Abil.Level >= LastHiter.PkDieLostLevel)
-                                {
-                                    Abil.Level -= LastHiter.PkDieLostLevel;
-                                }
-                                else
-                                {
-                                    Abil.Level = 0;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                M2Share.Log.Error(sExceptionMsg2);
-            }
-            try
-            {
-                if (!Envir.Flag.boFightZone && !Envir.Flag.boFight3Zone && !Animal)
-                {
-                    var AttackBaseObject = ExpHitter;
-                    if (ExpHitter != null && ExpHitter.Master != null)
-                    {
-                        AttackBaseObject = ExpHitter.Master;
-                    }
-                    if (Race != ActorRace.Play)
-                    {
-                        DropUseItems(AttackBaseObject);
-                        if (Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
-                        {
-                            ScatterBagItems(AttackBaseObject);
-                        }
-                        if (Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
-                        {
-                            ScatterGolds(AttackBaseObject);
-                        }
-                    }
-                    else
-                    {
-                        if (!NoItem || !Envir.Flag.boNODROPITEM)//允许设置 m_boNoItem 后人物死亡不掉物品
-                        {
-                            if (AttackBaseObject != null)
-                            {
-                                if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play)
-                                {
-                                    DropUseItems(null);
-                                }
-                            }
-                            else
-                            {
-                                DropUseItems(null);
-                            }
-                            if (M2Share.Config.DieScatterBag)
-                            {
-                                ScatterBagItems(null);
-                            }
-                            if (M2Share.Config.DieDropGold)
-                            {
-                                ScatterGolds(null);
-                            }
-                        }
-                        if (this.Race == ActorRace.Play)
-                        {
-                            ((PlayObject)this).AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
-                        }
-                    }
-                }
-                if (Race == ActorRace.Play)
-                {
-                    string tStr;
-                    if (GroupOwner != null)
-                    {
-                        GroupOwner.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
-                    }
-                    if (LastHiter != null)
-                    {
-                        if (LastHiter.Race == ActorRace.Play)
-                        {
-                            tStr = LastHiter.ChrName;
-                        }
-                        else
-                        {
-                            tStr = '#' + LastHiter.ChrName;
-                        }
-                    }
-                    else
-                    {
-                        tStr = "####";
-                    }
-                    M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.boFightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
-                }
-                // 减少地图上怪物计数
-                if (Master == null && !DelFormMaped)
-                {
-                    Envir.DelObjectCount(this);
-                    DelFormMaped = true;
-                }
-                SendRefMsg(Grobal2.RM_DEATH, Direction, CurrX, CurrY, 1, "");
-            }
-            catch
-            {
-                M2Share.Log.Error(sExceptionMsg3);
-            }
         }
-
+        
         internal virtual void ReAlive()
         {
             Death = false;
@@ -1029,7 +785,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 散落包裹物品
         /// </summary>
-        protected virtual void ScatterBagItems(BaseObject itemOfCreat)
+        internal virtual void ScatterBagItems(BaseObject itemOfCreat)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
@@ -1077,7 +833,7 @@ namespace GameSvr.Actor
             }
         }
 
-        protected virtual void DropUseItems(BaseObject BaseObject)
+        internal virtual void DropUseItems(BaseObject BaseObject)
         {
 
         }

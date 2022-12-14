@@ -153,7 +153,7 @@ namespace GameSvr.Player
                             {
                                 sText = sData.AsSpan()[1..].ToString();
                                 sText = HUtil32.GetValidStr3(sText, ref sParam1, new[] { ' ' });
-                                if (!MBoFilterSendMsg)
+                                if (!FilterSendMsg)
                                 {
                                     Whisper(sParam1, sText);
                                 }
@@ -189,7 +189,7 @@ namespace GameSvr.Player
                                         ShoutMsgTick = HUtil32.GetTickCount();
                                         sText = sData.AsSpan()[1..].ToString();
                                         var sCryCryMsg = "(!)" + ChrName + ": " + sText;
-                                        if (MBoFilterSendMsg)
+                                        if (FilterSendMsg)
                                         {
                                             SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
                                         }
@@ -206,7 +206,7 @@ namespace GameSvr.Player
                                 return;
                             }
                     }
-                    if (MBoFilterSendMsg)
+                    if (FilterSendMsg)
                     {
                         SendMsg(this, Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + sData);// 如果禁止发信息，则只向自己发信息
                     }

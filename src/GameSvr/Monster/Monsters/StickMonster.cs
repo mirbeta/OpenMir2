@@ -41,7 +41,7 @@ namespace GameSvr.Monster.Monsters
             }
             if (this.TargetCret.Envir == this.Envir)
             {
-                this.SetTargetXY(this.TargetCret.CurrX, this.TargetCret.CurrY);
+                this.SetTargetXy(this.TargetCret.CurrX, this.TargetCret.CurrY);
             }
             else
             {
