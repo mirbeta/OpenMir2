@@ -48,6 +48,7 @@ namespace GameSvr.Actor
         /// </summary>
         public int CharStatus;
         protected int CharStatusEx;
+        public MonGenInfo MonGen;
         /// <summary>
         /// 骑马
         /// </summary>
@@ -204,7 +205,7 @@ namespace GameSvr.Actor
         /// </summary>
         public bool SlaveRelax = false;
         /// <summary>
-        /// 下属攻击状态
+        /// 攻击状态
         /// </summary>
         public AttackMode AttatckMode;
         /// <summary>
@@ -330,7 +331,6 @@ namespace GameSvr.Actor
         /// 复活时间
         /// </summary>
         public int ReAliveTick = 0;
-        public MonGenInfo MonGen;
         /// <summary>
         /// 怪物所拿的武器
         /// </summary>
