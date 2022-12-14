@@ -679,6 +679,7 @@ namespace GameSvr.Actor
             if (ExpHitter != null && ExpHitter.Master != null)//如果是角色下属杀死对象
             {
                 ((PlayObject)ExpHitter.Master).KillTargetTrigger(this);
+                return;
             }
             if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
             {
