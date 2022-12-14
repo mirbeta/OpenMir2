@@ -123,7 +123,7 @@ namespace GameSvr.RobotPlay
         public RobotPlayObject() : base()
         {
             MNSoftVersionDate = Grobal2.CLIENT_VERSION_NUMBER;
-            MNSoftVersionDateEx = M2Share.GetExVersionNO(Grobal2.CLIENT_VERSION_NUMBER, ref MNSoftVersionDate);
+            SoftVersionDateEx = M2Share.GetExVersionNO(Grobal2.CLIENT_VERSION_NUMBER, ref MNSoftVersionDate);
             AbilCopyToWAbil();
             AttatckMode = 0;
             IsRobot = true;

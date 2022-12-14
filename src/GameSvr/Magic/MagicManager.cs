@@ -154,7 +154,7 @@ namespace GameSvr.Magic
             var boTrain = false;
             var boSpellFail = false;
             var boSpellFire = true;
-            if (playObject.MNSoftVersionDateEx == 0 && playObject.MDwClientTick == 0)
+            if (playObject.SoftVersionDateEx == 0 && playObject.MDwClientTick == 0)
             {
                 return false;
             }
@@ -690,6 +690,9 @@ namespace GameSvr.Magic
             return true;
         }
 
+        /// <summary>
+        /// 诱惑之光
+        /// </summary>
         private bool MagTamming(BaseObject baseObject, BaseObject targeTBaseObject, int nTargetX, int nTargetY, int nMagicLevel)
         {
             var result = false;
@@ -729,7 +732,6 @@ namespace GameSvr.Magic
                                             {
                                                 targeTBaseObject.WAbil.HP = (ushort)(targeTBaseObject.WAbil.HP / 10);
                                             }
-
                                             if (targeTBaseObject.CanReAlive && targeTBaseObject.Master == null)
                                             {
                                                 targeTBaseObject.CanReAlive = false;

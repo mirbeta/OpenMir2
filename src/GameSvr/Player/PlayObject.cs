@@ -1031,7 +1031,7 @@ namespace GameSvr.Player
         private void SendGoldInfo(bool boSendName)
         {
             var sMsg = string.Empty;
-            if (MNSoftVersionDateEx == 0)
+            if (SoftVersionDateEx == 0)
             {
                 return;
             }
@@ -1044,7 +1044,7 @@ namespace GameSvr.Player
 
         private void SendServerConfig()
         {
-            if (MNSoftVersionDateEx == 0)
+            if (SoftVersionDateEx == 0)
             {
                 return;
             }

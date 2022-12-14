@@ -68,6 +68,7 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckBonusPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
+            var BonusAbil = PlayObject.BonusAbil;
             var nTotlePoint = BonusAbil.DC + BonusAbil.MC + BonusAbil.SC + BonusAbil.AC + BonusAbil.MAC + BonusAbil.HP + BonusAbil.MP + BonusAbil.Hit + BonusAbil.Speed + BonusAbil.Reserved;
             nTotlePoint += PlayObject.BonusPoint;
             var cMethod = QuestConditionInfo.sParam1[0];

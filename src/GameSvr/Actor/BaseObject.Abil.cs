@@ -84,63 +84,10 @@ namespace GameSvr.Actor
         /// <summary>
         /// 计算攻击速度
         /// </summary>
-        private void RecalcHitSpeed()
+        protected virtual void RecalcHitSpeed()
         {
-            NakedAbility bonusTick = null;
-            HitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
-
-            if (Race == ActorRace.Play)
-            {
-                SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
-                switch (((PlayObject)this).Job)
-                {
-                    case PlayJob.Warrior:
-                        bonusTick = M2Share.Config.BonusAbilofWarr;
-                        break;
-                    case PlayJob.Wizard:
-                        bonusTick = M2Share.Config.BonusAbilofWizard;
-                        break;
-                    case PlayJob.Taoist:
-                        bonusTick = M2Share.Config.BonusAbilofTaos;
-                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
-                        break;
-                }
-            }
-
             HitPlus = 0;
             HitDouble = 0;
-            for (var i = 0; i < MagicList.Count; i++)
-            {
-                var userMagic = MagicList[i];
-                MagicArr[userMagic.MagIdx] = userMagic;
-                switch (userMagic.MagIdx)
-                {
-                    case MagicConst.SKILL_ONESWORD: // 基本剑法
-                        if (userMagic.Level > 0)
-                        {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.Level));
-                        }
-                        break;
-                    case MagicConst.SKILL_ILKWANG: // 精神力战法
-                        if (userMagic.Level > 0)
-                        {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.Level));
-                        }
-                        break;
-                    case MagicConst.SKILL_YEDO: // 攻杀剑法
-                        if (userMagic.Level > 0)
-                        {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.Level));
-                        }
-                        HitPlus = (byte)(M2Share.DEFHIT + userMagic.Level);
-                        AttackSkillCount = (byte)(7 - userMagic.Level);
-                        AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
-                        break;
-                    case MagicConst.SKILL_FIRESWORD: // 烈火剑法
-                        HitDouble = (byte)(4 + userMagic.Level * 4);
-                        break;
-                }
-            }
         }
 
         /// <summary>

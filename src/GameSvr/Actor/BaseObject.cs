@@ -66,7 +66,6 @@ namespace GameSvr.Actor
         public ushort IncHealing;
         private int IncHpStoneTime;
         private int IncMpStoneTime;
-        public NakedAbility BonusAbil;
         /// <summary>
         /// 怪物经验值
         /// </summary>
@@ -121,11 +120,11 @@ namespace GameSvr.Actor
         /// <summary>
         /// 额外攻击伤害(攻杀)
         /// </summary>
-        private ushort HitPlus;
+        internal ushort HitPlus;
         /// <summary>
         /// 双倍攻击伤害(烈火专用)
         /// </summary>
-        private ushort HitDouble;
+        internal ushort HitDouble;
         public ushort HealthRecover;
         public ushort SpellRecover;
         public byte AntiPoison;
@@ -350,7 +349,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 换地图时，跑走不考虑坐标
         /// </summary>
-        public bool SpaceMoved;
+        internal bool SpaceMoved;
         protected byte AttackSkillCount;
         protected byte AttackSkillPointCount;
         public bool Mission;
@@ -464,10 +463,6 @@ namespace GameSvr.Actor
         /// </summary>
         public IList<UserItem> ItemList;
         /// <summary>
-        /// 技能表
-        /// </summary>
-        public readonly IList<UserMagic> MagicList;
-        /// <summary>
         /// 身上物品
         /// </summary>
         public UserItem[] UseItems;
@@ -573,7 +568,6 @@ namespace GameSvr.Actor
             CharStatusEx = 0;
             StatusArr = new ushort[15];
             StatusArrTick = new int[15];
-            BonusAbil = new NakedAbility();
             AttatckMode = 0;
             GuildWarArea = false;
             SuperMan = false;
@@ -597,7 +591,6 @@ namespace GameSvr.Actor
             VisibleEvents = new List<EventInfo>();
             ItemList = new List<UserItem>();
             IsVisibleActive = false;
-            MagicList = new List<UserMagic>();
             UseItems = new UserItem[13];
             GroupOwner = null;
             Castle = null;
@@ -652,7 +645,6 @@ namespace GameSvr.Actor
             ExpHitter = null;
             SayMsgList = null;
             DenyRefStatus = false;
-            HorseType = 0;
             PkDieLostExp = 0;
             PkDieLostLevel = 0;
             AddToMaped = true;
@@ -1936,40 +1928,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-
-        internal void AddItemSkill(int nIndex)
-        {
-            MagicInfo magic = null;
-            switch (nIndex)
-            {
-                case 1:
-                    magic = M2Share.WorldEngine.FindMagic(M2Share.Config.FireBallSkill);
-                    break;
-                case 2:
-                    magic = M2Share.WorldEngine.FindMagic(M2Share.Config.HealSkill);
-                    break;
-            }
-            if (magic != null)
-            {
-                if (!IsTrainingSkill(magic.MagicId))
-                {
-                    var userMagic = new UserMagic
-                    {
-                        Magic = magic,
-                        MagIdx = magic.MagicId,
-                        Key = (char)0,
-                        Level = 1,
-                        TranPoint = 0
-                    };
-                    MagicList.Add(userMagic);
-                    if (Race == ActorRace.Play)
-                    {
-                        ((PlayObject)this).SendAddMagic(userMagic);
-                    }
-                }
-            }
-        }
-
+        
         private bool AddToMap()
         {
             var point = Envir.AddToMap(CurrX, CurrY, MapCell, this);
@@ -2717,13 +2676,6 @@ namespace GameSvr.Actor
         public virtual void Initialize()
         {
             AbilCopyToWAbil();
-            for (var i = 0; i < MagicList.Count; i++)
-            {
-                if (MagicList[i].Level >= 4)
-                {
-                    MagicList[i].Level = 0;
-                }
-            }
             AddtoMapSuccess = true;
             if (Envir.CanWalk(CurrX, CurrY, true) && AddToMap())
             {
@@ -3534,24 +3486,7 @@ namespace GameSvr.Actor
             GroupOwner = null;
             SendMsg(this, Grobal2.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
-
-        protected UserMagic GetMagicInfo(int nMagicId)
-        {
-            UserMagic result = null;
-            UserMagic userMagic;
-            for (var i = 0; i < MagicList.Count; i++)
-            {
-                userMagic = MagicList[i];
-                if (userMagic.Magic.MagicId == nMagicId)
-                {
-                    result = userMagic;
-                    break;
-                }
-            }
-
-            return result;
-        }
-
+        
         public bool CheckMagicLevelup(UserMagic userMagic)
         {
             var result = false;
@@ -3954,24 +3889,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-
-        public bool IsTrainingSkill(int nIndex)
-        {
-            var result = false;
-            UserMagic userMagic;
-            for (var i = 0; i < MagicList.Count; i++)
-            {
-                userMagic = MagicList[i];
-                if ((userMagic != null) && (userMagic.MagIdx == nIndex))
-                {
-                    result = true;
-                    break;
-                }
-            }
-
-            return result;
-        }
-
+        
         private void DamageBubbleDefence(int nInt)
         {
             if (StatusArr[PoisonState.BUBBLEDEFENCEUP] > 0)
@@ -4408,14 +4326,12 @@ namespace GameSvr.Actor
         {
             WAbil = Abil;
             Gold = 0;
-            //m_boStrike = false;
             NoItem = false;
             StoneMode = false;
             Skeleton = false;
             HolySeize = false;
             CrazyMode = false;
             ShowHp = false;
-            //m_boPlayerDupMode = false;
             FixedHideMode = false;
 
             if (this is CastleDoor)
@@ -4706,7 +4622,6 @@ namespace GameSvr.Actor
                     {
                         MonGen.ActiveCount--;
                     }
-
                     MonGen = null;
                 }
             }

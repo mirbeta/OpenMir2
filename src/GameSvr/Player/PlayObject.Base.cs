@@ -466,6 +466,10 @@ namespace GameSvr.Player
         public TScript MScript;
         public BaseObject LastNpc = null;
         /// <summary>
+        /// 职业属性点
+        /// </summary>
+        public NakedAbility BonusAbil;
+        /// <summary>
         /// 玩家的变量P
         /// </summary>
         public int[] MNVal;
@@ -497,6 +501,10 @@ namespace GameSvr.Player
         /// E 0-20 个人服务器字符串变量，不可保存，不可操作
         /// </summary>
         public int[] MServerIntVal;
+        /// <summary>
+        /// 技能表
+        /// </summary>
+        public readonly IList<UserMagic> MagicList;
         public string MSPlayDiceLabel = string.Empty;
         public bool MBoTimeRecall;
         public int MDwTimeRecallTick = 0;
@@ -513,9 +521,9 @@ namespace GameSvr.Player
         public int MDwWaitLoginNoticeOkTick;
         public bool MBoLoginNoticeOk;
         public bool Bo6Ab;
-        public int MDwShowLineNoticeTick;
-        public int MNShowLineNoticeIdx;
-        public int MNSoftVersionDateEx;
+        public int ShowLineNoticeTick;
+        public int ShowLineNoticeIdx;
+        public int SoftVersionDateEx;
         /// <summary>
         /// 可点击脚本标签字典
         /// </summary>
@@ -777,6 +785,7 @@ namespace GameSvr.Player
             MBoNewHuman = false;
             MBoLoginNoticeOk = false;
             Bo6Ab = false;
+            BonusAbil = new NakedAbility();
             AccountExpired = false;
             MBoSendNotice = false;
             MDwCheckDupObjTick = HUtil32.GetTickCount();
@@ -802,10 +811,11 @@ namespace GameSvr.Player
             MBoSwitchData = false;
             MBoSwitchDataSended = false;
             MNWriteChgDataErrCount = 0;
-            MDwShowLineNoticeTick = HUtil32.GetTickCount();
-            MNShowLineNoticeIdx = 0;
-            MNSoftVersionDateEx = 0;
+            ShowLineNoticeTick = HUtil32.GetTickCount();
+            ShowLineNoticeIdx = 0;
+            SoftVersionDateEx = 0;
             CanJmpScriptLableMap = new Hashtable(StringComparer.OrdinalIgnoreCase);
+            MagicList = new List<UserMagic>();
             MNKillMonExpMultiple = 1;
             MNKillMonExpRate = 100;
             MDwRateTick = HUtil32.GetTickCount();
@@ -1168,7 +1178,7 @@ namespace GameSvr.Player
                         MBoEmergencyClose = true;
                         return;
                     }
-                    if (MNSoftVersionDateEx == 0 && M2Share.Config.boOldClientShowHiLevel)
+                    if (SoftVersionDateEx == 0 && M2Share.Config.boOldClientShowHiLevel)
                     {
                         SysMsg(M2Share.sClientSoftVersionTooOld, MsgColor.Blue, MsgType.Hint);
                         SysMsg(M2Share.sDownLoadAndUseNewClient, MsgColor.Red, MsgType.Hint);
@@ -1532,6 +1542,13 @@ namespace GameSvr.Player
         public override void Initialize()
         {
             base.Initialize();
+            for (var i = 0; i < MagicList.Count; i++)
+            {
+                if (MagicList[i].Level >= 4)
+                {
+                    MagicList[i].Level = 0;
+                }
+            }
             this.AddBodyLuck(0);
         }
 
@@ -2895,6 +2912,36 @@ namespace GameSvr.Player
             }
         }
 
+        internal void AddItemSkill(int nIndex)
+        {
+            MagicInfo magic = null;
+            switch (nIndex)
+            {
+                case 1:
+                    magic = M2Share.WorldEngine.FindMagic(M2Share.Config.FireBallSkill);
+                    break;
+                case 2:
+                    magic = M2Share.WorldEngine.FindMagic(M2Share.Config.HealSkill);
+                    break;
+            }
+            if (magic != null)
+            {
+                if (!IsTrainingSkill(magic.MagicId))
+                {
+                    var userMagic = new UserMagic
+                    {
+                        Magic = magic,
+                        MagIdx = magic.MagicId,
+                        Key = (char)0,
+                        Level = 1,
+                        TranPoint = 0
+                    };
+                    MagicList.Add(userMagic);
+                    this.SendAddMagic(userMagic);
+                }
+            }
+        }
+        
         public void SetExpiredTime(int expiredTime)
         {
             if (Abil.Level > M2Share.g_nExpErienceLevel)
@@ -3348,6 +3395,90 @@ namespace GameSvr.Player
             return base.GetChrColor(baseObject);
         }
 
+        protected override void RecalcHitSpeed()
+        {
+            if (Race == ActorRace.Play)
+            {
+                NakedAbility bonusTick = null;
+                switch (this.Job)
+                {
+                    case PlayJob.Warrior:
+                        bonusTick = M2Share.Config.BonusAbilofWarr;
+                        HitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
+                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
+                        break;
+                    case PlayJob.Wizard:
+                        bonusTick = M2Share.Config.BonusAbilofWizard;
+                        HitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
+                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
+                        break;
+                    case PlayJob.Taoist:
+                        bonusTick = M2Share.Config.BonusAbilofTaos;
+                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
+                        break;
+                }
+            }
+            for (var i = 0; i < MagicList.Count; i++)
+            {
+                var userMagic = MagicList[i];
+                MagicArr[userMagic.MagIdx] = userMagic;
+                switch (userMagic.MagIdx)
+                {
+                    case MagicConst.SKILL_ONESWORD: // 基本剑法
+                        if (userMagic.Level > 0)
+                        {
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.Level));
+                        }
+                        break;
+                    case MagicConst.SKILL_ILKWANG: // 精神力战法
+                        if (userMagic.Level > 0)
+                        {
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.Level));
+                        }
+                        break;
+                    case MagicConst.SKILL_YEDO: // 攻杀剑法
+                        if (userMagic.Level > 0)
+                        {
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.Level));
+                        }
+                        HitPlus = (byte)(M2Share.DEFHIT + userMagic.Level);
+                        AttackSkillCount = (byte)(7 - userMagic.Level);
+                        AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
+                        break;
+                    case MagicConst.SKILL_FIRESWORD: // 烈火剑法
+                        HitDouble = (byte)(4 + userMagic.Level * 4);
+                        break;
+                }
+            }
+            base.RecalcHitSpeed();
+        }
+
+        protected UserMagic GetMagicInfo(int nMagicId)
+        {
+            for (var i = 0; i < MagicList.Count; i++)
+            {
+                var userMagic = MagicList[i];
+                if (userMagic.Magic.MagicId == nMagicId)
+                {
+                    return userMagic;
+                }
+            }
+            return null;
+        }
+        
+        public bool IsTrainingSkill(int nIndex)
+        {
+            for (var i = 0; i < MagicList.Count; i++)
+            {
+                var userMagic = MagicList[i];
+                if ((userMagic != null) && (userMagic.MagIdx == nIndex))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
         private bool IsProperIsFriend(BaseObject cret)
         {
             var result = false;

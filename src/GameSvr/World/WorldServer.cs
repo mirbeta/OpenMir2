@@ -525,7 +525,7 @@ namespace GameSvr.World
                 playObject.MDwLoadTick = userOpenInfo.LoadUser.dwNewUserTick;
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 playObject.MNSoftVersionDate = userOpenInfo.LoadUser.nSoftVersionDate;
-                playObject.MNSoftVersionDateEx = userOpenInfo.LoadUser.nSoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
+                playObject.SoftVersionDateEx = userOpenInfo.LoadUser.nSoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 result = playObject;
             }
             catch (Exception ex)
@@ -813,12 +813,12 @@ namespace GameSvr.World
                                         playObject.SearchViewRange();//搜索对像
                                         playObject.GameTimeChanged();//游戏时间改变
                                     }
-                                    if ((HUtil32.GetTickCount() - playObject.MDwShowLineNoticeTick) > M2Share.Config.ShowLineNoticeTime)
+                                    if ((HUtil32.GetTickCount() - playObject.ShowLineNoticeTick) > M2Share.Config.ShowLineNoticeTime)
                                     {
-                                        playObject.MDwShowLineNoticeTick = HUtil32.GetTickCount();
-                                        if (M2Share.LineNoticeList.Count > playObject.MNShowLineNoticeIdx)
+                                        playObject.ShowLineNoticeTick = HUtil32.GetTickCount();
+                                        if (M2Share.LineNoticeList.Count > playObject.ShowLineNoticeIdx)
                                         {
-                                            var lineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.MNShowLineNoticeIdx]);
+                                            var lineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
                                             switch (lineNoticeMsg[0])
                                             {
                                                 case 'R':
@@ -835,10 +835,10 @@ namespace GameSvr.World
                                                     break;
                                             }
                                         }
-                                        playObject.MNShowLineNoticeIdx++;
-                                        if (M2Share.LineNoticeList.Count <= playObject.MNShowLineNoticeIdx)
+                                        playObject.ShowLineNoticeIdx++;
+                                        if (M2Share.LineNoticeList.Count <= playObject.ShowLineNoticeIdx)
                                         {
-                                            playObject.MNShowLineNoticeIdx = 0;
+                                            playObject.ShowLineNoticeIdx = 0;
                                         }
                                     }
                                     playObject.Run();
