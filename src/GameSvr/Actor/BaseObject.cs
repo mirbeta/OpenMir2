@@ -2966,7 +2966,7 @@ namespace GameSvr.Actor
                 }
                 if (envir.QuestNpc != null)
                 {
-                    envir.QuestNpc.Click(this as PlayObject);
+                    envir.QuestNpc.Click((PlayObject)this);
                 }
                 if (envir.Flag.nNEEDSETONFlag >= 0)
                 {
@@ -3279,7 +3279,7 @@ namespace GameSvr.Actor
                 }
                 if (this is PlayObject)
                 {
-                    (this as PlayObject)?.SendAddItem(userItem);
+                    ((PlayObject)this)?.SendAddItem(userItem);
                     result = true;
                 }
                 baseObject.ItemList.RemoveAt(0);
@@ -4163,8 +4163,8 @@ namespace GameSvr.Actor
 
         public bool AttPowerUp(int nPower, int nTime)
         {
-            (this as PlayObject).ExtraAbil[0] = (ushort)nPower;
-            (this as PlayObject).ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
+            ((PlayObject)this).ExtraAbil[0] = (ushort)nPower;
+            ((PlayObject)this).ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
             SysMsg(Format(M2Share.g_sAttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");

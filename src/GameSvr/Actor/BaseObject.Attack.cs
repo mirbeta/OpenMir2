@@ -295,7 +295,7 @@ namespace GameSvr.Actor
                     AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nPower, AttackTarget.WAbil.HP, AttackTarget.WAbil.MaxHP, ActorId, "", 200);
                     if (AttackTarget.Race == ActorRace.Play && this.Race == ActorRace.Play)
                     {
-                        if (!(AttackTarget as PlayObject).UnParalysis && (this as PlayObject).Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
+                        if (!(AttackTarget as PlayObject).UnParalysis && ((PlayObject)this).Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
                         {
                             AttackTarget.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
                         }
@@ -318,8 +318,8 @@ namespace GameSvr.Actor
                             attackMagic = GetAttrackMagic(MagicConst.SKILL_ILKWANG);
                             if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
                             {
-                                (this as PlayObject).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
-                                if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
+                                ((PlayObject)this).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
+                                if (!((PlayObject)this).CheckMagicLevelup(attackMagic))
                                 {
                                     SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                                 }
@@ -330,8 +330,8 @@ namespace GameSvr.Actor
                             attackMagic = GetAttrackMagic(MagicConst.SKILL_YEDO);
                             if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
                             {
-                                (this as PlayObject).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
-                                if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
+                                ((PlayObject)this).TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
+                                if (!((PlayObject)this).CheckMagicLevelup(attackMagic))
                                 {
                                     SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                                 }
@@ -345,8 +345,8 @@ namespace GameSvr.Actor
                                 {
                                     if (attackMagic.Level < 3 && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
                                     {
-                                        (this as PlayObject).TrainSkill(attackMagic, 1);
-                                        if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
+                                        ((PlayObject)this).TrainSkill(attackMagic, 1);
+                                        if (!((PlayObject)this).CheckMagicLevelup(attackMagic))
                                         {
                                             SendDelayMsg(this.ActorId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                                         }
@@ -359,8 +359,8 @@ namespace GameSvr.Actor
                                 {
                                     if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
                                     {
-                                        (this as PlayObject).TrainSkill(attackMagic, 1);
-                                        if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
+                                        ((PlayObject)this).TrainSkill(attackMagic, 1);
+                                        if (!((PlayObject)this).CheckMagicLevelup(attackMagic))
                                         {
                                             SendDelayMsg(this.ActorId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                                         }
@@ -373,8 +373,8 @@ namespace GameSvr.Actor
                                 {
                                     if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
                                     {
-                                        (this as PlayObject).TrainSkill(attackMagic, 1);
-                                        if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
+                                        ((PlayObject)this).TrainSkill(attackMagic, 1);
+                                        if (!((PlayObject)this).CheckMagicLevelup(attackMagic))
                                         {
                                             SendDelayMsg(this.ActorId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                                         }
@@ -387,8 +387,8 @@ namespace GameSvr.Actor
                                 {
                                     if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
                                     {
-                                        (this as PlayObject).TrainSkill(attackMagic, 1);
-                                        if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
+                                        ((PlayObject)this).TrainSkill(attackMagic, 1);
+                                        if (!((PlayObject)this).CheckMagicLevelup(attackMagic))
                                         {
                                             SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                                         }
@@ -401,8 +401,8 @@ namespace GameSvr.Actor
                                 {
                                     if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
                                     {
-                                        (this as PlayObject).TrainSkill(attackMagic, 1);
-                                        if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
+                                        ((PlayObject)this).TrainSkill(attackMagic, 1);
+                                        if (!((PlayObject)this).CheckMagicLevelup(attackMagic))
                                         {
                                             SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                                         }
@@ -415,8 +415,8 @@ namespace GameSvr.Actor
                                 {
                                     if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
                                     {
-                                        (this as PlayObject).TrainSkill(attackMagic, 1);
-                                        if (!(this as PlayObject).CheckMagicLevelup(attackMagic))
+                                        ((PlayObject)this).TrainSkill(attackMagic, 1);
+                                        if (!((PlayObject)this).CheckMagicLevelup(attackMagic))
                                         {
                                             SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                                         }
@@ -443,11 +443,11 @@ namespace GameSvr.Actor
                                 }
                                 else
                                 {
-                                    if ((this as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                    if (((PlayObject)this).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                     {
                                         if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName))
                                         {
-                                            (this as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                            ((PlayObject)this).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                         }
                                     }
                                 }
