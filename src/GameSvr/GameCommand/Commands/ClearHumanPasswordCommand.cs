@@ -28,9 +28,9 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            m_PlayObject.m_boPasswordLocked = false;
-            m_PlayObject.m_boUnLockStoragePwd = false;
-            m_PlayObject.m_sStoragePwd = "";
+            m_PlayObject.MBoPasswordLocked = false;
+            m_PlayObject.MBoUnLockStoragePwd = false;
+            m_PlayObject.MSStoragePwd = "";
             m_PlayObject.SysMsg("你的保护密码已被清除!!!", MsgColor.Green, MsgType.Hint);
             PlayObject.SysMsg($"{sHumanName}的保护密码已被清除!!!", MsgColor.Green, MsgType.Hint);
         }

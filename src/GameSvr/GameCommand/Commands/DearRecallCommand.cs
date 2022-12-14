@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public void DearRecall(PlayObject PlayObject)
         {
-            if (PlayObject.m_sDearName == "")
+            if (PlayObject.MSDearName == "")
             {
                 PlayObject.SysMsg("你没有结婚!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg("本地图禁止夫妻传送!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.m_DearHuman == null)
+            if (PlayObject.MDearHuman == null)
             {
                 if (PlayObject.Gender == 0)
                 {
@@ -35,19 +35,19 @@ namespace GameSvr.GameCommand.Commands
                 }
                 return;
             }
-            if (HUtil32.GetTickCount() - PlayObject.m_dwDearRecallTick < 10000)
+            if (HUtil32.GetTickCount() - PlayObject.MDwDearRecallTick < 10000)
             {
                 PlayObject.SysMsg("稍等会才能再次使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.m_dwDearRecallTick = HUtil32.GetTickCount();
-            if (PlayObject.m_DearHuman.m_boCanDearRecall)
+            PlayObject.MDwDearRecallTick = HUtil32.GetTickCount();
+            if (PlayObject.MDearHuman.MBoCanDearRecall)
             {
-                PlayObject.RecallHuman(PlayObject.m_DearHuman.ChrName);
+                PlayObject.RecallHuman(PlayObject.MDearHuman.ChrName);
             }
             else
             {
-                PlayObject.SysMsg(PlayObject.m_DearHuman.ChrName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(PlayObject.MDearHuman.ChrName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

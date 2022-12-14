@@ -54,8 +54,8 @@ namespace GameSvr.Player
             }
             if (!string.IsNullOrEmpty(sSendMsg))
             {
-                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BAGITEMS, ActorId, 0, 0, (short)ItemList.Count);
-                SendSocket(m_DefMsg, sSendMsg);
+                MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BAGITEMS, ActorId, 0, 0, (short)ItemList.Count);
+                SendSocket(MDefMsg, sSendMsg);
             }
         }
 
@@ -106,8 +106,8 @@ namespace GameSvr.Player
                     userState.UseItems[i] = clientItem;
                 }
             }
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
-            SendSocket(m_DefMsg, EDCode.EncodeBuffer(userState));
+            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
+            SendSocket(MDefMsg, EDCode.EncodeBuffer(userState));
         }
 
         private void ClientMerchantDlgSelect(int nParam1, string sMsg)
@@ -237,7 +237,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropGoldMsg);
                 return false;
             }
-            if (!m_boCanDrop || Envir.Flag.boNOTHROWITEM)
+            if (!MBoCanDrop || Envir.Flag.boNOTHROWITEM)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropItemMsg);
                 return false;
@@ -263,7 +263,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
                 return false;
             }
-            if (!m_boCanDrop || Envir.Flag.boNOTHROWITEM)
+            if (!MBoCanDrop || Envir.Flag.boNOTHROWITEM)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropItemMsg);
                 return false;
@@ -321,13 +321,13 @@ namespace GameSvr.Player
             }
             if (!CheckActionStatus(wIdent, ref dwDelayTime))
             {
-                m_boFilterAction = false;
+                MBoFilterAction = false;
                 return false;
             }
-            m_boFilterAction = true;
+            MBoFilterAction = true;
             if (!M2Share.Config.CloseSpeedHackCheck)
             {
-                var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
+                var dwCheckTime = HUtil32.GetTickCount() - MDwTurnTick;
                 if (dwCheckTime < M2Share.Config.TurnIntervalTime)
                 {
                     dwDelayTime = M2Share.Config.TurnIntervalTime - dwCheckTime;
@@ -339,7 +339,7 @@ namespace GameSvr.Player
                 Direction = (byte)nDir;
                 if (Walk(Grobal2.RM_TURN))
                 {
-                    m_dwTurnTick = HUtil32.GetTickCount();
+                    MDwTurnTick = HUtil32.GetTickCount();
                     return true;
                 }
             }
@@ -354,13 +354,13 @@ namespace GameSvr.Player
             }
             if (!M2Share.Config.CloseSpeedHackCheck)
             {
-                var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
+                var dwCheckTime = HUtil32.GetTickCount() - MDwTurnTick;
                 if (dwCheckTime < M2Share.Config.TurnIntervalTime)
                 {
                     dwDelayTime = M2Share.Config.TurnIntervalTime - dwCheckTime;
                     return false;
                 }
-                m_dwTurnTick = HUtil32.GetTickCount();
+                MDwTurnTick = HUtil32.GetTickCount();
             }
             SendRefMsg(Grobal2.RM_POWERHIT, 0, 0, 0, 0, "");
             return true;
@@ -620,7 +620,7 @@ namespace GameSvr.Player
             var boEatOk = false;
             StdItem stdItem = null;
             int itemIndex = 0;
-            if (m_boCanUseItem)
+            if (MBoCanUseItem)
             {
                 if (!Death)
                 {
@@ -722,13 +722,13 @@ namespace GameSvr.Player
             var baseObject = M2Share.ActorMgr.Get(charId);
             if (!M2Share.Config.CloseSpeedHackCheck)
             {
-                var dwCheckTime = HUtil32.GetTickCount() - m_dwTurnTick;
+                var dwCheckTime = HUtil32.GetTickCount() - MDwTurnTick;
                 if (dwCheckTime < HUtil32._MAX(150, M2Share.Config.TurnIntervalTime - 150))
                 {
                     dwDelayTime = HUtil32._MAX(150, M2Share.Config.TurnIntervalTime - 150) - dwCheckTime;
                     return false;
                 }
-                m_dwTurnTick = HUtil32.GetTickCount();
+                MDwTurnTick = HUtil32.GetTickCount();
             }
             if (Math.Abs(nX - CurrX) <= 2 && Math.Abs(nY - CurrY) <= 2)
             {
@@ -919,7 +919,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sPleaseTryDealLaterMsg);
                 return;
             }
-            if (!m_boCanDeal)
+            if (!MBoCanDeal)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotTryDealMsg);
                 return;
@@ -931,7 +931,7 @@ namespace GameSvr.Player
                 {
                     if (targetPlayObject.Race == ActorRace.Play)
                     {
-                        if (targetPlayObject.AllowDeal && targetPlayObject.m_boCanDeal)
+                        if (targetPlayObject.AllowDeal && targetPlayObject.MBoCanDeal)
                         {
                             targetPlayObject.SysMsg(ChrName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
                             SysMsg(targetPlayObject.ChrName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
@@ -1263,8 +1263,8 @@ namespace GameSvr.Player
                     }
                     sC = sC + MyGuild.GuildAllList[i] + '\r';
                 }
-                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OPENGUILDDLG, 0, 0, 0, 1);
-                SendSocket(m_DefMsg, EDCode.EncodeString(sC));
+                MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OPENGUILDDLG, 0, 0, 0, 1);
+                SendSocket(MDefMsg, EDCode.EncodeString(sC));
             }
             else
             {
@@ -1297,8 +1297,8 @@ namespace GameSvr.Player
                     sSendMsg = sSendMsg + guildRank.MemberList[j].sMemberName + '/';
                 }
             }
-            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
-            SendSocket(m_DefMsg, EDCode.EncodeString(sSendMsg));
+            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
+            SendSocket(MDefMsg, EDCode.EncodeString(sSendMsg));
         }
 
         private void ClientGuildAddMember(string sHumName)
@@ -1672,7 +1672,7 @@ namespace GameSvr.Player
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!m_boCanGetBackItem)
+            if (!MBoCanGetBackItem)
             {
                 SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + CommandMgr.Commands.UnlockStorage.CmdName + '\\' + "仓库加锁命令: @" + CommandMgr.Commands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.Commands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.Commands.ChgPassword.CmdName);
                 return;

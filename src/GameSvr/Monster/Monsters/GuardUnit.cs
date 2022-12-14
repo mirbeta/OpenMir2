@@ -40,7 +40,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 if (baseObject.Race == ActorRace.Guard)
                 {
-                    var guardObject = baseObject as GuardUnit;
+                    var guardObject = (GuardUnit)baseObject;
                     if (guardObject.BoCrimeforCastle)
                     {
                         if ((HUtil32.GetTickCount() - guardObject.CrimeforCastleTime) < (2 * 60 * 1000))
@@ -68,7 +68,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         if (baseObject.Race == ActorRace.Play)
                         {
-                            if (Castle.MasterGuild == (baseObject as PlayObject).MyGuild || Castle.MasterGuild.IsAllyGuild((baseObject as PlayObject).MyGuild))
+                            if (Castle.MasterGuild == ((PlayObject)baseObject).MyGuild || Castle.MasterGuild.IsAllyGuild(((PlayObject)baseObject).MyGuild))
                             {
                                 if (LastHiter != baseObject)
                                 {
@@ -81,7 +81,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         if (baseObject.Master.Race == ActorRace.Play)
                         {
-                            if (Castle.MasterGuild == (baseObject.Master as PlayObject).MyGuild || Castle.MasterGuild.IsAllyGuild((baseObject.Master as PlayObject).MyGuild))
+                            if (Castle.MasterGuild == ((PlayObject)baseObject.Master).MyGuild || Castle.MasterGuild.IsAllyGuild(((PlayObject)baseObject.Master).MyGuild))
                             {
                                 if (LastHiter != baseObject.Master && LastHiter != baseObject)
                                 {
@@ -107,7 +107,7 @@ namespace GameSvr.Monster.Monsters
             }
             if (baseObject.Race == ActorRace.Play)
             {
-                if ((baseObject as PlayObject).PvpLevel() >= 2)
+                if (((PlayObject)baseObject).PvpLevel() >= 2)
                 {
                     return true;
                 }

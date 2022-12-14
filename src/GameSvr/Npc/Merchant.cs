@@ -926,11 +926,11 @@ namespace GameSvr.Npc
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (PlayObject.m_sScriptGoBackLable == "")
+                            if (PlayObject.ScriptGoBackLable == "")
                             {
-                                PlayObject.m_sScriptGoBackLable = ScriptConst.sMAIN;
+                                PlayObject.ScriptGoBackLable = ScriptConst.sMAIN;
                             }
-                            GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
+                            GotoLable(PlayObject, PlayObject.ScriptGoBackLable, false);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sDealYBme, StringComparison.OrdinalIgnoreCase) == 0) // 元宝寄售:出售物品 
                         {
@@ -1039,7 +1039,7 @@ namespace GameSvr.Npc
         /// <param name="User"></param>
         private void UserSelectOpenDealOffForm(PlayObject User)
         {
-            if (User.bo_YBDEAL)
+            if (User.BoYbdeal)
             {
                 if (!User.SellOffInTime(0))
                 {
@@ -1743,7 +1743,7 @@ namespace GameSvr.Npc
         /// <param name="sMsg"></param>
         protected void SetOffLineMsg(PlayObject PlayObject, string sMsg)
         {
-            PlayObject.MSOffLineLeaveword = sMsg;
+            PlayObject.MsOffLineLeaveword = sMsg;
         }
 
         protected override void SendCustemMsg(PlayObject PlayObject, string sMsg)
@@ -1789,11 +1789,11 @@ namespace GameSvr.Npc
 
         private void ChangeUseItemName(PlayObject PlayObject, string sLabel, string sItemName)
         {
-            if (!PlayObject.m_boChangeItemNameFlag)
+            if (!PlayObject.MBoChangeItemNameFlag)
             {
                 return;
             }
-            PlayObject.m_boChangeItemNameFlag = false;
+            PlayObject.MBoChangeItemNameFlag = false;
             var sWhere = sLabel.Substring(ScriptConst.sUSEITEMNAME.Length, sLabel.Length - ScriptConst.sUSEITEMNAME.Length);
             var btWhere = (byte)HUtil32.StrToInt(sWhere, -1);
             if (btWhere >= 0 && btWhere <= PlayObject.UseItems.Length)

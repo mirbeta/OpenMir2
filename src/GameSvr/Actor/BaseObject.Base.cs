@@ -1179,11 +1179,11 @@ namespace GameSvr.Actor
                                             {
                                                 if (TargetBaseObject.IsRobot)
                                                 {
-                                                    (TargetBaseObject as RobotPlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                    ((RobotPlayObject)TargetBaseObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
                                                 }
                                                 else
                                                 {
-                                                    (TargetBaseObject as PlayObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                    ((PlayObject)TargetBaseObject).GainExp(GetMagStruckDamage(TargetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
                                                 }
                                             }
                                         }

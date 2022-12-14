@@ -16,10 +16,10 @@ namespace GameSvr.Npc
     {
         private void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp, string sMsg)
         {
-            if (PlayObject.m_NPC != this)
+            if (PlayObject.LastNpc != this)
             {
-                PlayObject.m_NPC = null;
-                PlayObject.m_Script = null;
+                PlayObject.LastNpc = null;
+                PlayObject.MScript = null;
             }
             TScript Script = null;
             SayingRecord SayingRecord;
@@ -33,19 +33,19 @@ namespace GameSvr.Npc
                     if (Script3C.RecordList.TryGetValue(sLabel, out SayingRecord))
                     {
                         Script = Script3C;
-                        PlayObject.m_Script = Script;
-                        PlayObject.m_NPC = this;
+                        PlayObject.MScript = Script;
+                        PlayObject.LastNpc = this;
                         break;
                     }
                 }
             }
             if (Script == null)
             {
-                if (PlayObject.m_Script != null)
+                if (PlayObject.MScript != null)
                 {
                     for (var i = m_ScriptList.Count - 1; i >= 0; i--)
                     {
-                        if (m_ScriptList[i] == PlayObject.m_Script)
+                        if (m_ScriptList[i] == PlayObject.MScript)
                         {
                             Script = m_ScriptList[i];
                         }
@@ -58,8 +58,8 @@ namespace GameSvr.Npc
                         if (CheckGotoLableQuestStatus(PlayObject, m_ScriptList[i]))
                         {
                             Script = m_ScriptList[i];
-                            PlayObject.m_Script = Script;
-                            PlayObject.m_NPC = this;
+                            PlayObject.MScript = Script;
+                            PlayObject.LastNpc = this;
                         }
                     }
                 }
@@ -275,7 +275,7 @@ namespace GameSvr.Npc
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    PlayObject.m_nVal[n14] = nCount;
+                    PlayObject.MNVal[n14] = nCount;
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 119))
                 {
@@ -283,11 +283,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    PlayObject.m_DyVal[n14 - 200] = nCount;
+                    PlayObject.MDyVal[n14 - 200] = nCount;
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    PlayObject.m_nMval[n14 - 300] = nCount;
+                    PlayObject.MNMval[n14 - 300] = nCount;
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -295,7 +295,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.m_nSval[n14 - 600] = nCount.ToString();
+                    PlayObject.MNSval[n14 - 600] = nCount.ToString();
                 }
             }
         }
@@ -322,7 +322,7 @@ namespace GameSvr.Npc
 
         public bool GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject PlayObject, string sNumber)
         {
-            return PlayObject.m_sRandomNo == sNumber;
+            return PlayObject.MSRandomNo == sNumber;
         }
 
         private bool GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject PlayObject, string ChrName, string sListFileName, string sDay, string param1, string param2)
@@ -854,13 +854,13 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKACCOUNTLIST:
-                        if (!CheckGotoLableStringList(PlayObject.UserID, m_sPath + QuestConditionInfo.sParam1))
+                        if (!CheckGotoLableStringList(PlayObject.UserAccount, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKIPLIST:
-                        if (!CheckGotoLableStringList(PlayObject.m_sIPaddr, m_sPath + QuestConditionInfo.sParam1))
+                        if (!CheckGotoLableStringList(PlayObject.LoginIpAddr, m_sPath + QuestConditionInfo.sParam1))
                         {
                             result = false;
                         }
@@ -1049,7 +1049,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nSC_ISNEWHUMAN:
-                        if (!PlayObject.m_boNewHuman)
+                        if (!PlayObject.MBoNewHuman)
                         {
                             result = false;
                         }
@@ -1413,8 +1413,8 @@ namespace GameSvr.Npc
 
         private bool GotoLable_JmpToLable(PlayObject PlayObject, string sLabel)
         {
-            PlayObject.m_nScriptGotoCount++;
-            if (PlayObject.m_nScriptGotoCount > M2Share.Config.ScriptGotoCountLimit)
+            PlayObject.ScriptGotoCount++;
+            if (PlayObject.ScriptGotoCount > M2Share.Config.ScriptGotoCountLimit)
             {
                 return false;
             }
@@ -1429,8 +1429,8 @@ namespace GameSvr.Npc
                 var Script = m_ScriptList[i];
                 if (Script.nQuest == nQuest)
                 {
-                    PlayObject.m_Script = Script;
-                    PlayObject.m_NPC = this;
+                    PlayObject.MScript = Script;
+                    PlayObject.LastNpc = this;
                     GotoLable(PlayObject, ScriptConst.sMAIN, false);
                     break;
                 }
@@ -1856,11 +1856,11 @@ namespace GameSvr.Npc
                         result = false;
                         break;
                     case ScriptConst.nTIMERECALL:
-                        PlayObject.m_boTimeRecall = true;
-                        PlayObject.m_sMoveMap = PlayObject.MapName;
-                        PlayObject.m_nMoveX = PlayObject.CurrX;
-                        PlayObject.m_nMoveY = PlayObject.CurrY;
-                        PlayObject.m_dwTimeRecallTick = HUtil32.GetTickCount() + (QuestActionInfo.nParam1 * 60 * 1000);
+                        PlayObject.MBoTimeRecall = true;
+                        PlayObject.MSMoveMap = PlayObject.MapName;
+                        PlayObject.MNMoveX = PlayObject.CurrX;
+                        PlayObject.MNMoveY = PlayObject.CurrY;
+                        PlayObject.MDwTimeRecallTick = HUtil32.GetTickCount() + (QuestActionInfo.nParam1 * 60 * 1000);
                         break;
                     case ScriptConst.nSC_PARAM1:
                         n34 = QuestActionInfo.nParam1;
@@ -1944,7 +1944,7 @@ namespace GameSvr.Npc
                         PercentData(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nBREAKTIMERECALL:
-                        PlayObject.m_boTimeRecall = false;
+                        PlayObject.MBoTimeRecall = false;
                         break;
                     case ScriptConst.nCHANGEMODE:
                         switch (QuestActionInfo.nParam1)
@@ -2001,8 +2001,8 @@ namespace GameSvr.Npc
                         ActionOfRecallmob(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nKICK:
-                        PlayObject.m_boReconnection = true;
-                        PlayObject.m_boSoftClose = true;
+                        PlayObject.MBoReconnection = true;
+                        PlayObject.MBoSoftClose = true;
                         break;
                     case ScriptConst.nTHROWITEM://将指定物品刷新到指定地图坐标范围内
                         ActionOfTHROWITEM(PlayObject, QuestActionInfo);
@@ -2074,8 +2074,8 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nPLAYDICE:
-                        PlayObject.m_sPlayDiceLabel = QuestActionInfo.sParam2;
-                        PlayObject.SendMsg(this, Grobal2.RM_PLAYDICE, (short)QuestActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.m_DyVal[0], (ushort)PlayObject.m_DyVal[1]), HUtil32.MakeWord((ushort)PlayObject.m_DyVal[2], (ushort)PlayObject.m_DyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.m_DyVal[4], (ushort)PlayObject.m_DyVal[5]), HUtil32.MakeWord((ushort)PlayObject.m_DyVal[6], (ushort)PlayObject.m_DyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.m_DyVal[8], (ushort)PlayObject.m_DyVal[9]), 0), QuestActionInfo.sParam2);
+                        PlayObject.MSPlayDiceLabel = QuestActionInfo.sParam2;
+                        PlayObject.SendMsg(this, Grobal2.RM_PLAYDICE, (short)QuestActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[0], (ushort)PlayObject.MDyVal[1]), HUtil32.MakeWord((ushort)PlayObject.MDyVal[2], (ushort)PlayObject.MDyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[4], (ushort)PlayObject.MDyVal[5]), HUtil32.MakeWord((ushort)PlayObject.MDyVal[6], (ushort)PlayObject.MDyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[8], (ushort)PlayObject.MDyVal[9]), 0), QuestActionInfo.sParam2);
                         bo11 = true;
                         break;
                     case ScriptConst.nADDNAMELIST:
@@ -2107,22 +2107,22 @@ namespace GameSvr.Npc
                         ActionOfLineMsg(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nADDACCOUNTLIST:
-                        GotoLable_AddList(PlayObject.UserID, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_AddList(PlayObject.UserAccount, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nDELACCOUNTLIST:
-                        GotoLable_DelList(PlayObject.UserID, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_DelList(PlayObject.UserAccount, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nADDIPLIST:
-                        GotoLable_AddList(PlayObject.m_sIPaddr, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_AddList(PlayObject.LoginIpAddr, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nDELIPLIST:
-                        GotoLable_DelList(PlayObject.m_sIPaddr, m_sPath + QuestActionInfo.sParam1);
+                        GotoLable_DelList(PlayObject.LoginIpAddr, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nGOQUEST:
                         GotoLable_GoToQuest(PlayObject, QuestActionInfo.nParam1);
                         break;
                     case ScriptConst.nENDQUEST:
-                        PlayObject.m_Script = null;
+                        PlayObject.MScript = null;
                         break;
                     case ScriptConst.nGOTO:
                         if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1))
@@ -2288,7 +2288,7 @@ namespace GameSvr.Npc
                         ActionOfClearMakeItems(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_SETSENDMSGFLAG:
-                        PlayObject.m_boSendMsgFlag = true;
+                        PlayObject.MBoSendMsgFlag = true;
                         break;
                     case ScriptConst.nSC_UPGRADEITEMS:
                         ActionOfUpgradeItems(PlayObject, QuestActionInfo);
@@ -2396,9 +2396,9 @@ namespace GameSvr.Npc
                         ActionOfRepairAllItem(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_QUERYBAGITEMS:// 刷新包裹
-                        if ((HUtil32.GetTickCount() - PlayObject.m_dwQueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
+                        if ((HUtil32.GetTickCount() - PlayObject.MDwQueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
                         {
-                            PlayObject.m_dwQueryBagItemsTick = HUtil32.GetTickCount();
+                            PlayObject.MDwQueryBagItemsTick = HUtil32.GetTickCount();
                             PlayObject.ClientQueryBagItems();
                         }
                         else
@@ -2410,9 +2410,9 @@ namespace GameSvr.Npc
                         while (true)
                         {
                             n2C = M2Share.RandomNumber.Random(999999);
-                            if ((n2C >= 1000) && (n2C.ToString() != PlayObject.m_sRandomNo))
+                            if ((n2C >= 1000) && (n2C.ToString() != PlayObject.MSRandomNo))
                             {
-                                PlayObject.m_sRandomNo = n2C.ToString();
+                                PlayObject.MSRandomNo = n2C.ToString();
                                 break;
                             }
                         }
@@ -2427,7 +2427,7 @@ namespace GameSvr.Npc
                         ActionOfQueryTrustDeal(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nDELAYGOTO:
-                        PlayObject.m_boTimeGoto = true;
+                        PlayObject.MBoTimeGoto = true;
                         var m_DelayGoto = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
                         if (m_DelayGoto == 0)
                         {
@@ -2437,19 +2437,19 @@ namespace GameSvr.Npc
                         }
                         if (m_DelayGoto > 0)
                         {
-                            PlayObject.m_dwTimeGotoTick = HUtil32.GetTickCount() + m_DelayGoto;
+                            PlayObject.MDwTimeGotoTick = HUtil32.GetTickCount() + m_DelayGoto;
                         }
                         else
                         {
-                            PlayObject.m_dwTimeGotoTick = HUtil32.GetTickCount() + QuestActionInfo.nParam1;//毫秒
+                            PlayObject.MDwTimeGotoTick = HUtil32.GetTickCount() + QuestActionInfo.nParam1;//毫秒
                         }
-                        PlayObject.m_sTimeGotoLable = QuestActionInfo.sParam2;
-                        PlayObject.m_TimeGotoNPC = this;
+                        PlayObject.MSTimeGotoLable = QuestActionInfo.sParam2;
+                        PlayObject.MTimeGotoNpc = this;
                         break;
                     case ScriptConst.nCLEARDELAYGOTO:
-                        PlayObject.m_boTimeGoto = false;
-                        PlayObject.m_sTimeGotoLable = "";
-                        PlayObject.m_TimeGotoNPC = null;
+                        PlayObject.MBoTimeGoto = false;
+                        PlayObject.MSTimeGotoLable = "";
+                        PlayObject.MTimeGotoNpc = null;
                         break;
                     case ScriptConst.nSC_QUERYVALUE:
                         ActionOfQueryValue(PlayObject, QuestActionInfo);
@@ -2482,7 +2482,7 @@ namespace GameSvr.Npc
         private void ActionOfQueryItemDlg(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.TakeDlgItem = QuestActionInfo.nParam3 != 0;
-            PlayObject.m_sGotoNpcLabel = QuestActionInfo.sParam2;
+            PlayObject.MSGotoNpcLabel = QuestActionInfo.sParam2;
             var sHint = QuestActionInfo.sParam1;
             if (string.IsNullOrEmpty(sHint)) sHint = "请输入:";
             PlayObject.SendDefMessage(Grobal2.SM_QUERYITEMDLG, ActorId, 0, 0, 0, sHint);
@@ -2521,24 +2521,24 @@ namespace GameSvr.Npc
             {
                 btStrLabel = 0;
             }
-            PlayObject.m_btValLabel = (byte)btStrLabel;
+            PlayObject.MBtValLabel = (byte)btStrLabel;
             var btType = QuestActionInfo.nParam2;
             if (btType > 3)
             {
                 btType = 0;
             }
-            PlayObject.m_btValType = (byte)btType;
+            PlayObject.MBtValType = (byte)btType;
             var btLen = HUtil32._MAX(1, QuestActionInfo.nParam3);
-            PlayObject.m_sGotoNpcLabel = QuestActionInfo.sParam4;
+            PlayObject.MSGotoNpcLabel = QuestActionInfo.sParam4;
             var sHint = QuestActionInfo.sParam5;
-            PlayObject.m_btValNPCType = 0;
+            PlayObject.MBtValNpcType = 0;
             if (string.Compare(QuestActionInfo.sParam6, "QF", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                PlayObject.m_btValNPCType = 1;
+                PlayObject.MBtValNpcType = 1;
             }
             else if (string.Compare(QuestActionInfo.sParam6, "QM", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                PlayObject.m_btValNPCType = 2;
+                PlayObject.MBtValNpcType = 2;
             }
             if (string.IsNullOrEmpty(sHint))
             {

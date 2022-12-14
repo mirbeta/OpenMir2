@@ -12,73 +12,64 @@ namespace GameSvr.World
             SwitchDataInfo result = null;
             for (var i = 0; i < _mChangeServerList.Count; i++)
             {
-                SwitchDataInfo SwitchData = _mChangeServerList[i];
-                if (string.Compare(SwitchData.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0 && SwitchData.nCode == nCode)
+                SwitchDataInfo switchData = _mChangeServerList[i];
+                if (string.Compare(switchData.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0 && switchData.nCode == nCode)
                 {
-                    result = SwitchData;
+                    result = switchData;
                     break;
                 }
             }
             return result;
         }
 
-        private void LoadSwitchData(SwitchDataInfo SwitchData, ref PlayObject PlayObject)
+        private void LoadSwitchData(SwitchDataInfo switchData, ref PlayObject playObject)
         {
-            int nCount;
-            SlaveInfo SlaveInfo;
-            if (SwitchData.boC70)
-            {
-
-            }
-            PlayObject.BanShout = SwitchData.boBanShout;
-            PlayObject.HearWhisper = SwitchData.boHearWhisper;
-            PlayObject.BanGuildChat = SwitchData.boBanGuildChat;
-            PlayObject.BanGuildChat = SwitchData.boBanGuildChat;
-            PlayObject.AdminMode = SwitchData.boAdminMode;
-            PlayObject.ObMode = SwitchData.boObMode;
-            nCount = 0;
+            playObject.BanShout = switchData.boBanShout;
+            playObject.HearWhisper = switchData.boHearWhisper;
+            playObject.BanGuildChat = switchData.boBanGuildChat;
+            playObject.BanGuildChat = switchData.boBanGuildChat;
+            playObject.AdminMode = switchData.boAdminMode;
+            playObject.ObMode = switchData.boObMode;
+            var nCount = 0;
             while (true)
             {
-                if (SwitchData.BlockWhisperArr[nCount] == "") break;
-                PlayObject.LockWhisperList.Add(SwitchData.BlockWhisperArr[nCount]);
+                if (switchData.BlockWhisperArr[nCount] == "") break;
+                playObject.LockWhisperList.Add(switchData.BlockWhisperArr[nCount]);
                 nCount++;
-                if (nCount >= SwitchData.BlockWhisperArr.Count) break;
+                if (nCount >= switchData.BlockWhisperArr.Count) break;
             }
-
             nCount = 0;
             while (true)
             {
-                if (SwitchData.SlaveArr[nCount].SlaveName == "") break;
-                SlaveInfo = SwitchData.SlaveArr[nCount];
+                if (switchData.SlaveArr[nCount].SlaveName == "") break;
                 var slaveId = HUtil32.Sequence();
-                M2Share.ActorMgr.AddOhter(slaveId, SlaveInfo);
-                PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_10401, 0, slaveId, 0, 0, "", 500);
+                M2Share.ActorMgr.AddOhter(slaveId,  switchData.SlaveArr[nCount]);
+                playObject.SendDelayMsg(playObject, Grobal2.RM_10401, 0, slaveId, 0, 0, "", 500);
                 nCount++;
                 if (nCount >= 5) break;
             }
             nCount = 0;
             while (true)
             {
-                PlayObject.ExtraAbil[nCount] = SwitchData.StatusValue[nCount];
-                PlayObject.ExtraAbilTimes[nCount] = SwitchData.StatusTimeOut[nCount];
+                playObject.ExtraAbil[nCount] = switchData.StatusValue[nCount];
+                playObject.ExtraAbilTimes[nCount] = switchData.StatusTimeOut[nCount];
                 nCount++;
                 if (nCount >= 6) break;
             }
         }
 
-        public void AddSwitchData(SwitchDataInfo SwitchData)
+        public void AddSwitchData(SwitchDataInfo switchData)
         {
-            SwitchData.dwWaitTime = HUtil32.GetTickCount();
-            _mChangeServerList.Add(SwitchData);
+            switchData.dwWaitTime = HUtil32.GetTickCount();
+            _mChangeServerList.Add(switchData);
         }
 
-        private void DelSwitchData(SwitchDataInfo SwitchData)
+        private void DelSwitchData(SwitchDataInfo switchData)
         {
-            SwitchDataInfo SwitchDataInfo;
             for (var i = 0; i < _mChangeServerList.Count; i++)
             {
-                SwitchDataInfo = _mChangeServerList[i];
-                if (SwitchDataInfo == SwitchData)
+                var switchDataInfo = _mChangeServerList[i];
+                if (switchDataInfo == switchData)
                 {
                     _mChangeServerList.RemoveAt(i);
                     break;
@@ -86,61 +77,60 @@ namespace GameSvr.World
             }
         }
 
-        private bool SendSwitchData(PlayObject PlayObject, int nServerIndex)
+        private bool SendSwitchData(PlayObject playObject, int nServerIndex)
         {
-            SwitchDataInfo SwitchData = null;
-            MakeSwitchData(PlayObject, ref SwitchData);
+            SwitchDataInfo switchData = null;
+            MakeSwitchData(playObject, ref switchData);
             var flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
-            PlayObject.m_sSwitchDataTempFile = flName;
+            playObject.MSSwitchDataTempFile = flName;
             SendServerGroupMsg(Grobal2.ISM_USERSERVERCHANGE, nServerIndex, flName);//发送消息切换服务器
             M2Share.ShareFileNameNum++;
             return true;
         }
 
-        private void MakeSwitchData(PlayObject PlayObject, ref SwitchDataInfo SwitchData)
+        private void MakeSwitchData(PlayObject playObject, ref SwitchDataInfo switchData)
         {
-            SwitchData = new SwitchDataInfo();
-            SwitchData.sChrName = PlayObject.ChrName;
-            SwitchData.sMap = PlayObject.MapName;
-            SwitchData.wX = PlayObject.CurrX;
-            SwitchData.wY = PlayObject.CurrY;
-            SwitchData.Abil = PlayObject.Abil;
-            SwitchData.nCode = PlayObject.m_nSessionID;
-            SwitchData.boBanShout = PlayObject.BanShout;
-            SwitchData.boHearWhisper = PlayObject.HearWhisper;
-            SwitchData.boBanGuildChat = PlayObject.BanGuildChat;
-            SwitchData.boBanGuildChat = PlayObject.BanGuildChat;
-            SwitchData.boAdminMode = PlayObject.AdminMode;
-            SwitchData.boObMode = PlayObject.ObMode;
-            for (var i = 0; i < PlayObject.LockWhisperList.Count; i++)
+            switchData = new SwitchDataInfo();
+            switchData.sChrName = playObject.ChrName;
+            switchData.sMap = playObject.MapName;
+            switchData.wX = playObject.CurrX;
+            switchData.wY = playObject.CurrY;
+            switchData.Abil = playObject.Abil;
+            switchData.nCode = playObject.MNSessionId;
+            switchData.boBanShout = playObject.BanShout;
+            switchData.boHearWhisper = playObject.HearWhisper;
+            switchData.boBanGuildChat = playObject.BanGuildChat;
+            switchData.boBanGuildChat = playObject.BanGuildChat;
+            switchData.boAdminMode = playObject.AdminMode;
+            switchData.boObMode = playObject.ObMode;
+            for (var i = 0; i < playObject.LockWhisperList.Count; i++)
             {
-                SwitchData.BlockWhisperArr.Add(PlayObject.LockWhisperList[i]);
+                switchData.BlockWhisperArr.Add(playObject.LockWhisperList[i]);
             }
 
-            for (var i = 0; i < PlayObject.SlaveList.Count; i++)
+            for (var i = 0; i < playObject.SlaveList.Count; i++)
             {
-                BaseObject BaseObject = PlayObject.SlaveList[i];
+                BaseObject baseObject = playObject.SlaveList[i];
                 if (i <= 4)
                 {
-                    SwitchData.SlaveArr[i].SlaveName = BaseObject.ChrName;
-                    SwitchData.SlaveArr[i].KillCount = BaseObject.KillMonCount;
-                    SwitchData.SlaveArr[i].SalveLevel = BaseObject.SlaveMakeLevel;
-                    SwitchData.SlaveArr[i].SlaveExpLevel = BaseObject.SlaveExpLevel;
-                    SwitchData.SlaveArr[i].RoyaltySec = (BaseObject.MasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
-                    SwitchData.SlaveArr[i].nHP = BaseObject.Abil.HP;
-                    SwitchData.SlaveArr[i].nMP = BaseObject.Abil.MP;
+                    switchData.SlaveArr[i].SlaveName = baseObject.ChrName;
+                    switchData.SlaveArr[i].KillCount = baseObject.KillMonCount;
+                    switchData.SlaveArr[i].SalveLevel = baseObject.SlaveMakeLevel;
+                    switchData.SlaveArr[i].SlaveExpLevel = baseObject.SlaveExpLevel;
+                    switchData.SlaveArr[i].RoyaltySec = (baseObject.MasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
+                    switchData.SlaveArr[i].nHP = baseObject.Abil.HP;
+                    switchData.SlaveArr[i].nMP = baseObject.Abil.MP;
                 }
             }
-            for (var i = 0; i < PlayObject.ExtraAbil.Length; i++)
+            for (var i = 0; i < playObject.ExtraAbil.Length; i++)
             {
-                if (PlayObject.ExtraAbil[i] > 0)
+                if (playObject.ExtraAbil[i] > 0)
                 {
-                    SwitchData.StatusValue[i] = PlayObject.ExtraAbil[i];
-                    SwitchData.StatusTimeOut[i] = PlayObject.ExtraAbilTimes[i];
+                    switchData.StatusValue[i] = playObject.ExtraAbil[i];
+                    switchData.StatusTimeOut[i] = playObject.ExtraAbilTimes[i];
                 }
             }
         }
-
 
         public void CheckSwitchServerTimeOut()
         {

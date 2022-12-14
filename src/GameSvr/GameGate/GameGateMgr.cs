@@ -149,8 +149,8 @@ namespace GameSvr.GameGate
                                         {
                                             gateUserInfo.PlayObject.SysMsg("账号付费时间已到,本机已被强行离线,请充值后再继续进行游戏!", MsgColor.Red, MsgType.Hint);
                                         }
-                                        gateUserInfo.PlayObject.m_boEmergencyClose = true;
-                                        gateUserInfo.PlayObject.m_boSoftClose = true;
+                                        gateUserInfo.PlayObject.MBoEmergencyClose = true;
+                                        gateUserInfo.PlayObject.MBoSoftClose = true;
                                     }
                                     gateInfo.UserList[j] = null;
                                     gateInfo.nUserCount -= 1;
@@ -220,8 +220,8 @@ namespace GameSvr.GameGate
                         {
                             if (gateUser.PlayObject != null)
                             {
-                                gateUser.PlayObject.m_boEmergencyClose = true;
-                                if (!gateUser.PlayObject.m_boReconnection)
+                                gateUser.PlayObject.MBoEmergencyClose = true;
+                                if (!gateUser.PlayObject.MBoReconnection)
                                 {
                                     IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.nSessionID);
                                 }

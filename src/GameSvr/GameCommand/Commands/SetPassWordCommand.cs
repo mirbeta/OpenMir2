@@ -18,10 +18,10 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.m_sStoragePwd == "")
+            if (playObject.MSStoragePwd == "")
             {
                 playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                playObject.m_boSetStoragePwd = true;
+                playObject.MBoSetStoragePwd = true;
                 playObject.SysMsg(M2Share.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
             else
@@ -45,9 +45,9 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!playObject.m_boPasswordLocked)
+            if (!playObject.MBoPasswordLocked)
             {
-                playObject.m_sStoragePwd = "";
+                playObject.MSStoragePwd = "";
                 playObject.SysMsg(M2Share.g_sOldPasswordIsClearMsg, MsgColor.Green, MsgType.Hint);
             }
             else
@@ -71,16 +71,16 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.m_btPwdFailCount > 3)
+            if (playObject.MBtPwdFailCount > 3)
             {
                 playObject.SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.m_boPasswordLocked = true;
+                playObject.MBoPasswordLocked = true;
                 return;
             }
-            if (playObject.m_sStoragePwd != "")
+            if (playObject.MSStoragePwd != "")
             {
                 playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                playObject.m_boCheckOldPwd = true;
+                playObject.MBoCheckOldPwd = true;
                 playObject.SysMsg(M2Share.g_sPleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
             else
@@ -104,19 +104,19 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.m_btPwdFailCount > M2Share.Config.PasswordErrorCountLock)
+            if (playObject.MBtPwdFailCount > M2Share.Config.PasswordErrorCountLock)
             {
                 playObject.SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.m_boPasswordLocked = true;
+                playObject.MBoPasswordLocked = true;
                 return;
             }
-            if (playObject.m_sStoragePwd != "")
+            if (playObject.MSStoragePwd != "")
             {
-                if (!playObject.m_boUnLockStoragePwd)
+                if (!playObject.MBoUnLockStoragePwd)
                 {
                     playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                     playObject.SysMsg(M2Share.g_sPleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
-                    playObject.m_boUnLockStoragePwd = true;
+                    playObject.MBoUnLockStoragePwd = true;
                 }
                 else
                 {
@@ -144,19 +144,19 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.m_btPwdFailCount > M2Share.Config.PasswordErrorCountLock)
+            if (playObject.MBtPwdFailCount > M2Share.Config.PasswordErrorCountLock)
             {
                 playObject.SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.m_boPasswordLocked = true;
+                playObject.MBoPasswordLocked = true;
                 return;
             }
-            if (playObject.m_sStoragePwd != "")
+            if (playObject.MSStoragePwd != "")
             {
-                if (!playObject.m_boUnLockPwd)
+                if (!playObject.MBoUnLockPwd)
                 {
                     playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                     playObject.SysMsg(M2Share.g_sPleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
-                    playObject.m_boUnLockPwd = true;
+                    playObject.MBoUnLockPwd = true;
                 }
                 else
                 {
@@ -184,12 +184,12 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!playObject.m_boPasswordLocked)
+            if (!playObject.MBoPasswordLocked)
             {
-                if (playObject.m_sStoragePwd != "")
+                if (playObject.MSStoragePwd != "")
                 {
-                    playObject.m_boPasswordLocked = true;
-                    playObject.m_boCanGetBackItem = false;
+                    playObject.MBoPasswordLocked = true;
+                    playObject.MBoCanGetBackItem = false;
                     playObject.SysMsg(M2Share.g_sLockStorageSuccessMsg, MsgColor.Green, MsgType.Hint);
                 }
                 else

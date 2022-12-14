@@ -18,8 +18,8 @@ namespace GameSvr.RobotPlay
             int nWhere;
             int nPercent;
             int nValue;
-            StdItem StdItem;
-            UserItem UserItem;
+            StdItem stdItem;
+            UserItem userItem;
             bool boRecalcAbilitys;
             bool boFind = false;
             try
@@ -90,7 +90,7 @@ namespace GameSvr.RobotPlay
                             }
                             else if (IsNeedAvoid()) // 自动躲避
                             {
-                                m_dwActionTick = HUtil32.GetTickCount() - 10;
+                                MDwActionTick = HUtil32.GetTickCount() - 10;
                                 AutoAvoid();
                                 base.Run();
                                 return;
@@ -99,7 +99,7 @@ namespace GameSvr.RobotPlay
                             {
                                 if (IsNeedGotoXY())// 是否走向目标
                                 {
-                                    m_dwActionTick = HUtil32.GetTickCount();
+                                    MDwActionTick = HUtil32.GetTickCount();
                                     TargetX = TargetCret.CurrX;
                                     TargetY = TargetCret.CurrY;
                                     if (AllowUseMagic(12) && Job == 0)
@@ -167,23 +167,23 @@ namespace GameSvr.RobotPlay
                                         }
                                         if (UseItems[nWhere].Index <= 0)
                                         {
-                                            StdItem = M2Share.WorldEngine.GetStdItem(m_UseItemNames[nWhere]);
-                                            if (StdItem != null)
+                                            stdItem = M2Share.WorldEngine.GetStdItem(m_UseItemNames[nWhere]);
+                                            if (stdItem != null)
                                             {
-                                                UserItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref UserItem))
+                                                userItem = new UserItem();
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref userItem))
                                                 {
                                                     boRecalcAbilitys = true;
-                                                    if (M2Share.StdModeMap.Contains(StdItem.StdMode))
+                                                    if (M2Share.StdModeMap.Contains(stdItem.StdMode))
                                                     {
-                                                        if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
+                                                        if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                                         {
                                                             //M2Share.WorldEngine.GetUnknowItemValue(UserItem);
                                                         }
                                                     }
                                                 }
-                                                UseItems[nWhere] = UserItem;
-                                                Dispose(UserItem);
+                                                UseItems[nWhere] = userItem;
+                                                Dispose(userItem);
                                             }
                                         }
                                     }
@@ -193,14 +193,14 @@ namespace GameSvr.RobotPlay
                                         {
                                             for (var j = 0; j < ItemList.Count; j++)
                                             {
-                                                UserItem = ItemList[j];
-                                                if (UserItem != null)
+                                                userItem = ItemList[j];
+                                                if (userItem != null)
                                                 {
-                                                    StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                                                    if (StdItem != null)
+                                                    stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                                                    if (stdItem != null)
                                                     {
                                                         boFind = false;
-                                                        if (StdItem.Name.CompareTo(m_BagItemNames[i]) == 0)
+                                                        if (string.Compare(stdItem.Name, m_BagItemNames[i], StringComparison.OrdinalIgnoreCase) == 0)
                                                         {
                                                             boFind = true;
                                                             break;
@@ -210,18 +210,18 @@ namespace GameSvr.RobotPlay
                                             }
                                             if (!boFind)
                                             {
-                                                UserItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_BagItemNames[i], ref UserItem))
+                                                userItem = new UserItem();
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_BagItemNames[i], ref userItem))
                                                 {
-                                                    if (!AddItemToBag(UserItem))
+                                                    if (!AddItemToBag(userItem))
                                                     {
-                                                        Dispose(UserItem);
+                                                        Dispose(userItem);
                                                         break;
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    Dispose(UserItem);
+                                                    Dispose(userItem);
                                                 }
                                             }
                                         }
@@ -230,10 +230,10 @@ namespace GameSvr.RobotPlay
                                     {
                                         if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
                                         {
-                                            StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nWhere].Index);
-                                            if (StdItem != null)
+                                            stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nWhere].Index);
+                                            if (stdItem != null)
                                             {
-                                                if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && StdItem.StdMode != 43)
+                                                if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && stdItem.StdMode != 43)
                                                 {
                                                     /*if (PlugOfCheckCanItem(3, StdItem.Name, false, 0, 0))
                                                     {
@@ -316,40 +316,40 @@ namespace GameSvr.RobotPlay
             base.Run();
         }
 
-        protected override bool IsProtectTarget(BaseObject BaseObject)
+        protected override bool IsProtectTarget(BaseObject baseObject)
         {
-            return base.IsProtectTarget(BaseObject);
+            return base.IsProtectTarget(baseObject);
         }
 
-        protected override bool IsAttackTarget(BaseObject BaseObject)
+        protected override bool IsAttackTarget(BaseObject baseObject)
         {
-            return base.IsAttackTarget(BaseObject);
+            return base.IsAttackTarget(baseObject);
         }
 
-        public override bool IsProperTarget(BaseObject BaseObject)
+        public override bool IsProperTarget(BaseObject baseObject)
         {
             bool result = false;
-            if (BaseObject != null)
+            if (baseObject != null)
             {
-                if (base.IsProperTarget(BaseObject))
+                if (base.IsProperTarget(baseObject))
                 {
                     result = true;
-                    if (BaseObject.Master != null)
+                    if (baseObject.Master != null)
                     {
-                        if (BaseObject.Master == this || BaseObject.Master.IsRobot && !InFreePkArea)
+                        if (baseObject.Master == this || baseObject.Master.IsRobot && !InFreePkArea)
                         {
                             result = false;
                         }
                     }
-                    if (BaseObject.IsRobot && !InFreePkArea)// 假人不攻击假人,行会战除外
+                    if (baseObject.IsRobot && !InFreePkArea)// 假人不攻击假人,行会战除外
                     {
                         result = false;
                     }
-                    switch (BaseObject.Race)
+                    switch (baseObject.Race)
                     {
                         case ActorRace.ArcherGuard:
                         case ActorRace.Exercise:// 不主动攻击练功师 弓箭手
-                            if (BaseObject.TargetCret != this)
+                            if (baseObject.TargetCret != this)
                             {
                                 result = false;
                             }
@@ -370,9 +370,9 @@ namespace GameSvr.RobotPlay
                 {
                     if (AttatckMode == AttackMode.HAM_PKATTACK)// 红名模式，除红名目标外，受人攻击时才还击
                     {
-                        if (BaseObject.Race == ActorRace.Play)
+                        if (baseObject.Race == ActorRace.Play)
                         {
-                            var targetPvpLevel = (BaseObject as PlayObject).PvpLevel();
+                            var targetPvpLevel = ((PlayObject)baseObject).PvpLevel();
                             if (PvpLevel() >= 2)
                             {
                                 result = targetPvpLevel < 2;
@@ -384,51 +384,51 @@ namespace GameSvr.RobotPlay
                         }
                         if (IsRobot && !result)
                         {
-                            if (BaseObject.Race == ActorRace.Play || BaseObject.Master != null)
+                            if (baseObject.Race == ActorRace.Play || baseObject.Master != null)
                             {
-                                if (BaseObject.TargetCret != null)
+                                if (baseObject.TargetCret != null)
                                 {
-                                    if (BaseObject.TargetCret == this)
+                                    if (baseObject.TargetCret == this)
                                     {
                                         result = true;
                                     }
                                 }
-                                if (BaseObject.LastHiter != null)
+                                if (baseObject.LastHiter != null)
                                 {
-                                    if (BaseObject.LastHiter == this)
+                                    if (baseObject.LastHiter == this)
                                     {
                                         result = true;
                                     }
                                 }
-                                if (BaseObject.ExpHitter != null)
+                                if (baseObject.ExpHitter != null)
                                 {
-                                    if (BaseObject.LastHiter == this)
+                                    if (baseObject.LastHiter == this)
                                     {
                                         result = true;
                                     }
                                 }
                             }
                         }
-                        if (BaseObject.Race == ActorRace.Play || BaseObject.Master != null)// 安全区不能打人物和英雄
+                        if (baseObject.Race == ActorRace.Play || baseObject.Master != null)// 安全区不能打人物和英雄
                         {
-                            if (BaseObject.InSafeZone() || InSafeZone())
+                            if (baseObject.InSafeZone() || InSafeZone())
                             {
                                 result = false;
                             }
                         }
-                        if (BaseObject.Master == this)
+                        if (baseObject.Master == this)
                         {
                             result = false;
                         }
-                        if (BaseObject.IsRobot && (!InFreePkArea || (BaseObject as PlayObject).PvpLevel() < 2)) // 假人不攻击假人,行会战除外
+                        if (baseObject.IsRobot && (!InFreePkArea || ((PlayObject)baseObject).PvpLevel() < 2)) // 假人不攻击假人,行会战除外
                         {
                             result = false;
                         }
-                        switch (BaseObject.Race)
+                        switch (baseObject.Race)
                         {
                             case ActorRace.ArcherGuard:
                             case ActorRace.Exercise:// 不主动攻击练功师 弓箭手
-                                if (BaseObject.TargetCret != this)
+                                if (baseObject.TargetCret != this)
                                 {
                                     result = false;
                                 }
@@ -450,9 +450,9 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public override bool IsProperFriend(BaseObject BaseObject)
+        public override bool IsProperFriend(BaseObject baseObject)
         {
-            return base.IsProperFriend(BaseObject);
+            return base.IsProperFriend(baseObject);
         }
 
         public override void SearchViewRange()
@@ -461,7 +461,7 @@ namespace GameSvr.RobotPlay
             MapCellInfo cellInfo;
             CellObject cellObject = null;
             BaseObject baseObject;
-            EventInfo MapEvent;
+            EventInfo mapEvent;
             VisibleFlag nVisibleFlag;
             const string sExceptionMsg = "RobotPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
             if (Ghost)
@@ -571,29 +571,29 @@ namespace GameSvr.RobotPlay
                                                         }
                                                         continue;
                                                     }
-                                                    var MapItem = (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
-                                                    UpdateVisibleItem(nX, nY, MapItem);
-                                                    if (MapItem.OfBaseObject != 0 || MapItem.DropBaseObject != 0)
+                                                    var mapItem = (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                                    UpdateVisibleItem(nX, nY, mapItem);
+                                                    if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                     {
-                                                        if (HUtil32.GetTickCount() - MapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)
+                                                        if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)
                                                         {
-                                                            MapItem.OfBaseObject = 0;
-                                                            MapItem.DropBaseObject = 0;
+                                                            mapItem.OfBaseObject = 0;
+                                                            mapItem.DropBaseObject = 0;
                                                         }
                                                         else
                                                         {
-                                                            if (MapItem.OfBaseObject > 0)
+                                                            if (mapItem.OfBaseObject > 0)
                                                             {
-                                                                if (M2Share.ActorMgr.Get(MapItem.OfBaseObject).Ghost)
+                                                                if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
                                                                 {
-                                                                    MapItem.OfBaseObject = 0;
+                                                                    mapItem.OfBaseObject = 0;
                                                                 }
                                                             }
-                                                            if (MapItem.DropBaseObject > 0)
+                                                            if (mapItem.DropBaseObject > 0)
                                                             {
-                                                                if (M2Share.ActorMgr.Get(MapItem.DropBaseObject).Ghost)
+                                                                if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
                                                                 {
-                                                                    MapItem.DropBaseObject = 0;
+                                                                    mapItem.DropBaseObject = 0;
                                                                 }
                                                             }
                                                         }
@@ -605,8 +605,8 @@ namespace GameSvr.RobotPlay
                                                 {
                                                     if (cellObject.CellObjId < 0)
                                                     {
-                                                        MapEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
-                                                        UpdateVisibleEvent(nX, nY, MapEvent);
+                                                        mapEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                                        UpdateVisibleEvent(nX, nY, mapEvent);
                                                     }
                                                 }
                                                 break;
@@ -635,11 +635,11 @@ namespace GameSvr.RobotPlay
                         {
                             break;
                         }
-                        VisibleBaseObject VisibleBaseObject;
+                        VisibleBaseObject visibleBaseObject;
                         try
                         {
-                            VisibleBaseObject = VisibleActors[n18];
-                            nVisibleFlag = VisibleBaseObject.VisibleFlag;
+                            visibleBaseObject = VisibleActors[n18];
+                            nVisibleFlag = visibleBaseObject.VisibleFlag;
                         }
                         catch
                         {
@@ -650,12 +650,12 @@ namespace GameSvr.RobotPlay
                             }
                             break;
                         }
-                        switch (VisibleBaseObject.VisibleFlag)
+                        switch (visibleBaseObject.VisibleFlag)
                         {
                             case VisibleFlag.Visible:
                                 if (Race == ActorRace.Play)
                                 {
-                                    baseObject = VisibleBaseObject.BaseObject;
+                                    baseObject = visibleBaseObject.BaseObject;
                                     if (baseObject != null)
                                     {
                                         if (!baseObject.FixedHideMode && !baseObject.Ghost)
@@ -665,15 +665,15 @@ namespace GameSvr.RobotPlay
                                     }
                                 }
                                 VisibleActors.RemoveAt(n18);
-                                if (VisibleBaseObject != null)
+                                if (visibleBaseObject != null)
                                 {
-                                    Dispose(VisibleBaseObject);
+                                    Dispose(visibleBaseObject);
                                 }
                                 continue;
                             case VisibleFlag.Hidden:
                                 if (Race == ActorRace.Play)
                                 {
-                                    baseObject = VisibleBaseObject.BaseObject;
+                                    baseObject = visibleBaseObject.BaseObject;
                                     if (baseObject != null)
                                     {
                                         if (baseObject != this && !baseObject.Ghost && !Ghost)
@@ -699,10 +699,10 @@ namespace GameSvr.RobotPlay
                                         }
                                     }
                                 }
-                                VisibleBaseObject.VisibleFlag = 0;
+                                visibleBaseObject.VisibleFlag = 0;
                                 break;
                             case VisibleFlag.Invisible:
-                                VisibleBaseObject.VisibleFlag = 0;
+                                visibleBaseObject.VisibleFlag = 0;
                                 break;
                         }
                     }
@@ -730,11 +730,11 @@ namespace GameSvr.RobotPlay
                             break;
                         }
 
-                        VisibleMapItem VisibleMapItem;
+                        VisibleMapItem visibleMapItem;
                         try
                         {
-                            VisibleMapItem = VisibleItems[position];
-                            nVisibleFlag = VisibleMapItem.VisibleFlag;
+                            visibleMapItem = VisibleItems[position];
+                            nVisibleFlag = visibleMapItem.VisibleFlag;
                         }
                         catch
                         {
@@ -745,10 +745,10 @@ namespace GameSvr.RobotPlay
                             }
                             break;
                         }
-                        if (VisibleMapItem.VisibleFlag == 0)
+                        if (visibleMapItem.VisibleFlag == 0)
                         {
                             VisibleItems.RemoveAt(position);
-                            VisibleMapItem = null;
+                            visibleMapItem = null;
                             if (VisibleItems.Count > 0)
                             {
                                 continue;
@@ -773,8 +773,8 @@ namespace GameSvr.RobotPlay
                         }
                         try
                         {
-                            MapEvent = VisibleEvents[position];
-                            nVisibleFlag = MapEvent.VisibleFlag;
+                            mapEvent = VisibleEvents[position];
+                            nVisibleFlag = mapEvent.VisibleFlag;
                         }
                         catch
                         {
@@ -785,12 +785,12 @@ namespace GameSvr.RobotPlay
                             }
                             break;
                         }
-                        if (MapEvent != null)
+                        if (mapEvent != null)
                         {
-                            switch (MapEvent.VisibleFlag)
+                            switch (mapEvent.VisibleFlag)
                             {
                                 case VisibleFlag.Visible:
-                                    SendMsg(this, Grobal2.RM_HIDEEVENT, 0, MapEvent.Id, MapEvent.nX, MapEvent.nY, "");
+                                    SendMsg(this, Grobal2.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
                                     VisibleEvents.RemoveAt(position);
                                     if (VisibleEvents.Count > 0)
                                     {
@@ -798,11 +798,11 @@ namespace GameSvr.RobotPlay
                                     }
                                     break;
                                 case VisibleFlag.Invisible:
-                                    MapEvent.VisibleFlag = 0;
+                                    mapEvent.VisibleFlag = 0;
                                     break;
                                 case VisibleFlag.Hidden:
-                                    SendMsg(this, Grobal2.RM_SHOWEVENT, MapEvent.EventType, MapEvent.Id, HUtil32.MakeLong(MapEvent.nX, (short)MapEvent.EventParam), MapEvent.nY, "");
-                                    MapEvent.VisibleFlag = 0;
+                                    SendMsg(this, Grobal2.RM_SHOWEVENT, mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
+                                    mapEvent.VisibleFlag = 0;
                                     break;
                             }
                         }
@@ -864,11 +864,11 @@ namespace GameSvr.RobotPlay
                 {
                     if (M2Share.RandomNumber.Random(8) == 0 && m_AISayMsgList.Count > 0)
                     {
-                        if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
+                        if (HUtil32.GetTickCount() >= MDwDisableSayMsgTick)
                         {
-                            m_boDisableSayMsg = false;
+                            MBoDisableSayMsg = false;
                         }
-                        var boDisableSayMsg = m_boDisableSayMsg;
+                        var boDisableSayMsg = MBoDisableSayMsg;
                         //g_DenySayMsgList.Lock;
                         //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                         //{
@@ -914,14 +914,14 @@ namespace GameSvr.RobotPlay
             base.Die();
         }
 
-        protected override void DropUseItems(BaseObject BaseObject)
+        protected override void DropUseItems(BaseObject baseObject)
         {
-            const byte MaxUseItem = 8;
+            const byte maxUseItem = 8;
             if (NoDropUseItem)
             {
                 return;
             }
-            IList<DeleteItem> DropItemList = new List<DeleteItem>();
+            IList<DeleteItem> dropItemList = new List<DeleteItem>();
             var nRate = PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
             var nC = 0;
             while (true)
@@ -933,16 +933,16 @@ namespace GameSvr.RobotPlay
                         nC++;
                         continue;
                     }
-                    if (DropItemDown(UseItems[nC], 2, true, BaseObject, this))
+                    if (DropItemDown(UseItems[nC], 2, true, baseObject, this))
                     {
-                        var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
-                        if (StdItem != null)
+                        var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
+                        if (stdItem != null)
                         {
-                            if ((StdItem.ItemDesc & 10) == 0)
+                            if ((stdItem.ItemDesc & 10) == 0)
                             {
                                 if (Race == ActorRace.Play)
                                 {
-                                    DropItemList.Add(new DeleteItem()
+                                    dropItemList.Add(new DeleteItem()
                                     {
                                         ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].Index),
                                         MakeIndex = UseItems[nC].MakeIndex
@@ -954,16 +954,16 @@ namespace GameSvr.RobotPlay
                     }
                 }
                 nC++;
-                if (nC >= MaxUseItem)
+                if (nC >= maxUseItem)
                 {
                     break;
                 }
             }
-            if (DropItemList.Count > 0)
+            if (dropItemList.Count > 0)
             {
-                var ObjectId = HUtil32.Sequence();
-                M2Share.ActorMgr.AddOhter(ObjectId, DropItemList);
-                SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                var objectId = HUtil32.Sequence();
+                M2Share.ActorMgr.AddOhter(objectId, dropItemList);
+                SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }
         }
     }

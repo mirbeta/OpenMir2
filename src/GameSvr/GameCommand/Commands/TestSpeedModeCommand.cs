@@ -9,8 +9,8 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public void TestSpeedMode(PlayObject PlayObject)
         {
-            PlayObject.m_boTestSpeedMode = !PlayObject.m_boTestSpeedMode;
-            if (PlayObject.m_boTestSpeedMode)
+            PlayObject.MBoTestSpeedMode = !PlayObject.MBoTestSpeedMode;
+            if (PlayObject.MBoTestSpeedMode)
             {
                 PlayObject.SysMsg("开启速度测试模式", MsgColor.Red, MsgType.Hint);
             }

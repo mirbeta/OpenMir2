@@ -30,10 +30,10 @@ namespace GameSvr.GameCommand.Commands
             {
                 if (nLevel >= 0 && nLevel <= 255)
                 {
-                    m_PlayObject.m_btReLevel = (byte)nLevel;
+                    m_PlayObject.MBtReLevel = (byte)nLevel;
                     m_PlayObject.RefShowName();
                 }
-                PlayObject.SysMsg(sHumanName + " 的转生等级为 " + PlayObject.m_btReLevel, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(sHumanName + " 的转生等级为 " + PlayObject.MBtReLevel, MsgColor.Green, MsgType.Hint);
             }
             else
             {

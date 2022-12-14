@@ -40,7 +40,7 @@ namespace GameSvr.Player
                     if (HUtil32.GetTickCount() - AccountExpiredTick > QueryExpireTick)//一分钟查询一次账号游戏到期时间
                     {
                         ExpireTime = ExpireTime - 60;//游戏时间减去一分钟
-                        IdSrvClient.Instance.SendUserPlayTime(UserID, ExpireTime);
+                        IdSrvClient.Instance.SendUserPlayTime(UserAccount, ExpireTime);
                         AccountExpiredTick = HUtil32.GetTickCount();
                         CheckExpiredTime();
                     }
@@ -48,7 +48,7 @@ namespace GameSvr.Player
                     {
                         SysMsg(sPayMentExpire, MsgColor.Red, MsgType.Hint);
                         SysMsg(sDisConnectMsg, MsgColor.Red, MsgType.Hint);
-                        m_boEmergencyClose = true;
+                        MBoEmergencyClose = true;
                         AccountExpired = false;
                     }
                 }
@@ -63,10 +63,10 @@ namespace GameSvr.Player
                     TwinHitSkill = false;
                     SendSocket("+UTWN");
                 }
-                if (m_boTimeRecall && HUtil32.GetTickCount() > m_dwTimeRecallTick) //执行 TimeRecall回到原地
+                if (MBoTimeRecall && HUtil32.GetTickCount() > MDwTimeRecallTick) //执行 TimeRecall回到原地
                 {
-                    m_boTimeRecall = false;
-                    SpaceMove(m_sMoveMap, m_nMoveX, m_nMoveY, 0);
+                    MBoTimeRecall = false;
+                    SpaceMove(MSMoveMap, MNMoveX, MNMoveY, 0);
                 }
                 for (var i = 0; i < 20; i++) //个人定时器
                 {
@@ -77,7 +77,7 @@ namespace GameSvr.Player
                             if (M2Share.g_ManageNPC != null)
                             {
                                 AutoTimerTick[i] = HUtil32.GetTickCount();
-                                m_nScriptGotoCount = 0;
+                                ScriptGotoCount = 0;
                                 M2Share.g_ManageNPC.GotoLable(this, "@OnTimer" + i, false);
                             }
                         }
@@ -149,41 +149,41 @@ namespace GameSvr.Player
                 {
                     HealthSpellChanged();
                 }
-                if (m_boTimeGoto && (HUtil32.GetTickCount() > m_dwTimeGotoTick)) //Delaygoto延时跳转
+                if (MBoTimeGoto && (HUtil32.GetTickCount() > MDwTimeGotoTick)) //Delaygoto延时跳转
                 {
-                    m_boTimeGoto = false;
-                    ((Merchant)m_TimeGotoNPC)?.GotoLable(this, m_sTimeGotoLable, false);
+                    MBoTimeGoto = false;
+                    ((Merchant)MTimeGotoNpc)?.GotoLable(this, MSTimeGotoLable, false);
                 }
                 // 增加挂机
                 if (OffLineFlag && HUtil32.GetTickCount() > KickOffLineTick)
                 {
                     OffLineFlag = false;
-                    m_boSoftClose = true;
+                    MBoSoftClose = true;
                 }
-                if (m_boDelayCall && (HUtil32.GetTickCount() - m_dwDelayCallTick) > m_nDelayCall)
+                if (MBoDelayCall && (HUtil32.GetTickCount() - MDwDelayCallTick) > MNDelayCall)
                 {
-                    m_boDelayCall = false;
-                    NormNpc normNpc = WorldServer.FindMerchant<Merchant>(m_DelayCallNPC);
+                    MBoDelayCall = false;
+                    NormNpc normNpc = WorldServer.FindMerchant<Merchant>(MDelayCallNpc);
                     if (normNpc == null)
                     {
-                        normNpc = WorldServer.FindNpc<NormNpc>(m_DelayCallNPC);
+                        normNpc = WorldServer.FindNpc<NormNpc>(MDelayCallNpc);
                     }
                     if (normNpc != null)
                     {
-                        normNpc.GotoLable(this, m_sDelayCallLabel, false);
+                        normNpc.GotoLable(this, DelayCallLabel, false);
                     }
                 }
-                if ((HUtil32.GetTickCount() - DecPkPointTick) > M2Share.Config.DecPkPointTime)// 减少PK值
+                if ((HUtil32.GetTickCount() - _decPkPointTick) > M2Share.Config.DecPkPointTime)// 减少PK值
                 {
-                    DecPkPointTick = HUtil32.GetTickCount();
+                    _decPkPointTick = HUtil32.GetTickCount();
                     if (PkPoint > 0)
                     {
                         DecPkPoint(M2Share.Config.DecPkPointCount);
                     }
                 }
-                if ((HUtil32.GetTickCount() - m_dwCheckDupObjTick) > 3000)
+                if ((HUtil32.GetTickCount() - MDwCheckDupObjTick) > 3000)
                 {
-                    m_dwCheckDupObjTick = HUtil32.GetTickCount();
+                    MDwCheckDupObjTick = HUtil32.GetTickCount();
                     GetStartPoint();
                     tObjCount = Envir.GetXyObjCount(CurrX, CurrY);
                     if (tObjCount >= 2)
@@ -218,11 +218,11 @@ namespace GameSvr.Player
                     var wMSec = DateTime.Now.Millisecond;
                     if (M2Share.Config.DiscountForNightTime && (wHour == M2Share.Config.HalfFeeStart || wHour == M2Share.Config.HalfFeeEnd))
                     {
-                        if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - m_dwLogonTick) > 60000)
+                        if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - MDwLogonTick) > 60000)
                         {
                             LogonTimcCost();
-                            m_dwLogonTick = HUtil32.GetTickCount();
-                            m_dLogonTime = DateTime.Now;
+                            MDwLogonTick = HUtil32.GetTickCount();
+                            MDLogonTime = DateTime.Now;
                         }
                     }
                     if (MyGuild != null)
@@ -230,9 +230,9 @@ namespace GameSvr.Player
                         if (MyGuild.GuildWarList.Count > 0)
                         {
                             var boInSafeArea = InSafeArea();
-                            if (boInSafeArea != m_boInSafeArea)
+                            if (boInSafeArea != MBoInSafeArea)
                             {
-                                m_boInSafeArea = boInSafeArea;
+                                MBoInSafeArea = boInSafeArea;
                                 RefNameColor();
                             }
                         }
@@ -276,28 +276,28 @@ namespace GameSvr.Player
             }
             try
             {
-                m_dwGetMsgTick = HUtil32.GetTickCount();
-                while (((HUtil32.GetTickCount() - m_dwGetMsgTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(out ProcessMsg))
+                MDwGetMsgTick = HUtil32.GetTickCount();
+                while (((HUtil32.GetTickCount() - MDwGetMsgTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(out ProcessMsg))
                 {
                     if (!Operate(ProcessMsg))
                     {
                         break;
                     }
                 }
-                if (m_boEmergencyClose || m_boKickFlag || m_boSoftClose)
+                if (MBoEmergencyClose || MBoKickFlag || MBoSoftClose)
                 {
-                    if (m_boSwitchData)
+                    if (MBoSwitchData)
                     {
-                        MapName = m_sSwitchMapName;
-                        CurrX = m_nSwitchMapX;
-                        CurrY = m_nSwitchMapY;
+                        MapName = MSSwitchMapName;
+                        CurrX = MNSwitchMapX;
+                        CurrY = MNSwitchMapY;
                     }
                     MakeGhost();
-                    if (m_boKickFlag)
+                    if (MBoKickFlag)
                     {
                         SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
                     }
-                    if (!m_boReconnection && m_boSoftClose)
+                    if (!MBoReconnection && MBoSoftClose)
                     {
                         MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
                         if (MyGuild != null)
@@ -305,7 +305,7 @@ namespace GameSvr.Player
                             MyGuild.SendGuildMsg(ChrName + " 已经退出游戏.");
                             M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + "" + '/' + ChrName + " has exited the game.");
                         }
-                        IdSrvClient.Instance.SendHumanLogOutMsg(UserID, m_nSessionID);
+                        IdSrvClient.Instance.SendHumanLogOutMsg(UserAccount, MNSessionId);
                     }
                 }
             }
@@ -361,20 +361,20 @@ namespace GameSvr.Player
                     }
                 }
             }
-            tObjCount = m_nGameGold;
-            if (m_boDecGameGold && (HUtil32.GetTickCount() - m_dwDecGameGoldTick) > m_dwDecGameGoldTime)
+            tObjCount = MNGameGold;
+            if (MBoDecGameGold && (HUtil32.GetTickCount() - MDwDecGameGoldTick) > MDwDecGameGoldTime)
             {
-                m_dwDecGameGoldTick = HUtil32.GetTickCount();
-                if (m_nGameGold >= m_nDecGameGold)
+                MDwDecGameGoldTick = HUtil32.GetTickCount();
+                if (MNGameGold >= MNDecGameGold)
                 {
-                    m_nGameGold -= m_nDecGameGold;
-                    nInteger = m_nDecGameGold;
+                    MNGameGold -= MNDecGameGold;
+                    nInteger = MNDecGameGold;
                 }
                 else
                 {
-                    nInteger = m_nGameGold;
-                    m_nGameGold = 0;
-                    m_boDecGameGold = false;
+                    nInteger = MNGameGold;
+                    MNGameGold = 0;
+                    MBoDecGameGold = false;
                     MoveToHome();
                 }
                 if (M2Share.GameLogGameGold)
@@ -382,40 +382,40 @@ namespace GameSvr.Player
                     M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
-            if (m_boIncGameGold && (HUtil32.GetTickCount() - m_dwIncGameGoldTick) > m_dwIncGameGoldTime)
+            if (MBoIncGameGold && (HUtil32.GetTickCount() - MDwIncGameGoldTick) > MDwIncGameGoldTime)
             {
-                m_dwIncGameGoldTick = HUtil32.GetTickCount();
-                if (m_nGameGold + m_nIncGameGold < 2000000)
+                MDwIncGameGoldTick = HUtil32.GetTickCount();
+                if (MNGameGold + MNIncGameGold < 2000000)
                 {
-                    m_nGameGold += m_nIncGameGold;
-                    nInteger = m_nIncGameGold;
+                    MNGameGold += MNIncGameGold;
+                    nInteger = MNIncGameGold;
                 }
                 else
                 {
-                    m_nGameGold = 2000000;
-                    nInteger = 2000000 - m_nGameGold;
-                    m_boIncGameGold = false;
+                    MNGameGold = 2000000;
+                    nInteger = 2000000 - MNGameGold;
+                    MBoIncGameGold = false;
                 }
                 if (M2Share.GameLogGameGold)
                 {
                     M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
-            if (!m_boDecGameGold && Envir.Flag.boDECGAMEGOLD)
+            if (!MBoDecGameGold && Envir.Flag.boDECGAMEGOLD)
             {
-                if ((HUtil32.GetTickCount() - m_dwDecGameGoldTick) > Envir.Flag.nDECGAMEGOLDTIME * 1000)
+                if ((HUtil32.GetTickCount() - MDwDecGameGoldTick) > Envir.Flag.nDECGAMEGOLDTIME * 1000)
                 {
-                    m_dwDecGameGoldTick = HUtil32.GetTickCount();
-                    if (m_nGameGold >= Envir.Flag.nDECGAMEGOLD)
+                    MDwDecGameGoldTick = HUtil32.GetTickCount();
+                    if (MNGameGold >= Envir.Flag.nDECGAMEGOLD)
                     {
-                        m_nGameGold -= Envir.Flag.nDECGAMEGOLD;
+                        MNGameGold -= Envir.Flag.nDECGAMEGOLD;
                         nInteger = Envir.Flag.nDECGAMEGOLD;
                     }
                     else
                     {
-                        nInteger = m_nGameGold;
-                        m_nGameGold = 0;
-                        m_boDecGameGold = false;
+                        nInteger = MNGameGold;
+                        MNGameGold = 0;
+                        MBoDecGameGold = false;
                         MoveToHome();
                     }
                     if (M2Share.GameLogGameGold)
@@ -424,20 +424,20 @@ namespace GameSvr.Player
                     }
                 }
             }
-            if (!m_boIncGameGold && Envir.Flag.boINCGAMEGOLD)
+            if (!MBoIncGameGold && Envir.Flag.boINCGAMEGOLD)
             {
-                if ((HUtil32.GetTickCount() - m_dwIncGameGoldTick) > (Envir.Flag.nINCGAMEGOLDTIME * 1000))
+                if ((HUtil32.GetTickCount() - MDwIncGameGoldTick) > (Envir.Flag.nINCGAMEGOLDTIME * 1000))
                 {
-                    m_dwIncGameGoldTick = HUtil32.GetTickCount();
-                    if (m_nGameGold + Envir.Flag.nINCGAMEGOLD <= 2000000)
+                    MDwIncGameGoldTick = HUtil32.GetTickCount();
+                    if (MNGameGold + Envir.Flag.nINCGAMEGOLD <= 2000000)
                     {
-                        m_nGameGold += Envir.Flag.nINCGAMEGOLD;
+                        MNGameGold += Envir.Flag.nINCGAMEGOLD;
                         nInteger = Envir.Flag.nINCGAMEGOLD;
                     }
                     else
                     {
-                        nInteger = 2000000 - m_nGameGold;
-                        m_nGameGold = 2000000;
+                        nInteger = 2000000 - MNGameGold;
+                        MNGameGold = 2000000;
                     }
                     if (M2Share.GameLogGameGold)
                     {
@@ -445,7 +445,7 @@ namespace GameSvr.Player
                     }
                 }
             }
-            if (tObjCount != m_nGameGold)
+            if (tObjCount != MNGameGold)
             {
                 SendUpdateMsg(this, Grobal2.RM_GOLDCHANGED, 0, 0, 0, 0, "");
             }
@@ -469,18 +469,18 @@ namespace GameSvr.Player
             }
             if (Envir.Flag.boINCGAMEPOINT)
             {
-                if ((HUtil32.GetTickCount() - m_dwIncGamePointTick) > (Envir.Flag.nINCGAMEPOINTTIME * 1000))
+                if ((HUtil32.GetTickCount() - MDwIncGamePointTick) > (Envir.Flag.nINCGAMEPOINTTIME * 1000))
                 {
-                    m_dwIncGamePointTick = HUtil32.GetTickCount();
-                    if (m_nGamePoint + Envir.Flag.nINCGAMEPOINT <= 2000000)
+                    MDwIncGamePointTick = HUtil32.GetTickCount();
+                    if (MNGamePoint + Envir.Flag.nINCGAMEPOINT <= 2000000)
                     {
-                        m_nGamePoint += Envir.Flag.nINCGAMEPOINT;
+                        MNGamePoint += Envir.Flag.nINCGAMEPOINT;
                         nInteger = Envir.Flag.nINCGAMEPOINT;
                     }
                     else
                     {
-                        m_nGamePoint = 2000000;
-                        nInteger = 2000000 - m_nGamePoint;
+                        MNGamePoint = 2000000;
+                        nInteger = 2000000 - MNGamePoint;
                     }
                     if (M2Share.GameLogGamePoint)
                     {
@@ -488,9 +488,9 @@ namespace GameSvr.Player
                     }
                 }
             }
-            if (Envir.Flag.boDECHP && (HUtil32.GetTickCount() - m_dwDecHPTick) > (Envir.Flag.nDECHPTIME * 1000))
+            if (Envir.Flag.boDECHP && (HUtil32.GetTickCount() - MDwDecHpTick) > (Envir.Flag.nDECHPTIME * 1000))
             {
-                m_dwDecHPTick = HUtil32.GetTickCount();
+                MDwDecHpTick = HUtil32.GetTickCount();
                 if (WAbil.HP > Envir.Flag.nDECHPPOINT)
                 {
                     WAbil.HP -= (ushort)Envir.Flag.nDECHPPOINT;
@@ -501,9 +501,9 @@ namespace GameSvr.Player
                 }
                 HealthSpellChanged();
             }
-            if (Envir.Flag.boINCHP && (HUtil32.GetTickCount() - m_dwIncHPTick) > (Envir.Flag.nINCHPTIME * 1000))
+            if (Envir.Flag.boINCHP && (HUtil32.GetTickCount() - MDwIncHpTick) > (Envir.Flag.nINCHPTIME * 1000))
             {
-                m_dwIncHPTick = HUtil32.GetTickCount();
+                MDwIncHpTick = HUtil32.GetTickCount();
                 if (WAbil.HP + Envir.Flag.nDECHPPOINT < WAbil.MaxHP)
                 {
                     WAbil.HP += (ushort)Envir.Flag.nDECHPPOINT;
@@ -555,24 +555,24 @@ namespace GameSvr.Player
                     }
                 }
             }
-            if ((HUtil32.GetTickCount() - m_dwRateTick) > 1000)
+            if ((HUtil32.GetTickCount() - MDwRateTick) > 1000)
             {
-                m_dwRateTick = HUtil32.GetTickCount();
-                if (m_dwKillMonExpRateTime > 0)
+                MDwRateTick = HUtil32.GetTickCount();
+                if (MDwKillMonExpRateTime > 0)
                 {
-                    m_dwKillMonExpRateTime -= 1;
-                    if (m_dwKillMonExpRateTime == 0)
+                    MDwKillMonExpRateTime -= 1;
+                    if (MDwKillMonExpRateTime == 0)
                     {
-                        m_nKillMonExpRate = 100;
+                        MNKillMonExpRate = 100;
                         SysMsg("经验倍数恢复正常...", MsgColor.Red, MsgType.Hint);
                     }
                 }
-                if (m_dwPowerRateTime > 0)
+                if (MDwPowerRateTime > 0)
                 {
-                    m_dwPowerRateTime -= 1;
-                    if (m_dwPowerRateTime == 0)
+                    MDwPowerRateTime -= 1;
+                    if (MDwPowerRateTime == 0)
                     {
-                        m_nPowerRate = 100;
+                        MNPowerRate = 100;
                         SysMsg("攻击力倍数恢复正常...", MsgColor.Red, MsgType.Hint);
                     }
                 }
@@ -675,7 +675,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        if (m_dwLogonTick < (M2Share.g_HighOnlineHuman as PlayObject).m_dwLogonTick)
+                        if (MDwLogonTick < (M2Share.g_HighOnlineHuman as PlayObject).MDwLogonTick)
                         {
                             M2Share.g_HighOnlineHuman = this;
                         }
@@ -686,51 +686,51 @@ namespace GameSvr.Player
             {
                 M2Share.Log.Error(sExceptionMsg3);
             }
-            if (M2Share.Config.ReNewChangeColor && m_btReLevel > 0 && (HUtil32.GetTickCount() - m_dwReColorTick) > M2Share.Config.ReNewNameColorTime)
+            if (M2Share.Config.ReNewChangeColor && MBtReLevel > 0 && (HUtil32.GetTickCount() - MDwReColorTick) > M2Share.Config.ReNewNameColorTime)
             {
-                m_dwReColorTick = HUtil32.GetTickCount();
-                m_btReColorIdx++;
-                if (m_btReColorIdx >= M2Share.Config.ReNewNameColor.Length)
+                MDwReColorTick = HUtil32.GetTickCount();
+                MBtReColorIdx++;
+                if (MBtReColorIdx >= M2Share.Config.ReNewNameColor.Length)
                 {
-                    m_btReColorIdx = 0;
+                    MBtReColorIdx = 0;
                 }
-                NameColor = M2Share.Config.ReNewNameColor[m_btReColorIdx];
+                NameColor = M2Share.Config.ReNewNameColor[MBtReColorIdx];
                 RefNameColor();
             }
             // 检测侦听私聊对像
-            if (m_GetWhisperHuman != null)
+            if (MGetWhisperHuman != null)
             {
-                if (m_GetWhisperHuman.Death || m_GetWhisperHuman.Ghost)
+                if (MGetWhisperHuman.Death || MGetWhisperHuman.Ghost)
                 {
-                    m_GetWhisperHuman = null;
+                    MGetWhisperHuman = null;
                 }
             }
             ProcessSpiritSuite();
             try
             {
-                if ((HUtil32.GetTickCount() - m_dwClearObjTick) > 10000)
+                if ((HUtil32.GetTickCount() - MDwClearObjTick) > 10000)
                 {
-                    m_dwClearObjTick = HUtil32.GetTickCount();
-                    if (m_DearHuman != null && (m_DearHuman.Death || m_DearHuman.Ghost))
+                    MDwClearObjTick = HUtil32.GetTickCount();
+                    if (MDearHuman != null && (MDearHuman.Death || MDearHuman.Ghost))
                     {
-                        m_DearHuman = null;
+                        MDearHuman = null;
                     }
-                    if (m_boMaster)
+                    if (MBoMaster)
                     {
-                        for (var i = m_MasterList.Count - 1; i >= 0; i--)
+                        for (var i = MMasterList.Count - 1; i >= 0; i--)
                         {
-                            var PlayObject = m_MasterList[i];
+                            var PlayObject = MMasterList[i];
                             if (PlayObject.Death || PlayObject.Ghost)
                             {
-                                m_MasterList.RemoveAt(i);
+                                MMasterList.RemoveAt(i);
                             }
                         }
                     }
                     else
                     {
-                        if (m_MasterHuman != null && (m_MasterHuman.Death || m_MasterHuman.Ghost))
+                        if (MMasterHuman != null && (MMasterHuman.Death || MMasterHuman.Ghost))
                         {
-                            m_MasterHuman = null;
+                            MMasterHuman = null;
                         }
                     }
 
@@ -746,12 +746,12 @@ namespace GameSvr.Player
                 M2Share.Log.Error(sExceptionMsg4);
                 M2Share.Log.Error(e.Message);
             }
-            if (m_nAutoGetExpPoint > 0 && (m_AutoGetExpEnvir == null || m_AutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - m_dwAutoGetExpTick) > m_nAutoGetExpTime)
+            if (MNAutoGetExpPoint > 0 && (MAutoGetExpEnvir == null || MAutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - MDwAutoGetExpTick) > MNAutoGetExpTime)
             {
-                m_dwAutoGetExpTick = HUtil32.GetTickCount();
-                if (!m_boAutoGetExpInSafeZone || m_boAutoGetExpInSafeZone && InSafeZone())
+                MDwAutoGetExpTick = HUtil32.GetTickCount();
+                if (!MBoAutoGetExpInSafeZone || MBoAutoGetExpInSafeZone && InSafeZone())
                 {
-                    GetExp(m_nAutoGetExpPoint);
+                    GetExp(MNAutoGetExpPoint);
                 }
             }
             base.Run();
@@ -777,9 +777,9 @@ namespace GameSvr.Player
                     ClientQueryUserName(ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3);
                     break;
                 case Grobal2.CM_QUERYBAGITEMS: //僵尸攻击：不断刷新包裹发送大量数据，导致网络阻塞
-                    if ((HUtil32.GetTickCount() - m_dwQueryBagItemsTick) > 30 * 1000)
+                    if ((HUtil32.GetTickCount() - MDwQueryBagItemsTick) > 30 * 1000)
                     {
-                        m_dwQueryBagItemsTick = HUtil32.GetTickCount();
+                        MDwQueryBagItemsTick = HUtil32.GetTickCount();
                         ClientQueryBagItems();
                     }
                     else
@@ -829,13 +829,13 @@ namespace GameSvr.Player
                             nMsgCount = GetDigUpMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxDigUpMsgCount)
                             {
-                                m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                MNOverSpeedCount++;
+                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
-                                        m_boEmergencyClose = true;
+                                        MBoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
@@ -848,7 +848,7 @@ namespace GameSvr.Player
                             {
                                 if (dwDelayTime < M2Share.Config.DropOverSpeed)
                                 {
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -869,11 +869,11 @@ namespace GameSvr.Player
                 case Grobal2.CM_SOFTCLOSE:
                     if (!OffLineFlag)
                     {
-                        m_boReconnection = true;
-                        m_boSoftClose = true;
+                        MBoReconnection = true;
+                        MBoSoftClose = true;
                         if (ProcessMsg.wParam == 1)
                         {
-                            m_boEmergencyClose = true;
+                            MBoEmergencyClose = true;
                         }
                     }
                     break;
@@ -1003,7 +1003,7 @@ namespace GameSvr.Player
                 case Grobal2.CM_TURN:
                     if (ClientChangeDir((short)ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam, ref dwDelayTime))
                     {
-                        m_dwActionTick = HUtil32.GetTickCount();
+                        MDwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1017,13 +1017,13 @@ namespace GameSvr.Player
                             nMsgCount = GetTurnMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxTurnMsgCount)
                             {
-                                m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                MNOverSpeedCount++;
+                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
-                                        m_boEmergencyClose = true;
+                                        MBoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
@@ -1037,7 +1037,7 @@ namespace GameSvr.Player
                                 if (dwDelayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1054,7 +1054,7 @@ namespace GameSvr.Player
                 case Grobal2.CM_WALK:
                     if (ClientWalkXY(ProcessMsg.wIdent, (short)ProcessMsg.nParam1, (short)ProcessMsg.nParam2, ProcessMsg.LateDelivery, ref dwDelayTime))
                     {
-                        m_dwActionTick = HUtil32.GetTickCount();
+                        MDwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1068,13 +1068,13 @@ namespace GameSvr.Player
                             nMsgCount = GetWalkMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxWalkMsgCount)
                             {
-                                m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                MNOverSpeedCount++;
+                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
-                                        m_boEmergencyClose = true;
+                                        MBoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
@@ -1082,24 +1082,24 @@ namespace GameSvr.Player
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
-                                if (m_boTestSpeedMode)
+                                if (MBoTestSpeedMode)
                                 {
                                     SysMsg(Format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1113,7 +1113,7 @@ namespace GameSvr.Player
                 case Grobal2.CM_HORSERUN:
                     if (ClientHorseRunXY(ProcessMsg.wIdent, (short)ProcessMsg.nParam1, (short)ProcessMsg.nParam2, ProcessMsg.LateDelivery, ref dwDelayTime))
                     {
-                        m_dwActionTick = HUtil32.GetTickCount();
+                        MDwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1127,13 +1127,13 @@ namespace GameSvr.Player
                             nMsgCount = GetRunMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
                             {
-                                m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                MNOverSpeedCount++;
+                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
-                                        m_boEmergencyClose = true;
+                                        MBoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
@@ -1141,14 +1141,14 @@ namespace GameSvr.Player
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
-                                if (m_boTestSpeedMode)
+                                if (MBoTestSpeedMode)
                                 {
                                     SysMsg(Format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
                             {
-                                if (m_boTestSpeedMode)
+                                if (MBoTestSpeedMode)
                                 {
                                     SysMsg(Format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
@@ -1161,7 +1161,7 @@ namespace GameSvr.Player
                 case Grobal2.CM_RUN:
                     if (ClientRunXY(ProcessMsg.wIdent, (short)ProcessMsg.nParam1, (short)ProcessMsg.nParam2, ProcessMsg.nParam3, ref dwDelayTime))
                     {
-                        m_dwActionTick = HUtil32.GetTickCount();
+                        MDwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1175,13 +1175,13 @@ namespace GameSvr.Player
                             nMsgCount = GetRunMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
                             {
-                                m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                MNOverSpeedCount++;
+                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
-                                        m_boEmergencyClose = true;
+                                        MBoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
@@ -1192,17 +1192,17 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1224,7 +1224,7 @@ namespace GameSvr.Player
                 case Grobal2.CM_FIREHIT:
                     if (ClientHitXY(ProcessMsg.wIdent, ProcessMsg.nParam1, ProcessMsg.nParam2, (byte)ProcessMsg.wParam, ProcessMsg.LateDelivery, ref dwDelayTime))
                     {
-                        m_dwActionTick = HUtil32.GetTickCount();
+                        MDwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1238,13 +1238,13 @@ namespace GameSvr.Player
                             nMsgCount = GetHitMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxHitMsgCount)
                             {
-                                m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                MNOverSpeedCount++;
+                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
-                                        m_boEmergencyClose = true;
+                                        MBoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
@@ -1255,17 +1255,17 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg("操作延迟 Ident: " + ProcessMsg.wIdent + " Time: " + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                     }
@@ -1279,7 +1279,7 @@ namespace GameSvr.Player
                 case Grobal2.CM_SITDOWN:
                     if (ClientSitDownHit(ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam, ref dwDelayTime))
                     {
-                        m_dwActionTick = HUtil32.GetTickCount();
+                        MDwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1293,13 +1293,13 @@ namespace GameSvr.Player
                             nMsgCount = GetSiteDownMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxSitDonwMsgCount)
                             {
-                                m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                MNOverSpeedCount++;
+                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
-                                        m_boEmergencyClose = true;
+                                        MBoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
@@ -1313,14 +1313,14 @@ namespace GameSvr.Player
                                 if (dwDelayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1334,7 +1334,7 @@ namespace GameSvr.Player
                 case Grobal2.CM_SPELL:
                     if (ClientSpellXY(ProcessMsg.wIdent, ProcessMsg.wParam, (short)ProcessMsg.nParam1, (short)ProcessMsg.nParam2, M2Share.ActorMgr.Get(ProcessMsg.nParam3), ProcessMsg.LateDelivery, ref dwDelayTime))
                     {
-                        m_dwActionTick = HUtil32.GetTickCount();
+                        MDwActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1348,13 +1348,13 @@ namespace GameSvr.Player
                             nMsgCount = GetSpellMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxSpellMsgCount)
                             {
-                                m_nOverSpeedCount++;
-                                if (m_nOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                MNOverSpeedCount++;
+                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
                                         SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
-                                        m_boEmergencyClose = true;
+                                        MBoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
@@ -1365,17 +1365,17 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && m_boFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", ProcessMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1398,122 +1398,122 @@ namespace GameSvr.Player
                 case Grobal2.RM_WALK:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WALK, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WALK, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                         CharDesc = new CharDesc();
                         CharDesc.Feature = BaseObject.GetFeature(BaseObject);
                         CharDesc.Status = BaseObject.CharStatus;
-                        SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
+                        SendSocket(MDefMsg, EDCode.EncodeBuffer(CharDesc));
                     }
                     break;
                 case Grobal2.RM_HORSERUN:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HORSERUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HORSERUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                         CharDesc = new CharDesc();
                         CharDesc.Feature = BaseObject.GetFeature(BaseObject);
                         CharDesc.Status = BaseObject.CharStatus;
-                        SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
+                        SendSocket(MDefMsg, EDCode.EncodeBuffer(CharDesc));
                     }
                     break;
                 case Grobal2.RM_RUN:
                     if (ProcessMsg.BaseObject != this.ActorId && BaseObject != null)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                         CharDesc = new CharDesc();
                         CharDesc.Feature = BaseObject.GetFeature(BaseObject);
                         CharDesc.Status = BaseObject.CharStatus;
-                        SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
+                        SendSocket(MDefMsg, EDCode.EncodeBuffer(CharDesc));
                     }
                     break;
                 case Grobal2.RM_HIT:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_HEAVYHIT:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAVYHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg, ProcessMsg.Msg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAVYHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg, ProcessMsg.Msg);
                     }
                     break;
                 case Grobal2.RM_BIGHIT:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BIGHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BIGHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_SPELL:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPELL, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg, ProcessMsg.nParam3.ToString());
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPELL, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg, ProcessMsg.nParam3.ToString());
                     }
                     break;
                 case Grobal2.RM_SPELL2:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_POWERHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_POWERHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_MOVEFAIL:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEFAIL, ActorId, CurrX, CurrY, Direction);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEFAIL, ActorId, CurrX, CurrY, Direction);
                     CharDesc = new CharDesc();
                     CharDesc.Feature = BaseObject.GetFeatureToLong();
                     CharDesc.Status = BaseObject.CharStatus;
-                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
+                    SendSocket(MDefMsg, EDCode.EncodeBuffer(CharDesc));
                     break;
                 case Grobal2.RM_LONGHIT:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LONGHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LONGHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_WIDEHIT:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WIDEHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WIDEHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_FIREHIT:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FIREHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FIREHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_CRSHIT:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CRSHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CRSHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_41:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_41, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_41, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_TWINHIT:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_TWINHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_TWINHIT, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_43:
                     if (ProcessMsg.BaseObject != this.ActorId)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_43, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_43, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_TURN:
@@ -1525,16 +1525,16 @@ namespace GameSvr.Player
                         switch (ProcessMsg.wIdent)
                         {
                             case Grobal2.RM_PUSH:
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BACKSTEP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                                MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BACKSTEP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                                 break;
                             case Grobal2.RM_RUSH:
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                                MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                                 break;
                             case Grobal2.RM_RUSHKUNG:
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSHKUNG, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                                MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSHKUNG, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                                 break;
                             default:
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_TURN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                                MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_TURN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                                 break;
                         }
                         CharDesc = new CharDesc();
@@ -1546,7 +1546,7 @@ namespace GameSvr.Player
                         {
                             sendMsg = sendMsg + EDCode.EncodeString($"{ProcessMsg.Msg}/{nObjCount}");
                         }
-                        SendSocket(m_DefMsg, sendMsg);
+                        SendSocket(MDefMsg, sendMsg);
                         if (ProcessMsg.wIdent == Grobal2.RM_TURN)
                         {
                             nObjCount = BaseObject.GetFeatureToLong();
@@ -1590,7 +1590,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STRUCK, ProcessMsg.BaseObject, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ProcessMsg.wParam);
+                                MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STRUCK, ProcessMsg.BaseObject, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ProcessMsg.wParam);
                                 MessageBodyWL = new MessageBodyWL();
                                 MessageBodyWL.Param1 = BaseObject.GetFeature(this);
                                 MessageBodyWL.Param2 = BaseObject.CharStatus;
@@ -1603,7 +1603,7 @@ namespace GameSvr.Player
                                 {
                                     MessageBodyWL.Tag2 = 0;
                                 }
-                                SendSocket(m_DefMsg, EDCode.EncodeBuffer(MessageBodyWL));
+                                SendSocket(MDefMsg, EDCode.EncodeBuffer(MessageBodyWL));
                             }
                         }
                     }
@@ -1611,7 +1611,7 @@ namespace GameSvr.Player
                 case Grobal2.RM_DEATH:
                     if (ProcessMsg.nParam3 == 1)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NOWDEATH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NOWDEATH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                         if (ProcessMsg.BaseObject == ActorId)
                         {
                             if (M2Share.g_FunctionNPC != null)
@@ -1622,45 +1622,45 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEATH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEATH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                     }
                     CharDesc = new CharDesc();
                     CharDesc.Feature = BaseObject.GetFeature(this);
                     CharDesc.Status = BaseObject.CharStatus;
-                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
+                    SendSocket(MDefMsg, EDCode.EncodeBuffer(CharDesc));
                     break;
                 case Grobal2.RM_DISAPPEAR:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DISAPPEAR, ProcessMsg.BaseObject, 0, 0, 0);
-                    SendSocket(m_DefMsg);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DISAPPEAR, ProcessMsg.BaseObject, 0, 0, 0);
+                    SendSocket(MDefMsg);
                     break;
                 case Grobal2.RM_SKELETON:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SKELETON, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SKELETON, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                     CharDesc = new CharDesc();
                     CharDesc.Feature = BaseObject.GetFeature(this);
                     CharDesc.Status = BaseObject.CharStatus;
-                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
+                    SendSocket(MDefMsg, EDCode.EncodeBuffer(CharDesc));
                     break;
                 case Grobal2.RM_USERNAME:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, ProcessMsg.BaseObject, GetChrColor(BaseObject), 0, 0);
-                    SendSocket(m_DefMsg, EDCode.EncodeString(ProcessMsg.Msg));
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, ProcessMsg.BaseObject, GetChrColor(BaseObject), 0, 0);
+                    SendSocket(MDefMsg, EDCode.EncodeString(ProcessMsg.Msg));
                     break;
                 case Grobal2.RM_WINEXP:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WINEXP, Abil.Exp, HUtil32.LoWord(ProcessMsg.nParam1), HUtil32.HiWord(ProcessMsg.nParam1), 0);
-                    SendSocket(m_DefMsg);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WINEXP, Abil.Exp, HUtil32.LoWord(ProcessMsg.nParam1), HUtil32.HiWord(ProcessMsg.nParam1), 0);
+                    SendSocket(MDefMsg);
                     break;
                 case Grobal2.RM_LEVELUP:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LEVELUP, Abil.Exp, Abil.Level, 0, 0);
-                    SendSocket(m_DefMsg);
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
-                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(WAbil));
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LEVELUP, Abil.Exp, Abil.Level, 0, 0);
+                    SendSocket(MDefMsg);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(MNGameGold), HUtil32.HiWord(MNGameGold));
+                    SendSocket(MDefMsg, EDCode.EncodeBuffer(WAbil));
                     SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
                 case Grobal2.RM_CHANGENAMECOLOR:
                     SendDefMessage(Grobal2.SM_CHANGENAMECOLOR, ProcessMsg.BaseObject, GetChrColor(BaseObject), 0, 0, "");
                     break;
                 case Grobal2.RM_LOGON:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWMAP, ActorId, CurrX, CurrY, DayBright());
-                    SendSocket(m_DefMsg, EDCode.EncodeString(MapFileName));
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWMAP, ActorId, CurrX, CurrY, DayBright());
+                    SendSocket(MDefMsg, EDCode.EncodeString(MapFileName));
                     SendMsg(this, Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                     SendLogon();
                     SendServerConfig();
@@ -1668,8 +1668,8 @@ namespace GameSvr.Player
                     RefUserState();
                     SendMapDescription();
                     SendGoldInfo(true);
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_VERSION_FAIL, M2Share.Config.nClientFile1_CRC, HUtil32.LoWord(M2Share.Config.nClientFile2_CRC), HUtil32.HiWord(M2Share.Config.nClientFile2_CRC), 0);
-                    SendSocket(m_DefMsg, "<<<<<<");
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_VERSION_FAIL, M2Share.Config.nClientFile1_CRC, HUtil32.LoWord(M2Share.Config.nClientFile2_CRC), HUtil32.HiWord(M2Share.Config.nClientFile2_CRC), 0);
+                    SendSocket(MDefMsg, "<<<<<<");
                     break;
                 case Grobal2.RM_HEAR:
                 case Grobal2.RM_WHISPER:
@@ -1684,43 +1684,43 @@ namespace GameSvr.Player
                     switch (ProcessMsg.wIdent)
                     {
                         case Grobal2.RM_HEAR:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
+                            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_WHISPER:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WHISPER, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
+                            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WHISPER, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_CRY:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
+                            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_SYSMESSAGE:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
+                            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_GROUPMESSAGE:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
+                            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_GUILDMESSAGE:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_GUILDMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
+                            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_GUILDMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_MERCHANTSAY:
-                            m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MERCHANTSAY, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
+                            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MERCHANTSAY, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), 0, 1);
                             break;
                         case Grobal2.RM_MOVEMESSAGE:
-                            this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), ProcessMsg.nParam3, ProcessMsg.wParam);
+                            this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEMESSAGE, ProcessMsg.BaseObject, HUtil32.MakeWord((ushort)ProcessMsg.nParam1, (ushort)ProcessMsg.nParam2), ProcessMsg.nParam3, ProcessMsg.wParam);
                             break;
                     }
-                    SendSocket(m_DefMsg, EDCode.EncodeString(ProcessMsg.Msg));
+                    SendSocket(MDefMsg, EDCode.EncodeString(ProcessMsg.Msg));
                     break;
                 case Grobal2.RM_ABILITY:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold));
-                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(WAbil));
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(MNGameGold), HUtil32.HiWord(MNGameGold));
+                    SendSocket(MDefMsg, EDCode.EncodeBuffer(WAbil));
                     break;
                 case Grobal2.RM_HEALTHSPELLCHANGED:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEALTHSPELLCHANGED, ProcessMsg.BaseObject, BaseObject.WAbil.HP, BaseObject.WAbil.MP, BaseObject.WAbil.MaxHP);
-                    SendSocket(m_DefMsg);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEALTHSPELLCHANGED, ProcessMsg.BaseObject, BaseObject.WAbil.HP, BaseObject.WAbil.MP, BaseObject.WAbil.MaxHP);
+                    SendSocket(MDefMsg);
                     break;
                 case Grobal2.RM_DAYCHANGING:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DAYCHANGING, 0, m_btBright, DayBright(), 0);
-                    SendSocket(m_DefMsg);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DAYCHANGING, 0, MBtBright, DayBright(), 0);
+                    SendSocket(MDefMsg);
                     break;
                 case Grobal2.RM_ITEMSHOW:
                     SendDefMessage(Grobal2.SM_ITEMSHOW, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam, ProcessMsg.Msg);
@@ -1755,15 +1755,15 @@ namespace GameSvr.Player
                 case Grobal2.RM_BUTCH:
                     if (ProcessMsg.BaseObject != 0)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BUTCH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BUTCH, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg);
                     }
                     break;
                 case Grobal2.RM_MAGICFIRE:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MAGICFIRE, ProcessMsg.BaseObject, HUtil32.LoWord(ProcessMsg.nParam2), HUtil32.HiWord(ProcessMsg.nParam2), ProcessMsg.nParam1);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MAGICFIRE, ProcessMsg.BaseObject, HUtil32.LoWord(ProcessMsg.nParam2), HUtil32.HiWord(ProcessMsg.nParam2), ProcessMsg.nParam1);
                     var by = BitConverter.GetBytes(ProcessMsg.nParam3);
                     var sSendStr = EDCode.EncodeBuffer(by, by.Length);
-                    SendSocket(m_DefMsg, sSendStr);
+                    SendSocket(MDefMsg, sSendStr);
                     break;
                 case Grobal2.RM_MAGICFIREFAIL:
                     SendDefMessage(Grobal2.SM_MAGICFIRE_FAIL, ProcessMsg.BaseObject, 0, 0, 0, "");
@@ -1805,7 +1805,7 @@ namespace GameSvr.Player
                     SendDefMessage(Grobal2.SM_SENDDETAILGOODSLIST, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, 0, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_GOLDCHANGED:
-                    SendDefMessage(Grobal2.SM_GOLDCHANGED, Gold, HUtil32.LoWord(m_nGameGold), HUtil32.HiWord(m_nGameGold), 0, "");
+                    SendDefMessage(Grobal2.SM_GOLDCHANGED, Gold, HUtil32.LoWord(MNGameGold), HUtil32.HiWord(MNGameGold), 0, "");
                     break;
                 case Grobal2.RM_GAMEGOLDCHANGED:
                     SendGoldInfo(false);
@@ -1855,25 +1855,25 @@ namespace GameSvr.Player
                     SendDefMessage(Grobal2.SM_MAKEDRUG_FAIL, ProcessMsg.nParam1, 0, 0, 0, "");
                     break;
                 case Grobal2.RM_ALIVE:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ALIVE, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ALIVE, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
                     CharDesc = new CharDesc();
                     CharDesc.Feature = BaseObject.GetFeature(this);
                     CharDesc.Status = BaseObject.CharStatus;
-                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
+                    SendSocket(MDefMsg, EDCode.EncodeBuffer(CharDesc));
                     break;
                 case Grobal2.RM_DIGUP:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGUP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGUP, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                     MessageBodyWL = new MessageBodyWL();
                     MessageBodyWL.Param1 = BaseObject.GetFeature(this);
                     MessageBodyWL.Param2 = BaseObject.CharStatus;
                     MessageBodyWL.Tag1 = ProcessMsg.nParam3;
                     MessageBodyWL.Tag1 = 0;
                     sendMsg = EDCode.EncodeBuffer(MessageBodyWL);
-                    SendSocket(m_DefMsg, sendMsg);
+                    SendSocket(MDefMsg, sendMsg);
                     break;
                 case Grobal2.RM_DIGDOWN:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGDOWN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, 0);
-                    SendSocket(m_DefMsg);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGDOWN, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, 0);
+                    SendSocket(MDefMsg);
                     break;
                 case Grobal2.RM_FLYAXE:
                     if (M2Share.ActorMgr.Get(ProcessMsg.nParam3) != null)
@@ -1883,8 +1883,8 @@ namespace GameSvr.Player
                         MessageBodyW.Param2 = (ushort)M2Share.ActorMgr.Get(ProcessMsg.nParam3).CurrY;
                         MessageBodyW.Tag1 = HUtil32.LoWord(ProcessMsg.nParam3);
                         MessageBodyW.Tag2 = HUtil32.HiWord(ProcessMsg.nParam3);
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FLYAXE, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
-                        SendSocket(m_DefMsg, EDCode.EncodeBuffer(MessageBodyW));
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FLYAXE, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.wParam);
+                        SendSocket(MDefMsg, EDCode.EncodeBuffer(MessageBodyW));
                     }
                     break;
                 case Grobal2.RM_LIGHTING:
@@ -1895,8 +1895,8 @@ namespace GameSvr.Player
                         MessageBodyWL.Param2 = M2Share.ActorMgr.Get(ProcessMsg.nParam3).CurrY;
                         MessageBodyWL.Tag1 = ProcessMsg.nParam3;
                         MessageBodyWL.Tag2 = ProcessMsg.wParam;
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LIGHTING, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, BaseObject.Direction);
-                        SendSocket(m_DefMsg, EDCode.EncodeBuffer(MessageBodyWL));
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LIGHTING, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, BaseObject.Direction);
+                        SendSocket(MDefMsg, EDCode.EncodeBuffer(MessageBodyWL));
                     }
                     break;
                 case Grobal2.RM_10205:
@@ -1930,23 +1930,23 @@ namespace GameSvr.Player
                 case Grobal2.RM_SPACEMOVE_FIRE2:
                     if (ProcessMsg.wIdent == Grobal2.RM_SPACEMOVE_FIRE)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_HIDE, ProcessMsg.BaseObject, 0, 0, 0);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_HIDE, ProcessMsg.BaseObject, 0, 0, 0);
                     }
                     else
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_HIDE2, ProcessMsg.BaseObject, 0, 0, 0);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_HIDE2, ProcessMsg.BaseObject, 0, 0, 0);
                     }
-                    SendSocket(m_DefMsg);
+                    SendSocket(MDefMsg);
                     break;
                 case Grobal2.RM_SPACEMOVE_SHOW:
                 case Grobal2.RM_SPACEMOVE_SHOW2:
                     if (ProcessMsg.wIdent == Grobal2.RM_SPACEMOVE_SHOW)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                     }
                     else
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW2, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW2, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, HUtil32.MakeWord((ushort)ProcessMsg.wParam, BaseObject.Light));
                     }
                     CharDesc = new CharDesc();
                     CharDesc.Feature = BaseObject.GetFeature(this);
@@ -1957,10 +1957,10 @@ namespace GameSvr.Player
                     {
                         sendMsg = sendMsg + EDCode.EncodeString(ProcessMsg.Msg + '/' + nObjCount);
                     }
-                    SendSocket(m_DefMsg, sendMsg);
+                    SendSocket(MDefMsg, sendMsg);
                     break;
                 case Grobal2.RM_RECONNECTION:
-                    m_boReconnection = true;
+                    MBoReconnection = true;
                     SendDefMessage(Grobal2.SM_RECONNECT, 0, 0, 0, 0, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_HIDEEVENT:
@@ -1970,8 +1970,8 @@ namespace GameSvr.Player
                     var ShortMessage = new ShortMessage();
                     ShortMessage.Ident = HUtil32.HiWord(ProcessMsg.nParam2);
                     ShortMessage.wMsg = 0;
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SHOWEVENT, ProcessMsg.nParam1, ProcessMsg.wParam, ProcessMsg.nParam2, ProcessMsg.nParam3);
-                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(ShortMessage));
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SHOWEVENT, ProcessMsg.nParam1, ProcessMsg.wParam, ProcessMsg.nParam2, ProcessMsg.nParam3);
+                    SendSocket(MDefMsg, EDCode.EncodeBuffer(ShortMessage));
                     break;
                 case Grobal2.RM_ADJUST_BONUS:
                     SendAdjustBonus();
@@ -1994,11 +1994,11 @@ namespace GameSvr.Player
                 case Grobal2.RM_CHANGEFACE:
                     if (ProcessMsg.nParam1 != 0 && ProcessMsg.nParam2 != 0)
                     {
-                        m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CHANGEFACE, ProcessMsg.nParam1, HUtil32.LoWord(ProcessMsg.nParam2), HUtil32.HiWord(ProcessMsg.nParam2), 0);
+                        MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CHANGEFACE, ProcessMsg.nParam1, HUtil32.LoWord(ProcessMsg.nParam2), HUtil32.HiWord(ProcessMsg.nParam2), 0);
                         CharDesc = new CharDesc();
                         CharDesc.Feature = M2Share.ActorMgr.Get(ProcessMsg.nParam2).GetFeature(this);
                         CharDesc.Status = M2Share.ActorMgr.Get(ProcessMsg.nParam2).CharStatus;
-                        SendSocket(m_DefMsg, EDCode.EncodeBuffer(CharDesc));
+                        SendSocket(MDefMsg, EDCode.EncodeBuffer(CharDesc));
                     }
                     break;
                 case Grobal2.RM_PASSWORD:
@@ -2009,24 +2009,24 @@ namespace GameSvr.Player
                     MessageBodyWL.Param1 = ProcessMsg.nParam1;
                     MessageBodyWL.Param2 = ProcessMsg.nParam2;
                     MessageBodyWL.Tag1 = ProcessMsg.nParam3;
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PLAYDICE, ProcessMsg.BaseObject, ProcessMsg.wParam, 0, 0);
-                    SendSocket(m_DefMsg, EDCode.EncodeBuffer(MessageBodyWL) + EDCode.EncodeString(ProcessMsg.Msg));
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PLAYDICE, ProcessMsg.BaseObject, ProcessMsg.wParam, 0, 0);
+                    SendSocket(MDefMsg, EDCode.EncodeBuffer(MessageBodyWL) + EDCode.EncodeString(ProcessMsg.Msg));
                     break;
                 case Grobal2.RM_PASSWORDSTATUS:
-                    m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSWORDSTATUS, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3);
-                    SendSocket(m_DefMsg, ProcessMsg.Msg);
+                    MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSWORDSTATUS, ProcessMsg.BaseObject, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3);
+                    SendSocket(MDefMsg, ProcessMsg.Msg);
                     break;
                 // ---------------------------元宝寄售系统---------------------------------------
                 case Grobal2.RM_SENDDEALOFFFORM:// 打开出售物品窗口
                     SendDefMessage(Grobal2.SM_SENDDEALOFFFORM, ProcessMsg.nParam1, ProcessMsg.nParam2, 0, 0, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_QUERYYBSELL:// 查询正在出售的物品
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYYBSELL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYYBSELL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_QUERYYBDEAL:// 查询可以的购买物品
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYYBDEAL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYYBDEAL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 case Grobal2.CM_SELLOFFADDITEM:// 客户端往出售物品窗口里加物品 
                     ClientAddSellOffItem(ProcessMsg.nParam1, ProcessMsg.Msg);
@@ -2050,36 +2050,36 @@ namespace GameSvr.Player
                     ClientBuySellOffItme(ProcessMsg.Msg);// 出售人
                     break;
                 case Grobal2.RM_SELLOFFCANCEL:// 元宝寄售取消出售
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SellOffCANCEL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SellOffCANCEL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_SELLOFFADDITEM_OK:// 客户端往出售物品窗口里加物品 成功
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFADDITEM_OK, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFADDITEM_OK, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_SellOffADDITEM_FAIL:// 客户端往出售物品窗口里加物品 失败
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SellOffADDITEM_FAIL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SellOffADDITEM_FAIL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_SELLOFFDELITEM_OK:// 客户端删除出售物品窗里的物品 成功
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFDELITEM_OK, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFDELITEM_OK, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_SELLOFFDELITEM_FAIL:// 客户端删除出售物品窗里的物品 失败
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFDELITEM_FAIL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFDELITEM_FAIL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_SELLOFFEND_OK:// 客户端元宝寄售结束 成功
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFEND_OK, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFEND_OK, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_SELLOFFEND_FAIL:// 客户端元宝寄售结束 失败
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFEND_FAIL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFEND_FAIL, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 case Grobal2.RM_SELLOFFBUY_OK:// 购买成功
-                    this.m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFBUY_OK, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
-                    SendSocket(this.m_DefMsg, ProcessMsg.Msg);
+                    this.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFBUY_OK, ProcessMsg.nParam1, ProcessMsg.nParam2, ProcessMsg.nParam3, ProcessMsg.wParam);
+                    SendSocket(this.MDefMsg, ProcessMsg.Msg);
                     break;
                 default:
                     result = base.Operate(ProcessMsg);
@@ -2090,7 +2090,7 @@ namespace GameSvr.Player
 
         public override void Disappear()
         {
-            if (m_boReadyRun)
+            if (MBoReadyRun)
             {
                 DisappearA();
             }

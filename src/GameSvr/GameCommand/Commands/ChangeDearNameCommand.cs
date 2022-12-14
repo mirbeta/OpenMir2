@@ -28,13 +28,13 @@ namespace GameSvr.GameCommand.Commands
             {
                 if (string.Compare(sDearName, "无", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_PlayObject.m_sDearName = "";
+                    m_PlayObject.MSDearName = "";
                     m_PlayObject.RefShowName();
                     PlayObject.SysMsg(sHumanName + " 的配偶名清除成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    m_PlayObject.m_sDearName = sDearName;
+                    m_PlayObject.MSDearName = sDearName;
                     m_PlayObject.RefShowName();
                     PlayObject.SysMsg(sHumanName + " 的配偶名更改成功。", MsgColor.Green, MsgType.Hint);
                 }

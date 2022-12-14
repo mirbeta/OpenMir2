@@ -22,7 +22,7 @@ namespace GameSvr.GameCommand.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                m_PlayObject.m_boFilterSendMsg = true;
+                m_PlayObject.MBoFilterSendMsg = true;
             }
             M2Share.g_DisableSendMsgList.Add(sHumanName);
             M2Share.SaveDisableSendMsgList();

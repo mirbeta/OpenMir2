@@ -34,7 +34,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (baseObject is ScultureMonster)
                     {
-                        (baseObject as ScultureMonster).MeltStone();
+                        ((ScultureMonster)baseObject).MeltStone();
                     }
                 }
             }

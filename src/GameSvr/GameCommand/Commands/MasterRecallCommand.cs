@@ -13,12 +13,12 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public void MasterRecall(PlayObject PlayObject)
         {
-            if (!PlayObject.m_boMaster)
+            if (!PlayObject.MBoMaster)
             {
                 PlayObject.SysMsg("只能师父才能使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.m_MasterList.Count == 0)
+            if (PlayObject.MMasterList.Count == 0)
             {
                 PlayObject.SysMsg("你的徒弟一个都不在线!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -28,15 +28,15 @@ namespace GameSvr.GameCommand.Commands
             //    PlayObject.SysMsg("本地图禁止师徒传送!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
-            if ((HUtil32.GetTickCount() - PlayObject.m_dwMasterRecallTick) < 10000)
+            if ((HUtil32.GetTickCount() - PlayObject.MDwMasterRecallTick) < 10000)
             {
                 PlayObject.SysMsg("稍等一会才能再次使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = 0; i < PlayObject.m_MasterList.Count; i++)
+            for (var i = 0; i < PlayObject.MMasterList.Count; i++)
             {
-                var MasterHuman = PlayObject.m_MasterList[i];
-                if (MasterHuman.m_boCanMasterRecall)
+                var MasterHuman = PlayObject.MMasterList[i];
+                if (MasterHuman.MBoCanMasterRecall)
                 {
                     PlayObject.RecallHuman(MasterHuman.ChrName);
                 }

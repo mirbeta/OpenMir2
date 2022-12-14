@@ -347,7 +347,7 @@ namespace GameSvr.World
                             abil.MaxExp = 100;
                             abil.Weight = 0;
                             abil.MaxWeight = 30;
-                            playObject.m_boNewHuman = true;
+                            playObject.MBoNewHuman = true;
                         }
                     }
                     Envirnoment envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
@@ -360,7 +360,7 @@ namespace GameSvr.World
                             {
                                 playObject.Abil.HP = playObject.Abil.MaxHP;
                                 playObject.Abil.MP = playObject.Abil.MaxMP;
-                                playObject.m_boDieInFight3Zone = true;
+                                playObject.MBoDieInFight3Zone = true;
                             }
                             else
                             {
@@ -421,18 +421,18 @@ namespace GameSvr.World
                     envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);//切换其他服务器
                     if (envir == null)
                     {
-                        playObject.m_nSessionID = userOpenInfo.LoadUser.nSessionID;
-                        playObject.m_nSocket = userOpenInfo.LoadUser.nSocket;
-                        playObject.m_nGateIdx = userOpenInfo.LoadUser.nGateIdx;
-                        playObject.m_nGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
+                        playObject.MNSessionId = userOpenInfo.LoadUser.nSessionID;
+                        playObject.MNSocket = userOpenInfo.LoadUser.nSocket;
+                        playObject.MNGateIdx = userOpenInfo.LoadUser.nGateIdx;
+                        playObject.MNGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
                         playObject.WAbil = playObject.Abil;
-                        playObject.m_nServerIndex = M2Share.MapMgr.GetMapOfServerIndex(playObject.MapName);
+                        playObject.MNServerIndex = M2Share.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
                         {
-                            _logger.Warn(string.Format(sChangeServerFail1, new object[] { M2Share.ServerIndex, playObject.m_nServerIndex, playObject.MapName }));
+                            _logger.Warn(string.Format(sChangeServerFail1, new object[] { M2Share.ServerIndex, playObject.MNServerIndex, playObject.MapName }));
                         }
-                        SendSwitchData(playObject, playObject.m_nServerIndex);
-                        SendChangeServer(playObject, (byte)playObject.m_nServerIndex);
+                        SendSwitchData(playObject, playObject.MNServerIndex);
+                        SendChangeServer(playObject, (byte)playObject.MNServerIndex);
                         playObject = null;
                         return result;
                     }
@@ -449,7 +449,7 @@ namespace GameSvr.World
                     if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                     {
                         _logger.Warn(string.Format(sChangeServerFail2,
-                            new object[] { M2Share.ServerIndex, playObject.m_nServerIndex, playObject.MapName }));
+                            new object[] { M2Share.ServerIndex, playObject.MNServerIndex, playObject.MapName }));
                         playObject.MapName = M2Share.Config.HomeMap;
                         envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                         playObject.CurrX = M2Share.Config.HomeX;
@@ -463,7 +463,7 @@ namespace GameSvr.World
                         goto ReGetMap;
                     }
                     else
-                        playObject.m_boReadyRun = false;
+                        playObject.MBoReadyRun = false;
                     playObject.MapFileName = envir.MapFileName;
                 }
                 else
@@ -479,7 +479,7 @@ namespace GameSvr.World
                     Envirnoment envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
-                        _logger.Warn(string.Format(sChangeServerFail3, new object[] { M2Share.ServerIndex, playObject.m_nServerIndex, playObject.MapName }));
+                        _logger.Warn(string.Format(sChangeServerFail3, new object[] { M2Share.ServerIndex, playObject.MNServerIndex, playObject.MapName }));
                         playObject.MapName = M2Share.Config.HomeMap;
                         envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                         playObject.CurrX = M2Share.Config.HomeX;
@@ -489,7 +489,7 @@ namespace GameSvr.World
                     {
                         if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                         {
-                            _logger.Warn(string.Format(sChangeServerFail4, new object[] { M2Share.ServerIndex, playObject.m_nServerIndex, playObject.MapName }));
+                            _logger.Warn(string.Format(sChangeServerFail4, new object[] { M2Share.ServerIndex, playObject.MNServerIndex, playObject.MapName }));
                             playObject.MapName = M2Share.Config.HomeMap;
                             envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                             playObject.CurrX = M2Share.Config.HomeX;
@@ -505,27 +505,27 @@ namespace GameSvr.World
                         }
                         else
                         {
-                            playObject.m_boReadyRun = false;
-                            playObject.m_boLoginNoticeOK = true;
-                            playObject.bo6AB = true;
+                            playObject.MBoReadyRun = false;
+                            playObject.MBoLoginNoticeOk = true;
+                            playObject.Bo6Ab = true;
                         }
                     }
                 }
-                playObject.UserID = userOpenInfo.LoadUser.Account;
-                playObject.m_sIPaddr = userOpenInfo.LoadUser.sIPaddr;
-                playObject.m_sIPLocal = M2Share.GetIPLocal(playObject.m_sIPaddr);
-                playObject.m_nSocket = userOpenInfo.LoadUser.nSocket;
-                playObject.m_nGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
-                playObject.m_nGateIdx = userOpenInfo.LoadUser.nGateIdx;
-                playObject.m_nSessionID = userOpenInfo.LoadUser.nSessionID;
+                playObject.UserAccount = userOpenInfo.LoadUser.Account;
+                playObject.LoginIpAddr = userOpenInfo.LoadUser.sIPaddr;
+                playObject.LoginIpLocal = M2Share.GetIPLocal(playObject.LoginIpAddr);
+                playObject.MNSocket = userOpenInfo.LoadUser.nSocket;
+                playObject.MNGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
+                playObject.MNGateIdx = userOpenInfo.LoadUser.nGateIdx;
+                playObject.MNSessionId = userOpenInfo.LoadUser.nSessionID;
                 playObject.PayMent = userOpenInfo.LoadUser.nPayMent;
-                playObject.m_nPayMode = userOpenInfo.LoadUser.nPayMode;
+                playObject.MNPayMode = userOpenInfo.LoadUser.nPayMode;
                 playObject.ExpireTime = userOpenInfo.LoadUser.PlayTime;
                 playObject.ExpireCount = (int)Math.Round(TimeSpan.FromSeconds(playObject.ExpireTime).TotalMinutes, 1);
-                playObject.m_dwLoadTick = userOpenInfo.LoadUser.dwNewUserTick;
+                playObject.MDwLoadTick = userOpenInfo.LoadUser.dwNewUserTick;
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
-                playObject.m_nSoftVersionDate = userOpenInfo.LoadUser.nSoftVersionDate;
-                playObject.m_nSoftVersionDateEx = userOpenInfo.LoadUser.nSoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
+                playObject.MNSoftVersionDate = userOpenInfo.LoadUser.nSoftVersionDate;
+                playObject.MNSoftVersionDateEx = userOpenInfo.LoadUser.nSoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 result = playObject;
             }
             catch (Exception ex)
@@ -619,7 +619,7 @@ namespace GameSvr.World
                     for (var i = 0; i < NewHumanList.Count; i++)
                     {
                         playObject = NewHumanList[i];
-                        M2Share.GateMgr.SetGateUserList(playObject.m_nGateIdx, playObject.m_nSocket, playObject);
+                        M2Share.GateMgr.SetGateUserList(playObject.MNGateIdx, playObject.MNSocket, playObject);
                     }
                     NewHumanList.Clear();
                     for (var i = 0; i < ListOfGateIdx.Count; i++)
@@ -662,24 +662,24 @@ namespace GameSvr.World
                         PlayObjectFreeList.RemoveAt(i);
                         break;
                     }
-                    if (playObject.m_boSwitchData && playObject.m_boRcdSaved)
+                    if (playObject.MBoSwitchData && playObject.MBoRcdSaved)
                     {
-                        if (SendSwitchData(playObject, playObject.m_nServerIndex) || playObject.m_nWriteChgDataErrCount > 20)
+                        if (SendSwitchData(playObject, playObject.MNServerIndex) || playObject.MNWriteChgDataErrCount > 20)
                         {
-                            playObject.m_boSwitchData = false;
-                            playObject.m_boSwitchDataOK = true;
-                            playObject.m_boSwitchDataSended = true;
-                            playObject.m_dwChgDataWritedTick = HUtil32.GetTickCount();
+                            playObject.MBoSwitchData = false;
+                            playObject.MBoSwitchDataOk = true;
+                            playObject.MBoSwitchDataSended = true;
+                            playObject.MDwChgDataWritedTick = HUtil32.GetTickCount();
                         }
                         else
                         {
-                            playObject.m_nWriteChgDataErrCount++;
+                            playObject.MNWriteChgDataErrCount++;
                         }
                     }
-                    if (playObject.m_boSwitchDataSended && HUtil32.GetTickCount() - playObject.m_dwChgDataWritedTick > 100)
+                    if (playObject.MBoSwitchDataSended && HUtil32.GetTickCount() - playObject.MDwChgDataWritedTick > 100)
                     {
-                        playObject.m_boSwitchDataSended = false;
-                        SendChangeServer(playObject, (byte)playObject.m_nServerIndex);
+                        playObject.MBoSwitchDataSended = false;
+                        SendChangeServer(playObject, (byte)playObject.MNServerIndex);
                     }
                 }
             }
@@ -721,15 +721,15 @@ namespace GameSvr.World
                         playObject.RunTick = dwCurTick;
                         if (!playObject.Ghost)
                         {
-                            if (!playObject.m_boLoginNoticeOK)
+                            if (!playObject.MBoLoginNoticeOk)
                             {
                                 playObject.RunNotice();
                             }
                             else
                             {
-                                if (!playObject.m_boReadyRun)
+                                if (!playObject.MBoReadyRun)
                                 {
-                                    playObject.m_boReadyRun = true;
+                                    playObject.MBoReadyRun = true;
                                     playObject.UserLogon();
                                 }
                                 else
@@ -751,7 +751,7 @@ namespace GameSvr.World
                             AddToHumanFreeList(playObject);
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
-                            M2Share.GateMgr.CloseUser(playObject.m_nGateIdx, playObject.m_nSocket);
+                            M2Share.GateMgr.CloseUser(playObject.MNGateIdx, playObject.MNSocket);
                             SendServerGroupMsg(Grobal2.SS_202, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }
@@ -794,15 +794,15 @@ namespace GameSvr.World
                         playObject.RunTick = dwCurTick;
                         if (!playObject.Ghost)
                         {
-                            if (!playObject.m_boLoginNoticeOK)
+                            if (!playObject.MBoLoginNoticeOk)
                             {
                                 playObject.RunNotice();
                             }
                             else
                             {
-                                if (!playObject.m_boReadyRun)
+                                if (!playObject.MBoReadyRun)
                                 {
-                                    playObject.m_boReadyRun = true;
+                                    playObject.MBoReadyRun = true;
                                     playObject.UserLogon();
                                 }
                                 else
@@ -813,12 +813,12 @@ namespace GameSvr.World
                                         playObject.SearchViewRange();//搜索对像
                                         playObject.GameTimeChanged();//游戏时间改变
                                     }
-                                    if ((HUtil32.GetTickCount() - playObject.m_dwShowLineNoticeTick) > M2Share.Config.ShowLineNoticeTime)
+                                    if ((HUtil32.GetTickCount() - playObject.MDwShowLineNoticeTick) > M2Share.Config.ShowLineNoticeTime)
                                     {
-                                        playObject.m_dwShowLineNoticeTick = HUtil32.GetTickCount();
-                                        if (M2Share.LineNoticeList.Count > playObject.m_nShowLineNoticeIdx)
+                                        playObject.MDwShowLineNoticeTick = HUtil32.GetTickCount();
+                                        if (M2Share.LineNoticeList.Count > playObject.MNShowLineNoticeIdx)
                                         {
-                                            var lineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.m_nShowLineNoticeIdx]);
+                                            var lineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.MNShowLineNoticeIdx]);
                                             switch (lineNoticeMsg[0])
                                             {
                                                 case 'R':
@@ -835,16 +835,16 @@ namespace GameSvr.World
                                                     break;
                                             }
                                         }
-                                        playObject.m_nShowLineNoticeIdx++;
-                                        if (M2Share.LineNoticeList.Count <= playObject.m_nShowLineNoticeIdx)
+                                        playObject.MNShowLineNoticeIdx++;
+                                        if (M2Share.LineNoticeList.Count <= playObject.MNShowLineNoticeIdx)
                                         {
-                                            playObject.m_nShowLineNoticeIdx = 0;
+                                            playObject.MNShowLineNoticeIdx = 0;
                                         }
                                     }
                                     playObject.Run();
-                                    if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.m_dwSaveRcdTick) > M2Share.Config.SaveHumanRcdTime)
+                                    if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.MDwSaveRcdTick) > M2Share.Config.SaveHumanRcdTime)
                                     {
-                                        playObject.m_dwSaveRcdTick = HUtil32.GetTickCount();
+                                        playObject.MDwSaveRcdTick = HUtil32.GetTickCount();
                                         playObject.DealCancelA();
                                         SaveHumanRcd(playObject);
                                     }
@@ -858,7 +858,7 @@ namespace GameSvr.World
                             AddToHumanFreeList(playObject);
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
-                            M2Share.GateMgr.CloseUser(playObject.m_nGateIdx, playObject.m_nSocket);
+                            M2Share.GateMgr.CloseUser(playObject.MNGateIdx, playObject.MNSocket);
                             SendServerGroupMsg(Grobal2.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }
@@ -1204,7 +1204,7 @@ namespace GameSvr.World
                         sMsg);
                     break;
             }
-            if (!playObject.m_boReadyRun) return;
+            if (!playObject.MBoReadyRun) return;
             switch (defMsg.Ident)
             {
                 case Grobal2.CM_TURN:
@@ -1242,9 +1242,9 @@ namespace GameSvr.World
             for (var i = 0; i < PlayObjectFreeList.Count; i++)
             {
                 PlayObject hum = PlayObjectFreeList[i];
-                if (hum.m_sSwitchDataTempFile == flName)
+                if (hum.MSSwitchDataTempFile == flName)
                 {
-                    hum.m_boSwitchDataOK = true;
+                    hum.MBoSwitchDataOk = true;
                     break;
                 }
             }
@@ -1287,7 +1287,7 @@ namespace GameSvr.World
                     PlayObject playObject = PlayObjectList[i];
                     if (!playObject.Ghost)
                     {
-                        if (!(playObject.m_boPasswordLocked && playObject.ObMode && playObject.AdminMode))
+                        if (!(playObject.MBoPasswordLocked && playObject.ObMode && playObject.AdminMode))
                         {
                             result = playObject;
                         }
@@ -1309,7 +1309,7 @@ namespace GameSvr.World
                     if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         playObject = PlayObjectList[i];
-                        playObject.m_boEmergencyClose = true;
+                        playObject.MBoEmergencyClose = true;
                         break;
                     }
                 }
@@ -1430,7 +1430,7 @@ namespace GameSvr.World
                 var playObject = PlayObjectList[i];
                 if (string.Compare(playObject.ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    playObject.m_boKickFlag = true;
+                    playObject.MBoKickFlag = true;
                     break;
                 }
             }
@@ -1443,7 +1443,7 @@ namespace GameSvr.World
             const string sMsg = "{0}/{1}";
             if (M2Share.GetMultiServerAddrPort(nServerIndex, ref sIPaddr, ref nPort))
             {
-                playObject.m_boReconnection = true;
+                playObject.MBoReconnection = true;
                 playObject.SendDefMessage(Grobal2.SM_RECONNECT, 0, 0, 0, 0, string.Format(sMsg, sIPaddr, nPort));
             }
         }
@@ -1456,9 +1456,9 @@ namespace GameSvr.World
             }
             var saveRcd = new SavePlayerRcd
             {
-                Account = playObject.UserID,
+                Account = playObject.UserAccount,
                 ChrName = playObject.ChrName,
-                SessionID = playObject.m_nSessionID,
+                SessionID = playObject.MNSessionId,
                 PlayObject = playObject,
                 HumanRcd = new PlayerDataInfo()
             };
@@ -1475,7 +1475,7 @@ namespace GameSvr.World
         private void GetHumData(PlayObject playObject, ref PlayerDataInfo humanRcd)
         {
             var humData = humanRcd.Data;
-            playObject.UserID = humData.Account;
+            playObject.UserAccount = humData.Account;
             playObject.ChrName = humData.ChrName;
             playObject.MapName = humData.CurMap;
             playObject.CurrX = humData.CurX;
@@ -1504,19 +1504,19 @@ namespace GameSvr.World
             playObject.HomeY = humData.HomeY;
             playObject.BonusAbil = humData.BonusAbil;
             playObject.BonusPoint = humData.BonusPoint;
-            playObject.m_btCreditPoint = humData.CreditPoint;
-            playObject.m_btReLevel = humData.ReLevel;
-            playObject.m_sMasterName = humData.MasterName;
-            playObject.m_boMaster = humData.IsMaster;
-            playObject.m_sDearName = humData.DearName;
-            playObject.m_sStoragePwd = humData.StoragePwd;
-            if (!string.IsNullOrEmpty(playObject.m_sStoragePwd))
+            playObject.MBtCreditPoint = humData.CreditPoint;
+            playObject.MBtReLevel = humData.ReLevel;
+            playObject.MSMasterName = humData.MasterName;
+            playObject.MBoMaster = humData.IsMaster;
+            playObject.MSDearName = humData.DearName;
+            playObject.MSStoragePwd = humData.StoragePwd;
+            if (!string.IsNullOrEmpty(playObject.MSStoragePwd))
             {
-                playObject.m_boPasswordLocked = true;
+                playObject.MBoPasswordLocked = true;
             }
-            playObject.m_nGameGold = humData.GameGold;
-            playObject.m_nGamePoint = humData.GamePoint;
-            playObject.m_nPayMentPoint = humData.PayMentPoint;
+            playObject.MNGameGold = humData.GameGold;
+            playObject.MNGamePoint = humData.GamePoint;
+            playObject.MNPayMentPoint = humData.PayMentPoint;
             playObject.PkPoint = humData.PKPoint;
             playObject.AllowGroup = humData.AllowGroup > 0;
             playObject.BtB2 = humData.btF9;
@@ -1525,8 +1525,8 @@ namespace GameSvr.World
             playObject.IncSpell = humData.IncSpell;
             playObject.IncHealing = humData.IncHealing;
             playObject.FightZoneDieCount = humData.FightZoneDieCount;
-            playObject.m_boLockLogon = humData.LockLogon;
-            playObject.m_wContribution = humData.Contribution;
+            playObject.MBoLockLogon = humData.LockLogon;
+            playObject.MWContribution = humData.Contribution;
             playObject.HungerStatus = humData.HungerStatus;
             playObject.AllowGuildReCall = humData.AllowGuildReCall;
             playObject.GroupRcallTime = humData.GroupRcallTime;
@@ -1637,14 +1637,14 @@ namespace GameSvr.World
             humanRcd.Data.PKPoint = playObject.PkPoint;
             humanRcd.Data.BonusAbil = playObject.BonusAbil;
             humanRcd.Data.BonusPoint = playObject.BonusPoint;
-            humanRcd.Data.StoragePwd = playObject.m_sStoragePwd;
-            humanRcd.Data.CreditPoint = playObject.m_btCreditPoint;
-            humanRcd.Data.ReLevel = playObject.m_btReLevel;
-            humanRcd.Data.MasterName = playObject.m_sMasterName;
-            humanRcd.Data.IsMaster = playObject.m_boMaster;
-            humanRcd.Data.DearName = playObject.m_sDearName;
-            humanRcd.Data.GameGold = playObject.m_nGameGold;
-            humanRcd.Data.GamePoint = playObject.m_nGamePoint;
+            humanRcd.Data.StoragePwd = playObject.MSStoragePwd;
+            humanRcd.Data.CreditPoint = playObject.MBtCreditPoint;
+            humanRcd.Data.ReLevel = playObject.MBtReLevel;
+            humanRcd.Data.MasterName = playObject.MSMasterName;
+            humanRcd.Data.IsMaster = playObject.MBoMaster;
+            humanRcd.Data.DearName = playObject.MSDearName;
+            humanRcd.Data.GameGold = playObject.MNGameGold;
+            humanRcd.Data.GamePoint = playObject.MNGamePoint;
             humanRcd.Data.AllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
             humanRcd.Data.btF9 = playObject.BtB2;
             humanRcd.Data.AttatckMode = (byte)playObject.AttatckMode;
@@ -1652,9 +1652,9 @@ namespace GameSvr.World
             humanRcd.Data.IncSpell = (byte)playObject.IncSpell;
             humanRcd.Data.IncHealing = (byte)playObject.IncHealing;
             humanRcd.Data.FightZoneDieCount = (byte)playObject.FightZoneDieCount;
-            humanRcd.Data.Account = playObject.UserID;
-            humanRcd.Data.LockLogon = playObject.m_boLockLogon;
-            humanRcd.Data.Contribution = playObject.m_wContribution;
+            humanRcd.Data.Account = playObject.UserAccount;
+            humanRcd.Data.LockLogon = playObject.MBoLockLogon;
+            humanRcd.Data.Contribution = playObject.MWContribution;
             humanRcd.Data.HungerStatus = playObject.HungerStatus;
             humanRcd.Data.AllowGuildReCall = playObject.AllowGuildReCall;
             humanRcd.Data.GroupRcallTime = playObject.GroupRcallTime;
@@ -2148,7 +2148,7 @@ namespace GameSvr.World
             if (playObject != null)
             {
                 playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
-                playObject.UserID = "假人" + ai.sChrName;
+                playObject.UserAccount = "假人" + ai.sChrName;
                 playObject.Start(TPathType.t_Dynamic);
                 BotPlayObjectList.Add(playObject);
                 return true;
@@ -2309,7 +2309,7 @@ namespace GameSvr.World
         {
             for (int i = 0; i < PlayObjectList.Count(); i++)
             {
-                if (string.Compare(PlayObjectList[i].UserID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     return PlayObjectList[i].QueryExpireTick;
                 }
@@ -2321,7 +2321,7 @@ namespace GameSvr.World
         {
             for (int i = 0; i < PlayObjectList.Count(); i++)
             {
-                if (string.Compare(PlayObjectList[i].UserID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObjectList[i].QueryExpireTick = playTime;
                     break;
@@ -2333,7 +2333,7 @@ namespace GameSvr.World
         {
             for (int i = 0; i < PlayObjectList.Count(); i++)
             {
-                if (string.Compare(PlayObjectList[i].UserID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObjectList[i].AccountExpired = true;
                     break;
@@ -2345,7 +2345,7 @@ namespace GameSvr.World
         {
             for (int i = 0; i < PlayObjectList.Count(); i++)
             {
-                if (string.Compare(PlayObjectList[i].UserID, account, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     PlayObjectList[i].SetExpiredTime(5);
                     break;

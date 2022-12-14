@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
         {
             if (M2Share.g_ManageNPC != null)
             {
-                PlayObject.m_nScriptGotoCount = 0;
+                PlayObject.ScriptGotoCount = 0;
                 M2Share.g_ManageNPC.GotoLable(PlayObject, "@Member", false);
             }
         }

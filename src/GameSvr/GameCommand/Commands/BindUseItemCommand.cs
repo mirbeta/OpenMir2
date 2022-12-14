@@ -64,7 +64,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 case 0:
                     boFind = false;
-                    sBindName = m_PlayObject.UserID;
+                    sBindName = m_PlayObject.UserAccount;
                     HUtil32.EnterCriticalSection(M2Share.g_ItemBindAccount);
                     try
                     {
@@ -141,7 +141,7 @@ namespace GameSvr.GameCommand.Commands
                     break;
                 case 2:
                     boFind = false;
-                    sBindName = m_PlayObject.m_sIPaddr;
+                    sBindName = m_PlayObject.LoginIpAddr;
                     HUtil32.EnterCriticalSection(M2Share.g_ItemBindIPaddr);
                     try
                     {

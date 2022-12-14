@@ -19,7 +19,7 @@ namespace GameSvr.Player
         private void UpdateSellOffInfo(int code)
         {
             DealOffInfo DealOffInfo;
-            if (bo_YBDEAL)// 已开通元宝服务
+            if (BoYbdeal)// 已开通元宝服务
             {
                 for (var i = M2Share.sSellOffItemList.Count - 1; i >= 0; i--)
                 {
@@ -70,7 +70,7 @@ namespace GameSvr.Player
                 HUtil32.GetValidStr3(sItemName, ref sItemName, ' ');
             }
             bo11 = false;
-            if (!m_boSellOffOK)
+            if (!MBoSellOffOk)
             {
                 for (var i = this.ItemList.Count - 1; i >= 0; i--)
                 {
@@ -94,7 +94,7 @@ namespace GameSvr.Player
                         {
                             sUserItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
                         }
-                        if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && m_SellOffItemList.Count < 9)
+                        if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && SellOffItemList.Count < 9)
                         {
                             //if (this.CheckItemValue(UserItem, 1))
                             //{
@@ -104,7 +104,7 @@ namespace GameSvr.Player
                             //{
                             //    break;
                             //}
-                            m_SellOffItemList.Add(UserItem);
+                            SellOffItemList.Add(UserItem);
                             this.SendMsg(this, Grobal2.RM_SELLOFFADDITEM_OK, 0, 0, 0, 0, ""); // 放物品成功
                             this.ItemList.RemoveAt(i);
                             //ClearCopyItem(0, UserItem.wIndex, UserItem.MakeIndex); // 清理包裹和仓库复制物品
@@ -132,15 +132,15 @@ namespace GameSvr.Player
                 HUtil32.GetValidStr3(sItemName, ref sItemName, ' ');
             }
             bool bo11 = false;
-            if (!m_boSellOffOK)
+            if (!MBoSellOffOk)
             {
-                for (var i = m_SellOffItemList.Count - 1; i >= 0; i--)
+                for (var i = SellOffItemList.Count - 1; i >= 0; i--)
                 {
-                    if (m_SellOffItemList.Count <= 0)
+                    if (SellOffItemList.Count <= 0)
                     {
                         break;
                     }
-                    var UserItem = m_SellOffItemList[i];
+                    var UserItem = SellOffItemList[i];
                     if (UserItem == null)
                     {
                         continue;
@@ -160,7 +160,7 @@ namespace GameSvr.Player
                             //ClearCopyItem(0, UserItem.wIndex, UserItem.MakeIndex); // 清理包裹和仓库复制物品 
                             this.ItemList.Add(UserItem);
                             this.SendMsg(this, Grobal2.RM_SELLOFFDELITEM_OK, 0, 0, 0, 0, "");
-                            m_SellOffItemList.RemoveAt(i);
+                            SellOffItemList.RemoveAt(i);
                             bo11 = true;
                             break;
                         }
@@ -299,12 +299,12 @@ namespace GameSvr.Player
                             && string.Compare(dealOffInfo.sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 0)
                         {
                             dealOffInfo.Flag = 4;
-                            if (m_nGameGold >= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
+                            if (MNGameGold >= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
                             {
-                                m_nGameGold -= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold; // 扣出元宝
-                                if (m_nGameGold < 0)
+                                MNGameGold -= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold; // 扣出元宝
+                                if (MNGameGold < 0)
                                 {
-                                    m_nGameGold = 0;
+                                    MNGameGold = 0;
                                 }
                                 this.GameGoldChanged(); // 更新元宝数量
                                 PlayObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealChrName);
@@ -324,12 +324,12 @@ namespace GameSvr.Player
                                     {
                                         UpdateSellOffInfo(1);
                                         dealOffInfo.Flag = 2; // 交易结束
-                                        PlayObject.m_nGameGold += dealOffInfo.nSellGold;
+                                        PlayObject.MNGameGold += dealOffInfo.nSellGold;
                                         PlayObject.GameGoldChanged();
                                         PlayObject.SysMsg(string.Format(CommandHelp.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
                                         if (M2Share.GameLogGameGold)
                                         {
-                                            M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, PlayObject.m_nGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.ChrName));
+                                            M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, PlayObject.MNGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.ChrName));
                                         }
                                     }
                                 }
@@ -411,12 +411,12 @@ namespace GameSvr.Player
                             dealOffInfo.Flag = 2; // 交易结束
                             // sSellOffItemList.Delete(I);
                             // sSellOffItemList.Add(DealOffInfo);
-                            m_nGameGold += dealOffInfo.nSellGold;
+                            MNGameGold += dealOffInfo.nSellGold;
                             this.GameGoldChanged();
                             this.SysMsg(string.Format(CommandHelp.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
                             if (M2Share.GameLogGameGold)
                             {
-                                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, m_nGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
+                                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, MNGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
                             }
                             break;
                         }
@@ -444,7 +444,7 @@ namespace GameSvr.Player
         public string SelectSellDate()
         {
             var result = "您未开通" + M2Share.Config.GameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
-            if (bo_YBDEAL)
+            if (BoYbdeal)
             {
                 // 已开通元宝服务
                 if (M2Share.sSellOffItemList.Count > 0)
@@ -523,18 +523,18 @@ namespace GameSvr.Player
             UserItem UserItem;
             StdItem StdItem;
             DealOffInfo DealOffInfo;
-            m_boSellOffOK = true;
+            MBoSellOffOk = true;
             var bo11 = false;
-            if (m_boSellOffOK && (m_SellOffItemList.Count > 0 || nGameDiamond > 0) && m_SellOffItemList.Count < 10 && sBuyChrName.Length < 20 && nSellGold > 0 && nSellGold < 100000000
+            if (MBoSellOffOk && (SellOffItemList.Count > 0 || nGameDiamond > 0) && SellOffItemList.Count < 10 && sBuyChrName.Length < 20 && nSellGold > 0 && nSellGold < 100000000
                 && string.Compare(sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 // 不能自己寄售给自己
                 DealOffInfo = new DealOffInfo() { UseItems = new UserItem[9] };
-                if (m_SellOffItemList.Count > 0)
+                if (SellOffItemList.Count > 0)
                 {
-                    for (var i = 0; i < m_SellOffItemList.Count; i++)
+                    for (var i = 0; i < SellOffItemList.Count; i++)
                     {
-                        UserItem = m_SellOffItemList[i];
+                        UserItem = SellOffItemList[i];
                         StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                         if (StdItem != null && UserItem != null && UserItem.MakeIndex > 0)
                         {
@@ -574,16 +574,16 @@ namespace GameSvr.Player
                 DealOffInfo.Flag = 0; // 标识
                 M2Share.sSellOffItemList.Add(DealOffInfo); // 增加到元宝寄售列表中
                 this.SendMsg(this, Grobal2.RM_SELLOFFEND_OK, 0, 0, 0, 0, "");
-                m_nGameGold -= M2Share.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
-                if (m_nGameGold < 0)
+                MNGameGold -= M2Share.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
+                if (MNGameGold < 0)
                 {
-                    m_nGameGold = 0;
+                    MNGameGold = 0;
                 }
                 this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "[成功] 系统已经成功接受您的申请");
                 bo11 = true;
                 M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表 
-                m_boSellOffOK = false;
-                m_SellOffItemList.Clear();
+                MBoSellOffOk = false;
+                SellOffItemList.Clear();
             }
             if (!bo11)
             {
@@ -608,19 +608,19 @@ namespace GameSvr.Player
         /// </summary>
         public void GetBackSellOffItems()
         {
-            if (m_SellOffItemList == null)
+            if (SellOffItemList == null)
             {
-                m_SellOffItemList = new List<UserItem>();
+                SellOffItemList = new List<UserItem>();
             }
-            if (m_SellOffItemList.Count > 0)
+            if (SellOffItemList.Count > 0)
             {
-                for (var i = m_SellOffItemList.Count - 1; i >= 0; i--)
+                for (var i = SellOffItemList.Count - 1; i >= 0; i--)
                 {
-                    this.ItemList.Add(m_SellOffItemList[i]);
-                    m_SellOffItemList.RemoveAt(i);
+                    this.ItemList.Add(SellOffItemList[i]);
+                    SellOffItemList.RemoveAt(i);
                 }
             }
-            m_boSellOffOK = false;// 确认元宝寄售标志 
+            MBoSellOffOk = false;// 确认元宝寄售标志 
         }
     }
 }

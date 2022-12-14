@@ -12,22 +12,22 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public void SearchMaster(PlayObject PlayObject)
         {
-            if (PlayObject.m_sMasterName == "")
+            if (PlayObject.MSMasterName == "")
             {
                 PlayObject.SysMsg(M2Share.g_sYouAreNotMasterMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.m_boMaster)
+            if (PlayObject.MBoMaster)
             {
-                if (PlayObject.m_MasterList.Count <= 0)
+                if (PlayObject.MMasterList.Count <= 0)
                 {
                     PlayObject.SysMsg(M2Share.g_sYourMasterListNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 PlayObject.SysMsg(M2Share.g_sYourMasterListNowLocateMsg, MsgColor.Green, MsgType.Hint);
-                for (var i = 0; i < PlayObject.m_MasterList.Count; i++)
+                for (var i = 0; i < PlayObject.MMasterList.Count; i++)
                 {
-                    var Human = PlayObject.m_MasterList[i];
+                    var Human = PlayObject.MMasterList[i];
                     PlayObject.SysMsg(Human.ChrName + " " + Human.Envir.MapDesc + "(" + Human.CurrX + ":" + Human.CurrY + ")", MsgColor.Green, MsgType.Hint);
                     Human.SysMsg(M2Share.g_sYourMasterSearchLocateMsg, MsgColor.Green, MsgType.Hint);
                     Human.SysMsg(PlayObject.ChrName + " " + PlayObject.Envir.MapDesc + "(" + PlayObject.CurrX + ":" + PlayObject.CurrY + ")", MsgColor.Green, MsgType.Hint);
@@ -35,16 +35,16 @@ namespace GameSvr.GameCommand.Commands
             }
             else
             {
-                if (PlayObject.m_MasterHuman == null)
+                if (PlayObject.MMasterHuman == null)
                 {
                     PlayObject.SysMsg(M2Share.g_sYourMasterNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 PlayObject.SysMsg(M2Share.g_sYourMasterNowLocateMsg, MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg(PlayObject.m_MasterHuman.ChrName + " " + PlayObject.m_MasterHuman.Envir.MapDesc + "(" + PlayObject.m_MasterHuman.CurrX + ":"
-                    + PlayObject.m_MasterHuman.CurrY + ")", MsgColor.Green, MsgType.Hint);
-                PlayObject.m_MasterHuman.SysMsg(M2Share.g_sYourMasterListSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.m_MasterHuman.SysMsg(PlayObject.ChrName + " " + PlayObject.Envir.MapDesc + "(" + PlayObject.CurrX + ":" + PlayObject.CurrY + ")",
+                PlayObject.SysMsg(PlayObject.MMasterHuman.ChrName + " " + PlayObject.MMasterHuman.Envir.MapDesc + "(" + PlayObject.MMasterHuman.CurrX + ":"
+                    + PlayObject.MMasterHuman.CurrY + ")", MsgColor.Green, MsgType.Hint);
+                PlayObject.MMasterHuman.SysMsg(M2Share.g_sYourMasterListSearchLocateMsg, MsgColor.Green, MsgType.Hint);
+                PlayObject.MMasterHuman.SysMsg(PlayObject.ChrName + " " + PlayObject.Envir.MapDesc + "(" + PlayObject.CurrX + ":" + PlayObject.CurrY + ")",
                     MsgColor.Green, MsgType.Hint);
             }
         }

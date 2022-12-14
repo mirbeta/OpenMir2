@@ -94,11 +94,11 @@ namespace GameSvr.Npc
                     }
                     else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        if (PlayObject.m_sScriptGoBackLable == "")
+                        if (PlayObject.ScriptGoBackLable == "")
                         {
-                            PlayObject.m_sScriptGoBackLable = ScriptConst.sMAIN;
+                            PlayObject.ScriptGoBackLable = ScriptConst.sMAIN;
                         }
-                        GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
+                        GotoLable(PlayObject, PlayObject.ScriptGoBackLable, false);
                     }
                 }
             }

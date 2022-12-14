@@ -243,11 +243,11 @@ namespace GameSvr.Npc
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (PlayObject.m_sScriptGoBackLable == "")
+                            if (PlayObject.ScriptGoBackLable == "")
                             {
-                                PlayObject.m_sScriptGoBackLable = ScriptConst.sMAIN;
+                                PlayObject.ScriptGoBackLable = ScriptConst.sMAIN;
                             }
-                            GotoLable(PlayObject, PlayObject.m_sScriptGoBackLable, false);
+                            GotoLable(PlayObject, PlayObject.ScriptGoBackLable, false);
                         }
                     }
                 }
@@ -414,9 +414,9 @@ namespace GameSvr.Npc
                 PlayObject.SysMsg(M2Share.g_sSubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.m_boSendMsgFlag)
+            if (PlayObject.MBoSendMsgFlag)
             {
-                PlayObject.m_boSendMsgFlag = false;
+                PlayObject.MBoSendMsgFlag = false;
                 M2Share.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Castle);
             }
         }

@@ -26,14 +26,14 @@ namespace GameSvr.GameCommand.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
-                if (m_PlayObject.m_nGameGold > nPoint)
+                if (m_PlayObject.MNGameGold > nPoint)
                 {
-                    m_PlayObject.m_nGameGold -= nPoint;
+                    m_PlayObject.MNGameGold -= nPoint;
                 }
                 else
                 {
-                    nPoint = m_PlayObject.m_nGameGold;
-                    m_PlayObject.m_nGameGold = 0;
+                    nPoint = m_PlayObject.MNGameGold;
+                    m_PlayObject.MNGameGold = 0;
                 }
                 m_PlayObject.GoldChanged();
                 PlayObject.SysMsg(sHumName + "的游戏点已减少" + nPoint + '.', MsgColor.Green, MsgType.Hint);

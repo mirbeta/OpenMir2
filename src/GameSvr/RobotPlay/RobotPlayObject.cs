@@ -122,12 +122,12 @@ namespace GameSvr.RobotPlay
 
         public RobotPlayObject() : base()
         {
-            m_nSoftVersionDate = Grobal2.CLIENT_VERSION_NUMBER;
-            m_nSoftVersionDateEx = M2Share.GetExVersionNO(Grobal2.CLIENT_VERSION_NUMBER, ref m_nSoftVersionDate);
+            MNSoftVersionDate = Grobal2.CLIENT_VERSION_NUMBER;
+            MNSoftVersionDateEx = M2Share.GetExVersionNO(Grobal2.CLIENT_VERSION_NUMBER, ref MNSoftVersionDate);
             AbilCopyToWAbil();
             AttatckMode = 0;
             IsRobot = true;
-            m_boLoginNoticeOK = true;
+            MBoLoginNoticeOk = true;
             m_boAIStart = false; // 开始挂机
             m_ManagedEnvir = null; // 挂机地图
             m_Path = null;
@@ -280,7 +280,7 @@ namespace GameSvr.RobotPlay
                 m_nMoveFailCount = 0;
                 if (M2Share.g_FunctionNPC != null)
                 {
-                    m_nScriptGotoCount = 0;
+                    ScriptGotoCount = 0;
                     M2Share.g_FunctionNPC.GotoLable(this, "@AIStart", false);
                 }
             }
@@ -296,7 +296,7 @@ namespace GameSvr.RobotPlay
                 m_nPostion = -1;
                 if (M2Share.g_FunctionNPC != null)
                 {
-                    m_nScriptGotoCount = 0;
+                    ScriptGotoCount = 0;
                     M2Share.g_FunctionNPC.GotoLable(this, "@AIStop", false);
                 }
             }
@@ -312,8 +312,8 @@ namespace GameSvr.RobotPlay
             else if (dwExp > 0)
             {
                 dwExp = M2Share.Config.KillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
-                dwExp = m_nKillMonExpMultiple * dwExp; // 人物指定的杀怪经验倍数
-                dwExp = HUtil32.Round(m_nKillMonExpRate / 100 * dwExp); // 人物指定的杀怪经验倍数
+                dwExp = MNKillMonExpMultiple * dwExp; // 人物指定的杀怪经验倍数
+                dwExp = HUtil32.Round(MNKillMonExpRate / 100 * dwExp); // 人物指定的杀怪经验倍数
                 if (Envir.Flag.boEXPRATE)
                 {
                     dwExp = HUtil32.Round(Envir.Flag.nEXPRATE / 100 * dwExp); // 地图上指定杀怪经验倍数
@@ -359,7 +359,7 @@ namespace GameSvr.RobotPlay
             PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
-                if (!PlayObject.m_boReadyRun)
+                if (!PlayObject.MBoReadyRun)
                 {
                     return;
                 }
@@ -372,25 +372,25 @@ namespace GameSvr.RobotPlay
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { ChrName, Abil.Level, saystr }));
                     // 取得私聊信息
                     // m_GetWhisperHuman 侦听私聊对象
-                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.Ghost)
+                    if (MGetWhisperHuman != null && !MGetWhisperHuman.Ghost)
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
+                        MGetWhisperHuman.SendMsg(MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
-                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.Ghost)
+                    if (PlayObject.MGetWhisperHuman != null && !PlayObject.MGetWhisperHuman.Ghost)
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
+                        PlayObject.MGetWhisperHuman.SendMsg(PlayObject.MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
                 }
                 else
                 {
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { ChrName, Abil.Level, saystr }));
-                    if (m_GetWhisperHuman != null && !m_GetWhisperHuman.Ghost)
+                    if (MGetWhisperHuman != null && !MGetWhisperHuman.Ghost)
                     {
-                        m_GetWhisperHuman.SendMsg(m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
+                        MGetWhisperHuman.SendMsg(MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
-                    if (PlayObject.m_GetWhisperHuman != null && !PlayObject.m_GetWhisperHuman.Ghost)
+                    if (PlayObject.MGetWhisperHuman != null && !PlayObject.MGetWhisperHuman.Ghost)
                     {
-                        PlayObject.m_GetWhisperHuman.SendMsg(PlayObject.m_GetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
+                        PlayObject.MGetWhisperHuman.SendMsg(PlayObject.MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
                 }
             }
@@ -410,11 +410,11 @@ namespace GameSvr.RobotPlay
                 {
                     sData = sData[..M2Share.Config.SayMsgMaxLen];
                 }
-                if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
+                if (HUtil32.GetTickCount() >= MDwDisableSayMsgTick)
                 {
-                    m_boDisableSayMsg = false;
+                    MBoDisableSayMsg = false;
                 }
-                var boDisableSayMsg = m_boDisableSayMsg;
+                var boDisableSayMsg = MBoDisableSayMsg;
                 //g_DenySayMsgList.Lock;
                 //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                 //{
@@ -428,7 +428,7 @@ namespace GameSvr.RobotPlay
                     {
                         SC = sData.Substring(1, sData.Length - 1);
                         SC = HUtil32.GetValidStr3(SC, ref sParam1, ' ');
-                        if (!m_boFilterSendMsg)
+                        if (!MBoFilterSendMsg)
                         {
                             Whisper(sParam1, SC);
                         }
@@ -466,7 +466,7 @@ namespace GameSvr.RobotPlay
                                 ShoutMsgTick = HUtil32.GetTickCount();
                                 SC = sData.Substring(1, sData.Length - 1);
                                 string sCryCryMsg = "(!)" + ChrName + ": " + SC;
-                                if (m_boFilterSendMsg)
+                                if (MBoFilterSendMsg)
                                 {
                                     SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
                                 }
@@ -482,7 +482,7 @@ namespace GameSvr.RobotPlay
                         SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
-                    if (!m_boFilterSendMsg)
+                    if (!MBoFilterSendMsg)
                     {
                         SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + sData);
                     }
@@ -581,11 +581,11 @@ namespace GameSvr.RobotPlay
                 case Grobal2.RM_HEAR:
                     break;
                 case Grobal2.RM_WHISPER:
-                    if (HUtil32.GetTickCount() >= m_dwDisableSayMsgTick)
+                    if (HUtil32.GetTickCount() >= MDwDisableSayMsgTick)
                     {
-                        m_boDisableSayMsg = false;
+                        MBoDisableSayMsg = false;
                     }
-                    boDisableSayMsg = m_boDisableSayMsg;
+                    boDisableSayMsg = MBoDisableSayMsg;
                     // g_DenySayMsgList.Lock;
                     //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                     //{
@@ -874,7 +874,7 @@ namespace GameSvr.RobotPlay
             }
             if (nTargetX != CurrX || nTargetY != CurrY)
             {
-                if ((HUtil32.GetTickCount() - DwTick3F4) > m_dwTurnIntervalTime)// 转向间隔
+                if ((HUtil32.GetTickCount() - DwTick3F4) > MDwTurnIntervalTime)// 转向间隔
                 {
                     n10 = nTargetX;
                     n14 = nTargetY;
@@ -1921,7 +1921,7 @@ namespace GameSvr.RobotPlay
             BaseObject BaseObject;
             bool boIsWarrSkill;
             bool result = false;
-            if (!m_boCanSpell)
+            if (!MBoCanSpell)
             {
                 return false;
             }
@@ -2487,11 +2487,11 @@ namespace GameSvr.RobotPlay
             {
                 return false; // 麻痹不能跑动 
             }
-            if (!m_boCanRun) // 禁止跑,则退出
+            if (!MBoCanRun) // 禁止跑,则退出
             {
                 return false;
             }
-            if (HUtil32.GetTickCount() - dwTick5F4 > m_dwRunIntervalTime) // 跑步使用单独的变量计数
+            if (HUtil32.GetTickCount() - dwTick5F4 > MDwRunIntervalTime) // 跑步使用单独的变量计数
             {
                 var nX = nTargetX;
                 var nY = nTargetY;
@@ -2625,7 +2625,7 @@ namespace GameSvr.RobotPlay
             }
             if (Math.Abs(nTargetX - CurrX) > 1 || Math.Abs(nTargetY - CurrY) > 1)
             {
-                if (HUtil32.GetTickCount() - DwTick3F4 > m_dwWalkIntervalTime)
+                if (HUtil32.GetTickCount() - DwTick3F4 > MDwWalkIntervalTime)
                 {
                     n10 = nTargetX;
                     n14 = nTargetY;

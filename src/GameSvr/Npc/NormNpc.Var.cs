@@ -33,11 +33,11 @@ namespace GameSvr.Npc
                 {
                     if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
                     {
-                        PlayObject.m_nVal[n14] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        PlayObject.MNVal[n14] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
                     }
                     else
                     {
-                        PlayObject.m_nVal[n14] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        PlayObject.MNVal[n14] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 119))
@@ -55,22 +55,22 @@ namespace GameSvr.Npc
                 {
                     if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
                     {
-                        PlayObject.m_DyVal[n14 - 200] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        PlayObject.MDyVal[n14 - 200] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
                     }
                     else
                     {
-                        PlayObject.m_DyVal[n14 - 200] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        PlayObject.MDyVal[n14 - 200] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
                     if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
                     {
-                        PlayObject.m_nMval[n14 - 300] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        PlayObject.MNMval[n14 - 300] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
                     }
                     else
                     {
-                        PlayObject.m_nMval[n14 - 300] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        PlayObject.MNMval[n14 - 300] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
@@ -88,11 +88,11 @@ namespace GameSvr.Npc
                 {
                     if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
                     {
-                        PlayObject.m_nInteger[n14 - 500] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        PlayObject.MNInteger[n14 - 500] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
                     }
                     else
                     {
-                        PlayObject.m_nInteger[n14 - 500] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        PlayObject.MNInteger[n14 - 500] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))
@@ -347,11 +347,11 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.m_nVal[n14] += n3C;
+                                PlayObject.MNVal[n14] += n3C;
                             }
                             else
                             {
-                                PlayObject.m_nVal[n14]++;
+                                PlayObject.MNVal[n14]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
@@ -369,22 +369,22 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.m_DyVal[n14 - 200] += n3C;
+                                PlayObject.MDyVal[n14 - 200] += n3C;
                             }
                             else
                             {
-                                PlayObject.m_DyVal[n14 - 200]++;
+                                PlayObject.MDyVal[n14 - 200]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 300, 399))
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.m_nMval[n14 - 300] += n3C;
+                                PlayObject.MNMval[n14 - 300] += n3C;
                             }
                             else
                             {
-                                PlayObject.m_nMval[n14 - 300]++;
+                                PlayObject.MNMval[n14 - 300]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
@@ -402,16 +402,16 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.m_nInteger[n14 - 500] += n3C;
+                                PlayObject.MNInteger[n14 - 500] += n3C;
                             }
                             else
                             {
-                                PlayObject.m_nInteger[n14 - 500]++;
+                                PlayObject.MNInteger[n14 - 500]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
-                            PlayObject.m_sString[n14 - 600] = PlayObject.m_sString[n14 - 600] + s01;
+                            PlayObject.MSString[n14 - 600] = PlayObject.MSString[n14 - 600] + s01;
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
@@ -453,7 +453,7 @@ namespace GameSvr.Npc
                         {
                             if (HUtil32.RangeInDefined(n14, 0, 99))
                             {
-                                n3C = PlayObject.m_nVal[n14];
+                                n3C = PlayObject.MNVal[n14];
                             }
                             else if (HUtil32.RangeInDefined(n14, 100, 199))
                             {
@@ -461,11 +461,11 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
-                                n3C = PlayObject.m_DyVal[n14 - 200];
+                                n3C = PlayObject.MDyVal[n14 - 200];
                             }
                             else if (HUtil32.RangeInDefined(n14, 300, 399))
                             {
-                                n3C = PlayObject.m_nMval[n14 - 300];
+                                n3C = PlayObject.MNMval[n14 - 300];
                             }
                             else if (HUtil32.RangeInDefined(n14, 400, 499))
                             {
@@ -473,11 +473,11 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 500, 599))
                             {
-                                n3C = PlayObject.m_nInteger[n14 - 500];
+                                n3C = PlayObject.MNInteger[n14 - 500];
                             }
                             else if (HUtil32.RangeInDefined(n14, 600, 699))
                             {
-                                s01 = PlayObject.m_sString[n14 - 600];
+                                s01 = PlayObject.MSString[n14 - 600];
                             }
                             else if (HUtil32.RangeInDefined(n14, 700, 799))
                             {
@@ -554,7 +554,7 @@ namespace GameSvr.Npc
                     {
                         if (HUtil32.RangeInDefined(n14, 0, 99))
                         {
-                            n3C = PlayObject.m_nVal[n14];
+                            n3C = PlayObject.MNVal[n14];
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
                         {
@@ -562,11 +562,11 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 200, 299))
                         {
-                            n3C = PlayObject.m_DyVal[n14 - 200];
+                            n3C = PlayObject.MDyVal[n14 - 200];
                         }
                         else if (HUtil32.RangeInDefined(n14, 300, 399))
                         {
-                            n3C = PlayObject.m_nMval[n14 - 300];
+                            n3C = PlayObject.MNMval[n14 - 300];
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
                         {
@@ -574,11 +574,11 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 500, 599))
                         {
-                            n3C = PlayObject.m_nInteger[n14 - 500];
+                            n3C = PlayObject.MNInteger[n14 - 500];
                         }
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
-                            s01 = PlayObject.m_sString[n14 - 600];
+                            s01 = PlayObject.MSString[n14 - 600];
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
@@ -614,11 +614,11 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.m_nVal[n14] += n3C;
+                            PlayObject.MNVal[n14] += n3C;
                         }
                         else
                         {
-                            PlayObject.m_nVal[n14]++;
+                            PlayObject.MNVal[n14]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
@@ -636,22 +636,22 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.m_DyVal[n14 - 200] += n3C;
+                            PlayObject.MDyVal[n14 - 200] += n3C;
                         }
                         else
                         {
-                            PlayObject.m_DyVal[n14 - 200]++;
+                            PlayObject.MDyVal[n14 - 200]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.m_nMval[n14 - 300] += n3C;
+                            PlayObject.MNMval[n14 - 300] += n3C;
                         }
                         else
                         {
-                            PlayObject.m_nMval[n14 - 300]++;
+                            PlayObject.MNMval[n14 - 300]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
@@ -669,16 +669,16 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.m_nInteger[n14 - 500] += n3C;
+                            PlayObject.MNInteger[n14 - 500] += n3C;
                         }
                         else
                         {
-                            PlayObject.m_nInteger[n14 - 500]++;
+                            PlayObject.MNInteger[n14 - 500]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        PlayObject.m_sString[n14 - 600] = PlayObject.m_sString[n14 - 600] + s01;
+                        PlayObject.MSString[n14 - 600] = PlayObject.MSString[n14 - 600] + s01;
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
@@ -794,11 +794,11 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.m_nVal[n14] -= n3C;
+                                PlayObject.MNVal[n14] -= n3C;
                             }
                             else
                             {
-                                PlayObject.m_nVal[n14] -= 1;
+                                PlayObject.MNVal[n14] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
@@ -816,22 +816,22 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.m_DyVal[n14 - 200] -= n3C;
+                                PlayObject.MDyVal[n14 - 200] -= n3C;
                             }
                             else
                             {
-                                PlayObject.m_DyVal[n14 - 200] -= 1;
+                                PlayObject.MDyVal[n14 - 200] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 300, 399))
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.m_nMval[n14 - 300] -= n3C;
+                                PlayObject.MNMval[n14 - 300] -= n3C;
                             }
                             else
                             {
-                                PlayObject.m_nMval[n14 - 300] -= 1;
+                                PlayObject.MNMval[n14 - 300] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
@@ -849,19 +849,19 @@ namespace GameSvr.Npc
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.m_nInteger[n14 - 500] -= n3C;
+                                PlayObject.MNInteger[n14 - 500] -= n3C;
                             }
                             else
                             {
-                                PlayObject.m_nInteger[n14 - 500] -= 1;
+                                PlayObject.MNInteger[n14 - 500] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
-                            n10 = PlayObject.m_sString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
-                            s02 = PlayObject.m_sString[n14 - 600].Substring(1, n10 - 1);
-                            s03 = PlayObject.m_sString[n14 - 600].Substring(s01.Length + n10, PlayObject.m_sString[n14 - 600].Length);
-                            PlayObject.m_sString[n14 - 600] = s02 + s03;
+                            n10 = PlayObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            s02 = PlayObject.MSString[n14 - 600].Substring(1, n10 - 1);
+                            s03 = PlayObject.MSString[n14 - 600].Substring(s01.Length + n10, PlayObject.MSString[n14 - 600].Length);
+                            PlayObject.MSString[n14 - 600] = s02 + s03;
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
@@ -909,7 +909,7 @@ namespace GameSvr.Npc
                         {
                             if (HUtil32.RangeInDefined(n14, 0, 99))
                             {
-                                n3C = PlayObject.m_nVal[n14];
+                                n3C = PlayObject.MNVal[n14];
                             }
                             else if (HUtil32.RangeInDefined(n14, 100, 199))
                             {
@@ -917,11 +917,11 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
-                                n3C = PlayObject.m_DyVal[n14 - 200];
+                                n3C = PlayObject.MDyVal[n14 - 200];
                             }
                             else if (HUtil32.RangeInDefined(n14, 300, 399))
                             {
-                                n3C = PlayObject.m_nMval[n14 - 300];
+                                n3C = PlayObject.MNMval[n14 - 300];
                             }
                             else if (HUtil32.RangeInDefined(n14, 400, 499))
                             {
@@ -929,11 +929,11 @@ namespace GameSvr.Npc
                             }
                             else if (HUtil32.RangeInDefined(n14, 500, 599))
                             {
-                                n3C = PlayObject.m_nInteger[n14 - 500];
+                                n3C = PlayObject.MNInteger[n14 - 500];
                             }
                             else if (HUtil32.RangeInDefined(n14, 600, 699))
                             {
-                                s01 = PlayObject.m_sString[n14 - 600];
+                                s01 = PlayObject.MSString[n14 - 600];
                             }
                             else if (HUtil32.RangeInDefined(n14, 700, 799))
                             {
@@ -1013,7 +1013,7 @@ namespace GameSvr.Npc
                     {
                         if (HUtil32.RangeInDefined(n14, 0, 99))
                         {
-                            n3C = PlayObject.m_nVal[n14];
+                            n3C = PlayObject.MNVal[n14];
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
                         {
@@ -1021,11 +1021,11 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 200, 299))
                         {
-                            n3C = PlayObject.m_DyVal[n14 - 200];
+                            n3C = PlayObject.MDyVal[n14 - 200];
                         }
                         else if (HUtil32.RangeInDefined(n14, 300, 399))
                         {
-                            n3C = PlayObject.m_nMval[n14 - 300];
+                            n3C = PlayObject.MNMval[n14 - 300];
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
                         {
@@ -1033,11 +1033,11 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n14, 500, 599))
                         {
-                            n3C = PlayObject.m_nInteger[n14 - 500];
+                            n3C = PlayObject.MNInteger[n14 - 500];
                         }
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
-                            s01 = PlayObject.m_sString[n14 - 600];
+                            s01 = PlayObject.MSString[n14 - 600];
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
@@ -1073,11 +1073,11 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.m_nVal[n14] -= n3C;
+                            PlayObject.MNVal[n14] -= n3C;
                         }
                         else
                         {
-                            PlayObject.m_nVal[n14] -= 1;
+                            PlayObject.MNVal[n14] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
@@ -1095,22 +1095,22 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.m_DyVal[n14 - 200] -= n3C;
+                            PlayObject.MDyVal[n14 - 200] -= n3C;
                         }
                         else
                         {
-                            PlayObject.m_DyVal[n14 - 200] -= 1;
+                            PlayObject.MDyVal[n14 - 200] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.m_nMval[n14 - 300] -= n3C;
+                            PlayObject.MNMval[n14 - 300] -= n3C;
                         }
                         else
                         {
-                            PlayObject.m_nMval[n14 - 300] -= 1;
+                            PlayObject.MNMval[n14 - 300] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
@@ -1128,19 +1128,19 @@ namespace GameSvr.Npc
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.m_nInteger[n14 - 500] -= n3C;
+                            PlayObject.MNInteger[n14 - 500] -= n3C;
                         }
                         else
                         {
-                            PlayObject.m_nInteger[n14 - 500] -= 1;
+                            PlayObject.MNInteger[n14 - 500] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n10 = PlayObject.m_sString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
-                        s02 = PlayObject.m_sString[n14 - 600].Substring(1, n10 - 1);
-                        s03 = PlayObject.m_sString[n14 - 600].Substring(s01.Length + n10, PlayObject.m_sString[n14 - 600].Length);
-                        PlayObject.m_sString[n14 - 600] = s02 + s03;
+                        n10 = PlayObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
+                        s02 = PlayObject.MSString[n14 - 600].Substring(1, n10 - 1);
+                        s03 = PlayObject.MSString[n14 - 600].Substring(s01.Length + n10, PlayObject.MSString[n14 - 600].Length);
+                        PlayObject.MSString[n14 - 600] = s02 + s03;
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
@@ -1197,7 +1197,7 @@ namespace GameSvr.Npc
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n18 = PlayObject.m_nVal[n14];
+                        n18 = PlayObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1205,11 +1205,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n18 = PlayObject.m_DyVal[n14 - 200];
+                        n18 = PlayObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n18 = PlayObject.m_nMval[n14 - 300];
+                        n18 = PlayObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1217,7 +1217,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n18 = PlayObject.m_nInteger[n14 - 500];
+                        n18 = PlayObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
@@ -1246,7 +1246,7 @@ namespace GameSvr.Npc
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n1C = PlayObject.m_nVal[n14];
+                        n1C = PlayObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1254,11 +1254,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n1C = PlayObject.m_DyVal[n14 - 200];
+                        n1C = PlayObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n1C = PlayObject.m_nMval[n14 - 300];
+                        n1C = PlayObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1266,7 +1266,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n1C = PlayObject.m_nInteger[n14 - 500];
+                        n1C = PlayObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
@@ -1299,7 +1299,7 @@ namespace GameSvr.Npc
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    PlayObject.m_nVal[n14] = n18 / n1C;
+                    PlayObject.MNVal[n14] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1307,11 +1307,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    PlayObject.m_DyVal[n14 - 200] = n18 / n1C;
+                    PlayObject.MDyVal[n14 - 200] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    PlayObject.m_nMval[n14 - 300] = n18 / n1C;
+                    PlayObject.MNMval[n14 - 300] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1319,7 +1319,7 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.m_nInteger[n14 - 500] = n18 / n1C;
+                    PlayObject.MNInteger[n14 - 500] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                 {
@@ -1345,7 +1345,7 @@ namespace GameSvr.Npc
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n18 = PlayObject.m_nVal[n14];
+                        n18 = PlayObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1353,11 +1353,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n18 = PlayObject.m_DyVal[n14 - 200];
+                        n18 = PlayObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n18 = PlayObject.m_nMval[n14 - 300];
+                        n18 = PlayObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1365,11 +1365,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n18 = PlayObject.m_nInteger[n14 - 500];
+                        n18 = PlayObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n18 = HUtil32.StrToInt(PlayObject.m_sString[n14 - 600], 1);
+                        n18 = HUtil32.StrToInt(PlayObject.MSString[n14 - 600], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
@@ -1406,7 +1406,7 @@ namespace GameSvr.Npc
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n1C = PlayObject.m_nVal[n14];
+                        n1C = PlayObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1414,11 +1414,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n1C = PlayObject.m_DyVal[n14 - 200];
+                        n1C = PlayObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n1C = PlayObject.m_nMval[n14 - 300];
+                        n1C = PlayObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1426,11 +1426,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n1C = PlayObject.m_nInteger[n14 - 500];
+                        n1C = PlayObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n1C = HUtil32.StrToInt(PlayObject.m_sString[n14 - 600], 1);
+                        n1C = HUtil32.StrToInt(PlayObject.MSString[n14 - 600], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
@@ -1471,7 +1471,7 @@ namespace GameSvr.Npc
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    PlayObject.m_nVal[n14] = n18 * n1C;
+                    PlayObject.MNVal[n14] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1479,11 +1479,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    PlayObject.m_DyVal[n14 - 200] = n18 * n1C;
+                    PlayObject.MDyVal[n14 - 200] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    PlayObject.m_nMval[n14 - 300] = n18 * n1C;
+                    PlayObject.MNMval[n14 - 300] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1491,11 +1491,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.m_nInteger[n14 - 500] = n18 * n1C;
+                    PlayObject.MNInteger[n14 - 500] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    PlayObject.m_sString[n14 - 600] = (n18 * n1C).ToString();
+                    PlayObject.MSString[n14 - 600] = (n18 * n1C).ToString();
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1529,7 +1529,7 @@ namespace GameSvr.Npc
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n18 = PlayObject.m_nVal[n14];
+                        n18 = PlayObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1537,11 +1537,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n18 = PlayObject.m_DyVal[n14 - 200];
+                        n18 = PlayObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n18 = PlayObject.m_nMval[n14 - 300];
+                        n18 = PlayObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1549,7 +1549,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n18 = PlayObject.m_nInteger[n14 - 500];
+                        n18 = PlayObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
@@ -1578,7 +1578,7 @@ namespace GameSvr.Npc
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n1C = PlayObject.m_nVal[n14];
+                        n1C = PlayObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1586,11 +1586,11 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n1C = PlayObject.m_DyVal[n14 - 200];
+                        n1C = PlayObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n1C = PlayObject.m_nMval[n14 - 300];
+                        n1C = PlayObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1598,7 +1598,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n1C = PlayObject.m_nInteger[n14 - 500];
+                        n1C = PlayObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
@@ -1631,7 +1631,7 @@ namespace GameSvr.Npc
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    PlayObject.m_nVal[n14] = n18 * n1C;
+                    PlayObject.MNVal[n14] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1639,11 +1639,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    PlayObject.m_DyVal[n14 - 200] = n18 / n1C * 100;
+                    PlayObject.MDyVal[n14 - 200] = n18 / n1C * 100;
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    PlayObject.m_nMval[n14 - 300] = n18 / n1C * 100;
+                    PlayObject.MNMval[n14 - 300] = n18 / n1C * 100;
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1651,11 +1651,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.m_nInteger[n14 - 500] = n18 / n1C * 100;
+                    PlayObject.MNInteger[n14 - 500] = n18 / n1C * 100;
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    PlayObject.m_sString[n14 - 600] = $"{n18 / n1C * 100}%";
+                    PlayObject.MSString[n14 - 600] = $"{n18 / n1C * 100}%";
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1692,7 +1692,7 @@ namespace GameSvr.Npc
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    n18 = PlayObject.m_nVal[n14];
+                    n18 = PlayObject.MNVal[n14];
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1700,11 +1700,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    n18 = PlayObject.m_DyVal[n14 - 200];
+                    n18 = PlayObject.MDyVal[n14 - 200];
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    n18 = PlayObject.m_nMval[n14 - 300];
+                    n18 = PlayObject.MNMval[n14 - 300];
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1712,11 +1712,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    n18 = PlayObject.m_nInteger[n14 - 500];
+                    n18 = PlayObject.MNInteger[n14 - 500];
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    s44 = PlayObject.m_sString[n14 - 600];
+                    s44 = PlayObject.MSString[n14 - 600];
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1753,7 +1753,7 @@ namespace GameSvr.Npc
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    n1C = PlayObject.m_nVal[n14];
+                    n1C = PlayObject.MNVal[n14];
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1761,11 +1761,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    n1C = PlayObject.m_DyVal[n14 - 200];
+                    n1C = PlayObject.MDyVal[n14 - 200];
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    n1C = PlayObject.m_nMval[n14 - 300];
+                    n1C = PlayObject.MNMval[n14 - 300];
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1773,11 +1773,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    n1C = PlayObject.m_nInteger[n14 - 500];
+                    n1C = PlayObject.MNInteger[n14 - 500];
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    s48 = PlayObject.m_sString[n14 - 600];
+                    s48 = PlayObject.MSString[n14 - 600];
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1809,7 +1809,7 @@ namespace GameSvr.Npc
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    PlayObject.m_nVal[n14] = n18 + n1C;
+                    PlayObject.MNVal[n14] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1817,11 +1817,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    PlayObject.m_DyVal[n14 - 200] = n18 + n1C;
+                    PlayObject.MDyVal[n14 - 200] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    PlayObject.m_nMval[n14 - 300] = n18 + n1C;
+                    PlayObject.MNMval[n14 - 300] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1829,11 +1829,11 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.m_nInteger[n14 - 500] = n18 + n1C;
+                    PlayObject.MNInteger[n14 - 500] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    PlayObject.m_sString[n14 - 600] = s44 + s48;
+                    PlayObject.MSString[n14 - 600] = s44 + s48;
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -2069,7 +2069,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$SFNAME":// 师傅名 
-                    sValue = PlayObject.m_sMasterName;
+                    sValue = PlayObject.MSMasterName;
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2090,12 +2090,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$USERID":// 登录账号
-                    sValue = PlayObject.UserID;
+                    sValue = PlayObject.UserAccount;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$IPADDR":// 登录IP
-                    sValue = PlayObject.m_sIPaddr;
+                    sValue = PlayObject.LoginIpAddr;
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2134,7 +2134,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$RELEVEL":
-                    nValue = PlayObject.m_btReLevel;
+                    nValue = PlayObject.MBtReLevel;
                     nDataType = 1;
                     result = true;
                     return result;
@@ -2229,7 +2229,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$CREDITPOINT":
-                    nValue = PlayObject.m_btCreditPoint;
+                    nValue = PlayObject.MBtCreditPoint;
                     nDataType = 1;
                     result = true;
                     return result;
@@ -2274,12 +2274,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$GAMEGOLD":
-                    nValue = PlayObject.m_nGameGold;
+                    nValue = PlayObject.MNGameGold;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$GAMEPOINT":
-                    nValue = PlayObject.m_nGamePoint;
+                    nValue = PlayObject.MNGamePoint;
                     nDataType = 1;
                     result = true;
                     return result;
@@ -2289,12 +2289,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$LOGINTIME":
-                    sValue = PlayObject.m_dLogonTime.ToString();
+                    sValue = PlayObject.MDLogonTime.ToString();
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$LOGINLONG":
-                    nValue = (HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000;
+                    nValue = (HUtil32.GetTickCount() - PlayObject.MDwLogonTick) / 60000;
                     nDataType = 1;
                     result = true;
                     return result;
@@ -2364,7 +2364,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$IPLOCAL":
-                    sValue = PlayObject.m_sIPLocal;
+                    sValue = PlayObject.LoginIpLocal;
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2432,7 +2432,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$HUMAN", 6))//  人物变量
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref sVarValue2);
-                if (PlayObject.m_DynamicVarList.TryGetValue(sVarValue2, out DynamicVar))
+                if (PlayObject.DynamicVarMap.TryGetValue(sVarValue2, out DynamicVar))
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -2452,7 +2452,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$ACCOUNT", 8)) //  人物变量
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref sVarValue2);
-                if (PlayObject.m_DynamicVarList.TryGetValue(sVarValue2, out DynamicVar))
+                if (PlayObject.DynamicVarMap.TryGetValue(sVarValue2, out DynamicVar))
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -2483,7 +2483,7 @@ namespace GameSvr.Npc
                     case 1:
                         if (HUtil32.RangeInDefined(n100, 0, 99))
                         {
-                            PlayObject.m_nVal[n100] = nValue;
+                            PlayObject.MNVal[n100] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
@@ -2493,12 +2493,12 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
                         {
-                            PlayObject.m_DyVal[n100 - 200] = nValue;
+                            PlayObject.MDyVal[n100 - 200] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 300, 399))
                         {
-                            PlayObject.m_nMval[n100 - 300] = nValue;
+                            PlayObject.MNMval[n100 - 300] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
@@ -2508,12 +2508,12 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
                         {
-                            PlayObject.m_nInteger[n100 - 500] = nValue;
+                            PlayObject.MNInteger[n100 - 500] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 600, 699))
                         {
-                            PlayObject.m_sString[n100 - 600] = nValue.ToString();
+                            PlayObject.MSString[n100 - 600] = nValue.ToString();
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
@@ -2539,7 +2539,7 @@ namespace GameSvr.Npc
                     case 0:
                         if (HUtil32.RangeInDefined(n100, 0, 99))
                         {
-                            PlayObject.m_nVal[n100] = HUtil32.StrToInt(sValue, 0);
+                            PlayObject.MNVal[n100] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
@@ -2549,12 +2549,12 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
                         {
-                            PlayObject.m_DyVal[n100 - 200] = HUtil32.StrToInt(sValue, 0);
+                            PlayObject.MDyVal[n100 - 200] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 300, 399))
                         {
-                            PlayObject.m_nMval[n100 - 300] = HUtil32.StrToInt(sValue, 0);
+                            PlayObject.MNMval[n100 - 300] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
@@ -2564,12 +2564,12 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
                         {
-                            PlayObject.m_nInteger[n100 - 500] = HUtil32.StrToInt(sValue, 0);
+                            PlayObject.MNInteger[n100 - 500] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 600, 699))
                         {
-                            PlayObject.m_sString[n100 - 600] = sValue;
+                            PlayObject.MSString[n100 - 600] = sValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
@@ -2595,7 +2595,7 @@ namespace GameSvr.Npc
                     case 3:
                         if (HUtil32.RangeInDefined(n100, 0, 99))
                         {
-                            PlayObject.m_nVal[n100] = nValue;
+                            PlayObject.MNVal[n100] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
@@ -2605,12 +2605,12 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
                         {
-                            PlayObject.m_DyVal[n100 - 200] = nValue;
+                            PlayObject.MDyVal[n100 - 200] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 300, 399))
                         {
-                            PlayObject.m_nMval[n100 - 300] = nValue;
+                            PlayObject.MNMval[n100 - 300] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
@@ -2620,12 +2620,12 @@ namespace GameSvr.Npc
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
                         {
-                            PlayObject.m_nInteger[n100 - 500] = nValue;
+                            PlayObject.MNInteger[n100 - 500] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 600, 699))
                         {
-                            PlayObject.m_sString[n100 - 600] = sValue;
+                            PlayObject.MSString[n100 - 600] = sValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
@@ -2668,7 +2668,7 @@ namespace GameSvr.Npc
             {
                 if (HUtil32.RangeInDefined(n100, 0, 99))
                 {
-                    nValue = PlayObject.m_nVal[n100];
+                    nValue = PlayObject.MNVal[n100];
                     nDataType = 1;
                     result = true;
                 }
@@ -2680,13 +2680,13 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 200, 299))
                 {
-                    nValue = PlayObject.m_DyVal[n100 - 200];
+                    nValue = PlayObject.MDyVal[n100 - 200];
                     nDataType = 1;
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 300, 399))
                 {
-                    nValue = PlayObject.m_nMval[n100 - 300];
+                    nValue = PlayObject.MNMval[n100 - 300];
                     nDataType = 1;
                     result = true;
                 }
@@ -2698,13 +2698,13 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 500, 599))
                 {
-                    nValue = PlayObject.m_nInteger[n100 - 500];
+                    nValue = PlayObject.MNInteger[n100 - 500];
                     nDataType = 1;
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 600, 699))
                 {
-                    sValue = PlayObject.m_sString[n100 - 600];
+                    sValue = PlayObject.MSString[n100 - 600];
                     nDataType = 0;
                     result = true;
                 }

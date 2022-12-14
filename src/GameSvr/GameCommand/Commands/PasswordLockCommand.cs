@@ -22,23 +22,23 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.m_sStoragePwd == "")
+            if (playObject.MSStoragePwd == "")
             {
                 playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                playObject.m_boSetStoragePwd = true;
+                playObject.MBoSetStoragePwd = true;
                 playObject.SysMsg(M2Share.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                 return;
             }
-            if (playObject.m_btPwdFailCount > 3)
+            if (playObject.MBtPwdFailCount > 3)
             {
                 playObject.SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.m_boPasswordLocked = true;
+                playObject.MBoPasswordLocked = true;
                 return;
             }
-            if (!string.IsNullOrEmpty(playObject.m_sStoragePwd))
+            if (!string.IsNullOrEmpty(playObject.MSStoragePwd))
             {
                 playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                playObject.m_boCheckOldPwd = true;
+                playObject.MBoCheckOldPwd = true;
                 playObject.SysMsg(M2Share.g_sPleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
         }

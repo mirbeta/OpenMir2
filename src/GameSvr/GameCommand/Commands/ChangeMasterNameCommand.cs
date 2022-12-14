@@ -29,21 +29,21 @@ namespace GameSvr.GameCommand.Commands
             {
                 if (string.Compare(sMasterName, "无", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_PlayObject.m_sMasterName = "";
+                    m_PlayObject.MSMasterName = "";
                     m_PlayObject.RefShowName();
-                    m_PlayObject.m_boMaster = false;
+                    m_PlayObject.MBoMaster = false;
                     PlayObject.SysMsg(sHumanName + " 的师徒名清除成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    m_PlayObject.m_sMasterName = sMasterName;
+                    m_PlayObject.MSMasterName = sMasterName;
                     if (sIsMaster != "" && sIsMaster[0] == '1')
                     {
-                        m_PlayObject.m_boMaster = true;
+                        m_PlayObject.MBoMaster = true;
                     }
                     else
                     {
-                        m_PlayObject.m_boMaster = false;
+                        m_PlayObject.MBoMaster = false;
                     }
                     m_PlayObject.RefShowName();
                     PlayObject.SysMsg(sHumanName + " 的师徒名更改成功。", MsgColor.Green, MsgType.Hint);

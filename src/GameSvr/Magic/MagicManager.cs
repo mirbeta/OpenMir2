@@ -154,7 +154,7 @@ namespace GameSvr.Magic
             var boTrain = false;
             var boSpellFail = false;
             var boSpellFire = true;
-            if (playObject.m_nSoftVersionDateEx == 0 && playObject.m_dwClientTick == 0)
+            if (playObject.MNSoftVersionDateEx == 0 && playObject.MDwClientTick == 0)
             {
                 return false;
             }
@@ -873,7 +873,7 @@ namespace GameSvr.Magic
                 playObject.MapRandomMove(playObject.HomeMap, 1);
                 if (envir != playObject.Envir && playObject.Race == ActorRace.Play)
                 {
-                    playObject.m_boTimeRecall = false;
+                    playObject.MBoTimeRecall = false;
                 }
                 result = true;
             }

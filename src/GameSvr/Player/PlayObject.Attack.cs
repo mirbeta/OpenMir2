@@ -18,7 +18,7 @@ namespace GameSvr.Player
             dwDelayTime = 0;
             try
             {
-                if (!m_boCanHit)
+                if (!MBoCanHit)
                 {
                     return false;
                 }
@@ -32,35 +32,35 @@ namespace GameSvr.Player
                     {
                         if (!CheckActionStatus(wIdent, ref dwDelayTime))
                         {
-                            m_boFilterAction = false;
+                            MBoFilterAction = false;
                             return false;
                         }
-                        m_boFilterAction = true;
+                        MBoFilterAction = true;
                         int dwAttackTime = HUtil32._MAX(0, M2Share.Config.HitIntervalTime - HitSpeed * M2Share.Config.ItemSpeed);
-                        int dwCheckTime = HUtil32.GetTickCount() - m_dwAttackTick;
+                        int dwCheckTime = HUtil32.GetTickCount() - MDwAttackTick;
                         if (dwCheckTime < dwAttackTime)
                         {
-                            m_dwAttackCount++;
+                            MDwAttackCount++;
                             dwDelayTime = dwAttackTime - dwCheckTime;
                             if (dwDelayTime > M2Share.Config.DropOverSpeed)
                             {
-                                if (m_dwAttackCount >= 4)
+                                if (MDwAttackCount >= 4)
                                 {
-                                    m_dwAttackTick = HUtil32.GetTickCount();
-                                    m_dwAttackCount = 0;
+                                    MDwAttackTick = HUtil32.GetTickCount();
+                                    MDwAttackCount = 0;
                                     dwDelayTime = M2Share.Config.DropOverSpeed;
-                                    if (m_boTestSpeedMode)
+                                    if (MBoTestSpeedMode)
                                     {
                                         SysMsg($"攻击忙!!!{dwDelayTime}", MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    m_dwAttackCount = 0;
+                                    MDwAttackCount = 0;
                                 }
                                 return false;
                             }
-                            if (m_boTestSpeedMode)
+                            if (MBoTestSpeedMode)
                             {
                                 SysMsg($"攻击步忙!!!{dwDelayTime}", MsgColor.Red, MsgType.Hint);
                             }
@@ -72,7 +72,7 @@ namespace GameSvr.Player
                 if (nX == CurrX && nY == CurrY)
                 {
                     result = true;
-                    m_dwAttackTick = HUtil32.GetTickCount();
+                    MDwAttackTick = HUtil32.GetTickCount();
                     if (wIdent == Grobal2.CM_HEAVYHIT && UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Dura > 0)// 挖矿
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false))
@@ -162,7 +162,7 @@ namespace GameSvr.Player
             byte n14;
             int dwCheckTime;
             dwDelayTime = 0;
-            if (!m_boCanRun)
+            if (!MBoCanRun)
             {
                 return result;
             }
@@ -176,36 +176,36 @@ namespace GameSvr.Player
                 {
                     if (!CheckActionStatus(wIdent, ref dwDelayTime))
                     {
-                        m_boFilterAction = false;
+                        MBoFilterAction = false;
                         return result;
                     }
-                    m_boFilterAction = true;
-                    dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
+                    MBoFilterAction = true;
+                    dwCheckTime = HUtil32.GetTickCount() - MDwMoveTick;
                     if (dwCheckTime < M2Share.Config.RunIntervalTime)
                     {
-                        m_dwMoveCount++;
+                        MDwMoveCount++;
                         dwDelayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
                         if (dwDelayTime > M2Share.Config.DropOverSpeed)
                         {
-                            if (m_dwMoveCount >= 4)
+                            if (MDwMoveCount >= 4)
                             {
-                                m_dwMoveTick = HUtil32.GetTickCount();
-                                m_dwMoveCount = 0;
+                                MDwMoveTick = HUtil32.GetTickCount();
+                                MDwMoveCount = 0;
                                 dwDelayTime = M2Share.Config.DropOverSpeed;
-                                if (m_boTestSpeedMode)
+                                if (MBoTestSpeedMode)
                                 {
                                     SysMsg("马跑步忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
                             {
-                                m_dwMoveCount = 0;
+                                MDwMoveCount = 0;
                             }
                             return result;
                         }
                         else
                         {
-                            if (m_boTestSpeedMode)
+                            if (MBoTestSpeedMode)
                             {
                                 SysMsg("马跑步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                             }
@@ -214,7 +214,7 @@ namespace GameSvr.Player
                     }
                 }
             }
-            m_dwMoveTick = HUtil32.GetTickCount();
+            MDwMoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (HorseRunTo(n14, false))
@@ -235,7 +235,7 @@ namespace GameSvr.Player
             }
             else
             {
-                m_dwMoveCount = 0;
+                MDwMoveCount = 0;
             }
             return result;
         }
@@ -243,7 +243,7 @@ namespace GameSvr.Player
         private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject TargeTBaseObject, bool boLateDelivery, ref int dwDelayTime)
         {
             dwDelayTime = 0;
-            if (!m_boCanSpell)
+            if (!MBoCanSpell)
             {
                 return false;
             }
@@ -261,34 +261,34 @@ namespace GameSvr.Player
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
-                    m_boFilterAction = false;
+                    MBoFilterAction = false;
                     return false;
                 }
-                m_boFilterAction = true;
-                var dwCheckTime = HUtil32.GetTickCount() - m_dwMagicAttackTick;
-                if (dwCheckTime < m_dwMagicAttackInterval)
+                MBoFilterAction = true;
+                var dwCheckTime = HUtil32.GetTickCount() - MDwMagicAttackTick;
+                if (dwCheckTime < MDwMagicAttackInterval)
                 {
-                    m_dwMagicAttackCount++;
-                    dwDelayTime = m_dwMagicAttackInterval - dwCheckTime;
+                    MDwMagicAttackCount++;
+                    dwDelayTime = MDwMagicAttackInterval - dwCheckTime;
                     if (dwDelayTime > M2Share.Config.MagicHitIntervalTime / 3)
                     {
-                        if (m_dwMagicAttackCount >= 4)
+                        if (MDwMagicAttackCount >= 4)
                         {
-                            m_dwMagicAttackTick = HUtil32.GetTickCount();
-                            m_dwMagicAttackCount = 0;
+                            MDwMagicAttackTick = HUtil32.GetTickCount();
+                            MDwMagicAttackCount = 0;
                             dwDelayTime = M2Share.Config.MagicHitIntervalTime / 3;
-                            if (m_boTestSpeedMode)
+                            if (MBoTestSpeedMode)
                             {
                                 SysMsg("魔法忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                             }
                         }
                         else
                         {
-                            m_dwMagicAttackCount = 0;
+                            MDwMagicAttackCount = 0;
                         }
                         return false;
                     }
-                    if (m_boTestSpeedMode)
+                    if (MBoTestSpeedMode)
                     {
                         SysMsg("魔法忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                     }
@@ -299,9 +299,9 @@ namespace GameSvr.Player
             SpellTick = HUtil32._MAX(0, SpellTick);
             if (!boIsWarrSkill)
             {
-                m_dwMagicAttackInterval = UserMagic.Magic.DelayTime + M2Share.Config.MagicHitIntervalTime;
+                MDwMagicAttackInterval = UserMagic.Magic.DelayTime + M2Share.Config.MagicHitIntervalTime;
             }
-            m_dwMagicAttackTick = HUtil32.GetTickCount();
+            MDwMagicAttackTick = HUtil32.GetTickCount();
             ushort nSpellPoint;
             bool result;
             switch (UserMagic.MagIdx)
@@ -479,7 +479,7 @@ namespace GameSvr.Player
             bool result = false;
             byte nDir;
             dwDelayTime = 0;
-            if (!m_boCanRun)
+            if (!MBoCanRun)
             {
                 return false;
             }
@@ -491,41 +491,41 @@ namespace GameSvr.Player
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
-                    m_boFilterAction = false;
+                    MBoFilterAction = false;
                     return false;
                 }
-                m_boFilterAction = true;
-                var dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
+                MBoFilterAction = true;
+                var dwCheckTime = HUtil32.GetTickCount() - MDwMoveTick;
                 if (dwCheckTime < M2Share.Config.RunIntervalTime)
                 {
-                    m_dwMoveCount++;
+                    MDwMoveCount++;
                     dwDelayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
                     if (dwDelayTime > M2Share.Config.RunIntervalTime / 3)
                     {
-                        if (m_dwMoveCount >= 4)
+                        if (MDwMoveCount >= 4)
                         {
-                            m_dwMoveTick = HUtil32.GetTickCount();
-                            m_dwMoveCount = 0;
+                            MDwMoveTick = HUtil32.GetTickCount();
+                            MDwMoveCount = 0;
                             dwDelayTime = M2Share.Config.RunIntervalTime / 3;
-                            if (m_boTestSpeedMode)
+                            if (MBoTestSpeedMode)
                             {
                                 SysMsg("跑步忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                             }
                         }
                         else
                         {
-                            m_dwMoveCount = 0;
+                            MDwMoveCount = 0;
                         }
                         return result;
                     }
-                    if (m_boTestSpeedMode)
+                    if (MBoTestSpeedMode)
                     {
                         SysMsg("跑步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
             }
-            m_dwMoveTick = HUtil32.GetTickCount();
+            MDwMoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
             nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (RunTo(nDir, false, nX, nY))
@@ -546,7 +546,7 @@ namespace GameSvr.Player
             }
             else
             {
-                m_dwMoveCount = 0;
+                MDwMoveCount = 0;
             }
             return result;
         }
@@ -556,7 +556,7 @@ namespace GameSvr.Player
             bool result = false;
             int n14;
             dwDelayTime = 0;
-            if (!m_boCanWalk)
+            if (!MBoCanWalk)
             {
                 return false;
             }
@@ -568,41 +568,41 @@ namespace GameSvr.Player
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
-                    m_boFilterAction = false;
+                    MBoFilterAction = false;
                     return false;
                 }
-                m_boFilterAction = true;
-                int dwCheckTime = HUtil32.GetTickCount() - m_dwMoveTick;
+                MBoFilterAction = true;
+                int dwCheckTime = HUtil32.GetTickCount() - MDwMoveTick;
                 if (dwCheckTime < M2Share.Config.WalkIntervalTime)
                 {
-                    m_dwMoveCount++;
+                    MDwMoveCount++;
                     dwDelayTime = M2Share.Config.WalkIntervalTime - dwCheckTime;
                     if (dwDelayTime > M2Share.Config.WalkIntervalTime / 3)
                     {
-                        if (m_dwMoveCount >= 4)
+                        if (MDwMoveCount >= 4)
                         {
-                            m_dwMoveTick = HUtil32.GetTickCount();
-                            m_dwMoveCount = 0;
+                            MDwMoveTick = HUtil32.GetTickCount();
+                            MDwMoveCount = 0;
                             dwDelayTime = M2Share.Config.WalkIntervalTime / 3;
-                            if (m_boTestSpeedMode)
+                            if (MBoTestSpeedMode)
                             {
                                 SysMsg("走路忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                             }
                         }
                         else
                         {
-                            m_dwMoveCount = 0;
+                            MDwMoveCount = 0;
                         }
                         return false;
                     }
-                    if (m_boTestSpeedMode)
+                    if (MBoTestSpeedMode)
                     {
                         SysMsg("走路忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
                     }
                     return false;
                 }
             }
-            m_dwMoveTick = HUtil32.GetTickCount();
+            MDwMoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (WalkTo((byte)n14, false))
@@ -615,7 +615,7 @@ namespace GameSvr.Player
             }
             else
             {
-                m_dwMoveCount = 0;
+                MDwMoveCount = 0;
             }
             return result;
         }

@@ -20,8 +20,8 @@ namespace GameSvr.Npc
             string sName = string.Empty;
             string sIPaddr;
             var sChrName = PlayObject.ChrName;
-            var sCharAccount = PlayObject.UserID;
-            var sCharIPaddr = PlayObject.m_sIPaddr;
+            var sCharAccount = PlayObject.UserAccount;
+            var sCharIPaddr = PlayObject.LoginIpAddr;
             var LoadList = new StringList();
             if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
             {
@@ -754,25 +754,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_nGameGold == nGameGold)
+                    if (PlayObject.MNGameGold == nGameGold)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_nGameGold > nGameGold)
+                    if (PlayObject.MNGameGold > nGameGold)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_nGameGold < nGameGold)
+                    if (PlayObject.MNGameGold < nGameGold)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_nGameGold >= nGameGold)
+                    if (PlayObject.MNGameGold >= nGameGold)
                     {
                         result = true;
                     }
@@ -794,25 +794,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_nGamePoint == nGamePoint)
+                    if (PlayObject.MNGamePoint == nGamePoint)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_nGamePoint > nGamePoint)
+                    if (PlayObject.MNGamePoint > nGamePoint)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_nGamePoint < nGamePoint)
+                    if (PlayObject.MNGamePoint < nGamePoint)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_nGamePoint >= nGamePoint)
+                    if (PlayObject.MNGamePoint >= nGamePoint)
                     {
                         result = true;
                     }
@@ -1127,7 +1127,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckIsMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.m_sMasterName) && PlayObject.m_boMaster;
+            return !string.IsNullOrEmpty(PlayObject.MSMasterName) && PlayObject.MBoMaster;
         }
 
         private bool ConditionOfCheckListCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
@@ -1293,7 +1293,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckMarry(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.m_sDearName);
+            return !string.IsNullOrEmpty(PlayObject.MSDearName);
         }
 
         private bool ConditionOfCheckMarryCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
@@ -1309,25 +1309,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_btMarryCount == nCount)
+                    if (PlayObject.MBtMarryCount == nCount)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_btMarryCount > nCount)
+                    if (PlayObject.MBtMarryCount > nCount)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_btMarryCount < nCount)
+                    if (PlayObject.MBtMarryCount < nCount)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_btMarryCount >= nCount)
+                    if (PlayObject.MBtMarryCount >= nCount)
                     {
                         result = true;
                     }
@@ -1338,7 +1338,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.m_sMasterName) && !PlayObject.m_boMaster;
+            return !string.IsNullOrEmpty(PlayObject.MSMasterName) && !PlayObject.MBoMaster;
         }
 
         private bool ConditionOfCheckMemBerLevel(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
@@ -1354,25 +1354,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_nMemberLevel == nLevel)
+                    if (PlayObject.MNMemberLevel == nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_nMemberLevel > nLevel)
+                    if (PlayObject.MNMemberLevel > nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_nMemberLevel < nLevel)
+                    if (PlayObject.MNMemberLevel < nLevel)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_nMemberLevel >= nLevel)
+                    if (PlayObject.MNMemberLevel >= nLevel)
                     {
                         result = true;
                     }
@@ -1394,25 +1394,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_nMemberType == nType)
+                    if (PlayObject.MNMemberType == nType)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_nMemberType > nType)
+                    if (PlayObject.MNMemberType > nType)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_nMemberType < nType)
+                    if (PlayObject.MNMemberType < nType)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_nMemberType >= nType)
+                    if (PlayObject.MNMemberType >= nType)
                     {
                         result = true;
                     }
@@ -1429,8 +1429,8 @@ namespace GameSvr.Npc
             string sIPaddr;
             var result = false;
             var sChrName = PlayObject.ChrName;
-            var sCharAccount = PlayObject.UserID;
-            var sCharIPaddr = PlayObject.m_sIPaddr;
+            var sCharAccount = PlayObject.UserAccount;
+            var sCharIPaddr = PlayObject.LoginIpAddr;
             LoadList = new StringList();
             if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
             {
@@ -1523,7 +1523,7 @@ namespace GameSvr.Npc
             var PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if ((((PlayObject)PoseHuman).m_sMasterName != "") && ((PlayObject)PoseHuman).m_boMaster)
+                if ((((PlayObject)PoseHuman).MSMasterName != "") && ((PlayObject)PoseHuman).MBoMaster)
                 {
                     result = true;
                 }
@@ -1581,7 +1581,7 @@ namespace GameSvr.Npc
             BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if (((PlayObject)PoseHuman).m_sDearName != "")
+                if (((PlayObject)PoseHuman).MSDearName != "")
                 {
                     result = true;
                 }
@@ -1595,7 +1595,7 @@ namespace GameSvr.Npc
             BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if ((((PlayObject)PoseHuman).m_sMasterName != "") && !((PlayObject)PoseHuman).m_boMaster)
+                if ((((PlayObject)PoseHuman).MSMasterName != "") && !((PlayObject)PoseHuman).MBoMaster)
                 {
                     result = true;
                 }
@@ -1859,25 +1859,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_btReLevel == nLevel)
+                    if (PlayObject.MBtReLevel == nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_btReLevel > nLevel)
+                    if (PlayObject.MBtReLevel > nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_btReLevel < nLevel)
+                    if (PlayObject.MBtReLevel < nLevel)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_btReLevel >= nLevel)
+                    if (PlayObject.MBtReLevel >= nLevel)
                     {
                         result = true;
                     }
@@ -2026,7 +2026,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfHaveMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.m_sMasterName);
+            return !string.IsNullOrEmpty(PlayObject.MSMasterName);
         }
 
         private bool ConditionOfPoseHaveMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
@@ -2035,7 +2035,7 @@ namespace GameSvr.Npc
             var PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if (((PlayObject)PoseHuman).m_sMasterName != "")
+                if (((PlayObject)PoseHuman).MSMasterName != "")
                 {
                     result = true;
                 }
@@ -2096,25 +2096,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_wContribution == nContribution)
+                    if (PlayObject.MWContribution == nContribution)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_wContribution > nContribution)
+                    if (PlayObject.MWContribution > nContribution)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_wContribution < nContribution)
+                    if (PlayObject.MWContribution < nContribution)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_wContribution >= nContribution)
+                    if (PlayObject.MWContribution >= nContribution)
                     {
                         result = true;
                     }
@@ -2136,25 +2136,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_btCreditPoint == nCreditPoint)
+                    if (PlayObject.MBtCreditPoint == nCreditPoint)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_btCreditPoint > nCreditPoint)
+                    if (PlayObject.MBtCreditPoint > nCreditPoint)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_btCreditPoint < nCreditPoint)
+                    if (PlayObject.MBtCreditPoint < nCreditPoint)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_btCreditPoint >= nCreditPoint)
+                    if (PlayObject.MBtCreditPoint >= nCreditPoint)
                     {
                         result = true;
                     }
@@ -2190,7 +2190,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ONLINELONGMIN);
                 return result;
             }
-            var nOnlineTime = (HUtil32.GetTickCount() - PlayObject.m_dwLogonTick) / 60000;
+            var nOnlineTime = (HUtil32.GetTickCount() - PlayObject.MDwLogonTick) / 60000;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -2235,25 +2235,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.m_btPwdFailCount == nErrorCount)
+                    if (PlayObject.MBtPwdFailCount == nErrorCount)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.m_btPwdFailCount > nErrorCount)
+                    if (PlayObject.MBtPwdFailCount > nErrorCount)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.m_btPwdFailCount < nErrorCount)
+                    if (PlayObject.MBtPwdFailCount < nErrorCount)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.m_btPwdFailCount >= nErrorCount)
+                    if (PlayObject.MBtPwdFailCount >= nErrorCount)
                     {
                         result = true;
                     }
@@ -2264,12 +2264,12 @@ namespace GameSvr.Npc
 
         private bool ConditionOfIsLockPassword(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return PlayObject.m_boPasswordLocked;
+            return PlayObject.MBoPasswordLocked;
         }
 
         private bool ConditionOfIsLockStorage(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !PlayObject.m_boCanGetBackItem;
+            return !PlayObject.MBoCanGetBackItem;
         }
 
         private bool ConditionOfCheckPayMent(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
@@ -2389,7 +2389,7 @@ namespace GameSvr.Npc
                             {
                                 // Modify the A .. B: 0 .. 9
                                 case 0:
-                                    PlayObject.m_nVal[nValNo] = nDay;
+                                    PlayObject.MNVal[nValNo] = nDay;
                                     break;
                                 // Modify the A .. B: 100 .. 119
                                 case 100:
@@ -2397,11 +2397,11 @@ namespace GameSvr.Npc
                                     break;
                                 // Modify the A .. B: 200 .. 209
                                 case 200:
-                                    PlayObject.m_DyVal[nValNo - 200] = nDay;
+                                    PlayObject.MDyVal[nValNo - 200] = nDay;
                                     break;
                                 // Modify the A .. B: 300 .. 399
                                 case 300:
-                                    PlayObject.m_nMval[nValNo - 300] = nDay;
+                                    PlayObject.MNMval[nValNo - 300] = nDay;
                                     break;
                                 // Modify the A .. B: 400 .. 499
                                 case 400:
@@ -2415,7 +2415,7 @@ namespace GameSvr.Npc
                             {
                                 // Modify the A .. B: 0 .. 9
                                 case 0:
-                                    PlayObject.m_nVal[nValNoDay] = nDayCount - nDay;
+                                    PlayObject.MNVal[nValNoDay] = nDayCount - nDay;
                                     break;
                                 // Modify the A .. B: 100 .. 119
                                 case 100:
@@ -2423,11 +2423,11 @@ namespace GameSvr.Npc
                                     break;
                                 // Modify the A .. B: 200 .. 209
                                 case 200:
-                                    PlayObject.m_DyVal[nValNoDay - 200] = nDayCount - nDay;
+                                    PlayObject.MDyVal[nValNoDay - 200] = nDayCount - nDay;
                                     break;
                                 // Modify the A .. B: 300 .. 399
                                 case 300:
-                                    PlayObject.m_nMval[nValNoDay - 300] = nDayCount - nDay;
+                                    PlayObject.MNMval[nValNoDay - 300] = nDayCount - nDay;
                                     break;
                             }
                         }
@@ -2796,7 +2796,7 @@ namespace GameSvr.Npc
             {
                 if (HUtil32.RangeInDefined(n100, 0, 99))
                 {
-                    nValue = PlayObject.m_nVal[n100];
+                    nValue = PlayObject.MNVal[n100];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 100, 199))
@@ -2806,12 +2806,12 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 200, 299))
                 {
-                    nValue = PlayObject.m_DyVal[n100 - 200];
+                    nValue = PlayObject.MDyVal[n100 - 200];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 300, 399))
                 {
-                    nValue = PlayObject.m_nMval[n100 - 300];
+                    nValue = PlayObject.MNMval[n100 - 300];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 400, 499))
@@ -2821,14 +2821,14 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 500, 599))
                 {
-                    nValue = PlayObject.m_nInteger[n100 - 500];
+                    nValue = PlayObject.MNInteger[n100 - 500];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 600, 699))
                 {
-                    if (HUtil32.IsStringNumber(PlayObject.m_sString[n100 - 600]))
+                    if (HUtil32.IsStringNumber(PlayObject.MSString[n100 - 600]))
                     {
-                        nValue = HUtil32.StrToInt(PlayObject.m_sString[n100 - 600], 0);
+                        nValue = HUtil32.StrToInt(PlayObject.MSString[n100 - 600], 0);
                         result = true;
                     }
                 }
@@ -2855,15 +2855,15 @@ namespace GameSvr.Npc
                 }
                 else if (HUtil32.RangeInDefined(n100, 1600, 1699))//G变量
                 {
-                    if (HUtil32.IsStringNumber(PlayObject.m_ServerStrVal[n100 - 1600]))
+                    if (HUtil32.IsStringNumber(PlayObject.MServerStrVal[n100 - 1600]))
                     {
-                        nValue = HUtil32.StrToInt(PlayObject.m_ServerStrVal[n100 - 1600], 0);
+                        nValue = HUtil32.StrToInt(PlayObject.MServerStrVal[n100 - 1600], 0);
                         result = true;
                     }
                 }
                 else if (HUtil32.RangeInDefined(n100, 1700, 1799))//G变量
                 {
-                    nValue = PlayObject.m_ServerIntVal[n100 - 1700];
+                    nValue = PlayObject.MServerIntVal[n100 - 1700];
                     result = true;
                 }
             }

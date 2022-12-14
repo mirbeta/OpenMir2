@@ -12,8 +12,8 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public void AllowMasterRecall(PlayObject PlayObject)
         {
-            PlayObject.m_boCanMasterRecall = !PlayObject.m_boCanMasterRecall;
-            if (PlayObject.m_boCanMasterRecall)
+            PlayObject.MBoCanMasterRecall = !PlayObject.MBoCanMasterRecall;
+            if (PlayObject.MBoCanMasterRecall)
             {
                 PlayObject.SysMsg(CommandHelp.EnableMasterRecall, MsgColor.Blue, MsgType.Hint);
             }
