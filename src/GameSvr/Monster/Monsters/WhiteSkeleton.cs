@@ -8,11 +8,11 @@ namespace GameSvr.Monster.Monsters
     /// </summary>
     public class WhiteSkeleton : AtMonster
     {
-        public bool MBoIsFirst;
+        public bool BoIsFirst;
 
         public WhiteSkeleton() : base()
         {
-            MBoIsFirst = true;
+            BoIsFirst = true;
             this.FixedHideMode = true;
             this.ViewRange = 6;
             Race = ActorRace.WhiteSkeleton;
@@ -28,14 +28,13 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            if (MBoIsFirst)
+            if (BoIsFirst)
             {
-                MBoIsFirst = false;
+                BoIsFirst = false;
                 this.Direction = 5;
                 this.FixedHideMode = false;
                 this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
             }
-            //SlaveAttackTarget();
             base.Run();
         }
     }

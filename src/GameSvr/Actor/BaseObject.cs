@@ -3117,7 +3117,7 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            if (baseObject.Race >= ActorRace.Animal)
+            if (Race >= ActorRace.Animal)
             {
                 if (Master != null)
                 {
@@ -3192,6 +3192,10 @@ namespace GameSvr.Actor
             return true;
         }
 
+        /// <summary>
+        /// 检查对象是否可以被攻击
+        /// </summary>
+        /// <returns></returns>
         public virtual bool IsProperTarget(BaseObject baseObject)
         {
             var result = IsAttackTarget(baseObject);
@@ -4239,7 +4243,7 @@ namespace GameSvr.Actor
 
             if (this is WhiteSkeleton)
             {
-                ((WhiteSkeleton)this).MBoIsFirst = true;
+                ((WhiteSkeleton)this).BoIsFirst = true;
                 FixedHideMode = true;
             }
 
