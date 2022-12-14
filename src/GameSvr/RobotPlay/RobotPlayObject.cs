@@ -3992,7 +3992,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 if (AllowUseMagic(52)) // 诅咒术
                                 {
-                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)TargetCret.Job + 6] == 0)
+                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)(TargetCret as PlayObject).Job + 6] == 0)
                                     {
                                         result = 52;// 英雄诅咒术
                                         return result;
@@ -4002,7 +4002,7 @@ namespace GameSvr.RobotPlay
                             case 1:
                                 if (AllowUseMagic(52)) // 诅咒术
                                 {
-                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)TargetCret.Job + 6] == 0)
+                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)(TargetCret as PlayObject).Job + 6] == 0)
                                     {
                                         result = 52;// 英雄诅咒术
                                         return result;
@@ -4044,7 +4044,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 if (AllowUseMagic(52))// 诅咒术
                                 {
-                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)TargetCret.Job + 6] == 0)
+                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)(TargetCret as PlayObject).Job + 6] == 0)
                                     {
                                         result = 52;
                                         return result;
@@ -4085,7 +4085,7 @@ namespace GameSvr.RobotPlay
                         }
                         if (AllowUseMagic(52))// 诅咒术
                         {
-                            if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)TargetCret.Job + 6] == 0)
+                            if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)(TargetCret as PlayObject).Job + 6] == 0)
                             {
                                 result = 52;
                                 return result;

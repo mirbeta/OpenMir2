@@ -1467,13 +1467,13 @@ namespace GameSvr.Npc
                 switch (QuestConditionInfo.nParam1)
                 {
                     case 1:// 要求相同性别
-                        if (PoseHuman.Gender == PlayObject.Gender)
+                        if (((PlayObject)PoseHuman).Gender == PlayObject.Gender)
                         {
                             result = true;
                         }
                         break;
                     case 2:// 要求不同性别
-                        if (PoseHuman.Gender != PlayObject.Gender)
+                        if (((PlayObject)PoseHuman).Gender != PlayObject.Gender)
                         {
                             result = true;
                         }
@@ -1509,7 +1509,7 @@ namespace GameSvr.Npc
             var PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if (PoseHuman.Gender == Enum.Parse<PlayGender>(btSex.ToString()))
+                if (((PlayObject)PoseHuman).Gender == Enum.Parse<PlayGender>(btSex.ToString()))
                 {
                     result = true;
                 }

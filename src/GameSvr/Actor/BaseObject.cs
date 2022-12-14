@@ -40,18 +40,6 @@ namespace GameSvr.Actor
         /// </summary>
         public string MapFileName;
         /// <summary>
-        /// 性别
-        /// </summary>
-        public PlayGender Gender;
-        /// <summary>
-        /// 人物的头发
-        /// </summary>
-        public byte Hair;
-        /// <summary>
-        /// 人物的职业 (0:战士 1：法师 2:道士)
-        /// </summary>
-        public PlayJob Job;
-        /// <summary>
         /// 人物金币数
         /// </summary>
         public int Gold;
@@ -567,8 +555,6 @@ namespace GameSvr.Actor
             Direction = 4;
             Race = ActorRace.Animal;
             RaceImg = 0;
-            Hair = 0;
-            Job = PlayJob.Warrior;
             Gold = 0;
             Appr = 0;
             ViewRange = 5;
@@ -2056,43 +2042,6 @@ namespace GameSvr.Actor
             }
         }
 
-        private void DelItemSkill_DeleteSkill(string sSkillName)
-        {
-            for (var i = 0; i < MagicList.Count; i++)
-            {
-                var userMagic = MagicList[i];
-                if (userMagic.Magic.MagicName == sSkillName)
-                {
-                    ((PlayObject)this).SendDelMagic(userMagic);
-                    MagicList.RemoveAt(i);
-                    break;
-                }
-            }
-        }
-
-        internal void DelItemSkill(int nIndex)
-        {
-            if (Race != ActorRace.Play)
-            {
-                return;
-            }
-            switch (nIndex)
-            {
-                case 1:
-                    if (Job != PlayJob.Wizard)
-                    {
-                        DelItemSkill_DeleteSkill(M2Share.Config.FireBallSkill);
-                    }
-                    break;
-                case 2:
-                    if (Job != PlayJob.Taoist)
-                    {
-                        DelItemSkill_DeleteSkill(M2Share.Config.HealSkill);
-                    }
-                    break;
-            }
-        }
-
         public void DelMember(BaseObject baseObject)
         {
             if (GroupOwner != baseObject)
@@ -2744,7 +2693,8 @@ namespace GameSvr.Actor
                         nDress = (byte)(stdItem.Shape * 2);
                     }
                 }
-                nDress += (byte)Gender;
+                var playGender = ((PlayObject)this).Gender;
+                nDress += (byte)playGender;
                 byte nWeapon = 0;
                 if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Index > 0) // 武器
                 {
@@ -2754,8 +2704,8 @@ namespace GameSvr.Actor
                         nWeapon = (byte)(stdItem.Shape * 2);
                     }
                 }
-                nWeapon += (byte)Gender;
-                var nHair = (byte)(Hair * 2 + (byte)Gender);
+                nWeapon += (byte)playGender;
+                var nHair = (byte)(((PlayObject)this).Hair * 2 + (byte)playGender);
                 return Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
             }
             return Grobal2.MakeMonsterFeature(RaceImg, MonsterWeapon, Appr);
@@ -3743,7 +3693,7 @@ namespace GameSvr.Actor
             }
             if ((Race >= 50) && (LastHiter != null) && (LastHiter.Race == ActorRace.Play)) // 人攻击怪物
             {
-                switch (LastHiter.Job)
+                switch (((PlayObject)LastHiter).Job)
                 {
                     case PlayJob.Warrior:
                         nDamage = (ushort)(nDamage * M2Share.Config.WarrMon / 10);

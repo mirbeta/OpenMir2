@@ -867,12 +867,12 @@ namespace GameSvr.Npc
 
         private void ActionOfGetMarry(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var PoseBaseObject = PlayObject.GetPoseCreate();
-            if (PoseBaseObject != null && PoseBaseObject.Race == ActorRace.Play && PoseBaseObject.Gender != PlayObject.Gender)
+            var PoseHuman = PlayObject.GetPoseCreate();
+            if (PoseHuman != null && PoseHuman.Race == ActorRace.Play && ((PlayObject)PoseHuman).Gender != PlayObject.Gender)
             {
-                PlayObject.MSDearName = PoseBaseObject.ChrName;
+                PlayObject.MSDearName = PoseHuman.ChrName;
                 PlayObject.RefShowName();
-                PoseBaseObject.RefShowName();
+                PoseHuman.RefShowName();
             }
             else
             {
@@ -882,12 +882,12 @@ namespace GameSvr.Npc
 
         private void ActionOfGetMaster(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var PoseBaseObject = PlayObject.GetPoseCreate();
-            if (PoseBaseObject != null && PoseBaseObject.Race == ActorRace.Play && PoseBaseObject.Gender != PlayObject.Gender)
+            var PoseHuman = PlayObject.GetPoseCreate();
+            if (PoseHuman != null && PoseHuman.Race == ActorRace.Play && ((PlayObject)PoseHuman).Gender != PlayObject.Gender)
             {
-                PlayObject.MSMasterName = PoseBaseObject.ChrName;
+                PlayObject.MSMasterName = PoseHuman.ChrName;
                 PlayObject.RefShowName();
-                PoseBaseObject.RefShowName();
+                PoseHuman.RefShowName();
             }
             else
             {
