@@ -1864,6 +1864,7 @@ namespace GameSvr.Player
                 case Grobal2.RM_SENDDELITEMLIST:
                     var delItemList = (IList<DeleteItem>)M2Share.ActorMgr.GetOhter(processMsg.nParam1);
                     SendDelItemList(delItemList);
+                    M2Share.ActorMgr.RevomeOhter(processMsg.nParam1);
                     break;
                 case Grobal2.RM_USERMAKEDRUGITEMLIST:
                     SendDefMessage(Grobal2.SM_SENDUSERMAKEDRUGITEMLIST, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
@@ -1998,6 +1999,7 @@ namespace GameSvr.Player
                     break;
                 case Grobal2.RM_10401:
                     ChangeServerMakeSlave((SlaveInfo)M2Share.ActorMgr.GetOhter(processMsg.nParam1));
+                    M2Share.ActorMgr.RevomeOhter(processMsg.nParam1);
                     break;
                 case Grobal2.RM_OPENHEALTH:
                     SendDefMessage(Grobal2.SM_OPENHEALTH, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0, "");

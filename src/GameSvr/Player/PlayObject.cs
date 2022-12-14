@@ -2435,15 +2435,7 @@ namespace GameSvr.Player
 
         private void ChangeServerMakeSlave(SlaveInfo slaveInfo)
         {
-            int nSlavecount;
-            if (Job == PlayJob.Taoist)
-            {
-                nSlavecount = 1;
-            }
-            else
-            {
-                nSlavecount = 5;
-            }
+            var nSlavecount = Job == PlayJob.Taoist ? 1 : 5;
             var baseObject = MakeSlave(slaveInfo.SlaveName, 3, slaveInfo.SlaveLevel, nSlavecount, slaveInfo.RoyaltySec);
             if (baseObject != null)
             {

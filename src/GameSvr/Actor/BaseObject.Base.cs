@@ -1,5 +1,4 @@
 ﻿using GameSvr.Items;
-using GameSvr.Npc;
 using GameSvr.Player;
 using GameSvr.RobotPlay;
 using SystemModule;
@@ -13,7 +12,6 @@ namespace GameSvr.Actor
     {
         public virtual void Run()
         {
-            ProcessMessage ProcessMsg;
             const string sExceptionMsg0 = "[Exception] TBaseObject::Run 0";
             const string sExceptionMsg1 = "[Exception] TBaseObject::Run 1";
             const string sExceptionMsg2 = "[Exception] TBaseObject::Run 2";
@@ -25,7 +23,7 @@ namespace GameSvr.Actor
             var dwRunTick = HUtil32.GetTickCount();
             try
             {
-                while (GetMessage(out ProcessMsg))
+                while (GetMessage(out var ProcessMsg))
                 {
                     Operate(ProcessMsg);
                 }

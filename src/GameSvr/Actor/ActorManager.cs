@@ -16,6 +16,7 @@ namespace GameSvr.Actor
         private readonly IdWorker _idWorker = new IdWorker(1);
         private readonly ConcurrentQueue<int> _idQueue = new ConcurrentQueue<int>();
         private readonly Thread IdWorkThread;
+        private readonly IList<int> ActorIds = new Collection<int>();
         /// <summary>
         /// 精灵列表
         /// </summary>
@@ -23,21 +24,21 @@ namespace GameSvr.Actor
         /// <summary>
         /// 其他对象
         /// </summary>
-        private readonly ConcurrentDictionary<int, object> _ohter = new ConcurrentDictionary<int, object>();
-        private readonly IList<int> ActorIds = new Collection<int>();
-        private int MonsterGhostCount = 0;
-        private int PlayerGhostCount = 0;
+        private readonly ConcurrentDictionary<int, object> _ohterMap = new ConcurrentDictionary<int, object>();
+        private int MonsterDeathCount { get; set; }
+        private int MonsterDisposeCount { get; set; }
+        private int PlayerGhostCount { get; set; }
 
         public ActorMgr()
         {
-            IdWorkThread = new Thread(GenerateId)
+            IdWorkThread = new Thread(GenerateIdThread)
             {
                 IsBackground = true
             };
             IdWorkThread.Start();
         }
 
-        private void GenerateId(object obj)
+        private void GenerateIdThread(object obj)
         {
             while (true)
             {
@@ -71,30 +72,25 @@ namespace GameSvr.Actor
         {
             _actorsMap.TryAdd(actor.ActorId, actor);
         }
-
-        public void AddOhter(int objectId, object obj)
-        {
-            _ohter.TryAdd(objectId, obj);
-        }
-
-        public object GetOhter(int objectId)
-        {
-            return _ohter.TryGetValue(objectId, out var obj) ? obj : null;
-        }
-
+        
         public BaseObject Get(int actorId)
         {
             return _actorsMap.TryGetValue(actorId, out var actor) ? actor : null;
         }
 
+        public void AddOhter(int objectId, object obj)
+        {
+            _ohterMap.TryAdd(objectId, obj);
+        }
+
+        public object GetOhter(int objectId)
+        {
+            return _ohterMap.TryGetValue(objectId, out var obj) ? obj : null;
+        }
+
         public void RevomeOhter(int actorId)
         {
-            object actor;
-            _ohter.TryRemove(actorId, out actor);
-            if (actor != null)
-            {
-                _logger.Debug($"清理死亡对象 [{actorId}]");
-            }
+            _ohterMap.TryRemove(actorId, out var actor);
         }
 
         /// <summary>
@@ -106,14 +102,17 @@ namespace GameSvr.Actor
             var actors = _actorsMap.GetEnumerator();
             while (actors.MoveNext())
             {
-                BaseObject actor = actors.Current.Value;
+                var actor = actors.Current.Value;
+                if (actors.Current.Value.Death)
+                {
+                    MonsterDeathCount++;
+                }
                 if (!actor.Ghost || actor.GhostTick <= 0) continue;
                 if ((HUtil32.GetTickCount() - actor.DeathTick) <= M2Share.Config.MakeGhostTime)
                 {
                     continue; //死亡对象清理时间
                 }
                 ActorIds.Add(actors.Current.Key);
-                actors.Dispose();
             }
             foreach (var actorId in ActorIds)
             {
@@ -121,16 +120,17 @@ namespace GameSvr.Actor
                 {
                     if (actor.Race != ActorRace.Play)
                     {
-                        MonsterGhostCount++;
+                        MonsterDisposeCount++;
                     }
                     else
                     {
                         PlayerGhostCount++;
                     }
-                    _logger.Debug($"清理死亡对象 名称:[{actor.ChrName}] 地图:{actor.MapName} 坐标:{actor.CurrX}:{actor.CurrY}");
+                    actors.Dispose();
+                    //_logger.Debug($"清理死亡对象 名称:[{actor.ChrName}] 地图:{actor.MapName} 坐标:{actor.CurrX}:{actor.CurrY}");
                 }
             }
-            _logger.Debug($"当前总对象:[{_actorsMap.Count}] 累计角色死亡次数:[{PlayerGhostCount}] 累计怪物死亡次数:[{MonsterGhostCount}]");
+            _logger.Debug($"当前总对象:[{_actorsMap.Count}] 累计角色死亡次数:[{PlayerGhostCount}] 累计怪物死亡次数:[{MonsterDeathCount}] 累计怪物释放次数:[{MonsterDisposeCount}]");
         }
     }
 }
