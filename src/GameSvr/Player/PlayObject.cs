@@ -930,12 +930,14 @@ namespace GameSvr.Player
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (var i = 0; i < MsgList.Count; i++)
+                for (int i = 0; i < MsgList.Count; i++)
                 {
-                    var sendMessage = MsgList[i];
-                    if (sendMessage.wIdent == Grobal2.CM_BUTCH)
+                    if (MsgList.TryPeek(out var sendMessage, out var priority))
                     {
-                        result++;
+                        if (sendMessage.wIdent == Grobal2.CM_BUTCH)
+                        {
+                            result++;
+                        }
                     }
                 }
             }
@@ -2770,17 +2772,15 @@ namespace GameSvr.Player
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (var i = 0; i < MsgList.Count; i++)
+                for (int i = 0; i < MsgList.Count; i++)
                 {
-                    if (MsgList[i].wIdent >= Grobal2.CM_HIT || MsgList[i].wIdent <= Grobal2.CM_FIREHIT)
+                    if (MsgList.TryPeek(out var sendMessage, out var priority))
                     {
-                        result++;
+                        if (sendMessage.wIdent  >= Grobal2.CM_HIT || sendMessage.wIdent <= Grobal2.CM_FIREHIT)
+                        {
+                            result++;
+                        }
                     }
-                    //if (SendMessage.wIdent == Grobal2.CM_HIT || SendMessage.wIdent == Grobal2.CM_HEAVYHIT || SendMessage.wIdent == Grobal2.CM_BIGHIT || SendMessage.wIdent == Grobal2.CM_POWERHIT
-                    //    || SendMessage.wIdent == Grobal2.CM_LONGHIT || SendMessage.wIdent == Grobal2.CM_WIDEHIT || SendMessage.wIdent == Grobal2.CM_FIREHIT)
-                    //{
-                    //     result++;
-                    //}
                 }
             }
             finally
@@ -2800,11 +2800,14 @@ namespace GameSvr.Player
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (var i = 0; i < MsgList.Count; i++)
+                for (int i = 0; i < MsgList.Count; i++)
                 {
-                    if (MsgList[i].wIdent == Grobal2.CM_SPELL)
+                    if (MsgList.TryPeek(out var sendMessage, out var priority))
                     {
-                        result++;
+                        if (sendMessage.wIdent  == Grobal2.CM_SPELL)
+                        {
+                            result++;
+                        }
                     }
                 }
             }
@@ -2825,11 +2828,14 @@ namespace GameSvr.Player
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (var i = 0; i < MsgList.Count; i++)
+                for (int i = 0; i < MsgList.Count; i++)
                 {
-                    if (MsgList[i].wIdent == Grobal2.CM_RUN)
+                    if (MsgList.TryPeek(out var sendMessage, out var priority))
                     {
-                        result++;
+                        if (sendMessage.wIdent  == Grobal2.CM_RUN)
+                        {
+                            result++;
+                        }
                     }
                 }
             }
@@ -2850,11 +2856,14 @@ namespace GameSvr.Player
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (var i = 0; i < MsgList.Count; i++)
+                for (int i = 0; i < MsgList.Count; i++)
                 {
-                    if (MsgList[i].wIdent == Grobal2.CM_WALK)
+                    if (MsgList.TryPeek(out var sendMessage, out var priority))
                     {
-                        result++;
+                        if (sendMessage.wIdent  == Grobal2.CM_WALK)
+                        {
+                            result++;
+                        }
                     }
                 }
             }
@@ -2871,11 +2880,14 @@ namespace GameSvr.Player
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (var i = 0; i < MsgList.Count; i++)
+                for (int i = 0; i < MsgList.Count; i++)
                 {
-                    if (MsgList[i].wIdent == Grobal2.CM_TURN)
+                    if (MsgList.TryPeek(out var sendMessage, out var priority))
                     {
-                        result++;
+                        if (sendMessage.wIdent  == Grobal2.CM_TURN)
+                        {
+                            result++;
+                        }
                     }
                 }
             }
@@ -2892,11 +2904,14 @@ namespace GameSvr.Player
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
-                for (var i = 0; i < MsgList.Count; i++)
+                for (int i = 0; i < MsgList.Count; i++)
                 {
-                    if (MsgList[i].wIdent == Grobal2.CM_SITDOWN)
+                    if (MsgList.TryPeek(out var sendMessage, out var priority))
                     {
-                        result++;
+                        if (sendMessage.wIdent  == Grobal2.CM_SITDOWN)
+                        {
+                            result++;
+                        }
                     }
                 }
             }
