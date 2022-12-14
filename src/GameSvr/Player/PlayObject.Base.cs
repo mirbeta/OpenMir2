@@ -197,7 +197,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 是否在开行会战
         /// </summary>
-        public bool InFreePkArea;
+        public bool InGuildWarArea;
         public GuildInfo MyGuild;
         public short GuildRankNo;
         public string GuildRankName = string.Empty;
@@ -799,7 +799,7 @@ namespace GameSvr.Player
             AllowGroup = false;
             AllowGuild = false;
             ViewRange = 12;
-            InFreePkArea = false;
+            InGuildWarArea = false;
             MBoNewHuman = false;
             MBoLoginNoticeOk = false;
             Bo6Ab = false;
@@ -1570,7 +1570,7 @@ namespace GameSvr.Player
             }
             AddBodyLuck(0);
         }
-        
+
         /// <summary>
         /// 下属杀死怪物触发
         /// </summary>
@@ -1591,7 +1591,7 @@ namespace GameSvr.Player
                 }
             }*/
         }
-        
+
         /// <summary>
         /// 角色杀死怪物触发
         /// </summary>
@@ -1655,13 +1655,10 @@ namespace GameSvr.Player
                         {
                             boPK = true;
                         }
-                        if (killObject.Master != null)
+                        if (killObject.Master != null && killObject.Master.Race == ActorRace.Play)
                         {
-                            if (killObject.Master.Race == ActorRace.Play)
-                            {
-                                killObject = killObject.Master;
-                                boPK = true;
-                            }
+                            killObject = killObject.Master;
+                            boPK = true;
                         }
                     }
                 }
@@ -1676,16 +1673,19 @@ namespace GameSvr.Player
                             guildwarkill = true;
                         }
                     }
-                    var Castle = M2Share.CastleMgr.InCastleWarArea(this);
-                    if (Castle != null && Castle.UnderWar || (InFreePkArea))
+                    else
                     {
-                        guildwarkill = true;
+                        var Castle = M2Share.CastleMgr.InCastleWarArea(this);
+                        if ((Castle != null && Castle.UnderWar) || (InGuildWarArea))
+                        {
+                            guildwarkill = true;
+                        }
                     }
                     if (!guildwarkill)
                     {
                         if ((M2Share.Config.IsKillHumanWinLevel || M2Share.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP))
                         {
-                            PkDie(targetObject);
+                            PvpDie(targetObject);
                         }
                         else
                         {
@@ -1708,8 +1708,7 @@ namespace GameSvr.Player
                                 killObject.SysMsg(M2Share.g_sYouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
                             }
                         }
-                        // 检查攻击人是否用了着经验或等级装备
-                        if (killObject.Race == ActorRace.Play)
+                        if (killObject.Race == ActorRace.Play)// 检查攻击人是否用了着经验或等级装备
                         {
                             if (targetObject.PkDieLostExp > 0)
                             {
@@ -1737,7 +1736,7 @@ namespace GameSvr.Player
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 M2Share.Log.Error(ex);
             }
@@ -1784,10 +1783,7 @@ namespace GameSvr.Player
                             killObject.ScatterGolds(null);
                         }
                     }
-                    if (Race == ActorRace.Play)
-                    {
-                        AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
-                    }
+                    AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
                 }
             }
         }
@@ -2960,7 +2956,7 @@ namespace GameSvr.Player
                     else
                     {
                         castle = M2Share.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
-                        if (M2Share.Config.ShowGuildName || castle != null && castle.UnderWar || InFreePkArea)
+                        if (M2Share.Config.ShowGuildName || castle != null && castle.UnderWar || InGuildWarArea)
                         {
                             sGuildName = M2Share.g_sNoCastleGuildName.Replace("%guildname", MyGuild.sGuildName);
                             sGuildName = sGuildName.Replace("%rankname", GuildRankName);
@@ -3545,7 +3541,7 @@ namespace GameSvr.Player
                 }
                 if (attackTarget.Race > ActorRace.Play) return result;
                 var targetObject = (PlayObject)attackTarget;
-                if (!targetObject.InFreePkArea)
+                if (!targetObject.InGuildWarArea)
                 {
                     if (M2Share.Config.boPKLevelProtect)// 新人保护
                     {
@@ -3619,7 +3615,7 @@ namespace GameSvr.Player
                     }
                 }
                 var castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
-                if ((castle != null) && castle.UnderWar && InFreePkArea && targetObject.InFreePkArea)
+                if ((castle != null) && castle.UnderWar && InGuildWarArea && targetObject.InGuildWarArea)
                 {
                     result = M2Share.Config.InFreePKAreaNameColor;
                     GuildWarArea = true;
@@ -3891,9 +3887,9 @@ namespace GameSvr.Player
 
         public void ChangePkStatus(bool boWarFlag)
         {
-            if (InFreePkArea != boWarFlag)
+            if (InGuildWarArea != boWarFlag)
             {
-                InFreePkArea = boWarFlag;
+                InGuildWarArea = boWarFlag;
                 NameColorChanged = true;
             }
         }

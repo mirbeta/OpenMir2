@@ -336,12 +336,12 @@ namespace GameSvr.RobotPlay
                     result = true;
                     if (baseObject.Master != null)
                     {
-                        if (baseObject.Master == this || baseObject.Master.IsRobot && !InFreePkArea)
+                        if (baseObject.Master == this || baseObject.Master.IsRobot && !InGuildWarArea)
                         {
                             result = false;
                         }
                     }
-                    if (baseObject.IsRobot && !InFreePkArea)// 假人不攻击假人,行会战除外
+                    if (baseObject.IsRobot && !InGuildWarArea)// 假人不攻击假人,行会战除外
                     {
                         result = false;
                     }
@@ -420,7 +420,7 @@ namespace GameSvr.RobotPlay
                         {
                             result = false;
                         }
-                        if (baseObject.IsRobot && (!InFreePkArea || ((PlayObject)baseObject).PvpLevel() < 2)) // 假人不攻击假人,行会战除外
+                        if (baseObject.IsRobot && (!InGuildWarArea || ((PlayObject)baseObject).PvpLevel() < 2)) // 假人不攻击假人,行会战除外
                         {
                             result = false;
                         }

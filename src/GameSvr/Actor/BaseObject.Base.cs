@@ -627,7 +627,7 @@ namespace GameSvr.Actor
                 M2Share.g_nBaseObjTimeMax = M2Share.g_nBaseObjTimeMin;
             }
         }
-        
+
         public virtual void Die()
         {
             if (SuperMan)
@@ -657,7 +657,7 @@ namespace GameSvr.Actor
             IncHealth = 0;
             IncHealing = 0;
             KillFunc();
-            if (LastHiter != null && Race != ActorRace.Play )
+            if (LastHiter != null && Race != ActorRace.Play)
             {
                 MonsterSayMsg(LastHiter, MonStatus.Die);
             }
@@ -673,8 +673,8 @@ namespace GameSvr.Actor
             }
             SendRefMsg(Grobal2.RM_DEATH, Direction, CurrX, CurrY, 1, "");
         }
-        
-        private void KillTarget( )
+
+        private void KillTarget()
         {
             if (ExpHitter != null && ExpHitter.Master != null)//如果是角色下属杀死对象
             {
@@ -685,7 +685,7 @@ namespace GameSvr.Actor
                 ((PlayObject)ExpHitter).KillTargetTrigger(this);
             }
         }
-        
+
         private void KillFunc()
         {
             const string sExceptionMsg = "[Exception] TBaseObject::KillFunc";
@@ -738,7 +738,7 @@ namespace GameSvr.Actor
                 M2Share.Log.Error(e.Message);
             }
         }
-        
+
         internal virtual void ReAlive()
         {
             Death = false;

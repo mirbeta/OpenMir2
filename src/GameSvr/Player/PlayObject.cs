@@ -380,7 +380,7 @@ namespace GameSvr.Player
             {
                 n8 = n8 | 2;
             }
-            if (InFreePkArea)
+            if (InGuildWarArea)
             {
                 n8 = n8 | 4;
             }
@@ -1310,7 +1310,7 @@ namespace GameSvr.Player
             SendSocket(MDefMsg, sSendMsg);
         }
 
-        public void PkDie(PlayObject playObject)
+        private void PvpDie(PlayObject playObject)
         {
             var nWinLevel = M2Share.Config.KillHumanWinLevel;
             var nLostLevel = M2Share.Config.KilledLostLevel;
@@ -2365,7 +2365,7 @@ namespace GameSvr.Player
                 case 5:
                     if (MyGuild != null)
                     {
-                        if (!InFreePkArea)
+                        if (!InGuildWarArea)
                         {
                             var castle = M2Share.CastleMgr.IsCastleMember(this);
                             if (castle != null && castle.IsMasterGuild(MyGuild))
