@@ -1749,14 +1749,14 @@ namespace GameSvr.Player
                 }
                 if (killObject.Race != ActorRace.Play)
                 {
-                    killObject.DropUseItems(AttackBaseObject);
+                    killObject.DropUseItems(this);
                     if (Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
                     {
-                        killObject.ScatterBagItems(AttackBaseObject);
+                        killObject.ScatterBagItems(this);
                     }
                     if (killObject.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
                     {
-                        killObject.ScatterGolds(AttackBaseObject);
+                        killObject.ScatterGolds(this);
                     }
                 }
                 else
