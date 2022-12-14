@@ -3396,7 +3396,10 @@ namespace GameSvr.Player
         protected override bool IsAttackTarget(BaseObject baseObject)
         {
             var result = base.IsAttackTarget(baseObject);
-            if (Race > ActorRace.Play) return result;
+            if (result)
+            {
+                return true;
+            }
             switch (AttatckMode)
             {
                 case AttackMode.HAM_ALL:
