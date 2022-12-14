@@ -864,11 +864,11 @@ namespace GameSvr.RobotPlay
                 {
                     if (M2Share.RandomNumber.Random(8) == 0 && m_AISayMsgList.Count > 0)
                     {
-                        if (HUtil32.GetTickCount() >= MDwDisableSayMsgTick)
+                        if (HUtil32.GetTickCount() >= DisableSayMsgTick)
                         {
-                            MBoDisableSayMsg = false;
+                            DisableSayMsg = false;
                         }
-                        var boDisableSayMsg = MBoDisableSayMsg;
+                        var boDisableSayMsg = DisableSayMsg;
                         //g_DenySayMsgList.Lock;
                         //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                         //{

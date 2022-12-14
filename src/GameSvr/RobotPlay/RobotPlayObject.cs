@@ -122,12 +122,12 @@ namespace GameSvr.RobotPlay
 
         public RobotPlayObject() : base()
         {
-            MNSoftVersionDate = Grobal2.CLIENT_VERSION_NUMBER;
-            SoftVersionDateEx = M2Share.GetExVersionNO(Grobal2.CLIENT_VERSION_NUMBER, ref MNSoftVersionDate);
+            SoftVersionDate = Grobal2.CLIENT_VERSION_NUMBER;
+            SoftVersionDateEx = M2Share.GetExVersionNO(Grobal2.CLIENT_VERSION_NUMBER, ref SoftVersionDate);
             AbilCopyToWAbil();
             AttatckMode = 0;
             IsRobot = true;
-            MBoLoginNoticeOk = true;
+            LoginNoticeOk = true;
             m_boAIStart = false; // 开始挂机
             m_ManagedEnvir = null; // 挂机地图
             m_Path = null;
@@ -355,7 +355,7 @@ namespace GameSvr.RobotPlay
             PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
-                if (!PlayObject.MBoReadyRun)
+                if (!PlayObject.BoReadyRun)
                 {
                     return;
                 }
@@ -406,11 +406,11 @@ namespace GameSvr.RobotPlay
                 {
                     sData = sData[..M2Share.Config.SayMsgMaxLen];
                 }
-                if (HUtil32.GetTickCount() >= MDwDisableSayMsgTick)
+                if (HUtil32.GetTickCount() >= DisableSayMsgTick)
                 {
-                    MBoDisableSayMsg = false;
+                    DisableSayMsg = false;
                 }
-                var boDisableSayMsg = MBoDisableSayMsg;
+                var boDisableSayMsg = DisableSayMsg;
                 //g_DenySayMsgList.Lock;
                 //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                 //{
@@ -577,11 +577,11 @@ namespace GameSvr.RobotPlay
                 case Grobal2.RM_HEAR:
                     break;
                 case Grobal2.RM_WHISPER:
-                    if (HUtil32.GetTickCount() >= MDwDisableSayMsgTick)
+                    if (HUtil32.GetTickCount() >= DisableSayMsgTick)
                     {
-                        MBoDisableSayMsg = false;
+                        DisableSayMsg = false;
                     }
-                    boDisableSayMsg = MBoDisableSayMsg;
+                    boDisableSayMsg = DisableSayMsg;
                     // g_DenySayMsgList.Lock;
                     //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                     //{

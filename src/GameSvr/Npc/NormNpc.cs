@@ -228,7 +228,7 @@ namespace GameSvr.Npc
             // ================================================
             if (string.Compare(sParam1, "KICK", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                PlayObject.MBoKickFlag = true;
+                PlayObject.BoKickFlag = true;
                 return;
             }
         }
@@ -606,11 +606,11 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$HUNGER>", sText);
                     return;
                 case "$LOGINTIME":
-                    sText = PlayObject.MDLogonTime.ToString();
+                    sText = PlayObject.LogonTime.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$LOGINTIME>", sText);
                     return;
                 case "$LOGINLONG":
-                    sText = (HUtil32.GetTickCount() - PlayObject.MDwLogonTick) / 60000 + "分钟";
+                    sText = (HUtil32.GetTickCount() - PlayObject.LogonTick) / 60000 + "分钟";
                     sMsg = ReplaceVariableText(sMsg, "<$LOGINLONG>", sText);
                     return;
                 case "$DRESS":
@@ -1370,7 +1370,7 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$CLIENTVERSION")//显示当前用户客户端版本
             {
-                sMsg = ReplaceVariableText(sMsg, "<$CLIENTVERSION>", PlayObject.MNSoftVersionDate.ToString());
+                sMsg = ReplaceVariableText(sMsg, "<$CLIENTVERSION>", PlayObject.SoftVersionDate.ToString());
                 return;
             }
             if (sVariable == "$QUERYYBDEALLOG") // 查看元宝交易记录 

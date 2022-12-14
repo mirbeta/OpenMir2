@@ -17,7 +17,7 @@ namespace GameSvr.Player
             var PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
-                if (!PlayObject.MBoReadyRun)
+                if (!PlayObject.BoReadyRun)
                 {
                     SysMsg(whostr + M2Share.g_sCanotSendmsg, MsgColor.Red, MsgType.Hint);
                     return;
@@ -113,26 +113,26 @@ namespace GameSvr.Player
                 {
                     sData = sData[..M2Share.Config.SayMsgMaxLen]; // 3 * 1000
                 }
-                if ((HUtil32.GetTickCount() - MDwSayMsgTick) < M2Share.Config.SayMsgTime)
+                if ((HUtil32.GetTickCount() - SayMsgTick) < M2Share.Config.SayMsgTime)
                 {
-                    MNSayMsgCount++;// 2
-                    if (MNSayMsgCount >= M2Share.Config.SayMsgCount)
+                    SayMsgCount++;
+                    if (SayMsgCount >= M2Share.Config.SayMsgCount)
                     {
-                        MBoDisableSayMsg = true;
-                        MDwDisableSayMsgTick = HUtil32.GetTickCount() + M2Share.Config.DisableSayMsgTime;// 60 * 1000
+                        DisableSayMsg = true;
+                        DisableSayMsgTick = HUtil32.GetTickCount() + M2Share.Config.DisableSayMsgTime;// 60 * 1000
                         SysMsg(Format(M2Share.g_sDisableSayMsg, M2Share.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
                 {
-                    MDwSayMsgTick = HUtil32.GetTickCount();
-                    MNSayMsgCount = 0;
+                    SayMsgTick = HUtil32.GetTickCount();
+                    SayMsgCount = 0;
                 }
-                if (HUtil32.GetTickCount() >= MDwDisableSayMsgTick)
+                if (HUtil32.GetTickCount() >= DisableSayMsgTick)
                 {
-                    MBoDisableSayMsg = false;
+                    DisableSayMsg = false;
                 }
-                boDisableSayMsg = MBoDisableSayMsg;
+                boDisableSayMsg = DisableSayMsg;
                 if (M2Share.DenySayMsgList.ContainsKey(this.ChrName))
                 {
                     boDisableSayMsg = true;
@@ -140,7 +140,7 @@ namespace GameSvr.Player
                 if (!(boDisableSayMsg || Envir.Flag.boNOCHAT))
                 {
                     //M2Share.Log.Info('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + ChrName + ": " + sData);
-                    MSOldSayMsg = sData;
+                    OldSayMsg = sData;
                     if (sData.StartsWith("@@加速处理"))
                     {
                         M2Share.g_FunctionNPC.GotoLable(this, "@加速处理", false);
@@ -412,9 +412,9 @@ namespace GameSvr.Player
                 {
                     if (Permission >= 6 && sData[2] == M2Share.g_GMRedMsgCmd)
                     {
-                        if (HUtil32.GetTickCount() - MDwSayMsgTick > 2000)
+                        if (HUtil32.GetTickCount() - SayMsgTick > 2000)
                         {
-                            MDwSayMsgTick = HUtil32.GetTickCount();
+                            SayMsgTick = HUtil32.GetTickCount();
                             sData = sData.AsSpan()[2..].ToString();
                             if (sData.Length > M2Share.Config.SayRedMsgMaxLen)
                             {

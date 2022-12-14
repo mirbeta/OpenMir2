@@ -421,10 +421,10 @@ namespace GameSvr.World
                     envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);//切换其他服务器
                     if (envir == null)
                     {
-                        playObject.MNSessionId = userOpenInfo.LoadUser.nSessionID;
-                        playObject.MNSocket = userOpenInfo.LoadUser.nSocket;
-                        playObject.MNGateIdx = (byte)userOpenInfo.LoadUser.nGateIdx;
-                        playObject.MNGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
+                        playObject.SessionId = userOpenInfo.LoadUser.nSessionID;
+                        playObject.SocketId = userOpenInfo.LoadUser.nSocket;
+                        playObject.GateIdx = (byte)userOpenInfo.LoadUser.nGateIdx;
+                        playObject.SocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
                         playObject.WAbil = playObject.Abil;
                         playObject.ServerIndex = (byte)M2Share.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
@@ -463,7 +463,7 @@ namespace GameSvr.World
                         goto ReGetMap;
                     }
                     else
-                        playObject.MBoReadyRun = false;
+                        playObject.BoReadyRun = false;
                     playObject.MapFileName = envir.MapFileName;
                 }
                 else
@@ -505,8 +505,8 @@ namespace GameSvr.World
                         }
                         else
                         {
-                            playObject.MBoReadyRun = false;
-                            playObject.MBoLoginNoticeOk = true;
+                            playObject.BoReadyRun = false;
+                            playObject.LoginNoticeOk = true;
                             playObject.Bo6Ab = true;
                         }
                     }
@@ -514,17 +514,17 @@ namespace GameSvr.World
                 playObject.UserAccount = userOpenInfo.LoadUser.Account;
                 playObject.LoginIpAddr = userOpenInfo.LoadUser.sIPaddr;
                 playObject.LoginIpLocal = M2Share.GetIPLocal(playObject.LoginIpAddr);
-                playObject.MNSocket = userOpenInfo.LoadUser.nSocket;
-                playObject.MNGSocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
-                playObject.MNGateIdx = (byte)userOpenInfo.LoadUser.nGateIdx;
-                playObject.MNSessionId = userOpenInfo.LoadUser.nSessionID;
+                playObject.SocketId = userOpenInfo.LoadUser.nSocket;
+                playObject.SocketIdx = userOpenInfo.LoadUser.nGSocketIdx;
+                playObject.GateIdx = (byte)userOpenInfo.LoadUser.nGateIdx;
+                playObject.SessionId = userOpenInfo.LoadUser.nSessionID;
                 playObject.PayMent = (byte)userOpenInfo.LoadUser.nPayMent;
-                playObject.MNPayMode = (byte)userOpenInfo.LoadUser.nPayMode;
+                playObject.PayMode = (byte)userOpenInfo.LoadUser.nPayMode;
                 playObject.ExpireTime = userOpenInfo.LoadUser.PlayTime;
                 playObject.ExpireCount = (int)Math.Round(TimeSpan.FromSeconds(playObject.ExpireTime).TotalMinutes, 1);
                 playObject.MDwLoadTick = userOpenInfo.LoadUser.dwNewUserTick;
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
-                playObject.MNSoftVersionDate = userOpenInfo.LoadUser.nSoftVersionDate;
+                playObject.SoftVersionDate = userOpenInfo.LoadUser.nSoftVersionDate;
                 playObject.SoftVersionDateEx = userOpenInfo.LoadUser.nSoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 result = playObject;
             }
@@ -607,7 +607,9 @@ namespace GameSvr.World
                             var goldChangeInfo = _mChangeHumanDbGoldList[i];
                             playObject = GetPlayObject(goldChangeInfo.sGameMasterName);
                             if (playObject != null)
+                            {
                                 playObject.GoldChange(goldChangeInfo.sGetGoldUser, goldChangeInfo.nGold);
+                            }
                             goldChangeInfo = null;
                         }
                         _mChangeHumanDbGoldList.Clear();
@@ -619,7 +621,7 @@ namespace GameSvr.World
                     for (var i = 0; i < NewHumanList.Count; i++)
                     {
                         playObject = NewHumanList[i];
-                        M2Share.GateMgr.SetGateUserList(playObject.MNGateIdx, playObject.MNSocket, playObject);
+                        M2Share.GateMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
                     }
                     NewHumanList.Clear();
                     for (var i = 0; i < ListOfGateIdx.Count; i++)
@@ -721,15 +723,15 @@ namespace GameSvr.World
                         playObject.RunTick = dwCurTick;
                         if (!playObject.Ghost)
                         {
-                            if (!playObject.MBoLoginNoticeOk)
+                            if (!playObject.LoginNoticeOk)
                             {
                                 playObject.RunNotice();
                             }
                             else
                             {
-                                if (!playObject.MBoReadyRun)
+                                if (!playObject.BoReadyRun)
                                 {
-                                    playObject.MBoReadyRun = true;
+                                    playObject.BoReadyRun = true;
                                     playObject.UserLogon();
                                 }
                                 else
@@ -751,7 +753,7 @@ namespace GameSvr.World
                             AddToHumanFreeList(playObject);
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
-                            M2Share.GateMgr.CloseUser(playObject.MNGateIdx, playObject.MNSocket);
+                            M2Share.GateMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
                             SendServerGroupMsg(Grobal2.SS_202, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }
@@ -794,15 +796,15 @@ namespace GameSvr.World
                         playObject.RunTick = dwCurTick;
                         if (!playObject.Ghost)
                         {
-                            if (!playObject.MBoLoginNoticeOk)
+                            if (!playObject.LoginNoticeOk)
                             {
                                 playObject.RunNotice();
                             }
                             else
                             {
-                                if (!playObject.MBoReadyRun)
+                                if (!playObject.BoReadyRun)
                                 {
-                                    playObject.MBoReadyRun = true;
+                                    playObject.BoReadyRun = true;
                                     playObject.UserLogon();
                                 }
                                 else
@@ -858,7 +860,7 @@ namespace GameSvr.World
                             AddToHumanFreeList(playObject);
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
-                            M2Share.GateMgr.CloseUser(playObject.MNGateIdx, playObject.MNSocket);
+                            M2Share.GateMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
                             SendServerGroupMsg(Grobal2.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }
@@ -1204,7 +1206,7 @@ namespace GameSvr.World
                         sMsg);
                     break;
             }
-            if (!playObject.MBoReadyRun) return;
+            if (!playObject.BoReadyRun) return;
             switch (defMsg.Ident)
             {
                 case Grobal2.CM_TURN:
@@ -1309,7 +1311,7 @@ namespace GameSvr.World
                     if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         playObject = PlayObjectList[i];
-                        playObject.MBoEmergencyClose = true;
+                        playObject.BoEmergencyClose = true;
                         break;
                     }
                 }
@@ -1430,7 +1432,7 @@ namespace GameSvr.World
                 var playObject = PlayObjectList[i];
                 if (string.Compare(playObject.ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    playObject.MBoKickFlag = true;
+                    playObject.BoKickFlag = true;
                     break;
                 }
             }
@@ -1443,7 +1445,7 @@ namespace GameSvr.World
             const string sMsg = "{0}/{1}";
             if (M2Share.GetMultiServerAddrPort(nServerIndex, ref sIPaddr, ref nPort))
             {
-                playObject.MBoReconnection = true;
+                playObject.BoReconnection = true;
                 playObject.SendDefMessage(Grobal2.SM_RECONNECT, 0, 0, 0, 0, string.Format(sMsg, sIPaddr, nPort));
             }
         }
@@ -1458,7 +1460,7 @@ namespace GameSvr.World
             {
                 Account = playObject.UserAccount,
                 ChrName = playObject.ChrName,
-                SessionID = playObject.MNSessionId,
+                SessionID = playObject.SessionId,
                 PlayObject = playObject,
                 HumanRcd = new PlayerDataInfo()
             };

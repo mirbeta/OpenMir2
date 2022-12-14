@@ -875,7 +875,7 @@ namespace GameSvr.Magic
                 playObject.MapRandomMove(playObject.HomeMap, 1);
                 if (envir != playObject.Envir && playObject.Race == ActorRace.Play)
                 {
-                    playObject.MBoTimeRecall = false;
+                    playObject.BoTimeRecall = false;
                 }
                 result = true;
             }

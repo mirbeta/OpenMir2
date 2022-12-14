@@ -140,7 +140,7 @@ namespace GameSvr.Player
         /// 行会传送
         /// </summary>
         public bool GuildMove = false;
-        public ClientMesaagePacket MDefMsg;
+        public ClientMesaagePacket DefMsg;
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
@@ -202,14 +202,17 @@ namespace GameSvr.Player
         public short GuildRankNo;
         public string GuildRankName = string.Empty;
         public string ScriptLable = string.Empty;
-        public string MSOldSayMsg;
-        public int MNSayMsgCount = 0;
-        public int MDwSayMsgTick;
-        public bool MBoDisableSayMsg;
-        public int MDwDisableSayMsgTick;
-        public int MDwCheckDupObjTick;
+        public string OldSayMsg;
+        public int SayMsgCount = 0;
+        public int SayMsgTick;
+        public bool DisableSayMsg;
+        public int DisableSayMsgTick;
+        public int CheckDupObjTick;
         public int DiscountForNightTick;
-        public bool MBoInSafeArea;
+        /// <summary>
+        /// 是否在安全区域
+        /// </summary>
+        private bool InSafeArea;
         /// <summary>
         /// 喊话消息间隔
         /// </summary>
@@ -221,9 +224,9 @@ namespace GameSvr.Player
         protected bool NokChiSet = false;
         protected bool TaoBuSet = false;
         protected bool FiveStringSet = false;
-        public byte MBtValNpcType;
-        public byte MBtValType;
-        public byte MBtValLabel;
+        public byte ValNpcType;
+        public byte ValType;
+        public byte ValLabel;
         /// <summary>
         /// 掉物品
         /// </summary>
@@ -251,32 +254,31 @@ namespace GameSvr.Player
         /// 挂机字符
         /// </summary>
         public string MsOffLineLeaveword = string.Empty;
-        public int MNSocket = 0;
+        /// <summary>
+        /// Socket Handle
+        /// </summary>
+        public int SocketId = 0;
         /// <summary>
         /// 人物连接到游戏网关SOCKETID
         /// </summary>
-        public ushort MNGSocketIdx = 0;
+        public ushort SocketIdx = 0;
         /// <summary>
         /// 人物所在网关号
         /// </summary>
-        public byte MNGateIdx = 0;
-        public int MNSoftVersionDate = 0;
+        public byte GateIdx = 0;
+        public int SoftVersionDate = 0;
         /// <summary>
         /// 登录时间
         /// </summary>
-        public DateTime MDLogonTime;
+        public DateTime LogonTime;
         /// <summary>
         /// 战领沙城时间
         /// </summary>
-        public int MDwLogonTick;
+        public int LogonTick;
         /// <summary>
         /// 是否进入游戏完成
         /// </summary>
-        public bool MBoReadyRun;
-        /// <summary>
-        /// 当前会话ID
-        /// </summary>
-        public int MNSessionId = 0;
+        public bool BoReadyRun;
         /// <summary>
         /// 人物当前付费模式
         /// 1:试玩
@@ -284,29 +286,36 @@ namespace GameSvr.Player
         /// 3:测试
         /// </summary>
         public byte PayMent;
-        public byte MNPayMode = 0;
+        public byte PayMode = 0;
+        /// <summary>
+        /// 当前会话ID
+        /// </summary>
+        public int SessionId = 0;
         /// <summary>
         /// 全局会话信息
         /// </summary>
-        public TSessInfo MSessInfo;
+        public TSessInfo SessInfo;
         public int MDwLoadTick = 0;
         /// <summary>
         /// 人物当前所在服务器序号
         /// </summary>
         public byte ServerIndex = 0;
-        public bool MBoEmergencyClose;
+        /// <summary>
+        /// 超时关闭链接
+        /// </summary>
+        public bool BoEmergencyClose;
         /// <summary>
         /// 掉线标志
         /// </summary>
-        public bool MBoSoftClose;
+        public bool BoSoftClose;
         /// <summary>
         /// 断线标志(@kick 命令)
         /// </summary>
-        public bool MBoKickFlag;
+        public bool BoKickFlag;
         /// <summary>
         /// 是否重连
         /// </summary>
-        public bool MBoReconnection;
+        public bool BoReconnection;
         public bool MBoRcdSaved;
         public bool MBoSwitchData;
         public bool MBoSwitchDataOk = false;
@@ -513,20 +522,20 @@ namespace GameSvr.Player
         /// </summary>
         public IList<PlayObject> GroupMembers;
         public string MSPlayDiceLabel = string.Empty;
-        public bool MBoTimeRecall;
-        public int MDwTimeRecallTick = 0;
-        public string MSMoveMap = string.Empty;
-        public short MNMoveX;
-        public short MNMoveY;
+        public bool BoTimeRecall;
+        public int TimeRecallTick = 0;
+        public string TimeRecallMoveMap = string.Empty;
+        public short TimeRecallMoveX;
+        public short TimeRecallMoveY;
         /// <summary>
         /// 保存人物数据时间间隔
         /// </summary>
         public int MDwSaveRcdTick;
         public byte MBtBright;
         public bool MBoNewHuman;
-        public bool MBoSendNotice;
-        public int MDwWaitLoginNoticeOkTick;
-        public bool MBoLoginNoticeOk;
+        private bool IsSendNotice;
+        private int WaitLoginNoticeOkTick;
+        public bool LoginNoticeOk;
         public bool Bo6Ab;
         public int ShowLineNoticeTick;
         public int ShowLineNoticeIdx;
@@ -772,12 +781,12 @@ namespace GameSvr.Player
             DealItemList = new List<UserItem>();
             StorageItemList = new List<UserItem>();
             LockWhisperList = new List<string>();
-            MBoEmergencyClose = false;
+            BoEmergencyClose = false;
             MBoSwitchData = false;
-            MBoReconnection = false;
-            MBoKickFlag = false;
-            MBoSoftClose = false;
-            MBoReadyRun = false;
+            BoReconnection = false;
+            BoKickFlag = false;
+            BoSoftClose = false;
+            BoReadyRun = false;
             MDwSaveRcdTick = HUtil32.GetTickCount();
             DecHungerPointTick = HUtil32.GetTickCount();
             GroupRcallTick = HUtil32.GetTickCount();
@@ -788,10 +797,9 @@ namespace GameSvr.Player
             MBoDelayCall = false;
             MDelayCallNpc = 0;
             MScript = null;
-            MBoTimeRecall = false;
-            MSMoveMap = "";
-            MNMoveX = 0;
-            MNMoveY = 0;
+            BoTimeRecall = false;
+            TimeRecallMoveX = 0;
+            TimeRecallMoveY = 0;
             RunTick = HUtil32.GetTickCount();
             RunTime = 250;
             SearchTime = 1000;
@@ -801,14 +809,14 @@ namespace GameSvr.Player
             ViewRange = 12;
             InGuildWarArea = false;
             MBoNewHuman = false;
-            MBoLoginNoticeOk = false;
+            LoginNoticeOk = false;
             Bo6Ab = false;
             BonusAbil = new NakedAbility();
             AccountExpired = false;
-            MBoSendNotice = false;
-            MDwCheckDupObjTick = HUtil32.GetTickCount();
+            IsSendNotice = false;
+            CheckDupObjTick = HUtil32.GetTickCount();
             DiscountForNightTick = HUtil32.GetTickCount();
-            MBoInSafeArea = false;
+            InSafeArea = false;
             MDwMagicAttackTick = HUtil32.GetTickCount();
             MDwMagicAttackInterval = 0;
             MDwAttackTick = HUtil32.GetTickCount();
@@ -820,12 +828,12 @@ namespace GameSvr.Player
             MDwMagicAttackCount = 0;
             MDwMoveCount = 0;
             MNOverSpeedCount = 0;
-            MSOldSayMsg = "";
-            MDwSayMsgTick = HUtil32.GetTickCount();
-            MBoDisableSayMsg = false;
-            MDwDisableSayMsgTick = HUtil32.GetTickCount();
-            MDLogonTime = DateTime.Now;
-            MDwLogonTick = HUtil32.GetTickCount();
+            OldSayMsg = "";
+            SayMsgTick = HUtil32.GetTickCount();
+            DisableSayMsg = false;
+            DisableSayMsgTick = HUtil32.GetTickCount();
+            LogonTime = DateTime.Now;
+            LogonTick = HUtil32.GetTickCount();
             MBoSwitchData = false;
             MBoSwitchDataSended = false;
             MNWriteChgDataErrCount = 0;
@@ -917,7 +925,7 @@ namespace GameSvr.Player
             MDwWalkHitIntervalTime = M2Share.Config.WalkHitIntervalTime;// 组合操作间隔
             MDwRunMagicIntervalTime = M2Share.Config.RunMagicIntervalTime;// 跑位魔法间隔
             DynamicVarMap = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
-            MSessInfo = null;
+            SessInfo = null;
             MBoTestSpeedMode = false;
             MBoLockLogon = true;
             MBoLockLogoned = false;
@@ -957,9 +965,9 @@ namespace GameSvr.Player
         {
             ProcessMessage msg;
             const string sExceptionMsg = "[Exception] TPlayObject::RunNotice";
-            if (MBoEmergencyClose || MBoKickFlag || MBoSoftClose)
+            if (BoEmergencyClose || BoKickFlag || BoSoftClose)
             {
-                if (MBoKickFlag)
+                if (BoKickFlag)
                 {
                     SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
                 }
@@ -969,23 +977,23 @@ namespace GameSvr.Player
             {
                 try
                 {
-                    if (!MBoSendNotice)
+                    if (!IsSendNotice)
                     {
                         SendNotice();
-                        MBoSendNotice = true;
-                        MDwWaitLoginNoticeOkTick = HUtil32.GetTickCount();
+                        IsSendNotice = true;
+                        WaitLoginNoticeOkTick = HUtil32.GetTickCount();
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - MDwWaitLoginNoticeOkTick) > 10 * 1000)
+                        if ((HUtil32.GetTickCount() - WaitLoginNoticeOkTick) > 10 * 1000)
                         {
-                            MBoEmergencyClose = true;
+                            BoEmergencyClose = true;
                         }
                         while (GetMessage(out msg))
                         {
                             if (msg.wIdent == Grobal2.CM_LOGINNOTICEOK)
                             {
-                                MBoLoginNoticeOk = true;
+                                LoginNoticeOk = true;
                                 MDwClientTick = (short)msg.nParam1;
                                 SysMsg(MDwClientTick.ToString(), MsgColor.Red, MsgType.Notice);
                             }
@@ -1002,7 +1010,7 @@ namespace GameSvr.Player
         private void SendLogon()
         {
             var messageBodyWl = new MessageBodyWL();
-            MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
+            DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
             messageBodyWl.Param1 = GetFeatureToLong();
             messageBodyWl.Param2 = CharStatus;
             if (AllowGroup)
@@ -1014,7 +1022,7 @@ namespace GameSvr.Player
                 messageBodyWl.Tag1 = 0;
             }
             messageBodyWl.Tag2 = 0;
-            SendSocket(MDefMsg, EDCode.EncodeBuffer(messageBodyWl));
+            SendSocket(DefMsg, EDCode.EncodeBuffer(messageBodyWl));
             var nRecog = GetFeatureToLong();
             SendDefMessage(Grobal2.SM_FEATURECHANGED, ActorId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
             SendDefMessage(Grobal2.SM_ATTACKMODE, (byte)AttatckMode, 0, 0, 0, "");
@@ -1046,8 +1054,8 @@ namespace GameSvr.Player
                     PayMent = 3;
                 }
                 MapMoveTick = HUtil32.GetTickCount();
-                MDLogonTime = DateTime.Now;
-                MDwLogonTick = HUtil32.GetTickCount();
+                LogonTime = DateTime.Now;
+                LogonTick = HUtil32.GetTickCount();
                 Initialize();
                 SendMsg(this, Grobal2.RM_LOGON, 0, 0, 0, 0, "");
                 if (Abil.Level <= 7)
@@ -1068,7 +1076,7 @@ namespace GameSvr.Player
                         if (!M2Share.CompareIPaddr(LoginIpAddr, sIPaddr))
                         {
                             SysMsg(sCheckIPaddrFail, MsgColor.Red, MsgType.Hint);
-                            MBoEmergencyClose = true;
+                            BoEmergencyClose = true;
                         }
                     }
                 }
@@ -1189,12 +1197,12 @@ namespace GameSvr.Player
                 }
                 if (!Bo6Ab)
                 {
-                    if (MNSoftVersionDate < M2Share.Config.SoftVersionDate) //登录版本号验证
+                    if (SoftVersionDate < M2Share.Config.SoftVersionDate) //登录版本号验证
                     {
                         SysMsg(M2Share.sClientSoftVersionError, MsgColor.Red, MsgType.Hint);
                         SysMsg(M2Share.sDownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
                         SysMsg(M2Share.sForceDisConnect, MsgColor.Red, MsgType.Hint);
-                        MBoEmergencyClose = true;
+                        BoEmergencyClose = true;
                         return;
                     }
                     if (SoftVersionDateEx == 0 && M2Share.Config.boOldClientShowHiLevel)
@@ -1206,7 +1214,7 @@ namespace GameSvr.Player
                             SysMsg(M2Share.sClientSoftVersionError, MsgColor.Red, MsgType.Hint);
                             SysMsg(M2Share.sDownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
                             SysMsg(M2Share.sForceDisConnect, MsgColor.Red, MsgType.Hint);
-                            MBoEmergencyClose = true;
+                            BoEmergencyClose = true;
                             return;
                         }
                     }
@@ -1245,7 +1253,7 @@ namespace GameSvr.Player
                         {
                             SysMsg(M2Share.sOnlineUserFull, MsgColor.Red, MsgType.Hint);
                             SysMsg(M2Share.sForceDisConnect, MsgColor.Red, MsgType.Hint);
-                            MBoEmergencyClose = true;
+                            BoEmergencyClose = true;
                         }
                     }
                 }
@@ -1277,7 +1285,7 @@ namespace GameSvr.Player
                     {
                         SysMsg("测试状态可以使用到第 " + M2Share.Config.TryModeLevel, MsgColor.Red, MsgType.Hint);
                         SysMsg("链接中断，请到以下地址获得收费相关信息。(http://www.mir2.com)", MsgColor.Red, MsgType.Hint);
-                        MBoEmergencyClose = true;
+                        BoEmergencyClose = true;
                     }
                 }
                 if (PayMent == 3 && !Bo6Ab)

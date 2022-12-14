@@ -96,7 +96,7 @@ namespace GameSvr.World
             switchData.wX = playObject.CurrX;
             switchData.wY = playObject.CurrY;
             switchData.Abil = playObject.Abil;
-            switchData.nCode = playObject.MNSessionId;
+            switchData.nCode = playObject.SessionId;
             switchData.boBanShout = playObject.BanShout;
             switchData.boHearWhisper = playObject.HearWhisper;
             switchData.boBanGuildChat = playObject.BanGuildChat;

@@ -445,8 +445,8 @@ namespace GameSvr.Npc
         private void ActionOfOffLine(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
-            PlayObject.MDefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
-            PlayObject.SendSocket(PlayObject.MDefMsg, EDCode.EncodeString(sOffLineStartMsg));
+            PlayObject.DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
+            PlayObject.SendSocket(PlayObject.DefMsg, EDCode.EncodeString(sOffLineStartMsg));
             var nTime = HUtil32.StrToInt(QuestActionInfo.sParam1, 5);
             var nPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, 500);
             var nKickOffLine = HUtil32.StrToInt(QuestActionInfo.sParam3, 1440 * 15);
@@ -456,7 +456,7 @@ namespace GameSvr.Npc
             PlayObject.MNAutoGetExpPoint = nPoint;
             PlayObject.OffLineFlag = true;
             PlayObject.KickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
-            IdSrvClient.Instance.SendHumanLogOutMsgA(PlayObject.UserAccount, PlayObject.MNSessionId);
+            IdSrvClient.Instance.SendHumanLogOutMsgA(PlayObject.UserAccount, PlayObject.SessionId);
             PlayObject.SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
         }
 
@@ -3015,7 +3015,7 @@ namespace GameSvr.Npc
 
         private void ActionOfKick(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            PlayObject.MBoKickFlag = true;
+            PlayObject.BoKickFlag = true;
         }
 
         private void ActionOfKill(PlayObject PlayObject, QuestActionInfo QuestActionInfo)

@@ -412,14 +412,14 @@ namespace GameSvr.GameGate
                                 {
                                     if (!GateUser.PlayObject.OffLineFlag)
                                     {
-                                        GateUser.PlayObject.MBoSoftClose = true;
+                                        GateUser.PlayObject.BoSoftClose = true;
                                     }
                                 }
-                                if (GateUser.PlayObject != null && GateUser.PlayObject.Ghost && !GateUser.PlayObject.MBoReconnection)
+                                if (GateUser.PlayObject != null && GateUser.PlayObject.Ghost && !GateUser.PlayObject.BoReconnection)
                                 {
                                     IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.nSessionID);
                                 }
-                                if (GateUser.PlayObject != null && GateUser.PlayObject.MBoSoftClose && GateUser.PlayObject.MBoReconnection && GateUser.PlayObject.MBoEmergencyClose)
+                                if (GateUser.PlayObject != null && GateUser.PlayObject.BoSoftClose && GateUser.PlayObject.BoReconnection && GateUser.PlayObject.BoEmergencyClose)
                                 {
                                     IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.nSessionID);
                                 }

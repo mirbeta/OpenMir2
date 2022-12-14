@@ -2191,7 +2191,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ONLINELONGMIN);
                 return result;
             }
-            var nOnlineTime = (HUtil32.GetTickCount() - PlayObject.MDwLogonTick) / 60000;
+            var nOnlineTime = (HUtil32.GetTickCount() - PlayObject.LogonTick) / 60000;
             var cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {

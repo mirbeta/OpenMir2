@@ -24,8 +24,8 @@ namespace GameSvr.GameCommand.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
-                m_PlayObject.MBoKickFlag = true;
-                m_PlayObject.MBoEmergencyClose = true;
+                m_PlayObject.BoKickFlag = true;
+                m_PlayObject.BoEmergencyClose = true;
                 //m_PlayObject.m_boPlayOffLine = false;
                 //m_PlayObject.m_boNotOnlineAddExp = false;
             }

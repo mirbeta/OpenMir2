@@ -2289,12 +2289,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$LOGINTIME":
-                    sValue = PlayObject.MDLogonTime.ToString();
+                    sValue = PlayObject.LogonTime.ToString();
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$LOGINLONG":
-                    nValue = (HUtil32.GetTickCount() - PlayObject.MDwLogonTick) / 60000;
+                    nValue = (HUtil32.GetTickCount() - PlayObject.LogonTick) / 60000;
                     nDataType = 1;
                     result = true;
                     return result;

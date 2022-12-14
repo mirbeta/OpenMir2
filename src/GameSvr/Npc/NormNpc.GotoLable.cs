@@ -1856,11 +1856,11 @@ namespace GameSvr.Npc
                         result = false;
                         break;
                     case ScriptConst.nTIMERECALL:
-                        PlayObject.MBoTimeRecall = true;
-                        PlayObject.MSMoveMap = PlayObject.MapName;
-                        PlayObject.MNMoveX = PlayObject.CurrX;
-                        PlayObject.MNMoveY = PlayObject.CurrY;
-                        PlayObject.MDwTimeRecallTick = HUtil32.GetTickCount() + (QuestActionInfo.nParam1 * 60 * 1000);
+                        PlayObject.BoTimeRecall = true;
+                        PlayObject.TimeRecallMoveMap = PlayObject.MapName;
+                        PlayObject.TimeRecallMoveX = PlayObject.CurrX;
+                        PlayObject.TimeRecallMoveY = PlayObject.CurrY;
+                        PlayObject.TimeRecallTick = HUtil32.GetTickCount() + (QuestActionInfo.nParam1 * 60 * 1000);
                         break;
                     case ScriptConst.nSC_PARAM1:
                         n34 = QuestActionInfo.nParam1;
@@ -1944,7 +1944,7 @@ namespace GameSvr.Npc
                         PercentData(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nBREAKTIMERECALL:
-                        PlayObject.MBoTimeRecall = false;
+                        PlayObject.BoTimeRecall = false;
                         break;
                     case ScriptConst.nCHANGEMODE:
                         switch (QuestActionInfo.nParam1)
@@ -2001,8 +2001,8 @@ namespace GameSvr.Npc
                         ActionOfRecallmob(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nKICK:
-                        PlayObject.MBoReconnection = true;
-                        PlayObject.MBoSoftClose = true;
+                        PlayObject.BoReconnection = true;
+                        PlayObject.BoSoftClose = true;
                         break;
                     case ScriptConst.nTHROWITEM://将指定物品刷新到指定地图坐标范围内
                         ActionOfTHROWITEM(PlayObject, QuestActionInfo);
@@ -2521,24 +2521,24 @@ namespace GameSvr.Npc
             {
                 btStrLabel = 0;
             }
-            PlayObject.MBtValLabel = (byte)btStrLabel;
+            PlayObject.ValLabel = (byte)btStrLabel;
             var btType = QuestActionInfo.nParam2;
             if (btType > 3)
             {
                 btType = 0;
             }
-            PlayObject.MBtValType = (byte)btType;
+            PlayObject.ValType = (byte)btType;
             var btLen = HUtil32._MAX(1, QuestActionInfo.nParam3);
             PlayObject.MSGotoNpcLabel = QuestActionInfo.sParam4;
             var sHint = QuestActionInfo.sParam5;
-            PlayObject.MBtValNpcType = 0;
+            PlayObject.ValNpcType = 0;
             if (string.Compare(QuestActionInfo.sParam6, "QF", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                PlayObject.MBtValNpcType = 1;
+                PlayObject.ValNpcType = 1;
             }
             else if (string.Compare(QuestActionInfo.sParam6, "QM", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                PlayObject.MBtValNpcType = 2;
+                PlayObject.ValNpcType = 2;
             }
             if (string.IsNullOrEmpty(sHint))
             {
