@@ -3401,6 +3401,65 @@ namespace GameSvr.Player
             return result;
         }
 
+        protected override void AttackDir(BaseObject TargeBaseObject, short wHitMode, byte nDir)
+        {
+            switch (wHitMode)
+            {
+                case 5 when (MagicArr[MagicConst.SKILL_BANWOL] != null):
+                    if (WAbil.MP > 0)
+                    {
+                        DamageSpell((ushort)(MagicArr[MagicConst.SKILL_BANWOL].Magic.DefSpell + GetMagicSpell(MagicArr[MagicConst.SKILL_BANWOL])));
+                        HealthSpellChanged();
+                    }
+                    else
+                    {
+                        wHitMode = Grobal2.RM_HIT;
+                    }
+                    break;
+                case 8 when (MagicArr[MagicConst.SKILL_CROSSMOON] != null):
+                    if (WAbil.MP > 0)
+                    {
+                        DamageSpell((ushort)(MagicArr[MagicConst.SKILL_CROSSMOON].Magic.DefSpell + GetMagicSpell(MagicArr[MagicConst.SKILL_CROSSMOON])));
+                        HealthSpellChanged();
+                    }
+                    else
+                    {
+                        wHitMode = Grobal2.RM_HIT;
+                    }
+                    break;
+                case 12 when (MagicArr[MagicConst.SKILL_REDBANWOL] != null):
+                    if (WAbil.MP > 0)
+                    {
+                        DamageSpell((ushort)(MagicArr[MagicConst.SKILL_REDBANWOL].Magic.DefSpell + GetMagicSpell(MagicArr[MagicConst.SKILL_REDBANWOL])));
+                        HealthSpellChanged();
+                    }
+                    else
+                    {
+                        wHitMode = Grobal2.RM_HIT;
+                    }
+                    break;
+            }
+
+            base.AttackDir(TargeBaseObject, wHitMode, nDir);
+
+
+        }
+
+        protected  bool _Attack(ref short wHitMode, BaseObject AttackTarget)
+        {
+            var success = base._Attack(ref wHitMode, AttackTarget);
+            if (!success)
+            {
+                return success;
+            }
+            bool bo21 = false;
+            ushort nWeaponDamage = 0;
+            ushort nPower = 0;
+            int nSecPwr = 0;
+            int n20;
+            return success;
+        }
+
         protected override bool IsAttackTarget(BaseObject baseObject)
         {
             var result = base.IsAttackTarget(baseObject);

@@ -432,7 +432,10 @@ namespace GameSvr.Actor
         protected int DecLightItemDrugTick;
         protected int VerifyTick;
         protected int CheckRoyaltyTick;
-        protected int MDwHpmpTick;
+        /// <summary>
+        /// 恢复血量和魔法间隔
+        /// </summary>
+        protected int AutoRecoveryTick;
         protected readonly PriorityQueue<SendMessage, int> MsgQueue;
         protected readonly IList<BaseObject> VisibleHumanList;
         protected readonly IList<VisibleMapItem> VisibleItems;
@@ -473,8 +476,17 @@ namespace GameSvr.Actor
         /// </summary>
         public int NextHitTime;
         protected UserMagic[] MagicArr;
+        /// <summary>
+        /// 攻杀剑法
+        /// </summary>
         protected bool PowerHit;
+        /// <summary>
+        /// 烈火剑法
+        /// </summary>
         protected bool FireHitSkill;
+        /// <summary>
+        /// 烈火剑法
+        /// </summary>
         protected bool TwinHitSkill;
         protected int LatestFireHitTick = 0;
         protected int LatestTwinHitTick = 0;
@@ -618,7 +630,7 @@ namespace GameSvr.Actor
             PoisoningTick = HUtil32.GetTickCount();
             VerifyTick = HUtil32.GetTickCount();
             CheckRoyaltyTick = HUtil32.GetTickCount();
-            MDwHpmpTick = HUtil32.GetTickCount();
+            AutoRecoveryTick = HUtil32.GetTickCount();
             MapMoveTick = HUtil32.GetTickCount();
             MasterTick = 0;
             WalkSpeed = 1400;
@@ -1130,7 +1142,7 @@ namespace GameSvr.Actor
         /// 减少生命值
         /// </summary>
         /// <param name="nDamage"></param>
-        private void DamageHealth(ushort nDamage)
+        internal void DamageHealth(ushort nDamage)
         {
             if ((LastHiter == null) || ((LastHiter.Race == ActorRace.Play) && !((PlayObject)LastHiter).UnMagicShield))
             {
@@ -1854,7 +1866,7 @@ namespace GameSvr.Actor
         /// </summary>
         /// <param name="userMagic"></param>
         /// <returns></returns>
-        private static ushort GetMagicSpell(UserMagic userMagic)
+        internal static ushort GetMagicSpell(UserMagic userMagic)
         {
             return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1));
         }
