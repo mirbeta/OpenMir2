@@ -3390,18 +3390,12 @@ namespace GameSvr.Player
 
         protected override byte GetNameColor()
         {
-            var result = base.GetNameColor();
             var pvpLevel = PvpLevel();
-            switch (pvpLevel)
+            if (pvpLevel == 0)
             {
-                case 1:
-                    result = M2Share.Config.btPKLevel1NameColor;
-                    break;
-                case >= 2:
-                    result = M2Share.Config.btPKLevel2NameColor;
-                    break;
+                return base.GetNameColor();
             }
-            return result;
+            return pvpLevel >= 2 ? M2Share.Config.btPKLevel2NameColor : M2Share.Config.btPKLevel1NameColor;
         }
 
         protected void AttackDir(BaseObject targetObject, short wHitMode, byte nDir)
