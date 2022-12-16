@@ -40,7 +40,7 @@ namespace GameSvr.Actor
             {
                 if (!Death)
                 {
-                    int recoveryTick = (HUtil32.GetTickCount() - AutoRecoveryTick) / 20;
+                    var recoveryTick = (HUtil32.GetTickCount() - AutoRecoveryTick) / 20;
                     AutoRecoveryTick = HUtil32.GetTickCount();
                     HealthTick += recoveryTick;
                     SpellTick += recoveryTick;
@@ -130,10 +130,10 @@ namespace GameSvr.Actor
             {
                 if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (IncHealing > 0)))
                 {
-                    int dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
+                    var dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
                     if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
                     {
-                        int dwC = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
+                        var dwC = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
                         IncHealthSpellTick = HUtil32.GetTickCount() + dwC;
                         if ((IncSpell > 0) || (IncHealth > 0) || (PerHealing > 0))
                         {
@@ -208,7 +208,7 @@ namespace GameSvr.Actor
                     HealthSpellChanged();
                 }
                 // 检查HP/MP值是否大于最大值，大于则降低到正常大小
-                bool boNeedRecalc = false;
+                var boNeedRecalc = false;
                 if (WAbil.HP > WAbil.MaxHP)
                 {
                     boNeedRecalc = true;
@@ -434,8 +434,8 @@ namespace GameSvr.Actor
             }
             try
             {
-                bool boChg = false;
-                bool boNeedRecalc = false;
+                var boChg = false;
+                var boNeedRecalc = false;
                 for (var i = 0; i < StatusArrTick.Length; i++)
                 {
                     if ((StatusArr[i] > 0) && (StatusArr[i] < 60000))
@@ -575,7 +575,7 @@ namespace GameSvr.Actor
             {
                 if (UseItems.Length >= Grobal2.U_CHARM && UseItems[Grobal2.U_CHARM] != null && UseItems[Grobal2.U_CHARM].Index > 0)
                 {
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
+                    var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
                     if ((StdItem.StdMode == 7) && (StdItem.Shape == 2 || StdItem.Shape == 3))
                     {
                         ushort stoneDura;
@@ -844,7 +844,7 @@ namespace GameSvr.Actor
         {
             if (VisibleActors.Count > 0)
             {
-                for (int i = 0; i < VisibleActors.Count; i++)
+                for (var i = 0; i < VisibleActors.Count; i++)
                 {
                     if (VisibleActors[i].BaseObject == baseObject)
                     {
@@ -858,7 +858,7 @@ namespace GameSvr.Actor
 
         public virtual bool IsProperFriend(BaseObject attackTarget)
         {
-            bool result = false;
+            var result = false;
             if (attackTarget == null)
             {
                 return false;
@@ -1009,10 +1009,6 @@ namespace GameSvr.Actor
                         MapRandomMove(processMsg.Msg, processMsg.wParam);
                         break;
                     case Grobal2.RM_DELAYPUSHED:
-                        /*nPower = processMsg.wParam;
-                        nTargetX = HUtil32.LoWord(processMsg.nParam1);
-                        nTargetY = HUtil32.HiWord(processMsg.nParam1);
-                        nRage = processMsg.nParam2;*/
                         targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                         if (targetBaseObject != null)
                         {
@@ -1045,11 +1041,6 @@ namespace GameSvr.Actor
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
-                        //#if DEBUG
-                        //                    default:
-                        //                        M2Share.Log.Warn(string.Format("人物: {0} 消息: Ident {1} Param {2} P1 {3} P2 {3} P3 {4} Msg {5}", ChrName, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
-                        //                        break;
-                        //#endif
                 }
             }
             catch (Exception e)
