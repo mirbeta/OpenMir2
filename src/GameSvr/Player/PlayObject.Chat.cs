@@ -42,25 +42,25 @@ namespace GameSvr.Player
                 if (Permission > 0)
                 {
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, ChrName + "=> " + saystr);
-                    if (MGetWhisperHuman != null && !MGetWhisperHuman.Ghost)
+                    if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        MGetWhisperHuman.SendMsg(MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        WhisperHuman.SendMsg(WhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
-                    if (PlayObject.MGetWhisperHuman != null && !PlayObject.MGetWhisperHuman.Ghost)
+                    if (PlayObject.WhisperHuman != null && !PlayObject.WhisperHuman.Ghost)
                     {
-                        PlayObject.MGetWhisperHuman.SendMsg(PlayObject.MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                 }
                 else
                 {
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, ChrName + "=> " + saystr);
-                    if (MGetWhisperHuman != null && !MGetWhisperHuman.Ghost)
+                    if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        MGetWhisperHuman.SendMsg(MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        WhisperHuman.SendMsg(WhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
-                    if (PlayObject.MGetWhisperHuman != null && !PlayObject.MGetWhisperHuman.Ghost)
+                    if (PlayObject.WhisperHuman != null && !PlayObject.WhisperHuman.Ghost)
                     {
-                        PlayObject.MGetWhisperHuman.SendMsg(PlayObject.MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                 }
             }
@@ -268,7 +268,7 @@ namespace GameSvr.Player
                     {
                         MSStoragePwd = sData;
                         MBoPasswordLocked = true;
-                        MBoCanGetBackItem = false;
+                        BoCanGetBackItem = false;
                         MSTempPwd = "";
                         SysMsg(M2Share.g_sReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
@@ -288,31 +288,31 @@ namespace GameSvr.Player
                         {
                             if (M2Share.Config.LockDealAction)
                             {
-                                MBoCanDeal = true;
+                                BoCanDeal = true;
                             }
                             if (M2Share.Config.LockDropAction)
                             {
-                                MBoCanDrop = true;
+                                BoCanDrop = true;
                             }
                             if (M2Share.Config.LockWalkAction)
                             {
-                                MBoCanWalk = true;
+                                BoCanWalk = true;
                             }
                             if (M2Share.Config.LockRunAction)
                             {
-                                MBoCanRun = true;
+                                BoCanRun = true;
                             }
                             if (M2Share.Config.LockHitAction)
                             {
-                                MBoCanHit = true;
+                                BoCanHit = true;
                             }
                             if (M2Share.Config.LockSpellAction)
                             {
-                                MBoCanSpell = true;
+                                BoCanSpell = true;
                             }
                             if (M2Share.Config.LockSendMsgAction)
                             {
-                                MBoCanSendMsg = true;
+                                BoCanSendMsg = true;
                             }
                             if (M2Share.Config.LockUserItemAction)
                             {
@@ -330,7 +330,7 @@ namespace GameSvr.Player
                         {
                             if (M2Share.Config.LockGetBackItemAction)
                             {
-                                MBoCanGetBackItem = true;
+                                BoCanGetBackItem = true;
                             }
                             SysMsg(M2Share.g_sStorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }

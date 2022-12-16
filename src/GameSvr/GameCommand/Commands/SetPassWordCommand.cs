@@ -189,7 +189,7 @@ namespace GameSvr.GameCommand.Commands
                 if (playObject.MSStoragePwd != "")
                 {
                     playObject.MBoPasswordLocked = true;
-                    playObject.MBoCanGetBackItem = false;
+                    playObject.BoCanGetBackItem = false;
                     playObject.SysMsg(M2Share.g_sLockStorageSuccessMsg, MsgColor.Green, MsgType.Hint);
                 }
                 else

@@ -149,10 +149,10 @@ namespace GameSvr.Player
                 {
                     HealthSpellChanged();
                 }
-                if (MBoTimeGoto && (HUtil32.GetTickCount() > MDwTimeGotoTick)) //Delaygoto延时跳转
+                if (BoTimeGoto && (HUtil32.GetTickCount() > TimeGotoTick)) //Delaygoto延时跳转
                 {
-                    MBoTimeGoto = false;
-                    ((Merchant)MTimeGotoNpc)?.GotoLable(this, MSTimeGotoLable, false);
+                    BoTimeGoto = false;
+                    ((Merchant)TimeGotoNpc)?.GotoLable(this, TimeGotoLable, false);
                 }
                 // 增加挂机
                 if (OffLineFlag && HUtil32.GetTickCount() > KickOffLineTick)
@@ -698,11 +698,11 @@ namespace GameSvr.Player
                 RefNameColor();
             }
             // 检测侦听私聊对像
-            if (MGetWhisperHuman != null)
+            if (WhisperHuman != null)
             {
-                if (MGetWhisperHuman.Death || MGetWhisperHuman.Ghost)
+                if (WhisperHuman.Death || WhisperHuman.Ghost)
                 {
-                    MGetWhisperHuman = null;
+                    WhisperHuman = null;
                 }
             }
             ProcessSpiritSuite();
@@ -797,9 +797,9 @@ namespace GameSvr.Player
                     ClientQueryUserName(processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
                     break;
                 case Grobal2.CM_QUERYBAGITEMS: //僵尸攻击：不断刷新包裹发送大量数据，导致网络阻塞
-                    if ((HUtil32.GetTickCount() - MDwQueryBagItemsTick) > 30 * 1000)
+                    if ((HUtil32.GetTickCount() - QueryBagItemsTick) > 30 * 1000)
                     {
-                        MDwQueryBagItemsTick = HUtil32.GetTickCount();
+                        QueryBagItemsTick = HUtil32.GetTickCount();
                         ClientQueryBagItems();
                     }
                     else
@@ -868,7 +868,7 @@ namespace GameSvr.Player
                             {
                                 if (dwDelayTime < M2Share.Config.DropOverSpeed)
                                 {
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1057,7 +1057,7 @@ namespace GameSvr.Player
                                 if (dwDelayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1102,7 +1102,7 @@ namespace GameSvr.Player
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
-                                if (MBoTestSpeedMode)
+                                if (TestSpeedMode)
                                 {
                                     SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
@@ -1112,14 +1112,14 @@ namespace GameSvr.Player
                                 if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1161,14 +1161,14 @@ namespace GameSvr.Player
                                     }
                                 }
                                 SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
-                                if (MBoTestSpeedMode)
+                                if (TestSpeedMode)
                                 {
                                     SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
                             {
-                                if (MBoTestSpeedMode)
+                                if (TestSpeedMode)
                                 {
                                     SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
@@ -1215,14 +1215,14 @@ namespace GameSvr.Player
                                 if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1278,14 +1278,14 @@ namespace GameSvr.Player
                                 if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg("操作延迟 Ident: " + processMsg.wIdent + " Time: " + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                     }
@@ -1333,14 +1333,14 @@ namespace GameSvr.Player
                                 if (dwDelayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
@@ -1388,14 +1388,14 @@ namespace GameSvr.Player
                                 if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
                                     SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    if (MBoTestSpeedMode)
+                                    if (TestSpeedMode)
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }

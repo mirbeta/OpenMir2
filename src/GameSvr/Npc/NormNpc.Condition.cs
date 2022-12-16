@@ -2270,7 +2270,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfIsLockStorage(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !PlayObject.MBoCanGetBackItem;
+            return !PlayObject.BoCanGetBackItem;
         }
 
         private bool ConditionOfCheckPayMent(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)

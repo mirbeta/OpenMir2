@@ -368,25 +368,25 @@ namespace GameSvr.RobotPlay
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { ChrName, Abil.Level, saystr }));
                     // 取得私聊信息
                     // m_GetWhisperHuman 侦听私聊对象
-                    if (MGetWhisperHuman != null && !MGetWhisperHuman.Ghost)
+                    if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        MGetWhisperHuman.SendMsg(MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
+                        WhisperHuman.SendMsg(WhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
-                    if (PlayObject.MGetWhisperHuman != null && !PlayObject.MGetWhisperHuman.Ghost)
+                    if (PlayObject.WhisperHuman != null && !PlayObject.WhisperHuman.Ghost)
                     {
-                        PlayObject.MGetWhisperHuman.SendMsg(PlayObject.MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
+                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
                 }
                 else
                 {
                     PlayObject.SendMsg(PlayObject, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { ChrName, Abil.Level, saystr }));
-                    if (MGetWhisperHuman != null && !MGetWhisperHuman.Ghost)
+                    if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        MGetWhisperHuman.SendMsg(MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
+                        WhisperHuman.SendMsg(WhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
-                    if (PlayObject.MGetWhisperHuman != null && !PlayObject.MGetWhisperHuman.Ghost)
+                    if (PlayObject.WhisperHuman != null && !PlayObject.WhisperHuman.Ghost)
                     {
-                        PlayObject.MGetWhisperHuman.SendMsg(PlayObject.MGetWhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
+                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Grobal2.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, PlayObject.ChrName, saystr }));
                     }
                 }
             }
@@ -1917,7 +1917,7 @@ namespace GameSvr.RobotPlay
             BaseObject BaseObject;
             bool boIsWarrSkill;
             bool result = false;
-            if (!MBoCanSpell)
+            if (!BoCanSpell)
             {
                 return false;
             }
@@ -2483,7 +2483,7 @@ namespace GameSvr.RobotPlay
             {
                 return false; // 麻痹不能跑动 
             }
-            if (!MBoCanRun) // 禁止跑,则退出
+            if (!BoCanRun) // 禁止跑,则退出
             {
                 return false;
             }

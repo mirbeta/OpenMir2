@@ -2396,9 +2396,9 @@ namespace GameSvr.Npc
                         ActionOfRepairAllItem(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_QUERYBAGITEMS:// 刷新包裹
-                        if ((HUtil32.GetTickCount() - PlayObject.MDwQueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
+                        if ((HUtil32.GetTickCount() - PlayObject.QueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
                         {
-                            PlayObject.MDwQueryBagItemsTick = HUtil32.GetTickCount();
+                            PlayObject.QueryBagItemsTick = HUtil32.GetTickCount();
                             PlayObject.ClientQueryBagItems();
                         }
                         else
@@ -2427,7 +2427,7 @@ namespace GameSvr.Npc
                         ActionOfQueryTrustDeal(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nDELAYGOTO:
-                        PlayObject.MBoTimeGoto = true;
+                        PlayObject.BoTimeGoto = true;
                         var m_DelayGoto = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
                         if (m_DelayGoto == 0)
                         {
@@ -2437,19 +2437,19 @@ namespace GameSvr.Npc
                         }
                         if (m_DelayGoto > 0)
                         {
-                            PlayObject.MDwTimeGotoTick = HUtil32.GetTickCount() + m_DelayGoto;
+                            PlayObject.TimeGotoTick = HUtil32.GetTickCount() + m_DelayGoto;
                         }
                         else
                         {
-                            PlayObject.MDwTimeGotoTick = HUtil32.GetTickCount() + QuestActionInfo.nParam1;//毫秒
+                            PlayObject.TimeGotoTick = HUtil32.GetTickCount() + QuestActionInfo.nParam1;//毫秒
                         }
-                        PlayObject.MSTimeGotoLable = QuestActionInfo.sParam2;
-                        PlayObject.MTimeGotoNpc = this;
+                        PlayObject.TimeGotoLable = QuestActionInfo.sParam2;
+                        PlayObject.TimeGotoNpc = this;
                         break;
                     case ScriptConst.nCLEARDELAYGOTO:
-                        PlayObject.MBoTimeGoto = false;
-                        PlayObject.MSTimeGotoLable = "";
-                        PlayObject.MTimeGotoNpc = null;
+                        PlayObject.BoTimeGoto = false;
+                        PlayObject.TimeGotoLable = "";
+                        PlayObject.TimeGotoNpc = null;
                         break;
                     case ScriptConst.nSC_QUERYVALUE:
                         ActionOfQueryValue(PlayObject, QuestActionInfo);

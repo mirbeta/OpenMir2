@@ -237,7 +237,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropGoldMsg);
                 return false;
             }
-            if (!MBoCanDrop || Envir.Flag.boNOTHROWITEM)
+            if (!BoCanDrop || Envir.Flag.boNOTHROWITEM)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropItemMsg);
                 return false;
@@ -263,7 +263,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
                 return false;
             }
-            if (!MBoCanDrop || Envir.Flag.boNOTHROWITEM)
+            if (!BoCanDrop || Envir.Flag.boNOTHROWITEM)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropItemMsg);
                 return false;
@@ -919,7 +919,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sPleaseTryDealLaterMsg);
                 return;
             }
-            if (!MBoCanDeal)
+            if (!BoCanDeal)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotTryDealMsg);
                 return;
@@ -931,7 +931,7 @@ namespace GameSvr.Player
                 {
                     if (targetPlayObject.Race == ActorRace.Play)
                     {
-                        if (targetPlayObject.AllowDeal && targetPlayObject.MBoCanDeal)
+                        if (targetPlayObject.AllowDeal && targetPlayObject.BoCanDeal)
                         {
                             targetPlayObject.SysMsg(ChrName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
                             SysMsg(targetPlayObject.ChrName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
@@ -1672,7 +1672,7 @@ namespace GameSvr.Player
                 SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!MBoCanGetBackItem)
+            if (!BoCanGetBackItem)
             {
                 SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + CommandMgr.Commands.UnlockStorage.CmdName + '\\' + "仓库加锁命令: @" + CommandMgr.Commands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.Commands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.Commands.ChgPassword.CmdName);
                 return;

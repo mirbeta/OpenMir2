@@ -1039,7 +1039,7 @@ namespace GameSvr.Npc
         /// <param name="User"></param>
         private void UserSelectOpenDealOffForm(PlayObject User)
         {
-            if (User.BoYbdeal)
+            if (User.BoYbDeal)
             {
                 if (!User.SellOffInTime(0))
                 {

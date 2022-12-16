@@ -19,7 +19,7 @@ namespace GameSvr.Player
         private void UpdateSellOffInfo(int code)
         {
             DealOffInfo DealOffInfo;
-            if (BoYbdeal)// 已开通元宝服务
+            if (BoYbDeal)// 已开通元宝服务
             {
                 for (var i = M2Share.sSellOffItemList.Count - 1; i >= 0; i--)
                 {
@@ -70,7 +70,7 @@ namespace GameSvr.Player
                 HUtil32.GetValidStr3(sItemName, ref sItemName, ' ');
             }
             bo11 = false;
-            if (!MBoSellOffOk)
+            if (!SellOffConfirm)
             {
                 for (var i = this.ItemList.Count - 1; i >= 0; i--)
                 {
@@ -132,7 +132,7 @@ namespace GameSvr.Player
                 HUtil32.GetValidStr3(sItemName, ref sItemName, ' ');
             }
             bool bo11 = false;
-            if (!MBoSellOffOk)
+            if (!SellOffConfirm)
             {
                 for (var i = SellOffItemList.Count - 1; i >= 0; i--)
                 {
@@ -444,7 +444,7 @@ namespace GameSvr.Player
         public string SelectSellDate()
         {
             var result = "您未开通" + M2Share.Config.GameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
-            if (BoYbdeal)
+            if (BoYbDeal)
             {
                 // 已开通元宝服务
                 if (M2Share.sSellOffItemList.Count > 0)
@@ -523,9 +523,9 @@ namespace GameSvr.Player
             UserItem UserItem;
             StdItem StdItem;
             DealOffInfo DealOffInfo;
-            MBoSellOffOk = true;
+            SellOffConfirm = true;
             var bo11 = false;
-            if (MBoSellOffOk && (SellOffItemList.Count > 0 || nGameDiamond > 0) && SellOffItemList.Count < 10 && sBuyChrName.Length < 20 && nSellGold > 0 && nSellGold < 100000000
+            if (SellOffConfirm && (SellOffItemList.Count > 0 || nGameDiamond > 0) && SellOffItemList.Count < 10 && sBuyChrName.Length < 20 && nSellGold > 0 && nSellGold < 100000000
                 && string.Compare(sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 // 不能自己寄售给自己
@@ -582,7 +582,7 @@ namespace GameSvr.Player
                 this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "[成功] 系统已经成功接受您的申请");
                 bo11 = true;
                 M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表 
-                MBoSellOffOk = false;
+                SellOffConfirm = false;
                 SellOffItemList.Clear();
             }
             if (!bo11)
@@ -620,7 +620,7 @@ namespace GameSvr.Player
                     SellOffItemList.RemoveAt(i);
                 }
             }
-            MBoSellOffOk = false;// 确认元宝寄售标志 
+            SellOffConfirm = false;// 确认元宝寄售标志 
         }
     }
 }

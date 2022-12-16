@@ -24,7 +24,7 @@ namespace GameSvr.Npc
             int nGameGold = 0;
             try
             {
-                if (PlayObject.BoYbdeal)
+                if (PlayObject.BoYbDeal)
                 {
                     PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您已开通寄售服务,不需要再开通!!!\\ \\<返回/@main>");
                     return;// 如已开通元宝服务则退出
@@ -37,7 +37,7 @@ namespace GameSvr.Npc
                 {
                     // 玩家的元宝数大于或等于开通所需的元宝数
                     PlayObject.MNGameGold -= nGameGold;
-                    PlayObject.BoYbdeal = true;
+                    PlayObject.BoYbDeal = true;
                     PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/开通寄售服务成功!!!\\ \\<返回/@main>");
                 }
                 else
@@ -64,7 +64,7 @@ namespace GameSvr.Npc
             try
             {
                 bo12 = false;
-                if (PlayObject.BoYbdeal) // 已开通元宝服务
+                if (PlayObject.BoYbDeal) // 已开通元宝服务
                 {
                     if (PlayObject.SellOffInTime(0))
                     {
@@ -176,7 +176,7 @@ namespace GameSvr.Npc
             try
             {
                 bo12 = false;
-                if (PlayObject.BoYbdeal)
+                if (PlayObject.BoYbDeal)
                 {
                     // 已开通元宝服务
                     if (PlayObject.SellOffInTime(1))
@@ -1232,7 +1232,7 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SKILLLEVEL);
                 return;
             }
-            PlayObject.MSRankLevelName = sRankLevelName;
+            PlayObject.RankLevelName = sRankLevelName;
             PlayObject.RefShowName();
         }
 

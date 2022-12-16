@@ -733,7 +733,7 @@ namespace GameSvr.Player
 
         private void ClientClickNpc(int actorId)
         {
-            if (!MBoCanDeal)
+            if (!BoCanDeal)
             {
                 SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotTryDealMsg);
                 return;
@@ -742,9 +742,9 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (HUtil32.GetTickCount() - MDwClickNpcTime > M2Share.Config.ClickNpcTime)
+            if (HUtil32.GetTickCount() - ClickNpcTime > M2Share.Config.ClickNpcTime)
             {
-                MDwClickNpcTime = HUtil32.GetTickCount();
+                ClickNpcTime = HUtil32.GetTickCount();
                 var normNpc = WorldServer.FindMerchant<Merchant>(actorId) ?? WorldServer.FindNpc<NormNpc>(actorId);
                 if (normNpc != null)
                 {
@@ -2943,7 +2943,7 @@ namespace GameSvr.Player
             }
             // 检查二个不同操作之间所需间隔时间
             dwCheckTime = HUtil32.GetTickCount() - MDwActionTick;
-            if (MBoTestSpeedMode)
+            if (TestSpeedMode)
             {
                 SysMsg("间隔: " + dwCheckTime, MsgColor.Blue, MsgType.Notice);
             }
@@ -3494,31 +3494,31 @@ namespace GameSvr.Player
                     {
                         if (M2Share.Config.LockDealAction)
                         {
-                            MBoCanDeal = true;
+                            BoCanDeal = true;
                         }
                         if (M2Share.Config.LockDropAction)
                         {
-                            MBoCanDrop = true;
+                            BoCanDrop = true;
                         }
                         if (M2Share.Config.LockWalkAction)
                         {
-                            MBoCanWalk = true;
+                            BoCanWalk = true;
                         }
                         if (M2Share.Config.LockRunAction)
                         {
-                            MBoCanRun = true;
+                            BoCanRun = true;
                         }
                         if (M2Share.Config.LockHitAction)
                         {
-                            MBoCanHit = true;
+                            BoCanHit = true;
                         }
                         if (M2Share.Config.LockSpellAction)
                         {
-                            MBoCanSpell = true;
+                            BoCanSpell = true;
                         }
                         if (M2Share.Config.LockSendMsgAction)
                         {
-                            MBoCanSendMsg = true;
+                            BoCanSendMsg = true;
                         }
                         if (M2Share.Config.LockUserItemAction)
                         {
@@ -3536,7 +3536,7 @@ namespace GameSvr.Player
                     {
                         if (M2Share.Config.LockGetBackItemAction)
                         {
-                            MBoCanGetBackItem = true;
+                            BoCanGetBackItem = true;
                         }
                         SysMsg(M2Share.g_sStorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }

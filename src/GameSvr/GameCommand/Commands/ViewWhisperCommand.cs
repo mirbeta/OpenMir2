@@ -25,14 +25,14 @@ namespace GameSvr.GameCommand.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sChrName);
             if (m_PlayObject != null)
             {
-                if (m_PlayObject.MGetWhisperHuman == PlayObject)
+                if (m_PlayObject.WhisperHuman == PlayObject)
                 {
-                    m_PlayObject.MGetWhisperHuman = null;
+                    m_PlayObject.WhisperHuman = null;
                     PlayObject.SysMsg(string.Format(CommandHelp.GameCommandViewWhisperMsg1, sChrName), MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    m_PlayObject.MGetWhisperHuman = PlayObject;
+                    m_PlayObject.WhisperHuman = PlayObject;
                     PlayObject.SysMsg(string.Format(CommandHelp.GameCommandViewWhisperMsg2, sChrName), MsgColor.Green, MsgType.Hint);
                 }
             }
