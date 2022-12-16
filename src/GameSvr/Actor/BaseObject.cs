@@ -1110,7 +1110,7 @@ namespace GameSvr.Actor
             else
             {
                 result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
-                if (Luck < 0)
+                if (Luck <= 0)
                 {
                     if (M2Share.RandomNumber.Random(10 - HUtil32._MAX(0, -Luck)) == 0)
                     {
