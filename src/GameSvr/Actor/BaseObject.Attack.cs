@@ -20,53 +20,6 @@ namespace GameSvr.Actor
             return GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
         }
 
-        protected ushort GetAttackPowerHit(short wHitMode, ushort nPower, BaseObject AttackTarget, ref bool canHit)
-        {
-            canHit = false;
-            if (AttackTarget != null)
-            {
-                switch (wHitMode)
-                {
-                    case 3 when PowerHit:
-                        PowerHit = false;
-                        nPower += HitPlus;
-                        canHit = true;
-                        break;
-                    case 7 when FireHitSkill:// 烈火剑法
-                        FireHitSkill = false;
-                        LatestFireHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10));
-                        canHit = true;
-                        break;
-                    case 9 when TwinHitSkill:// 烈火剑法
-                        TwinHitSkill = false;
-                        LatestTwinHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10));
-                        canHit = true;
-                        break;
-                }
-            }
-            else
-            {
-                switch (wHitMode)
-                {
-                    case 3 when PowerHit:
-                        PowerHit = false;
-                        nPower += HitPlus;
-                        canHit = true;
-                        break;
-                    case 7 when FireHitSkill:
-                        FireHitSkill = false;
-                        LatestFireHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                        break;
-                    case 9 when TwinHitSkill:
-                        TwinHitSkill = false;
-                        LatestTwinHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                        break;
-                }
-            }
-            return nPower;
-        }
 
         internal bool _Attack(ushort nPower, BaseObject attackTarget)
         {

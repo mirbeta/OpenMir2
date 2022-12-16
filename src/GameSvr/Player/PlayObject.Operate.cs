@@ -21,8 +21,7 @@ namespace GameSvr.Player
             {
                 var nameColor = GetChrColor(baseObject);
                 var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, baseObject.ActorId, nameColor, 0, 0);
-                var uname = baseObject.GetShowName();
-                SendSocket(defMsg, EDCode.EncodeString(uname));
+                SendSocket(defMsg, EDCode.EncodeString(baseObject.GetShowName()));
             }
             else
             {

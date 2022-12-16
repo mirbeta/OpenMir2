@@ -477,20 +477,6 @@ namespace GameSvr.Actor
         public int NextHitTime;
         protected UserMagic[] MagicArr;
         /// <summary>
-        /// 攻杀剑法
-        /// </summary>
-        protected bool PowerHit;
-        /// <summary>
-        /// 烈火剑法
-        /// </summary>
-        protected bool FireHitSkill;
-        /// <summary>
-        /// 烈火剑法
-        /// </summary>
-        protected bool TwinHitSkill;
-        protected int LatestFireHitTick = 0;
-        protected int LatestTwinHitTick = 0;
-        /// <summary>
         /// 是否刷新在地图上信息
         /// </summary>
         protected readonly bool DenyRefStatus;
@@ -540,9 +526,6 @@ namespace GameSvr.Actor
             HitDouble = 0;
             BoFearFire = false;
             AbilSeeHealGauge = false;
-            PowerHit = false;
-            FireHitSkill = false;
-            TwinHitSkill = false;
             HitPoint = 5;
             SpeedPoint = 15;
             HitSpeed = 0;
@@ -4347,7 +4330,7 @@ namespace GameSvr.Actor
                     break;
             }
 
-            UseItems = new UserItem[8];
+            UseItems = new UserItem[13];
             for (var i = 0; i < ItemList.Count; i++)
             {
                 ItemList[i] = null;

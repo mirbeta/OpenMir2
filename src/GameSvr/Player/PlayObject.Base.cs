@@ -159,6 +159,20 @@ namespace GameSvr.Player
         protected bool UseThrusting;
         protected bool UseHalfMoon;
         /// <summary>
+        /// 攻杀剑法
+        /// </summary>
+        protected bool PowerHit;
+        /// <summary>
+        /// 烈火剑法
+        /// </summary>
+        protected bool FireHitSkill;
+        /// <summary>
+        /// 烈火剑法
+        /// </summary>
+        protected bool TwinHitSkill;
+        protected int LatestFireHitTick = 0;
+        protected int LatestTwinHitTick = 0;
+        /// <summary>
         /// 交易列表
         /// </summary>
         public IList<UserItem> DealItemList;
