@@ -19,7 +19,6 @@ namespace GameSvr.Actor
             const string sExceptionMsg4 = "[Exception] TBaseObject::Run 4 Code:{0}";
             const string sExceptionMsg5 = "[Exception] TBaseObject::Run 5";
             const string sExceptionMsg6 = "[Exception] TBaseObject::Run 6";
-            var dwRunTick = HUtil32.GetTickCount();
             try
             {
                 while (GetMessage(out var ProcessMsg))
@@ -519,11 +518,6 @@ namespace GameSvr.Actor
             {
                 M2Share.Log.Error(sExceptionMsg6);
             }
-            M2Share.g_nBaseObjTimeMin = HUtil32.GetTickCount() - dwRunTick;
-            if (M2Share.g_nBaseObjTimeMax < M2Share.g_nBaseObjTimeMin)
-            {
-                M2Share.g_nBaseObjTimeMax = M2Share.g_nBaseObjTimeMin;
-            }
         }
 
         public virtual void Die()
@@ -886,10 +880,6 @@ namespace GameSvr.Actor
 
         protected virtual bool Operate(ProcessMessage processMsg)
         {
-            int nTargetX;
-            int nTargetY;
-            int nPower;
-            int nRage;
             const string sExceptionMsg = "[Exception] TBaseObject::Operate ";
             try
             {
@@ -997,10 +987,10 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_DELAYMAGIC:
-                        nPower = processMsg.wParam;
-                        nTargetX = HUtil32.LoWord(processMsg.nParam1);
-                        nTargetY = HUtil32.HiWord(processMsg.nParam1);
-                        nRage = processMsg.nParam2;
+                        var nPower = processMsg.wParam;
+                        var nTargetX = HUtil32.LoWord(processMsg.nParam1);
+                        var nTargetY = HUtil32.HiWord(processMsg.nParam1);
+                        var nRage = processMsg.nParam2;
                         targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                         if ((targetBaseObject != null) && (targetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
@@ -1019,14 +1009,14 @@ namespace GameSvr.Actor
                         MapRandomMove(processMsg.Msg, processMsg.wParam);
                         break;
                     case Grobal2.RM_DELAYPUSHED:
-                        nPower = processMsg.wParam;
+                        /*nPower = processMsg.wParam;
                         nTargetX = HUtil32.LoWord(processMsg.nParam1);
                         nTargetY = HUtil32.HiWord(processMsg.nParam1);
-                        nRage = processMsg.nParam2;
+                        nRage = processMsg.nParam2;*/
                         targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                         if (targetBaseObject != null)
                         {
-                            targetBaseObject.CharPushed((byte)nPower, nRage);
+                            targetBaseObject.CharPushed((byte)processMsg.wParam, processMsg.nParam2);
                         }
                         break;
                     case Grobal2.RM_POISON:

@@ -171,8 +171,6 @@ namespace GameSvr
         public static short g_nMissionY = 0;
         public static bool StartReady = false;
         public static bool boFilterWord = false;
-        public static int g_nBaseObjTimeMin = 0;
-        public static int g_nBaseObjTimeMax = 0;
         public static int g_nSockCountMin = 0;
         public static int g_nSockCountMax = 0;
         public static int g_nHumCountMin = 0;
