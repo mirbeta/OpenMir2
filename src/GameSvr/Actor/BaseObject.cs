@@ -5,6 +5,7 @@ using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
 using GameSvr.Player;
+using System.Collections.Concurrent;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -436,7 +437,7 @@ namespace GameSvr.Actor
         /// 恢复血量和魔法间隔
         /// </summary>
         protected int AutoRecoveryTick;
-        protected readonly PriorityQueue<SendMessage, int> MsgQueue;
+        protected readonly Queue<SendMessage> MsgQueue;
         protected readonly IList<BaseObject> VisibleHumanList;
         protected readonly IList<VisibleMapItem> VisibleItems;
         protected readonly IList<EventInfo> VisibleEvents;
@@ -566,7 +567,7 @@ namespace GameSvr.Actor
             NoAttackMode = false;
             NoTame = false;
             AddAbil = new AddAbility();
-            MsgQueue = new PriorityQueue<SendMessage, int>();
+            MsgQueue = new Queue<SendMessage>();
             VisibleHumanList = new List<BaseObject>();
             VisibleActors = new List<VisibleBaseObject>();
             VisibleItems = new List<VisibleMapItem>();
@@ -2040,7 +2041,7 @@ namespace GameSvr.Actor
                         BaseObject = baseObject.ActorId,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage, 1);
+                    MsgQueue.Enqueue(sendMessage);
                 }
             }
             finally
@@ -2069,7 +2070,7 @@ namespace GameSvr.Actor
                         LateDelivery = false,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage, wIdent);
+                    MsgQueue.Enqueue(sendMessage);
                 }
             }
             finally
@@ -2100,7 +2101,7 @@ namespace GameSvr.Actor
                         LateDelivery = true,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage, wIdent);
+                    MsgQueue.Enqueue(sendMessage);
                 }
             }
             finally
@@ -2132,7 +2133,7 @@ namespace GameSvr.Actor
                         Buff = sMsg
                     };
                     sendMessage.BaseObject = baseObject == Grobal2.RM_STRUCK ? Grobal2.RM_STRUCK : baseObject;
-                    MsgQueue.Enqueue(sendMessage, wIdent);
+                    MsgQueue.Enqueue(sendMessage);
                 }
             }
             finally
@@ -2155,11 +2156,11 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out var sendMessage,out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if ((sendMessage.wIdent == wIdent) && (sendMessage.nParam1 == lParam1))
                         {
-                            MsgQueue.TryDequeue(out sendMessage, out priority);
+                            MsgQueue.TryDequeue(out sendMessage);
                             Dispose(sendMessage);
                         }
                     }
@@ -2187,11 +2188,11 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if (sendMessage.wIdent == wIdent)
                         {
-                            MsgQueue.TryDequeue(out sendMessage, out priority);
+                            MsgQueue.TryDequeue(out sendMessage);
                             Dispose(sendMessage);
                         }
                     }
@@ -2219,7 +2220,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if ((sendMessage.wIdent == Grobal2.CM_TURN) || (sendMessage.wIdent == Grobal2.CM_WALK) ||
                             (sendMessage.wIdent == Grobal2.CM_SITDOWN) || (sendMessage.wIdent == Grobal2.CM_HORSERUN) ||
@@ -2228,7 +2229,7 @@ namespace GameSvr.Actor
                             (sendMessage.wIdent == Grobal2.CM_POWERHIT) || (sendMessage.wIdent == Grobal2.CM_LONGHIT) ||
                             (sendMessage.wIdent == Grobal2.CM_WIDEHIT) || (sendMessage.wIdent == Grobal2.CM_FIREHIT))
                         {
-                            MsgQueue.TryDequeue(out sendMessage, out priority);
+                            MsgQueue.TryDequeue(out sendMessage);
                             Dispose(sendMessage);
                         }
                     }
@@ -2257,14 +2258,14 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if ((sendMessage.DeliveryTime != 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
                         {
                             I++;
                             continue;
                         }
-                        MsgQueue.TryDequeue(out sendMessage, out priority);
+                        MsgQueue.TryDequeue(out sendMessage);
                         msg = new ProcessMessage();
                         msg.wIdent = sendMessage.wIdent;
                         msg.wParam = sendMessage.wParam;
@@ -3666,7 +3667,7 @@ namespace GameSvr.Actor
             {
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if (sendMessage.wIdent  == Grobal2.RM_10401)
                         {

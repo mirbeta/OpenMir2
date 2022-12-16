@@ -932,7 +932,7 @@ namespace GameSvr.Player
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if (sendMessage.wIdent == Grobal2.CM_BUTCH)
                         {
@@ -2774,7 +2774,7 @@ namespace GameSvr.Player
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if (sendMessage.wIdent  >= Grobal2.CM_HIT || sendMessage.wIdent <= Grobal2.CM_FIREHIT)
                         {
@@ -2802,7 +2802,7 @@ namespace GameSvr.Player
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if (sendMessage.wIdent  == Grobal2.CM_SPELL)
                         {
@@ -2830,7 +2830,7 @@ namespace GameSvr.Player
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if (sendMessage.wIdent  == Grobal2.CM_RUN)
                         {
@@ -2858,7 +2858,7 @@ namespace GameSvr.Player
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if (sendMessage.wIdent  == Grobal2.CM_WALK)
                         {
@@ -2882,7 +2882,7 @@ namespace GameSvr.Player
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if (sendMessage.wIdent  == Grobal2.CM_TURN)
                         {
@@ -2906,7 +2906,7 @@ namespace GameSvr.Player
             {
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage))
                     {
                         if (sendMessage.wIdent  == Grobal2.CM_SITDOWN)
                         {
