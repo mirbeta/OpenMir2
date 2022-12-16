@@ -145,7 +145,7 @@ namespace GameSvr.Actor
                 {
                     if ((nSecPwr > 0) && IsProperTarget(baseObject))
                     {
-                        result = AttackDirect(baseObject, nSecPwr);
+                        AttackDirect(baseObject, nSecPwr);
                         SetTargetCreat(baseObject);
                     }
                     result = true;
