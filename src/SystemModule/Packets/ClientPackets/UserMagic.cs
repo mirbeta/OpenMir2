@@ -9,6 +9,9 @@ namespace SystemModule.Packets.ClientPackets
         public ushort MagIdx;
         public byte Level;
         public char Key;
+        /// <summary>
+        /// 技能熟练点
+        /// </summary>
         public int TranPoint;
 
         public UserMagic()

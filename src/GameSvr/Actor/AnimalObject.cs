@@ -64,7 +64,7 @@ namespace GameSvr.Actor
 
         protected virtual void Attack(BaseObject targetObject, byte nDir)
         {
-            base.AttackDir(targetObject, Grobal2.RM_HIT, nDir);
+            AttackDir(targetObject, Grobal2.RM_HIT, nDir);
             SendAttackMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY);
         }
 

@@ -29,7 +29,7 @@ namespace GameSvr.Monster.Monsters
                     this.TargetCret.GetBackPosition(ref this.CurrX, ref this.CurrY);
                     this.Direction = M2Share.GetNextDirection(this.CurrX, this.CurrY, this.TargetCret.CurrX, this.TargetCret.CurrY);
                     this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.CurrX, this.CurrY, 0, "");
-                    this._Attack(this.TargetCret);
+                    this._Attack(GetBaseAttackPoewr(), this.TargetCret);
                     this.TargetCret.SetLastHiter(this);
                     this.TargetCret.ExpHitter = null;
                     this.CurrX = nOldX;
