@@ -1120,7 +1120,7 @@ namespace GameSvr.Actor
             }
             if (Race == ActorRace.Play)
             {
-                var playObject = this as PlayObject;
+                var playObject = (PlayObject)this;
                 result = HUtil32.Round(result * (playObject.PowerRate / 100));
                 if (playObject.BoPowerItem)
                 {
@@ -1652,14 +1652,11 @@ namespace GameSvr.Actor
 
         public bool AddItemToBag(UserItem userItem)
         {
-            var result = false;
-            if (ItemList.Count < Grobal2.MAXBAGITEM)
-            {
-                ItemList.Add(userItem);
-                WeightChanged();
-                result = true;
-            }
-            return result;
+            if (ItemList.Count >= Grobal2.MAXBAGITEM)
+                return false;
+            ItemList.Add(userItem);
+            WeightChanged();
+            return true;
         }
 
         /// <summary>
@@ -1692,10 +1689,10 @@ namespace GameSvr.Actor
                         return;
                     }
                     var nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
-                    int nDura;
+                    ushort nDura;
                     if (M2Share.Config.DecLampDura)
                     {
-                        nDura = UseItems[Grobal2.U_RIGHTHAND].Dura - 1;
+                        nDura = (ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura - 1);
                     }
                     else
                     {
@@ -1711,12 +1708,12 @@ namespace GameSvr.Actor
                         UseItems[Grobal2.U_RIGHTHAND].Index = 0;
                         Light = 0;
                         SendRefMsg(Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
-                        SendMsg(this, Grobal2.RM_LAMPCHANGEDURA, 0, UseItems[Grobal2.U_RIGHTHAND].Dura, 0, 0, "");
+                        SendMsg(this, Grobal2.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
                         RecalcAbilitys();
                     }
                     else
                     {
-                        UseItems[Grobal2.U_RIGHTHAND].Dura = (ushort)nDura;
+                        UseItems[Grobal2.U_RIGHTHAND].Dura = nDura;
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000))
                     {
@@ -1835,7 +1832,6 @@ namespace GameSvr.Actor
         /// <summary>
         /// 计算包裹物品总重量
         /// </summary>
-        /// <returns></returns>
         protected ushort RecalcBagWeight()
         {
             ushort result = 0;
@@ -1864,8 +1860,6 @@ namespace GameSvr.Actor
         /// <summary>
         /// 计算施法魔法值
         /// </summary>
-        /// <param name="userMagic"></param>
-        /// <returns></returns>
         internal static ushort GetMagicSpell(UserMagic userMagic)
         {
             return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1));
@@ -1933,7 +1927,7 @@ namespace GameSvr.Actor
             {
                 UseItems[Grobal2.U_WEAPON].Dura = nDura;
             }
-            if ((int)Math.Abs((nDura / 1.03)) != nDuraPoint)
+            if ((ushort)Math.Abs((nDura / 1.03)) != nDuraPoint)
             {
                 SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             }
