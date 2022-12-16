@@ -1947,7 +1947,7 @@ namespace GameSvr.Actor
             {
                 return 0x7D;
             }
-            if (baseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
+            if (baseObject.IsSlave && baseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
             {
                 return M2Share.Config.SlaveColor[baseObject.SlaveExpLevel];
             }
