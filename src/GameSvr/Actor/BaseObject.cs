@@ -1900,13 +1900,16 @@ namespace GameSvr.Actor
             }
         }
         
+        /// <summary>
+        /// 减少武器持久值
+        /// </summary>
         protected void DoDamageWeapon(ushort nWeaponDamage)
         {
             if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].Index <= 0)
             {
                 return;
             }
-            ushort nDura = UseItems[Grobal2.U_WEAPON].Dura;
+            var nDura = UseItems[Grobal2.U_WEAPON].Dura;
             var nDuraPoint = HUtil32.Round(nDura / 1.03);
             nDura -= nWeaponDamage;
             if (nDura <= 0)
@@ -1954,7 +1957,7 @@ namespace GameSvr.Actor
             {
                 return M2Share.Config.SlaveColor[baseObject.SlaveExpLevel];
             }
-            return baseObject.GetNamecolor();
+            return baseObject.GetNameColor();
         }
 
         public int GetLevelExp(int nLevel)
@@ -1971,7 +1974,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        protected virtual byte GetNamecolor()
+        protected virtual byte GetNameColor()
         {
             return NameColor;
         }

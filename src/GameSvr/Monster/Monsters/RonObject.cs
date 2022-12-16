@@ -6,14 +6,12 @@ namespace GameSvr.Monster.Monsters
     public class RonObject : MonsterObject
     {
         public RonObject()
-            : base()
         {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
         private void AroundAttack()
         {
-            short wHitMode = 0;
             GetAttackDir(TargetCret, ref Direction);
             IList<BaseObject> xTargetList = new List<BaseObject>();
             GetMapBaseObjects(Envir, CurrX, CurrY, 1, xTargetList);
@@ -23,7 +21,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (xTargetList[i] != null)
                     {
-                        _Attack(ref wHitMode, xTargetList[i]);
+                        _Attack(xTargetList[i]);
                         xTargetList.RemoveAt(i);
                     }
                 }

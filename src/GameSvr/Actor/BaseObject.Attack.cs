@@ -2,7 +2,6 @@
 using GameSvr.Magic;
 using GameSvr.Player;
 using SystemModule;
-using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -11,239 +10,83 @@ namespace GameSvr.Actor
 {
     public partial class BaseObject
     {
-        protected virtual void AttackDir(BaseObject TargeBaseObject, short wHitMode, byte nDir)
+        protected virtual void AttackDir(BaseObject attackTarget, short wHitMode, byte nDir)
         {
-            const string sExceptionMsg = "[Exception] TBaseObject::AttackDir";
-            try
+            Direction = nDir;
+            if (_Attack(attackTarget))
             {
-                Direction = nDir;
-                BaseObject AttackTarget;
-                if (TargeBaseObject == null)
-                {
-                    AttackTarget = GetPoseCreate();
-                }
-                else
-                {
-                    AttackTarget = TargeBaseObject;
-                }
-                if (UseItems[Grobal2.U_WEAPON] != null && (UseItems[Grobal2.U_WEAPON].Index > 0) && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0)
-                {
-                    if (AttackTarget != null)
-                    {
-                        CheckWeaponUpgrade();
-                    }
-                }
-                var boPowerHit = PowerHit;
-                var boFireHit = FireHitSkill;
-                var boTwinHit = TwinHitSkill;
-                if (_Attack(ref wHitMode, AttackTarget))
-                {
-                    SetTargetCreat(AttackTarget);
-                }
-                int wIdent = Grobal2.RM_HIT;
-                if (Race == ActorRace.Play)
-                {
-                    switch (wHitMode)
-                    {
-                        case 0:
-                            wIdent = Grobal2.RM_HIT;
-                            break;
-                        case 1:
-                            wIdent = Grobal2.RM_HEAVYHIT;
-                            break;
-                        case 2:
-                            wIdent = Grobal2.RM_BIGHIT;
-                            break;
-                        case 3:
-                            if (boPowerHit)
-                            {
-                                wIdent = Grobal2.RM_SPELL2;
-                            }
-                            break;
-                        case 4:
-                            if (MagicArr[MagicConst.SKILL_ERGUM] != null)
-                            {
-                                wIdent = Grobal2.RM_LONGHIT;
-                            }
-                            break;
-                        case 5:
-                            if (MagicArr[MagicConst.SKILL_BANWOL] != null)
-                            {
-                                wIdent = Grobal2.RM_WIDEHIT;
-                            }
-                            break;
-                        case 7:
-                            if (boFireHit)
-                            {
-                                wIdent = Grobal2.RM_FIREHIT;
-                            }
-                            break;
-                        case 8:
-                            if (MagicArr[MagicConst.SKILL_CROSSMOON] != null)
-                            {
-                                wIdent = Grobal2.RM_CRSHIT;
-                            }
-                            break;
-                        case 9:
-                            if (boTwinHit)
-                            {
-                                wIdent = Grobal2.RM_TWINHIT;
-                            }
-                            break;
-                        case 12:
-                            if (MagicArr[MagicConst.SKILL_REDBANWOL] != null)
-                            {
-                                wIdent = Grobal2.RM_WIDEHIT;
-                            }
-                            break;
-                    }
-                }
-                SendAttackMsg(wIdent, Direction, CurrX, CurrY);
-            }
-            catch (Exception e)
-            {
-                M2Share.Log.Error(sExceptionMsg);
-                M2Share.Log.Error(e.Message);
+                SetTargetCreat(attackTarget);
             }
         }
 
-        internal bool _Attack(ref short wHitMode, BaseObject AttackTarget)
+        internal ushort GetBaseAttackPoewr()
         {
-            int n20;
+            return GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
+        }
+
+        protected ushort GetAttackPowerHit(short wHitMode, ushort nPower, BaseObject AttackTarget, ref bool canHit)
+        {
+            canHit = false;
+            if (AttackTarget != null)
+            {
+                switch (wHitMode)
+                {
+                    case 3 when PowerHit:
+                        PowerHit = false;
+                        nPower += HitPlus;
+                        canHit = true;
+                        break;
+                    case 7 when FireHitSkill:// 烈火剑法
+                        FireHitSkill = false;
+                        LatestFireHitTick = HUtil32.GetTickCount();// 禁止双烈火
+                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10));
+                        canHit = true;
+                        break;
+                    case 9 when TwinHitSkill:// 烈火剑法
+                        TwinHitSkill = false;
+                        LatestTwinHitTick = HUtil32.GetTickCount();// 禁止双烈火
+                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10));
+                        canHit = true;
+                        break;
+                }
+            }
+            else
+            {
+                switch (wHitMode)
+                {
+                    case 3 when PowerHit:
+                        PowerHit = false;
+                        nPower += HitPlus;
+                        canHit = true;
+                        break;
+                    case 7 when FireHitSkill:
+                        FireHitSkill = false;
+                        LatestFireHitTick = HUtil32.GetTickCount();// 禁止双烈火
+                        break;
+                    case 9 when TwinHitSkill:
+                        TwinHitSkill = false;
+                        LatestTwinHitTick = HUtil32.GetTickCount();// 禁止双烈火
+                        break;
+                }
+            }
+            return nPower;
+        }
+
+        internal bool _Attack(BaseObject attackTarget)
+        {
             bool result = false;
             try
             {
-                bool bo21 = false;
-                ushort nWeaponDamage = 0;
-                ushort nPower = 0;
-                int nSecPwr = 0;
-                if (AttackTarget != null)
-                {
-                    nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
-                    switch (wHitMode)
-                    {
-                        case 3 when PowerHit:
-                            PowerHit = false;
-                            nPower += HitPlus;
-                            bo21 = true;
-                            break;
-                        case 7 when FireHitSkill:// 烈火剑法
-                            FireHitSkill = false;
-                            LatestFireHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                            nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10));
-                            bo21 = true;
-                            break;
-                        case 9 when TwinHitSkill: // 烈火剑法
-                            TwinHitSkill = false;
-                            LatestTwinHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                            nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10));
-                            bo21 = true;
-                            break;
-                    }
-                }
-                else
-                {
-                    nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
-                    switch (wHitMode)
-                    {
-                        case 3 when PowerHit:
-                            PowerHit = false;
-                            nPower += HitPlus;
-                            bo21 = true;
-                            break;
-                        case 7 when FireHitSkill:
-                            FireHitSkill = false;
-                            LatestFireHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                            break;
-                        case 9 when TwinHitSkill:
-                            TwinHitSkill = false;
-                            LatestTwinHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                            break;
-                    }
-                }
-
-                if (wHitMode > 0)
-                {
-                    switch (wHitMode)
-                    {
-                        case 4:// 刺杀
-                            nSecPwr = 0;
-                            if (Race == ActorRace.Play)
-                            {
-                                if (MagicArr[MagicConst.SKILL_ERGUM] != null)
-                                {
-                                    nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_ERGUM].Magic.TrainLv + 2) * (MagicArr[MagicConst.SKILL_ERGUM].Level + 2));
-                                }
-                            }
-                            if (nSecPwr > 0)
-                            {
-                                if (!SwordLongAttack(ref nSecPwr) && M2Share.Config.LimitSwordLong)
-                                {
-                                    wHitMode = 0;
-                                }
-                            }
-                            break;
-                        case 5:
-                            {
-                                nSecPwr = 0;
-                                if (Race == ActorRace.Play)
-                                {
-                                    if (MagicArr[MagicConst.SKILL_BANWOL] != null)
-                                    {
-                                        nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_BANWOL].Magic.TrainLv + 10) * (MagicArr[MagicConst.SKILL_BANWOL].Level + 2));
-                                    }
-                                }
-                                if (nSecPwr > 0)
-                                {
-                                    SwordWideAttack(ref nSecPwr);
-                                }
-                                break;
-                            }
-                        case 12:
-                            {
-                                nSecPwr = 0;
-                                if (Race == ActorRace.Play)
-                                {
-                                    if (MagicArr[MagicConst.SKILL_REDBANWOL] != null)
-                                    {
-                                        nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_REDBANWOL].Magic.TrainLv + 10) * (MagicArr[MagicConst.SKILL_REDBANWOL].Level + 2));
-                                    }
-                                }
-                                if (nSecPwr > 0)
-                                {
-                                    SwordWideAttack(ref nSecPwr);
-                                }
-                                break;
-                            }
-                        case 8:
-                            {
-                                nSecPwr = 0;
-                                if (Race == ActorRace.Play)
-                                {
-                                    if (MagicArr[MagicConst.SKILL_CROSSMOON] != null)
-                                    {
-                                        nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_CROSSMOON].Magic.TrainLv + 10) * (MagicArr[MagicConst.SKILL_CROSSMOON].Level + 2));
-                                    }
-                                }
-                                if (nSecPwr > 0)
-                                {
-                                    CrsWideAttack(nSecPwr);
-                                }
-                                break;
-                            }
-                    }
-                }
-
-                if (AttackTarget == null)
+                if (attackTarget == null)
                 {
                     return false;
                 }
-
-                if (IsProperTarget(AttackTarget))
+                var nPower = GetBaseAttackPoewr();
+                if (IsProperTarget(attackTarget))
                 {
-                    if (AttackTarget.HitPoint > 0)
+                    if (attackTarget.HitPoint > 0)
                     {
-                        if (HitPoint < M2Share.RandomNumber.RandomByte(AttackTarget.SpeedPoint))
+                        if (HitPoint < M2Share.RandomNumber.RandomByte(attackTarget.SpeedPoint))
                         {
                             nPower = 0;
                         }
@@ -255,211 +98,17 @@ namespace GameSvr.Actor
                 }
                 if (nPower > 0)
                 {
-                    nPower = AttackTarget.GetHitStruckDamage(this, nPower);
-                    nWeaponDamage = (ushort)(M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
+                    nPower = attackTarget.GetHitStruckDamage(this, nPower);
                 }
                 if (nPower > 0)
                 {
-                    AttackTarget.StruckDamage(nPower);
-                    AttackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nPower, AttackTarget.WAbil.HP, AttackTarget.WAbil.MaxHP, ActorId, "", 200);
-                    if (AttackTarget.Race == ActorRace.Play && this.Race == ActorRace.Play)
-                    {
-                        if (!(AttackTarget as PlayObject).UnParalysis && ((PlayObject)this).Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
-                        {
-                            AttackTarget.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
-                        }
-                    }
+                    attackTarget.StruckDamage(nPower);
+                    attackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "", 200);
                     result = true;
-                    if (Race == ActorRace.Play)
-                    {
-                        if (this.SuckupEnemyHealthRate > 0)// 虹魔，吸血
-                        {
-                            this.SuckupEnemyHealth = nPower / 100 * this.SuckupEnemyHealthRate;
-                            if (this.SuckupEnemyHealth >= 2.0)
-                            {
-                                n20 = Convert.ToInt32(this.SuckupEnemyHealth);
-                                this.SuckupEnemyHealth = n20;
-                                DamageHealth((ushort)-n20);
-                            }
-                        }
-                        UserMagic attackMagic;
-                        if (MagicArr[MagicConst.SKILL_ILKWANG] != null)
-                        {
-                            attackMagic = GetAttrackMagic(MagicConst.SKILL_ILKWANG);
-                            if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
-                            {
-                                this.TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
-                                if (!this.CheckMagicLevelup(attackMagic))
-                                {
-                                    SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
-                                }
-                            }
-                        }
-                        if (bo21 && (MagicArr[MagicConst.SKILL_YEDO] != null))
-                        {
-                            attackMagic = GetAttrackMagic(MagicConst.SKILL_YEDO);
-                            if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
-                            {
-                                this.TrainSkill(attackMagic, M2Share.RandomNumber.Random(3) + 1);
-                                if (!this.CheckMagicLevelup(attackMagic))
-                                {
-                                    SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
-                                }
-                            }
-                        }
-                        switch (wHitMode)
-                        {
-                            case 4:
-                                attackMagic = GetAttrackMagic(MagicConst.SKILL_ERGUM);
-                                if (attackMagic != null)
-                                {
-                                    if (attackMagic.Level < 3 && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
-                                    {
-                                        this.TrainSkill(attackMagic, 1);
-                                        if (!this.CheckMagicLevelup(attackMagic))
-                                        {
-                                            SendDelayMsg(this.ActorId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
-                                        }
-                                    }
-                                }
-                                break;
-                            case 5:
-                                attackMagic = GetAttrackMagic(MagicConst.SKILL_BANWOL);
-                                if (attackMagic != null)
-                                {
-                                    if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
-                                    {
-                                        this.TrainSkill(attackMagic, 1);
-                                        if (!this.CheckMagicLevelup(attackMagic))
-                                        {
-                                            SendDelayMsg(this.ActorId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
-                                        }
-                                    }
-                                }
-                                break;
-                            case 12:
-                                attackMagic = GetAttrackMagic(MagicConst.SKILL_REDBANWOL);
-                                if (attackMagic != null)
-                                {
-                                    if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
-                                    {
-                                        this.TrainSkill(attackMagic, 1);
-                                        if (!this.CheckMagicLevelup(attackMagic))
-                                        {
-                                            SendDelayMsg(this.ActorId, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
-                                        }
-                                    }
-                                }
-                                break;
-                            case 7:
-                                attackMagic = GetAttrackMagic(MagicConst.SKILL_FIRESWORD);
-                                if (attackMagic != null)
-                                {
-                                    if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
-                                    {
-                                        this.TrainSkill(attackMagic, 1);
-                                        if (!this.CheckMagicLevelup(attackMagic))
-                                        {
-                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
-                                        }
-                                    }
-                                }
-                                break;
-                            case 8:
-                                attackMagic = GetAttrackMagic(MagicConst.SKILL_CROSSMOON);
-                                if (attackMagic != null)
-                                {
-                                    if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
-                                    {
-                                        this.TrainSkill(attackMagic, 1);
-                                        if (!this.CheckMagicLevelup(attackMagic))
-                                        {
-                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
-                                        }
-                                    }
-                                }
-                                break;
-                            case 9:
-                                attackMagic = GetAttrackMagic(MagicConst.SKILL_TWINBLADE);
-                                if (attackMagic != null)
-                                {
-                                    if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
-                                    {
-                                        this.TrainSkill(attackMagic, 1);
-                                        if (!this.CheckMagicLevelup(attackMagic))
-                                        {
-                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
-                                        }
-                                    }
-                                }
-                                break;
-                        }
-                    }
-                    if (M2Share.Config.MonDelHptoExp)
-                    {
-                        switch (Race)
-                        {
-                            case ActorRace.Play:
-                                if (this.IsRobot)
-                                {
-                                    if ((this as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
-                                    {
-                                        if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName))
-                                        {
-                                            (this as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (this.Abil.Level <= M2Share.Config.MonHptoExpLevel)
-                                    {
-                                        if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName))
-                                        {
-                                            this.GainExp(nPower * M2Share.Config.MonHptoExpmax);
-                                        }
-                                    }
-                                }
-                                break;
-                            case ActorRace.PlayClone:
-                                if (Master != null)
-                                {
-                                    if (Master.IsRobot)
-                                    {
-                                        if ((Master as RobotPlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
-                                        {
-                                            if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName))
-                                            {
-                                                (Master as RobotPlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if ((Master as PlayObject).Abil.Level <= M2Share.Config.MonHptoExpLevel)
-                                        {
-                                            if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName))
-                                            {
-                                                (Master as PlayObject).GainExp(nPower * M2Share.Config.MonHptoExpmax);
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
-                        }
-                    }
-                    if (Race == ActorRace.Play)
-                    {
-                        TrainCurrentSkill(wHitMode);
-                    }
                 }
-                if ((nWeaponDamage > 0) && (UseItems[Grobal2.U_WEAPON] != null) && (UseItems[Grobal2.U_WEAPON].Index > 0))
+                if (attackTarget.Race > ActorRace.Play)
                 {
-                    DoDamageWeapon(nWeaponDamage);
-                }
-                if (AttackTarget.Race != ActorRace.Play)
-                {
-                    AttackTarget.SendMsg(AttackTarget, Grobal2.RM_STRUCK, nPower, AttackTarget.WAbil.HP, AttackTarget.WAbil.MaxHP, ActorId, "");
+                    attackTarget.SendMsg(attackTarget, Grobal2.RM_STRUCK, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "");
                 }
             }
             catch (Exception e)
@@ -500,7 +149,7 @@ namespace GameSvr.Actor
             userItem.Desc[ItemAttr.WeaponUpgrade] = 0;
         }
 
-        private void CheckWeaponUpgrade()
+        internal void CheckWeaponUpgrade()
         {
             if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0) //检车武器是否升级
             {
@@ -567,9 +216,8 @@ namespace GameSvr.Actor
         /// <summary>
         /// 刺杀前面一个位置的攻击
         /// </summary>
-        /// <param name="nSecPwr"></param>
         /// <returns></returns>
-        private bool SwordLongAttack(ref int nSecPwr)
+        internal bool SwordLongAttack(ref int nSecPwr)
         {
             bool result = false;
             short nX = 0;
@@ -596,7 +244,7 @@ namespace GameSvr.Actor
         /// </summary>
         /// <param name="nSecPwr"></param>
         /// <returns></returns>
-        private bool SwordWideAttack(ref int nSecPwr)
+        internal bool SwordWideAttack(ref int nSecPwr)
         {
             bool result = false;
             byte nC = 0;
@@ -623,7 +271,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        private bool CrsWideAttack(int nSecPwr)
+        internal bool CrsWideAttack(int nSecPwr)
         {
             bool result = false;
             int nC = 0;

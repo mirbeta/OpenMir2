@@ -1,5 +1,4 @@
 ﻿using GameSvr.Maps;
-using GameSvr.Monster;
 using GameSvr.Player;
 using SystemModule;
 using SystemModule.Consts;
@@ -13,7 +12,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 未被处理次数，用于怪物处理循环
         /// </summary>
-        public int MNNotProcessCount;
+        private int NotProcessCount;
         internal short TargetX;
         internal short TargetY;
         public bool MBoRunAwayMode;
@@ -36,9 +35,9 @@ namespace GameSvr.Actor
         /// </summary>
         public int ProcessRunCount;
 
-        public AnimalObject() : base()
+        public AnimalObject()
         {
-            MNNotProcessCount = 0;
+            NotProcessCount = 0;
             TargetX = -1;
             Race = ActorRace.Animal;
             AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
@@ -63,9 +62,10 @@ namespace GameSvr.Actor
             return !Ghost && !Death && StatusArr[PoisonState.STONE] == 0;
         }
 
-        protected virtual void Attack(BaseObject targeTBaseObject, byte nDir)
+        protected virtual void Attack(BaseObject targetObject, byte nDir)
         {
-            base.AttackDir(targeTBaseObject, 0, nDir);
+            base.AttackDir(targetObject, Grobal2.RM_HIT, nDir);
+            SendAttackMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY);
         }
 
         protected void GotoTargetXy()
