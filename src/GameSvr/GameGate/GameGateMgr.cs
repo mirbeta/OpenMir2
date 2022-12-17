@@ -283,12 +283,13 @@ namespace GameSvr.GameGate
             var dwRunTick = HUtil32.GetTickCount();
             if (M2Share.StartReady)
             {
-                if (GameGateMap.IsEmpty)
+                if (!GameGateMap.IsEmpty)
                 {
-                    var gateServiceList = GameGateMap.Values.ToList();
-                    foreach (var gateService in gateServiceList)
+                    var gameGates = GameGateMap.GetEnumerator();
+                    while (gameGates.MoveNext())
                     {
-                        var gateInfo = gateService.GateInfo;
+                        var gameGate = gameGates.Current.Value;
+                        var gateInfo = gameGate.GateInfo;
                         if (gateInfo.Socket != null && gateInfo.Socket.Connected)
                         {
                             if (HUtil32.GetTickCount() - gateInfo.dwSendTick >= 1000)

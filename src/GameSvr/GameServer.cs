@@ -40,7 +40,6 @@ namespace GameSvr
         {
             while (M2Share.StartReady)
             {
-                M2Share.GateMgr.Run();
                 IdSrvClient.Instance.Run();
                 M2Share.WorldEngine.Run();
                 ProcessGameRun();
@@ -85,7 +84,8 @@ namespace GameSvr
                     _runTimeTick = HUtil32.GetTickCount();
                     M2Share.GuildMgr.Run();
                     M2Share.CastleMgr.Run();
-                    if (M2Share.DenySayMsgList.Count > 0)
+                    M2Share.GateMgr.Run();
+                    if (!M2Share.DenySayMsgList.IsEmpty)
                     {
                         var denyList = new List<string>(M2Share.DenySayMsgList.Count);
                         foreach (var item in M2Share.DenySayMsgList)
