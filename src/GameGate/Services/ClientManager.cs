@@ -72,7 +72,7 @@ namespace GameGate.Services
 
         public ClientThread[] GetClients()
         {
-            return _clientThreadMap.IsEmpty ? _clientThreadMap.Values.ToArray() : null;
+            return !_clientThreadMap.IsEmpty ? _clientThreadMap.Values.ToArray() : null;
         }
 
     }

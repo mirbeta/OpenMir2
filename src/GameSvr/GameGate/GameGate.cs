@@ -54,90 +54,71 @@ namespace GameSvr.GameGate
         /// 处理接收到的数据
         /// GameGate -> GameSvr
         /// </summary>
-        public void ProcessReceiveBuffer(int nMsgLen, Span<byte> data)
+        public void ProcessReceiveBuffer(int nMsgLen, byte[] data)
         {
-            const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
-            try
+            if (_gateInfo.BuffLen > 0)
             {
-                if (_gateInfo.BuffLen > 0)
-                {
-                    var buffSize = _gateInfo.BuffLen + nMsgLen;
-                    if (buffSize > _gateInfo.BuffLen)
-                    {
-                        Span<byte> tempBuff = stackalloc byte[buffSize];
-                        MemoryCopy.BlockCopy(_gateInfo.GateBuff, 0, tempBuff, 0, _gateInfo.BuffLen);
-                        MemoryCopy.BlockCopy(data, 0, tempBuff, _gateInfo.BuffLen, nMsgLen);
-                        ProcessBuffer(tempBuff, buffSize);
-                    }
-                }
-                else
-                {
-                    ProcessBuffer(data, nMsgLen);
-                }
+                MemoryCopy.BlockCopy(data, 0, _gateInfo.GateBuff, _gateInfo.BuffLen, nMsgLen);
+                ProcessBuffer(_gateInfo.GateBuff, _gateInfo.BuffLen + nMsgLen);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(ex.StackTrace);
+                ProcessBuffer(data, nMsgLen);
             }
         }
 
-        private void ProcessBuffer(Span<byte> packetBuff, int packetLen)
+        private void ProcessBuffer(byte[] packetBuff, int packetLen)
         {
-            const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer -> ExecGateMsg";
+            const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             var nLen = packetLen;
             var buffIndex = 0;
-            Span<byte> protoBuff = packetBuff;
+            var memoryStream = new MemoryStream(packetBuff);
+            var binaryReader = new BinaryReader(memoryStream);
             try
             {
                 while (nLen >= GameServerPacket.PacketSize)
                 {
-                    Span<byte> packetHead = protoBuff[..20];
-                    if (packetHead.Length < 20)
+                    packetHeader.PacketCode = binaryReader.ReadUInt32();
+                    if (packetHeader.PacketCode == Grobal2.RUNGATECODE)
                     {
-                        break;
-                    }
-                    packetHeader.PacketCode = BitConverter.ToUInt32(packetHead[..4]);
-                    packetHeader.PackLength = BitConverter.ToInt32(packetHead.Slice(16, 4));
-                    var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + GameServerPacket.PacketSize;
-                    if (packetHeader.PacketCode == Grobal2.RUNGATECODE && nCheckMsgLen < 0x8000)
-                    {
-                        if (nLen < nCheckMsgLen)
+                        packetHeader.Socket = binaryReader.ReadInt32();
+                        packetHeader.SessionId = binaryReader.ReadUInt16();
+                        packetHeader.Ident =  binaryReader.ReadUInt16();
+                        packetHeader.ServerIndex = binaryReader.ReadInt32();
+                        packetHeader.PackLength = binaryReader.ReadInt32();
+                        var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + GameServerPacket.PacketSize;
+                        if (nLen < nCheckMsgLen && nCheckMsgLen < 0x8000)
                         {
                             break;
                         }
-                        packetHeader.Socket = BitConverter.ToInt32(packetHead.Slice(4, 4));
-                        packetHeader.SessionId = BitConverter.ToUInt16(packetHead.Slice(8, 2));
-                        packetHeader.ServerIndex = BitConverter.ToInt32(packetHead.Slice(12, 4));
-                        packetHeader.Ident = BitConverter.ToUInt16(packetHead.Slice(10, 2));
-                        Span<byte> body = null;
                         if (packetHeader.PackLength > 0)
                         {
-                            body = protoBuff[..nCheckMsgLen]; //获取整个封包内容,包括消息头和消息体
-                            body = body[GameServerPacket.PacketSize..];
+                            var body = binaryReader.ReadBytes(nCheckMsgLen);
+                            ExecGateBuffers(packetHeader, body);
                         }
-                        //M2Share.GateMgr.AddGameGateQueue(_gateIdx, msgHeader, body);
-                        ExecGateBuffers(packetHeader, body);
+                        else
+                        {
+                            //M2Share.GateMgr.AddGameGateQueue(_gateIdx, msgHeader, body);
+                            ExecGateBuffers(packetHeader, null);
+                        }
                         nLen -= nCheckMsgLen;
                         if (nLen <= 0)
                         {
                             break;
                         }
-                        protoBuff = protoBuff.Slice(nCheckMsgLen, nLen);
                         _gateInfo.BuffLen = nLen;
                         buffIndex = 0;
                     }
                     else
                     {
-                        _logger.Error($"{sExceptionMsg} Offset:{buffIndex} DataLen:{protoBuff.Length}");
                         buffIndex++;
-                        if (buffIndex > protoBuff.Length) //异常数据，直接丢弃
+                        if (buffIndex > memoryStream.Length) //异常数据，整段数据丢弃
                         {
-                            _gateInfo.GateBuff = null;
+                            memoryStream.Position = 0;
                             _gateInfo.BuffLen = 0;
-                            break;
+                            return;
                         }
-                        protoBuff = protoBuff.Slice(buffIndex, GameServerPacket.PacketSize);
+                        memoryStream.Position = buffIndex;
                         nLen -= 1;
                     }
                     if (nLen < GameServerPacket.PacketSize)
@@ -153,13 +134,11 @@ namespace GameSvr.GameGate
             }
             if (nLen > 0)
             {
-                MemoryCopy.BlockCopy(protoBuff, 0, _gateInfo.GateBuff, 0, nLen);
-                //_gateInfo.GateBuff = protoBuff[..nLen].ToArray();
+                binaryReader.Read(_gateInfo.GateBuff, 0, nLen);
                 _gateInfo.BuffLen = nLen;
             }
             else
             {
-                _gateInfo.GateBuff = null;
                 _gateInfo.BuffLen = 0;
             }
         }

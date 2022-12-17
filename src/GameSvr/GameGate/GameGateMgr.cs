@@ -85,6 +85,7 @@ namespace GameSvr.GameGate
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
+                gateInfo.GateBuff = new byte[1024 * 10];
                 _logger.Info(string.Format(sGateOpen, e.EndPoint));
                 GameGateMap.TryAdd(e.SocHandle, new GameGate(e.SocHandle, gateInfo));
                 GameGateMap[e.SocHandle].StartGateQueue();
@@ -133,7 +134,7 @@ namespace GameSvr.GameGate
                                 {
                                     continue;
                                 }
-                                if (gateUserInfo.Account == sAccount || gateUserInfo.SessionID == nSessionID)
+                                if (string.Compare(gateUserInfo.Account, sAccount, StringComparison.OrdinalIgnoreCase) == 0 || (gateUserInfo.SessionID == nSessionID))
                                 {
                                     if (gateUserInfo.FrontEngine != null)
                                     {
@@ -285,7 +286,7 @@ namespace GameSvr.GameGate
             {
                 if (!GameGateMap.IsEmpty)
                 {
-                    var gameGates = GameGateMap.GetEnumerator();
+                    using IEnumerator<KeyValuePair<int, GameGate>> gameGates = GameGateMap.GetEnumerator();
                     while (gameGates.MoveNext())
                     {
                         var gameGate = gameGates.Current.Value;
@@ -434,7 +435,7 @@ namespace GameSvr.GameGate
                 {
                     return;
                 }
-                Span<byte> data = stackalloc byte[e.BytesReceived];
+                var data = new byte[e.BytesReceived];
                 MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
                 runGate.ProcessReceiveBuffer(nMsgLen, data);
             }

@@ -99,7 +99,7 @@ namespace GameSvr.Actor
         public void ClearObject()
         {
             ActorIds.Clear();
-            var actors = _actorsMap.GetEnumerator();
+            using IEnumerator<KeyValuePair<int, BaseObject>> actors = _actorsMap.GetEnumerator();
             while (actors.MoveNext())
             {
                 var actor = actors.Current.Value;
