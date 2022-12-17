@@ -1,6 +1,7 @@
 ﻿using GameSvr.Player;
 using GameSvr.Services;
 using GameSvr.World;
+using Microsoft.IO;
 using NLog;
 using System.Net.Sockets;
 using System.Threading.Channels;
@@ -25,6 +26,12 @@ namespace GameSvr.GameGate
         /// 发送缓冲区
         /// </summary>
         private byte[] SendBuff;
+        const int BlockSize = 1024;
+        const int LargeBufferMultiple = 1024 * 1024;
+        const int MaximumBufferSize = 16 * LargeBufferMultiple;
+        const int MaximumFreeLargePoolBytes = MaximumBufferSize * 4;
+        const int MaximumFreeSmallPoolBytes = 250 * BlockSize;
+        private readonly RecyclableMemoryStreamManager _memoryStreamManager = new RecyclableMemoryStreamManager(BlockSize, LargeBufferMultiple, MaximumBufferSize, MaximumFreeLargePoolBytes, MaximumFreeSmallPoolBytes);
 
         public GameGate(int gateIdx, GameGateInfo gateInfo)
         {
@@ -36,6 +43,10 @@ namespace GameSvr.GameGate
             packetHeader = new GameServerPacket();
             clientMesaagePacket = new ClientMesaagePacket();
             SendBuff = new byte[1024 * 10];
+            _memoryStreamManager.AggressiveBufferReturn = true;
+            _memoryStreamManager.GenerateCallStacks = true;
+            _memoryStreamManager.MaximumFreeLargePoolBytes = MaximumFreeLargePoolBytes;
+            _memoryStreamManager.MaximumFreeSmallPoolBytes = MaximumFreeSmallPoolBytes;
         }
 
         public GameGateInfo GateInfo => _gateInfo;
@@ -72,7 +83,7 @@ namespace GameSvr.GameGate
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             var nLen = packetLen;
             var buffIndex = 0;
-            var memoryStream = new MemoryStream(packetBuff);
+            using var memoryStream = _memoryStreamManager.GetStream("ProcessBuffer", packetBuff, 0, nLen);
             var binaryReader = new BinaryReader(memoryStream);
             try
             {
@@ -83,7 +94,7 @@ namespace GameSvr.GameGate
                     {
                         packetHeader.Socket = binaryReader.ReadInt32();
                         packetHeader.SessionId = binaryReader.ReadUInt16();
-                        packetHeader.Ident =  binaryReader.ReadUInt16();
+                        packetHeader.Ident = binaryReader.ReadUInt16();
                         packetHeader.ServerIndex = binaryReader.ReadInt32();
                         packetHeader.PackLength = binaryReader.ReadInt32();
                         var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + GameServerPacket.PacketSize;
@@ -112,7 +123,7 @@ namespace GameSvr.GameGate
                     else
                     {
                         buffIndex++;
-                        if (buffIndex > memoryStream.Length) //异常数据，整段数据丢弃
+                        if (buffIndex > memoryStream.Length)//异常数据，整段数据丢弃
                         {
                             memoryStream.Position = 0;
                             _gateInfo.BuffLen = 0;
