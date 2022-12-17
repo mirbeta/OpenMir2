@@ -21,6 +21,10 @@ namespace GameSvr.GameGate
         private readonly CancellationTokenSource _cancellation;
         private readonly GameServerPacket packetHeader;
         private readonly ClientMesaagePacket clientMesaagePacket;
+        /// <summary>
+        /// 发送缓冲区
+        /// </summary>
+        private byte[] SendBuff;
 
         public GameGate(int gateIdx, GameGateInfo gateInfo)
         {
@@ -31,6 +35,7 @@ namespace GameSvr.GameGate
             _cancellation = new CancellationTokenSource();
             packetHeader = new GameServerPacket();
             clientMesaagePacket = new ClientMesaagePacket();
+            SendBuff = new byte[1024 * 10];
         }
 
         public GameGateInfo GateInfo => _gateInfo;
@@ -164,7 +169,7 @@ namespace GameSvr.GameGate
         /// GameSvr -> GameGate
         /// </summary>
         /// <returns></returns>
-        public void HandleSendBuffer(byte[] buffer)
+        public void HandleSendBuffer(ReadOnlySpan<byte> buffer)
         {
             if (!GateInfo.BoUsed && GateInfo.Socket == null)
             {
@@ -183,7 +188,11 @@ namespace GameSvr.GameGate
             }
             try
             {
-                var nSendBuffLen = buffer.Length;
+                var nSendBuffLen = BitConverter.ToInt32(buffer[..4]);
+                if (nSendBuffLen == 0) //不发送空包
+                {
+                    return;
+                }
                 if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + nSendBuffLen >= M2Share.Config.CheckBlock * 10)
                 {
                     if (GateInfo.nSendBlockCount == 0 && M2Share.Config.CheckBlock * 10 <= nSendBuffLen)
@@ -194,39 +203,13 @@ namespace GameSvr.GameGate
                     GateInfo.nSendChecked = 1;
                     GateInfo.dwSendCheckTick = HUtil32.GetTickCount();
                 }
-                var sendBuffer = new byte[buffer.Length - 4];
-                Buffer.BlockCopy(buffer, 4, sendBuffer, 0, sendBuffer.Length);
-                nSendBuffLen = sendBuffer.Length;
-                if (nSendBuffLen > 0)
+                MemoryCopy.BlockCopy(buffer, 4, SendBuff, 0, buffer.Length);
+                if (GateInfo.Socket != null && GateInfo.Socket.Connected)
                 {
-                    while (true)
-                    {
-                        if (M2Share.Config.SendBlock <= nSendBuffLen)
-                        {
-                            if (GateInfo.Socket != null)
-                            {
-                                var sendBuff = new byte[M2Share.Config.SendBlock];
-                                Buffer.BlockCopy(sendBuffer, 0, sendBuff, 0, M2Share.Config.SendBlock);
-                                _sendQueue.AddToQueue(sendBuff);
-                                GateInfo.nSendCount++;
-                                GateInfo.nSendBytesCount += M2Share.Config.SendBlock;
-                            }
-                            GateInfo.nSendBlockCount += M2Share.Config.SendBlock;
-                            nSendBuffLen -= M2Share.Config.SendBlock;
-                            var tempBuff = new byte[nSendBuffLen];
-                            Buffer.BlockCopy(sendBuffer, M2Share.Config.SendBlock, tempBuff, 0, nSendBuffLen);
-                            sendBuffer = tempBuff;
-                            continue;
-                        }
-                        if (GateInfo.Socket != null)
-                        {
-                            _sendQueue.AddToQueue(sendBuffer);
-                            GateInfo.nSendCount++;
-                            GateInfo.nSendBytesCount += nSendBuffLen;
-                            GateInfo.nSendBlockCount += nSendBuffLen;
-                        }
-                        break;
-                    }
+                    _sendQueue.AddToQueue(SendBuff[..nSendBuffLen]);
+                    GateInfo.nSendCount++;
+                    GateInfo.nSendBytesCount += nSendBuffLen;
+                    GateInfo.nSendBlockCount += nSendBuffLen;
                 }
                 if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.SocLimit)
                 {
