@@ -2002,36 +2002,10 @@ namespace GameSvr.Actor
             }
         }
 
-        public void SendFirstMsg(BaseObject baseObject, short wIdent, short wParam, int lParam1, int lParam2,
-            int lParam3, string sMsg)
-        {
-            try
-            {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                if (!Ghost)
-                {
-                    var sendMessage = new SendMessage
-                    {
-                        wIdent = wIdent,
-                        wParam = wParam,
-                        nParam1 = lParam1,
-                        nParam2 = lParam2,
-                        nParam3 = lParam3,
-                        DeliveryTime = 0,
-                        BaseObject = baseObject.ActorId,
-                        Buff = sMsg
-                    };
-                    MsgQueue.Enqueue(sendMessage, 0);
-                }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
-            }
-        }
-
-        public void SendhighPriorityMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3,
-            string sMsg)
+        /// <summary>
+        /// 发送优先级消息
+        /// </summary>
+        public void SendPriorityMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "", MessagePriority Priority = MessagePriority.Normal)
         {
             try
             {
@@ -2050,7 +2024,7 @@ namespace GameSvr.Actor
                         LateDelivery = false,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage, 0);
+                    MsgQueue.Enqueue(sendMessage, (byte)Priority);
                 }
             }
             finally
@@ -2122,8 +2096,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 发送延时消息
         /// </summary>
-        public void SendDelayMsg(int baseObject, short wIdent, int wParam, int lParam1, int lParam2, int lParam3,
-            string sMsg, int dwDelay)
+        public void SendDelayMsg(int baseObject, short wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             try
             {
@@ -2260,10 +2233,6 @@ namespace GameSvr.Actor
             msg = null;
             try
             {
-                if (Race == ActorRace.Play && count > 1)
-                {
-                    Console.WriteLine(count);
-                }
                 while (count > 0)
                 {
                     if (count <= 0)
@@ -2279,10 +2248,6 @@ namespace GameSvr.Actor
                             continue;
                         }
                         msg = new ProcessMessage();
-                        if (sendMessage.wIdent == 621)
-                        {
-                            msg = new ProcessMessage();
-                        }
                         msg.wIdent = sendMessage.wIdent;
                         msg.wParam = sendMessage.wParam;
                         msg.nParam1 = sendMessage.nParam1;

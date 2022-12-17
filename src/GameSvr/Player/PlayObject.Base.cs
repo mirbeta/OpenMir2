@@ -1094,7 +1094,7 @@ namespace GameSvr.Player
                 LogonTime = DateTime.Now;
                 LogonTick = HUtil32.GetTickCount();
                 Initialize();
-                SendhighPriorityMsg(this, Grobal2.RM_LOGON, 0, 0, 0, 0, "");
+                SendPriorityMsg(this, Grobal2.RM_LOGON, 0, 0, 0, 0, "", MessagePriority.High);
                 if (Abil.Level <= 7)
                 {
                     if (GetRangeHumanCount() >= 80)
@@ -1295,12 +1295,12 @@ namespace GameSvr.Player
                     }
                 }
                 MBtBright = (byte)M2Share.g_nGameTime;
-                SendhighPriorityMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                SendhighPriorityMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-                SendhighPriorityMsg(this, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
-                SendhighPriorityMsg(this, Grobal2.RM_DAYCHANGING, 0, 0, 0, 0, "");
-                SendhighPriorityMsg(this, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
-                SendhighPriorityMsg(this, Grobal2.RM_SENDMYMAGIC, 0, 0, 0, 0, "");
+                SendPriorityMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(this, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(this, Grobal2.RM_DAYCHANGING, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(this, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(this, Grobal2.RM_SENDMYMAGIC, 0, 0, 0, 0, "", MessagePriority.High);
                 MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
                 if (MyGuild != null)
                 {

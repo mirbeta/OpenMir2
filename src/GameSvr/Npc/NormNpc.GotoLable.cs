@@ -2553,7 +2553,7 @@ namespace GameSvr.Npc
             PlayObject.GetScriptLabel(sMsg);
             if (boFlag)
             {
-                PlayObject.SendFirstMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
+                PlayObject.SendPriorityMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg, MessagePriority.High);
             }
             else
             {

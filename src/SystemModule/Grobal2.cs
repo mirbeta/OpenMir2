@@ -611,6 +611,9 @@ namespace SystemModule
         public const int RM_CRSHIT = 10015;
         public const int RM_DEATH = 10021;
         public const int RM_SKELETON = 10024;
+        /// <summary>
+        /// 发送登录消息
+        /// </summary>
         public const int RM_LOGON = 10050;
         public const int RM_ABILITY = 10051;
         public const int RM_HEALTHSPELLCHANGED = 10052;
