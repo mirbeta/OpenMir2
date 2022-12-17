@@ -38,6 +38,10 @@ namespace GameSvr.Monster.Monsters
                 {
                     result = true;
                 }
+                if (Castle.UnderWar)
+                {
+                    result = true;
+                }
                 if (baseObject.Race == ActorRace.Guard)
                 {
                     var guardObject = (GuardUnit)baseObject;
@@ -57,10 +61,6 @@ namespace GameSvr.Monster.Monsters
                             result = false;
                         }
                     }
-                }
-                if (Castle.UnderWar)
-                {
-                    result = true;
                 }
                 if (Castle.MasterGuild != null)
                 {

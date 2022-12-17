@@ -41,7 +41,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private bool MagBigHealing(BaseObject playObject, int nPower, int nX, int nY)
+        private bool MagBigHealing(PlayObject playObject, int nPower, int nX, int nY)
         {
             var result = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();

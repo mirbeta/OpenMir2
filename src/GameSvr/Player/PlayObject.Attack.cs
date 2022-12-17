@@ -207,6 +207,10 @@ namespace GameSvr.Player
 
         private void AttackSuccess(short wHitMode, ushort nPower, bool canHit, BaseObject AttackTarget)
         {
+            if (AttackTarget == null)
+            {
+                return;
+            }
             if (AttackTarget.Race == ActorRace.Play && Race == ActorRace.Play)
             {
                 if (!((PlayObject)AttackTarget).UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))

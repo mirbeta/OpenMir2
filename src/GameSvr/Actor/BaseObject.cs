@@ -383,10 +383,6 @@ namespace GameSvr.Actor
         /// </summary>
         protected byte PowerItem = 0;
         /// <summary>
-        /// 心灵启示
-        /// </summary>
-        public bool AbilSeeHealGauge;
-        /// <summary>
         /// 魔法盾
         /// </summary>
         protected bool AbilMagBubbleDefence;
@@ -436,7 +432,7 @@ namespace GameSvr.Actor
         /// 恢复血量和魔法间隔
         /// </summary>
         protected int AutoRecoveryTick;
-        protected readonly Queue<SendMessage> MsgQueue;
+        protected readonly PriorityQueue<SendMessage, int> MsgQueue;
         protected readonly IList<BaseObject> VisibleHumanList;
         protected readonly IList<VisibleMapItem> VisibleItems;
         protected readonly IList<EventInfo> VisibleEvents;
@@ -525,7 +521,6 @@ namespace GameSvr.Actor
             HitPlus = 0;
             HitDouble = 0;
             BoFearFire = false;
-            AbilSeeHealGauge = false;
             HitPoint = 5;
             SpeedPoint = 15;
             HitSpeed = 0;
@@ -566,7 +561,7 @@ namespace GameSvr.Actor
             NoAttackMode = false;
             NoTame = false;
             AddAbil = new AddAbility();
-            MsgQueue = new Queue<SendMessage>();
+            MsgQueue = new PriorityQueue<SendMessage, int>();
             VisibleHumanList = new List<BaseObject>();
             VisibleActors = new List<VisibleBaseObject>();
             VisibleItems = new List<VisibleMapItem>();
@@ -1643,20 +1638,6 @@ namespace GameSvr.Actor
         }
 
         /// <summary>
-        /// 检查心灵启示
-        /// </summary>
-        protected void CheckSeeHealGauge(UserMagic magic)
-        {
-            if (magic.Magic.MagicId == 28)
-            {
-                if (magic.Level >= 2)
-                {
-                    AbilSeeHealGauge = true;
-                }
-            }
-        }
-
-        /// <summary>
         /// 蜡烛勋章减少持久
         /// </summary>
         private void UseLamp()
@@ -2040,7 +2021,36 @@ namespace GameSvr.Actor
                         BaseObject = baseObject.ActorId,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage);
+                    MsgQueue.Enqueue(sendMessage, 0);
+                }
+            }
+            finally
+            {
+                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+            }
+        }
+
+        public void SendhighPriorityMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3,
+            string sMsg)
+        {
+            try
+            {
+                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+                if (!Ghost)
+                {
+                    var sendMessage = new SendMessage
+                    {
+                        wIdent = wIdent,
+                        wParam = wParam,
+                        nParam1 = nParam1,
+                        nParam2 = nParam2,
+                        nParam3 = nParam3,
+                        DeliveryTime = 0,
+                        BaseObject = baseObject.ActorId,
+                        LateDelivery = false,
+                        Buff = sMsg
+                    };
+                    MsgQueue.Enqueue(sendMessage, 0);
                 }
             }
             finally
@@ -2069,7 +2079,7 @@ namespace GameSvr.Actor
                         LateDelivery = false,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage);
+                    MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
             finally
@@ -2100,7 +2110,7 @@ namespace GameSvr.Actor
                         LateDelivery = true,
                         Buff = sMsg
                     };
-                    MsgQueue.Enqueue(sendMessage);
+                    MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
             finally
@@ -2132,7 +2142,7 @@ namespace GameSvr.Actor
                         Buff = sMsg
                     };
                     sendMessage.BaseObject = baseObject == Grobal2.RM_STRUCK ? Grobal2.RM_STRUCK : baseObject;
-                    MsgQueue.Enqueue(sendMessage);
+                    MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
             finally
@@ -2141,7 +2151,7 @@ namespace GameSvr.Actor
             }
         }
 
-        private void SendUpdateDelayMsg(BaseObject baseObject, short wIdent, short wParam, int lParam1, int lParam2,
+        internal void SendUpdateDelayMsg(BaseObject baseObject, short wIdent, short wParam, int lParam1, int lParam2,
             int lParam3, string sMsg, int dwDelay)
         {
             int i;
@@ -2155,11 +2165,11 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out var sendMessage))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if ((sendMessage.wIdent == wIdent) && (sendMessage.nParam1 == lParam1))
                         {
-                            MsgQueue.TryDequeue(out sendMessage);
+                            MsgQueue.TryDequeue(out sendMessage, out priority);
                             Dispose(sendMessage);
                         }
                     }
@@ -2187,11 +2197,11 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out var sendMessage))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent == wIdent)
                         {
-                            MsgQueue.TryDequeue(out sendMessage);
+                            MsgQueue.TryDequeue(out sendMessage, out priority);
                             Dispose(sendMessage);
                         }
                     }
@@ -2219,7 +2229,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out var sendMessage))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if ((sendMessage.wIdent == Grobal2.CM_TURN) || (sendMessage.wIdent == Grobal2.CM_WALK) ||
                             (sendMessage.wIdent == Grobal2.CM_SITDOWN) || (sendMessage.wIdent == Grobal2.CM_HORSERUN) ||
@@ -2228,7 +2238,7 @@ namespace GameSvr.Actor
                             (sendMessage.wIdent == Grobal2.CM_POWERHIT) || (sendMessage.wIdent == Grobal2.CM_LONGHIT) ||
                             (sendMessage.wIdent == Grobal2.CM_WIDEHIT) || (sendMessage.wIdent == Grobal2.CM_FIREHIT))
                         {
-                            MsgQueue.TryDequeue(out sendMessage);
+                            MsgQueue.TryDequeue(out sendMessage, out priority);
                             Dispose(sendMessage);
                         }
                     }
@@ -2245,27 +2255,34 @@ namespace GameSvr.Actor
         protected virtual bool GetMessage(out ProcessMessage msg)
         {
             var result = false;
-            int I;
+            int count = MsgQueue.Count;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             msg = null;
             try
             {
-                I = 0;
-                while (MsgQueue.Count > I)
+                if (Race == ActorRace.Play && count > 1)
                 {
-                    if (MsgQueue.Count <= I)
+                    Console.WriteLine(count);
+                }
+                while (count > 0)
+                {
+                    if (count <= 0)
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out var sendMessage))
+                    if (MsgQueue.TryDequeue(out var sendMessage, out var priority))
                     {
-                        if ((sendMessage.DeliveryTime != 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
+                        if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
                         {
-                            I++;
+                            count--;
+                            MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
                             continue;
                         }
-                        MsgQueue.TryDequeue(out sendMessage);
                         msg = new ProcessMessage();
+                        if (sendMessage.wIdent == 621)
+                        {
+                            msg = new ProcessMessage();
+                        }
                         msg.wIdent = sendMessage.wIdent;
                         msg.wParam = sendMessage.wParam;
                         msg.nParam1 = sendMessage.nParam1;
@@ -3176,33 +3193,7 @@ namespace GameSvr.Actor
         /// <returns></returns>
         public virtual bool IsProperTarget(BaseObject baseObject)
         {
-            var result = IsAttackTarget(baseObject);
-            if (result)
-            {
-                if ((Race == ActorRace.Play) && (baseObject.Race == ActorRace.Play))
-                {
-                    result = IsProtectTarget(baseObject);
-                }
-            }
-            if ((baseObject != null) && (Race == ActorRace.Play) && (baseObject.Master != null) && (baseObject.Race != ActorRace.Play))
-            {
-                if (baseObject.Master == this)
-                {
-                    if (AttatckMode != AttackMode.HAM_ALL)
-                    {
-                        result = false;
-                    }
-                }
-                else
-                {
-                    result = IsAttackTarget(baseObject.Master);
-                    if (InSafeZone() || baseObject.InSafeZone())
-                    {
-                        result = false;
-                    }
-                }
-            }
-            return result;
+            return IsAttackTarget(baseObject);
         }
 
         protected void WeightChanged()
@@ -3321,37 +3312,7 @@ namespace GameSvr.Actor
                 RefNameColor();
             }
         }
-        
-        public bool CheckMagicLevelup(UserMagic userMagic)
-        {
-            var result = false;
-            int nLevel;
-            if ((userMagic.Level < 4) && (userMagic.Magic.TrainLv >= userMagic.Level))
-            {
-                nLevel = userMagic.Level;
-            }
-            else
-            {
-                nLevel = 0;
-            }
-            if ((userMagic.Magic.TrainLv > userMagic.Level) && (userMagic.Magic.MaxTrain[nLevel] <= userMagic.TranPoint))
-            {
-                if (userMagic.Magic.TrainLv > userMagic.Level)
-                {
-                    userMagic.TranPoint -= userMagic.Magic.MaxTrain[nLevel];
-                    userMagic.Level++;
-                    SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 800);
-                    CheckSeeHealGauge(userMagic);
-                }
-                else
-                {
-                    userMagic.TranPoint = userMagic.Magic.MaxTrain[nLevel];
-                }
-                result = true;
-            }
-            return result;
-        }
-
+       
         /// <summary>
         /// 召唤属下
         /// </summary>
@@ -3666,7 +3627,7 @@ namespace GameSvr.Actor
             {
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent  == Grobal2.RM_10401)
                         {

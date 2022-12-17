@@ -20,7 +20,6 @@ namespace GameSvr.Actor
             return GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
         }
 
-
         internal bool _Attack(ushort nPower, BaseObject attackTarget)
         {
             if (attackTarget == null)
@@ -59,7 +58,6 @@ namespace GameSvr.Actor
             return result;
         }
         
-        // 攻击角色
         private bool AttackDirect(BaseObject BaseObject, int nSecPwr)
         {
             bool result = false;

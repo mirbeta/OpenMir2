@@ -341,6 +341,10 @@ namespace GameSvr.Player
         public bool MBoSwitchDataSended;
         public int MDwChgDataWritedTick = 0;
         /// <summary>
+        /// 心灵启示
+        /// </summary>
+        public bool AbilSeeHealGauge;
+        /// <summary>
         /// 攻击间隔
         /// </summary>
         public int MDwHitIntervalTime;
@@ -1090,7 +1094,7 @@ namespace GameSvr.Player
                 LogonTime = DateTime.Now;
                 LogonTick = HUtil32.GetTickCount();
                 Initialize();
-                SendMsg(this, Grobal2.RM_LOGON, 0, 0, 0, 0, "");
+                SendhighPriorityMsg(this, Grobal2.RM_LOGON, 0, 0, 0, 0, "");
                 if (Abil.Level <= 7)
                 {
                     if (GetRangeHumanCount() >= 80)
@@ -1291,12 +1295,12 @@ namespace GameSvr.Player
                     }
                 }
                 MBtBright = (byte)M2Share.g_nGameTime;
-                SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-                SendMsg(this, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
-                SendMsg(this, Grobal2.RM_DAYCHANGING, 0, 0, 0, 0, "");
-                SendMsg(this, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
-                SendMsg(this, Grobal2.RM_SENDMYMAGIC, 0, 0, 0, 0, "");
+                SendhighPriorityMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                SendhighPriorityMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
+                SendhighPriorityMsg(this, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                SendhighPriorityMsg(this, Grobal2.RM_DAYCHANGING, 0, 0, 0, 0, "");
+                SendhighPriorityMsg(this, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                SendhighPriorityMsg(this, Grobal2.RM_SENDMYMAGIC, 0, 0, 0, 0, "");
                 MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
                 if (MyGuild != null)
                 {
@@ -1695,6 +1699,38 @@ namespace GameSvr.Player
                     AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
                 }
             }
+        }
+
+        public override bool IsProperTarget(BaseObject baseObject)
+        {
+            var result = base.IsProperTarget(baseObject);
+            if (!result)
+            {
+                if ((Race == ActorRace.Play) && (baseObject.Race == ActorRace.Play))
+                {
+                    result = IsProtectTarget(baseObject);
+                }
+                if ((baseObject != null) && (Race == ActorRace.Play) && (baseObject.Master != null) && (baseObject.Race != ActorRace.Play))
+                {
+                    if (baseObject.Master == this)
+                    {
+                        if (AttatckMode != AttackMode.HAM_ALL)
+                        {
+                            result = false;
+                        }
+                    }
+                    else
+                    {
+                        result = IsAttackTarget(baseObject.Master);
+                        if (InSafeZone() || baseObject.InSafeZone())
+                        {
+                            result = false;
+                        }
+                    }
+                }
+                return result;
+            }
+            return result;
         }
 
         public override void Die()
@@ -3089,6 +3125,148 @@ namespace GameSvr.Player
             }
         }
 
+        protected override byte GetNameColor()
+        {
+            var pvpLevel = PvpLevel();
+            if (pvpLevel == 0)
+            {
+                return base.GetNameColor();
+            }
+            return pvpLevel >= 2 ? M2Share.Config.btPKLevel2NameColor : M2Share.Config.btPKLevel1NameColor;
+        }
+
+        protected override byte GetChrColor(BaseObject baseObject)
+        {
+            if (baseObject.Race == ActorRace.Play)
+            {
+                byte result = NameColor;
+                var targetObject = (PlayObject)baseObject;
+                if (targetObject.PvpLevel() < 2)
+                {
+                    if (targetObject.PvpFlag)
+                    {
+                        result = M2Share.Config.btPKFlagNameColor;
+                    }
+                    var n10 = GetGuildRelation(this, targetObject);
+                    switch (n10)
+                    {
+                        case 1:
+                        case 3:
+                            result = M2Share.Config.btAllyAndGuildNameColor;
+                            break;
+                        case 2:
+                            result = M2Share.Config.WarGuildNameColor;
+                            break;
+                    }
+                    if (targetObject.Envir.Flag.boFight3Zone)
+                    {
+                        result = MyGuild == targetObject.MyGuild ? M2Share.Config.btAllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
+                    }
+                }
+                var castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
+                if ((castle != null) && castle.UnderWar && InGuildWarArea && targetObject.InGuildWarArea)
+                {
+                    result = M2Share.Config.InFreePKAreaNameColor;
+                    GuildWarArea = true;
+                    if (MyGuild == null)
+                    {
+                        return result;
+                    }
+                    if (castle.IsMasterGuild(MyGuild))
+                    {
+                        if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
+                        {
+                            result = M2Share.Config.btAllyAndGuildNameColor;
+                        }
+                        else
+                        {
+                            if (castle.IsAttackGuild(targetObject.MyGuild))
+                            {
+                                result = M2Share.Config.WarGuildNameColor;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (castle.IsAttackGuild(MyGuild))
+                        {
+                            if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
+                            {
+                                result = M2Share.Config.btAllyAndGuildNameColor;
+                            }
+                            else
+                            {
+                                if (castle.IsMember(targetObject))
+                                {
+                                    result = M2Share.Config.WarGuildNameColor;
+                                }
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            return base.GetChrColor(baseObject);
+        }
+
+        protected override void RecalcHitSpeed()
+        {
+            if (Race == ActorRace.Play)
+            {
+                NakedAbility bonusTick = null;
+                switch (Job)
+                {
+                    case PlayJob.Warrior:
+                        bonusTick = M2Share.Config.BonusAbilofWarr;
+                        HitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
+                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
+                        break;
+                    case PlayJob.Wizard:
+                        bonusTick = M2Share.Config.BonusAbilofWizard;
+                        HitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
+                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
+                        break;
+                    case PlayJob.Taoist:
+                        bonusTick = M2Share.Config.BonusAbilofTaos;
+                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
+                        break;
+                }
+            }
+            for (var i = 0; i < MagicList.Count; i++)
+            {
+                var userMagic = MagicList[i];
+                MagicArr[userMagic.MagIdx] = userMagic;
+                switch (userMagic.MagIdx)
+                {
+                    case MagicConst.SKILL_ONESWORD: // 基本剑法
+                        if (userMagic.Level > 0)
+                        {
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.Level));
+                        }
+                        break;
+                    case MagicConst.SKILL_ILKWANG: // 精神力战法
+                        if (userMagic.Level > 0)
+                        {
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.Level));
+                        }
+                        break;
+                    case MagicConst.SKILL_YEDO: // 攻杀剑法
+                        if (userMagic.Level > 0)
+                        {
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.Level));
+                        }
+                        HitPlus = (byte)(M2Share.DEFHIT + userMagic.Level);
+                        AttackSkillCount = (byte)(7 - userMagic.Level);
+                        AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
+                        break;
+                    case MagicConst.SKILL_FIRESWORD: // 烈火剑法
+                        HitDouble = (byte)(4 + userMagic.Level * 4);
+                        break;
+                }
+            }
+            base.RecalcHitSpeed();
+        }
+
         private void WinLottery()
         {
             var nGold = 0;
@@ -3385,148 +3563,6 @@ namespace GameSvr.Player
                     QuestUnit[n10] = (byte)((128 >> n14) | bt15);
                 }
             }
-        }
-
-        protected override byte GetNameColor()
-        {
-            var pvpLevel = PvpLevel();
-            if (pvpLevel == 0)
-            {
-                return base.GetNameColor();
-            }
-            return pvpLevel >= 2 ? M2Share.Config.btPKLevel2NameColor : M2Share.Config.btPKLevel1NameColor;
-        }
-
-        protected override byte GetChrColor(BaseObject baseObject)
-        {
-            if (baseObject.Race == ActorRace.Play)
-            {
-                byte result = NameColor;
-                var targetObject = (PlayObject)baseObject;
-                if (targetObject.PvpLevel() < 2)
-                {
-                    if (targetObject.PvpFlag)
-                    {
-                        result = M2Share.Config.btPKFlagNameColor;
-                    }
-                    var n10 = GetGuildRelation(this, targetObject);
-                    switch (n10)
-                    {
-                        case 1:
-                        case 3:
-                            result = M2Share.Config.btAllyAndGuildNameColor;
-                            break;
-                        case 2:
-                            result = M2Share.Config.WarGuildNameColor;
-                            break;
-                    }
-                    if (targetObject.Envir.Flag.boFight3Zone)
-                    {
-                        result = MyGuild == targetObject.MyGuild ? M2Share.Config.btAllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
-                    }
-                }
-                var castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
-                if ((castle != null) && castle.UnderWar && InGuildWarArea && targetObject.InGuildWarArea)
-                {
-                    result = M2Share.Config.InFreePKAreaNameColor;
-                    GuildWarArea = true;
-                    if (MyGuild == null)
-                    {
-                        return result;
-                    }
-                    if (castle.IsMasterGuild(MyGuild))
-                    {
-                        if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
-                        {
-                            result = M2Share.Config.btAllyAndGuildNameColor;
-                        }
-                        else
-                        {
-                            if (castle.IsAttackGuild(targetObject.MyGuild))
-                            {
-                                result = M2Share.Config.WarGuildNameColor;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (castle.IsAttackGuild(MyGuild))
-                        {
-                            if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
-                            {
-                                result = M2Share.Config.btAllyAndGuildNameColor;
-                            }
-                            else
-                            {
-                                if (castle.IsMember(targetObject))
-                                {
-                                    result = M2Share.Config.WarGuildNameColor;
-                                }
-                            }
-                        }
-                    }
-                }
-                return result;
-            }
-            return base.GetChrColor(baseObject);
-        }
-
-        protected override void RecalcHitSpeed()
-        {
-            if (Race == ActorRace.Play)
-            {
-                NakedAbility bonusTick = null;
-                switch (Job)
-                {
-                    case PlayJob.Warrior:
-                        bonusTick = M2Share.Config.BonusAbilofWarr;
-                        HitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
-                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
-                        break;
-                    case PlayJob.Wizard:
-                        bonusTick = M2Share.Config.BonusAbilofWizard;
-                        HitPoint = (byte)(M2Share.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
-                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
-                        break;
-                    case PlayJob.Taoist:
-                        bonusTick = M2Share.Config.BonusAbilofTaos;
-                        SpeedPoint = (byte)(M2Share.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
-                        break;
-                }
-            }
-            for (var i = 0; i < MagicList.Count; i++)
-            {
-                var userMagic = MagicList[i];
-                MagicArr[userMagic.MagIdx] = userMagic;
-                switch (userMagic.MagIdx)
-                {
-                    case MagicConst.SKILL_ONESWORD: // 基本剑法
-                        if (userMagic.Level > 0)
-                        {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.Level));
-                        }
-                        break;
-                    case MagicConst.SKILL_ILKWANG: // 精神力战法
-                        if (userMagic.Level > 0)
-                        {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.Level));
-                        }
-                        break;
-                    case MagicConst.SKILL_YEDO: // 攻杀剑法
-                        if (userMagic.Level > 0)
-                        {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.Level));
-                        }
-                        HitPlus = (byte)(M2Share.DEFHIT + userMagic.Level);
-                        AttackSkillCount = (byte)(7 - userMagic.Level);
-                        AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
-                        break;
-                    case MagicConst.SKILL_FIRESWORD: // 烈火剑法
-                        HitDouble = (byte)(4 + userMagic.Level * 4);
-                        break;
-                }
-            }
-            base.RecalcHitSpeed();
         }
 
         /// <summary>
@@ -4601,6 +4637,50 @@ namespace GameSvr.Player
                 {
                     GroupOwner.GroupMembers[i].SendMsg(this, Grobal2.RM_GROUPMESSAGE, 0, M2Share.Config.GroupMsgFColor,
                         M2Share.Config.GroupMsgBColor, 0, sMsg);
+                }
+            }
+        }
+
+        public bool CheckMagicLevelup(UserMagic userMagic)
+        {
+            var result = false;
+            int nLevel;
+            if ((userMagic.Level < 4) && (userMagic.Magic.TrainLv >= userMagic.Level))
+            {
+                nLevel = userMagic.Level;
+            }
+            else
+            {
+                nLevel = 0;
+            }
+            if ((userMagic.Magic.TrainLv > userMagic.Level) && (userMagic.Magic.MaxTrain[nLevel] <= userMagic.TranPoint))
+            {
+                if (userMagic.Magic.TrainLv > userMagic.Level)
+                {
+                    userMagic.TranPoint -= userMagic.Magic.MaxTrain[nLevel];
+                    userMagic.Level++;
+                    SendUpdateDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 800);
+                    CheckSeeHealGauge(userMagic);
+                }
+                else
+                {
+                    userMagic.TranPoint = userMagic.Magic.MaxTrain[nLevel];
+                }
+                result = true;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 心灵启示
+        /// </summary>
+        protected void CheckSeeHealGauge(UserMagic magic)
+        {
+            if (magic.Magic.MagicId == 28)
+            {
+                if (magic.Level >= 2)
+                {
+                    AbilSeeHealGauge = true;
                 }
             }
         }
