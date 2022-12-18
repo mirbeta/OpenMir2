@@ -249,63 +249,61 @@ namespace GameSvr.Player
             }
             if (string.IsNullOrEmpty(sMsg))
                 return;
-
-            var msgHdr = new GameServerPacket
+            var msgHdr = new ServerMessagePacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = SocketId,
                 SessionId = SocketIdx,
                 Ident = Grobal2.GM_DATA,
-                nMsg = sMsg
             };
             var bMsg = HUtil32.GetBytes(sMsg);
             msgHdr.PackLength = -bMsg.Length;
             var dataLen = Math.Abs(msgHdr.PackLength) + 20;
-            M2Share.GateMgr.AddGateBuffer(GateIdx, dataLen, ServerPackSerializer.Serialize(msgHdr));
+            M2Share.GateMgr.AddGateBuffer(GateIdx, dataLen, ServerPackSerializer.Serialize(msgHdr), bMsg);
         }
 
-        private void SendSocket(ClientMesaagePacket defMsg)
+        private void SendSocket(ClientCommandPacket defMsg)
         {
-            SendSocket(defMsg, "");
+            SendSocket(defMsg, string.Empty);
         }
 
-        internal virtual void SendSocket(ClientMesaagePacket defMsg, string sMsg)
+        internal virtual void SendSocket(ClientCommandPacket defMsg, string sMsg)
         {
             if (OffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
             {
                 return;
             }
-            var messageHead = new GameServerPacket
+            var messageHead = new ServerMessagePacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = SocketId,
                 SessionId = SocketIdx,
                 Ident = Grobal2.GM_DATA,
-                nMsg = sMsg
             };
+            //if (defMsg != null)
+            //{
             byte[] bMsg = null;
-            var nSendBytes = 0;
-            if (defMsg != null)
-            {
-                if (!string.IsNullOrEmpty(sMsg))
-                {
-                    bMsg = HUtil32.GetBytes(sMsg);
-                    messageHead.PackLength = bMsg.Length + 12;
-                }
-                else
-                {
-                    messageHead.PackLength = 12;
-                }
-                nSendBytes = messageHead.PackLength + GameServerPacket.PacketSize;
-            }
-            else if (!string.IsNullOrEmpty(sMsg))
+            if (!string.IsNullOrEmpty(sMsg))
             {
                 bMsg = HUtil32.GetBytes(sMsg);
-                messageHead.PackLength = -bMsg.Length;
-                nSendBytes = Math.Abs(messageHead.PackLength) + GameServerPacket.PacketSize;
+                messageHead.PackLength = bMsg.Length + 12;
             }
-            var clientOutMessage = new ClientOutMessage(messageHead, defMsg);
-            M2Share.GateMgr.AddGateBuffer(GateIdx, nSendBytes, ServerPackSerializer.Serialize(clientOutMessage));
+            else
+            {
+                messageHead.PackLength = 12;
+            }
+            int nSendBytes = messageHead.PackLength + ServerMessagePacket.PacketSize;
+            //}
+            //else if (!string.IsNullOrEmpty(sMsg))
+            //{
+            //    bMsg = HUtil32.GetBytes(sMsg);
+            //    messageHead.PackLength = -bMsg.Length;
+            //    nSendBytes = Math.Abs(messageHead.PackLength) + GameServerPacket.PacketSize;
+            //}
+            var clientOutMessage = new ClientOutMessage();
+            clientOutMessage.MessagePacket = messageHead;
+            clientOutMessage.CommandPacket = defMsg;
+            M2Share.GateMgr.AddGateBuffer(GateIdx, nSendBytes, ServerPackSerializer.Serialize(clientOutMessage), bMsg);
         }
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)

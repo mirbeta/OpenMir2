@@ -20,8 +20,7 @@ namespace GameSvr.GameGate
         private readonly GateSendQueue _sendQueue;
         private readonly object _runSocketSection;
         private readonly CancellationTokenSource _cancellation;
-        private GameServerPacket packetHeader;
-        private readonly ClientMesaagePacket clientMesaagePacket;
+        private ClientCommandPacket clientMesaagePacket;
         /// <summary>
         /// 发送缓冲区
         /// </summary>
@@ -41,8 +40,7 @@ namespace GameSvr.GameGate
             _runSocketSection = new object();
             _sendQueue = new GateSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
-            packetHeader = new GameServerPacket();
-            clientMesaagePacket = new ClientMesaagePacket();
+            clientMesaagePacket = new ClientCommandPacket();
             SendBuff = new byte[1024 * 10];
             _memoryStreamManager.AggressiveBufferReturn = true;
             _memoryStreamManager.GenerateCallStacks = true;
@@ -66,7 +64,7 @@ namespace GameSvr.GameGate
         /// 处理接收到的数据
         /// GameGate -> GameSvr
         /// </summary>
-        public void ProcessReceiveBuffer(int nMsgLen, byte[] data)
+        public void ProcessReceiveBuffer(int nMsgLen, Span<byte> data)
         {
             if (_gateInfo.BuffLen > 0)
             {
@@ -75,7 +73,8 @@ namespace GameSvr.GameGate
             }
             else
             {
-                ProcessBuffer(data, nMsgLen);
+                MemoryCopy.BlockCopy(data, 0, _gateInfo.GateBuff, 0, nMsgLen);
+                ProcessBuffer(_gateInfo.GateBuff, nMsgLen);
             }
         }
 
@@ -84,28 +83,21 @@ namespace GameSvr.GameGate
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             var nLen = packetLen;
             var buffIndex = 0;
-            using var memoryStream = _memoryStreamManager.GetStream("ProcessBuffer", packetBuff, 0, nLen);
-            var binaryReader = new BinaryReader(memoryStream);
             try
             {
-                while (nLen >= GameServerPacket.PacketSize)
+                while (nLen >= ServerMessagePacket.PacketSize)
                 {
-                    packetHeader.PacketCode = binaryReader.ReadUInt32();
+                    var packetHeader = ServerPackSerializer.Deserialize<ServerMessagePacket>(packetBuff[..ServerMessagePacket.PacketSize]);
                     if (packetHeader.PacketCode == Grobal2.RUNGATECODE)
                     {
-                        packetHeader.Socket = binaryReader.ReadInt32();
-                        packetHeader.SessionId = binaryReader.ReadUInt16();
-                        packetHeader.Ident = binaryReader.ReadUInt16();
-                        packetHeader.ServerIndex = binaryReader.ReadInt32();
-                        packetHeader.PackLength = binaryReader.ReadInt32();
-                        var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + GameServerPacket.PacketSize;
+                        var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + ServerMessagePacket.PacketSize;
                         if (nLen < nCheckMsgLen && nCheckMsgLen < 0x8000)
                         {
                             break;
                         }
                         if (packetHeader.PackLength > 0)
                         {
-                            var body = binaryReader.ReadBytes(nCheckMsgLen);
+                            var body = packetBuff[nCheckMsgLen..];
                             ExecGateBuffers(packetHeader, body);
                         }
                         else
@@ -124,16 +116,16 @@ namespace GameSvr.GameGate
                     else
                     {
                         buffIndex++;
-                        if (buffIndex > memoryStream.Length)//异常数据，整段数据丢弃
-                        {
-                            memoryStream.Position = 0;
-                            _gateInfo.BuffLen = 0;
-                            return;
-                        }
-                        memoryStream.Position = buffIndex;
+                        //if (buffIndex > memoryStream.Length)//异常数据，整段数据丢弃
+                        //{
+                        //    memoryStream.Position = 0;
+                        //    _gateInfo.BuffLen = 0;
+                        //    return;
+                        //}
+                        //memoryStream.Position = buffIndex;
                         nLen -= 1;
                     }
-                    if (nLen < GameServerPacket.PacketSize)
+                    if (nLen < ServerMessagePacket.PacketSize)
                     {
                         break;
                     }
@@ -146,7 +138,7 @@ namespace GameSvr.GameGate
             }
             if (nLen > 0)
             {
-                binaryReader.Read(_gateInfo.GateBuff, 0, nLen);
+                MemoryCopy.BlockCopy(packetBuff, 0, _gateInfo.GateBuff, 0, nLen);
                 _gateInfo.BuffLen = nLen;
             }
             else
@@ -160,7 +152,7 @@ namespace GameSvr.GameGate
         /// GameSvr -> GameGate
         /// </summary>
         /// <returns></returns>
-        public void HandleSendBuffer(int sendBuffLen,ReadOnlySpan<byte> buffer)
+        public void HandleSendBuffer(int sendBuffLen,ReadOnlySpan<byte> buffer, byte[] msgBuffer)
         {
             if (!GateInfo.BoUsed && GateInfo.Socket == null)
             {
@@ -195,6 +187,10 @@ namespace GameSvr.GameGate
                 }
                 MemoryCopy.BlockCopy(BitConverter.GetBytes(sendBuffLen), 0, SendBuff, 0, 4);
                 MemoryCopy.BlockCopy(buffer, 0, SendBuff, 4, buffer.Length);
+                if (msgBuffer != null && msgBuffer.Length > 0)
+                {
+                    MemoryCopy.BlockCopy(msgBuffer, 0, SendBuff, buffer.Length + 4, msgBuffer.Length);
+                }
                 if (GateInfo.Socket != null && GateInfo.Socket.Connected)
                 {
                     _sendQueue.AddToQueue(SendBuff[..sendBuffLen]);
@@ -220,7 +216,7 @@ namespace GameSvr.GameGate
             {
                 return;
             }
-            var msgHeader = new GameServerPacket
+            var msgHeader = new ServerMessagePacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
@@ -229,7 +225,7 @@ namespace GameSvr.GameGate
             };
             if (Socket.Connected)
             {
-                var data = ServerPackSerializer.MemoryPackBrotli(msgHeader);
+                var data = ServerPackSerializer.Serialize(msgHeader);
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -237,7 +233,7 @@ namespace GameSvr.GameGate
         /// <summary>
         /// 执行网关封包消息
         /// </summary>
-        private void ExecGateBuffers(GameServerPacket packet, Span<byte> data)
+        private void ExecGateBuffers(ServerMessagePacket packet, Span<byte> data)
         {
             if (packet.PackLength == 0)
             {
@@ -456,7 +452,7 @@ namespace GameSvr.GameGate
             {
                 return;
             }
-            var MsgHeader = new GameServerPacket();
+            var MsgHeader = new ServerMessagePacket();
             MsgHeader.PacketCode = Grobal2.RUNGATECODE;
             MsgHeader.Socket = nSocket;
             MsgHeader.SessionId = socketId;
@@ -465,12 +461,12 @@ namespace GameSvr.GameGate
             MsgHeader.PackLength = 0;
             if (Socket.Connected)
             {
-                var data = ServerPackSerializer.MemoryPackBrotli(MsgHeader);
+                var data = ServerPackSerializer.Serialize(MsgHeader);
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
 
-        private void ExecGateMessage(int GateIdx, GameGateInfo Gate, GameServerPacket MsgHeader, Span<byte> MsgBuff, int nMsgLen)
+        private void ExecGateMessage(int GateIdx, GameGateInfo Gate, ServerMessagePacket MsgHeader, Span<byte> MsgBuff, int nMsgLen)
         {
             int nUserIdx;
             const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg";

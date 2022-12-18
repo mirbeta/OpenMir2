@@ -320,8 +320,8 @@ namespace GameSvr.GameGate
 
         private void SendGateTestMsg(int nIndex)
         {
-            var defMsg = new ClientMesaagePacket();
-            var msgHdr = new GameServerPacket
+            var defMsg = new ClientCommandPacket();
+            var msgHdr = new ServerMessagePacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
@@ -349,7 +349,7 @@ namespace GameSvr.GameGate
             {
                 return;
             }
-            var msgHeader = new GameServerPacket
+            var msgHeader = new ServerMessagePacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
@@ -358,7 +358,7 @@ namespace GameSvr.GameGate
             };
             if (Socket.Connected)
             {
-                var data = ServerPackSerializer.MemoryPackBrotli(msgHeader);
+                var data = ServerPackSerializer.Serialize(msgHeader);
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -368,11 +368,11 @@ namespace GameSvr.GameGate
         /// GameSvr->GameGate
         /// </summary>
         /// <returns></returns>
-        public bool AddGateBuffer(int gateIdx, int len, byte[] buffer)
+        public bool AddGateBuffer(int gateIdx, int len, byte[] buffer, byte[] msgBuffer)
         {
             if (GameGateMap.TryGetValue(gateIdx, out GameGate value))
             {
-                value.HandleSendBuffer(len, buffer);
+                value.HandleSendBuffer(len, buffer, msgBuffer);
                 return true;
             }
             _logger.Error("发送网关消息失败，用户对应网关ID不存在.");
@@ -382,7 +382,7 @@ namespace GameSvr.GameGate
         /// <summary>
         /// 收到GameGate发来的消息并添加到GameSvr消息队列
         /// </summary>
-        public void AddGameGateQueue(int gateIdx, GameServerPacket packet, byte[] data)
+        public void AddGameGateQueue(int gateIdx, ServerMessagePacket packet, byte[] data)
         {
             _receiveQueue.Writer.TryWrite(new ReceiveData()
             {
@@ -436,7 +436,7 @@ namespace GameSvr.GameGate
                 {
                     return;
                 }
-                var data = new byte[e.BytesReceived];
+                Span<byte> data = stackalloc byte[e.BytesReceived];
                 MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
                 runGate.ProcessReceiveBuffer(nMsgLen, data);
             }
@@ -451,7 +451,7 @@ namespace GameSvr.GameGate
 
     public struct ReceiveData
     {
-        public GameServerPacket Packet;
+        public ServerMessagePacket Packet;
         public byte[] Data;
         public int GateId;
     }

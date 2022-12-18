@@ -1,5 +1,4 @@
 using MemoryPack;
-using MemoryPack.Compression;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -10,27 +9,19 @@ namespace SystemModule
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte[] Serialize<T>(T origin)
         {
-            return MemoryPackSerializer.Serialize(origin);
+            return MemoryPackSerializer.Serialize(origin, MemoryPackSerializerOptions.Utf16);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Deserialize<T>(byte[] bytes)
         {
-            return MemoryPackSerializer.Deserialize<T>(bytes)!;
+            return MemoryPackSerializer.Deserialize<T>(bytes, MemoryPackSerializerOptions.Utf16)!;
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Deserialize<T>(Span<byte> bytes)
         {
-            return MemoryPackSerializer.Deserialize<T>(bytes)!;
-        }
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte[] MemoryPackBrotli<T>(T origin)
-        {
-            using var compressor = new BrotliCompressor();
-            MemoryPackSerializer.Serialize(compressor, origin);
-            return compressor.ToArray();
+            return MemoryPackSerializer.Deserialize<T>(bytes, MemoryPackSerializerOptions.Utf16)!;
         }
     }
 }

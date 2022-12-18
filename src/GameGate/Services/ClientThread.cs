@@ -2,8 +2,6 @@ using GameGate.Conf;
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packets;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -35,9 +33,13 @@ namespace GameGate.Services
         /// </summary>
         private int CheckServerFailCount { get; set; }
         /// <summary>
-        /// Buffer
+        /// 接收GameSvr数据缓冲区
         /// </summary>
         private byte[] ReceiveBuffer { get; set; }
+        /// <summary>
+        /// 发送GameSvr数据缓冲区
+        /// </summary>
+        private byte[] SendBuffer { get; set; }
         /// <summary>
         /// 上次剩下多少字节未处理
         /// </summary>
@@ -152,6 +154,7 @@ namespace GameGate.Services
             ReceiveBytes = 0;
             SendBytes = 0;
             ReceiveBuffer = new byte[4096 * 10];
+            SendBuffer = new byte[2048];
             Logger.Log($"[{GateEndPoint}] 游戏引擎[{e.RemoteEndPoint}]链接成功.", 1);
             Logger.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
         }
@@ -185,15 +188,14 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            var packetData = e.Buff[..nMsgLen];
             if (BuffLen > 0)
             {
-                MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
+                MemoryCopy.BlockCopy(e.Buff, 0, ReceiveBuffer, BuffLen, nMsgLen);
                 ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
             }
             else
             {
-                ProcessServerPacket(packetData, nMsgLen);
+                ProcessServerPacket(e.Buff, nMsgLen);
             }
             ReceiveBytes += nMsgLen;
         }
@@ -226,7 +228,7 @@ namespace GameGate.Services
             Span<byte> dataBuff = buff;
             try
             {
-                while (nLen >= GameServerPacket.PacketSize)
+                while (nLen >= ServerMessagePacket.PacketSize)
                 {
                     Span<byte> packetHead = dataBuff[..20];
                     var packetCode = BitConverter.ToUInt32(packetHead[..4]);
@@ -339,7 +341,7 @@ namespace GameGate.Services
         private void SendServerMsg(ushort command, ushort socketIndex, int nSocket, ushort userIndex, int nLen,
             string data)
         {
-            var gateMsg = new GameServerPacket
+            var gateMsg = new ServerMessagePacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = nSocket,
@@ -355,11 +357,11 @@ namespace GameGate.Services
                 var tempBuff = new byte[20 + data.Length];
                 MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
                 MemoryCopy.BlockCopy(strBuff, 0, tempBuff, sendBuffer.Length, data.Length);
-                SendBuffer(tempBuff);
+                Send(tempBuff);
             }
             else
             {
-                SendBuffer(sendBuffer);
+                Send(sendBuffer);
             }
         }
 
@@ -383,12 +385,14 @@ namespace GameGate.Services
         /// 发送消息到GameSvr
         /// </summary>
         /// <param name="sendBuffer"></param>
-        public void SendBuffer(byte[] sendBuffer)
+        internal void Send(byte[] sendBuffer)
         {
             if (!ClientSocket.IsConnected)
             {
                 return;
             }
+            //MemoryCopy.BlockCopy(BitConverter.GetBytes(sendBuffLen), 0, SendBuffer, 0, 4);
+            //MemoryCopy.BlockCopy(sendBuffer, 0, SendBuffer, 4, sendBuffer.Length);
             SendBytes += sendBuffer.Length;
             ClientSocket.Send(sendBuffer);
         }

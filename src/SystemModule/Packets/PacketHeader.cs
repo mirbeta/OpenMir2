@@ -1,5 +1,4 @@
 using MemoryPack;
-using System.IO;
 using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule.Packets
@@ -8,34 +7,28 @@ namespace SystemModule.Packets
     /// 封包消息头
     /// </summary>
     [MemoryPackable]
-    public partial struct GameServerPacket 
+    public partial struct ServerMessagePacket
     {
-        public uint PacketCode;
+        public uint PacketCode{ get; set; }
         /// <summary>
         /// SocketID
         /// </summary>
-        public int Socket;
+        public int Socket{ get; set; }
         /// <summary>
         /// 会话ID
         /// </summary>
-        public ushort SessionId;
-        public ushort Ident;
-        public int ServerIndex;
-        public int PackLength;
-        public string nMsg;
+        public ushort SessionId{ get; set; }
+        public ushort Ident{ get; set; }
+        public int ServerIndex{ get; set; }
+        public int PackLength{ get; set; }
 
         public const int PacketSize = 20;
     }
 
-    public struct ClientOutMessage 
+    [MemoryPackable]
+    public partial struct ClientOutMessage
     {
-        private readonly GameServerPacket MessageHeader;
-        private readonly ClientMesaagePacket clientMesaage;
-
-        public ClientOutMessage(GameServerPacket messageHeader, ClientMesaagePacket clientMesaage)
-        {
-            MessageHeader = messageHeader;
-            clientMesaage = clientMesaage;
-        }
+        public ServerMessagePacket MessagePacket;
+        public ClientCommandPacket CommandPacket;
     }
 }

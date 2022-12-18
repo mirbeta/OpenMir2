@@ -839,9 +839,9 @@ namespace SystemModule
         public const int SM_SMUGGLE = 41900; // 夹带数据
         public const int LA_UNDEAD = 1;
 
-        public static ClientMesaagePacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
+        public static ClientCommandPacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
         {
-            var result = new ClientMesaagePacket();
+            var result = new ClientCommandPacket();
             result.Ident = (ushort)msg;
             result.Param = (ushort)param;
             result.Tag = (ushort)tag;

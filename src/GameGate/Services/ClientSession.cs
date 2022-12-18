@@ -119,7 +119,7 @@ namespace GameGate.Services
             var success = false;
             if (HandleLogin)
             {
-                if (messagePacket.BufferLen < ClientMesaagePacket.PackSize)
+                if (messagePacket.BufferLen < ClientCommandPacket.PackSize)
                 {
                     _session.Socket.Close();//关闭异常会话
                     return;
@@ -456,15 +456,15 @@ namespace GameGate.Services
                                 _gameSpeed.SayMsgTick = currentTick;
                             }
                         }
-                        if (nDeCodeLen > ClientMesaagePacket.PackSize)
+                        if (nDeCodeLen > ClientCommandPacket.PackSize)
                         {
                             if (sMsg.StartsWith("@"))
                             {
                                 var pszChatBuffer = new byte[255];
                                 var pszChatCmd = string.Empty;
                                 // Move((nABuf + TCmdPack.PackSize), pszChatBuffer[0], nDeCodeLen - TCmdPack.PackSize);
-                                Buffer.BlockCopy(messagePacket.Buffer, ClientMesaagePacket.PackSize, pszChatBuffer, 0, nDeCodeLen - ClientMesaagePacket.PackSize);
-                                pszChatBuffer[nDeCodeLen - ClientMesaagePacket.PackSize] = (byte)'\0';
+                                Buffer.BlockCopy(messagePacket.Buffer, ClientCommandPacket.PackSize, pszChatBuffer, 0, nDeCodeLen - ClientCommandPacket.PackSize);
+                                pszChatBuffer[nDeCodeLen - ClientCommandPacket.PackSize] = (byte)'\0';
                                 var tempStr = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
                                 var nChatStrPos = tempStr.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
                                 // if (nChatStrPos > 0)
@@ -478,15 +478,15 @@ namespace GameGate.Services
                                 // }
                                 if (GateShare.ChatCommandFilter.ContainsKey(pszChatCmd))
                                 {
-                                    var cmd = new ClientMesaagePacket();
-                                    cmd.UID = SvrObjectId;
-                                    cmd.Cmd = Grobal2.SM_WHISPER;
-                                    cmd.X = HUtil32.MakeWord(0xFF, 56);
+                                    var cmd = new ClientCommandPacket();
+                                    //cmd.UID = SvrObjectId;
+                                    //cmd.Cmd = Grobal2.SM_WHISPER;
+                                    //cmd.X = HUtil32.MakeWord(0xFF, 56);
                                     //StrFmt(pszChatBuffer, Protocol._STR_CMD_FILTER, new char[] { pszChatCmd });
                                     pszChatBuffer = HUtil32.GetBytes(string.Format(Protocol._STR_CMD_FILTER, pszChatCmd));
                                     var pszSendBuf = new byte[255];
                                     pszSendBuf[0] = (byte)'#';
-                                    Buffer.BlockCopy(cmd.GetBuffer(), 0, pszSendBuf, 0, pszSendBuf.Length);
+                                    Buffer.BlockCopy(ServerPackSerializer.Serialize(cmd), 0, pszSendBuf, 0, pszSendBuf.Length);
                                     //Move(Cmd, m_pOverlapRecv.BBuffer[1], TCmdPack.PackSize);
                                     //Move(pszChatBuffer[0], m_pOverlapRecv.BBuffer[13], pszChatBuffer.Length);
                                     //var nEnCodeLen = Misc.EncodeBuf(((int)m_pOverlapRecv.BBuffer[1]), TCmdPack.PackSize + pszChatBuffer.Length, ((int)pszSendBuf[1]));
@@ -573,14 +573,14 @@ namespace GameGate.Services
                                 }
                                 else
                                 {
-                                    var eatPacket = new ClientMesaagePacket();
-                                    eatPacket.UID = recog;
-                                    eatPacket.Cmd = Grobal2.SM_EAT_FAIL;
-                                    var pszSendBuf = new byte[ClientMesaagePacket.PackSize];
+                                    var eatPacket = new ClientCommandPacket();
+                                    eatPacket.Recog = recog;
+                                    eatPacket.Ident = Grobal2.SM_EAT_FAIL;
+                                    var pszSendBuf = new byte[ClientCommandPacket.PackSize];
                                     pszSendBuf[0] = (byte)'#';
-                                    var nEnCodeLen = PacketEncoder.EncodeBuf(eatPacket.GetBuffer(), ClientMesaagePacket.PackSize, pszSendBuf);
+                                    var nEnCodeLen = PacketEncoder.EncodeBuf(ServerPackSerializer.Serialize(eatPacket), ClientCommandPacket.PackSize, pszSendBuf);
                                     pszSendBuf[nEnCodeLen + 1] = (byte)'!';
-                                    ClientThread.SendBuffer(pszSendBuf);
+                                    ClientThread.Send(pszSendBuf);
                                     return;
                                 }
                             }
@@ -590,29 +590,29 @@ namespace GameGate.Services
 
                 //todo 需要优化
                 byte[] bodyBuffer;
-                var cmdPack = new GameServerPacket();
+                var cmdPack = new ServerMessagePacket();
                 cmdPack.PacketCode = Grobal2.RUNGATECODE;
                 cmdPack.Socket = _session.SckHandle;
                 cmdPack.Ident = Grobal2.GM_DATA;
                 cmdPack.ServerIndex = SvrListIdx;
-                if (nDeCodeLen > ClientMesaagePacket.PackSize)
+                if (nDeCodeLen > ClientCommandPacket.PackSize)
                 {
-                    var sendBuffer = new byte[messagePacket.Buffer.Length - ClientMesaagePacket.PackSize + 1];
-                    var tLen = PacketEncoder.EncodeBuf(decodeBuff, nDeCodeLen - ClientMesaagePacket.PackSize, sendBuffer);
-                    cmdPack.PackLength = ClientMesaagePacket.PackSize + tLen + 1;
-                    bodyBuffer = new byte[GameServerPacket.PacketSize + cmdPack.PackLength];
-                    Buffer.BlockCopy(decodeBuff, 0, bodyBuffer, GameServerPacket.PacketSize, ClientMesaagePacket.PackSize);
+                    var sendBuffer = new byte[messagePacket.Buffer.Length - ClientCommandPacket.PackSize + 1];
+                    var tLen = PacketEncoder.EncodeBuf(decodeBuff, nDeCodeLen - ClientCommandPacket.PackSize, sendBuffer);
+                    cmdPack.PackLength = ClientCommandPacket.PackSize + tLen + 1;
+                    bodyBuffer = new byte[ServerMessagePacket.PacketSize + cmdPack.PackLength];
+                    Buffer.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessagePacket.PacketSize, ClientCommandPacket.PackSize);
                     //Buffer.BlockCopy(tempBuff.ToArray(), 16, bodyBuffer, 32, tLen); //消息体
                     MemoryCopy.BlockCopy(tempBuff, 16, bodyBuffer, 32, tLen);
                 }
                 else
                 {
-                    bodyBuffer = new byte[GameServerPacket.PacketSize + decodeBuff.Length];
-                    cmdPack.PackLength = ClientMesaagePacket.PackSize;
-                    Buffer.BlockCopy(decodeBuff, 0, bodyBuffer, GameServerPacket.PacketSize, decodeBuff.Length);
+                    bodyBuffer = new byte[ServerMessagePacket.PacketSize + decodeBuff.Length];
+                    cmdPack.PackLength = ClientCommandPacket.PackSize;
+                    Buffer.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessagePacket.PacketSize, decodeBuff.Length);
                 }
-                Buffer.BlockCopy(ServerPackSerializer.MemoryPackBrotli(cmdPack), 0, bodyBuffer, 0, GameServerPacket.PacketSize);//复制消息头
-                ClientThread.SendBuffer(bodyBuffer);
+                Buffer.BlockCopy(ServerPackSerializer.Serialize(cmdPack), 0, bodyBuffer, 0, ServerMessagePacket.PacketSize);//复制消息头
+                ClientThread.Send(bodyBuffer);
             }
             else
             {
@@ -640,7 +640,7 @@ namespace GameGate.Services
             {
                 if (delayMsg.BufLen > 0)
                 {
-                    ClientThread.SendBuffer(delayMsg.Buffer);//发送消息到GameSvr
+                    ClientThread.Send(delayMsg.Buffer);//发送消息到GameSvr
                     var dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.Cmd)
                     {
@@ -877,14 +877,14 @@ namespace GameGate.Services
             }
             else
             {
-                var packetBuffer = new byte[clientPacket.BufferLen + ClientMesaagePacket.PackSize];
+                var packetBuffer = new byte[clientPacket.BufferLen + ClientCommandPacket.PackSize];
                 packetBuffer[0] = (byte)'#';
                 var packetBuff = clientPacket.Buffer;
-                var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientMesaagePacket.PackSize, packetBuffer, 1);//消息头
-                if (clientPacket.BufferLen > ClientMesaagePacket.PackSize)
+                var nLen = PacketEncoder.EncodeBuf(packetBuff, ClientCommandPacket.PackSize, packetBuffer, 1);//消息头
+                if (clientPacket.BufferLen > ClientCommandPacket.PackSize)
                 {
-                    MemoryCopy.BlockCopy(packetBuff, ClientMesaagePacket.PackSize, packetBuffer, nLen + 1, packetBuff.Length - ClientMesaagePacket.PackSize);
-                    nLen = packetBuff.Length - ClientMesaagePacket.PackSize + nLen;
+                    MemoryCopy.BlockCopy(packetBuff, ClientCommandPacket.PackSize, packetBuffer, nLen + 1, packetBuff.Length - ClientCommandPacket.PackSize);
+                    nLen = packetBuff.Length - ClientCommandPacket.PackSize + nLen;
                     /*var tempBuffer = packetBuff[ClientMesaagePacket.PackSize..];
                     MemoryCopy.BlockCopy(tempBuffer, 0, packBuff, nLen + 1, tempBuffer.Length);
                      nLen = packetBuff.Length + nLen;
@@ -965,7 +965,7 @@ namespace GameGate.Services
         private void SendKickMsg(int killType)
         {
             var sendMsg = string.Empty;
-            var defMsg = new ClientMesaagePacket();
+            var defMsg = new ClientCommandPacket();
             switch (killType)
             {
                 case 0:
@@ -981,7 +981,7 @@ namespace GameGate.Services
                     sendMsg = "当前登录帐号正在其它位置登录，本机已被强行离线";
                     break;
                 case 4: //todo 版本号验证
-                    defMsg.Cmd = Grobal2.SM_VERSION_FAIL;
+                    //defMsg.Cmd = Grobal2.SM_VERSION_FAIL;
                     break;
                 case 5:
                     sendMsg = Config.m_szOverClientCntMsg;
@@ -1208,21 +1208,21 @@ namespace GameGate.Services
             byte[] tempBuff;
             if (len == 0)
             {
-                tempBuff = new byte[GameServerPacket.PacketSize + packet.Length];
+                tempBuff = new byte[ServerMessagePacket.PacketSize + packet.Length];
             }
             else
             {
-                tempBuff = new byte[GameServerPacket.PacketSize + len];
+                tempBuff = new byte[ServerMessagePacket.PacketSize + len];
             }
-            var packetHeader = new GameServerPacket();
+            var packetHeader = new ServerMessagePacket();
             packetHeader.PacketCode = Grobal2.RUNGATECODE;
             packetHeader.Socket = (int)_session.Socket.Handle;
             packetHeader.SessionId = _session.SessionId;
             packetHeader.Ident = Grobal2.GM_DATA;
             packetHeader.ServerIndex = _session.UserListIndex;
-            packetHeader.PackLength = tempBuff.Length - GameServerPacket.PacketSize;
-            var sendBuffer = ServerPackSerializer.MemoryPackBrotli(packetHeader);
-            MemoryCopy.FastCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
+            packetHeader.PackLength = tempBuff.Length - ServerMessagePacket.PacketSize;
+            var sendBuffer = ServerPackSerializer.Serialize(packetHeader);
+            MemoryCopy.FastCopy( ServerPackSerializer.Serialize(packetHeader), 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)
             {
                 MemoryCopy.CopyMemory(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
@@ -1242,17 +1242,17 @@ namespace GameGate.Services
             }
             var tempBuf = new byte[1024];
             var sendBuf = new byte[1024];
-            var clientPacket = new ClientMesaagePacket();
-            clientPacket.UID = SvrObjectId;
-            clientPacket.Cmd = Grobal2.SM_SYSMESSAGE;
-            clientPacket.X = HUtil32.MakeWord(0xFF, 0xF9);
-            clientPacket.Y = 0;
-            clientPacket.Direct = 0;
+            var clientPacket = new ClientCommandPacket();
+            //clientPacket.UID = SvrObjectId;
+            //clientPacket.Cmd = Grobal2.SM_SYSMESSAGE;
+            //clientPacket.X = HUtil32.MakeWord(0xFF, 0xF9);
+            //clientPacket.Y = 0;
+            //clientPacket.Direct = 0;
             sendBuf[0] = (byte)'#';
-            Buffer.BlockCopy(clientPacket.GetBuffer(), 0, tempBuf, 0, ClientMesaagePacket.PackSize);
+            Buffer.BlockCopy(ServerPackSerializer.Serialize(clientPacket), 0, tempBuf, 0, ClientCommandPacket.PackSize);
             var sBuff = HUtil32.GetBytes(szMsg);
             Buffer.BlockCopy(sBuff, 0, tempBuf, 13, sBuff.Length);
-            var iLen = ClientMesaagePacket.PackSize + szMsg.Length;
+            var iLen = ClientCommandPacket.PackSize + szMsg.Length;
             iLen = PacketEncoder.EncodeBuf(tempBuf, iLen, sendBuf);
             sendBuf[iLen + 1] = (byte)'!';
             SendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, sendBuf[..(iLen + 1)]);

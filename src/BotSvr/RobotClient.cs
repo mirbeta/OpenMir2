@@ -36,7 +36,7 @@ namespace BotSvr
         private readonly TTimerCommand TimerCmd;
         private int ActionLockTime = 0;
         private readonly short ActionKey = 0;
-        private ClientMesaagePacket WaitingMsg = null;
+        private ClientMesaagePacket WaitingMsg;
         private string WaitingStr = string.Empty;
         private string WhisperName = string.Empty;
         private int m_dwProcUseMagicTick = 0;
@@ -2987,7 +2987,7 @@ namespace BotSvr
             var Str = string.Empty;
             var Str2 = string.Empty;
             var str3 = string.Empty;
-            ClientMesaagePacket msg = null;
+            ClientMesaagePacket msg;
             ShortMessage sMsg;
             MessageBodyW mbw;
             CharDesc desc;

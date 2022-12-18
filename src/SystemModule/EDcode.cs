@@ -10,24 +10,24 @@ namespace SystemModule
         /// <summary>
         /// 解码客户端封包
         /// </summary>
-        public static ClientMesaagePacket DecodePacket(string str)
+        public static ClientCommandPacket DecodePacket(string str)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
             var tempBuf = HUtil32.GetBytes(str);
             var buffLen = 0;
             var encBuf = PacketEncoder.DecodeBuf(tempBuf, str.Length, ref buffLen);
-            return ClientPackage.ToPacket<ClientMesaagePacket>(encBuf);
+            return ServerPackSerializer.Deserialize<ClientCommandPacket>(encBuf);
         }
 
         /// <summary>
         /// 解码客户端封包
         /// </summary>
-        public static ClientMesaagePacket DecodePacket(byte[] data)
+        public static ClientCommandPacket DecodePacket(byte[] data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             var buffLen = 0;
             var encBuf = PacketEncoder.DecodeBuf(data, data.Length, ref buffLen);
-            return ClientPackage.ToPacket<ClientMesaagePacket>(encBuf);
+            return ServerPackSerializer.Deserialize<ClientCommandPacket>(encBuf);
         }
 
         /// <summary>
@@ -177,10 +177,9 @@ namespace SystemModule
         /// 加密消息
         /// </summary>
         /// <returns></returns>
-        public static string EncodeMessage(ClientMesaagePacket packet)
+        public static string EncodeMessage(ClientCommandPacket packet)
         {
-            if (packet == null) throw new ArgumentNullException(nameof(packet));
-            var packetData = packet.GetBuffer();
+            var packetData = ServerPackSerializer.Serialize(packet);
             if (packetData.Length <= 0)
             {
                 return string.Empty;

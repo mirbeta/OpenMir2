@@ -88,48 +88,48 @@ namespace LoginGate.Services
             { 
                 m_dwClientTimeOutTick = HUtil32.GetTickCount();
             }*/
-            ClientMesaagePacket cltCmd = ClientPackage.ToPacket<ClientMesaagePacket>(packBuff);
-            switch (cltCmd.Cmd)
-            {
-                case Grobal2.CM_ADDNEWUSER://注册账号
-                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                    /*if (nDeCodeLen > TCmdPack.PackSize)
-                    {
-                        pszSendBuff = new byte[nDeCodeLen];
-                        Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
-                        int nDeCodeLen = 0;
-                        byte[] packBuff = PacketEncoder.EncodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
-                        var createAccount = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
-                        _lastLoginSvr.SendPacket(accountPacket);
-                    }*/
-                    break;
-                case Grobal2.CM_IDPASSWORD://登录消息
-                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                    //pszSendBuff = new byte[nDeCodeLen];
-                    //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
-                    //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
-                    //lastGameSvr.SendBuffer(accountPacket.GetPacket());
-                    break;
-                case Grobal2.CM_PROTOCOL:
-                case Grobal2.CM_SELECTSERVER:
-                case Grobal2.CM_CHANGEPASSWORD:
-                case Grobal2.CM_UPDATEUSER:
-                case Grobal2.CM_GETBACKPASSWORD:
-                    m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                    //pszSendBuff = new byte[nDeCodeLen];
-                    //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
-                    //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
-                    //lastGameSvr.SendBuffer(accountPacket.GetPacket());
-                    break;
-                default:
-                    Console.WriteLine($"错误的数据包索引:[{cltCmd.Cmd}]");
-                    break;
-            }
+            //ClientMesaagePacket cltCmd = ClientPackage.ToPacket<ClientMesaagePacket>(packBuff);
+            //switch (cltCmd.Cmd)
+            //{
+            //    case Grobal2.CM_ADDNEWUSER://注册账号
+            //        m_dwClientTimeOutTick = HUtil32.GetTickCount();
+            //        /*if (nDeCodeLen > TCmdPack.PackSize)
+            //        {
+            //            pszSendBuff = new byte[nDeCodeLen];
+            //            Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
+            //            int nDeCodeLen = 0;
+            //            byte[] packBuff = PacketEncoder.EncodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+            //            var createAccount = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
+            //            _lastLoginSvr.SendPacket(accountPacket);
+            //        }*/
+            //        break;
+            //    case Grobal2.CM_IDPASSWORD://登录消息
+            //        m_dwClientTimeOutTick = HUtil32.GetTickCount();
+            //        //pszSendBuff = new byte[nDeCodeLen];
+            //        //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
+            //        //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
+            //        //lastGameSvr.SendBuffer(accountPacket.GetPacket());
+            //        break;
+            //    case Grobal2.CM_PROTOCOL:
+            //    case Grobal2.CM_SELECTSERVER:
+            //    case Grobal2.CM_CHANGEPASSWORD:
+            //    case Grobal2.CM_UPDATEUSER:
+            //    case Grobal2.CM_GETBACKPASSWORD:
+            //        m_dwClientTimeOutTick = HUtil32.GetTickCount();
+            //        //pszSendBuff = new byte[nDeCodeLen];
+            //        //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
+            //        //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
+            //        //lastGameSvr.SendBuffer(accountPacket.GetPacket());
+            //        break;
+            //    default:
+            //        Console.WriteLine($"错误的数据包索引:[{cltCmd.Cmd}]");
+            //        break;
+            //}
 
-            if (!success)
-            {
-                //KickUser("ip");
-            }
+            //if (!success)
+            //{
+            //    //KickUser("ip");
+            //}
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace LoginGate.Services
             {
                 return;
             }
-            ClientMesaagePacket cmd = new ClientMesaagePacket();
+            ClientCommandPacket cmd = new ClientCommandPacket();
             cmd.Recog = nRecog;
             cmd.Ident = wIdent;
             cmd.Param = nParam;
@@ -203,14 +203,14 @@ namespace LoginGate.Services
             if (!string.IsNullOrEmpty(sMsg))
             {
                 byte[] sBuff = HUtil32.GetBytes(sMsg);
-                tempBuf = new byte[ClientMesaagePacket.PackSize + sBuff.Length];
+                tempBuf = new byte[ClientCommandPacket.PackSize + sBuff.Length];
                 Array.Copy(sBuff, 0, tempBuf, 13, sBuff.Length);
-                iLen = PacketEncoder.EncodeBuf(tempBuf, ClientMesaagePacket.PackSize + sMsg.Length, sendBuf);
+                iLen = PacketEncoder.EncodeBuf(tempBuf, ClientCommandPacket.PackSize + sMsg.Length, sendBuf);
             }
             else
             {
-                tempBuf = cmd.GetBuffer();
-                iLen = PacketEncoder.EncodeBuf(tempBuf, ClientMesaagePacket.PackSize, sendBuf, 1);
+                tempBuf = ServerPackSerializer.Serialize(cmd);
+                iLen = PacketEncoder.EncodeBuf(tempBuf, ClientCommandPacket.PackSize, sendBuf, 1);
             }
             sendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(sendBuf, iLen, SocketFlags.None);

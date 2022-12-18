@@ -140,7 +140,7 @@ namespace GameSvr.Player
         /// 行会传送
         /// </summary>
         public bool GuildMove = false;
-        public ClientMesaagePacket ClientMsg;
+        public ClientCommandPacket ClientMsg;
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
