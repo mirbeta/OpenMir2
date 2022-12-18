@@ -348,7 +348,7 @@ namespace GameGate.Services
                 ServerIndex = userIndex,
                 PackLength = nLen
             };
-            var sendBuffer = gateMsg.GetBuffer();
+            var sendBuffer = ServerPackSerializer.Serialize(gateMsg);
             if (!string.IsNullOrEmpty(data))
             {
                 var strBuff = HUtil32.GetBytes(data);

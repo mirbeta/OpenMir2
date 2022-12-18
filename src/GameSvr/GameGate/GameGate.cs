@@ -20,7 +20,7 @@ namespace GameSvr.GameGate
         private readonly GateSendQueue _sendQueue;
         private readonly object _runSocketSection;
         private readonly CancellationTokenSource _cancellation;
-        private readonly GameServerPacket packetHeader;
+        private GameServerPacket packetHeader;
         private readonly ClientMesaagePacket clientMesaagePacket;
         /// <summary>
         /// 发送缓冲区
@@ -160,7 +160,7 @@ namespace GameSvr.GameGate
         /// GameSvr -> GameGate
         /// </summary>
         /// <returns></returns>
-        public void HandleSendBuffer(ReadOnlySpan<byte> buffer)
+        public void HandleSendBuffer(int sendBuffLen,ReadOnlySpan<byte> buffer)
         {
             if (!GateInfo.BoUsed && GateInfo.Socket == null)
             {
@@ -179,14 +179,13 @@ namespace GameSvr.GameGate
             }
             try
             {
-                var nSendBuffLen = BitConverter.ToInt32(buffer[..4]);
-                if (nSendBuffLen == 0) //不发送空包
+                if (sendBuffLen == 0) //不发送空包
                 {
                     return;
                 }
-                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + nSendBuffLen >= M2Share.Config.CheckBlock * 10)
+                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= M2Share.Config.CheckBlock * 10)
                 {
-                    if (GateInfo.nSendBlockCount == 0 && M2Share.Config.CheckBlock * 10 <= nSendBuffLen)
+                    if (GateInfo.nSendBlockCount == 0 && M2Share.Config.CheckBlock * 10 <= sendBuffLen)
                     {
                         return;
                     }
@@ -194,13 +193,14 @@ namespace GameSvr.GameGate
                     GateInfo.nSendChecked = 1;
                     GateInfo.dwSendCheckTick = HUtil32.GetTickCount();
                 }
-                MemoryCopy.BlockCopy(buffer, 4, SendBuff, 0, buffer.Length);
+                MemoryCopy.BlockCopy(BitConverter.GetBytes(sendBuffLen), 0, SendBuff, 0, 4);
+                MemoryCopy.BlockCopy(buffer, 0, SendBuff, 4, buffer.Length);
                 if (GateInfo.Socket != null && GateInfo.Socket.Connected)
                 {
-                    _sendQueue.AddToQueue(SendBuff[..nSendBuffLen]);
+                    _sendQueue.AddToQueue(SendBuff[..sendBuffLen]);
                     GateInfo.nSendCount++;
-                    GateInfo.nSendBytesCount += nSendBuffLen;
-                    GateInfo.nSendBlockCount += nSendBuffLen;
+                    GateInfo.nSendBytesCount += sendBuffLen;
+                    GateInfo.nSendBlockCount += sendBuffLen;
                 }
                 if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.SocLimit)
                 {
@@ -229,7 +229,7 @@ namespace GameSvr.GameGate
             };
             if (Socket.Connected)
             {
-                var data = msgHeader.GetBuffer();
+                var data = ServerPackSerializer.MemoryPackBrotli(msgHeader);
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -465,7 +465,7 @@ namespace GameSvr.GameGate
             MsgHeader.PackLength = 0;
             if (Socket.Connected)
             {
-                var data = MsgHeader.GetBuffer();
+                var data = ServerPackSerializer.MemoryPackBrotli(MsgHeader);
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }

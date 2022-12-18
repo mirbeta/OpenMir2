@@ -252,7 +252,8 @@ namespace GameSvr.GameGate
 
         public void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx)
         {
-            var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            //todo   
+            /*var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             var msgHeader = new GameServerPacket();
             msgHeader.PacketCode = Grobal2.RUNGATECODE;
             msgHeader.Socket = nSocket;
@@ -263,7 +264,7 @@ namespace GameSvr.GameGate
             if (!AddGateBuffer(nGateIdx, outMessage.GetBuffer()))
             {
                 M2Share.Log.Error("发送玩家退出消息失败.");
-            }
+            }*/
         }
 
         /// <summary>
@@ -327,11 +328,11 @@ namespace GameSvr.GameGate
                 Ident = Grobal2.GM_TEST,
                 PackLength = 100
             };
-            var nLen = msgHdr.PackLength + GameServerPacket.PacketSize;
+            /*var nLen = msgHdr.PackLength + GameServerPacket.PacketSize;
             using var memoryStream = new MemoryStream();
             var backingStream = new BinaryWriter(memoryStream);
             backingStream.Write(nLen);
-            backingStream.Write(msgHdr.GetBuffer());
+            backingStream.Write(ServerPackSerializer.MemoryPackBrotli(msgHdr));
             backingStream.Write(defMsg.GetBuffer());
             memoryStream.Seek(0, SeekOrigin.Begin);
             var data = new byte[memoryStream.Length];
@@ -339,7 +340,7 @@ namespace GameSvr.GameGate
             if (!M2Share.GateMgr.AddGateBuffer(nIndex, data))
             {
                 data = null;
-            }
+            }*/
         }
 
         private void SendCheck(Socket Socket, int nIdent)
@@ -357,7 +358,7 @@ namespace GameSvr.GameGate
             };
             if (Socket.Connected)
             {
-                var data = msgHeader.GetBuffer();
+                var data = ServerPackSerializer.MemoryPackBrotli(msgHeader);
                 Socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -367,11 +368,11 @@ namespace GameSvr.GameGate
         /// GameSvr->GameGate
         /// </summary>
         /// <returns></returns>
-        public bool AddGateBuffer(int gateIdx, byte[] buffer)
+        public bool AddGateBuffer(int gateIdx, int len, byte[] buffer)
         {
             if (GameGateMap.TryGetValue(gateIdx, out GameGate value))
             {
-                value.HandleSendBuffer(buffer);
+                value.HandleSendBuffer(len, buffer);
                 return true;
             }
             _logger.Error("发送网关消息失败，用户对应网关ID不存在.");

@@ -247,31 +247,21 @@ namespace GameSvr.Player
             {
                 return;
             }
+            if (string.IsNullOrEmpty(sMsg))
+                return;
+
             var msgHdr = new GameServerPacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = SocketId,
                 SessionId = SocketIdx,
-                Ident = Grobal2.GM_DATA
+                Ident = Grobal2.GM_DATA,
+                nMsg = sMsg
             };
-            if (!string.IsNullOrEmpty(sMsg))
-            {
-                var bMsg = HUtil32.GetBytes(sMsg);
-                msgHdr.PackLength = -bMsg.Length;
-                var nSendBytes = Math.Abs(msgHdr.PackLength) + 20;
-                using var memoryStream = new MemoryStream();
-                using var backingStream = new BinaryWriter(memoryStream);
-                backingStream.Write(nSendBytes);
-                backingStream.Write(msgHdr.GetBuffer());
-                if (bMsg.Length > 0)
-                {
-                    backingStream.Write(bMsg);
-                }
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                var data = new byte[memoryStream.Length];
-                memoryStream.Read(data, 0, data.Length);
-                M2Share.GateMgr.AddGateBuffer(GateIdx, data);
-            }
+            var bMsg = HUtil32.GetBytes(sMsg);
+            msgHdr.PackLength = -bMsg.Length;
+            var dataLen = Math.Abs(msgHdr.PackLength) + 20;
+            M2Share.GateMgr.AddGateBuffer(GateIdx, dataLen, ServerPackSerializer.Serialize(msgHdr));
         }
 
         private void SendSocket(ClientMesaagePacket defMsg)
@@ -290,17 +280,16 @@ namespace GameSvr.Player
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = SocketId,
                 SessionId = SocketIdx,
-                Ident = Grobal2.GM_DATA
+                Ident = Grobal2.GM_DATA,
+                nMsg = sMsg
             };
-            using var memoryStream = new MemoryStream();
-            using var backingStream = new BinaryWriter(memoryStream);
             byte[] bMsg = null;
-            int nSendBytes;
+            var nSendBytes = 0;
             if (defMsg != null)
             {
-                bMsg = HUtil32.GetBytes(sMsg);
                 if (!string.IsNullOrEmpty(sMsg))
                 {
+                    bMsg = HUtil32.GetBytes(sMsg);
                     messageHead.PackLength = bMsg.Length + 12;
                 }
                 else
@@ -308,26 +297,15 @@ namespace GameSvr.Player
                     messageHead.PackLength = 12;
                 }
                 nSendBytes = messageHead.PackLength + GameServerPacket.PacketSize;
-                backingStream.Write(nSendBytes);
-                backingStream.Write(messageHead.GetBuffer());
-                backingStream.Write(defMsg.GetBuffer());
             }
             else if (!string.IsNullOrEmpty(sMsg))
             {
                 bMsg = HUtil32.GetBytes(sMsg);
                 messageHead.PackLength = -bMsg.Length;
                 nSendBytes = Math.Abs(messageHead.PackLength) + GameServerPacket.PacketSize;
-                backingStream.Write(nSendBytes);
-                backingStream.Write(messageHead.GetBuffer());
             }
-            if (bMsg != null && bMsg.Length > 0)
-            {
-                backingStream.Write(bMsg);
-            }
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var data = new byte[memoryStream.Length];
-            memoryStream.Read(data, 0, data.Length);
-            M2Share.GateMgr.AddGateBuffer(GateIdx, data);
+            var clientOutMessage = new ClientOutMessage(messageHead, defMsg);
+            M2Share.GateMgr.AddGateBuffer(GateIdx, nSendBytes, ServerPackSerializer.Serialize(clientOutMessage));
         }
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)

@@ -611,7 +611,7 @@ namespace GameGate.Services
                     cmdPack.PackLength = ClientMesaagePacket.PackSize;
                     Buffer.BlockCopy(decodeBuff, 0, bodyBuffer, GameServerPacket.PacketSize, decodeBuff.Length);
                 }
-                Buffer.BlockCopy(cmdPack.GetBuffer(), 0, bodyBuffer, 0, GameServerPacket.PacketSize);//复制消息头
+                Buffer.BlockCopy(ServerPackSerializer.MemoryPackBrotli(cmdPack), 0, bodyBuffer, 0, GameServerPacket.PacketSize);//复制消息头
                 ClientThread.SendBuffer(bodyBuffer);
             }
             else
@@ -1221,7 +1221,7 @@ namespace GameGate.Services
             packetHeader.Ident = Grobal2.GM_DATA;
             packetHeader.ServerIndex = _session.UserListIndex;
             packetHeader.PackLength = tempBuff.Length - GameServerPacket.PacketSize;
-            var sendBuffer = packetHeader.GetBuffer();
+            var sendBuffer = ServerPackSerializer.MemoryPackBrotli(packetHeader);
             MemoryCopy.FastCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)
             {
