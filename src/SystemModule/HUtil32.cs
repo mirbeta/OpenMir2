@@ -760,20 +760,6 @@ namespace SystemModule
             return result;
         }
 
-        public static long IpToInt(string ip)
-        {
-            if (string.IsNullOrEmpty(ip))
-            {
-                return -1;
-            }
-            char[] separator = new[] { '.' };
-            string[] items = ip.Split(separator);
-            return long.Parse(items[0]) << 24
-                   | long.Parse(items[1]) << 16
-                   | long.Parse(items[2]) << 8
-                   | long.Parse(items[3]);
-        }
-
         /// <summary>
         /// 获取大小的显示字符串
         /// </summary>
@@ -808,6 +794,25 @@ namespace SystemModule
                 return string.Concat(Math.Round(bytes / byteConversion, 2), " KB");
             }
             return string.Concat(bytes, " Bytes");// Bytes
+        }
+
+        /// <summary>
+        /// IP地址转数字
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <returns></returns>
+        public static long IpToInt(string ip)
+        {
+            if (string.IsNullOrEmpty(ip))
+            {
+                return -1;
+            }
+            char[] separator = new[] { '.' };
+            string[] items = ip.Split(separator);
+            return long.Parse(items[0]) << 24
+                   | long.Parse(items[1]) << 16
+                   | long.Parse(items[2]) << 8
+                   | long.Parse(items[3]);
         }
     }
 }

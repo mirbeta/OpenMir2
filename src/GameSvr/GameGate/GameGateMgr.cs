@@ -3,6 +3,7 @@ using GameSvr.Services;
 using NLog;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
 using SystemModule;
@@ -22,6 +23,7 @@ namespace GameSvr.GameGate
         private readonly object m_RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;
         private readonly ConcurrentDictionary<int, GameGate> GameGateMap;
+        private readonly HashSet<long> RunGatePermitMap = new HashSet<long>();
 
         public GameGateMgr()
         {
@@ -51,12 +53,28 @@ namespace GameSvr.GameGate
 
         private void LoadRunAddr()
         {
-            var sFileName = ".\\RunAddr.txt";
+            var sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "!Runaddr.txt");
             if (File.Exists(sFileName))
             {
                 var runAddrList = new StringList();
                 runAddrList.LoadFromFile(sFileName);
                 M2Share.TrimStringList(runAddrList);
+
+                for (int i = 0; i < runAddrList.Count; i++)
+                {
+                    if (!string.IsNullOrEmpty(runAddrList[i]))
+                    {
+                        RunGatePermitMap.Add(HUtil32.IpToInt(runAddrList[i]));
+                    }
+                }
+                var localEntity = Dns.GetHostEntry(Dns.GetHostName());
+                for (int i = 0; i < localEntity.AddressList.Length; i++)
+                {
+                    if (localEntity.AddressList[i].AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        RunGatePermitMap.Add(HUtil32.IpToInt(localEntity.AddressList[i].ToString()));
+                    }
+                }
             }
         }
 
@@ -424,7 +442,14 @@ namespace GameSvr.GameGate
 
         private void GateSocketClientConnect(object sender, AsyncUserToken e)
         {
-            M2Share.GateMgr.AddGate(e);
+            if (RunGatePermitMap.TryGetValue(HUtil32.IpToInt(e.RemoteIPaddr), out _))
+            {
+                M2Share.GateMgr.AddGate(e);
+            }
+            else
+            {
+                e.Socket.Close();
+            }
         }
 
         private void GateSocketClientRead(object sender, AsyncUserToken e)
