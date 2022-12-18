@@ -13,6 +13,7 @@ using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GameSvr.GameGate
 {
@@ -103,7 +104,6 @@ namespace GameSvr.GameGate
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
-                gateInfo.GateBuff = new byte[1024 * 10];
                 _logger.Info(string.Format(sGateOpen, e.EndPoint));
                 GameGateMap.TryAdd(e.SocHandle, new GameGate(e.SocHandle, gateInfo));
                 GameGateMap[e.SocHandle].StartGateQueue();
@@ -461,9 +461,19 @@ namespace GameSvr.GameGate
                 {
                     return;
                 }
-                Span<byte> data = stackalloc byte[e.BytesReceived];
-                MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
-                runGate.ProcessReceiveBuffer(nMsgLen, data);
+                if (runGate.ReceiveLen > 0)
+                {
+                    MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, runGate.ReceiveBuffer, runGate.ReceiveLen, nMsgLen);
+                    runGate.ProcessBuffer(runGate.ReceiveBuffer, runGate.ReceiveLen + nMsgLen);
+                }
+                else
+                {
+                    MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, runGate.ReceiveBuffer, 0, nMsgLen);
+                    runGate.ProcessBuffer(runGate.ReceiveBuffer, nMsgLen);
+                }
+                //Span<byte> data = stackalloc byte[e.BytesReceived];
+                //MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
+                //runGate.ProcessReceiveBuffer(nMsgLen, data);
             }
             else
             {

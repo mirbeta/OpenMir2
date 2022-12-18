@@ -53,7 +53,5 @@ namespace GameSvr.GameGate
         /// 上次心跳时间
         /// </summary>
         public int dwSendCheckTick;
-        public byte[] GateBuff;
-        public int BuffLen;
     }
 }
