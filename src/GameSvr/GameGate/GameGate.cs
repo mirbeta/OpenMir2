@@ -8,7 +8,6 @@ using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GameSvr.GameGate
 {
@@ -34,7 +33,6 @@ namespace GameSvr.GameGate
         
         public GameGate(int gateIdx, GameGateInfo gateInfo)
         {
-            
             GateIdx = gateIdx;
             _gateInfo = gateInfo;
             _runSocketSection = new object();
@@ -57,26 +55,29 @@ namespace GameSvr.GameGate
             _cancellation.CancelAfter(3000);
         }
 
-        internal void ProcessBuffer(byte[] packetBuff, int packetLen)
+        internal void ProcessBufferReceive(Span<byte> packetBuff, int packetLen)
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             var nLen = packetLen;
             var buffIndex = 0;
+            var processLen = 0;
+            var processBuff = packetBuff;
             try
             {
                 while (nLen >= ServerMessagePacket.PacketSize)
                 {
-                    var packetHeader = ServerPackSerializer.Deserialize<ServerMessagePacket>(packetBuff[..ServerMessagePacket.PacketSize]);
+                    var packetHeader = ServerPackSerializer.Deserialize<ServerMessagePacket>(processBuff.Slice(processLen, ServerMessagePacket.PacketSize));
                     if (packetHeader.PacketCode == Grobal2.RUNGATECODE)
                     {
                         var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + ServerMessagePacket.PacketSize;
                         if (nLen < nCheckMsgLen && nCheckMsgLen < 0x8000)
                         {
+                            _logger.Warn("丢弃网关长度数据包.");
                             break;
                         }
                         if (packetHeader.PackLength > 0)
                         {
-                            var body = packetBuff[nCheckMsgLen..];
+                            var body = processBuff.Slice(processLen, nCheckMsgLen);
                             ExecGateBuffers(GateIdx, GateInfo, packetHeader, body, packetHeader.PackLength);
                         }
                         else
@@ -84,6 +85,7 @@ namespace GameSvr.GameGate
                             ExecGateBuffers(GateIdx, GateInfo, packetHeader, null, packetHeader.PackLength);
                         }
                         nLen -= nCheckMsgLen;
+                        processLen += nCheckMsgLen;
                         if (nLen <= 0)
                         {
                             break;
@@ -102,6 +104,7 @@ namespace GameSvr.GameGate
                         //}
                         //memoryStream.Position = buffIndex;
                         nLen -= 1;
+                        _logger.Warn("丢弃整段网关异常数据包");
                     }
                     if (nLen < ServerMessagePacket.PacketSize)
                     {
@@ -116,7 +119,7 @@ namespace GameSvr.GameGate
             }
             if (nLen > 0)
             {
-                MemoryCopy.BlockCopy(packetBuff, 0, ReceiveBuffer, 0, nLen);
+                MemoryCopy.BlockCopy(processBuff, 0, ReceiveBuffer, 0, nLen);
                 ReceiveLen = nLen;
             }
             else
@@ -130,7 +133,7 @@ namespace GameSvr.GameGate
         /// GameSvr -> GameGate
         /// </summary>
         /// <returns></returns>
-        public void HandleSendBuffer(int sendBuffLen,ReadOnlySpan<byte> buffer, byte[] msgBuffer)
+        public void ProcessBufferSend(int sendBuffLen, ReadOnlySpan<byte> commandBuffer, byte[] strBuffer)
         {
             if (!GateInfo.BoUsed && GateInfo.Socket == null)
             {
@@ -163,11 +166,10 @@ namespace GameSvr.GameGate
                     GateInfo.nSendChecked = 1;
                     GateInfo.dwSendCheckTick = HUtil32.GetTickCount();
                 }
-                MemoryCopy.BlockCopy(BitConverter.GetBytes(sendBuffLen), 0, SendBuffer, 0, 4);
-                MemoryCopy.BlockCopy(buffer, 0, SendBuffer, 4, buffer.Length);
-                if (msgBuffer != null && msgBuffer.Length > 0)
+                MemoryCopy.BlockCopy(commandBuffer, 0, SendBuffer, 0, commandBuffer.Length);
+                if (strBuffer != null && strBuffer.Length > 0)
                 {
-                    MemoryCopy.BlockCopy(msgBuffer, 0, SendBuffer, buffer.Length + 4, msgBuffer.Length);
+                    MemoryCopy.BlockCopy(strBuffer, 0, SendBuffer, commandBuffer.Length, strBuffer.Length);
                 }
                 if (GateInfo.Socket != null && GateInfo.Socket.Connected)
                 {

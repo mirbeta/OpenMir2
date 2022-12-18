@@ -195,7 +195,8 @@ namespace GameGate.Services
             }
             else
             {
-                ProcessServerPacket(e.Buff, nMsgLen);
+                MemoryCopy.BlockCopy(e.Buff, 0, ReceiveBuffer, 0, nMsgLen);
+                ProcessServerPacket(ReceiveBuffer, nMsgLen);
             }
             ReceiveBytes += nMsgLen;
         }
@@ -221,46 +222,40 @@ namespace GameGate.Services
             CheckServerFail = true;
         }
 
-        private void ProcessServerPacket(byte[] buff, int buffLen)
+        private void ProcessServerPacket(byte[] buff, int nLen)
         {
             var srcOffset = 0;
-            var nLen = buffLen;
-            Span<byte> dataBuff = buff;
+            var processLen = 0;
+            var processBuff = buff.AsSpan();
             try
             {
                 while (nLen >= ServerMessagePacket.PacketSize)
                 {
-                    Span<byte> packetHead = dataBuff[..20];
-                    var packetCode = BitConverter.ToUInt32(packetHead[..4]);
-                    if (packetCode != Grobal2.RUNGATECODE)
+                    var packetHeader = ServerPackSerializer.Deserialize<ServerMessagePacket>(processBuff[..ServerMessagePacket.PacketSize]);
+                    if (packetHeader.PacketCode != Grobal2.RUNGATECODE)
                     {
                         srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, HeaderMessageSize);
+                        //dataBuff = dataBuff.Slice(srcOffset, HeaderMessageSize);
                         nLen -= 1;
-                        Logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        //Logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
-                    //var Socket = BitConverter.ToInt32(packetHead.Slice(4, 4));
-                    var sessionId = BitConverter.ToUInt16(packetHead.Slice(8, 2));
-                    var ident = BitConverter.ToUInt16(packetHead.Slice(10, 2));
-                    var serverIndex = BitConverter.ToInt32(packetHead.Slice(12, 4));
-                    var packLength = BitConverter.ToInt32(packetHead.Slice(16, 4));
-                    var nCheckMsgLen = Math.Abs(packLength) + HeaderMessageSize;
+                    var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + HeaderMessageSize;
                     if (nCheckMsgLen > nLen)
                     {
                         break;
                     }
-                    switch (ident)
+                    switch (packetHeader.Ident)
                     {
                         case Grobal2.GM_CHECKSERVER:
                             CheckServerFail = false;
                             CheckServerTick = HUtil32.GetTickCount();
                             break;
                         case Grobal2.GM_SERVERUSERINDEX:
-                            var userSession = SessionManager.GetSession(sessionId);
+                            var userSession = SessionManager.GetSession(packetHeader.SessionId);
                             if (userSession != null)
                             {
-                                userSession.SvrListIdx = serverIndex;
+                                userSession.SvrListIdx = packetHeader.ServerIndex;
                             }
                             break;
                         case Grobal2.GM_RECEIVE_OK:
@@ -275,17 +270,20 @@ namespace GameGate.Services
                         case Grobal2.GM_DATA:
                             var sessionPacket = new MessagePacket
                             {
-                                SessionId = sessionId,
-                                BufferLen = packLength
+                                SessionId = packetHeader.SessionId,
+                                BufferLen = packetHeader.PackLength
                             };
-                            if (packLength > 0)
+                            if (packetHeader.PackLength > 0)
                             {
-                                sessionPacket.Buffer = dataBuff.Slice(20, packLength).ToArray();
+                                sessionPacket.Buffer = new byte[packetHeader.PackLength];
+                                MemoryCopy.BlockCopy(processBuff, 20, sessionPacket.Buffer, 0, packetHeader.PackLength);
                             }
                             else
                             {
-                                var packetSize = dataBuff.Length - HeaderMessageSize;
-                                sessionPacket.Buffer = dataBuff.Slice(20, packetSize).ToArray();
+                                var packetSize = processBuff.Length - HeaderMessageSize;
+                                //sessionPacket.Buffer = processBuff.Slice(ServerMessagePacket.PacketSize, packetSize).ToArray();
+                                sessionPacket.Buffer = new byte[packetSize];
+                                MemoryCopy.BlockCopy(processBuff, 20, sessionPacket.Buffer, 0, packetSize);
                             }
                             SessionManager.Enqueue(sessionPacket);
                             break;
@@ -293,11 +291,13 @@ namespace GameGate.Services
                             break;
                     }
                     nLen -= nCheckMsgLen;
+                    processLen += nCheckMsgLen;
                     if (nLen <= 0)
                     {
                         break;
                     }
-                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                    //MemoryCopy.BlockCopy(buff, nCheckMsgLen, ReceiveBuffer, 0, nLen);
+                    processBuff = processBuff.Slice(nCheckMsgLen, nLen);
                     BuffLen = nLen;
                     srcOffset = 0;
                     if (nLen < HeaderMessageSize)
@@ -308,7 +308,8 @@ namespace GameGate.Services
                 if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
                     //ReceiveBuffer = dataBuff[..nLen].ToArray();
-                    MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
+                    //MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
+                    MemoryCopy.BlockCopy(processBuff, 0, ReceiveBuffer, 0, nLen);
                     BuffLen = nLen;
                 }
                 else

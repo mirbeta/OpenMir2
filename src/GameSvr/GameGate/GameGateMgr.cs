@@ -13,7 +13,6 @@ using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GameSvr.GameGate
 {
@@ -270,19 +269,21 @@ namespace GameSvr.GameGate
 
         public void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx)
         {
-            //todo   
-            /*var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            var msgHeader = new GameServerPacket();
-            msgHeader.PacketCode = Grobal2.RUNGATECODE;
-            msgHeader.Socket = nSocket;
-            msgHeader.SessionId = nGsIdx;
-            msgHeader.Ident = Grobal2.GM_DATA;
-            msgHeader.PackLength = ClientMesaagePacket.PackSize;
-            ClientOutMessage outMessage = new ClientOutMessage(msgHeader, defMsg);
-            if (!AddGateBuffer(nGateIdx, outMessage.GetBuffer()))
-            {
-                M2Share.Log.Error("发送玩家退出消息失败.");
-            }*/
+            //todo 
+            //var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            //var msgHeader = new ServerMessagePacket();
+            //msgHeader.PacketCode = Grobal2.RUNGATECODE;
+            //msgHeader.Socket = nSocket;
+            //msgHeader.SessionId = nGsIdx;
+            //msgHeader.Ident = Grobal2.GM_DATA;
+            //msgHeader.PackLength = ClientCommandPacket.PackSize;
+            //ClientOutMessage outMessage = new ClientOutMessage();
+            //outMessage.MessagePacket = msgHeader;
+            //outMessage.CommandPacket = defMsg;
+            //if (!AddGateBuffer(nGateIdx, 0, ServerPackSerializer.Serialize(outMessage), null))
+            //{
+            //    M2Share.Log.Error("发送玩家退出消息失败.");
+            //}
         }
 
         /// <summary>
@@ -390,7 +391,7 @@ namespace GameSvr.GameGate
         {
             if (GameGateMap.TryGetValue(gateIdx, out GameGate value))
             {
-                value.HandleSendBuffer(len, buffer, msgBuffer);
+                value.ProcessBufferSend(len, buffer, msgBuffer);
                 return true;
             }
             _logger.Error("发送网关消息失败，用户对应网关ID不存在.");
@@ -464,12 +465,12 @@ namespace GameSvr.GameGate
                 if (runGate.ReceiveLen > 0)
                 {
                     MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, runGate.ReceiveBuffer, runGate.ReceiveLen, nMsgLen);
-                    runGate.ProcessBuffer(runGate.ReceiveBuffer, runGate.ReceiveLen + nMsgLen);
+                    runGate.ProcessBufferReceive(runGate.ReceiveBuffer, runGate.ReceiveLen + nMsgLen);
                 }
                 else
                 {
                     MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, runGate.ReceiveBuffer, 0, nMsgLen);
-                    runGate.ProcessBuffer(runGate.ReceiveBuffer, nMsgLen);
+                    runGate.ProcessBufferReceive(runGate.ReceiveBuffer, nMsgLen);
                 }
                 //Span<byte> data = stackalloc byte[e.BytesReceived];
                 //MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nMsgLen);
