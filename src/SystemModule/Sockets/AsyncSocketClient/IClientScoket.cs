@@ -202,12 +202,12 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 {
                     // 增加接收到的字节总数
                     Interlocked.Add(ref totalBytesRead, length);
-                    Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
+                    /*Span<byte> destinationArray = stackalloc byte[length];//目的字节数组
                     for (var i = 0; i < length; i++)
                     {
                         destinationArray[i] = _databuffer[i];
-                    }
-                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(_cli, destinationArray.ToArray(), length)); //引发接收数据事件
+                    }*/
+                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(_cli, _databuffer[..length], length)); //引发接收数据事件
                     StartWaitingForData(asyncState);//继续接收数据
                 }
             }

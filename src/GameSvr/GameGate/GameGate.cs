@@ -35,6 +35,7 @@ namespace GameSvr.GameGate
 
         public GameGate(int gateIdx, GameGateInfo gateInfo)
         {
+            
             GateIdx = gateIdx;
             _gateInfo = gateInfo;
             _runSocketSection = new object();
