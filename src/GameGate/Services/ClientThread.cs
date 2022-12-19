@@ -308,7 +308,8 @@ namespace GameGate.Services
                 {
                     //ReceiveBuffer = dataBuff[..nLen].ToArray();
                     //MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
-                    MemoryCopy.BlockCopy(processBuff, 0, ReceiveBuffer, 0, nLen);
+                    Console.WriteLine(nLen);
+                    MemoryCopy.BlockCopy(processBuff, nLen, ReceiveBuffer, 0, nLen);
                     BuffLen = nLen;
                 }
                 else

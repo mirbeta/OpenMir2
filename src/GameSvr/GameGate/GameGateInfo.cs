@@ -9,6 +9,9 @@ namespace GameSvr.GameGate
         /// </summary>
         public bool BoUsed;
         public Socket Socket;
+        /// <summary>
+        /// Socket链接ID
+        /// </summary>
         public string SocketId;
         /// <summary>
         /// 玩家列表

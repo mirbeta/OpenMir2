@@ -163,7 +163,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
 
             // 读写池
             _readPool = new SocketAsyncEventArgsPool(numConnections);
-            _writePool = new SocketAsyncEventArgsPool(numConnections);
+            _writePool = new SocketAsyncEventArgsPool(numConnections * 20);
 
             // 接收数据事件参数对象集合
             _mTokens = new ConcurrentDictionary<string, AsyncUserToken>();

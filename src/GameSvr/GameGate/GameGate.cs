@@ -1,9 +1,9 @@
-﻿using GameSvr.Player;
+﻿using System.Net.Sockets;
+using System.Threading.Channels;
+using GameSvr.Player;
 using GameSvr.Services;
 using GameSvr.World;
 using NLog;
-using System.Net.Sockets;
-using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets;
@@ -14,23 +14,18 @@ namespace GameSvr.GameGate
     public class GameGate
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly int GateIdx;
+        readonly int GateIdx;
         private readonly GameGateInfo _gateInfo;
         private readonly GateSendQueue _sendQueue;
         private readonly object _runSocketSection;
         private readonly CancellationTokenSource _cancellation;
-        private ClientCommandPacket clientMesaagePacket;
-        /// <summary>
-        /// 发送缓冲区
-        /// </summary>
-        private byte[] SendBuffer;
-        private int SendLen;
+        private ClientCommandPacket _clientMesaagePacket;
         /// <summary>
         /// 数据接收缓冲区
         /// </summary>
         public byte[] ReceiveBuffer;
         public int ReceiveLen;
-        
+
         public GameGate(int gateIdx, GameGateInfo gateInfo)
         {
             GateIdx = gateIdx;
@@ -38,15 +33,14 @@ namespace GameSvr.GameGate
             _runSocketSection = new object();
             _sendQueue = new GateSendQueue(gateInfo.SocketId);
             _cancellation = new CancellationTokenSource();
-            clientMesaagePacket = new ClientCommandPacket();
-            SendBuffer = new byte[1024 * 10];
+            _clientMesaagePacket = new ClientCommandPacket();
             ReceiveBuffer = new byte[4096];
             StartGateQueue();
         }
 
         public GameGateInfo GateInfo => _gateInfo;
 
-        public void StartGateQueue()
+        private void StartGateQueue()
         {
             _sendQueue.ProcessSendQueue(_cancellation);
         }
@@ -78,12 +72,12 @@ namespace GameSvr.GameGate
                         }
                         if (packetHeader.PackLength > 0)
                         {
-                            var body = processBuff.Slice(ServerMessagePacket.PacketSize,packetHeader.PackLength);
-                            ExecGateBuffers(GateIdx, GateInfo, packetHeader, body, packetHeader.PackLength);
+                            var body = processBuff.Slice(ServerMessagePacket.PacketSize, packetHeader.PackLength);
+                            ExecGateBuffers(packetHeader, packetHeader.PackLength, body);
                         }
                         else
                         {
-                            ExecGateBuffers(GateIdx, GateInfo, packetHeader, null, packetHeader.PackLength);
+                            ExecGateBuffers(packetHeader, packetHeader.PackLength, null);
                         }
                         nLen -= nCheckMsgLen;
                         processLen += nCheckMsgLen;
@@ -134,7 +128,7 @@ namespace GameSvr.GameGate
         /// GameSvr -> GameGate
         /// </summary>
         /// <returns></returns>
-        public void ProcessBufferSend(ReadOnlySpan<byte> commandPacket, ReadOnlySpan<byte> strBuffer)
+        public void ProcessBufferSend(byte[] sendData)
         {
             if (!GateInfo.BoUsed && GateInfo.Socket == null)
             {
@@ -153,7 +147,7 @@ namespace GameSvr.GameGate
             }
             try
             {
-                var sendBuffLen = commandPacket.Length + strBuffer.Length;
+                var sendBuffLen = sendData.Length;
                 if (sendBuffLen == 0) //不发送空包
                 {
                     return;
@@ -164,18 +158,13 @@ namespace GameSvr.GameGate
                     {
                         return;
                     }
-                    SendCheck(GateInfo.Socket, Grobal2.GM_RECEIVE_OK);
+                    SendCheck(GateInfo.SocketId, Grobal2.GM_RECEIVE_OK);
                     GateInfo.nSendChecked = 1;
                     GateInfo.dwSendCheckTick = HUtil32.GetTickCount();
                 }
-                MemoryCopy.BlockCopy(commandPacket, 0, SendBuffer, 0, commandPacket.Length);
-                if (strBuffer != null && strBuffer.Length > 0)
-                {
-                    MemoryCopy.BlockCopy(strBuffer, 0, SendBuffer, commandPacket.Length, strBuffer.Length);
-                }
                 if (GateInfo.Socket != null && GateInfo.Socket.Connected)
                 {
-                    _sendQueue.AddToQueue(SendBuffer[..sendBuffLen]);
+                    _sendQueue.AddToQueue(sendData);
                     GateInfo.nSendCount++;
                     GateInfo.nSendBytesCount += sendBuffLen;
                     GateInfo.nSendBlockCount += sendBuffLen;
@@ -192,12 +181,8 @@ namespace GameSvr.GameGate
             }
         }
 
-        private void SendCheck(Socket Socket, ushort nIdent)
+        private void SendCheck(string connectId, ushort nIdent)
         {
-            if (!Socket.Connected)
-            {
-                return;
-            }
             var msgHeader = new ServerMessagePacket
             {
                 PacketCode = Grobal2.RUNGATECODE,
@@ -205,96 +190,92 @@ namespace GameSvr.GameGate
                 Ident = nIdent,
                 PackLength = 0
             };
-            if (Socket.Connected)
-            {
-                var data = ServerPackSerializer.Serialize(msgHeader);
-                Socket.Send(data, 0, data.Length, SocketFlags.None);
-            }
+            var data = ServerPackSerializer.Serialize(msgHeader);
+            M2Share.GateMgr.Send(connectId, data);
         }
 
         /// <summary>
         /// 执行网关封包消息
         /// </summary>
-        private void ExecGateBuffers(int GateIdx, GameGateInfo Gate, ServerMessagePacket MsgHeader, Span<byte> MsgBuff, int nMsgLen)
+        private void ExecGateBuffers(ServerMessagePacket msgPacket, int nMsgLen, Span<byte> msgBuff)
         {
-            int nUserIdx;
             const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg";
             try
             {
-                switch (MsgHeader.Ident)
+                int nUserIdx;
+                switch (msgPacket.Ident)
                 {
                     case Grobal2.GM_OPEN:
-                        var sIPaddr = HUtil32.GetString(MsgBuff, nMsgLen);
-                        nUserIdx = OpenNewUser(MsgHeader.Socket, MsgHeader.SessionId, sIPaddr, Gate.UserList);
-                        SendNewUserMsg(Gate.Socket, MsgHeader.Socket, MsgHeader.SessionId, nUserIdx + 1);
-                        Gate.nUserCount++;
+                        var sIPaddr = HUtil32.GetString(msgBuff, nMsgLen);
+                        nUserIdx = OpenNewUser(msgPacket.Socket, msgPacket.SessionId, sIPaddr, GateInfo.UserList);
+                        SendNewUserMsg(GateInfo.Socket, msgPacket.Socket, msgPacket.SessionId, nUserIdx + 1);
+                        GateInfo.nUserCount++;
                         break;
                     case Grobal2.GM_CLOSE:
-                        CloseUser(MsgHeader.Socket);
+                        CloseUser(msgPacket.Socket);
                         break;
                     case Grobal2.GM_CHECKCLIENT:
-                        Gate.boSendKeepAlive = true;
+                        GateInfo.boSendKeepAlive = true;
                         break;
                     case Grobal2.GM_RECEIVE_OK:
-                        Gate.nSendChecked = 0;
-                        Gate.nSendBlockCount = 0;
+                        GateInfo.nSendChecked = 0;
+                        GateInfo.nSendBlockCount = 0;
                         break;
                     case Grobal2.GM_DATA:
-                        GateUserInfo GateUser = null;
-                        if (MsgHeader.ServerIndex >= 1)
+                        GateUserInfo gateUser = null;
+                        if (msgPacket.ServerIndex >= 1)
                         {
-                            nUserIdx = MsgHeader.ServerIndex - 1;
-                            if (Gate.UserList.Count > nUserIdx)
+                            nUserIdx = msgPacket.ServerIndex - 1;
+                            if (GateInfo.UserList.Count > nUserIdx)
                             {
-                                GateUser = Gate.UserList[nUserIdx];
-                                if (GateUser != null && GateUser.nSocket != MsgHeader.Socket)
+                                gateUser = GateInfo.UserList[nUserIdx];
+                                if (gateUser != null && gateUser.nSocket != msgPacket.Socket)
                                 {
-                                    GateUser = null;
+                                    gateUser = null;
                                 }
                             }
                         }
-                        if (GateUser == null)
+                        if (gateUser == null)
                         {
-                            for (var i = 0; i < Gate.UserList.Count; i++)
+                            for (var i = 0; i < GateInfo.UserList.Count; i++)
                             {
-                                if (Gate.UserList[i] == null)
+                                if (GateInfo.UserList[i] == null)
                                 {
                                     continue;
                                 }
-                                if (Gate.UserList[i].nSocket == MsgHeader.Socket)
+                                if (GateInfo.UserList[i].nSocket == msgPacket.Socket)
                                 {
-                                    GateUser = Gate.UserList[i];
+                                    gateUser = GateInfo.UserList[i];
                                     break;
                                 }
                             }
                         }
-                        if (GateUser != null)
+                        if (gateUser != null)
                         {
-                            if (GateUser.PlayObject != null && GateUser.UserEngine != null)
+                            if (gateUser.PlayObject != null && gateUser.UserEngine != null)
                             {
-                                if (GateUser.Certification && nMsgLen >= 12)
+                                if (gateUser.Certification && nMsgLen >= 12)
                                 {
-                                    clientMesaagePacket.Recog = BitConverter.ToInt32(MsgBuff[..4]);
-                                    clientMesaagePacket.Ident = BitConverter.ToUInt16(MsgBuff.Slice(4, 2));
-                                    clientMesaagePacket.Param = BitConverter.ToUInt16(MsgBuff.Slice(6, 2));
-                                    clientMesaagePacket.Tag = BitConverter.ToUInt16(MsgBuff.Slice(8, 2));
-                                    clientMesaagePacket.Series = BitConverter.ToUInt16(MsgBuff.Slice(10, 2));
-                                    //var defMsg = Packets.ToPacket<ClientMesaagePacket>(MsgBuff);
+                                    _clientMesaagePacket.Recog = BitConverter.ToInt32(msgBuff[..4]);
+                                    _clientMesaagePacket.Ident = BitConverter.ToUInt16(msgBuff.Slice(4, 2));
+                                    _clientMesaagePacket.Param = BitConverter.ToUInt16(msgBuff.Slice(6, 2));
+                                    _clientMesaagePacket.Tag = BitConverter.ToUInt16(msgBuff.Slice(8, 2));
+                                    _clientMesaagePacket.Series = BitConverter.ToUInt16(msgBuff.Slice(10, 2));
                                     if (nMsgLen == 12)
                                     {
-                                        WorldServer.ProcessUserMessage(GateUser.PlayObject, clientMesaagePacket, null);
+                                        WorldServer.ProcessUserMessage(gateUser.PlayObject, _clientMesaagePacket, null);
                                     }
                                     else
                                     {
-                                        var sMsg = EDCode.DeCodeString(HUtil32.GetString(MsgBuff, 12, MsgBuff.Length - 13));
-                                        WorldServer.ProcessUserMessage(GateUser.PlayObject, clientMesaagePacket, sMsg);
+                                        var sMsg = EDCode.DeCodeString(HUtil32.GetString(msgBuff, 12, msgBuff.Length - 13));
+                                        WorldServer.ProcessUserMessage(gateUser.PlayObject, _clientMesaagePacket, sMsg);
                                     }
                                 }
                             }
                             else
                             {
-                                var sMsg = HUtil32.StrPas(MsgBuff);
-                                DoClientCertification(GateIdx, GateUser, MsgHeader.Socket, sMsg);
+                                var sMsg = HUtil32.StrPas(msgBuff);
+                                DoClientCertification(GateIdx, gateUser, msgPacket.Socket, sMsg);
                             }
                         }
                         break;
@@ -306,12 +287,12 @@ namespace GameSvr.GameGate
             }
         }
 
-        private bool GetCertification(string sMsg, ref string sAccount, ref string sChrName, ref int nSessionID, ref int nClientVersion, ref bool boFlag, ref byte[] tHWID)
+        private bool GetCertification(string sMsg, ref string sAccount, ref string sChrName, ref int nSessionId, ref int nClientVersion, ref bool boFlag, ref byte[] tHwid)
         {
             var result = false;
             var sCodeStr = string.Empty;
             var sClientVersion = string.Empty;
-            var sHWID = string.Empty;
+            var sHwid = string.Empty;
             var sIdx = string.Empty;
             const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification -> GetCertification";
             try
@@ -325,8 +306,8 @@ namespace GameSvr.GameGate
                     sData = HUtil32.GetValidStr3(sData, ref sCodeStr, HUtil32.Backslash);
                     sData = HUtil32.GetValidStr3(sData, ref sClientVersion, HUtil32.Backslash);
                     sData = HUtil32.GetValidStr3(sData, ref sIdx, HUtil32.Backslash);
-                    sData = HUtil32.GetValidStr3(sData, ref sHWID, HUtil32.Backslash);
-                    nSessionID = HUtil32.StrToInt(sCodeStr, 0);
+                    sData = HUtil32.GetValidStr3(sData, ref sHwid, HUtil32.Backslash);
+                    nSessionId = HUtil32.StrToInt(sCodeStr, 0);
                     if (sIdx == "0")
                     {
                         boFlag = true;
@@ -335,13 +316,13 @@ namespace GameSvr.GameGate
                     {
                         boFlag = false;
                     }
-                    if (!string.IsNullOrEmpty(sAccount) && !string.IsNullOrEmpty(sChrName) && nSessionID >= 2 && !string.IsNullOrEmpty(sHWID))
+                    if (!string.IsNullOrEmpty(sAccount) && !string.IsNullOrEmpty(sChrName) && nSessionId >= 2 && !string.IsNullOrEmpty(sHwid))
                     {
                         nClientVersion = HUtil32.StrToInt(sClientVersion, 0);
-                        tHWID = MD5.MD5UnPrInt(sHWID);
+                        tHwid = MD5.MD5UnPrInt(sHwid);
                         result = true;
                     }
-                    M2Share.Log.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHWID}]");
+                    M2Share.Log.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHwid}]");
                 }
             }
             catch
@@ -351,51 +332,51 @@ namespace GameSvr.GameGate
             return result;
         }
 
-        private void DoClientCertification(int GateIdx, GateUserInfo GateUser, int nSocket, string sMsg)
+        private void DoClientCertification(int gateIdx, GateUserInfo gateUser, int nSocket, string sMsg)
         {
             var sAccount = string.Empty;
             var sChrName = string.Empty;
-            var nSessionID = 0;
+            var nSessionId = 0;
             var boFlag = false;
             var nClientVersion = 0;
             var nPayMent = 0;
             var nPayMode = 0;
             var nPlayTime = 0L;
-            byte[] HWID = MD5.EmptyDigest;
-            TSessInfo SessInfo;
+            byte[] hwid = MD5.EmptyDigest;
+            TSessInfo sessInfo;
             const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification";
             const string sDisable = "*disable*";
             try
             {
-                if (string.IsNullOrEmpty(GateUser.Account))
+                if (string.IsNullOrEmpty(gateUser.Account))
                 {
                     if (HUtil32.TagCount(sMsg, '!') > 0)
                     {
                         HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
                         var packetMsg = sMsg.AsSpan()[1..].ToString();
-                        if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionID, ref nClientVersion, ref boFlag, ref HWID))
+                        if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid))
                         {
-                            SessInfo = IdSrvClient.Instance.GetAdmission(sAccount, GateUser.sIPaddr, nSessionID, ref nPayMode, ref nPayMent, ref nPlayTime);
-                            if (SessInfo != null && nPayMent > 0)
+                            sessInfo = IdSrvClient.Instance.GetAdmission(sAccount, gateUser.sIPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
+                            if (sessInfo != null && nPayMent > 0)
                             {
-                                GateUser.Certification = true;
-                                GateUser.Account = sAccount.Trim();
-                                GateUser.sChrName = sChrName.Trim();
-                                GateUser.SessionID = nSessionID;
-                                GateUser.ClientVersion = nClientVersion;
-                                GateUser.SessInfo = SessInfo;
+                                gateUser.Certification = true;
+                                gateUser.Account = sAccount.Trim();
+                                gateUser.sChrName = sChrName.Trim();
+                                gateUser.SessionID = nSessionId;
+                                gateUser.ClientVersion = nClientVersion;
+                                gateUser.SessInfo = sessInfo;
                                 var loadRcdInfo = new LoadDBInfo
                                 {
                                     Account = sAccount,
                                     ChrName = sChrName,
-                                    sIPaddr = GateUser.sIPaddr,
-                                    SessionID = nSessionID,
+                                    sIPaddr = gateUser.sIPaddr,
+                                    SessionID = nSessionId,
                                     SoftVersionDate = nClientVersion,
                                     PayMent = nPayMent,
                                     PayMode = nPayMode,
                                     SocketId = nSocket,
-                                    GSocketIdx = GateUser.SocketId,
-                                    GateIdx = GateIdx,
+                                    GSocketIdx = gateUser.SocketId,
+                                    GateIdx = gateIdx,
                                     NewUserTick = HUtil32.GetTickCount(),
                                     PlayTime = nPlayTime
                                 };
@@ -403,16 +384,16 @@ namespace GameSvr.GameGate
                             }
                             else
                             {
-                                GateUser.Account = sDisable;
-                                GateUser.Certification = false;
+                                gateUser.Account = sDisable;
+                                gateUser.Certification = false;
                                 CloseUser(nSocket);
-                                _logger.Warn($"会话验证失败.Account:{sAccount} SessionId:{nSessionID} Address:{GateUser.sIPaddr}");
+                                _logger.Warn($"会话验证失败.Account:{sAccount} SessionId:{nSessionId} Address:{gateUser.sIPaddr}");
                             }
                         }
                         else
                         {
-                            GateUser.Account = sDisable;
-                            GateUser.Certification = false;
+                            gateUser.Account = sDisable;
+                            gateUser.Certification = false;
                             CloseUser(nSocket);
                         }
                     }
@@ -426,7 +407,6 @@ namespace GameSvr.GameGate
 
         public void CloseUser(int nSocket)
         {
-            GateUserInfo GateUser;
             if (GateInfo.UserList.Count > 0)
             {
                 HUtil32.EnterCriticalSections(_runSocketSection);
@@ -436,31 +416,31 @@ namespace GameSvr.GameGate
                     {
                         if (GateInfo.UserList[i] != null)
                         {
-                            GateUser = GateInfo.UserList[i];
-                            if (GateUser == null)
+                            var gateUser = GateInfo.UserList[i];
+                            if (gateUser == null)
                             {
                                 continue;
                             }
-                            if (GateUser.nSocket == nSocket)
+                            if (gateUser.nSocket == nSocket)
                             {
-                                if (GateUser.FrontEngine != null)
+                                if (gateUser.FrontEngine != null)
                                 {
-                                    GateUser.FrontEngine.DeleteHuman(i, GateUser.nSocket);
+                                    gateUser.FrontEngine.DeleteHuman(i, gateUser.nSocket);
                                 }
-                                if (GateUser.PlayObject != null)
+                                if (gateUser.PlayObject != null)
                                 {
-                                    if (!GateUser.PlayObject.OffLineFlag)
+                                    if (!gateUser.PlayObject.OffLineFlag)
                                     {
-                                        GateUser.PlayObject.BoSoftClose = true;
+                                        gateUser.PlayObject.BoSoftClose = true;
                                     }
                                 }
-                                if (GateUser.PlayObject != null && GateUser.PlayObject.Ghost && !GateUser.PlayObject.BoReconnection)
+                                if (gateUser.PlayObject != null && gateUser.PlayObject.Ghost && !gateUser.PlayObject.BoReconnection)
                                 {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.SessionID);
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                 }
-                                if (GateUser.PlayObject != null && GateUser.PlayObject.BoSoftClose && GateUser.PlayObject.BoReconnection && GateUser.PlayObject.BoEmergencyClose)
+                                if (gateUser.PlayObject != null && gateUser.PlayObject.BoSoftClose && gateUser.PlayObject.BoReconnection && gateUser.PlayObject.BoEmergencyClose)
                                 {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(GateUser.Account, GateUser.SessionID);
+                                    IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                 }
                                 GateInfo.UserList[i] = null;
                                 GateInfo.nUserCount -= 1;
@@ -476,10 +456,10 @@ namespace GameSvr.GameGate
             }
         }
 
-        private int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<GateUserInfo> UserList)
+        private int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<GateUserInfo> userList)
         {
             int result;
-            var GateUser = new GateUserInfo
+            var gateUser = new GateUserInfo
             {
                 Account = string.Empty,
                 sChrName = string.Empty,
@@ -493,44 +473,43 @@ namespace GameSvr.GameGate
                 dwNewUserTick = HUtil32.GetTickCount(),
                 Certification = false
             };
-            for (var i = 0; i < UserList.Count; i++)
+            for (var i = 0; i < userList.Count; i++)
             {
-                if (UserList[i] == null)
+                if (userList[i] == null)
                 {
-                    UserList[i] = GateUser;
+                    userList[i] = gateUser;
                     result = i;
                     return result;
                 }
             }
-            UserList.Add(GateUser);
-            result = UserList.Count - 1;
-            return result;
+            userList.Add(gateUser);
+            return userList.Count - 1;
         }
 
-        private void SendNewUserMsg(Socket Socket, int nSocket, ushort socketId, int nUserIdex)
+        private void SendNewUserMsg(Socket socket, int nSocket, ushort socketId, int nUserIdex)
         {
-            if (!Socket.Connected)
+            if (!socket.Connected)
             {
                 return;
             }
-            var MsgHeader = new ServerMessagePacket();
-            MsgHeader.PacketCode = Grobal2.RUNGATECODE;
-            MsgHeader.Socket = nSocket;
-            MsgHeader.SessionId = socketId;
-            MsgHeader.Ident = Grobal2.GM_SERVERUSERINDEX;
-            MsgHeader.ServerIndex = (ushort)nUserIdex;
-            MsgHeader.PackLength = 0;
-            if (Socket.Connected)
+            var msgHeader = new ServerMessagePacket();
+            msgHeader.PacketCode = Grobal2.RUNGATECODE;
+            msgHeader.Socket = nSocket;
+            msgHeader.SessionId = socketId;
+            msgHeader.Ident = Grobal2.GM_SERVERUSERINDEX;
+            msgHeader.ServerIndex = (ushort)nUserIdex;
+            msgHeader.PackLength = 0;
+            if (socket.Connected)
             {
-                var data = ServerPackSerializer.Serialize(MsgHeader);
-                Socket.Send(data, 0, data.Length, SocketFlags.None);
+                var data = ServerPackSerializer.Serialize(msgHeader);
+                socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
 
         /// <summary>
         /// 设置用户对应网关编号
         /// </summary>
-        public void SetGateUserList(int nSocket, PlayObject PlayObject)
+        public void SetGateUserList(int nSocket, PlayObject playObject)
         {
             HUtil32.EnterCriticalSection(_runSocketSection);
             try
@@ -542,7 +521,7 @@ namespace GameSvr.GameGate
                     {
                         gateUserInfo.FrontEngine = null;
                         gateUserInfo.UserEngine = M2Share.WorldEngine;
-                        gateUserInfo.PlayObject = PlayObject;
+                        gateUserInfo.PlayObject = playObject;
                         break;
                     }
                 }
@@ -555,26 +534,26 @@ namespace GameSvr.GameGate
 
         private class GateSendQueue
         {
-            private readonly Channel<byte[]> _sendQueue;
-            private readonly string ConnectId;
+            private Channel<byte[]> SendQueue { get; }
+            private string ConnectionId { get; }
 
-            public GateSendQueue(string connectId)
+            public GateSendQueue(string connectionId)
             {
-                _sendQueue = Channel.CreateUnbounded<byte[]>();
-                ConnectId = connectId;
+                SendQueue = Channel.CreateUnbounded<byte[]>();
+                ConnectionId = connectionId;
             }
 
             /// <summary>
             /// 获取队列消息数量
             /// </summary>
-            public int GetQueueCount => _sendQueue.Reader.Count;
+            public int GetQueueCount => SendQueue.Reader.Count;
 
             /// <summary>
             /// 添加到发送队列
             /// </summary>
             public void AddToQueue(byte[] buffer)
             {
-                _sendQueue.Writer.TryWrite(buffer);
+                SendQueue.Writer.TryWrite(buffer);
             }
 
             /// <summary>
@@ -585,16 +564,11 @@ namespace GameSvr.GameGate
             {
                 Task.Factory.StartNew(async () =>
                 {
-                    while (await _sendQueue.Reader.WaitToReadAsync(cancellation.Token))
+                    while (await SendQueue.Reader.WaitToReadAsync(cancellation.Token))
                     {
-                        while (_sendQueue.Reader.TryRead(out var buffer))
+                        while (SendQueue.Reader.TryRead(out var buffer))
                         {
-                            M2Share.GateMgr.Send(ConnectId, buffer);
-                            /*if (_sendSocket.Connected)
-                            {
-                                //todo 此处异步发送效率比同步效率要低很多,不知道为什么,暂时先保持同步发送
-                                _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                            }*/
+                            M2Share.GateMgr.Send(ConnectionId, buffer);
                         }
                     }
                 }, cancellation.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
