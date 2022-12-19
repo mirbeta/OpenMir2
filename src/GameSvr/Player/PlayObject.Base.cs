@@ -4743,18 +4743,19 @@ namespace GameSvr.Player
             MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(messageHead), 0, sendData, 0, ServerMessagePacket.PacketSize);
             MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(defMsg), 0, sendData, ServerMessagePacket.PacketSize, ClientCommandPacket.PackSize);
 
-            var packetLen = bMsg.Length;
-
-            if (bMsg.Length > 128)
+            const byte MaxSendLen = 128;
+            if (bMsg.Length > MaxSendLen)
             {
+                var packetLen = bMsg.Length;
                 var sendLen = 0;
                 M2Share.GateMgr.AddGateBuffer(GateIdx, sendData[..32]);//先发送消息头
                 while (packetLen > 0)
                 {
-                    MemoryCopy.BlockCopy(bMsg, sendLen, sendData, 0, 128);
-                    sendLen += 128;
-                    M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
+                    var copyLen = packetLen < MaxSendLen ? packetLen : MaxSendLen;
+                    MemoryCopy.BlockCopy(bMsg, sendLen, sendData, 0, copyLen);
                     packetLen -= sendLen;
+                    sendLen += MaxSendLen;
+                    M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
                 }
             }
             else

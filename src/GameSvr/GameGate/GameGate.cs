@@ -158,7 +158,7 @@ namespace GameSvr.GameGate
                     {
                         return;
                     }
-                    SendCheck(GateInfo.SocketId, Grobal2.GM_RECEIVE_OK);
+                    SendCheck(Grobal2.GM_RECEIVE_OK);
                     GateInfo.nSendChecked = 1;
                     GateInfo.dwSendCheckTick = HUtil32.GetTickCount();
                 }
@@ -181,7 +181,7 @@ namespace GameSvr.GameGate
             }
         }
 
-        private void SendCheck(string connectId, ushort nIdent)
+        internal void SendCheck(ushort nIdent)
         {
             var msgHeader = new ServerMessagePacket
             {
@@ -191,7 +191,7 @@ namespace GameSvr.GameGate
                 PackLength = 0
             };
             var data = ServerPackSerializer.Serialize(msgHeader);
-            M2Share.GateMgr.Send(connectId, data);
+            _sendQueue.AddToQueue(data);
         }
 
         /// <summary>

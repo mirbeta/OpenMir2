@@ -188,6 +188,7 @@ namespace GameGate.Services
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
+            Console.WriteLine("收到数据包,长度:" + nMsgLen);
             if (BuffLen > 0)
             {
                 MemoryCopy.BlockCopy(e.Buff, 0, ReceiveBuffer, BuffLen, nMsgLen);
@@ -308,7 +309,6 @@ namespace GameGate.Services
                 {
                     //ReceiveBuffer = dataBuff[..nLen].ToArray();
                     //MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
-                    Console.WriteLine(nLen);
                     MemoryCopy.BlockCopy(processBuff, nLen, ReceiveBuffer, 0, nLen);
                     BuffLen = nLen;
                 }

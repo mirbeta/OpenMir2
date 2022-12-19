@@ -298,7 +298,7 @@ namespace GameSvr.GameGate
                             if (gateInfo.boSendKeepAlive)
                             {
                                 gateInfo.boSendKeepAlive = false;
-                                SendCheck(gateInfo.SocketId, Grobal2.GM_CHECKSERVER);
+                                GameGates[i].SendCheck(Grobal2.GM_CHECKSERVER);
                             }
                         }
                     }
@@ -326,19 +326,6 @@ namespace GameSvr.GameGate
             clientOutMessage.CommandPacket = defMsg;
             clientOutMessage.MessagePacket = msgHdr;
             M2Share.GateMgr.AddGateBuffer(nIndex, ServerPackSerializer.Serialize(clientOutMessage));
-        }
-
-        private void SendCheck(string connectionId, byte nIdent)
-        {
-            var msgHeader = new ServerMessagePacket
-            {
-                PacketCode = Grobal2.RUNGATECODE,
-                Socket = 0,
-                Ident = nIdent,
-                PackLength = 0
-            };
-            var data = ServerPackSerializer.Serialize(msgHeader);
-            M2Share.GateMgr.Send(connectionId, data);
         }
 
         /// <summary>
