@@ -13,6 +13,7 @@ using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Player
@@ -4682,6 +4683,72 @@ namespace GameSvr.Player
                 {
                     AbilSeeHealGauge = true;
                 }
+            }
+        }
+
+        private void SendSocket(string sMsg)
+        {
+            if (OffLineFlag)
+            {
+                return;
+            }
+            if (string.IsNullOrEmpty(sMsg))
+                return;
+            var msgHdr = new ServerMessagePacket
+            {
+                PacketCode = Grobal2.RUNGATECODE,
+                Socket = SocketId,
+                SessionId = SocketIdx,
+                Ident = Grobal2.GM_DATA
+            };
+            var bMsg = HUtil32.GetBytes(sMsg);
+            M2Share.GateMgr.AddGateBuffer(GateIdx, ServerPackSerializer.Serialize(msgHdr), bMsg);
+        }
+
+        private void SendSocket(ClientCommandPacket defMsg)
+        {
+            SendSocket(defMsg, string.Empty);
+        }
+
+        internal virtual void SendSocket(ClientCommandPacket defMsg, string sMsg)
+        {
+            if (OffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
+            {
+                return;
+            }
+            var messageHead = new ServerMessagePacket
+            {
+                PacketCode = Grobal2.RUNGATECODE,
+                Socket = SocketId,
+                SessionId = SocketIdx,
+                Ident = Grobal2.GM_DATA
+            };
+            byte[] bMsg = null;
+            if (!string.IsNullOrEmpty(sMsg))
+            {
+                bMsg = HUtil32.GetBytes(sMsg);
+                messageHead.PackLength = bMsg.Length + ClientCommandPacket.PackSize;
+            }
+            else
+            {
+                messageHead.PackLength = ClientCommandPacket.PackSize;
+            }
+            var clientOutMessage = new ClientOutMessage();
+            clientOutMessage.MessagePacket = messageHead;
+            clientOutMessage.CommandPacket = defMsg;
+            M2Share.GateMgr.AddGateBuffer(GateIdx, ServerPackSerializer.Serialize(clientOutMessage), bMsg);
+        }
+
+        public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)
+        {
+            ClientMsg = Grobal2.MakeDefaultMsg(wIdent, nRecog, nParam, nTag, nSeries);
+            if (!string.IsNullOrEmpty(sMsg))
+            {
+                SendSocket(ClientMsg, EDCode.EncodeString(sMsg));
+            }
+            else
+            {
+                SendSocket(ClientMsg);
             }
         }
     }

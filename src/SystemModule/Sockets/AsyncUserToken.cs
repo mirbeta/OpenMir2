@@ -11,6 +11,7 @@ namespace SystemModule.Sockets
     {
         private Socket m_socket;//Socket
         private string m_connectionId;//内部连接ID
+        private int m_connectionIdx;//内部链接数自增
         private IPEndPoint m_endPoint;//终结点
         private byte[] m_receiveBuffer;//缓冲区
         private int m_count;

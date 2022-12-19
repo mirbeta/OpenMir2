@@ -281,7 +281,6 @@ namespace GameGate.Services
                             else
                             {
                                 var packetSize = processBuff.Length - HeaderMessageSize;
-                                //sessionPacket.Buffer = processBuff.Slice(ServerMessagePacket.PacketSize, packetSize).ToArray();
                                 sessionPacket.Buffer = new byte[packetSize];
                                 MemoryCopy.BlockCopy(processBuff, 20, sessionPacket.Buffer, 0, packetSize);
                             }

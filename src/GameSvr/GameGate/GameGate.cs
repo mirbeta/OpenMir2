@@ -36,11 +36,12 @@ namespace GameSvr.GameGate
             GateIdx = gateIdx;
             _gateInfo = gateInfo;
             _runSocketSection = new object();
-            _sendQueue = new GateSendQueue(gateInfo);
+            _sendQueue = new GateSendQueue(gateInfo.SocketId);
             _cancellation = new CancellationTokenSource();
             clientMesaagePacket = new ClientCommandPacket();
             SendBuffer = new byte[1024 * 10];
             ReceiveBuffer = new byte[4096];
+            StartGateQueue();
         }
 
         public GameGateInfo GateInfo => _gateInfo;
@@ -77,7 +78,7 @@ namespace GameSvr.GameGate
                         }
                         if (packetHeader.PackLength > 0)
                         {
-                            var body = processBuff.Slice(processLen, nCheckMsgLen);
+                            var body = processBuff.Slice(ServerMessagePacket.PacketSize,packetHeader.PackLength);
                             ExecGateBuffers(GateIdx, GateInfo, packetHeader, body, packetHeader.PackLength);
                         }
                         else
@@ -133,7 +134,7 @@ namespace GameSvr.GameGate
         /// GameSvr -> GameGate
         /// </summary>
         /// <returns></returns>
-        public void ProcessBufferSend(int sendBuffLen, ReadOnlySpan<byte> commandBuffer, byte[] strBuffer)
+        public void ProcessBufferSend(ReadOnlySpan<byte> commandPacket, ReadOnlySpan<byte> strBuffer)
         {
             if (!GateInfo.BoUsed && GateInfo.Socket == null)
             {
@@ -152,6 +153,7 @@ namespace GameSvr.GameGate
             }
             try
             {
+                var sendBuffLen = commandPacket.Length + strBuffer.Length;
                 if (sendBuffLen == 0) //不发送空包
                 {
                     return;
@@ -166,10 +168,10 @@ namespace GameSvr.GameGate
                     GateInfo.nSendChecked = 1;
                     GateInfo.dwSendCheckTick = HUtil32.GetTickCount();
                 }
-                MemoryCopy.BlockCopy(commandBuffer, 0, SendBuffer, 0, commandBuffer.Length);
+                MemoryCopy.BlockCopy(commandPacket, 0, SendBuffer, 0, commandPacket.Length);
                 if (strBuffer != null && strBuffer.Length > 0)
                 {
-                    MemoryCopy.BlockCopy(strBuffer, 0, SendBuffer, commandBuffer.Length, strBuffer.Length);
+                    MemoryCopy.BlockCopy(strBuffer, 0, SendBuffer, commandPacket.Length, strBuffer.Length);
                 }
                 if (GateInfo.Socket != null && GateInfo.Socket.Connected)
                 {
@@ -554,14 +556,12 @@ namespace GameSvr.GameGate
         private class GateSendQueue
         {
             private readonly Channel<byte[]> _sendQueue;
-            private readonly Socket _sendSocket;
-            private readonly GameGateInfo _gameGate;
+            private readonly string ConnectId;
 
-            public GateSendQueue(GameGateInfo gameGate)
+            public GateSendQueue(string connectId)
             {
                 _sendQueue = Channel.CreateUnbounded<byte[]>();
-                _gameGate = gameGate;
-                _sendSocket = gameGate.Socket;
+                ConnectId = connectId;
             }
 
             /// <summary>
@@ -589,11 +589,12 @@ namespace GameSvr.GameGate
                     {
                         while (_sendQueue.Reader.TryRead(out var buffer))
                         {
-                            if (_sendSocket.Connected)
+                            M2Share.GateMgr.Send(ConnectId, buffer);
+                            /*if (_sendSocket.Connected)
                             {
                                 //todo 此处异步发送效率比同步效率要低很多,不知道为什么,暂时先保持同步发送
                                 _sendSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                            }
+                            }*/
                         }
                     }
                 }, cancellation.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);

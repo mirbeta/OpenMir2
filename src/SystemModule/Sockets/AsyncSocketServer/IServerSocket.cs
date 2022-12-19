@@ -391,6 +391,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
                 readEventArg = _readPool.Pop();
 
                 token = (AsyncUserToken)readEventArg.UserToken;
+                
                 // 把它放到ReadEventArg对象的user token中
                 token.Socket = e.AcceptSocket;
                 // 获得一个新的Guid 32位 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -403,7 +404,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
                 EventHandler<AsyncUserToken> handler = OnClientConnect;
                 // 如果订户事件将为空(null)
                 handler?.Invoke(this, token);// 抛出客户端连接事件
-                                             // 客户端一连接上就抛出一个接收委托给连接的Socket开始接收数据
+                // 客户端一连接上就抛出一个接收委托给连接的Socket开始接收数据
                 bool willRaiseEvent = token.Socket.ReceiveAsync(readEventArg);
                 if (!willRaiseEvent)
                 {
