@@ -1,5 +1,6 @@
 using GameGate.Conf;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using SystemModule;
@@ -36,6 +37,13 @@ namespace GameGate.Services
         /// 接收GameSvr数据缓冲区
         /// </summary>
         private byte[] ReceiveBuffer { get; set; }
+        /// <summary>
+        /// 数据接收长度
+        /// </summary>
+        private int ReceiveLen { get; set; }
+
+        private int PacketLen { get; set; }
+
         /// <summary>
         /// 发送GameSvr数据缓冲区
         /// </summary>
@@ -182,23 +190,36 @@ namespace GameGate.Services
             CheckServerFail = true;
         }
 
+        private void PacketCombine(byte[] data, int len)
+        {
+            if (PacketLen == 0)
+            {
+                ProcessServerPacket(data, len);
+                return;
+            }
+            if (PacketLen > 0)
+            {
+                if (ReceiveLen > 0)
+                {
+                    MemoryCopy.BlockCopy(data, 0, ReceiveBuffer, ReceiveLen, len);
+                }
+                ReceiveLen += len;
+            }
+            if (PacketLen > 0 && ReceiveLen >= PacketLen)
+            {
+                ProcessServerPacket(ReceiveBuffer, ReceiveLen);
+                PacketLen = 0;
+                ReceiveLen = 0;
+            }
+        }
+
         /// <summary>
         /// 接收GameSvr发来的封包消息
         /// </summary>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            Console.WriteLine("收到数据包,长度:" + nMsgLen);
-            if (BuffLen > 0)
-            {
-                MemoryCopy.BlockCopy(e.Buff, 0, ReceiveBuffer, BuffLen, nMsgLen);
-                ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
-            }
-            else
-            {
-                MemoryCopy.BlockCopy(e.Buff, 0, ReceiveBuffer, 0, nMsgLen);
-                ProcessServerPacket(ReceiveBuffer, nMsgLen);
-            }
+            PacketCombine(e.Buff, nMsgLen);
             ReceiveBytes += nMsgLen;
         }
 
@@ -239,11 +260,13 @@ namespace GameGate.Services
                         //dataBuff = dataBuff.Slice(srcOffset, HeaderMessageSize);
                         nLen -= 1;
                         //Logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        Logger.DebugLog("解析封包错误");
                         continue;
                     }
                     var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + HeaderMessageSize;
                     if (nCheckMsgLen > nLen)
                     {
+                        PacketLen = Math.Abs(packetHeader.PackLength);
                         break;
                     }
                     switch (packetHeader.Ident)
@@ -276,14 +299,16 @@ namespace GameGate.Services
                             };
                             if (packetHeader.PackLength > 0)
                             {
-                                sessionPacket.Buffer = new byte[packetHeader.PackLength];
-                                MemoryCopy.BlockCopy(processBuff, 20, sessionPacket.Buffer, 0, packetHeader.PackLength);
+                                //sessionPacket.Buffer = new byte[packetHeader.PackLength];
+                                //MemoryCopy.BlockCopy(processBuff, 20, sessionPacket.Buffer, 0, packetHeader.PackLength);
+                                processBuff.Slice(20, packetHeader.PackLength).ToArray();
                             }
                             else
                             {
-                                var packetSize = processBuff.Length - HeaderMessageSize;
-                                sessionPacket.Buffer = new byte[packetSize];
-                                MemoryCopy.BlockCopy(processBuff, 20, sessionPacket.Buffer, 0, packetSize);
+                                var packetSize = buff.Length - HeaderMessageSize;
+                                //sessionPacket.Buffer = new byte[packetSize];
+                                //MemoryCopy.BlockCopy(processBuff, 20, sessionPacket.Buffer, 0, packetSize);
+                                sessionPacket.Buffer = processBuff.Slice(20, packetSize).ToArray();
                             }
                             SessionManager.Enqueue(sessionPacket);
                             break;
@@ -296,7 +321,6 @@ namespace GameGate.Services
                     {
                         break;
                     }
-                    //MemoryCopy.BlockCopy(buff, nCheckMsgLen, ReceiveBuffer, 0, nLen);
                     processBuff = processBuff.Slice(nCheckMsgLen, nLen);
                     BuffLen = nLen;
                     srcOffset = 0;
@@ -307,14 +331,14 @@ namespace GameGate.Services
                 }
                 if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
-                    //ReceiveBuffer = dataBuff[..nLen].ToArray();
-                    //MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
-                    MemoryCopy.BlockCopy(processBuff, nLen, ReceiveBuffer, 0, nLen);
+                    MemoryCopy.BlockCopy(processBuff, 0, ReceiveBuffer, 0, nLen);
                     BuffLen = nLen;
+                    ReceiveLen = nLen;
                 }
                 else
                 {
                     BuffLen = 0;
+                    ReceiveLen = 0;
                 }
             }
             catch (Exception ex)

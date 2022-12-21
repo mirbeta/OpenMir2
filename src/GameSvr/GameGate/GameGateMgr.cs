@@ -132,6 +132,10 @@ namespace GameSvr.GameGate
             {
                 for (int i = 0; i < GameGates.Length; i++)
                 {
+                    if (GameGates[i] == null)
+                    {
+                        continue;
+                    }
                     var gateInfo = GameGates[i].GateInfo;
                     if (gateInfo.BoUsed && gateInfo.Socket != null && gateInfo.UserList != null)
                     {
@@ -278,7 +282,7 @@ namespace GameSvr.GameGate
             {
                 if (GameGates.Length > 0)
                 {
-                    for (int i = 0; i < GameGates.Length; i++)
+                    for (var i = 0; i < GameGates.Length; i++)
                     {
                         if (GameGates[i] == null)
                         {

@@ -1,9 +1,9 @@
-﻿using System.Net.Sockets;
-using System.Threading.Channels;
-using GameSvr.Player;
+﻿using GameSvr.Player;
 using GameSvr.Services;
 using GameSvr.World;
 using NLog;
+using System.Net.Sockets;
+using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets;
@@ -31,7 +31,7 @@ namespace GameSvr.GameGate
             GateIdx = gateIdx;
             _gateInfo = gateInfo;
             _runSocketSection = new object();
-            _sendQueue = new GateSendQueue(gateInfo.SocketId);
+            _sendQueue = new GateSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
             _clientMesaagePacket = new ClientCommandPacket();
             ReceiveBuffer = new byte[4096];
@@ -164,7 +164,7 @@ namespace GameSvr.GameGate
                 }
                 if (GateInfo.Socket != null && GateInfo.Socket.Connected)
                 {
-                    _sendQueue.AddToQueue(sendData);
+                    _sendQueue.SendMessage(sendData);
                     GateInfo.nSendCount++;
                     GateInfo.nSendBytesCount += sendBuffLen;
                     GateInfo.nSendBlockCount += sendBuffLen;
@@ -191,7 +191,7 @@ namespace GameSvr.GameGate
                 PackLength = 0
             };
             var data = ServerPackSerializer.Serialize(msgHeader);
-            _sendQueue.AddToQueue(data);
+            _sendQueue.SendMessage(data);
         }
 
         /// <summary>
@@ -407,6 +407,10 @@ namespace GameSvr.GameGate
 
         public void CloseUser(int nSocket)
         {
+            if (GateInfo == null || GateInfo.UserList == null)
+            {
+                return;
+            }
             if (GateInfo.UserList.Count > 0)
             {
                 HUtil32.EnterCriticalSections(_runSocketSection);
@@ -458,7 +462,6 @@ namespace GameSvr.GameGate
 
         private int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<GateUserInfo> userList)
         {
-            int result;
             var gateUser = new GateUserInfo
             {
                 Account = string.Empty,
@@ -478,8 +481,7 @@ namespace GameSvr.GameGate
                 if (userList[i] == null)
                 {
                     userList[i] = gateUser;
-                    result = i;
-                    return result;
+                    return i;
                 }
             }
             userList.Add(gateUser);
@@ -534,26 +536,28 @@ namespace GameSvr.GameGate
 
         private class GateSendQueue
         {
-            private Channel<byte[]> SendQueue { get; }
+            private Queue<byte[]> SendQueue { get; }
             private string ConnectionId { get; }
+            private GameGateInfo GameGate { get; }
 
-            public GateSendQueue(string connectionId)
+            public GateSendQueue(GameGateInfo gateInfo)
             {
-                SendQueue = Channel.CreateUnbounded<byte[]>();
-                ConnectionId = connectionId;
+                SendQueue = new Queue<byte[]>();
+                ConnectionId = gateInfo.SocketId;
+                GameGate = gateInfo;
             }
 
             /// <summary>
             /// 获取队列消息数量
             /// </summary>
-            public int GetQueueCount => SendQueue.Reader.Count;
+            public int GetQueueCount => SendQueue.Count;
 
             /// <summary>
             /// 添加到发送队列
             /// </summary>
-            public void AddToQueue(byte[] buffer)
+            public void SendMessage(byte[] buffer)
             {
-                SendQueue.Writer.TryWrite(buffer);
+                SendQueue.Enqueue(buffer);
             }
 
             /// <summary>
@@ -564,9 +568,9 @@ namespace GameSvr.GameGate
             {
                 Task.Factory.StartNew(async () =>
                 {
-                    while (await SendQueue.Reader.WaitToReadAsync(cancellation.Token))
+                    while (true)
                     {
-                        while (SendQueue.Reader.TryRead(out var buffer))
+                        while (SendQueue.TryDequeue(out var buffer))
                         {
                             M2Share.GateMgr.Send(ConnectionId, buffer);
                         }

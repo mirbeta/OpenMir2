@@ -586,7 +586,6 @@ namespace SystemModule.Sockets.AsyncSocketServer
             }
         }
 
-
         /// <summary>
         /// 发送数据,可以携带操作类型(使用自定义枚举来表示)
         /// </summary>
