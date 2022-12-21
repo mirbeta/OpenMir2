@@ -433,6 +433,7 @@ namespace GameSvr.World
                         }
                         SendSwitchData(playObject, playObject.ServerIndex);
                         SendChangeServer(playObject, (byte)playObject.ServerIndex);
+                        playObject.SetSocketHead();
                         playObject = null;
                         return result;
                     }
@@ -526,6 +527,7 @@ namespace GameSvr.World
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 playObject.SoftVersionDate = userOpenInfo.LoadUser.SoftVersionDate;
                 playObject.SoftVersionDateEx = userOpenInfo.LoadUser.SoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
+                playObject.SetSocketHead();
                 result = playObject;
             }
             catch (Exception ex)

@@ -33,9 +33,9 @@ namespace GameGate.Services
         public int QueueCount => ProcessMsgQueue.Reader.Count;
 
         /// <summary>
-        /// 添加到消息处理队列
+        /// 加入会话让会话自身处理
         /// </summary>
-        public void Enqueue(MessagePacket sessionPacket)
+        public void EnqueueSession(MessagePacket sessionPacket)
         {
             ProcessMsgQueue.Writer.TryWrite(sessionPacket);
         }
@@ -54,6 +54,7 @@ namespace GameGate.Services
                         var userSession = GetSession(message.SessionId);
                         if (userSession == null)
                         {
+                            Logger.DebugLog("异常会话");
                             continue;
                         }
                         try
@@ -76,7 +77,7 @@ namespace GameGate.Services
 
         public ClientSession GetSession(int sessionId)
         {
-            return _sessionMap.ContainsKey(sessionId) ? _sessionMap[sessionId] : null;
+            return _sessionMap.TryGetValue(sessionId, out var clientSession) ? clientSession : null;
         }
 
         public void CloseSession(int sessionId)

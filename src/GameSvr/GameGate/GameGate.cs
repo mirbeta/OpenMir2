@@ -536,13 +536,13 @@ namespace GameSvr.GameGate
 
         private class GateSendQueue
         {
-            private Queue<byte[]> SendQueue { get; }
+            private Channel<byte[]> SendQueue { get; }
             private string ConnectionId { get; }
             private GameGateInfo GameGate { get; }
 
             public GateSendQueue(GameGateInfo gateInfo)
             {
-                SendQueue = new Queue<byte[]>();
+                SendQueue = Channel.CreateUnbounded<byte[]>();
                 ConnectionId = gateInfo.SocketId;
                 GameGate = gateInfo;
             }
@@ -550,14 +550,14 @@ namespace GameSvr.GameGate
             /// <summary>
             /// 获取队列消息数量
             /// </summary>
-            public int GetQueueCount => SendQueue.Count;
+            public int GetQueueCount => SendQueue.Reader.Count;
 
             /// <summary>
             /// 添加到发送队列
             /// </summary>
             public void SendMessage(byte[] buffer)
             {
-                SendQueue.Enqueue(buffer);
+                SendQueue.Writer.TryWrite(buffer);
             }
 
             /// <summary>
@@ -568,11 +568,12 @@ namespace GameSvr.GameGate
             {
                 Task.Factory.StartNew(async () =>
                 {
-                    while (true)
+                    while (await SendQueue.Reader.WaitToReadAsync(cancellation.Token))
                     {
-                        while (SendQueue.TryDequeue(out var buffer))
+                        while (SendQueue.Reader.TryRead(out var buffer))
                         {
                             M2Share.GateMgr.Send(ConnectionId, buffer);
+                            //GameGate.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         }
                     }
                 }, cancellation.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
