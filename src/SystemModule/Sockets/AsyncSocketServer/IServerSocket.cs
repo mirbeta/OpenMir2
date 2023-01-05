@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,7 +27,6 @@ namespace SystemModule.Sockets.AsyncSocketServer
         /// 写对象池同步对象
         /// </summary>
         private readonly object _writePoolLock = new object();
-
         /// <summary>
         /// 接收数据事件对象集合
         /// </summary>
@@ -524,6 +524,66 @@ namespace SystemModule.Sockets.AsyncSocketServer
                 throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
             }
             token.Socket.Close();
+        }
+
+        public void Send(string connectionId, Memory<byte> buffer)
+        {
+             AsyncUserToken token;
+            if (!this._mTokens.TryGetValue(connectionId, out token))
+            {
+                throw new AsyncSocketException($"客户端:{connectionId}已经关闭或者未连接", AsyncSocketErrorCode.ClientSocketNoExist);
+            }
+            try
+            {
+                rwl.AcquireReaderLock(3);
+                var writeEventArgs = _writePool.Pop();// 分配一个写SocketAsyncEventArgs对象
+                writeEventArgs.UserToken = token;
+                if (buffer.Length <= _bufferSize)
+                {
+                    writeEventArgs.SetBuffer(buffer);
+                    //Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
+                    //Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
+                    //writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
+                }
+                else
+                {
+                    lock (_bufferLock)
+                    {
+                        _bufferManager.FreeBuffer(writeEventArgs);
+                    }
+                    writeEventArgs.SetBuffer(buffer);
+                }
+                // 异步发送数据
+                var willRaiseEvent = token.Socket.SendAsync(writeEventArgs);
+                if (!willRaiseEvent)
+                {
+                    ProcessSend(writeEventArgs);
+                }
+            }
+            catch (ObjectDisposedException)
+            {
+                RaiseDisconnectedEvent(token);
+            }
+            catch (SocketException socketException)
+            {
+                if (socketException.ErrorCode == (int)SocketError.ConnectionReset)
+                {
+                    RaiseDisconnectedEvent(token);//引发断开连接事件
+                }
+                else
+                {
+                    RaiseErrorEvent(token, new AsyncSocketException("在SocketAsyncEventArgs对象上执行异步发送数据操作时发生SocketException异常", socketException));
+                }
+            }
+            catch (Exception exceptionDebug)
+            {
+                Debug.WriteLine("调试：" + exceptionDebug.Message);
+                throw;
+            }
+            finally
+            {
+                rwl.ReleaseReaderLock();
+            }
         }
 
         public void Send(string connectionId, byte[] buffer)

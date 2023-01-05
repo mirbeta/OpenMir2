@@ -63,6 +63,7 @@ namespace GameSvr
         public static CommonDB CommonDb;
         public static readonly Logger Log;
         public static readonly RandomNumber RandomNumber;
+        public static readonly BufferManager _bufferManager;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
         public static GameGateMgr GateMgr = null;
@@ -564,6 +565,7 @@ namespace GameSvr
             Log = LogManager.GetCurrentClassLogger();
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
+            _bufferManager = new BufferManager();
         }
 
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)

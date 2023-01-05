@@ -1,13 +1,13 @@
-using System.Collections.Concurrent;
 using System.Diagnostics;
+using Collections.Pooled;
 using SystemModule;
 
 namespace GameSvr.Maps
 {
     public class CellObjectMgr
     {
-        //todo 从当前地图获取地图对象，而不是统一管理
-        private readonly ConcurrentDictionary<int, ActorEntity> _cellObject = new ConcurrentDictionary<int, ActorEntity>();
+        //todo 从当前地图管理对象，而不是统一管理
+        private readonly PooledDictionary<int, ActorEntity> _cellObject = new PooledDictionary<int, ActorEntity>();
 
         public void Add(int cellId, ActorEntity cell)
         {
@@ -21,13 +21,7 @@ namespace GameSvr.Maps
 
         public void Remove(int cellId)
         {
-            //var obj = M2Share.ObjectManager.Get(cellId);
-            //if (obj != null)
-            //{
-            //   M2Share.ObjectManager.Remove(cellId);
-            //   obj = null;
-            //}
-            _cellObject.Remove(cellId, out var cell);
+            _cellObject.Remove(cellId);
         }
 
         public void Dispose(int cellId)

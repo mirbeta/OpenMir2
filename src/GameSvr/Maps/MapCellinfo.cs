@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace GameSvr.Maps
 {
-    public class MapCellInfo : IDisposable
+    public sealed class MapCellInfo : IDisposable
     {
         public static MapCellInfo LowWall = new MapCellInfo
         {
@@ -84,7 +84,7 @@ namespace GameSvr.Maps
         /// 非密封类可重写的Dispose方法，方便子类继承时可重写
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposed)
             {

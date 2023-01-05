@@ -1,4 +1,5 @@
-﻿using GameSvr.Player;
+﻿using System.Buffers;
+using GameSvr.Player;
 using GameSvr.Services;
 using NLog;
 using System.Net;
@@ -345,6 +346,7 @@ namespace GameSvr.GameGate
         internal void Send(string connectId, byte[] buff)
         {
             _gateSocket.Send(connectId, buff);
+            BufferManager.ReturnBuffer(buff);
         }
 
         /// <summary>

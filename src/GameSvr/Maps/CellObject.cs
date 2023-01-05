@@ -3,7 +3,7 @@
     /// <summary>
     /// 地图上的对象
     /// </summary>
-    public class CellObject : IDisposable
+    public sealed class CellObject : IDisposable
     {
         /// <summary>
         /// 唯一ID
@@ -61,7 +61,7 @@
         /// 非密封类可重写的Dispose方法，方便子类继承时可重写
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposed)
             {

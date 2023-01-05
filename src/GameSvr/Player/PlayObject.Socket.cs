@@ -7,12 +7,6 @@ namespace GameSvr.Player
     public partial class PlayObject
     {
         const byte HeaderLen = 32;
- 
-        /// <summary>
-        /// 动作数据缓冲区
-        /// </summary>
-        private byte[] actionData = new byte[33];
-        
 
         private ServerMessagePacket messageHead = new ServerMessagePacket
         {
@@ -40,7 +34,8 @@ namespace GameSvr.Player
                 return;
             var msgBuff = HUtil32.GetBytes(sMsg);
             messageHead.PackLength = -msgBuff.Length;
-            MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(messageHead), 0, actionData, 0, 20);
+            var actionData = BufferManager.GetBuffer(ServerMessagePacket.PacketSize + msgBuff.Length);
+            MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(messageHead), 0, actionData, 0, ServerMessagePacket.PacketSize);
             MemoryCopy.BlockCopy(msgBuff, 0, actionData, ServerMessagePacket.PacketSize, msgBuff.Length);
             M2Share.GateMgr.AddGateBuffer(GateIdx, actionData);
         }
@@ -56,7 +51,7 @@ namespace GameSvr.Player
                 return;
             }
             messageHead.PackLength = ClientCommandPacket.PackSize;
-            var sendData = new byte[HeaderLen];
+            var sendData = BufferManager.GetBuffer(HeaderLen);
             MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(messageHead), 0, sendData, 0, ServerMessagePacket.PacketSize);
             MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(defMsg), 0, sendData, ServerMessagePacket.PacketSize, ClientCommandPacket.PackSize);
             M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
@@ -73,7 +68,7 @@ namespace GameSvr.Player
                 return;
             }
             var bMsg = HUtil32.GetBytes(sMsg);
-            var sendData = new byte[HeaderLen + bMsg.Length];
+            var sendData = BufferManager.GetBuffer(HeaderLen + bMsg.Length);
             messageHead.PackLength = bMsg.Length + ClientCommandPacket.PackSize;
             MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(messageHead), 0, sendData, 0, ServerMessagePacket.PacketSize);
             MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(defMsg), 0, sendData, ServerMessagePacket.PacketSize, ClientCommandPacket.PackSize);
