@@ -1,8 +1,7 @@
 ﻿using GameGate.Services;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using NLog;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
@@ -11,8 +10,7 @@ namespace GameGate
 {
     public class TimedService : BackgroundService
     {
-        private readonly ILogger<TimedService> _logger;
-        private static MirLog LogQueue => MirLog.Instance;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static ClientManager ClientManager => ClientManager.Instance;
         private static SessionManager SessionManager => SessionManager.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
@@ -24,9 +22,8 @@ namespace GameGate
 
         private readonly PeriodicTimer _periodicTimer;
 
-        public TimedService(ILogger<TimedService> logger)
+        public TimedService()
         {
-            _logger = logger;
             KepAliveTick = HUtil32.GetTickCount();
             _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(10));
         }
@@ -42,31 +39,10 @@ namespace GameGate
             while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
             {
                 var currentTick = HUtil32.GetTickCount();
-                OutMianMessage();
                 ProcessDelayMsg(currentTick);
                 ClearIdleSession(currentTick);
                 KeepAlive(currentTick);
                 ProcessDelayClose(currentTick);
-            }
-        }
-
-        private void OutMianMessage()
-        {
-            if (!GateShare.ShowLog)
-                return;
-
-            while (!LogQueue.MessageLogQueue.IsEmpty)
-            {
-                string message;
-                if (!LogQueue.MessageLogQueue.TryDequeue(out message)) continue;
-                _logger.LogInformation(message);
-            }
-
-            while (!LogQueue.DebugLogQueue.IsEmpty)
-            {
-                string message;
-                if (!LogQueue.DebugLogQueue.TryDequeue(out message)) continue;
-                _logger.LogDebug(message);
             }
         }
 
@@ -109,12 +85,24 @@ namespace GameGate
                 }
                 for (var i = 0; i < sessionList.Length; i++)
                 {
-                    var clientSession = sessionList[i];
-                    if (clientSession?.Session?.Socket == null || !clientSession.Session.Socket.Connected)
+                    var serverSession = sessionList[i];
+                    if (serverSession == null)
                     {
                         continue;
                     }
-                    clientSession.ProcessDelayMessage();
+                    for (int j = 0; j < serverSession.Length; j++)
+                    {
+                        var clientSession = serverSession[j];
+                        if (clientSession == null)
+                        {
+                            continue;
+                        }
+                        if (clientSession.Session?.Socket == null || !clientSession.Session.Socket.Connected)
+                        {
+                            continue;
+                        }
+                        clientSession.ProcessDelayMessage();
+                    }
                 }
             }
         }
@@ -125,13 +113,17 @@ namespace GameGate
             {
                 ProcessDelayCloseTick = HUtil32.GetTickCount();
                 var serverList = ServerManager.GetServerList();
+                if (serverList == null)
+                {
+                    return;
+                }
                 for (var i = 0; i < serverList.Length; i++)
                 {
                     if (serverList[i] == null)
                     {
                         continue;
                     }
-                    serverList[i].CloseWaitList();
+                    serverList[i].ProcessCloseSessionQueue();
                 }
             }
         }
@@ -157,7 +149,7 @@ namespace GameGate
                     }
                     clientList[i].ProcessIdleSession();
                 }
-                LogQueue.DebugLog("清理超时无效会话...");
+                _logger.Debug("清理空闲或无效超时会话");
             }
         }
 

@@ -51,6 +51,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// </summary>
         private Socket connectSocket = null;
         public IPEndPoint EndPoint;
+        public IPEndPoint RemoteEndpoint;
         /// <summary>
         /// 用于发送数据的SocketAsyncEventArgs
         /// </summary>
@@ -96,17 +97,20 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             try
             {
-                // 重置接收和发送字节总数
-                _totalBytesRead = 0;
-                _totalBytesWrite = 0;
-                connectSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPAddress address = IPAddress.Parse(Host);
-                IPEndPoint endpoint = new IPEndPoint(address, Port);
+                if (RemoteEndpoint == null)
+                {
+                    // 重置接收和发送字节总数
+                    _totalBytesRead = 0;
+                    _totalBytesWrite = 0;
+                    connectSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    IPAddress address = IPAddress.Parse(Host);
+                    RemoteEndpoint = new IPEndPoint(address, Port);
+                }
 
                 //连接tcp服务器
                 SocketAsyncEventArgs connectEventArg = new SocketAsyncEventArgs();
                 connectEventArg.Completed += ConnectEventArgs_Completed;
-                connectEventArg.RemoteEndPoint = endpoint;//设置要连接的tcp服务器地址
+                connectEventArg.RemoteEndPoint = RemoteEndpoint;//设置要连接的tcp服务器地址
                 bool willRaiseEvent = connectSocket.ConnectAsync(connectEventArg);
                 if (!willRaiseEvent)
                     ProcessConnect(connectEventArg);
@@ -129,7 +133,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             if (connectSocket == null)
                 throw new Exception("socket cannot be null");
 
-            sendEventArg.SetBuffer(buffer);
+            sendEventArg.SetBuffer(buffer, 0, buffer.Length);
             if (!connectSocket.SendAsync(sendEventArg))
             {
                 ProcessSend(sendEventArg);
@@ -142,6 +146,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         public void CloseSocket()
         {
             IsConnected = false;
+            RemoteEndpoint = null;
             if (connectSocket == null)
                 return;
             try
@@ -287,10 +292,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             try
             {
-                AsyncUserToken token = (AsyncUserToken)e.UserToken;
                 // 增加发送到的字节总数
                 Interlocked.Add(ref _totalBytesWrite, e.BytesTransferred);
-                token.SetBytesReceived(e.BytesTransferred);
                 if (e.SocketError == SocketError.Success)
                 {
                     OnSendDataCompleted?.Invoke(this, new DSCClientSendDataEventArgs(e.ConnectSocket, e.BytesTransferred));

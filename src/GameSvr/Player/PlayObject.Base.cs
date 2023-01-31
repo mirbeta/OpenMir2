@@ -141,7 +141,7 @@ namespace GameSvr.Player
         /// 行会传送
         /// </summary>
         public bool GuildMove = false;
-        public ClientCommandPacket ClientMsg;
+        public CommandPacket ClientMsg;
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
@@ -2740,7 +2740,7 @@ namespace GameSvr.Player
                                                 cellInfo.Dispose();
                                                 break;
                                             }
-                                            var mapItem = (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                            var mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                             UpdateVisibleItem(nX, nY, mapItem);
                                             if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
                                             {
@@ -2770,7 +2770,7 @@ namespace GameSvr.Player
                                         }
                                         if (cellObject.CellType == CellType.Event)
                                         {
-                                            EventInfo mapEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                            EventInfo mapEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                             if (mapEvent.Visible)
                                             {
                                                 UpdateVisibleEvent(nX, nY, mapEvent);

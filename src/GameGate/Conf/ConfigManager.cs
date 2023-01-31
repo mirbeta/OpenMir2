@@ -1,3 +1,4 @@
+using NLog;
 using System;
 using System.IO;
 using SystemModule.Common;
@@ -6,27 +7,27 @@ namespace GameGate.Conf
 {
     public class ConfigManager : IniFile
     {
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private static readonly string fileName = Path.Combine(AppContext.BaseDirectory, "config.conf");
-
         private static readonly ConfigManager instance = new ConfigManager(fileName);
-
         public static ConfigManager Instance => instance;
-
         public GateConfig GateConfig;
-        public GameGateInfo[] GameGateList;
+        public GameGateInfo[] GateList;
 
-        public ConfigManager(string fileName) : base(fileName)
+        private ConfigManager(string fileName) : base(fileName)
         {
             Load();
             GateConfig = new GateConfig();
-            GameGateList = new GameGateInfo[32];
-            for (int i = 0; i < GameGateList.Length; i++)
+            GateList = new GameGateInfo[32];
+            for (int i = 0; i < GateList.Length; i++)
             {
-                GameGateList[i] = new GameGateInfo();
-                GameGateList[i].ServerAdress = "127.0.0.1";
-                GameGateList[i].ServerPort = 5000;
-                GameGateList[i].GateAddress = "127.0.0.1";
-                GameGateList[i].GatePort = 7200 + i;
+                GateList[i] = new GameGateInfo();
+                GateList[i].ServiceId = (byte) i;
+                GateList[i].ServerAdress = "127.0.0.1";
+                GateList[i].ServerPort = 5000;
+                GateList[i].GateAddress = "127.0.0.1";
+                GateList[i].GatePort = 7200 + i;
+                GateList[i].ThreadId = Guid.NewGuid().ToString("N");
             }
         }
 
@@ -39,13 +40,13 @@ namespace GameGate.Conf
                 GateConfig.CloudPort = ReadInteger("Cloud", "CloudPort", GateConfig.CloudPort);
                 GateConfig.LicenseCode = ReadString("Cloud", "LicenseCode", GateConfig.LicenseCode);
             }
-            GateConfig.m_szCMDSpaceMove = ReadString("Strings", "CMDSpaceMove", GateConfig.m_szCMDSpaceMove);
-            GateConfig.m_szOverClientCntMsg = ReadString("Strings", "OverClientCntMsg", GateConfig.m_szOverClientCntMsg);
-            GateConfig.m_szHWIDBlockedMsg = ReadString("Strings", "HWIDBlockedMsg", GateConfig.m_szHWIDBlockedMsg);
-            GateConfig.m_szChatFilterReplace = ReadString("Strings", "ChatFilterReplace", GateConfig.m_szChatFilterReplace);
-            GateConfig.m_szOverSpeedSendBack = ReadString("Strings", "OverSpeedSendBack", GateConfig.m_szOverSpeedSendBack);
-            GateConfig.m_szPacketDecryptFailed = ReadString("Strings", "PacketDecryptFailed", GateConfig.m_szPacketDecryptFailed);
-            GateConfig.m_szBlockHWIDFileName = ReadString("Strings", "BlockHWIDFileName", GateConfig.m_szBlockHWIDFileName);
+            GateConfig.SpaceMoveCommand = ReadString("Strings", "CMDSpaceMove", GateConfig.SpaceMoveCommand);
+            GateConfig.ClientOverCntMsg = ReadString("Strings", "OverClientCntMsg", GateConfig.ClientOverCntMsg);
+            GateConfig.HWIDBlockedMsg = ReadString("Strings", "HWIDBlockedMsg", GateConfig.HWIDBlockedMsg);
+            GateConfig.ChatFilterReplace = ReadString("Strings", "ChatFilterReplace", GateConfig.ChatFilterReplace);
+            GateConfig.OverSpeedSendBack = ReadString("Strings", "OverSpeedSendBack", GateConfig.OverSpeedSendBack);
+            GateConfig.PacketDecryptFailed = ReadString("Strings", "PacketDecryptFailed", GateConfig.PacketDecryptFailed);
+            GateConfig.BlockHWIDFileName = ReadString("Strings", "BlockHWIDFileName", GateConfig.BlockHWIDFileName);
             GateConfig.m_fAddLog = ReadBool("Switch", "AddLog", GateConfig.m_fAddLog);
             GateConfig.PunishMoveInterval = ReadInteger("Integer", "PunishMoveInterval", GateConfig.PunishMoveInterval);
             GateConfig.PunishSpellInterval = ReadInteger("Integer", "PunishSpellInterval", GateConfig.PunishSpellInterval);
@@ -116,21 +117,31 @@ namespace GameGate.Conf
             GateConfig.OpenClientSpeedRate = ReadBool("Switch", "OpenClientSpeedRate", GateConfig.OpenClientSpeedRate);
             GateConfig.SyncClientSpeed = ReadBool("Switch", "SyncClientSpeed", GateConfig.SyncClientSpeed);
             GateConfig.PunishIntervalRate = ReadFloat("Float", "PunishIntervalRate", GateConfig.PunishIntervalRate);
-            GateConfig.ServerWorkThread = ReadInteger("GameGate", "ServerWorkThread", 1);
+            GateConfig.ServerWorkThread = (byte)ReadInteger("GameGate", "ServerWorkThread", 1);
             if (GateConfig.ServerWorkThread <= 0)
             {
                 GateConfig.ServerWorkThread = 1;
             }
-            if (GateConfig.ServerWorkThread > byte.MaxValue)
+            if (GateConfig.ServerWorkThread > 50)
             {
-                GateConfig.ServerWorkThread = byte.MaxValue;
+                GateConfig.ServerWorkThread = 50;
             }
             for (var i = 0; i < GateConfig.ServerWorkThread; i++)
             {
-                GameGateList[i].ServerAdress = ReadString("GameGate", "ServerAddr" + (i + 1), GameGateList[i].ServerAdress);
-                GameGateList[i].ServerPort = ReadInteger("GameGate", "ServerPort" + (i + 1), GameGateList[i].ServerPort);
-                GameGateList[i].GateAddress = ReadString("GameGate", "GateAddress" + (i + 1), GameGateList[i].GateAddress);
-                GameGateList[i].GatePort = ReadInteger("GameGate", "GatePort" + (i + 1), GameGateList[i].GatePort);
+                GateList[i].ServerAdress = ReadString("GameGate", "ServerAddr" + (i + 1), GateList[i].ServerAdress);
+                GateList[i].ServerPort = ReadInteger("GameGate", "ServerPort" + (i + 1), GateList[i].ServerPort);
+                GateList[i].GateAddress = ReadString("GameGate", "GateAddress" + (i + 1), GateList[i].GateAddress);
+                GateList[i].GatePort = ReadInteger("GameGate", "GatePort" + (i + 1), GateList[i].GatePort);
+                if (string.IsNullOrEmpty(GateList[i].ServerAdress) || GateList[i].ServerPort <= 0)
+                {
+                    logger.Info($"配置文件节点[ServerAddr{i}]配置错误或端口错误.", 1);
+                    continue;
+                }
+                if (string.IsNullOrEmpty(GateList[i].GateAddress) || GateList[i].GatePort <= 0)
+                {
+                    logger.Info($"配置文件节点[GateAddress{i}]配置错误或端口错误.", 1);
+                    continue;
+                }
             }
             GateConfig.MessageWorkThread = ReadInteger("GameGate", "MessageWorkThread", 1);
             if (GateConfig.MessageWorkThread <= 0)
@@ -163,6 +174,11 @@ namespace GameGate.Conf
 
     public struct GameGateInfo
     {
+        public byte ServiceId;
+        /// <summary>
+        /// 网关ID
+        /// </summary>
+        public string ThreadId;
         public string ServerAdress;
         public int ServerPort;
         public string GateAddress;

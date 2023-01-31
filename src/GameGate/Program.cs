@@ -14,6 +14,7 @@ using System.Runtime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LogLevel = NLog.LogLevel;
 
 namespace GameGate
 {
@@ -39,7 +40,7 @@ namespace GameGate
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
-                GateShare.ShowLog = true;
+                ChanggeLogLevel(LogLevel.Info);
                 if (_timer != null)
                 {
                     _timer.Dispose();
@@ -76,6 +77,7 @@ namespace GameGate
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
                 ctx.Spinner(Spinner.Known.Dots);
+                LogManager.Shutdown();
             });
         }
 
@@ -135,9 +137,17 @@ namespace GameGate
             return Task.CompletedTask;
         }
 
+        private static void ChanggeLogLevel(LogLevel logLevel)
+        {
+            LogManager.Configuration.Variables["logLevel"] = logLevel.ToString();
+            LogManager.ReconfigExistingLoggers();
+        }
+        
         private static async Task ShowServerStatus()
         {
-            GateShare.ShowLog = false;
+            //GateShare.ShowLog = false;
+            ChanggeLogLevel(LogLevel.Off);
+            
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             var serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);

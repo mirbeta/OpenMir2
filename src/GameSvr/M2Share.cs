@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
+using SystemModule.MemoryPool;
 
 namespace GameSvr
 {
@@ -58,12 +59,12 @@ namespace GameSvr
         /// <summary>
         /// 地图对象管理
         /// </summary>
-        public static CellObjectMgr CellObjectSystem;
+        public static CellObjectMgr CellObjectMgr;
         public static LocalDB LocalDb;
         public static CommonDB CommonDb;
         public static readonly Logger Log;
         public static readonly RandomNumber RandomNumber;
-        public static readonly BufferManager _bufferManager;
+        public static readonly FixedLengthMemoryPool<byte> BytePool;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
         public static GameGateMgr GateMgr = null;
@@ -565,7 +566,7 @@ namespace GameSvr
             Log = LogManager.GetCurrentClassLogger();
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
-            _bufferManager = new BufferManager();
+            BytePool = FixedLengthMemoryPool<byte>.Shared;
         }
 
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)

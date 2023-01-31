@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace SystemModule
 {
-    public static class ServerPackSerializer
+    public static class SerializerUtil
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte[] Serialize<T>(T origin)

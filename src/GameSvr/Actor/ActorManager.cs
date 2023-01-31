@@ -2,19 +2,37 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using SystemModule;
 using SystemModule.Enums;
 
 namespace GameSvr.Actor
 {
+    public class ProductIdComparer : IEqualityComparer<int>
+    {
+        public bool Equals(int x, int y)
+        {
+            if (x == null)
+                return y == null;
+            return x == y;
+        }
+
+        public int GetHashCode(int obj)
+        {
+            if (obj == null)
+                return 0;
+            return obj.GetHashCode();
+        }
+    }
+
     /// <summary>
     /// 精灵管理
     /// </summary>
     public class ActorMgr
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IdWorker _idWorker = new IdWorker(1);
-        private readonly ConcurrentQueue<int> _idQueue = new ConcurrentQueue<int>();
+        private readonly ConcurrentQueue<int> IdQueue = new ConcurrentQueue<int>();
+        private readonly IdWorker IdWorker = new IdWorker(1);
         private readonly Thread IdWorkThread;
         private readonly IList<int> ActorIds = new Collection<int>();
         /// <summary>
@@ -29,6 +47,18 @@ namespace GameSvr.Actor
         private int MonsterDisposeCount { get; set; }
         private int PlayerGhostCount { get; set; }
 
+        const int WorkerIdBits = 10;
+        const int DatacenterIdBits = 0;
+        const int SequenceBits = 12;
+        const long MaxWorkerId = -1L ^ (-1L << WorkerIdBits);
+        const long MaxDatacenterId = -1L ^ (-1L << DatacenterIdBits);
+        private const int WorkerIdShift = SequenceBits;
+        private const int DatacenterIdShift = SequenceBits + WorkerIdBits;
+        public const int TimestampLeftShift = 2;
+        private const int SequenceMask = -1 ^ (-1 << SequenceBits);
+        public long DatacenterId { get; protected set; }
+        public const int Twepoch = 1288446507;
+
         public ActorMgr()
         {
             IdWorkThread = new Thread(GenerateIdThread)
@@ -42,22 +72,36 @@ namespace GameSvr.Actor
         {
             while (true)
             {
-                if (_idQueue.Count < 20000)
+                if (IdQueue.Count < 20000)
                 {
                     var sw = new Stopwatch();
                     sw.Start();
+                    var hashMap = new HashSet<long>();
                     for (var i = 0; i < 50000; i++)
                     {
-                        var sequence = Environment.TickCount + HUtil32.Sequence();
+                        var sequence = IdWorker.NextId();
+                        if (hashMap.Contains(sequence))
+                        {
+                            while (true)
+                            {
+                                sequence = IdWorker.NextId();
+                                if (!hashMap.Contains(sequence))
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        hashMap.Add(sequence);
+
                         while (sequence < 0)
                         {
                             sequence = Environment.TickCount + HUtil32.Sequence();
                             if (sequence > 0) break;
                         }
-                        _idQueue.Enqueue(sequence);
+                        IdQueue.Enqueue(sequence);
                     }
                     sw.Stop();
-                    _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 当前可用ID数:[{_idQueue.Count}]");
+                    _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{IdQueue.Count}] 是否有重复:{IdQueue.Count != IdQueue.Distinct().Count()}");
                 }
                 Thread.Sleep(5000);
             }
@@ -65,7 +109,7 @@ namespace GameSvr.Actor
 
         public int Dequeue()
         {
-            return _idQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
+            return IdQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
         }
 
         public void Add(BaseObject actor)

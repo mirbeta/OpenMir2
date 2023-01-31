@@ -37,8 +37,7 @@ namespace SystemModule.AsyncSocket
 
         public UserToken Pop()
         {
-            UserToken item = null;
-            if (m_pool.TryPop(out item))
+            if (m_pool.TryPop(out UserToken item))
             {
                 InitItem(item);
                 return item;

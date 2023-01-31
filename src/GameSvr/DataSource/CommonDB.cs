@@ -118,7 +118,7 @@ namespace GameSvr.DataSource
         public int LoadMagicDB()
         {
             MagicInfo Magic;
-            const string sSQLString = "select * from Magics";
+            const string sSQLString = "select * from magics";
             var result = -1;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
@@ -185,7 +185,7 @@ namespace GameSvr.DataSource
         {
             var result = 0;
             MonsterInfo Monster;
-            const string sSQLString = "select * from Monsters";
+            const string sSQLString = "select * from monsters";
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {

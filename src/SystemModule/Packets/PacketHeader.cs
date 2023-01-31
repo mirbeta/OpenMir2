@@ -7,7 +7,7 @@ namespace SystemModule.Packets
     /// 封包消息头
     /// </summary>
     [MemoryPackable]
-    public partial struct ServerMessagePacket
+    public partial struct ServerMessage
     {
         public uint PacketCode { get; set; }
         /// <summary>
@@ -28,18 +28,8 @@ namespace SystemModule.Packets
     [MemoryPackable]
     public partial struct ClientOutMessage
     {
-        public ServerMessagePacket MessagePacket;
-        public ClientCommandPacket CommandPacket;
-        public byte[] Data;
-    }
-
-    /// <summary>
-    /// 动作消息包
-    /// </summary>
-    [MemoryPackable]
-    public partial struct ActionOutPacket
-    {
-        public ServerMessagePacket MessagePacket;
+        public ServerMessage MessagePacket;
+        public CommandPacket CommandPacket;
         public byte[] Data;
     }
 }

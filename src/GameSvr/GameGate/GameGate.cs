@@ -2,6 +2,7 @@
 using GameSvr.Services;
 using GameSvr.World;
 using NLog;
+using System.Buffers;
 using System.Net.Sockets;
 using System.Threading.Channels;
 using SystemModule;
@@ -19,7 +20,7 @@ namespace GameSvr.GameGate
         private readonly GateSendQueue _sendQueue;
         private readonly object _runSocketSection;
         private readonly CancellationTokenSource _cancellation;
-        private ClientCommandPacket _clientMesaagePacket;
+        private CommandPacket _clientMesaagePacket;
         /// <summary>
         /// 数据接收缓冲区
         /// </summary>
@@ -33,7 +34,7 @@ namespace GameSvr.GameGate
             _runSocketSection = new object();
             _sendQueue = new GateSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
-            _clientMesaagePacket = new ClientCommandPacket();
+            _clientMesaagePacket = new CommandPacket();
             ReceiveBuffer = new byte[4096];
             StartGateQueue();
         }
@@ -50,21 +51,21 @@ namespace GameSvr.GameGate
             _cancellation.CancelAfter(3000);
         }
 
-        internal void ProcessBufferReceive(Span<byte> packetBuff, int packetLen)
+        internal void ProcessBufferReceive(byte[] packetBuff, int packetLen)
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             var nLen = packetLen;
             var buffIndex = 0;
             var processLen = 0;
-            var processBuff = packetBuff;
+            var processBuff = packetBuff.AsSpan();
             try
             {
-                while (nLen >= ServerMessagePacket.PacketSize)
+                while (nLen >= ServerMessage.PacketSize)
                 {
-                    var packetHeader = ServerPackSerializer.Deserialize<ServerMessagePacket>(processBuff.Slice(processLen, ServerMessagePacket.PacketSize));
+                    var packetHeader = SerializerUtil.Deserialize<ServerMessage>(processBuff.Slice(processLen, ServerMessage.PacketSize));
                     if (packetHeader.PacketCode == Grobal2.RUNGATECODE)
                     {
-                        var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + ServerMessagePacket.PacketSize;
+                        var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + ServerMessage.PacketSize;
                         if (nLen < nCheckMsgLen && nCheckMsgLen < 0x8000)
                         {
                             _logger.Warn("丢弃网关长度数据包.");
@@ -72,7 +73,7 @@ namespace GameSvr.GameGate
                         }
                         if (packetHeader.PackLength > 0)
                         {
-                            var body = processBuff.Slice(ServerMessagePacket.PacketSize, packetHeader.PackLength);
+                            var body = processBuff.Slice(ServerMessage.PacketSize, packetHeader.PackLength);
                             ExecGateBuffers(packetHeader, packetHeader.PackLength, body);
                         }
                         else
@@ -101,7 +102,7 @@ namespace GameSvr.GameGate
                         nLen -= 1;
                         _logger.Warn("丢弃整段网关异常数据包");
                     }
-                    if (nLen < ServerMessagePacket.PacketSize)
+                    if (nLen < ServerMessage.PacketSize)
                     {
                         break;
                     }
@@ -183,21 +184,23 @@ namespace GameSvr.GameGate
 
         internal void SendCheck(ushort nIdent)
         {
-            var msgHeader = new ServerMessagePacket
+            var msgHeader = new ServerMessage
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
                 Ident = nIdent,
                 PackLength = 0
             };
-            var data = ServerPackSerializer.Serialize(msgHeader);
+            var data = SerializerUtil.Serialize(msgHeader);
+            //var sendData = M2Share.BytePool.Rent(data.Length);
+            //data.CopyTo(sendData.Memory);
             _sendQueue.SendMessage(data);
         }
 
         /// <summary>
         /// 执行网关封包消息
         /// </summary>
-        private void ExecGateBuffers(ServerMessagePacket msgPacket, int nMsgLen, Span<byte> msgBuff)
+        private void ExecGateBuffers(ServerMessage msgPacket, int nMsgLen, Span<byte> msgBuff)
         {
             const string sExceptionMsg = "[Exception] TRunSocket::ExecGateMsg";
             try
@@ -494,7 +497,7 @@ namespace GameSvr.GameGate
             {
                 return;
             }
-            var msgHeader = new ServerMessagePacket();
+            var msgHeader = new ServerMessage();
             msgHeader.PacketCode = Grobal2.RUNGATECODE;
             msgHeader.Socket = nSocket;
             msgHeader.SessionId = socketId;
@@ -503,7 +506,7 @@ namespace GameSvr.GameGate
             msgHeader.PackLength = 0;
             if (socket.Connected)
             {
-                var data = ServerPackSerializer.Serialize(msgHeader);
+                var data = SerializerUtil.Serialize(msgHeader);
                 socket.Send(data, 0, data.Length, SocketFlags.None);
             }
         }
@@ -572,7 +575,15 @@ namespace GameSvr.GameGate
                     {
                         while (SendQueue.Reader.TryRead(out var buffer))
                         {
-                            M2Share.GateMgr.Send(ConnectionId, buffer);
+                            try
+                            {
+                                M2Share.GateMgr.Send(ConnectionId, buffer);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.StackTrace);
+                                continue;
+                            }
                             //GameGate.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         }
                     }

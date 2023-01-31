@@ -43,7 +43,7 @@ namespace LoginSvr
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<MirLogger>();
-            services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
+            services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "logsrv.conf")));
             services.AddSingleton<SessionServer>();
             services.AddSingleton<ClientSession>();
             services.AddSingleton<SessionManager>();

@@ -124,7 +124,7 @@ namespace LoginSvr.Services
                 {
                     break;
                 } 
-                var messageData = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                 AddToQueue(socketId, messageData);
                 nLen -= nCheckMsgLen;
                 if (nLen <= 0)
@@ -217,7 +217,7 @@ namespace LoginSvr.Services
         {
             var messagePacket = new ServerDataMessage();
             messagePacket.Type = ServerDataType.KeepAlive;
-            SendMessage(connectionId, ServerPackSerializer.Serialize(messagePacket));
+            SendMessage(connectionId, SerializerUtil.Serialize(messagePacket));
         }
         
         private void ReceiveCloseUser(int sSockIndex, LoginGateInfo gateInfo)

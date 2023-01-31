@@ -1118,7 +1118,7 @@ namespace GameSvr.World
             return false;
         }
 
-        public static void ProcessUserMessage(PlayObject playObject, ClientCommandPacket defMsg, string buff)
+        public static void ProcessUserMessage(PlayObject playObject, CommandPacket defMsg, string buff)
         {
             var sMsg = string.Empty;
             if (playObject.OffLineFlag) return;

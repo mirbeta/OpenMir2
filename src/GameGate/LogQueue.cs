@@ -1,22 +1,20 @@
 ﻿using GameGate.Conf;
 using System;
 using System.Collections.Concurrent;
+using NLog;
 
 namespace GameGate
 {
     public class MirLog
     {
-        private static readonly MirLog instance = new MirLog();
-
-        public static MirLog Instance => instance;
-
         private static GateConfig Config => ConfigManager.Instance.GateConfig;
         public readonly ConcurrentQueue<string> MessageLogQueue = new ConcurrentQueue<string>();
         public readonly ConcurrentQueue<string> DebugLogQueue = new ConcurrentQueue<string>();
 
         public MirLog()
         {
-
+            LogManager.Configuration.Variables["LogLevel"] = "Debug";
+            LogManager.ReconfigExistingLoggers(); 
         }
 
         public void Log(string msg, int msgLevel)
@@ -27,6 +25,11 @@ namespace GameGate
             }
         }
 
+        public void LogError(string msg)
+        {
+            MessageLogQueue.Enqueue(msg);
+        }
+        
         public void LogError(Exception ex)
         {
             MessageLogQueue.Enqueue($"{ex.TargetSite} - {ex}");

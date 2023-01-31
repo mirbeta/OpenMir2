@@ -68,9 +68,6 @@ namespace SystemModule
         /// <summary>
         /// Encode Count bytes at Source into (Count / 4) DWORDs at Target
         /// </summary>
-        /// <param name="Source"></param>
-        /// <param name="Target"></param>
-        /// <param name="Count"></param>
         private static void Encode(byte[] Source, ref uint[] Target, int Count)
         {
             var s = Source;

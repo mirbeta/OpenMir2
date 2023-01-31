@@ -41,11 +41,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DBSvr", "DBSvr", "{6E1CC18F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr.Storage.MongoDB", "src\Storeages\DBSvr.Storage.MongoDB\DBSvr.Storage.MongoDB.csproj", "{647E768C-E6EB-421B-BBD8-9BAC5162590D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogDataSvr", "src\LogDataSvr\LogDataSvr.csproj", "{3375F945-E67F-49B5-9358-A6DDAD075C6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogDataSvr", "src\LogDataSvr\LogDataSvr.csproj", "{3375F945-E67F-49B5-9358-A6DDAD075C6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapSvr", "src\MapSvr\MapSvr.csproj", "{19D44174-D864-4625-B4C8-08A3DB5B6073}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "test\ConsoleApp1\ConsoleApp1.csproj", "{33DBBECB-CE6D-43E7-8DCF-1008E46EF1E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapSvr", "src\MapSvr\MapSvr.csproj", "{19D44174-D864-4625-B4C8-08A3DB5B6073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,10 +107,6 @@ Global
 		{19D44174-D864-4625-B4C8-08A3DB5B6073}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19D44174-D864-4625-B4C8-08A3DB5B6073}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19D44174-D864-4625-B4C8-08A3DB5B6073}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33DBBECB-CE6D-43E7-8DCF-1008E46EF1E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33DBBECB-CE6D-43E7-8DCF-1008E46EF1E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33DBBECB-CE6D-43E7-8DCF-1008E46EF1E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33DBBECB-CE6D-43E7-8DCF-1008E46EF1E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

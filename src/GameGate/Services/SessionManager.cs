@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+using GameGate.Conf;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -12,32 +9,40 @@ namespace GameGate.Services
     {
         private static readonly SessionManager instance = new SessionManager();
         public static SessionManager Instance => instance;
-        private static MirLog Logger => MirLog.Instance;
-
+        /// <summary>
+        /// 配置文件
+        /// </summary>
+        private static ConfigManager ConfigManager => ConfigManager.Instance;
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private Channel<MessagePacket> ProcessMsgQueue { get; }
-
-        private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
+        private readonly Channel<SessionMessage> SessionMessageQueue;
+        /// <summary>
+        /// 客户端会话列表
+        /// </summary>
+        private readonly ClientSession[][] _sessionMap;
 
         private SessionManager()
         {
-            _sessionMap = new ConcurrentDictionary<int, ClientSession>();
-            ProcessMsgQueue = Channel.CreateUnbounded<MessagePacket>();
+            SessionMessageQueue = Channel.CreateUnbounded<SessionMessage>();
+            _sessionMap = new ClientSession[ConfigManager.GateConfig.ServerWorkThread][];
+            for (var i = 0; i < _sessionMap.Length; i++)
+            {
+                _sessionMap[i] = new ClientSession[GateShare.MaxSession];
+            }
         }
 
         /// <summary>
         /// 获取待处理的队列数量
         /// </summary>
-        public int QueueCount => ProcessMsgQueue.Reader.Count;
+        public int QueueCount => SessionMessageQueue.Reader.Count;
 
         /// <summary>
-        /// 加入会话让会话自身处理
+        /// 添加到消息处理队列
         /// </summary>
-        public void EnqueueSession(MessagePacket sessionPacket)
+        public void Enqueue(SessionMessage sessionPacket)
         {
-            ProcessMsgQueue.Writer.TryWrite(sessionPacket);
+            SessionMessageQueue.Writer.TryWrite(sessionPacket);
         }
 
         /// <summary>
@@ -47,59 +52,39 @@ namespace GameGate.Services
         {
             Task.Factory.StartNew(async () =>
             {
-                while (await ProcessMsgQueue.Reader.WaitToReadAsync(stoppingToken))
+                while (await SessionMessageQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (ProcessMsgQueue.Reader.TryRead(out var message))
+                    if (SessionMessageQueue.Reader.TryRead(out var message))
                     {
-                        var userSession = GetSession(message.SessionId);
+                        var userSession = GetSession(message.ServiceId, message.SessionId);
                         if (userSession == null)
                         {
-                            Logger.DebugLog("异常会话");
                             continue;
                         }
-                        try
-                        {
-                            userSession.ProcessServerPacket(message);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.LogError(e);
-                        }
+                        userSession.ProcessServerPacket(message);
                     }
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
-        public void AddSession(int sessionId, ClientSession clientSession)
+        public void AddSession(byte serviceId, int sessionId, ClientSession clientSession)
         {
-            _sessionMap.TryAdd(sessionId, clientSession);
+            _sessionMap[serviceId][sessionId] = clientSession;
         }
 
-        public ClientSession GetSession(int sessionId)
+        public ClientSession GetSession(byte serviceId, int sessionId)
         {
-            return _sessionMap.TryGetValue(sessionId, out var clientSession) ? clientSession : null;
+            return _sessionMap[serviceId][sessionId];
         }
 
         public void CloseSession(int sessionId)
         {
-            if (!_sessionMap.TryRemove(sessionId, out var clientSession))
-            {
-
-            }
+            _sessionMap[sessionId] = null;
         }
 
-        public bool CheckSession(int sessionId)
+        public ClientSession[][] GetSessions()
         {
-            if (_sessionMap.ContainsKey(sessionId))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public ClientSession[] GetSessions()
-        {
-            return _sessionMap.IsEmpty ? null : _sessionMap.Values.ToArray();
+            return _sessionMap;
         }
     }
 }

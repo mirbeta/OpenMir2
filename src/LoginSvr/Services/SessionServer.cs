@@ -338,6 +338,10 @@ namespace LoginSvr.Services
             }
             for (var i = 0; i < UserLimit.Length; i++)
             {
+                if (UserLimit[i] == null)
+                {
+                    continue;
+                }
                 if (UserLimit[i].ServerName == serverName)
                 {
                     UserLimit[i].LimitCountMin = nCount;

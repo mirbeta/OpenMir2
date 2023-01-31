@@ -2593,7 +2593,7 @@ namespace GameSvr.Actor
                         switch (cellObject.CellType)
                         {
                             case CellType.Route:
-                                var gateObj = (GateObject)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                var gateObj = (GateObject)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                 if (gateObj != null)
                                 {
                                     if (Race == ActorRace.Play)
@@ -2627,10 +2627,10 @@ namespace GameSvr.Actor
                             case CellType.Event:
                                 {
                                     EventInfo mapEvent = null;
-                                    var owinEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                    var owinEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                     if (owinEvent.OwnBaseObject != null)
                                     {
-                                        mapEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                        mapEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                     }
                                     if (mapEvent != null)
                                     {

@@ -238,7 +238,7 @@ namespace LoginSvr.Services
                     SessionKick(sLoginId);
                     nCode = -3;
                 }
-                ClientCommandPacket defMsg;
+                CommandPacket defMsg;
                 if (boNeedUpdate)
                 {
                     defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
@@ -400,7 +400,7 @@ namespace LoginSvr.Services
                 {
                     _logger.LogWarning(string.Format(sAddNewuserFail, userFullEntry.UserEntry.Account, userFullEntry.UserEntryAdd.Quiz2));
                 }
-                ClientCommandPacket defMsg;
+                CommandPacket defMsg;
                 if (nErrCode == 1)
                 {
                     defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWID_SUCCESS, 0, 0, 0, 0);
@@ -466,7 +466,7 @@ namespace LoginSvr.Services
                     }
                 }
 
-                ClientCommandPacket defMsg;
+                CommandPacket defMsg;
                 if (nCode == 1)
                 {
                     defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CHGPASSWD_SUCCESS, 0, 0, 0, 0);
@@ -489,7 +489,7 @@ namespace LoginSvr.Services
         /// </summary>
         private void AccountSelectServer(UserInfo userInfo, string sData)
         {
-            ClientCommandPacket defMsg;
+            CommandPacket defMsg;
             var sSelGateIp = string.Empty;
             var nSelGatePort = 0;
             const string sSelServerMsg = "Server: {0}/{1}-{2}:{3}";
@@ -537,7 +537,7 @@ namespace LoginSvr.Services
         /// </summary>
         private void AccountUpdateUserInfo(UserInfo userInfo, string sData)
         {
-            ClientCommandPacket defMsg;
+            CommandPacket defMsg;
             try
             {
                 if (string.IsNullOrEmpty(sData))
@@ -604,7 +604,7 @@ namespace LoginSvr.Services
             var sAnswer2 = string.Empty;
             var sPassword = string.Empty;
             var sBirthDay = string.Empty;
-            ClientCommandPacket defMsg;
+            CommandPacket defMsg;
             AccountRecord accountRecord = null;
             var sMsg = EDCode.DeCodeString(sData);
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, "\09");
@@ -683,7 +683,7 @@ namespace LoginSvr.Services
 
         private void AccountCheckProtocol(UserInfo userInfo, int nDate)
         {
-            ClientCommandPacket defMsg;
+            CommandPacket defMsg;
             if (nDate < LsShare.VersionDate)
             {
                 defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CERTIFICATION_FAIL, 0, 0, 0, 0);
@@ -733,7 +733,7 @@ namespace LoginSvr.Services
                 packet.Data = HUtil32.GetBytes("#" + sMsg + "!$");
                 packet.DataLen = (short)packet.Data.Length;
                 packet.Type = ServerDataType.Data;
-                var sendBuffer = ServerPackSerializer.Serialize(packet);
+                var sendBuffer = SerializerUtil.Serialize(packet);
                 SendMessage(socket, sendBuffer);
             }
             else

@@ -57,11 +57,11 @@ namespace GameSvr.Services
             }
             var requestPacket = new ServerRequestData();
             requestPacket.QueryId = queryId;
-            requestPacket.Message = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(message));
-            requestPacket.Packet = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(packet));
+            requestPacket.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(message));
+            requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
             var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
-            SendMessage(ServerPackSerializer.Serialize(requestPacket));
+            SendMessage(SerializerUtil.Serialize(requestPacket));
             return true;
         }
 
@@ -136,7 +136,7 @@ namespace GameSvr.Services
                         break;
                     }
                     SocketWorking = true;
-                    var messageData = ServerPackSerializer.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                    var messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                     ProcessServerData(messageData);
                     nLen -= nCheckMsgLen;
                     if (nLen <= 0)

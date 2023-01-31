@@ -132,13 +132,25 @@ namespace SystemModule
         public const int CM_OPENDOOR = 1002;
         public const int CM_SOFTCLOSE = 1009;
         public const int CM_DROPITEM = 1000;
+        /// <summary>
+        /// 拾取物品
+        /// </summary>
         public const int CM_PICKUP = 1001;
         public const int CM_TAKEONITEM = 1003;
         public const int CM_TAKEOFFITEM = 1004;
         public const int CM_1005 = 1005;
+        /// <summary>
+        /// 使用武物品
+        /// </summary>
         public const int CM_EAT = 1006;
+        /// <summary>
+        /// 挖物品
+        /// </summary>
         public const int CM_BUTCH = 1007;
         public const int CM_MAGICKEYCHANGE = 1008;
+        /// <summary>
+        /// 点击NPC
+        /// </summary>
         public const int CM_CLICKNPC = 1010;
         public const int CM_MERCHANTDLGSELECT = 1011;
         public const int CM_MERCHANTQUERYSELLPRICE = 1012;
@@ -157,6 +169,9 @@ namespace SystemModule
         public const int CM_DELGROUPMEMBER = 1022;
         public const int CM_USERREPAIRITEM = 1023;
         public const int CM_MERCHANTQUERYREPAIRCOST = 1024;
+        /// <summary>
+        /// 发起交易
+        /// </summary>
         public const int CM_DEALTRY = 1025;
         public const int CM_DEALADDITEM = 1026;
         public const int CM_DEALDELITEM = 1027;
@@ -218,6 +233,9 @@ namespace SystemModule
         public const int CM_LONGHIT = 3019;
         public const int CM_WIDEHIT = 3024;
         public const int CM_FIREHIT = 3025;
+        /// <summary>
+        /// 玩家说话
+        /// </summary>
         public const int CM_SAY = 3030;
         public const int CM_SPEEDHACKMSG = 3500;
         public const int SM_41 = 4;
@@ -839,9 +857,9 @@ namespace SystemModule
         public const int SM_SMUGGLE = 41900; // 夹带数据
         public const int LA_UNDEAD = 1;
 
-        public static ClientCommandPacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
+        public static CommandPacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
         {
-            var result = new ClientCommandPacket();
+            var result = new CommandPacket();
             result.Ident = (ushort)msg;
             result.Param = (ushort)param;
             result.Tag = (ushort)tag;

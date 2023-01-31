@@ -44,9 +44,9 @@ namespace GameGate.Conf
         public int MessageWorkThread;
         /// <summary>
         /// 网关数
-        /// 最多255个线程
+        /// 最多50个ServerService线程
         /// </summary>
-        public int ServerWorkThread;
+        public byte ServerWorkThread;
         /// <summary>
         /// 检查空会话
         /// </summary>
@@ -70,13 +70,13 @@ namespace GameGate.Conf
         public int NomClientPacketSize;
         public int MaxClientPacketSize;
         public int MaxClientPacketCount;
-        public string m_szCMDSpaceMove;
-        public string m_szOverClientCntMsg;
-        public string m_szHWIDBlockedMsg;
-        public string m_szChatFilterReplace;
-        public string m_szOverSpeedSendBack;
-        public string m_szPacketDecryptFailed;
-        public string m_szBlockHWIDFileName;
+        public string SpaceMoveCommand;
+        public string ClientOverCntMsg;
+        public string HWIDBlockedMsg;
+        public string ChatFilterReplace;
+        public string OverSpeedSendBack;
+        public string PacketDecryptFailed;
+        public string BlockHWIDFileName;
         /// <summary>
         /// 聊天过滤
         /// </summary>
@@ -245,13 +245,13 @@ namespace GameGate.Conf
             MaxClientCount = 50;
             ClientTimeOutTime = 15 * 1000;
             MaxClientPacketCount = 15;
-            m_szOverSpeedSendBack = "[提示]：请爱护游戏环境，关闭加速外挂重新登陆！";
-            m_szCMDSpaceMove = "Move";
-            m_szPacketDecryptFailed = "[警告]：游戏连接被断开，请重新登陆！原因：使用非法外挂，客户端不配套，开启的客户端数量过多。";
-            m_szOverClientCntMsg = "开启游戏过多，链接被断开！";
-            m_szHWIDBlockedMsg = "机器码已被封，链接被断开！";
-            m_szChatFilterReplace = "说话内容被屏蔽";
-            m_szBlockHWIDFileName = Path.Combine(AppContext.BaseDirectory, "BlockHWID.txt");
+            OverSpeedSendBack = "[提示]：请爱护游戏环境，关闭加速外挂重新登陆！";
+            SpaceMoveCommand = "Move";
+            PacketDecryptFailed = "[警告]：游戏连接被断开，请重新登陆！原因：使用非法外挂，客户端不配套，开启的客户端数量过多。";
+            ClientOverCntMsg = "开启游戏过多，链接被断开！";
+            HWIDBlockedMsg = "机器码已被封，链接被断开！";
+            ChatFilterReplace = "说话内容被屏蔽";
+            BlockHWIDFileName = Path.Combine(AppContext.BaseDirectory, "BlockHWID.txt");
             IsChatCmdFilter = false;
             IsChatFilter = true;
             IsChatInterval = true;

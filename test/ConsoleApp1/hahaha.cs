@@ -1,8 +1,8 @@
 ﻿using System.Buffers;
 
-namespace GameSvr
+namespace ConsoleApp1
 {
-    public class BufferManager
+    public class BufferManagers
     {
         private static readonly ArrayPool<byte> _pool = ArrayPool<byte>.Create(1024 * 10, 1024 * 10);
 

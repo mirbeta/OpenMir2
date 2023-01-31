@@ -217,7 +217,7 @@ namespace SelGate.Services
                 {
                     break;
                 } 
-                var messageData = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                 switch (messageData.Type)
                 {
                     case ServerDataType.KeepAlive:
@@ -289,7 +289,7 @@ namespace SelGate.Services
         {
             var messageData = new ServerDataMessage();
             messageData.Type = ServerDataType.KeepAlive;
-            SendSocket(ServerPackSerializer.Serialize(messageData));
+            SendSocket(SerializerUtil.Serialize(messageData));
             _logger.DebugLog("Send DBSvr Heartbeat.");
         }
 

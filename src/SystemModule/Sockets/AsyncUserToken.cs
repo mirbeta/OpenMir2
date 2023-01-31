@@ -111,6 +111,12 @@ namespace SystemModule.Sockets
             set { this.m_connectionId = value; }
         }
 
+        public int SessionId
+        {
+            get { return m_connectionIdx; }
+            set { this.m_connectionIdx = value; }
+        }
+
         /// <summary>
         /// 获取正在连接的对端客户端终结点
         /// </summary>

@@ -1,6 +1,6 @@
 using GameGate.Conf;
+using NLog;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GameGate.Services
@@ -10,11 +10,10 @@ namespace GameGate.Services
     /// </summary>
     public class ClientManager
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly ClientManager instance = new ClientManager();
         public static ClientManager Instance => instance;
         private static ServerManager ServerManager => ServerManager.Instance;
-        private static MirLog LogQueue => MirLog.Instance;
-        private static ConfigManager ConfigManager => ConfigManager.Instance;
 
         private readonly ConcurrentDictionary<string, ClientThread> _clientThreadMap;
 
@@ -22,25 +21,7 @@ namespace GameGate.Services
         {
             _clientThreadMap = new ConcurrentDictionary<string, ClientThread>();
         }
-
-        public void Initialization()
-        {
-            var serverList = new ServerService[ConfigManager.GateConfig.ServerWorkThread];
-            for (var i = 0; i < serverList.Length; i++)
-            {
-                var gameGate = ConfigManager.GameGateList[i];
-                var serverAddr = gameGate.ServerAdress;
-                var serverPort = gameGate.ServerPort;
-                if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
-                {
-                    LogQueue.Log($"游戏网关配置文件服务器节点[ServerAddr{i}]配置获取失败.", 1);
-                    return;
-                }
-                serverList[i] = new ServerService(gameGate);
-            }
-            ServerManager.Initialization(serverList);
-        }
-
+ 
         /// <summary>
         /// 添加用户对应网关
         /// </summary>

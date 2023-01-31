@@ -3,9 +3,10 @@ using MemoryPack;
 namespace SystemModule.Packets.ClientPackets
 {
     /// <summary>
-    /// 客户端消息
+    /// 客户端消息体
     /// </summary>
-    public struct ClientCommandPacket
+    [MemoryPackable]
+    public partial struct CommandPacket
     {
         [MemoryPackInclude]
         public int Recog;
@@ -18,7 +19,7 @@ namespace SystemModule.Packets.ClientPackets
         [MemoryPackInclude]
         public ushort Series;
 
-        public const int PackSize = 12;
+        public const int Size = 12;
 
         //protected override void ReadPacket(BinaryReader reader)
         //{

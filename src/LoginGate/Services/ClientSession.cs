@@ -62,7 +62,7 @@ namespace LoginGate.Services
             bool success = false;
             byte[] tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             int nDeCodeLen = 0;
-            byte[] packBuff = PacketEncoder.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+            byte[] packBuff = EncryptUtil.Decode(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
             string sReviceMsg = HUtil32.GetString(userData.Body, 0, userData.Body.Length);
             if (!string.IsNullOrEmpty(sReviceMsg))
             {
@@ -192,7 +192,7 @@ namespace LoginGate.Services
             {
                 return;
             }
-            ClientCommandPacket cmd = new ClientCommandPacket();
+            CommandPacket cmd = new CommandPacket();
             cmd.Recog = nRecog;
             cmd.Ident = wIdent;
             cmd.Param = nParam;
@@ -203,14 +203,14 @@ namespace LoginGate.Services
             if (!string.IsNullOrEmpty(sMsg))
             {
                 byte[] sBuff = HUtil32.GetBytes(sMsg);
-                tempBuf = new byte[ClientCommandPacket.PackSize + sBuff.Length];
+                tempBuf = new byte[CommandPacket.Size + sBuff.Length];
                 Array.Copy(sBuff, 0, tempBuf, 13, sBuff.Length);
-                iLen = PacketEncoder.EncodeBuf(tempBuf, ClientCommandPacket.PackSize + sMsg.Length, sendBuf);
+                iLen = EncryptUtil.Encode(tempBuf, CommandPacket.Size + sMsg.Length, sendBuf);
             }
             else
             {
-                tempBuf = ServerPackSerializer.Serialize(cmd);
-                iLen = PacketEncoder.EncodeBuf(tempBuf, ClientCommandPacket.PackSize, sendBuf, 1);
+                tempBuf = SerializerUtil.Serialize(cmd);
+                iLen = EncryptUtil.Encode(tempBuf, CommandPacket.Size, sendBuf, 1);
             }
             sendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(sendBuf, iLen, SocketFlags.None);

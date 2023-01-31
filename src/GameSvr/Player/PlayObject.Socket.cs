@@ -6,9 +6,9 @@ namespace GameSvr.Player
 {
     public partial class PlayObject
     {
-        const byte HeaderLen = 32;
+        private const byte HeaderLen = 32;
 
-        private ServerMessagePacket messageHead = new ServerMessagePacket
+        private ServerMessage messageHead = new ServerMessage
         {
             PacketCode = Grobal2.RUNGATECODE,
             Ident = Grobal2.GM_DATA
@@ -34,30 +34,32 @@ namespace GameSvr.Player
                 return;
             var msgBuff = HUtil32.GetBytes(sMsg);
             messageHead.PackLength = -msgBuff.Length;
-            var actionData = BufferManager.GetBuffer(ServerMessagePacket.PacketSize + msgBuff.Length);
-            MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(messageHead), 0, actionData, 0, ServerMessagePacket.PacketSize);
-            MemoryCopy.BlockCopy(msgBuff, 0, actionData, ServerMessagePacket.PacketSize, msgBuff.Length);
+            var actionData = new byte[ServerMessage.PacketSize + msgBuff.Length];
+            MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, actionData, 0, ServerMessage.PacketSize);
+            MemoryCopy.BlockCopy(msgBuff, 0, actionData, ServerMessage.PacketSize, msgBuff.Length);
             M2Share.GateMgr.AddGateBuffer(GateIdx, actionData);
+            Console.WriteLine($"发送动作消息 Len:{actionData.Length}");
         }
 
         /// <summary>
         /// 发送普通命令消息（如：玩家升级、攻击目标等）
         /// </summary>
         /// <param name="defMsg"></param>
-        private void SendSocket(ClientCommandPacket defMsg)
+        private void SendSocket(CommandPacket defMsg)
         {
             if (OffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
             {
                 return;
             }
-            messageHead.PackLength = ClientCommandPacket.PackSize;
-            var sendData = BufferManager.GetBuffer(HeaderLen);
-            MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(messageHead), 0, sendData, 0, ServerMessagePacket.PacketSize);
-            MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(defMsg), 0, sendData, ServerMessagePacket.PacketSize, ClientCommandPacket.PackSize);
+            messageHead.PackLength = CommandPacket.Size;
+            var sendData = new byte[HeaderLen];
+            MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
+            MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandPacket.Size);
             M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
+            Console.WriteLine($"发送命令消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 
-        internal virtual void SendSocket(ClientCommandPacket defMsg, string sMsg)
+        internal virtual void SendSocket(CommandPacket defMsg, string sMsg)
         {
             if (OffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
             {
@@ -68,12 +70,13 @@ namespace GameSvr.Player
                 return;
             }
             var bMsg = HUtil32.GetBytes(sMsg);
-            var sendData = BufferManager.GetBuffer(HeaderLen + bMsg.Length);
-            messageHead.PackLength = bMsg.Length + ClientCommandPacket.PackSize;
-            MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(messageHead), 0, sendData, 0, ServerMessagePacket.PacketSize);
-            MemoryCopy.BlockCopy(ServerPackSerializer.Serialize(defMsg), 0, sendData, ServerMessagePacket.PacketSize, ClientCommandPacket.PackSize);
+            var sendData = new byte[HeaderLen + bMsg.Length];
+            messageHead.PackLength = bMsg.Length + CommandPacket.Size;
+            MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
+            MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandPacket.Size);
             MemoryCopy.BlockCopy(bMsg, 0, sendData, HeaderLen, bMsg.Length);
             M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
+            Console.WriteLine($"发送文字消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)

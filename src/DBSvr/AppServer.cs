@@ -313,7 +313,7 @@ namespace DBSvr
 
         public override void Dispose()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -43,7 +43,7 @@ namespace GameGate
                     {
                         try
                         {
-                            ServerMgr.AddPacketOutQueue(sendPacket);
+                            ServerMgr.Send(sendPacket);
                         }
                         catch (Exception e)
                         {

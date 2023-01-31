@@ -5,6 +5,8 @@ using GameSvr.Event.Events;
 using GameSvr.Monster.Monsters;
 using GameSvr.Npc;
 using GameSvr.Player;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Text;
 using SystemModule;
 using SystemModule.Common;
@@ -49,6 +51,7 @@ namespace GameSvr.Maps
         private int _monCount;
         private int _humCount;
         public readonly IList<PointInfo> PointList;
+        public readonly ConcurrentDictionary<int, ActorEntity> CellMap = new ConcurrentDictionary<int, ActorEntity>();
 
         public Envirnoment()
         {
@@ -111,7 +114,7 @@ namespace GameSvr.Maps
                                     var cellObject = cellInfo.ObjList[i];
                                     if (cellObject.CellType == CellType.Item)
                                     {
-                                        var mapItem = (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                        var mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                         if (mapItem.Name == Grobal2.sSTRING_GOLDNAME)
                                         {
                                             var nGoldCount = mapItem.Count + ((MapItem)mapObject).Count;
@@ -164,9 +167,10 @@ namespace GameSvr.Maps
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 M2Share.Log.Error(sExceptionMsg);
+                M2Share.Log.Error(ex);
             }
             return result;
         }
@@ -605,7 +609,7 @@ namespace GameSvr.Maps
                         switch (cellObject.CellType)
                         {
                             case CellType.Item:
-                                return (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                return (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                             case CellType.Route:
                                 Bo2C = false;
                                 break;
@@ -1164,7 +1168,7 @@ namespace GameSvr.Maps
                     var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        var owinEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                        var owinEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                         if (owinEvent.Damage > 0)
                         {
                             result = false;
@@ -1433,7 +1437,7 @@ namespace GameSvr.Maps
                     var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        result = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId); ;
+                        result = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId); ;
                     }
                 }
             }

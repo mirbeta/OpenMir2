@@ -192,7 +192,7 @@ namespace LoginGate.Services
                 {
                     break;
                 } 
-                var messageData = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                 switch (messageData.Type)
                 {
                     case ServerDataType.KeepAlive:
@@ -266,7 +266,7 @@ namespace LoginGate.Services
             {
                 return;
             }
-            SendMessage(ServerPackSerializer.Serialize(packet));
+            SendMessage(SerializerUtil.Serialize(packet));
         }
 
         private void SendMessage(byte[] sendBuffer)

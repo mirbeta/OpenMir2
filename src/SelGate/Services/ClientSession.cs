@@ -62,8 +62,8 @@ namespace SelGate
             var success = false;
             var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             var nDeCodeLen = 0;
-            var packBuff = PacketEncoder.DecodeBuf(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
-            var cltCmd = ServerPackSerializer.Deserialize<ClientCommandPacket>(packBuff);
+            var packBuff = EncryptUtil.Decode(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+            var cltCmd = SerializerUtil.Deserialize<CommandPacket>(packBuff);
             switch (cltCmd.Ident)
             {
                 case Grobal2.CM_QUERYCHR:
@@ -76,7 +76,7 @@ namespace SelGate
                     accountPacket.DataLen = (byte)userData.Body.Length;
                     accountPacket.Type = ServerDataType.Data;
                     accountPacket.SocketId = Session.SocketId;
-                    _lastDbSvr.SendSocket(ServerPackSerializer.Serialize(accountPacket));
+                    _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
                     break;
                 default:
                     _logger.DebugLog($"错误的数据包索引:[{cltCmd.Ident}]");
@@ -144,30 +144,30 @@ namespace SelGate
         private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg)
         {
             int iLen = 0;
-            ClientCommandPacket Cmd;
+            CommandPacket Cmd;
             byte[] TempBuf = new byte[1048 - 1 + 1];
             byte[] SendBuf = new byte[1048 - 1 + 1];
             if ((_lastDbSvr == null) || !_lastDbSvr.IsConnected)
             {
                 return;
             }
-            Cmd = new ClientCommandPacket();
+            Cmd = new CommandPacket();
             Cmd.Recog = nRecog;
             Cmd.Ident = wIdent;
             Cmd.Param = nParam;
             Cmd.Tag = nTag;
             Cmd.Series = nSeries;
             SendBuf[0] = (byte)'#';
-            Array.Copy(ServerPackSerializer.Serialize(Cmd), 0, TempBuf, 0, ClientCommandPacket.PackSize);
+            Array.Copy(SerializerUtil.Serialize(Cmd), 0, TempBuf, 0, CommandPacket.Size);
             if (!string.IsNullOrEmpty(sMsg))
             {
                 var sBuff = HUtil32.GetBytes(sMsg);
                 Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
-                iLen = PacketEncoder.EncodeBuf(TempBuf, ClientCommandPacket.PackSize + sMsg.Length, SendBuf);
+                iLen = EncryptUtil.Encode(TempBuf, CommandPacket.Size + sMsg.Length, SendBuf);
             }
             else
             {
-                iLen = PacketEncoder.EncodeBuf(TempBuf, ClientCommandPacket.PackSize, SendBuf);
+                iLen = EncryptUtil.Encode(TempBuf, CommandPacket.Size, SendBuf);
             }
             SendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);
@@ -185,7 +185,7 @@ namespace SelGate
             accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Enter;
             accountPacket.SocketId = Session.SocketId;
-            _lastDbSvr.SendSocket(ServerPackSerializer.Serialize(accountPacket));
+            _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
             _logger.DebugLog("[UserEnter] " + sendStr);
         }
 
@@ -205,7 +205,7 @@ namespace SelGate
             accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Leave;
             accountPacket.SocketId = Session.SocketId;
-            _lastDbSvr.SendSocket(ServerPackSerializer.Serialize(accountPacket));
+            _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
             _kickFlag = false;
             _logger.DebugLog("[UserLeave] " + sendStr);
         }

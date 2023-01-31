@@ -557,7 +557,7 @@ namespace GameSvr.RobotPlay
                                                     {
                                                         if (cellObject.CellObjId > 0)
                                                         {
-                                                            M2Share.CellObjectSystem.Dispose(cellObject.CellObjId);
+                                                            M2Share.CellObjectMgr.Dispose(cellObject.CellObjId);
                                                         }
                                                         if (cellObject != null)
                                                         {
@@ -571,7 +571,7 @@ namespace GameSvr.RobotPlay
                                                         }
                                                         continue;
                                                     }
-                                                    var mapItem = (MapItem)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                                    var mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                                     UpdateVisibleItem(nX, nY, mapItem);
                                                     if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                     {
@@ -605,7 +605,7 @@ namespace GameSvr.RobotPlay
                                                 {
                                                     if (cellObject.CellObjId < 0)
                                                     {
-                                                        mapEvent = (EventInfo)M2Share.CellObjectSystem.Get(cellObject.CellObjId);
+                                                        mapEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                                         UpdateVisibleEvent(nX, nY, mapEvent);
                                                     }
                                                 }

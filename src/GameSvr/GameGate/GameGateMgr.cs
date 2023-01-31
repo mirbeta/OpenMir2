@@ -1,13 +1,14 @@
-﻿using System.Buffers;
-using GameSvr.Player;
+﻿using GameSvr.Player;
 using GameSvr.Services;
 using NLog;
+using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
+using SystemModule.MemoryPool;
 using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets;
@@ -60,7 +61,6 @@ namespace GameSvr.GameGate
                 var runAddrList = new StringList();
                 runAddrList.LoadFromFile(sFileName);
                 M2Share.TrimStringList(runAddrList);
-
                 for (int i = 0; i < runAddrList.Count; i++)
                 {
                     if (!string.IsNullOrEmpty(runAddrList[i]))
@@ -318,19 +318,19 @@ namespace GameSvr.GameGate
 
         private void SendGateTestMsg(int nIndex)
         {
-            var defMsg = new ClientCommandPacket();
-            var msgHdr = new ServerMessagePacket
+            var defMsg = new CommandPacket();
+            var msgHdr = new ServerMessage
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
                 Ident = Grobal2.GM_TEST,
                 PackLength = 100
             };
-            var nLen = msgHdr.PackLength + ServerMessagePacket.PacketSize;
+            var nLen = msgHdr.PackLength + ServerMessage.PacketSize;
             var clientOutMessage = new ClientOutMessage();
             clientOutMessage.CommandPacket = defMsg;
             clientOutMessage.MessagePacket = msgHdr;
-            M2Share.GateMgr.AddGateBuffer(nIndex, ServerPackSerializer.Serialize(clientOutMessage));
+            //M2Share.GateMgr.AddGateBuffer(nIndex, ServerPackSerializer.Serialize(clientOutMessage));
         }
 
         /// <summary>
@@ -346,13 +346,13 @@ namespace GameSvr.GameGate
         internal void Send(string connectId, byte[] buff)
         {
             _gateSocket.Send(connectId, buff);
-            BufferManager.ReturnBuffer(buff);
+            //((FixedLengthOwner<byte>)buff).Dispose();
         }
 
         /// <summary>
         /// 收到GameGate发来的消息并添加到GameSvr消息队列
         /// </summary>
-        public void AddGameGateQueue(int gateIdx, ServerMessagePacket packet, byte[] data)
+        public void AddGameGateQueue(int gateIdx, ServerMessage packet, byte[] data)
         {
             _receiveQueue.Writer.TryWrite(new ReceiveData()
             {
@@ -434,7 +434,7 @@ namespace GameSvr.GameGate
 
     public struct ReceiveData
     {
-        public ServerMessagePacket Packet;
+        public ServerMessage Packet;
         public byte[] Data;
         public int GateId;
     }

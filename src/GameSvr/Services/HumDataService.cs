@@ -45,7 +45,7 @@ namespace GameSvr.Services
                         {
                             return false;
                         }
-                        var serverPacket = ServerPackSerializer.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
+                        var serverPacket = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
                         if (serverPacket == null)
                         {
                             return false;
@@ -174,7 +174,7 @@ namespace GameSvr.Services
                         if (nIdent == Grobal2.DBR_LOADHUMANRCD && nRecog == 1)
                         {
                             var humRespData = EDCode.DecodeBuff(data);
-                            var responsePacket = ServerPackSerializer.Deserialize<LoadPlayerDataPacket>(humRespData);
+                            var responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(humRespData);
                             responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
                             loadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
                         }

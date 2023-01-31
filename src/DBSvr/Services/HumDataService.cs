@@ -110,7 +110,7 @@ namespace DBSvr.Services
                     {
                         break;
                     }
-                    var messageData = ServerPackSerializer.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                    var messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                     ProcessMessagePacket(serverInfo, messageData);
                     nLen -= nCheckMsgLen;
                     if (nLen <= 0)
@@ -144,7 +144,7 @@ namespace DBSvr.Services
         private void ProcessMessagePacket(ServerDataInfo serverInfo, ServerRequestData requestData)
         {
             int nQueryId = requestData.QueryId;
-            var requestMessage = ServerPackSerializer.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
+            var requestMessage = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
             var packetLen = requestData.Message.Length + requestData.Packet.Length + 6;
             if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0 && requestData.Packet != null && requestData.Sgin != null)
             {
@@ -175,7 +175,7 @@ namespace DBSvr.Services
             }
             var responsePack = new ServerRequestData();
             var messagePacket = new ServerRequestMessage(Grobal2.DBR_FAIL, 0, 0, 0, 0);
-            responsePack.Message = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(messagePacket));
+            responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
             SendRequest(serverInfo.ConnectionId, nQueryId, responsePack);
         }
 
@@ -263,7 +263,7 @@ namespace DBSvr.Services
                 default:
                     var responsePack = new ServerRequestData();
                     var messagePacket = new ServerRequestMessage(Grobal2.DBR_FAIL, 0, 0, 0, 0);
-                    responsePack.Message = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(messagePacket));
+                    responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
                     SendRequest(connectionId, nQueryId, responsePack);
                     break;
             }
@@ -271,7 +271,7 @@ namespace DBSvr.Services
 
         private void LoadHumanRcd(int queryId, byte[] data, string connectionId)
         {
-            var loadHumanPacket = ServerPackSerializer.Deserialize<LoadPlayerDataMessage>(data);
+            var loadHumanPacket = SerializerUtil.Deserialize<LoadPlayerDataMessage>(data);
             if (loadHumanPacket == null)
             {
                 return;
@@ -313,14 +313,14 @@ namespace DBSvr.Services
                 loadHumData.ChrName = EDCode.EncodeString(loadHumanPacket.ChrName);
                 loadHumData.HumDataInfo = HumanRCD;
                 var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 1, 0, 0, 1);
-                responsePack.Message = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(messagePacket));
+                responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
                 SendRequest(connectionId, queryId, responsePack, loadHumData);
                 _logger.DebugLog($"获取玩家[{loadHumanPacket.ChrName}]数据成功");
             }
             else
             {
                 var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, nCheckCode, 0, 0, 0);
-                responsePack.Message = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(messagePacket));
+                responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
                 SendRequest(connectionId, queryId, responsePack);
             }
         }
@@ -329,7 +329,7 @@ namespace DBSvr.Services
         {
             try
             {
-                var saveHumDataPacket = ServerPackSerializer.Deserialize<SavePlayerDataMessage>(sMsg);
+                var saveHumDataPacket = SerializerUtil.Deserialize<SavePlayerDataMessage>(sMsg);
                 if (saveHumDataPacket == null)
                 {
                     _logger.LogError("保存玩家数据出错.");
@@ -371,13 +371,13 @@ namespace DBSvr.Services
                         }
                     }
                     var messagePacket = new ServerRequestMessage(Grobal2.DBR_SAVEHUMANRCD, 1, 0, 0, 0);
-                    responsePack.Message = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(messagePacket));
+                    responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
                     SendRequest(connectionId, queryId, responsePack);
                 }
                 else
                 {
                     var messagePacket = new ServerRequestMessage(Grobal2.DBR_LOADHUMANRCD, 0, 0, 0, 0);
-                    responsePack.Message = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(messagePacket));
+                    responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
                     SendRequest(connectionId, queryId, responsePack);
                 }
             }
@@ -389,7 +389,7 @@ namespace DBSvr.Services
 
         private void SaveHumanRcdEx(int nQueryId, byte[] sMsg, int nRecog, string connectionId)
         {
-            var saveHumDataPacket = ServerPackSerializer.Deserialize<SavePlayerDataMessage>(sMsg);
+            var saveHumDataPacket = SerializerUtil.Deserialize<SavePlayerDataMessage>(sMsg);
             if (saveHumDataPacket == null)
             {
                 _logger.LogError("保存玩家数据出错.");
@@ -447,7 +447,7 @@ namespace DBSvr.Services
             }
             var nCheckCode = BitConverter.GetBytes(queryPart);
             requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
-            SendMessage(connectionId, ServerPackSerializer.Serialize(requestPacket));
+            SendMessage(connectionId, SerializerUtil.Serialize(requestPacket));
         }
 
         private void SendRequest<T>(string connectionId, int queryId, ServerRequestData requestPacket, T packet) where T : new()
@@ -455,11 +455,11 @@ namespace DBSvr.Services
             requestPacket.QueryId = queryId;
             if (packet != null)
             {
-                requestPacket.Packet = EDCode.EncodeBuffer(ServerPackSerializer.Serialize(packet));
+                requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
             }
             var s = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
-            SendMessage(connectionId, ServerPackSerializer.Serialize(requestPacket));
+            SendMessage(connectionId, SerializerUtil.Serialize(requestPacket));
         }
 
         private void SendMessage(string connectionId, byte[] sendBuffer)

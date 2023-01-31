@@ -1,10 +1,12 @@
 ﻿using GameGate.Conf;
+using NLog;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.MemoryPool;
 
 namespace GameGate.Services
 {
@@ -21,7 +23,7 @@ namespace GameGate.Services
         /// <summary>
         /// 配置文件
         /// </summary>
-        private static GateConfig Config => ConfigManager.Instance.GateConfig;
+        private static ConfigManager ConfigManager => ConfigManager.Instance;
         /// <summary>
         /// 服务器列表
         /// </summary>
@@ -34,16 +36,20 @@ namespace GameGate.Services
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private readonly Channel<MessagePacket> _messageQueue;
+        private readonly Channel<SessionMessage> _messageQueue;
 
         private ServerManager()
         {
-            _messageQueue = Channel.CreateUnbounded<MessagePacket>();
+            _messageQueue = Channel.CreateUnbounded<SessionMessage>();
         }
 
-        public void Initialization(ServerService[] serverService)
+        public void Initialization()
         {
-            _serverServices = serverService;
+            _serverServices = new ServerService[ConfigManager.GateConfig.ServerWorkThread];
+            for (var i = 0; i < _serverServices.Length; i++)
+            {
+                _serverServices[i] = new ServerService(ConfigManager.GateList[i]);
+            }
         }
 
         public void Start(CancellationToken stoppingToken)
@@ -73,16 +79,17 @@ namespace GameGate.Services
         /// <summary>
         /// 添加到客户端消息队列
         /// </summary>
-        public void AddPacketOutQueue(ClientOutPacketData outPacket)
+        public void Send(ClientOutPacketData outPacket)
         {
             _serverServices[outPacket.ThreadId].Send(outPacket.ConnectId, outPacket.Buffer);
+            GateShare.BytePool.Return(outPacket.Buffer, true);
         }
 
         /// <summary>
         /// 客户端消息添加到队列给服务端处理
         /// GameGate -> GameSvr
         /// </summary>
-        public void SendMessageQueue(MessagePacket messagePacket)
+        public void SendMessageQueue(SessionMessage messagePacket)
         {
             _messageQueue.Writer.TryWrite(messagePacket);
         }
@@ -90,7 +97,7 @@ namespace GameGate.Services
         /// <summary>
         /// 消息处理线程数
         /// </summary>
-        public static int MessageWorkThreads => Config.MessageWorkThread;
+        public static int MessageWorkThreads => ConfigManager.GateConfig.MessageWorkThread;
 
         /// <summary>
         /// 开启客户端消息消费线程
@@ -99,14 +106,14 @@ namespace GameGate.Services
         {
             Task.Factory.StartNew(() =>
             {
-                if (LastMessageThreadCount == Config.MessageWorkThread)
+                if (LastMessageThreadCount == ConfigManager.GateConfig.MessageWorkThread)
                 {
                     return;
                 }
-                if (Config.MessageWorkThread > LastMessageThreadCount)
+                if (ConfigManager.GateConfig.MessageWorkThread > LastMessageThreadCount)
                 {
-                    Array.Resize(ref _messageWorkThreads, Config.MessageWorkThread);
-                    for (var i = 0; i < Config.MessageWorkThread; i++)
+                    Array.Resize(ref _messageWorkThreads, ConfigManager.GateConfig.MessageWorkThread);
+                    for (var i = 0; i < ConfigManager.GateConfig.MessageWorkThread; i++)
                     {
                         if (_messageWorkThreads[i] == null)
                         {
@@ -120,7 +127,7 @@ namespace GameGate.Services
                 }
                 else
                 {
-                    for (var i = _messageWorkThreads.Length - 1; i >= Config.MessageWorkThread; i--)
+                    for (var i = _messageWorkThreads.Length - 1; i >= ConfigManager.GateConfig.MessageWorkThread; i--)
                     {
                         if (_messageWorkThreads[i] == null)
                         {
@@ -133,7 +140,7 @@ namespace GameGate.Services
                         }
                     }
                 }
-                LastMessageThreadCount = Config.MessageWorkThread;
+                LastMessageThreadCount = ConfigManager.GateConfig.MessageWorkThread;
             }, stoppingToken);
         }
 
@@ -173,19 +180,19 @@ namespace GameGate.Services
             /// <summary>
             /// 接收封包（客户端-》网关）
             /// </summary>
-            private readonly ChannelReader<MessagePacket> _messageQueue;
+            private readonly ChannelReader<SessionMessage> _messageQueue;
             public MessageThreadState ThreadState;
             private static SessionManager SessionMgr => SessionManager.Instance;
-            private static MirLog Logger => MirLog.Instance;
+            private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-            public ClientMessageWorkThread(CancellationToken stoppingToken, ChannelReader<MessagePacket> channel)
+            public ClientMessageWorkThread(CancellationToken stoppingToken, ChannelReader<SessionMessage> channel)
             {
                 _messageQueue = channel;
                 _resetEvent = new ManualResetEvent(true);
                 ThreadState = MessageThreadState.Stop;
                 _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
                 _cts.Token.Register(() =>
-                    Logger.DebugLog($"消息消费线程[{_threadId}]已停止处理.")
+                    _logger.Debug($"消息消费线程[{_threadId}]已停止处理.")
                 );
             }
 
@@ -195,20 +202,20 @@ namespace GameGate.Services
                 {
                     _threadId = Guid.NewGuid().ToString("N");
                     ThreadState = MessageThreadState.Runing;
-                    Logger.DebugLog($"消息消费线程[{_threadId}]已启动.");
+                    _logger.Debug($"消息消费线程[{_threadId}]已启动.");
                     while (await _messageQueue.WaitToReadAsync(_cts.Token))
                     {
                         _resetEvent.WaitOne();
                         if (_messageQueue.TryRead(out var message))
                         {
-                            var clientSession = SessionMgr.GetSession(message.SessionId);
+                            var clientSession = SessionMgr.GetSession(message.ServiceId, message.SessionId);
                             try
                             {
                                 clientSession?.ProcessPacket(message);
                             }
                             catch (Exception e)
                             {
-                                Logger.LogError(e);
+                                _logger.Error(e);
                             }
                         }
                     }
@@ -221,7 +228,7 @@ namespace GameGate.Services
                 _resetEvent.Reset();//暂停
                 if (_messageQueue.Count > 0)
                 {
-                    _cts.CancelAfter(_messageQueue.Count * 100);//延时3秒取消消费，防止消息丢失
+                    _cts.CancelAfter(_messageQueue.Count * 100);//延时取消消费，防止消息丢失
                 }
                 else
                 {

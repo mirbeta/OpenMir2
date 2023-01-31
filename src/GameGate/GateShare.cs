@@ -1,10 +1,12 @@
 using GameGate.Filters;
 using GameGate.Services;
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using SystemModule.Common;
+using SystemModule.Packets;
 
 namespace GameGate
 {
@@ -15,6 +17,10 @@ namespace GameGate
         /// 单线程最大用户数
         /// </summary>
         public const int MaxSession = 6000;
+        /// <summary>
+        /// 消息头加密固定长度
+        /// </summary>
+        public const byte CommandFixedLength = 16;
         /// <summary>
         ///  网关游戏服务器之间检测超时时间
         /// </summary>
@@ -34,24 +40,46 @@ namespace GameGate
         /// <summary>
         /// 聊天过滤命令列表
         /// </summary>
-        public static ConcurrentDictionary<string, byte> ChatCommandFilter;
+        public static ConcurrentDictionary<string, byte> ChatCommandFilterMap;
+
+        public static readonly ArrayPool<byte> BytePool = ArrayPool<byte>.Shared;
         public static Dictionary<string, ClientSession> PunishList;
         public static HardwareFilter HardwareFilter;
+        public static AbusiveFilter AbusiveFilter;
+        public static ChatCommandFilter ChatCommandFilter;
+        public const int HeaderMessageSize = ServerMessage.PacketSize;
 
         public static void Initialization()
         {
             BlockIPList = new StringList();
             TempBlockIPList = new List<string>();
+            AbusiveFilter = AbusiveFilter.Instance;
+            ChatCommandFilter = ChatCommandFilter.Instance;
             PunishList = new Dictionary<string, ClientSession>();
-            ChatCommandFilter = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
+            ChatCommandFilterMap = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
+        }
+
+        public static void Load()
+        {
+            AbusiveFilter.LoadChatFilterList();
+            ChatCommandFilter.LoadChatCommandFilterList();
         }
     }
 
-    public struct MessagePacket
+    public readonly struct SessionMessage
     {
-        public byte[] Buffer;
-        public int BufferLen;
-        public int SessionId;
+        public byte[] Buffer { get; }
+        public int PacketLen { get; }
+        public int SessionId { get; }
+        public byte ServiceId { get; }
+
+        public SessionMessage(byte[] Buffer, int PacketLen, int SessionId, byte ServiceId)
+        {
+            this.Buffer = Buffer;
+            this.PacketLen = PacketLen;
+            this.SessionId = SessionId;
+            this.ServiceId = ServiceId;
+        }
     }
 
     public class SessionInfo
@@ -118,8 +146,17 @@ namespace GameGate
 
     public enum ChatFilterMethod
     {
+        /// <summary>
+        /// 整句替换
+        /// </summary>
         ReplaceAll,
+        /// <summary>
+        /// 替换脏字
+        /// </summary>
         ReplaceOne,
+        /// <summary>
+        /// 丢弃
+        /// </summary>
         Dropconnect
     }
 
@@ -132,13 +169,12 @@ namespace GameGate
     public class Protocol
     {
         public static bool g_fServiceStarted = false;
-        public const string _STR_CMD_FILTER = "{0} 此命令禁止使用！";
-        public const string _STR_CONFIG_FILE = ".\\Config.ini";
-        public const string _STR_BLOCK_FILE = ".\\BlockIPList.txt";
-        public const string _STR_BLOCK_AREA_FILE = ".\\BlockIPAreaList.txt";
-        public const string _STR_CHAT_FILTER_FILE = ".\\ChatFilter.txt";
-        public const string _STR_CHAT_CMD_FILTER_FILE = ".\\CharCmdFilter.txt";
-        public const string _STR_PUNISH_USER_FILE = ".\\PunishList.txt";
+        public const string CmdFilter = "{0} 此命令禁止使用！";
+        public const string _STR_CONFIG_FILE = "Config.ini";
+        public const string _STR_BLOCK_FILE = "BlockIPList.txt";
+        public const string _STR_BLOCK_AREA_FILE = "BlockIPAreaList.txt";
+        public const string _STR_CHAT_FILTER_FILE = "ChatFilter.txt";
+        public const string _STR_PUNISH_USER_FILE = "PunishList.txt";
         public const int FIRST_PAKCET_MAX_LEN = 254;
         public const int MAGIC_NUM = 0128;
         public const int DELAY_BUFFER_LEN = 1024;
