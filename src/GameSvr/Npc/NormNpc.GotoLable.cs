@@ -15,9 +15,9 @@ namespace GameSvr.Npc
     {
         private void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp, string sMsg)
         {
-            if (PlayObject.LastNpc != this)
+            if (PlayObject.LastNpc != this.ActorId)
             {
-                PlayObject.LastNpc = null;
+                PlayObject.LastNpc = 0;
                 PlayObject.MScript = null;
             }
             TScript Script = null;
@@ -33,7 +33,7 @@ namespace GameSvr.Npc
                     {
                         Script = Script3C;
                         PlayObject.MScript = Script;
-                        PlayObject.LastNpc = this;
+                        PlayObject.LastNpc = this.ActorId;
                         break;
                     }
                 }
@@ -58,7 +58,7 @@ namespace GameSvr.Npc
                         {
                             Script = m_ScriptList[i];
                             PlayObject.MScript = Script;
-                            PlayObject.LastNpc = this;
+                            PlayObject.LastNpc = this.ActorId;
                         }
                     }
                 }
@@ -1429,7 +1429,7 @@ namespace GameSvr.Npc
                 if (Script.nQuest == nQuest)
                 {
                     PlayObject.MScript = Script;
-                    PlayObject.LastNpc = this;
+                    PlayObject.LastNpc = this.ActorId;
                     GotoLable(PlayObject, ScriptConst.sMAIN, false);
                     break;
                 }

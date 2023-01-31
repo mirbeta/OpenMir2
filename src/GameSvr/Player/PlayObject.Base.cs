@@ -492,7 +492,7 @@ namespace GameSvr.Player
         public int MDelayCallNpc;
         public string DelayCallLabel = string.Empty;
         public TScript MScript;
-        public BaseObject LastNpc = null;
+        public int LastNpc = 0;
         /// <summary>
         /// 职业属性点
         /// </summary>
@@ -1519,7 +1519,7 @@ namespace GameSvr.Player
             {
                 M2Share.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
             }
-            int monsterExp = CalcGetExp(WAbil.Level, killObject.FightExp);
+            var monsterExp = CalcGetExp(WAbil.Level, killObject.FightExp);
             if (!M2Share.Config.VentureServer)
             {
                 if (IsRobot)
