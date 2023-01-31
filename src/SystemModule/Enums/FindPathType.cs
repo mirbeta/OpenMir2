@@ -1,6 +1,6 @@
-﻿namespace SystemModule.Data
+﻿namespace SystemModule.Enums
 {
-    public enum TPathType
+    public enum FindPathType
     {
         /// <summary>
         /// 动态

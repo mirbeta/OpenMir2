@@ -1960,7 +1960,7 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckVar(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             string sName = string.Empty;
-            TDynamicVar DynamicVar;
+            DynamicVar DynamicVar;
             bool boFoundVar = false;
             var result = false;
             var sType = QuestConditionInfo.sParam1;
@@ -2763,9 +2763,9 @@ namespace GameSvr.Npc
         private bool GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject PlayObject, string sVarType, string sValName, ref int nValue)
         {
             bool result = false;
-            TDynamicVar DynamicVar;
+            DynamicVar DynamicVar;
             string sName = string.Empty;
-            Dictionary<string, TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return result;

@@ -12,7 +12,7 @@ namespace SystemModule
 
         public static string EncodeString(string str)
         {
-            byte[] encBuf = new byte[4096];
+            var encBuf = new byte[4096];
             var tempBuf = HUtil32.GetBytes(str);
             var buffLen = Encode(tempBuf, str.Length, encBuf);
             return HUtil32.GetString(encBuf, 0, buffLen);

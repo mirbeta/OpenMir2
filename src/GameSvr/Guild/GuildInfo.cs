@@ -66,7 +66,7 @@ namespace GameSvr.Guild
         public bool m_boEnableAuthAlly;
         public int dwSaveTick;
         public bool boChanged;
-        public Dictionary<string, TDynamicVar> m_DynamicVarList;
+        public Dictionary<string, DynamicVar> m_DynamicVarList;
         /// <summary>
         /// 建筑度
         /// </summary>
@@ -113,7 +113,7 @@ namespace GameSvr.Guild
             m_nStability = 0;
             m_nFlourishing = 0;
             m_nChiefItemCount = 0;
-            m_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
+            m_DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             var sFileName = Path.Combine(M2Share.Config.GuildDir, string.Concat(sName + ".ini"));
             _guildConf = new GuildConf(sName, sFileName);
         }

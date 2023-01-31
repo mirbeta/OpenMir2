@@ -1,6 +1,7 @@
 ﻿using GameSvr.GameCommand;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Enums;
 
 namespace GameSvr.Player
 {

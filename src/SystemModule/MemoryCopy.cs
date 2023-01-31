@@ -55,7 +55,7 @@ namespace SystemModule
                 {
                     fixed (byte* dest = &destination[dstOff])
                     {
-                        System.Buffer.MemoryCopy(
+                        Buffer.MemoryCopy(
                             source: src, //要复制的字节的地址
                             destination: dest, //目标地址
                             destinationSizeInBytes: count, //目标内存块中可用的字节数

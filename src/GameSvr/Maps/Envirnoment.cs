@@ -47,7 +47,7 @@ namespace GameSvr.Maps
         /// <summary>
         /// 任务
         /// </summary>
-        private readonly IList<TMapQuestInfo> QuestList;
+        private readonly IList<MapQuestInfo> QuestList;
         private int _monCount;
         private int _humCount;
         public readonly IList<PointInfo> PointList;
@@ -61,7 +61,7 @@ namespace GameSvr.Maps
             _humCount = 0;
             Flag = new MapInfoFlag();
             DoorList = new List<DoorInfo>();
-            QuestList = new List<TMapQuestInfo>();
+            QuestList = new List<MapQuestInfo>();
             PointList = new List<PointInfo>();
         }
 
@@ -1003,7 +1003,7 @@ namespace GameSvr.Maps
             {
                 return false;
             }
-            var mapQuest = new TMapQuestInfo
+            var mapQuest = new MapQuestInfo
             {
                 nFlag = nFlag
             };

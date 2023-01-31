@@ -452,7 +452,7 @@ namespace GameSvr.Actor
         /// 身上物品
         /// </summary>
         public UserItem[] UseItems;
-        public IList<TMonSayMsg> SayMsgList;
+        public IList<MonsterSayMsg> SayMsgList;
         private int SendRefMsgTick;
         /// <summary>
         /// 攻击间隔
@@ -2924,7 +2924,7 @@ namespace GameSvr.Actor
             }
             for (var i = 0; i < SayMsgList.Count; i++)
             {
-                TMonSayMsg monSayMsg = SayMsgList[i];
+                MonsterSayMsg monSayMsg = SayMsgList[i];
                 string sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(ChrName));
                 sMsg = sMsg.Replace("%d", sAttackName);
                 if ((monSayMsg.State == monStatus) && (M2Share.RandomNumber.Random(monSayMsg.nRate) == 0))

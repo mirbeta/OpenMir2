@@ -95,7 +95,7 @@ namespace GameSvr.DataSource
                         {
                             continue;
                         }
-                        var AdminInfo = new TAdminInfo
+                        var AdminInfo = new AdminInfo
                         {
                             nLv = nLv,
                             sChrName = sChrName,
@@ -604,7 +604,7 @@ namespace GameSvr.DataSource
         /// 读取怪物物品掉落配置
         /// </summary>
         /// <returns></returns>
-        public void LoadMonitems(string MonName, ref IList<TMonItem> ItemList)
+        public void LoadMonitems(string MonName, ref IList<MonsterDropItem> ItemList)
         {
             var sData = string.Empty;
             var monFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MonItems", $"{MonName}.txt");
@@ -620,7 +620,7 @@ namespace GameSvr.DataSource
                 }
                 if (ItemList == null)
                 {
-                    ItemList = new List<TMonItem>();
+                    ItemList = new List<MonsterDropItem>();
                 }
                 using var LoadList = new StringList();
                 LoadList.LoadFromFile(monFileName);
@@ -646,7 +646,7 @@ namespace GameSvr.DataSource
                         var itemCount = HUtil32.StrToInt(sData, 1);
                         if (n18 > 0 && n1C > 0 && !string.IsNullOrEmpty(itemName))
                         {
-                            var MonItem = new TMonItem
+                            var MonItem = new MonsterDropItem
                             {
                                 SelPoint = n18 - 1,
                                 MaxPoint = n1C,

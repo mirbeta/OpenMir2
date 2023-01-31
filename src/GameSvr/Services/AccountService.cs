@@ -12,12 +12,12 @@ namespace GameSvr.Services
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int _dwClearEmptySessionTick;
-        private readonly IList<TSessInfo> _sessionList;
+        private readonly IList<PlayerSession> _sessionList;
         private readonly ClientScoket _clientScoket;
 
         public AccountService()
         {
-            _sessionList = new List<TSessInfo>();
+            _sessionList = new List<PlayerSession>();
             M2Share.Config.boIDSocketConnected = false;
             _clientScoket = new ClientScoket(new IPEndPoint(IPAddress.Parse(M2Share.Config.sIDSAddr), M2Share.Config.nIDSPort));
             _clientScoket.OnConnected += IDSocketConnect;
@@ -291,7 +291,7 @@ namespace GameSvr.Services
 
         private void NewSession(string sAccount, string sIPaddr, int nSessionID, int nPayMent, int nPayMode, long playTime)
         {
-            var sessInfo = new TSessInfo();
+            var sessInfo = new PlayerSession();
             sessInfo.sAccount = sAccount;
             sessInfo.sIPaddr = sIPaddr;
             sessInfo.nSessionID = nSessionID;
@@ -308,7 +308,7 @@ namespace GameSvr.Services
         private void DelSession(int nSessionID)
         {
             var sAccount = string.Empty;
-            TSessInfo SessInfo = null;
+            PlayerSession SessInfo = null;
             const string sExceptionMsg = "[Exception] FrmIdSoc::DelSession";
             try
             {
@@ -344,9 +344,9 @@ namespace GameSvr.Services
             _sessionList.Clear();
         }
 
-        public TSessInfo GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent, ref long playTime)
+        public PlayerSession GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent, ref long playTime)
         {
-            TSessInfo result = null;
+            PlayerSession result = null;
             var boFound = false;
             const string sGetFailMsg = "[非法登录] 全局会话验证失败({0}/{1}/{2})";
             nPayMent = 0;

@@ -71,6 +71,6 @@ namespace SystemModule.Data
         /// <summary>
         /// 掉落物品列表
         /// </summary>
-        public IList<TMonItem> ItemList;
+        public IList<MonsterDropItem> ItemList;
     }
 }

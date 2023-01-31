@@ -309,7 +309,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 全局会话信息
         /// </summary>
-        public TSessInfo SessInfo;
+        public PlayerSession SessInfo;
         public int MDwLoadTick = 0;
         /// <summary>
         /// 人物当前所在服务器序号
@@ -733,7 +733,7 @@ namespace GameSvr.Player
         public int MNAutoGetExpPoint;
         public Envirnoment MAutoGetExpEnvir;
         public bool MBoAutoGetExpInSafeZone = false;
-        public Dictionary<string, TDynamicVar> DynamicVarMap;
+        public Dictionary<string, DynamicVar> DynamicVarMap;
         public short MDwClientTick;
         /// <summary>
         /// 进入速度测试模式
@@ -946,7 +946,7 @@ namespace GameSvr.Player
             MDwRunHitIntervalTime = M2Share.Config.RunHitIntervalTime;// 组合操作间隔
             MDwWalkHitIntervalTime = M2Share.Config.WalkHitIntervalTime;// 组合操作间隔
             MDwRunMagicIntervalTime = M2Share.Config.RunMagicIntervalTime;// 跑位魔法间隔
-            DynamicVarMap = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
+            DynamicVarMap = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             SessInfo = null;
             TestSpeedMode = false;
             MBoLockLogon = true;

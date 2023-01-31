@@ -7,11 +7,11 @@ namespace GameSvr.Items
 {
     public class CustomItem
     {
-        private IList<TItemName> ItemNameList;
+        private IList<ItemName> ItemNameList;
 
         public CustomItem()
         {
-            ItemNameList = new List<TItemName>();
+            ItemNameList = new List<ItemName>();
         }
 
         ~CustomItem()
@@ -26,7 +26,7 @@ namespace GameSvr.Items
         public string GetCustomItemName(int nMakeIndex, int nItemIndex)
         {
             var result = string.Empty;
-            TItemName itemName;
+            ItemName itemName;
             for (var i = ItemNameList.Count - 1; i >= 0; i--)
             {
                 itemName = ItemNameList[i];
@@ -39,7 +39,7 @@ namespace GameSvr.Items
 
         public bool AddCustomItemName(int nMakeIndex, int nItemIndex, string sItemName)
         {
-            TItemName itemName;
+            ItemName itemName;
             for (var i = ItemNameList.Count - 1; i >= 0; i--)
             {
                 itemName = ItemNameList[i];
@@ -48,7 +48,7 @@ namespace GameSvr.Items
                     return false;
                 }
             }
-            itemName = new TItemName();
+            itemName = new ItemName();
             itemName.nMakeIndex = nMakeIndex;
             itemName.nItemIndex = nItemIndex;
             itemName.sItemName = sItemName;
@@ -92,7 +92,7 @@ namespace GameSvr.Items
                     var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if (nMakeIndex < 0 || nItemIndex < 0) continue;
-                    var itemName = new TItemName();
+                    var itemName = new ItemName();
                     itemName.nMakeIndex = nMakeIndex;
                     itemName.nItemIndex = nItemIndex;
                     itemName.sItemName = sItemName;

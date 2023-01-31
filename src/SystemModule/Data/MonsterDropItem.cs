@@ -3,7 +3,7 @@
     /// <summary>
     /// 怪物掉落物品
     /// </summary>
-    public class TMonItem
+    public class MonsterDropItem
     {
         public int MaxPoint;
         public int SelPoint;

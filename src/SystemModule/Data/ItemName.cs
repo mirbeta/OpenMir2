@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class TItemName
+    public class ItemName
     {
         public int nMakeIndex;
         public int nItemIndex;

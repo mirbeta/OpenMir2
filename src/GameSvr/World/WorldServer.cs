@@ -48,8 +48,8 @@ namespace GameSvr.World
         /// 处理假人间隔
         /// </summary>
         public long RobotLogonTick { get; set; }
-        public readonly IList<TAdminInfo> AdminList;
-        private readonly IList<TGoldChangeInfo> _mChangeHumanDbGoldList;
+        public readonly IList<AdminInfo> AdminList;
+        private readonly IList<GoldChangeInfo> _mChangeHumanDbGoldList;
         private readonly IList<SwitchDataInfo> _mChangeServerList;
         private readonly IList<int> ListOfGateIdx;
         private readonly IList<int> ListOfSocket;
@@ -87,7 +87,7 @@ namespace GameSvr.World
             LoadPlayList = new List<UserOpenInfo>();
             PlayObjectList = new List<PlayObject>();
             PlayObjectFreeList = new List<PlayObject>();
-            _mChangeHumanDbGoldList = new List<TGoldChangeInfo>();
+            _mChangeHumanDbGoldList = new List<GoldChangeInfo>();
             ShowOnlineTick = HUtil32.GetTickCount();
             SendOnlineHumTime = HUtil32.GetTickCount();
             ProcessMapDoorTick = HUtil32.GetTickCount();
@@ -104,7 +104,7 @@ namespace GameSvr.World
             MonGenInfoThreadMap = new Dictionary<int, IList<MonGenInfo>>();
             MonsterThreadMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             MagicList = new List<MagicInfo>();
-            AdminList = new List<TAdminInfo>();
+            AdminList = new List<AdminInfo>();
             MerchantList = new List<Merchant>();
             QuestNpcList = new List<NormNpc>();
             _mChangeServerList = new List<SwitchDataInfo>();
@@ -1402,7 +1402,7 @@ namespace GameSvr.World
             btPermission = (byte)M2Share.Config.StartPermission;
             for (var i = 0; i < AdminList.Count; i++)
             {
-                TAdminInfo adminInfo = AdminList[i];
+                AdminInfo adminInfo = AdminList[i];
                 if (string.Compare(adminInfo.sChrName, sUserName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     btPermission = (byte)adminInfo.nLv;
@@ -2092,7 +2092,7 @@ namespace GameSvr.World
             }
         }
 
-        public void sub_4AE514(TGoldChangeInfo goldChangeInfo)
+        public void sub_4AE514(GoldChangeInfo goldChangeInfo)
         {
             var goldChange = goldChangeInfo;
             HUtil32.EnterCriticalSection(LoadPlaySection);
@@ -2153,7 +2153,7 @@ namespace GameSvr.World
             {
                 playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
                 playObject.UserAccount = "假人" + ai.sChrName;
-                playObject.Start(TPathType.t_Dynamic);
+                playObject.Start(FindPathType.t_Dynamic);
                 BotPlayObjectList.Add(playObject);
                 return true;
             }

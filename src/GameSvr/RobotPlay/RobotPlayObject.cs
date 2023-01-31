@@ -265,7 +265,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public void Start(TPathType PathType)
+        public void Start(FindPathType PathType)
         {
             if (!Ghost && !Death && !m_boAIStart)
             {

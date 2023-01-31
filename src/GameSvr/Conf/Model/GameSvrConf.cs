@@ -705,11 +705,11 @@ namespace GameSvr.Conf.Model
         public int DropItemRage;
         public string Skeleton;
         public int SkeletonCount;
-        public TRecallMigic[] SkeletonArray;
+        public RecallMigic[] SkeletonArray;
         public string Dragon;
         public string Dragon1;
         public int DragonCount;
-        public TRecallMigic[] DragonArray;
+        public RecallMigic[] DragonArray;
         public string Angel;
         public int AmyOunsulPoint;
         public bool DisableInSafeZoneFireCross;
@@ -1568,11 +1568,11 @@ namespace GameSvr.Conf.Model
             DropItemRage = 3; //爆物范围
             Skeleton = "变异骷髅";
             SkeletonCount = 1;
-            SkeletonArray = new TRecallMigic[10];
+            SkeletonArray = new RecallMigic[10];
             Dragon = "神兽";
             Dragon1 = "神兽1";
             DragonCount = 1;
-            DragonArray = new TRecallMigic[10];
+            DragonArray = new RecallMigic[10];
             Angel = "精灵";
             AmyOunsulPoint = 10;
             DisableInSafeZoneFireCross = false;

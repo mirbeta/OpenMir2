@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public struct TMapQuestInfo
+    public struct MapQuestInfo
     {
         public int nFlag;
         public int nValue;

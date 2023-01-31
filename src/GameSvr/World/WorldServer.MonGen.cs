@@ -462,7 +462,7 @@ namespace GameSvr.World
         /// <returns></returns>
         private void MonGetRandomItems(BaseObject mon)
         {
-            IList<TMonItem> itemList = null;
+            IList<MonsterDropItem> itemList = null;
             var itemName = string.Empty;
             if (MonsterList.TryGetValue(mon.ChrName, out var monster))
             {

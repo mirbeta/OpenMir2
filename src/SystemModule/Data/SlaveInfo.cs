@@ -22,10 +22,5 @@ namespace SystemModule.Data
         public byte SlaveExpLevel;
         public ushort nHP;
         public ushort nMP;
-
-        public SlaveInfo()
-        {
-
-        }
     }
 }

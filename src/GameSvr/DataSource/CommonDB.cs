@@ -200,7 +200,7 @@ namespace GameSvr.DataSource
                     {
                         Monster = new MonsterInfo
                         {
-                            ItemList = new List<TMonItem>(),
+                            ItemList = new List<MonsterDropItem>(),
                             Name = dr.GetString("NAME").Trim(),
                             Race = (byte)dr.GetInt32("Race"),
                             RaceImg = (byte)dr.GetInt32("RaceImg"),

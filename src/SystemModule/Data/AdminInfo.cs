@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public struct TAdminInfo
+    public struct AdminInfo
     {
         public int nLv;
         public string sChrName;

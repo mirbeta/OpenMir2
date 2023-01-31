@@ -36,7 +36,7 @@ namespace GameSvr.GameGate
         /// <summary>
         /// 当前会话信息
         /// </summary>
-        public TSessInfo SessInfo;
+        public PlayerSession SessInfo;
         public int nSocket;
         public TFrontEngine FrontEngine;
         public WorldServer UserEngine;

@@ -266,7 +266,7 @@ namespace GameSvr.Npc
         protected virtual void GetVariableText(PlayObject PlayObject, string sVariable, ref string sMsg)
         {
             string s14 = string.Empty;
-            TDynamicVar DynamicVar;
+            DynamicVar DynamicVar;
             bool boFoundVar;
             string sText;
             switch (sVariable)
@@ -1688,9 +1688,9 @@ namespace GameSvr.Npc
             Castle = M2Share.CastleMgr.InCastleWarArea(this);
         }
 
-        private Dictionary<string, TDynamicVar> GetDynamicVarList(PlayObject PlayObject, string sType, ref string sName)
+        private Dictionary<string, DynamicVar> GetDynamicVarList(PlayObject PlayObject, string sType, ref string sName)
         {
-            Dictionary<string, TDynamicVar> result = null;
+            Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN", 5))
             {
                 result = PlayObject.DynamicVarMap;

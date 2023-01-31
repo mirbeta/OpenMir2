@@ -2,7 +2,7 @@
 using GameSvr.Player;
 using System.Collections;
 using SystemModule;
-using SystemModule.Data;
+using SystemModule.Enums;
 
 namespace GameSvr.Maps
 {
@@ -15,7 +15,7 @@ namespace GameSvr.Maps
                 return GetCount();
             }
         }
-        public TPathType PathType
+        public FindPathType PathType
         {
             get
             {
@@ -34,7 +34,7 @@ namespace GameSvr.Maps
         public Envirnoment m_PEnvir;
         private readonly ArrayList FPointList;
         private readonly BaseObject FBaseObject;
-        private TPathType FPathType;
+        private FindPathType FPathType;
 
         public PointManager(BaseObject ABaseObject)
         {
@@ -43,7 +43,7 @@ namespace GameSvr.Maps
             m_nPostion = -1;
             FBaseObject = ABaseObject;
             FPointList = new ArrayList();
-            FPathType = TPathType.t_Dynamic;
+            FPathType = FindPathType.t_Dynamic;
             m_PEnvir = null;
         }
 
@@ -103,7 +103,7 @@ namespace GameSvr.Maps
             byte btDir = 0;
             int nStep;
             bool result = false;
-            if (FPathType == TPathType.t_Dynamic)
+            if (FPathType == FindPathType.t_Dynamic)
             {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
@@ -412,7 +412,7 @@ namespace GameSvr.Maps
             short nCurrY;
             byte btDir = 0;
             int nStep;
-            if (FPathType == TPathType.t_Dynamic)
+            if (FPathType == FindPathType.t_Dynamic)
             {
                 m_nCurrX = nX;
                 m_nCurrY = nY;

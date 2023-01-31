@@ -1,6 +1,8 @@
-﻿namespace SystemModule.Data
+﻿using SystemModule.Enums;
+
+namespace SystemModule.Data
 {
-    public class TDynamicVar
+    public class DynamicVar
     {
         public string sName;
         public VarType VarType;

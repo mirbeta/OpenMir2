@@ -272,8 +272,8 @@ namespace GameSvr.Npc
             int n14;
             int n3C = 0;
             string s01 = string.Empty;
-            TDynamicVar DynamicVar;
-            Dictionary<string, TDynamicVar> DynamicVarList;
+            DynamicVar DynamicVar;
+            Dictionary<string, DynamicVar> DynamicVarList;
             string sName = string.Empty;
             bool boVarFound;
             string sParam1 = string.Empty;
@@ -716,8 +716,8 @@ namespace GameSvr.Npc
         {
             int n14;
             int n3C = 0;
-            TDynamicVar DynamicVar;
-            Dictionary<string, TDynamicVar> DynamicVarList;
+            DynamicVar DynamicVar;
+            Dictionary<string, DynamicVar> DynamicVarList;
             string sName = string.Empty;
             string s01 = string.Empty;
             string sParam1 = string.Empty;
@@ -1855,7 +1855,7 @@ namespace GameSvr.Npc
             string s10 = string.Empty;
             string sVarValue2 = string.Empty;
             int nSecond;
-            TDynamicVar DynamicVar;
+            DynamicVar DynamicVar;
             sValue = "";
             nValue = -1;
             nDataType = -1;
@@ -2736,12 +2736,12 @@ namespace GameSvr.Npc
 
         private bool GetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
-            TDynamicVar DynamicVar;
+            DynamicVar DynamicVar;
             string sName = string.Empty;
             sValue = "";
             nValue = -1;
             nDataType = -1;
-            Dictionary<string, TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return false;
@@ -2766,10 +2766,10 @@ namespace GameSvr.Npc
 
         private bool SetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType)
         {
-            TDynamicVar DynamicVar;
+            DynamicVar DynamicVar;
             string sName = string.Empty;
             bool boVarFound = false;
-            Dictionary<string, TDynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return false;

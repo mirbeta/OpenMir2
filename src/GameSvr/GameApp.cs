@@ -83,7 +83,7 @@ namespace GameSvr
             M2Share.LineNoticeList = new List<string>();
             M2Share.QuestDiaryList = new List<IList<TQDDinfo>>();
             M2Share.AbuseTextList = new StringList();
-            M2Share.g_MonSayMsgList = new Dictionary<string, IList<TMonSayMsg>>(StringComparer.OrdinalIgnoreCase);
+            M2Share.g_MonSayMsgList = new Dictionary<string, IList<MonsterSayMsg>>(StringComparer.OrdinalIgnoreCase);
             M2Share.g_DisableMakeItemList = new List<string>();
             M2Share.g_EnableMakeItemList = new List<string>();
             M2Share.g_DisableSellOffList = new List<string>();
@@ -106,7 +106,7 @@ namespace GameSvr
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.Config.UserIDSection = new object();
             M2Share.UserDBSection = new object();
-            M2Share.g_DynamicVarList = new Dictionary<string, TDynamicVar>(StringComparer.OrdinalIgnoreCase);
+            M2Share.g_DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.sSellOffItemList = new List<DealOffInfo>();
             M2Share.dwRunDBTimeMax = HUtil32.GetTickCount();
         }

@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public struct TClientGoods
+    public struct ClientGoods
     {
         public string Name;
         public int SubMenu;

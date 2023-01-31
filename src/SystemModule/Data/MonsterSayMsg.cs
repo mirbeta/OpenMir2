@@ -1,6 +1,8 @@
-﻿namespace SystemModule.Data
+﻿using SystemModule.Enums;
+
+namespace SystemModule.Data
 {
-    public class TMonSayMsg
+    public class MonsterSayMsg
     {
         public MonStatus State;
         public MsgColor Color;

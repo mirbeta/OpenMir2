@@ -1437,9 +1437,9 @@ namespace GameSvr.Npc
         private void ActionOfSaveVar(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
-            TDynamicVar DynamicVar = null;
+            DynamicVar DynamicVar = null;
             bool boFoundVar;
-            Dictionary<string, TDynamicVar> DynamicVarList;
+            Dictionary<string, DynamicVar> DynamicVarList;
             ConfFile IniFile;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
@@ -1511,9 +1511,9 @@ namespace GameSvr.Npc
         private void ActionOfCalcVar(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
-            TDynamicVar DynamicVar = null;
+            DynamicVar DynamicVar = null;
             string sVarValue2 = string.Empty;
-            Dictionary<string, TDynamicVar> DynamicVarList;
+            Dictionary<string, DynamicVar> DynamicVarList;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             string sType = QuestActionInfo.sParam1;//类型
@@ -1842,16 +1842,16 @@ namespace GameSvr.Npc
         private void ActionOfVar(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
-            TDynamicVar DynamicVar;
+            DynamicVar DynamicVar;
             bool boFoundVar;
-            Dictionary<string, TDynamicVar> DynamicVarList;
+            Dictionary<string, DynamicVar> DynamicVarList;
             const string sVarFound = "变量{0}已存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = QuestActionInfo.sParam2;
             var sVarName = QuestActionInfo.sParam3;
             var sVarValue = QuestActionInfo.sParam4;
             var nVarValue = HUtil32.StrToInt(QuestActionInfo.sParam4, 0);
-            var VarType = SystemModule.Data.VarType.None;
+            var VarType = SystemModule.Enums.VarType.None;
             if (string.Compare(QuestActionInfo.sParam1, "Integer", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 VarType = VarType.Integer;
@@ -1878,7 +1878,7 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_VAR);
                 return;
             }
-            DynamicVar = new TDynamicVar();
+            DynamicVar = new DynamicVar();
             DynamicVar.sName = sVarName;
             DynamicVar.VarType = VarType;
             DynamicVar.nInternet = nVarValue;
@@ -1914,8 +1914,8 @@ namespace GameSvr.Npc
         private void ActionOfLoadVar(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sName = string.Empty;
-            TDynamicVar DynamicVar = null;
-            Dictionary<string, TDynamicVar> DynamicVarList;
+            DynamicVar DynamicVar = null;
+            Dictionary<string, DynamicVar> DynamicVarList;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = QuestActionInfo.sParam1;
@@ -1971,7 +1971,7 @@ namespace GameSvr.Npc
                 {
                     if (!DynamicVarList.ContainsKey(sVarName))
                     {
-                        DynamicVarList.Add(sVarName, new TDynamicVar()
+                        DynamicVarList.Add(sVarName, new DynamicVar()
                         {
                             sName = sVarName,
                             sString = str,

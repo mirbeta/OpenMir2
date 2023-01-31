@@ -346,7 +346,7 @@ namespace GameSvr.GameGate
             var nPayMode = 0;
             var nPlayTime = 0L;
             byte[] hwid = MD5.EmptyDigest;
-            TSessInfo sessInfo;
+            PlayerSession sessInfo;
             const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification";
             const string sDisable = "*disable*";
             try

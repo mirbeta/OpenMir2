@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
+using SystemModule.Enums;
 using SystemModule.MemoryPool;
 
 namespace GameSvr
@@ -97,7 +98,7 @@ namespace GameSvr
         /// <summary>
         /// 怪物说话信息列表
         /// </summary>
-        public static Dictionary<string, IList<TMonSayMsg>> g_MonSayMsgList = null;
+        public static Dictionary<string, IList<MonsterSayMsg>> g_MonSayMsgList = null;
         /// <summary>
         /// /禁止制造物品列表
         /// </summary>
@@ -194,7 +195,7 @@ namespace GameSvr
         public static NormNpc g_ManageNPC = null;
         public static NormNpc g_RobotNPC = null;
         public static Merchant g_FunctionNPC = null;
-        public static Dictionary<string, TDynamicVar> g_DynamicVarList = null;
+        public static Dictionary<string, DynamicVar> g_DynamicVarList = null;
         public static char g_GMRedMsgCmd = '!';
         public static int g_nGMREDMSGCMD = 6;
         public static int g_dwSendOnlineTick = 0;
@@ -2346,7 +2347,7 @@ namespace GameSvr
             int nColor;
             StringList LoadList;
             string sLineText;
-            TMonSayMsg MonSayMsg;
+            MonsterSayMsg MonSayMsg;
             var result = false;
             var sFileName = BasePath + Config.EnvirDir + "GenMsg.txt";
             if (File.Exists(sFileName))
@@ -2371,7 +2372,7 @@ namespace GameSvr
                             nColor = HUtil32.StrToInt(sColor, -1);
                             if (nStatus >= 0 && nRate >= 0 && nColor >= 0)
                             {
-                                MonSayMsg = new TMonSayMsg();
+                                MonSayMsg = new MonsterSayMsg();
                                 switch (nStatus)
                                 {
                                     case 0:

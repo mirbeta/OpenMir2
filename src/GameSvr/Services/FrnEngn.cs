@@ -10,7 +10,7 @@ namespace GameSvr.Services
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly object UserCriticalSection;
         private readonly IList<SavePlayerRcd> m_SaveRcdList;
-        private readonly IList<TGoldChangeInfo> m_ChangeGoldList;
+        private readonly IList<GoldChangeInfo> m_ChangeGoldList;
         private readonly IList<SavePlayerRcd> m_SaveRcdTempList;
         private IList<LoadDBInfo> m_LoadRcdTempList;
         private IList<LoadDBInfo> m_LoadRcdList;
@@ -20,7 +20,7 @@ namespace GameSvr.Services
             UserCriticalSection = new object();
             m_LoadRcdList = new List<LoadDBInfo>();
             m_SaveRcdList = new List<SavePlayerRcd>();
-            m_ChangeGoldList = new List<TGoldChangeInfo>();
+            m_ChangeGoldList = new List<GoldChangeInfo>();
             m_LoadRcdTempList = new List<LoadDBInfo>();
             m_SaveRcdTempList = new List<SavePlayerRcd>();
         }
@@ -146,7 +146,7 @@ namespace GameSvr.Services
 
         private void ProcessGameDate()
         {
-            IList<TGoldChangeInfo> changeGoldList = null;
+            IList<GoldChangeInfo> changeGoldList = null;
             var boReTryLoadDb = false;
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
@@ -163,7 +163,7 @@ namespace GameSvr.Services
                 m_LoadRcdList = TempList;
                 if (m_ChangeGoldList.Any())
                 {
-                    changeGoldList = new List<TGoldChangeInfo>();
+                    changeGoldList = new List<GoldChangeInfo>();
                     for (var i = 0; i < m_ChangeGoldList.Count; i++)
                     {
                         changeGoldList.Add(m_ChangeGoldList[i]);
@@ -373,7 +373,7 @@ namespace GameSvr.Services
         /// </summary>
         public void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold)
         {
-            var GoldInfo = new TGoldChangeInfo
+            var GoldInfo = new GoldChangeInfo
             {
                 sGameMasterName = sGameMasterName,
                 sGetGoldUser = sGetGoldUserName,
@@ -421,7 +421,7 @@ namespace GameSvr.Services
             }
         }
 
-        private bool ChangeUserGoldInDB(TGoldChangeInfo GoldChangeInfo)
+        private bool ChangeUserGoldInDB(GoldChangeInfo GoldChangeInfo)
         {
             var result = false;
             /*if (PlayerDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))

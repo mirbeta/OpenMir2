@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public struct TRecallMigic
+    public struct RecallMigic
     {
         public int nHumLevel;
         public string sMonName;

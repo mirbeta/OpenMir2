@@ -3,6 +3,7 @@ using GameSvr.Player;
 using NLog;
 using System.Reflection;
 using SystemModule.Data;
+using SystemModule.Enums;
 
 namespace GameSvr.GameCommand
 {
