@@ -177,11 +177,6 @@ namespace SelGate
         private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
-            using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SelGate.logo.png");
-            var logo = new CanvasImage(logoStream!)
-            {
-                MaxWidth = 25
-            };
 
             var table = new Table()
             {
@@ -218,7 +213,7 @@ namespace SelGate
                 .AddEmptyRow()
                 .AddEmptyRow()
                 .AddRow(markup);
-            table.AddRow(logo, rightTable);
+            table.AddRow(rightTable);
 
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();

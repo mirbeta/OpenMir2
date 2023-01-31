@@ -1391,7 +1391,7 @@ namespace GameSvr.RobotPlay
             BaseObject BaseObject;
             for (var n10 = 0; n10 < 7; n10++)
             {
-                if (Envir.GetNextPosition(CurrX, CurrY, n10, 1, ref nX, ref nY))
+                if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))
                 {
                     BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                     if (BaseObject != null && !BaseObject.Death && !BaseObject.Ghost && IsProperTarget(BaseObject))
@@ -1415,7 +1415,7 @@ namespace GameSvr.RobotPlay
             }
             for (var i = 0; i < 7; i++)
             {
-                if (Envir.GetNextPosition(nCurrX, nCurrY, i, 1, ref nX, ref nY))
+                if (Envir.GetNextPosition(nCurrX, nCurrY, (byte)i, 1, ref nX, ref nY))
                 {
                     BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                     if (BaseObject != null && !BaseObject.Death && !BaseObject.Ghost && IsProperTarget(BaseObject))
@@ -1465,7 +1465,7 @@ namespace GameSvr.RobotPlay
                 {
                     for (var i = 0; i < 7; i++)
                     {
-                        if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, i, 1, ref nX, ref nY))
+                        if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, (byte)i, 1, ref nX, ref nY))
                         {
                             if (Master.Envir.CanWalk(nX, nY, true))
                             {
@@ -1500,7 +1500,7 @@ namespace GameSvr.RobotPlay
                                 {
                                     if (j != Master.Direction)
                                     {
-                                        if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, j, k, ref nX, ref nY) && GotoNext(nX, nY, true))
+                                        if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, (byte)j, k, ref nX, ref nY) && GotoNext(nX, nY, true))
                                         {
                                             return true;
                                         }
@@ -1535,7 +1535,7 @@ namespace GameSvr.RobotPlay
                         {
                             if (k != Master.Direction)
                             {
-                                if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, k, j, ref nX, ref nY) && GotoNextOne(nX, nY, true))
+                                if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, (byte)k, j, ref nX, ref nY) && GotoNextOne(nX, nY, true))
                                 {
                                     return true;
                                 }
@@ -1567,7 +1567,7 @@ namespace GameSvr.RobotPlay
             UserMagic UserMagic = FindMagic(wMagIdx);
             if (UserMagic != null)
             {
-                if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx))
+                if (!MagicManager.IsWarrSkill(UserMagic.MagIdx))
                 {
                     result = UserMagic.Key == 0 || IsRobot;
                 }
@@ -1911,7 +1911,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        private bool UseSpell(UserMagic UserMagic, short nTargetX, short nTargetY, BaseObject TargeTBaseObject)
+        private bool UseSpell(UserMagic UserMagic, short nTargetX, short nTargetY, BaseObject targetBaseObject)
         {
             int n14;
             BaseObject BaseObject;
@@ -1936,7 +1936,7 @@ namespace GameSvr.RobotPlay
                     return false;
                 }
             }
-            boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx); // 是否是战士技能
+            boIsWarrSkill = MagicManager.IsWarrSkill(UserMagic.MagIdx); // 是否是战士技能
             SpellTick -= 450;
             SpellTick = HUtil32._MAX(0, SpellTick);
             switch (UserMagic.MagIdx)
@@ -1980,7 +1980,7 @@ namespace GameSvr.RobotPlay
                     if ((HUtil32.GetTickCount() - DoMotaeboTick) > 3000)
                     {
                         DoMotaeboTick = HUtil32.GetTickCount();
-                        if (GetAttackDir(TargeTBaseObject, ref Direction))
+                        if (GetAttackDir(targetBaseObject, ref Direction))
                         {
                             DoMotaebo(Direction, UserMagic.Level);
                         }
@@ -1995,9 +1995,9 @@ namespace GameSvr.RobotPlay
                     BaseObject = null;
                     if (UserMagic.MagIdx >= 60 && UserMagic.MagIdx <= 65)
                     {
-                        if (CretInNearXy(TargeTBaseObject, nTargetX, nTargetY))// 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
+                        if (CretInNearXy(targetBaseObject, nTargetX, nTargetY))// 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                         {
-                            BaseObject = TargeTBaseObject;
+                            BaseObject = targetBaseObject;
                             nTargetX = BaseObject.CurrX;
                             nTargetY = BaseObject.CurrY;
                         }
@@ -2036,9 +2036,9 @@ namespace GameSvr.RobotPlay
                                 }
                                 break;
                             default:
-                                if (CretInNearXy(TargeTBaseObject, nTargetX, nTargetY))
+                                if (CretInNearXy(targetBaseObject, nTargetX, nTargetY))
                                 {
-                                    BaseObject = TargeTBaseObject;
+                                    BaseObject = targetBaseObject;
                                     nTargetX = BaseObject.CurrX;
                                     nTargetY = BaseObject.CurrY;
                                 }
@@ -2067,9 +2067,9 @@ namespace GameSvr.RobotPlay
                         return false;
                     }
                 }
-                if (!M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx))
+                if (!MagicManager.IsWarrSkill(UserMagic.MagIdx))
                 {
-                    result = M2Share.MagicMgr.DoSpell(this, UserMagic, nTargetX, nTargetY, BaseObject);
+                    result = MagicManager.DoSpell(this, UserMagic, nTargetX, nTargetY, BaseObject);
                     AttackTick = HUtil32.GetTickCount();
                 }
             }
@@ -4141,7 +4141,7 @@ namespace GameSvr.RobotPlay
                             n10 = (Direction + M2Share.Config.WideAttack[nC]) % 8;
                             break;
                     }
-                    if (Envir.GetNextPosition(CurrX, CurrY, n10, 1, ref nX, ref nY))
+                    if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))
                     {
                         BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                         if (BaseObject != null)

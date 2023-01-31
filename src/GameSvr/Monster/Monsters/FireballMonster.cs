@@ -28,7 +28,7 @@ namespace GameSvr.Monster.Monsters
                                     var baseObject = GetPoseCreate();
                                     if (baseObject != null && IsProperTarget(baseObject) && AntiMagic > 0)
                                     {
-                                        nPower = baseObject.GetMagStruckDamage(this, nPower);
+                                        nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);
                                         if (nPower > 0)
                                         {
                                             baseObject.StruckDamage((ushort)nPower);

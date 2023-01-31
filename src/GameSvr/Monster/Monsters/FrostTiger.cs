@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (StatusArr[PoisonState.STATE_TRANSPARENT] == 0)
                     {
-                        M2Share.MagicMgr.MagMakePrivateTransparent(this, 180);
+                        Magic.MagicManager.MagMakePrivateTransparent(this, 180);
                     }
                 }
                 else

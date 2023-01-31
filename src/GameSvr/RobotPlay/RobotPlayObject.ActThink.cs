@@ -620,7 +620,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public MapWalkXY ActThink_FindPosOfDir(int nDir, int nRange, bool boFlag)
+        public MapWalkXY ActThink_FindPosOfDir(byte nDir, int nRange, bool boFlag)
         {
             MapWalkXY result = null;
             short nCurrX = 0;

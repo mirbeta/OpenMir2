@@ -1047,7 +1047,7 @@ namespace GameSvr.Player
             return result;
         }
 
-        private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject TargeTBaseObject, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject targetBaseObject, bool boLateDelivery, ref int dwDelayTime)
         {
             dwDelayTime = 0;
             if (!BoCanSpell)
@@ -1063,7 +1063,7 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            var boIsWarrSkill = M2Share.MagicMgr.IsWarrSkill(UserMagic.MagIdx);
+            var boIsWarrSkill = MagicManager.IsWarrSkill(UserMagic.MagIdx);
             if (!boLateDelivery && !boIsWarrSkill && (!M2Share.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
@@ -1265,9 +1265,9 @@ namespace GameSvr.Player
                 default:
                     Direction = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
                     BaseObject BaseObject = null;
-                    if (CretInNearXy(TargeTBaseObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
+                    if (CretInNearXy(targetBaseObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {
-                        BaseObject = TargeTBaseObject;
+                        BaseObject = targetBaseObject;
                         nTargetX = BaseObject.CurrX;
                         nTargetY = BaseObject.CurrY;
                     }

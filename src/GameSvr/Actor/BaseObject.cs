@@ -1240,7 +1240,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public int MagPassThroughMagic(short sx, short sy, short tx, short ty, int nDir, int magPwr, bool undeadAttack)
+        public int MagPassThroughMagic(short sx, short sy, short tx, short ty, byte nDir, int magPwr, bool undeadAttack)
         {
             var tcount = 0;
             for (var i = 0; i < 12; i++)
@@ -3334,20 +3334,20 @@ namespace GameSvr.Actor
             return (ushort)nDamage;
         }
 
-        public ushort GetMagStruckDamage(BaseObject baseObject, int nDamage)
+        public ushort GetMagStruckDamage(BaseObject baseObject, ushort nDamage)
         {
             var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
-            nDamage = HUtil32._MAX(0, nDamage - n14);
+            nDamage = (ushort)HUtil32._MAX(0, nDamage - n14);
             if ((LifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
                 nDamage += AddAbil.UndeadPower;
             }
             if ((nDamage > 0) && AbilMagBubbleDefence)
             {
-                nDamage = HUtil32.Round(nDamage / 1.0e2 * (MagBubbleDefenceLevel + 2) * 8.0);
+                nDamage = (ushort)HUtil32.Round(nDamage / 1.0e2 * (MagBubbleDefenceLevel + 2) * 8.0);//魔法盾减伤
                 DamageBubbleDefence(nDamage);
             }
-            return (ushort)nDamage;
+            return nDamage;
         }
 
         public void StruckDamage(ushort nDamage)
@@ -3474,13 +3474,12 @@ namespace GameSvr.Actor
 
         public virtual string GetBaseObjectInfo()
         {
-            var result = ChrName + ' ' + "地图:" + MapName + '(' + Envir.MapDesc + ") " + "座标:" + CurrX +
+            return ChrName + ' ' + "地图:" + MapName + '(' + Envir.MapDesc + ") " + "座标:" + CurrX +
                          '/' + CurrY + ' ' + "等级:" + Abil.Level + ' ' + "经验:" + Abil.Exp + ' ' + "生命值: " + WAbil.HP + '-' + WAbil.MaxHP + ' ' + "魔法值: " + WAbil.MP + '-' +
                          WAbil.MaxMP + ' ' + "攻击力: " + HUtil32.LoByte(WAbil.DC) + '-' +
                          HUtil32.HiByte(WAbil.DC) + ' ' + "魔法力: " + HUtil32.LoByte(WAbil.MC) + '-' + HUtil32.HiByte(WAbil.MC) + ' ' + "道术: " +
                          HUtil32.LoByte(WAbil.SC) + '-' + HUtil32.HiByte(WAbil.SC) + ' ' + "防御力: " + HUtil32.LoByte(WAbil.AC) + '-' + HUtil32.HiByte(WAbil.AC) + ' ' + "魔防力: " +
                          HUtil32.LoByte(WAbil.MAC) + '-' + HUtil32.HiByte(WAbil.MAC) + ' ' + "准确:" + HitPoint + ' ' + "敏捷:" + SpeedPoint;
-            return result;
         }
 
         public bool GetBackPosition(ref short nX, ref short nY)
@@ -3667,7 +3666,6 @@ namespace GameSvr.Actor
         public bool MagCanHitTarget(short nX, short nY, BaseObject targeBaseObject)
         {
             var result = false;
-            int n18;
             if (targeBaseObject == null)
             {
                 return false;
@@ -3676,7 +3674,7 @@ namespace GameSvr.Actor
             var n14 = 0;
             while (n14 < 13)
             {
-                n18 = M2Share.GetNextDirection(nX, nY, targeBaseObject.CurrX, targeBaseObject.CurrY);
+                var n18 = M2Share.GetNextDirection(nX, nY, targeBaseObject.CurrX, targeBaseObject.CurrY);
                 if (Envir.GetNextPosition(nX, nY, n18, 1, ref nX, ref nY) && Envir.IsValidCell(nX, nY))
                 {
                     if ((nX == targeBaseObject.CurrX) && (nY == targeBaseObject.CurrY))

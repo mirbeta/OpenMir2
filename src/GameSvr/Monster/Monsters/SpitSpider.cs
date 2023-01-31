@@ -35,7 +35,7 @@ namespace GameSvr.Monster.Monsters
                         var baseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                         if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                         {
-                            nDamage = baseObject.GetMagStruckDamage(this, nDamage);
+                            nDamage = baseObject.GetMagStruckDamage(this, (ushort)nDamage);
                             if (nDamage > 0)
                             {
                                 baseObject.StruckDamage((ushort)nDamage);

@@ -23,7 +23,7 @@ namespace GameSvr.Monster.Monsters
                 var baseObject = GetPoseCreate();
                 if (baseObject != null && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                 {
-                    nPower = baseObject.GetMagStruckDamage(this, nPower);
+                    nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);
                     if (nPower > 0)
                     {
                         baseObject.StruckDamage((ushort)nPower);

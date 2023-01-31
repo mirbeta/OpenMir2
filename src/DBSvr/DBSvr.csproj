@@ -39,13 +39,8 @@
 	</Choose>
 	
 	<ItemGroup>
-		<EmbeddedResource Include="..\..\logo.png" Link="logo.png" />
-	</ItemGroup>
-	
-	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
 		<PackageReference Include="Spectre.Console" Version="0.45.0" />
-		<PackageReference Include="Spectre.Console.ImageSharp" Version="0.45.0" />
 		<PackageReference Include="NLog" Version="5.1.0" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.0" />
 	</ItemGroup>

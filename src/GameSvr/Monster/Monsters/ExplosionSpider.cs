@@ -32,7 +32,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         var damage = 0;
                         damage += baseObject.GetHitStruckDamage(this, nPower / 2);
-                        damage += baseObject.GetMagStruckDamage(this, nPower / 2);
+                        damage += baseObject.GetMagStruckDamage(this, (ushort)(nPower / 2));
                         if (damage > 0)
                         {
                             baseObject.StruckDamage((ushort)damage);

@@ -875,7 +875,7 @@ namespace GameSvr.Actor
                 }
                 return result;
             }
-            return result;
+            return false;
         }
 
         protected virtual bool Operate(ProcessMessage processMsg)
@@ -892,7 +892,7 @@ namespace GameSvr.Actor
                         {
                             WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
                         }
-                        var nDamage = GetMagStruckDamage(null, processMsg.nParam1);
+                        var nDamage = GetMagStruckDamage(null, (ushort)processMsg.nParam1);
                         if (nDamage > 0)
                         {
                             StruckDamage(nDamage);
@@ -992,7 +992,7 @@ namespace GameSvr.Actor
                         var nTargetY = HUtil32.HiWord(processMsg.nParam1);
                         var nRage = processMsg.nParam2;
                         targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
-                        if ((targetBaseObject != null) && (targetBaseObject.GetMagStruckDamage(this, nPower) > 0))
+                        if ((targetBaseObject != null) && (targetBaseObject.GetMagStruckDamage(this, (ushort)nPower) > 0))
                         {
                             SetTargetCreat(targetBaseObject);
                             if (targetBaseObject.Race >= ActorRace.Animal)
@@ -1036,7 +1036,7 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Grobal2.RM_TRANSPARENT:
-                        M2Share.MagicMgr.MagMakePrivateTransparent(this, (ushort)processMsg.nParam1);
+                        Magic.MagicManager.MagMakePrivateTransparent(this, (ushort)processMsg.nParam1);
                         break;
                     case Grobal2.RM_DOOPENHEALTH:
                         MakeOpenHealth();

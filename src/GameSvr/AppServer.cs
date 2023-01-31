@@ -70,11 +70,6 @@ namespace GameSvr
         private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
-            using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("GameSvr.logo.png");
-            var logo = new CanvasImage(logoStream!)
-            {
-                MaxWidth = 25
-            };
 
             var table = new Table()
             {
@@ -109,9 +104,8 @@ namespace GameSvr
             rightTable.AddRow(header)
                 .AddRow(header2)
                 .AddEmptyRow()
-                .AddEmptyRow()
-                .AddRow(markup);
-            table.AddRow(logo, rightTable);
+                .AddEmptyRow();
+            table.AddRow(rightTable);
 
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();

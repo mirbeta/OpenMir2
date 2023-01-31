@@ -10,6 +10,90 @@ namespace GameSvr.Actor
 {
     public partial class BaseObject
     {
+        /// <summary>
+        /// 计算自身属性
+        /// </summary>
+        public virtual void RecalcAbilitys()
+        {
+            AddAbil = new AddAbility();
+            var temp = WAbil;
+            WAbil = (Ability)Abil.Clone();
+            WAbil.HP = temp.HP;
+            WAbil.MP = temp.MP;
+            WAbil.Weight = 0;
+            WAbil.WearWeight = 0;
+            WAbil.HandWeight = 0;
+            AntiPoison = 0;
+            PoisonRecover = 0;
+            HealthRecover = 0;
+            SpellRecover = 0;
+            AntiMagic = 1;
+            Luck = 0;
+            HitSpeed = 0;
+            var oldhmode = HideMode;
+            HideMode = false;
+            if (Transparent && (StatusArr[PoisonState.STATE_TRANSPARENT] > 0))
+            {
+                HideMode = true;
+            }
+            if (HideMode)
+            {
+                if (!oldhmode)
+                {
+                    CharStatus = GetCharStatus();
+                    StatusChanged();
+                }
+            }
+            else
+            {
+                if (oldhmode)
+                {
+                    StatusArr[PoisonState.STATE_TRANSPARENT] = 0;
+                    CharStatus = GetCharStatus();
+                    StatusChanged();
+                }
+            }
+            RecalcHitSpeed();
+            if (AddAbil.HitSpeed > 0)
+            {
+                AddAbil.HitSpeed = ((ushort)(AddAbil.HitSpeed / 2));
+            }
+            else
+            {
+                AddAbil.HitSpeed = (ushort)((AddAbil.HitSpeed - 1) / 2);
+            }
+            AddAbil.HitSpeed = (ushort)HUtil32._MIN(15, AddAbil.HitSpeed);
+            SpeedPoint = (byte)(SpeedPoint + AddAbil.SPEED);
+            HitPoint = (byte)(HitPoint + AddAbil.HIT);
+            AntiPoison = (byte)(AntiPoison + AddAbil.AntiPoison);
+            PoisonRecover = (ushort)(PoisonRecover + AddAbil.PoisonRecover);
+            HealthRecover = (ushort)(HealthRecover + AddAbil.HealthRecover);
+            SpellRecover = (ushort)(SpellRecover + AddAbil.SpellRecover);
+            AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
+            Luck = (byte)(Luck + AddAbil.Luck);
+            Luck = (byte)(Luck - AddAbil.UnLuck);
+            HitSpeed = AddAbil.HitSpeed;
+            WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
+            WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
+            WAbil.AC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
+            WAbil.MAC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
+            WAbil.DC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
+            WAbil.MC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
+            WAbil.SC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
+            if (StatusArr[PoisonState.DEFENCEUP] > 0)
+            {
+                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + StatusArrTick[PoisonState.DEFENCEUP]));
+            }
+            if (StatusArr[PoisonState.MAGDEFENCEUP] > 0)
+            {
+                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + StatusArrTick[PoisonState.MAGDEFENCEUP]));
+            }
+            if (Race >= ActorRace.Animal)
+            {
+                ApplySlaveLevelAbilitys();
+            }
+        }
+                
         public void RecalcLevelAbilitys()
         {
             if (Race == ActorRace.Play)
@@ -87,90 +171,6 @@ namespace GameSvr.Actor
         {
             HitPlus = 0;
             HitDouble = 0;
-        }
-
-        /// <summary>
-        /// 计算自身属性
-        /// </summary>
-        public virtual void RecalcAbilitys()
-        {
-            AddAbil = new AddAbility();
-            var temp = WAbil;
-            WAbil = (Ability)Abil.Clone();
-            WAbil.HP = temp.HP;
-            WAbil.MP = temp.MP;
-            WAbil.Weight = 0;
-            WAbil.WearWeight = 0;
-            WAbil.HandWeight = 0;
-            AntiPoison = 0;
-            PoisonRecover = 0;
-            HealthRecover = 0;
-            SpellRecover = 0;
-            AntiMagic = 1;
-            Luck = 0;
-            HitSpeed = 0;
-            var oldhmode = HideMode;
-            HideMode = false;
-            if (Transparent && (StatusArr[PoisonState.STATE_TRANSPARENT] > 0))
-            {
-                HideMode = true;
-            }
-            if (HideMode)
-            {
-                if (!oldhmode)
-                {
-                    CharStatus = GetCharStatus();
-                    StatusChanged();
-                }
-            }
-            else
-            {
-                if (oldhmode)
-                {
-                    StatusArr[PoisonState.STATE_TRANSPARENT] = 0;
-                    CharStatus = GetCharStatus();
-                    StatusChanged();
-                }
-            }
-            RecalcHitSpeed();
-            if (AddAbil.HitSpeed >= 0)
-            {
-                AddAbil.HitSpeed = ((ushort)(AddAbil.HitSpeed / 2));
-            }
-            else
-            {
-                AddAbil.HitSpeed = (ushort)((AddAbil.HitSpeed - 1) / 2);
-            }
-            AddAbil.HitSpeed = (ushort)HUtil32._MIN(15, AddAbil.HitSpeed);
-            SpeedPoint = (byte)(SpeedPoint + AddAbil.SPEED);
-            HitPoint = (byte)(HitPoint + AddAbil.HIT);
-            AntiPoison = (byte)(AntiPoison + AddAbil.AntiPoison);
-            PoisonRecover = (ushort)(PoisonRecover + AddAbil.PoisonRecover);
-            HealthRecover = (ushort)(HealthRecover + AddAbil.HealthRecover);
-            SpellRecover = (ushort)(SpellRecover + AddAbil.SpellRecover);
-            AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
-            Luck = (byte)(Luck + AddAbil.Luck);
-            Luck = (byte)(Luck - AddAbil.UnLuck);
-            HitSpeed = AddAbil.HitSpeed;
-            WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
-            WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
-            WAbil.AC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
-            WAbil.MAC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
-            WAbil.DC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
-            WAbil.MC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
-            WAbil.SC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
-            if (StatusArr[PoisonState.DEFENCEUP] > 0)
-            {
-                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + StatusArrTick[PoisonState.DEFENCEUP]));
-            }
-            if (StatusArr[PoisonState.MAGDEFENCEUP] > 0)
-            {
-                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + StatusArrTick[PoisonState.MAGDEFENCEUP]));
-            }
-            if (Race >= ActorRace.Animal)
-            {
-                ApplySlaveLevelAbilitys();
-            }
         }
 
         protected void ChangeItemWithLevel(ref ClientItem citem, int level)

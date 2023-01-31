@@ -18,22 +18,22 @@ namespace GameSvr.Monster.Monsters
             Race = ActorRace.ArcherGuard;
         }
 
-        private void AttackTarger(BaseObject targeTBaseObject)
+        private void AttackTarger(BaseObject targetBaseObject)
         {
-            Direction = M2Share.GetNextDirection(CurrX, CurrY, targeTBaseObject.CurrX, targeTBaseObject.CurrY);
+            Direction = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
             var nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nDamage > 0)
             {
-                nDamage = targeTBaseObject.GetHitStruckDamage(this, nDamage);
+                nDamage = targetBaseObject.GetHitStruckDamage(this, nDamage);
             }
             if (nDamage > 0)
             {
-                targeTBaseObject.SetLastHiter(this);
-                targeTBaseObject.ExpHitter = null;
-                targeTBaseObject.StruckDamage((ushort)nDamage);
-                targeTBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, targeTBaseObject.WAbil.HP, targeTBaseObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targeTBaseObject.CurrX), Math.Abs(CurrY - targeTBaseObject.CurrY)) * 50 + 600);
+                targetBaseObject.SetLastHiter(this);
+                targetBaseObject.ExpHitter = null;
+                targetBaseObject.StruckDamage((ushort)nDamage);
+                targetBaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, targetBaseObject.WAbil.HP, targetBaseObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targetBaseObject.CurrX), Math.Abs(CurrY - targetBaseObject.CurrY)) * 50 + 600);
             }
-            SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, targeTBaseObject.ActorId, "");
+            SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, targetBaseObject.ActorId, "");
         }
 
         public override void Run()

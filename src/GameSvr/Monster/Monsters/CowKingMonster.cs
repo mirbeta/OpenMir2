@@ -24,10 +24,10 @@ namespace GameSvr.Monster.Monsters
             CrazyKingMode = false;
         }
 
-        protected override void Attack(BaseObject targeTBaseObject, byte nDir)
+        protected override void Attack(BaseObject targetBaseObject, byte nDir)
         {
             var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
-            HitMagAttackTarget(targeTBaseObject, nPower / 2, nPower / 2, true);
+            HitMagAttackTarget(targetBaseObject, nPower / 2, nPower / 2, true);
         }
 
         public override void Initialize()

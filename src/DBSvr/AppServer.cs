@@ -264,11 +264,6 @@ namespace DBSvr
         private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
-            using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DBSvr.logo.png");
-            var logo = new CanvasImage(logoStream!)
-            {
-                MaxWidth = 25
-            };
 
             var table = new Table()
             {
@@ -305,7 +300,7 @@ namespace DBSvr
                 .AddEmptyRow()
                 .AddEmptyRow()
                 .AddRow(markup);
-            table.AddRow(logo, rightTable);
+            table.AddRow(rightTable);
 
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();
@@ -313,7 +308,7 @@ namespace DBSvr
 
         public override void Dispose()
         {
-            
+
         }
     }
 }

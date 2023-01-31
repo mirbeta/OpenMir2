@@ -1085,7 +1085,7 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public bool GetNextPosition(short sx, short sy, int ndir, int nFlag, ref short snx, ref short sny)
+        public bool GetNextPosition(short sx, short sy, byte ndir, int nFlag, ref short snx, ref short sny)
         {
             bool result;
             snx = sx;

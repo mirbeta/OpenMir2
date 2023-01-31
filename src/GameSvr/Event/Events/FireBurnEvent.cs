@@ -30,10 +30,10 @@ namespace GameSvr.Event.Events
                     Envir.GetBaseObjects(nX, nY, true, BaseObjectList);
                     for (var i = 0; i < BaseObjectList.Count; i++)
                     {
-                        var targeTBaseObject = BaseObjectList[i];
-                        if (targeTBaseObject != null && OwnBaseObject != null && OwnBaseObject.IsProperTarget(targeTBaseObject))
+                        var targetBaseObject = BaseObjectList[i];
+                        if (targetBaseObject != null && OwnBaseObject != null && OwnBaseObject.IsProperTarget(targetBaseObject))
                         {
-                            targeTBaseObject.SendMsg(OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, Damage, 0, 0, "");
+                            targetBaseObject.SendMsg(OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, Damage, 0, 0, "");
                         }
                     }
                 }

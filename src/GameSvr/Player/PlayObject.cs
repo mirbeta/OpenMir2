@@ -983,7 +983,7 @@ namespace GameSvr.Player
         }
 
         // 检查角色的座标是否在指定误差范围以内
-        // TargeTBaseObject 为要检查的角色，nX,nY 为比较的座标
+        // targetBaseObject 为要检查的角色，nX,nY 为比较的座标
         // 检查角色是否在指定座标的1x1 范围以内，如果在则返回True 否则返回 False
         protected bool CretInNearXy(BaseObject targeBaseObject, int nX, int nY)
         {
@@ -1508,7 +1508,7 @@ namespace GameSvr.Player
             var result = false;
             try
             {
-                if (!M2Share.MagicMgr.IsWarrSkill(userMagic.MagIdx))
+                if (!Magic.MagicManager.IsWarrSkill(userMagic.MagIdx))
                 {
                     var nSpellPoint = GetSpellPoint(userMagic);
                     if (nSpellPoint > 0)
@@ -1520,7 +1520,7 @@ namespace GameSvr.Player
                         DamageSpell(nSpellPoint);
                         HealthSpellChanged();
                     }
-                    result = M2Share.MagicMgr.DoSpell(this, userMagic, targetX, targetY, baseObject);
+                    result = Magic.MagicManager.DoSpell(this, userMagic, targetX, targetY, baseObject);
                 }
             }
             catch (Exception e)

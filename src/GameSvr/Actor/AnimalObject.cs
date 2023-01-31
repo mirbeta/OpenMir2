@@ -197,11 +197,11 @@ namespace GameSvr.Actor
             AttackTick = AttackTick + (150 - HUtil32._MIN(130, Abil.Level * 4));
         }
 
-        protected void HitMagAttackTarget(BaseObject targeTBaseObject, int nHitPower, int nMagPower, bool boFlag)
+        protected void HitMagAttackTarget(BaseObject targetBaseObject, int nHitPower, int nMagPower, bool boFlag)
         {
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            Direction = M2Share.GetNextDirection(CurrX, CurrY, targeTBaseObject.CurrX, targeTBaseObject.CurrY);
-            Envir.GetBaseObjects(targeTBaseObject.CurrX, targeTBaseObject.CurrY, false, baseObjectList);
+            Direction = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
+            Envir.GetBaseObjects(targetBaseObject.CurrX, targetBaseObject.CurrY, false, baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
             {
                 var baseObject = baseObjectList[i];
@@ -209,7 +209,7 @@ namespace GameSvr.Actor
                 {
                     var nDamage = 0;
                     nDamage += baseObject.GetHitStruckDamage(this, nHitPower);
-                    nDamage += baseObject.GetMagStruckDamage(this, nMagPower);
+                    nDamage += baseObject.GetMagStruckDamage(this, (ushort)nMagPower);
                     if (nDamage > 0)
                     {
                         baseObject.StruckDamage((ushort)nDamage);

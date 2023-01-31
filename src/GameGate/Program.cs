@@ -9,7 +9,6 @@ using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Runtime;
 using System.Text;
 using System.Threading;
@@ -196,11 +195,6 @@ namespace GameGate
         private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
-            using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("GameGate.logo.png");
-            var logo = new CanvasImage(logoStream!)
-            {
-                MaxWidth = 25
-            };
 
             var table = new Table()
             {
@@ -237,7 +231,7 @@ namespace GameGate
                 .AddEmptyRow()
                 .AddEmptyRow()
                 .AddRow(markup);
-            table.AddRow(logo, rightTable);
+            table.AddRow(rightTable);
 
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();
