@@ -2669,7 +2669,7 @@ namespace GameSvr.Npc
                             {
                                 M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                             }
-                            PlayObject.DropItemDown(UserItem, 3, false, PlayObject, null);
+                            PlayObject.DropItemDown(UserItem, 3, false, PlayObject.ActorId, 0);
                         }
                         Dispose(UserItem);
                     }

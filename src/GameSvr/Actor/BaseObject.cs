@@ -696,7 +696,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool DropItemDown(UserItem userItem, int nScatterRange, bool boDieDrop, BaseObject itemOfCreat, BaseObject dropCreat)
+        public bool DropItemDown(UserItem userItem, int nScatterRange, bool boDieDrop, int itemOfCreat, int dropCreat)
         {
             if (userItem == null)
             {
@@ -731,9 +731,9 @@ namespace GameSvr.Actor
                 mapItem.AniCount = stdItem.AniCount;
                 mapItem.Reserved = 0;
                 mapItem.Count = 1;
-                mapItem.OfBaseObject = itemOfCreat == null ? 0 : itemOfCreat.ActorId;
+                mapItem.OfBaseObject = itemOfCreat;
                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
-                mapItem.DropBaseObject = dropCreat.ActorId;
+                mapItem.DropBaseObject = dropCreat;
                 GetDropPosition(CurrX, CurrY, nScatterRange, ref dx, ref dy);
                 var pr = (MapItem)Envir.AddToMap(dx, dy, CellType.Item, mapItem);
                 if (pr == mapItem)
@@ -959,21 +959,20 @@ namespace GameSvr.Actor
             }
         }
 
-        protected bool DropGoldDown(int nGold, bool boFalg, BaseObject goldOfCreat, BaseObject dropGoldCreat)
+        protected bool DropGoldDown(int nGold, bool boFalg, int goldOfCreat, int dropGoldCreat)
         {
             var result = false;
             var nX = 0;
             var nY = 0;
             int s20;
-            //var dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
             var mapItem = new MapItem
             {
                 Name = Grobal2.sSTRING_GOLDNAME,
                 Count = nGold,
                 Looks = M2Share.GetGoldShape(nGold),
-                OfBaseObject = goldOfCreat?.ActorId ?? 0,
+                OfBaseObject = goldOfCreat,
                 CanPickUpTick = HUtil32.GetTickCount(),
-                DropBaseObject = dropGoldCreat.ActorId
+                DropBaseObject = dropGoldCreat
             };
             GetDropPosition(CurrX, CurrY, 3, ref nX, ref nY);
             var mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.Item, mapItem);
@@ -1489,18 +1488,15 @@ namespace GameSvr.Actor
 
         public void SpaceMove(string sMap, short nX, short nY, int nInt)
         {
-            int nOldX;
-            int nOldY;
-            bool bo21;
             var envir = M2Share.MapMgr.FindMap(sMap);
             if (envir != null)
             {
                 if (M2Share.ServerIndex == envir.ServerIndex)
                 {
                     var oldEnvir = Envir;
-                    nOldX = CurrX;
-                    nOldY = CurrY;
-                    bo21 = false;
+                    int nOldX = CurrX;
+                    int nOldY = CurrY;
+                    bool moveSuccess = false;
                     Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
                     VisibleHumanList.Clear();
                     for (var i = 0; i < VisibleItems.Count; i++)
@@ -1534,9 +1530,9 @@ namespace GameSvr.Actor
                         }
                         MapMoveTick = HUtil32.GetTickCount();
                         SpaceMoved = true;
-                        bo21 = true;
+                        moveSuccess = true;
                     }
-                    if (!bo21)
+                    if (!moveSuccess)
                     {
                         Envir = oldEnvir;
                         CurrX = (short)nOldX;
@@ -1571,10 +1567,10 @@ namespace GameSvr.Actor
 
         public BaseObject MakeSlave(string sMonName, int nMakeLevel, int nExpLevel, int nMaxMob, int dwRoyaltySec)
         {
-            short nX = 0;
-            short nY = 0;
             if (SlaveList.Count < nMaxMob)
             {
+                short nX = 0;
+                short nY = 0;
                 GetFrontPosition(ref nX, ref nY);
                 var monObj = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
                 if (monObj != null)
@@ -2993,7 +2989,7 @@ namespace GameSvr.Actor
         /// 散落金币
         /// </summary>
         /// <param name="goldOfCreat"></param>
-        internal void ScatterGolds(BaseObject goldOfCreat)
+        internal void ScatterGolds(int goldOfCreat)
         {
             int I;
             int nGold;
@@ -3014,7 +3010,7 @@ namespace GameSvr.Actor
                     }
                     if (nGold > 0)
                     {
-                        if (!DropGoldDown(nGold, true, goldOfCreat, this))
+                        if (!DropGoldDown(nGold, true, goldOfCreat, this.ActorId))
                         {
                             Gold = Gold + nGold;
                             break;

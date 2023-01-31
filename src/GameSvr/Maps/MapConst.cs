@@ -38,7 +38,7 @@ namespace GameSvr.Maps
         /// </summary>
         public int OfBaseObject;
         /// <summary>
-        /// 可以拾取的时间
+        /// 掉落的时间
         /// </summary>
         public int CanPickUpTick;
         public UserItem UserItem;

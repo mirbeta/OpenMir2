@@ -1663,14 +1663,14 @@ namespace GameSvr.Player
                 }
                 if (killObject.Race != ActorRace.Play)
                 {
-                    killObject.DropUseItems(this);
+                    killObject.DropUseItems(this.ActorId);
                     if (Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
                     {
-                        killObject.ScatterBagItems(this);
+                        killObject.ScatterBagItems(this.ActorId);
                     }
                     if (killObject.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
                     {
-                        killObject.ScatterGolds(this);
+                        killObject.ScatterGolds(this.ActorId);
                     }
                 }
                 else
@@ -1681,20 +1681,20 @@ namespace GameSvr.Player
                         {
                             if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play)
                             {
-                                killObject.DropUseItems(null);
+                                killObject.DropUseItems(0);
                             }
                         }
                         else
                         {
-                            killObject.DropUseItems(null);
+                            killObject.DropUseItems(0);
                         }
                         if (M2Share.Config.DieScatterBag)
                         {
-                            killObject.ScatterBagItems(null);
+                            killObject.ScatterBagItems(0);
                         }
                         if (M2Share.Config.DieDropGold)
                         {
-                            killObject.ScatterGolds(null);
+                            killObject.ScatterGolds(0);
                         }
                     }
                     AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
@@ -3079,7 +3079,7 @@ namespace GameSvr.Player
             base.MakeGhost();
         }
 
-        internal override void ScatterBagItems(BaseObject itemOfCreat)
+        internal override void ScatterBagItems(int itemOfCreat)
         {
             const int dropWide = 2;
             if (AngryRing || NoDropItem || Envir.Flag.boNODROPITEM)
@@ -3097,7 +3097,7 @@ namespace GameSvr.Player
                     {
                         if (boDropall || M2Share.RandomNumber.Random(M2Share.Config.DieScatterBagRate) == 0)
                         {
-                            if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, this))
+                            if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, this.ActorId))
                             {
                                 if (Race == ActorRace.Play)
                                 {
@@ -3356,7 +3356,7 @@ namespace GameSvr.Player
                 }
                 else
                 {
-                    DropGoldDown(nGold, true, null, null);
+                    DropGoldDown(nGold, true, 0, 0);
                 }
             }
             else

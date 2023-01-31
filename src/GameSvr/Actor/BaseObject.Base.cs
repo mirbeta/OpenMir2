@@ -776,7 +776,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 散落包裹物品
         /// </summary>
-        internal virtual void ScatterBagItems(BaseObject itemOfCreat)
+        internal virtual void ScatterBagItems(int itemOfCreat)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
@@ -811,7 +811,7 @@ namespace GameSvr.Actor
                     {
                         continue;
                     }
-                    if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, this))
+                    if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, this.ActorId))
                     {
                         Dispose(ItemList[i]);
                         ItemList.RemoveAt(i);
@@ -824,7 +824,7 @@ namespace GameSvr.Actor
             }
         }
 
-        internal virtual void DropUseItems(BaseObject BaseObject)
+        internal virtual void DropUseItems(int BaseObject)
         {
 
         }

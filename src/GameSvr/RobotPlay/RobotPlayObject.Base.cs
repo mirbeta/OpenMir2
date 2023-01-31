@@ -914,7 +914,7 @@ namespace GameSvr.RobotPlay
             base.Die();
         }
 
-        internal override void DropUseItems(BaseObject baseObject)
+        internal override void DropUseItems(int baseObject)
         {
             const byte maxUseItem = 8;
             if (NoDropUseItem)
@@ -933,7 +933,7 @@ namespace GameSvr.RobotPlay
                         nC++;
                         continue;
                     }
-                    if (DropItemDown(UseItems[nC], 2, true, baseObject, this))
+                    if (DropItemDown(UseItems[nC], 2, true, baseObject, this.ActorId))
                     {
                         var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
                         if (stdItem != null)

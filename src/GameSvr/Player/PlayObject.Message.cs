@@ -342,7 +342,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (DropItemDown(UseItems[i], 1, false, null, this))
+                                if (DropItemDown(UseItems[i], 1, false, 0, this.ActorId))
                                 {
                                     boTakeItem = true;
                                 }
@@ -2132,7 +2132,7 @@ namespace GameSvr.Player
             base.Disappear();
         }
 
-        internal override void DropUseItems(BaseObject baseObject)
+        internal override void DropUseItems(int baseObject)
         {
             const string sExceptionMsg = "[Exception] TPlayObject::DropUseItems";
             try
@@ -2175,7 +2175,7 @@ namespace GameSvr.Player
                         continue;
                     }
                     // 检查是否在禁止取下列表,如果在列表中则不掉此物品
-                    if (DropItemDown(UseItems[i], 2, true, baseObject, this))
+                    if (DropItemDown(UseItems[i], 2, true, baseObject, this.ActorId))
                     {
                         stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                         if (stdItem != null)

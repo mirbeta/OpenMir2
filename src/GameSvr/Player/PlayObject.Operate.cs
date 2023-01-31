@@ -246,7 +246,7 @@ namespace GameSvr.Player
                 return false;
             }
             Gold -= nGold;
-            if (!DropGoldDown(nGold, false, null, this))
+            if (!DropGoldDown(nGold, false, 0, this.ActorId))
             {
                 Gold += nGold;
             }
@@ -294,7 +294,7 @@ namespace GameSvr.Player
                                 result = true;
                                 break;
                             }
-                            if (DropItemDown(userItem, 1, false, null, this))
+                            if (DropItemDown(userItem, 1, false, 0, this.ActorId))
                             {
                                 Dispose(userItem);
                                 ItemList.RemoveAt(i);

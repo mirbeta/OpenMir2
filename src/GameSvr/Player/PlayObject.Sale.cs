@@ -224,7 +224,7 @@ namespace GameSvr.Player
                                     }
                                     else
                                     {
-                                        this.DropItemDown(UserItem, 3, false, this, this);
+                                        this.DropItemDown(UserItem, 3, false, this.ActorId, this.ActorId);
                                     }
                                 }
                                 // 是金刚石
@@ -356,7 +356,7 @@ namespace GameSvr.Player
                                         }
                                         else
                                         {
-                                            this.DropItemDown(UserItem, 3, false, this, this);
+                                            this.DropItemDown(UserItem, 3, false, this.ActorId, this.ActorId);
                                         }
                                     }
                                     // 是金刚石
