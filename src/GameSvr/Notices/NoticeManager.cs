@@ -1,4 +1,5 @@
 using SystemModule.Common;
+using SystemModule.Data;
 
 namespace GameSvr.Notices
 {
@@ -42,7 +43,7 @@ namespace GameSvr.Notices
 
         public void GetNoticeMsg(string sStr, IList<string> LoadList)
         {
-            var bo15 = true;
+            var success = true;
             for (var i = 0; i < NoticeList.Length; i++)
             {
                 if (string.Compare(NoticeList[i].sMsg, sStr, StringComparison.OrdinalIgnoreCase) != 0) continue;
@@ -53,9 +54,9 @@ namespace GameSvr.Notices
                         LoadList.Add(NoticeList[i].sList[j]);
                     }
                 }
-                bo15 = false;
+                success = false;
             }
-            if (!bo15)
+            if (!success)
             {
                 return;
             }

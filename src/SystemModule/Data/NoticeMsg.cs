@@ -1,6 +1,6 @@
 using SystemModule.Common;
 
-namespace GameSvr.Notices
+namespace SystemModule.Data
 {
     public struct NoticeMsg
     {
