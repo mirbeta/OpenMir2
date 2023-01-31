@@ -877,19 +877,19 @@ namespace GameSvr.Npc
             switch (cMode)
             {
                 case 'L':
-                    result = M2Share.HighLevelHuman == PlayObject;
+                    result = M2Share.HighLevelHuman == PlayObject.ActorId;
                     break;
                 case 'P':
-                    result = M2Share.HighPKPointHuman == PlayObject;
+                    result = M2Share.HighPKPointHuman == PlayObject.ActorId;
                     break;
                 case 'D':
-                    result = M2Share.HighDCHuman == PlayObject;
+                    result = M2Share.HighDCHuman == PlayObject.ActorId;
                     break;
                 case 'M':
-                    result = M2Share.HighMCHuman == PlayObject;
+                    result = M2Share.HighMCHuman == PlayObject.ActorId;
                     break;
                 case 'S':
-                    result = M2Share.HighSCHuman == PlayObject;
+                    result = M2Share.HighSCHuman == PlayObject.ActorId;
                     break;
                 default:
                     ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISHIGH);

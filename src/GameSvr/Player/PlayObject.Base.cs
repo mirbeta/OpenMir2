@@ -2983,29 +2983,29 @@ namespace GameSvr.Player
             const string sExceptionMsg = "[Exception] TPlayObject::MakeGhost";
             try
             {
-                if (M2Share.HighLevelHuman == this)
+                if (M2Share.HighLevelHuman == this.ActorId)
                 {
-                    M2Share.HighLevelHuman = null;
+                    M2Share.HighLevelHuman = 0;
                 }
-                if (M2Share.HighPKPointHuman == this)
+                if (M2Share.HighPKPointHuman == this.ActorId)
                 {
-                    M2Share.HighPKPointHuman = null;
+                    M2Share.HighPKPointHuman = 0;
                 }
-                if (M2Share.HighDCHuman == this)
+                if (M2Share.HighDCHuman == this.ActorId)
                 {
-                    M2Share.HighDCHuman = null;
+                    M2Share.HighDCHuman = 0;
                 }
-                if (M2Share.HighMCHuman == this)
+                if (M2Share.HighMCHuman == this.ActorId)
                 {
-                    M2Share.HighMCHuman = null;
+                    M2Share.HighMCHuman = 0;
                 }
-                if (M2Share.HighSCHuman == this)
+                if (M2Share.HighSCHuman == this.ActorId)
                 {
-                    M2Share.HighSCHuman = null;
+                    M2Share.HighSCHuman = 0;
                 }
-                if (M2Share.HighOnlineHuman == this)
+                if (M2Share.HighOnlineHuman == this.ActorId)
                 {
-                    M2Share.HighOnlineHuman = null;
+                    M2Share.HighOnlineHuman = 0;
                 }
                 // 人物下线后通知配偶，并把对方的相关记录清空
                 string sSayMsg;

@@ -3276,7 +3276,7 @@ namespace GameSvr.Player
             sMyInfo = sMyInfo.Replace("%maxmc", HUtil32.HiWord(WAbil.MC).ToString());
             sMyInfo = sMyInfo.Replace("%minsc", HUtil32.LoWord(WAbil.SC).ToString());
             sMyInfo = sMyInfo.Replace("%maxsc", HUtil32.HiWord(WAbil.SC).ToString());
-            sMyInfo = sMyInfo.Replace("%logontime", LogonTime.ToString());
+            sMyInfo = sMyInfo.Replace("%logontime", LogonTime.ToString("yyyy-MM-dd HH:ss:mm"));
             sMyInfo = sMyInfo.Replace("%logonint", ((HUtil32.GetTickCount() - LogonTick) / 60000).ToString());
             return sMyInfo;
         }

@@ -86,12 +86,12 @@ namespace GameSvr
         public static NormNpc ManageNPC = null;
         public static NormNpc RobotNPC = null;
         public static Merchant FunctionNPC = null;
-        public static object HighLevelHuman = null;
-        public static object HighPKPointHuman = null;
-        public static object HighDCHuman = null;
-        public static object HighMCHuman = null;
-        public static object HighSCHuman = null;
-        public static object HighOnlineHuman = null;
+        public static int HighLevelHuman;
+        public static int HighPKPointHuman;
+        public static int HighDCHuman;
+        public static int HighMCHuman;
+        public static int HighSCHuman;
+        public static int HighOnlineHuman;
         public static Dictionary<string, IList<MakeItem>> MakeItemList = null;
         public static IList<StartPoint> StartPointList = null;
         public static TRouteInfo[] ServerTableList = null;

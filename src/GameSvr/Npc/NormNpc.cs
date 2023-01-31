@@ -349,9 +349,9 @@ namespace GameSvr.Npc
                     return;
                 case "$HIGHLEVELINFO":
                     {
-                        if (M2Share.HighLevelHuman != null)
+                        if (M2Share.HighLevelHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.HighLevelHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -362,9 +362,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHPKINFO":
                     {
-                        if (M2Share.HighPKPointHuman != null)
+                        if (M2Share.HighPKPointHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.HighPKPointHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighPKPointHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -375,9 +375,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHDCINFO":
                     {
-                        if (M2Share.HighDCHuman != null)
+                        if (M2Share.HighDCHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.HighDCHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighDCHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -388,9 +388,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHMCINFO":
                     {
-                        if (M2Share.HighMCHuman != null)
+                        if (M2Share.HighMCHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.HighMCHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighMCHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -401,9 +401,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHSCINFO":
                     {
-                        if (M2Share.HighSCHuman != null)
+                        if (M2Share.HighSCHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.HighSCHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighSCHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -414,9 +414,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHONLINEINFO":
                     {
-                        if (M2Share.HighOnlineHuman != null)
+                        if (M2Share.HighOnlineHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.HighOnlineHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighOnlineHuman)).GetMyInfo();
                         }
                         else
                         {
