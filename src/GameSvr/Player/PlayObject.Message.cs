@@ -5,7 +5,6 @@ using GameSvr.Monster.Monsters;
 using GameSvr.Npc;
 using GameSvr.Services;
 using GameSvr.World;
-using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -456,7 +455,7 @@ namespace GameSvr.Player
                 {
                     MyGuild.TeamFightWhoDead(ChrName);
                 }
-                if (LastHiter != null && LastHiter.Race== ActorRace.Play)
+                if (LastHiter != null && LastHiter.Race == ActorRace.Play)
                 {
                     var lastHiterPlay = LastHiter as PlayObject;
                     if (lastHiterPlay.MyGuild != null && MyGuild != null)
@@ -753,7 +752,7 @@ namespace GameSvr.Player
                             }
                         }
                     }
-                    
+
                     // 检查交易双方 状态
                     if ((DealCreat != null) && DealCreat.Ghost)
                     {

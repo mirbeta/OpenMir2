@@ -1,6 +1,5 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Player;
-using SystemModule;
 using SystemModule.Data;
 
 namespace GameSvr.World
@@ -43,7 +42,7 @@ namespace GameSvr.World
             {
                 if (switchData.SlaveArr[nCount].SlaveName == "") break;
                 var slaveId = HUtil32.Sequence();
-                M2Share.ActorMgr.AddOhter(slaveId,  switchData.SlaveArr[nCount]);
+                M2Share.ActorMgr.AddOhter(slaveId, switchData.SlaveArr[nCount]);
                 playObject.SendDelayMsg(playObject, Grobal2.RM_10401, 0, slaveId, 0, 0, "", 500);
                 nCount++;
                 if (nCount >= 5) break;

@@ -1,5 +1,4 @@
-﻿using SystemModule;
-using SystemModule.Packets;
+﻿using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Player

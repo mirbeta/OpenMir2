@@ -2,8 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using SystemModule;
 using SystemModule.Enums;
 
 namespace GameSvr.Actor
@@ -47,11 +45,11 @@ namespace GameSvr.Actor
         private int MonsterDisposeCount { get; set; }
         private int PlayerGhostCount { get; set; }
 
-        const int WorkerIdBits = 10;
-        const int DatacenterIdBits = 0;
-        const int SequenceBits = 12;
-        const long MaxWorkerId = -1L ^ (-1L << WorkerIdBits);
-        const long MaxDatacenterId = -1L ^ (-1L << DatacenterIdBits);
+        private const int WorkerIdBits = 10;
+        private const int DatacenterIdBits = 0;
+        private const int SequenceBits = 12;
+        private const long MaxWorkerId = -1L ^ (-1L << WorkerIdBits);
+        private const long MaxDatacenterId = -1L ^ (-1L << DatacenterIdBits);
         private const int WorkerIdShift = SequenceBits;
         private const int DatacenterIdShift = SequenceBits + WorkerIdBits;
         public const int TimestampLeftShift = 2;
@@ -116,7 +114,7 @@ namespace GameSvr.Actor
         {
             _actorsMap.TryAdd(actor.ActorId, actor);
         }
-        
+
         public BaseObject Get(int actorId)
         {
             return _actorsMap.TryGetValue(actorId, out var actor) ? actor : null;

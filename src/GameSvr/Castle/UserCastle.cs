@@ -4,7 +4,6 @@ using GameSvr.Maps;
 using GameSvr.Monster.Monsters;
 using GameSvr.Player;
 using NLog;
-using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 
@@ -633,7 +632,7 @@ namespace GameSvr.Castle
             var result = IsMasterGuild(targetObject.MyGuild);
             return result ? result : CheckInPalace(nX, nY);
         }
-        
+
         public bool CheckInPalace(int nX, int nY)
         {
             var result = false;

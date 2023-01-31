@@ -2,7 +2,6 @@
 using GameSvr.Maps;
 using GameSvr.Player;
 using GameSvr.Script;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 

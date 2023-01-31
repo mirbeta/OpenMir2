@@ -157,7 +157,7 @@ namespace GameSvr.GameCommand
 
             var output = string.Empty;
             var found = false;
-            
+
             if (CommandMaps.TryGetValue(commandName, out var commond))
             {
                 output = commond.Handle(parameters, playObject);

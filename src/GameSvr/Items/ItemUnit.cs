@@ -1,4 +1,3 @@
-using SystemModule;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Items

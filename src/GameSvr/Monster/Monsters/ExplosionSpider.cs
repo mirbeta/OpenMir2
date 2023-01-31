@@ -1,6 +1,4 @@
-﻿using SystemModule;
-
-namespace GameSvr.Monster.Monsters
+﻿namespace GameSvr.Monster.Monsters
 {
     public class ExplosionSpider : MonsterObject
     {

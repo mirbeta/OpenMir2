@@ -2,10 +2,8 @@
 using GameSvr.Services;
 using GameSvr.World;
 using NLog;
-using System.Buffers;
 using System.Net.Sockets;
 using System.Threading.Channels;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
@@ -15,7 +13,7 @@ namespace GameSvr.GameGate
     public class GameGate
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        readonly int GateIdx;
+        private readonly int GateIdx;
         private readonly GameGateInfo _gateInfo;
         private readonly GateSendQueue _sendQueue;
         private readonly object _runSocketSection;

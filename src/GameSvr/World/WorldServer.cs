@@ -10,7 +10,6 @@ using GameSvr.RobotPlay;
 using GameSvr.Services;
 using NLog;
 using System.Collections;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -432,7 +431,7 @@ namespace GameSvr.World
                             _logger.Warn(string.Format(sChangeServerFail1, new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
                         }
                         SendSwitchData(playObject, playObject.ServerIndex);
-                        SendChangeServer(playObject, (byte)playObject.ServerIndex);
+                        SendChangeServer(playObject, playObject.ServerIndex);
                         playObject.SetSocketHead();
                         playObject = null;
                         return result;
@@ -683,7 +682,7 @@ namespace GameSvr.World
                     if (playObject.MBoSwitchDataSended && HUtil32.GetTickCount() - playObject.MDwChgDataWritedTick > 100)
                     {
                         playObject.MBoSwitchDataSended = false;
-                        SendChangeServer(playObject, (byte)playObject.ServerIndex);
+                        SendChangeServer(playObject, playObject.ServerIndex);
                     }
                 }
             }

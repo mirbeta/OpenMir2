@@ -6,7 +6,6 @@ using GameSvr.Maps;
 using GameSvr.Monster.Monsters;
 using GameSvr.Player;
 using System.Collections;
-using SystemModule;
 using SystemModule.Common;
 using SystemModule.Consts;
 using SystemModule.Data;

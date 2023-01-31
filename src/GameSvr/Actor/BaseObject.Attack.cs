@@ -1,5 +1,4 @@
-﻿using SystemModule;
-using SystemModule.Enums;
+﻿using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Actor
@@ -57,7 +56,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         private bool AttackDirect(BaseObject BaseObject, int nSecPwr)
         {
             bool result = false;
@@ -162,7 +161,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         internal UserMagic GetAttrackMagic(int magicId)
         {
             return MagicArr[magicId];

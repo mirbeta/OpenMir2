@@ -3,7 +3,6 @@ using GameSvr.Npc;
 using NLog;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using SystemModule;
 using SystemModule.Common;
 
 namespace GameSvr.Script

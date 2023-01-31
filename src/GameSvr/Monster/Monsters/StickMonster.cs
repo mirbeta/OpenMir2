@@ -1,5 +1,4 @@
 ﻿using GameSvr.Actor;
-using SystemModule;
 using SystemModule.Data;
 
 namespace GameSvr.Monster.Monsters

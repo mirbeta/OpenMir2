@@ -1,7 +1,6 @@
 ﻿using GameSvr.Event.Events;
 using GameSvr.Npc;
 using NLog;
-using SystemModule;
 using SystemModule.Data;
 
 namespace GameSvr.Maps

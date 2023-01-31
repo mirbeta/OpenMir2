@@ -1,6 +1,5 @@
 using GameSvr.Items;
 using GameSvr.Player;
-using SystemModule;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Magic

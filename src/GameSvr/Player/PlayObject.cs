@@ -7,11 +7,9 @@ using GameSvr.Npc;
 using GameSvr.Services;
 using GameSvr.World;
 using System.Text.RegularExpressions;
-using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Player
@@ -2674,7 +2672,7 @@ namespace GameSvr.Player
                 {
                     if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
-                        if (sendMessage.wIdent  >= Grobal2.CM_HIT || sendMessage.wIdent <= Grobal2.CM_FIREHIT)
+                        if (sendMessage.wIdent >= Grobal2.CM_HIT || sendMessage.wIdent <= Grobal2.CM_FIREHIT)
                         {
                             result++;
                         }
@@ -2702,7 +2700,7 @@ namespace GameSvr.Player
                 {
                     if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
-                        if (sendMessage.wIdent  == Grobal2.CM_SPELL)
+                        if (sendMessage.wIdent == Grobal2.CM_SPELL)
                         {
                             result++;
                         }
@@ -2730,7 +2728,7 @@ namespace GameSvr.Player
                 {
                     if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
-                        if (sendMessage.wIdent  == Grobal2.CM_RUN)
+                        if (sendMessage.wIdent == Grobal2.CM_RUN)
                         {
                             result++;
                         }
@@ -2758,7 +2756,7 @@ namespace GameSvr.Player
                 {
                     if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
-                        if (sendMessage.wIdent  == Grobal2.CM_WALK)
+                        if (sendMessage.wIdent == Grobal2.CM_WALK)
                         {
                             result++;
                         }
@@ -2782,7 +2780,7 @@ namespace GameSvr.Player
                 {
                     if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
-                        if (sendMessage.wIdent  == Grobal2.CM_TURN)
+                        if (sendMessage.wIdent == Grobal2.CM_TURN)
                         {
                             result++;
                         }
@@ -2806,7 +2804,7 @@ namespace GameSvr.Player
                 {
                     if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
-                        if (sendMessage.wIdent  == Grobal2.CM_SITDOWN)
+                        if (sendMessage.wIdent == Grobal2.CM_SITDOWN)
                         {
                             result++;
                         }

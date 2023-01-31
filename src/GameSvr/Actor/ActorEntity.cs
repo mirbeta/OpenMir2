@@ -1,5 +1,3 @@
-using GameSvr;
-
 namespace SystemModule
 {
     public class ActorEntity : IDisposable

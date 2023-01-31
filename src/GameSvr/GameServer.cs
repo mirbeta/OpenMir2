@@ -1,7 +1,6 @@
 ﻿using GameSvr.Planes;
 using GameSvr.Services;
 using NLog;
-using SystemModule;
 using SystemModule.Data;
 
 namespace GameSvr

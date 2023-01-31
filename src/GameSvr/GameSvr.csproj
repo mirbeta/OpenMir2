@@ -13,6 +13,11 @@
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 		<Description>网络游戏数据处理引擎</Description>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="GameSvr" />
+		<Using Include="SystemModule" />
+	</ItemGroup>
 	
 	<Choose>
 		<When Condition="$(Configuration)=='Release'">
@@ -56,6 +61,7 @@
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' ">
 		<ExternalConsole>true</ExternalConsole>
 	</PropertyGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="Collections.Pooled" Version="1.0.82" />
 		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />

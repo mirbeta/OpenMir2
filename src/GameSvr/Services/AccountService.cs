@@ -1,7 +1,6 @@
 using NLog;
 using System.Collections;
 using System.Net;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;

@@ -1,6 +1,4 @@
-﻿using SystemModule;
-
-namespace GameSvr.World
+﻿namespace GameSvr.World
 {
     public class MonsterThread
     {

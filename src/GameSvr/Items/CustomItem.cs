@@ -1,4 +1,3 @@
-using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;

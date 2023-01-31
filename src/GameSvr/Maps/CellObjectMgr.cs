@@ -1,6 +1,4 @@
 using System.Collections.Concurrent;
-using System.Diagnostics;
-using SystemModule;
 
 namespace GameSvr.Maps
 {
@@ -23,10 +21,10 @@ namespace GameSvr.Maps
             return _cellObject.TryGetValue(cellId, out var cell) ? cell : null;
         }
 
-        public void Remove(int cellId)  
+        public void Remove(int cellId)
         {
             if (!_cellObject.TryRemove(cellId, out _))
-            { 
+            {
                 //Console.WriteLine($"删除失败. cellId:{cellId}");
             }
         }

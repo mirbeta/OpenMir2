@@ -1,7 +1,6 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Event.Events;
 using GameSvr.Player;
-using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -15,7 +14,7 @@ namespace GameSvr.Magic
         /// 宠物叛变时间
         /// </summary>
         private const int DwRoyaltySec = 10 * 24 * 60 * 60;
-        
+
         private static int MagPushArround(BaseObject playObject, int nPushLevel)
         {
             var result = 0;
@@ -1149,7 +1148,7 @@ namespace GameSvr.Magic
                 IList<BaseObject> baseObjectList = new List<BaseObject>();
                 MagicEvent magicEvent = null;
                 baseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, baseObjectList);
-                
+
                 for (var i = 0; i < baseObjectList.Count; i++)
                 {
                     var targetBaseObject = baseObjectList[i];

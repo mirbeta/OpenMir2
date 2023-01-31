@@ -1,6 +1,4 @@
-﻿using SystemModule;
-
-namespace GameSvr.Monster.Monsters
+﻿namespace GameSvr.Monster.Monsters
 {
     /// <summary>
     /// 电僵尸

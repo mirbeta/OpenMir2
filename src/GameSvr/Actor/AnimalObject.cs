@@ -1,6 +1,5 @@
 ﻿using GameSvr.Maps;
 using GameSvr.Player;
-using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -12,7 +11,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 未被处理次数，用于怪物处理循环
         /// </summary>
-        private int NotProcessCount;
+        private readonly int NotProcessCount;
         internal short TargetX;
         internal short TargetY;
         public bool MBoRunAwayMode;
@@ -171,7 +170,7 @@ namespace GameSvr.Actor
             }
             return base.Operate(processMsg);
         }
-        
+
         public virtual void Struck(BaseObject hiter)
         {
             byte btDir = 0;

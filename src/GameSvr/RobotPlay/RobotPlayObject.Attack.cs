@@ -1,5 +1,4 @@
 using GameSvr.Magic;
-using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;

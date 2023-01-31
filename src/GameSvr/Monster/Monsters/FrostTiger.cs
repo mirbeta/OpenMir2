@@ -1,5 +1,4 @@
-﻿using SystemModule;
-using SystemModule.Consts;
+﻿using SystemModule.Consts;
 
 namespace GameSvr.Monster.Monsters
 {

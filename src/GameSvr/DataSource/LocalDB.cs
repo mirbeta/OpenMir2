@@ -3,7 +3,6 @@ using GameSvr.Monster;
 using GameSvr.Npc;
 using GameSvr.Script;
 using System.Collections;
-using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 

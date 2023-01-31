@@ -3,7 +3,6 @@ using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
 using GameSvr.Npc;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;

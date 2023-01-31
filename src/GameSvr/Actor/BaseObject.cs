@@ -5,7 +5,6 @@ using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
 using GameSvr.Player;
-using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -893,7 +892,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         protected void HealthSpellChanged()
         {
             if (Race == ActorRace.Play)
@@ -1805,7 +1804,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         private bool AddToMap()
         {
             var point = Envir.AddToMap(CurrX, CurrY, MapCell, this);
@@ -1853,7 +1852,7 @@ namespace GameSvr.Actor
                 }
             }
         }
-        
+
         /// <summary>
         /// 减少武器持久值
         /// </summary>
@@ -2942,7 +2941,7 @@ namespace GameSvr.Actor
                 }
             }
         }
-        
+
         /// <summary>
         /// 设置肉的品质
         /// </summary>
@@ -3273,7 +3272,7 @@ namespace GameSvr.Actor
                 RefNameColor();
             }
         }
-       
+
         /// <summary>
         /// 召唤属下
         /// </summary>
@@ -3589,7 +3588,7 @@ namespace GameSvr.Actor
                 {
                     if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
-                        if (sendMessage.wIdent  == Grobal2.RM_10401)
+                        if (sendMessage.wIdent == Grobal2.RM_10401)
                         {
                             result = true;
                             break;
@@ -3647,7 +3646,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-        
+
         private void DamageBubbleDefence(int nInt)
         {
             if (StatusArr[PoisonState.BUBBLEDEFENCEUP] > 0)

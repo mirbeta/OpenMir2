@@ -1,15 +1,12 @@
 ﻿using GameSvr.Player;
 using GameSvr.Services;
 using NLog;
-using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
-using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.MemoryPool;
 using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets;
@@ -206,7 +203,7 @@ namespace GameSvr.GameGate
             }
         }
 
-        private void CloseGate(int gateId, string connectionId,string endPoint)
+        private void CloseGate(int gateId, string connectionId, string endPoint)
         {
             const string sGateClose = "游戏网关[{0}]已关闭...";
             HUtil32.EnterCriticalSection(m_RunSocketSection);

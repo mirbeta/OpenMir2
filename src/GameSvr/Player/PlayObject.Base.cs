@@ -9,11 +9,9 @@ using GameSvr.Npc;
 using GameSvr.RobotPlay;
 using GameSvr.Script;
 using System.Collections;
-using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Player
@@ -712,11 +710,11 @@ namespace GameSvr.Player
         /// <summary>
         /// PK 死亡掉经验，不够经验就掉等级
         /// </summary>
-        private int PkDieLostExp;
+        private readonly int PkDieLostExp;
         /// <summary>
         /// PK 死亡掉等级
         /// </summary>
-        private byte PkDieLostLevel;
+        private readonly byte PkDieLostLevel;
         /// <summary>
         /// 私聊对象
         /// </summary>
@@ -3606,7 +3604,7 @@ namespace GameSvr.Player
                 }
             }
         }
-                
+
         /// <summary>
         /// 检查武器升级状态
         /// </summary>
@@ -3637,7 +3635,7 @@ namespace GameSvr.Player
             }
             userItem.Desc[ItemAttr.WeaponUpgrade] = 0;
         }
-        
+
         private UserMagic GetMagicInfo(int nMagicId)
         {
             for (var i = 0; i < MagicList.Count; i++)

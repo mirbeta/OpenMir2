@@ -1,5 +1,4 @@
-﻿using SystemModule;
-using SystemModule.Data;
+﻿using SystemModule.Data;
 
 namespace GameSvr.Npc
 {
