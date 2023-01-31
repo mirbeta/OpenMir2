@@ -17,8 +17,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sIPaddr = @Params.Length > 0 ? @Params[0] : "";
-            var sFixDeny = @Params.Length > 1 ? @Params[3] : "";
+            string sIPaddr = @Params.Length > 0 ? @Params[0] : "";
+            string sFixDeny = @Params.Length > 1 ? @Params[3] : "";
             if (sIPaddr == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

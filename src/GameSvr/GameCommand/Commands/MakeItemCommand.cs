@@ -16,9 +16,9 @@ namespace GameSvr.GameCommand.Commands
         public void CmdMakeItem(string[] Params, PlayObject PlayObject)
         {
             if (Params == null) return;
-            var sItemName = Params.Length > 0 ? Params[0] : ""; //物品名称
-            var nCount = Params.Length > 1 ? Convert.ToInt32(Params[1]) : 1; //数量
-            var sParam = Params.Length > 2 ? Params[2] : ""; //可选参数（持久力）
+            string sItemName = Params.Length > 0 ? Params[0] : ""; //物品名称
+            int nCount = Params.Length > 1 ? Convert.ToInt32(Params[1]) : 1; //数量
+            string sParam = Params.Length > 2 ? Params[2] : ""; //可选参数（持久力）
             if (string.IsNullOrEmpty(sItemName))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -45,13 +45,13 @@ namespace GameSvr.GameCommand.Commands
                 }
                 nCount = 1;
             }
-            for (var i = 0; i < nCount; i++)
+            for (int i = 0; i < nCount; i++)
             {
                 if (PlayObject.ItemList.Count >= Grobal2.MAXBAGITEM) return;
                 UserItem UserItem = null;
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {
-                    var stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                    Items.StdItem stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (stdItem.Price >= 15000 && !M2Share.Config.TestServer && PlayObject.Permission < 5)
                     {
                         return;

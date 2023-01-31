@@ -18,17 +18,17 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            var sParam2 = @Params.Length > 1 ? @Params[1] : "";
-            var sParam3 = @Params.Length > 2 ? @Params[2] : "";
-            var sParam4 = @Params.Length > 3 ? @Params[3] : "";
+            string sParam1 = @Params.Length > 0 ? @Params[0] : "";
+            string sParam2 = @Params.Length > 1 ? @Params[1] : "";
+            string sParam3 = @Params.Length > 2 ? @Params[2] : "";
+            string sParam4 = @Params.Length > 3 ? @Params[3] : "";
             if (sParam1 == "" || sParam2 == "" || sParam1 != "" && sParam1[0] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nAppr = HUtil32.StrToInt(sParam3, 0);
-            var boIsCastle = HUtil32.StrToInt(sParam4, 0) == 1;
+            int nAppr = HUtil32.StrToInt(sParam3, 0);
+            bool boIsCastle = HUtil32.StrToInt(sParam4, 0) == 1;
             if (sParam1 == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

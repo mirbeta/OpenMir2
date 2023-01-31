@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sGuildName = @Params.Length > 0 ? @Params[0] : "";
+            string sGuildName = @Params.Length > 0 ? @Params[0] : "";
             if (M2Share.ServerIndex != 0)
             {
                 PlayObject.SysMsg("只能在主服务器上才可以使用此命令删除行会!!!", MsgColor.Red, MsgType.Hint);

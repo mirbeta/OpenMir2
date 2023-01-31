@@ -28,7 +28,7 @@ namespace GameSvr
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
-            var currentTick = HUtil32.GetTickCount();
+            int currentTick = HUtil32.GetTickCount();
             _checkIntervalTime = currentTick;
             _saveIntervalTime = currentTick;
             _clearIntervalTime = currentTick;
@@ -48,7 +48,7 @@ namespace GameSvr
         {
             if (M2Share.StartReady)
             {
-                var currentTick = HUtil32.GetTickCount();
+                int currentTick = HUtil32.GetTickCount();
                 if ((currentTick - _checkIntervalTime) > 10 * 1000) //10s一次检查链接
                 {
                     M2Share.DataServer.CheckConnected();
@@ -84,7 +84,7 @@ namespace GameSvr
             if (M2Share.WorldEngine.PlayObjectCount > 0)
             {
                 _scheduledSaveData = true;
-                foreach (var play in M2Share.WorldEngine.PlayObjects)
+                foreach (Player.PlayObject play in M2Share.WorldEngine.PlayObjects)
                 {
                     if (M2Share.FrontEngine.InSaveRcdList(play.ChrName))
                     {

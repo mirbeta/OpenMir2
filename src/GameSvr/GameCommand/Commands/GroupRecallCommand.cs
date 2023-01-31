@@ -15,7 +15,7 @@ namespace GameSvr.GameCommand.Commands
         {
             if (PlayObject.RecallSuite || PlayObject.Permission >= 6)
             {
-                var dwValue = (HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000;
+                int dwValue = (HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000;
                 PlayObject.GroupRcallTick = PlayObject.GroupRcallTick + dwValue * 1000;
                 if (PlayObject.Permission >= 6)
                 {
@@ -33,9 +33,9 @@ namespace GameSvr.GameCommand.Commands
                 {
                     if (PlayObject.GroupOwner == PlayObject)
                     {
-                        for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
+                        for (int i = 0; i < PlayObject.GroupMembers.Count; i++)
                         {
-                            var m_PlayObject = PlayObject.GroupMembers[i];
+                            PlayObject m_PlayObject = PlayObject.GroupMembers[i];
                             if (m_PlayObject.AllowGroupReCall)
                             {
                                 if (m_PlayObject.Envir.Flag.boNORECALL)

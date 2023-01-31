@@ -20,9 +20,9 @@ namespace GameSvr.GameCommand.Commands
             }
             short nX = 0;
             short nY = 0;
-            var sMonName = Params.Length > 0 ? @Params[0] : "";//名称
-            var nCount = Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 1;//数量
-            var nLevel = Params.Length > 2 ? Convert.ToByte(@Params[2]) : (byte)0;//怪物等级
+            string sMonName = Params.Length > 0 ? @Params[0] : "";//名称
+            int nCount = Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 1;//数量
+            byte nLevel = Params.Length > 2 ? Convert.ToByte(@Params[2]) : (byte)0;//怪物等级
             if (string.IsNullOrEmpty(sMonName))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -38,7 +38,7 @@ namespace GameSvr.GameCommand.Commands
             }
             nCount = (byte)HUtil32._MIN(64, nCount);
             PlayObject.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
-            for (var i = 0; i < nCount; i++)
+            for (int i = 0; i < nCount; i++)
             {
                 BaseObject Monster = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, nX, nY, sMonName);
                 if (Monster != null)

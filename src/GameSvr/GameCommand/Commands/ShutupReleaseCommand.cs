@@ -14,8 +14,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            bool boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -31,13 +31,13 @@ namespace GameSvr.GameCommand.Commands
                 //    //PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
                 //    if (m_PlayObject != null)
                 //    {
-                //        m_PlayObject.SysMsg(Settings.g_sGameCommandShutupReleaseCanSendMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                //        m_PlayObject.SysMsg(Settings.GameCommandShutupReleaseCanSendMsg, TMsgColor.c_Red, TMsgType.t_Hint);
                 //    }
                 //    if (boAll)
                 //    {
                 //        //M2Share.WorldEngine.SendServerGroupMsg(SS_210, nServerIndex, sHumanName);
                 //    }
-                //    PlayObject.SysMsg(string.Format(Settings.g_sGameCommandShutupReleaseHumanCanSendMsg, sHumanName),
+                //    PlayObject.SysMsg(string.Format(Settings.GameCommandShutupReleaseHumanCanSendMsg, sHumanName),
                 //        TMsgColor.c_Green, TMsgType.t_Hint);
                 //}
             }

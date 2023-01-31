@@ -18,9 +18,9 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : ""; //玩家名称
-            var sItemName = @Params.Length > 1 ? @Params[1] : ""; //物品名称
-            var nCount = @Params.Length > 2 ? int.Parse(@Params[2]) : 0; //数量
+            string sHumanName = @Params.Length > 0 ? @Params[0] : ""; //玩家名称
+            string sItemName = @Params.Length > 1 ? @Params[1] : ""; //物品名称
+            int nCount = @Params.Length > 2 ? int.Parse(@Params[2]) : 0; //数量
             Items.StdItem StdItem;
             UserItem UserItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName))
@@ -28,14 +28,14 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nItemCount = 0;
-            for (var i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
+            int nItemCount = 0;
+            for (int i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
             {
                 if (m_PlayObject.ItemList.Count <= 0)
                 {

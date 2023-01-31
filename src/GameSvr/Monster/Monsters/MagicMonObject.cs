@@ -39,8 +39,8 @@
                 {
                     return;
                 }
-                var nX = Math.Abs(CurrX - Master.CurrX);
-                var nY = Math.Abs(CurrY - Master.CurrY);
+                int nX = Math.Abs(CurrX - Master.CurrX);
+                int nY = Math.Abs(CurrY - Master.CurrY);
                 if (nX <= 5 && nY <= 5)
                 {
                     if (UseMagic || nX == 5 || nY == 5)

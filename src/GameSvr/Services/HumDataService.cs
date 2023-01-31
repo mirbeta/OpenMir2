@@ -31,7 +31,7 @@ namespace GameSvr.Services
 
         private static bool GetDBSockMsg(int queryId, ref int nIdent, ref int nRecog, ref byte[] data, int dwTimeOut, bool boLoadRcd)
         {
-            var result = false;
+            bool result = false;
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
@@ -44,7 +44,7 @@ namespace GameSvr.Services
                         {
                             return false;
                         }
-                        var serverPacket = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
+                        ServerRequestMessage serverPacket = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
                         if (serverPacket == null)
                         {
                             return false;
@@ -54,7 +54,7 @@ namespace GameSvr.Services
                         data = respPack.Packet;
                         result = true;
                     }
-                    ReceivedMap.TryRemove(queryId, out var delData);
+                    ReceivedMap.TryRemove(queryId, out ServerRequestData delData);
                 }
             }
             finally
@@ -74,8 +74,8 @@ namespace GameSvr.Services
 
         public static bool LoadHumRcdFromDB(string sAccount, string sChrName, string sStr, ref int queryId, int nCertCode)
         {
-            var result = false;
-            var loadHum = new LoadPlayerDataMessage()
+            bool result = false;
+            LoadPlayerDataMessage loadHum = new LoadPlayerDataMessage()
             {
                 Account = sAccount,
                 ChrName = sChrName,
@@ -109,8 +109,8 @@ namespace GameSvr.Services
         private static bool SaveRcd(SavePlayerRcd saveRcd, ref int queryId)
         {
             queryId = GetQueryId();
-            var packet = new ServerRequestMessage(Grobal2.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
-            var saveHumData = new SavePlayerDataMessage(saveRcd.Account, saveRcd.ChrName, saveRcd.HumanRcd);
+            ServerRequestMessage packet = new ServerRequestMessage(Grobal2.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
+            SavePlayerDataMessage saveHumData = new SavePlayerDataMessage(saveRcd.Account, saveRcd.ChrName, saveRcd.HumanRcd);
             if (M2Share.DataServer.SendRequest(queryId, packet, saveHumData))
             {
                 saveProcessList.Enqueue(queryId);
@@ -127,9 +127,9 @@ namespace GameSvr.Services
                 IList<int> tempList = new List<int>();
                 while (saveProcessList.Count > 0)
                 {
-                    var queryId = saveProcessList.Dequeue();
-                    var nIdent = 0;
-                    var nRecog = 0;
+                    int queryId = saveProcessList.Dequeue();
+                    int nIdent = 0;
+                    int nRecog = 0;
                     byte[] data = null;
                     if (GetDBSockMsg(queryId, ref nIdent, ref nRecog, ref data, 5000, false))
                     {
@@ -160,20 +160,20 @@ namespace GameSvr.Services
                 IList<QueryPlayData> tempList = new List<QueryPlayData>();
                 while (queryProcessList.Count > 0)
                 {
-                    var queryData = queryProcessList.Dequeue();
+                    QueryPlayData queryData = queryProcessList.Dequeue();
                     if (queryData.QuetyCount >= 50)
                     {
                         continue;
                     }
-                    var nIdent = 0;
-                    var nRecog = 0;
+                    int nIdent = 0;
+                    int nRecog = 0;
                     byte[] data = null;
                     if (GetDBSockMsg(queryData.QueryId, ref nIdent, ref nRecog, ref data, 5000, true))
                     {
                         if (nIdent == Grobal2.DBR_LOADHUMANRCD && nRecog == 1)
                         {
-                            var humRespData = EDCode.DecodeBuff(data);
-                            var responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(humRespData);
+                            byte[] humRespData = EDCode.DecodeBuff(data);
+                            LoadPlayerDataPacket responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(humRespData);
                             responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
                             loadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
                         }
@@ -196,8 +196,8 @@ namespace GameSvr.Services
 
         private static bool LoadRcd(LoadPlayerDataMessage loadHuman, ref int queryId)
         {
-            var nQueryId = GetQueryId();
-            var packet = new ServerRequestMessage(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
+            int nQueryId = GetQueryId();
+            ServerRequestMessage packet = new ServerRequestMessage(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
             if (M2Share.DataServer.SendRequest(nQueryId, packet, loadHuman))
             {
                 queryProcessList.Enqueue(new QueryPlayData()

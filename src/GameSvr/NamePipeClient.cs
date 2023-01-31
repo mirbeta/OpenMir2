@@ -29,7 +29,7 @@ namespace GameSvr
 
         public void SendPipeMessage(byte[] data)
         {
-            string clientSendMsg = $"123,Client now is {DateTime.Now.ToString("yyyyMMddHHmmssffff")}";
+            string clientSendMsg = $"123,Client now is {DateTime.Now:yyyyMMddHHmmssffff}";
             char[] sendBytes = clientSendMsg.ToCharArray();
             streamWriter.WriteLine(clientSendMsg);
             streamWriter.Flush();
@@ -38,7 +38,7 @@ namespace GameSvr
 
         private void ReceivePipeMessage()
         {
-            var s = streamReader.ReadLine();
+            string s = streamReader.ReadLine();
             //pipeClient.Read(receiveBuff, 0, receiveBuff.Length);
             //Console.WriteLine($"{DateTime.Now}:{Encoding.UTF8.GetString(receiveBuff).Trim(new char[] { '\0' })}");
             Console.WriteLine(s);

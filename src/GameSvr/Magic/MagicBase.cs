@@ -110,7 +110,7 @@ namespace GameSvr.Magic
             {
                 return;
             }
-            var dura = (ushort)(nCount * 100);
+            ushort dura = (ushort)(nCount * 100);
             if (PlayObject.UseItems[Idx] != null && PlayObject.UseItems[Idx].Dura > dura)
             {
                 PlayObject.UseItems[Idx].Dura -= dura;//减少护身符持久即数量

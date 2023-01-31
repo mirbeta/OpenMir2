@@ -17,18 +17,18 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sExp = @Params.Length > 1 ? @Params[1] : "";
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sExp = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var dwExp = HUtil32.StrToInt(sExp, 0);
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            int dwExp = HUtil32.StrToInt(sExp, 0);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
-                var dwOExp = PlayObject.Abil.Exp;
+                int dwOExp = PlayObject.Abil.Exp;
                 m_PlayObject.Abil.Exp = dwExp;
                 m_PlayObject.HasLevelUp(m_PlayObject.Abil.Level - 1);
                 PlayObject.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);

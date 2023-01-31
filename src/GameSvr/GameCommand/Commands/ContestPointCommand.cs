@@ -17,14 +17,14 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sGuildName = @Params.Length > 0 ? @Params[0] : "";
+            string sGuildName = @Params.Length > 0 ? @Params[0] : "";
             if (sGuildName == "" || sGuildName != "" && sGuildName[0] == '?')
             {
                 PlayObject.SysMsg("查看行会战的得分数。", MsgColor.Red, MsgType.Hint);
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            Guild.GuildInfo Guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (Guild != null)
             {
                 PlayObject.SysMsg($"{sGuildName} 的得分为: {Guild.nContestPoint}", MsgColor.Green, MsgType.Hint);

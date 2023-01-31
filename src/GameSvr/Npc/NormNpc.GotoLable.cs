@@ -26,7 +26,7 @@ namespace GameSvr.Npc
             string sC = string.Empty;
             if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                for (var i = 0; i < m_ScriptList.Count; i++)
+                for (int i = 0; i < m_ScriptList.Count; i++)
                 {
                     TScript Script3C = m_ScriptList[i];
                     if (Script3C.RecordList.TryGetValue(sLabel, out SayingRecord))
@@ -42,7 +42,7 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.MScript != null)
                 {
-                    for (var i = m_ScriptList.Count - 1; i >= 0; i--)
+                    for (int i = m_ScriptList.Count - 1; i >= 0; i--)
                     {
                         if (m_ScriptList[i] == PlayObject.MScript)
                         {
@@ -52,7 +52,7 @@ namespace GameSvr.Npc
                 }
                 if (Script == null)
                 {
-                    for (var i = m_ScriptList.Count - 1; i >= 0; i--)
+                    for (int i = m_ScriptList.Count - 1; i >= 0; i--)
                     {
                         if (CheckGotoLableQuestStatus(PlayObject, m_ScriptList[i]))
                         {
@@ -72,11 +72,11 @@ namespace GameSvr.Npc
                     {
                         return;
                     }
-                    var sSendMsg = string.Empty;
-                    for (var i = 0; i < SayingRecord.ProcedureList.Count; i++)
+                    string sSendMsg = string.Empty;
+                    for (int i = 0; i < SayingRecord.ProcedureList.Count; i++)
                     {
-                        var sayingProcedure = SayingRecord.ProcedureList[i];
-                        var bo11 = false;
+                        SayingProcedure sayingProcedure = SayingRecord.ProcedureList[i];
+                        bool bo11 = false;
                         if (GotoLableQuestCheckCondition(PlayObject, sayingProcedure.ConditionList, ref sC, ref UserItem))
                         {
                             sSendMsg = sSendMsg + sayingProcedure.sSayMsg;
@@ -117,12 +117,12 @@ namespace GameSvr.Npc
 
         private static bool CheckGotoLableQuestStatus(PlayObject PlayObject, TScript ScriptInfo)
         {
-            var result = true;
+            bool result = true;
             if (!ScriptInfo.boQuest)
             {
                 return result;
             }
-            var nIndex = 0;
+            int nIndex = 0;
             while (true)
             {
                 if ((ScriptInfo.QuestInfo[nIndex].nRandRage > 0) && (M2Share.RandomNumber.Random(ScriptInfo.QuestInfo[nIndex].nRandRage) != 0))
@@ -242,7 +242,7 @@ namespace GameSvr.Npc
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
             if (File.Exists(sListFileName))
             {
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 try
                 {
                     LoadList.LoadFromFile(sListFileName);
@@ -251,7 +251,7 @@ namespace GameSvr.Npc
                 {
                     M2Share.Log.Error("loading fail.... => " + sListFileName);
                 }
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     if (string.Compare(LoadList[i].Trim(), sHumName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -269,7 +269,7 @@ namespace GameSvr.Npc
 
         private static void GotoLable_QuestCheckCondition_SetVal(PlayObject PlayObject, string sIndex, int nCount)
         {
-            var n14 = M2Share.GetValNameNo(sIndex);
+            int n14 = M2Share.GetValNameNo(sIndex);
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -327,9 +327,9 @@ namespace GameSvr.Npc
         private bool GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject PlayObject, string ChrName, string sListFileName, string sDay, string param1, string param2)
         {
             string Name = string.Empty;
-            var result = false;
+            bool result = false;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
-            var LoadList = new StringList();
+            StringList LoadList = new StringList();
             try
             {
                 if (File.Exists(sListFileName))
@@ -343,8 +343,8 @@ namespace GameSvr.Npc
                         M2Share.Log.Error("loading fail.... => " + sListFileName);
                     }
                 }
-                var nDay = HUtil32.StrToInt(sDay, 0);
-                for (var i = 0; i < LoadList.Count; i++)
+                int nDay = HUtil32.StrToInt(sDay, 0);
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     string sText = LoadList[i].Trim();
                     sText = HUtil32.GetValidStrCap(sText, ref Name, new[] { ' ', '\t' });
@@ -352,9 +352,9 @@ namespace GameSvr.Npc
                     if (ChrName == Name)
                     {
                         string ssDay = sText.Trim();
-                        var nnday = HUtil32.StrToDate(ssDay);
-                        var UseDay = HUtil32.Round(DateTime.Today.ToOADate() - nnday.ToOADate());
-                        var LastDay = nDay - UseDay;
+                        DateTime nnday = HUtil32.StrToDate(ssDay);
+                        int UseDay = HUtil32.Round(DateTime.Today.ToOADate() - nnday.ToOADate());
+                        int LastDay = nDay - UseDay;
                         if (LastDay < 0)
                         {
                             result = true;
@@ -379,14 +379,14 @@ namespace GameSvr.Npc
             int n1C = 0;
             int nMaxDura = 0;
             int nDura = 0;
-            for (var i = 0; i < ConditionList.Count; i++)
+            for (int i = 0; i < ConditionList.Count; i++)
             {
-                var QuestConditionInfo = ConditionList[i];
+                QuestConditionInfo QuestConditionInfo = ConditionList[i];
                 if (!string.IsNullOrEmpty(QuestConditionInfo.sParam1))
                 {
                     if (QuestConditionInfo.sParam1[0] == '$')
                     {
-                        var s50 = QuestConditionInfo.sParam1;
+                        string s50 = QuestConditionInfo.sParam1;
                         QuestConditionInfo.sParam1 = '<' + QuestConditionInfo.sParam1 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam1);
                     }
@@ -399,7 +399,7 @@ namespace GameSvr.Npc
                 {
                     if (QuestConditionInfo.sParam2[0] == '$')
                     {
-                        var s50 = QuestConditionInfo.sParam2;
+                        string s50 = QuestConditionInfo.sParam2;
                         QuestConditionInfo.sParam2 = '<' + QuestConditionInfo.sParam2 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam2);
                     }
@@ -412,7 +412,7 @@ namespace GameSvr.Npc
                 {
                     if (QuestConditionInfo.sParam3[0] == '$')
                     {
-                        var s50 = QuestConditionInfo.sParam3;
+                        string s50 = QuestConditionInfo.sParam3;
                         QuestConditionInfo.sParam3 = '<' + QuestConditionInfo.sParam3 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam3);
                     }
@@ -425,7 +425,7 @@ namespace GameSvr.Npc
                 {
                     if (QuestConditionInfo.sParam4[0] == '$')
                     {
-                        var s50 = QuestConditionInfo.sParam4;
+                        string s50 = QuestConditionInfo.sParam4;
                         QuestConditionInfo.sParam4 = '<' + QuestConditionInfo.sParam4 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam4);
                     }
@@ -438,7 +438,7 @@ namespace GameSvr.Npc
                 {
                     if (QuestConditionInfo.sParam5[0] == '$')
                     {
-                        var s50 = QuestConditionInfo.sParam5;
+                        string s50 = QuestConditionInfo.sParam5;
                         QuestConditionInfo.sParam5 = '<' + QuestConditionInfo.sParam5 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam5);
                     }
@@ -451,7 +451,7 @@ namespace GameSvr.Npc
                 {
                     if (QuestConditionInfo.sParam6[0] == '$')
                     {
-                        var s50 = QuestConditionInfo.sParam6;
+                        string s50 = QuestConditionInfo.sParam6;
                         QuestConditionInfo.sParam6 = '<' + QuestConditionInfo.sParam6 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam6);
                     }
@@ -468,7 +468,7 @@ namespace GameSvr.Npc
                     {
                         if (QuestConditionInfo.sOpName[1] == '$')
                         {
-                            var s50 = QuestConditionInfo.sOpName;
+                            string s50 = QuestConditionInfo.sOpName;
                             QuestConditionInfo.sOpName = '<' + QuestConditionInfo.sOpName + '>';
                             GetVariableText(PlayObject, s50, ref QuestConditionInfo.sOpName);
                         }
@@ -477,7 +477,7 @@ namespace GameSvr.Npc
                             QuestConditionInfo.sOpName = GetLineVariableText(PlayObject, QuestConditionInfo.sOpName);
                         }
                     }
-                    var Human = M2Share.WorldEngine.GetPlayObject(QuestConditionInfo.sOpName);
+                    PlayObject Human = M2Share.WorldEngine.GetPlayObject(QuestConditionInfo.sOpName);
                     if (Human != null)
                     {
                         PlayObject = Human;
@@ -808,7 +808,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nCHECKMONMAP:
-                        var Envir = M2Share.MapMgr.FindMap(QuestConditionInfo.sParam1);
+                        Envirnoment Envir = M2Share.MapMgr.FindMap(QuestConditionInfo.sParam1);
                         if (Envir != null)
                         {
                             if (M2Share.WorldEngine.GetMapMonster(Envir, null) < QuestConditionInfo.nParam2)
@@ -831,7 +831,7 @@ namespace GameSvr.Npc
                             if (QuestConditionInfo.sParam1 != "")
                             {
                                 result = false;
-                                var StdItem = M2Share.WorldEngine.GetStdItem(QuestConditionInfo.sParam1);
+                                StdItem StdItem = M2Share.WorldEngine.GetStdItem(QuestConditionInfo.sParam1);
                                 if (StdItem != null)
                                 {
                                     if (PlayObject.IsAddWeightAvailable(StdItem.Weight))
@@ -1389,7 +1389,7 @@ namespace GameSvr.Npc
                         result = ConditionOfIsHigh(PlayObject, QuestConditionInfo);
                         break;
                     case ScriptConst.nSCHECKDEATHPLAYMON:
-                        var s01 = string.Empty;
+                        string s01 = string.Empty;
                         if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref s01))
                         {
                             s01 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam1);
@@ -1423,9 +1423,9 @@ namespace GameSvr.Npc
 
         private void GotoLable_GoToQuest(PlayObject PlayObject, int nQuest)
         {
-            for (var i = 0; i < m_ScriptList.Count; i++)
+            for (int i = 0; i < m_ScriptList.Count; i++)
             {
-                var Script = m_ScriptList[i];
+                TScript Script = m_ScriptList[i];
                 if (Script.nQuest == nQuest)
                 {
                     PlayObject.MScript = Script;
@@ -1442,13 +1442,13 @@ namespace GameSvr.Npc
             string sText;
             bool bo15;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
-            var LoadList = new StringList();
+            StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 LoadList.LoadFromFile(sListFileName);
             }
             bo15 = false;
-            for (var i = 0; i < LoadList.Count; i++)
+            for (int i = 0; i < LoadList.Count; i++)
             {
                 sText = LoadList[i].Trim();
                 sText = HUtil32.GetValidStrCap(sText, ref s10, new[] { ' ', '\t' });
@@ -1476,13 +1476,13 @@ namespace GameSvr.Npc
         private static void GotoLable_AddList(string sHumName, string sListFileName)
         {
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
-            var LoadList = new StringList();
+            StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 LoadList.LoadFromFile(sListFileName);
             }
-            var bo15 = false;
-            for (var i = 0; i < LoadList.Count; i++)
+            bool bo15 = false;
+            for (int i = 0; i < LoadList.Count; i++)
             {
                 string s10 = LoadList[i].Trim();
                 if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
@@ -1510,13 +1510,13 @@ namespace GameSvr.Npc
             string s10 = string.Empty;
             string sText;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
-            var LoadList = new StringList();
+            StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 LoadList.LoadFromFile(sListFileName);
             }
-            var bo15 = false;
-            for (var i = 0; i < LoadList.Count; i++)
+            bool bo15 = false;
+            for (int i = 0; i < LoadList.Count; i++)
             {
                 sText = LoadList[i].Trim();
                 sText = HUtil32.GetValidStrCap(sText, ref s10, new[] { ' ', '\t' });
@@ -1537,13 +1537,13 @@ namespace GameSvr.Npc
         {
             bool bo15;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
-            var LoadList = new StringList();
+            StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 LoadList.LoadFromFile(sListFileName);
             }
             bo15 = false;
-            for (var i = 0; i < LoadList.Count; i++)
+            for (int i = 0; i < LoadList.Count; i++)
             {
                 string s10 = LoadList[i].Trim();
                 if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
@@ -1573,7 +1573,7 @@ namespace GameSvr.Npc
                 }
                 return;
             }
-            for (var i = PlayObject.ItemList.Count - 1; i >= 0; i--)
+            for (int i = PlayObject.ItemList.Count - 1; i >= 0; i--)
             {
                 if (nItemCount <= 0)
                 {
@@ -1616,7 +1616,7 @@ namespace GameSvr.Npc
                 {
                     nItemCount = 1;
                 }
-                for (var i = 0; i < nItemCount; i++)
+                for (int i = 0; i < nItemCount; i++)
                 {
                     if (PlayObject.IsEnoughBag())
                     {
@@ -1771,7 +1771,7 @@ namespace GameSvr.Npc
                     return;
                 }
             }
-            for (var i = 0; i < PlayObject.UseItems.Length; i++)
+            for (int i = 0; i < PlayObject.UseItems.Length; i++)
             {
                 if (nItemCount <= 0)
                 {
@@ -1801,15 +1801,15 @@ namespace GameSvr.Npc
             Envirnoment Envir;
             IList<BaseObject> List58;
             PlayObject User;
-            var n18 = 0;
-            var n34 = 0;
-            var n38 = 0;
-            var n3C = 0;
-            var n40 = 0;
+            int n18 = 0;
+            int n34 = 0;
+            int n38 = 0;
+            int n3C = 0;
+            int n40 = 0;
             string s50;
-            for (var i = 0; i < ActionList.Count; i++)
+            for (int i = 0; i < ActionList.Count; i++)
             {
-                var QuestActionInfo = ActionList[i];
+                QuestActionInfo QuestActionInfo = ActionList[i];
                 switch (QuestActionInfo.nCmdCode)
                 {
                     case ScriptConst.nSET:
@@ -1830,7 +1830,7 @@ namespace GameSvr.Npc
                         PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                         break;
                     case ScriptConst.nRESET:
-                        for (var k = 0; k < QuestActionInfo.nParam2; k++)
+                        for (int k = 0; k < QuestActionInfo.nParam2; k++)
                         {
                             PlayObject.SetQuestFlagStatus(QuestActionInfo.nParam1 + k, 0);
                         }
@@ -1846,7 +1846,7 @@ namespace GameSvr.Npc
                         PlayObject.SetQuestUnitStatus(n28, n2C);
                         break;
                     case ScriptConst.nRESETUNIT:
-                        for (var k = 0; k < QuestActionInfo.nParam2; k++)
+                        for (int k = 0; k < QuestActionInfo.nParam2; k++)
                         {
                             PlayObject.SetQuestUnitStatus(QuestActionInfo.nParam1 + k, 0);
                         }
@@ -1903,7 +1903,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nMONGEN:
-                        for (var k = 0; k < QuestActionInfo.nParam2; k++)
+                        for (int k = 0; k < QuestActionInfo.nParam2; k++)
                         {
                             n20X = M2Share.RandomNumber.Random(QuestActionInfo.nParam3 * 2 + 1) + (n38 - QuestActionInfo.nParam3);
                             n24Y = M2Share.RandomNumber.Random(QuestActionInfo.nParam3 * 2 + 1) + (n3C - QuestActionInfo.nParam3);
@@ -1913,7 +1913,7 @@ namespace GameSvr.Npc
                     case ScriptConst.nMONCLEAR:
                         List58 = new List<BaseObject>();
                         M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), List58);
-                        for (var k = 0; k < List58.Count; k++)
+                        for (int k = 0; k < List58.Count; k++)
                         {
                             List58[k].NoItem = true;
                             List58[k].WAbil.HP = 0;
@@ -2033,7 +2033,7 @@ namespace GameSvr.Npc
                         {
                             List58 = new List<BaseObject>();
                             M2Share.WorldEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
-                            for (var k = 0; k < List58.Count; k++)
+                            for (int k = 0; k < List58.Count; k++)
                             {
                                 User = (PlayObject)List58[k];
                                 User.MapRandomMove(MapName, 0);
@@ -2064,10 +2064,10 @@ namespace GameSvr.Npc
                         n18 = QuestActionInfo.nParam1 * 1000;
                         break;
                     case ScriptConst.nBATCHMOVE:
-                        var n20 = 0;
-                        for (var k = 0; k < BatchParamsList.Count; k++)
+                        int n20 = 0;
+                        for (int k = 0; k < BatchParamsList.Count; k++)
                         {
-                            var batchParam = BatchParamsList[k];
+                            ScriptParams batchParam = BatchParamsList[k];
                             PlayObject.SendDelayMsg(ActorId, Grobal2.RM_RANDOMSPACEMOVE, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
                             n20 += batchParam.nParams;
                         }
@@ -2402,7 +2402,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            PlayObject.SysMsg(Settings.g_sQUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
+                            PlayObject.SysMsg(Settings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                         }
                         break;
                     case ScriptConst.nSC_SETRANDOMNO:
@@ -2427,10 +2427,10 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nDELAYGOTO:
                         PlayObject.BoTimeGoto = true;
-                        var m_DelayGoto = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
+                        int m_DelayGoto = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
                         if (m_DelayGoto == 0)
                         {
-                            var delayCount = 0;
+                            int delayCount = 0;
                             GetValValue(PlayObject, QuestActionInfo.sParam1, ref delayCount);
                             m_DelayGoto = delayCount;
                         }
@@ -2482,14 +2482,14 @@ namespace GameSvr.Npc
         {
             PlayObject.TakeDlgItem = QuestActionInfo.nParam3 != 0;
             PlayObject.MSGotoNpcLabel = QuestActionInfo.sParam2;
-            var sHint = QuestActionInfo.sParam1;
+            string sHint = QuestActionInfo.sParam1;
             if (string.IsNullOrEmpty(sHint)) sHint = "请输入:";
             PlayObject.SendDefMessage(Grobal2.SM_QUERYITEMDLG, ActorId, 0, 0, 0, sHint);
         }
 
         private void ActionOfKillSlaveName(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var sSlaveName = QuestActionInfo.sParam1;
+            string sSlaveName = QuestActionInfo.sParam1;
             if (string.IsNullOrEmpty(sSlaveName))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_KILLSLAVENAME);
@@ -2505,7 +2505,7 @@ namespace GameSvr.Npc
             }
             for (int i = 0; i < PlayObject.SlaveList.Count; i++)
             {
-                var BaseObject = PlayObject.SlaveList[i];
+                BaseObject BaseObject = PlayObject.SlaveList[i];
                 if (!Death && (string.Compare(sSlaveName, BaseObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     BaseObject.WAbil.HP = 0;
@@ -2515,21 +2515,21 @@ namespace GameSvr.Npc
 
         private static void ActionOfQueryValue(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var btStrLabel = QuestActionInfo.nParam1;
+            int btStrLabel = QuestActionInfo.nParam1;
             if (btStrLabel < 100)
             {
                 btStrLabel = 0;
             }
             PlayObject.ValLabel = (byte)btStrLabel;
-            var btType = QuestActionInfo.nParam2;
+            int btType = QuestActionInfo.nParam2;
             if (btType > 3)
             {
                 btType = 0;
             }
             PlayObject.ValType = (byte)btType;
-            var btLen = HUtil32._MAX(1, QuestActionInfo.nParam3);
+            int btLen = HUtil32._MAX(1, QuestActionInfo.nParam3);
             PlayObject.MSGotoNpcLabel = QuestActionInfo.sParam4;
-            var sHint = QuestActionInfo.sParam5;
+            string sHint = QuestActionInfo.sParam5;
             PlayObject.ValNpcType = 0;
             if (string.Compare(QuestActionInfo.sParam6, "QF", StringComparison.OrdinalIgnoreCase) == 0)
             {

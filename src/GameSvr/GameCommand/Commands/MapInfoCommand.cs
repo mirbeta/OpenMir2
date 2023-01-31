@@ -14,16 +14,16 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sMap = @params[2];
-            var nX = (short)HUtil32.StrToInt(@params[0], 0);
-            var nY = (short)HUtil32.StrToInt(@params[1], 0);
+            string sMap = @params[2];
+            short nX = (short)HUtil32.StrToInt(@params[0], 0);
+            short nY = (short)HUtil32.StrToInt(@params[1], 0);
             if (!string.IsNullOrEmpty(sMap) && nX >= 0 && nY >= 0)
             {
-                var Map = M2Share.MapMgr.FindMap(sMap);
+                Maps.Envirnoment Map = M2Share.MapMgr.FindMap(sMap);
                 if (Map != null)
                 {
-                    var cellSuccess = false;
-                    var cellInfo = Map.GetCellInfo(nX, nY, ref cellSuccess);
+                    bool cellSuccess = false;
+                    Maps.MapCellInfo cellInfo = Map.GetCellInfo(nX, nY, ref cellSuccess);
                     if (cellSuccess)
                     {
                         playObject.SysMsg("标志: " + cellInfo.Attribute, MsgColor.Green, MsgType.Hint);

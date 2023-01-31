@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             if (Envir.CanFly(CurrX, CurrY, target.CurrX, target.CurrY))
             {
                 Direction = M2Share.GetNextDirection(CurrX, CurrY, target.CurrX, target.CurrY);
-                var nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+                int nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
                 if (nDamage > 0)
                 {
                     nDamage = target.GetHitStruckDamage(this, nDamage);
@@ -89,7 +89,7 @@ namespace GameSvr.Monster.Monsters
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) >= 5000)
                 {
                     SearchEnemyTick = HUtil32.GetTickCount();
-                    for (var i = 0; i < VisibleActors.Count; i++)
+                    for (int i = 0; i < VisibleActors.Count; i++)
                     {
                         BaseObject baseObject = VisibleActors[i].BaseObject;
                         if (baseObject.Death)

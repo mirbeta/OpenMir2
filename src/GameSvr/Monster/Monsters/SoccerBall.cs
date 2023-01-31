@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
         {
             short n08 = 0;
             short n0C = 0;
-            var bo0D = false;
+            bool bo0D = false;
             if (N550 > 0)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, Direction, 1, ref n08, ref n0C))

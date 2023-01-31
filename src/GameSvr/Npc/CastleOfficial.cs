@@ -52,7 +52,7 @@ namespace GameSvr.Npc
                     break;
                 case "$CASTLEDOORSTATE":
                     {
-                        var castleDoor = (CastleDoor)Castle.MainDoor.BaseObject;
+                        CastleDoor castleDoor = (CastleDoor)Castle.MainDoor.BaseObject;
                         if (castleDoor.Death)
                         {
                             sText = "destroyed";
@@ -93,7 +93,7 @@ namespace GameSvr.Npc
 
         public override void UserSelect(PlayObject PlayObject, string sData)
         {
-            var sLabel = string.Empty;
+            string sLabel = string.Empty;
             const string sExceptionMsg = "[Exception] TCastleManager::UserSelect... ";
             base.UserSelect(PlayObject, sData);
             try
@@ -106,12 +106,12 @@ namespace GameSvr.Npc
                 string s18;
                 if (!string.IsNullOrEmpty(sData) && sData[0] == '@')
                 {
-                    var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
+                    string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                     s18 = "";
                     PlayObject.ScriptLable = sData;
                     if (Castle.IsMasterGuild(PlayObject.MyGuild) && PlayObject.IsGuildMaster())
                     {
-                        var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
+                        bool boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                         if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (sMsg == "")
@@ -272,14 +272,14 @@ namespace GameSvr.Npc
             }
             if (Castle.TotalGold >= M2Share.Config.HireGuardPrice)
             {
-                var n10 = HUtil32.StrToInt(sIndex, 0) - 1;
+                int n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCalsteGuard)
                 {
                     if (Castle.Guards[n10].BaseObject == null)
                     {
                         if (!Castle.UnderWar)
                         {
-                            var ObjUnit = Castle.Guards[n10];
+                            ArcherUnit ObjUnit = Castle.Guards[n10];
                             ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {
@@ -319,14 +319,14 @@ namespace GameSvr.Npc
             }
             if (Castle.TotalGold >= M2Share.Config.HireArcherPrice)
             {
-                var n10 = HUtil32.StrToInt(sIndex, 0) - 1;
+                int n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCastleArcher)
                 {
                     if (Castle.Archers[n10].BaseObject == null)
                     {
                         if (!Castle.UnderWar)
                         {
-                            var ObjUnit = Castle.Archers[n10];
+                            ArcherUnit ObjUnit = Castle.Archers[n10];
                             ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {
@@ -411,7 +411,7 @@ namespace GameSvr.Npc
         {
             if (!M2Share.Config.SubkMasterSendMsg)
             {
-                PlayObject.SysMsg(Settings.g_sSubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Settings.SubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.BoSendMsgFlag)

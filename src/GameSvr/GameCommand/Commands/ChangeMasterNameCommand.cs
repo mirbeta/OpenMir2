@@ -17,15 +17,15 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sMasterName = @Params.Length > 1 ? @Params[1] : "";
-            var sIsMaster = @Params.Length > 2 ? @Params[2] : "";
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sMasterName = @Params.Length > 1 ? @Params[1] : "";
+            string sIsMaster = @Params.Length > 2 ? @Params[2] : "";
             if (string.IsNullOrEmpty(sHumanName) || sMasterName == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 if (string.Compare(sMasterName, "无", StringComparison.OrdinalIgnoreCase) == 0)

@@ -28,10 +28,10 @@ namespace GameSvr.Npc
             base.GetVariableText(PlayObject, sVariable, ref sMsg);
             if (sVariable == "$REQUESTCASTLELIST")
             {
-                var sText = "";
+                string sText = "";
                 IList<string> List = new List<string>();
                 M2Share.CastleMgr.GetCastleNameList(List);
-                for (var i = 0; i < List.Count; i++)
+                for (int i = 0; i < List.Count; i++)
                 {
                     sText = sText + Format("<{0}/@requestcastlewarnow{1}> {2}", List[i], i, sText);
                 }
@@ -58,15 +58,15 @@ namespace GameSvr.Npc
 
         public override void UserSelect(PlayObject PlayObject, string sData)
         {
-            var sLabel = string.Empty;
+            string sLabel = string.Empty;
             const string sExceptionMsg = "[Exception] TGuildOfficial::UserSelect... ";
             base.UserSelect(PlayObject, sData);
             try
             {
                 if (!string.IsNullOrEmpty(sData) && sData.StartsWith("@"))
                 {
-                    var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
-                    var boCanJmp = PlayObject.LableIsCanJmp(sLabel);
+                    string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
+                    bool boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                     GotoLable(PlayObject, sLabel, !boCanJmp);
                     if (!boCanJmp)
                     {
@@ -86,7 +86,7 @@ namespace GameSvr.Npc
                     }
                     else if (HUtil32.CompareLStr(sLabel, ScriptConst.sREQUESTCASTLEWAR))
                     {
-                        ReQuestCastleWar(PlayObject, sLabel.Substring(ScriptConst.sREQUESTCASTLEWAR.Length, sLabel.Length - ScriptConst.sREQUESTCASTLEWAR.Length));
+                        ReQuestCastleWar(PlayObject, sLabel[ScriptConst.sREQUESTCASTLEWAR.Length..]);
                     }
                     else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -116,7 +116,7 @@ namespace GameSvr.Npc
         /// <returns></returns>
         private int ReQuestBuildGuild(PlayObject PlayObject, string sGuildName)
         {
-            var result = 0;
+            int result = 0;
             sGuildName = sGuildName.Trim();
             UserItem UserItem = null;
             if (sGuildName == "")
@@ -208,15 +208,15 @@ namespace GameSvr.Npc
 
         private void ReQuestCastleWar(PlayObject PlayObject, string sIndex)
         {
-            var nIndex = HUtil32.StrToInt(sIndex, -1);
+            int nIndex = HUtil32.StrToInt(sIndex, -1);
             if (nIndex < 0)
             {
                 nIndex = 0;
             }
-            var Castle = M2Share.CastleMgr.GetCastle(nIndex);
+            Castle.UserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
             if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject))
             {
-                var UserItem = PlayObject.CheckItems(M2Share.Config.ZumaPiece);
+                UserItem UserItem = PlayObject.CheckItems(M2Share.Config.ZumaPiece);
                 if (UserItem != null)
                 {
                     if (Castle.AddAttackerInfo(PlayObject.MyGuild))

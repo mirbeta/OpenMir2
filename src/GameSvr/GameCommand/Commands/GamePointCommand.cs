@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             char Ctr = '1';
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             string sCtr = @params.Length > 1 ? @params[1] : "";
-            var nPoint = @params.Length > 2 ? Convert.ToUInt16(@params[2]) : 0;
+            int nPoint = @params.Length > 2 ? Convert.ToUInt16(@params[2]) : 0;
             if (string.IsNullOrEmpty(sHumanName))
             {
                 return;
@@ -36,7 +36,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -58,7 +58,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (M2Share.GameLogGamePoint)
             {
-                //M2Share.ItemEventSource.AddGameLog(string.Format(Settings.g_sGameLogMsg1, M2Share.LOG_GAMEPOINT, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY,
+                //M2Share.ItemEventSource.AddGameLog(string.Format(Settings.GameLogMsg1, M2Share.LOG_GAMEPOINT, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY,
                 //    m_PlayObject.m_sChrName, Settings.g_Config.sGamePointName, nPoint, sCtr[1], m_PlayObject.m_sChrName));
             }
             PlayObject.GameGoldChanged();

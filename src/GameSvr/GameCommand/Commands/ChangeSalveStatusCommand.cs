@@ -18,11 +18,11 @@ namespace GameSvr.GameCommand.Commands
             {
                 if (PlayObject.SlaveRelax)
                 {
-                    PlayObject.SysMsg(Settings.sPetRest, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(Settings.PetRest, MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    PlayObject.SysMsg(Settings.sPetAttack, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(Settings.PetAttack, MsgColor.Green, MsgType.Hint);
                 }
             }
         }

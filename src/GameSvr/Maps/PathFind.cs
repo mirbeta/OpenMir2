@@ -136,7 +136,7 @@ namespace GameSvr.Maps
             {
                 return null;
             }
-            var result = new PointInfo[PathMapArray[nY, nX].Distance + 1];
+            PointInfo[] result = new PointInfo[PathMapArray[nY, nX].Distance + 1];
             while (PathMapArray[nY, nX].Distance > 0)
             {
                 if (!StartFind)
@@ -144,7 +144,7 @@ namespace GameSvr.Maps
                     break;
                 }
                 result[PathMapArray[nY, nX].Distance] = new PointInfo(nX, nY);
-                var direction = PathMapArray[nY, nX].Direction;
+                int direction = PathMapArray[nY, nX].Direction;
                 nX = (short)(nX - DirToDx(direction));
                 nY = (short)(nY - DirToDy(direction));
                 nCount++;
@@ -252,7 +252,7 @@ namespace GameSvr.Maps
             if ((path != null) && (path.Length > 1))
             {
                 PointInfo[] walkPath = path;
-                var nStep = 0;
+                int nStep = 0;
                 I = 0;
                 while (true)
                 {
@@ -285,7 +285,7 @@ namespace GameSvr.Maps
                     nStep++;
                     I++;
                 }
-                var n01 = 0;
+                int n01 = 0;
                 for (I = 0; I < walkPath.Length; I++)
                 {
                     if ((walkPath[I].nX != -1) && (walkPath[I].nX != -1))
@@ -403,9 +403,9 @@ namespace GameSvr.Maps
             int nWidth = ClientRect.Right - ClientRect.Left;
             int nHeight = ClientRect.Bottom - ClientRect.Top;
             result = new PathcellSuccess[nHeight, nWidth];
-            for (var y = 0; y < nHeight; y++)
+            for (int y = 0; y < nHeight; y++)
             {
-                for (var x = 0; x < nWidth; x++)
+                for (int x = 0; x < nWidth; x++)
                 {
                     result[y, x] = new PathcellSuccess();
                     result[y, x].Distance = -1;
@@ -417,11 +417,11 @@ namespace GameSvr.Maps
         // 合法点是指非障碍物且Result[X，Y]中未访问的点
         private void FillPathMap_TestNeighbours(Wave oldWave, Wave newWave, ref PathcellSuccess[,] result)
         {
-            for (var i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
-                var x = oldWave.Item.X + DirToDx(i);
-                var y = oldWave.Item.Y + DirToDy(i);
-                var c = GetCost(x, y, i);
+                int x = oldWave.Item.X + DirToDx(i);
+                int y = oldWave.Item.Y + DirToDy(i);
+                int c = GetCost(x, y, i);
                 if ((c >= 0) && (result[y, x].Distance < 0))
                 {
                     newWave.Add(x, y, c, i);
@@ -431,7 +431,7 @@ namespace GameSvr.Maps
 
         private static void FillPathMap_ExchangeWaves(Wave oldWave, Wave newWave)
         {
-            var w = oldWave;
+            Wave w = oldWave;
             newWave = w;
             newWave.Clear();
         }

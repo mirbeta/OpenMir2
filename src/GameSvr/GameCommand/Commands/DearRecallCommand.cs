@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void DearRecall(PlayObject PlayObject)
         {
-            if (PlayObject.MSDearName == "")
+            if (PlayObject.DearName == "")
             {
                 PlayObject.SysMsg("你没有结婚!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg("本地图禁止夫妻传送!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.MDearHuman == null)
+            if (PlayObject.DearHuman == null)
             {
                 if (PlayObject.Gender == 0)
                 {
@@ -41,13 +41,13 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             PlayObject.MDwDearRecallTick = HUtil32.GetTickCount();
-            if (PlayObject.MDearHuman.MBoCanDearRecall)
+            if (PlayObject.DearHuman.MBoCanDearRecall)
             {
-                PlayObject.RecallHuman(PlayObject.MDearHuman.ChrName);
+                PlayObject.RecallHuman(PlayObject.DearHuman.ChrName);
             }
             else
             {
-                PlayObject.SysMsg(PlayObject.MDearHuman.ChrName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(PlayObject.DearHuman.ChrName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

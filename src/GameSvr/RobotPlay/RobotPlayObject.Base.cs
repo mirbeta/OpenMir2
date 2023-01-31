@@ -188,9 +188,9 @@ namespace GameSvr.RobotPlay
                                     }
                                     if (m_BagItemNames.Count > 0)
                                     {
-                                        for (var i = 0; i < m_BagItemNames.Count; i++)
+                                        for (int i = 0; i < m_BagItemNames.Count; i++)
                                         {
-                                            for (var j = 0; j < ItemList.Count; j++)
+                                            for (int j = 0; j < ItemList.Count; j++)
                                             {
                                                 userItem = ItemList[j];
                                                 if (userItem != null)
@@ -371,7 +371,7 @@ namespace GameSvr.RobotPlay
                     {
                         if (baseObject.Race == ActorRace.Play)
                         {
-                            var targetPvpLevel = ((PlayObject)baseObject).PvpLevel();
+                            byte targetPvpLevel = ((PlayObject)baseObject).PvpLevel();
                             if (PvpLevel() >= 2)
                             {
                                 result = targetPvpLevel < 2;
@@ -469,23 +469,23 @@ namespace GameSvr.RobotPlay
             }
             if (VisibleItems.Count > 0)
             {
-                for (var i = 0; i < VisibleItems.Count; i++)
+                for (int i = 0; i < VisibleItems.Count; i++)
                 {
                     VisibleItems[i].VisibleFlag = 0;
                 }
             }
             try
             {
-                var nStartX = (short)(CurrX - ViewRange);
-                var nEndX = (short)(CurrX + ViewRange);
-                var nStartY = (short)(CurrY - ViewRange);
-                var nEndY = (short)(CurrY + ViewRange);
-                var dwRunTick = HUtil32.GetTickCount();
-                for (var nX = nStartX; nX <= nEndX; nX++)
+                short nStartX = (short)(CurrX - ViewRange);
+                short nEndX = (short)(CurrX + ViewRange);
+                short nStartY = (short)(CurrY - ViewRange);
+                short nEndY = (short)(CurrY + ViewRange);
+                int dwRunTick = HUtil32.GetTickCount();
+                for (short nX = nStartX; nX <= nEndX; nX++)
                 {
-                    for (var nY = nStartY; nY <= nEndY; nY++)
+                    for (short nY = nStartY; nY <= nEndY; nY++)
                     {
-                        var cellSuccess = false;
+                        bool cellSuccess = false;
                         cellInfo = Envir.GetCellInfo(nX, nY, ref cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
@@ -570,7 +570,7 @@ namespace GameSvr.RobotPlay
                                                         }
                                                         continue;
                                                     }
-                                                    var mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                                    MapItem mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                                     UpdateVisibleItem(nX, nY, mapItem);
                                                     if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                     {
@@ -625,7 +625,7 @@ namespace GameSvr.RobotPlay
             }
             try
             {
-                var n18 = 0;
+                int n18 = 0;
                 while (true)
                 {
                     try
@@ -719,7 +719,7 @@ namespace GameSvr.RobotPlay
             }
             try
             {
-                var position = 0;
+                int position = 0;
                 while (true)
                 {
                     try
@@ -867,7 +867,7 @@ namespace GameSvr.RobotPlay
                         {
                             DisableSayMsg = false;
                         }
-                        var boDisableSayMsg = DisableSayMsg;
+                        bool boDisableSayMsg = DisableSayMsg;
                         //g_DenySayMsgList.Lock;
                         //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                         //{
@@ -921,8 +921,8 @@ namespace GameSvr.RobotPlay
                 return;
             }
             IList<DeleteItem> dropItemList = new List<DeleteItem>();
-            var nRate = PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
-            var nC = 0;
+            int nRate = PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
+            int nC = 0;
             while (true)
             {
                 if (M2Share.RandomNumber.Random(nRate) == 0)
@@ -934,7 +934,7 @@ namespace GameSvr.RobotPlay
                     }
                     if (DropItemDown(UseItems[nC], 2, true, baseObject, this.ActorId))
                     {
-                        var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
+                        StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
                         if (stdItem != null)
                         {
                             if ((stdItem.ItemDesc & 10) == 0)
@@ -960,7 +960,7 @@ namespace GameSvr.RobotPlay
             }
             if (dropItemList.Count > 0)
             {
-                var objectId = HUtil32.Sequence();
+                int objectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(objectId, dropItemList);
                 SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }

@@ -9,10 +9,10 @@
 
         public override void Run()
         {
-            var time1 = 0;
+            int time1 = 0;
             short nx = 0;
             short ny = 0;
-            var borunaway = false;
+            bool borunaway = false;
             if (!Death && !Ghost)
             {
                 if (TargetCret != null)

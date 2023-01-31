@@ -16,7 +16,7 @@ namespace GameSvr.GameCommand.Commands
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
             try
             {
-                var nCount = M2Share.DenySayMsgList.Count;
+                int nCount = M2Share.DenySayMsgList.Count;
                 if (M2Share.DenySayMsgList.Count <= 0)
                 {
                     PlayObject.SysMsg(CommandHelp.GameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);

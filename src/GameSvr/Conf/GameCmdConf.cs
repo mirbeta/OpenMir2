@@ -15,7 +15,7 @@ namespace GameSvr.Conf
         /// </summary>
         public void LoadConfig()
         {
-            var gameCommands = CommandMgr.GameCommands;
+            GameCommands gameCommands = CommandMgr.GameCommands;
             int nLoadInteger;
             string LoadString = ReadString("Command", "Date", "");
             if (string.IsNullOrEmpty(LoadString))

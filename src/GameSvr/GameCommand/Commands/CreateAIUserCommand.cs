@@ -16,17 +16,17 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var userCount = @params.Length > 0 ? int.Parse(@params[0]) : 1;
+            int userCount = @params.Length > 0 ? int.Parse(@params[0]) : 1;
             //todo 可以指定是随机刷还是指定地图和坐标
             if (userCount == 0)
             {
                 userCount = 1;
             }
-            for (var i = 0; i < userCount; i++)
+            for (int i = 0; i < userCount; i++)
             {
                 short nX = 0;
                 short nY = 0;
-                var sMapName = World.WorldServer.GetHomeInfo(ref nX, ref nY);
+                string sMapName = World.WorldServer.GetHomeInfo(ref nX, ref nY);
                 M2Share.WorldEngine.AddAiLogon(new RoBotLogon()
                 {
                     sChrName = "玩家" + RandomNumber.GetInstance().Random() + "号",

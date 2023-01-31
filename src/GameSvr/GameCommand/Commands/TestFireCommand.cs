@@ -13,19 +13,19 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var nRange = @params.Length > 0 ? int.Parse(@params[0]) : 0;
-            var nType = @params.Length > 1 ? int.Parse(@params[1]) : 0;
-            var nTime = @params.Length > 2 ? int.Parse(@params[2]) : 0;
-            var nPoint = @params.Length > 3 ? int.Parse(@params[3]) : 0;
+            int nRange = @params.Length > 0 ? int.Parse(@params[0]) : 0;
+            int nType = @params.Length > 1 ? int.Parse(@params[1]) : 0;
+            int nTime = @params.Length > 2 ? int.Parse(@params[2]) : 0;
+            int nPoint = @params.Length > 3 ? int.Parse(@params[3]) : 0;
 
             FireBurnEvent FireBurnEvent;
-            var nMinX = PlayObject.CurrX - nRange;
-            var nMaxX = PlayObject.CurrX + nRange;
-            var nMinY = PlayObject.CurrY - nRange;
-            var nMaxY = PlayObject.CurrY + nRange;
-            for (var nX = nMinX; nX <= nMaxX; nX++)
+            int nMinX = PlayObject.CurrX - nRange;
+            int nMaxX = PlayObject.CurrX + nRange;
+            int nMinY = PlayObject.CurrY - nRange;
+            int nMaxY = PlayObject.CurrY + nRange;
+            for (int nX = nMinX; nX <= nMaxX; nX++)
             {
-                for (var nY = nMinY; nY <= nMaxY; nY++)
+                for (int nY = nMinY; nY <= nMaxY; nY++)
                 {
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {

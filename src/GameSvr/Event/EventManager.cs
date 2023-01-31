@@ -16,7 +16,7 @@ namespace GameSvr.Event
         public void Run()
         {
             EventInfo executeEvent;
-            for (var i = _eventList.Count - 1; i >= 0; i--)
+            for (int i = _eventList.Count - 1; i >= 0; i--)
             {
                 executeEvent = _eventList[i];
                 if (executeEvent.Active && (HUtil32.GetTickCount() - executeEvent.RunStart) > executeEvent.RunTick)
@@ -31,7 +31,7 @@ namespace GameSvr.Event
                 }
             }
 
-            for (var i = _closedEventList.Count - 1; i >= 0; i--)
+            for (int i = _closedEventList.Count - 1; i >= 0; i--)
             {
                 executeEvent = _closedEventList[i];
                 if ((HUtil32.GetTickCount() - executeEvent.CloseTick) > 5 * 60 * 1000)
@@ -44,9 +44,9 @@ namespace GameSvr.Event
 
         public EventInfo GetEvent(Envirnoment Envir, int nX, int nY, int nType)
         {
-            for (var i = _eventList.Count - 1; i >= 0; i--)
+            for (int i = _eventList.Count - 1; i >= 0; i--)
             {
-                var currentEvent = _eventList[i];
+                EventInfo currentEvent = _eventList[i];
                 if (currentEvent.EventType == nType)
                 {
                     if (currentEvent.Envir == Envir && currentEvent.nX == nX && currentEvent.nY == nY)

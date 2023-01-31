@@ -18,9 +18,9 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sSkillName = @Params.Length > 1 ? @Params[1] : "";
-            var nLevel = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sSkillName = @Params.Length > 1 ? @Params[1] : "";
+            int nLevel = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
             UserMagic UserMagic;
             if (string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel <= 0)
             {
@@ -28,13 +28,13 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             nLevel = HUtil32._MIN(3, nLevel);
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = 0; i < m_PlayObject.MagicList.Count; i++)
+            for (int i = 0; i < m_PlayObject.MagicList.Count; i++)
             {
                 UserMagic = m_PlayObject.MagicList[i];
                 //if (string.Compare(UserMagic.MagicInfo.GetMagicName(), sSkillName, true) == 0)

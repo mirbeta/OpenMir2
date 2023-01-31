@@ -338,7 +338,7 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "MonUpLvRate", M2Share.Config.MonUpLvRate);
             }
             M2Share.Config.MonUpLvRate = ReadInteger("Setup", "MonUpLvRate", M2Share.Config.MonUpLvRate);
-            for (var i = 0; i < M2Share.Config.MonUpLvNeedKillCount.Length; i++)
+            for (int i = 0; i < M2Share.Config.MonUpLvNeedKillCount.Length; i++)
             {
                 if (ReadInteger("Setup", "MonUpLvNeedKillCount" + i, -1) < 0)
                 {
@@ -346,7 +346,7 @@ namespace GameSvr.Conf
                 }
                 M2Share.Config.MonUpLvNeedKillCount[i] = ReadInteger("Setup", "MonUpLvNeedKillCount" + i, M2Share.Config.MonUpLvNeedKillCount[i]);
             }
-            for (var i = 0; i < M2Share.Config.SlaveColor.Length; i++)
+            for (int i = 0; i < M2Share.Config.SlaveColor.Length; i++)
             {
                 if (ReadInteger("Setup", "SlaveColor" + i, -1) < 0)
                 {
@@ -457,7 +457,7 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "StartPointSize", M2Share.Config.StartPointSize);
             M2Share.Config.StartPointSize =
                 ReadInteger("Setup", "StartPointSize", M2Share.Config.StartPointSize);
-            for (var i = 0; i < M2Share.Config.ReNewNameColor.Length; i++)
+            for (int i = 0; i < M2Share.Config.ReNewNameColor.Length; i++)
             {
                 if (ReadInteger("Setup", "ReNewNameColor" + i, -1) < 0)
                 {
@@ -882,7 +882,7 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "SkeletonCount", M2Share.Config.SkeletonCount);
             }
             M2Share.Config.SkeletonCount = ReadInteger("Setup", "SkeletonCount", M2Share.Config.SkeletonCount);
-            for (var i = 0; i < M2Share.Config.SkeletonArray.Length; i++)
+            for (int i = 0; i < M2Share.Config.SkeletonArray.Length; i++)
             {
                 if (ReadInteger("Setup", "SkeletonHumLevel" + i, -1) < 0)
                 {
@@ -910,7 +910,7 @@ namespace GameSvr.Conf
                 WriteInteger("Setup", "DragonCount", M2Share.Config.DragonCount);
             }
             M2Share.Config.DragonCount = ReadInteger("Setup", "DragonCount", M2Share.Config.DragonCount);
-            for (var i = 0; i < M2Share.Config.DragonArray.Length; i++)
+            for (int i = 0; i < M2Share.Config.DragonArray.Length; i++)
             {
                 if (ReadInteger("Setup", "DragonHumLevel" + i, -1) < 0)
                 {
@@ -2162,7 +2162,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.nLevelValueOfTaosHP = nLoadInteger;
             }
-            var nLoadFloatRate = Read<double>("Setup", "LevelValueOfTaosHPRate", 0);
+            double nLoadFloatRate = Read<double>("Setup", "LevelValueOfTaosHPRate", 0);
             if (nLoadFloatRate == 0)
             {
                 WriteInteger("Setup", "LevelValueOfTaosHPRate", M2Share.Config.nLevelValueOfTaosHPRate);

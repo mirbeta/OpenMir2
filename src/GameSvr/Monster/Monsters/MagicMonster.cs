@@ -30,7 +30,7 @@ namespace GameSvr.Monster.Monsters
 
         private bool Think()
         {
-            var result = false;
+            bool result = false;
             if ((HUtil32.GetTickCount() - ThinkTick) > (3 * 1000))
             {
                 ThinkTick = HUtil32.GetTickCount();
@@ -59,7 +59,7 @@ namespace GameSvr.Monster.Monsters
 
         protected virtual bool AttackTarget()
         {
-            var result = false;
+            bool result = false;
             byte dir = 0;
             if (TargetCret != null)
             {

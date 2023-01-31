@@ -17,8 +17,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            var nTime = HUtil32.StrToInt(sParam1, -1);
+            string sParam1 = @Params.Length > 0 ? @Params[0] : "";
+            int nTime = HUtil32.StrToInt(sParam1, -1);
             int dwTime;
             if (nTime > 0)
             {

@@ -53,13 +53,13 @@ namespace GameSvr.Conf
                 WriteBool("Exp", "HighLevelGroupFixExp", M2Share.Config.HighLevelGroupFixExp);
             }
             M2Share.Config.HighLevelGroupFixExp = ReadBool("Exp", "HighLevelGroupFixExp", M2Share.Config.HighLevelGroupFixExp);
-            for (var i = 0; i < M2Share.Config.NeedExps.Length; i++)
+            for (int i = 0; i < M2Share.Config.NeedExps.Length; i++)
             {
                 LoadString = ReadString("Exp", "Level" + i, "");
                 LoadInteger = HUtil32.StrToInt(LoadString, 0);
                 if (LoadInteger == 0)
                 {
-                    var oldNeedExp = M2Share.OldNeedExps[i];
+                    int oldNeedExp = M2Share.OldNeedExps[i];
                     if (oldNeedExp <= 0)
                     {
                         oldNeedExp = ReadInteger("Exp", "Level" + i, 0);

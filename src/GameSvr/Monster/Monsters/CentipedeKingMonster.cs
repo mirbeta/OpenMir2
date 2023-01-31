@@ -17,10 +17,10 @@ namespace GameSvr.Monster.Monsters
 
         private bool CheckAttackTarget()
         {
-            var result = false;
-            for (var i = 0; i < VisibleActors.Count; i++)
+            bool result = false;
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
-                var baseObject = VisibleActors[i].BaseObject;
+                Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
                 if (baseObject.Death)
                 {
                     continue;
@@ -47,10 +47,10 @@ namespace GameSvr.Monster.Monsters
             {
                 AttackTick = HUtil32.GetTickCount();
                 SendAttackMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY);
-                var nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
-                for (var i = 0; i < VisibleActors.Count; i++)
+                int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    var baseObject = VisibleActors[i].BaseObject;
+                    Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
                     if (baseObject.Death)
                     {
                         continue;
@@ -97,9 +97,9 @@ namespace GameSvr.Monster.Monsters
                     {
                         if ((HUtil32.GetTickCount() - _attackTick) > 10000)
                         {
-                            for (var i = 0; i < VisibleActors.Count; i++)
+                            for (int i = 0; i < VisibleActors.Count; i++)
                             {
-                                var baseObject = VisibleActors[i].BaseObject;
+                                Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
                                 if (baseObject.Death)
                                 {
                                     continue;

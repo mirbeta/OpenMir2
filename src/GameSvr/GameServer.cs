@@ -59,7 +59,7 @@ namespace GameSvr
             if (M2Share.Config.SendOnlineCount && (HUtil32.GetTickCount() - M2Share.SendOnlineTick) > M2Share.Config.SendOnlineTime)
             {
                 M2Share.SendOnlineTick = HUtil32.GetTickCount();
-                var sMsg = string.Format(Settings.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (M2Share.Config.SendOnlineCountRate / 10)));
+                string sMsg = string.Format(Settings.SendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (M2Share.Config.SendOnlineCountRate / 10)));
                 M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }
@@ -86,17 +86,17 @@ namespace GameSvr
                     M2Share.GateMgr.Run();
                     if (!M2Share.DenySayMsgList.IsEmpty)
                     {
-                        var denyList = new List<string>(M2Share.DenySayMsgList.Count);
-                        foreach (var item in M2Share.DenySayMsgList)
+                        List<string> denyList = new List<string>(M2Share.DenySayMsgList.Count);
+                        foreach (KeyValuePair<string, long> item in M2Share.DenySayMsgList)
                         {
                             if (HUtil32.GetTickCount() > item.Value)
                             {
                                 denyList.Add(item.Key);
                             }
                         }
-                        for (var i = 0; i < denyList.Count; i++)
+                        for (int i = 0; i < denyList.Count; i++)
                         {
-                            if (M2Share.DenySayMsgList.TryRemove(denyList[i], out var denyName))
+                            if (M2Share.DenySayMsgList.TryRemove(denyList[i], out long denyName))
                             {
                                 _logger.Debug($"解除玩家[{denyList[i]}]禁言");
                             }

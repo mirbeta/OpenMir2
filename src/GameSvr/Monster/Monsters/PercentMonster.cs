@@ -55,7 +55,7 @@ namespace GameSvr.Monster.Monsters
 
         protected virtual bool AttackTarget()
         {
-            var result = false;
+            bool result = false;
             byte btDir = 0;
             if (TargetCret != null)
             {

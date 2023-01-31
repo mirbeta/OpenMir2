@@ -25,7 +25,7 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            var result = false;
+            bool result = false;
             if (IsProperTarget(attackTarget))
             {
                 if (attackTarget.HitPoint > 0)
@@ -116,10 +116,10 @@ namespace GameSvr.Actor
             short nY = 0;
             while (true)
             {
-                var nDir = (byte)((Direction + M2Share.Config.WideAttack[nC]) % 8);
+                byte nDir = (byte)((Direction + M2Share.Config.WideAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
-                    var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                    BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
                     {
                         result = AttackDirect(BaseObject, nSecPwr);
@@ -146,7 +146,7 @@ namespace GameSvr.Actor
                 byte nDir = (byte)((Direction + M2Share.Config.CrsAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
-                    var BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                    BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
                     {
                         result = AttackDirect(BaseObject, nSecPwr);

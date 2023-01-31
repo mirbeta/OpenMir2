@@ -41,21 +41,21 @@ namespace GameSvr.Monster.Monsters
         private void DoubleAttack(byte btDir)
         {
             Direction = btDir;
-            var nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+            int nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nDamage <= 0)
             {
                 return;
             }
             SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
-            for (var i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
-                for (var k = 0; k < 4; k++)
+                for (int k = 0; k < 4; k++)
                 {
                     if (M2Share.Config.SpitMap[btDir, i, k] == 1)
                     {
-                        var nX = (short)(CurrX - 2 + k);
-                        var nY = (short)(CurrY - 2 + i);
-                        var baseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                        short nX = (short)(CurrX - 2 + k);
+                        short nY = (short)(CurrY - 2 + i);
+                        BaseObject baseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                         if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                         {
                             nDamage = baseObject.GetHitStruckDamage(this, nDamage);

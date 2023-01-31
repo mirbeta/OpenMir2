@@ -72,12 +72,12 @@ namespace GameSvr.Actor
             {
                 if (IdQueue.Count < 20000)
                 {
-                    var sw = new Stopwatch();
+                    Stopwatch sw = new Stopwatch();
                     sw.Start();
-                    var hashMap = new HashSet<long>();
-                    for (var i = 0; i < 50000; i++)
+                    HashSet<long> hashMap = new HashSet<long>();
+                    for (int i = 0; i < 50000; i++)
                     {
-                        var sequence = IdWorker.NextId();
+                        int sequence = IdWorker.NextId();
                         if (hashMap.Contains(sequence))
                         {
                             while (true)
@@ -107,7 +107,7 @@ namespace GameSvr.Actor
 
         public int Dequeue()
         {
-            return IdQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
+            return IdQueue.TryDequeue(out int sequence) ? sequence : HUtil32.Sequence();
         }
 
         public void Add(BaseObject actor)
@@ -117,7 +117,7 @@ namespace GameSvr.Actor
 
         public BaseObject Get(int actorId)
         {
-            return _actorsMap.TryGetValue(actorId, out var actor) ? actor : null;
+            return _actorsMap.TryGetValue(actorId, out BaseObject actor) ? actor : null;
         }
 
         public void AddOhter(int objectId, object obj)
@@ -127,12 +127,12 @@ namespace GameSvr.Actor
 
         public object GetOhter(int objectId)
         {
-            return _ohterMap.TryGetValue(objectId, out var obj) ? obj : null;
+            return _ohterMap.TryGetValue(objectId, out object obj) ? obj : null;
         }
 
         public void RevomeOhter(int actorId)
         {
-            _ohterMap.TryRemove(actorId, out var actor);
+            _ohterMap.TryRemove(actorId, out object actor);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace GameSvr.Actor
             using IEnumerator<KeyValuePair<int, BaseObject>> actors = _actorsMap.GetEnumerator();
             while (actors.MoveNext())
             {
-                var actor = actors.Current.Value;
+                BaseObject actor = actors.Current.Value;
                 if (actor.Death)
                 {
                     MonsterDeathCount++;
@@ -156,9 +156,9 @@ namespace GameSvr.Actor
                 }
                 ActorIds.Add(actors.Current.Key);
             }
-            foreach (var actorId in ActorIds)
+            foreach (int actorId in ActorIds)
             {
-                if (_actorsMap.TryRemove(actorId, out var actor))
+                if (_actorsMap.TryRemove(actorId, out BaseObject actor))
                 {
                     if (actor.Race != ActorRace.Play)
                     {

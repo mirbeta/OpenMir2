@@ -92,7 +92,7 @@ namespace GameSvr.Services
 
         public bool IsIdle()
         {
-            var result = false;
+            bool result = false;
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
             {
@@ -110,7 +110,7 @@ namespace GameSvr.Services
 
         public int SaveListCount()
         {
-            var result = 0;
+            int result = 0;
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
             {
@@ -128,7 +128,7 @@ namespace GameSvr.Services
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
             {
-                for (var j = 0; j < m_SaveRcdList.Count; j++)
+                for (int j = 0; j < m_SaveRcdList.Count; j++)
                 {
                     if (m_SaveRcdList[j].QueryId == queryId)
                     {
@@ -146,13 +146,13 @@ namespace GameSvr.Services
         private void ProcessGameDate()
         {
             IList<GoldChangeInfo> changeGoldList = null;
-            var boReTryLoadDb = false;
+            bool boReTryLoadDb = false;
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
             {
                 if (m_SaveRcdList.Any())
                 {
-                    for (var i = 0; i < m_SaveRcdList.Count; i++)
+                    for (int i = 0; i < m_SaveRcdList.Count; i++)
                     {
                         m_SaveRcdTempList.Add(m_SaveRcdList[i]);
                     }
@@ -163,7 +163,7 @@ namespace GameSvr.Services
                 if (m_ChangeGoldList.Any())
                 {
                     changeGoldList = new List<GoldChangeInfo>();
-                    for (var i = 0; i < m_ChangeGoldList.Count; i++)
+                    for (int i = 0; i < m_ChangeGoldList.Count; i++)
                     {
                         changeGoldList.Add(m_ChangeGoldList[i]);
                     }
@@ -178,9 +178,9 @@ namespace GameSvr.Services
             {
                 PlayerDataService.ProcessQueryList();
                 PlayerDataService.ProcessSaveList();
-                for (var i = 0; i < m_SaveRcdTempList.Count; i++)
+                for (int i = 0; i < m_SaveRcdTempList.Count; i++)
                 {
-                    var SaveRcd = m_SaveRcdTempList[i];
+                    SavePlayerRcd SaveRcd = m_SaveRcdTempList[i];
                     if (SaveRcd == null)
                     {
                         continue;
@@ -210,7 +210,7 @@ namespace GameSvr.Services
                 HUtil32.EnterCriticalSection(UserCriticalSection);
                 try
                 {
-                    for (var i = 0; i < m_SaveRcdList.Count; i++)
+                    for (int i = 0; i < m_SaveRcdList.Count; i++)
                     {
                         if (m_SaveRcdList[i] != null)
                         {
@@ -225,9 +225,9 @@ namespace GameSvr.Services
                 m_SaveRcdList.Clear();
             }
             m_SaveRcdTempList.Clear();
-            for (var i = 0; i < m_LoadRcdTempList.Count; i++)
+            for (int i = 0; i < m_LoadRcdTempList.Count; i++)
             {
-                var loadDbInfo = m_LoadRcdTempList[i];
+                LoadDBInfo loadDbInfo = m_LoadRcdTempList[i];
                 if (loadDbInfo.SessionID == 0)
                 {
                     continue;
@@ -261,9 +261,9 @@ namespace GameSvr.Services
             m_LoadRcdTempList.Clear();
             if (changeGoldList != null)
             {
-                for (var i = 0; i < changeGoldList.Count; i++)
+                for (int i = 0; i < changeGoldList.Count; i++)
                 {
-                    var goldChangeInfo = changeGoldList[i];
+                    GoldChangeInfo goldChangeInfo = changeGoldList[i];
                     if (goldChangeInfo == null)
                     {
                         continue;
@@ -276,7 +276,7 @@ namespace GameSvr.Services
 
         public bool IsFull()
         {
-            var result = false;
+            bool result = false;
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
             {
@@ -308,7 +308,7 @@ namespace GameSvr.Services
         private bool LoadHumFromDB(LoadDBInfo LoadUser, ref bool boReTry)
         {
             int queryId = 0;
-            var result = false;
+            bool result = false;
             boReTry = false;
             if (InSaveRcdList(LoadUser.ChrName))
             {
@@ -327,7 +327,7 @@ namespace GameSvr.Services
             }
             else
             {
-                var userOpenInfo = new UserOpenInfo
+                UserOpenInfo userOpenInfo = new UserOpenInfo
                 {
                     ChrName = LoadUser.ChrName,
                     LoadUser = LoadUser,
@@ -347,11 +347,11 @@ namespace GameSvr.Services
         /// <returns></returns>
         public bool InSaveRcdList(string sChrName)
         {
-            var result = false;
+            bool result = false;
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
             {
-                for (var i = 0; i < m_SaveRcdList.Count; i++)
+                for (int i = 0; i < m_SaveRcdList.Count; i++)
                 {
                     if (string.Compare(m_SaveRcdList[i].ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -372,7 +372,7 @@ namespace GameSvr.Services
         /// </summary>
         public void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold)
         {
-            var GoldInfo = new GoldChangeInfo
+            GoldChangeInfo GoldInfo = new GoldChangeInfo
             {
                 sGameMasterName = sGameMasterName,
                 sGetGoldUser = sGetGoldUserName,
@@ -403,7 +403,7 @@ namespace GameSvr.Services
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
             {
-                for (var i = 0; i < m_LoadRcdList.Count; i++)
+                for (int i = 0; i < m_LoadRcdList.Count; i++)
                 {
                     LoadRcdInfo = m_LoadRcdList[i];
                     if (LoadRcdInfo.GateIdx == nGateIndex && LoadRcdInfo.SocketId == nSocket)
@@ -422,7 +422,7 @@ namespace GameSvr.Services
 
         private static bool ChangeUserGoldInDB(GoldChangeInfo GoldChangeInfo)
         {
-            var result = false;
+            bool result = false;
             /*if (PlayerDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
             {
                 if (HumanRcd.Data.Gold + GoldChangeInfo.nGold > 0 && HumanRcd.Data.Gold + GoldChangeInfo.nGold < 2000000000)

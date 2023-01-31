@@ -12,15 +12,15 @@ namespace GameSvr.Monster.Monsters
 
         protected virtual bool AttackTarget()
         {
-            var result = false;
+            bool result = false;
             if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
             {
                 AttackTick = HUtil32.GetTickCount();
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
-                var nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
-                for (var i = 0; i < VisibleActors.Count; i++)
+                int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    var baseObject = VisibleActors[i].BaseObject;
+                    BaseObject baseObject = VisibleActors[i].BaseObject;
                     if (baseObject.Death)
                     {
                         continue;

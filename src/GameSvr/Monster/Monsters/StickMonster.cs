@@ -58,7 +58,7 @@ namespace GameSvr.Monster.Monsters
         protected virtual void ComeDown()
         {
             this.SendRefMsg(Grobal2.RM_DIGDOWN, this.Direction, this.CurrX, this.CurrY, 0, "");
-            for (var i = 0; i < this.VisibleActors.Count; i++)
+            for (int i = 0; i < this.VisibleActors.Count; i++)
             {
                 Dispose(VisibleActors[i]);
             }
@@ -68,8 +68,8 @@ namespace GameSvr.Monster.Monsters
 
         protected virtual bool CheckComeOut()
         {
-            var result = false;
-            for (var i = 0; i < this.VisibleActors.Count; i++)
+            bool result = false;
+            for (int i = 0; i < this.VisibleActors.Count; i++)
             {
                 BaseObject baseObject = this.VisibleActors[i].BaseObject;
                 if (baseObject.Death)
@@ -116,7 +116,7 @@ namespace GameSvr.Monster.Monsters
                         {
                             this.SearchTarget();
                         }
-                        var bo05 = false;
+                        bool bo05 = false;
                         if (this.TargetCret != null)
                         {
                             if (Math.Abs(this.TargetCret.CurrX - this.CurrX) > AttackRange || Math.Abs(this.TargetCret.CurrY - this.CurrY) > AttackRange)

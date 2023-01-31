@@ -26,7 +26,7 @@ namespace GameSvr.Monster.Monsters
             CharStatus = GetCharStatus();
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             StoneMode = false;
-            var stoneEvent = new EventInfo(Envir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
+            EventInfo stoneEvent = new EventInfo(Envir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
             M2Share.EventMgr.AddEvent(stoneEvent);
         }
 
@@ -34,15 +34,15 @@ namespace GameSvr.Monster.Monsters
         {
             short nX = 0;
             short nY = 0;
-            var nCount = M2Share.RandomNumber.Random(6) + 6;
+            int nCount = M2Share.RandomNumber.Random(6) + 6;
             GetFrontPosition(ref nX, ref nY);
-            for (var i = 0; i < nCount; i++)
+            for (int i = 0; i < nCount; i++)
             {
                 if (_mSlaveObjectList.Count >= 30)
                 {
                     break;
                 }
-                var baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, nX, nY, M2Share.Config.Zuma[M2Share.RandomNumber.Random(4)]);
+                BaseObject baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, nX, nY, M2Share.Config.Zuma[M2Share.RandomNumber.Random(4)]);
                 if (baseObject != null)
                 {
                     _mSlaveObjectList.Add(baseObject);
@@ -52,7 +52,7 @@ namespace GameSvr.Monster.Monsters
 
         protected override void Attack(BaseObject targetBaseObject, byte nDir)
         {
-            var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
+            ushort nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
             HitMagAttackTarget(targetBaseObject, 0, nPower, true);
         }
 
@@ -63,7 +63,7 @@ namespace GameSvr.Monster.Monsters
                 BaseObject baseObject;
                 if (StoneMode)
                 {
-                    for (var i = 0; i < VisibleActors.Count; i++)
+                    for (int i = 0; i < VisibleActors.Count; i++)
                     {
                         baseObject = VisibleActors[i].BaseObject;
                         if (baseObject.Death)
@@ -100,7 +100,7 @@ namespace GameSvr.Monster.Monsters
                         }
                     }
                 }
-                for (var i = _mSlaveObjectList.Count - 1; i >= 0; i--)
+                for (int i = _mSlaveObjectList.Count - 1; i >= 0; i--)
                 {
                     baseObject = _mSlaveObjectList[i];
                     if (baseObject.Death || baseObject.Ghost)

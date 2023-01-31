@@ -17,13 +17,13 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = M2Share.DisableSendMsgList.Count - 1; i >= 0; i--)
+            for (int i = M2Share.DisableSendMsgList.Count - 1; i >= 0; i--)
             {
                 if (M2Share.DisableSendMsgList.Count <= 0)
                 {

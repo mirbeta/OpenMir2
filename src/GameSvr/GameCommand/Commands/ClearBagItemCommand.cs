@@ -14,13 +14,13 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? Params[0] : "";
+            string sHumanName = @Params.Length > 0 ? Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -30,9 +30,9 @@ namespace GameSvr.GameCommand.Commands
             if (m_PlayObject.ItemList.Count > 0)
             {
                 DelList = new List<DeleteItem>();
-                for (var i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
+                for (int i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
                 {
-                    var UserItem = m_PlayObject.ItemList[i];
+                    SystemModule.Packets.ClientPackets.UserItem UserItem = m_PlayObject.ItemList[i];
                     DelList.Add(new DeleteItem()
                     {
                         ItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index),
@@ -44,7 +44,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (DelList != null)
             {
-                var ObjectId = HUtil32.Sequence();
+                int ObjectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(ObjectId, DelList);
                 m_PlayObject.SendMsg(m_PlayObject, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
             }

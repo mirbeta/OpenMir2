@@ -14,15 +14,15 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sAccount = @Params.Length > 0 ? @Params[0] : "";
-            var sFixDeny = @Params.Length > 1 ? @Params[1] : "";
+            string sAccount = @Params.Length > 0 ? @Params[0] : "";
+            string sFixDeny = @Params.Length > 1 ? @Params[1] : "";
             if (sAccount == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var boDelete = false;
-            for (var i = 0; i < M2Share.DenyAccountList.Count; i++)
+            bool boDelete = false;
+            for (int i = 0; i < M2Share.DenyAccountList.Count; i++)
             {
                 //if ((sAccount).CompareTo((M2Share.g_DenyAccountList[i])) == 0)
                 //{

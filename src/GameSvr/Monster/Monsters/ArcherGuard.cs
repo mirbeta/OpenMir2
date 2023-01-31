@@ -20,7 +20,7 @@ namespace GameSvr.Monster.Monsters
         private void AttackTarger(BaseObject targetBaseObject)
         {
             Direction = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
-            var nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+            int nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nDamage > 0)
             {
                 nDamage = targetBaseObject.GetHitStruckDamage(this, nDamage);
@@ -44,16 +44,16 @@ namespace GameSvr.Monster.Monsters
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
                     WalkTick = HUtil32.GetTickCount();
-                    for (var i = 0; i < VisibleActors.Count; i++)
+                    for (int i = 0; i < VisibleActors.Count; i++)
                     {
-                        var baseObject = VisibleActors[i].BaseObject;
+                        BaseObject baseObject = VisibleActors[i].BaseObject;
                         if (baseObject.Death)
                         {
                             continue;
                         }
                         if (IsProperTarget(baseObject))
                         {
-                            var nAbs = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
+                            int nAbs = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
                             if (nAbs < nRage)
                             {
                                 nRage = nAbs;

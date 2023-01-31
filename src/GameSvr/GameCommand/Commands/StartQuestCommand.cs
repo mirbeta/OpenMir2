@@ -14,7 +14,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sQuestName = @params.Length > 0 ? @params[0] : "";
+            string sQuestName = @params.Length > 0 ? @params[0] : "";
             if (sQuestName == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);

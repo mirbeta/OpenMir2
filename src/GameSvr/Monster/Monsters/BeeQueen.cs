@@ -31,7 +31,7 @@ namespace GameSvr.Monster.Monsters
         {
             if (processMsg.wIdent == Grobal2.RM_ZEN_BEE)
             {
-                var bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, M2Share.Config.Bee);
+                BaseObject bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, M2Share.Config.Bee);
                 if (bb != null)
                 {
                     bb.SetTargetCreat(TargetCret);
@@ -57,9 +57,9 @@ namespace GameSvr.Monster.Monsters
                             MakeChildBee();
                         }
                     }
-                    for (var i = BeeList.Count - 1; i >= 0; i--)
+                    for (int i = BeeList.Count - 1; i >= 0; i--)
                     {
-                        var bb = BeeList[i];
+                        BaseObject bb = BeeList[i];
                         if (bb.Death || bb.Ghost)
                         {
                             BeeList.RemoveAt(i);

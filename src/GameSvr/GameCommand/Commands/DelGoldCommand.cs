@@ -17,13 +17,13 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumName = @Params.Length > 0 ? @Params[0] : "";
-            var nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
+            string sHumName = @Params.Length > 0 ? @Params[0] : "";
+            int nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             if (sHumName == "" || nCount <= 0)
             {
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (sHumName == "" || nCount <= 0)
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -51,7 +51,7 @@ namespace GameSvr.GameCommand.Commands
             }
             else
             {
-                var nServerIndex = 0;
+                int nServerIndex = 0;
                 if (M2Share.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex))
                 {
                     PlayObject.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", MsgColor.Green, MsgType.Hint);

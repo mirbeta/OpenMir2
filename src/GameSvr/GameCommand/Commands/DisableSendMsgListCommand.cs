@@ -16,7 +16,7 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             PlayObject.SysMsg("禁言列表:", MsgColor.Blue, MsgType.Hint);
-            for (var i = 0; i < M2Share.DisableSendMsgList.Count; i++)
+            for (int i = 0; i < M2Share.DisableSendMsgList.Count; i++)
             {
                 //PlayObject.SysMsg(Settings.g_DisableSendMsgList[i], TMsgColor.c_Green, TMsgType.t_Hint);
             }

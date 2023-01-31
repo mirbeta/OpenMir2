@@ -11,7 +11,7 @@ namespace GameSvr
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
-            var serviceRunner = new AppServer();
+            AppServer serviceRunner = new AppServer();
             await serviceRunner.RunAsync();
         }
     }

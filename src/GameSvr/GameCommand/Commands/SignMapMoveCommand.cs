@@ -25,14 +25,14 @@ namespace GameSvr.GameCommand.Commands
             //            }
             //            else
             //            {
-            //                PlayObject.SysMsg(string.Format(Settings.g_sGameCommandPositionMoveCanotMoveToMap1, PlayObject.m_sLastMapName, PlayObject.m_nLastCurrX,
+            //                PlayObject.SysMsg(string.Format(Settings.GameCommandPositionMoveCanotMoveToMap1, PlayObject.m_sLastMapName, PlayObject.m_nLastCurrX,
             //                    PlayObject.m_nLastCurrY), TMsgColor.c_Green, TMsgType.t_Hint);
             //            }
             //        }
             //    }
             //    else
             //    {
-            //        PlayObject.SysMsg(string.Format(Settings.g_sTheMapDisableMove, PlayObject.m_sLastMapName, Envir.sMapDesc), TMsgColor.c_Red, TMsgType.t_Hint);
+            //        PlayObject.SysMsg(string.Format(Settings.TheMapDisableMove, PlayObject.m_sLastMapName, Envir.sMapDesc), TMsgColor.c_Red, TMsgType.t_Hint);
             //    }
             //}
             //catch (Exception E)

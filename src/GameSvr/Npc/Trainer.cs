@@ -20,7 +20,7 @@ namespace GameSvr.Npc
 
         protected override bool Operate(ProcessMessage ProcessMsg)
         {
-            var result = false;
+            bool result = false;
             if (ProcessMsg.wIdent == Grobal2.RM_STRUCK || ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)
             {
                 if (ProcessMsg.BaseObject == ActorId)

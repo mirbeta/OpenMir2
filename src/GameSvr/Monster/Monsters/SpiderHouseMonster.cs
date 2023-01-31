@@ -61,9 +61,9 @@ namespace GameSvr.Monster.Monsters
                             GenBb();
                         }
                     }
-                    for (var i = _bbList.Count - 1; i >= 0; i--)
+                    for (int i = _bbList.Count - 1; i >= 0; i--)
                     {
-                        var bb = _bbList[i];
+                        BaseObject bb = _bbList[i];
                         if (bb.Death || bb.Ghost)
                         {
                             _bbList.RemoveAt(i);

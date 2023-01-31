@@ -15,16 +15,16 @@ namespace GameSvr.Monster.Monsters
 
         private bool AttackTarget()
         {
-            var result = false;
+            bool result = false;
             if (this.TargetCret.Envir == this.Envir)
             {
                 if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
                 {
                     this.AttackTick = HUtil32.GetTickCount();
                     this.TargetFocusTick = HUtil32.GetTickCount();
-                    var nOldX = this.CurrX;
-                    var nOldY = this.CurrY;
-                    var btOldDir = this.Direction;
+                    short nOldX = this.CurrX;
+                    short nOldY = this.CurrY;
+                    byte btOldDir = this.Direction;
                     this.TargetCret.GetBackPosition(ref this.CurrX, ref this.CurrY);
                     this.Direction = M2Share.GetNextDirection(this.CurrX, this.CurrY, this.TargetCret.CurrX, this.TargetCret.CurrY);
                     this.SendRefMsg(Grobal2.RM_HIT, this.Direction, this.CurrX, this.CurrY, 0, "");
@@ -72,9 +72,9 @@ namespace GameSvr.Monster.Monsters
             }
             if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
             {
-                for (var i = 0; i < this.VisibleActors.Count; i++)
+                for (int i = 0; i < this.VisibleActors.Count; i++)
                 {
-                    var attackObject = this.VisibleActors[i].BaseObject;
+                    BaseObject attackObject = this.VisibleActors[i].BaseObject;
                     if (attackObject == null)
                     {
                         continue;

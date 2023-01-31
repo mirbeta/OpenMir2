@@ -15,7 +15,7 @@ namespace GameSvr.RobotPlay
             int result = 0;
             if (VisibleActors.Count > 0)
             {
-                for (var i = 0; i < VisibleActors.Count; i++)
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
                     BaseObject = VisibleActors[i].BaseObject;
                     if (BaseObject != null)
@@ -85,7 +85,7 @@ namespace GameSvr.RobotPlay
             }
             if (wMagicID == MagicID)
             {
-                for (var i = 0; i < VisibleActors.Count; i++)
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
                     ActorObject = VisibleActors[i].BaseObject;
                     if (Math.Abs(CurrX - ActorObject.CurrX) <= 1 && Math.Abs(CurrY - ActorObject.CurrY) <= 1)

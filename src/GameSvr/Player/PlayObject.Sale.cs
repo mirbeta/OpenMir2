@@ -21,7 +21,7 @@ namespace GameSvr.Player
             DealOffInfo DealOffInfo;
             if (BoYbDeal)// 已开通元宝服务
             {
-                for (var i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
+                for (int i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
                 {
                     if (M2Share.SellOffItemList.Count <= 0)
                     {
@@ -72,13 +72,13 @@ namespace GameSvr.Player
             bo11 = false;
             if (!SellOffConfirm)
             {
-                for (var i = this.ItemList.Count - 1; i >= 0; i--)
+                for (int i = this.ItemList.Count - 1; i >= 0; i--)
                 {
                     if (this.ItemList.Count <= 0)
                     {
                         break;
                     }
-                    var UserItem = this.ItemList[i];
+                    UserItem UserItem = this.ItemList[i];
                     if (UserItem == null)
                     {
                         continue;
@@ -134,13 +134,13 @@ namespace GameSvr.Player
             bool bo11 = false;
             if (!SellOffConfirm)
             {
-                for (var i = SellOffItemList.Count - 1; i >= 0; i--)
+                for (int i = SellOffItemList.Count - 1; i >= 0; i--)
                 {
                     if (SellOffItemList.Count <= 0)
                     {
                         break;
                     }
-                    var UserItem = SellOffItemList[i];
+                    UserItem UserItem = SellOffItemList[i];
                     if (UserItem == null)
                     {
                         continue;
@@ -187,7 +187,7 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                for (var i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
+                for (int i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
                 {
                     if (M2Share.SellOffItemList.Count <= 0)
                     {
@@ -200,7 +200,7 @@ namespace GameSvr.Player
                         if (string.Compare(DealOffInfo.sDealChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && (DealOffInfo.Flag == 0 || DealOffInfo.Flag == 3))
                         {
                             DealOffInfo.Flag = 4;
-                            for (var j = 0; j < 9; j++)
+                            for (int j = 0; j < 9; j++)
                             {
                                 if (DealOffInfo.UseItems[j] == null)
                                 {
@@ -253,13 +253,13 @@ namespace GameSvr.Player
         /// <param name="dealChrName"></param>
         private void ClientBuyCancelSellOff(string dealChrName)
         {
-            for (var i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
+            for (int i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
             {
                 if (M2Share.SellOffItemList.Count <= 0)
                 {
                     break;
                 }
-                var dealOffInfo = M2Share.SellOffItemList[i];
+                DealOffInfo dealOffInfo = M2Share.SellOffItemList[i];
                 if (dealOffInfo != null)
                 {
                     if (string.Compare(dealOffInfo.sDealChrName, dealChrName, StringComparison.OrdinalIgnoreCase) == 0 &&
@@ -286,13 +286,13 @@ namespace GameSvr.Player
             PlayObject PlayObject;
             try
             {
-                for (var i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
+                for (int i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
                 {
                     if (M2Share.SellOffItemList.Count <= 0)
                     {
                         break;
                     }
-                    var dealOffInfo = M2Share.SellOffItemList[i];
+                    DealOffInfo dealOffInfo = M2Share.SellOffItemList[i];
                     if (dealOffInfo != null)
                     {
                         if (string.Compare(dealOffInfo.sDealChrName, dealChrName, StringComparison.OrdinalIgnoreCase) == 0
@@ -334,7 +334,7 @@ namespace GameSvr.Player
                                     }
                                 }
                                 M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
-                                for (var j = 0; j <= 9; j++)
+                                for (int j = 0; j <= 9; j++)
                                 {
                                     StdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[j].Index);
                                     if (StdItem != null)
@@ -396,13 +396,13 @@ namespace GameSvr.Player
             //}
             try
             {
-                for (var i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
+                for (int i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
                 {
                     if (M2Share.SellOffItemList.Count <= 0)
                     {
                         break;
                     }
-                    var dealOffInfo = M2Share.SellOffItemList[i];
+                    DealOffInfo dealOffInfo = M2Share.SellOffItemList[i];
                     if (dealOffInfo != null)
                     {
                         if (string.Compare(dealOffInfo.sDealChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 1)
@@ -443,15 +443,15 @@ namespace GameSvr.Player
         /// <returns></returns>
         public string SelectSellDate()
         {
-            var result = "您未开通" + M2Share.Config.GameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
+            string result = "您未开通" + M2Share.Config.GameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
             if (BoYbDeal)
             {
                 // 已开通元宝服务
                 if (M2Share.SellOffItemList.Count > 0)
                 {
-                    for (var i = 0; i < M2Share.SellOffItemList.Count; i++)
+                    for (int i = 0; i < M2Share.SellOffItemList.Count; i++)
                     {
-                        var dealOffInfo = M2Share.SellOffItemList[i];
+                        DealOffInfo dealOffInfo = M2Share.SellOffItemList[i];
                         if (dealOffInfo != null)
                         {
                             if (string.Compare(dealOffInfo.sDealChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 2)
@@ -479,12 +479,12 @@ namespace GameSvr.Player
         /// <returns></returns>
         public bool SellOffInTime(int nCode)
         {
-            var result = false;
+            bool result = false;
             if (M2Share.SellOffItemList.Count > 0)
             {
-                for (var i = 0; i < M2Share.SellOffItemList.Count; i++)
+                for (int i = 0; i < M2Share.SellOffItemList.Count; i++)
                 {
-                    var dealOffInfo = M2Share.SellOffItemList[i];
+                    DealOffInfo dealOffInfo = M2Share.SellOffItemList[i];
                     if (dealOffInfo != null)
                     {
                         switch (nCode)
@@ -524,7 +524,7 @@ namespace GameSvr.Player
             StdItem StdItem;
             DealOffInfo DealOffInfo;
             SellOffConfirm = true;
-            var bo11 = false;
+            bool bo11 = false;
             if (SellOffConfirm && (SellOffItemList.Count > 0 || nGameDiamond > 0) && SellOffItemList.Count < 10 && sBuyChrName.Length < 20 && nSellGold > 0 && nSellGold < 100000000
                 && string.Compare(sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) != 0)
             {
@@ -532,7 +532,7 @@ namespace GameSvr.Player
                 DealOffInfo = new DealOffInfo() { UseItems = new UserItem[9] };
                 if (SellOffItemList.Count > 0)
                 {
-                    for (var i = 0; i < SellOffItemList.Count; i++)
+                    for (int i = 0; i < SellOffItemList.Count; i++)
                     {
                         UserItem = SellOffItemList[i];
                         StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
@@ -542,7 +542,7 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                for (var j = 0; j < 9; j++)
+                for (int j = 0; j < 9; j++)
                 {
                     if (DealOffInfo.UseItems[j] == null)
                     {
@@ -614,7 +614,7 @@ namespace GameSvr.Player
             }
             if (SellOffItemList.Count > 0)
             {
-                for (var i = SellOffItemList.Count - 1; i >= 0; i--)
+                for (int i = SellOffItemList.Count - 1; i >= 0; i--)
                 {
                     this.ItemList.Add(SellOffItemList[i]);
                     SellOffItemList.RemoveAt(i);

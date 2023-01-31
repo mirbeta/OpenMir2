@@ -20,7 +20,7 @@ namespace GameSvr.Monster
 
         protected BaseObject MakeClone(string sMonName, BaseObject OldMon)
         {
-            var ElfMon = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
+            BaseObject ElfMon = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)
             {
                 if (OldMon.TargetCret == null)
@@ -57,7 +57,7 @@ namespace GameSvr.Monster
 
         private bool Think()
         {
-            var result = false;
+            bool result = false;
             if ((HUtil32.GetTickCount() - m_dwThinkTick) > (3 * 1000))
             {
                 m_dwThinkTick = HUtil32.GetTickCount();

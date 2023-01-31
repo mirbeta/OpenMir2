@@ -18,8 +18,8 @@ namespace GameSvr.Castle
             userCastle.IncomeToday = ReadDateTime("Setup", "IncomeToday", DateTime.Now);
             userCastle.TotalGold = ReadInteger("Setup", "TotalGold", 0);
             userCastle.TodayIncome = ReadInteger("Setup", "TodayIncome", 0);
-            var sMapList = ReadString("Defense", "CastleMapList", "");
-            var sMap = string.Empty;
+            string sMapList = ReadString("Defense", "CastleMapList", "");
+            string sMap = string.Empty;
             if (!string.IsNullOrEmpty(sMapList))
             {
                 while (!string.IsNullOrEmpty(sMapList))
@@ -64,9 +64,9 @@ namespace GameSvr.Castle
             userCastle.RightWall.sName = ReadString("Defense", "RightWallName", "RightWall");
             userCastle.RightWall.nHP = Read<ushort>("Defense", "RightWallHP", (short)2000);
             userCastle.RightWall.BaseObject = null;
-            for (var i = 0; i < userCastle.Archers.Length; i++)
+            for (int i = 0; i < userCastle.Archers.Length; i++)
             {
-                var objUnit = new ArcherUnit();
+                ArcherUnit objUnit = new ArcherUnit();
                 objUnit.nX = Read<short>("Defense", $"Archer_{i + 1}_X", (short)0);
                 objUnit.nY = Read<short>("Defense", $"Archer_{i + 1}_Y", (short)0);
                 objUnit.sName = ReadString("Defense", $"Archer_{i + 1}_Name", "弓箭手");
@@ -74,9 +74,9 @@ namespace GameSvr.Castle
                 objUnit.BaseObject = null;
                 userCastle.Archers[i] = objUnit;
             }
-            for (var i = 0; i < userCastle.Guards.Length; i++)
+            for (int i = 0; i < userCastle.Guards.Length; i++)
             {
-                var objUnit = new ArcherUnit();
+                ArcherUnit objUnit = new ArcherUnit();
                 objUnit.nX = Read<short>("Defense", $"Guard_{i + 1}_X", (short)0);
                 objUnit.nY = Read<short>("Defense", $"Guard_{i + 1}_Y", (short)0);
                 objUnit.sName = ReadString("Defense", $"Guard_{i + 1}_Name", "守卫");
@@ -88,8 +88,8 @@ namespace GameSvr.Castle
 
         public void SaveConfig(UserCastle userCastle)
         {
-            var filePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, userCastle.ConfigDir);
-            var sMapList = string.Empty;
+            string filePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, userCastle.ConfigDir);
+            string sMapList = string.Empty;
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
@@ -110,7 +110,7 @@ namespace GameSvr.Castle
                 WriteInteger("Setup", "TotalGold", userCastle.TotalGold);
             if (userCastle.TodayIncome != 0)
                 WriteInteger("Setup", "TodayIncome", userCastle.TodayIncome);
-            for (var i = 0; i < userCastle.EnvirList.Count; i++)
+            for (int i = 0; i < userCastle.EnvirList.Count; i++)
             {
                 sMapList = sMapList + userCastle.EnvirList[i] + ',';
             }
@@ -195,9 +195,9 @@ namespace GameSvr.Castle
             {
                 WriteInteger("Defense", "RightWallHP", userCastle.RightWall.BaseObject.WAbil.HP);
             }
-            for (var i = 0; i < userCastle.Archers.Length; i++)
+            for (int i = 0; i < userCastle.Archers.Length; i++)
             {
-                var objUnit = userCastle.Archers[i];
+                ArcherUnit objUnit = userCastle.Archers[i];
                 if (objUnit.nX != 0) WriteInteger("Defense", $"Archer_{i + 1}_X", objUnit.nX);
                 if (objUnit.nY != 0) WriteInteger("Defense", $"Archer_{i + 1}_Y", objUnit.nY);
                 if (!string.IsNullOrEmpty(objUnit.sName))
@@ -213,9 +213,9 @@ namespace GameSvr.Castle
                     WriteInteger("Defense", $"Archer_{i + 1}_HP", 0);
                 }
             }
-            for (var i = 0; i < userCastle.Guards.Length; i++)
+            for (int i = 0; i < userCastle.Guards.Length; i++)
             {
-                var objUnit = userCastle.Guards[i];
+                ArcherUnit objUnit = userCastle.Guards[i];
                 if (objUnit.nX != 0) WriteInteger("Defense", $"Guard_{i + 1}_X", objUnit.nX);
                 if (objUnit.nY != 0) WriteInteger("Defense", $"Guard_{i + 1}_Y", objUnit.nY);
                 if (objUnit.sName != "") WriteString("Defense", $"Guard_{i + 1}_Name", objUnit.sName);

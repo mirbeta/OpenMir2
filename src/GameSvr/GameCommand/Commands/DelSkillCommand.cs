@@ -36,13 +36,13 @@ namespace GameSvr.GameCommand.Commands
             {
                 boDelAll = false;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = m_PlayObject.MagicList.Count - 1; i >= 0; i--)
+            for (int i = m_PlayObject.MagicList.Count - 1; i >= 0; i--)
             {
                 if (m_PlayObject.MagicList.Count <= 0)
                 {

@@ -14,7 +14,7 @@ namespace GameSvr.Player
 
         protected void AttackDir(BaseObject targetObject, short wHitMode, byte nDir)
         {
-            var attackTarget = targetObject ?? GetPoseCreate();
+            BaseObject attackTarget = targetObject ?? GetPoseCreate();
             if (UseItems[Grobal2.U_WEAPON] != null && (UseItems[Grobal2.U_WEAPON].Index > 0) && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0)
             {
                 if (attackTarget != null)
@@ -60,9 +60,9 @@ namespace GameSvr.Player
                     break;
             }
 
-            var nBasePower = GetBaseAttackPoewr();//基础攻击力
-            var canHit = false;
-            var nPower = GetAttackPowerHit(wHitMode, nBasePower, attackTarget, ref canHit);
+            ushort nBasePower = GetBaseAttackPoewr();//基础攻击力
+            bool canHit = false;
+            ushort nPower = GetAttackPowerHit(wHitMode, nBasePower, attackTarget, ref canHit);
             SkillAttackDamage(wHitMode, nPower);
             AttackDir(attackTarget, nPower, nDir);
             SendAttackMsg(GetHitMode(wHitMode), Direction, CurrX, CurrY);
@@ -71,7 +71,7 @@ namespace GameSvr.Player
 
         private int GetHitMode(short wHitMode)
         {
-            var wIdent = Grobal2.RM_HIT;
+            int wIdent = Grobal2.RM_HIT;
             switch (wHitMode)
             {
                 case 0:
@@ -131,7 +131,7 @@ namespace GameSvr.Player
 
         private void SkillAttackDamage(short wHitMode, ushort nPower)
         {
-            var nSecPwr = 0;
+            int nSecPwr = 0;
             if (wHitMode > 0)
             {
                 switch (wHitMode)
@@ -217,7 +217,7 @@ namespace GameSvr.Player
                     AttackTarget.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
                 }
             }
-            var nWeaponDamage = (ushort)(M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
+            ushort nWeaponDamage = (ushort)(M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
             if ((nWeaponDamage > 0) && (UseItems[Grobal2.U_WEAPON] != null) && (UseItems[Grobal2.U_WEAPON].Index > 0))
             {
                 DoDamageWeapon(nWeaponDamage);
@@ -227,7 +227,7 @@ namespace GameSvr.Player
                 SuckupEnemyHealth = nPower / 100 * SuckupEnemyHealthRate;
                 if (SuckupEnemyHealth >= 2.0)
                 {
-                    var n20 = Convert.ToUInt16(SuckupEnemyHealth);
+                    ushort n20 = Convert.ToUInt16(SuckupEnemyHealth);
                     SuckupEnemyHealth = n20;
                     DamageHealth((ushort)-n20);
                 }
@@ -334,9 +334,9 @@ namespace GameSvr.Player
 
         public bool IsTrainingSkill(int nIndex)
         {
-            for (var i = 0; i < MagicList.Count; i++)
+            for (int i = 0; i < MagicList.Count; i++)
             {
-                var userMagic = MagicList[i];
+                UserMagic userMagic = MagicList[i];
                 if ((userMagic != null) && (userMagic.MagIdx == nIndex))
                 {
                     return true;
@@ -621,7 +621,7 @@ namespace GameSvr.Player
 
         protected override bool IsAttackTarget(BaseObject baseObject)
         {
-            var result = base.IsAttackTarget(baseObject);
+            bool result = base.IsAttackTarget(baseObject);
             if (result)
             {
                 return true;
@@ -645,7 +645,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case AttackMode.HAM_DEAR:
-                    if (baseObject != MDearHuman)
+                    if (baseObject != DearHuman)
                     {
                         result = true;
                     }
@@ -656,7 +656,7 @@ namespace GameSvr.Player
                         result = true;
                         if (MBoMaster)
                         {
-                            for (var i = 0; i < MasterList.Count; i++)
+                            for (int i = 0; i < MasterList.Count; i++)
                             {
                                 if (MasterList[i] == baseObject)
                                 {
@@ -667,7 +667,7 @@ namespace GameSvr.Player
                         }
                         if (((PlayObject)baseObject).MBoMaster)
                         {
-                            for (var i = 0; i < ((PlayObject)baseObject).MasterList.Count; i++)
+                            for (int i = 0; i < ((PlayObject)baseObject).MasterList.Count; i++)
                             {
                                 if (((PlayObject)baseObject).MasterList[i] == this)
                                 {
@@ -755,7 +755,7 @@ namespace GameSvr.Player
         {
             if (attackTarget.Race == ActorRace.Play)
             {
-                var result = IsProperIsFriend(attackTarget);
+                bool result = IsProperIsFriend(attackTarget);
                 if (attackTarget.Race < ActorRace.Animal)
                 {
                     return result;
@@ -769,7 +769,7 @@ namespace GameSvr.Player
                     return IsProperIsFriend(attackTarget.Master);
                 }
                 if (attackTarget.Race > ActorRace.Play) return result;
-                var targetObject = (PlayObject)attackTarget;
+                PlayObject targetObject = (PlayObject)attackTarget;
                 if (!targetObject.InGuildWarArea)
                 {
                     if (M2Share.Config.boPKLevelProtect)// 新人保护
@@ -817,7 +817,7 @@ namespace GameSvr.Player
 
         private bool ClientHitXY(int wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
         {
-            var result = false;
+            bool result = false;
             short n14 = 0;
             short n18 = 0;
             const string sExceptionMsg = "[Exception] TPlayObject::ClientHitXY";
@@ -883,7 +883,7 @@ namespace GameSvr.Player
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false))
                         {
-                            var StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
+                            StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                             if (StdItem != null && StdItem.Shape == 19)
                             {
                                 if (PileStones(n14, n18))
@@ -964,7 +964,7 @@ namespace GameSvr.Player
 
         private bool ClientHorseRunXY(int wIdent, short nX, short nY, bool boLateDelivery, ref int dwDelayTime)
         {
-            var result = false;
+            bool result = false;
             byte n14;
             int dwCheckTime;
             dwDelayTime = 0;
@@ -1057,12 +1057,12 @@ namespace GameSvr.Player
             {
                 return false;
             }
-            var UserMagic = GetMagicInfo(nKey);
+            UserMagic UserMagic = GetMagicInfo(nKey);
             if (UserMagic == null)
             {
                 return false;
             }
-            var boIsWarrSkill = MagicManager.IsWarrSkill(UserMagic.MagIdx);
+            bool boIsWarrSkill = MagicManager.IsWarrSkill(UserMagic.MagIdx);
             if (!boLateDelivery && !boIsWarrSkill && (!M2Share.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
@@ -1071,7 +1071,7 @@ namespace GameSvr.Player
                     return false;
                 }
                 MBoFilterAction = true;
-                var dwCheckTime = HUtil32.GetTickCount() - MDwMagicAttackTick;
+                int dwCheckTime = HUtil32.GetTickCount() - MDwMagicAttackTick;
                 if (dwCheckTime < MDwMagicAttackInterval)
                 {
                     MDwMagicAttackCount++;
@@ -1301,7 +1301,7 @@ namespace GameSvr.Player
                     return false;
                 }
                 MBoFilterAction = true;
-                var dwCheckTime = HUtil32.GetTickCount() - MDwMoveTick;
+                int dwCheckTime = HUtil32.GetTickCount() - MDwMoveTick;
                 if (dwCheckTime < M2Share.Config.RunIntervalTime)
                 {
                     MDwMoveCount++;

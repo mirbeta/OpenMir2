@@ -145,9 +145,9 @@ namespace GameSvr.World
         {
             try
             {
-                for (var i = 0; i < MobThreads.Length; i++)
+                for (int i = 0; i < MobThreads.Length; i++)
                 {
-                    var mobThread = MobThreads[i];
+                    MonsterThread mobThread = MobThreads[i];
                     if (mobThread == null)
                     {
                         continue;
@@ -184,7 +184,7 @@ namespace GameSvr.World
 
         private int GetMonRace(string sMonName)
         {
-            var result = -1;
+            int result = -1;
             if (MonsterList.ContainsKey(sMonName))
             {
                 return MonsterList[sMonName].Race;
@@ -194,7 +194,7 @@ namespace GameSvr.World
 
         private int GetMonsterThreadId(string sMonName)
         {
-            if (MonsterThreadMap.TryGetValue(sMonName, out var threadId))
+            if (MonsterThreadMap.TryGetValue(sMonName, out int threadId))
             {
                 return threadId;
             }
@@ -203,9 +203,9 @@ namespace GameSvr.World
 
         private void MerchantInitialize()
         {
-            for (var i = MerchantList.Count - 1; i >= 0; i--)
+            for (int i = MerchantList.Count - 1; i >= 0; i--)
             {
-                var merchant = MerchantList[i];
+                Merchant merchant = MerchantList[i];
                 merchant.Envir = M2Share.MapMgr.FindMap(merchant.MapName);
                 if (merchant.Envir != null)
                 {
@@ -232,9 +232,9 @@ namespace GameSvr.World
 
         private void NpCinitialize()
         {
-            for (var i = QuestNpcList.Count - 1; i >= 0; i--)
+            for (int i = QuestNpcList.Count - 1; i >= 0; i--)
             {
-                var normNpc = QuestNpcList[i];
+                NormNpc normNpc = QuestNpcList[i];
                 normNpc.Envir = M2Share.MapMgr.FindMap(normNpc.MapName);
                 if (normNpc.Envir != null)
                 {
@@ -275,14 +275,14 @@ namespace GameSvr.World
 
         private bool ProcessHumansIsLogined(string sChrName)
         {
-            var result = false;
+            bool result = false;
             if (M2Share.FrontEngine.InSaveRcdList(sChrName))
             {
                 result = true;
             }
             else
             {
-                for (var i = 0; i < PlayObjectList.Count; i++)
+                for (int i = 0; i < PlayObjectList.Count; i++)
                 {
                     if (string.Compare(PlayObjectList[i].ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -331,7 +331,7 @@ namespace GameSvr.World
                         playObject.CurrY = GetRandHomeY(playObject);
                         if (playObject.Abil.Level == 0)
                         {
-                            var abil = playObject.Abil;
+                            Ability abil = playObject.Abil;
                             abil.Level = 1;
                             abil.AC = 0;
                             abil.MAC = 0;
@@ -368,7 +368,7 @@ namespace GameSvr.World
                         }
                     }
                     playObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(playObject.ChrName);
-                    var userCastle = M2Share.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
+                    Castle.UserCastle userCastle = M2Share.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
                     if (envir != null && userCastle != null && (userCastle.PalaceEnvir == envir || userCastle.UnderWar))
                     {
                         userCastle = M2Share.CastleMgr.IsCastleMember(playObject);
@@ -437,7 +437,7 @@ namespace GameSvr.World
                         return result;
                     }
                     playObject.MapFileName = envir.MapFileName;
-                    var nC = 0;
+                    int nC = 0;
                     while (true)
                     {
                         if (envir.CanWalk(playObject.CurrX, playObject.CurrY, true)) break;
@@ -541,7 +541,7 @@ namespace GameSvr.World
         {
             const string sExceptionMsg1 = "[Exception] TUserEngine::ProcessHumans -> Ready, Save, Load...";
             const string sExceptionMsg3 = "[Exception] TUserEngine::ProcessHumans ClosePlayer.Delete";
-            var dwCheckTime = HUtil32.GetTickCount();
+            int dwCheckTime = HUtil32.GetTickCount();
             PlayObject playObject;
             if ((HUtil32.GetTickCount() - ProcessLoadPlayTick) > 200)
             {
@@ -552,8 +552,8 @@ namespace GameSvr.World
                     try
                     {
                         //没有进入游戏前 不删除和清空列表
-                        var tempList = new List<int>();
-                        for (var i = 0; i < LoadPlayList.Count; i++)
+                        List<int> tempList = new List<int>();
+                        for (int i = 0; i < LoadPlayList.Count; i++)
                         {
                             UserOpenInfo userOpenInfo = LoadPlayList[i];
                             if (userOpenInfo == null)
@@ -603,9 +603,9 @@ namespace GameSvr.World
                             LoadPlayList.RemoveAt(i);
                         }
                         //LoadPlayList.Clear();
-                        for (var i = 0; i < _mChangeHumanDbGoldList.Count; i++)
+                        for (int i = 0; i < _mChangeHumanDbGoldList.Count; i++)
                         {
-                            var goldChangeInfo = _mChangeHumanDbGoldList[i];
+                            GoldChangeInfo goldChangeInfo = _mChangeHumanDbGoldList[i];
                             playObject = GetPlayObject(goldChangeInfo.sGameMasterName);
                             if (playObject != null)
                             {
@@ -619,13 +619,13 @@ namespace GameSvr.World
                     {
                         HUtil32.LeaveCriticalSection(LoadPlaySection);
                     }
-                    for (var i = 0; i < NewHumanList.Count; i++)
+                    for (int i = 0; i < NewHumanList.Count; i++)
                     {
                         playObject = NewHumanList[i];
                         M2Share.GateMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
                     }
                     NewHumanList.Clear();
-                    for (var i = 0; i < ListOfGateIdx.Count; i++)
+                    for (int i = 0; i < ListOfGateIdx.Count; i++)
                     {
                         M2Share.GateMgr.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
                     }
@@ -647,7 +647,7 @@ namespace GameSvr.World
                     RobotLogonTick = HUtil32.GetTickCount();
                     if (RobotLogonList.Count > 0)
                     {
-                        var roBot = RobotLogonList[0];
+                        RoBotLogon roBot = RobotLogonList[0];
                         RegenAiObject(roBot);
                         RobotLogonList.RemoveAt(0);
                     }
@@ -656,7 +656,7 @@ namespace GameSvr.World
 
             try
             {
-                for (var i = 0; i < PlayObjectFreeList.Count; i++)
+                for (int i = 0; i < PlayObjectFreeList.Count; i++)
                 {
                     playObject = PlayObjectFreeList[i];
                     if ((HUtil32.GetTickCount() - playObject.GhostTick) > M2Share.Config.HumanFreeDelayTime)// 5 * 60 * 1000
@@ -697,7 +697,7 @@ namespace GameSvr.World
             {
                 ProcessHumanLoopTime = 0;
                 M2Share.ProcessHumanLoopTime = ProcessHumanLoopTime;
-                var dwUsrRotTime = HUtil32.GetTickCount() - M2Share.UsrRotCountTick;
+                int dwUsrRotTime = HUtil32.GetTickCount() - M2Share.UsrRotCountTick;
                 M2Share.UsrRotCountMin = dwUsrRotTime;
                 M2Share.UsrRotCountTick = HUtil32.GetTickCount();
                 if (M2Share.UsrRotCountMax < dwUsrRotTime) M2Share.UsrRotCountMax = dwUsrRotTime;
@@ -711,14 +711,14 @@ namespace GameSvr.World
             const string sExceptionMsg = "[Exception] TUserEngine::ProcessRobotPlayData";
             try
             {
-                var dwCurTick = HUtil32.GetTickCount();
-                var nIdx = ProcBotHubIdx;
-                var boCheckTimeLimit = false;
-                var dwCheckTime = HUtil32.GetTickCount();
+                int dwCurTick = HUtil32.GetTickCount();
+                int nIdx = ProcBotHubIdx;
+                bool boCheckTimeLimit = false;
+                int dwCheckTime = HUtil32.GetTickCount();
                 while (true)
                 {
                     if (BotPlayObjectList.Count <= nIdx) break;
-                    var playObject = BotPlayObjectList[nIdx];
+                    PlayObject playObject = BotPlayObjectList[nIdx];
                     if (dwCurTick - playObject.RunTick > playObject.RunTime)
                     {
                         playObject.RunTick = dwCurTick;
@@ -780,14 +780,14 @@ namespace GameSvr.World
         {
             try
             {
-                var dwCurTick = HUtil32.GetTickCount();
-                var nIdx = ProcHumIdx;
-                var boCheckTimeLimit = false;
-                var dwCheckTime = HUtil32.GetTickCount();
+                int dwCurTick = HUtil32.GetTickCount();
+                int nIdx = ProcHumIdx;
+                bool boCheckTimeLimit = false;
+                int dwCheckTime = HUtil32.GetTickCount();
                 while (true)
                 {
                     if (PlayObjectList.Count <= nIdx) break;
-                    var playObject = PlayObjectList[nIdx];
+                    PlayObject playObject = PlayObjectList[nIdx];
                     if (playObject == null)
                     {
                         continue;
@@ -821,7 +821,7 @@ namespace GameSvr.World
                                         playObject.ShowLineNoticeTick = HUtil32.GetTickCount();
                                         if (M2Share.LineNoticeList.Count > playObject.ShowLineNoticeIdx)
                                         {
-                                            var lineNoticeMsg = M2Share.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
+                                            string lineNoticeMsg = M2Share.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
                                             switch (lineNoticeMsg[0])
                                             {
                                                 case 'R':
@@ -885,15 +885,15 @@ namespace GameSvr.World
 
         private void ProcessMerchants()
         {
-            var boProcessLimit = false;
+            bool boProcessLimit = false;
             const string sExceptionMsg = "[Exception] TUserEngine::ProcessMerchants";
-            var dwRunTick = HUtil32.GetTickCount();
+            int dwRunTick = HUtil32.GetTickCount();
             try
             {
-                var dwCurrTick = HUtil32.GetTickCount();
-                for (var i = _merchantPosition; i < MerchantList.Count; i++)
+                int dwCurrTick = HUtil32.GetTickCount();
+                for (int i = _merchantPosition; i < MerchantList.Count; i++)
                 {
-                    var merchantNpc = MerchantList[i];
+                    Merchant merchantNpc = MerchantList[i];
                     if (!merchantNpc.Ghost)
                     {
                         if ((dwCurrTick - merchantNpc.RunTick) > merchantNpc.RunTime)
@@ -953,12 +953,12 @@ namespace GameSvr.World
 
         private void ProcessNpcs()
         {
-            var dwRunTick = HUtil32.GetTickCount();
-            var boProcessLimit = false;
+            int dwRunTick = HUtil32.GetTickCount();
+            bool boProcessLimit = false;
             try
             {
-                var dwCurrTick = HUtil32.GetTickCount();
-                for (var i = NpcPosition; i < QuestNpcList.Count; i++)
+                int dwCurrTick = HUtil32.GetTickCount();
+                for (int i = NpcPosition; i < QuestNpcList.Count; i++)
                 {
                     NormNpc npc = QuestNpcList[i];
                     if (!npc.Ghost)
@@ -1043,7 +1043,7 @@ namespace GameSvr.World
         {
             Items.StdItem result = null;
             if (string.IsNullOrEmpty(sItemName)) return null;
-            for (var i = 0; i < StdItemList.Count; i++)
+            for (int i = 0; i < StdItemList.Count; i++)
             {
                 Items.StdItem stdItem = StdItemList[i];
                 if (string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -1068,7 +1068,7 @@ namespace GameSvr.World
 
         public string GetStdItemName(int nItemIdx)
         {
-            var result = "";
+            string result = "";
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
@@ -1079,7 +1079,7 @@ namespace GameSvr.World
 
         public bool FindOtherServerUser(string sName, ref int nServerIndex)
         {
-            if (OtherUserNameList.TryGetValue(sName, out var groupServer))
+            if (OtherUserNameList.TryGetValue(sName, out ServerGruopInfo groupServer))
             {
                 nServerIndex = groupServer.nServerIdx;
                 M2Share.Log.Info($"玩家在[{nServerIndex}]服务器上.");
@@ -1091,7 +1091,7 @@ namespace GameSvr.World
         public void CryCry(short wIdent, Envirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
         {
             PlayObject playObject;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == pMap && playObject.BanShout &&
@@ -1103,9 +1103,9 @@ namespace GameSvr.World
         public bool CopyToUserItemFromName(string sItemName, ref UserItem item)
         {
             if (string.IsNullOrEmpty(sItemName)) return false;
-            for (var i = 0; i < StdItemList.Count; i++)
+            for (int i = 0; i < StdItemList.Count; i++)
             {
-                var stdItem = StdItemList[i];
+                Items.StdItem stdItem = StdItemList[i];
                 if (!stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase)) continue;
                 if (item == null) item = new UserItem();
                 item.Index = (ushort)(i + 1);
@@ -1119,7 +1119,7 @@ namespace GameSvr.World
 
         public static void ProcessUserMessage(PlayObject playObject, CommandPacket defMsg, string buff)
         {
-            var sMsg = string.Empty;
+            string sMsg = string.Empty;
             if (playObject.OffLineFlag) return;
             if (!string.IsNullOrEmpty(buff)) sMsg = buff;
             switch (defMsg.Ident)
@@ -1242,7 +1242,7 @@ namespace GameSvr.World
 
         public void GetIsmChangeServerReceive(string flName)
         {
-            for (var i = 0; i < PlayObjectFreeList.Count; i++)
+            for (int i = 0; i < PlayObjectFreeList.Count; i++)
             {
                 PlayObject hum = PlayObjectFreeList[i];
                 if (hum.MSSwitchDataTempFile == flName)
@@ -1255,8 +1255,8 @@ namespace GameSvr.World
 
         public void OtherServerUserLogon(int sNum, string uname)
         {
-            var name = string.Empty;
-            var apmode = HUtil32.GetValidStr3(uname, ref name, ':');
+            string name = string.Empty;
+            string apmode = HUtil32.GetValidStr3(uname, ref name, ':');
             OtherUserNameList.Remove(name);
             OtherUserNameList.Add(name, new ServerGruopInfo()
             {
@@ -1267,8 +1267,8 @@ namespace GameSvr.World
 
         public void OtherServerUserLogout(int sNum, string uname)
         {
-            var name = string.Empty;
-            var apmode = HUtil32.GetValidStr3(uname, ref name, ':');
+            string name = string.Empty;
+            string apmode = HUtil32.GetValidStr3(uname, ref name, ':');
             OtherUserNameList.Remove(name);
             // for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
             // {
@@ -1283,7 +1283,7 @@ namespace GameSvr.World
         public PlayObject GetPlayObject(string sName)
         {
             PlayObject result = null;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -1307,7 +1307,7 @@ namespace GameSvr.World
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                for (var i = 0; i < PlayObjectList.Count; i++)
+                for (int i = 0; i < PlayObjectList.Count; i++)
                 {
                     if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -1329,7 +1329,7 @@ namespace GameSvr.World
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                for (var i = 0; i < PlayObjectList.Count; i++)
+                for (int i = 0; i < PlayObjectList.Count; i++)
                 {
                     if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -1347,8 +1347,8 @@ namespace GameSvr.World
 
         public static T FindMerchant<T>(int merchantId)
         {
-            var normNpc = M2Share.ActorMgr.Get(merchantId);
-            var npcType = normNpc.GetType();
+            BaseObject normNpc = M2Share.ActorMgr.Get(merchantId);
+            Type npcType = normNpc.GetType();
             if (npcType == typeof(Merchant))
             {
                 return (T)Convert.ChangeType(normNpc, typeof(T));
@@ -1370,7 +1370,7 @@ namespace GameSvr.World
 
         public static T FindNpc<T>(int npcId)
         {
-            var normNpc = M2Share.ActorMgr.Get(npcId);
+            BaseObject normNpc = M2Share.ActorMgr.Get(npcId);
             return (T)Convert.ChangeType(normNpc, typeof(T));
         }
 
@@ -1380,10 +1380,10 @@ namespace GameSvr.World
         /// <returns></returns>
         public int GetMapOfRangeHumanCount(Envirnoment envir, int nX, int nY, int nRange)
         {
-            var result = 0;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            int result = 0;
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
-                var playObject = PlayObjectList[i];
+                PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == envir)
                 {
                     if (Math.Abs(playObject.CurrX - nX) < nRange && Math.Abs(playObject.CurrY - nY) < nRange)
@@ -1397,9 +1397,9 @@ namespace GameSvr.World
 
         public bool GetHumPermission(string sUserName, ref string sIPaddr, ref byte btPermission)
         {
-            var result = false;
+            bool result = false;
             btPermission = (byte)M2Share.Config.StartPermission;
-            for (var i = 0; i < AdminList.Count; i++)
+            for (int i = 0; i < AdminList.Count; i++)
             {
                 AdminInfo adminInfo = AdminList[i];
                 if (string.Compare(adminInfo.sChrName, sUserName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -1428,9 +1428,9 @@ namespace GameSvr.World
 
         private void KickOnlineUser(string sChrName)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
-                var playObject = PlayObjectList[i];
+                PlayObject playObject = PlayObjectList[i];
                 if (string.Compare(playObject.ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playObject.BoKickFlag = true;
@@ -1441,8 +1441,8 @@ namespace GameSvr.World
 
         private static void SendChangeServer(PlayObject playObject, byte nServerIndex)
         {
-            var sIPaddr = string.Empty;
-            var nPort = 0;
+            string sIPaddr = string.Empty;
+            int nPort = 0;
             const string sMsg = "{0}/{1}";
             if (M2Share.GetMultiServerAddrPort(nServerIndex, ref sIPaddr, ref nPort))
             {
@@ -1457,7 +1457,7 @@ namespace GameSvr.World
             {
                 return;
             }
-            var saveRcd = new SavePlayerRcd
+            SavePlayerRcd saveRcd = new SavePlayerRcd
             {
                 Account = playObject.UserAccount,
                 ChrName = playObject.ChrName,
@@ -1477,7 +1477,7 @@ namespace GameSvr.World
 
         private void GetHumData(PlayObject playObject, ref PlayerDataInfo humanRcd)
         {
-            var humData = humanRcd.Data;
+            PlayerInfoData humData = humanRcd.Data;
             playObject.UserAccount = humData.Account;
             playObject.ChrName = humData.ChrName;
             playObject.MapName = humData.CurMap;
@@ -1511,7 +1511,7 @@ namespace GameSvr.World
             playObject.MBtReLevel = humData.ReLevel;
             playObject.MasterName = humData.MasterName;
             playObject.MBoMaster = humData.IsMaster;
-            playObject.MSDearName = humData.DearName;
+            playObject.DearName = humData.DearName;
             playObject.StoragePwd = humData.StoragePwd;
             if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
@@ -1555,7 +1555,7 @@ namespace GameSvr.World
             ServerUserItem[] bagItems = humanRcd.Data.BagItems;
             if (bagItems != null)
             {
-                for (var i = 0; i < bagItems.Length; i++)
+                for (int i = 0; i < bagItems.Length; i++)
                 {
                     if (bagItems[i] == null)
                     {
@@ -1567,19 +1567,19 @@ namespace GameSvr.World
                     }
                 }
             }
-            var humMagic = humanRcd.Data.Magic;
+            MagicRcd[] humMagic = humanRcd.Data.Magic;
             if (humMagic != null)
             {
-                for (var i = 0; i < humMagic.Length; i++)
+                for (int i = 0; i < humMagic.Length; i++)
                 {
                     if (humMagic[i] == null)
                     {
                         continue;
                     }
-                    var magicInfo = FindMagic(humMagic[i].MagIdx);
+                    MagicInfo magicInfo = FindMagic(humMagic[i].MagIdx);
                     if (magicInfo != null)
                     {
-                        var userMagic = new UserMagic();
+                        UserMagic userMagic = new UserMagic();
                         userMagic.Magic = magicInfo;
                         userMagic.MagIdx = humMagic[i].MagIdx;
                         userMagic.Level = humMagic[i].Level;
@@ -1592,7 +1592,7 @@ namespace GameSvr.World
             ServerUserItem[] storageItems = humanRcd.Data.StorageItems;
             if (storageItems != null)
             {
-                for (var i = 0; i < storageItems.Length; i++)
+                for (int i = 0; i < storageItems.Length; i++)
                 {
                     if (storageItems[i] == null)
                     {
@@ -1645,7 +1645,7 @@ namespace GameSvr.World
             humanRcd.Data.ReLevel = playObject.MBtReLevel;
             humanRcd.Data.MasterName = playObject.MasterName;
             humanRcd.Data.IsMaster = playObject.MBoMaster;
-            humanRcd.Data.DearName = playObject.MSDearName;
+            humanRcd.Data.DearName = playObject.DearName;
             humanRcd.Data.GameGold = playObject.GameGold;
             humanRcd.Data.GamePoint = playObject.GamePoint;
             humanRcd.Data.AllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
@@ -1666,7 +1666,7 @@ namespace GameSvr.World
             humanRcd.Data.QuestUnitOpen = playObject.QuestUnitOpen;
             humanRcd.Data.QuestUnit = playObject.QuestUnit;
             humanRcd.Data.QuestFlag = playObject.QuestFlag;
-            var HumItems = humanRcd.Data.HumItems;
+            ServerUserItem[] HumItems = humanRcd.Data.HumItems;
             if (HumItems == null)
             {
                 HumItems = new ServerUserItem[13];
@@ -1684,37 +1684,37 @@ namespace GameSvr.World
             HumItems[Grobal2.U_BELT] = playObject.UseItems[Grobal2.U_BELT] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_BELT].ToServerItem();
             HumItems[Grobal2.U_BOOTS] = playObject.UseItems[Grobal2.U_BOOTS] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_BOOTS].ToServerItem();
             HumItems[Grobal2.U_CHARM] = playObject.UseItems[Grobal2.U_CHARM] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_CHARM].ToServerItem();
-            var BagItems = humanRcd.Data.BagItems;
+            ServerUserItem[] BagItems = humanRcd.Data.BagItems;
             if (BagItems == null)
             {
                 BagItems = new ServerUserItem[Grobal2.MAXBAGITEM];
             }
-            for (var i = 0; i < playObject.ItemList.Count; i++)
+            for (int i = 0; i < playObject.ItemList.Count; i++)
             {
                 if (i < Grobal2.MAXBAGITEM)
                 {
                     BagItems[i] = playObject.ItemList[i].ToServerItem();
                 }
             }
-            for (var i = 0; i < BagItems.Length; i++)
+            for (int i = 0; i < BagItems.Length; i++)
             {
                 if (BagItems[i] == null)
                 {
                     BagItems[i] = HUtil32.DelfautItem.ToServerItem();
                 }
             }
-            var HumMagic = humanRcd.Data.Magic;
+            MagicRcd[] HumMagic = humanRcd.Data.Magic;
             if (HumMagic == null)
             {
                 HumMagic = new MagicRcd[Grobal2.MaxMagicCount];
             }
-            for (var i = 0; i < playObject.MagicList.Count; i++)
+            for (int i = 0; i < playObject.MagicList.Count; i++)
             {
                 if (i >= Grobal2.MaxMagicCount)
                 {
                     break;
                 }
-                var userMagic = playObject.MagicList[i];
+                UserMagic userMagic = playObject.MagicList[i];
                 if (HumMagic[i] == null)
                 {
                     HumMagic[i] = new MagicRcd();
@@ -1724,19 +1724,19 @@ namespace GameSvr.World
                 HumMagic[i].MagicKey = userMagic.Key;
                 HumMagic[i].TranPoint = userMagic.TranPoint;
             }
-            for (var i = 0; i < HumMagic.Length; i++)
+            for (int i = 0; i < HumMagic.Length; i++)
             {
                 if (HumMagic[i] == null)
                 {
                     HumMagic[i] = HUtil32.DetailtMagicRcd;
                 }
             }
-            var StorageItems = humanRcd.Data.StorageItems;
+            ServerUserItem[] StorageItems = humanRcd.Data.StorageItems;
             if (StorageItems == null)
             {
                 StorageItems = new ServerUserItem[50];
             }
-            for (var i = 0; i < playObject.StorageItemList.Count; i++)
+            for (int i = 0; i < playObject.StorageItemList.Count; i++)
             {
                 if (i >= StorageItems.Length)
                 {
@@ -1744,7 +1744,7 @@ namespace GameSvr.World
                 }
                 StorageItems[i] = playObject.StorageItemList[i].ToServerItem();
             }
-            for (var i = 0; i < StorageItems.Length; i++)
+            for (int i = 0; i < StorageItems.Length; i++)
             {
                 if (StorageItems[i] == null)
                 {
@@ -1787,7 +1787,7 @@ namespace GameSvr.World
         public MagicInfo FindMagic(int nMagIdx)
         {
             MagicInfo result = null;
-            for (var i = 0; i < MagicList.Count; i++)
+            for (int i = 0; i < MagicList.Count; i++)
             {
                 MagicInfo magic = MagicList[i];
                 if (magic.MagicId == nMagIdx)
@@ -1801,7 +1801,7 @@ namespace GameSvr.World
 
         public void OpenDoor(Envirnoment envir, int nX, int nY)
         {
-            var door = envir.GetDoor(nX, nY);
+            DoorInfo door = envir.GetDoor(nX, nY);
             if (door != null && !door.Status.Opened && !door.Status.bo01)
             {
                 door.Status.Opened = true;
@@ -1824,20 +1824,20 @@ namespace GameSvr.World
             int n24 = nX + 12;
             int n20 = nY - 12;
             int n28 = nY + 12;
-            for (var n10 = n1C; n10 <= n24; n10++)
+            for (int n10 = n1C; n10 <= n24; n10++)
             {
-                for (var n14 = n20; n14 <= n28; n14++)
+                for (int n14 = n20; n14 <= n28; n14++)
                 {
-                    var cellSuccess = false;
-                    var cellInfo = envir.GetCellInfo(n10, n14, ref cellSuccess);
+                    bool cellSuccess = false;
+                    MapCellInfo cellInfo = envir.GetCellInfo(n10, n14, ref cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        for (var i = 0; i < cellInfo.Count; i++)
+                        for (int i = 0; i < cellInfo.Count; i++)
                         {
-                            var cellObject = cellInfo.ObjList[i];
+                            CellObject cellObject = cellInfo.ObjList[i];
                             if (cellObject != null && (cellObject.CellType == CellType.Monster || cellObject.CellType == CellType.Play))
                             {
-                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == ActorRace.Play)
                                 {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0, "");
@@ -1851,11 +1851,11 @@ namespace GameSvr.World
 
         private void ProcessMapDoor()
         {
-            var doorList = M2Share.MapMgr.GetDoorMapList();
-            for (var i = 0; i < doorList.Count; i++)
+            IList<Envirnoment> doorList = M2Share.MapMgr.GetDoorMapList();
+            for (int i = 0; i < doorList.Count; i++)
             {
-                var envir = doorList[i];
-                for (var j = 0; j < envir.DoorList.Count; j++)
+                Envirnoment envir = doorList[i];
+                for (int j = 0; j < envir.DoorList.Count; j++)
                 {
                     DoorInfo door = envir.DoorList[j];
                     if (door.Status.Opened)
@@ -1871,12 +1871,12 @@ namespace GameSvr.World
 
         private void ProcessEvents()
         {
-            for (var i = MagicEventList.Count - 1; i >= 0; i--)
+            for (int i = MagicEventList.Count - 1; i >= 0; i--)
             {
                 MagicEvent magicEvent = MagicEventList[i];
                 if (magicEvent != null)
                 {
-                    for (var j = magicEvent.BaseObjectList.Count - 1; j >= 0; j--)
+                    for (int j = magicEvent.BaseObjectList.Count - 1; j >= 0; j--)
                     {
                         BaseObject baseObject = magicEvent.BaseObjectList[j];
                         if (baseObject.Death || baseObject.Ghost || !baseObject.HolySeize)
@@ -1887,7 +1887,7 @@ namespace GameSvr.World
                     if (magicEvent.BaseObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.dwStartTick) > magicEvent.dwTime ||
                         (HUtil32.GetTickCount() - magicEvent.dwStartTick) > 180000)
                     {
-                        var count = 0;
+                        int count = 0;
                         while (true)
                         {
                             if (magicEvent.Events[count] != null) magicEvent.Events[count].Close();
@@ -1903,7 +1903,7 @@ namespace GameSvr.World
 
         public MagicInfo FindMagic(string sMagicName)
         {
-            for (var i = 0; i < MagicList.Count; i++)
+            for (int i = 0; i < MagicList.Count; i++)
             {
                 MagicInfo magic = MagicList[i];
                 if (magic.MagicName.Equals(sMagicName, StringComparison.OrdinalIgnoreCase))
@@ -1916,18 +1916,18 @@ namespace GameSvr.World
 
         public int GetMapRangeMonster(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> list)
         {
-            var result = 0;
+            int result = 0;
             if (envir == null) return result;
-            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
-                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
+                for (int j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
-                    var monGen = MonGenInfoThreadMap[i][j];
+                    MonGenInfo monGen = MonGenInfoThreadMap[i][j];
                     if (monGen == null) continue;
                     if (monGen.Envir != null && monGen.Envir != envir) continue;
-                    for (var k = 0; k < monGen.CertList.Count; k++)
+                    for (int k = 0; k < monGen.CertList.Count; k++)
                     {
-                        var baseObject = monGen.CertList[k];
+                        BaseObject baseObject = monGen.CertList[k];
                         if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir &&
                             Math.Abs(baseObject.CurrX - nX) <= nRange && Math.Abs(baseObject.CurrY - nY) <= nRange)
                         {
@@ -1947,9 +1947,9 @@ namespace GameSvr.World
 
         public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
         {
-            for (var i = 0; i < MerchantList.Count; i++)
+            for (int i = 0; i < MerchantList.Count; i++)
             {
-                var merchant = MerchantList[i];
+                Merchant merchant = MerchantList[i];
                 if (merchant.Envir == envir && Math.Abs(merchant.CurrX - nX) <= nRange &&
                     Math.Abs(merchant.CurrY - nY) <= nRange) tmpList.Add(merchant);
             }
@@ -1958,9 +1958,9 @@ namespace GameSvr.World
 
         public int GetNpcList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
         {
-            for (var i = 0; i < QuestNpcList.Count; i++)
+            for (int i = 0; i < QuestNpcList.Count; i++)
             {
-                var npc = QuestNpcList[i];
+                NormNpc npc = QuestNpcList[i];
                 if (npc.Envir == envir && Math.Abs(npc.CurrX - nX) <= nRange &&
                     Math.Abs(npc.CurrY - nY) <= nRange) tmpList.Add(npc);
             }
@@ -1969,7 +1969,7 @@ namespace GameSvr.World
 
         public void ReloadMerchantList()
         {
-            for (var i = 0; i < MerchantList.Count; i++)
+            for (int i = 0; i < MerchantList.Count; i++)
             {
                 Merchant merchant = MerchantList[i];
                 if (!merchant.Ghost)
@@ -1982,7 +1982,7 @@ namespace GameSvr.World
 
         public void ReloadNpcList()
         {
-            for (var i = 0; i < QuestNpcList.Count; i++)
+            for (int i = 0; i < QuestNpcList.Count; i++)
             {
                 NormNpc npc = QuestNpcList[i];
                 npc.ClearScript();
@@ -1996,17 +1996,17 @@ namespace GameSvr.World
             {
                 list = new List<BaseObject>();
             }
-            var result = 0;
+            int result = 0;
             if (envir == null) return result;
-            for (var i = 0; i < MonGenInfoThreadMap.Count; i++)
+            for (int i = 0; i < MonGenInfoThreadMap.Count; i++)
             {
-                if (MonGenInfoThreadMap.TryGetValue(i, out var mongenList))
+                if (MonGenInfoThreadMap.TryGetValue(i, out IList<MonGenInfo> mongenList))
                 {
-                    for (var j = 0; j < mongenList.Count; j++)
+                    for (int j = 0; j < mongenList.Count; j++)
                     {
                         MonGenInfo monGen = mongenList[j];
                         if (monGen == null) continue;
-                        for (var k = 0; k < monGen.CertList.Count; k++)
+                        for (int k = 0; k < monGen.CertList.Count; k++)
                         {
                             BaseObject monObject = monGen.CertList[k];
                             if (!monObject.Death && !monObject.Ghost && monObject.Envir == envir)
@@ -2023,10 +2023,10 @@ namespace GameSvr.World
 
         public int GetMapHuman(string sMapName)
         {
-            var result = 0;
-            var envir = M2Share.MapMgr.FindMap(sMapName);
+            int result = 0;
+            Envirnoment envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir == null) return result;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir) result++;
@@ -2036,8 +2036,8 @@ namespace GameSvr.World
 
         public int GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, IList<BaseObject> list)
         {
-            var result = 0;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            int result = 0;
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir &&
@@ -2054,9 +2054,9 @@ namespace GameSvr.World
         {
             ushort result = 0;
             if (string.IsNullOrEmpty(sItemName)) return result;
-            for (var i = 0; i < StdItemList.Count; i++)
+            for (int i = 0; i < StdItemList.Count; i++)
             {
-                var stdItem = StdItemList[i];
+                Items.StdItem stdItem = StdItemList[i];
                 if (stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase))
                 {
                     result = (ushort)(i + 1);
@@ -2071,7 +2071,7 @@ namespace GameSvr.World
         /// </summary>
         public void SendBroadCastMsgExt(string sMsg, MsgType msgType)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Ghost)
@@ -2081,7 +2081,7 @@ namespace GameSvr.World
 
         public void SendBroadCastMsg(string sMsg, MsgType msgType)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Ghost)
@@ -2093,19 +2093,19 @@ namespace GameSvr.World
 
         public void sub_4AE514(GoldChangeInfo goldChangeInfo)
         {
-            var goldChange = goldChangeInfo;
+            GoldChangeInfo goldChange = goldChangeInfo;
             HUtil32.EnterCriticalSection(LoadPlaySection);
             _mChangeHumanDbGoldList.Add(goldChange);
         }
 
         public void ClearMonSayMsg()
         {
-            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
-                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
+                for (int j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
                     MonGenInfo monGen = MonGenInfoThreadMap[i][j];
-                    for (var k = 0; k < monGen.CertList.Count; k++)
+                    for (int k = 0; k < monGen.CertList.Count; k++)
                     {
                         BaseObject monBaseObject = monGen.CertList[k];
                         monBaseObject.SayMsgList = null;
@@ -2147,7 +2147,7 @@ namespace GameSvr.World
 
         private bool RegenAiObject(RoBotLogon ai)
         {
-            var playObject = AddAiPlayObject(ai);
+            RobotPlayObject playObject = AddAiPlayObject(ai);
             if (playObject != null)
             {
                 playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
@@ -2165,7 +2165,7 @@ namespace GameSvr.World
             int n20;
             int n24;
             object p28;
-            var envirnoment = M2Share.MapMgr.FindMap(ai.sMapName);
+            Envirnoment envirnoment = M2Share.MapMgr.FindMap(ai.sMapName);
             if (envirnoment == null)
             {
                 return null;
@@ -2264,7 +2264,7 @@ namespace GameSvr.World
         public void SendQuestMsg(string sQuestName)
         {
             PlayObject playObject;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost)
@@ -2290,7 +2290,7 @@ namespace GameSvr.World
 
         private void ClearMerchantData()
         {
-            for (var i = 0; i < MerchantList.Count; i++)
+            for (int i = 0; i < MerchantList.Count; i++)
             {
                 MerchantList[i].ClearData();
             }
@@ -2299,7 +2299,7 @@ namespace GameSvr.World
         public void GuildMemberReGetRankName(GuildInfo guild)
         {
             short nRankNo = 0;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (PlayObjectList[i].MyGuild == guild)
                 {

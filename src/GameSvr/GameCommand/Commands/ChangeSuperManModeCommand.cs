@@ -13,15 +13,15 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void ChangeSuperManMode(PlayObject PlayObject)
         {
-            var boFlag = !PlayObject.SuperMan;
+            bool boFlag = !PlayObject.SuperMan;
             PlayObject.SuperMan = boFlag;
             if (PlayObject.SuperMan)
             {
-                PlayObject.SysMsg(Settings.sSupermanMode, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Settings.SupermanMode, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(Settings.sReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Settings.ReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
             }
         }
     }

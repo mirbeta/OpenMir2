@@ -19,7 +19,7 @@ namespace GameSvr.RobotPlay
             {
                 if (TargetCret != null)
                 {
-                    var boHit = GetAttackDir(TargetCret, ref bt06);
+                    bool boHit = GetAttackDir(TargetCret, ref bt06);
                     if (!boHit && (wHitMode == 4 || wHitMode == 15))
                     {
                         boHit = GetAttackDir(TargetCret, 2, ref bt06);// 防止隔位刺杀无效果
@@ -184,7 +184,7 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    var UserMagic = FindMagic(m_nSelectMagic);
+                    UserMagic UserMagic = FindMagic(m_nSelectMagic);
                     if (UserMagic != null)
                     {
                         if (UserMagic.Key == 0)// 技能打开状态才能使用

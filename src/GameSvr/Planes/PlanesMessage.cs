@@ -157,28 +157,28 @@ namespace GameSvr.Planes
 
         private static void MsgGetUserChangeServerRecieveOk(int sNum, string Body)
         {
-            var ufilename = Body;
+            string ufilename = Body;
             M2Share.WorldEngine.GetIsmChangeServerReceive(ufilename);
         }
 
         private static void MsgGetUserLogon(int sNum, string Body)
         {
-            var uname = Body;
+            string uname = Body;
             M2Share.WorldEngine.OtherServerUserLogon(sNum, uname);
         }
 
         private static void MsgGetUserLogout(int sNum, string Body)
         {
-            var uname = Body;
+            string uname = Body;
             M2Share.WorldEngine.OtherServerUserLogout(sNum, uname);
         }
 
         private static void MsgGetWhisper(int sNum, string Body)
         {
-            var uname = string.Empty;
+            string uname = string.Empty;
             if (sNum == M2Share.ServerIndex)
             {
-                var Str = Body;
+                string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
@@ -193,10 +193,10 @@ namespace GameSvr.Planes
 
         private static void MsgGetGMWhisper(int sNum, string Body)
         {
-            var uname = string.Empty;
+            string uname = string.Empty;
             if (sNum == M2Share.ServerIndex)
             {
-                var Str = Body;
+                string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
@@ -211,10 +211,10 @@ namespace GameSvr.Planes
 
         private static void MsgGetLoverWhisper(int sNum, string Body)
         {
-            var uname = string.Empty;
+            string uname = string.Empty;
             if (sNum == M2Share.ServerIndex)
             {
-                var Str = Body;
+                string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
@@ -234,20 +234,20 @@ namespace GameSvr.Planes
 
         private static void MsgGetAddGuild(int sNum, string Body)
         {
-            var gname = string.Empty;
-            var mname = HUtil32.GetValidStr3(Body, ref gname, HUtil32.Backslash);
+            string gname = string.Empty;
+            string mname = HUtil32.GetValidStr3(Body, ref gname, HUtil32.Backslash);
             M2Share.GuildMgr.AddGuild(gname, mname);
         }
 
         private static void MsgGetDelGuild(int sNum, string Body)
         {
-            var gname = Body;
+            string gname = Body;
             M2Share.GuildMgr.DelGuild(gname);
         }
 
         private static void MsgGetReloadGuild(int sNum, string Body)
         {
-            var gname = Body;
+            string gname = Body;
             GuildInfo guild;
             if (sNum == 0)
             {
@@ -272,12 +272,12 @@ namespace GameSvr.Planes
 
         private static void MsgGetGuildMsg(int sNum, string Body)
         {
-            var gname = string.Empty;
+            string gname = string.Empty;
             string Str = Body;
             Str = HUtil32.GetValidStr3(Str, ref gname, HUtil32.Backslash);
             if (gname != "")
             {
-                var g = M2Share.GuildMgr.FindGuild(gname);
+                GuildInfo g = M2Share.GuildMgr.FindGuild(gname);
                 if (g != null)
                 {
                     g.SendGuildMsg(Str);
@@ -288,10 +288,10 @@ namespace GameSvr.Planes
         private static void MsgGetGuildWarInfo(int sNum, string Body)
         {
             string Str;
-            var gname = string.Empty;
-            var warguildname = string.Empty;
-            var StartTime = string.Empty;
-            var remaintime = string.Empty;
+            string gname = string.Empty;
+            string warguildname = string.Empty;
+            string StartTime = string.Empty;
+            string remaintime = string.Empty;
             GuildInfo g;
             GuildInfo WarGuild;
             WarGuild pgw;
@@ -314,7 +314,7 @@ namespace GameSvr.Planes
                             M2Share.ServerTickDifference = Convert.ToInt32(StartTime) - currenttick;
                         }
                         pgw = null;
-                        for (var i = 0; i < g.GuildWarList.Count; i++)
+                        for (int i = 0; i < g.GuildWarList.Count; i++)
                         {
                             pgw = g.GuildWarList[i];
                             if (pgw != null)
@@ -350,8 +350,8 @@ namespace GameSvr.Planes
 
         private void MsgGetChatProhibition(int sNum, string Body)
         {
-            var whostr = string.Empty;
-            var minstr = string.Empty;
+            string whostr = string.Empty;
+            string minstr = string.Empty;
             string Str = Body;
             Str = HUtil32.GetValidStr3(Str, ref whostr, HUtil32.Backslash);
             Str = HUtil32.GetValidStr3(Str, ref minstr, HUtil32.Backslash);
@@ -364,7 +364,7 @@ namespace GameSvr.Planes
 
         private static void MsgGetChatProhibitionCancel(int sNum, string Body)
         {
-            var whostr = Body;
+            string whostr = Body;
             if (whostr != "")
             {
                 //PlayObject.CmdShutup(Settings.g_GameCommand.SHUTUP, whostr, "");
@@ -393,7 +393,7 @@ namespace GameSvr.Planes
 
         private static void MsgGetUserMgr(int sNum, string Body, int Ident_)
         {
-            var UserName = string.Empty;
+            string UserName = string.Empty;
             string Str = Body;
             string msgbody = HUtil32.GetValidStr3(Str, ref UserName, HUtil32.Backslash);
             // UserMgrEngine.OnExternInterMsg(sNum, Ident_, UserName, msgbody);
@@ -407,18 +407,18 @@ namespace GameSvr.Planes
 
         private static void MsgGetGuildMemberRecall(int sNum, string Body)
         {
-            var dxstr = string.Empty;
-            var dystr = string.Empty;
-            var uname = string.Empty;
+            string dxstr = string.Empty;
+            string dystr = string.Empty;
+            string uname = string.Empty;
             if (sNum == M2Share.ServerIndex)
             {
-                var Str = Body;
+                string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dxstr, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
-                var dx = (short)HUtil32.StrToInt(dxstr, 0);
-                var dy = (short)HUtil32.StrToInt(dystr, 0);
-                var hum = M2Share.WorldEngine.GetPlayObject(uname);
+                short dx = (short)HUtil32.StrToInt(dxstr, 0);
+                short dy = (short)HUtil32.StrToInt(dystr, 0);
+                PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.AllowGuildReCall)
@@ -440,8 +440,8 @@ namespace GameSvr.Planes
         {
             PlayObject humlover;
             string Str;
-            var uname = string.Empty;
-            var lovername = string.Empty;
+            string uname = string.Empty;
+            string lovername = string.Empty;
             if (sNum == M2Share.ServerIndex)
             {
                 Str = Body;
@@ -461,14 +461,14 @@ namespace GameSvr.Planes
 
         private static void MsgGetLoverLogout(int sNum, string Body)
         {
-            var uname = string.Empty;
+            string uname = string.Empty;
             const string sLoverFindYouMsg = "正在找你...";
             if (sNum == M2Share.ServerIndex)
             {
-                var Str = Body;
+                string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                var lovername = Str;
-                var hum = M2Share.WorldEngine.GetPlayObject(lovername);
+                string lovername = Str;
+                PlayObject hum = M2Share.WorldEngine.GetPlayObject(lovername);
                 if (hum != null)
                 {
                     hum.SysMsg(uname + sLoverFindYouMsg, MsgColor.Red, MsgType.Hint);
@@ -482,12 +482,12 @@ namespace GameSvr.Planes
 
         private static void MsgGetLoverKilledMsg(int sNum, string Body)
         {
-            var uname = string.Empty;
+            string uname = string.Empty;
             if (sNum == M2Share.ServerIndex)
             {
-                var Str = Body;
+                string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                var hum = M2Share.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     hum.SysMsg(Str, MsgColor.Red, MsgType.Hint);
@@ -497,18 +497,18 @@ namespace GameSvr.Planes
 
         private static void MsgGetRecall(int sNum, string Body)
         {
-            var dxstr = string.Empty;
-            var dystr = string.Empty;
-            var uname = string.Empty;
+            string dxstr = string.Empty;
+            string dystr = string.Empty;
+            string uname = string.Empty;
             if (sNum == M2Share.ServerIndex)
             {
-                var Str = Body;
+                string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dxstr, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
-                var dx = (short)HUtil32.StrToInt(dxstr, 0);
-                var dy = (short)HUtil32.StrToInt(dystr, 0);
-                var hum = M2Share.WorldEngine.GetPlayObject(uname);
+                short dx = (short)HUtil32.StrToInt(dxstr, 0);
+                short dy = (short)HUtil32.StrToInt(dystr, 0);
+                PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     hum.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -519,12 +519,12 @@ namespace GameSvr.Planes
 
         private static void MsgGetRequestRecall(int sNum, string Body)
         {
-            var uname = string.Empty;
+            string uname = string.Empty;
             if (sNum == M2Share.ServerIndex)
             {
-                var Str = Body;
+                string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                var hum = M2Share.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     hum.RecallHuman(Str);
@@ -534,12 +534,12 @@ namespace GameSvr.Planes
 
         private static void MsgGetRequestLoverRecall(int sNum, string Body)
         {
-            var uname = string.Empty;
+            string uname = string.Empty;
             if (sNum == M2Share.ServerIndex)
             {
-                var Str = Body;
+                string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                var hum = M2Share.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (!hum.Envir.Flag.boNORECALL)

@@ -15,8 +15,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sEffect = @Params.Length > 0 ? @Params[0] : "";
-            var sTime = @Params.Length > 1 ? @Params[1] : "";
+            string sEffect = @Params.Length > 0 ? @Params[0] : "";
+            string sTime = @Params.Length > 1 ? @Params[1] : "";
             //int nEffectType;
             //TFlowerEvent FlowerEvent = null;
             //if ((sEffect == "") || (HUtil32.Str_ToInt(sEffect, -1) <= 0))

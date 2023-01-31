@@ -13,8 +13,8 @@
         private void LightingAttack(byte nDir)
         {
             Direction = nDir;
-            var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
-            var nDamage = TargetCret.GetMagStruckDamage(this, nPower);
+            ushort nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
+            ushort nDamage = TargetCret.GetMagStruckDamage(this, nPower);
             if (nDamage > 0)
             {
                 int btGetBackHp = HUtil32.LoByte(WAbil.MP);
@@ -49,8 +49,8 @@
                 {
                     return;
                 }
-                var nX = Math.Abs(CurrX - TargetCret.CurrX);
-                var nY = Math.Abs(CurrY - TargetCret.CurrY);
+                int nX = Math.Abs(CurrX - TargetCret.CurrX);
+                int nY = Math.Abs(CurrY - TargetCret.CurrY);
                 if (nX <= 2 && nY <= 2)
                 {
                     if (UseMagic || nX == 2 || nY == 2)

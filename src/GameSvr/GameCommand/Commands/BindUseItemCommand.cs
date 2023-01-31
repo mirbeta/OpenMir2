@@ -15,12 +15,12 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sItem = @Params.Length > 1 ? @Params[1] : "";
-            var sType = @Params.Length > 2 ? @Params[2] : "";
-            var sLight = @Params.Length > 3 ? @Params[3] : "";
-            var nBind = -1;
-            var nItem = M2Share.GetUseItemIdx(sItem);
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sItem = @Params.Length > 1 ? @Params[1] : "";
+            string sType = @Params.Length > 2 ? @Params[2] : "";
+            string sLight = @Params.Length > 3 ? @Params[3] : "";
+            int nBind = -1;
+            int nItem = M2Share.GetUseItemIdx(sItem);
             if (string.Compare(sType, "帐号", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 0;
@@ -37,13 +37,13 @@ namespace GameSvr.GameCommand.Commands
             {
                 nBind = 3;
             }
-            var boLight = sLight == "1";
+            bool boLight = sLight == "1";
             if (nItem < 0 || nBind < 0 || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -56,7 +56,7 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             int nItemIdx = UserItem.Index;
-            var nMakeIdex = UserItem.MakeIndex;
+            int nMakeIdex = UserItem.MakeIndex;
             TItemBind ItemBind;
             string sBindName;
             bool boFind;
@@ -68,7 +68,7 @@ namespace GameSvr.GameCommand.Commands
                     HUtil32.EnterCriticalSection(M2Share.ItemBindAccount);
                     try
                     {
-                        for (var i = 0; i < M2Share.ItemBindAccount.Count; i++)
+                        for (int i = 0; i < M2Share.ItemBindAccount.Count; i++)
                         {
                             ItemBind = M2Share.ItemBindAccount[i];
                             if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
@@ -106,7 +106,7 @@ namespace GameSvr.GameCommand.Commands
                     HUtil32.EnterCriticalSection(M2Share.ItemBindChrName);
                     try
                     {
-                        for (var i = 0; i < M2Share.ItemBindChrName.Count; i++)
+                        for (int i = 0; i < M2Share.ItemBindChrName.Count; i++)
                         {
                             ItemBind = M2Share.ItemBindChrName[i];
                             if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
@@ -145,7 +145,7 @@ namespace GameSvr.GameCommand.Commands
                     HUtil32.EnterCriticalSection(M2Share.ItemBindIPaddr);
                     try
                     {
-                        for (var i = 0; i < M2Share.ItemBindIPaddr.Count; i++)
+                        for (int i = 0; i < M2Share.ItemBindIPaddr.Count; i++)
                         {
                             ItemBind = M2Share.ItemBindIPaddr[i];
                             if (ItemBind.nItemIdx == nItemIdx && ItemBind.nMakeIdex == nMakeIdex)
@@ -180,12 +180,12 @@ namespace GameSvr.GameCommand.Commands
                     break;
                 case 3:// 人物装备死亡不爆绑定
                     sBindName = PlayObject.ChrName;
-                    for (var i = 0; i < M2Share.ItemBindDieNoDropName.Count; i++)
+                    for (int i = 0; i < M2Share.ItemBindDieNoDropName.Count; i++)
                     {
                         //ItemBind = Settings.g_ItemBindDieNoDropName[i];
                         //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.sBindName == sBindName))
                         //{
-                        //    this.SysMsg(string.Format(Settings.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
+                        //    this.SysMsg(string.Format(Settings.GameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
                         //    return;
                         //}
                     }

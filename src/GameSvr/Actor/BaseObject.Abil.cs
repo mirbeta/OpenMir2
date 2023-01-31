@@ -15,7 +15,7 @@ namespace GameSvr.Actor
         public virtual void RecalcAbilitys()
         {
             AddAbil = new AddAbility();
-            var temp = WAbil;
+            Ability temp = WAbil;
             WAbil = (Ability)Abil.Clone();
             WAbil.HP = temp.HP;
             WAbil.MP = temp.MP;
@@ -29,7 +29,7 @@ namespace GameSvr.Actor
             AntiMagic = 1;
             Luck = 0;
             HitSpeed = 0;
-            var oldhmode = HideMode;
+            bool oldhmode = HideMode;
             HideMode = false;
             if (Transparent && (StatusArr[PoisonState.STATE_TRANSPARENT] > 0))
             {
@@ -98,7 +98,7 @@ namespace GameSvr.Actor
             if (Race == ActorRace.Play)
             {
                 int n;
-                var nLevel = Abil.Level;
+                byte nLevel = Abil.Level;
                 switch (((PlayObject)this).Job)
                 {
                     case PlayJob.Taoist:
@@ -259,7 +259,7 @@ namespace GameSvr.Actor
                         }
                     }
                 }
-                for (var i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
+                for (byte i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
                 {
                     if (UseItems[i] == null)
                     {

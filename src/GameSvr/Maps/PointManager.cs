@@ -111,7 +111,7 @@ namespace GameSvr.Maps
                     FBaseObject.Direction = 4;
                 }
                 m_btDirection = FBaseObject.Direction;
-                for (var i = 2; i >= 1; i--)
+                for (int i = 2; i >= 1; i--)
                 {
                     if (FBaseObject.Envir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, i, ref nMX, ref nMY))
                     {
@@ -130,7 +130,7 @@ namespace GameSvr.Maps
                 while (true)
                 {
                     btDir = GetNextDir(btDir);
-                    for (var i = 2; i >= 1; i--)
+                    for (int i = 2; i >= 1; i--)
                     {
                         if (FBaseObject.Envir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
                         {
@@ -168,7 +168,7 @@ namespace GameSvr.Maps
                     m_nPostion = 0;
                 }
                 PointInfo Pt;
-                for (var i = m_nPostion; i < m_PEnvir.PointList.Count; i++)
+                for (int i = m_nPostion; i < m_PEnvir.PointList.Count; i++)
                 {
                     Pt = m_PEnvir.PointList[i];
                     nCurrX = Pt.nX;
@@ -197,7 +197,7 @@ namespace GameSvr.Maps
                     if (n10 <= 0 && nIndex >= 0)
                     {
                         nStep = 0;
-                        for (var i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
+                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
                         {
                             Pt = m_PEnvir.PointList[i];
                             nCurrX = Pt.nX;
@@ -231,7 +231,7 @@ namespace GameSvr.Maps
                     }
                     if (!FBaseObject.CanRun(nX, nY, nMX, nMY, false))
                     {
-                        for (var i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
+                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
                         {
                             Pt = m_PEnvir.PointList[i];
                             nCurrX = Pt.nX;
@@ -420,7 +420,7 @@ namespace GameSvr.Maps
                 while (true)
                 {
                     btDir = GetPoint1_GetNextDir(btDir);
-                    for (var i = 2; i >= 1; i--)
+                    for (int i = 2; i >= 1; i--)
                     {
                         if (((PlayObject)FBaseObject).Envir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY))
                         {
@@ -458,7 +458,7 @@ namespace GameSvr.Maps
                     m_nPostion = 0;
                 }
                 PointInfo Pt;
-                for (var i = m_nPostion; i < m_PEnvir.PointList.Count; i++)
+                for (int i = m_nPostion; i < m_PEnvir.PointList.Count; i++)
                 {
                     Pt = m_PEnvir.PointList[i];
                     nCurrX = Pt.nX;
@@ -487,7 +487,7 @@ namespace GameSvr.Maps
                     if (n10 <= 0 && nIndex >= 0)
                     {
                         nStep = 0;
-                        for (var i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
+                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
                         {
                             Pt = m_PEnvir.PointList[i];
                             nCurrX = Pt.nX;
@@ -521,7 +521,7 @@ namespace GameSvr.Maps
                     }
                     if (!((PlayObject)FBaseObject).CanRun(nX, nY, nMX, nMY, false))
                     {
-                        for (var i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
+                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
                         {
                             Pt = m_PEnvir.PointList[i];
                             nCurrX = Pt.nX;

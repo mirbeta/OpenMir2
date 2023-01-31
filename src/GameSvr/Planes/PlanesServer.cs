@@ -36,9 +36,9 @@ namespace GameSvr.Planes
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr)
         {
-            for (var i = 0; i < m_SrvArray.Length; i++)
+            for (int i = 0; i < m_SrvArray.Length; i++)
             {
-                var serverMsgInfo = m_SrvArray[i];
+                TServerMsgInfo serverMsgInfo = m_SrvArray[i];
                 if (serverMsgInfo == null)
                 {
                     continue;
@@ -53,9 +53,9 @@ namespace GameSvr.Planes
 
         private void DecodeSocStr(TServerMsgInfo ps)
         {
-            var Str = string.Empty;
-            var sNumStr = string.Empty;
-            var Head = string.Empty;
+            string Str = string.Empty;
+            string sNumStr = string.Empty;
+            string Head = string.Empty;
             int Ident;
             int sNum;
             if (string.IsNullOrEmpty(ps.SocData))
@@ -99,7 +99,7 @@ namespace GameSvr.Planes
         {
             if (Socket.Connected)
             {
-                var buffer = HUtil32.GetBytes("(" + sMsg + ")");
+                byte[] buffer = HUtil32.GetBytes("(" + sMsg + ")");
                 Socket.Send(buffer);
             }
         }
@@ -111,7 +111,7 @@ namespace GameSvr.Planes
         public void SendServerSocket(string msgstr)
         {
             TServerMsgInfo ServerMsgInfo;
-            for (var i = 0; i < m_SrvArray.Length; i++)
+            for (int i = 0; i < m_SrvArray.Length; i++)
             {
                 ServerMsgInfo = m_SrvArray[i];
                 if (ServerMsgInfo == null)
@@ -128,7 +128,7 @@ namespace GameSvr.Planes
         private void MsgServerClientConnect(object sender, AsyncUserToken e)
         {
             TServerMsgInfo ServerMsgInfo;
-            for (var i = 0; i < m_SrvArray.Length; i++)
+            for (int i = 0; i < m_SrvArray.Length; i++)
             {
                 ServerMsgInfo = m_SrvArray[i];
                 if (ServerMsgInfo == null)
@@ -147,7 +147,7 @@ namespace GameSvr.Planes
         private void MsgServerClientDisconnect(object sender, AsyncUserToken e)
         {
             TServerMsgInfo ServerMsgInfo;
-            for (var i = 0; i < m_SrvArray.Length; i++)
+            for (int i = 0; i < m_SrvArray.Length; i++)
             {
                 ServerMsgInfo = m_SrvArray[i];
                 if (ServerMsgInfo == null)
@@ -172,7 +172,7 @@ namespace GameSvr.Planes
         /// <param name="e"></param>
         private void MsgServerClientRead(object sender, AsyncUserToken e)
         {
-            for (var i = 0; i < m_SrvArray.Length; i++)
+            for (int i = 0; i < m_SrvArray.Length; i++)
             {
                 if (m_SrvArray[i] == null)
                 {
@@ -190,9 +190,9 @@ namespace GameSvr.Planes
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::Run";
             try
             {
-                for (var i = 0; i < m_SrvArray.Length; i++)
+                for (int i = 0; i < m_SrvArray.Length; i++)
                 {
-                    var ps = m_SrvArray[i];
+                    TServerMsgInfo ps = m_SrvArray[i];
                     if (ps == null)
                     {
                         continue;

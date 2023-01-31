@@ -9,7 +9,7 @@ namespace GameSvr.Notices
 
         public NoticeManager()
         {
-            for (var i = 0; i < NoticeList.Length; i++)
+            for (int i = 0; i < NoticeList.Length; i++)
             {
                 NoticeList[i].sMsg = string.Empty;
                 NoticeList[i].sList = null;
@@ -18,13 +18,13 @@ namespace GameSvr.Notices
 
         public void LoadingNotice()
         {
-            for (var i = 0; i < NoticeList.Length; i++)
+            for (int i = 0; i < NoticeList.Length; i++)
             {
                 if (string.IsNullOrEmpty(NoticeList[i].sMsg))
                 {
                     continue;
                 }
-                var fileName = Path.Combine(M2Share.BasePath, M2Share.Config.NoticeDir, $"{NoticeList[i].sMsg}.txt");
+                string fileName = Path.Combine(M2Share.BasePath, M2Share.Config.NoticeDir, $"{NoticeList[i].sMsg}.txt");
                 if (!File.Exists(fileName)) continue;
                 try
                 {
@@ -43,13 +43,13 @@ namespace GameSvr.Notices
 
         public void GetNoticeMsg(string sStr, IList<string> LoadList)
         {
-            var success = true;
-            for (var i = 0; i < NoticeList.Length; i++)
+            bool success = true;
+            for (int i = 0; i < NoticeList.Length; i++)
             {
                 if (string.Compare(NoticeList[i].sMsg, sStr, StringComparison.OrdinalIgnoreCase) != 0) continue;
                 if (NoticeList[i].sList != null)
                 {
-                    for (var j = 0; j < NoticeList[i].sList.Count; j++)
+                    for (int j = 0; j < NoticeList[i].sList.Count; j++)
                     {
                         LoadList.Add(NoticeList[i].sList[j]);
                     }
@@ -60,11 +60,11 @@ namespace GameSvr.Notices
             {
                 return;
             }
-            for (var i = 0; i < NoticeList.Length; i++)
+            for (int i = 0; i < NoticeList.Length; i++)
             {
                 if (string.IsNullOrEmpty(NoticeList[i].sMsg))
                 {
-                    var fileName = Path.Combine(M2Share.BasePath, M2Share.Config.NoticeDir, sStr + ".txt");
+                    string fileName = Path.Combine(M2Share.BasePath, M2Share.Config.NoticeDir, sStr + ".txt");
                     if (File.Exists(fileName))
                     {
                         try
@@ -74,7 +74,7 @@ namespace GameSvr.Notices
                                 NoticeList[i].sList = new StringList();
                             }
                             NoticeList[i].sList.LoadFromFile(fileName, true);
-                            for (var j = 0; j < NoticeList[i].sList.Count; j++)
+                            for (int j = 0; j < NoticeList[i].sList.Count; j++)
                             {
                                 LoadList.Add(NoticeList[i].sList[j]);
                             }

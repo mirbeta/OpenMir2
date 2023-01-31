@@ -27,9 +27,9 @@ namespace GameSvr.Event.Events
                 if (Envir != null)
                 {
                     Envir.GetBaseObjects(nX, nY, true, BaseObjectList);
-                    for (var i = 0; i < BaseObjectList.Count; i++)
+                    for (int i = 0; i < BaseObjectList.Count; i++)
                     {
-                        var targetBaseObject = BaseObjectList[i];
+                        BaseObject targetBaseObject = BaseObjectList[i];
                         if (targetBaseObject != null && OwnBaseObject != null && OwnBaseObject.IsProperTarget(targetBaseObject))
                         {
                             targetBaseObject.SendMsg(OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, Damage, 0, 0, "");

@@ -13,18 +13,18 @@ namespace GameSvr.Player
         /// <param name="saystr"></param>
         protected virtual void Whisper(string whostr, string saystr)
         {
-            var svidx = 0;
-            var PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
+            int svidx = 0;
+            PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
                 if (!PlayObject.BoReadyRun)
                 {
-                    SysMsg(whostr + Settings.g_sCanotSendmsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(whostr + Settings.CanotSendmsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (!PlayObject.HearWhisper || PlayObject.IsBlockWhisper(ChrName))
                 {
-                    SysMsg(whostr + Settings.g_sUserDenyWhisperMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(whostr + Settings.UserDenyWhisperMsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (!OffLineFlag && PlayObject.OffLineFlag)
@@ -72,14 +72,14 @@ namespace GameSvr.Player
                 }
                 else
                 {
-                    SysMsg(whostr + Settings.g_sUserNotOnLine, MsgColor.Red, MsgType.Hint);
+                    SysMsg(whostr + Settings.UserNotOnLine, MsgColor.Red, MsgType.Hint);
                 }
             }
         }
 
         public void WhisperRe(string SayStr, byte MsgType)
         {
-            var sendwho = string.Empty;
+            string sendwho = string.Empty;
             HUtil32.GetValidStr3(SayStr, ref sendwho, new[] { '[', ' ', '=', '>' });
             if (HearWhisper && !IsBlockWhisper(sendwho))
             {
@@ -105,7 +105,7 @@ namespace GameSvr.Player
         protected override void ProcessSayMsg(string sData)
         {
             bool boDisableSayMsg;
-            var sParam1 = string.Empty;
+            string sParam1 = string.Empty;
             const string sExceptionMsg = "[Exception] TPlayObject.ProcessSayMsg Msg = {0}";
             try
             {
@@ -120,7 +120,7 @@ namespace GameSvr.Player
                     {
                         DisableSayMsg = true;
                         DisableSayMsgTick = HUtil32.GetTickCount() + M2Share.Config.DisableSayMsgTime;// 60 * 1000
-                        SysMsg(Format(Settings.g_sDisableSayMsg, M2Share.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
+                        SysMsg(Format(Settings.DisableSayMsg, M2Share.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
@@ -183,12 +183,12 @@ namespace GameSvr.Player
                                     {
                                         if (Abil.Level <= M2Share.Config.CanShoutMsgLevel)
                                         {
-                                            SysMsg(Format(Settings.g_sYouNeedLevelMsg, M2Share.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                            SysMsg(Format(Settings.YouNeedLevelMsg, M2Share.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                             return;
                                         }
                                         ShoutMsgTick = HUtil32.GetTickCount();
                                         sText = sData.AsSpan()[1..].ToString();
-                                        var sCryCryMsg = "(!)" + ChrName + ": " + sText;
+                                        string sCryCryMsg = "(!)" + ChrName + ": " + sText;
                                         if (FilterSendMsg)
                                         {
                                             SendMsg(null, Grobal2.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
@@ -199,10 +199,10 @@ namespace GameSvr.Player
                                         }
                                         return;
                                     }
-                                    SysMsg(Format(Settings.g_sYouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format(Settings.YouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
                                     return;
                                 }
-                                SysMsg(Settings.g_sThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
+                                SysMsg(Settings.ThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
                                 return;
                             }
                     }
@@ -216,7 +216,7 @@ namespace GameSvr.Player
                     }
                     return;
                 }
-                SysMsg(Settings.g_sYouIsDisableSendMsg, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.YouIsDisableSendMsg, MsgColor.Red, MsgType.Hint);
             }
             catch (Exception e)
             {
@@ -228,14 +228,14 @@ namespace GameSvr.Player
         internal void ProcessUserLineMsg(string sData)
         {
             string sC;
-            var sCMD = string.Empty;
-            var sParam1 = string.Empty;
-            var sParam2 = string.Empty;
-            var sParam3 = string.Empty;
-            var sParam4 = string.Empty;
-            var sParam5 = string.Empty;
-            var sParam6 = string.Empty;
-            var sParam7 = string.Empty;
+            string sCMD = string.Empty;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            string sParam4 = string.Empty;
+            string sParam5 = string.Empty;
+            string sParam6 = string.Empty;
+            string sParam7 = string.Empty;
             int nLen;
             const string sExceptionMsg = "[Exception] TPlayObject::ProcessUserLineMsg Msg = {0}";
             try
@@ -252,12 +252,12 @@ namespace GameSvr.Player
                     {
                         MSTempPwd = sData;
                         MBoReConfigPwd = true;
-                        SysMsg(Settings.g_sReSetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(Settings.ReSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                     }
                     else
                     {
-                        SysMsg(Settings.g_sPasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
+                        SysMsg(Settings.PasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
                     }
                     return;
                 }
@@ -270,12 +270,12 @@ namespace GameSvr.Player
                         MBoPasswordLocked = true;
                         BoCanGetBackItem = false;
                         MSTempPwd = "";
-                        SysMsg(Settings.g_sReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);
+                        SysMsg(Settings.ReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
                         MSTempPwd = "";
-                        SysMsg(Settings.g_sReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.ReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
                 }
@@ -324,7 +324,7 @@ namespace GameSvr.Player
                                 AdminMode = false;
                             }
                             BoLockLogoned = true;
-                            SysMsg(Settings.g_sPasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
+                            SysMsg(Settings.PasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
                         if (MBoUnLockStoragePwd)
                         {
@@ -332,16 +332,16 @@ namespace GameSvr.Player
                             {
                                 BoCanGetBackItem = true;
                             }
-                            SysMsg(Settings.g_sStorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
+                            SysMsg(Settings.StorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
                     }
                     else
                     {
                         MBtPwdFailCount++;
-                        SysMsg(Settings.g_sUnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.UnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
                         if (MBtPwdFailCount > 3)
                         {
-                            SysMsg(Settings.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     MBoUnLockPwd = false;
@@ -354,16 +354,16 @@ namespace GameSvr.Player
                     if (StoragePwd == sData)
                     {
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                        SysMsg(Settings.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                         MBoSetStoragePwd = true;
                     }
                     else
                     {
                         MBtPwdFailCount++;
-                        SysMsg(Settings.g_sOldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.OldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
                         if (MBtPwdFailCount > 3)
                         {
-                            SysMsg(Settings.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                             MBoPasswordLocked = true;
                         }
                     }

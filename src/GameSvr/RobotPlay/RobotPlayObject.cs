@@ -167,7 +167,7 @@ namespace GameSvr.RobotPlay
             WalkSpeed = 300;
             m_RunPos = new TRunPos();
             m_Path = new PointInfo[0];
-            var sFileName = GetRandomConfigFileName(ChrName, 0);
+            string sFileName = GetRandomConfigFileName(ChrName, 0);
             if (sFileName == "" || !File.Exists(sFileName))
             {
                 if (m_sConfigFileName != "" && File.Exists(m_sConfigFileName))
@@ -245,15 +245,15 @@ namespace GameSvr.RobotPlay
                             {
                                 if (Str[1] == '\\')
                                 {
-                                    Str = Str.Substring(1, Str.Length - 1);
+                                    Str = Str[1..];
                                 }
                                 if (Str[2] == '\\')
                                 {
-                                    Str = Str.Substring(2, Str.Length - 2);
+                                    Str = Str[2..];
                                 }
                                 if (Str[3] == '\\')
                                 {
-                                    Str = Str.Substring(3, Str.Length - 3);
+                                    Str = Str[3..];
                                 }
                             }
                             result = m_sFilePath + Str;
@@ -400,7 +400,7 @@ namespace GameSvr.RobotPlay
             }
             try
             {
-                var sParam1 = string.Empty;
+                string sParam1 = string.Empty;
                 if (sData.Length > M2Share.Config.SayMsgMaxLen)
                 {
                     sData = sData[..M2Share.Config.SayMsgMaxLen];
@@ -409,7 +409,7 @@ namespace GameSvr.RobotPlay
                 {
                     DisableSayMsg = false;
                 }
-                var boDisableSayMsg = DisableSayMsg;
+                bool boDisableSayMsg = DisableSayMsg;
                 //g_DenySayMsgList.Lock;
                 //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                 //{
@@ -421,7 +421,7 @@ namespace GameSvr.RobotPlay
                     string SC;
                     if (sData[0] == '/')
                     {
-                        SC = sData.Substring(1, sData.Length - 1);
+                        SC = sData[1..];
                         SC = HUtil32.GetValidStr3(SC, ref sParam1, ' ');
                         if (!FilterSendMsg)
                         {
@@ -435,7 +435,7 @@ namespace GameSvr.RobotPlay
                         {
                             if (sData[1] == '!')//发送组队消息
                             {
-                                SC = sData.Substring(2, sData.Length - 2);
+                                SC = sData[2..];
                                 SendGroupText(ChrName + ": " + SC);
                                 return;
                             }
@@ -443,7 +443,7 @@ namespace GameSvr.RobotPlay
                             {
                                 if (MyGuild != null)
                                 {
-                                    SC = sData.Substring(2, sData.Length - 2);
+                                    SC = sData[2..];
                                     MyGuild.SendGuildMsg(ChrName + ": " + SC);
                                 }
                                 return;
@@ -455,11 +455,11 @@ namespace GameSvr.RobotPlay
                             {
                                 if (Abil.Level <= M2Share.Config.CanShoutMsgLevel)
                                 {
-                                    SysMsg(Format(Settings.g_sYouNeedLevelMsg, M2Share.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format(Settings.YouNeedLevelMsg, M2Share.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                     return;
                                 }
                                 ShoutMsgTick = HUtil32.GetTickCount();
-                                SC = sData.Substring(1, sData.Length - 1);
+                                SC = sData[1..];
                                 string sCryCryMsg = "(!)" + ChrName + ": " + SC;
                                 if (FilterSendMsg)
                                 {
@@ -471,10 +471,10 @@ namespace GameSvr.RobotPlay
                                 }
                                 return;
                             }
-                            SysMsg(Format(Settings.g_sYouCanSendCyCyLaterMsg, new object[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
+                            SysMsg(Format(Settings.YouCanSendCyCyLaterMsg, new object[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
                             return;
                         }
-                        SysMsg(Settings.g_sThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.ThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (!FilterSendMsg)
@@ -493,7 +493,7 @@ namespace GameSvr.RobotPlay
         {
             UserMagic result = null;
             UserMagic UserMagic;
-            for (var i = 0; i < MagicList.Count; i++)
+            for (int i = 0; i < MagicList.Count; i++)
             {
                 UserMagic = MagicList[i];
                 if (UserMagic.Magic.MagicId == wMagIdx)
@@ -508,7 +508,7 @@ namespace GameSvr.RobotPlay
         public UserMagic FindMagic(string sMagicName)
         {
             UserMagic result = null;
-            for (var i = 0; i < MagicList.Count; i++)
+            for (int i = 0; i < MagicList.Count; i++)
             {
                 UserMagic UserMagic = MagicList[i];
                 if (string.Compare(UserMagic.Magic.MagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -592,7 +592,7 @@ namespace GameSvr.RobotPlay
                         nPos = sMsg.IndexOf("=>", StringComparison.OrdinalIgnoreCase);
                         if (nPos > 0 && m_AISayMsgList.Count > 0)
                         {
-                            sChrName = sMsg.Substring(1 - 1, nPos - 1);
+                            sChrName = sMsg[..(nPos - 1)];
                             sSendMsg = sMsg.Substring(nPos + 3 - 1, sMsg.Length - nPos - 2);
                             Whisper(sChrName, "你猜我是谁.");
                             //Whisper(sChrName, m_AISayMsgList[(M2Share.RandomNumber.Random(m_AISayMsgList.Count)).Next()]);
@@ -621,7 +621,7 @@ namespace GameSvr.RobotPlay
         private void SearchPickUpItem_SetHideItem(MapItem MapItem)
         {
             VisibleMapItem VisibleMapItem;
-            for (var i = 0; i < VisibleItems.Count; i++)
+            for (int i = 0; i < VisibleItems.Count; i++)
             {
                 VisibleMapItem = VisibleItems[i];
                 if (VisibleMapItem != null && VisibleMapItem.VisibleFlag > 0)
@@ -734,7 +734,7 @@ namespace GameSvr.RobotPlay
                     if (m_SelMapItem != null)
                     {
                         m_boCanPickIng = true;
-                        for (var i = 0; i < VisibleItems.Count; i++)
+                        for (int i = 0; i < VisibleItems.Count; i++)
                         {
                             VisibleMapItem = VisibleItems[i];
                             if (VisibleMapItem != null && VisibleMapItem.VisibleFlag > 0)
@@ -760,12 +760,12 @@ namespace GameSvr.RobotPlay
                             return result;
                         }
                     }
-                    var n01 = 999;
+                    int n01 = 999;
                     VisibleMapItem SelVisibleMapItem = null;
                     boFound = false;
                     if (m_SelMapItem != null)
                     {
-                        for (var i = 0; i < VisibleItems.Count; i++)
+                        for (int i = 0; i < VisibleItems.Count; i++)
                         {
                             VisibleMapItem = VisibleItems[i];
                             if (VisibleMapItem != null && VisibleMapItem.VisibleFlag > 0)
@@ -781,14 +781,14 @@ namespace GameSvr.RobotPlay
                     }
                     if (!boFound)
                     {
-                        for (var i = 0; i < VisibleItems.Count; i++)
+                        for (int i = 0; i < VisibleItems.Count; i++)
                         {
                             VisibleMapItem = VisibleItems[i];
                             if (VisibleMapItem != null)
                             {
                                 if (VisibleMapItem.VisibleFlag > 0)
                                 {
-                                    var mapItem = VisibleMapItem.MapItem;
+                                    MapItem mapItem = VisibleMapItem.MapItem;
                                     if (mapItem != null)
                                     {
                                         if (IsAllowAIPickUpItem(VisibleMapItem.sName) && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(mapItem.UserItem.Index)))
@@ -797,7 +797,7 @@ namespace GameSvr.RobotPlay
                                             {
                                                 if (Math.Abs(VisibleMapItem.nX - CurrX) <= 5 && Math.Abs(VisibleMapItem.nY - CurrY) <= 5)
                                                 {
-                                                    var n02 = Math.Abs(VisibleMapItem.nX - CurrX) + Math.Abs(VisibleMapItem.nY - CurrY);
+                                                    int n02 = Math.Abs(VisibleMapItem.nX - CurrX) + Math.Abs(VisibleMapItem.nY - CurrY);
                                                     if (n02 < n01)
                                                     {
                                                         n01 = n02;
@@ -923,7 +923,7 @@ namespace GameSvr.RobotPlay
                     if (!result)
                     {
                         n20 = M2Share.RandomNumber.Random(3);
-                        for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
+                        for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                         {
                             if (nOldX == CurrX && nOldY == CurrY)
                             {
@@ -1019,7 +1019,7 @@ namespace GameSvr.RobotPlay
                     {
                         WalkTo(nDir, false);
                         n20 = M2Share.RandomNumber.Random(3);
-                        for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
+                        for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                         {
                             if (nOldX == CurrX && nOldY == CurrY)
                             {
@@ -1049,7 +1049,7 @@ namespace GameSvr.RobotPlay
                     WalkTo(nDir, false);
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
                     n20 = M2Share.RandomNumber.Random(3);
-                    for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
+                    for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                     {
                         if (nOldX == CurrX && nOldY == CurrY)
                         {
@@ -1080,8 +1080,8 @@ namespace GameSvr.RobotPlay
         {
             if (m_boAIStart && TargetCret == null && !m_boCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusArr[PoisonState.STONE] == 0)
             {
-                var nX = CurrX;
-                var nY = CurrY;
+                short nX = CurrX;
+                short nY = CurrY;
                 if (m_Path != null && m_Path.Length > 0 && m_nPostion < m_Path.Length)
                 {
                     if (!GotoNextOne(m_Path[m_nPostion].nX, m_Path[m_nPostion].nY, true))
@@ -1283,7 +1283,7 @@ namespace GameSvr.RobotPlay
                 PointInfo[] Path = M2Share.FindPath.Find(Envir, CurrX, CurrY, nX, nY, boRun);
                 if (Path.Length > 0)
                 {
-                    for (var i = 0; i < Path.Length; i++)
+                    for (int i = 0; i < Path.Length; i++)
                     {
                         if (Path[i].nX != CurrX || Path[i].nY != CurrY)
                         {
@@ -1324,7 +1324,7 @@ namespace GameSvr.RobotPlay
                 {
                     if (ProcessMsg.BaseObject == this.ActorId)
                     {
-                        var AttackBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
+                        BaseObject AttackBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)
                         {
                             if (AttackBaseObject.Race == ActorRace.Play)
@@ -1368,7 +1368,7 @@ namespace GameSvr.RobotPlay
             int result = 0;
             short nCurrX = nX;
             short nCurrY = nY;
-            for (var i = 0; i < nRange; i++)
+            for (int i = 0; i < nRange; i++)
             {
                 if (Envir.GetNextPosition(nCurrX, nCurrY, nDir, 1, ref nCurrX, ref nCurrY))
                 {
@@ -1388,7 +1388,7 @@ namespace GameSvr.RobotPlay
             short nX = 0;
             short nY = 0;
             BaseObject BaseObject;
-            for (var n10 = 0; n10 < 7; n10++)
+            for (int n10 = 0; n10 < 7; n10++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))
                 {
@@ -1412,7 +1412,7 @@ namespace GameSvr.RobotPlay
             {
                 result++;
             }
-            for (var i = 0; i < 7; i++)
+            for (int i = 0; i < 7; i++)
             {
                 if (Envir.GetNextPosition(nCurrX, nCurrY, (byte)i, 1, ref nX, ref nY))
                 {
@@ -1462,7 +1462,7 @@ namespace GameSvr.RobotPlay
                 Master.GetBackPosition(ref nX, ref nY);
                 if (!Master.Envir.CanWalk(nX, nY, true))
                 {
-                    for (var i = 0; i < 7; i++)
+                    for (int i = 0; i < 7; i++)
                     {
                         if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, (byte)i, 1, ref nX, ref nY))
                         {
@@ -1482,7 +1482,7 @@ namespace GameSvr.RobotPlay
             Master.GetBackPosition(ref nCurrX, ref nCurrY);
             if (TargetCret == null && !Master.SlaveRelax)
             {
-                for (var i = 0; i < 2; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     // 判断主人是否在英雄对面
                     if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Direction, i, ref nX, ref nY))
@@ -1493,9 +1493,9 @@ namespace GameSvr.RobotPlay
                             {
                                 return true;
                             }
-                            for (var k = 0; k < 2; k++)
+                            for (int k = 0; k < 2; k++)
                             {
-                                for (var j = 0; j < 7; j++)
+                                for (int j = 0; j < 7; j++)
                                 {
                                     if (j != Master.Direction)
                                     {
@@ -1528,9 +1528,9 @@ namespace GameSvr.RobotPlay
                     {
                         return result;
                     }
-                    for (var j = 0; j < 2; j++)
+                    for (int j = 0; j < 2; j++)
                     {
-                        for (var k = 0; k < 7; k++)
+                        for (int k = 0; k < 7; k++)
                         {
                             if (k != Master.Direction)
                             {
@@ -1549,7 +1549,7 @@ namespace GameSvr.RobotPlay
         private bool FindVisibleActors(BaseObject ActorObject)
         {
             bool result = false;
-            for (var i = 0; i < VisibleActors.Count; i++)
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
                 if (VisibleActors[i].BaseObject == ActorObject)
                 {
@@ -1637,7 +1637,7 @@ namespace GameSvr.RobotPlay
         private int GetUserItemList(int nItemType, int nCount)
         {
             int result = -1;
-            for (var i = 0; i < ItemList.Count; i++)
+            for (int i = 0; i < ItemList.Count; i++)
             {
                 StdItem StdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
                 if (StdItem != null)
@@ -1711,7 +1711,7 @@ namespace GameSvr.RobotPlay
             IList<BaseObject> BaseObjectList = new List<BaseObject>();
             if (Envirnoment.GetMapBaseObjects(nX, nY, nRange, BaseObjectList))
             {
-                for (var i = BaseObjectList.Count - 1; i >= 0; i--)
+                for (int i = BaseObjectList.Count - 1; i >= 0; i--)
                 {
                     BaseObject = BaseObjectList[i];
                     if (BaseObject.HideMode && !CoolEye || !IsProperTarget(BaseObject))
@@ -1758,7 +1758,7 @@ namespace GameSvr.RobotPlay
             short nX = CurrX;
             short nY = CurrY;
             byte btDir = M2Share.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
-            for (var i = 0; i < nStep; i++)
+            for (int i = 0; i < nStep; i++)
             {
                 if (TargetCret.CurrX == nX && TargetCret.CurrY == nY)
                 {
@@ -1784,7 +1784,7 @@ namespace GameSvr.RobotPlay
             short nX = 0;
             short nY = 0;
             btDir = M2Share.GetNextDirection(nCurrX, nCurrY, BaseObject.CurrX, BaseObject.CurrY);
-            for (var i = 0; i < nRange; i++)
+            for (int i = 0; i < nRange; i++)
             {
                 if (!Envir.GetNextPosition(nCurrX, nCurrY, btDir, i, ref nX, ref nY))
                 {
@@ -1805,7 +1805,7 @@ namespace GameSvr.RobotPlay
             short nY = 0;
             bool result = false;
             btDir = M2Share.GetNextDirection(CurrX, CurrY, BaseObject.CurrX, BaseObject.CurrY);
-            for (var i = 0; i < nRange; i++)
+            for (int i = 0; i < nRange; i++)
             {
                 if (!Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nX, ref nY))
                 {
@@ -1834,7 +1834,7 @@ namespace GameSvr.RobotPlay
                     result = true;
                     break;
                 case PlayJob.Wizard:
-                    for (var i = 0; i < MagicList.Count; i++)
+                    for (int i = 0; i < MagicList.Count; i++)
                     {
                         UserMagic = MagicList[i];
                         switch (UserMagic.MagIdx)
@@ -1861,7 +1861,7 @@ namespace GameSvr.RobotPlay
                     }
                     break;
                 case PlayJob.Taoist:
-                    for (var i = 0; i < MagicList.Count; i++)
+                    for (int i = 0; i < MagicList.Count; i++)
                     {
                         UserMagic = MagicList[i];
                         if (UserMagic.Magic.Job == 2 || UserMagic.Magic.Job == 99)
@@ -2145,7 +2145,7 @@ namespace GameSvr.RobotPlay
             int result = 0;
             if (VisibleActors.Count > 0)
             {
-                for (var i = 0; i < VisibleActors.Count; i++)
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
                     BaseObject = VisibleActors[i].BaseObject;
                     if (BaseObject != null)
@@ -2488,8 +2488,8 @@ namespace GameSvr.RobotPlay
             }
             if (HUtil32.GetTickCount() - dwTick5F4 > MDwRunIntervalTime) // 跑步使用单独的变量计数
             {
-                var nX = nTargetX;
-                var nY = nTargetY;
+                short nX = nTargetX;
+                short nY = nTargetY;
                 byte nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
                 if (!RobotRunTo(nDir, false, nTargetX, nTargetY))
                 {
@@ -2514,13 +2514,13 @@ namespace GameSvr.RobotPlay
         private bool RobotRunTo(byte btDir, bool boFlag, short nDestX, short nDestY)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
-            var result = false;
+            bool result = false;
             try
             {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 Direction = btDir;
-                var canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll || M2Share.Config.boSafeAreaLimited && InSafeZone();
+                bool canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll || M2Share.Config.boSafeAreaLimited && InSafeZone();
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
@@ -2674,7 +2674,7 @@ namespace GameSvr.RobotPlay
                     if (!result)
                     {
                         n20 = M2Share.RandomNumber.Random(3);
-                        for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
+                        for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                         {
                             if (nOldX == CurrX && nOldY == CurrY)
                             {
@@ -4100,7 +4100,7 @@ namespace GameSvr.RobotPlay
             int n10 = nRange;
             if (VisibleActors.Count > 0)
             {
-                for (var i = 0; i < VisibleActors.Count; i++)
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
                     BaseObject = VisibleActors[i].BaseObject;
                     if (BaseObject != null)
@@ -4132,7 +4132,7 @@ namespace GameSvr.RobotPlay
             BaseObject BaseObject;
             if (VisibleActors.Count > 0)
             {
-                for (var i = 0; i < VisibleActors.Count; i++)
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
                     switch (nMode)
                     {
@@ -4184,7 +4184,7 @@ namespace GameSvr.RobotPlay
             int n10 = nRange;
             if (VisibleActors.Count > 0)
             {
-                for (var i = 0; i < VisibleActors.Count; i++)
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
                     BaseObject = VisibleActors[i].BaseObject;
                     if (BaseObject != null)
@@ -4275,7 +4275,7 @@ namespace GameSvr.RobotPlay
                 // 检测人物包裹是否存在毒,护身符
                 if (ItemList.Count > 0)
                 {
-                    for (var i = 0; i < ItemList.Count; i++)
+                    for (int i = 0; i < ItemList.Count; i++)
                     {
                         // 人物包裹不为空
                         UserItem = ItemList[i];

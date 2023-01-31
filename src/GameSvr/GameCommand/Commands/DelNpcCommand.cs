@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
             BaseObject BaseObject = PlayObject.GetPoseCreate();
             if (BaseObject != null)
             {
-                for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
+                for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
                 {
                     if (M2Share.WorldEngine.MerchantList[i] == BaseObject)
                     {
@@ -29,7 +29,7 @@ namespace GameSvr.GameCommand.Commands
                         return;
                     }
                 }
-                for (var i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++)
+                for (int i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++)
                 {
                     if (M2Share.WorldEngine.QuestNpcList[i] == BaseObject)
                     {

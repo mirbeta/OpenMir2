@@ -18,20 +18,20 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sMonName = @Params[0];
-            var OleMap = @Params[1];
-            var NewMap = @Params[2];
-            var nX = @Params[3] == null ? (short)0 : Convert.ToInt16(@Params[3]);
-            var nY = @Params[4] == null ? (short)0 : Convert.ToInt16(@Params[4]);
-            var OnX = @Params[5] == null ? (short)0 : Convert.ToInt16(@Params[5]);
-            var OnY = @Params[6] == null ? (short)0 : Convert.ToInt16(@Params[6]);
+            string sMonName = @Params[0];
+            string OleMap = @Params[1];
+            string NewMap = @Params[2];
+            short nX = @Params[3] == null ? (short)0 : Convert.ToInt16(@Params[3]);
+            short nY = @Params[4] == null ? (short)0 : Convert.ToInt16(@Params[4]);
+            short OnX = @Params[5] == null ? (short)0 : Convert.ToInt16(@Params[5]);
+            short OnY = @Params[6] == null ? (short)0 : Convert.ToInt16(@Params[6]);
             BaseObject MoveMon;
             if (sMonName == "" || OleMap == "" || NewMap == "" || sMonName != "" && sMonName[0] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var boMoveAll = false;
+            bool boMoveAll = false;
             if (sMonName == "ALL")
             {
                 boMoveAll = true;
@@ -52,8 +52,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 OnY = 0;
             }
-            var SrcEnvir = M2Share.MapMgr.FindMap(OleMap);// 原地图
-            var DenEnvir = M2Share.MapMgr.FindMap(NewMap);// 新地图
+            Maps.Envirnoment SrcEnvir = M2Share.MapMgr.FindMap(OleMap);// 原地图
+            Maps.Envirnoment DenEnvir = M2Share.MapMgr.FindMap(NewMap);// 新地图
             if (SrcEnvir == null || DenEnvir == null)
             {
                 return;
@@ -64,7 +64,7 @@ namespace GameSvr.GameCommand.Commands
                 M2Share.WorldEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 10, MonList);// 查指定XY范围内的怪
                 if (MonList.Count > 0)
                 {
-                    for (var i = 0; i < MonList.Count; i++)
+                    for (int i = 0; i < MonList.Count; i++)
                     {
                         MoveMon = MonList[i];
                         if (MoveMon != PlayObject)
@@ -81,7 +81,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 // 所有怪移动
                 M2Share.WorldEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 1000, MonList);// 查指定XY范围内的怪
-                for (var i = 0; i < MonList.Count; i++)
+                for (int i = 0; i < MonList.Count; i++)
                 {
                     MoveMon = MonList[i];
                     if (MoveMon != PlayObject)

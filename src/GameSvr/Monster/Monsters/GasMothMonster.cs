@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
 
         protected override BaseObject GasAttack(byte bt05)
         {
-            var baseObject = base.GasAttack(bt05);
+            BaseObject baseObject = base.GasAttack(bt05);
             if (baseObject != null && M2Share.RandomNumber.Random(3) == 0 && baseObject.HideMode)
             {
                 baseObject.StatusArr[PoisonState.STATE_TRANSPARENT] = 1;
@@ -36,16 +36,16 @@ namespace GameSvr.Monster.Monsters
         private void GasMothAttack()
         {
             BaseObject Creat = null;
-            var n10 = 999;
-            for (var i = 0; i < this.VisibleActors.Count; i++)
+            int n10 = 999;
+            for (int i = 0; i < this.VisibleActors.Count; i++)
             {
-                var BaseObject = this.VisibleActors[i].BaseObject;
+                BaseObject BaseObject = this.VisibleActors[i].BaseObject;
                 if (BaseObject.Death)
                 {
                     continue;
                 }
                 if (!this.IsProperTarget(BaseObject)) continue;
-                var nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
+                int nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
                 if (nC >= n10) continue;
                 n10 = nC;
                 Creat = BaseObject;

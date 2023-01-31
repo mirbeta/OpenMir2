@@ -24,7 +24,7 @@ namespace GameSvr.Monster.Monsters
             Envir.SetMapXyFlag(CurrX, CurrY - 2, true);
             Envir.SetMapXyFlag(CurrX + 1, CurrY - 1, true);
             Envir.SetMapXyFlag(CurrX + 1, CurrY - 2, true);
-            var boFlag = nFlag != 1;
+            bool boFlag = nFlag != 1;
             Envir.SetMapXyFlag(CurrX, CurrY, boFlag);
             Envir.SetMapXyFlag(CurrX, CurrY - 1, boFlag);
             Envir.SetMapXyFlag(CurrX, CurrY - 2, boFlag);
@@ -104,7 +104,7 @@ namespace GameSvr.Monster.Monsters
 
         public void RefStatus()
         {
-            var n08 = 3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3);
+            int n08 = 3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3);
             if (n08 - 3 >= 0)
             {
                 n08 = 0;

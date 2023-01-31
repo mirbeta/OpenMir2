@@ -19,10 +19,10 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sItemName = @Params.Length > 1 ? @Params[1] : "";
-            var sItemCount = @Params.Length > 2 ? @Params[2] : "";
-            var sType = @Params.Length > 3 ? @Params[3] : "";
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sItemName = @Params.Length > 1 ? @Params[1] : "";
+            string sItemCount = @Params.Length > 2 ? @Params[2] : "";
+            string sType = @Params.Length > 3 ? @Params[3] : "";
 
             int nItemCount;
             StdItem StdItem;
@@ -31,20 +31,20 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nCount = HUtil32.StrToInt(sItemCount, 0);
-            var nType = HUtil32.StrToInt(sType, 0);
+            int nCount = HUtil32.StrToInt(sItemCount, 0);
+            int nType = HUtil32.StrToInt(sType, 0);
             UserItem UserItem;
             switch (nType)
             {
                 case 0:
                     nItemCount = 0;
-                    for (var i = 0; i < m_PlayObject.UseItems.Length; i++)
+                    for (int i = 0; i < m_PlayObject.UseItems.Length; i++)
                     {
                         if (m_PlayObject.ItemList.Count >= 46)
                         {
@@ -75,7 +75,7 @@ namespace GameSvr.GameCommand.Commands
 
                 case 1:
                     nItemCount = 0;
-                    for (var i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
+                    for (int i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
                     {
                         if (m_PlayObject.ItemList.Count >= 46)
                         {
@@ -108,7 +108,7 @@ namespace GameSvr.GameCommand.Commands
 
                 case 2:
                     nItemCount = 0;
-                    for (var i = m_PlayObject.StorageItemList.Count - 1; i >= 0; i--)
+                    for (int i = m_PlayObject.StorageItemList.Count - 1; i >= 0; i--)
                     {
                         if (m_PlayObject.ItemList.Count >= 46)
                         {

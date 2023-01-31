@@ -17,8 +17,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var nHungerPoint = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : -1;
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            int nHungerPoint = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : -1;
             if (PlayObject.Permission < 6)
             {
                 return;
@@ -28,7 +28,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 m_PlayObject.HungerStatus = nHungerPoint;

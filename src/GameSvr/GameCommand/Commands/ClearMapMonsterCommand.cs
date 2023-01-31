@@ -19,18 +19,18 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sMapName = @Params.Length > 0 ? @Params[0] : "";
-            var sMonName = @Params.Length > 1 ? @Params[1] : "";
-            var sItems = @Params.Length > 2 ? @Params[2] : "";
+            string sMapName = @Params.Length > 0 ? @Params[0] : "";
+            string sMonName = @Params.Length > 1 ? @Params[1] : "";
+            string sItems = @Params.Length > 2 ? @Params[2] : "";
             if (sMapName == "" || sMonName == "" || sItems == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var boKillAll = false;
-            var boKillAllMap = false;
-            var boNotItem = true;
-            var nMonCount = 0;
+            bool boKillAll = false;
+            bool boKillAllMap = false;
+            bool boNotItem = true;
+            int nMonCount = 0;
             Envirnoment Envir = null;
             if (sMonName == "*")
             {
@@ -47,19 +47,19 @@ namespace GameSvr.GameCommand.Commands
             IList<BaseObject> MonList = new List<BaseObject>();
             try
             {
-                for (var i = 0; i < M2Share.MapMgr.Maps.Count; i++)
+                for (int i = 0; i < M2Share.MapMgr.Maps.Count; i++)
                 {
                     Envir = M2Share.MapMgr.Maps[i];
                     if (Envir != null)
                     {
                         if (boKillAllMap || string.Compare(Envir.MapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            var monsterCount = M2Share.WorldEngine.GetMapMonster(Envir, MonList);
+                            int monsterCount = M2Share.WorldEngine.GetMapMonster(Envir, MonList);
                             if (monsterCount > 0)
                             {
-                                for (var j = 0; j < monsterCount; j++)
+                                for (int j = 0; j < monsterCount; j++)
                                 {
-                                    var BaseObject = MonList[j];
+                                    BaseObject BaseObject = MonList[j];
                                     if (BaseObject != null)
                                     {
                                         if (BaseObject.Master != null && BaseObject.Race != 135)// 除135怪外，其它宝宝不清除

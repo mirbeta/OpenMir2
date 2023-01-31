@@ -22,20 +22,20 @@ namespace GameSvr.Robots
 
         private void LoadRobot()
         {
-            var sRobotName = string.Empty;
-            var sScriptFileName = string.Empty;
-            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot.txt");
+            string sRobotName = string.Empty;
+            string sScriptFileName = string.Empty;
+            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot.txt");
             if (!File.Exists(sFileName)) return;
-            using var LoadList = new StringList();
+            using StringList LoadList = new StringList();
             LoadList.LoadFromFile(sFileName);
-            for (var i = 0; i < LoadList.Count; i++)
+            for (int i = 0; i < LoadList.Count; i++)
             {
-                var sLineText = LoadList[i];
+                string sLineText = LoadList[i];
                 if (sLineText == "" || sLineText[0] == ';') continue;
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sRobotName, new[] { ' ', '/', '\t' });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sScriptFileName, new[] { ' ', '/', '\t' });
                 if (sRobotName == "" || sScriptFileName == "") continue;
-                var RobotHuman = new RobotObject();
+                RobotObject RobotHuman = new RobotObject();
                 RobotHuman.ChrName = sRobotName;
                 RobotHuman.ScriptFileName = sScriptFileName;
                 RobotHuman.LoadScript();
@@ -54,7 +54,7 @@ namespace GameSvr.Robots
             const string sExceptionMsg = "[Exception] TRobotManage::Run";
             try
             {
-                for (var i = RobotHumanList.Count - 1; i >= 0; i--)
+                for (int i = RobotHumanList.Count - 1; i >= 0; i--)
                 {
                     RobotHumanList[i].Run();
                 }
@@ -68,7 +68,7 @@ namespace GameSvr.Robots
 
         private void UnLoadRobot()
         {
-            for (var i = 0; i < RobotHumanList.Count; i++)
+            for (int i = 0; i < RobotHumanList.Count; i++)
             {
                 RobotHumanList[i] = null;
             }

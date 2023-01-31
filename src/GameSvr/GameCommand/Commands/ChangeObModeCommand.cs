@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void ChangeObMode(PlayObject PlayObject)
         {
-            var boFlag = !PlayObject.ObMode;
+            bool boFlag = !PlayObject.ObMode;
             if (boFlag)
             {
                 PlayObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");// 发送刷新数据到客户端，解决隐身有影子问题
@@ -21,11 +21,11 @@ namespace GameSvr.GameCommand.Commands
             PlayObject.ObMode = boFlag;
             if (PlayObject.ObMode)
             {
-                PlayObject.SysMsg(Settings.sObserverMode, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Settings.ObserverMode, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(Settings.g_sReleaseObserverMode, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Settings.ReleaseObserverMode, MsgColor.Green, MsgType.Hint);
             }
         }
     }

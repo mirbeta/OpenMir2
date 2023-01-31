@@ -62,8 +62,8 @@ namespace GameSvr.Items
 
         private static int GetUpgrade(int count, int ran)
         {
-            var result = 0;
-            for (var i = 0; i < count; i++)
+            int result = 0;
+            for (int i = 0; i < count; i++)
             {
                 if (M2Share.RandomNumber.Random(ran) == 0)
                 {
@@ -80,8 +80,8 @@ namespace GameSvr.Items
         public static int GetUpgrade2(int x, int a)
         {
             int iProb;
-            var result = 0;
-            for (var i = x; i >= 1; i--)
+            int result = 0;
+            for (int i = x; i >= 1; i--)
             {
                 if (i > x / 2)
                 {
@@ -102,7 +102,7 @@ namespace GameSvr.Items
 
         private void UpgradeRandomWeapon(UserItem pu)
         {
-            var up = GetUpgrade(12, 15);
+            int up = GetUpgrade(12, 15);
             if (M2Share.RandomNumber.Random(15) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);//DC
@@ -110,7 +110,7 @@ namespace GameSvr.Items
             up = GetUpgrade(12, 15);
             if (M2Share.RandomNumber.Random(20) == 0)
             {
-                var incp = (1 + up) / 3;
+                int incp = (1 + up) / 3;
                 if (incp > 0)
                 {
                     if (M2Share.RandomNumber.Random(3) != 0)
@@ -141,7 +141,7 @@ namespace GameSvr.Items
             up = GetUpgrade(12, 12);
             if (M2Share.RandomNumber.Random(3) < 2)
             {
-                var n = (1 + up) * 2000;
+                int n = (1 + up) * 2000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -154,7 +154,7 @@ namespace GameSvr.Items
 
         private void UpgradeRandomDress(UserItem pu)
         {
-            var up = GetUpgrade(6, 15);
+            int up = GetUpgrade(6, 15);
             if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC
@@ -182,7 +182,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 10);
             if (M2Share.RandomNumber.Random(8) < 6)
             {
-                var n = (1 + up) * 2000;
+                int n = (1 + up) * 2000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -190,7 +190,7 @@ namespace GameSvr.Items
 
         private void UpgradeRandomNecklace(UserItem pu)
         {
-            var up = GetUpgrade(6, 30);
+            int up = GetUpgrade(6, 30);
             if (M2Share.RandomNumber.Random(60) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC(HIT)
@@ -218,7 +218,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(20) < 15)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -226,7 +226,7 @@ namespace GameSvr.Items
 
         private void UpgradeRandomBarcelet(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(20) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC
@@ -254,7 +254,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(20) < 15)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -262,7 +262,7 @@ namespace GameSvr.Items
 
         private void UpgradeRandomNecklace19(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);
@@ -290,7 +290,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 10);
             if (M2Share.RandomNumber.Random(4) < 3)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -298,7 +298,7 @@ namespace GameSvr.Items
 
         private void UpgradeRandomRings(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up); // DC
@@ -316,7 +316,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(4) < 3)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -324,7 +324,7 @@ namespace GameSvr.Items
 
         private void UpgradeRandomRings23(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);
@@ -352,7 +352,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(4) < 3)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -360,7 +360,7 @@ namespace GameSvr.Items
 
         private void UpgradeRandomHelmet(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC
@@ -388,7 +388,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(4) < 3)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -396,12 +396,12 @@ namespace GameSvr.Items
 
         private void RandomSetUnknownHelmet(UserItem pu)
         {
-            var up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
+            int up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
             if (up > 0)
             {
                 pu.Desc[0] = (byte)up;// AC
             }
-            var sum = up;
+            int sum = up;
             up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
             if (up > 0)
             {
@@ -429,7 +429,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 30);
             if (up > 0)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -470,12 +470,12 @@ namespace GameSvr.Items
 
         private void RandomSetUnknownRing(UserItem pu)
         {
-            var up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
+            int up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
             if (up > 0)
             {
                 pu.Desc[2] = (byte)up;// DC
             }
-            var sum = up;
+            int sum = up;
             up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
             if (up > 0)
             {
@@ -491,7 +491,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 30);
             if (up > 0)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -526,12 +526,12 @@ namespace GameSvr.Items
 
         private void RandomSetUnknownBracelet(UserItem pu)
         {
-            var up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
+            int up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
             if (up > 0)
             {
                 pu.Desc[0] = (byte)up; // AC
             }
-            var sum = up;
+            int sum = up;
             up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
             if (up > 0)
             {
@@ -559,7 +559,7 @@ namespace GameSvr.Items
             up = GetUpgrade(6, 30);
             if (up > 0)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -652,7 +652,7 @@ namespace GameSvr.Items
         public int GetUpgradeStdItem(UserItem userItem, ref ClientItem clientItem)
         {
             CopyItemToClientItem(ref clientItem);
-            var UCount = 0;
+            int UCount = 0;
             switch (StdMode)
             {
                 case 5:

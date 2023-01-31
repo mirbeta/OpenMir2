@@ -27,11 +27,11 @@ namespace GameSvr.Script
             bool result = false;
             if (File.Exists(sFileName))
             {
-                var LoadStrList = new StringList();
+                StringList LoadStrList = new StringList();
                 LoadStrList.LoadFromFile(sFileName);
                 sLabel = '[' + sLabel + ']';
-                var bo1D = false;
-                for (var i = 0; i < LoadStrList.Count; i++)
+                bool bo1D = false;
+                for (int i = 0; i < LoadStrList.Count; i++)
                 {
                     string sLine = LoadStrList[i].Trim();
                     if (!string.IsNullOrEmpty(sLine))
@@ -67,13 +67,13 @@ namespace GameSvr.Script
 
         private static int GetScriptCallCount(string sText)
         {
-            var match = Regex.Matches(sText, "#CALL", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.RightToLeft);
+            MatchCollection match = Regex.Matches(sText, "#CALL", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.RightToLeft);
             return match.Count;
         }
 
         private static string GetCallScriptPath(string path)
         {
-            var sCallScriptFile = path;
+            string sCallScriptFile = path;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 if (sCallScriptFile.StartsWith("\\\\"))
@@ -103,18 +103,18 @@ namespace GameSvr.Script
 
         private void LoadCallScript(ref StringList LoadList, ref bool success)
         {
-            var sLable = string.Empty;
-            var callList = new StringList();
-            for (var i = 0; i < LoadList.Count; i++)
+            string sLable = string.Empty;
+            StringList callList = new StringList();
+            for (int i = 0; i < LoadList.Count; i++)
             {
-                var sLine = LoadList[i].Trim();
+                string sLine = LoadList[i].Trim();
                 callList.AppendText(sLine);
                 if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL"))
                 {
                     sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
-                    var sCallScriptFile = GetCallScriptPath(sLable.Trim());
-                    var sLabName = sLine.Trim();
-                    var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "QuestDiary", sCallScriptFile);
+                    string sCallScriptFile = GetCallScriptPath(sLable.Trim());
+                    string sLabName = sLine.Trim();
+                    string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "QuestDiary", sCallScriptFile);
                     if (sCallScriptDict.ContainsKey(sFileName))
                     {
                         callList[i] = "#ACT";
@@ -137,7 +137,7 @@ namespace GameSvr.Script
                 }
             }
             LoadList = callList;
-            var callCount = GetScriptCallCount(LoadList.Text);
+            int callCount = GetScriptCallCount(LoadList.Text);
             while (callCount <= 0)
             {
                 success = true;
@@ -147,11 +147,11 @@ namespace GameSvr.Script
 
         private string LoadScriptDefineInfo(StringList LoadList, IList<TDefineInfo> List)
         {
-            var result = string.Empty;
-            var s1C = string.Empty;
-            var s20 = string.Empty;
-            var s24 = string.Empty;
-            for (var i = 0; i < LoadList.Count; i++)
+            string result = string.Empty;
+            string s1C = string.Empty;
+            string s20 = string.Empty;
+            string s24 = string.Empty;
+            for (int i = 0; i < LoadList.Count; i++)
             {
                 string sDefName = LoadList[i].Trim();
                 if (sDefName != "" && sDefName[0] == '#')
@@ -208,15 +208,15 @@ namespace GameSvr.Script
 
         private bool LoadScriptFileQuestCondition(string sText, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var sCmd = string.Empty;
-            var sParam1 = string.Empty;
-            var sParam2 = string.Empty;
-            var sParam3 = string.Empty;
-            var sParam4 = string.Empty;
-            var sParam5 = string.Empty;
-            var sParam6 = string.Empty;
-            var nCMDCode = 0;
+            bool result = false;
+            string sCmd = string.Empty;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            string sParam4 = string.Empty;
+            string sParam5 = string.Empty;
+            string sParam6 = string.Empty;
+            int nCMDCode = 0;
             sText = HUtil32.GetValidStrCap(sText, ref sCmd, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam1, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam2, TextSpitConst);
@@ -226,7 +226,7 @@ namespace GameSvr.Script
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, TextSpitConst);
             if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1) //支持脚本变量
             {
-                var sActName = string.Empty;
+                string sActName = string.Empty;
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                 if (!string.IsNullOrEmpty(sActName))
                 {
@@ -730,15 +730,15 @@ namespace GameSvr.Script
 
         private bool LoadScriptFileQuestAction(string sText, QuestActionInfo QuestActionInfo)
         {
-            var sCmd = string.Empty;
-            var sParam1 = string.Empty;
-            var sParam2 = string.Empty;
-            var sParam3 = string.Empty;
-            var sParam4 = string.Empty;
-            var sParam5 = string.Empty;
-            var sParam6 = string.Empty;
+            string sCmd = string.Empty;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            string sParam4 = string.Empty;
+            string sParam5 = string.Empty;
+            string sParam6 = string.Empty;
             int nCMDCode;
-            var result = false;
+            bool result = false;
             sText = HUtil32.GetValidStrCap(sText, ref sCmd, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam1, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam2, TextSpitConst);
@@ -748,7 +748,7 @@ namespace GameSvr.Script
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, TextSpitConst);
             if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1) //支持脚本变量
             {
-                var sActName = string.Empty;
+                string sActName = string.Empty;
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                 if (!string.IsNullOrEmpty(sActName))
                 {
@@ -1389,28 +1389,28 @@ namespace GameSvr.Script
         /// <returns></returns>
         public int LoadScriptFile(NormNpc NPC, string sPatch, string sScritpName, bool boFlag)
         {
-            var s30 = string.Empty;
-            var sScript = string.Empty;
-            var s3C = string.Empty;
-            var s40 = string.Empty;
-            var s44 = string.Empty;
+            string s30 = string.Empty;
+            string sScript = string.Empty;
+            string s3C = string.Empty;
+            string s40 = string.Empty;
+            string s44 = string.Empty;
             StringList LoadList;
             IList<TDefineInfo> DefineList;
             QuestActionInfo QuestActionInfo = null;
-            var slabName = string.Empty;
-            var bo8D = false;
+            string slabName = string.Empty;
+            bool bo8D = false;
             TScript Script = null;
             SayingRecord SayingRecord = null;
             SayingProcedure SayingProcedure = null;
-            var scriptType = 0;
-            var n70 = 0;
-            var sScritpFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
+            int scriptType = 0;
+            int n70 = 0;
+            string sScritpFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, sPatch, GetScriptCrossPath(string.Concat(sScritpName, ".txt")));
             if (File.Exists(sScritpFileName))
             {
                 sCallScriptDict.Clear();
                 LoadList = new StringList();
                 LoadList.LoadFromFile(sScritpFileName);
-                var success = false;
+                bool success = false;
                 while (!success)
                 {
                     LoadCallScript(ref LoadList, ref success);
@@ -1421,7 +1421,7 @@ namespace GameSvr.Script
                 List<QuestActionInfo> DelayGotoList = new List<QuestActionInfo>();
                 List<QuestActionInfo> PlayDiceList = new List<QuestActionInfo>();
                 string s54 = LoadScriptDefineInfo(LoadList, DefineList);
-                var DefineInfo = new TDefineInfo
+                TDefineInfo DefineInfo = new TDefineInfo
                 {
                     sName = "@HOME"
                 };
@@ -1433,7 +1433,7 @@ namespace GameSvr.Script
                 DefineList.Add(DefineInfo);
                 int n24;
                 // 常量处理
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     sScript = LoadList[i].Trim();
                     if (!string.IsNullOrEmpty(sScript))
@@ -1453,10 +1453,10 @@ namespace GameSvr.Script
                                 if (bo8D)
                                 {
                                     // 将Define 好的常量换成指定值
-                                    for (var n20 = 0; n20 < DefineList.Count; n20++)
+                                    for (int n20 = 0; n20 < DefineList.Count; n20++)
                                     {
                                         DefineInfo = DefineList[n20];
-                                        var n1C = 0;
+                                        int n1C = 0;
                                         while (true)
                                         {
                                             n24 = sScript.ToUpper().IndexOf(DefineInfo.sName, StringComparison.OrdinalIgnoreCase);
@@ -1482,13 +1482,13 @@ namespace GameSvr.Script
                     }
                 }
                 // 释放常量定义内容
-                for (var i = 0; i < DefineList.Count; i++)
+                for (int i = 0; i < DefineList.Count; i++)
                 {
                     DefineList[i] = null;
                 }
                 DefineList.Clear();
-                var nQuestIdx = 0;
-                for (var i = 0; i < LoadList.Count; i++)
+                int nQuestIdx = 0;
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     sScript = LoadList[i].Trim();
                     if (sScript == "" || sScript[0] == ';' || sScript[0] == '/')
@@ -1499,8 +1499,8 @@ namespace GameSvr.Script
                     {
                         if (sScript.StartsWith("%")) // 物品价格倍率
                         {
-                            sScript = sScript.Substring(1, sScript.Length - 1);
-                            var nPriceRate = HUtil32.StrToInt(sScript, -1);
+                            sScript = sScript[1..];
+                            int nPriceRate = HUtil32.StrToInt(sScript, -1);
                             if (nPriceRate >= 55)
                             {
                                 ((Merchant)NPC).PriceRate = nPriceRate;
@@ -1509,8 +1509,8 @@ namespace GameSvr.Script
                         }
                         if (sScript.StartsWith("+")) // 物品交易类型
                         {
-                            sScript = sScript.Substring(1, sScript.Length - 1);
-                            var nItemType = HUtil32.StrToInt(sScript, -1);
+                            sScript = sScript[1..];
+                            int nItemType = HUtil32.StrToInt(sScript, -1);
                             if (nItemType >= 0)
                             {
                                 ((Merchant)NPC).ItemTypeList.Add(nItemType);
@@ -1760,9 +1760,9 @@ namespace GameSvr.Script
                     }
                     if (scriptType == 20 && boFlag)
                     {
-                        var sItemName = string.Empty;
-                        var sItemCount = string.Empty;
-                        var sItemRefillTime = string.Empty;
+                        string sItemName = string.Empty;
+                        string sItemCount = string.Empty;
+                        string sItemRefillTime = string.Empty;
                         sScript = HUtil32.GetValidStrCap(sScript, ref sItemName, TextSpitConst);
                         sScript = HUtil32.GetValidStrCap(sScript, ref sItemCount, TextSpitConst);
                         sScript = HUtil32.GetValidStrCap(sScript, ref sItemRefillTime, TextSpitConst);
@@ -1772,7 +1772,7 @@ namespace GameSvr.Script
                             {
                                 HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                             }
-                            var goods = new Goods
+                            Goods goods = new Goods
                             {
                                 ItemName = sItemName,
                                 Count = HUtil32.StrToInt(sItemCount, 0),
@@ -1801,7 +1801,7 @@ namespace GameSvr.Script
         /// </summary>
         private void InitializeLabel(NormNpc NPC, QuestActionInfo QuestActionInfo, IList<string> ScriptNameList, List<QuestActionInfo> PlayDiceList, List<QuestActionInfo> GotoList, List<QuestActionInfo> DelayGotoList)
         {
-            for (var i = 0; i < NPC.FGotoLable.Length; i++)
+            for (int i = 0; i < NPC.FGotoLable.Length; i++)
             {
                 NPC.FGotoLable[i] = -1;
             }
@@ -1860,11 +1860,11 @@ namespace GameSvr.Script
             //     nIdx = ScriptNameList.IndexOf(FormatLabelStr(QuestActionInfo.sParam2, ref boChange));
             //     QuestActionInfo.nParam2 = nIdx;
             // }
-            for (var i = 0; i < NPC.m_ScriptList.Count; i++)
+            for (int i = 0; i < NPC.m_ScriptList.Count; i++)
             {
-                var RecordList = NPC.m_ScriptList[i];
+                TScript RecordList = NPC.m_ScriptList[i];
                 nIdx = 0;
-                foreach (var SayingRecord in RecordList.RecordList.Values)
+                foreach (SayingRecord SayingRecord in RecordList.RecordList.Values)
                 {
                     // for (var k = 0; k < SayingRecord.ProcedureList.Count; k++)
                     // {
@@ -2244,7 +2244,7 @@ namespace GameSvr.Script
         /// <returns></returns>
         private static string FormatLabelStr(string sLabel, ref bool boChange)
         {
-            var result = sLabel;
+            string result = sLabel;
             if (sLabel.IndexOf(")", StringComparison.OrdinalIgnoreCase) > -1)
             {
                 HUtil32.GetValidStr3(sLabel, ref result, '(');
@@ -2259,9 +2259,9 @@ namespace GameSvr.Script
         /// <returns></returns>
         protected string InitializeProcedure(string sMsg)
         {
-            var nC = 0;
-            var sCmd = string.Empty;
-            var tempstr = sMsg;
+            int nC = 0;
+            string sCmd = string.Empty;
+            string tempstr = sMsg;
             while (true)
             {
                 if (tempstr.IndexOf(">", StringComparison.OrdinalIgnoreCase) < -1)
@@ -2299,16 +2299,16 @@ namespace GameSvr.Script
         /// <returns></returns>
         private string InitializeSayMsg(string sMsg, List<string> StringList, IList<string> OldStringList, IList<string> ScriptNameList)
         {
-            var nC = 0;
-            var s10 = string.Empty;
-            var tempstr = sMsg;
+            int nC = 0;
+            string s10 = string.Empty;
+            string tempstr = sMsg;
             string sLabel;
-            var sname = string.Empty;
+            string sname = string.Empty;
             int nIdx;
-            var nChangeIndex = 1;
-            var nNotIdx = -1;
-            var boChange = false;
-            var boAddResetLabel = false;
+            int nChangeIndex = 1;
+            int nNotIdx = -1;
+            bool boChange = false;
+            bool boAddResetLabel = false;
             while (true)
             {
                 if (string.IsNullOrEmpty(tempstr))
@@ -2411,8 +2411,8 @@ namespace GameSvr.Script
         /// </summary>
         private static void InitializeVariable(string sLabel, ref string sMsg)
         {
-            var s14 = string.Empty;
-            var sLabel2 = sLabel.ToUpper();
+            string s14 = string.Empty;
+            string sLabel2 = sLabel.ToUpper();
             if (sLabel2 == ScriptConst.sVAR_SERVERNAME)
             {
                 sMsg = sMsg.Replace("<" + sLabel + ">", ScriptConst.tVAR_SERVERNAME);

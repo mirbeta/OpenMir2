@@ -15,7 +15,7 @@ namespace GameSvr.Items
 
         ~CustomItem()
         {
-            for (var i = 0; i < ItemNameList.Count; i++)
+            for (int i = 0; i < ItemNameList.Count; i++)
             {
                 ItemNameList[i] = null;
             }
@@ -24,9 +24,9 @@ namespace GameSvr.Items
 
         public string GetCustomItemName(int nMakeIndex, int nItemIndex)
         {
-            var result = string.Empty;
+            string result = string.Empty;
             ItemName itemName;
-            for (var i = ItemNameList.Count - 1; i >= 0; i--)
+            for (int i = ItemNameList.Count - 1; i >= 0; i--)
             {
                 itemName = ItemNameList[i];
                 if (itemName.nMakeIndex != nMakeIndex || itemName.nItemIndex != nItemIndex) continue;
@@ -39,7 +39,7 @@ namespace GameSvr.Items
         public bool AddCustomItemName(int nMakeIndex, int nItemIndex, string sItemName)
         {
             ItemName itemName;
-            for (var i = ItemNameList.Count - 1; i >= 0; i--)
+            for (int i = ItemNameList.Count - 1; i >= 0; i--)
             {
                 itemName = ItemNameList[i];
                 if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex)
@@ -57,9 +57,9 @@ namespace GameSvr.Items
 
         public void DelCustomItemName(int nMakeIndex, int nItemIndex)
         {
-            for (var i = 0; i < ItemNameList.Count; i++)
+            for (int i = 0; i < ItemNameList.Count; i++)
             {
-                var itemName = ItemNameList[i];
+                ItemName itemName = ItemNameList[i];
                 if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex)
                 {
                     ItemNameList.RemoveAt(i);
@@ -73,25 +73,25 @@ namespace GameSvr.Items
         /// </summary>
         public void LoadCustomItemName()
         {
-            var sMakeIndex = string.Empty;
-            var sItemIndex = string.Empty;
-            var sItemName = string.Empty;
-            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "ItemNameList.txt");
-            var loadList = new StringList();
+            string sMakeIndex = string.Empty;
+            string sItemIndex = string.Empty;
+            string sItemName = string.Empty;
+            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "ItemNameList.txt");
+            StringList loadList = new StringList();
             if (File.Exists(sFileName))
             {
                 ItemNameList.Clear();
                 loadList.LoadFromFile(sFileName);
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
                     string sLineText = loadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '\t' });
-                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                    int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if (nMakeIndex < 0 || nItemIndex < 0) continue;
-                    var itemName = new ItemName();
+                    ItemName itemName = new ItemName();
                     itemName.nMakeIndex = nMakeIndex;
                     itemName.nItemIndex = nItemIndex;
                     itemName.sItemName = sItemName;
@@ -111,7 +111,7 @@ namespace GameSvr.Items
         /// <returns></returns>
         public static string GetItemName(UserItem userItem)
         {
-            var result = string.Empty;
+            string result = string.Empty;
             if (userItem.Desc[13] == 1)
             {
                 result = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
@@ -128,11 +128,11 @@ namespace GameSvr.Items
         /// </summary>
         public void SaveCustomItemName()
         {
-            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "ItemNameList.txt");
-            var saveList = new StringList();
-            for (var i = ItemNameList.Count - 1; i >= 0; i--)
+            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "ItemNameList.txt");
+            StringList saveList = new StringList();
+            for (int i = ItemNameList.Count - 1; i >= 0; i--)
             {
-                var itemName = ItemNameList[i];
+                ItemName itemName = ItemNameList[i];
                 saveList.Add(itemName.nMakeIndex + "\t" + itemName.nItemIndex + "\t" + itemName.sItemName);
             }
             saveList.SaveToFile(sFileName);

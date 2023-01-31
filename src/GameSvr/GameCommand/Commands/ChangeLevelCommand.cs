@@ -15,8 +15,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            var nLevel = HUtil32.StrToInt(sParam1, 1);
+            string sParam1 = @Params.Length > 0 ? @Params[0] : "";
+            int nLevel = HUtil32.StrToInt(sParam1, 1);
             int nOLevel = PlayObject.Abil.Level;
             PlayObject.Abil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
             PlayObject.HasLevelUp(1);// 等级调整记录日志

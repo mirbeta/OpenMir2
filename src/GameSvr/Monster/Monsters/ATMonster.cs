@@ -39,10 +39,10 @@ namespace GameSvr.Monster.Monsters
             if (Master != null && (Master.TargetCret != null || Master.LastHiter != null))
             {
                 BaseObject attackTarget = null;
-                var n10 = 999;
-                for (var i = 0; i < Master.VisibleActors.Count; i++) //共享主人的视野
+                int n10 = 999;
+                for (int i = 0; i < Master.VisibleActors.Count; i++) //共享主人的视野
                 {
-                    var baseObject = Master.VisibleActors[i].BaseObject;
+                    BaseObject baseObject = Master.VisibleActors[i].BaseObject;
                     if (baseObject.Death || baseObject.Ghost || (baseObject.Envir != Envir) || (Math.Abs(baseObject.CurrX - CurrX) > 15) || (Math.Abs(baseObject.CurrY - CurrY) > 15))
                     {
                         ClearTargetCreat(baseObject);
@@ -50,7 +50,7 @@ namespace GameSvr.Monster.Monsters
                     }
                     if (this.IsProperTarget(baseObject) && (!baseObject.HideMode || this.CoolEye))
                     {
-                        var nC = Math.Abs(this.CurrX - baseObject.CurrX) + Math.Abs(this.CurrY - baseObject.CurrY);
+                        int nC = Math.Abs(this.CurrX - baseObject.CurrX) + Math.Abs(this.CurrY - baseObject.CurrY);
                         if (nC < n10)
                         {
                             n10 = nC;

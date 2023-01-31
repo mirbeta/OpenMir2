@@ -14,7 +14,7 @@ namespace GameSvr
             try
             {
                 _logger.Info("Connecting to MapSvr...");
-                for (var i = 0; i < pipeClientMaps.Length; i++)
+                for (int i = 0; i < pipeClientMaps.Length; i++)
                 {
                     pipeClientMaps[i] = new NamePipeClient();
                     pipeClientMaps[i].Connect();
@@ -28,7 +28,7 @@ namespace GameSvr
 
         public static MapCellInfo GetCellInfo(int nX, int nY, ref bool success)
         {
-            var ram = RandomNumber.GetInstance().Random(pipeClientMaps.Length);
+            int ram = RandomNumber.GetInstance().Random(pipeClientMaps.Length);
             pipeClientMaps[ram].SendPipeMessage(Encoding.UTF8.GetBytes("123"));
             pipeClientMaps[ram].Close();
             return null;

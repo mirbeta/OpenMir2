@@ -18,8 +18,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sRange = @Params.Length > 1 ? @Params[1] : "";
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sRange = @Params.Length > 1 ? @Params[1] : "";
             PlayObject MoveHuman;
             IList<BaseObject> HumanList;
             if (sRange == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
@@ -27,13 +27,13 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nRange = HUtil32._MAX(10, HUtil32.StrToInt(sRange, 2));
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            int nRange = HUtil32._MAX(10, HUtil32.StrToInt(sRange, 2));
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 HumanList = new List<BaseObject>();
                 M2Share.WorldEngine.GetMapRageHuman(m_PlayObject.Envir, m_PlayObject.CurrX, m_PlayObject.CurrY, nRange, HumanList);
-                for (var i = 0; i < HumanList.Count; i++)
+                for (int i = 0; i < HumanList.Count; i++)
                 {
                     MoveHuman = HumanList[i] as PlayObject;
                     if (MoveHuman != PlayObject)

@@ -28,7 +28,7 @@ namespace GameSvr.GameCommand.Commands
             IList<PlayObject> List14 = new List<PlayObject>();
             IList<GuildInfo> guildList = new List<GuildInfo>();
             M2Share.WorldEngine.GetMapRageHuman(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, List10);
-            for (var i = 0; i < List10.Count; i++)
+            for (int i = 0; i < List10.Count; i++)
             {
                 m_PlayObject = List10[i] as PlayObject;
                 if (!m_PlayObject.ObMode || !m_PlayObject.AdminMode)
@@ -39,7 +39,7 @@ namespace GameSvr.GameCommand.Commands
                         continue;
                     }
                     bo19 = false;
-                    for (var j = 0; j < List14.Count; j++)
+                    for (int j = 0; j < List14.Count; j++)
                     {
                         PlayObjectA = List14[j];
                         if (m_PlayObject.MyGuild == PlayObjectA.MyGuild)
@@ -55,7 +55,7 @@ namespace GameSvr.GameCommand.Commands
             }
             PlayObject.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
             M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- 行会战争已爆发。");
-            var s20 = "";
+            string s20 = "";
             GuildInfo Guild;
             for (int i = 0; i < guildList.Count; i++)
             {

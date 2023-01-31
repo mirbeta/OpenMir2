@@ -16,10 +16,10 @@
         private void DoSelfExplosion()
         {
             WAbil.HP = 0;
-            var nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
-            for (var i = 0; i < VisibleActors.Count; i++)
+            int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
-                var baseObject = VisibleActors[i].BaseObject;
+                Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
                 if (baseObject.Death)
                 {
                     continue;
@@ -28,7 +28,7 @@
                 {
                     if (Math.Abs(CurrX - baseObject.CurrX) <= 1 && Math.Abs(CurrY - baseObject.CurrY) <= 1)
                     {
-                        var damage = 0;
+                        int damage = 0;
                         damage += baseObject.GetHitStruckDamage(this, nPower / 2);
                         damage += baseObject.GetMagStruckDamage(this, (ushort)(nPower / 2));
                         if (damage > 0)
@@ -43,7 +43,7 @@
 
         protected override bool AttackTarget()
         {
-            var result = false;
+            bool result = false;
             byte btDir = 0;
             if (TargetCret == null)
             {

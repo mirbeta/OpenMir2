@@ -53,7 +53,7 @@ namespace GameSvr.Conf
                 {
                     //HUtil32.ArrestStringEx(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
                     TempList = sLineText.Split(",").ToList();
-                    for (var i = 0; i < TempList.Count; i++)
+                    for (int i = 0; i < TempList.Count; i++)
                     {
                         sMagicName = TempList[i].Trim();
                         if (playObject.FindMagic(sMagicName) == null)
@@ -88,7 +88,7 @@ namespace GameSvr.Conf
                 {
                     //ExtractStrings(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
                     TempList = sLineText.Split(",").ToList();
-                    for (var i = 0; i < TempList.Count; i++)
+                    for (int i = 0; i < TempList.Count; i++)
                     {
                         sItemName = TempList[i].Trim();
                         StdItem = M2Share.WorldEngine.GetStdItem(sItemName);
@@ -123,7 +123,7 @@ namespace GameSvr.Conf
                     //TempList.Free;
                 }
             }
-            for (var i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++)
             {
                 sSayMsg = ReadString("MonSay", i.ToString(), "");
                 if (sSayMsg != "")
@@ -144,7 +144,7 @@ namespace GameSvr.Conf
             playObject.m_UseItemNames[Grobal2.U_ARMRINGR] = ReadString("UseItems", "UseItems6", ""); // '右手镯';
             playObject.m_UseItemNames[Grobal2.U_RINGL] = ReadString("UseItems", "UseItems7", ""); // '左戒指';
             playObject.m_UseItemNames[Grobal2.U_RINGR] = ReadString("UseItems", "UseItems8", ""); // '右戒指';
-            for (var i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
+            for (byte i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
             {
                 if (!string.IsNullOrEmpty(playObject.m_UseItemNames[i]))
                 {

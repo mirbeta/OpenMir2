@@ -32,11 +32,11 @@ namespace GameSvr.World
 
         public void InitializeMonster()
         {
-            var monsterGenMap = new Dictionary<string, IList<MonGenInfo>>(StringComparer.OrdinalIgnoreCase); //临时存放怪物刷新映射,这样也能知道每一个怪要刷新几个和统计
+            Dictionary<string, IList<MonGenInfo>> monsterGenMap = new Dictionary<string, IList<MonGenInfo>>(StringComparer.OrdinalIgnoreCase); //临时存放怪物刷新映射,这样也能知道每一个怪要刷新几个和统计
 
             for (int i = 0; i < MonGenList.Count; i++)
             {
-                var monName = MonGenList[i].MonName;
+                string monName = MonGenList[i].MonName;
                 if (monsterGenMap.ContainsKey(monName))
                 {
                     monsterGenMap[monName].Add(MonGenList[i]);
@@ -60,11 +60,11 @@ namespace GameSvr.World
             }
             else
             {
-                var monsterNames = monsterGenMap.Keys.ToArray();
+                string[] monsterNames = monsterGenMap.Keys.ToArray();
                 for (int i = 0; i < monsterNames.Length; i++)
                 {
-                    var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
-                    var monName = monsterNames[i];
+                    int threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+                    string monName = monsterNames[i];
                     if (MonGenInfoThreadMap.ContainsKey(threadId))
                     {
                         for (int j = 0; j < monsterGenMap[monName].Count; j++)
@@ -74,7 +74,7 @@ namespace GameSvr.World
                     }
                     else
                     {
-                        var monsterList = new List<MonGenInfo>();
+                        List<MonGenInfo> monsterList = new List<MonGenInfo>();
                         for (int j = 0; j < monsterGenMap[monName].Count; j++)
                         {
                             monsterList.Add(monsterGenMap[monName][j]);
@@ -89,19 +89,19 @@ namespace GameSvr.World
             }
 
 
-            var monsterName = MonsterList.Values.ToList();
+            List<MonsterInfo> monsterName = MonsterList.Values.ToList();
             for (int i = 0; i < monsterName.Count; i++)
             {
-                var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+                int threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
                 if (!MonsterThreadMap.ContainsKey(MonsterList[monsterName[i].Name].Name))
                 {
                     MonsterThreadMap.Add(MonsterList[monsterName[i].Name].Name, threadId);
                 }
             }
 
-            for (var i = 0; i < MonGenInfoThreadMap.Count; i++)
+            for (int i = 0; i < MonGenInfoThreadMap.Count; i++)
             {
-                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
+                for (int j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
                     if (MonGenInfoThreadMap[i] != null)
                     {
@@ -124,7 +124,7 @@ namespace GameSvr.World
                 Monitor.PulseAll(_locker);
             }
 
-            for (var i = 0; i < MobThreading.Length; i++)
+            for (int i = 0; i < MobThreading.Length; i++)
             {
                 if (MobThreads[i] != null)
                 {
@@ -145,20 +145,20 @@ namespace GameSvr.World
         {
             _logger.Debug($"Run monster threads:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
 
-            var monsterThreads = M2Share.Config.ProcessMonsterMultiThreadLimit; //处理线程+预留线程
+            int monsterThreads = M2Share.Config.ProcessMonsterMultiThreadLimit; //处理线程+预留线程
 
             MobThreads = new MonsterThread[monsterThreads];
             MobThreading = new Thread[monsterThreads];
 
-            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 MobThreads[i] = new MonsterThread();
                 MobThreads[i].Id = i;
             }
 
-            for (var i = 0; i < monsterThreads; i++)
+            for (int i = 0; i < monsterThreads; i++)
             {
-                var mobThread = MobThreads[i];
+                MonsterThread mobThread = MobThreads[i];
                 if (mobThread == null)
                 {
                     continue;
@@ -178,7 +178,7 @@ namespace GameSvr.World
             int result;
             if (dwTime < 30 * 60 * 1000)
             {
-                var d10 = (PlayObjectCount - M2Share.Config.UserFull) / HUtil32._MAX(1, M2Share.Config.ZenFastStep);
+                int d10 = (PlayObjectCount - M2Share.Config.UserFull) / HUtil32._MAX(1, M2Share.Config.ZenFastStep);
                 if (d10 > 0)
                 {
                     if (d10 > 6)
@@ -243,10 +243,10 @@ namespace GameSvr.World
                     {
                         if (monGen.StartTick == 0 || ((HUtil32.GetTickCount() - monGen.StartTick) > GetMonstersZenTime(monGen.ZenTime)))
                         {
-                            var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
-                            var boRegened = true;
-                            var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (M2Share.Config.MonGenRate / 10)));//所需刷的怪总数
-                            var map = M2Share.MapMgr.FindMap(monGen.MapName);
+                            int nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
+                            bool boRegened = true;
+                            int genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (M2Share.Config.MonGenRate / 10)));//所需刷的怪总数
+                            Envirnoment map = M2Share.MapMgr.FindMap(monGen.MapName);
                             bool canCreate;
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 canCreate = false;
@@ -264,18 +264,18 @@ namespace GameSvr.World
                     }
                 }
 
-                var dwRunTick = HUtil32.GetTickCount();
+                int dwRunTick = HUtil32.GetTickCount();
                 try
                 {
-                    var boProcessLimit = false;
-                    var dwCurrentTick = HUtil32.GetTickCount();
-                    var dwMonProcTick = HUtil32.GetTickCount();
+                    bool boProcessLimit = false;
+                    int dwCurrentTick = HUtil32.GetTickCount();
+                    int dwMonProcTick = HUtil32.GetTickCount();
                     monsterThread.MonsterProcessCount = 0;
-                    var i = 0;
+                    int i = 0;
                     for (i = monsterThread.MonGenListPosition; i < mongenList.Count; i++)
                     {
                         monGen = mongenList[i];
-                        var processPosition = monsterThread.MonGenCertListPosition < monGen.CertList.Count ? monsterThread.MonGenCertListPosition : 0;
+                        int processPosition = monsterThread.MonGenCertListPosition < monGen.CertList.Count ? monsterThread.MonGenCertListPosition : 0;
                         monsterThread.MonGenCertListPosition = 0;
                         while (true)
                         {
@@ -283,7 +283,7 @@ namespace GameSvr.World
                             {
                                 break;
                             }
-                            var monster = (AnimalObject)monGen.CertList[processPosition];
+                            AnimalObject monster = (AnimalObject)monGen.CertList[processPosition];
                             if (monster != null)
                             {
                                 if (!monster.Ghost)
@@ -390,8 +390,8 @@ namespace GameSvr.World
         /// <returns></returns>
         private static int GetGenMonCount(MonGenInfo monGen)
         {
-            var nCount = 0;
-            for (var i = 0; i < monGen.CertList.Count; i++)
+            int nCount = 0;
+            for (int i = 0; i < monGen.CertList.Count; i++)
             {
                 BaseObject baseObject = monGen.CertList[i];
                 if (!baseObject.Death && !baseObject.Ghost)
@@ -404,11 +404,11 @@ namespace GameSvr.World
 
         public BaseObject RegenMonsterByName(string sMap, short nX, short nY, string sMonName)
         {
-            var nRace = GetMonRace(sMonName);
-            var baseObject = CreateMonster(sMap, nX, nY, nRace, sMonName);
+            int nRace = GetMonRace(sMonName);
+            BaseObject baseObject = CreateMonster(sMap, nX, nY, nRace, sMonName);
             if (baseObject != null)
             {
-                var threadId = GetMonsterThreadId(sMonName);
+                int threadId = GetMonsterThreadId(sMonName);
                 if (threadId >= 0)
                 {
                     MonGenInfo MonGenInfo = new MonGenInfo();
@@ -462,16 +462,16 @@ namespace GameSvr.World
         private void MonGetRandomItems(BaseObject mon)
         {
             IList<MonsterDropItem> itemList = null;
-            var itemName = string.Empty;
-            if (MonsterList.TryGetValue(mon.ChrName, out var monster))
+            string itemName = string.Empty;
+            if (MonsterList.TryGetValue(mon.ChrName, out MonsterInfo monster))
             {
                 itemList = monster.ItemList;
             }
             if (itemList != null)
             {
-                for (var i = 0; i < itemList.Count; i++)
+                for (int i = 0; i < itemList.Count; i++)
                 {
-                    var monItem = itemList[i];
+                    MonsterDropItem monItem = itemList[i];
                     if (M2Share.RandomNumber.Random(monItem.MaxPoint) <= monItem.SelPoint)
                     {
                         if (string.Compare(monItem.ItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
@@ -485,7 +485,7 @@ namespace GameSvr.World
                             if (CopyToUserItemFromName(itemName, ref userItem))
                             {
                                 userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100 * (20 + M2Share.RandomNumber.Random(80)));
-                                var stdItem = GetStdItem(userItem.Index);
+                                Items.StdItem stdItem = GetStdItem(userItem.Index);
                                 if (stdItem == null) continue;
                                 if (M2Share.RandomNumber.Random(M2Share.Config.MonRandomAddValue) == 0) //极品掉落几率
                                 {
@@ -516,7 +516,7 @@ namespace GameSvr.World
             short n20;
             short n24;
             BaseObject cert = null;
-            var map = M2Share.MapMgr.FindMap(sMapName);
+            Envirnoment map = M2Share.MapMgr.FindMap(sMapName);
             if (map == null) return null;
             switch (nMonRace)
             {
@@ -799,8 +799,8 @@ namespace GameSvr.World
         {
             BaseObject cert;
             const string sExceptionMsg = "[Exception] TUserEngine::RegenMonsters";
-            var result = true;
-            var dwStartTick = HUtil32.GetTickCount();
+            bool result = true;
+            int dwStartTick = HUtil32.GetTickCount();
             try
             {
                 if (monGen.Race > 0)
@@ -811,7 +811,7 @@ namespace GameSvr.World
                     {
                         nX = (short)(monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
                         nY = (short)(monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
-                        for (var i = 0; i < nCount; i++)
+                        for (int i = 0; i < nCount; i++)
                         {
                             cert = CreateMonster(monGen.MapName, (short)(nX - 10 + M2Share.RandomNumber.Random(20)), (short)(nY - 10 + M2Share.RandomNumber.Random(20)), monGen.Race, monGen.MonName);
                             if (cert != null)
@@ -831,7 +831,7 @@ namespace GameSvr.World
                     }
                     else
                     {
-                        for (var i = 0; i < nCount; i++)
+                        for (int i = 0; i < nCount; i++)
                         {
                             nX = (short)((monGen.X - monGen.Range) + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
                             nY = (short)((monGen.Y - monGen.Range) + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
@@ -866,7 +866,7 @@ namespace GameSvr.World
 
         private void ApplyMonsterAbility(AnimalObject baseObject, string sMonName)
         {
-            if (!MonsterList.TryGetValue(sMonName, out var monster)) return;
+            if (!MonsterList.TryGetValue(sMonName, out MonsterInfo monster)) return;
             baseObject.Race = monster.Race;
             baseObject.RaceImg = monster.RaceImg;
             baseObject.Appr = monster.Appr;

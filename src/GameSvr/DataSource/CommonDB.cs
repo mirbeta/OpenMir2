@@ -24,7 +24,7 @@ namespace GameSvr.DataSource
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
-                for (var i = 0; i < M2Share.WorldEngine.StdItemList.Count; i++)
+                for (int i = 0; i < M2Share.WorldEngine.StdItemList.Count; i++)
                 {
                     M2Share.WorldEngine.StdItemList[i] = null;
                 }
@@ -34,7 +34,7 @@ namespace GameSvr.DataSource
                 {
                     return result;
                 }
-                using (var dr = Query(sSQLString))
+                using (IDataReader dr = Query(sSQLString))
                 {
                     while (dr.Read())
                     {
@@ -118,7 +118,7 @@ namespace GameSvr.DataSource
         {
             MagicInfo Magic;
             const string sSQLString = "select * from magics";
-            var result = -1;
+            int result = -1;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
@@ -127,7 +127,7 @@ namespace GameSvr.DataSource
                 {
                     return result;
                 }
-                using (var dr = Query(sSQLString))
+                using (IDataReader dr = Query(sSQLString))
                 {
                     while (dr.Read())
                     {
@@ -182,7 +182,7 @@ namespace GameSvr.DataSource
 
         public int LoadMonsterDB()
         {
-            var result = 0;
+            int result = 0;
             MonsterInfo Monster;
             const string sSQLString = "select * from monsters";
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
@@ -193,7 +193,7 @@ namespace GameSvr.DataSource
                 {
                     return result;
                 }
-                using (var dr = Query(sSQLString))
+                using (IDataReader dr = Query(sSQLString))
                 {
                     while (dr.Read())
                     {
@@ -274,16 +274,16 @@ namespace GameSvr.DataSource
             {
                 DealOffInfo DealOffInfo;
                 const string sSQLString = "select * from goldsales";
-                using (var dr = Query(sSQLString))
+                using (IDataReader dr = Query(sSQLString))
                 {
                     while (dr.Read())
                     {
-                        var sDealChrName = dr.GetString("DealChrName");
-                        var sBuyChrName = dr.GetString("BuyChrName");
-                        var dSellDateTime = dr.GetDateTime("SellDateTime");
-                        var nState = dr.GetByte("State");
-                        var nSellGold = dr.GetInt16("SellGold");
-                        var sUseItems = dr.GetString("UseItems");
+                        string sDealChrName = dr.GetString("DealChrName");
+                        string sBuyChrName = dr.GetString("BuyChrName");
+                        DateTime dSellDateTime = dr.GetDateTime("SellDateTime");
+                        byte nState = dr.GetByte("State");
+                        short nSellGold = dr.GetInt16("SellGold");
+                        string sUseItems = dr.GetString("UseItems");
                         if ((!string.IsNullOrEmpty(sDealChrName)) && (!string.IsNullOrEmpty(sBuyChrName)) && (nState < 4))
                         {
                             DealOffInfo = new DealOffInfo();
@@ -327,12 +327,12 @@ namespace GameSvr.DataSource
                 if (M2Share.SellOffItemList.Count > 0)
                 {
                     Execute(sSQLString);
-                    for (var i = 0; i < M2Share.SellOffItemList.Count; i++)
+                    for (int i = 0; i < M2Share.SellOffItemList.Count; i++)
                     {
                         DealOffInfo = M2Share.SellOffItemList[i];
                         if (DealOffInfo != null)
                         {
-                            var command = new MySqlCommand();
+                            MySqlCommand command = new MySqlCommand();
                             command.Connection = (MySqlConnection)_dbConnection;
                             command.CommandText = SaveSellItemSql;
                             command.Parameters.AddWithValue("@DealChrName", DealOffInfo.sDealChrName);
@@ -370,7 +370,7 @@ namespace GameSvr.DataSource
 
         private IDataReader Query(string sSQLString)
         {
-            var command = new MySqlCommand();
+            MySqlCommand command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
             command.CommandText = sSQLString;
             return command.ExecuteReader();
@@ -378,7 +378,7 @@ namespace GameSvr.DataSource
 
         private int Execute(string sSQLString)
         {
-            var command = new MySqlCommand();
+            MySqlCommand command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
             command.CommandText = sSQLString;
             return command.ExecuteNonQuery();

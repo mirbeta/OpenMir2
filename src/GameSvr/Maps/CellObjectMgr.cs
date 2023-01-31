@@ -18,7 +18,7 @@ namespace GameSvr.Maps
 
         public ActorEntity Get(int cellId)
         {
-            return _cellObject.TryGetValue(cellId, out var cell) ? cell : null;
+            return _cellObject.TryGetValue(cellId, out ActorEntity cell) ? cell : null;
         }
 
         public void Remove(int cellId)
@@ -31,7 +31,7 @@ namespace GameSvr.Maps
 
         public void Dispose(int cellId)
         {
-            if (_cellObject.TryRemove(cellId, out var cell))
+            if (_cellObject.TryRemove(cellId, out ActorEntity cell))
             {
                 cell.Dispose();
             }

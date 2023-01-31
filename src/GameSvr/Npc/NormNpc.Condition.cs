@@ -18,14 +18,14 @@ namespace GameSvr.Npc
             string sLine;
             string sName = string.Empty;
             string sIPaddr;
-            var sChrName = PlayObject.ChrName;
-            var sCharAccount = PlayObject.UserAccount;
-            var sCharIPaddr = PlayObject.LoginIpAddr;
-            var LoadList = new StringList();
+            string sChrName = PlayObject.ChrName;
+            string sCharAccount = PlayObject.UserAccount;
+            string sCharIPaddr = PlayObject.LoginIpAddr;
+            StringList LoadList = new StringList();
             if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
             {
                 LoadList.LoadFromFile(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     sLine = LoadList[i];
                     if (sLine[0] == ';')
@@ -50,8 +50,8 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckBagSize(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nSize = QuestConditionInfo.nParam1;
+            bool result = false;
+            int nSize = QuestConditionInfo.nParam1;
             if ((nSize <= 0) || (nSize > Grobal2.MAXBAGITEM))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKBAGSIZE);
@@ -66,11 +66,11 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckBonusPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var BonusAbil = PlayObject.BonusAbil;
-            var nTotlePoint = BonusAbil.DC + BonusAbil.MC + BonusAbil.SC + BonusAbil.AC + BonusAbil.MAC + BonusAbil.HP + BonusAbil.MP + BonusAbil.Hit + BonusAbil.Speed + BonusAbil.Reserved;
+            bool result = false;
+            NakedAbility BonusAbil = PlayObject.BonusAbil;
+            int nTotlePoint = BonusAbil.DC + BonusAbil.MC + BonusAbil.SC + BonusAbil.AC + BonusAbil.MAC + BonusAbil.HP + BonusAbil.MP + BonusAbil.Hit + BonusAbil.Speed + BonusAbil.Reserved;
             nTotlePoint += PlayObject.BonusPoint;
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -103,7 +103,7 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckHPCheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
-            var result = false;
+            bool result = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -136,11 +136,11 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckHP(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var cMethodMin = QuestConditionInfo.sParam1[0];
-            var cMethodMax = QuestConditionInfo.sParam1[2];
-            var nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            var nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
+            bool result = false;
+            char cMethodMin = QuestConditionInfo.sParam1[0];
+            char cMethodMax = QuestConditionInfo.sParam1[2];
+            int nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            int nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKHP);
@@ -178,7 +178,7 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckMP_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
-            var result = false;
+            bool result = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -211,11 +211,11 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckMP(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var cMethodMin = QuestConditionInfo.sParam1[0];
-            var cMethodMax = QuestConditionInfo.sParam1[2];
-            var nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            var nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
+            bool result = false;
+            char cMethodMin = QuestConditionInfo.sParam1[0];
+            char cMethodMax = QuestConditionInfo.sParam1[2];
+            int nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            int nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMP);
@@ -253,7 +253,7 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckDC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
-            var result = false;
+            bool result = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -286,11 +286,11 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckDC(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var cMethodMin = QuestConditionInfo.sParam1[0];
-            var cMethodMax = QuestConditionInfo.sParam1[2];
-            var nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            var nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
+            bool result = false;
+            char cMethodMin = QuestConditionInfo.sParam1[0];
+            char cMethodMax = QuestConditionInfo.sParam1[2];
+            int nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            int nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKDC);
@@ -328,7 +328,7 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckMC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
-            var result = false;
+            bool result = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -361,11 +361,11 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckMC(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var cMethodMin = QuestConditionInfo.sParam1[0];
-            var cMethodMax = QuestConditionInfo.sParam1[2];
-            var nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            var nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
+            bool result = false;
+            char cMethodMin = QuestConditionInfo.sParam1[0];
+            char cMethodMax = QuestConditionInfo.sParam1[2];
+            int nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            int nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMC);
@@ -403,7 +403,7 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckSC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
-            var result = false;
+            bool result = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -436,11 +436,11 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckSC(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var cMethodMin = QuestConditionInfo.sParam1[0];
-            var cMethodMax = QuestConditionInfo.sParam1[2];
-            var nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            var nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
+            bool result = false;
+            char cMethodMin = QuestConditionInfo.sParam1[0];
+            char cMethodMax = QuestConditionInfo.sParam1[2];
+            int nMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            int nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKSC);
@@ -478,14 +478,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckExp(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var dwExp = HUtil32.StrToInt(QuestConditionInfo.sParam2, 0);
+            bool result = false;
+            int dwExp = HUtil32.StrToInt(QuestConditionInfo.sParam2, 0);
             if (dwExp == 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKEXP);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -518,8 +518,8 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckFlourishPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKFLOURISHPOINT);
@@ -529,8 +529,8 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            var Guild = PlayObject.MyGuild;
-            var cMethod = QuestConditionInfo.sParam1[0];
+            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -563,8 +563,8 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckChiefItemCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nCount = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nCount = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKFLOURISHPOINT);
@@ -574,8 +574,8 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            var Guild = PlayObject.MyGuild;
-            var cMethod = QuestConditionInfo.sParam1[0];
+            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -608,8 +608,8 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckGuildAuraePoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKAURAEPOINT);
@@ -619,8 +619,8 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            var Guild = PlayObject.MyGuild;
-            var cMethod = QuestConditionInfo.sParam1[0];
+            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -653,8 +653,8 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckGuildBuildPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKBUILDPOINT);
@@ -664,8 +664,8 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            var Guild = PlayObject.MyGuild;
-            var cMethod = QuestConditionInfo.sParam1[0];
+            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -698,8 +698,8 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckStabilityPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKSTABILITYPOINT);
@@ -709,8 +709,8 @@ namespace GameSvr.Npc
             {
                 return result;
             }
-            var Guild = PlayObject.MyGuild;
-            var cMethod = QuestConditionInfo.sParam1[0];
+            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -743,14 +743,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckGameGold(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nGameGold = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nGameGold = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nGameGold < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKGAMEGOLD);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -783,14 +783,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckGamePoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nGamePoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nGamePoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nGamePoint < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKGAMEPOINT);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -823,18 +823,18 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckGroupCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
+            bool result = false;
             if (PlayObject.GroupOwner == null)
             {
                 return false;
             }
-            var nCount = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            int nCount = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKGROUPCOUNT);
                 return false;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -867,13 +867,13 @@ namespace GameSvr.Npc
 
         private bool ConditionOfIsHigh(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
+            bool result = false;
             if (QuestConditionInfo.sParam1 == "")
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISHIGH);
                 return false;
             }
-            var cMode = QuestConditionInfo.sParam1[0];
+            char cMode = QuestConditionInfo.sParam1[0];
             switch (cMode)
             {
                 case 'L':
@@ -905,10 +905,10 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckInMapRange(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var sMapName = QuestConditionInfo.sParam1;
-            var nX = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            var nY = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
-            var nRange = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
+            string sMapName = QuestConditionInfo.sParam1;
+            int nX = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            int nY = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
+            int nRange = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
             if ((sMapName == "") || (nX < 0) || (nY < 0) || (nRange < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKINMAPRANGE);
@@ -941,15 +941,15 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckCastleChageDay(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nDay = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nDay = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if ((nDay < 0) || (Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CASTLECHANGEDAY);
                 return result;
             }
-            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, Castle.ChangeDate);
-            var cMethod = QuestConditionInfo.sParam1[0];
+            int nChangeDay = HUtil32.GetDayCount(DateTime.Now, Castle.ChangeDate);
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -982,15 +982,15 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckCastleWarDay(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nDay = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nDay = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if ((nDay < 0) || (Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CASTLEWARDAY);
                 return false;
             }
-            var nWarDay = HUtil32.GetDayCount(DateTime.Now, Castle.m_WarDate);
-            var cMethod = QuestConditionInfo.sParam1[0];
+            int nWarDay = HUtil32.GetDayCount(DateTime.Now, Castle.m_WarDate);
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1023,9 +1023,9 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckCastleDoorStatus(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nDay = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
-            var nDoorStatus = -1;
+            bool result = false;
+            int nDay = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            int nDoorStatus = -1;
             if (string.Compare(QuestConditionInfo.sParam1, "损坏", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nDoorStatus = 0;
@@ -1043,7 +1043,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKCASTLEDOOR);
                 return result;
             }
-            var CastleDoor = (CastleDoor)Castle.MainDoor.BaseObject;
+            CastleDoor CastleDoor = (CastleDoor)Castle.MainDoor.BaseObject;
             switch (nDoorStatus)
             {
                 case 0:
@@ -1137,22 +1137,22 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckItemAddValue(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nWhere = HUtil32.StrToInt(QuestConditionInfo.sParam1, -1);
-            var cMethod = QuestConditionInfo.sParam2[0];
-            var nAddValue = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
+            bool result = false;
+            int nWhere = HUtil32.StrToInt(QuestConditionInfo.sParam1, -1);
+            char cMethod = QuestConditionInfo.sParam2[0];
+            int nAddValue = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
             if (!(nWhere >= 0 && nWhere <= PlayObject.UseItems.Length) || (nAddValue < 0))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKITEMADDVALUE);
                 return result;
             }
-            var UserItem = PlayObject.UseItems[nWhere];
+            UserItem UserItem = PlayObject.UseItems[nWhere];
             if (UserItem.Index == 0)
             {
                 return result;
             }
-            var nAddAllValue = 0;
-            for (var i = 0; i < UserItem.Desc.Length; i++)
+            int nAddAllValue = 0;
+            for (int i = 0; i < UserItem.Desc.Length; i++)
             {
                 nAddAllValue += UserItem.Desc[i];
             }
@@ -1189,20 +1189,20 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckItemType(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nWhere = HUtil32.StrToInt(QuestConditionInfo.sParam1, -1);
-            var nType = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nWhere = HUtil32.StrToInt(QuestConditionInfo.sParam1, -1);
+            int nType = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (!(nWhere >= 0 && nWhere <= PlayObject.UseItems.Length))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKITEMTYPE);
                 return result;
             }
-            var UserItem = PlayObject.UseItems[nWhere];
+            UserItem UserItem = PlayObject.UseItems[nWhere];
             if (UserItem == null && UserItem.Index == 0)
             {
                 return result;
             }
-            var Stditem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+            Items.StdItem Stditem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if ((Stditem != null) && (Stditem.StdMode == nType))
             {
                 result = true;
@@ -1212,14 +1212,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckLevelEx(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nLevel = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nLevel = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKLEVELEX);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1253,14 +1253,14 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckNameListPostion(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             string sLine;
-            var result = false;
-            var nNamePostion = -1;
-            var sChrName = PlayObject.ChrName;
+            bool result = false;
+            int nNamePostion = -1;
+            string sChrName = PlayObject.ChrName;
             if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
             {
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     sLine = LoadList[i].Trim();
                     if (sLine[0] == ';')
@@ -1278,7 +1278,7 @@ namespace GameSvr.Npc
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKNAMELISTPOSITION);
             }
-            var nPostion = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            int nPostion = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nPostion < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKNAMELISTPOSITION);
@@ -1293,19 +1293,19 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckMarry(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.MSDearName);
+            return !string.IsNullOrEmpty(PlayObject.DearName);
         }
 
         private bool ConditionOfCheckMarryCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nCount = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nCount = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMARRYCOUNT);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1343,14 +1343,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckMemBerLevel(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nLevel = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nLevel = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMEMBERLEVEL);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1383,14 +1383,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckMemberType(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nType = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nType = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nType < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMEMBERTYPE);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1427,15 +1427,15 @@ namespace GameSvr.Npc
             string sLine;
             string sName = string.Empty;
             string sIPaddr;
-            var result = false;
-            var sChrName = PlayObject.ChrName;
-            var sCharAccount = PlayObject.UserAccount;
-            var sCharIPaddr = PlayObject.LoginIpAddr;
+            bool result = false;
+            string sChrName = PlayObject.ChrName;
+            string sCharAccount = PlayObject.UserAccount;
+            string sCharIPaddr = PlayObject.LoginIpAddr;
             LoadList = new StringList();
             if (File.Exists(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1))
             {
                 LoadList.LoadFromFile(M2Share.Config.EnvirDir + QuestConditionInfo.sParam1);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     sLine = LoadList[i];
                     if (sLine[0] == ';')
@@ -1460,8 +1460,8 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckPoseDir(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var PoseHuman = PlayObject.GetPoseCreate();
+            bool result = false;
+            BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.GetPoseCreate() == PlayObject) && (PoseHuman.Race == ActorRace.Play))
             {
                 switch (QuestConditionInfo.nParam1)
@@ -1488,7 +1488,7 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckPoseGender(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
+            bool result = false;
             byte btSex = 0;
             if (string.Compare(QuestConditionInfo.sParam1, "MAN", StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -1506,7 +1506,7 @@ namespace GameSvr.Npc
             {
                 btSex = 1;
             }
-            var PoseHuman = PlayObject.GetPoseCreate();
+            BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 if (((PlayObject)PoseHuman).Gender == Enum.Parse<PlayGender>(btSex.ToString()))
@@ -1519,8 +1519,8 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckPoseIsMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var PoseHuman = PlayObject.GetPoseCreate();
+            bool result = false;
+            BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 if ((((PlayObject)PoseHuman).MasterName != "") && ((PlayObject)PoseHuman).MBoMaster)
@@ -1533,15 +1533,15 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckPoseLevel(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nLevel = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nLevel = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKPOSELEVEL);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
-            var PoseHuman = PlayObject.GetPoseCreate();
+            char cMethod = QuestConditionInfo.sParam1[0];
+            BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 switch (cMethod)
@@ -1581,7 +1581,7 @@ namespace GameSvr.Npc
             BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if (((PlayObject)PoseHuman).MSDearName != "")
+                if (((PlayObject)PoseHuman).DearName != "")
                 {
                     result = true;
                 }
@@ -1683,7 +1683,7 @@ namespace GameSvr.Npc
             {
                 LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     s18 = LoadList[i].Trim();
                     if ((s18 != "") && (s18[1] != ';'))
@@ -1709,7 +1709,7 @@ namespace GameSvr.Npc
         {
             bool result = false;
             UserMagic UserMagic;
-            for (var i = 0; i < PlayObject.MagicList.Count; i++)
+            for (int i = 0; i < PlayObject.MagicList.Count; i++)
             {
                 UserMagic = PlayObject.MagicList[i];
                 if (string.Compare(UserMagic.Magic.MagicName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
@@ -1749,7 +1749,7 @@ namespace GameSvr.Npc
             }
             if (PlayObject.GroupOwner != null)
             {
-                for (var i = 0; i < PlayObject.GroupMembers.Count; i++)
+                for (int i = 0; i < PlayObject.GroupMembers.Count; i++)
                 {
                     PlayObjectEx = PlayObject.GroupMembers[i];
                     if (PlayObjectEx.Job == nJob)
@@ -1807,7 +1807,7 @@ namespace GameSvr.Npc
             }
             IList<BaseObject> MonList = new List<BaseObject>();
             int nMapRangeCount = Envir.GetRangeBaseObject(nX, nY, nRange, true, MonList);
-            for (var i = MonList.Count - 1; i >= 0; i--)
+            for (int i = MonList.Count - 1; i >= 0; i--)
             {
                 BaseObject = MonList[i];
                 if ((BaseObject.Race < ActorRace.Animal) || (BaseObject.Race == ActorRace.ArcherGuard) || (BaseObject.Master != null))
@@ -1896,8 +1896,8 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKLEVELEX);
                 return result;
             }
-            var nSlaveLevel = -1;
-            for (var i = 0; i < PlayObject.SlaveList.Count; i++)
+            int nSlaveLevel = -1;
+            for (int i = 0; i < PlayObject.SlaveList.Count; i++)
             {
                 BaseObject = PlayObject.SlaveList[i];
                 if (BaseObject.Abil.Level > nSlaveLevel)
@@ -1909,7 +1909,7 @@ namespace GameSvr.Npc
             {
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1961,19 +1961,19 @@ namespace GameSvr.Npc
             string sName = string.Empty;
             DynamicVar DynamicVar;
             bool boFoundVar = false;
-            var result = false;
-            var sType = QuestConditionInfo.sParam1;
-            var sVarName = QuestConditionInfo.sParam2;
-            var sMethod = QuestConditionInfo.sParam3;
-            var nVarValue = HUtil32.StrToInt(QuestConditionInfo.sParam4, 0);
-            var sVarValue = QuestConditionInfo.sParam4;
+            bool result = false;
+            string sType = QuestConditionInfo.sParam1;
+            string sVarName = QuestConditionInfo.sParam2;
+            string sMethod = QuestConditionInfo.sParam3;
+            int nVarValue = HUtil32.StrToInt(QuestConditionInfo.sParam4, 0);
+            string sVarValue = QuestConditionInfo.sParam4;
             if ((sType == "") || (sVarName == "") || (sMethod == ""))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKVAR);
                 return result;
             }
-            var cMethod = sMethod[0];
-            var DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
+            char cMethod = sMethod[0];
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
             if (DynamicVarList == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKVAR);
@@ -2031,8 +2031,8 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfPoseHaveMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var PoseHuman = PlayObject.GetPoseCreate();
+            bool result = false;
+            BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
                 if (((PlayObject)PoseHuman).MasterName != "")
@@ -2045,14 +2045,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckCastleGold(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nGold = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nGold = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if ((nGold < 0) || (Castle == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKCASTLEGOLD);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2085,14 +2085,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckContribution(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nContribution = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nContribution = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nContribution < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKCONTRIBUTION);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2125,14 +2125,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckCreditPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nCreditPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nCreditPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nCreditPoint < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKCREDITPOINT);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2165,7 +2165,7 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckOfGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
+            bool result = false;
             if (QuestConditionInfo.sParam1 == "")
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKOFGUILD);
@@ -2183,15 +2183,15 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckOnlineLongMin(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nOnlineMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nOnlineMin = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nOnlineMin < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ONLINELONGMIN);
                 return result;
             }
-            var nOnlineTime = (HUtil32.GetTickCount() - PlayObject.LogonTick) / 60000;
-            var cMethod = QuestConditionInfo.sParam1[0];
+            int nOnlineTime = (HUtil32.GetTickCount() - PlayObject.LogonTick) / 60000;
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2224,14 +2224,14 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckPasswordErrorCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nErrorCount = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
+            bool result = false;
+            int nErrorCount = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nErrorCount < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_PASSWORDERRORCOUNT);
                 return result;
             }
-            var cMethod = QuestConditionInfo.sParam1[0];
+            char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2274,8 +2274,8 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckPayMent(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nPayMent = HUtil32.StrToInt(QuestConditionInfo.sParam1, -1);
+            bool result = false;
+            int nPayMent = HUtil32.StrToInt(QuestConditionInfo.sParam1, -1);
             if (nPayMent < 1)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKPAYMENT);
@@ -2291,14 +2291,14 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckSlaveName(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             BaseObject BaseObject;
-            var result = false;
-            var sSlaveName = QuestConditionInfo.sParam1;
+            bool result = false;
+            string sSlaveName = QuestConditionInfo.sParam1;
             if (sSlaveName == "")
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKSLAVENAME);
                 return result;
             }
-            for (var i = 0; i < PlayObject.SlaveList.Count; i++)
+            for (int i = 0; i < PlayObject.SlaveList.Count; i++)
             {
                 BaseObject = PlayObject.SlaveList[i];
                 if (string.Compare(sSlaveName, BaseObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -2320,12 +2320,12 @@ namespace GameSvr.Npc
             string sDate = string.Empty;
             DateTime dOldDate = DateTime.Now;
             int nDay;
-            var nDayCount = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
-            var nValNo = M2Share.GetValNameNo(QuestConditionInfo.sParam4);
-            var nValNoDay = M2Share.GetValNameNo(QuestConditionInfo.sParam5);
-            var boDeleteExprie = string.Compare(QuestConditionInfo.sParam6, "清理", StringComparison.OrdinalIgnoreCase) == 0;
-            var boNoCompareHumanName = string.Compare(QuestConditionInfo.sParam6, "1", StringComparison.OrdinalIgnoreCase) == 0;
-            var cMethod = QuestConditionInfo.sParam2[0];
+            int nDayCount = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
+            int nValNo = M2Share.GetValNameNo(QuestConditionInfo.sParam4);
+            int nValNoDay = M2Share.GetValNameNo(QuestConditionInfo.sParam5);
+            bool boDeleteExprie = string.Compare(QuestConditionInfo.sParam6, "清理", StringComparison.OrdinalIgnoreCase) == 0;
+            bool boNoCompareHumanName = string.Compare(QuestConditionInfo.sParam6, "1", StringComparison.OrdinalIgnoreCase) == 0;
+            char cMethod = QuestConditionInfo.sParam2[0];
             if (nDayCount < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKNAMEDATELIST);
@@ -2344,7 +2344,7 @@ namespace GameSvr.Npc
                 {
                     M2Share.Log.Error("loading fail.... => " + sListFileName);
                 }
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new[] { ' ', '\t' });
@@ -2462,15 +2462,15 @@ namespace GameSvr.Npc
         // CHECKMAPHUMANCOUNT MAP = COUNT
         private bool ConditionOfCheckMapHumanCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nCount = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
+            bool result = false;
+            int nCount = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
             if (nCount < 0)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMAPHUMANCOUNT);
                 return result;
             }
-            var nHumanCount = M2Share.WorldEngine.GetMapHuman(QuestConditionInfo.sParam1);
-            var cMethod = QuestConditionInfo.sParam2[0];
+            int nHumanCount = M2Share.WorldEngine.GetMapHuman(QuestConditionInfo.sParam1);
+            char cMethod = QuestConditionInfo.sParam2[0];
             switch (cMethod)
             {
                 case '=':
@@ -2503,16 +2503,16 @@ namespace GameSvr.Npc
 
         private bool ConditionOfCheckMapMonCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            var result = false;
-            var nCount = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
-            var Envir = M2Share.MapMgr.FindMap(QuestConditionInfo.sParam1);
+            bool result = false;
+            int nCount = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
+            Envirnoment Envir = M2Share.MapMgr.FindMap(QuestConditionInfo.sParam1);
             if ((nCount < 0) || (Envir == null))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMAPMONCOUNT);
                 return result;
             }
-            var nMonCount = M2Share.WorldEngine.GetMapMonster(Envir, null);
-            var cMethod = QuestConditionInfo.sParam2[0];
+            int nMonCount = M2Share.WorldEngine.GetMapMonster(Envir, null);
+            char cMethod = QuestConditionInfo.sParam2[0];
             switch (cMethod)
             {
                 case '=':
@@ -2604,8 +2604,8 @@ namespace GameSvr.Npc
         {
             int n14 = 0;
             int n18 = 0;
-            var s01 = string.Empty;
-            var s02 = string.Empty;
+            string s01 = string.Empty;
+            string s02 = string.Empty;
             bool result;
             if (CheckVarNameNo(PlayObject, QuestConditionInfo, ref n14, ref n18))// 比较数值
             {

@@ -115,7 +115,7 @@ namespace GameSvr.Planes
         {
             if (IsConnect())
             {
-                var buff = HUtil32.GetBytes("(" + sMsg + ")");
+                byte[] buff = HUtil32.GetBytes("(" + sMsg + ")");
                 _msgClient.Send(buff);
             }
         }

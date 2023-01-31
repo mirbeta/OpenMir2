@@ -17,8 +17,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sX = @Params.Length > 0 ? @Params[0] : "";
-            var sY = @Params.Length > 1 ? @Params[1] : "";
+            string sX = @Params.Length > 0 ? @Params[0] : "";
+            string sY = @Params.Length > 1 ? @Params[1] : "";
             if (PlayObject.Teleport)
             {
                 short nX = (short)HUtil32.StrToInt(sX, -1);

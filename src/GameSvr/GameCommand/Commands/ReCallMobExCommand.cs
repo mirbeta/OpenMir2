@@ -17,10 +17,10 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sMonName = @Params.Length > 0 ? @Params[0] : "";
-            var nNameColor = @Params.Length > 0 ? Convert.ToInt32(@Params[1]) : 0;
-            var nX = @Params.Length > 0 ? Convert.ToInt16(@Params[2]) : (short)0;
-            var nY = @Params.Length > 0 ? Convert.ToInt16(@Params[3]) : (short)0;
+            string sMonName = @Params.Length > 0 ? @Params[0] : "";
+            int nNameColor = @Params.Length > 0 ? Convert.ToInt32(@Params[1]) : 0;
+            short nX = @Params.Length > 0 ? Convert.ToInt16(@Params[2]) : (short)0;
+            short nY = @Params.Length > 0 ? Convert.ToInt16(@Params[3]) : (short)0;
             if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
@@ -42,7 +42,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 nNameColor = 255;
             }
-            var mon = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, nX, nY, sMonName);
+            Actor.BaseObject mon = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, nX, nY, sMonName);
             if (mon != null)
             {
                 mon.Master = PlayObject;

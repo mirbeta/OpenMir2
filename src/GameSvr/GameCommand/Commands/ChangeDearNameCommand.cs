@@ -17,25 +17,25 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sDearName = @Params.Length > 1 ? @Params[1] : "";
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sDearName = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || sDearName == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null)
             {
                 if (string.Compare(sDearName, "无", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_PlayObject.MSDearName = "";
+                    m_PlayObject.DearName = "";
                     m_PlayObject.RefShowName();
                     PlayObject.SysMsg(sHumanName + " 的配偶名清除成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    m_PlayObject.MSDearName = sDearName;
+                    m_PlayObject.DearName = sDearName;
                     m_PlayObject.RefShowName();
                     PlayObject.SysMsg(sHumanName + " 的配偶名更改成功。", MsgColor.Green, MsgType.Hint);
                 }

@@ -30,7 +30,7 @@ namespace GameSvr.Monster.Monsters
 
         public override bool IsProperTarget(BaseObject baseObject)
         {
-            var result = false;
+            bool result = false;
             if (Castle != null)
             {
                 if (LastHiter == baseObject)
@@ -43,7 +43,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 if (baseObject.Race == ActorRace.Guard)
                 {
-                    var guardObject = (GuardUnit)baseObject;
+                    GuardUnit guardObject = (GuardUnit)baseObject;
                     if (guardObject.BoCrimeforCastle)
                     {
                         if ((HUtil32.GetTickCount() - guardObject.CrimeforCastleTime) < (2 * 60 * 1000))

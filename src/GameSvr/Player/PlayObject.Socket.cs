@@ -31,9 +31,9 @@ namespace GameSvr.Player
             }
             if (string.IsNullOrEmpty(sMsg))
                 return;
-            var msgBuff = HUtil32.GetBytes(sMsg);
+            byte[] msgBuff = HUtil32.GetBytes(sMsg);
             messageHead.PackLength = -msgBuff.Length;
-            var actionData = new byte[ServerMessage.PacketSize + msgBuff.Length];
+            byte[] actionData = new byte[ServerMessage.PacketSize + msgBuff.Length];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, actionData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(msgBuff, 0, actionData, ServerMessage.PacketSize, msgBuff.Length);
             M2Share.GateMgr.AddGateBuffer(GateIdx, actionData);
@@ -51,7 +51,7 @@ namespace GameSvr.Player
                 return;
             }
             messageHead.PackLength = CommandPacket.Size;
-            var sendData = new byte[HeaderLen];
+            byte[] sendData = new byte[HeaderLen];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandPacket.Size);
             M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
@@ -68,8 +68,8 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var bMsg = HUtil32.GetBytes(sMsg);
-            var sendData = new byte[HeaderLen + bMsg.Length];
+            byte[] bMsg = HUtil32.GetBytes(sMsg);
+            byte[] sendData = new byte[HeaderLen + bMsg.Length];
             messageHead.PackLength = bMsg.Length + CommandPacket.Size;
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandPacket.Size);

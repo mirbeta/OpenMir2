@@ -26,9 +26,9 @@ namespace GameSvr.Monster.Monsters
             MeltStone();
             IList<BaseObject> list10 = new List<BaseObject>();
             GetMapBaseObjects(Envir, CurrX, CurrY, 7, list10);
-            for (var i = 0; i < list10.Count; i++)
+            for (int i = 0; i < list10.Count; i++)
             {
-                var baseObject = list10[i];
+                BaseObject baseObject = list10[i];
                 if (baseObject.StoneMode)
                 {
                     if (baseObject is ScultureMonster)
@@ -45,9 +45,9 @@ namespace GameSvr.Monster.Monsters
             {
                 if (StoneMode)
                 {
-                    for (var i = 0; i < VisibleActors.Count; i++)
+                    for (int i = 0; i < VisibleActors.Count; i++)
                     {
-                        var baseObject = VisibleActors[i].BaseObject;
+                        BaseObject baseObject = VisibleActors[i].BaseObject;
                         if (baseObject.Death)
                         {
                             continue;

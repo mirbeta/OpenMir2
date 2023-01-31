@@ -18,9 +18,9 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sMineName = @Params.Length > 0 ? @Params[0] : "";
-            var nMineCount = @Params.Length > 0 ? int.Parse(@Params[1]) : 0;
-            var nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
+            string sMineName = @Params.Length > 0 ? @Params[0] : "";
+            int nMineCount = @Params.Length > 0 ? int.Parse(@Params[1]) : 0;
+            int nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
             if (PlayObject.Permission < this.GameCommand.nPermissionMin)
             {
                 PlayObject.SysMsg(CommandHelp.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
@@ -36,12 +36,12 @@ namespace GameSvr.GameCommand.Commands
                 nDura = M2Share.RandomNumber.Random(18) + 3;
             }
             // 如纯度不填,则随机给纯度
-            for (var i = 0; i < nMineCount; i++)
+            for (int i = 0; i < nMineCount; i++)
             {
-                var UserItem = new UserItem();
+                UserItem UserItem = new UserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sMineName, ref UserItem))
                 {
-                    var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                    Items.StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem != null && StdItem.StdMode == 43)
                     {
                         if (PlayObject.IsAddWeightAvailable(StdItem.Weight * nMineCount))

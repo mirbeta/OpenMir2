@@ -15,7 +15,7 @@ namespace GameSvr.Npc
         /// <param name="QuestActionInfo"></param>
         private void MovrData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var s34 = string.Empty;
+            string s34 = string.Empty;
             int n14;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
             {
@@ -724,7 +724,7 @@ namespace GameSvr.Npc
             string sParam3 = string.Empty;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
-            var n10 = 0;
+            int n10 = 0;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
             {
                 HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref sParam1);
@@ -858,14 +858,14 @@ namespace GameSvr.Npc
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
                             n10 = PlayObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
-                            s02 = PlayObject.MSString[n14 - 600].Substring(1, n10 - 1);
+                            s02 = PlayObject.MSString[n14 - 600][1..n10];
                             s03 = PlayObject.MSString[n14 - 600].Substring(s01.Length + n10, PlayObject.MSString[n14 - 600].Length);
                             PlayObject.MSString[n14 - 600] = s02 + s03;
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
                             n10 = M2Share.Config.GlobalAVal[n14 - 700].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
-                            s02 = M2Share.Config.GlobalAVal[n14 - 700].Substring(1, n10 - 1);
+                            s02 = M2Share.Config.GlobalAVal[n14 - 700][1..n10];
                             s03 = M2Share.Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 700].Length);
                             M2Share.Config.GlobalAVal[n14 - 700] = s02 + s03;
                         }
@@ -883,7 +883,7 @@ namespace GameSvr.Npc
                         else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                         {
                             n10 = M2Share.Config.GlobalAVal[n14 - 1100].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
-                            s02 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(1, n10 - 1);
+                            s02 = M2Share.Config.GlobalAVal[n14 - 1100][1..n10];
                             s03 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 1100].Length);
                             M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
                         }
@@ -1137,14 +1137,14 @@ namespace GameSvr.Npc
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
                         n10 = PlayObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
-                        s02 = PlayObject.MSString[n14 - 600].Substring(1, n10 - 1);
+                        s02 = PlayObject.MSString[n14 - 600][1..n10];
                         s03 = PlayObject.MSString[n14 - 600].Substring(s01.Length + n10, PlayObject.MSString[n14 - 600].Length);
                         PlayObject.MSString[n14 - 600] = s02 + s03;
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
                         n10 = M2Share.Config.GlobalAVal[n14 - 700].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
-                        s02 = M2Share.Config.GlobalAVal[n14 - 700].Substring(1, n10 - 1);
+                        s02 = M2Share.Config.GlobalAVal[n14 - 700][1..n10];
                         s03 = M2Share.Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 700].Length);
                         M2Share.Config.GlobalAVal[n14 - 700] = s02 + s03;
                     }
@@ -1162,7 +1162,7 @@ namespace GameSvr.Npc
                     else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
                     {
                         n10 = M2Share.Config.GlobalAVal[n14 - 1100].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
-                        s02 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(1, n10 - 1);
+                        s02 = M2Share.Config.GlobalAVal[n14 - 1100][1..n10];
                         s03 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 1100].Length);
                         M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
                     }
@@ -1186,9 +1186,9 @@ namespace GameSvr.Npc
         /// <param name="QuestActionInfo"></param>
         private void DivData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var s34 = string.Empty;
-            var n18 = 0;
-            var n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            string s34 = string.Empty;
+            int n18 = 0;
+            int n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
             if (n14 < 0)
             {
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
@@ -1236,7 +1236,7 @@ namespace GameSvr.Npc
             {
                 n18 = n14;
             }
-            var n1C = 0;
+            int n1C = 0;
             n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
             if (n14 < 0)
             {
@@ -1334,9 +1334,9 @@ namespace GameSvr.Npc
         /// <param name="QuestActionInfo"></param>
         private void MulData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var s34 = string.Empty;
-            var n18 = 0;
-            var n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            string s34 = string.Empty;
+            int n18 = 0;
+            int n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
             if (n14 < 0)
             {
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
@@ -1396,7 +1396,7 @@ namespace GameSvr.Npc
             {
                 n18 = n14;
             }
-            var n1C = 0;
+            int n1C = 0;
             n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
             if (n14 < 0)
             {
@@ -1518,9 +1518,9 @@ namespace GameSvr.Npc
         /// <param name="QuestActionInfo"></param>
         private void PercentData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var s34 = string.Empty;
-            var n18 = 0;
-            var n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            string s34 = string.Empty;
+            int n18 = 0;
+            int n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
             if (n14 < 0)
             {
                 n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2); // 取第一个变量,并传值给n18
@@ -1568,7 +1568,7 @@ namespace GameSvr.Npc
             {
                 n18 = n14;
             }
-            var n1C = 0;
+            int n1C = 0;
             n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
             if (n14 < 0)
             {
@@ -1673,10 +1673,10 @@ namespace GameSvr.Npc
 
         private void SumData(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var n18 = 0;
-            var s34 = string.Empty;
-            var s44 = string.Empty;
-            var s48 = string.Empty;
+            int n18 = 0;
+            string s34 = string.Empty;
+            string s44 = string.Empty;
+            string s48 = string.Empty;
             int n14;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6)) //  SUM 支持字符串变量
             {
@@ -1738,7 +1738,7 @@ namespace GameSvr.Npc
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSUM);
             }
-            var n1C = 0;
+            int n1C = 0;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6)) //SUM 支持字符串变量
             {
                 HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref s34);
@@ -1858,12 +1858,12 @@ namespace GameSvr.Npc
             sValue = "";
             nValue = -1;
             nDataType = -1;
-            var result = false;
+            bool result = false;
             if (sVariable == "")
             {
                 return result;
             }
-            var sMsg = sVariable;
+            string sMsg = sVariable;
             HUtil32.ArrestStringEx(sMsg, "<", ">", ref s10);
             if (s10 == "")
             {
@@ -2474,7 +2474,7 @@ namespace GameSvr.Npc
         private static bool SetMovDataValNameValue(PlayObject PlayObject, string sVarName, string sValue, int nValue, int nDataType)
         {
             bool result = false;
-            var n100 = M2Share.GetValNameNo(sVarName);
+            int n100 = M2Share.GetValNameNo(sVarName);
             if (n100 >= 0)
             {
                 switch (nDataType)
@@ -2821,7 +2821,7 @@ namespace GameSvr.Npc
             }
             if (HUtil32.IsVarNumber(sParam1))
             {
-                if ((sParam3 != "") && (sParam3[0] == '<') && (sParam3[sParam3.Length - 1] == '>'))
+                if ((sParam3 != "") && (sParam3[0] == '<') && (sParam3[^1] == '>'))
                 {
                     result = 0;
                 }
@@ -2842,7 +2842,7 @@ namespace GameSvr.Npc
             int n01 = M2Share.GetValNameNo(sParam1);
             if (n01 >= 0)
             {
-                if ((sParam2 != "") && (sParam2[0] == '<') && (sParam2[sParam2.Length - 1] == '>'))
+                if ((sParam2 != "") && (sParam2[0] == '<') && (sParam2[^1] == '>'))
                 {
                     result = 4;
                 }

@@ -22,25 +22,25 @@ namespace GameSvr.Maps
 
         public void MakeSafePkZone()
         {
-            for (var i = 0; i < M2Share.StartPointList.Count; i++)
+            for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                var StartPoint = M2Share.StartPointList[i];
+                StartPoint StartPoint = M2Share.StartPointList[i];
                 if (StartPoint != null && StartPoint.m_nType > 0)
                 {
-                    var Envir = FindMap(StartPoint.m_sMapName);
+                    Envirnoment Envir = FindMap(StartPoint.m_sMapName);
                     if (Envir != null)
                     {
                         int nMinX = StartPoint.m_nCurrX - StartPoint.m_nRange;
                         int nMaxX = StartPoint.m_nCurrX + StartPoint.m_nRange;
                         int nMinY = StartPoint.m_nCurrY - StartPoint.m_nRange;
                         int nMaxY = StartPoint.m_nCurrY + StartPoint.m_nRange;
-                        for (var nX = nMinX; nX <= nMaxX; nX++)
+                        for (int nX = nMinX; nX <= nMaxX; nX++)
                         {
-                            for (var nY = nMinY; nY <= nMaxY; nY++)
+                            for (int nY = nMinY; nY <= nMaxY; nY++)
                             {
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                                 {
-                                    var SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.m_nType);
+                                    SafeEvent SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.m_nType);
                                     M2Share.EventMgr.AddEvent(SafeEvent);
                                 }
                             }
@@ -62,8 +62,8 @@ namespace GameSvr.Maps
 
         public Envirnoment AddMapInfo(string sMapName, string sMapDesc, byte nServerNumber, MapInfoFlag MapFlag, Merchant QuestNPC)
         {
-            var sMapFileName = string.Empty;
-            var sTempName = sMapName;
+            string sMapFileName = string.Empty;
+            string sTempName = sMapName;
             if (sTempName.IndexOf('|') > -1)
             {
                 sMapFileName = HUtil32.GetValidStr3(sTempName, ref sMapName, '|');
@@ -80,7 +80,7 @@ namespace GameSvr.Maps
                     sMapName = sTempName;
                 }
             }
-            var envirnoment = new Envirnoment
+            Envirnoment envirnoment = new Envirnoment
             {
                 MapName = sMapName,
                 MapFileName = sMapFileName,
@@ -89,7 +89,7 @@ namespace GameSvr.Maps
                 Flag = MapFlag,
                 QuestNpc = QuestNPC
             };
-            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out var minMap))
+            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out int minMap))
             {
                 envirnoment.MinMap = minMap;
             }
@@ -126,7 +126,7 @@ namespace GameSvr.Maps
             Envirnoment DEnvir = FindMap(sDMapNO);
             if (SEnvir != null && DEnvir != null)
             {
-                var GateObj = new GateObject
+                GateObject GateObj = new GateObject
                 {
                     boFlag = false,
                     Envir = DEnvir,
@@ -141,13 +141,13 @@ namespace GameSvr.Maps
 
         public Envirnoment FindMap(string sMapName)
         {
-            return _mapList.TryGetValue(sMapName, out var map) ? map : null;
+            return _mapList.TryGetValue(sMapName, out Envirnoment map) ? map : null;
         }
 
         public Envirnoment GetMapInfo(int nServerIdx, string sMapName)
         {
             Envirnoment result = null;
-            if (_mapList.TryGetValue(sMapName, out var envirnoment))
+            if (_mapList.TryGetValue(sMapName, out Envirnoment envirnoment))
             {
                 if (envirnoment.ServerIndex == nServerIdx)
                 {
@@ -164,7 +164,7 @@ namespace GameSvr.Maps
         /// <returns></returns>
         public int GetMapOfServerIndex(string sMapName)
         {
-            if (_mapList.TryGetValue(sMapName, out var envirnoment))
+            if (_mapList.TryGetValue(sMapName, out Envirnoment envirnoment))
             {
                 return envirnoment.ServerIndex;
             }
@@ -173,7 +173,7 @@ namespace GameSvr.Maps
 
         public void LoadMapDoor()
         {
-            for (var i = 0; i < Maps.Count; i++)
+            for (int i = 0; i < Maps.Count; i++)
             {
                 this.Maps[i].AddDoorToMap();
             }

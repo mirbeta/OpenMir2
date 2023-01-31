@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             BaseObject BaseObject;
             if (!string.IsNullOrEmpty(sHumanName))
             {

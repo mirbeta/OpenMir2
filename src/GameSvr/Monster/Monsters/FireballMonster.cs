@@ -20,10 +20,10 @@
                         {
                             if (Math.Abs(TargetX - CurrX) <= 8 && Math.Abs(TargetY - CurrY) <= 8)
                             {
-                                var nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+                                int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
                                 if (nPower > 0)
                                 {
-                                    var baseObject = GetPoseCreate();
+                                    Actor.BaseObject baseObject = GetPoseCreate();
                                     if (baseObject != null && IsProperTarget(baseObject) && AntiMagic > 0)
                                     {
                                         nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);

@@ -19,7 +19,7 @@ namespace GameSvr.Castle
 
         public UserCastle Find(string sCastleName)
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 if (string.Compare(_castleList[i].sName, sCastleName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -36,7 +36,7 @@ namespace GameSvr.Castle
         /// <returns></returns>
         public UserCastle InCastleWarArea(BaseObject BaseObject)
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 if (_castleList[i].InCastleWarArea(BaseObject.Envir, BaseObject.CurrX, BaseObject.CurrY))
                 {
@@ -48,7 +48,7 @@ namespace GameSvr.Castle
 
         public UserCastle InCastleWarArea(Envirnoment Envir, int nX, int nY)
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 if (_castleList[i].InCastleWarArea(Envir, nX, nY))
                 {
@@ -76,7 +76,7 @@ namespace GameSvr.Castle
                 Save();
                 return;
             }
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 castle = _castleList[i];
                 castle.Initialize();
@@ -87,7 +87,7 @@ namespace GameSvr.Castle
         // 城堡皇宫所在地图
         public UserCastle IsCastlePalaceEnvir(Envirnoment Envir)
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 if (_castleList[i].PalaceEnvir == Envir)
                 {
@@ -100,7 +100,7 @@ namespace GameSvr.Castle
         // 城堡所在地图
         public UserCastle IsCastleEnvir(Envirnoment Envir)
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 if (_castleList[i].CastleEnvir == Envir)
                 {
@@ -112,7 +112,7 @@ namespace GameSvr.Castle
 
         public UserCastle IsCastleMember(PlayObject BaseObject)
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 if (_castleList[i].IsMember(BaseObject))
                 {
@@ -124,7 +124,7 @@ namespace GameSvr.Castle
 
         public void Run()
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 _castleList[i].Run();
             }
@@ -132,9 +132,9 @@ namespace GameSvr.Castle
 
         public void GetCastleGoldInfo(IList<string> List)
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
-                var castle = _castleList[i];
+                UserCastle castle = _castleList[i];
                 List.Add(string.Format(CommandHelp.GameCommandSbkGoldShowMsg, castle.sName, castle.TotalGold, castle.TodayIncome));
             }
         }
@@ -142,27 +142,27 @@ namespace GameSvr.Castle
         public void Save()
         {
             SaveCastleList();
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
-                var castle = _castleList[i];
+                UserCastle castle = _castleList[i];
                 castle.Save();
             }
         }
 
         public void LoadCastleList()
         {
-            var castleFile = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
+            string castleFile = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
             if (File.Exists(castleFile))
             {
-                using (var loadList = new StringList())
+                using (StringList loadList = new StringList())
                 {
                     loadList.LoadFromFile(castleFile);
-                    for (var i = 0; i < loadList.Count; i++)
+                    for (int i = 0; i < loadList.Count; i++)
                     {
-                        var sCastleDir = loadList[i].Trim();
+                        string sCastleDir = loadList[i].Trim();
                         if (!string.IsNullOrEmpty(sCastleDir))
                         {
-                            var castle = new UserCastle(sCastleDir);
+                            UserCastle castle = new UserCastle(sCastleDir);
                             _castleList.Add(castle);
                         }
                     }
@@ -177,17 +177,17 @@ namespace GameSvr.Castle
 
         private void SaveCastleList()
         {
-            var castleDirPath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir);
+            string castleDirPath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir);
             if (!Directory.Exists(castleDirPath))
             {
                 Directory.CreateDirectory(castleDirPath);
             }
-            var loadList = new StringList();
-            for (var i = 0; i < _castleList.Count; i++)
+            StringList loadList = new StringList();
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 loadList.Add(i.ToString());
             }
-            var savePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
+            string savePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
             loadList.SaveToFile(savePath);
         }
 
@@ -202,7 +202,7 @@ namespace GameSvr.Castle
 
         public void GetCastleNameList(IList<string> List)
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 List.Add(_castleList[i].sName);
             }
@@ -210,7 +210,7 @@ namespace GameSvr.Castle
 
         public void IncRateGold(int nGold)
         {
-            for (var i = 0; i < _castleList.Count; i++)
+            for (int i = 0; i < _castleList.Count; i++)
             {
                 _castleList[i].IncRateGold(nGold);
             }

@@ -17,8 +17,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sIPaddr = @params.Length > 0 ? @params[0] : "";
-            var sPort = @params.Length > 1 ? @params[1] : "";
+            string sIPaddr = @params.Length > 0 ? @params[0] : "";
+            string sPort = @params.Length > 1 ? @params[1] : "";
             if (PlayObject.Permission < 10)
             {
                 return;

@@ -11,7 +11,7 @@ namespace GameSvr.Conf
 
         public void LoadConfig()
         {
-            var nInteger = ReadInteger("Config", "WhisperRecord", -1);  //游戏私聊
+            int nInteger = ReadInteger("Config", "WhisperRecord", -1);  //游戏私聊
             if (nInteger <= -1)
             {
                 WriteBool("Config", "WhisperRecord", M2Share.Config.ClientConf.boWhisperRecord);
@@ -57,10 +57,10 @@ namespace GameSvr.Conf
             if (nInteger <= -1) WriteBool("Config", "SecondCardSystem", Settings.boSecondCardSystem);
 
             nInteger = ReadInteger("Config", "ExpErienceLevel", -1);
-            if (nInteger <= -1) WriteInteger("Config", "ExpErienceLevel", Settings.g_nExpErienceLevel);
+            if (nInteger <= -1) WriteInteger("Config", "ExpErienceLevel", Settings.ExpErienceLevel);
 
 
-            var sString = ReadString("Config", "BadManHomeMap", "");
+            string sString = ReadString("Config", "BadManHomeMap", "");
             if (string.IsNullOrEmpty(sString))
             {
                 WriteString("Config", "BadManHomeMap", "3");
@@ -92,7 +92,7 @@ namespace GameSvr.Conf
             M2Share.Config.ClientConf.boShowHelp = ReadBool("Config", "ShowHelp", M2Share.Config.ClientConf.boShowHelp);
 
             Settings.boSecondCardSystem = ReadBool("Config", "SecondCardSystem", Settings.boSecondCardSystem);
-            Settings.g_nExpErienceLevel = (byte)ReadInteger("Config", "ExpErienceLevel", Settings.g_nExpErienceLevel);
+            Settings.ExpErienceLevel = (byte)ReadInteger("Config", "ExpErienceLevel", Settings.ExpErienceLevel);
 
             Settings.BADMANHOMEMAP = ReadString("Config", "BadManHomeMap", Settings.BADMANHOMEMAP);
             Settings.BADMANSTARTX = (short)ReadInteger("Config", "BadManStartX", Settings.BADMANSTARTX);

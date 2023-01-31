@@ -124,7 +124,7 @@ namespace GameSvr
             if (M2Share.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
                 _logger.Info("保存玩家数据");
-                foreach (var play in M2Share.WorldEngine.PlayObjects)
+                foreach (Player.PlayObject play in M2Share.WorldEngine.PlayObjects)
                 {
                     M2Share.WorldEngine.SaveHumanRcd(play);
                 }
@@ -134,21 +134,21 @@ namespace GameSvr
 
         private void StopService(string sIPaddr, int nPort, bool isTransfer)
         {
-            var playerCount = M2Share.WorldEngine.PlayObjectCount;
+            int playerCount = M2Share.WorldEngine.PlayObjectCount;
             if (playerCount > 0)
             {
                 Task.Factory.StartNew(async () =>
                 {
-                    var shutdownSeconds = M2Share.Config.CloseCountdown;
+                    int shutdownSeconds = M2Share.Config.CloseCountdown;
                     while (true)
                     {
                         if (playerCount <= 0)
                         {
                             break;
                         }
-                        foreach (var playObject in M2Share.WorldEngine.PlayObjects)
+                        foreach (Player.PlayObject playObject in M2Share.WorldEngine.PlayObjects)
                         {
-                            var closeMsg = isTransfer ? $"服务器关闭倒计时[{shutdownSeconds}]. 关闭后自动转移到其他大区，请勿退出游戏。" : $"服务器关闭倒计时[{shutdownSeconds}].";
+                            string closeMsg = isTransfer ? $"服务器关闭倒计时[{shutdownSeconds}]. 关闭后自动转移到其他大区，请勿退出游戏。" : $"服务器关闭倒计时[{shutdownSeconds}].";
                             playObject.SysMsg(closeMsg, MsgColor.Red, MsgType.Notice);
                             _logger.Info(closeMsg);
                             shutdownSeconds--;
@@ -161,7 +161,7 @@ namespace GameSvr
                         {
                             if (isTransfer)
                             {
-                                foreach (var playObject in M2Share.WorldEngine.PlayObjects)
+                                foreach (Player.PlayObject playObject in M2Share.WorldEngine.PlayObjects)
                                 {
                                     if (playObject.Ghost || playObject.Death)//死亡或者下线的玩家不进行转移
                                     {
@@ -194,9 +194,9 @@ namespace GameSvr
             {
                 _logger.Info("检查是否有其他可用服务器.");
                 //如果有多机负载转移在线玩家到新服务器
-                var sIPaddr = string.Empty;
-                var nPort = 0;
-                var isMultiServer = M2Share.GetMultiServerAddrPort(M2Share.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
+                string sIPaddr = string.Empty;
+                int nPort = 0;
+                bool isMultiServer = M2Share.GetMultiServerAddrPort(M2Share.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
                 if (isMultiServer)
                 {
                     //todo 通知网关断开链接.停止新玩家进入游戏
@@ -260,8 +260,8 @@ namespace GameSvr
                     // Omitted
                     while (await _timer.WaitForNextTickAsync(cancellationToken))
                     {
-                        var monsterCount = 0;
-                        for (var i = 0; i < M2Share.WorldEngine.MobThreads.Length; i++)
+                        int monsterCount = 0;
+                        for (int i = 0; i < M2Share.WorldEngine.MobThreads.Length; i++)
                         {
                             monsterCount += M2Share.WorldEngine.MobThreads[i].MonsterCount;
                         }

@@ -17,13 +17,13 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = PlayObject.LockWhisperList.Count - 1; i >= 0; i--)
+            for (int i = PlayObject.LockWhisperList.Count - 1; i >= 0; i--)
             {
                 if (PlayObject.LockWhisperList.Count <= 0)
                 {
@@ -32,7 +32,7 @@ namespace GameSvr.GameCommand.Commands
                 //if ((PlayObject.m_BlockWhisperList[i]).CompareTo((sHumanName)) == 0)
                 //{
                 //    PlayObject.m_BlockWhisperList.RemoveAt(i);
-                //    PlayObject.SysMsg(string.Format(Settings.g_sGameCommandPrvMsgUnLimitMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
+                //    PlayObject.SysMsg(string.Format(Settings.GameCommandPrvMsgUnLimitMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
                 //    return;
                 //}
             }

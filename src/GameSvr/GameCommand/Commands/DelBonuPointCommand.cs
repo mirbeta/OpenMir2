@@ -17,13 +17,13 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumName = @Params.Length > 0 ? @Params[0] : "";
+            string sHumName = @Params.Length > 0 ? @Params[0] : "";
             if (sHumName == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            PlayObject targerPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (targerPlayObject != null)
             {
                 targerPlayObject.BonusPoint = 0;

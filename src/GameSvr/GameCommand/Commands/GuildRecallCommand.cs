@@ -30,15 +30,15 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             GuildRank GuildRank;
-            var m_Castle = M2Share.CastleMgr.InCastleWarArea(PlayObject);
+            Castle.UserCastle m_Castle = M2Share.CastleMgr.InCastleWarArea(PlayObject);
             if (m_Castle != null && m_Castle.UnderWar)
             {
                 PlayObject.SysMsg("攻城区域不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nRecallCount = 0;
-            var nNoRecallCount = 0;
-            var dwValue = (HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000;
+            int nRecallCount = 0;
+            int nNoRecallCount = 0;
+            int dwValue = (HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000;
             PlayObject.GroupRcallTick = PlayObject.GroupRcallTick + dwValue * 1000;
             if (PlayObject.Permission >= 6)
             {
@@ -58,14 +58,14 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             PlayObject m_PlayObject;
-            for (var i = 0; i < PlayObject.MyGuild.m_RankList.Count; i++)
+            for (int i = 0; i < PlayObject.MyGuild.m_RankList.Count; i++)
             {
                 GuildRank = PlayObject.MyGuild.m_RankList[i];
                 if (GuildRank == null)
                 {
                     continue;
                 }
-                for (var j = 0; j < GuildRank.MemberList.Count; j++)
+                for (int j = 0; j < GuildRank.MemberList.Count; j++)
                 {
                     m_PlayObject = M2Share.WorldEngine.GetPlayObject(GuildRank.MemberList[j].sMemberName);
                     if (m_PlayObject != null)

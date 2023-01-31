@@ -16,8 +16,8 @@ namespace GameSvr.Monster.Monsters
             GetMapBaseObjects(Envir, CurrX, CurrY, 1, xTargetList);
             if (xTargetList.Count > 0)
             {
-                var nPower = GetBaseAttackPoewr();
-                for (var i = xTargetList.Count - 1; i >= 0; i--)
+                ushort nPower = GetBaseAttackPoewr();
+                for (int i = xTargetList.Count - 1; i >= 0; i--)
                 {
                     if (xTargetList[i] != null)
                     {

@@ -15,11 +15,11 @@ namespace GameSvr.Monster.Monsters
         {
             BaseObject result = null;
             Direction = bt05;
-            var nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+            int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nPower > 0)
             {
                 SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
-                var baseObject = GetPoseCreate();
+                BaseObject baseObject = GetPoseCreate();
                 if (baseObject != null && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                 {
                     nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);
@@ -40,7 +40,7 @@ namespace GameSvr.Monster.Monsters
 
         protected override bool AttackTarget()
         {
-            var result = false;
+            bool result = false;
             byte btDir = 0;
             if (TargetCret == null)
             {

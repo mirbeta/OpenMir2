@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.MemoryPool;
 
 namespace GameSvr
 {
@@ -223,10 +222,10 @@ namespace GameSvr
         public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
 
         public static string GetGoodTick => string.Format(Settings.sSTATUS_GOOD, HUtil32.GetTickCount());
-        
+
         public static bool LoadLineNotice(string FileName)
         {
-            var result = false;
+            bool result = false;
             int i;
             string sText;
             if (File.Exists(FileName))
@@ -261,10 +260,10 @@ namespace GameSvr
         /// <returns></returns>
         public static bool GetMultiServerAddrPort(byte serverIndex, ref string sIPaddr, ref int nPort)
         {
-            var result = false;
-            for (var i = 0; i < ServerTableList.Length; i++)
+            bool result = false;
+            for (int i = 0; i < ServerTableList.Length; i++)
             {
-                var routeInfo = ServerTableList[i];
+                TRouteInfo routeInfo = ServerTableList[i];
                 if (routeInfo == null)
                 {
                     continue;
@@ -292,7 +291,7 @@ namespace GameSvr
 
         private static string GetRandpmRoute(TRouteInfo RouteInfo, ref int nGatePort)
         {
-            var nC = RandomNumber.Random(RouteInfo.nGateCount);
+            int nC = RandomNumber.Random(RouteInfo.nGateCount);
             nGatePort = RouteInfo.nGameGatePort[nC];
             return RouteInfo.sGameGateIP[nC];
         }
@@ -312,7 +311,7 @@ namespace GameSvr
 
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)
         {
-            var result = 0;
+            int result = 0;
             if (nVersionDate > 10000000)
             {
                 while (nVersionDate > 10000000)
@@ -405,7 +404,7 @@ namespace GameSvr
 
         public static bool CheckUserItems(int nIdx, Items.StdItem StdItem)
         {
-            var result = false;
+            bool result = false;
             switch (nIdx)
             {
                 case Grobal2.U_DRESS:
@@ -487,7 +486,7 @@ namespace GameSvr
 
         public static DateTime AddDateTimeOfDay(DateTime DateTime, int nDay)
         {
-            var result = DateTime.Now;
+            DateTime result = DateTime.Now;
             //if (nDay > 0)
             //{
             //    nDay -= 1;
@@ -555,13 +554,13 @@ namespace GameSvr
 
         public static bool CheckGuildName(string sGuildName)
         {
-            var result = true;
+            bool result = true;
             if (sGuildName.Length > Config.GuildNameLen)
             {
                 result = false;
                 return result;
             }
-            for (var i = 0; i < sGuildName.Length - 1; i++)
+            for (int i = 0; i < sGuildName.Length - 1; i++)
             {
                 if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' '
                     || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
@@ -598,13 +597,13 @@ namespace GameSvr
 
         public static string FilterShowName(string sName)
         {
-            var result = "";
-            var bo11 = false;
+            string result = "";
+            bool bo11 = false;
             if (string.IsNullOrEmpty(sName))
             {
                 return sName;
             }
-            for (var i = 0; i < sName.Length; i++)
+            for (int i = 0; i < sName.Length; i++)
             {
                 if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
                 {
@@ -627,12 +626,12 @@ namespace GameSvr
         /// <returns></returns>
         public static int GetValNameNo(string sText)
         {
-            var result = -1;
+            int result = -1;
             int nValNo;
-            var ValText = sText.AsSpan();
+            ReadOnlySpan<char> ValText = sText.AsSpan();
             if (sText.Length >= 2)
             {
-                var valType = char.ToUpper(sText[0]);
+                char valType = char.ToUpper(sText[0]);
                 switch (valType)
                 {
                     case 'P':
@@ -860,7 +859,7 @@ namespace GameSvr
         public static bool IsAccessory(ushort nIndex)
         {
             bool result;
-            var item = WorldEngine.GetStdItem(nIndex);
+            StdItem item = WorldEngine.GetStdItem(nIndex);
             if (IsAccessoryMap.Contains(item.StdMode))
             {
                 result = true;
@@ -874,7 +873,7 @@ namespace GameSvr
 
         public static IList<MakeItem> GetMakeItemInfo(string sItemName)
         {
-            if (MakeItemList.TryGetValue(sItemName, out var itemList))
+            if (MakeItemList.TryGetValue(sItemName, out IList<MakeItem> itemList))
             {
                 return itemList;
             }
@@ -883,12 +882,12 @@ namespace GameSvr
 
         public static string GetStartPointInfo(int nIndex, ref short nX, ref short nY)
         {
-            var result = string.Empty;
+            string result = string.Empty;
             nX = 0;
             nY = 0;
             if (nIndex >= 0 && nIndex < StartPointList.Count)
             {
-                var StartPoint = StartPointList[nIndex];
+                StartPoint StartPoint = StartPointList[nIndex];
                 if (StartPoint != null)
                 {
                     nX = StartPoint.m_nCurrX;
@@ -1005,25 +1004,25 @@ namespace GameSvr
         public static bool LoadItemBindIPaddr()
         {
             StringList LoadList = null;
-            var sMakeIndex = string.Empty;
-            var sItemIndex = string.Empty;
-            var sBindName = string.Empty;
+            string sMakeIndex = string.Empty;
+            string sItemIndex = string.Empty;
+            string sBindName = string.Empty;
             bool result = false;
-            var sFileName = Path.Combine(Config.EnvirDir, "ItemBindIPaddr.txt");
+            string sFileName = Path.Combine(Config.EnvirDir, "ItemBindIPaddr.txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
                 try
                 {
-                    for (var i = 0; i < ItemBindIPaddr.Count; i++)
+                    for (int i = 0; i < ItemBindIPaddr.Count; i++)
                     {
                         ItemBindIPaddr[i] = null;
                     }
                     ItemBindIPaddr.Clear();
                     LoadList.LoadFromFile(sFileName);
-                    for (var i = 0; i < LoadList.Count; i++)
+                    for (int i = 0; i < LoadList.Count; i++)
                     {
-                        var sLineText = LoadList[i].Trim();
+                        string sLineText = LoadList[i].Trim();
                         if (sLineText[0] == ';')
                         {
                             continue;
@@ -1031,11 +1030,11 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, HUtil32.Separator);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
-                        var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-                        var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                        int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                        int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                         if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
                         {
-                            var ItemBind = new TItemBind();
+                            TItemBind ItemBind = new TItemBind();
                             ItemBind.nMakeIdex = nMakeIndex;
                             ItemBind.nItemIdx = nItemIndex;
                             ItemBind.sBindName = sBindName;
@@ -1058,7 +1057,7 @@ namespace GameSvr
         public static bool SaveItemBindIPaddr()
         {
             bool result;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindIPaddr.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindIPaddr.txt";
             //SaveList = new StringList();
             //try {
             //    for (I = 0; I < g_ItemBindIPaddr.Count; I++)
@@ -1077,25 +1076,25 @@ namespace GameSvr
         public static bool LoadItemBindAccount()
         {
             StringList LoadList = null;
-            var sMakeIndex = string.Empty;
-            var sItemIndex = string.Empty;
-            var sBindName = string.Empty;
-            var result = false;
+            string sMakeIndex = string.Empty;
+            string sItemIndex = string.Empty;
+            string sBindName = string.Empty;
+            bool result = false;
             string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "ItemBindAccount.txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
                 try
                 {
-                    for (var i = 0; i < ItemBindAccount.Count; i++)
+                    for (int i = 0; i < ItemBindAccount.Count; i++)
                     {
                         ItemBindAccount[i] = null;
                     }
                     ItemBindAccount.Clear();
                     LoadList.LoadFromFile(sFileName);
-                    for (var i = 0; i < LoadList.Count; i++)
+                    for (int i = 0; i < LoadList.Count; i++)
                     {
-                        var sLineText = LoadList[i].Trim();
+                        string sLineText = LoadList[i].Trim();
                         if (sLineText[0] == ';')
                         {
                             continue;
@@ -1103,11 +1102,11 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, HUtil32.Separator);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
-                        var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-                        var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                        int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                        int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                         if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
                         {
-                            var ItemBind = new TItemBind();
+                            TItemBind ItemBind = new TItemBind();
                             ItemBind.nMakeIdex = nMakeIndex;
                             ItemBind.nItemIdx = nItemIndex;
                             ItemBind.sBindName = sBindName;
@@ -1129,7 +1128,7 @@ namespace GameSvr
 
         public static bool SaveItemBindAccount()
         {
-            var sFileName = Config.EnvirDir + "ItemBindAccount.txt";
+            string sFileName = Config.EnvirDir + "ItemBindAccount.txt";
             //SaveList = new StringList();
             //g_ItemBindAccount.__Lock();
             //try {
@@ -1151,24 +1150,24 @@ namespace GameSvr
 
         public static bool LoadItemBindChrName()
         {
-            var sMakeIndex = string.Empty;
-            var sItemIndex = string.Empty;
-            var sBindName = string.Empty;
-            var result = false;
+            string sMakeIndex = string.Empty;
+            string sItemIndex = string.Empty;
+            string sBindName = string.Empty;
+            bool result = false;
             string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "ItemBindChrName.txt");
             StringList LoadList = null;
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
-                for (var I = 0; I < ItemBindChrName.Count; I++)
+                for (int I = 0; I < ItemBindChrName.Count; I++)
                 {
                     ItemBindChrName[I] = null;
                 }
                 ItemBindChrName.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if (sLineText[0] == ';')
                     {
                         continue;
@@ -1176,11 +1175,11 @@ namespace GameSvr
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, HUtil32.Separator);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
-                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                    int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
                     {
-                        var ItemBind = new TItemBind();
+                        TItemBind ItemBind = new TItemBind();
                         ItemBind.nMakeIdex = nMakeIndex;
                         ItemBind.nItemIdx = nItemIndex;
                         ItemBind.sBindName = sBindName;
@@ -1198,8 +1197,8 @@ namespace GameSvr
 
         public static bool SaveItemBindChrName()
         {
-            var result = false;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindChrName.txt";
+            bool result = false;
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "ItemBindChrName.txt";
             //g_ItemBindChrName.__Lock();
             //try {
             //    for (I = 0; I < g_ItemBindChrName.Count; I++)
@@ -1218,9 +1217,9 @@ namespace GameSvr
 
         public static bool LoadDisableMakeItem()
         {
-            var result = false;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "DisableMakeItem.txt";
-            var LoadList = new ArrayList();
+            bool result = false;
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "DisableMakeItem.txt";
+            ArrayList LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
             //    g_DisableMakeItemList.__Lock();
@@ -1289,15 +1288,15 @@ namespace GameSvr
 
         public static bool LoadUnForceMasterList()
         {
-            var result = false;
-            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "UnForceMaster.txt");
+            bool result = false;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "UnForceMaster.txt");
             StringList LoadList = null;
             if (File.Exists(sFileName))
             {
                 UnForceMasterList.Clear();
                 LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     UnForceMasterList.Add(LoadList[i].Trim());
                 }
@@ -1319,7 +1318,7 @@ namespace GameSvr
 
         public static bool LoadEnableMakeItem()
         {
-            var result = false;
+            bool result = false;
             string sFileName = M2Share.BasePath + Config.EnvirDir + "EnableMakeItem.txt";
             //if (File.Exists(sFileName))
             //{
@@ -1353,15 +1352,15 @@ namespace GameSvr
 
         public static bool LoadDisableMoveMap()
         {
-            var result = false;
-            var sFileName = Path.Combine(Config.EnvirDir, "DisableMoveMap.txt");
+            bool result = false;
+            string sFileName = Path.Combine(Config.EnvirDir, "DisableMoveMap.txt");
             StringList LoadList = null;
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
                 DisableMoveMapList.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     DisableMoveMapList.Add(LoadList[i].Trim());
                 }
@@ -1383,8 +1382,8 @@ namespace GameSvr
 
         public static bool LoadAllowSellOffItem()
         {
-            var result = false;
-            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableSellOffItem.txt");
+            bool result = false;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableSellOffItem.txt");
             StringList LoadList;
             if (File.Exists(sFileName))
             {
@@ -1393,7 +1392,7 @@ namespace GameSvr
                     LoadList = new StringList();
                     DisableSellOffList.Clear();
                     LoadList.LoadFromFile(sFileName);
-                    for (var i = 0; i < LoadList.Count; i++)
+                    for (int i = 0; i < LoadList.Count; i++)
                     {
                         DisableSellOffList.Add(LoadList[i].Trim());
                     }
@@ -1442,55 +1441,55 @@ namespace GameSvr
         public static int GetUseItemIdx(string sName)
         {
             int result = -1;
-            if (string.Compare(sName, Settings.U_DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(sName, Settings.DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 0;
             }
-            else if (string.Compare(sName, Settings.U_WEAPONNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.WEAPONNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 1;
             }
-            else if (string.Compare(sName, Settings.U_RIGHTHANDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.RIGHTHANDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 2;
             }
-            else if (string.Compare(sName, Settings.U_NECKLACENAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.NECKLACENAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 3;
             }
-            else if (string.Compare(sName, Settings.U_HELMETNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.HELMETNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 4;
             }
-            else if (string.Compare(sName, Settings.U_ARMRINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.ARMRINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 5;
             }
-            else if (string.Compare(sName, Settings.U_ARMRINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.ARMRINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 6;
             }
-            else if (string.Compare(sName, Settings.U_RINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.RINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 7;
             }
-            else if (string.Compare(sName, Settings.U_RINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.RINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 8;
             }
-            else if (string.Compare(sName, Settings.U_BUJUKNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.BUJUKNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 9;
             }
-            else if (string.Compare(sName, Settings.U_BELTNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.BELTNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 10;
             }
-            else if (string.Compare(sName, Settings.U_BOOTSNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.BOOTSNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 11;
             }
-            else if (string.Compare(sName, Settings.U_CHARMNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, Settings.CHARMNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 12;
             }
@@ -1499,47 +1498,47 @@ namespace GameSvr
 
         public static string GetUseItemName(int nIndex)
         {
-            var result = string.Empty;
+            string result = string.Empty;
             switch (nIndex)
             {
                 case 0:
-                    result = Settings.U_DRESSNAME;
+                    result = Settings.DRESSNAME;
                     break;
                 case 1:
-                    result = Settings.U_WEAPONNAME;
+                    result = Settings.WEAPONNAME;
                     break;
                 case 2:
-                    result =Settings. U_RIGHTHANDNAME;
+                    result = Settings.RIGHTHANDNAME;
                     break;
                 case 3:
-                    result =Settings. U_NECKLACENAME;
+                    result = Settings.NECKLACENAME;
                     break;
                 case 4:
-                    result = Settings.U_HELMETNAME;
+                    result = Settings.HELMETNAME;
                     break;
                 case 5:
-                    result =Settings. U_ARMRINGLNAME;
+                    result = Settings.ARMRINGLNAME;
                     break;
                 case 6:
-                    result = Settings.U_ARMRINGRNAME;
+                    result = Settings.ARMRINGRNAME;
                     break;
                 case 7:
-                    result = Settings.U_RINGLNAME;
+                    result = Settings.RINGLNAME;
                     break;
                 case 8:
-                    result =Settings. U_RINGRNAME;
+                    result = Settings.RINGRNAME;
                     break;
                 case 9:
-                    result =Settings. U_BUJUKNAME;
+                    result = Settings.BUJUKNAME;
                     break;
                 case 10:
-                    result = Settings.U_BELTNAME;
+                    result = Settings.BELTNAME;
                     break;
                 case 11:
-                    result = Settings.U_BOOTSNAME;
+                    result = Settings.BOOTSNAME;
                     break;
                 case 12:
-                    result = Settings.U_CHARMNAME;
+                    result = Settings.CHARMNAME;
                     break;
             }
             return result;
@@ -1547,13 +1546,12 @@ namespace GameSvr
 
         public static bool LoadDisableSendMsgList()
         {
-            var result = false;
+            bool result = false;
             string sFileName = Config.EnvirDir + "DisableSendMsgList.txt";
             ArrayList LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
             //    g_DisableSendMsgList.Clear();
-
             //    LoadList.LoadFromFile(sFileName);
             //    for (I = 0; I < LoadList.Count; I ++ )
             //    {
@@ -1571,16 +1569,16 @@ namespace GameSvr
 
         public static bool LoadMonDropLimitList()
         {
-            var sItemName = string.Empty;
-            var sItemCount = string.Empty;
-            var result = false;
+            string sItemName = string.Empty;
+            string sItemCount = string.Empty;
+            bool result = false;
             string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "MonDropLimitList.txt");
-            var LoadList = new StringList();
+            StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 MonDropLimitLIst.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     string sLineText = LoadList[i].Trim();
                     if ((sLineText == "") || (sLineText[0] == ';'))
@@ -1589,10 +1587,10 @@ namespace GameSvr
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new[] { ' ', '/', ',', '\t' });
-                    var nItemCount = HUtil32.StrToInt(sItemCount, -1);
+                    int nItemCount = HUtil32.StrToInt(sItemCount, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
                     {
-                        var MonDrop = new MonsterLimitDrop();
+                        MonsterLimitDrop MonDrop = new MonsterLimitDrop();
                         MonDrop.ItemName = sItemName;
                         MonDrop.DropCount = 0;
                         MonDrop.NoDropCount = 0;
@@ -1611,12 +1609,12 @@ namespace GameSvr
 
         public static bool SaveMonDropLimitList()
         {
-            var sFileName = Config.EnvirDir + "MonDropLimitList.txt";
+            string sFileName = Config.EnvirDir + "MonDropLimitList.txt";
             StringList LoadList = new StringList();
-            foreach (var item in MonDropLimitLIst)
+            foreach (KeyValuePair<string, MonsterLimitDrop> item in MonDropLimitLIst)
             {
-                var monDrop = item.Value;
-                var sLineText = monDrop.ItemName + "\t" + (monDrop.CountLimit).ToString();
+                MonsterLimitDrop monDrop = item.Value;
+                string sLineText = monDrop.ItemName + "\t" + (monDrop.CountLimit).ToString();
                 LoadList.Add(sLineText);
             }
             LoadList.SaveToFile(sFileName);
@@ -1625,25 +1623,25 @@ namespace GameSvr
 
         public static bool LoadDisableTakeOffList()
         {
-            var sItemName = string.Empty;
-            var sItemIdx = string.Empty;
-            var result = false;
-            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableTakeOffList.txt");
-            var LoadList = new StringList();
+            string sItemName = string.Empty;
+            string sItemIdx = string.Empty;
+            bool result = false;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableTakeOffList.txt");
+            StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 LoadList.LoadFromFile(sFileName);
                 DisableTakeOffList.Clear();
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if ((sLineText == "") || (sLineText[0] == ';'))
                     {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new[] { ' ', '/', ',', '\t' });
-                    var nItemIdx = HUtil32.StrToInt(sItemIdx, -1);
+                    int nItemIdx = HUtil32.StrToInt(sItemIdx, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
                     {
                         DisableTakeOffList.Add(nItemIdx, sItemName);
@@ -1660,11 +1658,11 @@ namespace GameSvr
 
         public static bool SaveDisableTakeOffList()
         {
-            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableTakeOffList.txt");
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "DisableTakeOffList.txt");
             StringList LoadList = new StringList();
-            foreach (var item in DisableTakeOffList)
+            foreach (KeyValuePair<int, string> item in DisableTakeOffList)
             {
-                var sLineText = item.Value + "\t" + item.Key;
+                string sLineText = item.Value + "\t" + item.Key;
                 LoadList.Add(sLineText);
             }
             LoadList.SaveToFile(sFileName);
@@ -1680,7 +1678,7 @@ namespace GameSvr
         {
             string sFileName = Path.Combine(BasePath, Config.EnvirDir, "DisableSendMsgList.txt");
             StringList LoadList = new StringList();
-            for (var i = 0; i < DisableSendMsgList.Count; i++)
+            for (int i = 0; i < DisableSendMsgList.Count; i++)
             {
                 LoadList.Add(DisableSendMsgList[i]);
             }
@@ -1703,9 +1701,9 @@ namespace GameSvr
 
         public static bool LoadGameLogItemNameList()
         {
-            var result = false;
-            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "GameLogItemNameList.txt");
-            var LoadList = new StringList();
+            bool result = false;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "GameLogItemNameList.txt");
+            StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 GameLogItemNameList.Clear();
@@ -1715,7 +1713,7 @@ namespace GameSvr
                     GameLogItemNameList.Add("*");
                     return true;
                 }
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     GameLogItemNameList.Add(LoadList[i].Trim());
                 }
@@ -1735,7 +1733,7 @@ namespace GameSvr
             {
                 return 1;
             }
-            for (var i = 0; i < GameLogItemNameList.Count; i++)
+            for (int i = 0; i < GameLogItemNameList.Count; i++)
             {
                 if (string.Compare(sItemName, GameLogItemNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -1749,7 +1747,7 @@ namespace GameSvr
         public static bool SaveGameLogItemNameList()
         {
             bool result;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "GameLogItemNameList.txt";
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "GameLogItemNameList.txt";
             try
             {
 
@@ -1764,8 +1762,8 @@ namespace GameSvr
 
         public static bool LoadDenyIPAddrList()
         {
-            var result = false;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "DenyIPAddrList.txt";
+            bool result = false;
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "DenyIPAddrList.txt";
             //if (File.Exists(sFileName))
             //{
             //    g_DenyIPAddrList.__Lock();
@@ -1794,7 +1792,7 @@ namespace GameSvr
             bool result = false;
             try
             {
-                for (var i = 0; i < DenyIPAddrList.Count; i++)
+                for (int i = 0; i < DenyIPAddrList.Count; i++)
                 {
                     //if ((sIPaddr).CompareTo((g_DenyIPAddrList[I])) == 0)
                     //{
@@ -1827,13 +1825,13 @@ namespace GameSvr
             //    g_DenyIPAddrList.UnLock();
             //}
             //SaveList.Free;
-            var result = true;
+            bool result = true;
             return result;
         }
 
         public static bool LoadDenyChrNameList()
         {
-            var result = false;
+            bool result = false;
             string sFileName = M2Share.BasePath + Config.EnvirDir + "DenyChrNameList.txt";
             //if (File.Exists(sFileName))
             //{
@@ -1902,8 +1900,8 @@ namespace GameSvr
 
         public static bool LoadDenyAccountList()
         {
-            var result = false;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "DenyAccountList.txt";
+            bool result = false;
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "DenyAccountList.txt";
             new ArrayList();
             if (File.Exists(sFileName))
             {
@@ -1934,7 +1932,7 @@ namespace GameSvr
             bool result = false;
             try
             {
-                for (var I = 0; I < DenyAccountList.Count; I++)
+                for (int I = 0; I < DenyAccountList.Count; I++)
                 {
                     //if ((sAccount).CompareTo((g_DenyAccountList[I])) == 0)
                     //{
@@ -1975,15 +1973,15 @@ namespace GameSvr
 
         public static bool LoadNoClearMonList()
         {
-            var result = false;
-            var sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "NoClearMonList.txt");
+            bool result = false;
+            string sFileName = Path.Combine(M2Share.BasePath, Config.EnvirDir, "NoClearMonList.txt");
             StringList LoadList = null;
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
                 NoClearMonLIst.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     NoClearMonLIst.Add(LoadList[i].Trim());
                 }
@@ -2018,7 +2016,7 @@ namespace GameSvr
 
         public static bool GetNoClearMonList(string sMonName)
         {
-            var result = false;
+            bool result = false;
             //for (var I = 0; I < g_NoClearMonLIst.Count; I++)
             //{
             //    if ((sMonName).CompareTo((g_NoClearMonLIst[I])) == 0)
@@ -2077,25 +2075,25 @@ namespace GameSvr
 
         public static bool LoadMonSayMsg()
         {
-            var sStatus = string.Empty;
-            var sRate = string.Empty;
-            var sColor = string.Empty;
-            var sMonName = string.Empty;
-            var sSayMsg = string.Empty;
+            string sStatus = string.Empty;
+            string sRate = string.Empty;
+            string sColor = string.Empty;
+            string sMonName = string.Empty;
+            string sSayMsg = string.Empty;
             int nStatus;
             int nRate;
             int nColor;
             StringList LoadList;
             string sLineText;
             MonsterSayMsg MonSayMsg;
-            var result = false;
-            var sFileName = M2Share.BasePath + Config.EnvirDir + "GenMsg.txt";
+            bool result = false;
+            string sFileName = M2Share.BasePath + Config.EnvirDir + "GenMsg.txt";
             if (File.Exists(sFileName))
             {
                 MonSayMsgList.Clear();
                 LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i].Trim();
                     if (sLineText != "" && sLineText[1] < ';')
@@ -2213,7 +2211,7 @@ namespace GameSvr
         // * 号为通配符
         public static bool CompareIPaddr(string sIPaddr, string dIPaddr)
         {
-            var result = false;
+            bool result = false;
             if (sIPaddr == "" || dIPaddr == "")
             {
                 return result;
@@ -2223,7 +2221,7 @@ namespace GameSvr
                 result = true;
                 return result;
             }
-            var nPos = dIPaddr.IndexOf('*');
+            int nPos = dIPaddr.IndexOf('*');
             if (nPos > 0)
             {
                 result = HUtil32.CompareLStr(sIPaddr, dIPaddr, nPos - 1);

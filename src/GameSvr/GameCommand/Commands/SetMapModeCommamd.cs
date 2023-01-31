@@ -15,10 +15,10 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sMapName = @Params.Length > 0 ? @Params[0] : "";
-            var sMapMode = @Params.Length > 1 ? @Params[1] : "";
-            var sParam1 = @Params.Length > 2 ? @Params[2] : "";
-            var sParam2 = @Params.Length > 3 ? @Params[3] : "";
+            string sMapName = @Params.Length > 0 ? @Params[0] : "";
+            string sMapMode = @Params.Length > 1 ? @Params[1] : "";
+            string sParam1 = @Params.Length > 2 ? @Params[2] : "";
+            string sParam2 = @Params.Length > 3 ? @Params[3] : "";
             if (PlayObject.Permission < 6)
             {
                 return;

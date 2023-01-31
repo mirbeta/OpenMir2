@@ -20,9 +20,9 @@ namespace GameSvr.GameCommand.Commands
             }
             try
             {
-                var sMapName = @Params.Length > 0 ? @Params[0] : "";
-                var sX = @Params.Length > 1 ? @Params[1] : "";
-                var sY = @Params.Length > 2 ? @Params[2] : "";
+                string sMapName = @Params.Length > 0 ? @Params[0] : "";
+                string sX = @Params.Length > 1 ? @Params[1] : "";
+                string sY = @Params.Length > 2 ? @Params[2] : "";
                 Envirnoment Envir = null;
                 if (sMapName == "" || sX == "" || sY == "" || sMapName != "" && sMapName[0] == '?')
                 {
@@ -34,8 +34,8 @@ namespace GameSvr.GameCommand.Commands
                     Envir = M2Share.MapMgr.FindMap(sMapName);
                     if (Envir != null)
                     {
-                        var nX = (short)HUtil32.StrToInt(sX, 0);
-                        var nY = (short)HUtil32.StrToInt(sY, 0);
+                        short nX = (short)HUtil32.StrToInt(sX, 0);
+                        short nY = (short)HUtil32.StrToInt(sY, 0);
                         if (Envir.CanWalk(nX, nY, true))
                         {
                             PlayObject.SpaceMove(sMapName, nX, nY, 0);

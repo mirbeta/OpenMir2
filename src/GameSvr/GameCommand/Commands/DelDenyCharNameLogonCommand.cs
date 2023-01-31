@@ -14,16 +14,16 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sChrName = @Params.Length > 0 ? @Params[0] : "";
+            string sChrName = @Params.Length > 0 ? @Params[0] : "";
             if (sChrName == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var boDelete = false;
+            bool boDelete = false;
             try
             {
-                for (var i = 0; i < M2Share.DenyChrNameList.Count; i++)
+                for (int i = 0; i < M2Share.DenyChrNameList.Count; i++)
                 {
                     //if ((sChrName).CompareTo((M2Share.g_DenyChrNameList[i])) == 0)
                     //{

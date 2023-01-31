@@ -234,8 +234,8 @@ namespace GameSvr.Npc
 
         public string GetLineVariableText(PlayObject PlayObject, string sMsg)
         {
-            var nCount = 0;
-            var sVariable = string.Empty;
+            int nCount = 0;
+            string sVariable = string.Empty;
             while (true)
             {
                 if (sMsg.IndexOf('>', StringComparison.Ordinal) < 1)
@@ -336,10 +336,10 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$MACRUNTIME>", sText);
                     return;
                 case "$SERVERRUNTIME":
-                    var nSecond = (HUtil32.GetTickCount() - M2Share.StartTick) / 1000;
-                    var wHour = nSecond / 3600;
-                    var wMinute = nSecond / 60 % 60;
-                    var wSecond = nSecond % 60;
+                    int nSecond = (HUtil32.GetTickCount() - M2Share.StartTick) / 1000;
+                    int wHour = nSecond / 3600;
+                    int wMinute = nSecond / 60 % 60;
+                    int wSecond = nSecond % 60;
                     sText = Format("{0}:{1}:{2}", wHour, wMinute, wSecond);
                     sMsg = ReplaceVariableText(sMsg, "<$SERVERRUNTIME>", sText);
                     return;
@@ -1066,8 +1066,8 @@ namespace GameSvr.Npc
             {
                 int MonGenCount = 0;
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                var MapName = HUtil32.GetValidStr3(s14, ref s14, '/');
-                var MonsterName = s14;
+                string MapName = HUtil32.GetValidStr3(s14, ref s14, '/');
+                string MonsterName = s14;
                 if (MapName.StartsWith("$")) // $MAPMOSTERCOUNT[怪物名字/地图号]
                 {
                     MapName = M2Share.ManageNPC.GetLineVariableText(PlayObject, "<" + MapName + ">"); // 替换变量
@@ -1082,16 +1082,16 @@ namespace GameSvr.Npc
                 {
                     if (string.Compare(MonsterName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部名字的怪物
                     {
-                        for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                         {
-                            for (var j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
                             {
                                 MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
                                 if (MonGen == null)
                                 {
                                     continue;
                                 }
-                                for (var k = 0; k < MonGen.CertList.Count; k++)
+                                for (int k = 0; k < MonGen.CertList.Count; k++)
                                 {
                                     BaseObject = MonGen.CertList[k];
                                     if (BaseObject.Master == null && !BaseObject.Death && !BaseObject.Ghost)
@@ -1104,16 +1104,16 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                         {
-                            for (var j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
                             {
                                 MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
                                 if (MonGen == null)
                                 {
                                     continue;
                                 }
-                                for (var k = 0; k < MonGen.CertList.Count; k++)
+                                for (int k = 0; k < MonGen.CertList.Count; k++)
                                 {
                                     BaseObject = MonGen.CertList[k];
                                     if (BaseObject.Master == null && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
@@ -1128,21 +1128,21 @@ namespace GameSvr.Npc
                 else
                 {
                     // 如果不是全部地图
-                    var Envir = M2Share.MapMgr.FindMap(MapName);
+                    Envirnoment Envir = M2Share.MapMgr.FindMap(MapName);
                     if (Envir != null)
                     {
                         if (string.Compare(MonsterName, "ALL", StringComparison.CurrentCulture) == 0)// 如果是全部名字的怪物
                         {
-                            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                             {
-                                for (var j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
                                 {
                                     MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
                                     if (MonGen == null)
                                     {
                                         continue;
                                     }
-                                    for (var k = 0; k < MonGen.CertList.Count; k++)
+                                    for (int k = 0; k < MonGen.CertList.Count; k++)
                                     {
                                         BaseObject = MonGen.CertList[k];
                                         if (BaseObject.Master == null && BaseObject.Envir == Envir && !BaseObject.Death && !BaseObject.Ghost)
@@ -1155,16 +1155,16 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
                             {
-                                for (var j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
                                 {
                                     MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
                                     if (MonGen == null)
                                     {
                                         continue;
                                     }
-                                    for (var k = 0; k < MonGen.CertList.Count; k++)
+                                    for (int k = 0; k < MonGen.CertList.Count; k++)
                                     {
                                         BaseObject = MonGen.CertList[k];
                                         if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
@@ -1315,7 +1315,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$USEITEMMAKEINDEX("))// 显示n位置的装备ID
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
-                var n18 = HUtil32.StrToInt(s14, -1);
+                int n18 = HUtil32.StrToInt(s14, -1);
                 if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
                 {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.UseItems[n18].MakeIndex.ToString());
@@ -1329,7 +1329,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$USEITEMNAME("))// 显示n位置的装备名称
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
-                var n18 = HUtil32.StrToInt(s14, -1);
+                int n18 = HUtil32.StrToInt(s14, -1);
                 if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
                 {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[n18].Index));
@@ -1521,7 +1521,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$STR("))
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
-                var nVarValue = M2Share.GetValNameNo(s14);
+                int nVarValue = M2Share.GetValNameNo(s14);
                 if (nVarValue >= 0)
                 {
                     if (HUtil32.RangeInDefined(nVarValue, 0, 99))
@@ -1581,7 +1581,7 @@ namespace GameSvr.Npc
             if (m_boIsQuest)
             {
                 m_sPath = ScriptConst.sNpc_def;
-                var sScriptName = ChrName + '-' + MapName;
+                string sScriptName = ChrName + '-' + MapName;
                 M2Share.ScriptSystem.LoadScript(this, m_sFilePath, sScriptName);
             }
             else
@@ -1608,13 +1608,13 @@ namespace GameSvr.Npc
         private void ScriptActionError(PlayObject PlayObject, string sErrMsg, QuestActionInfo QuestActionInfo, string sCmd)
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
-            var sMsg = Format(sOutMessage, sErrMsg, sCmd, ChrName, MapName, CurrX, CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
+            string sMsg = Format(sOutMessage, sErrMsg, sCmd, ChrName, MapName, CurrX, CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             M2Share.Log.Error(sMsg);
         }
 
         private void ScriptConditionError(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo, string sCmd)
         {
-            var sMsg = "Cmd:" + sCmd + " NPC名称:" + ChrName + " 地图:" + MapName + " 座标:" + CurrX + ':' + CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
+            string sMsg = "Cmd:" + sCmd + " NPC名称:" + ChrName + " 地图:" + MapName + " 座标:" + CurrX + ':' + CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
             M2Share.Log.Error("[脚本参数不正确] " + sMsg);
         }
 
@@ -1625,11 +1625,11 @@ namespace GameSvr.Npc
 
         protected static string ReplaceVariableText(string sMsg, string sStr, string sText)
         {
-            var n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
+            int n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
             if (n10 > -1)
             {
-                ReadOnlySpan<char> s18 = sMsg.AsSpan().Slice(sStr.Length + n10, sMsg.Length - (sStr.Length + n10));
-                var builder = new StringBuilder();
+                ReadOnlySpan<char> s18 = sMsg.AsSpan()[(sStr.Length + n10)..sMsg.Length];
+                StringBuilder builder = new StringBuilder();
                 builder.Append(sMsg[..n10]);
                 builder.Append(sText);
                 builder.Append(s18);
@@ -1671,7 +1671,7 @@ namespace GameSvr.Npc
         {
             if (!M2Share.Config.SendCustemMsg)
             {
-                PlayObject.SysMsg(Settings.g_sSendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Settings.SendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.BoSendMsgFlag)

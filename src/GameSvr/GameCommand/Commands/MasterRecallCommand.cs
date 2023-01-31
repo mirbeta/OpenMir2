@@ -33,9 +33,9 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg("稍等一会才能再次使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = 0; i < PlayObject.MasterList.Count; i++)
+            for (int i = 0; i < PlayObject.MasterList.Count; i++)
             {
-                var MasterHuman = PlayObject.MasterList[i];
+                PlayObject MasterHuman = PlayObject.MasterList[i];
                 if (MasterHuman.MBoCanMasterRecall)
                 {
                     PlayObject.RecallHuman(MasterHuman.ChrName);

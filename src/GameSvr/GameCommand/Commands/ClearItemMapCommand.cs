@@ -12,14 +12,14 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sMap = @Params.Length > 0 ? @Params[0] : "";
-            var sItemName = @Params.Length > 1 ? @Params[1] : "";
-            var nX = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
-            var nY = @Params.Length > 3 ? Convert.ToInt32(@Params[3]) : 0;
-            var nRange = @Params.Length > 4 ? Convert.ToInt32(@Params[4]) : 0;
+            string sMap = @Params.Length > 0 ? @Params[0] : "";
+            string sItemName = @Params.Length > 1 ? @Params[1] : "";
+            int nX = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
+            int nY = @Params.Length > 3 ? Convert.ToInt32(@Params[3]) : 0;
+            int nRange = @Params.Length > 4 ? Convert.ToInt32(@Params[4]) : 0;
             if (sMap == "" || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?')
             {
-                //PlayObject.SysMsg(string.Format(Settings.g_sGameCommandParamUnKnow, this.Attributes.Name, Settings.g_sGameCommandCLEARITEMMAPHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                //PlayObject.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandCLEARITEMMAPHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (sItemName == "ALL")

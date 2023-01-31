@@ -17,15 +17,15 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sX = @Params.Length > 0 ? @Params[0] : "";
-            var sY = @Params.Length > 1 ? @Params[1] : "";
+            string sX = @Params.Length > 0 ? @Params[0] : "";
+            string sY = @Params.Length > 1 ? @Params[1] : "";
             if (sX == "" || sY == "")
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nX = (short)HUtil32.StrToInt(sX, 0);
-            var nY = (short)HUtil32.StrToInt(sY, 0);
+            short nX = (short)HUtil32.StrToInt(sX, 0);
+            short nY = (short)HUtil32.StrToInt(sY, 0);
             M2Share.BoMission = true;
             M2Share.MissionMap = PlayObject.MapName;
             M2Share.MissionX = nX;

@@ -18,21 +18,21 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sSkillName = @Params.Length > 1 ? @Params[1] : "";
-            var nLevel = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sSkillName = @Params.Length > 1 ? @Params[1] : "";
+            int nLevel = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3))
             {
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject == null)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var Magic = M2Share.WorldEngine.FindMagic(sSkillName);
+            MagicInfo Magic = M2Share.WorldEngine.FindMagic(sSkillName);
             if (Magic == null)
             {
 

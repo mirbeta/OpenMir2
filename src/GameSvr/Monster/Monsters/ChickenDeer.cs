@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
                 BaseObject baseObject = null;
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
                 {
-                    for (var i = 0; i < VisibleActors.Count; i++)
+                    for (int i = 0; i < VisibleActors.Count; i++)
                     {
                         baseObject = VisibleActors[i].BaseObject;
                         if (baseObject.Death)
@@ -29,7 +29,7 @@ namespace GameSvr.Monster.Monsters
                         {
                             if (!baseObject.HideMode || CoolEye)
                             {
-                                var nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
+                                int nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
                                 if (nC < n10)
                                 {
                                     n10 = nC;
@@ -53,7 +53,7 @@ namespace GameSvr.Monster.Monsters
                 {
                     if (Math.Abs(CurrX - baseObject.CurrX) <= 6 && Math.Abs(CurrX - baseObject.CurrX) <= 6)
                     {
-                        var n14 = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                        byte n14 = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                         Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, n14, 5, ref TargetX, ref TargetY);
                     }
                 }

@@ -66,7 +66,7 @@ namespace GameSvr.Monster.Monsters
                 }
                 if (boChangeFace)
                 {
-                    var elfMon = MakeClone(M2Share.Config.Dragon1, this);
+                    Actor.BaseObject elfMon = MakeClone(M2Share.Config.Dragon1, this);
                     if (elfMon != null)
                     {
                         elfMon.AutoChangeColor = AutoChangeColor;

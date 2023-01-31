@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             UserItem UserItem;
             UserItem UserItem1;
             string s14;
@@ -27,13 +27,13 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var TargerObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            PlayObject TargerObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (TargerObject == null)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = TargerObject.ItemList.Count - 1; i >= 0; i--)
+            for (int i = TargerObject.ItemList.Count - 1; i >= 0; i--)
             {
                 if (TargerObject.ItemList.Count <= 0)
                 {
@@ -42,7 +42,7 @@ namespace GameSvr.GameCommand.Commands
 
                 UserItem = TargerObject.ItemList[i];
                 s14 = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
-                for (var j = i - 1; j >= 0; j--)
+                for (int j = i - 1; j >= 0; j--)
                 {
                     UserItem1 = TargerObject.ItemList[j];
                     if (M2Share.WorldEngine.GetStdItemName(UserItem1.Index) == s14 && UserItem.MakeIndex == UserItem1.MakeIndex)
@@ -53,7 +53,7 @@ namespace GameSvr.GameCommand.Commands
                 }
             }
 
-            for (var i = TargerObject.StorageItemList.Count - 1; i >= 0; i--)
+            for (int i = TargerObject.StorageItemList.Count - 1; i >= 0; i--)
             {
                 if (TargerObject.StorageItemList.Count <= 0)
                 {
@@ -61,7 +61,7 @@ namespace GameSvr.GameCommand.Commands
                 }
                 UserItem = TargerObject.StorageItemList[i];
                 s14 = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
-                for (var j = i - 1; j >= 0; j--)
+                for (int j = i - 1; j >= 0; j--)
                 {
                     UserItem1 = TargerObject.StorageItemList[j];
                     if (M2Share.WorldEngine.GetStdItemName(UserItem1.Index) == s14 &&

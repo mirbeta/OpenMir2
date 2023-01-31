@@ -17,15 +17,15 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            var sTime = @Params.Length > 1 ? @Params[1] : "";
+            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sTime = @Params.Length > 1 ? @Params[1] : "";
             if (sTime == "" || string.IsNullOrEmpty(sHumanName) ||
                 !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.GameCommand.Name, CommandHelp.GameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var dwTime = (uint)HUtil32.StrToInt(sTime, 5);
+            uint dwTime = (uint)HUtil32.StrToInt(sTime, 5);
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
             try
             {

@@ -9,7 +9,7 @@ namespace GameSvr.World
         private SwitchDataInfo GetSwitchData(string sChrName, int nCode)
         {
             SwitchDataInfo result = null;
-            for (var i = 0; i < _mChangeServerList.Count; i++)
+            for (int i = 0; i < _mChangeServerList.Count; i++)
             {
                 SwitchDataInfo switchData = _mChangeServerList[i];
                 if (string.Compare(switchData.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0 && switchData.nCode == nCode)
@@ -29,7 +29,7 @@ namespace GameSvr.World
             playObject.BanGuildChat = switchData.boBanGuildChat;
             playObject.AdminMode = switchData.boAdminMode;
             playObject.ObMode = switchData.boObMode;
-            var nCount = 0;
+            int nCount = 0;
             while (true)
             {
                 if (switchData.BlockWhisperArr[nCount] == "") break;
@@ -41,7 +41,7 @@ namespace GameSvr.World
             while (true)
             {
                 if (switchData.SlaveArr[nCount].SlaveName == "") break;
-                var slaveId = HUtil32.Sequence();
+                int slaveId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(slaveId, switchData.SlaveArr[nCount]);
                 playObject.SendDelayMsg(playObject, Grobal2.RM_10401, 0, slaveId, 0, 0, "", 500);
                 nCount++;
@@ -65,9 +65,9 @@ namespace GameSvr.World
 
         private void DelSwitchData(SwitchDataInfo switchData)
         {
-            for (var i = 0; i < _mChangeServerList.Count; i++)
+            for (int i = 0; i < _mChangeServerList.Count; i++)
             {
-                var switchDataInfo = _mChangeServerList[i];
+                SwitchDataInfo switchDataInfo = _mChangeServerList[i];
                 if (switchDataInfo == switchData)
                 {
                     _mChangeServerList.RemoveAt(i);
@@ -80,7 +80,7 @@ namespace GameSvr.World
         {
             SwitchDataInfo switchData = null;
             MakeSwitchData(playObject, ref switchData);
-            var flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
+            string flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
             playObject.MSSwitchDataTempFile = flName;
             SendServerGroupMsg(Grobal2.ISM_USERSERVERCHANGE, nServerIndex, flName);//发送消息切换服务器
             M2Share.ShareFileNameNum++;
@@ -102,12 +102,12 @@ namespace GameSvr.World
             switchData.boBanGuildChat = playObject.BanGuildChat;
             switchData.boAdminMode = playObject.AdminMode;
             switchData.boObMode = playObject.ObMode;
-            for (var i = 0; i < playObject.LockWhisperList.Count; i++)
+            for (int i = 0; i < playObject.LockWhisperList.Count; i++)
             {
                 switchData.BlockWhisperArr.Add(playObject.LockWhisperList[i]);
             }
 
-            for (var i = 0; i < playObject.SlaveList.Count; i++)
+            for (int i = 0; i < playObject.SlaveList.Count; i++)
             {
                 BaseObject baseObject = playObject.SlaveList[i];
                 if (i <= 4)
@@ -121,7 +121,7 @@ namespace GameSvr.World
                     switchData.SlaveArr[i].nMP = baseObject.Abil.MP;
                 }
             }
-            for (var i = 0; i < playObject.ExtraAbil.Length; i++)
+            for (int i = 0; i < playObject.ExtraAbil.Length; i++)
             {
                 if (playObject.ExtraAbil[i] > 0)
                 {
@@ -133,7 +133,7 @@ namespace GameSvr.World
 
         public void CheckSwitchServerTimeOut()
         {
-            for (var i = _mChangeServerList.Count - 1; i >= 0; i--)
+            for (int i = _mChangeServerList.Count - 1; i >= 0; i--)
             {
                 if ((HUtil32.GetTickCount() - _mChangeServerList[i].dwWaitTime) > 30 * 1000)
                 {

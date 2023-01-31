@@ -14,7 +14,7 @@ namespace GameSvr.Monster.Monsters
 
         private void sub_4AA8DC()
         {
-            var digEvent = new EventInfo(Envir, CurrX, CurrY, 1, 5 * 60 * 1000, true);
+            EventInfo digEvent = new EventInfo(Envir, CurrX, CurrY, 1, 5 * 60 * 1000, true);
             M2Share.EventMgr.AddEvent(digEvent);
             FixedHideMode = false;
             SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, digEvent.Id, "");
@@ -26,9 +26,9 @@ namespace GameSvr.Monster.Monsters
             {
                 if (FixedHideMode)
                 {
-                    for (var i = 0; i < VisibleActors.Count; i++)
+                    for (int i = 0; i < VisibleActors.Count; i++)
                     {
-                        var baseObject = VisibleActors[i].BaseObject;
+                        Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
                         if (baseObject.Death)
                         {
                             continue;

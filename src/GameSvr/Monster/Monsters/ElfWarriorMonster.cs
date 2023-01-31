@@ -62,7 +62,7 @@ namespace GameSvr.Monster.Monsters
             }
             else
             {
-                var boChangeFace = TargetCret == null;
+                bool boChangeFace = TargetCret == null;
                 if (Master != null && (Master.TargetCret != null || Master.LastHiter != null))
                 {
                     boChangeFace = false;
@@ -72,7 +72,7 @@ namespace GameSvr.Monster.Monsters
                     if ((HUtil32.GetTickCount() - DigDownTick) > (6 * 10 * 1000))
                     {
                         BaseObject elfMon = null;
-                        var elfName = ChrName;
+                        string elfName = ChrName;
                         if (elfName[^1] == '1')
                         {
                             elfName = elfName[..^1];

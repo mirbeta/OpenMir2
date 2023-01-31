@@ -29,7 +29,7 @@ namespace GameSvr.Robots
             {
                 return;
             }
-            var currentTime = HUtil32.GetTimestamp();
+            long currentTime = HUtil32.GetTimestamp();
             if (currentTime >= AutoRunInfo.RunTimeTick)
             {
                 switch (AutoRunInfo.RunCmd)
@@ -96,15 +96,15 @@ namespace GameSvr.Robots
 
         private void AutoRunOfOnDay(AutoRunInfo AutoRunInfo)
         {
-            var sMin = string.Empty;
-            var sHour = string.Empty;
-            var sLineText = AutoRunInfo.sParam1;
+            string sMin = string.Empty;
+            string sHour = string.Empty;
+            string sLineText = AutoRunInfo.sParam1;
             sLineText = HUtil32.GetValidStr3(sLineText, ref sHour, ':');
             sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ':');
-            var nHour = HUtil32.StrToInt(sHour, -1);
-            var nMin = HUtil32.StrToInt(sMin, -1);
-            var wHour = DateTime.Now.Hour;
-            var wMin = DateTime.Now.Minute;
+            int nHour = HUtil32.StrToInt(sHour, -1);
+            int nMin = HUtil32.StrToInt(sMin, -1);
+            int wHour = DateTime.Now.Hour;
+            int wMin = DateTime.Now.Minute;
             if (nHour >= 0 && nHour <= 24 && nMin >= 0 && nMin <= 60)
             {
                 if (wHour == nHour)
@@ -137,21 +137,21 @@ namespace GameSvr.Robots
 
         private void AutoRunOfOnWeek(AutoRunInfo AutoRunInfo)
         {
-            var sMin = string.Empty;
-            var sHour = string.Empty;
-            var sWeek = string.Empty;
-            var sLineText = AutoRunInfo.sParam1;
+            string sMin = string.Empty;
+            string sHour = string.Empty;
+            string sWeek = string.Empty;
+            string sLineText = AutoRunInfo.sParam1;
             sLineText = HUtil32.GetValidStr3(sLineText, ref sWeek, ':');
             sLineText = HUtil32.GetValidStr3(sLineText, ref sHour, ':');
             sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ':');
-            var nWeek = HUtil32.StrToInt(sWeek, -1);
-            var nHour = HUtil32.StrToInt(sHour, -1);
-            var nMin = HUtil32.StrToInt(sMin, -1);
+            int nWeek = HUtil32.StrToInt(sWeek, -1);
+            int nHour = HUtil32.StrToInt(sHour, -1);
+            int nMin = HUtil32.StrToInt(sMin, -1);
             if (nWeek >= 1 && nWeek <= 7 && nHour >= 0 && nHour <= 24 && nMin >= 0 && nMin <= 60)
             {
-                var wHour = DateTime.Now.Hour;
-                var wMin = DateTime.Now.Minute;
-                var wWeek = DateTime.Now.DayOfWeek;
+                int wHour = DateTime.Now.Hour;
+                int wMin = DateTime.Now.Minute;
+                DayOfWeek wWeek = DateTime.Now.DayOfWeek;
                 if ((int)wWeek == nWeek && wHour == nHour)
                 {
                     if (wMin == nMin)
@@ -170,7 +170,7 @@ namespace GameSvr.Robots
 
         private void ClearScript()
         {
-            for (var i = 0; i < AutoRunList.Count; i++)
+            for (int i = 0; i < AutoRunList.Count; i++)
             {
                 AutoRunList[i] = null;
             }
@@ -180,19 +180,19 @@ namespace GameSvr.Robots
         public void LoadScript()
         {
             string sLineText;
-            var sActionType = string.Empty;
-            var sRunCmd = string.Empty;
-            var sMoethod = string.Empty;
-            var sParam1 = string.Empty;
-            var sParam2 = string.Empty;
-            var sParam3 = string.Empty;
-            var sParam4 = string.Empty;
-            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot_def", $"{ScriptFileName}.txt");
+            string sActionType = string.Empty;
+            string sRunCmd = string.Empty;
+            string sMoethod = string.Empty;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            string sParam4 = string.Empty;
+            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot_def", $"{ScriptFileName}.txt");
             if (File.Exists(sFileName))
             {
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
                     if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
@@ -208,7 +208,7 @@ namespace GameSvr.Robots
                         {
                             if (string.Compare(sRunCmd, Robot.sRONPCLABLEJMP, StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                var AutoRunInfo = new AutoRunInfo();
+                                AutoRunInfo AutoRunInfo = new AutoRunInfo();
                                 AutoRunInfo.RunTick = HUtil32.GetTimestamp();
                                 AutoRunInfo.RunTimeTick = 0;
                                 AutoRunInfo.boStatus = false;
@@ -284,35 +284,35 @@ namespace GameSvr.Robots
 
         private bool GetWeekTime(string param, ref long runTime)
         {
-            if (!DateTimeOffset.TryParse(param, out var runWeekTime)) return false;
+            if (!DateTimeOffset.TryParse(param, out DateTimeOffset runWeekTime)) return false;
             runTime = GetSundayDate(runWeekTime).ToUnixTimeMilliseconds();
             return true;
         }
 
         private static bool GetDayTime(string param, ref long runTime)
         {
-            if (!DateTimeOffset.TryParse(param, out var runDayTime)) return false;
+            if (!DateTimeOffset.TryParse(param, out DateTimeOffset runDayTime)) return false;
             runTime = runDayTime.ToUnixTimeMilliseconds();
             return true;
         }
 
         private static bool GetHourTime(string param, ref long runTime)
         {
-            if (!int.TryParse(param, out var runHour)) return false;
+            if (!int.TryParse(param, out int runHour)) return false;
             runTime = DateTimeOffset.Now.AddHours(runHour).ToUnixTimeMilliseconds();
             return true;
         }
 
         private static bool GetMinuteTime(string param, ref long runTime)
         {
-            if (!int.TryParse(param, out var runHour)) return false;
+            if (!int.TryParse(param, out int runHour)) return false;
             runTime = DateTimeOffset.Now.AddMinutes(runHour).ToUnixTimeMilliseconds();
             return true;
         }
 
         private static bool GetSecondTime(string param, ref long runTime)
         {
-            if (!int.TryParse(param, out var runHour)) return false;
+            if (!int.TryParse(param, out int runHour)) return false;
             runTime = DateTimeOffset.Now.AddSeconds(runHour).ToUnixTimeMilliseconds();
             return true;
         }
@@ -329,13 +329,13 @@ namespace GameSvr.Robots
         /// <returns>返回礼拜日日期，后面的具体时、分、秒和传入值相等</returns>
         private static DateTimeOffset GetSundayDate(DateTimeOffset someDate)
         {
-            var i = (7 - (int)someDate.DayOfWeek);
+            int i = (7 - (int)someDate.DayOfWeek);
             return someDate.Add(new TimeSpan(i, 0, 0, 0));
         }
 
         private void ProcessAutoRun()
         {
-            for (var i = AutoRunList.Count - 1; i >= 0; i--)
+            for (int i = AutoRunList.Count - 1; i >= 0; i--)
             {
                 AutoRun(AutoRunList[i]);
             }

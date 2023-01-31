@@ -17,12 +17,12 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            var sHumName = @params.Length > 0 ? @params[0] : "";
+            string sHumName = @params.Length > 0 ? @params[0] : "";
             if (sHumName == "")
             {
                 return;
             }
-            var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
                 m_PlayObject.BoKickFlag = true;

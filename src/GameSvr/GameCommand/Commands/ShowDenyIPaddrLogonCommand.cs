@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
                 }
                 if (nCount > 0)
                 {
-                    for (var i = 0; i < M2Share.DenyIPAddrList.Count; i++)
+                    for (int i = 0; i < M2Share.DenyIPAddrList.Count; i++)
                     {
                         //PlayObject.SysMsg(Settings.g_DenyIPAddrList[i], TMsgColor.c_Green, TMsgType.t_Hint);
                     }

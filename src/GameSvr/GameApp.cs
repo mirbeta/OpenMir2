@@ -123,7 +123,7 @@ namespace GameSvr
             M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
             _logger.Info("正在加载物品数据库...");
-            var nCode = M2Share.CommonDb.LoadItemsDB();
+            int nCode = M2Share.CommonDb.LoadItemsDB();
             if (nCode < 0)
             {
                 _logger.Info("物品数据库加载失败!!!" + "Code: " + nCode);
@@ -159,7 +159,7 @@ namespace GameSvr
             }
             _logger.Info($"加载技能数据库成功...[{M2Share.WorldEngine.MagicList.Count}]");
             _logger.Info("正在加载怪物刷新配置信息...");
-            nCode = M2Share.LocalDb.LoadMonGen(out var mongenCount);
+            nCode = M2Share.LocalDb.LoadMonGen(out int mongenCount);
             if (nCode < 0)
             {
                 _logger.Info("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
@@ -266,8 +266,8 @@ namespace GameSvr
                 M2Share.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
                 M2Share.StartReady = true;
-                _logger.Info(Settings.g_sVersion);
-                _logger.Info(Settings.g_sUpDateTime);
+                _logger.Info(Settings.Version);
+                _logger.Info(Settings.UpDateTime);
             }
             catch (Exception ex)
             {
@@ -277,17 +277,17 @@ namespace GameSvr
 
         private static void LoadServerTable()
         {
-            var nRouteIdx = 0;
-            var sIdx = string.Empty;
-            var sSelGateIPaddr = string.Empty;
-            var sGameGateIPaddr = string.Empty;
-            var sGameGatePort = string.Empty;
-            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.BaseDir, "!servertable.txt");
+            int nRouteIdx = 0;
+            string sIdx = string.Empty;
+            string sSelGateIPaddr = string.Empty;
+            string sGameGateIPaddr = string.Empty;
+            string sGameGatePort = string.Empty;
+            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.BaseDir, "!servertable.txt");
             if (File.Exists(sFileName))
             {
-                var loadList = new StringList();
+                StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
                     string sLineText = loadList[i];
                     if (sLineText != "" && sLineText[0] != ';')
@@ -305,7 +305,7 @@ namespace GameSvr
                         M2Share.ServerTableList[nRouteIdx].nGateCount = 0;
                         M2Share.ServerTableList[nRouteIdx].nServerIdx = HUtil32.StrToInt(sIdx, 0);
                         M2Share.ServerTableList[nRouteIdx].sSelGateIP = sSelGateIPaddr.Trim();
-                        var nGateIdx = 0;
+                        int nGateIdx = 0;
                         while (!string.IsNullOrEmpty(sGameGate))
                         {
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
@@ -333,7 +333,7 @@ namespace GameSvr
         private static bool LoadAbuseInformation(string fileName)
         {
             int lineCount = 0;
-            var result = false;
+            bool result = false;
             if (File.Exists(fileName))
             {
                 M2Share.AbuseTextList.Clear();
@@ -344,7 +344,7 @@ namespace GameSvr
                     {
                         break;
                     }
-                    var sText = M2Share.AbuseTextList[lineCount].Trim();
+                    string sText = M2Share.AbuseTextList[lineCount].Trim();
                     if (string.IsNullOrEmpty(sText))
                     {
                         M2Share.AbuseTextList.RemoveAt(lineCount);
