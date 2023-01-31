@@ -281,7 +281,7 @@ namespace GameSvr.Npc
             string sLineText;
             string sHumName = string.Empty;
             string sDate = string.Empty;
-            string sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, m_sPath, QuestActionInfo.sParam1);
+            string sListFileName = M2Share.GetEnvirFilePath( m_sPath, QuestActionInfo.sParam1);
             using StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -326,7 +326,7 @@ namespace GameSvr.Npc
             string sLineText;
             string sHumName = string.Empty;
             string sDate = string.Empty;
-            string sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, m_sPath, QuestActionInfo.sParam1);
+            string sListFileName = M2Share.GetEnvirFilePath( m_sPath, QuestActionInfo.sParam1);
             using StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -726,7 +726,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearNameList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            string sListFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, m_sPath, QuestActionInfo.sParam1);
+            string sListFileName = M2Share.GetEnvirFilePath( m_sPath, QuestActionInfo.sParam1);
             using StringList LoadList = new StringList();
             LoadList.Clear();
             try
@@ -1457,7 +1457,7 @@ namespace GameSvr.Npc
             {
                 sFileName = sFileName[3..];
             }
-            sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, sFileName);
+            sFileName = M2Share.GetEnvirFilePath(sFileName);
             if (sType == "" || sVarName == "" || !File.Exists(sFileName))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SAVEVAR);
@@ -1642,7 +1642,7 @@ namespace GameSvr.Npc
 
         private static void ActionOfClearList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            string ffile = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, QuestActionInfo.sParam1);
+            string ffile = M2Share.GetEnvirFilePath(QuestActionInfo.sParam1);
             if (File.Exists(ffile))
             {
                 //myFile = new FileInfo(ffile);
@@ -1932,7 +1932,7 @@ namespace GameSvr.Npc
             {
                 sFileName = sFileName[3..];
             }
-            sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, sFileName);
+            sFileName = M2Share.GetEnvirFilePath(sFileName);
             if (sType == "" || sVarName == "" || !File.Exists(sFileName))
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_LOADVAR);

@@ -239,7 +239,7 @@ namespace GameSvr.Npc
         private static bool CheckGotoLableStringList(string sHumName, string sListFileName)
         {
             bool result = false;
-            sListFileName = M2Share.Config.EnvirDir + sListFileName;
+            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
                 StringList LoadList = new StringList();
@@ -328,7 +328,7 @@ namespace GameSvr.Npc
         {
             string Name = string.Empty;
             bool result = false;
-            sListFileName = M2Share.Config.EnvirDir + sListFileName;
+            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             StringList LoadList = new StringList();
             try
             {
@@ -1441,7 +1441,7 @@ namespace GameSvr.Npc
             string s10 = string.Empty;
             string sText;
             bool bo15;
-            sListFileName = M2Share.Config.EnvirDir + sListFileName;
+            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1475,7 +1475,7 @@ namespace GameSvr.Npc
 
         private static void GotoLable_AddList(string sHumName, string sListFileName)
         {
-            sListFileName = M2Share.Config.EnvirDir + sListFileName;
+            sListFileName = M2Share.GetEnvirFilePath( sListFileName);
             StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1509,7 +1509,7 @@ namespace GameSvr.Npc
         {
             string s10 = string.Empty;
             string sText;
-            sListFileName = M2Share.Config.EnvirDir + sListFileName;
+            sListFileName = M2Share.GetEnvirFilePath( sListFileName);
             StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -1536,7 +1536,7 @@ namespace GameSvr.Npc
         private static void GotoLable_DelList(string sHumName, string sListFileName)
         {
             bool bo15;
-            sListFileName = M2Share.Config.EnvirDir + sListFileName;
+            sListFileName = M2Share.GetEnvirFilePath( sListFileName);
             StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {

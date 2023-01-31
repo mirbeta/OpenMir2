@@ -31,7 +31,7 @@ namespace GameSvr.DataSource
             string sIPaddr = string.Empty;
             string sChrName = string.Empty;
             string sData = string.Empty;
-            string sfilename = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "AdminList.txt");
+            string sfilename = M2Share.GetEnvirFilePath("AdminList.txt");
             if (!File.Exists(sfilename))
             {
                 return false;
@@ -119,7 +119,7 @@ namespace GameSvr.DataSource
                 string cX = string.Empty;
                 string cY = string.Empty;
                 string direction = string.Empty;
-                string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "GuardList.txt");
+                string sFileName = M2Share.GetEnvirFilePath("GuardList.txt");
                 if (File.Exists(sFileName))
                 {
                     StringList guardList = new StringList();
@@ -164,7 +164,7 @@ namespace GameSvr.DataSource
             string sSubName = string.Empty;
             string sItemName = string.Empty;
             IList<MakeItem> List28 = null;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MakeItem.txt");
+            string sFileName = M2Share.GetEnvirFilePath("MakeItem.txt");
             if (File.Exists(sFileName))
             {
                 using StringList LoadList = new StringList();
@@ -206,8 +206,8 @@ namespace GameSvr.DataSource
         {
             try
             {
-                string sScriptFile = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, ScriptConst.sMarket_Def, "QFunction-0.txt");
-                string sScritpDir = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, ScriptConst.sMarket_Def);
+                string sScriptFile = M2Share.GetEnvirFilePath(ScriptConst.sMarket_Def, "QFunction-0.txt");
+                string sScritpDir = M2Share.GetEnvirFilePath(ScriptConst.sMarket_Def);
                 if (!Directory.Exists(sScritpDir))
                 {
                     Directory.CreateDirectory(sScritpDir);
@@ -251,8 +251,8 @@ namespace GameSvr.DataSource
         {
             try
             {
-                string sScriptFile = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MapQuest_def", "QManage.txt");
-                string sScritpDir = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MapQuest_def");
+                string sScriptFile = M2Share.GetEnvirFilePath("MapQuest_def", "QManage.txt");
+                string sScritpDir = M2Share.GetEnvirFilePath("MapQuest_def");
                 if (!Directory.Exists(sScritpDir))
                 {
                     Directory.CreateDirectory(sScritpDir);
@@ -308,8 +308,8 @@ namespace GameSvr.DataSource
         {
             try
             {
-                string sScriptFile = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot_def", "RobotManage.txt");
-                string sScritpDir = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot_def");
+                string sScriptFile = M2Share.GetEnvirFilePath("Robot_def", "RobotManage.txt");
+                string sScritpDir = M2Share.GetEnvirFilePath("Robot_def");
                 if (!Directory.Exists(sScritpDir))
                 {
                     Directory.CreateDirectory(sScritpDir);
@@ -363,7 +363,7 @@ namespace GameSvr.DataSource
             string sQuest = string.Empty;
             string s30 = string.Empty;
             string s34 = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MapQuest.txt");
+            string sFileName = M2Share.GetEnvirFilePath("MapQuest.txt");
             if (File.Exists(sFileName))
             {
                 StringList tMapQuestList = new StringList();
@@ -435,7 +435,7 @@ namespace GameSvr.DataSource
             string sIsCalste = string.Empty;
             string sCanMove = string.Empty;
             string sMoveTime = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Merchant.txt");
+            string sFileName = M2Share.GetEnvirFilePath("Merchant.txt");
             if (File.Exists(sFileName))
             {
                 StringList tMerchantList = new StringList();
@@ -489,7 +489,7 @@ namespace GameSvr.DataSource
 
         private static void LoadMonGen_LoadMapGen(StringList MonGenList, string sFileName)
         {
-            string sFileDir = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MonGen");
+            string sFileDir = M2Share.GetEnvirFilePath("MonGen");
             if (!Directory.Exists(sFileDir))
             {
                 Directory.CreateDirectory(sFileDir);
@@ -515,7 +515,7 @@ namespace GameSvr.DataSource
             int i;
             int result = 0;
             mongenCount = 0;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MonGen.txt");
+            string sFileName = M2Share.GetEnvirFilePath("MonGen.txt");
             if (File.Exists(sFileName))
             {
                 using StringList LoadList = new StringList();
@@ -606,7 +606,7 @@ namespace GameSvr.DataSource
         public void LoadMonitems(string MonName, ref IList<MonsterDropItem> ItemList)
         {
             string sData = string.Empty;
-            string monFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MonItems", $"{MonName}.txt");
+            string monFileName = M2Share.GetEnvirFilePath("MonItems", $"{MonName}.txt");
             if (File.Exists(monFileName))
             {
                 if (ItemList != null)
@@ -671,7 +671,7 @@ namespace GameSvr.DataSource
             string cY = string.Empty;
             string flag = string.Empty;
             string appr = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Npcs.txt");
+            string sFileName = M2Share.GetEnvirFilePath("Npcs.txt");
             if (File.Exists(sFileName))
             {
                 using StringList LoadList = new StringList();
@@ -751,7 +751,7 @@ namespace GameSvr.DataSource
             while (true)
             {
                 IList<TQDDinfo> QDDinfoList = null;
-                string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "QuestDiary", LoadQuestDiary_sub_48978C(nC) + ".txt");
+                string sFileName = M2Share.GetEnvirFilePath("QuestDiary", LoadQuestDiary_sub_48978C(nC) + ".txt");
                 if (File.Exists(sFileName))
                 {
                     s18 = string.Empty;
@@ -839,7 +839,7 @@ namespace GameSvr.DataSource
             string type = string.Empty;
             string zone = string.Empty;
             string fire = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "StartPoint.txt");
+            string sFileName = M2Share.GetEnvirFilePath("StartPoint.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.StartPointList.Clear();
@@ -887,7 +887,7 @@ namespace GameSvr.DataSource
             int result = 0;
             string sData = string.Empty;
             string sItemName = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "UnbindList.txt");
+            string sFileName = M2Share.GetEnvirFilePath("UnbindList.txt");
             if (File.Exists(sFileName))
             {
                 using StringList LoadList = new StringList();
@@ -1010,7 +1010,7 @@ namespace GameSvr.DataSource
             string sCanMove = string.Empty;
             string sMoveTime = string.Empty;
             Merchant Merchant;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Merchant.txt");
+            string sFileName = M2Share.GetEnvirFilePath("Merchant.txt");
             if (!File.Exists(sFileName))
             {
                 return;

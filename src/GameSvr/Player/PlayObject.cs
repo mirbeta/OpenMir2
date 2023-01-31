@@ -3036,7 +3036,7 @@ namespace GameSvr.Player
         {
             string sSayMsg;
             bool boIsfound = false;
-            string sUnMarryFileName = M2Share.BasePath + M2Share.Config.EnvirDir + "UnMarry.txt";
+            string sUnMarryFileName = M2Share.GetEnvirFilePath("UnMarry.txt");
             if (File.Exists(sUnMarryFileName))
             {
                 StringList loadList = new StringList();

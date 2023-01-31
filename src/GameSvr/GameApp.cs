@@ -212,7 +212,7 @@ namespace GameSvr
                 _logger.Info("加载文字过滤信息成功...");
             }
             _logger.Info("正在加载公告提示信息...");
-            if (!M2Share.LoadLineNotice(Path.Combine(M2Share.BasePath, M2Share.Config.NoticeDir, "LineNotice.txt")))
+            if (!M2Share.LoadLineNotice(M2Share.GetNoticeFilePath("LineNotice.txt")))
             {
                 _logger.Info("加载公告提示信息失败!!!");
             }

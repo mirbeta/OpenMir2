@@ -939,7 +939,7 @@ namespace GameSvr.Maps
                     result = true;
                 }
 
-                string pointFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Point", $"{sMapFile}.txt");
+                string pointFileName = M2Share.GetEnvirFilePath("Point", $"{sMapFile}.txt");
                 if (File.Exists(pointFileName))
                 {
                     StringList loadList = new StringList();

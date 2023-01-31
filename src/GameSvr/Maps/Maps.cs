@@ -29,7 +29,7 @@ namespace GameSvr.Maps
             string sLine = string.Empty;
             string sReConnectMap = string.Empty;
             int result = -1;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MapInfo.txt");
+            string sFileName = M2Share.GetEnvirFilePath("MapInfo.txt");
             if (File.Exists(sFileName))
             {
                 StringList LoadList = new StringList();
@@ -386,7 +386,7 @@ namespace GameSvr.Maps
             string sMapNO = string.Empty;
             string sMapIdx = string.Empty;
             int result = 0;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MiniMap.txt");
+            string sFileName = M2Share.GetEnvirFilePath("MiniMap.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.MiniMapList.Clear();
@@ -461,7 +461,7 @@ namespace GameSvr.Maps
 
         private static void LoadSubMapInfo(StringList loadList, string sFileName)
         {
-            string sFileDir = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MapInfo");
+            string sFileDir = M2Share.GetEnvirFilePath("MapInfo");
             if (!Directory.Exists(sFileDir))
             {
                 Directory.CreateDirectory(sFileDir);

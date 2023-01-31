@@ -187,7 +187,7 @@ namespace GameSvr.Robots
             string sParam2 = string.Empty;
             string sParam3 = string.Empty;
             string sParam4 = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "Robot_def", $"{ScriptFileName}.txt");
+            string sFileName = M2Share.GetEnvirFilePath("Robot_def", $"{ScriptFileName}.txt");
             if (File.Exists(sFileName))
             {
                 StringList LoadList = new StringList();
