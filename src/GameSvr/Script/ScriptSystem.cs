@@ -22,7 +22,7 @@ namespace GameSvr.Script
             return LoadScriptFile(NPC, sPatch, sScritpName, false); ;
         }
 
-        private bool LoadScriptCallScript(string sFileName, string sLabel, StringList List)
+        private static bool LoadScriptCallScript(string sFileName, string sLabel, StringList List)
         {
             bool result = false;
             if (File.Exists(sFileName))
@@ -65,13 +65,13 @@ namespace GameSvr.Script
             return result;
         }
 
-        private int GetScriptCallCount(string sText)
+        private static int GetScriptCallCount(string sText)
         {
             var match = Regex.Matches(sText, "#CALL", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.RightToLeft);
             return match.Count;
         }
 
-        private string GetCallScriptPath(string path)
+        private static string GetCallScriptPath(string path)
         {
             var sCallScriptFile = path;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -195,7 +195,7 @@ namespace GameSvr.Script
             return result;
         }
 
-        private TScript LoadMakeNewScript(NormNpc NPC)
+        private static TScript LoadMakeNewScript(NormNpc NPC)
         {
             TScript ScriptInfo = new TScript
             {
@@ -1374,7 +1374,7 @@ namespace GameSvr.Script
             return result;
         }
 
-        private string GetScriptCrossPath(string path)
+        private static string GetScriptCrossPath(string path)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
@@ -1887,7 +1887,7 @@ namespace GameSvr.Script
         /// <summary>
         /// 初始化脚本标签
         /// </summary>
-        private void InitializeAppendLabel(NormNpc NPC, string sLabel, int nIdx)
+        private static void InitializeAppendLabel(NormNpc NPC, string sLabel, int nIdx)
         {
             switch (sLabel)
             {
@@ -2242,7 +2242,7 @@ namespace GameSvr.Script
         /// <param name="sLabel"></param>
         /// <param name="boChange"></param>
         /// <returns></returns>
-        private string FormatLabelStr(string sLabel, ref bool boChange)
+        private static string FormatLabelStr(string sLabel, ref bool boChange)
         {
             var result = sLabel;
             if (sLabel.IndexOf(")", StringComparison.OrdinalIgnoreCase) > -1)
@@ -2409,7 +2409,7 @@ namespace GameSvr.Script
         /// <summary>
         /// 初始化全局变量脚本
         /// </summary>
-        private void InitializeVariable(string sLabel, ref string sMsg)
+        private static void InitializeVariable(string sLabel, ref string sMsg)
         {
             var s14 = string.Empty;
             var sLabel2 = sLabel.ToUpper();

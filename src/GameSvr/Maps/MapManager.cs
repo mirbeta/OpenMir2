@@ -180,12 +180,12 @@ namespace GameSvr.Maps
             _logger.Info("地图环境加载成功...");
         }
 
-        public void ProcessMapDoor()
+        public static void ProcessMapDoor()
         {
 
         }
 
-        public void ReSetMinMap()
+        public static void ReSetMinMap()
         {
             // for (var I = 0; I < this.Count; I ++ )
             // {
@@ -201,7 +201,7 @@ namespace GameSvr.Maps
             // }
         }
 
-        public void Run()
+        public static void Run()
         {
 
         }

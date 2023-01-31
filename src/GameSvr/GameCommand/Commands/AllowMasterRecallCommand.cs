@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class AllowMasterRecallCommand : Command
     {
         [ExecuteCommand]
-        public void AllowMasterRecall(PlayObject PlayObject)
+        public static void AllowMasterRecall(PlayObject PlayObject)
         {
             PlayObject.MBoCanMasterRecall = !PlayObject.MBoCanMasterRecall;
             if (PlayObject.MBoCanMasterRecall)

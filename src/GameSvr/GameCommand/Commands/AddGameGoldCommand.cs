@@ -31,14 +31,14 @@ namespace GameSvr.GameCommand.Commands
             var m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (m_PlayObject != null)
             {
-                if (m_PlayObject.MNGameGold + nPoint < 2000000)
+                if (m_PlayObject.GameGold + nPoint < 2000000)
                 {
-                    m_PlayObject.MNGameGold += nPoint;
+                    m_PlayObject.GameGold += nPoint;
                 }
                 else
                 {
-                    nPoint = 2000000 - m_PlayObject.MNGameGold;
-                    m_PlayObject.MNGameGold = 2000000;
+                    nPoint = 2000000 - m_PlayObject.GameGold;
+                    m_PlayObject.GameGold = 2000000;
                 }
                 m_PlayObject.GoldChanged();
                 PlayObject.SysMsg(sHumName + "的游戏点已增加" + nPoint + '.', MsgColor.Green, MsgType.Hint);

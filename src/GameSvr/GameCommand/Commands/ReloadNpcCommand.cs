@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadNpcCommand : Command
     {
         [ExecuteCommand]
-        public void ReloadNpc(string[] @Params, PlayObject PlayObject)
+        public static void ReloadNpc(string[] @Params, PlayObject PlayObject)
         {
             var sParam = string.Empty;
             if (@Params != null)

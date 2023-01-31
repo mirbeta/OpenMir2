@@ -11,10 +11,10 @@ namespace GameSvr.GameCommand.Commands
     public class ReLoadAdminCommand : Command
     {
         [ExecuteCommand]
-        public void ReLoadAdmin(PlayObject playObject)
+        public static void ReLoadAdmin(PlayObject playObject)
         {
-            M2Share.LocalDb.LoadAdminList();
-            M2Share.WorldEngine.SendServerGroupMsg(213, M2Share.ServerIndex, "");
+            DataSource.LocalDB.LoadAdminList();
+            World.WorldServer.SendServerGroupMsg(213, M2Share.ServerIndex, "");
             playObject.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }
     }

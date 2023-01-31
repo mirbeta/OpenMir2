@@ -13,7 +13,7 @@ namespace GameSvr.Player
             this.ChrName = "Clone";
             this.CurrX = PlayObject.CurrX;
             this.CurrY = PlayObject.CurrY;
-            this.Direction = this.GetBackDir(PlayObject.Direction);
+            this.Direction = GetBackDir(PlayObject.Direction);
             this.Envir = PlayObject.Envir;
             this.Gender = PlayObject.Gender;
             this.Hair = PlayObject.Hair;

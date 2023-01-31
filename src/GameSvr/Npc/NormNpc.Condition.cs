@@ -64,7 +64,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckBonusPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckBonusPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var BonusAbil = PlayObject.BonusAbil;
@@ -101,7 +101,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckHPCheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
+        private static bool ConditionOfCheckHPCheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -176,7 +176,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMP_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
+        private static bool ConditionOfCheckMP_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -251,7 +251,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckDC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
+        private static bool ConditionOfCheckDC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -326,7 +326,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
+        private static bool ConditionOfCheckMC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -401,7 +401,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckSC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
+        private static bool ConditionOfCheckSC_CheckHigh(PlayObject PlayObject, char cMethodMax, int nMax)
         {
             var result = false;
             switch (cMethodMax)
@@ -754,25 +754,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.MNGameGold == nGameGold)
+                    if (PlayObject.GameGold == nGameGold)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MNGameGold > nGameGold)
+                    if (PlayObject.GameGold > nGameGold)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MNGameGold < nGameGold)
+                    if (PlayObject.GameGold < nGameGold)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MNGameGold >= nGameGold)
+                    if (PlayObject.GameGold >= nGameGold)
                     {
                         result = true;
                     }
@@ -794,25 +794,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.MNGamePoint == nGamePoint)
+                    if (PlayObject.GamePoint == nGamePoint)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MNGamePoint > nGamePoint)
+                    if (PlayObject.GamePoint > nGamePoint)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MNGamePoint < nGamePoint)
+                    if (PlayObject.GamePoint < nGamePoint)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MNGamePoint >= nGamePoint)
+                    if (PlayObject.GamePoint >= nGamePoint)
                     {
                         result = true;
                     }
@@ -898,7 +898,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckHaveGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckHaveGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return PlayObject.MyGuild != null;
         }
@@ -1110,27 +1110,27 @@ namespace GameSvr.Npc
             return Castle.IsDefenseGuild(PlayObject.MyGuild);
         }
 
-        private bool ConditionOfCheckIsCastleaGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckIsCastleaGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return M2Share.CastleMgr.IsCastleMember(PlayObject) != null;
         }
 
-        private bool ConditionOfCheckIsCastleMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckIsCastleMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return PlayObject.IsGuildMaster() && (M2Share.CastleMgr.IsCastleMember(PlayObject) != null);
         }
 
-        private bool ConditionOfCheckIsGuildMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckIsGuildMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return PlayObject.IsGuildMaster();
         }
 
-        private bool ConditionOfCheckIsMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckIsMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.MSMasterName) && PlayObject.MBoMaster;
+            return !string.IsNullOrEmpty(PlayObject.MasterName) && PlayObject.MBoMaster;
         }
 
-        private bool ConditionOfCheckListCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckListCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return false;
         }
@@ -1291,7 +1291,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMarry(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckMarry(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return !string.IsNullOrEmpty(PlayObject.MSDearName);
         }
@@ -1336,9 +1336,9 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.MSMasterName) && !PlayObject.MBoMaster;
+            return !string.IsNullOrEmpty(PlayObject.MasterName) && !PlayObject.MBoMaster;
         }
 
         private bool ConditionOfCheckMemBerLevel(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
@@ -1354,25 +1354,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.MNMemberLevel == nLevel)
+                    if (PlayObject.MemberLevel == nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MNMemberLevel > nLevel)
+                    if (PlayObject.MemberLevel > nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MNMemberLevel < nLevel)
+                    if (PlayObject.MemberLevel < nLevel)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MNMemberLevel >= nLevel)
+                    if (PlayObject.MemberLevel >= nLevel)
                     {
                         result = true;
                     }
@@ -1394,25 +1394,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.MNMemberType == nType)
+                    if (PlayObject.MemberType == nType)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MNMemberType > nType)
+                    if (PlayObject.MemberType > nType)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MNMemberType < nType)
+                    if (PlayObject.MemberType < nType)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MNMemberType >= nType)
+                    if (PlayObject.MemberType >= nType)
                     {
                         result = true;
                     }
@@ -1458,7 +1458,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseDir(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckPoseDir(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
@@ -1486,7 +1486,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseGender(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckPoseGender(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             byte btSex = 0;
@@ -1517,13 +1517,13 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseIsMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckPoseIsMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if ((((PlayObject)PoseHuman).MSMasterName != "") && ((PlayObject)PoseHuman).MBoMaster)
+                if ((((PlayObject)PoseHuman).MasterName != "") && ((PlayObject)PoseHuman).MBoMaster)
                 {
                     result = true;
                 }
@@ -1575,7 +1575,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseMarry(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckPoseMarry(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             BaseObject PoseHuman = PlayObject.GetPoseCreate();
@@ -1589,13 +1589,13 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckPoseMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckPoseMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if ((((PlayObject)PoseHuman).MSMasterName != "") && !((PlayObject)PoseHuman).MBoMaster)
+                if ((((PlayObject)PoseHuman).MasterName != "") && !((PlayObject)PoseHuman).MBoMaster)
                 {
                     result = true;
                 }
@@ -1603,7 +1603,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckServerName(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckServerName(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return QuestConditionInfo.sParam1 == M2Share.Config.ServerName;
         }
@@ -1648,12 +1648,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMap(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckMap(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return QuestConditionInfo.sParam1 == PlayObject.MapName;
         }
 
-        private bool ConditionOfCheckPos(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckPos(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             bool result;
             int nX = QuestConditionInfo.nParam2;
@@ -1669,7 +1669,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfReviveSlave(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfReviveSlave(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             string s18;
@@ -1705,7 +1705,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckMagicLvl(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckMagicLvl(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
             UserMagic UserMagic;
@@ -2024,18 +2024,18 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfHaveMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfHaveMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.MSMasterName);
+            return !string.IsNullOrEmpty(PlayObject.MasterName);
         }
 
-        private bool ConditionOfPoseHaveMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfPoseHaveMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             var result = false;
             var PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if (((PlayObject)PoseHuman).MSMasterName != "")
+                if (((PlayObject)PoseHuman).MasterName != "")
                 {
                     result = true;
                 }
@@ -2262,12 +2262,12 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfIsLockPassword(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfIsLockPassword(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return PlayObject.MBoPasswordLocked;
         }
 
-        private bool ConditionOfIsLockStorage(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfIsLockStorage(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             return !PlayObject.BoCanGetBackItem;
         }
@@ -2543,7 +2543,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool ConditionOfCheckIsOnMap(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
+        private static bool ConditionOfCheckIsOnMap(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             if (PlayObject.MapFileName == QuestConditionInfo.sParam1 || PlayObject.MapName == QuestConditionInfo.sParam1)
             {
@@ -2698,7 +2698,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private int GotoLable_CheckVarNameNo_GetDataType(QuestConditionInfo CheckQuestConditionInfo)
+        private static int GotoLable_CheckVarNameNo_GetDataType(QuestConditionInfo CheckQuestConditionInfo)
         {
             int result;
             string sParam1 = string.Empty;
@@ -2787,7 +2787,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GotoLable_CheckVarNameNo_GetValValue(PlayObject PlayObject, string sValName, ref int nValue)
+        private static bool GotoLable_CheckVarNameNo_GetValValue(PlayObject PlayObject, string sValName, ref int nValue)
         {
             nValue = 0;
             bool result = false;

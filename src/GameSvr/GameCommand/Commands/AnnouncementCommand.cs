@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class AnnouncementCommand : Command
     {
         [ExecuteCommand]
-        public void Announcement(string[] @Params, PlayObject PlayObject)
+        public static void Announcement(string[] @Params, PlayObject PlayObject)
         {
             //string sGuildName = @Params.Length > 0 ? @Params[0] : "";
             //TGUild Guild;

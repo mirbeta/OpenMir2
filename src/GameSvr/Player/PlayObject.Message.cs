@@ -247,7 +247,7 @@ namespace GameSvr.Player
                                     if (castle.CanGetCastle(MyGuild))
                                     {
                                         castle.GetCastle(MyGuild);
-                                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.ServerIndex, MyGuild.sGuildName);
+                                        WorldServer.SendServerGroupMsg(Grobal2.SS_211, M2Share.ServerIndex, MyGuild.sGuildName);
                                         if (castle.InPalaceGuildCount() <= 1)
                                         {
                                             castle.StopWallconquestWar();
@@ -302,7 +302,7 @@ namespace GameSvr.Player
                         if (MyGuild != null)
                         {
                             MyGuild.SendGuildMsg(ChrName + " 已经退出游戏.");
-                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + "" + '/' + ChrName + " has exited the game.");
+                            WorldServer.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + "" + '/' + ChrName + " has exited the game.");
                         }
                         IdSrvClient.Instance.SendHumanLogOutMsg(UserAccount, SessionId);
                     }
@@ -360,20 +360,20 @@ namespace GameSvr.Player
                     }
                 }
             }
-            tObjCount = MNGameGold;
-            if (MBoDecGameGold && (HUtil32.GetTickCount() - MDwDecGameGoldTick) > MDwDecGameGoldTime)
+            tObjCount = GameGold;
+            if (BoDecGameGold && (HUtil32.GetTickCount() - DecGameGoldTick) > DecGameGoldTime)
             {
-                MDwDecGameGoldTick = HUtil32.GetTickCount();
-                if (MNGameGold >= MNDecGameGold)
+                DecGameGoldTick = HUtil32.GetTickCount();
+                if (GameGold >= DecGameGold)
                 {
-                    MNGameGold -= MNDecGameGold;
-                    nInteger = MNDecGameGold;
+                    GameGold -= DecGameGold;
+                    nInteger = DecGameGold;
                 }
                 else
                 {
-                    nInteger = MNGameGold;
-                    MNGameGold = 0;
-                    MBoDecGameGold = false;
+                    nInteger = GameGold;
+                    GameGold = 0;
+                    BoDecGameGold = false;
                     MoveToHome();
                 }
                 if (M2Share.GameLogGameGold)
@@ -381,40 +381,40 @@ namespace GameSvr.Player
                     M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
-            if (MBoIncGameGold && (HUtil32.GetTickCount() - MDwIncGameGoldTick) > MDwIncGameGoldTime)
+            if (BoIncGameGold && (HUtil32.GetTickCount() - IncGameGoldTick) > IncGameGoldTime)
             {
-                MDwIncGameGoldTick = HUtil32.GetTickCount();
-                if (MNGameGold + MNIncGameGold < 2000000)
+                IncGameGoldTick = HUtil32.GetTickCount();
+                if (GameGold + IncGameGold < 2000000)
                 {
-                    MNGameGold += MNIncGameGold;
-                    nInteger = MNIncGameGold;
+                    GameGold += IncGameGold;
+                    nInteger = IncGameGold;
                 }
                 else
                 {
-                    MNGameGold = 2000000;
-                    nInteger = 2000000 - MNGameGold;
-                    MBoIncGameGold = false;
+                    GameGold = 2000000;
+                    nInteger = 2000000 - GameGold;
+                    BoIncGameGold = false;
                 }
                 if (M2Share.GameLogGameGold)
                 {
                     M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
-            if (!MBoDecGameGold && Envir.Flag.boDECGAMEGOLD)
+            if (!BoDecGameGold && Envir.Flag.boDECGAMEGOLD)
             {
-                if ((HUtil32.GetTickCount() - MDwDecGameGoldTick) > Envir.Flag.nDECGAMEGOLDTIME * 1000)
+                if ((HUtil32.GetTickCount() - DecGameGoldTick) > Envir.Flag.nDECGAMEGOLDTIME * 1000)
                 {
-                    MDwDecGameGoldTick = HUtil32.GetTickCount();
-                    if (MNGameGold >= Envir.Flag.nDECGAMEGOLD)
+                    DecGameGoldTick = HUtil32.GetTickCount();
+                    if (GameGold >= Envir.Flag.nDECGAMEGOLD)
                     {
-                        MNGameGold -= Envir.Flag.nDECGAMEGOLD;
+                        GameGold -= Envir.Flag.nDECGAMEGOLD;
                         nInteger = Envir.Flag.nDECGAMEGOLD;
                     }
                     else
                     {
-                        nInteger = MNGameGold;
-                        MNGameGold = 0;
-                        MBoDecGameGold = false;
+                        nInteger = GameGold;
+                        GameGold = 0;
+                        BoDecGameGold = false;
                         MoveToHome();
                     }
                     if (M2Share.GameLogGameGold)
@@ -423,20 +423,20 @@ namespace GameSvr.Player
                     }
                 }
             }
-            if (!MBoIncGameGold && Envir.Flag.boINCGAMEGOLD)
+            if (!BoIncGameGold && Envir.Flag.boINCGAMEGOLD)
             {
-                if ((HUtil32.GetTickCount() - MDwIncGameGoldTick) > (Envir.Flag.nINCGAMEGOLDTIME * 1000))
+                if ((HUtil32.GetTickCount() - IncGameGoldTick) > (Envir.Flag.nINCGAMEGOLDTIME * 1000))
                 {
-                    MDwIncGameGoldTick = HUtil32.GetTickCount();
-                    if (MNGameGold + Envir.Flag.nINCGAMEGOLD <= 2000000)
+                    IncGameGoldTick = HUtil32.GetTickCount();
+                    if (GameGold + Envir.Flag.nINCGAMEGOLD <= 2000000)
                     {
-                        MNGameGold += Envir.Flag.nINCGAMEGOLD;
+                        GameGold += Envir.Flag.nINCGAMEGOLD;
                         nInteger = Envir.Flag.nINCGAMEGOLD;
                     }
                     else
                     {
-                        nInteger = 2000000 - MNGameGold;
-                        MNGameGold = 2000000;
+                        nInteger = 2000000 - GameGold;
+                        GameGold = 2000000;
                     }
                     if (M2Share.GameLogGameGold)
                     {
@@ -444,7 +444,7 @@ namespace GameSvr.Player
                     }
                 }
             }
-            if (tObjCount != MNGameGold)
+            if (tObjCount != GameGold)
             {
                 SendUpdateMsg(this, Grobal2.RM_GOLDCHANGED, 0, 0, 0, 0, "");
             }
@@ -468,18 +468,18 @@ namespace GameSvr.Player
             }
             if (Envir.Flag.boINCGAMEPOINT)
             {
-                if ((HUtil32.GetTickCount() - MDwIncGamePointTick) > (Envir.Flag.nINCGAMEPOINTTIME * 1000))
+                if ((HUtil32.GetTickCount() - IncGamePointTick) > (Envir.Flag.nINCGAMEPOINTTIME * 1000))
                 {
-                    MDwIncGamePointTick = HUtil32.GetTickCount();
-                    if (MNGamePoint + Envir.Flag.nINCGAMEPOINT <= 2000000)
+                    IncGamePointTick = HUtil32.GetTickCount();
+                    if (GamePoint + Envir.Flag.nINCGAMEPOINT <= 2000000)
                     {
-                        MNGamePoint += Envir.Flag.nINCGAMEPOINT;
+                        GamePoint += Envir.Flag.nINCGAMEPOINT;
                         nInteger = Envir.Flag.nINCGAMEPOINT;
                     }
                     else
                     {
-                        MNGamePoint = 2000000;
-                        nInteger = 2000000 - MNGamePoint;
+                        GamePoint = 2000000;
+                        nInteger = 2000000 - GamePoint;
                     }
                     if (M2Share.GameLogGamePoint)
                     {
@@ -487,9 +487,9 @@ namespace GameSvr.Player
                     }
                 }
             }
-            if (Envir.Flag.boDECHP && (HUtil32.GetTickCount() - MDwDecHpTick) > (Envir.Flag.nDECHPTIME * 1000))
+            if (Envir.Flag.boDECHP && (HUtil32.GetTickCount() - DecHpTick) > (Envir.Flag.nDECHPTIME * 1000))
             {
-                MDwDecHpTick = HUtil32.GetTickCount();
+                DecHpTick = HUtil32.GetTickCount();
                 if (WAbil.HP > Envir.Flag.nDECHPPOINT)
                 {
                     WAbil.HP -= (ushort)Envir.Flag.nDECHPPOINT;
@@ -500,9 +500,9 @@ namespace GameSvr.Player
                 }
                 HealthSpellChanged();
             }
-            if (Envir.Flag.boINCHP && (HUtil32.GetTickCount() - MDwIncHpTick) > (Envir.Flag.nINCHPTIME * 1000))
+            if (Envir.Flag.boINCHP && (HUtil32.GetTickCount() - IncHpTick) > (Envir.Flag.nINCHPTIME * 1000))
             {
-                MDwIncHpTick = HUtil32.GetTickCount();
+                IncHpTick = HUtil32.GetTickCount();
                 if (WAbil.HP + Envir.Flag.nDECHPPOINT < WAbil.MaxHP)
                 {
                     WAbil.HP += (ushort)Envir.Flag.nDECHPPOINT;
@@ -716,19 +716,19 @@ namespace GameSvr.Player
                     }
                     if (MBoMaster)
                     {
-                        for (var i = MMasterList.Count - 1; i >= 0; i--)
+                        for (var i = MasterList.Count - 1; i >= 0; i--)
                         {
-                            if (MMasterList[i].Death || MMasterList[i].Ghost)
+                            if (MasterList[i].Death || MasterList[i].Ghost)
                             {
-                                MMasterList.RemoveAt(i);
+                                MasterList.RemoveAt(i);
                             }
                         }
                     }
                     else
                     {
-                        if (MMasterHuman != null && (MMasterHuman.Death || MMasterHuman.Ghost))
+                        if (MasterHuman != null && (MasterHuman.Death || MasterHuman.Ghost))
                         {
-                            MMasterHuman = null;
+                            MasterHuman = null;
                         }
                     }
 
@@ -1670,7 +1670,7 @@ namespace GameSvr.Player
                 case Grobal2.RM_LEVELUP:
                     ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LEVELUP, Abil.Exp, Abil.Level, 0, 0);
                     SendSocket(ClientMsg);
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(MNGameGold), HUtil32.HiWord(MNGameGold));
+                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(WAbil));
                     SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
@@ -1730,7 +1730,7 @@ namespace GameSvr.Player
                     SendSocket(ClientMsg, EDCode.EncodeString(processMsg.Msg));
                     break;
                 case Grobal2.RM_ABILITY:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(MNGameGold), HUtil32.HiWord(MNGameGold));
+                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(WAbil));
                     break;
                 case Grobal2.RM_HEALTHSPELLCHANGED:
@@ -1824,7 +1824,7 @@ namespace GameSvr.Player
                     SendDefMessage(Grobal2.SM_SENDDETAILGOODSLIST, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, processMsg.Msg);
                     break;
                 case Grobal2.RM_GOLDCHANGED:
-                    SendDefMessage(Grobal2.SM_GOLDCHANGED, Gold, HUtil32.LoWord(MNGameGold), HUtil32.HiWord(MNGameGold), 0, "");
+                    SendDefMessage(Grobal2.SM_GOLDCHANGED, Gold, HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold), 0, "");
                     break;
                 case Grobal2.RM_GAMEGOLDCHANGED:
                     SendGoldInfo(false);

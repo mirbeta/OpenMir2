@@ -426,7 +426,7 @@ namespace GameSvr.Npc
                         return;
                     }
                 case "$RANDOMNO":
-                    sMsg = ReplaceVariableText(sMsg, "<$RANDOMNO>", PlayObject.MSRandomNo);
+                    sMsg = ReplaceVariableText(sMsg, "<$RANDOMNO>", PlayObject.RandomNo);
                     return;
                 case "$RELEVEL":
                     sText = PlayObject.MBtReLevel.ToString();
@@ -593,11 +593,11 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$GOLDCOUNT>", sText);
                     return;
                 case "$GAMEGOLD":
-                    sText = PlayObject.MNGameGold.ToString();
+                    sText = PlayObject.GameGold.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$GAMEGOLD>", sText);
                     return;
                 case "$GAMEPOINT":
-                    sText = PlayObject.MNGamePoint.ToString();
+                    sText = PlayObject.GamePoint.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$GAMEPOINT>", sText);
                     return;
                 case "$HUNGER":
@@ -1409,7 +1409,7 @@ namespace GameSvr.Npc
             }
             if (sVariable == "$GAMEGOLD")// 元宝
             {
-                sText = PlayObject.MNGameGold.ToString();
+                sText = PlayObject.GameGold.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$GAMEGOLD>", sText);
                 return;
             }
@@ -1623,7 +1623,7 @@ namespace GameSvr.Npc
             PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
         }
 
-        protected string ReplaceVariableText(string sMsg, string sStr, string sText)
+        protected static string ReplaceVariableText(string sMsg, string sStr, string sText)
         {
             var n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
             if (n10 > -1)
@@ -1674,9 +1674,9 @@ namespace GameSvr.Npc
                 PlayObject.SysMsg(M2Share.g_sSendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.MBoSendMsgFlag)
+            if (PlayObject.BoSendMsgFlag)
             {
-                PlayObject.MBoSendMsgFlag = false;
+                PlayObject.BoSendMsgFlag = false;
                 M2Share.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Cust);
             }
         }
@@ -1687,7 +1687,7 @@ namespace GameSvr.Npc
             Castle = M2Share.CastleMgr.InCastleWarArea(this);
         }
 
-        private Dictionary<string, DynamicVar> GetDynamicVarList(PlayObject PlayObject, string sType, ref string sName)
+        private static Dictionary<string, DynamicVar> GetDynamicVarList(PlayObject PlayObject, string sType, ref string sName)
         {
             Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN", 5))
@@ -1717,7 +1717,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue)
+        private static bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue)
         {
             bool result = false;
             if (string.IsNullOrEmpty(sMsg))
@@ -1791,7 +1791,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GetValValue(PlayObject PlayObject, string sMsg, ref string sValue)
+        private static bool GetValValue(PlayObject PlayObject, string sMsg, ref string sValue)
         {
             bool result = false;
             int n01;
@@ -1833,7 +1833,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool SetValValue(PlayObject PlayObject, string sMsg, int nValue)
+        private static bool SetValValue(PlayObject PlayObject, string sMsg, int nValue)
         {
             bool result = false;
             int n01;
@@ -1895,7 +1895,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool SetValValue(PlayObject PlayObject, string sMsg, string sValue)
+        private static bool SetValValue(PlayObject PlayObject, string sMsg, string sValue)
         {
             bool result = false;
             int n01;

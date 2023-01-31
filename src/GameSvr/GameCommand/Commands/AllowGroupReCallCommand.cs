@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class AllowGroupReCallCommand : Command
     {
         [ExecuteCommand]
-        public void AllowGroupReCall(PlayObject PlayObject)
+        public static void AllowGroupReCall(PlayObject PlayObject)
         {
             PlayObject.AllowGroupReCall = !PlayObject.AllowGroupReCall;
             if (PlayObject.AllowGroupReCall)

@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class AuthCommand : Command
     {
         [ExecuteCommand]
-        public void Auth(PlayObject PlayObject)
+        public static void Auth(PlayObject PlayObject)
         {
             if (PlayObject.IsGuildMaster())
             {

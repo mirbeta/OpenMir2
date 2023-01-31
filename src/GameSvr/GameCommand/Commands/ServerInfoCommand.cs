@@ -7,7 +7,7 @@ namespace GameSvr.GameCommand.Commands
     public class ServerInfoCommand : Command
     {
         [ExecuteCommand]
-        public void ServerInfo(string[] @Params, PlayObject PlayObject)
+        public static void ServerInfo(string[] @Params, PlayObject PlayObject)
         {
             var sb = new StringBuilder();
             //sb.AppendLine(string.Format("({0}) [{1}/{2}] [{3}/{4}] [{5}/{6}]", M2Share.WorldEngine.MonsterCount,

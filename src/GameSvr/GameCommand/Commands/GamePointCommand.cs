@@ -45,15 +45,15 @@ namespace GameSvr.GameCommand.Commands
             switch (sCtr[1])
             {
                 case '=':
-                    m_PlayObject.MNGamePoint = (ushort)nPoint;
+                    m_PlayObject.GamePoint = (ushort)nPoint;
                     break;
 
                 case '+':
-                    m_PlayObject.MNGamePoint += (ushort)nPoint;
+                    m_PlayObject.GamePoint += (ushort)nPoint;
                     break;
 
                 case '-':
-                    m_PlayObject.MNGamePoint -= (ushort)nPoint;
+                    m_PlayObject.GamePoint -= (ushort)nPoint;
                     break;
             }
             if (M2Share.GameLogGamePoint)
@@ -62,8 +62,8 @@ namespace GameSvr.GameCommand.Commands
                 //    m_PlayObject.m_sChrName, M2Share.g_Config.sGamePointName, nPoint, sCtr[1], m_PlayObject.m_sChrName));
             }
             PlayObject.GameGoldChanged();
-            m_PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGamePointHumanMsg, nPoint, m_PlayObject.MNGamePoint), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGamePointGMMsg, sHumanName, nPoint, m_PlayObject.MNGamePoint), MsgColor.Green, MsgType.Hint);
+            m_PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGamePointHumanMsg, nPoint, m_PlayObject.GamePoint), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGamePointGMMsg, sHumanName, nPoint, m_PlayObject.GamePoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

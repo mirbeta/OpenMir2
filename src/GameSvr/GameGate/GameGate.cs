@@ -461,7 +461,7 @@ namespace GameSvr.GameGate
             }
         }
 
-        private int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<GateUserInfo> userList)
+        private static int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<GateUserInfo> userList)
         {
             var gateUser = new GateUserInfo
             {
@@ -489,7 +489,7 @@ namespace GameSvr.GameGate
             return userList.Count - 1;
         }
 
-        private void SendNewUserMsg(Socket socket, int nSocket, ushort socketId, int nUserIdex)
+        private static void SendNewUserMsg(Socket socket, int nSocket, ushort socketId, int nUserIdex)
         {
             if (!socket.Connected)
             {

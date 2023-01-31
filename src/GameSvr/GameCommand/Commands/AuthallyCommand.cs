@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     internal class AuthallyCommand : Command
     {
         [ExecuteCommand]
-        public void Authally(PlayObject playObject)
+        public static void Authally(PlayObject playObject)
         {
             if (playObject.IsGuildMaster())
             {

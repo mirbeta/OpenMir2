@@ -78,7 +78,7 @@ namespace GameSvr.Maps
         // 6  X  2
         // 5  4  3
         // *************************************************************
-        private short DirToDx(int direction)
+        private static short DirToDx(int direction)
         {
             short result;
             switch (direction)
@@ -99,7 +99,7 @@ namespace GameSvr.Maps
             return result;
         }
 
-        private short DirToDy(int direction)
+        private static short DirToDy(int direction)
         {
             short result;
             switch (direction)
@@ -158,7 +158,7 @@ namespace GameSvr.Maps
         }
 
         // 把WALK合并成RUN
-        public byte WalkToRun_GetNextDirection(int sx, int sy, int dx, int dy)
+        public static byte WalkToRun_GetNextDirection(int sx, int sy, int dx, int dy)
         {
             byte result;
             int flagx;
@@ -429,7 +429,7 @@ namespace GameSvr.Maps
             }
         }
 
-        private void FillPathMap_ExchangeWaves(Wave oldWave, Wave newWave)
+        private static void FillPathMap_ExchangeWaves(Wave oldWave, Wave newWave)
         {
             var w = oldWave;
             newWave = w;

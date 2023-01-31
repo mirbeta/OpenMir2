@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class LetGuildCommand : Command
     {
         [ExecuteCommand]
-        public void Letguild(PlayObject playObject)
+        public static void Letguild(PlayObject playObject)
         {
             playObject.AllowGuild = !playObject.AllowGuild;
             if (playObject.AllowGuild)

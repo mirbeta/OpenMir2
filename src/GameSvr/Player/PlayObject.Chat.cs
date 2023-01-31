@@ -68,7 +68,7 @@ namespace GameSvr.Player
             {
                 if (M2Share.WorldEngine.FindOtherServerUser(whostr, ref svidx))
                 {
-                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.ISM_WHISPER, svidx, whostr + '/' + ChrName + "=> " + saystr);
+                    World.WorldServer.SendServerGroupMsg(Grobal2.ISM_WHISPER, svidx, whostr + '/' + ChrName + "=> " + saystr);
                 }
                 else
                 {
@@ -168,12 +168,12 @@ namespace GameSvr.Player
                                         case '!'://发送组队消息
                                             sText = sData.AsSpan()[2..].ToString();
                                             SendGroupText(ChrName + ": " + sText);
-                                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, ChrName + "/:" + sText);
+                                            World.WorldServer.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, ChrName + "/:" + sText);
                                             return;
                                         case '~' when MyGuild != null://发送行会消息
                                             sText = sData.AsSpan()[2..].ToString();
                                             MyGuild.SendGuildMsg(ChrName + ": " + sText);
-                                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + ChrName + '/' + sText);
+                                            World.WorldServer.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + ChrName + '/' + sText);
                                             return;
                                     }
                                 }
@@ -266,7 +266,7 @@ namespace GameSvr.Player
                     MBoReConfigPwd = false;
                     if (string.Compare(MSTempPwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        MSStoragePwd = sData;
+                        StoragePwd = sData;
                         MBoPasswordLocked = true;
                         BoCanGetBackItem = false;
                         MSTempPwd = "";
@@ -281,7 +281,7 @@ namespace GameSvr.Player
                 }
                 if (MBoUnLockPwd || MBoUnLockStoragePwd)
                 {
-                    if (string.Compare(MSStoragePwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(StoragePwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         MBoPasswordLocked = false;
                         if (MBoUnLockPwd)
@@ -323,7 +323,7 @@ namespace GameSvr.Player
                                 ObMode = false;
                                 AdminMode = false;
                             }
-                            MBoLockLogoned = true;
+                            BoLockLogoned = true;
                             SysMsg(M2Share.g_sPasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
                         if (MBoUnLockStoragePwd)
@@ -351,7 +351,7 @@ namespace GameSvr.Player
                 if (MBoCheckOldPwd)
                 {
                     MBoCheckOldPwd = false;
-                    if (MSStoragePwd == sData)
+                    if (StoragePwd == sData)
                     {
                         SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                         SysMsg(M2Share.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);

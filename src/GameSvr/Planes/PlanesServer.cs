@@ -95,7 +95,7 @@ namespace GameSvr.Planes
             }
         }
 
-        private void SendSocket(Socket Socket, string sMsg)
+        private static void SendSocket(Socket Socket, string sMsg)
         {
             if (Socket.Connected)
             {

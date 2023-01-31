@@ -29,7 +29,7 @@ namespace GameSvr
             _worldThread.Start();
         }
 
-        public void Stop()
+        public static void Stop()
         {
             M2Share.DataServer.Stop();
             M2Share.GateMgr.Stop();
@@ -54,7 +54,7 @@ namespace GameSvr
             }
         }
 
-        private void ProcessGameNotice()
+        private static void ProcessGameNotice()
         {
             if (M2Share.Config.SendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.Config.SendOnlineTime)
             {

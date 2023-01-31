@@ -143,7 +143,7 @@ namespace GameSvr.Items
         /// </summary>
         /// <param name="UserItem"></param>
         /// <returns></returns>
-        public int GetItemAddValuePointColor(UserItem UserItem)
+        public static int GetItemAddValuePointColor(UserItem UserItem)
         {
             int result = 0;
             // if (M2Share.g_Config.boRandomnameColor)

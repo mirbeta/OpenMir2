@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     public class MemberFunctionCommand : Command
     {
         [ExecuteCommand]
-        public void MemberFunction(PlayObject PlayObject)
+        public static void MemberFunction(PlayObject PlayObject)
         {
             if (M2Share.g_ManageNPC != null)
             {

@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class KillCommand : Command
     {
         [ExecuteCommand]
-        public void Kill(string[] @Params, PlayObject PlayObject)
+        public static void Kill(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

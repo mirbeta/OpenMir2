@@ -146,7 +146,7 @@ namespace GameSvr.Npc
             {
                 if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName))
                 {
-                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
+                    World.WorldServer.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.WomaHorn);
                     PlayObject.DecGold(M2Share.Config.BuildGuildPrice);
@@ -180,7 +180,7 @@ namespace GameSvr.Npc
         /// <param name="PlayObject"></param>
         /// <param name="sGuildName"></param>
         /// <returns></returns>
-        private void ReQuestGuildWar(PlayObject PlayObject, string sGuildName)
+        private static void ReQuestGuildWar(PlayObject PlayObject, string sGuildName)
         {
             if (M2Share.GuildMgr.FindGuild(sGuildName) != null)
             {

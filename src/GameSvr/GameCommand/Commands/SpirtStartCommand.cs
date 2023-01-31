@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class SpirtStartCommand : Command
     {
         [ExecuteCommand]
-        public void SpirtStart(string[] @Params, PlayObject PlayObject)
+        public static void SpirtStart(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

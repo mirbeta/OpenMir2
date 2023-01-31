@@ -188,7 +188,7 @@ namespace GameSvr
         public static int SocLimit = 10;
         public static int g_dwSocCheckTimeOut = 50;
         public static int nDecLimit = 20;
-        public static string BasePath;
+        public static readonly string BasePath;
         public static int dwRunDBTimeMax = 0;
         public static int g_nGameTime = 0;
         public static NormNpc g_ManageNPC = null;

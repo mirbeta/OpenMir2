@@ -40,13 +40,13 @@ namespace GameSvr.GameCommand.Commands
             switch (sCtr[0])
             {
                 case '=':
-                    m_PlayObject.MNGameGold = nGold;
+                    m_PlayObject.GameGold = nGold;
                     break;
                 case '+':
-                    m_PlayObject.MNGameGold += nGold;
+                    m_PlayObject.GameGold += nGold;
                     break;
                 case '-':
-                    m_PlayObject.MNGameGold -= nGold;
+                    m_PlayObject.GameGold -= nGold;
                     break;
             }
             if (M2Share.GameLogGameGold)
@@ -55,8 +55,8 @@ namespace GameSvr.GameCommand.Commands
                     m_PlayObject.ChrName, M2Share.Config.GameGoldName, nGold, sCtr[1], PlayObject.ChrName));
             }
             PlayObject.GameGoldChanged();
-            m_PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGameGoldHumanMsg, M2Share.Config.GameGoldName, nGold, m_PlayObject.MNGameGold, M2Share.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGameGoldGMMsg, sHumanName, M2Share.Config.GameGoldName, nGold, m_PlayObject.MNGameGold, M2Share.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
+            m_PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGameGoldHumanMsg, M2Share.Config.GameGoldName, nGold, m_PlayObject.GameGold, M2Share.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGameGoldGMMsg, sHumanName, M2Share.Config.GameGoldName, nGold, m_PlayObject.GameGold, M2Share.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

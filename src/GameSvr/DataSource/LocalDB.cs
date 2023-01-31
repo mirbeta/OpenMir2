@@ -26,7 +26,7 @@ namespace GameSvr.DataSource
         private readonly char[] TextSpitConst = { ' ', '\t' };
         private readonly char[] MonsterSpitConst = { ' ', '/', '\t' };
 
-        public bool LoadAdminList()
+        public static bool LoadAdminList()
         {
             var sIPaddr = string.Empty;
             var sChrName = string.Empty;
@@ -110,7 +110,7 @@ namespace GameSvr.DataSource
         /// <summary>
         /// 读取守卫配置
         /// </summary>
-        public void LoadGuardList()
+        public static void LoadGuardList()
         {
             try
             {
@@ -202,7 +202,7 @@ namespace GameSvr.DataSource
             }
         }
 
-        private void QFunctionNPC()
+        private static void QFunctionNPC()
         {
             try
             {
@@ -247,7 +247,7 @@ namespace GameSvr.DataSource
             }
         }
 
-        private void QMangeNPC()
+        private static void QMangeNPC()
         {
             try
             {
@@ -304,7 +304,7 @@ namespace GameSvr.DataSource
             }
         }
 
-        private void RobotNPC()
+        private static void RobotNPC()
         {
             try
             {
@@ -487,7 +487,7 @@ namespace GameSvr.DataSource
             }
         }
 
-        private void LoadMonGen_LoadMapGen(StringList MonGenList, string sFileName)
+        private static void LoadMonGen_LoadMapGen(StringList MonGenList, string sFileName)
         {
             var sFileDir = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, "MonGen");
             if (!Directory.Exists(sFileDir))
@@ -723,7 +723,7 @@ namespace GameSvr.DataSource
             }
         }
 
-        private string LoadQuestDiary_sub_48978C(int nIndex)
+        private static string LoadQuestDiary_sub_48978C(int nIndex)
         {
             string result;
             if (nIndex >= 1000)
@@ -924,7 +924,7 @@ namespace GameSvr.DataSource
             return result;
         }
 
-        public int SaveGoodRecord(Merchant NPC, string sFile)
+        public static int SaveGoodRecord(Merchant NPC, string sFile)
         {
             var result = -1;
             var sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
@@ -962,7 +962,7 @@ namespace GameSvr.DataSource
             return result;
         }
 
-        public int SaveGoodPriceRecord(Merchant NPC, string sFile)
+        public static int SaveGoodPriceRecord(Merchant NPC, string sFile)
         {
             var result = -1;
             var sFileName = ".\\Envir\\Market_Prices\\" + sFile + ".prc";
@@ -992,7 +992,7 @@ namespace GameSvr.DataSource
             return result;
         }
 
-        public void ReLoadNpc()
+        public static void ReLoadNpc()
         {
 
         }
@@ -1119,7 +1119,7 @@ namespace GameSvr.DataSource
             }
         }
 
-        public int LoadGoodRecord(Merchant NPC, string sFile)
+        public static int LoadGoodRecord(Merchant NPC, string sFile)
         {
             var result = -1;
             var sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
@@ -1170,7 +1170,7 @@ namespace GameSvr.DataSource
             return result;
         }
 
-        public int LoadGoodPriceRecord(Merchant NPC, string sFile)
+        public static int LoadGoodPriceRecord(Merchant NPC, string sFile)
         {
             var result = -1;
             var sFileName = ".\\Envir\\Market_Prices\\" + sFile + ".prc";

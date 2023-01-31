@@ -31,7 +31,7 @@ namespace GameSvr
             Builder.ConfigureServices(ConfigureServices);
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<GameApp>();
             services.AddHostedService<AppService>();

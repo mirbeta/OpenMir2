@@ -846,7 +846,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        private bool IsAllowAIPickUpItem(string sName)
+        private static bool IsAllowAIPickUpItem(string sName)
         {
             return true;
         }
@@ -1583,7 +1583,7 @@ namespace GameSvr.RobotPlay
             return CheckUserItemType(nItemType, nCount) || GetUserItemList(nItemType, nCount) >= 0;
         }
 
-        private bool CheckItemType(int nItemType, StdItem StdItem)
+        private static bool CheckItemType(int nItemType, StdItem StdItem)
         {
             bool result = false;
             switch (nItemType)
@@ -1709,7 +1709,7 @@ namespace GameSvr.RobotPlay
             int result = 0;
             BaseObject BaseObject;
             IList<BaseObject> BaseObjectList = new List<BaseObject>();
-            if (Envir.GetMapBaseObjects(nX, nY, nRange, BaseObjectList))
+            if (Envirnoment.GetMapBaseObjects(nX, nY, nRange, BaseObjectList))
             {
                 for (var i = BaseObjectList.Count - 1; i >= 0; i--)
                 {
@@ -1930,7 +1930,7 @@ namespace GameSvr.RobotPlay
             }
             if (Envir != null)
             {
-                if (!Envir.AllowMagics(UserMagic.Magic.MagicName))
+                if (!Envirnoment.AllowMagics(UserMagic.Magic.MagicName))
                 {
                     return false;
                 }
@@ -3856,7 +3856,7 @@ namespace GameSvr.RobotPlay
                                 {
                                     if (Envir != null)// 判断地图是否禁用
                                     {
-                                        if (Envir.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
+                                        if (Envirnoment.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             m_SkillUseTick[38] = HUtil32.GetTickCount();
                                             result = MagicConst.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
@@ -3870,7 +3870,7 @@ namespace GameSvr.RobotPlay
                                     {
                                         if (Envir != null)
                                         {
-                                            if (Envir.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
+                                            if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
                                                 result = MagicConst.SKILL_AMYOUNSUL;// 英雄施毒术
@@ -3887,7 +3887,7 @@ namespace GameSvr.RobotPlay
                                     {
                                         if (Envir != null)
                                         {
-                                            if (Envir.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
+                                            if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
                                                 result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
@@ -3913,7 +3913,7 @@ namespace GameSvr.RobotPlay
                                     if (Envir != null)
                                     {
                                         // 判断地图是否禁用
-                                        if (Envir.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
+                                        if (Envirnoment.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             m_SkillUseTick[38] = HUtil32.GetTickCount();
                                             result = MagicConst.SKILL_GROUPAMYOUNSUL; // 英雄群体施毒
@@ -3928,7 +3928,7 @@ namespace GameSvr.RobotPlay
                                         if (Envir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (Envir.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
+                                            if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
                                                 result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
@@ -3946,7 +3946,7 @@ namespace GameSvr.RobotPlay
                                         if (Envir != null)
                                         {
                                             // 判断地图是否禁用
-                                            if (Envir.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
+                                            if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
                                             {
                                                 m_SkillUseTick[6] = HUtil32.GetTickCount();
                                                 result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
@@ -4316,7 +4316,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        private int GetDirBaseObjectsCount(int m_btDirection, int rang)
+        private static int GetDirBaseObjectsCount(int m_btDirection, int rang)
         {
             return 0;
         }

@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     public class TakeOffHorseCommand : Command
     {
         [ExecuteCommand]
-        public void TakeOffHorse(PlayObject PlayObject)
+        public static void TakeOffHorse(PlayObject PlayObject)
         {
             if (!PlayObject.OnHorse)
             {

@@ -595,9 +595,9 @@ namespace GameSvr.Player
         /// <summary>
         /// 师徒名称
         /// </summary>
-        public string MSMasterName;
-        public PlayObject MMasterHuman;
-        public IList<PlayObject> MMasterList;
+        public string MasterName;
+        public PlayObject MasterHuman;
+        public IList<PlayObject> MasterList;
         public bool MBoMaster = false;
         /// <summary>
         /// 声望点
@@ -636,10 +636,10 @@ namespace GameSvr.Player
         /// <summary>
         /// 是否打开登录锁
         /// </summary>        
-        public bool MBoLockLogoned;
+        public bool BoLockLogoned;
         public string MSTempPwd;
-        public string MSStoragePwd;
-        public BaseObject MPoseBaseObject = null;
+        public string StoragePwd;
+        public BaseObject PoseBaseObject = null;
         public bool MBoStartMarry = false;
         public bool MBoStartMaster = false;
         public bool MBoStartUnMarry = false;
@@ -675,38 +675,44 @@ namespace GameSvr.Player
         public bool BoCanHit;
         public bool BoCanSpell;
         public bool BoCanSendMsg;
-        public int MNMemberType;
-        // 会员类型
-        public int MNMemberLevel;
-        // 会员等级
-        public bool MBoSendMsgFlag;
-        // 发祝福语标志
-        public bool MBoChangeItemNameFlag;
+        /// <summary>
+        /// 会员类型
+        /// </summary>
+        public int MemberType;
+        /// <summary>
+        /// 会员等级
+        /// </summary> 
+        public byte MemberLevel;
+        /// <summary>
+        /// 发祝福语标志
+        /// </summary> 
+        public bool BoSendMsgFlag;
+        public bool BoChangeItemNameFlag;
         /// <summary>
         /// 游戏币
         /// </summary>
-        public int MNGameGold;
+        public int GameGold;
         /// <summary>
         /// 是否自动减游戏币
         /// </summary>        
-        public bool MBoDecGameGold;
-        public int MDwDecGameGoldTime;
-        public int MDwDecGameGoldTick;
-        public int MNDecGameGold;
+        public bool BoDecGameGold;
+        public int DecGameGoldTime;
+        public int DecGameGoldTick;
+        public int DecGameGold;
         // 一次减点数
-        public bool MBoIncGameGold;
+        public bool BoIncGameGold;
         // 是否自动加游戏币
-        public int MDwIncGameGoldTime;
-        public int MDwIncGameGoldTick;
-        public int MNIncGameGold;
+        public int IncGameGoldTime;
+        public int IncGameGoldTick;
+        public int IncGameGold;
         // 一次减点数
-        public int MNGamePoint;
+        public int GamePoint;
         // 游戏点数
-        public int MDwIncGamePointTick;
-        public int MNPayMentPoint;
+        public int IncGamePointTick;
+        public int PayMentPoint;
         public int MDwPayMentPointTick = 0;
-        public int MDwDecHpTick = 0;
-        public int MDwIncHpTick = 0;
+        public int DecHpTick = 0;
+        public int IncHpTick = 0;
         /// <summary>
         /// PK 死亡掉经验，不够经验就掉等级
         /// </summary>
@@ -731,13 +737,13 @@ namespace GameSvr.Player
         public int MNAutoGetExpPoint;
         public Envirnoment MAutoGetExpEnvir;
         public bool MBoAutoGetExpInSafeZone = false;
-        public Dictionary<string, DynamicVar> DynamicVarMap;
+        public readonly Dictionary<string, DynamicVar> DynamicVarMap;
         public short MDwClientTick;
         /// <summary>
         /// 进入速度测试模式
         /// </summary>
         public bool TestSpeedMode;
-        public string MSRandomNo = string.Empty;
+        public string RandomNo = string.Empty;
         /// <summary>
         /// 刷新包裹间隔
         /// </summary>
@@ -876,7 +882,7 @@ namespace GameSvr.Player
             // 锁仓库
             MBtPwdFailCount = 0;
             MSTempPwd = "";
-            MSStoragePwd = "";
+            StoragePwd = "";
             FilterSendMsg = false;
             BoCanDeal = true;
             BoCanDrop = true;
@@ -886,25 +892,25 @@ namespace GameSvr.Player
             BoCanHit = true;
             BoCanSpell = true;
             MBoCanUseItem = true;
-            MNMemberType = 0;
-            MNMemberLevel = 0;
-            MNGameGold = 0;
-            MBoDecGameGold = false;
-            MNDecGameGold = 1;
-            MDwDecGameGoldTick = HUtil32.GetTickCount();
-            MDwDecGameGoldTime = 60 * 1000;
-            MBoIncGameGold = false;
-            MNIncGameGold = 1;
-            MDwIncGameGoldTick = HUtil32.GetTickCount();
-            MDwIncGameGoldTime = 60 * 1000;
-            MNGamePoint = 0;
-            MDwIncGamePointTick = HUtil32.GetTickCount();
-            MNPayMentPoint = 0;
+            MemberType = 0;
+            MemberLevel = 0;
+            GameGold = 0;
+            BoDecGameGold = false;
+            DecGameGold = 1;
+            DecGameGoldTick = HUtil32.GetTickCount();
+            DecGameGoldTime = 60 * 1000;
+            BoIncGameGold = false;
+            IncGameGold = 1;
+            IncGameGoldTick = HUtil32.GetTickCount();
+            IncGameGoldTime = 60 * 1000;
+            GamePoint = 0;
+            IncGamePointTick = HUtil32.GetTickCount();
+            PayMentPoint = 0;
             MDearHuman = null;
-            MMasterHuman = null;
-            MMasterList = new List<PlayObject>();
-            MBoSendMsgFlag = false;
-            MBoChangeItemNameFlag = false;
+            MasterHuman = null;
+            MasterList = new List<PlayObject>();
+            BoSendMsgFlag = false;
+            BoChangeItemNameFlag = false;
             MBoCanMasterRecall = false;
             MBoCanDearRecall = false;
             MDwDearRecallTick = HUtil32.GetTickCount();
@@ -948,7 +954,7 @@ namespace GameSvr.Player
             SessInfo = null;
             TestSpeedMode = false;
             MBoLockLogon = true;
-            MBoLockLogoned = false;
+            BoLockLogoned = false;
             BoTimeGoto = false;
             TimeGotoTick = HUtil32.GetTickCount();
             TimeGotoLable = "";
@@ -963,7 +969,7 @@ namespace GameSvr.Player
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
             GroupMembers = new List<PlayObject>();
-            MSRandomNo = M2Share.RandomNumber.Random(999999).ToString();
+            RandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
 
         public override void Initialize()
@@ -1390,8 +1396,8 @@ namespace GameSvr.Player
                     SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sActionIsLockedMsg + "\\ \\" + "开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName + '\\' + "加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
                 }
                 // 重置泡点方面计时
-                MDwIncGamePointTick = HUtil32.GetTickCount();
-                MDwIncGameGoldTick = HUtil32.GetTickCount();
+                IncGamePointTick = HUtil32.GetTickCount();
+                IncGameGoldTick = HUtil32.GetTickCount();
                 MDwAutoGetExpTick = HUtil32.GetTickCount();
                 GetSellOffGlod();// 检查是否有元宝寄售交易结束还没得到元宝
             }
@@ -1601,7 +1607,7 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            if (!killObject.IsGoodKilling(this))
+                            if (!IsGoodKilling(this))
                             {
                                 targetObject.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
                                 killObject.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
@@ -2936,15 +2942,15 @@ namespace GameSvr.Player
                 {
                     sChrName = Format(RankLevelName, ChrName);
                 }
-                if (!string.IsNullOrEmpty(MSMasterName))
+                if (!string.IsNullOrEmpty(MasterName))
                 {
                     if (MBoMaster)
                     {
-                        sMasterName = Format(M2Share.g_sMasterName, MSMasterName);
+                        sMasterName = Format(M2Share.g_sMasterName, MasterName);
                     }
                     else
                     {
-                        sMasterName = Format(M2Share.g_sNoMasterName, MSMasterName);
+                        sMasterName = Format(M2Share.g_sNoMasterName, MasterName);
                     }
                 }
                 if (!string.IsNullOrEmpty(MSDearName))
@@ -3026,43 +3032,43 @@ namespace GameSvr.Player
                     MDearHuman.MDearHuman = null;
                     MDearHuman = null;
                 }
-                if (MMasterHuman != null || MMasterList.Count > 0)
+                if (MasterHuman != null || MasterList.Count > 0)
                 {
                     if (MBoMaster)
                     {
-                        for (var i = MMasterList.Count - 1; i >= 0; i--)
+                        for (var i = MasterList.Count - 1; i >= 0; i--)
                         {
-                            var human = MMasterList[i];
+                            var human = MasterList[i];
                             sSayMsg = M2Share.g_sMasterLongOutMasterListOnlineMsg.Replace("%s", ChrName);
                             sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                             sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                             sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
                             human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
-                            human.MMasterHuman = null;
+                            human.MasterHuman = null;
                         }
                     }
                     else
                     {
-                        if (MMasterHuman == null)
+                        if (MasterHuman == null)
                         {
                             return;
                         }
-                        sSayMsg = M2Share.g_sMasterListLongOutMasterOnlineMsg.Replace("%d", MSMasterName);
+                        sSayMsg = M2Share.g_sMasterListLongOutMasterOnlineMsg.Replace("%d", MasterName);
                         sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
-                        MMasterHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
+                        MasterHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                         // 如果为大徒弟则将对方的记录清空
-                        if (MMasterHuman.MSMasterName == ChrName)
+                        if (MasterHuman.MasterName == ChrName)
                         {
-                            MMasterHuman.MMasterHuman = null;
+                            MasterHuman.MasterHuman = null;
                         }
-                        for (var i = 0; i < MMasterHuman.MMasterList.Count; i++)
+                        for (var i = 0; i < MasterHuman.MasterList.Count; i++)
                         {
-                            if (MMasterHuman.MMasterList[i] == this)
+                            if (MasterHuman.MasterList[i] == this)
                             {
-                                MMasterHuman.MMasterList.RemoveAt(i);
+                                MasterHuman.MasterList.RemoveAt(i);
                                 break;
                             }
                         }
@@ -3608,7 +3614,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 检查武器升级状态
         /// </summary>
-        private void CheckWeaponUpgradeStatus(ref UserItem userItem)
+        private static void CheckWeaponUpgradeStatus(ref UserItem userItem)
         {
             if ((userItem.Desc[0] + userItem.Desc[1] + userItem.Desc[2]) < M2Share.Config.UpgradeWeaponMaxPoint)
             {
@@ -3675,9 +3681,9 @@ namespace GameSvr.Player
                         }
                         else if (MBoMaster)
                         {
-                            for (var i = 0; i < MMasterList.Count; i++)
+                            for (var i = 0; i < MasterList.Count; i++)
                             {
-                                if (MMasterList[i] == cret)
+                                if (MasterList[i] == cret)
                                 {
                                     result = true;
                                     break;
@@ -3686,9 +3692,9 @@ namespace GameSvr.Player
                         }
                         else if (((PlayObject)cret).MBoMaster)
                         {
-                            for (var i = 0; i < ((PlayObject)cret).MMasterList.Count; i++)
+                            for (var i = 0; i < ((PlayObject)cret).MasterList.Count; i++)
                             {
-                                if (((PlayObject)cret).MMasterList[i] == this)
+                                if (((PlayObject)cret).MasterList[i] == this)
                                 {
                                     result = true;
                                     break;
@@ -3867,7 +3873,7 @@ namespace GameSvr.Player
                     case 5:
                     case 6:
                         aabil.HIT = (ushort)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + stdItem.RealAttackSpeed(HUtil32.HiByte(clientItem.Item.MAC)));
+                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + StdItem.RealAttackSpeed(HUtil32.HiByte(clientItem.Item.MAC)));
                         aabil.Luck = (byte)(aabil.Luck + HUtil32.LoByte(clientItem.Item.AC));
                         aabil.UnLuck = (byte)(aabil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
                         aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
@@ -4058,7 +4064,7 @@ namespace GameSvr.Player
             }
         }
 
-        internal void ApplyItemParametersEx(UserItem uitem, ref Ability aWabil)
+        internal static void ApplyItemParametersEx(UserItem uitem, ref Ability aWabil)
         {
             StdItem item = M2Share.WorldEngine.GetStdItem(uitem.Index);
             if (item != null)

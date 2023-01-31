@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadAbuseCommand : Command
     {
         [ExecuteCommand]
-        public void ReloadAbuse(PlayObject PlayObject)
+        public static void ReloadAbuse(PlayObject PlayObject)
         {
 
         }

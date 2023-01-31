@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class AdjustExpCommand : Command
     {
         [ExecuteCommand]
-        public void AdjustExp(string[] @Params, PlayObject PlayObject)
+        public static void AdjustExp(string[] @Params, PlayObject PlayObject)
         {
             if (PlayObject.Permission < 6)
             {

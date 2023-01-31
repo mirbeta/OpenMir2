@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class RefineWeaponCommand : Command
     {
         [ExecuteCommand]
-        public void RefineWeapon(string[] @Params, PlayObject PlayObject)
+        public static void RefineWeapon(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

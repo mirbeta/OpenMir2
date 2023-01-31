@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class PasswordLockCommand : Command
     {
         [ExecuteCommand]
-        public void PasswordLock(string[] @params, PlayObject playObject)
+        public static void PasswordLock(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)
             {
@@ -22,7 +22,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.MSStoragePwd == "")
+            if (playObject.StoragePwd == "")
             {
                 playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.MBoSetStoragePwd = true;
@@ -35,7 +35,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.MBoPasswordLocked = true;
                 return;
             }
-            if (!string.IsNullOrEmpty(playObject.MSStoragePwd))
+            if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
                 playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.MBoCheckOldPwd = true;

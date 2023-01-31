@@ -68,7 +68,7 @@ namespace GameSvr.Maps
             Dispose(false);
         }
 
-        public bool AllowMagics(string magicName)
+        public static bool AllowMagics(string magicName)
         {
             return true;
         }
@@ -77,7 +77,7 @@ namespace GameSvr.Maps
         /// 检测地图是否禁用技能
         /// </summary>
         /// <returns></returns>
-        public bool AllowMagics(short magicId, int type)
+        public static bool AllowMagics(short magicId, int type)
         {
             return true;
         }
@@ -1365,7 +1365,7 @@ namespace GameSvr.Maps
             return baseObjectList.Count;
         }
 
-        public bool GetMapBaseObjects(short nX, short nY, int nRage, IList<BaseObject> baseObjectList, CellType btType = CellType.Monster)
+        public static bool GetMapBaseObjects(short nX, short nY, int nRage, IList<BaseObject> baseObjectList, CellType btType = CellType.Monster)
         {
             if (baseObjectList.Count == 0)
             {

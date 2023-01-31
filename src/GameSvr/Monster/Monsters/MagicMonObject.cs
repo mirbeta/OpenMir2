@@ -13,7 +13,7 @@
             UseMagic = false;
         }
 
-        private void LightingAttack(int nDir)
+        private static void LightingAttack(int nDir)
         {
 
         }

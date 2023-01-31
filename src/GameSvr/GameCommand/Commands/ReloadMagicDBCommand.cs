@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadMagicDBCommand : Command
     {
         [ExecuteCommand]
-        public void ReloadMonItems(PlayObject PlayObject)
+        public static void ReloadMonItems(PlayObject PlayObject)
         {
             M2Share.CommonDb.LoadMagicDB();
             PlayObject.SysMsg("魔法数据库重新加载完成。", MsgColor.Green, MsgType.Hint);

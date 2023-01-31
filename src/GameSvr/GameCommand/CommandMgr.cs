@@ -207,7 +207,7 @@ namespace GameSvr.GameCommand
         /// <param name="command">返回 命令名称</param>
         /// <param name="parameters">返回 命令参数</param>
         /// <returns>解析是否成功</returns>
-        private bool ExtractCommandAndParameters(string line, out string command, out string parameters)
+        private static bool ExtractCommandAndParameters(string line, out string command, out string parameters)
         {
             line = line.Trim();
             command = string.Empty;

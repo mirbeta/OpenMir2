@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class ShowDenyAccountLogonCommand : Command
     {
         [ExecuteCommand]
-        public void ShowDenyAccountLogon(PlayObject PlayObject)
+        public static void ShowDenyAccountLogon(PlayObject PlayObject)
         {
             if (PlayObject.Permission < 6)
             {

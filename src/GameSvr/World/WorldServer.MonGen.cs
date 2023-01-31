@@ -388,7 +388,7 @@ namespace GameSvr.World
         /// </summary>
         /// <param name="monGen"></param>
         /// <returns></returns>
-        private int GetGenMonCount(MonGenInfo monGen)
+        private static int GetGenMonCount(MonGenInfo monGen)
         {
             var nCount = 0;
             for (var i = 0; i < monGen.CertList.Count; i++)

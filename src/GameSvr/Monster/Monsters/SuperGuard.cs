@@ -58,7 +58,7 @@ namespace GameSvr.Monster.Monsters
             return base.Operate(processMsg);
         }
 
-        private bool CanAttckTarget(BaseObject baseObject)
+        private static bool CanAttckTarget(BaseObject baseObject)
         {
             //todo 最好加个字段直接判断是否能被攻击，减少判断
             return baseObject.Race == ActorRace.Guard || baseObject.Race == ActorRace.ArcherGuard || baseObject.Race == ActorRace.PeaceNpc || baseObject.Race == ActorRace.NPC;

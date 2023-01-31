@@ -222,7 +222,7 @@ namespace GameSvr
                 _logger.Info("加载公告提示信息失败!!!");
             }
             _logger.Info("加载公告提示信息成功...");
-            M2Share.LocalDb.LoadAdminList();
+            LocalDB.LoadAdminList();
             _logger.Info("管理员列表加载成功...");
         }
 
@@ -247,7 +247,7 @@ namespace GameSvr
                 M2Share.WorldEngine.InitializationMonsterThread();
                 if (!M2Share.Config.VentureServer)
                 {
-                    M2Share.LocalDb.LoadGuardList();
+                    LocalDB.LoadGuardList();
                     _logger.Info("守卫列表加载成功...");
                 }
                 _logger.Info("游戏处理引擎初始化成功...");
@@ -276,7 +276,7 @@ namespace GameSvr
             }
         }
 
-        private void LoadServerTable()
+        private static void LoadServerTable()
         {
             var nRouteIdx = 0;
             var sIdx = string.Empty;
@@ -331,7 +331,7 @@ namespace GameSvr
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private bool LoadAbuseInformation(string fileName)
+        private static bool LoadAbuseInformation(string fileName)
         {
             int lineCount = 0;
             var result = false;

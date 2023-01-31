@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadLineNoticeCommand : Command
     {
         [ExecuteCommand]
-        public void ReloadLineNotice(PlayObject PlayObject)
+        public static void ReloadLineNotice(PlayObject PlayObject)
         {
             if (M2Share.LoadLineNotice(Path.Combine(M2Share.BasePath, M2Share.Config.NoticeDir, "LineNotice.txt")))
             {

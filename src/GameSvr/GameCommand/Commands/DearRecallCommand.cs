@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class DearRecallCommond : Command
     {
         [ExecuteCommand]
-        public void DearRecall(PlayObject PlayObject)
+        public static void DearRecall(PlayObject PlayObject)
         {
             if (PlayObject.MSDearName == "")
             {

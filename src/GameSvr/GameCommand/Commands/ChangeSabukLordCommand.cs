@@ -38,7 +38,7 @@ namespace GameSvr.GameCommand.Commands
                 Castle.GetCastle(Guild);
                 if (boFlag)
                 {
-                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_211, M2Share.ServerIndex, sGuildName);
+                    World.WorldServer.SendServerGroupMsg(Grobal2.SS_211, M2Share.ServerIndex, sGuildName);
                 }
                 PlayObject.SysMsg(Castle.sName + " 所属行会已经更改为 " + sGuildName, MsgColor.Green, MsgType.Hint);
             }

@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands
     public class SmakeItemCommand : Command
     {
         [ExecuteCommand]
-        public void SmakeItem(string[] @Params, PlayObject PlayObject)
+        public static void SmakeItem(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

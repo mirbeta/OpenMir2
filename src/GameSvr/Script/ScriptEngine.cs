@@ -14,12 +14,12 @@ namespace GameSvr.Script
 
         }
 
-        public void Condition(NormNpc normNpc, PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool result)
+        public static void Condition(NormNpc normNpc, PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool result)
         {
 
         }
 
-        public void Action(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool result)
+        public static void Action(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool result)
         {
 
         }

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class KickHumanCommand : Command
     {
         [ExecuteCommand]
-        public void KickHuman(string[] @params, PlayObject PlayObject)
+        public static void KickHuman(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

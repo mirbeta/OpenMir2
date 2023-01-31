@@ -414,9 +414,9 @@ namespace GameSvr.Npc
                 PlayObject.SysMsg(M2Share.g_sSubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.MBoSendMsgFlag)
+            if (PlayObject.BoSendMsgFlag)
             {
-                PlayObject.MBoSendMsgFlag = false;
+                PlayObject.BoSendMsgFlag = false;
                 M2Share.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Castle);
             }
         }

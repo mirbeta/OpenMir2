@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class BackStepCommand : Command
     {
         [ExecuteCommand]
-        public void BackStep(string[] @Params, PlayObject PlayObject)
+        public static void BackStep(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {
@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
             nType = HUtil32._MIN(nType, 8);
             if (nType == 0)
             {
-                PlayObject.CharPushed(PlayObject.GetBackDir(PlayObject.Direction), nCount);
+                PlayObject.CharPushed(Actor.BaseObject.GetBackDir(PlayObject.Direction), nCount);
             }
             else
             {

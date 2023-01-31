@@ -21,7 +21,7 @@ namespace GameSvr.World
             return result;
         }
 
-        private void LoadSwitchData(SwitchDataInfo switchData, ref PlayObject playObject)
+        private static void LoadSwitchData(SwitchDataInfo switchData, ref PlayObject playObject)
         {
             playObject.BanShout = switchData.boBanShout;
             playObject.HearWhisper = switchData.boHearWhisper;
@@ -87,7 +87,7 @@ namespace GameSvr.World
             return true;
         }
 
-        private void MakeSwitchData(PlayObject playObject, ref SwitchDataInfo switchData)
+        private static void MakeSwitchData(PlayObject playObject, ref SwitchDataInfo switchData)
         {
             switchData = new SwitchDataInfo();
             switchData.sChrName = playObject.ChrName;

@@ -299,12 +299,12 @@ namespace GameSvr.Player
                             && string.Compare(dealOffInfo.sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 0)
                         {
                             dealOffInfo.Flag = 4;
-                            if (MNGameGold >= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
+                            if (GameGold >= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
                             {
-                                MNGameGold -= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold; // 扣出元宝
-                                if (MNGameGold < 0)
+                                GameGold -= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold; // 扣出元宝
+                                if (GameGold < 0)
                                 {
-                                    MNGameGold = 0;
+                                    GameGold = 0;
                                 }
                                 this.GameGoldChanged(); // 更新元宝数量
                                 PlayObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealChrName);
@@ -324,12 +324,12 @@ namespace GameSvr.Player
                                     {
                                         UpdateSellOffInfo(1);
                                         dealOffInfo.Flag = 2; // 交易结束
-                                        PlayObject.MNGameGold += dealOffInfo.nSellGold;
+                                        PlayObject.GameGold += dealOffInfo.nSellGold;
                                         PlayObject.GameGoldChanged();
                                         PlayObject.SysMsg(string.Format(CommandHelp.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
                                         if (M2Share.GameLogGameGold)
                                         {
-                                            M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, PlayObject.MNGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.ChrName));
+                                            M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, PlayObject.GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.ChrName));
                                         }
                                     }
                                 }
@@ -411,12 +411,12 @@ namespace GameSvr.Player
                             dealOffInfo.Flag = 2; // 交易结束
                             // sSellOffItemList.Delete(I);
                             // sSellOffItemList.Add(DealOffInfo);
-                            MNGameGold += dealOffInfo.nSellGold;
+                            GameGold += dealOffInfo.nSellGold;
                             this.GameGoldChanged();
                             this.SysMsg(string.Format(CommandHelp.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
                             if (M2Share.GameLogGameGold)
                             {
-                                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, MNGameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
+                                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
                             }
                             break;
                         }
@@ -574,10 +574,10 @@ namespace GameSvr.Player
                 DealOffInfo.Flag = 0; // 标识
                 M2Share.sSellOffItemList.Add(DealOffInfo); // 增加到元宝寄售列表中
                 this.SendMsg(this, Grobal2.RM_SELLOFFEND_OK, 0, 0, 0, 0, "");
-                MNGameGold -= M2Share.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
-                if (MNGameGold < 0)
+                GameGold -= M2Share.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
+                if (GameGold < 0)
                 {
-                    MNGameGold = 0;
+                    GameGold = 0;
                 }
                 this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "[成功] 系统已经成功接受您的申请");
                 bo11 = true;

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class AllowGuildRecallCommand : Command
     {
         [ExecuteCommand]
-        public void AllowGuildRecall(PlayObject playObject)
+        public static void AllowGuildRecall(PlayObject playObject)
         {
             playObject.AllowGuildReCall = !playObject.AllowGuildReCall;
             if (playObject.AllowGuildReCall)

@@ -656,9 +656,9 @@ namespace GameSvr.Player
                         result = true;
                         if (MBoMaster)
                         {
-                            for (var i = 0; i < MMasterList.Count; i++)
+                            for (var i = 0; i < MasterList.Count; i++)
                             {
-                                if (MMasterList[i] == baseObject)
+                                if (MasterList[i] == baseObject)
                                 {
                                     result = false;
                                     break;
@@ -667,9 +667,9 @@ namespace GameSvr.Player
                         }
                         if (((PlayObject)baseObject).MBoMaster)
                         {
-                            for (var i = 0; i < ((PlayObject)baseObject).MMasterList.Count; i++)
+                            for (var i = 0; i < ((PlayObject)baseObject).MasterList.Count; i++)
                             {
-                                if (((PlayObject)baseObject).MMasterList[i] == this)
+                                if (((PlayObject)baseObject).MasterList[i] == this)
                                 {
                                     result = false;
                                     break;

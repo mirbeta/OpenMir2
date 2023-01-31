@@ -11,14 +11,14 @@ namespace GameSvr.GameCommand.Commands
     public class SetPassWordCommand : Command
     {
         [ExecuteCommand]
-        public void SetPassWord(string[] @params, PlayObject playObject)
+        public static void SetPassWord(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
                 playObject.SysMsg(M2Share.g_sNoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.MSStoragePwd == "")
+            if (playObject.StoragePwd == "")
             {
                 playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.MBoSetStoragePwd = true;
@@ -38,7 +38,7 @@ namespace GameSvr.GameCommand.Commands
     public class UnPasswWordCommand : Command
     {
         [ExecuteCommand]
-        public void UnPassWord(string[] @params, PlayObject playObject)
+        public static void UnPassWord(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -47,7 +47,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (!playObject.MBoPasswordLocked)
             {
-                playObject.MSStoragePwd = "";
+                playObject.StoragePwd = "";
                 playObject.SysMsg(M2Share.g_sOldPasswordIsClearMsg, MsgColor.Green, MsgType.Hint);
             }
             else
@@ -64,7 +64,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChgpassWordCommand : Command
     {
         [ExecuteCommand]
-        public void ChgpassWord(string[] @params, PlayObject playObject)
+        public static void ChgpassWord(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -77,7 +77,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.MBoPasswordLocked = true;
                 return;
             }
-            if (playObject.MSStoragePwd != "")
+            if (playObject.StoragePwd != "")
             {
                 playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.MBoCheckOldPwd = true;
@@ -97,7 +97,7 @@ namespace GameSvr.GameCommand.Commands
     public class UnlockStorageCommand : Command
     {
         [ExecuteCommand]
-        public void UnlockStorage(string[] @params, PlayObject playObject)
+        public static void UnlockStorage(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -110,7 +110,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.MBoPasswordLocked = true;
                 return;
             }
-            if (playObject.MSStoragePwd != "")
+            if (playObject.StoragePwd != "")
             {
                 if (!playObject.MBoUnLockStoragePwd)
                 {
@@ -137,7 +137,7 @@ namespace GameSvr.GameCommand.Commands
     public class UnLockCommand : Command
     {
         [ExecuteCommand]
-        public void UnLock(string[] @params, PlayObject playObject)
+        public static void UnLock(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -150,7 +150,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.MBoPasswordLocked = true;
                 return;
             }
-            if (playObject.MSStoragePwd != "")
+            if (playObject.StoragePwd != "")
             {
                 if (!playObject.MBoUnLockPwd)
                 {
@@ -177,7 +177,7 @@ namespace GameSvr.GameCommand.Commands
     public class LockCommand : Command
     {
         [ExecuteCommand]
-        public void Lock(string[] @params, PlayObject playObject)
+        public static void Lock(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -186,7 +186,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (!playObject.MBoPasswordLocked)
             {
-                if (playObject.MSStoragePwd != "")
+                if (playObject.StoragePwd != "")
                 {
                     playObject.MBoPasswordLocked = true;
                     playObject.BoCanGetBackItem = false;

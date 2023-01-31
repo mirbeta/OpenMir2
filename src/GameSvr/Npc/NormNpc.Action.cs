@@ -32,10 +32,10 @@ namespace GameSvr.Npc
                 {
                     nGameGold = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);
                 }
-                if (PlayObject.MNGameGold >= nGameGold)
+                if (PlayObject.GameGold >= nGameGold)
                 {
                     // 玩家的元宝数大于或等于开通所需的元宝数
-                    PlayObject.MNGameGold -= nGameGold;
+                    PlayObject.GameGold -= nGameGold;
                     PlayObject.BoYbDeal = true;
                     PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/开通寄售服务成功!!!\\ \\<返回/@main>");
                 }
@@ -400,16 +400,16 @@ namespace GameSvr.Npc
             {
                 if (nPoint > 0 && nTime > 0)
                 {
-                    PlayObject.MNIncGameGold = nPoint;
-                    PlayObject.MDwIncGameGoldTime = nTime * 1000;
-                    PlayObject.MDwIncGameGoldTick = HUtil32.GetTickCount();
-                    PlayObject.MBoIncGameGold = true;
+                    PlayObject.IncGameGold = nPoint;
+                    PlayObject.IncGameGoldTime = nTime * 1000;
+                    PlayObject.IncGameGoldTick = HUtil32.GetTickCount();
+                    PlayObject.BoIncGameGold = true;
                     return;
                 }
             }
             if (string.Compare(QuestActionInfo.sParam1, "STOP", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                PlayObject.MBoIncGameGold = false;
+                PlayObject.BoIncGameGold = false;
                 return;
             }
             ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_AUTOADDGAMEGOLD);
@@ -441,7 +441,7 @@ namespace GameSvr.Npc
         /// <summary>
         /// 增加挂机
         /// </summary>
-        private void ActionOfOffLine(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfOffLine(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
             PlayObject.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
@@ -465,16 +465,16 @@ namespace GameSvr.Npc
             {
                 if (nPoint > 0 && nTime > 0)
                 {
-                    PlayObject.MNDecGameGold = nPoint;
-                    PlayObject.MDwDecGameGoldTime = nTime * 1000;
-                    PlayObject.MDwDecGameGoldTick = 0;
-                    PlayObject.MBoDecGameGold = true;
+                    PlayObject.DecGameGold = nPoint;
+                    PlayObject.DecGameGoldTime = nTime * 1000;
+                    PlayObject.DecGameGoldTick = 0;
+                    PlayObject.BoDecGameGold = true;
                     return;
                 }
             }
             if (string.Compare(QuestActionInfo.sParam1, "STOP", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                PlayObject.MBoDecGameGold = false;
+                PlayObject.BoDecGameGold = false;
                 return;
             }
             ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_AUTOSUBGAMEGOLD);
@@ -703,7 +703,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfClearMapMon(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfClearMapMon(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             IList<BaseObject> MonList = new List<BaseObject>();
             var monsterCount = M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), MonList);
@@ -792,7 +792,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGameGold(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var nOldGameGold = PlayObject.MNGameGold;
+            var nOldGameGold = PlayObject.GameGold;
             var nGameGold = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nGameGold < 0)
             {
@@ -805,23 +805,23 @@ namespace GameSvr.Npc
                 case '=':
                     if (nGameGold >= 0)
                     {
-                        PlayObject.MNGameGold = nGameGold;
+                        PlayObject.GameGold = nGameGold;
                     }
                     break;
                 case '-':
-                    nGameGold = HUtil32._MAX(0, PlayObject.MNGameGold - nGameGold);
-                    PlayObject.MNGameGold = nGameGold;
+                    nGameGold = HUtil32._MAX(0, PlayObject.GameGold - nGameGold);
+                    PlayObject.GameGold = nGameGold;
                     break;
                 case '+':
-                    nGameGold = HUtil32._MAX(0, PlayObject.MNGameGold + nGameGold);
-                    PlayObject.MNGameGold = nGameGold;
+                    nGameGold = HUtil32._MAX(0, PlayObject.GameGold + nGameGold);
+                    PlayObject.GameGold = nGameGold;
                     break;
             }
             if (M2Share.GameLogGameGold)
             {
                 M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, ChrName));
             }
-            if (nOldGameGold != PlayObject.MNGameGold)
+            if (nOldGameGold != PlayObject.GameGold)
             {
                 PlayObject.GameGoldChanged();
             }
@@ -829,7 +829,7 @@ namespace GameSvr.Npc
 
         private void ActionOfGamePoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            var nOldGamePoint = PlayObject.MNGamePoint;
+            var nOldGamePoint = PlayObject.GamePoint;
             var nGamePoint = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nGamePoint < 0)
             {
@@ -842,23 +842,23 @@ namespace GameSvr.Npc
                 case '=':
                     if (nGamePoint >= 0)
                     {
-                        PlayObject.MNGamePoint = nGamePoint;
+                        PlayObject.GamePoint = nGamePoint;
                     }
                     break;
                 case '-':
-                    nGamePoint = HUtil32._MAX(0, PlayObject.MNGamePoint - nGamePoint);
-                    PlayObject.MNGamePoint = nGamePoint;
+                    nGamePoint = HUtil32._MAX(0, PlayObject.GamePoint - nGamePoint);
+                    PlayObject.GamePoint = nGamePoint;
                     break;
                 case '+':
-                    nGamePoint = HUtil32._MAX(0, PlayObject.MNGamePoint + nGamePoint);
-                    PlayObject.MNGamePoint = nGamePoint;
+                    nGamePoint = HUtil32._MAX(0, PlayObject.GamePoint + nGamePoint);
+                    PlayObject.GamePoint = nGamePoint;
                     break;
             }
             if (M2Share.GameLogGamePoint)
             {
                 M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEPOINT, Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, ChrName));
             }
-            if (nOldGamePoint != PlayObject.MNGamePoint)
+            if (nOldGamePoint != PlayObject.GamePoint)
             {
                 PlayObject.GameGoldChanged();
             }
@@ -884,7 +884,7 @@ namespace GameSvr.Npc
             var PoseHuman = PlayObject.GetPoseCreate();
             if (PoseHuman != null && PoseHuman.Race == ActorRace.Play && ((PlayObject)PoseHuman).Gender != PlayObject.Gender)
             {
-                PlayObject.MSMasterName = PoseHuman.ChrName;
+                PlayObject.MasterName = PoseHuman.ChrName;
                 PlayObject.RefShowName();
                 PoseHuman.RefShowName();
             }
@@ -932,7 +932,7 @@ namespace GameSvr.Npc
                     if (PlayObject.MyGuild != null)
                     {
                         PlayObject.MyGuild.SendGuildMsg(sMsg);
-                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName + "/" + PlayObject.ChrName + "/" + sMsg);
+                        World.WorldServer.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName + "/" + PlayObject.ChrName + "/" + sMsg);
                     }
                     break;
                 default:
@@ -941,7 +941,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfMapTing(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfMapTing(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
 
         }
@@ -1068,7 +1068,7 @@ namespace GameSvr.Npc
 
         private void ActionOfMaster(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            if (PlayObject.MSMasterName != "")
+            if (PlayObject.MasterName != "")
             {
                 return;
             }
@@ -1103,8 +1103,8 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.MBoStartMaster && PoseHuman.MBoStartMaster)
                 {
-                    PlayObject.MPoseBaseObject = PoseHuman;
-                    PoseHuman.MPoseBaseObject = PlayObject;
+                    PlayObject.PoseBaseObject = PoseHuman;
+                    PoseHuman.PoseBaseObject = PlayObject;
                     GotoLable(PlayObject, "@WateMaster", false);
                     GotoLable(PoseHuman, "@RevMaster", false);
                 }
@@ -1114,7 +1114,7 @@ namespace GameSvr.Npc
             {
                 if (string.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (PlayObject.MPoseBaseObject == PoseHuman && PoseHuman.MPoseBaseObject == PlayObject)
+                    if (PlayObject.PoseBaseObject == PoseHuman && PoseHuman.PoseBaseObject == PlayObject)
                     {
                         if (PlayObject.MBoStartMaster && PoseHuman.MBoStartMaster)
                         {
@@ -1122,13 +1122,13 @@ namespace GameSvr.Npc
                             GotoLable(PoseHuman, "@EndMaster", false);
                             PlayObject.MBoStartMaster = false;
                             PoseHuman.MBoStartMaster = false;
-                            if (PlayObject.MSMasterName == "")
+                            if (PlayObject.MasterName == "")
                             {
-                                PlayObject.MSMasterName = PoseHuman.ChrName;
+                                PlayObject.MasterName = PoseHuman.ChrName;
                                 PlayObject.MBoMaster = true;
                             }
-                            PlayObject.MMasterList.Add(PoseHuman);
-                            PoseHuman.MSMasterName = PlayObject.ChrName;
+                            PlayObject.MasterList.Add(PoseHuman);
+                            PoseHuman.MasterName = PlayObject.ChrName;
                             PoseHuman.MBoMaster = false;
                             PlayObject.RefShowName();
                             PoseHuman.RefShowName();
@@ -1219,7 +1219,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfRecallGroupMembers(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfRecallGroupMembers(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
         }
 
@@ -1242,10 +1242,10 @@ namespace GameSvr.Npc
             switch (nWhere)
             {
                 case 0:
-                    PlayObject.MBoSendMsgFlag = boFlag;
+                    PlayObject.BoSendMsgFlag = boFlag;
                     break;
                 case 1:
-                    PlayObject.MBoChangeItemNameFlag = boFlag;
+                    PlayObject.BoChangeItemNameFlag = boFlag;
                     break;
                 default:
                     ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SETSCRIPTFLAG);
@@ -1619,7 +1619,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGuildRecall(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfGuildRecall(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             if (PlayObject.MyGuild != null)
             {
@@ -1627,7 +1627,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGroupAddList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfGroupAddList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string ffile = QuestActionInfo.sParam1;
             if (PlayObject.GroupOwner != null)
@@ -1640,7 +1640,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfClearList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfClearList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var ffile = Path.Combine(M2Share.BasePath, M2Share.Config.EnvirDir, QuestActionInfo.sParam1);
             if (File.Exists(ffile))
@@ -1651,7 +1651,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfGroupRecall(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfGroupRecall(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             if (PlayObject.GroupOwner != null)
             {
@@ -2078,7 +2078,7 @@ namespace GameSvr.Npc
         private void ActionOfUnMaster(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sMsg;
-            if (PlayObject.MSMasterName == "")
+            if (PlayObject.MasterName == "")
             {
                 GotoLable(PlayObject, "@ExeMasterFail", false);
                 return;
@@ -2099,14 +2099,14 @@ namespace GameSvr.Npc
                     }
                     if (PoseHuman.GetPoseCreate() == PlayObject)
                     {
-                        if (PlayObject.MSMasterName == PoseHuman.ChrName)
+                        if (PlayObject.MasterName == PoseHuman.ChrName)
                         {
                             if (PlayObject.MBoMaster)
                             {
                                 GotoLable(PlayObject, "@UnIsMaster", false);
                                 return;
                             }
-                            if (PlayObject.MSMasterName != PoseHuman.ChrName)
+                            if (PlayObject.MasterName != PoseHuman.ChrName)
                             {
                                 GotoLable(PlayObject, "@UnMasterError", false);
                                 return;
@@ -2130,8 +2130,8 @@ namespace GameSvr.Npc
                         {
                             sMsg = string.Format(M2Share.g_sNPCSayUnMasterOKMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
-                            PlayObject.MSMasterName = "";
-                            PoseHuman.MSMasterName = "";
+                            PlayObject.MasterName = "";
+                            PoseHuman.MasterName = "";
                             PlayObject.MBoStartUnMaster = false;
                             PoseHuman.MBoStartUnMaster = false;
                             PlayObject.RefShowName();
@@ -2152,20 +2152,20 @@ namespace GameSvr.Npc
                     // 强行出师
                     if (string.Compare(QuestActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        sMsg = string.Format(M2Share.g_sNPCSayForceUnMasterMsg, ChrName, PlayObject.ChrName, PlayObject.MSMasterName);
+                        sMsg = string.Format(M2Share.g_sNPCSayForceUnMasterMsg, ChrName, PlayObject.ChrName, PlayObject.MasterName);
                         M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
-                        PoseHuman = M2Share.WorldEngine.GetPlayObject(PlayObject.MSMasterName);
+                        PoseHuman = M2Share.WorldEngine.GetPlayObject(PlayObject.MasterName);
                         if (PoseHuman != null)
                         {
-                            PoseHuman.MSMasterName = "";
+                            PoseHuman.MasterName = "";
                             PoseHuman.RefShowName();
                         }
                         else
                         {
-                            M2Share.g_UnForceMasterList.Add(PlayObject.MSMasterName);
+                            M2Share.g_UnForceMasterList.Add(PlayObject.MasterName);
                             M2Share.SaveUnForceMasterList();
                         }
-                        PlayObject.MSMasterName = "";
+                        PlayObject.MasterName = "";
                         GotoLable(PlayObject, "@UnMasterEnd", false);
                         PlayObject.RefShowName();
                     }
@@ -2542,36 +2542,36 @@ namespace GameSvr.Npc
 
         private void ActionOfSetMemberLevel(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            int nLevel = HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
+            var nLevel = (byte)HUtil32.StrToInt(QuestActionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SETMEMBERLEVEL);
                 return;
             }
-            char cMethod = QuestActionInfo.sParam1[0];
+            var cMethod = QuestActionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.MNMemberLevel = nLevel;
+                    PlayObject.MemberLevel = nLevel;
                     break;
                 case '-':
-                    PlayObject.MNMemberLevel -= nLevel;
-                    if (PlayObject.MNMemberLevel < 0)
+                    PlayObject.MemberLevel -= nLevel;
+                    if (PlayObject.MemberLevel <= 0)
                     {
-                        PlayObject.MNMemberLevel = 0;
+                        PlayObject.MemberLevel = 0;
                     }
                     break;
                 case '+':
-                    PlayObject.MNMemberLevel += nLevel;
-                    if (PlayObject.MNMemberLevel > 65535)
+                    PlayObject.MemberLevel += nLevel;
+                    if (PlayObject.MemberLevel >= byte.MaxValue)
                     {
-                        PlayObject.MNMemberLevel = 65535;
+                        PlayObject.MemberLevel = 255;
                     }
                     break;
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sChangeMemberLevelMsg, new[] { PlayObject.MNMemberLevel }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sChangeMemberLevelMsg, new[] { PlayObject.MemberLevel }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2587,26 +2587,26 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    PlayObject.MNMemberType = nType;
+                    PlayObject.MemberType = nType;
                     break;
                 case '-':
-                    PlayObject.MNMemberType -= nType;
-                    if (PlayObject.MNMemberType < 0)
+                    PlayObject.MemberType -= nType;
+                    if (PlayObject.MemberType < 0)
                     {
-                        PlayObject.MNMemberType = 0;
+                        PlayObject.MemberType = 0;
                     }
                     break;
                 case '+':
-                    PlayObject.MNMemberType += nType;
-                    if (PlayObject.MNMemberType > 65535)
+                    PlayObject.MemberType += nType;
+                    if (PlayObject.MemberType > 65535)
                     {
-                        PlayObject.MNMemberType = 65535;
+                        PlayObject.MemberType = 65535;
                     }
                     break;
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sChangeMemberTypeMsg, new[] { PlayObject.MNMemberType }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(M2Share.g_sChangeMemberTypeMsg, new[] { PlayObject.MemberType }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3012,7 +3012,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfKick(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfKick(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.BoKickFlag = true;
         }
@@ -3073,19 +3073,19 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfDelMarry(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfDelMarry(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.MSDearName = "";
             PlayObject.RefShowName();
         }
 
-        private void ActionOfDelMaster(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfDelMaster(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            PlayObject.MSMasterName = "";
+            PlayObject.MasterName = "";
             PlayObject.RefShowName();
         }
 
-        private void ActionOfRestBonusPoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfRestBonusPoint(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var nTotleUsePoint = PlayObject.BonusAbil.DC + PlayObject.BonusAbil.MC + PlayObject.BonusAbil.SC + PlayObject.BonusAbil.AC + PlayObject.BonusAbil.MAC + PlayObject.BonusAbil.HP + PlayObject.BonusAbil.MP + PlayObject.BonusAbil.Hit + PlayObject.BonusAbil.Speed + PlayObject.BonusAbil.Reserved;
             PlayObject.BonusPoint += nTotleUsePoint;
@@ -3094,7 +3094,7 @@ namespace GameSvr.Npc
             PlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
         }
 
-        private void ActionOfRestReNewLevel(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfRestReNewLevel(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.MBtReLevel = 0;
             PlayObject.HasLevelUp(0);
@@ -3113,16 +3113,16 @@ namespace GameSvr.Npc
             PlayObject.RefNameColor();
         }
 
-        private void ActionOfClearPassword(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfClearPassword(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            PlayObject.MSStoragePwd = "";
+            PlayObject.StoragePwd = "";
             PlayObject.MBoPasswordLocked = false;
         }
 
         // 挂机的
         // RECALLMOB 怪物名称 等级 叛变时间 变色(0,1) 固定颜色(1 - 7)
         // 变色为0 时固定颜色才起作用
-        private void ActionOfRecallmob(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfRecallmob(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             BaseObject Mon;
             if (QuestActionInfo.nParam3 <= 1)
@@ -3187,7 +3187,7 @@ namespace GameSvr.Npc
             PlayObject.FeatureChanged();
         }
 
-        private void ActionOfKillSlave(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfKillSlave(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             BaseObject Slave;
             for (var i = 0; i < PlayObject.SlaveList.Count; i++)
@@ -3476,7 +3476,7 @@ namespace GameSvr.Npc
                                 MapItem = new MapItem();
                                 MapItem.UserItem = new UserItem(UserItem);
                                 MapItem.Name = StdItem.Name;
-                                var NameCorlr = "@" + M2Share.CustomItemMgr.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
+                                var NameCorlr = "@" + CustomItem.GetItemAddValuePointColor(UserItem); // 取自定义物品名称
                                 var sUserItemName = "";
                                 if (UserItem.Desc[13] == 1)
                                 {
@@ -3528,7 +3528,7 @@ namespace GameSvr.Npc
             }
         }
 
-        public bool ActionOfTHROWITEM_RobotGetDropPosition(Envirnoment neEnvir, int nOrgX, int nOrgY, int nRange, ref int nDX, ref int nDY)
+        public static bool ActionOfTHROWITEM_RobotGetDropPosition(Envirnoment neEnvir, int nOrgX, int nOrgY, int nRange, ref int nDX, ref int nDY)
         {
             bool result;
             int nItemCount = 0;

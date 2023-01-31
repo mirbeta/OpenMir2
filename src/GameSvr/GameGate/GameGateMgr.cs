@@ -195,7 +195,7 @@ namespace GameSvr.GameGate
             }
         }
 
-        public void CloseErrGate(Socket Socket)
+        public static void CloseErrGate(Socket Socket)
         {
             if (Socket.Connected)
             {
@@ -247,7 +247,7 @@ namespace GameSvr.GameGate
             }
         }
 
-        public void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx)
+        public static void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx)
         {
             //todo 
             //var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
@@ -314,7 +314,7 @@ namespace GameSvr.GameGate
             }
         }
 
-        private void SendGateTestMsg(int nIndex)
+        private static void SendGateTestMsg(int nIndex)
         {
             var defMsg = new CommandPacket();
             var msgHdr = new ServerMessage

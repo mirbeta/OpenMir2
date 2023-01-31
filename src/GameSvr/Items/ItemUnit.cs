@@ -60,7 +60,7 @@ namespace GameSvr.Items
         public ushort ItemSet;
         public string Reference;
 
-        private int GetUpgrade(int count, int ran)
+        private static int GetUpgrade(int count, int ran)
         {
             var result = 0;
             for (var i = 0; i < count; i++)
@@ -77,7 +77,7 @@ namespace GameSvr.Items
             return result;
         }
 
-        public int GetUpgrade2(int x, int a)
+        public static int GetUpgrade2(int x, int a)
         {
             int iProb;
             var result = 0;
@@ -1059,7 +1059,7 @@ namespace GameSvr.Items
             return UCount;
         }
 
-        public int RealAttackSpeed(short wAtkSpd)
+        public static int RealAttackSpeed(short wAtkSpd)
         {
             int result;
             if (wAtkSpd <= 10)
@@ -1073,7 +1073,7 @@ namespace GameSvr.Items
             return result;
         }
 
-        private short NaturalAttackSpeed(int iAtkSpd)
+        private static short NaturalAttackSpeed(int iAtkSpd)
         {
             short result;
             if (iAtkSpd <= 0)

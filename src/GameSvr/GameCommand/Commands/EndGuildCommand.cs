@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class EndGuildCommand : Command
     {
         [ExecuteCommand]
-        public void EndGuild(PlayObject PlayObject)
+        public static void EndGuild(PlayObject PlayObject)
         {
             if (PlayObject.MyGuild != null)
             {
@@ -19,7 +19,7 @@ namespace GameSvr.GameCommand.Commands
                 {
                     if (PlayObject.MyGuild.IsMember(PlayObject.ChrName) && PlayObject.MyGuild.DelMember(PlayObject.ChrName))
                     {
-                        M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName);
+                        World.WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName);
                         PlayObject.MyGuild = null;
                         PlayObject.RefRankInfo(0, "");
                         PlayObject.RefShowName();

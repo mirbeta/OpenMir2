@@ -211,7 +211,7 @@ namespace GameSvr.Services
             }
         }
 
-        private void QueryAccountExpired(string sData)
+        private static void QueryAccountExpired(string sData)
         {
             var account = string.Empty;
             var certstr = HUtil32.GetValidStr3(sData, ref account, '/');
@@ -381,7 +381,7 @@ namespace GameSvr.Services
             return result;
         }
 
-        private void SetTotalHumanCount(string sData)
+        private static void SetTotalHumanCount(string sData)
         {
             M2Share.g_nTotalHumCount = HUtil32.StrToInt(sData, 0);
         }
@@ -406,7 +406,7 @@ namespace GameSvr.Services
             }
         }
 
-        private void GetServerLoad(string sData)
+        private static void GetServerLoad(string sData)
         {
             /*var sC = string.Empty;
             var s10 = string.Empty;

@@ -51,7 +51,7 @@ namespace GameSvr.Services
         }
 
 
-        private void GetGameTime()
+        private static void GetGameTime()
         {
             switch (DateTime.Now.Hour)
             {
@@ -323,7 +323,7 @@ namespace GameSvr.Services
             }
             if (!PlayerDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref queryId, LoadUser.SessionID))
             {
-                M2Share.GateMgr.SendOutConnectMsg(LoadUser.GateIdx, LoadUser.SocketId, LoadUser.GSocketIdx);
+                GameGate.GameGateMgr.SendOutConnectMsg(LoadUser.GateIdx, LoadUser.SocketId, LoadUser.GSocketIdx);
             }
             else
             {
@@ -420,7 +420,7 @@ namespace GameSvr.Services
             }
         }
 
-        private bool ChangeUserGoldInDB(GoldChangeInfo GoldChangeInfo)
+        private static bool ChangeUserGoldInDB(GoldChangeInfo GoldChangeInfo)
         {
             var result = false;
             /*if (PlayerDataService.LoadHumRcdFromDB("1", GoldChangeInfo.sGetGoldUser, "1", ref HumanRcd, 1))
@@ -438,7 +438,7 @@ namespace GameSvr.Services
             return result;
         }
 
-        private void DisPose(object obj)
+        private static void DisPose(object obj)
         {
         }
     }

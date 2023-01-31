@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeObModeCommand : Command
     {
         [ExecuteCommand]
-        public void ChangeObMode(PlayObject PlayObject)
+        public static void ChangeObMode(PlayObject PlayObject)
         {
             var boFlag = !PlayObject.ObMode;
             if (boFlag)

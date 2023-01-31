@@ -1163,7 +1163,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public byte GetBackDir(int nDir)
+        public static byte GetBackDir(int nDir)
         {
             byte result = 0;
             switch (nDir)
@@ -1913,7 +1913,7 @@ namespace GameSvr.Actor
             return baseObject.GetNameColor();
         }
 
-        public int GetLevelExp(int nLevel)
+        public static int GetLevelExp(int nLevel)
         {
             int result;
             if (nLevel <= Grobal2.MaxLevel)
@@ -2267,7 +2267,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        public bool GetMapBaseObjects(Envirnoment envir, int nX, int nY, int nRage, IList<BaseObject> rList)
+        public static bool GetMapBaseObjects(Envirnoment envir, int nX, int nY, int nRage, IList<BaseObject> rList)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::GetMapBaseObjects";
             if (rList == null)
@@ -2740,8 +2740,8 @@ namespace GameSvr.Actor
                 OnEnvirnomentChanged();
                 if (Race == ActorRace.Play) // 复位泡点，及金币，时间
                 {
-                    ((PlayObject)this).MDwIncGamePointTick = HUtil32.GetTickCount();
-                    ((PlayObject)this).MDwIncGameGoldTick = HUtil32.GetTickCount();
+                    ((PlayObject)this).IncGamePointTick = HUtil32.GetTickCount();
+                    ((PlayObject)this).IncGameGoldTick = HUtil32.GetTickCount();
                     ((PlayObject)this).MDwAutoGetExpTick = HUtil32.GetTickCount();
                 }
                 if (Envir.Flag.boFight3Zone && (Envir.Flag.boFight3Zone != oldEnvir.Flag.boFight3Zone))
@@ -3048,7 +3048,7 @@ namespace GameSvr.Actor
             }
         }
 
-        internal bool IsGoodKilling(BaseObject cert)
+        internal static bool IsGoodKilling(BaseObject cert)
         {
             if (cert.Race == ActorRace.Play)
             {
@@ -4425,12 +4425,12 @@ namespace GameSvr.Actor
             //}
         }
 
-        protected void Dispose(object obj)
+        protected static void Dispose(object obj)
         {
             obj = null;
         }
 
-        protected string Format(string str, params object[] par)
+        protected static string Format(string str, params object[] par)
         {
             return string.Format(str, par);
         }

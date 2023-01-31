@@ -57,7 +57,7 @@ namespace GameSvr.Player
             }
         }
 
-        private void ClientQueryUserSet(ProcessMessage processMsg)
+        private static void ClientQueryUserSet(ProcessMessage processMsg)
         {
 
         }
@@ -96,7 +96,7 @@ namespace GameSvr.Player
 
                     if (i == Grobal2.U_DRESS)
                     {
-                        playObject.ChangeItemWithLevel(ref clientItem, playObject.Abil.Level);
+                        ChangeItemWithLevel(ref clientItem, playObject.Abil.Level);
                     }
 
                     playObject.ChangeItemByJob(ref clientItem, playObject.Abil.Level);
@@ -580,7 +580,7 @@ namespace GameSvr.Player
             }
         }
 
-        private string ClientUseItemsGetUnbindItemName(int nShape)
+        private static string ClientUseItemsGetUnbindItemName(int nShape)
         {
             if (M2Share.g_UnbindList.TryGetValue(nShape, out var result))
             {
@@ -1316,7 +1316,7 @@ namespace GameSvr.Player
                                 if (playObject.MyGuild == null && MyGuild.m_RankList.Count < 400)
                                 {
                                     MyGuild.AddMember(playObject);
-                                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                                     playObject.MyGuild = MyGuild;
                                     playObject.GuildRankName = MyGuild.GetRankName(playObject, ref playObject.GuildRankNo);
                                     playObject.RefShowName();
@@ -1377,7 +1377,7 @@ namespace GameSvr.Player
                                 playObject.RefRankInfo(0, "");
                                 playObject.RefShowName();
                             }
-                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                            WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                             nC = 0;
                         }
                         else
@@ -1392,7 +1392,7 @@ namespace GameSvr.Player
                         if (MyGuild.CancelGuld(sHumName))
                         {
                             M2Share.GuildMgr.DelGuild(s14);
-                            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_206, M2Share.ServerIndex, s14);
+                            WorldServer.SendServerGroupMsg(Grobal2.SS_206, M2Share.ServerIndex, s14);
                             MyGuild = null;
                             RefRankInfo(0, "");
                             RefShowName();
@@ -1430,7 +1430,7 @@ namespace GameSvr.Player
                 MyGuild.NoticeList.Add(sC);
             }
             MyGuild.SaveGuildInfoFile();
-            M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+            WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
             ClientOpenGuildDlg();
         }
 
@@ -1443,7 +1443,7 @@ namespace GameSvr.Player
             var nC = MyGuild.UpdateRank(sRankInfo);
             if (nC == 0)
             {
-                M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                 ClientGuildMemberList();
             }
             else
@@ -1479,8 +1479,8 @@ namespace GameSvr.Player
                                     posePlay.MyGuild.SendGuildMsg(MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
                                     MyGuild.RefMemberName();
                                     posePlay.MyGuild.RefMemberName();
-                                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
-                                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, posePlay.MyGuild.sGuildName);
+                                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, posePlay.MyGuild.sGuildName);
                                     n8 = 0;
                                 }
                                 else
@@ -1533,8 +1533,8 @@ namespace GameSvr.Player
                     guild.SendGuildMsg(MyGuild.sGuildName + " 行会解除了与您行会的联盟!!!");
                     MyGuild.RefMemberName();
                     guild.RefMemberName();
-                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
-                    M2Share.WorldEngine.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, guild.sGuildName);
+                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, guild.sGuildName);
                     n10 = 0;
                 }
                 else

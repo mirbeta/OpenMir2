@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
     public class CreateAIUserCommand : Command
     {
         [ExecuteCommand]
-        public void AddRebotPlay(string[] @params, PlayObject PlayObject)
+        public static void AddRebotPlay(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {
@@ -26,7 +26,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 short nX = 0;
                 short nY = 0;
-                var sMapName = M2Share.WorldEngine.GetHomeInfo(ref nX, ref nY);
+                var sMapName = World.WorldServer.GetHomeInfo(ref nX, ref nY);
                 M2Share.WorldEngine.AddAiLogon(new RoBotLogon()
                 {
                     sChrName = "玩家" + RandomNumber.GetInstance().Random() + "号",
@@ -42,7 +42,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (userCount > 0)
             {
-                M2Share.WorldEngine.StartAi();
+                World.WorldServer.StartAi();
             }
         }
     }

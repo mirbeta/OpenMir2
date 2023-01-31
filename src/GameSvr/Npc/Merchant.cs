@@ -177,7 +177,7 @@ namespace GameSvr.Npc
                 nPrice = nPrice
             };
             ItemPriceList.Add(itemPrice);
-            M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
+            DataSource.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
         }
 
         private void CheckItemPrice(ushort nIndex)
@@ -231,14 +231,14 @@ namespace GameSvr.Npc
                             {
                                 CheckItemPrice(nIndex);
                                 RefillGoodsItems(ref refillList, Goods.ItemName, Goods.Count - nRefillCount);
-                                M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
-                                M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
+                                DataSource.LocalDB.SaveGoodRecord(this, m_sScript + '-' + MapName);
+                                DataSource.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
                             }
                             if (Goods.Count < nRefillCount)
                             {
                                 RefillDelReFillItem(ref refillList, nRefillCount - Goods.Count);
-                                M2Share.LocalDb.SaveGoodRecord(this, m_sScript + '-' + MapName);
-                                M2Share.LocalDb.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
+                                DataSource.LocalDB.SaveGoodRecord(this, m_sScript + '-' + MapName);
+                                DataSource.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
                             }
                         }
                     }
@@ -1017,7 +1017,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void UserSelectItemPrices(PlayObject User)
+        private static void UserSelectItemPrices(PlayObject User)
         {
 
         }
@@ -1059,16 +1059,16 @@ namespace GameSvr.Npc
         public void LoadNPCData()
         {
             var sFile = m_sScript + '-' + MapName;
-            M2Share.LocalDb.LoadGoodRecord(this, sFile);
-            M2Share.LocalDb.LoadGoodPriceRecord(this, sFile);
+            DataSource.LocalDB.LoadGoodRecord(this, sFile);
+            DataSource.LocalDB.LoadGoodPriceRecord(this, sFile);
             LoadUpgradeList();
         }
 
         private void SaveNPCData()
         {
             var sFile = m_sScript + '-' + MapName;
-            M2Share.LocalDb.SaveGoodRecord(this, sFile);
-            M2Share.LocalDb.SaveGoodPriceRecord(this, sFile);
+            DataSource.LocalDB.SaveGoodRecord(this, sFile);
+            DataSource.LocalDB.SaveGoodPriceRecord(this, sFile);
         }
 
         /// <summary>
@@ -1361,12 +1361,12 @@ namespace GameSvr.Npc
             }
         }
 
-        private int GetSellItemPrice(double nPrice)
+        private static int GetSellItemPrice(double nPrice)
         {
             return HUtil32.Round(nPrice / 2.0);
         }
 
-        private bool ClientSellItem_sub_4A1C84(UserItem UserItem)
+        private static bool ClientSellItem_sub_4A1C84(UserItem UserItem)
         {
             var result = true;
             var StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
@@ -1715,7 +1715,7 @@ namespace GameSvr.Npc
             UpgradeWeaponList.Clear();
             try
             {
-                M2Share.CommonDb.LoadUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
+                DataSource.CommonDB.LoadUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
             }
             catch
             {
@@ -1727,7 +1727,7 @@ namespace GameSvr.Npc
         {
             try
             {
-                M2Share.CommonDb.SaveUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
+                DataSource.CommonDB.SaveUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
             }
             catch
             {
@@ -1740,7 +1740,7 @@ namespace GameSvr.Npc
         /// </summary>
         /// <param name="PlayObject"></param>
         /// <param name="sMsg"></param>
-        protected void SetOffLineMsg(PlayObject PlayObject, string sMsg)
+        protected static void SetOffLineMsg(PlayObject PlayObject, string sMsg)
         {
             PlayObject.MsOffLineLeaveword = sMsg;
         }
@@ -1788,11 +1788,11 @@ namespace GameSvr.Npc
 
         private void ChangeUseItemName(PlayObject PlayObject, string sLabel, string sItemName)
         {
-            if (!PlayObject.MBoChangeItemNameFlag)
+            if (!PlayObject.BoChangeItemNameFlag)
             {
                 return;
             }
-            PlayObject.MBoChangeItemNameFlag = false;
+            PlayObject.BoChangeItemNameFlag = false;
             var sWhere = sLabel.Substring(ScriptConst.sUSEITEMNAME.Length, sLabel.Length - ScriptConst.sUSEITEMNAME.Length);
             var btWhere = (byte)HUtil32.StrToInt(sWhere, -1);
             if (btWhere >= 0 && btWhere <= PlayObject.UseItems.Length)
@@ -1824,7 +1824,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void DisPose(object obj)
+        private static void DisPose(object obj)
         {
         }
     }

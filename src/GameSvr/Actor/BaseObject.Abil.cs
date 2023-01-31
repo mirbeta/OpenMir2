@@ -172,7 +172,7 @@ namespace GameSvr.Actor
             HitDouble = 0;
         }
 
-        protected void ChangeItemWithLevel(ref ClientItem citem, int level)
+        protected static void ChangeItemWithLevel(ref ClientItem citem, int level)
         {
             if (citem.Item.Shape == ItemShapeConst.DRESS_SHAPE_WING && (citem.Item.StdMode == ItemShapeConst.DRESS_STDMODE_MAN || citem.Item.StdMode == ItemShapeConst.DRESS_STDMODE_WOMAN))
             {

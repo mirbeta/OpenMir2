@@ -638,7 +638,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public byte ActThink_RunPosAttack_GetNextRunPos(byte btDir, bool boTurn)
+        public static byte ActThink_RunPosAttack_GetNextRunPos(byte btDir, bool boTurn)
         {
             byte result = 0;
             if (boTurn)

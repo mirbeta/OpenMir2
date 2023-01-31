@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeAttackModeCommand : Command
     {
         [ExecuteCommand]
-        public void ChangeAttackMode(PlayObject PlayObject)
+        public static void ChangeAttackMode(PlayObject PlayObject)
         {
             if (PlayObject.AttatckMode >= AttackMode.HAM_PKATTACK)
             {

@@ -2068,7 +2068,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$SFNAME":// 师傅名 
-                    sValue = PlayObject.MSMasterName;
+                    sValue = PlayObject.MasterName;
                     nDataType = 0;
                     result = true;
                     return result;
@@ -2273,12 +2273,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$GAMEGOLD":
-                    nValue = PlayObject.MNGameGold;
+                    nValue = PlayObject.GameGold;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$GAMEPOINT":
-                    nValue = PlayObject.MNGamePoint;
+                    nValue = PlayObject.GamePoint;
                     nDataType = 1;
                     result = true;
                     return result;
@@ -2471,7 +2471,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool SetMovDataValNameValue(PlayObject PlayObject, string sVarName, string sValue, int nValue, int nDataType)
+        private static bool SetMovDataValNameValue(PlayObject PlayObject, string sVarName, string sValue, int nValue, int nDataType)
         {
             bool result = false;
             var n100 = M2Share.GetValNameNo(sVarName);
@@ -2656,7 +2656,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GetMovDataValNameValue(PlayObject PlayObject, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
+        private static bool GetMovDataValNameValue(PlayObject PlayObject, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
             bool result = false;
             nValue = -1;
@@ -2789,7 +2789,7 @@ namespace GameSvr.Npc
             return boVarFound;
         }
 
-        private int GetMovDataType(QuestActionInfo QuestActionInfo)
+        private static int GetMovDataType(QuestActionInfo QuestActionInfo)
         {
             string sParam1 = string.Empty;
             string sParam2 = string.Empty;

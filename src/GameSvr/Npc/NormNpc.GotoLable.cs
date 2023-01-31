@@ -115,7 +115,7 @@ namespace GameSvr.Npc
             GotoLable(PlayObject, sLabel, boExtJmp, string.Empty);
         }
 
-        private bool CheckGotoLableQuestStatus(PlayObject PlayObject, TScript ScriptInfo)
+        private static bool CheckGotoLableQuestStatus(PlayObject PlayObject, TScript ScriptInfo)
         {
             var result = true;
             if (!ScriptInfo.boQuest)
@@ -144,7 +144,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private UserItem CheckGotoLableItemW(PlayObject PlayObject, string sItemType, int nParam)
+        private static UserItem CheckGotoLableItemW(PlayObject PlayObject, string sItemType, int nParam)
         {
             UserItem result = null;
             int nCount = 0;
@@ -236,7 +236,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool CheckGotoLableStringList(string sHumName, string sListFileName)
+        private static bool CheckGotoLableStringList(string sHumName, string sListFileName)
         {
             bool result = false;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
@@ -267,7 +267,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private void GotoLable_QuestCheckCondition_SetVal(PlayObject PlayObject, string sIndex, int nCount)
+        private static void GotoLable_QuestCheckCondition_SetVal(PlayObject PlayObject, string sIndex, int nCount)
         {
             var n14 = M2Share.GetValNameNo(sIndex);
             if (n14 >= 0)
@@ -299,7 +299,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private bool GotoLable_QuestCheckCondition_CheckDieMon(PlayObject PlayObject, string MonName)
+        private static bool GotoLable_QuestCheckCondition_CheckDieMon(PlayObject PlayObject, string MonName)
         {
             bool result = string.IsNullOrEmpty(MonName);
             if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.ChrName == MonName))
@@ -309,7 +309,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool GotoLable_QuestCheckCondition_CheckKillMon(PlayObject PlayObject, string MonName)
+        private static bool GotoLable_QuestCheckCondition_CheckKillMon(PlayObject PlayObject, string MonName)
         {
             bool result = string.IsNullOrEmpty(MonName);
             if ((PlayObject.TargetCret != null) && (PlayObject.TargetCret.ChrName == MonName))
@@ -319,9 +319,9 @@ namespace GameSvr.Npc
             return result;
         }
 
-        public bool GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject PlayObject, string sNumber)
+        public static bool GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject PlayObject, string sNumber)
         {
-            return PlayObject.MSRandomNo == sNumber;
+            return PlayObject.RandomNo == sNumber;
         }
 
         private bool GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject PlayObject, string ChrName, string sListFileName, string sDay, string param1, string param2)
@@ -1405,7 +1405,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private bool CheckKillMon2(PlayObject PlayObject, string sMonName)
+        private static bool CheckKillMon2(PlayObject PlayObject, string sMonName)
         {
             return true;
         }
@@ -1436,7 +1436,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void GotoLable_AddUseDateList(string sHumName, string sListFileName)
+        private static void GotoLable_AddUseDateList(string sHumName, string sListFileName)
         {
             string s10 = string.Empty;
             string sText;
@@ -1473,7 +1473,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void GotoLable_AddList(string sHumName, string sListFileName)
+        private static void GotoLable_AddList(string sHumName, string sListFileName)
         {
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
             var LoadList = new StringList();
@@ -1505,7 +1505,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void GotoLable_DELUseDateList(string sHumName, string sListFileName)
+        private static void GotoLable_DELUseDateList(string sHumName, string sListFileName)
         {
             string s10 = string.Empty;
             string sText;
@@ -1533,7 +1533,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void GotoLable_DelList(string sHumName, string sListFileName)
+        private static void GotoLable_DelList(string sHumName, string sListFileName)
         {
             bool bo15;
             sListFileName = M2Share.Config.EnvirDir + sListFileName;
@@ -1654,7 +1654,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void GotoLable_TakeWItem(PlayObject PlayObject, string sItemName, int nItemCount)
+        private static void GotoLable_TakeWItem(PlayObject PlayObject, string sItemName, int nItemCount)
         {
             string sC;
             if (HUtil32.CompareLStr(sItemName, "[NECKLACE]", 4))
@@ -2287,7 +2287,7 @@ namespace GameSvr.Npc
                         ActionOfClearMakeItems(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_SETSENDMSGFLAG:
-                        PlayObject.MBoSendMsgFlag = true;
+                        PlayObject.BoSendMsgFlag = true;
                         break;
                     case ScriptConst.nSC_UPGRADEITEMS:
                         ActionOfUpgradeItems(PlayObject, QuestActionInfo);
@@ -2409,9 +2409,9 @@ namespace GameSvr.Npc
                         while (true)
                         {
                             n2C = M2Share.RandomNumber.Random(999999);
-                            if ((n2C >= 1000) && (n2C.ToString() != PlayObject.MSRandomNo))
+                            if ((n2C >= 1000) && (n2C.ToString() != PlayObject.RandomNo))
                             {
-                                PlayObject.MSRandomNo = n2C.ToString();
+                                PlayObject.RandomNo = n2C.ToString();
                                 break;
                             }
                         }
@@ -2473,7 +2473,7 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private void ActionOfUpgradeDlgItem(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfUpgradeDlgItem(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
 
         }
@@ -2513,7 +2513,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private void ActionOfQueryValue(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
+        private static void ActionOfQueryValue(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             var btStrLabel = QuestActionInfo.nParam1;
             if (btStrLabel < 100)

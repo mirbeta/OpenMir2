@@ -11,14 +11,14 @@ namespace GameSvr.GameCommand.Commands
     public class LockLoginCommand : Command
     {
         [ExecuteCommand]
-        public void LockLogin(PlayObject PlayObject)
+        public static void LockLogin(PlayObject PlayObject)
         {
             if (!M2Share.Config.LockHumanLogin)
             {
                 PlayObject.SysMsg("本服务器还没有启用登录锁功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.MBoLockLogon && !PlayObject.MBoLockLogoned)
+            if (PlayObject.MBoLockLogon && !PlayObject.BoLockLogoned)
             {
                 PlayObject.SysMsg("您还没有打开登录锁或还没有设置锁密码!!!", MsgColor.Red, MsgType.Hint);
                 return;

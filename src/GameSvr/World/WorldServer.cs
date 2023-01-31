@@ -566,7 +566,7 @@ namespace GameSvr.World
                                 {
                                     _logger.Warn($"获取玩家数据[{userOpenInfo.ChrName}]失败.");
                                     tempList.Add(i);
-                                    M2Share.GateMgr.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
+                                    GameGate.GameGateMgr.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
                                     continue;
                                 }
                                 if (!PlayerDataService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
@@ -946,7 +946,7 @@ namespace GameSvr.World
             }
         }
 
-        private void ProcessMissions()
+        private static void ProcessMissions()
         {
 
         }
@@ -1228,7 +1228,7 @@ namespace GameSvr.World
             }
         }
 
-        public void SendServerGroupMsg(int nCode, int nServerIdx, string sMsg)
+        public static void SendServerGroupMsg(int nCode, int nServerIdx, string sMsg)
         {
             if (M2Share.ServerIndex == 0)
             {
@@ -1439,7 +1439,7 @@ namespace GameSvr.World
             }
         }
 
-        private void SendChangeServer(PlayObject playObject, byte nServerIndex)
+        private static void SendChangeServer(PlayObject playObject, byte nServerIndex)
         {
             var sIPaddr = string.Empty;
             var nPort = 0;
@@ -1509,17 +1509,17 @@ namespace GameSvr.World
             playObject.BonusPoint = humData.BonusPoint;
             playObject.MBtCreditPoint = humData.CreditPoint;
             playObject.MBtReLevel = humData.ReLevel;
-            playObject.MSMasterName = humData.MasterName;
+            playObject.MasterName = humData.MasterName;
             playObject.MBoMaster = humData.IsMaster;
             playObject.MSDearName = humData.DearName;
-            playObject.MSStoragePwd = humData.StoragePwd;
-            if (!string.IsNullOrEmpty(playObject.MSStoragePwd))
+            playObject.StoragePwd = humData.StoragePwd;
+            if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
                 playObject.MBoPasswordLocked = true;
             }
-            playObject.MNGameGold = humData.GameGold;
-            playObject.MNGamePoint = humData.GamePoint;
-            playObject.MNPayMentPoint = humData.PayMentPoint;
+            playObject.GameGold = humData.GameGold;
+            playObject.GamePoint = humData.GamePoint;
+            playObject.PayMentPoint = humData.PayMentPoint;
             playObject.PkPoint = humData.PKPoint;
             playObject.AllowGroup = humData.AllowGroup > 0;
             playObject.BtB2 = humData.btF9;
@@ -1606,7 +1606,7 @@ namespace GameSvr.World
             }
         }
 
-        private void MakeSaveRcd(PlayObject playObject, ref PlayerDataInfo humanRcd)
+        private static void MakeSaveRcd(PlayObject playObject, ref PlayerDataInfo humanRcd)
         {
             humanRcd.Data.ServerIndex = M2Share.ServerIndex;
             humanRcd.Data.ChrName = playObject.ChrName;
@@ -1640,14 +1640,14 @@ namespace GameSvr.World
             humanRcd.Data.PKPoint = playObject.PkPoint;
             humanRcd.Data.BonusAbil = playObject.BonusAbil;
             humanRcd.Data.BonusPoint = playObject.BonusPoint;
-            humanRcd.Data.StoragePwd = playObject.MSStoragePwd;
+            humanRcd.Data.StoragePwd = playObject.StoragePwd;
             humanRcd.Data.CreditPoint = playObject.MBtCreditPoint;
             humanRcd.Data.ReLevel = playObject.MBtReLevel;
-            humanRcd.Data.MasterName = playObject.MSMasterName;
+            humanRcd.Data.MasterName = playObject.MasterName;
             humanRcd.Data.IsMaster = playObject.MBoMaster;
             humanRcd.Data.DearName = playObject.MSDearName;
-            humanRcd.Data.GameGold = playObject.MNGameGold;
-            humanRcd.Data.GamePoint = playObject.MNGamePoint;
+            humanRcd.Data.GameGold = playObject.GameGold;
+            humanRcd.Data.GamePoint = playObject.GamePoint;
             humanRcd.Data.AllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
             humanRcd.Data.btF9 = playObject.BtB2;
             humanRcd.Data.AttatckMode = (byte)playObject.AttatckMode;
@@ -1753,7 +1753,7 @@ namespace GameSvr.World
             }
         }
 
-        private string GetHomeInfo(PlayJob nJob, ref short nX, ref short nY)
+        private static string GetHomeInfo(PlayJob nJob, ref short nX, ref short nY)
         {
             string result;
             int I;
@@ -1774,12 +1774,12 @@ namespace GameSvr.World
             return result;
         }
 
-        private short GetRandHomeX(PlayObject playObject)
+        private static short GetRandHomeX(PlayObject playObject)
         {
             return (short)(M2Share.RandomNumber.Random(3) + (playObject.HomeX - 2));
         }
 
-        private short GetRandHomeY(PlayObject playObject)
+        private static short GetRandHomeY(PlayObject playObject)
         {
             return (short)(M2Share.RandomNumber.Random(3) + (playObject.HomeY - 2));
         }
@@ -1818,7 +1818,7 @@ namespace GameSvr.World
             SendDoorStatus(envir, door.nX, door.nY, Grobal2.RM_DOORCLOSE, 0, door.nX, door.nY);
         }
 
-        private void SendDoorStatus(Envirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY)
+        private static void SendDoorStatus(Envirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY)
         {
             int n1C = nX - 12;
             int n24 = nX + 12;
@@ -2114,7 +2114,7 @@ namespace GameSvr.World
             }
         }
 
-        public string GetHomeInfo(ref short nX, ref short nY)
+        public static string GetHomeInfo(ref short nX, ref short nY)
         {
             string result;
             if (M2Share.StartPointList.Count > 0)
@@ -2135,7 +2135,7 @@ namespace GameSvr.World
             return result;
         }
 
-        public void StartAi()
+        public static void StartAi()
         {
 
         }
@@ -2159,7 +2159,7 @@ namespace GameSvr.World
             return false;
         }
 
-        private RobotPlayObject AddAiPlayObject(RoBotLogon ai)
+        private static RobotPlayObject AddAiPlayObject(RoBotLogon ai)
         {
             int n1C;
             int n20;

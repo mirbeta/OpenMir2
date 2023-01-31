@@ -57,7 +57,7 @@ namespace GameSvr.Maps
             m_nPostion = 0;
         }
 
-        public byte GetNextDir(byte btDir)
+        public static byte GetNextDir(byte btDir)
         {
             byte result = 0;
             switch (btDir)
@@ -254,7 +254,7 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public byte GetPoint1_GetNextDir(byte btDir)
+        public static byte GetPoint1_GetNextDir(byte btDir)
         {
             byte result = 0;
             switch (btDir)

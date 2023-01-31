@@ -30,14 +30,14 @@ namespace GameSvr.GameCommand.Commands
             {
                 if (string.Compare(sMasterName, "无", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    m_PlayObject.MSMasterName = "";
+                    m_PlayObject.MasterName = "";
                     m_PlayObject.RefShowName();
                     m_PlayObject.MBoMaster = false;
                     PlayObject.SysMsg(sHumanName + " 的师徒名清除成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    m_PlayObject.MSMasterName = sMasterName;
+                    m_PlayObject.MasterName = sMasterName;
                     if (sIsMaster != "" && sIsMaster[0] == '1')
                     {
                         m_PlayObject.MBoMaster = true;

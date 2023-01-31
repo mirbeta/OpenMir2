@@ -704,7 +704,7 @@ namespace GameSvr.Guild
             return false;
         }
 
-        private void UpdateRank_ClearRankList(ref IList<GuildRank> RankList)
+        private static void UpdateRank_ClearRankList(ref IList<GuildRank> RankList)
         {
             GuildRank GuildRank;
             for (var i = 0; i < RankList.Count; i++)

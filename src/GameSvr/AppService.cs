@@ -175,7 +175,7 @@ namespace GameSvr
                             }
                         }
                     }
-                    _mirApp.Stop();
+                    ServerBase.Stop();
                     _logger.Info("游戏服务已停止...");
                 }, _cancellationTokenSource.Token);
             }
@@ -207,7 +207,7 @@ namespace GameSvr
             else
             {
                 _logger.Info("没有可用服务器，即将关闭游戏服务器.");
-                _mirApp.Stop();
+                ServerBase.Stop();
             }
             _cancellationTokenSource?.CancelAfter(3000);
         }
@@ -232,7 +232,7 @@ namespace GameSvr
             }
         }
 
-        private void Exit()
+        private static void Exit()
         {
             if (AnsiConsole.Confirm("Do you really want to exit?"))
             {

@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     public class SbkDoorControlCommand : Command
     {
         [ExecuteCommand]
-        public void SbkDoorControl(PlayObject PlayObject)
+        public static void SbkDoorControl(PlayObject PlayObject)
         {
         }
     }

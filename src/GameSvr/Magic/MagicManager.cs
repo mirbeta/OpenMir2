@@ -49,7 +49,7 @@ namespace GameSvr.Magic
         {
             var result = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            playObject.GetMapBaseObjects(playObject.Envir, nX, nY, 1, baseObjectList);
+            BaseObject.GetMapBaseObjects(playObject.Envir, nX, nY, 1, baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
             {
                 var baseObject = baseObjectList[i];
@@ -673,7 +673,7 @@ namespace GameSvr.Magic
                 return false;
             }
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            baseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, 9, baseObjectList);
+            BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, 9, baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
             {
                 var targetBaseObject = baseObjectList[i];
@@ -891,7 +891,7 @@ namespace GameSvr.Magic
             short nAmuletIdx = 0;
             var result = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            playObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), baseObjectList);
+            BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
             {
                 var baseObject = baseObjectList[i];
@@ -940,7 +940,7 @@ namespace GameSvr.Magic
             BaseObject baseObject;
             var result = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            playObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), baseObjectList);
+            BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
             {
                 baseObject = baseObjectList[i];
@@ -980,7 +980,7 @@ namespace GameSvr.Magic
             var result = false;
             boSpellFire = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            playObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), baseObjectList);
+            BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), baseObjectList);
             playObject.SendRefMsg(Grobal2.RM_MAGICFIRE, 0, HUtil32.MakeWord(userMagic.Magic.EffectType, userMagic.Magic.Effect), HUtil32.MakeLong(nTargetX, nTargetY), targetBaseObject.ActorId, "");
             for (var i = 0; i < baseObjectList.Count; i++)
             {
@@ -1098,7 +1098,7 @@ namespace GameSvr.Magic
         {
             var result = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            baseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, nRage, baseObjectList);
+            BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, nRage, baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
             {
                 var targetBaseObject = baseObjectList[i];
@@ -1117,7 +1117,7 @@ namespace GameSvr.Magic
         {
             var result = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            baseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, M2Share.Config.ElecBlizzardRange, baseObjectList);
+            BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, M2Share.Config.ElecBlizzardRange, baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
             {
                 var targetBaseObject = baseObjectList[i];
@@ -1147,7 +1147,7 @@ namespace GameSvr.Magic
             {
                 IList<BaseObject> baseObjectList = new List<BaseObject>();
                 MagicEvent magicEvent = null;
-                baseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, baseObjectList);
+                BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, baseObjectList);
 
                 for (var i = 0; i < baseObjectList.Count; i++)
                 {
@@ -1214,7 +1214,7 @@ namespace GameSvr.Magic
         {
             var result = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            baseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, baseObjectList);
+            BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
             {
                 var targetBaseObject = baseObjectList[i];

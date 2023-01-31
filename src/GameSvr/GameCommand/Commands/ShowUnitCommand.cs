@@ -5,7 +5,7 @@
     public class ShowUnitCommand : Command
     {
         [ExecuteCommand()]
-        public void ShowUnit()
+        public static void ShowUnit()
         {
 
         }

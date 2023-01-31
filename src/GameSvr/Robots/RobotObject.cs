@@ -123,15 +123,15 @@ namespace GameSvr.Robots
             }
         }
 
-        private void AutoRunOfOnHour(AutoRunInfo AutoRunInfo)
+        private static void AutoRunOfOnHour(AutoRunInfo AutoRunInfo)
         {
         }
 
-        private void AutoRunOfOnMin(AutoRunInfo AutoRunInfo)
+        private static void AutoRunOfOnMin(AutoRunInfo AutoRunInfo)
         {
         }
 
-        private void AutoRunOfOnSec(AutoRunInfo AutoRunInfo)
+        private static void AutoRunOfOnSec(AutoRunInfo AutoRunInfo)
         {
         }
 
@@ -289,28 +289,28 @@ namespace GameSvr.Robots
             return true;
         }
 
-        private bool GetDayTime(string param, ref long runTime)
+        private static bool GetDayTime(string param, ref long runTime)
         {
             if (!DateTimeOffset.TryParse(param, out var runDayTime)) return false;
             runTime = runDayTime.ToUnixTimeMilliseconds();
             return true;
         }
 
-        private bool GetHourTime(string param, ref long runTime)
+        private static bool GetHourTime(string param, ref long runTime)
         {
             if (!int.TryParse(param, out var runHour)) return false;
             runTime = DateTimeOffset.Now.AddHours(runHour).ToUnixTimeMilliseconds();
             return true;
         }
 
-        private bool GetMinuteTime(string param, ref long runTime)
+        private static bool GetMinuteTime(string param, ref long runTime)
         {
             if (!int.TryParse(param, out var runHour)) return false;
             runTime = DateTimeOffset.Now.AddMinutes(runHour).ToUnixTimeMilliseconds();
             return true;
         }
 
-        private bool GetSecondTime(string param, ref long runTime)
+        private static bool GetSecondTime(string param, ref long runTime)
         {
             if (!int.TryParse(param, out var runHour)) return false;
             runTime = DateTimeOffset.Now.AddSeconds(runHour).ToUnixTimeMilliseconds();
@@ -327,7 +327,7 @@ namespace GameSvr.Robots
         /// </summary>
         /// <param name="someDate">该周中任意一天</param>
         /// <returns>返回礼拜日日期，后面的具体时、分、秒和传入值相等</returns>
-        private DateTimeOffset GetSundayDate(DateTimeOffset someDate)
+        private static DateTimeOffset GetSundayDate(DateTimeOffset someDate)
         {
             var i = (7 - (int)someDate.DayOfWeek);
             return someDate.Add(new TimeSpan(i, 0, 0, 0));

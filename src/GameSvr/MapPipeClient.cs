@@ -26,7 +26,7 @@ namespace GameSvr
             }
         }
 
-        public MapCellInfo GetCellInfo(int nX, int nY, ref bool success)
+        public static MapCellInfo GetCellInfo(int nX, int nY, ref bool success)
         {
             var ram = RandomNumber.GetInstance().Random(pipeClientMaps.Length);
             pipeClientMaps[ram].SendPipeMessage(Encoding.UTF8.GetBytes("123"));
