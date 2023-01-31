@@ -32,7 +32,7 @@ namespace GameSvr.Services
         private static bool GetDBSockMsg(int queryId, ref int nIdent, ref int nRecog, ref byte[] data, int dwTimeOut, bool boLoadRcd)
         {
             var result = false;
-            HUtil32.EnterCriticalSection(M2Share.UserDBSection);
+            HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
                 if (ReceivedMap.ContainsKey(queryId))
@@ -59,7 +59,7 @@ namespace GameSvr.Services
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(M2Share.UserDBSection);
+                HUtil32.LeaveCriticalSection(M2Share.UserDBCriticalSection);
             }
             return result;
         }

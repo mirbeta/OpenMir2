@@ -221,7 +221,7 @@ namespace GameSvr.DataSource
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    M2Share.g_FunctionNPC = new Merchant
+                    M2Share.FunctionNPC = new Merchant
                     {
                         MapName = "0",
                         CurrX = 0,
@@ -234,16 +234,16 @@ namespace GameSvr.DataSource
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
-                    M2Share.WorldEngine.AddMerchant(M2Share.g_FunctionNPC);
+                    M2Share.WorldEngine.AddMerchant(M2Share.FunctionNPC);
                 }
                 else
                 {
-                    M2Share.g_FunctionNPC = null;
+                    M2Share.FunctionNPC = null;
                 }
             }
             catch
             {
-                M2Share.g_FunctionNPC = null;
+                M2Share.FunctionNPC = null;
             }
         }
 
@@ -279,7 +279,7 @@ namespace GameSvr.DataSource
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    M2Share.g_ManageNPC = new Merchant
+                    M2Share.ManageNPC = new Merchant
                     {
                         MapName = "0",
                         CurrX = 0,
@@ -291,16 +291,16 @@ namespace GameSvr.DataSource
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
-                    M2Share.WorldEngine.QuestNpcList.Add(M2Share.g_ManageNPC);
+                    M2Share.WorldEngine.QuestNpcList.Add(M2Share.ManageNPC);
                 }
                 else
                 {
-                    M2Share.g_ManageNPC = null;
+                    M2Share.ManageNPC = null;
                 }
             }
             catch
             {
-                M2Share.g_ManageNPC = null;
+                M2Share.ManageNPC = null;
             }
         }
 
@@ -323,7 +323,7 @@ namespace GameSvr.DataSource
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    M2Share.g_RobotNPC = new Merchant
+                    M2Share.RobotNPC = new Merchant
                     {
                         MapName = "0",
                         CurrX = 0,
@@ -335,16 +335,16 @@ namespace GameSvr.DataSource
                         m_boIsHide = true,
                         m_boIsQuest = false
                     };
-                    M2Share.WorldEngine.QuestNpcList.Add(M2Share.g_RobotNPC);
+                    M2Share.WorldEngine.QuestNpcList.Add(M2Share.RobotNPC);
                 }
                 else
                 {
-                    M2Share.g_RobotNPC = null;
+                    M2Share.RobotNPC = null;
                 }
             }
             catch
             {
-                M2Share.g_RobotNPC = null;
+                M2Share.RobotNPC = null;
             }
         }
 
@@ -906,12 +906,12 @@ namespace GameSvr.DataSource
                         var n10 = HUtil32.StrToInt(sData, 0);
                         if (n10 > 0)
                         {
-                            if (M2Share.g_UnbindList.ContainsKey(n10))
+                            if (M2Share.UnbindList.ContainsKey(n10))
                             {
                                 M2Share.Log.Warn($"重复解包物品[{sItemName}]...");
                                 continue;
                             }
-                            M2Share.g_UnbindList.Add(n10, sItemName);
+                            M2Share.UnbindList.Add(n10, sItemName);
                         }
                         else
                         {
@@ -1018,7 +1018,7 @@ namespace GameSvr.DataSource
             for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
             {
                 Merchant = M2Share.WorldEngine.MerchantList[i];
-                if (Merchant != M2Share.g_FunctionNPC)
+                if (Merchant != M2Share.FunctionNPC)
                 {
                     Merchant.m_nFlag = -1;
                 }

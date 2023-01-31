@@ -146,7 +146,7 @@ namespace GameSvr.Items
         public static int GetItemAddValuePointColor(UserItem UserItem)
         {
             int result = 0;
-            // if (M2Share.g_Config.boRandomnameColor)
+            // if (Settings.g_Config.boRandomnameColor)
             // {
             //     for (var I = 0; I <= 7; I ++ )
             //     {
@@ -160,19 +160,19 @@ namespace GameSvr.Items
             //         switch(ItemVlue)
             //         {
             //             case 1:
-            //                 result = M2Share.g_Config.nRandom1nameColor;
+            //                 result = Settings.g_Config.nRandom1nameColor;
             //                 break;
             //             case 2:
-            //                 result = M2Share.g_Config.nRandom2nameColor;
+            //                 result = Settings.g_Config.nRandom2nameColor;
             //                 break;
             //             case 3:
-            //                 result = M2Share.g_Config.nRandom3nameColor;
+            //                 result = Settings.g_Config.nRandom3nameColor;
             //                 break;
             //             case 4:
-            //                 result = M2Share.g_Config.nRandom4nameColor;
+            //                 result = Settings.g_Config.nRandom4nameColor;
             //                 break;
             //             default:
-            //                 result = M2Share.g_Config.nRandom5nameColor;
+            //                 result = Settings.g_Config.nRandom5nameColor;
             //                 break;
             //         }
             //     }
@@ -186,7 +186,7 @@ namespace GameSvr.Items
             //                 case 0:
             //                 case 1:
             //                 case 3:
-            //                     result = M2Share.g_Config.nRandom8nameColor;
+            //                     result = Settings.g_Config.nRandom8nameColor;
             //                     break;
             //                 case 5:
             //                 case 6:
@@ -212,10 +212,10 @@ namespace GameSvr.Items
             //                 case 62:
             //                 case 63:
             //                 case 64:
-            //                     result = M2Share.g_Config.nRandom7nameColor;
+            //                     result = Settings.g_Config.nRandom7nameColor;
             //                     break;
             //                 default:
-            //                     result = M2Share.g_Config.nRandom6nameColor;
+            //                     result = Settings.g_Config.nRandom6nameColor;
             //                     break;
             //             }
             //         }

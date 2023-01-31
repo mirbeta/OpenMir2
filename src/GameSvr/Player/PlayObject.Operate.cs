@@ -227,17 +227,17 @@ namespace GameSvr.Player
         {
             if (M2Share.Config.InSafeDisableDrop && InSafeZone())
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sCanotDropInSafeZoneMsg);
                 return false;
             }
             if (M2Share.Config.ControlDropItem && nGold < M2Share.Config.CanDropGold)
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropGoldMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sCanotDropGoldMsg);
                 return false;
             }
             if (!BoCanDrop || Envir.Flag.boNOTHROWITEM)
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropItemMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sCanotDropItemMsg);
                 return false;
             }
             if (nGold >= Gold)
@@ -258,12 +258,12 @@ namespace GameSvr.Player
             var result = false;
             if (M2Share.Config.InSafeDisableDrop && InSafeZone())
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropInSafeZoneMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sCanotDropInSafeZoneMsg);
                 return false;
             }
             if (!BoCanDrop || Envir.Flag.boNOTHROWITEM)
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotDropItemMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sCanotDropItemMsg);
                 return false;
             }
             if (sItemName.IndexOf(' ') > 0)
@@ -421,26 +421,26 @@ namespace GameSvr.Player
                                 {
                                     if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
                                     {
-                                        SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Settings.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                         n18 = -4;
                                         goto FailExit;
                                     }
                                 }
                                 if (!UserUnLockDurg && (stdItem20.ItemDesc & 2) != 0)
                                 {
-                                    SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Settings.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
                                 if ((stdItem20.ItemDesc & 4) != 0)
                                 {
-                                    SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Settings.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
                                 if (M2Share.InDisableTakeOffList(UseItems[btWhere].Index))
                                 {
-                                    SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Settings.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     goto FailExit;
                                 }
                                 takeOffItem = UseItems[btWhere];
@@ -515,26 +515,26 @@ namespace GameSvr.Player
                         {
                             if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
                             {
-                                SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                SysMsg(Settings.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                 n10 = -4;
                                 goto FailExit;
                             }
                         }
                         if (!UserUnLockDurg && (stdItem.ItemDesc & 2) != 0)
                         {
-                            SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             n10 = -4;
                             goto FailExit;
                         }
                         if ((stdItem.ItemDesc & 4) != 0)
                         {
-                            SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             n10 = -4;
                             goto FailExit;
                         }
                         if (M2Share.InDisableTakeOffList(UseItems[btWhere].Index))
                         {
-                            SysMsg(M2Share.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sCanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             goto FailExit;
                         }
                         var sUserItemName = CustomItem.GetItemName(UseItems[btWhere]);// 取自定义物品名称
@@ -551,9 +551,9 @@ namespace GameSvr.Player
                                 SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
                                 SendDefMessage(Grobal2.SM_TAKEOFF_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
                                 FeatureChanged();
-                                if (M2Share.g_FunctionNPC != null)
+                                if (M2Share.FunctionNPC != null)
                                 {
-                                    M2Share.g_FunctionNPC.GotoLable(this, "@TakeOff" + sItemName, false);
+                                    M2Share.FunctionNPC.GotoLable(this, "@TakeOff" + sItemName, false);
                                 }
                             }
                             else
@@ -582,11 +582,7 @@ namespace GameSvr.Player
 
         private static string ClientUseItemsGetUnbindItemName(int nShape)
         {
-            if (M2Share.g_UnbindList.TryGetValue(nShape, out var result))
-            {
-                return result;
-            }
-            return string.Empty;
+            return M2Share.UnbindList.TryGetValue(nShape, out var result) ? result : string.Empty;
         }
 
         private bool ClientUseItemsGetUnBindItems(string sItemName, int nCount)
@@ -697,7 +693,7 @@ namespace GameSvr.Player
             }
             else
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotUseItemMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sCanotUseItemMsg);
             }
             if (boEatOk)
             {
@@ -752,7 +748,7 @@ namespace GameSvr.Player
                             }
                             if (!TakeBagItems(baseObject))
                             {
-                                SysMsg(M2Share.sYouFoundNothing, MsgColor.Red, MsgType.Hint);
+                                SysMsg(Settings.sYouFoundNothing, MsgColor.Red, MsgType.Hint);
                             }
                             baseObject.BodyLeathery = 50;
                         }
@@ -794,9 +790,9 @@ namespace GameSvr.Player
             {
                 SysMsg("如果你想退出，使用编组功能（删除按钮）", MsgColor.Red, MsgType.Hint);
             }
-            if (M2Share.g_FunctionNPC != null)
+            if (M2Share.FunctionNPC != null)
             {
-                M2Share.g_FunctionNPC.GotoLable(this, "@GroupClose", false);
+                M2Share.FunctionNPC.GotoLable(this, "@GroupClose", false);
             }
         }
 
@@ -831,9 +827,9 @@ namespace GameSvr.Player
             AllowGroup = true;
             SendDefMessage(Grobal2.SM_CREATEGROUP_OK, 0, 0, 0, 0, "");
             SendGroupMembers();
-            if (M2Share.g_FunctionNPC != null)
+            if (M2Share.FunctionNPC != null)
             {
-                M2Share.g_FunctionNPC.GotoLable(this, "@GroupCreate", false);// 创建小组时触发
+                M2Share.FunctionNPC.GotoLable(this, "@GroupCreate", false);// 创建小组时触发
             }
         }
 
@@ -869,9 +865,9 @@ namespace GameSvr.Player
             playObject.JoinGroup(this);
             SendDefMessage(Grobal2.SM_GROUPADDMEM_OK, 0, 0, 0, 0, "");
             SendGroupMembers();
-            if (M2Share.g_FunctionNPC != null)
+            if (M2Share.FunctionNPC != null)
             {
-                M2Share.g_FunctionNPC.GotoLable(this, "@GroupAddMember", false);
+                M2Share.FunctionNPC.GotoLable(this, "@GroupAddMember", false);
             }
         }
 
@@ -895,9 +891,9 @@ namespace GameSvr.Player
             }
             DelMember(playObject);
             SendDefMessage(Grobal2.SM_GROUPDELMEM_OK, 0, 0, 0, 0, sHumName);
-            if (M2Share.g_FunctionNPC != null)
+            if (M2Share.FunctionNPC != null)
             {
-                M2Share.g_FunctionNPC.GotoLable(this, "@GroupDelMember", false);
+                M2Share.FunctionNPC.GotoLable(this, "@GroupDelMember", false);
             }
         }
 
@@ -905,7 +901,7 @@ namespace GameSvr.Player
         {
             if (M2Share.Config.DisableDeal)
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sDisableDealItemsMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sDisableDealItemsMsg);
                 return;
             }
             if (Dealing)
@@ -914,12 +910,12 @@ namespace GameSvr.Player
             }
             if ((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.TryDealTime)
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sPleaseTryDealLaterMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sPleaseTryDealLaterMsg);
                 return;
             }
             if (!BoCanDeal)
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotTryDealMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sCanotTryDealMsg);
                 return;
             }
             var targetPlayObject = (PlayObject)GetPoseCreate();
@@ -931,14 +927,14 @@ namespace GameSvr.Player
                     {
                         if (targetPlayObject.AllowDeal && targetPlayObject.BoCanDeal)
                         {
-                            targetPlayObject.SysMsg(ChrName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
-                            SysMsg(targetPlayObject.ChrName + M2Share.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
+                            targetPlayObject.SysMsg(ChrName + Settings.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
+                            SysMsg(targetPlayObject.ChrName + Settings.g_sOpenedDealMsg, MsgColor.Green, MsgType.Hint);
                             this.OpenDealDlg(targetPlayObject);
                             targetPlayObject.OpenDealDlg(this);
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sPoseDisableDealMsg, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sPoseDisableDealMsg, MsgColor.Red, MsgType.Hint);
                         }
                     }
                 }
@@ -994,7 +990,7 @@ namespace GameSvr.Player
         {
             if (M2Share.Config.CanNotGetBackDeal)
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sDealItemsDenyGetBackMsg);
                 SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
                 return;
             }
@@ -1042,7 +1038,7 @@ namespace GameSvr.Player
         {
             if (DealGolds > 0 && M2Share.Config.CanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sDealItemsDenyGetBackMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sDealItemsDenyGetBackMsg);
                 SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
                 return;
             }
@@ -1083,7 +1079,7 @@ namespace GameSvr.Player
             }
             if (((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.DealOKTime) || ((HUtil32.GetTickCount() - DealCreat.DealLastTick) < M2Share.Config.DealOKTime))
             {
-                SysMsg(M2Share.g_sDealOKTooFast, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.g_sDealOKTooFast, MsgColor.Red, MsgType.Hint);
                 DealCancel();
                 return;
             }
@@ -1093,21 +1089,21 @@ namespace GameSvr.Player
                 if (Grobal2.MAXBAGITEM - ItemList.Count < DealCreat.DealItemList.Count)
                 {
                     bo11 = false;
-                    SysMsg(M2Share.g_sYourBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sYourBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
                 }
                 if (GoldMax - Gold < DealCreat.DealGolds)
                 {
-                    SysMsg(M2Share.g_sYourGoldLargeThenLimit, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sYourGoldLargeThenLimit, MsgColor.Red, MsgType.Hint);
                     bo11 = false;
                 }
                 if (Grobal2.MAXBAGITEM - DealCreat.ItemList.Count < DealItemList.Count)
                 {
-                    SysMsg(M2Share.g_sDealHumanBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sDealHumanBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
                     bo11 = false;
                 }
                 if (DealCreat.GoldMax - DealCreat.Gold < DealGolds)
                 {
-                    SysMsg(M2Share.g_sDealHumanGoldLargeThenLimit, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sDealHumanGoldLargeThenLimit, MsgColor.Red, MsgType.Hint);
                     bo11 = false;
                 }
                 if (bo11)
@@ -1168,14 +1164,14 @@ namespace GameSvr.Player
                     }
                     var playObject = DealCreat;
                     playObject.SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
-                    playObject.SysMsg(M2Share.g_sDealSuccessMsg, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(Settings.g_sDealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     playObject.DealCreat = null;
                     playObject.Dealing = false;
                     playObject.DealItemList.Clear();
                     playObject.DealGolds = 0;
                     playObject.DealSuccess = false;
                     SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
-                    SysMsg(M2Share.g_sDealSuccessMsg, MsgColor.Green, MsgType.Hint);
+                    SysMsg(Settings.g_sDealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     DealCreat = null;
                     Dealing = false;
                     DealItemList.Clear();
@@ -1189,8 +1185,8 @@ namespace GameSvr.Player
             }
             else
             {
-                SysMsg(M2Share.g_sYouDealOKMsg, MsgColor.Green, MsgType.Hint);
-                DealCreat.SysMsg(M2Share.g_sPoseDealOKMsg, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.g_sYouDealOKMsg, MsgColor.Green, MsgType.Hint);
+                DealCreat.SysMsg(Settings.g_sPoseDealOKMsg, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -1616,7 +1612,7 @@ namespace GameSvr.Player
             }
             if (PayMent == 1 && !M2Share.Config.TryModeUseStorage)
             {
-                SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
             Merchant merchant = WorldServer.FindMerchant<Merchant>(objectId);
@@ -1627,7 +1623,7 @@ namespace GameSvr.Player
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     // 检查NPC是否允许存物品
-                    if (merchant != null && merchant.m_boStorage && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.g_FunctionNPC))
+                    if (merchant != null && merchant.m_boStorage && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.FunctionNPC))
                     {
                         if (StorageItemList.Count < 39)
                         {
@@ -1667,12 +1663,12 @@ namespace GameSvr.Player
             if (PayMent == 1 && !M2Share.Config.TryModeUseStorage)
             {
                 // '试玩模式不可以使用仓库功能!!!'
-                SysMsg(M2Share.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.g_sTryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (!BoCanGetBackItem)
             {
-                SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + CommandMgr.GameCommands.UnlockStorage.CmdName + '\\' + "仓库加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
+                SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sStorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + CommandMgr.GameCommands.UnlockStorage.CmdName + '\\' + "仓库加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
                 return;
             }
             for (var i = 0; i < StorageItemList.Count; i++)
@@ -1684,7 +1680,7 @@ namespace GameSvr.Player
                     if (IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index)))
                     {
                         // 检查NPC是否允许取物品
-                        if (merchant.m_boGetback && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.g_FunctionNPC))
+                        if (merchant.m_boGetback && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.FunctionNPC))
                         {
                             if (AddItemToBag(userItem))
                             {
@@ -1707,7 +1703,7 @@ namespace GameSvr.Player
                     else
                     {
                         // '无法携带更多的东西!!!'
-                        SysMsg(M2Share.g_sCanotGetItems, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sCanotGetItems, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 }

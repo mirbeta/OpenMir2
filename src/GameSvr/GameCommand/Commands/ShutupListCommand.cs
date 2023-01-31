@@ -23,15 +23,15 @@ namespace GameSvr.GameCommand.Commands
                 }
                 if (nCount > 0)
                 {
-                    //foreach (var item in M2Share.g_DenySayMsgList)
+                    //foreach (var item in Settings.g_DenySayMsgList)
                     //{
-                    //    PlayObject.SysMsg(M2Share.g_DenySayMsgList[item.Key] + ' ' + (((M2Share.g_DenySayMsgList[item.Key]) - HUtil32.GetTickCount()) / 60000).ToString()
+                    //    PlayObject.SysMsg(Settings.g_DenySayMsgList[item.Key] + ' ' + (((Settings.g_DenySayMsgList[item.Key]) - HUtil32.GetTickCount()) / 60000).ToString()
                     //        , TMsgColor.c_Green, TMsgType.t_Hint);
                     //}
 
-                    //for (int i = 0; i < M2Share.g_DenySayMsgList.Count; i++)
+                    //for (int i = 0; i < Settings.g_DenySayMsgList.Count; i++)
                     //{
-                    //this.SysMsg(M2Share.g_DenySayMsgList[i] + ' ' + ((((uint)M2Share.g_DenySayMsgList[i]) - HUtil32.GetTickCount()) / 60000).ToString(), TMsgColor.c_Green, TMsgType.t_Hint);
+                    //this.SysMsg(Settings.g_DenySayMsgList[i] + ' ' + ((((uint)Settings.g_DenySayMsgList[i]) - HUtil32.GetTickCount()) / 60000).ToString(), TMsgColor.c_Green, TMsgType.t_Hint);
                     //}
                 }
             }

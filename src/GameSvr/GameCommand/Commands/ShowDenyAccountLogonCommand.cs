@@ -16,14 +16,14 @@ namespace GameSvr.GameCommand.Commands
             }
             try
             {
-                if (M2Share.g_DenyAccountList.Count <= 0)
+                if (M2Share.DenyAccountList.Count <= 0)
                 {
                     PlayObject.SysMsg("禁止登录帐号列表为空。", MsgColor.Green, MsgType.Hint);
                     return;
                 }
-                for (var i = 0; i < M2Share.g_DenyAccountList.Count; i++)
+                for (var i = 0; i < M2Share.DenyAccountList.Count; i++)
                 {
-                    //PlayObject.SysMsg(M2Share.g_DenyAccountList[i], TMsgColor.c_Green, TMsgType.t_Hint);
+                    //PlayObject.SysMsg(Settings.g_DenyAccountList[i], TMsgColor.c_Green, TMsgType.t_Hint);
                 }
             }
             finally

@@ -26,13 +26,13 @@ namespace GameSvr.GameCommand.Commands
 
             //if ((sMapName == "") || (sMapMode == ""))
             //{
-            //    if (M2Share.g_Config.boGMShowFailMsg)
+            //    if (Settings.g_Config.boGMShowFailMsg)
             //    {
             //        PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 地图号 模式", TMsgColor.c_Red, TMsgType.t_Hint);
             //    }
             //    return;
             //}
-            //Envir = M2Share.g_MapManager.FindMap(sMapName);
+            //Envir = Settings.g_MapManager.FindMap(sMapName);
             //if ((Envir == null))
             //{
             //    PlayObject.   SysMsg(sMapName + " 不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);

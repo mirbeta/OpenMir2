@@ -135,8 +135,8 @@ namespace GameSvr.Conf
                 WriteInteger("Server", "SocLimit", M2Share.SocLimit);
             M2Share.SocLimit = ReadInteger("Server", "SocLimit", M2Share.SocLimit);
             if (ReadInteger("Server", "DecLimit", -1) < 0)
-                WriteInteger("Server", "DecLimit", M2Share.nDecLimit);
-            M2Share.nDecLimit = ReadInteger("Server", "DecLimit", M2Share.nDecLimit);
+                WriteInteger("Server", "DecLimit", M2Share.DecLimit);
+            M2Share.DecLimit = ReadInteger("Server", "DecLimit", M2Share.DecLimit);
             if (ReadInteger("Server", "SendBlock", -1) < 0)
                 WriteInteger("Server", "SendBlock", M2Share.Config.SendBlock);
             M2Share.Config.SendBlock = ReadInteger("Server", "SendBlock", M2Share.Config.SendBlock);
@@ -144,8 +144,8 @@ namespace GameSvr.Conf
                 WriteInteger("Server", "CheckBlock", M2Share.Config.CheckBlock);
             M2Share.Config.CheckBlock = ReadInteger("Server", "CheckBlock", M2Share.Config.CheckBlock);
             if (ReadInteger("Server", "SocCheckTimeOut", -1) < 0)
-                WriteInteger("Server", "SocCheckTimeOut", M2Share.g_dwSocCheckTimeOut);
-            M2Share.g_dwSocCheckTimeOut = ReadInteger("Server", "SocCheckTimeOut", M2Share.g_dwSocCheckTimeOut);
+                WriteInteger("Server", "SocCheckTimeOut", M2Share.SocCheckTimeOut);
+            M2Share.SocCheckTimeOut = ReadInteger("Server", "SocCheckTimeOut", M2Share.SocCheckTimeOut);
             if (ReadInteger("Server", "AvailableBlock", -1) < 0)
                 WriteInteger("Server", "AvailableBlock", M2Share.Config.AvailableBlock);
             M2Share.Config.AvailableBlock = ReadInteger("Server", "AvailableBlock", M2Share.Config.AvailableBlock);

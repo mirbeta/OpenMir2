@@ -80,7 +80,7 @@ namespace GameSvr.Actor
                                 ItemDamageRevivalRing();
                                 WAbil.HP = WAbil.MaxHP;
                                 HealthSpellChanged();
-                                SysMsg(M2Share.g_sRevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
+                                SysMsg(Settings.g_sRevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
                             }
                         }
                         if (WAbil.HP == 0)
@@ -390,7 +390,7 @@ namespace GameSvr.Actor
                     CheckRoyaltyTick = HUtil32.GetTickCount();
                     if (Master != null)
                     {
-                        if ((M2Share.g_dwSpiritMutinyTick > HUtil32.GetTickCount()) && (SlaveExpLevel < 5))
+                        if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (SlaveExpLevel < 5))
                         {
                             MasterRoyaltyTick = 0;
                         }
@@ -682,7 +682,7 @@ namespace GameSvr.Actor
             try
             {
                 KillTarget();
-                if ((M2Share.g_FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
+                if ((M2Share.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
                 {
                     if (Race != ActorRace.Play)
                     {
@@ -690,12 +690,12 @@ namespace GameSvr.Actor
                         {
                             if (ExpHitter.Race == ActorRace.Play)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                M2Share.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
 
                             if (ExpHitter.Master != null)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                M2Share.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                         }
                         else
@@ -704,11 +704,11 @@ namespace GameSvr.Actor
                             {
                                 if (LastHiter.Race == ActorRace.Play)
                                 {
-                                    M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                    M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                                 }
                                 if (LastHiter.Master != null)
                                 {
-                                    M2Share.g_FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                    M2Share.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                                 }
                             }
                         }
@@ -717,7 +717,7 @@ namespace GameSvr.Actor
                     {
                         if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
                         {
-                            M2Share.g_FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
+                            M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
                         }
                     }
                 }
@@ -791,12 +791,12 @@ namespace GameSvr.Actor
                     var boCanNotDrop = false;
                     if (StdItem != null)
                     {
-                        if (M2Share.g_MonDropLimitLIst.TryGetValue(StdItem.Name, out var MonDrop))
+                        if (M2Share.MonDropLimitLIst.TryGetValue(StdItem.Name, out var MonDrop))
                         {
                             if (MonDrop.DropCount < MonDrop.CountLimit)
                             {
                                 MonDrop.DropCount++;
-                                M2Share.g_MonDropLimitLIst[StdItem.Name] = MonDrop;
+                                M2Share.MonDropLimitLIst[StdItem.Name] = MonDrop;
                             }
                             else
                             {

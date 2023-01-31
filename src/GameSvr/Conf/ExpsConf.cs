@@ -59,7 +59,7 @@ namespace GameSvr.Conf
                 LoadInteger = HUtil32.StrToInt(LoadString, 0);
                 if (LoadInteger == 0)
                 {
-                    var oldNeedExp = M2Share.g_dwOldNeedExps[i];
+                    var oldNeedExp = M2Share.OldNeedExps[i];
                     if (oldNeedExp <= 0)
                     {
                         oldNeedExp = ReadInteger("Exp", "Level" + i, 0);

@@ -22,7 +22,7 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             var boDelete = false;
-            for (var i = 0; i < M2Share.g_DenyAccountList.Count; i++)
+            for (var i = 0; i < M2Share.DenyAccountList.Count; i++)
             {
                 //if ((sAccount).CompareTo((M2Share.g_DenyAccountList[i])) == 0)
                 //{

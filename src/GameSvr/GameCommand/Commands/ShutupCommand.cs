@@ -29,23 +29,23 @@ namespace GameSvr.GameCommand.Commands
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
             try
             {
-                //if (M2Share.g_DenySayMsgList.ContainsKey(sHumanName))
+                //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
-                //    M2Share.g_DenySayMsgList[sHumanName] = HUtil32.GetTickCount() + dwTime * 60 * 1000;
+                //    Settings.g_DenySayMsgList[sHumanName] = HUtil32.GetTickCount() + dwTime * 60 * 1000;
                 //}
                 //else
                 //{
-                //    M2Share.g_DenySayMsgList.Add(sHumanName, HUtil32.GetTickCount() + dwTime * 60 * 1000);
+                //    Settings.g_DenySayMsgList.Add(sHumanName, HUtil32.GetTickCount() + dwTime * 60 * 1000);
                 //}
 
-                //nIndex = M2Share.g_DenySayMsgList.GetIndex(sHumanName);
+                //nIndex = Settings.g_DenySayMsgList.GetIndex(sHumanName);
                 //if (nIndex >= 0)
                 //{
-                //    M2Share.g_DenySayMsgList[nIndex] = ((HUtil32.GetTickCount() + dwTime * 60 * 1000) as Object);
+                //    Settings.g_DenySayMsgList[nIndex] = ((HUtil32.GetTickCount() + dwTime * 60 * 1000) as Object);
                 //}
                 //else
                 //{
-                //    M2Share.g_DenySayMsgList.AddRecord(sHumanName, HUtil32.GetTickCount() + dwTime * 60 * 1000);
+                //    Settings.g_DenySayMsgList.AddRecord(sHumanName, HUtil32.GetTickCount() + dwTime * 60 * 1000);
                 //}
             }
             finally

@@ -277,10 +277,10 @@ namespace GameSvr.RobotPlay
                 m_PointManager.Initialize(Envir);
                 m_boAIStart = true;
                 m_nMoveFailCount = 0;
-                if (M2Share.g_FunctionNPC != null)
+                if (M2Share.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
-                    M2Share.g_FunctionNPC.GotoLable(this, "@AIStart", false);
+                    M2Share.FunctionNPC.GotoLable(this, "@AIStart", false);
                 }
             }
         }
@@ -293,10 +293,10 @@ namespace GameSvr.RobotPlay
                 m_nMoveFailCount = 0;
                 m_Path = null;
                 m_nPostion = -1;
-                if (M2Share.g_FunctionNPC != null)
+                if (M2Share.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
-                    M2Share.g_FunctionNPC.GotoLable(this, "@AIStop", false);
+                    M2Share.FunctionNPC.GotoLable(this, "@AIStop", false);
                 }
             }
         }
@@ -329,7 +329,7 @@ namespace GameSvr.RobotPlay
             if (Abil.Exp >= Abil.MaxExp)
             {
                 Abil.Exp -= Abil.MaxExp;
-                if (Abil.Level < M2Share.MAXUPLEVEL)
+                if (Abil.Level < Settings.MAXUPLEVEL)
                 {
                     Abil.Level++;
                 }
@@ -455,7 +455,7 @@ namespace GameSvr.RobotPlay
                             {
                                 if (Abil.Level <= M2Share.Config.CanShoutMsgLevel)
                                 {
-                                    SysMsg(Format(M2Share.g_sYouNeedLevelMsg, M2Share.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format(Settings.g_sYouNeedLevelMsg, M2Share.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                     return;
                                 }
                                 ShoutMsgTick = HUtil32.GetTickCount();
@@ -471,10 +471,10 @@ namespace GameSvr.RobotPlay
                                 }
                                 return;
                             }
-                            SysMsg(Format(M2Share.g_sYouCanSendCyCyLaterMsg, new object[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
+                            SysMsg(Format(Settings.g_sYouCanSendCyCyLaterMsg, new object[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
                             return;
                         }
-                        SysMsg(M2Share.g_sThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (!FilterSendMsg)

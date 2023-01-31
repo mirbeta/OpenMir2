@@ -64,7 +64,7 @@ namespace GameSvr.Player
             }
             if (!ClientPickUpItemIsSelf(mapItem.OfBaseObject) && !ClientPickUpItemIsOfGroup(mapItem.OfBaseObject))
             {
-                SysMsg(M2Share.g_sCanotPickUpItem, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.g_sCanotPickUpItem, MsgColor.Red, MsgType.Hint);
                 return false;
             }
             if (mapItem.Name.Equals(Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase))
@@ -152,7 +152,7 @@ namespace GameSvr.Player
             if (Abil.Exp >= Abil.MaxExp)
             {
                 Abil.Exp -= Abil.MaxExp;
-                if (Abil.Level < M2Share.MAXUPLEVEL)
+                if (Abil.Level < Settings.MAXUPLEVEL)
                 {
                     Abil.Level++;
                 }
@@ -321,7 +321,7 @@ namespace GameSvr.Player
                 }
             }
             RecalcAbilitys();
-            M2Share.g_dwSpiritMutinyTick = HUtil32.GetTickCount() + M2Share.Config.SpiritMutinyTime;
+            M2Share.SpiritMutinyTick = HUtil32.GetTickCount() + M2Share.Config.SpiritMutinyTime;
             M2Share.WorldEngine.SendBroadCastMsg("神之祈祷，天地震怒，尸横遍野...", MsgType.System);
             SysMsg("祈祷发出强烈的宇宙效应", MsgColor.Green, MsgType.Hint);
         }
@@ -533,11 +533,11 @@ namespace GameSvr.Player
             UseThrusting = boSwitch;
             if (UseThrusting)
             {
-                SysMsg(M2Share.sThrustingOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sThrustingOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sThrustingOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sThrustingOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -546,11 +546,11 @@ namespace GameSvr.Player
             UseHalfMoon = boSwitch;
             if (UseHalfMoon)
             {
-                SysMsg(M2Share.sHalfMoonOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sHalfMoonOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sHalfMoonOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sHalfMoonOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -559,11 +559,11 @@ namespace GameSvr.Player
             RedUseHalfMoon = boSwitch;
             if (RedUseHalfMoon)
             {
-                SysMsg(M2Share.sRedHalfMoonOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sRedHalfMoonOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sRedHalfMoonOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sRedHalfMoonOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -572,11 +572,11 @@ namespace GameSvr.Player
             CrsHitkill = boSwitch;
             if (CrsHitkill)
             {
-                SysMsg(M2Share.sCrsHitOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sCrsHitOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sCrsHitOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sCrsHitOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -585,11 +585,11 @@ namespace GameSvr.Player
             TwinHitSkill = boSwitch;
             if (TwinHitSkill)
             {
-                SysMsg(M2Share.sTwinHitOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sTwinHitOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(M2Share.sTwinHitOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sTwinHitOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -612,10 +612,10 @@ namespace GameSvr.Player
             {
                 LatestFireHitTick = HUtil32.GetTickCount();
                 FireHitSkill = true;
-                SysMsg(M2Share.sFireSpiritsSummoned, MsgColor.Green, MsgType.Hint);
+                SysMsg(Settings.sFireSpiritsSummoned, MsgColor.Green, MsgType.Hint);
                 return true;
             }
-            SysMsg(M2Share.sFireSpiritsFail, MsgColor.Red, MsgType.Hint);
+            SysMsg(Settings.sFireSpiritsFail, MsgColor.Red, MsgType.Hint);
             return false;
         }
 
@@ -631,7 +631,7 @@ namespace GameSvr.Player
         {
             if (!BoCanDeal)
             {
-                SendMsg(M2Share.g_ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, M2Share.g_sCanotTryDealMsg);
+                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.g_sCanotTryDealMsg);
                 return;
             }
             if (Death || Ghost)
@@ -700,7 +700,7 @@ namespace GameSvr.Player
             }
             DealCreat = null;
             GetBackDealItems();
-            SysMsg(M2Share.g_sDealActionCancelMsg, MsgColor.Green, MsgType.Hint);
+            SysMsg(Settings.g_sDealActionCancelMsg, MsgColor.Green, MsgType.Hint);
             DealLastTick = HUtil32.GetTickCount();
         }
 
@@ -782,9 +782,9 @@ namespace GameSvr.Player
 
         public void GameTimeChanged()
         {
-            if (MBtBright != M2Share.g_nGameTime)
+            if (MBtBright != M2Share.GameTime)
             {
-                MBtBright = (byte)M2Share.g_nGameTime;
+                MBtBright = M2Share.GameTime;
                 SendMsg(this, Grobal2.RM_DAYCHANGING, 0, 0, 0, 0, "");
             }
         }
@@ -1075,9 +1075,9 @@ namespace GameSvr.Player
         private bool UseStdmodeFunItem(StdItem stdItem)
         {
             var result = false;
-            if (M2Share.g_FunctionNPC != null)
+            if (M2Share.FunctionNPC != null)
             {
-                M2Share.g_FunctionNPC.GotoLable(this, "@StdModeFunc" + stdItem.AniCount, false);
+                M2Share.FunctionNPC.GotoLable(this, "@StdModeFunc" + stdItem.AniCount, false);
                 result = true;
             }
             return result;
@@ -1243,8 +1243,8 @@ namespace GameSvr.Player
                 if (!IsGoodKilling(this))
                 {
                     playObject.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
-                    playObject.SysMsg(M2Share.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
-                    SysMsg(Format(M2Share.g_sYouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
+                    playObject.SysMsg(Settings.g_sYouMurderedMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Format(Settings.g_sYouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
                     playObject.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
                     if (PvpLevel() < 1)
                     {
@@ -1253,27 +1253,27 @@ namespace GameSvr.Player
                             playObject.MakeWeaponUnlock();
                         }
                     }
-                    if (M2Share.g_FunctionNPC != null)
+                    if (M2Share.FunctionNPC != null)
                     {
-                        M2Share.g_FunctionNPC.GotoLable(playObject, "@OnMurder", false);
-                        M2Share.g_FunctionNPC.GotoLable(this, "@Murdered", false);
+                        M2Share.FunctionNPC.GotoLable(playObject, "@OnMurder", false);
+                        M2Share.FunctionNPC.GotoLable(this, "@Murdered", false);
                     }
                 }
                 else
                 {
-                    playObject.SysMsg(M2Share.g_sYouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(Settings.g_sYouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
                 }
                 return;
             }
             if (boWinLEvel)
             {
-                if (playObject.Abil.Level + nWinLevel <= M2Share.MAXUPLEVEL)
+                if (playObject.Abil.Level + nWinLevel <= Settings.MAXUPLEVEL)
                 {
                     playObject.Abil.Level += (byte)nWinLevel;
                 }
                 else
                 {
-                    playObject.Abil.Level = M2Share.MAXUPLEVEL;
+                    playObject.Abil.Level = Settings.MAXUPLEVEL;
                 }
                 playObject.HasLevelUp(playObject.Abil.Level - nWinLevel);
                 if (boLostLevel)
@@ -1485,7 +1485,7 @@ namespace GameSvr.Player
             {
                 GetFrontPosition(ref nX, ref nY);
                 SendRefMsg(Grobal2.RM_RUSHKUNG, Direction, nX, nY, 0, "");
-                SysMsg(M2Share.sMateDoTooweak, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.sMateDoTooweak, MsgColor.Red, MsgType.Hint);
             }
             if (n28 > 0)
             {
@@ -1732,17 +1732,17 @@ namespace GameSvr.Player
             switch (clientItem.Item.StdMode)
             {
                 case 10 when Gender != PlayGender.Man:
-                    SysMsg(M2Share.sWearNotOfWoMan, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.sWearNotOfWoMan, MsgColor.Red, MsgType.Hint);
                     return false;
                 case 11 when Gender != PlayGender.WoMan:
-                    SysMsg(M2Share.sWearNotOfMan, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.sWearNotOfMan, MsgColor.Red, MsgType.Hint);
                     return false;
             }
             if (nWhere == 1 || nWhere == 2)
             {
                 if (clientItem.Item.Weight > WAbil.MaxHandWeight)
                 {
-                    SysMsg(M2Share.sHandWeightNot, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.sHandWeightNot, MsgColor.Red, MsgType.Hint);
                     return false;
                 }
             }
@@ -1750,7 +1750,7 @@ namespace GameSvr.Player
             {
                 if (clientItem.Item.Weight + GetUserItemWeitht(nWhere) > WAbil.MaxWearWeight)
                 {
-                    SysMsg(M2Share.sWearWeightNot, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.sWearWeightNot, MsgColor.Red, MsgType.Hint);
                     return false;
                 }
             }
@@ -1763,7 +1763,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 1:
@@ -1773,7 +1773,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sDCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sDCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 10:
@@ -1783,7 +1783,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sJobOrLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sJobOrLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 11:
@@ -1793,7 +1793,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sJobOrDCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sJobOrDCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 12:
@@ -1803,7 +1803,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sJobOrMCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sJobOrMCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 13:
@@ -1813,7 +1813,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sJobOrSCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sJobOrSCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 2:
@@ -1823,7 +1823,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sMCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 3:
@@ -1833,7 +1833,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sSCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sSCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 4:
@@ -1843,7 +1843,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 40:
@@ -1855,12 +1855,12 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sLevelNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sLevelNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 41:
@@ -1872,12 +1872,12 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sDCNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sDCNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 42:
@@ -1889,12 +1889,12 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sMCNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sMCNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 43:
@@ -1906,12 +1906,12 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sSCNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sSCNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 44:
@@ -1923,12 +1923,12 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sCreditPointNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sCreditPointNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 5:
@@ -1938,7 +1938,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sCreditPointNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sCreditPointNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 6:
@@ -1948,7 +1948,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sGuildNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sGuildNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 60:
@@ -1958,7 +1958,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sGuildMasterNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sGuildMasterNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 7:
@@ -1968,7 +1968,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sSabukHumanNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sSabukHumanNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 70:
@@ -1980,12 +1980,12 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            SysMsg(M2Share.g_sLevelNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(Settings.g_sLevelNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sSabukMasterManNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sSabukMasterManNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 8:
@@ -1995,7 +1995,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMemberNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sMemberNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 81:
@@ -2005,7 +2005,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMemberTypeNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sMemberTypeNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 82:
@@ -2015,7 +2015,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMemberTypeNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sMemberTypeNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
             }
@@ -2048,7 +2048,7 @@ namespace GameSvr.Player
             var result = false;
             if (Envir.Flag.boNODRUG)
             {
-                SysMsg(M2Share.sCanotUseDrugOnThisMap, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.sCanotUseDrugOnThisMap, MsgColor.Red, MsgType.Hint);
                 return false;
             }
             switch (stdItem.StdMode)
@@ -2417,7 +2417,7 @@ namespace GameSvr.Player
         private void JoinGroup(PlayObject playObject)
         {
             GroupOwner = playObject;
-            SendGroupText(Format(M2Share.g_sJoinGroup, ChrName));
+            SendGroupText(Format(Settings.g_sJoinGroup, ChrName));
         }
 
         /// <summary>
@@ -3057,11 +3057,11 @@ namespace GameSvr.Player
             {
                 if (Gender == PlayGender.Man)
                 {
-                    sSayMsg = string.Format(M2Share.g_sfUnMarryManLoginMsg, MSDearName, MSDearName);
+                    sSayMsg = string.Format(Settings.g_sfUnMarryManLoginMsg, MSDearName, MSDearName);
                 }
                 else
                 {
-                    sSayMsg = string.Format(M2Share.g_sfUnMarryWoManLoginMsg, ChrName, ChrName);
+                    sSayMsg = string.Format(Settings.g_sfUnMarryWoManLoginMsg, ChrName, ChrName);
                 }
                 SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                 MSDearName = "";
@@ -3073,16 +3073,16 @@ namespace GameSvr.Player
                 MDearHuman.MDearHuman = this;
                 if (Gender == PlayGender.Man)
                 {
-                    sSayMsg = string.Format(M2Share.g_sManLoginDearOnlineSelfMsg, MSDearName, ChrName, MDearHuman.Envir.MapDesc, MDearHuman.CurrX, MDearHuman.CurrY);
+                    sSayMsg = string.Format(Settings.g_sManLoginDearOnlineSelfMsg, MSDearName, ChrName, MDearHuman.Envir.MapDesc, MDearHuman.CurrX, MDearHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = string.Format(M2Share.g_sManLoginDearOnlineDearMsg, MSDearName, ChrName, Envir.MapDesc, CurrX, CurrY);
+                    sSayMsg = string.Format(Settings.g_sManLoginDearOnlineDearMsg, MSDearName, ChrName, Envir.MapDesc, CurrX, CurrY);
                     MDearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
-                    sSayMsg = string.Format(M2Share.g_sWoManLoginDearOnlineSelfMsg, MSDearName, ChrName, MDearHuman.Envir.MapDesc, MDearHuman.CurrX, MDearHuman.CurrY);
+                    sSayMsg = string.Format(Settings.g_sWoManLoginDearOnlineSelfMsg, MSDearName, ChrName, MDearHuman.Envir.MapDesc, MDearHuman.CurrX, MDearHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = string.Format(M2Share.g_sWoManLoginDearOnlineDearMsg, MSDearName, ChrName, Envir.MapDesc, CurrX, CurrY);
+                    sSayMsg = string.Format(Settings.g_sWoManLoginDearOnlineDearMsg, MSDearName, ChrName, Envir.MapDesc, CurrX, CurrY);
                     MDearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
             }
@@ -3090,11 +3090,11 @@ namespace GameSvr.Player
             {
                 if (Gender == PlayGender.Man)
                 {
-                    SysMsg(M2Share.g_sManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
                 else
                 {
-                    SysMsg(M2Share.g_sWoManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sWoManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
         }
@@ -3103,11 +3103,11 @@ namespace GameSvr.Player
         {
             var boIsfound = false;
             string sSayMsg;
-            for (var i = 0; i < M2Share.g_UnForceMasterList.Count; i++) // 处理强行脱离师徒关系
+            for (var i = 0; i < M2Share.UnForceMasterList.Count; i++) // 处理强行脱离师徒关系
             {
-                if (string.Compare(M2Share.g_UnForceMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.UnForceMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    M2Share.g_UnForceMasterList.RemoveAt(i);
+                    M2Share.UnForceMasterList.RemoveAt(i);
                     M2Share.SaveUnForceMasterList();
                     boIsfound = true;
                     break;
@@ -3117,11 +3117,11 @@ namespace GameSvr.Player
             {
                 if (MBoMaster)
                 {
-                    sSayMsg = string.Format(M2Share.g_sfUnMasterLoginMsg, MasterName);
+                    sSayMsg = string.Format(Settings.g_sfUnMasterLoginMsg, MasterName);
                 }
                 else
                 {
-                    sSayMsg = string.Format(M2Share.g_sfUnMasterListLoginMsg, MasterName);
+                    sSayMsg = string.Format(Settings.g_sfUnMasterListLoginMsg, MasterName);
                 }
                 SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                 MasterName = "";
@@ -3134,9 +3134,9 @@ namespace GameSvr.Player
                     var human = M2Share.WorldEngine.GetPlayObject(MasterName);
                     if (human != null && !human.Death && !human.Ghost)
                     {
-                        sSayMsg = string.Format(M2Share.g_sYourMasterListUnMasterOKMsg, ChrName);
+                        sSayMsg = string.Format(Settings.g_sYourMasterListUnMasterOKMsg, ChrName);
                         human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
-                        SysMsg(M2Share.g_sYouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sYouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
                         if (ChrName == human.MasterName)// 如果大徒弟则将师父上的名字去掉
                         {
                             human.MasterName = "";
@@ -3163,9 +3163,9 @@ namespace GameSvr.Player
                     {
                         // 如果师父不在线则保存到记录表中
                         boIsfound = false;
-                        for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
+                        for (var i = 0; i < M2Share.UnMasterList.Count; i++)
                         {
-                            if (string.Compare(M2Share.g_UnMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(M2Share.UnMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 boIsfound = true;
                                 break;
@@ -3173,13 +3173,13 @@ namespace GameSvr.Player
                         }
                         if (!boIsfound)
                         {
-                            M2Share.g_UnMasterList.Add(MasterName);
+                            M2Share.UnMasterList.Add(MasterName);
                         }
                         if (!boIsfound)
                         {
                             M2Share.SaveUnMasterList();
                         }
-                        SysMsg(M2Share.g_sYouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sYouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
                         MasterName = "";
                         RefShowName();
                     }
@@ -3187,11 +3187,11 @@ namespace GameSvr.Player
             }
             // 处理出师记录
             boIsfound = false;
-            for (var i = 0; i < M2Share.g_UnMasterList.Count; i++)
+            for (var i = 0; i < M2Share.UnMasterList.Count; i++)
             {
-                if (string.Compare(M2Share.g_UnMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.UnMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    M2Share.g_UnMasterList.RemoveAt(i);
+                    M2Share.UnMasterList.RemoveAt(i);
                     M2Share.SaveUnMasterList();
                     boIsfound = true;
                     break;
@@ -3199,7 +3199,7 @@ namespace GameSvr.Player
             }
             if (boIsfound && MBoMaster)
             {
-                SysMsg(M2Share.g_sUnMasterLoginMsg, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.g_sUnMasterLoginMsg, MsgColor.Red, MsgType.Hint);
                 MasterName = "";
                 RefShowName();
                 if (MBtCreditPoint + M2Share.Config.MasterOKCreditPoint <= byte.MaxValue)
@@ -3220,14 +3220,14 @@ namespace GameSvr.Player
                 {
                     MasterHuman.MasterHuman = this;
                     MasterList.Add(MasterHuman);
-                    sSayMsg = string.Format(M2Share.g_sMasterOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
+                    sSayMsg = string.Format(Settings.g_sMasterOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = string.Format(M2Share.g_sMasterOnlineMasterListMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
+                    sSayMsg = string.Format(Settings.g_sMasterOnlineMasterListMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
                     MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
-                    SysMsg(M2Share.g_sMasterNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sMasterNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
             else
@@ -3243,14 +3243,14 @@ namespace GameSvr.Player
                             MasterHuman.MasterHuman = this;
                         }
                         MasterHuman.MasterList.Add(this);
-                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
+                        sSayMsg = string.Format(Settings.g_sMasterListOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
                         SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                        sSayMsg = string.Format(M2Share.g_sMasterListOnlineMasterMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
+                        sSayMsg = string.Format(Settings.g_sMasterListOnlineMasterMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
                         MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sMasterListNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sMasterListNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                     }
                 }
             }
@@ -3258,7 +3258,7 @@ namespace GameSvr.Player
 
         public string GetMyInfo()
         {
-            var sMyInfo = M2Share.g_sMyInfo;
+            var sMyInfo = Settings.g_sMyInfo;
             sMyInfo = sMyInfo.Replace("%name", ChrName);
             sMyInfo = sMyInfo.Replace("%map", Envir.MapDesc);
             sMyInfo = sMyInfo.Replace("%x", CurrX.ToString());
@@ -3285,9 +3285,9 @@ namespace GameSvr.Player
         {
             TItemBind itemBind;
             var result = true;
-            for (var i = 0; i < M2Share.g_ItemBindAccount.Count; i++)
+            for (var i = 0; i < M2Share.ItemBindAccount.Count; i++)
             {
-                itemBind = M2Share.g_ItemBindAccount[i];
+                itemBind = M2Share.ItemBindAccount[i];
                 if (itemBind.nMakeIdex == userItem.MakeIndex && itemBind.nItemIdx == userItem.Index)
                 {
                     result = false;
@@ -3297,14 +3297,14 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sItemIsNotThisAccount, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sItemIsNotThisAccount, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
             }
-            for (var i = 0; i < M2Share.g_ItemBindIPaddr.Count; i++)
+            for (var i = 0; i < M2Share.ItemBindIPaddr.Count; i++)
             {
-                itemBind = M2Share.g_ItemBindIPaddr[i];
+                itemBind = M2Share.ItemBindIPaddr[i];
                 if (itemBind.nMakeIdex == userItem.MakeIndex && itemBind.nItemIdx == userItem.Index)
                 {
                     result = false;
@@ -3314,14 +3314,14 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sItemIsNotThisIPaddr, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sItemIsNotThisIPaddr, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
             }
-            for (var i = 0; i < M2Share.g_ItemBindChrName.Count; i++)
+            for (var i = 0; i < M2Share.ItemBindChrName.Count; i++)
             {
-                itemBind = M2Share.g_ItemBindChrName[i];
+                itemBind = M2Share.ItemBindChrName[i];
                 if (itemBind.nMakeIdex == userItem.MakeIndex && itemBind.nItemIdx == userItem.Index)
                 {
                     result = false;
@@ -3331,7 +3331,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sItemIsNotThisChrName, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sItemIsNotThisChrName, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
@@ -3355,12 +3355,12 @@ namespace GameSvr.Player
                 {
                     MSTempPwd = sData;
                     MBoReConfigPwd = true;
-                    SysMsg(M2Share.g_sReSetPasswordMsg, MsgColor.Green, MsgType.Hint);// '请重复输入一次仓库密码：'
+                    SysMsg(Settings.g_sReSetPasswordMsg, MsgColor.Green, MsgType.Hint);// '请重复输入一次仓库密码：'
                     SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
                 }
                 else
                 {
-                    SysMsg(M2Share.g_sPasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
+                    SysMsg(Settings.g_sPasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
                 }
                 return;
             }
@@ -3372,12 +3372,12 @@ namespace GameSvr.Player
                     StoragePwd = sData;
                     MBoPasswordLocked = true;
                     MSTempPwd = "";
-                    SysMsg(M2Share.g_sReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);// '密码设置成功!!，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
+                    SysMsg(Settings.g_sReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);// '密码设置成功!!，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
                 }
                 else
                 {
                     MSTempPwd = "";
-                    SysMsg(M2Share.g_sReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
                 }
                 return;
             }
@@ -3426,7 +3426,7 @@ namespace GameSvr.Player
                             AdminMode = false;
                         }
                         BoLockLogoned = true;
-                        SysMsg(M2Share.g_sPasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
+                        SysMsg(Settings.g_sPasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     if (MBoUnLockStoragePwd)
                     {
@@ -3434,16 +3434,16 @@ namespace GameSvr.Player
                         {
                             BoCanGetBackItem = true;
                         }
-                        SysMsg(M2Share.g_sStorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
+                        SysMsg(Settings.g_sStorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                 }
                 else
                 {
                     MBtPwdFailCount++;
-                    SysMsg(M2Share.g_sUnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sUnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
                     if (MBtPwdFailCount > 3)
                     {
-                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                     }
                 }
                 MBoUnLockPwd = false;
@@ -3456,16 +3456,16 @@ namespace GameSvr.Player
                 if (StoragePwd == sData)
                 {
                     SendMsg(this, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
-                    SysMsg(M2Share.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                    SysMsg(Settings.g_sSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                     MBoSetStoragePwd = true;
                 }
                 else
                 {
                     MBtPwdFailCount++;
-                    SysMsg(M2Share.g_sOldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sOldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
                     if (MBtPwdFailCount > 3)
                     {
-                        SysMsg(M2Share.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sStoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         MBoPasswordLocked = true;
                     }
                 }
@@ -3543,17 +3543,17 @@ namespace GameSvr.Player
             var result = false;
             if (M2Share.GetDenyIPAddrList(LoginIpAddr))
             {
-                SysMsg(M2Share.g_sYourIPaddrDenyLogon, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.g_sYourIPaddrDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             else if (M2Share.GetDenyAccountList(UserAccount))
             {
-                SysMsg(M2Share.g_sYourAccountDenyLogon, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.g_sYourAccountDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             else if (M2Share.GetDenyChrNameList(ChrName))
             {
-                SysMsg(M2Share.g_sYourChrNameDenyLogon, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.g_sYourChrNameDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             if (result)
@@ -3610,15 +3610,15 @@ namespace GameSvr.Player
                     }
                     break;
                 case 1:
-                    if (M2Share.g_FunctionNPC != null)
+                    if (M2Share.FunctionNPC != null)
                     {
-                        M2Share.g_FunctionNPC.GotoLable(this, MSGotoNpcLabel, false);
+                        M2Share.FunctionNPC.GotoLable(this, MSGotoNpcLabel, false);
                     }
                     break;
                 case 2:
-                    if (M2Share.g_ManageNPC != null)
+                    if (M2Share.ManageNPC != null)
                     {
-                        M2Share.g_ManageNPC.GotoLable(this, MSGotoNpcLabel, false);
+                        M2Share.ManageNPC.GotoLable(this, MSGotoNpcLabel, false);
                     }
                     break;
             }

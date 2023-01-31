@@ -349,9 +349,9 @@ namespace GameSvr.Npc
                     return;
                 case "$HIGHLEVELINFO":
                     {
-                        if (M2Share.g_HighLevelHuman != null)
+                        if (M2Share.HighLevelHuman != null)
                         {
-                            sText = ((PlayObject)M2Share.g_HighLevelHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.HighLevelHuman).GetMyInfo();
                         }
                         else
                         {
@@ -362,9 +362,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHPKINFO":
                     {
-                        if (M2Share.g_HighPKPointHuman != null)
+                        if (M2Share.HighPKPointHuman != null)
                         {
-                            sText = ((PlayObject)M2Share.g_HighPKPointHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.HighPKPointHuman).GetMyInfo();
                         }
                         else
                         {
@@ -375,9 +375,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHDCINFO":
                     {
-                        if (M2Share.g_HighDCHuman != null)
+                        if (M2Share.HighDCHuman != null)
                         {
-                            sText = ((PlayObject)M2Share.g_HighDCHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.HighDCHuman).GetMyInfo();
                         }
                         else
                         {
@@ -388,9 +388,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHMCINFO":
                     {
-                        if (M2Share.g_HighMCHuman != null)
+                        if (M2Share.HighMCHuman != null)
                         {
-                            sText = ((PlayObject)M2Share.g_HighMCHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.HighMCHuman).GetMyInfo();
                         }
                         else
                         {
@@ -401,9 +401,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHSCINFO":
                     {
-                        if (M2Share.g_HighSCHuman != null)
+                        if (M2Share.HighSCHuman != null)
                         {
-                            sText = ((PlayObject)M2Share.g_HighSCHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.HighSCHuman).GetMyInfo();
                         }
                         else
                         {
@@ -414,9 +414,9 @@ namespace GameSvr.Npc
                     }
                 case "$HIGHONLINEINFO":
                     {
-                        if (M2Share.g_HighOnlineHuman != null)
+                        if (M2Share.HighOnlineHuman != null)
                         {
-                            sText = ((PlayObject)M2Share.g_HighOnlineHuman).GetMyInfo();
+                            sText = ((PlayObject)M2Share.HighOnlineHuman).GetMyInfo();
                         }
                         else
                         {
@@ -1070,11 +1070,11 @@ namespace GameSvr.Npc
                 var MonsterName = s14;
                 if (MapName.StartsWith("$")) // $MAPMOSTERCOUNT[怪物名字/地图号]
                 {
-                    MapName = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + MapName + ">"); // 替换变量
+                    MapName = M2Share.ManageNPC.GetLineVariableText(PlayObject, "<" + MapName + ">"); // 替换变量
                 }
                 if (MonsterName.StartsWith("$"))
                 {
-                    MonsterName = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + MonsterName + ">"); // 替换变量
+                    MonsterName = M2Share.ManageNPC.GetLineVariableText(PlayObject, "<" + MonsterName + ">"); // 替换变量
                 }
                 MonGenInfo MonGen;
                 BaseObject BaseObject;
@@ -1195,7 +1195,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$MONKILLER["))// $MONKILLER(怪物名称 + 地图号) 显示杀死此怪物的杀手
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1212,7 +1212,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$MONDIEHOUR[")) // $MONDIEHOUR(怪物名称 + 地图号) 显示该怪物死时的小时
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1229,7 +1229,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$MONDIEMIN["))// $MONDIEMIN(怪物名称 + 地图号) 显示该怪物死时的分钟
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1246,7 +1246,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$MONDIESEC["))// $MONDIESEC(怪物名称 + 地图号) 显示该怪物死时的秒数
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1263,7 +1263,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$MONDIEYEAR["))// $MONDIEYEAR[怪物名称 + 地图号]   显示该怪物死亡的年
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1280,7 +1280,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$MONDIEMONTH["))// $MONDIEMONTH[怪物名称 + 地图号]  显示该怪物死亡的月
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1297,7 +1297,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$MONDIEDAY["))// $MONDIEDAY[怪物名称 + 地图号]    显示该怪物死亡的日
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(M2Share.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1498,7 +1498,7 @@ namespace GameSvr.Npc
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
-                if (M2Share.g_DynamicVarList.TryGetValue(s14, out DynamicVar))
+                if (M2Share.DynamicVarList.TryGetValue(s14, out DynamicVar))
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -1671,7 +1671,7 @@ namespace GameSvr.Npc
         {
             if (!M2Share.Config.SendCustemMsg)
             {
-                PlayObject.SysMsg(M2Share.g_sSendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Settings.g_sSendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.BoSendMsgFlag)
@@ -1706,7 +1706,7 @@ namespace GameSvr.Npc
             }
             else if (HUtil32.CompareLStr(sType, "GLOBAL", 6))
             {
-                result = M2Share.g_DynamicVarList;
+                result = M2Share.DynamicVarList;
                 sName = "GLOBAL";
             }
             else if (HUtil32.CompareLStr(sType, "Account", 7))

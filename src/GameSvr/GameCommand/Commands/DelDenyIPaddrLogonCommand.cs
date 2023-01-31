@@ -23,19 +23,19 @@ namespace GameSvr.GameCommand.Commands
             var boDelete = false;
             try
             {
-                for (var i = M2Share.g_DenyIPAddrList.Count - 1; i >= 0; i--)
+                for (var i = M2Share.DenyIPAddrList.Count - 1; i >= 0; i--)
                 {
-                    if (M2Share.g_DenyIPAddrList.Count <= 0)
+                    if (M2Share.DenyIPAddrList.Count <= 0)
                     {
                         break;
                     }
-                    //if ((sIPaddr).CompareTo((M2Share.g_DenyIPAddrList[i])) == 0)
+                    //if ((sIPaddr).CompareTo((Settings.g_DenyIPAddrList[i])) == 0)
                     //{
-                    //    //if (((int)M2Share.g_DenyIPAddrList[i]) != 0)
+                    //    //if (((int)Settings.g_DenyIPAddrList[i]) != 0)
                     //    //{
                     //    //    M2Share.SaveDenyIPAddrList();
                     //    //}
-                    //    M2Share.g_DenyIPAddrList.RemoveAt(i);
+                    //    Settings.g_DenyIPAddrList.RemoveAt(i);
                     //    PlayObject.SysMsg(sIPaddr + "已从禁止登录IP列表中删除。", TMsgColor.c_Green, TMsgType.t_Hint);
                     //    boDelete = true;
                     //    break;

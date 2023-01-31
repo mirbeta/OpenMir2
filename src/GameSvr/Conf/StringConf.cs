@@ -126,546 +126,546 @@ namespace GameSvr.Conf
             LoadString = ReadString("String", "ClientSoftVersionError", "");
             if (LoadString == "")
             {
-                WriteString("String", "ClientSoftVersionError", M2Share.sClientSoftVersionError);
+                WriteString("String", "ClientSoftVersionError", Settings.sClientSoftVersionError);
             }
             else
             {
-                M2Share.sClientSoftVersionError = LoadString;
+                Settings.sClientSoftVersionError = LoadString;
             }
             LoadString = ReadString("String", "DownLoadNewClientSoft", "");
             if (LoadString == "")
             {
-                WriteString("String", "DownLoadNewClientSoft", M2Share.sDownLoadNewClientSoft);
+                WriteString("String", "DownLoadNewClientSoft", Settings.sDownLoadNewClientSoft);
             }
             else
             {
-                M2Share.sDownLoadNewClientSoft = LoadString;
+                Settings.sDownLoadNewClientSoft = LoadString;
             }
             LoadString = ReadString("String", "ForceDisConnect", "");
             if (LoadString == "")
             {
-                WriteString("String", "ForceDisConnect", M2Share.sForceDisConnect);
+                WriteString("String", "ForceDisConnect", Settings.sForceDisConnect);
             }
             else
             {
-                M2Share.sForceDisConnect = LoadString;
+                Settings.sForceDisConnect = LoadString;
             }
             LoadString = ReadString("String", "ClientSoftVersionTooOld", "");
             if (LoadString == "")
             {
-                WriteString("String", "ClientSoftVersionTooOld", M2Share.sClientSoftVersionTooOld);
+                WriteString("String", "ClientSoftVersionTooOld", Settings.sClientSoftVersionTooOld);
             }
             else
             {
-                M2Share.sClientSoftVersionTooOld = LoadString;
+                Settings.sClientSoftVersionTooOld = LoadString;
             }
             LoadString = ReadString("String", "DownLoadAndUseNewClient", "");
             if (LoadString == "")
             {
-                WriteString("String", "DownLoadAndUseNewClient", M2Share.sDownLoadAndUseNewClient);
+                WriteString("String", "DownLoadAndUseNewClient", Settings.sDownLoadAndUseNewClient);
             }
             else
             {
-                M2Share.sDownLoadAndUseNewClient = LoadString;
+                Settings.sDownLoadAndUseNewClient = LoadString;
             }
             LoadString = ReadString("String", "OnlineUserFull", "");
             if (LoadString == "")
             {
-                WriteString("String", "OnlineUserFull", M2Share.sOnlineUserFull);
+                WriteString("String", "OnlineUserFull", Settings.sOnlineUserFull);
             }
             else
             {
-                M2Share.sOnlineUserFull = LoadString;
+                Settings.sOnlineUserFull = LoadString;
             }
             LoadString = ReadString("String", "YouNowIsTryPlayMode", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouNowIsTryPlayMode", M2Share.sYouNowIsTryPlayMode);
+                WriteString("String", "YouNowIsTryPlayMode", Settings.sYouNowIsTryPlayMode);
             }
             else
             {
-                M2Share.sYouNowIsTryPlayMode = LoadString;
+                Settings.sYouNowIsTryPlayMode = LoadString;
             }
             LoadString = ReadString("String", "NowIsFreePlayMode", "");
             if (LoadString == "")
             {
-                WriteString("String", "NowIsFreePlayMode", M2Share.g_sNowIsFreePlayMode);
+                WriteString("String", "NowIsFreePlayMode", Settings.g_sNowIsFreePlayMode);
             }
             else
             {
-                M2Share.g_sNowIsFreePlayMode = LoadString;
+                Settings.g_sNowIsFreePlayMode = LoadString;
             }
             LoadString = ReadString("String", "AttackModeOfAll", "");
             if (LoadString == "")
             {
-                WriteString("String", "AttackModeOfAll", M2Share.sAttackModeOfAll);
+                WriteString("String", "AttackModeOfAll", Settings.sAttackModeOfAll);
             }
             else
             {
-                M2Share.sAttackModeOfAll = LoadString;
+                Settings.sAttackModeOfAll = LoadString;
             }
             LoadString = ReadString("String", "AttackModeOfPeaceful", "");
             if (LoadString == "")
             {
-                WriteString("String", "AttackModeOfPeaceful", M2Share.sAttackModeOfPeaceful);
+                WriteString("String", "AttackModeOfPeaceful", Settings.sAttackModeOfPeaceful);
             }
             else
             {
-                M2Share.sAttackModeOfPeaceful = LoadString;
+                Settings.sAttackModeOfPeaceful = LoadString;
             }
             LoadString = ReadString("String", "AttackModeOfGroup", "");
             if (LoadString == "")
             {
-                WriteString("String", "AttackModeOfGroup", M2Share.sAttackModeOfGroup);
+                WriteString("String", "AttackModeOfGroup", Settings.sAttackModeOfGroup);
             }
             else
             {
-                M2Share.sAttackModeOfGroup = LoadString;
+                Settings.sAttackModeOfGroup = LoadString;
             }
             LoadString = ReadString("String", "AttackModeOfGuild", "");
             if (LoadString == "")
             {
-                WriteString("String", "AttackModeOfGuild", M2Share.sAttackModeOfGuild);
+                WriteString("String", "AttackModeOfGuild", Settings.sAttackModeOfGuild);
             }
             else
             {
-                M2Share.sAttackModeOfGuild = LoadString;
+                Settings.sAttackModeOfGuild = LoadString;
             }
             LoadString = ReadString("String", "AttackModeOfRedWhite", "");
             if (LoadString == "")
             {
-                WriteString("String", "AttackModeOfRedWhite", M2Share.sAttackModeOfRedWhite);
+                WriteString("String", "AttackModeOfRedWhite", Settings.sAttackModeOfRedWhite);
             }
             else
             {
-                M2Share.sAttackModeOfRedWhite = LoadString;
+                Settings.sAttackModeOfRedWhite = LoadString;
             }
             LoadString = ReadString("String", "StartChangeAttackModeHelp", "");
             if (LoadString == "")
             {
-                WriteString("String", "StartChangeAttackModeHelp", M2Share.sStartChangeAttackModeHelp);
+                WriteString("String", "StartChangeAttackModeHelp", Settings.sStartChangeAttackModeHelp);
             }
             else
             {
-                M2Share.sStartChangeAttackModeHelp = LoadString;
+                Settings.sStartChangeAttackModeHelp = LoadString;
             }
             LoadString = ReadString("String", "StartNoticeMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "StartNoticeMsg", M2Share.sStartNoticeMsg);
+                WriteString("String", "StartNoticeMsg", Settings.sStartNoticeMsg);
             }
             else
             {
-                M2Share.sStartNoticeMsg = LoadString;
+                Settings.sStartNoticeMsg = LoadString;
             }
             LoadString = ReadString("String", "ThrustingOn", "");
             if (LoadString == "")
             {
-                WriteString("String", "ThrustingOn", M2Share.sThrustingOn);
+                WriteString("String", "ThrustingOn", Settings.sThrustingOn);
             }
             else
             {
-                M2Share.sThrustingOn = LoadString;
+                Settings.sThrustingOn = LoadString;
             }
             LoadString = ReadString("String", "ThrustingOff", "");
             if (LoadString == "")
             {
-                WriteString("String", "ThrustingOff", M2Share.sThrustingOff);
+                WriteString("String", "ThrustingOff", Settings.sThrustingOff);
             }
             else
             {
-                M2Share.sThrustingOff = LoadString;
+                Settings.sThrustingOff = LoadString;
             }
             LoadString = ReadString("String", "HalfMoonOn", "");
             if (LoadString == "")
             {
-                WriteString("String", "HalfMoonOn", M2Share.sHalfMoonOn);
+                WriteString("String", "HalfMoonOn", Settings.sHalfMoonOn);
             }
             else
             {
-                M2Share.sHalfMoonOn = LoadString;
+                Settings.sHalfMoonOn = LoadString;
             }
             LoadString = ReadString("String", "HalfMoonOff", "");
             if (LoadString == "")
             {
-                WriteString("String", "HalfMoonOff", M2Share.sHalfMoonOff);
+                WriteString("String", "HalfMoonOff", Settings.sHalfMoonOff);
             }
             else
             {
-                M2Share.sHalfMoonOff = LoadString;
+                Settings.sHalfMoonOff = LoadString;
             }
-            M2Share.sCrsHitOn = LoadConfigString("String", "CrsHitOn", M2Share.sCrsHitOn);
-            M2Share.sCrsHitOff = LoadConfigString("String", "CrsHitOff", M2Share.sCrsHitOff);
-            M2Share.sTwinHitOn = LoadConfigString("String", "TwinHitOn", M2Share.sTwinHitOn);
-            M2Share.sTwinHitOff = LoadConfigString("String", "TwinHitOff", M2Share.sTwinHitOff);
+            Settings.sCrsHitOn = LoadConfigString("String", "CrsHitOn", Settings.sCrsHitOn);
+            Settings.sCrsHitOff = LoadConfigString("String", "CrsHitOff", Settings.sCrsHitOff);
+            Settings.sTwinHitOn = LoadConfigString("String", "TwinHitOn", Settings.sTwinHitOn);
+            Settings.sTwinHitOff = LoadConfigString("String", "TwinHitOff", Settings.sTwinHitOff);
             LoadString = ReadString("String", "FireSpiritsSummoned", "");
             if (LoadString == "")
             {
-                WriteString("String", "FireSpiritsSummoned", M2Share.sFireSpiritsSummoned);
+                WriteString("String", "FireSpiritsSummoned", Settings.sFireSpiritsSummoned);
             }
             else
             {
-                M2Share.sFireSpiritsSummoned = LoadString;
+                Settings.sFireSpiritsSummoned = LoadString;
             }
             LoadString = ReadString("String", "FireSpiritsFail", "");
             if (LoadString == "")
             {
-                WriteString("String", "FireSpiritsFail", M2Share.sFireSpiritsFail);
+                WriteString("String", "FireSpiritsFail", Settings.sFireSpiritsFail);
             }
             else
             {
-                M2Share.sFireSpiritsFail = LoadString;
+                Settings.sFireSpiritsFail = LoadString;
             }
             LoadString = ReadString("String", "SpiritsGone", "");
             if (LoadString == "")
             {
-                WriteString("String", "SpiritsGone", M2Share.sSpiritsGone);
+                WriteString("String", "SpiritsGone", Settings.sSpiritsGone);
             }
             else
             {
-                M2Share.sSpiritsGone = LoadString;
+                Settings.sSpiritsGone = LoadString;
             }
             LoadString = ReadString("String", "MateDoTooweak", "");
             if (LoadString == "")
             {
-                WriteString("String", "MateDoTooweak", M2Share.sMateDoTooweak);
+                WriteString("String", "MateDoTooweak", Settings.sMateDoTooweak);
             }
             else
             {
-                M2Share.sMateDoTooweak = LoadString;
+                Settings.sMateDoTooweak = LoadString;
             }
             LoadString = ReadString("String", "TheWeaponBroke", "");
             if (LoadString == "")
             {
-                WriteString("String", "TheWeaponBroke", M2Share.TheWeaponBroke);
+                WriteString("String", "TheWeaponBroke", Settings.TheWeaponBroke);
             }
             else
             {
-                M2Share.TheWeaponBroke = LoadString;
+                Settings.TheWeaponBroke = LoadString;
             }
             LoadString = ReadString("String", "TheWeaponRefineSuccessfull", "");
             if (LoadString == "")
             {
-                WriteString("String", "TheWeaponRefineSuccessfull", M2Share.TheWeaponRefineSuccessfull);
+                WriteString("String", "TheWeaponRefineSuccessfull", Settings.TheWeaponRefineSuccessfull);
             }
             else
             {
-                M2Share.TheWeaponRefineSuccessfull = LoadString;
+                Settings.TheWeaponRefineSuccessfull = LoadString;
             }
             LoadString = ReadString("String", "YouPoisoned", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouPoisoned", M2Share.sYouPoisoned);
+                WriteString("String", "YouPoisoned", Settings.sYouPoisoned);
             }
             else
             {
-                M2Share.sYouPoisoned = LoadString;
+                Settings.sYouPoisoned = LoadString;
             }
             LoadString = ReadString("String", "PetRest", "");
             if (LoadString == "")
             {
-                WriteString("String", "PetRest", M2Share.sPetRest);
+                WriteString("String", "PetRest", Settings.sPetRest);
             }
             else
             {
-                M2Share.sPetRest = LoadString;
+                Settings.sPetRest = LoadString;
             }
             LoadString = ReadString("String", "PetAttack", "");
             if (LoadString == "")
             {
-                WriteString("String", "PetAttack", M2Share.sPetAttack);
+                WriteString("String", "PetAttack", Settings.sPetAttack);
             }
             else
             {
-                M2Share.sPetAttack = LoadString;
+                Settings.sPetAttack = LoadString;
             }
             LoadString = ReadString("String", "WearNotOfWoMan", "");
             if (LoadString == "")
             {
-                WriteString("String", "WearNotOfWoMan", M2Share.sWearNotOfWoMan);
+                WriteString("String", "WearNotOfWoMan", Settings.sWearNotOfWoMan);
             }
             else
             {
-                M2Share.sWearNotOfWoMan = LoadString;
+                Settings.sWearNotOfWoMan = LoadString;
             }
             LoadString = ReadString("String", "WearNotOfMan", "");
             if (LoadString == "")
             {
-                WriteString("String", "WearNotOfMan", M2Share.sWearNotOfMan);
+                WriteString("String", "WearNotOfMan", Settings.sWearNotOfMan);
             }
             else
             {
-                M2Share.sWearNotOfMan = LoadString;
+                Settings.sWearNotOfMan = LoadString;
             }
             LoadString = ReadString("String", "HandWeightNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "HandWeightNot", M2Share.sHandWeightNot);
+                WriteString("String", "HandWeightNot", Settings.sHandWeightNot);
             }
             else
             {
-                M2Share.sHandWeightNot = LoadString;
+                Settings.sHandWeightNot = LoadString;
             }
             LoadString = ReadString("String", "WearWeightNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "WearWeightNot", M2Share.sWearWeightNot);
+                WriteString("String", "WearWeightNot", Settings.sWearWeightNot);
             }
             else
             {
-                M2Share.sWearWeightNot = LoadString;
+                Settings.sWearWeightNot = LoadString;
             }
             LoadString = ReadString("String", "ItemIsNotThisAccount", "");
             if (LoadString == "")
             {
-                WriteString("String", "ItemIsNotThisAccount", M2Share.g_sItemIsNotThisAccount);
+                WriteString("String", "ItemIsNotThisAccount", Settings.g_sItemIsNotThisAccount);
             }
             else
             {
-                M2Share.g_sItemIsNotThisAccount = LoadString;
+                Settings.g_sItemIsNotThisAccount = LoadString;
             }
             LoadString = ReadString("String", "ItemIsNotThisIPaddr", "");
             if (LoadString == "")
             {
-                WriteString("String", "ItemIsNotThisIPaddr", M2Share.g_sItemIsNotThisIPaddr);
+                WriteString("String", "ItemIsNotThisIPaddr", Settings.g_sItemIsNotThisIPaddr);
             }
             else
             {
-                M2Share.g_sItemIsNotThisIPaddr = LoadString;
+                Settings.g_sItemIsNotThisIPaddr = LoadString;
             }
             LoadString = ReadString("String", "ItemIsNotThisChrName", "");
             if (LoadString == "")
             {
-                WriteString("String", "ItemIsNotThisChrName", M2Share.g_sItemIsNotThisChrName);
+                WriteString("String", "ItemIsNotThisChrName", Settings.g_sItemIsNotThisChrName);
             }
             else
             {
-                M2Share.g_sItemIsNotThisChrName = LoadString;
+                Settings.g_sItemIsNotThisChrName = LoadString;
             }
             LoadString = ReadString("String", "LevelNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "LevelNot", M2Share.g_sLevelNot);
+                WriteString("String", "LevelNot", Settings.g_sLevelNot);
             }
             else
             {
-                M2Share.g_sLevelNot = LoadString;
+                Settings.g_sLevelNot = LoadString;
             }
             LoadString = ReadString("String", "JobOrLevelNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "JobOrLevelNot", M2Share.g_sJobOrLevelNot);
+                WriteString("String", "JobOrLevelNot", Settings.g_sJobOrLevelNot);
             }
             else
             {
-                M2Share.g_sJobOrLevelNot = LoadString;
+                Settings.g_sJobOrLevelNot = LoadString;
             }
             LoadString = ReadString("String", "JobOrDCNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "JobOrDCNot", M2Share.g_sJobOrDCNot);
+                WriteString("String", "JobOrDCNot", Settings.g_sJobOrDCNot);
             }
             else
             {
-                M2Share.g_sJobOrDCNot = LoadString;
+                Settings.g_sJobOrDCNot = LoadString;
             }
             LoadString = ReadString("String", "JobOrMCNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "JobOrMCNot", M2Share.g_sJobOrMCNot);
+                WriteString("String", "JobOrMCNot", Settings.g_sJobOrMCNot);
             }
             else
             {
-                M2Share.g_sJobOrMCNot = LoadString;
+                Settings.g_sJobOrMCNot = LoadString;
             }
             LoadString = ReadString("String", "JobOrSCNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "JobOrSCNot", M2Share.g_sJobOrSCNot);
+                WriteString("String", "JobOrSCNot", Settings.g_sJobOrSCNot);
             }
             else
             {
-                M2Share.g_sJobOrSCNot = LoadString;
+                Settings.g_sJobOrSCNot = LoadString;
             }
             LoadString = ReadString("String", "DCNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "DCNot", M2Share.g_sDCNot);
+                WriteString("String", "DCNot", Settings.g_sDCNot);
             }
             else
             {
-                M2Share.g_sDCNot = LoadString;
+                Settings.g_sDCNot = LoadString;
             }
             LoadString = ReadString("String", "MCNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "MCNot", M2Share.g_sMCNot);
+                WriteString("String", "MCNot", Settings.g_sMCNot);
             }
             else
             {
-                M2Share.g_sMCNot = LoadString;
+                Settings.g_sMCNot = LoadString;
             }
             LoadString = ReadString("String", "SCNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "SCNot", M2Share.g_sSCNot);
+                WriteString("String", "SCNot", Settings.g_sSCNot);
             }
             else
             {
-                M2Share.g_sSCNot = LoadString;
+                Settings.g_sSCNot = LoadString;
             }
             LoadString = ReadString("String", "CreditPointNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "CreditPointNot", M2Share.g_sCreditPointNot);
+                WriteString("String", "CreditPointNot", Settings.g_sCreditPointNot);
             }
             else
             {
-                M2Share.g_sCreditPointNot = LoadString;
+                Settings.g_sCreditPointNot = LoadString;
             }
             LoadString = ReadString("String", "ReNewLevelNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "ReNewLevelNot", M2Share.g_sReNewLevelNot);
+                WriteString("String", "ReNewLevelNot", Settings.g_sReNewLevelNot);
             }
             else
             {
-                M2Share.g_sReNewLevelNot = LoadString;
+                Settings.g_sReNewLevelNot = LoadString;
             }
             LoadString = ReadString("String", "GuildNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "GuildNot", M2Share.g_sGuildNot);
+                WriteString("String", "GuildNot", Settings.g_sGuildNot);
             }
             else
             {
-                M2Share.g_sGuildNot = LoadString;
+                Settings.g_sGuildNot = LoadString;
             }
             LoadString = ReadString("String", "GuildMasterNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "GuildMasterNot", M2Share.g_sGuildMasterNot);
+                WriteString("String", "GuildMasterNot", Settings.g_sGuildMasterNot);
             }
             else
             {
-                M2Share.g_sGuildMasterNot = LoadString;
+                Settings.g_sGuildMasterNot = LoadString;
             }
             LoadString = ReadString("String", "SabukHumanNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "SabukHumanNot", M2Share.g_sSabukHumanNot);
+                WriteString("String", "SabukHumanNot", Settings.g_sSabukHumanNot);
             }
             else
             {
-                M2Share.g_sSabukHumanNot = LoadString;
+                Settings.g_sSabukHumanNot = LoadString;
             }
             LoadString = ReadString("String", "SabukMasterManNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "SabukMasterManNot", M2Share.g_sSabukMasterManNot);
+                WriteString("String", "SabukMasterManNot", Settings.g_sSabukMasterManNot);
             }
             else
             {
-                M2Share.g_sSabukMasterManNot = LoadString;
+                Settings.g_sSabukMasterManNot = LoadString;
             }
             LoadString = ReadString("String", "MemberNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "MemberNot", M2Share.g_sMemberNot);
+                WriteString("String", "MemberNot", Settings.g_sMemberNot);
             }
             else
             {
-                M2Share.g_sMemberNot = LoadString;
+                Settings.g_sMemberNot = LoadString;
             }
             LoadString = ReadString("String", "MemberTypeNot", "");
             if (LoadString == "")
             {
-                WriteString("String", "MemberTypeNot", M2Share.g_sMemberTypeNot);
+                WriteString("String", "MemberTypeNot", Settings.g_sMemberTypeNot);
             }
             else
             {
-                M2Share.g_sMemberTypeNot = LoadString;
+                Settings.g_sMemberTypeNot = LoadString;
             }
             LoadString = ReadString("String", "CanottWearIt", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanottWearIt", M2Share.g_sCanottWearIt);
+                WriteString("String", "CanottWearIt", Settings.g_sCanottWearIt);
             }
             else
             {
-                M2Share.g_sCanottWearIt = LoadString;
+                Settings.g_sCanottWearIt = LoadString;
             }
             LoadString = ReadString("String", "CanotUseDrugOnThisMap", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotUseDrugOnThisMap", M2Share.sCanotUseDrugOnThisMap);
+                WriteString("String", "CanotUseDrugOnThisMap", Settings.sCanotUseDrugOnThisMap);
             }
             else
             {
-                M2Share.sCanotUseDrugOnThisMap = LoadString;
+                Settings.sCanotUseDrugOnThisMap = LoadString;
             }
             LoadString = ReadString("String", "GameMasterMode", "");
             if (LoadString == "")
             {
-                WriteString("String", "GameMasterMode", M2Share.sGameMasterMode);
+                WriteString("String", "GameMasterMode", Settings.sGameMasterMode);
             }
             else
             {
-                M2Share.sGameMasterMode = LoadString;
+                Settings.sGameMasterMode = LoadString;
             }
             LoadString = ReadString("String", "ReleaseGameMasterMode", "");
             if (LoadString == "")
             {
-                WriteString("String", "ReleaseGameMasterMode", M2Share.sReleaseGameMasterMode);
+                WriteString("String", "ReleaseGameMasterMode", Settings.sReleaseGameMasterMode);
             }
             else
             {
-                M2Share.sReleaseGameMasterMode = LoadString;
+                Settings.sReleaseGameMasterMode = LoadString;
             }
             LoadString = ReadString("String", "ObserverMode", "");
             if (LoadString == "")
             {
-                WriteString("String", "ObserverMode", M2Share.sObserverMode);
+                WriteString("String", "ObserverMode", Settings.sObserverMode);
             }
             else
             {
-                M2Share.sObserverMode = LoadString;
+                Settings.sObserverMode = LoadString;
             }
             LoadString = ReadString("String", "ReleaseObserverMode", "");
             if (LoadString == "")
             {
-                WriteString("String", "ReleaseObserverMode", M2Share.g_sReleaseObserverMode);
+                WriteString("String", "ReleaseObserverMode", Settings.g_sReleaseObserverMode);
             }
             else
             {
-                M2Share.g_sReleaseObserverMode = LoadString;
+                Settings.g_sReleaseObserverMode = LoadString;
             }
             LoadString = ReadString("String", "SupermanMode", "");
             if (LoadString == "")
             {
-                WriteString("String", "SupermanMode", M2Share.sSupermanMode);
+                WriteString("String", "SupermanMode", Settings.sSupermanMode);
             }
             else
             {
-                M2Share.sSupermanMode = LoadString;
+                Settings.sSupermanMode = LoadString;
             }
             LoadString = ReadString("String", "ReleaseSupermanMode", "");
             if (LoadString == "")
             {
-                WriteString("String", "ReleaseSupermanMode", M2Share.sReleaseSupermanMode);
+                WriteString("String", "ReleaseSupermanMode", Settings.sReleaseSupermanMode);
             }
             else
             {
-                M2Share.sReleaseSupermanMode = LoadString;
+                Settings.sReleaseSupermanMode = LoadString;
             }
             LoadString = ReadString("String", "YouFoundNothing", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouFoundNothing", M2Share.sYouFoundNothing);
+                WriteString("String", "YouFoundNothing", Settings.sYouFoundNothing);
             }
             else
             {
-                M2Share.sYouFoundNothing = LoadString;
+                Settings.sYouFoundNothing = LoadString;
             }
             LoadString = ReadString("String", "LineNoticePreFix", "");
             if (LoadString == "")
@@ -751,1046 +751,1046 @@ namespace GameSvr.Conf
             LoadString = ReadString("String", "NoPasswordLockSystemMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "NoPasswordLockSystemMsg", M2Share.g_sNoPasswordLockSystemMsg);
+                WriteString("String", "NoPasswordLockSystemMsg", Settings.g_sNoPasswordLockSystemMsg);
             }
             else
             {
-                M2Share.g_sNoPasswordLockSystemMsg = LoadString;
+                Settings.g_sNoPasswordLockSystemMsg = LoadString;
             }
             LoadString = ReadString("String", "AlreadySetPassword", "");
             if (LoadString == "")
             {
-                WriteString("String", "AlreadySetPassword", M2Share.g_sAlreadySetPasswordMsg);
+                WriteString("String", "AlreadySetPassword", Settings.g_sAlreadySetPasswordMsg);
             }
             else
             {
-                M2Share.g_sAlreadySetPasswordMsg = LoadString;
+                Settings.g_sAlreadySetPasswordMsg = LoadString;
             }
             LoadString = ReadString("String", "ReSetPassword", "");
             if (LoadString == "")
             {
-                WriteString("String", "ReSetPassword", M2Share.g_sReSetPasswordMsg);
+                WriteString("String", "ReSetPassword", Settings.g_sReSetPasswordMsg);
             }
             else
             {
-                M2Share.g_sReSetPasswordMsg = LoadString;
+                Settings.g_sReSetPasswordMsg = LoadString;
             }
             LoadString = ReadString("String", "PasswordOverLong", "");
             if (LoadString == "")
             {
-                WriteString("String", "PasswordOverLong", M2Share.g_sPasswordOverLongMsg);
+                WriteString("String", "PasswordOverLong", Settings.g_sPasswordOverLongMsg);
             }
             else
             {
-                M2Share.g_sPasswordOverLongMsg = LoadString;
+                Settings.g_sPasswordOverLongMsg = LoadString;
             }
             LoadString = ReadString("String", "ReSetPasswordOK", "");
             if (LoadString == "")
             {
-                WriteString("String", "ReSetPasswordOK", M2Share.g_sReSetPasswordOKMsg);
+                WriteString("String", "ReSetPasswordOK", Settings.g_sReSetPasswordOKMsg);
             }
             else
             {
-                M2Share.g_sReSetPasswordOKMsg = LoadString;
+                Settings.g_sReSetPasswordOKMsg = LoadString;
             }
             LoadString = ReadString("String", "ReSetPasswordNotMatch", "");
             if (LoadString == "")
             {
-                WriteString("String", "ReSetPasswordNotMatch", M2Share.g_sReSetPasswordNotMatchMsg);
+                WriteString("String", "ReSetPasswordNotMatch", Settings.g_sReSetPasswordNotMatchMsg);
             }
             else
             {
-                M2Share.g_sReSetPasswordNotMatchMsg = LoadString;
+                Settings.g_sReSetPasswordNotMatchMsg = LoadString;
             }
             LoadString = ReadString("String", "PleaseInputUnLockPassword", "");
             if (LoadString == "")
             {
-                WriteString("String", "PleaseInputUnLockPassword", M2Share.g_sPleaseInputUnLockPasswordMsg);
+                WriteString("String", "PleaseInputUnLockPassword", Settings.g_sPleaseInputUnLockPasswordMsg);
             }
             else
             {
-                M2Share.g_sPleaseInputUnLockPasswordMsg = LoadString;
+                Settings.g_sPleaseInputUnLockPasswordMsg = LoadString;
             }
             LoadString = ReadString("String", "StorageUnLockOK", "");
             if (LoadString == "")
             {
-                WriteString("String", "StorageUnLockOK", M2Share.g_sStorageUnLockOKMsg);
+                WriteString("String", "StorageUnLockOK", Settings.g_sStorageUnLockOKMsg);
             }
             else
             {
-                M2Share.g_sStorageUnLockOKMsg = LoadString;
+                Settings.g_sStorageUnLockOKMsg = LoadString;
             }
             LoadString = ReadString("String", "StorageAlreadyUnLock", "");
             if (LoadString == "")
             {
-                WriteString("String", "StorageAlreadyUnLock", M2Share.g_sStorageAlreadyUnLockMsg);
+                WriteString("String", "StorageAlreadyUnLock", Settings.g_sStorageAlreadyUnLockMsg);
             }
             else
             {
-                M2Share.g_sStorageAlreadyUnLockMsg = LoadString;
+                Settings.g_sStorageAlreadyUnLockMsg = LoadString;
             }
             LoadString = ReadString("String", "StorageNoPassword", "");
             if (LoadString == "")
             {
-                WriteString("String", "StorageNoPassword", M2Share.g_sStorageNoPasswordMsg);
+                WriteString("String", "StorageNoPassword", Settings.g_sStorageNoPasswordMsg);
             }
             else
             {
-                M2Share.g_sStorageNoPasswordMsg = LoadString;
+                Settings.g_sStorageNoPasswordMsg = LoadString;
             }
             LoadString = ReadString("String", "UnLockPasswordFail", "");
             if (LoadString == "")
             {
-                WriteString("String", "UnLockPasswordFail", M2Share.g_sUnLockPasswordFailMsg);
+                WriteString("String", "UnLockPasswordFail", Settings.g_sUnLockPasswordFailMsg);
             }
             else
             {
-                M2Share.g_sUnLockPasswordFailMsg = LoadString;
+                Settings.g_sUnLockPasswordFailMsg = LoadString;
             }
             LoadString = ReadString("String", "LockStorageSuccess", "");
             if (LoadString == "")
             {
-                WriteString("String", "LockStorageSuccess", M2Share.g_sLockStorageSuccessMsg);
+                WriteString("String", "LockStorageSuccess", Settings.g_sLockStorageSuccessMsg);
             }
             else
             {
-                M2Share.g_sLockStorageSuccessMsg = LoadString;
+                Settings.g_sLockStorageSuccessMsg = LoadString;
             }
             LoadString = ReadString("String", "StoragePasswordClearMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "StoragePasswordClearMsg", M2Share.g_sStoragePasswordClearMsg);
+                WriteString("String", "StoragePasswordClearMsg", Settings.g_sStoragePasswordClearMsg);
             }
             else
             {
-                M2Share.g_sStoragePasswordClearMsg = LoadString;
+                Settings.g_sStoragePasswordClearMsg = LoadString;
             }
             LoadString = ReadString("String", "PleaseUnloadStoragePasswordMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "PleaseUnloadStoragePasswordMsg", M2Share.g_sPleaseUnloadStoragePasswordMsg);
+                WriteString("String", "PleaseUnloadStoragePasswordMsg", Settings.g_sPleaseUnloadStoragePasswordMsg);
             }
             else
             {
-                M2Share.g_sPleaseUnloadStoragePasswordMsg = LoadString;
+                Settings.g_sPleaseUnloadStoragePasswordMsg = LoadString;
             }
             LoadString = ReadString("String", "StorageAlreadyLock", "");
             if (LoadString == "")
             {
-                WriteString("String", "StorageAlreadyLock", M2Share.g_sStorageAlreadyLockMsg);
+                WriteString("String", "StorageAlreadyLock", Settings.g_sStorageAlreadyLockMsg);
             }
             else
             {
-                M2Share.g_sStorageAlreadyLockMsg = LoadString;
+                Settings.g_sStorageAlreadyLockMsg = LoadString;
             }
             LoadString = ReadString("String", "StoragePasswordLocked", "");
             if (LoadString == "")
             {
-                WriteString("String", "StoragePasswordLocked", M2Share.g_sStoragePasswordLockedMsg);
+                WriteString("String", "StoragePasswordLocked", Settings.g_sStoragePasswordLockedMsg);
             }
             else
             {
-                M2Share.g_sStoragePasswordLockedMsg = LoadString;
+                Settings.g_sStoragePasswordLockedMsg = LoadString;
             }
             LoadString = ReadString("String", "StorageSetPassword", "");
             if (LoadString == "")
             {
-                WriteString("String", "StorageSetPassword", M2Share.g_sSetPasswordMsg);
+                WriteString("String", "StorageSetPassword", Settings.g_sSetPasswordMsg);
             }
             else
             {
-                M2Share.g_sSetPasswordMsg = LoadString;
+                Settings.g_sSetPasswordMsg = LoadString;
             }
             LoadString = ReadString("String", "PleaseInputOldPassword", "");
             if (LoadString == "")
             {
-                WriteString("String", "PleaseInputOldPassword", M2Share.g_sPleaseInputOldPasswordMsg);
+                WriteString("String", "PleaseInputOldPassword", Settings.g_sPleaseInputOldPasswordMsg);
             }
             else
             {
-                M2Share.g_sPleaseInputOldPasswordMsg = LoadString;
+                Settings.g_sPleaseInputOldPasswordMsg = LoadString;
             }
             LoadString = ReadString("String", "PasswordIsClearMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "PasswordIsClearMsg", M2Share.g_sOldPasswordIsClearMsg);
+                WriteString("String", "PasswordIsClearMsg", Settings.g_sOldPasswordIsClearMsg);
             }
             else
             {
-                M2Share.g_sOldPasswordIsClearMsg = LoadString;
+                Settings.g_sOldPasswordIsClearMsg = LoadString;
             }
             LoadString = ReadString("String", "NoPasswordSet", "");
             if (LoadString == "")
             {
-                WriteString("String", "NoPasswordSet", M2Share.g_sNoPasswordSetMsg);
+                WriteString("String", "NoPasswordSet", Settings.g_sNoPasswordSetMsg);
             }
             else
             {
-                M2Share.g_sNoPasswordSetMsg = LoadString;
+                Settings.g_sNoPasswordSetMsg = LoadString;
             }
             LoadString = ReadString("String", "OldPasswordIncorrect", "");
             if (LoadString == "")
             {
-                WriteString("String", "OldPasswordIncorrect", M2Share.g_sOldPasswordIncorrectMsg);
+                WriteString("String", "OldPasswordIncorrect", Settings.g_sOldPasswordIncorrectMsg);
             }
             else
             {
-                M2Share.g_sOldPasswordIncorrectMsg = LoadString;
+                Settings.g_sOldPasswordIncorrectMsg = LoadString;
             }
             LoadString = ReadString("String", "StorageIsLocked", "");
             if (LoadString == "")
             {
-                WriteString("String", "StorageIsLocked", M2Share.g_sStorageIsLockedMsg);
+                WriteString("String", "StorageIsLocked", Settings.g_sStorageIsLockedMsg);
             }
             else
             {
-                M2Share.g_sStorageIsLockedMsg = LoadString;
+                Settings.g_sStorageIsLockedMsg = LoadString;
             }
             LoadString = ReadString("String", "PleaseTryDealLaterMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "PleaseTryDealLaterMsg", M2Share.g_sPleaseTryDealLaterMsg);
+                WriteString("String", "PleaseTryDealLaterMsg", Settings.g_sPleaseTryDealLaterMsg);
             }
             else
             {
-                M2Share.g_sPleaseTryDealLaterMsg = LoadString;
+                Settings.g_sPleaseTryDealLaterMsg = LoadString;
             }
             LoadString = ReadString("String", "DealItemsDenyGetBackMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "DealItemsDenyGetBackMsg", M2Share.g_sDealItemsDenyGetBackMsg);
+                WriteString("String", "DealItemsDenyGetBackMsg", Settings.g_sDealItemsDenyGetBackMsg);
             }
             else
             {
-                M2Share.g_sDealItemsDenyGetBackMsg = LoadString;
+                Settings.g_sDealItemsDenyGetBackMsg = LoadString;
             }
             LoadString = ReadString("String", "DisableDealItemsMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "DisableDealItemsMsg", M2Share.g_sDisableDealItemsMsg);
+                WriteString("String", "DisableDealItemsMsg", Settings.g_sDisableDealItemsMsg);
             }
             else
             {
-                M2Share.g_sDisableDealItemsMsg = LoadString;
+                Settings.g_sDisableDealItemsMsg = LoadString;
             }
             LoadString = ReadString("String", "CanotTryDealMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotTryDealMsg", M2Share.g_sCanotTryDealMsg);
+                WriteString("String", "CanotTryDealMsg", Settings.g_sCanotTryDealMsg);
             }
             else
             {
-                M2Share.g_sCanotTryDealMsg = LoadString;
+                Settings.g_sCanotTryDealMsg = LoadString;
             }
             LoadString = ReadString("String", "DealActionCancelMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "DealActionCancelMsg", M2Share.g_sDealActionCancelMsg);
+                WriteString("String", "DealActionCancelMsg", Settings.g_sDealActionCancelMsg);
             }
             else
             {
-                M2Share.g_sDealActionCancelMsg = LoadString;
+                Settings.g_sDealActionCancelMsg = LoadString;
             }
             LoadString = ReadString("String", "PoseDisableDealMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "PoseDisableDealMsg", M2Share.g_sPoseDisableDealMsg);
+                WriteString("String", "PoseDisableDealMsg", Settings.g_sPoseDisableDealMsg);
             }
             else
             {
-                M2Share.g_sPoseDisableDealMsg = LoadString;
+                Settings.g_sPoseDisableDealMsg = LoadString;
             }
             LoadString = ReadString("String", "DealSuccessMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "DealSuccessMsg", M2Share.g_sDealSuccessMsg);
+                WriteString("String", "DealSuccessMsg", Settings.g_sDealSuccessMsg);
             }
             else
             {
-                M2Share.g_sDealSuccessMsg = LoadString;
+                Settings.g_sDealSuccessMsg = LoadString;
             }
             LoadString = ReadString("String", "DealOKTooFast", "");
             if (LoadString == "")
             {
-                WriteString("String", "DealOKTooFast", M2Share.g_sDealOKTooFast);
+                WriteString("String", "DealOKTooFast", Settings.g_sDealOKTooFast);
             }
             else
             {
-                M2Share.g_sDealOKTooFast = LoadString;
+                Settings.g_sDealOKTooFast = LoadString;
             }
             LoadString = ReadString("String", "YourBagSizeTooSmall", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourBagSizeTooSmall", M2Share.g_sYourBagSizeTooSmall);
+                WriteString("String", "YourBagSizeTooSmall", Settings.g_sYourBagSizeTooSmall);
             }
             else
             {
-                M2Share.g_sYourBagSizeTooSmall = LoadString;
+                Settings.g_sYourBagSizeTooSmall = LoadString;
             }
             LoadString = ReadString("String", "DealHumanBagSizeTooSmall", "");
             if (LoadString == "")
             {
-                WriteString("String", "DealHumanBagSizeTooSmall", M2Share.g_sDealHumanBagSizeTooSmall);
+                WriteString("String", "DealHumanBagSizeTooSmall", Settings.g_sDealHumanBagSizeTooSmall);
             }
             else
             {
-                M2Share.g_sDealHumanBagSizeTooSmall = LoadString;
+                Settings.g_sDealHumanBagSizeTooSmall = LoadString;
             }
             LoadString = ReadString("String", "YourGoldLargeThenLimit", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourGoldLargeThenLimit", M2Share.g_sYourGoldLargeThenLimit);
+                WriteString("String", "YourGoldLargeThenLimit", Settings.g_sYourGoldLargeThenLimit);
             }
             else
             {
-                M2Share.g_sYourGoldLargeThenLimit = LoadString;
+                Settings.g_sYourGoldLargeThenLimit = LoadString;
             }
             LoadString = ReadString("String", "DealHumanGoldLargeThenLimit", "");
             if (LoadString == "")
             {
-                WriteString("String", "DealHumanGoldLargeThenLimit", M2Share.g_sDealHumanGoldLargeThenLimit);
+                WriteString("String", "DealHumanGoldLargeThenLimit", Settings.g_sDealHumanGoldLargeThenLimit);
             }
             else
             {
-                M2Share.g_sDealHumanGoldLargeThenLimit = LoadString;
+                Settings.g_sDealHumanGoldLargeThenLimit = LoadString;
             }
             LoadString = ReadString("String", "YouDealOKMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouDealOKMsg", M2Share.g_sYouDealOKMsg);
+                WriteString("String", "YouDealOKMsg", Settings.g_sYouDealOKMsg);
             }
             else
             {
-                M2Share.g_sYouDealOKMsg = LoadString;
+                Settings.g_sYouDealOKMsg = LoadString;
             }
             LoadString = ReadString("String", "PoseDealOKMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "PoseDealOKMsg", M2Share.g_sPoseDealOKMsg);
+                WriteString("String", "PoseDealOKMsg", Settings.g_sPoseDealOKMsg);
             }
             else
             {
-                M2Share.g_sPoseDealOKMsg = LoadString;
+                Settings.g_sPoseDealOKMsg = LoadString;
             }
             LoadString = ReadString("String", "KickClientUserMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "KickClientUserMsg", M2Share.g_sKickClientUserMsg);
+                WriteString("String", "KickClientUserMsg", Settings.g_sKickClientUserMsg);
             }
             else
             {
-                M2Share.g_sKickClientUserMsg = LoadString;
+                Settings.g_sKickClientUserMsg = LoadString;
             }
             LoadString = ReadString("String", "ActionIsLockedMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ActionIsLockedMsg", M2Share.g_sActionIsLockedMsg);
+                WriteString("String", "ActionIsLockedMsg", Settings.g_sActionIsLockedMsg);
             }
             else
             {
-                M2Share.g_sActionIsLockedMsg = LoadString;
+                Settings.g_sActionIsLockedMsg = LoadString;
             }
             LoadString = ReadString("String", "PasswordNotSetMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "PasswordNotSetMsg", M2Share.g_sPasswordNotSetMsg);
+                WriteString("String", "PasswordNotSetMsg", Settings.g_sPasswordNotSetMsg);
             }
             else
             {
-                M2Share.g_sPasswordNotSetMsg = LoadString;
+                Settings.g_sPasswordNotSetMsg = LoadString;
             }
             LoadString = ReadString("String", "NotPasswordProtectMode", "");
             if (LoadString == "")
             {
-                WriteString("String", "NotPasswordProtectMode", M2Share.g_sNotPasswordProtectMode);
+                WriteString("String", "NotPasswordProtectMode", Settings.g_sNotPasswordProtectMode);
             }
             else
             {
-                M2Share.g_sNotPasswordProtectMode = LoadString;
+                Settings.g_sNotPasswordProtectMode = LoadString;
             }
             LoadString = ReadString("String", "CanotDropGoldMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotDropGoldMsg", M2Share.g_sCanotDropGoldMsg);
+                WriteString("String", "CanotDropGoldMsg", Settings.g_sCanotDropGoldMsg);
             }
             else
             {
-                M2Share.g_sCanotDropGoldMsg = LoadString;
+                Settings.g_sCanotDropGoldMsg = LoadString;
             }
             LoadString = ReadString("String", "CanotDropInSafeZoneMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotDropInSafeZoneMsg", M2Share.g_sCanotDropInSafeZoneMsg);
+                WriteString("String", "CanotDropInSafeZoneMsg", Settings.g_sCanotDropInSafeZoneMsg);
             }
             else
             {
-                M2Share.g_sCanotDropInSafeZoneMsg = LoadString;
+                Settings.g_sCanotDropInSafeZoneMsg = LoadString;
             }
             LoadString = ReadString("String", "CanotDropItemMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotDropItemMsg", M2Share.g_sCanotDropItemMsg);
+                WriteString("String", "CanotDropItemMsg", Settings.g_sCanotDropItemMsg);
             }
             else
             {
-                M2Share.g_sCanotDropItemMsg = LoadString;
+                Settings.g_sCanotDropItemMsg = LoadString;
             }
             LoadString = ReadString("String", "CanotDropItemMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotDropItemMsg", M2Share.g_sCanotDropItemMsg);
+                WriteString("String", "CanotDropItemMsg", Settings.g_sCanotDropItemMsg);
             }
             else
             {
-                M2Share.g_sCanotDropItemMsg = LoadString;
+                Settings.g_sCanotDropItemMsg = LoadString;
             }
             LoadString = ReadString("String", "CanotUseItemMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotUseItemMsg", M2Share.g_sCanotUseItemMsg);
+                WriteString("String", "CanotUseItemMsg", Settings.g_sCanotUseItemMsg);
             }
             else
             {
-                M2Share.g_sCanotUseItemMsg = LoadString;
+                Settings.g_sCanotUseItemMsg = LoadString;
             }
             LoadString = ReadString("String", "StartMarryManMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "StartMarryManMsg", M2Share.g_sStartMarryManMsg);
+                WriteString("String", "StartMarryManMsg", Settings.g_sStartMarryManMsg);
             }
             else
             {
-                M2Share.g_sStartMarryManMsg = LoadString;
+                Settings.g_sStartMarryManMsg = LoadString;
             }
             LoadString = ReadString("String", "StartMarryWoManMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "StartMarryWoManMsg", M2Share.g_sStartMarryWoManMsg);
+                WriteString("String", "StartMarryWoManMsg", Settings.g_sStartMarryWoManMsg);
             }
             else
             {
-                M2Share.g_sStartMarryWoManMsg = LoadString;
+                Settings.g_sStartMarryWoManMsg = LoadString;
             }
             LoadString = ReadString("String", "StartMarryManAskQuestionMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "StartMarryManAskQuestionMsg", M2Share.g_sStartMarryManAskQuestionMsg);
+                WriteString("String", "StartMarryManAskQuestionMsg", Settings.g_sStartMarryManAskQuestionMsg);
             }
             else
             {
-                M2Share.g_sStartMarryManAskQuestionMsg = LoadString;
+                Settings.g_sStartMarryManAskQuestionMsg = LoadString;
             }
             LoadString = ReadString("String", "StartMarryWoManAskQuestionMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "StartMarryWoManAskQuestionMsg", M2Share.g_sStartMarryWoManAskQuestionMsg);
+                WriteString("String", "StartMarryWoManAskQuestionMsg", Settings.g_sStartMarryWoManAskQuestionMsg);
             }
             else
             {
-                M2Share.g_sStartMarryWoManAskQuestionMsg = LoadString;
+                Settings.g_sStartMarryWoManAskQuestionMsg = LoadString;
             }
             LoadString = ReadString("String", "MarryManAnswerQuestionMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MarryManAnswerQuestionMsg", M2Share.g_sMarryManAnswerQuestionMsg);
+                WriteString("String", "MarryManAnswerQuestionMsg", Settings.g_sMarryManAnswerQuestionMsg);
             }
             else
             {
-                M2Share.g_sMarryManAnswerQuestionMsg = LoadString;
+                Settings.g_sMarryManAnswerQuestionMsg = LoadString;
             }
             LoadString = ReadString("String", "MarryManAskQuestionMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MarryManAskQuestionMsg", M2Share.g_sMarryManAskQuestionMsg);
+                WriteString("String", "MarryManAskQuestionMsg", Settings.g_sMarryManAskQuestionMsg);
             }
             else
             {
-                M2Share.g_sMarryManAskQuestionMsg = LoadString;
+                Settings.g_sMarryManAskQuestionMsg = LoadString;
             }
             LoadString = ReadString("String", "MarryWoManAnswerQuestionMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MarryWoManAnswerQuestionMsg", M2Share.g_sMarryWoManAnswerQuestionMsg);
+                WriteString("String", "MarryWoManAnswerQuestionMsg", Settings.g_sMarryWoManAnswerQuestionMsg);
             }
             else
             {
-                M2Share.g_sMarryWoManAnswerQuestionMsg = LoadString;
+                Settings.g_sMarryWoManAnswerQuestionMsg = LoadString;
             }
             LoadString = ReadString("String", "MarryWoManGetMarryMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MarryWoManGetMarryMsg", M2Share.g_sMarryWoManGetMarryMsg);
+                WriteString("String", "MarryWoManGetMarryMsg", Settings.g_sMarryWoManGetMarryMsg);
             }
             else
             {
-                M2Share.g_sMarryWoManGetMarryMsg = LoadString;
+                Settings.g_sMarryWoManGetMarryMsg = LoadString;
             }
             LoadString = ReadString("String", "MarryWoManDenyMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MarryWoManDenyMsg", M2Share.g_sMarryWoManDenyMsg);
+                WriteString("String", "MarryWoManDenyMsg", Settings.g_sMarryWoManDenyMsg);
             }
             else
             {
-                M2Share.g_sMarryWoManDenyMsg = LoadString;
+                Settings.g_sMarryWoManDenyMsg = LoadString;
             }
             LoadString = ReadString("String", "MarryWoManCancelMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MarryWoManCancelMsg", M2Share.g_sMarryWoManCancelMsg);
+                WriteString("String", "MarryWoManCancelMsg", Settings.g_sMarryWoManCancelMsg);
             }
             else
             {
-                M2Share.g_sMarryWoManCancelMsg = LoadString;
+                Settings.g_sMarryWoManCancelMsg = LoadString;
             }
             LoadString = ReadString("String", "ForceUnMarryManLoginMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ForceUnMarryManLoginMsg", M2Share.g_sfUnMarryManLoginMsg);
+                WriteString("String", "ForceUnMarryManLoginMsg", Settings.g_sfUnMarryManLoginMsg);
             }
             else
             {
-                M2Share.g_sfUnMarryManLoginMsg = LoadString;
+                Settings.g_sfUnMarryManLoginMsg = LoadString;
             }
             LoadString = ReadString("String", "ForceUnMarryWoManLoginMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ForceUnMarryWoManLoginMsg", M2Share.g_sfUnMarryWoManLoginMsg);
+                WriteString("String", "ForceUnMarryWoManLoginMsg", Settings.g_sfUnMarryWoManLoginMsg);
             }
             else
             {
-                M2Share.g_sfUnMarryWoManLoginMsg = LoadString;
+                Settings.g_sfUnMarryWoManLoginMsg = LoadString;
             }
             LoadString = ReadString("String", "ManLoginDearOnlineSelfMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ManLoginDearOnlineSelfMsg", M2Share.g_sManLoginDearOnlineSelfMsg);
+                WriteString("String", "ManLoginDearOnlineSelfMsg", Settings.g_sManLoginDearOnlineSelfMsg);
             }
             else
             {
-                M2Share.g_sManLoginDearOnlineSelfMsg = LoadString;
+                Settings.g_sManLoginDearOnlineSelfMsg = LoadString;
             }
             LoadString = ReadString("String", "ManLoginDearOnlineDearMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ManLoginDearOnlineDearMsg", M2Share.g_sManLoginDearOnlineDearMsg);
+                WriteString("String", "ManLoginDearOnlineDearMsg", Settings.g_sManLoginDearOnlineDearMsg);
             }
             else
             {
-                M2Share.g_sManLoginDearOnlineDearMsg = LoadString;
+                Settings.g_sManLoginDearOnlineDearMsg = LoadString;
             }
             LoadString = ReadString("String", "WoManLoginDearOnlineSelfMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WoManLoginDearOnlineSelfMsg", M2Share.g_sWoManLoginDearOnlineSelfMsg);
+                WriteString("String", "WoManLoginDearOnlineSelfMsg", Settings.g_sWoManLoginDearOnlineSelfMsg);
             }
             else
             {
-                M2Share.g_sWoManLoginDearOnlineSelfMsg = LoadString;
+                Settings.g_sWoManLoginDearOnlineSelfMsg = LoadString;
             }
             LoadString = ReadString("String", "WoManLoginDearOnlineDearMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WoManLoginDearOnlineDearMsg", M2Share.g_sWoManLoginDearOnlineDearMsg);
+                WriteString("String", "WoManLoginDearOnlineDearMsg", Settings.g_sWoManLoginDearOnlineDearMsg);
             }
             else
             {
-                M2Share.g_sWoManLoginDearOnlineDearMsg = LoadString;
+                Settings.g_sWoManLoginDearOnlineDearMsg = LoadString;
             }
             LoadString = ReadString("String", "ManLoginDearNotOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ManLoginDearNotOnlineMsg", M2Share.g_sManLoginDearNotOnlineMsg);
+                WriteString("String", "ManLoginDearNotOnlineMsg", Settings.g_sManLoginDearNotOnlineMsg);
             }
             else
             {
-                M2Share.g_sManLoginDearNotOnlineMsg = LoadString;
+                Settings.g_sManLoginDearNotOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "WoManLoginDearNotOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WoManLoginDearNotOnlineMsg", M2Share.g_sWoManLoginDearNotOnlineMsg);
+                WriteString("String", "WoManLoginDearNotOnlineMsg", Settings.g_sWoManLoginDearNotOnlineMsg);
             }
             else
             {
-                M2Share.g_sWoManLoginDearNotOnlineMsg = LoadString;
+                Settings.g_sWoManLoginDearNotOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "ManLongOutDearOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ManLongOutDearOnlineMsg", M2Share.g_sManLongOutDearOnlineMsg);
+                WriteString("String", "ManLongOutDearOnlineMsg", Settings.g_sManLongOutDearOnlineMsg);
             }
             else
             {
-                M2Share.g_sManLongOutDearOnlineMsg = LoadString;
+                Settings.g_sManLongOutDearOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "WoManLongOutDearOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WoManLongOutDearOnlineMsg", M2Share.g_sWoManLongOutDearOnlineMsg);
+                WriteString("String", "WoManLongOutDearOnlineMsg", Settings.g_sWoManLongOutDearOnlineMsg);
             }
             else
             {
-                M2Share.g_sWoManLongOutDearOnlineMsg = LoadString;
+                Settings.g_sWoManLongOutDearOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "YouAreNotMarryedMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouAreNotMarryedMsg", M2Share.g_sYouAreNotMarryedMsg);
+                WriteString("String", "YouAreNotMarryedMsg", Settings.g_sYouAreNotMarryedMsg);
             }
             else
             {
-                M2Share.g_sYouAreNotMarryedMsg = LoadString;
+                Settings.g_sYouAreNotMarryedMsg = LoadString;
             }
             LoadString = ReadString("String", "YourWifeNotOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourWifeNotOnlineMsg", M2Share.g_sYourWifeNotOnlineMsg);
+                WriteString("String", "YourWifeNotOnlineMsg", Settings.g_sYourWifeNotOnlineMsg);
             }
             else
             {
-                M2Share.g_sYourWifeNotOnlineMsg = LoadString;
+                Settings.g_sYourWifeNotOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "YourHusbandNotOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourHusbandNotOnlineMsg", M2Share.g_sYourHusbandNotOnlineMsg);
+                WriteString("String", "YourHusbandNotOnlineMsg", Settings.g_sYourHusbandNotOnlineMsg);
             }
             else
             {
-                M2Share.g_sYourHusbandNotOnlineMsg = LoadString;
+                Settings.g_sYourHusbandNotOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "YourWifeNowLocateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourWifeNowLocateMsg", M2Share.g_sYourWifeNowLocateMsg);
+                WriteString("String", "YourWifeNowLocateMsg", Settings.g_sYourWifeNowLocateMsg);
             }
             else
             {
-                M2Share.g_sYourWifeNowLocateMsg = LoadString;
+                Settings.g_sYourWifeNowLocateMsg = LoadString;
             }
             LoadString = ReadString("String", "YourHusbandSearchLocateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourHusbandSearchLocateMsg", M2Share.g_sYourHusbandSearchLocateMsg);
+                WriteString("String", "YourHusbandSearchLocateMsg", Settings.g_sYourHusbandSearchLocateMsg);
             }
             else
             {
-                M2Share.g_sYourHusbandSearchLocateMsg = LoadString;
+                Settings.g_sYourHusbandSearchLocateMsg = LoadString;
             }
             LoadString = ReadString("String", "YourHusbandNowLocateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourHusbandNowLocateMsg", M2Share.g_sYourHusbandNowLocateMsg);
+                WriteString("String", "YourHusbandNowLocateMsg", Settings.g_sYourHusbandNowLocateMsg);
             }
             else
             {
-                M2Share.g_sYourHusbandNowLocateMsg = LoadString;
+                Settings.g_sYourHusbandNowLocateMsg = LoadString;
             }
             LoadString = ReadString("String", "YourWifeSearchLocateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourWifeSearchLocateMsg", M2Share.g_sYourWifeSearchLocateMsg);
+                WriteString("String", "YourWifeSearchLocateMsg", Settings.g_sYourWifeSearchLocateMsg);
             }
             else
             {
-                M2Share.g_sYourWifeSearchLocateMsg = LoadString;
+                Settings.g_sYourWifeSearchLocateMsg = LoadString;
             }
             LoadString = ReadString("String", "FUnMasterLoginMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "FUnMasterLoginMsg", M2Share.g_sfUnMasterLoginMsg);
+                WriteString("String", "FUnMasterLoginMsg", Settings.g_sfUnMasterLoginMsg);
             }
             else
             {
-                M2Share.g_sfUnMasterLoginMsg = LoadString;
+                Settings.g_sfUnMasterLoginMsg = LoadString;
             }
             LoadString = ReadString("String", "UnMasterListLoginMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "UnMasterListLoginMsg", M2Share.g_sfUnMasterListLoginMsg);
+                WriteString("String", "UnMasterListLoginMsg", Settings.g_sfUnMasterListLoginMsg);
             }
             else
             {
-                M2Share.g_sfUnMasterListLoginMsg = LoadString;
+                Settings.g_sfUnMasterListLoginMsg = LoadString;
             }
             LoadString = ReadString("String", "MasterListOnlineSelfMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MasterListOnlineSelfMsg", M2Share.g_sMasterListOnlineSelfMsg);
+                WriteString("String", "MasterListOnlineSelfMsg", Settings.g_sMasterListOnlineSelfMsg);
             }
             else
             {
-                M2Share.g_sMasterListOnlineSelfMsg = LoadString;
+                Settings.g_sMasterListOnlineSelfMsg = LoadString;
             }
             LoadString = ReadString("String", "MasterListOnlineMasterMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MasterListOnlineMasterMsg", M2Share.g_sMasterListOnlineMasterMsg);
+                WriteString("String", "MasterListOnlineMasterMsg", Settings.g_sMasterListOnlineMasterMsg);
             }
             else
             {
-                M2Share.g_sMasterListOnlineMasterMsg = LoadString;
+                Settings.g_sMasterListOnlineMasterMsg = LoadString;
             }
             LoadString = ReadString("String", "MasterOnlineSelfMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MasterOnlineSelfMsg", M2Share.g_sMasterOnlineSelfMsg);
+                WriteString("String", "MasterOnlineSelfMsg", Settings.g_sMasterOnlineSelfMsg);
             }
             else
             {
-                M2Share.g_sMasterOnlineSelfMsg = LoadString;
+                Settings.g_sMasterOnlineSelfMsg = LoadString;
             }
             LoadString = ReadString("String", "MasterOnlineMasterListMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MasterOnlineMasterListMsg", M2Share.g_sMasterOnlineMasterListMsg);
+                WriteString("String", "MasterOnlineMasterListMsg", Settings.g_sMasterOnlineMasterListMsg);
             }
             else
             {
-                M2Share.g_sMasterOnlineMasterListMsg = LoadString;
+                Settings.g_sMasterOnlineMasterListMsg = LoadString;
             }
             LoadString = ReadString("String", "MasterLongOutMasterListOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MasterLongOutMasterListOnlineMsg", M2Share.g_sMasterLongOutMasterListOnlineMsg);
+                WriteString("String", "MasterLongOutMasterListOnlineMsg", Settings.g_sMasterLongOutMasterListOnlineMsg);
             }
             else
             {
-                M2Share.g_sMasterLongOutMasterListOnlineMsg = LoadString;
+                Settings.g_sMasterLongOutMasterListOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "MasterListLongOutMasterOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MasterListLongOutMasterOnlineMsg", M2Share.g_sMasterListLongOutMasterOnlineMsg);
+                WriteString("String", "MasterListLongOutMasterOnlineMsg", Settings.g_sMasterListLongOutMasterOnlineMsg);
             }
             else
             {
-                M2Share.g_sMasterListLongOutMasterOnlineMsg = LoadString;
+                Settings.g_sMasterListLongOutMasterOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "MasterListNotOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MasterListNotOnlineMsg", M2Share.g_sMasterListNotOnlineMsg);
+                WriteString("String", "MasterListNotOnlineMsg", Settings.g_sMasterListNotOnlineMsg);
             }
             else
             {
-                M2Share.g_sMasterListNotOnlineMsg = LoadString;
+                Settings.g_sMasterListNotOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "MasterNotOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "MasterNotOnlineMsg", M2Share.g_sMasterNotOnlineMsg);
+                WriteString("String", "MasterNotOnlineMsg", Settings.g_sMasterNotOnlineMsg);
             }
             else
             {
-                M2Share.g_sMasterNotOnlineMsg = LoadString;
+                Settings.g_sMasterNotOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "YouAreNotMasterMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouAreNotMasterMsg", M2Share.g_sYouAreNotMasterMsg);
+                WriteString("String", "YouAreNotMasterMsg", Settings.g_sYouAreNotMasterMsg);
             }
             else
             {
-                M2Share.g_sYouAreNotMasterMsg = LoadString;
+                Settings.g_sYouAreNotMasterMsg = LoadString;
             }
             LoadString = ReadString("String", "YourMasterNotOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourMasterNotOnlineMsg", M2Share.g_sYourMasterNotOnlineMsg);
+                WriteString("String", "YourMasterNotOnlineMsg", Settings.g_sYourMasterNotOnlineMsg);
             }
             else
             {
-                M2Share.g_sYourMasterNotOnlineMsg = LoadString;
+                Settings.g_sYourMasterNotOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "YourMasterListNotOnlineMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourMasterListNotOnlineMsg", M2Share.g_sYourMasterListNotOnlineMsg);
+                WriteString("String", "YourMasterListNotOnlineMsg", Settings.g_sYourMasterListNotOnlineMsg);
             }
             else
             {
-                M2Share.g_sYourMasterListNotOnlineMsg = LoadString;
+                Settings.g_sYourMasterListNotOnlineMsg = LoadString;
             }
             LoadString = ReadString("String", "YourMasterNowLocateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourMasterNowLocateMsg", M2Share.g_sYourMasterNowLocateMsg);
+                WriteString("String", "YourMasterNowLocateMsg", Settings.g_sYourMasterNowLocateMsg);
             }
             else
             {
-                M2Share.g_sYourMasterNowLocateMsg = LoadString;
+                Settings.g_sYourMasterNowLocateMsg = LoadString;
             }
             LoadString = ReadString("String", "YourMasterListSearchLocateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourMasterListSearchLocateMsg", M2Share.g_sYourMasterListSearchLocateMsg);
+                WriteString("String", "YourMasterListSearchLocateMsg", Settings.g_sYourMasterListSearchLocateMsg);
             }
             else
             {
-                M2Share.g_sYourMasterListSearchLocateMsg = LoadString;
+                Settings.g_sYourMasterListSearchLocateMsg = LoadString;
             }
             LoadString = ReadString("String", "YourMasterListNowLocateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourMasterListNowLocateMsg", M2Share.g_sYourMasterListNowLocateMsg);
+                WriteString("String", "YourMasterListNowLocateMsg", Settings.g_sYourMasterListNowLocateMsg);
             }
             else
             {
-                M2Share.g_sYourMasterListNowLocateMsg = LoadString;
+                Settings.g_sYourMasterListNowLocateMsg = LoadString;
             }
             LoadString = ReadString("String", "YourMasterSearchLocateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourMasterSearchLocateMsg", M2Share.g_sYourMasterSearchLocateMsg);
+                WriteString("String", "YourMasterSearchLocateMsg", Settings.g_sYourMasterSearchLocateMsg);
             }
             else
             {
-                M2Share.g_sYourMasterSearchLocateMsg = LoadString;
+                Settings.g_sYourMasterSearchLocateMsg = LoadString;
             }
             LoadString = ReadString("String", "YourMasterListUnMasterOKMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourMasterListUnMasterOKMsg", M2Share.g_sYourMasterListUnMasterOKMsg);
+                WriteString("String", "YourMasterListUnMasterOKMsg", Settings.g_sYourMasterListUnMasterOKMsg);
             }
             else
             {
-                M2Share.g_sYourMasterListUnMasterOKMsg = LoadString;
+                Settings.g_sYourMasterListUnMasterOKMsg = LoadString;
             }
             LoadString = ReadString("String", "YouAreUnMasterOKMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouAreUnMasterOKMsg", M2Share.g_sYouAreUnMasterOKMsg);
+                WriteString("String", "YouAreUnMasterOKMsg", Settings.g_sYouAreUnMasterOKMsg);
             }
             else
             {
-                M2Share.g_sYouAreUnMasterOKMsg = LoadString;
+                Settings.g_sYouAreUnMasterOKMsg = LoadString;
             }
             LoadString = ReadString("String", "UnMasterLoginMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "UnMasterLoginMsg", M2Share.g_sUnMasterLoginMsg);
+                WriteString("String", "UnMasterLoginMsg", Settings.g_sUnMasterLoginMsg);
             }
             else
             {
-                M2Share.g_sUnMasterLoginMsg = LoadString;
+                Settings.g_sUnMasterLoginMsg = LoadString;
             }
             LoadString = ReadString("String", "NPCSayUnMasterOKMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "NPCSayUnMasterOKMsg", M2Share.g_sNPCSayUnMasterOKMsg);
+                WriteString("String", "NPCSayUnMasterOKMsg", Settings.g_sNPCSayUnMasterOKMsg);
             }
             else
             {
-                M2Share.g_sNPCSayUnMasterOKMsg = LoadString;
+                Settings.g_sNPCSayUnMasterOKMsg = LoadString;
             }
             LoadString = ReadString("String", "NPCSayForceUnMasterMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "NPCSayForceUnMasterMsg", M2Share.g_sNPCSayForceUnMasterMsg);
+                WriteString("String", "NPCSayForceUnMasterMsg", Settings.g_sNPCSayForceUnMasterMsg);
             }
             else
             {
-                M2Share.g_sNPCSayForceUnMasterMsg = LoadString;
+                Settings.g_sNPCSayForceUnMasterMsg = LoadString;
             }
             LoadString = ReadString("String", "MyInfo", "");
             if (LoadString == "")
             {
-                WriteString("String", "MyInfo", M2Share.g_sMyInfo);
+                WriteString("String", "MyInfo", Settings.g_sMyInfo);
             }
             else
             {
-                M2Share.g_sMyInfo = LoadString;
+                Settings.g_sMyInfo = LoadString;
             }
             LoadString = ReadString("String", "OpenedDealMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "OpenedDealMsg", M2Share.g_sOpenedDealMsg);
+                WriteString("String", "OpenedDealMsg", Settings.g_sOpenedDealMsg);
             }
             else
             {
-                M2Share.g_sOpenedDealMsg = LoadString;
+                Settings.g_sOpenedDealMsg = LoadString;
             }
             LoadString = ReadString("String", "SendCustMsgCanNotUseNowMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "SendCustMsgCanNotUseNowMsg", M2Share.g_sSendCustMsgCanNotUseNowMsg);
+                WriteString("String", "SendCustMsgCanNotUseNowMsg", Settings.g_sSendCustMsgCanNotUseNowMsg);
             }
             else
             {
-                M2Share.g_sSendCustMsgCanNotUseNowMsg = LoadString;
+                Settings.g_sSendCustMsgCanNotUseNowMsg = LoadString;
             }
             LoadString = ReadString("String", "SubkMasterMsgCanNotUseNowMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "SubkMasterMsgCanNotUseNowMsg", M2Share.g_sSubkMasterMsgCanNotUseNowMsg);
+                WriteString("String", "SubkMasterMsgCanNotUseNowMsg", Settings.g_sSubkMasterMsgCanNotUseNowMsg);
             }
             else
             {
-                M2Share.g_sSubkMasterMsgCanNotUseNowMsg = LoadString;
+                Settings.g_sSubkMasterMsgCanNotUseNowMsg = LoadString;
             }
             LoadString = ReadString("String", "SendOnlineCountMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "SendOnlineCountMsg", M2Share.g_sSendOnlineCountMsg);
+                WriteString("String", "SendOnlineCountMsg", Settings.g_sSendOnlineCountMsg);
             }
             else
             {
-                M2Share.g_sSendOnlineCountMsg = LoadString;
+                Settings.g_sSendOnlineCountMsg = LoadString;
             }
             LoadString = ReadString("String", "WeaponRepairSuccess", "");
             if (LoadString == "")
             {
-                WriteString("String", "WeaponRepairSuccess", M2Share.g_sWeaponRepairSuccess);
+                WriteString("String", "WeaponRepairSuccess", Settings.g_sWeaponRepairSuccess);
             }
             else
             {
-                M2Share.g_sWeaponRepairSuccess = LoadString;
+                Settings.g_sWeaponRepairSuccess = LoadString;
             }
             LoadString = ReadString("String", "DefenceUpTime", "");
             if (LoadString == "")
             {
-                WriteString("String", "DefenceUpTime", M2Share.g_sDefenceUpTime);
+                WriteString("String", "DefenceUpTime", Settings.g_sDefenceUpTime);
             }
             else
             {
-                M2Share.g_sDefenceUpTime = LoadString;
+                Settings.g_sDefenceUpTime = LoadString;
             }
             LoadString = ReadString("String", "MagDefenceUpTime", "");
             if (LoadString == "")
             {
-                WriteString("String", "MagDefenceUpTime", M2Share.g_sMagDefenceUpTime);
+                WriteString("String", "MagDefenceUpTime", Settings.g_sMagDefenceUpTime);
             }
             else
             {
-                M2Share.g_sMagDefenceUpTime = LoadString;
+                Settings.g_sMagDefenceUpTime = LoadString;
             }
             LoadString = ReadString("String", "WinLottery1Msg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WinLottery1Msg", M2Share.g_sWinLottery1Msg);
+                WriteString("String", "WinLottery1Msg", Settings.g_sWinLottery1Msg);
             }
             else
             {
-                M2Share.g_sWinLottery1Msg = LoadString;
+                Settings.g_sWinLottery1Msg = LoadString;
             }
             LoadString = ReadString("String", "WinLottery2Msg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WinLottery2Msg", M2Share.g_sWinLottery2Msg);
+                WriteString("String", "WinLottery2Msg", Settings.g_sWinLottery2Msg);
             }
             else
             {
-                M2Share.g_sWinLottery2Msg = LoadString;
+                Settings.g_sWinLottery2Msg = LoadString;
             }
             LoadString = ReadString("String", "WinLottery3Msg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WinLottery3Msg", M2Share.g_sWinLottery3Msg);
+                WriteString("String", "WinLottery3Msg", Settings.g_sWinLottery3Msg);
             }
             else
             {
-                M2Share.g_sWinLottery3Msg = LoadString;
+                Settings.g_sWinLottery3Msg = LoadString;
             }
             LoadString = ReadString("String", "WinLottery4Msg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WinLottery4Msg", M2Share.g_sWinLottery4Msg);
+                WriteString("String", "WinLottery4Msg", Settings.g_sWinLottery4Msg);
             }
             else
             {
-                M2Share.g_sWinLottery4Msg = LoadString;
+                Settings.g_sWinLottery4Msg = LoadString;
             }
             LoadString = ReadString("String", "WinLottery5Msg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WinLottery5Msg", M2Share.g_sWinLottery5Msg);
+                WriteString("String", "WinLottery5Msg", Settings.g_sWinLottery5Msg);
             }
             else
             {
-                M2Share.g_sWinLottery5Msg = LoadString;
+                Settings.g_sWinLottery5Msg = LoadString;
             }
             LoadString = ReadString("String", "WinLottery6Msg", "");
             if (LoadString == "")
             {
-                WriteString("String", "WinLottery6Msg", M2Share.g_sWinLottery6Msg);
+                WriteString("String", "WinLottery6Msg", Settings.g_sWinLottery6Msg);
             }
             else
             {
-                M2Share.g_sWinLottery6Msg = LoadString;
+                Settings.g_sWinLottery6Msg = LoadString;
             }
             LoadString = ReadString("String", "NotWinLotteryMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "NotWinLotteryMsg", M2Share.g_sNotWinLotteryMsg);
+                WriteString("String", "NotWinLotteryMsg", Settings.g_sNotWinLotteryMsg);
             }
             else
             {
-                M2Share.g_sNotWinLotteryMsg = LoadString;
+                Settings.g_sNotWinLotteryMsg = LoadString;
             }
             LoadString = ReadString("String", "WeaptonMakeLuck", "");
             if (LoadString == "")
             {
-                WriteString("String", "WeaptonMakeLuck", M2Share.g_sWeaptonMakeLuck);
+                WriteString("String", "WeaptonMakeLuck", Settings.g_sWeaptonMakeLuck);
             }
             else
             {
-                M2Share.g_sWeaptonMakeLuck = LoadString;
+                Settings.g_sWeaptonMakeLuck = LoadString;
             }
             LoadString = ReadString("String", "WeaptonNotMakeLuck", "");
             if (LoadString == "")
             {
-                WriteString("String", "WeaptonNotMakeLuck", M2Share.g_sWeaptonNotMakeLuck);
+                WriteString("String", "WeaptonNotMakeLuck", Settings.g_sWeaptonNotMakeLuck);
             }
             else
             {
-                M2Share.g_sWeaptonNotMakeLuck = LoadString;
+                Settings.g_sWeaptonNotMakeLuck = LoadString;
             }
             LoadString = ReadString("String", "TheWeaponIsCursed", "");
             if (LoadString == "")
             {
-                WriteString("String", "TheWeaponIsCursed", M2Share.g_sTheWeaponIsCursed);
+                WriteString("String", "TheWeaponIsCursed", Settings.g_sTheWeaponIsCursed);
             }
             else
             {
-                M2Share.g_sTheWeaponIsCursed = LoadString;
+                Settings.g_sTheWeaponIsCursed = LoadString;
             }
             LoadString = ReadString("String", "CanotTakeOffItem", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotTakeOffItem", M2Share.g_sCanotTakeOffItem);
+                WriteString("String", "CanotTakeOffItem", Settings.g_sCanotTakeOffItem);
             }
             else
             {
-                M2Share.g_sCanotTakeOffItem = LoadString;
+                Settings.g_sCanotTakeOffItem = LoadString;
             }
             LoadString = ReadString("String", "JoinGroupMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "JoinGroupMsg", M2Share.g_sJoinGroup);
+                WriteString("String", "JoinGroupMsg", Settings.g_sJoinGroup);
             }
             else
             {
-                M2Share.g_sJoinGroup = LoadString;
+                Settings.g_sJoinGroup = LoadString;
             }
             LoadString = ReadString("String", "TryModeCanotUseStorage", "");
             if (LoadString == "")
             {
-                WriteString("String", "TryModeCanotUseStorage", M2Share.g_sTryModeCanotUseStorage);
+                WriteString("String", "TryModeCanotUseStorage", Settings.g_sTryModeCanotUseStorage);
             }
             else
             {
-                M2Share.g_sTryModeCanotUseStorage = LoadString;
+                Settings.g_sTryModeCanotUseStorage = LoadString;
             }
             LoadString = ReadString("String", "CanotGetItemsMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotGetItemsMsg", M2Share.g_sCanotGetItems);
+                WriteString("String", "CanotGetItemsMsg", Settings.g_sCanotGetItems);
             }
             else
             {
-                M2Share.g_sCanotGetItems = LoadString;
+                Settings.g_sCanotGetItems = LoadString;
             }
             LoadString = ReadString("String", "EnableDearRecall", "");
             if (LoadString == "")
@@ -2011,345 +2011,345 @@ namespace GameSvr.Conf
             LoadString = ReadString("String", "YourIPaddrDenyLogon", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourIPaddrDenyLogon", M2Share.g_sYourIPaddrDenyLogon);
+                WriteString("String", "YourIPaddrDenyLogon", Settings.g_sYourIPaddrDenyLogon);
             }
             else
             {
-                M2Share.g_sYourIPaddrDenyLogon = LoadString;
+                Settings.g_sYourIPaddrDenyLogon = LoadString;
             }
             LoadString = ReadString("String", "YourAccountDenyLogon", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourAccountDenyLogon", M2Share.g_sYourAccountDenyLogon);
+                WriteString("String", "YourAccountDenyLogon", Settings.g_sYourAccountDenyLogon);
             }
             else
             {
-                M2Share.g_sYourAccountDenyLogon = LoadString;
+                Settings.g_sYourAccountDenyLogon = LoadString;
             }
             LoadString = ReadString("String", "YourChrNameDenyLogon", "");
             if (LoadString == "")
             {
-                WriteString("String", "YourChrNameDenyLogon", M2Share.g_sYourChrNameDenyLogon);
+                WriteString("String", "YourChrNameDenyLogon", Settings.g_sYourChrNameDenyLogon);
             }
             else
             {
-                M2Share.g_sYourChrNameDenyLogon = LoadString;
+                Settings.g_sYourChrNameDenyLogon = LoadString;
             }
             LoadString = ReadString("String", "CanotPickUpItem", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotPickUpItem", M2Share.g_sCanotPickUpItem);
+                WriteString("String", "CanotPickUpItem", Settings.g_sCanotPickUpItem);
             }
             else
             {
-                M2Share.g_sCanotPickUpItem = LoadString;
+                Settings.g_sCanotPickUpItem = LoadString;
             }
             LoadString = ReadString("String", "sQUERYBAGITEMS", "");
             if (LoadString == "")
             {
-                WriteString("String", "sQUERYBAGITEMS", M2Share.g_sQUERYBAGITEMS);
+                WriteString("String", "sQUERYBAGITEMS", Settings.g_sQUERYBAGITEMS);
             }
             else
             {
-                M2Share.g_sQUERYBAGITEMS = LoadString;
+                Settings.g_sQUERYBAGITEMS = LoadString;
             }
             LoadString = ReadString("String", "CanotSendmsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "CanotSendmsg", M2Share.g_sCanotSendmsg);
+                WriteString("String", "CanotSendmsg", Settings.g_sCanotSendmsg);
             }
             else
             {
-                M2Share.g_sCanotSendmsg = LoadString;
+                Settings.g_sCanotSendmsg = LoadString;
             }
             LoadString = ReadString("String", "UserDenyWhisperMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "UserDenyWhisperMsg", M2Share.g_sUserDenyWhisperMsg);
+                WriteString("String", "UserDenyWhisperMsg", Settings.g_sUserDenyWhisperMsg);
             }
             else
             {
-                M2Share.g_sUserDenyWhisperMsg = LoadString;
+                Settings.g_sUserDenyWhisperMsg = LoadString;
             }
             LoadString = ReadString("String", "UserNotOnLine", "");
             if (LoadString == "")
             {
-                WriteString("String", "UserNotOnLine", M2Share.g_sUserNotOnLine);
+                WriteString("String", "UserNotOnLine", Settings.g_sUserNotOnLine);
             }
             else
             {
-                M2Share.g_sUserNotOnLine = LoadString;
+                Settings.g_sUserNotOnLine = LoadString;
             }
             LoadString = ReadString("String", "RevivalRecoverMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "RevivalRecoverMsg", M2Share.g_sRevivalRecoverMsg);
+                WriteString("String", "RevivalRecoverMsg", Settings.g_sRevivalRecoverMsg);
             }
             else
             {
-                M2Share.g_sRevivalRecoverMsg = LoadString;
+                Settings.g_sRevivalRecoverMsg = LoadString;
             }
             LoadString = ReadString("String", "ClientVersionTooOld", "");
             if (LoadString == "")
             {
-                WriteString("String", "ClientVersionTooOld", M2Share.g_sClientVersionTooOld);
+                WriteString("String", "ClientVersionTooOld", Settings.g_sClientVersionTooOld);
             }
             else
             {
-                M2Share.g_sClientVersionTooOld = LoadString;
+                Settings.g_sClientVersionTooOld = LoadString;
             }
             LoadString = ReadString("String", "CastleGuildName", "");
             if (LoadString == "")
             {
-                WriteString("String", "CastleGuildName", M2Share.g_sCastleGuildName);
+                WriteString("String", "CastleGuildName", Settings.g_sCastleGuildName);
             }
             else
             {
-                M2Share.g_sCastleGuildName = LoadString;
+                Settings.g_sCastleGuildName = LoadString;
             }
             LoadString = ReadString("String", "NoCastleGuildName", "");
             if (LoadString == "")
             {
-                WriteString("String", "NoCastleGuildName", M2Share.g_sNoCastleGuildName);
+                WriteString("String", "NoCastleGuildName", Settings.g_sNoCastleGuildName);
             }
             else
             {
-                M2Share.g_sNoCastleGuildName = LoadString;
+                Settings.g_sNoCastleGuildName = LoadString;
             }
             LoadString = ReadString("String", "WarrReNewName", "");
             if (LoadString == "")
             {
-                WriteString("String", "WarrReNewName", M2Share.g_sWarrReNewName);
+                WriteString("String", "WarrReNewName", Settings.g_sWarrReNewName);
             }
             else
             {
-                M2Share.g_sWarrReNewName = LoadString;
+                Settings.g_sWarrReNewName = LoadString;
             }
             LoadString = ReadString("String", "WizardReNewName", "");
             if (LoadString == "")
             {
-                WriteString("String", "WizardReNewName", M2Share.g_sWizardReNewName);
+                WriteString("String", "WizardReNewName", Settings.g_sWizardReNewName);
             }
             else
             {
-                M2Share.g_sWizardReNewName = LoadString;
+                Settings.g_sWizardReNewName = LoadString;
             }
             LoadString = ReadString("String", "TaosReNewName", "");
             if (LoadString == "")
             {
-                WriteString("String", "TaosReNewName", M2Share.g_sTaosReNewName);
+                WriteString("String", "TaosReNewName", Settings.g_sTaosReNewName);
             }
             else
             {
-                M2Share.g_sTaosReNewName = LoadString;
+                Settings.g_sTaosReNewName = LoadString;
             }
             LoadString = ReadString("String", "RankLevelName", "");
             if (LoadString == "")
             {
-                WriteString("String", "RankLevelName", M2Share.g_sRankLevelName);
+                WriteString("String", "RankLevelName", Settings.g_sRankLevelName);
             }
             else
             {
-                M2Share.g_sRankLevelName = LoadString.Replace("%s", "{0}");
+                Settings.g_sRankLevelName = LoadString.Replace("%s", "{0}");
             }
             LoadString = ReadString("String", "ManDearName", "");
             if (LoadString == "")
             {
-                WriteString("String", "ManDearName", M2Share.g_sManDearName);
+                WriteString("String", "ManDearName", Settings.g_sManDearName);
             }
             else
             {
-                M2Share.g_sManDearName = LoadString;
+                Settings.g_sManDearName = LoadString;
             }
             LoadString = ReadString("String", "WoManDearName", "");
             if (LoadString == "")
             {
-                WriteString("String", "WoManDearName", M2Share.g_sWoManDearName);
+                WriteString("String", "WoManDearName", Settings.g_sWoManDearName);
             }
             else
             {
-                M2Share.g_sWoManDearName = LoadString;
+                Settings.g_sWoManDearName = LoadString;
             }
             LoadString = ReadString("String", "MasterName", "");
             if (LoadString == "")
             {
-                WriteString("String", "MasterName", M2Share.g_sMasterName);
+                WriteString("String", "MasterName", Settings.g_sMasterName);
             }
             else
             {
-                M2Share.g_sMasterName = LoadString;
+                Settings.g_sMasterName = LoadString;
             }
 
             LoadString = ReadString("String", "NoMasterName", "");
             if (LoadString == "")
             {
-                WriteString("String", "NoMasterName", M2Share.g_sNoMasterName);
+                WriteString("String", "NoMasterName", Settings.g_sNoMasterName);
             }
             else
             {
-                M2Share.g_sNoMasterName = LoadString;
+                Settings.g_sNoMasterName = LoadString;
             }
             LoadString = ReadString("String", "HumanShowName", "");
             if (LoadString == "")
             {
-                WriteString("String", "HumanShowName", M2Share.g_sHumanShowName);
+                WriteString("String", "HumanShowName", Settings.g_sHumanShowName);
             }
             else
             {
-                M2Share.g_sHumanShowName = LoadString;
+                Settings.g_sHumanShowName = LoadString;
             }
             LoadString = ReadString("String", "ChangePermissionMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ChangePermissionMsg", M2Share.g_sChangePermissionMsg);
+                WriteString("String", "ChangePermissionMsg", Settings.g_sChangePermissionMsg);
             }
             else
             {
-                M2Share.g_sChangePermissionMsg = LoadString;
+                Settings.g_sChangePermissionMsg = LoadString;
             }
             LoadString = ReadString("String", "ChangeKillMonExpRateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ChangeKillMonExpRateMsg", M2Share.g_sChangeKillMonExpRateMsg);
+                WriteString("String", "ChangeKillMonExpRateMsg", Settings.g_sChangeKillMonExpRateMsg);
             }
             else
             {
-                M2Share.g_sChangeKillMonExpRateMsg = LoadString;
+                Settings.g_sChangeKillMonExpRateMsg = LoadString;
             }
             LoadString = ReadString("String", "ChangePowerRateMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ChangePowerRateMsg", M2Share.g_sChangePowerRateMsg);
+                WriteString("String", "ChangePowerRateMsg", Settings.g_sChangePowerRateMsg);
             }
             else
             {
-                M2Share.g_sChangePowerRateMsg = LoadString;
+                Settings.g_sChangePowerRateMsg = LoadString;
             }
             LoadString = ReadString("String", "ChangeMemberLevelMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ChangeMemberLevelMsg", M2Share.g_sChangeMemberLevelMsg);
+                WriteString("String", "ChangeMemberLevelMsg", Settings.g_sChangeMemberLevelMsg);
             }
             else
             {
-                M2Share.g_sChangeMemberLevelMsg = LoadString;
+                Settings.g_sChangeMemberLevelMsg = LoadString;
             }
             LoadString = ReadString("String", "ChangeMemberTypeMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ChangeMemberTypeMsg", M2Share.g_sChangeMemberTypeMsg);
+                WriteString("String", "ChangeMemberTypeMsg", Settings.g_sChangeMemberTypeMsg);
             }
             else
             {
-                M2Share.g_sChangeMemberTypeMsg = LoadString;
+                Settings.g_sChangeMemberTypeMsg = LoadString;
             }
             LoadString = ReadString("String", "ScriptChangeHumanHPMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ScriptChangeHumanHPMsg", M2Share.g_sScriptChangeHumanHPMsg);
+                WriteString("String", "ScriptChangeHumanHPMsg", Settings.g_sScriptChangeHumanHPMsg);
             }
             else
             {
-                M2Share.g_sScriptChangeHumanHPMsg = LoadString;
+                Settings.g_sScriptChangeHumanHPMsg = LoadString;
             }
             LoadString = ReadString("String", "ScriptChangeHumanMPMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ScriptChangeHumanMPMsg", M2Share.g_sScriptChangeHumanMPMsg);
+                WriteString("String", "ScriptChangeHumanMPMsg", Settings.g_sScriptChangeHumanMPMsg);
             }
             else
             {
-                M2Share.g_sScriptChangeHumanMPMsg = LoadString;
+                Settings.g_sScriptChangeHumanMPMsg = LoadString;
             }
             LoadString = ReadString("String", "YouCanotDisableSayMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouCanotDisableSayMsg", M2Share.g_sDisableSayMsg);
+                WriteString("String", "YouCanotDisableSayMsg", Settings.g_sDisableSayMsg);
             }
             else
             {
-                M2Share.g_sDisableSayMsg = LoadString;
+                Settings.g_sDisableSayMsg = LoadString;
             }
             LoadString = ReadString("String", "OnlineCountMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "OnlineCountMsg", M2Share.g_sOnlineCountMsg);
+                WriteString("String", "OnlineCountMsg", Settings.g_sOnlineCountMsg);
             }
             else
             {
-                M2Share.g_sOnlineCountMsg = LoadString;
+                Settings.g_sOnlineCountMsg = LoadString;
             }
             LoadString = ReadString("String", "TotalOnlineCountMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "TotalOnlineCountMsg", M2Share.g_sTotalOnlineCountMsg);
+                WriteString("String", "TotalOnlineCountMsg", Settings.g_sTotalOnlineCountMsg);
             }
             else
             {
-                M2Share.g_sTotalOnlineCountMsg = LoadString;
+                Settings.g_sTotalOnlineCountMsg = LoadString;
             }
             LoadString = ReadString("String", "YouNeedLevelSendMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouNeedLevelSendMsg", M2Share.g_sYouNeedLevelMsg);
+                WriteString("String", "YouNeedLevelSendMsg", Settings.g_sYouNeedLevelMsg);
             }
             else
             {
-                M2Share.g_sYouNeedLevelMsg = LoadString;
+                Settings.g_sYouNeedLevelMsg = LoadString;
             }
             LoadString = ReadString("String", "ThisMapDisableSendCyCyMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "ThisMapDisableSendCyCyMsg", M2Share.g_sThisMapDisableSendCyCyMsg);
+                WriteString("String", "ThisMapDisableSendCyCyMsg", Settings.g_sThisMapDisableSendCyCyMsg);
             }
             else
             {
-                M2Share.g_sThisMapDisableSendCyCyMsg = LoadString;
+                Settings.g_sThisMapDisableSendCyCyMsg = LoadString;
             }
             LoadString = ReadString("String", "YouCanSendCyCyLaterMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouCanSendCyCyLaterMsg", M2Share.g_sYouCanSendCyCyLaterMsg);
+                WriteString("String", "YouCanSendCyCyLaterMsg", Settings.g_sYouCanSendCyCyLaterMsg);
             }
             else
             {
-                M2Share.g_sYouCanSendCyCyLaterMsg = LoadString;
+                Settings.g_sYouCanSendCyCyLaterMsg = LoadString;
             }
             LoadString = ReadString("String", "YouIsDisableSendMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouIsDisableSendMsg", M2Share.g_sYouIsDisableSendMsg);
+                WriteString("String", "YouIsDisableSendMsg", Settings.g_sYouIsDisableSendMsg);
             }
             else
             {
-                M2Share.g_sYouIsDisableSendMsg = LoadString;
+                Settings.g_sYouIsDisableSendMsg = LoadString;
             }
             LoadString = ReadString("String", "YouMurderedMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouMurderedMsg", M2Share.g_sYouMurderedMsg);
+                WriteString("String", "YouMurderedMsg", Settings.g_sYouMurderedMsg);
             }
             else
             {
-                M2Share.g_sYouMurderedMsg = LoadString;
+                Settings.g_sYouMurderedMsg = LoadString;
             }
             LoadString = ReadString("String", "YouKilledByMsg", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouKilledByMsg", M2Share.g_sYouKilledByMsg);
+                WriteString("String", "YouKilledByMsg", Settings.g_sYouKilledByMsg);
             }
             else
             {
-                M2Share.g_sYouKilledByMsg = LoadString;
+                Settings.g_sYouKilledByMsg = LoadString;
             }
             LoadString = ReadString("String", "YouprotectedByLawOfDefense", "");
             if (LoadString == "")
             {
-                WriteString("String", "YouprotectedByLawOfDefense", M2Share.g_sYouprotectedByLawOfDefense);
+                WriteString("String", "YouprotectedByLawOfDefense", Settings.g_sYouprotectedByLawOfDefense);
             }
             else
             {
-                M2Share.g_sYouprotectedByLawOfDefense = LoadString;
+                Settings.g_sYouprotectedByLawOfDefense = LoadString;
             }
         }
 

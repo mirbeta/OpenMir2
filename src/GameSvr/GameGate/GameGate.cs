@@ -137,7 +137,7 @@ namespace GameSvr.GameGate
             var dwRunTick = HUtil32.GetTickCount();
             if (GateInfo.nSendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
             {
-                if ((HUtil32.GetTickCount() - GateInfo.dwSendCheckTick) > M2Share.g_dwSocCheckTimeOut) // 2 * 1000
+                if ((HUtil32.GetTickCount() - GateInfo.dwSendCheckTick) > M2Share.SocCheckTimeOut) // 2 * 1000
                 {
                     GateInfo.nSendChecked = 0;
                     GateInfo.nSendBlockCount = 0;

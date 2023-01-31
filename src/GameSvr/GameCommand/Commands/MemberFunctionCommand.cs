@@ -8,10 +8,10 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void MemberFunction(PlayObject PlayObject)
         {
-            if (M2Share.g_ManageNPC != null)
+            if (M2Share.ManageNPC != null)
             {
                 PlayObject.ScriptGotoCount = 0;
-                M2Share.g_ManageNPC.GotoLable(PlayObject, "@Member", false);
+                M2Share.ManageNPC.GotoLable(PlayObject, "@Member", false);
             }
         }
     }

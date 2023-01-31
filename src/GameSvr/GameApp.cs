@@ -29,17 +29,17 @@ namespace GameSvr
         {
             M2Share.LocalDb = new LocalDB();
             M2Share.CommonDb = new CommonDB();
-            M2Share.g_nSockCountMax = 0;
-            M2Share.g_nHumCountMax = 0;
-            M2Share.dwUsrRotCountMin = 0;
-            M2Share.dwUsrRotCountMax = 0;
-            M2Share.g_nProcessHumanLoopTime = 0;
+            M2Share.SockCountMax = 0;
+            M2Share.HumCountMax = 0;
+            M2Share.UsrRotCountMin = 0;
+            M2Share.UsrRotCountMax = 0;
+            M2Share.ProcessHumanLoopTime = 0;
             M2Share.HumLimit = 30;
             M2Share.MonLimit = 30;
             M2Share.ZenLimit = 5;
             M2Share.NpcLimit = 5;
             M2Share.SocLimit = 10;
-            M2Share.nDecLimit = 20;
+            M2Share.DecLimit = 20;
             M2Share.Config.nLoadDBErrorCount = 0;
             M2Share.Config.nLoadDBCount = 0;
             M2Share.Config.nSaveDBCount = 0;
@@ -78,36 +78,35 @@ namespace GameSvr
             M2Share.ServerTableList = new TRouteInfo[20];
             M2Share.DenySayMsgList = new ConcurrentDictionary<string, long>(StringComparer.OrdinalIgnoreCase);
             M2Share.MiniMapList = new ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            M2Share.g_UnbindList = new Dictionary<int, string>();
+            M2Share.UnbindList = new Dictionary<int, string>();
             M2Share.LineNoticeList = new List<string>();
             M2Share.QuestDiaryList = new List<IList<TQDDinfo>>();
             M2Share.AbuseTextList = new StringList();
-            M2Share.g_MonSayMsgList = new Dictionary<string, IList<MonsterSayMsg>>(StringComparer.OrdinalIgnoreCase);
-            M2Share.g_DisableMakeItemList = new List<string>();
-            M2Share.g_EnableMakeItemList = new List<string>();
-            M2Share.g_DisableSellOffList = new List<string>();
-            M2Share.g_DisableMoveMapList = new StringList();
-            M2Share.g_DisableSendMsgList = new List<string>();
-            M2Share.g_MonDropLimitLIst = new ConcurrentDictionary<string, MonsterLimitDrop>(StringComparer.OrdinalIgnoreCase);
-            M2Share.g_DisableTakeOffList = new Dictionary<int, string>();
-            M2Share.g_UnMasterList = new List<string>();
-            M2Share.g_UnForceMasterList = new List<string>();
+            M2Share.MonSayMsgList = new Dictionary<string, IList<MonsterSayMsg>>(StringComparer.OrdinalIgnoreCase);
+            M2Share.DisableMakeItemList = new List<string>();
+            M2Share.EnableMakeItemList = new List<string>();
+            M2Share.DisableSellOffList = new List<string>();
+            M2Share.DisableMoveMapList = new StringList();
+            M2Share.DisableSendMsgList = new List<string>();
+            M2Share.MonDropLimitLIst = new ConcurrentDictionary<string, MonsterLimitDrop>(StringComparer.OrdinalIgnoreCase);
+            M2Share.DisableTakeOffList = new Dictionary<int, string>();
+            M2Share.UnMasterList = new List<string>();
+            M2Share.UnForceMasterList = new List<string>();
             M2Share.GameLogItemNameList = new List<string>();
-            M2Share.g_DenyIPAddrList = new List<string>();
-            M2Share.g_DenyChrNameList = new List<string>();
-            M2Share.g_DenyAccountList = new List<string>();
-            M2Share.g_NoClearMonLIst = new List<string>();
-            M2Share.g_NoHptoexpMonLIst = new List<string>();
-            M2Share.g_ItemBindIPaddr = new List<TItemBind>();
-            M2Share.g_ItemBindAccount = new List<TItemBind>();
-            M2Share.g_ItemBindChrName = new List<TItemBind>();
+            M2Share.DenyIPAddrList = new List<string>();
+            M2Share.DenyChrNameList = new List<string>();
+            M2Share.DenyAccountList = new List<string>();
+            M2Share.NoClearMonLIst = new List<string>();
+            M2Share.NoHptoexpMonLIst = new List<string>();
+            M2Share.ItemBindIPaddr = new List<TItemBind>();
+            M2Share.ItemBindAccount = new List<TItemBind>();
+            M2Share.ItemBindChrName = new List<TItemBind>();
             M2Share.ProcessMsgCriticalSection = new object();
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.Config.UserIDSection = new object();
-            M2Share.UserDBSection = new object();
-            M2Share.g_DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
-            M2Share.sSellOffItemList = new List<DealOffInfo>();
-            M2Share.dwRunDBTimeMax = HUtil32.GetTickCount();
+            M2Share.UserDBCriticalSection = new object();
+            M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
+            M2Share.SellOffItemList = new List<DealOffInfo>();
         }
 
         public void Initialize()
@@ -172,7 +171,7 @@ namespace GameSvr
             _logger.Info("初始化怪物处理完成...");
             _logger.Info("正加载怪物说话配置信息...");
             M2Share.LoadMonSayMsg();
-            _logger.Info($"加载怪物说话配置信息成功...[{M2Share.g_MonSayMsgList.Count}]");
+            _logger.Info($"加载怪物说话配置信息成功...[{M2Share.MonSayMsgList.Count}]");
             M2Share.LoadDisableTakeOffList();
             M2Share.LoadMonDropLimitList();
             M2Share.LoadDisableMakeItem();
@@ -267,8 +266,8 @@ namespace GameSvr
                 M2Share.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
                 M2Share.StartReady = true;
-                _logger.Info(M2Share.g_sVersion);
-                _logger.Info(M2Share.g_sUpDateTime);
+                _logger.Info(Settings.g_sVersion);
+                _logger.Info(Settings.g_sUpDateTime);
             }
             catch (Exception ex)
             {

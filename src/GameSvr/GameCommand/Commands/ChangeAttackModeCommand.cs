@@ -39,25 +39,25 @@ namespace GameSvr.GameCommand.Commands
             switch (PlayObject.AttatckMode)
             {
                 case AttackMode.HAM_ALL:// [攻击模式: 全体攻击]
-                    PlayObject.SysMsg(M2Share.sAttackModeOfAll, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(Settings.sAttackModeOfAll, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_PEACE: // [攻击模式: 和平攻击]
-                    PlayObject.SysMsg(M2Share.sAttackModeOfPeaceful, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(Settings.sAttackModeOfPeaceful, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_DEAR:// [攻击模式: 和平攻击]
-                    PlayObject.SysMsg(M2Share.sAttackModeOfDear, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(Settings.sAttackModeOfDear, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_MASTER:// [攻击模式: 和平攻击]
-                    PlayObject.SysMsg(M2Share.sAttackModeOfMaster, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(Settings.sAttackModeOfMaster, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_GROUP:// [攻击模式: 编组攻击]
-                    PlayObject.SysMsg(M2Share.sAttackModeOfGroup, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(Settings.sAttackModeOfGroup, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_GUILD:// [攻击模式: 行会攻击]
-                    PlayObject.SysMsg(M2Share.sAttackModeOfGuild, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(Settings.sAttackModeOfGuild, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_PKATTACK:// [攻击模式: 红名攻击]
-                    PlayObject.SysMsg(M2Share.sAttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
+                    PlayObject.SysMsg(Settings.sAttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
                     break;
             }
             PlayObject.SendDefMessage(Grobal2.SM_ATTACKMODE, (byte)PlayObject.AttatckMode, 0, 0, 0, "");

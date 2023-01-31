@@ -32,7 +32,7 @@ namespace GameSvr.GameCommand.Commands
                 //if ((PlayObject.m_BlockWhisperList[i]).CompareTo((sHumanName)) == 0)
                 //{
                 //    PlayObject.m_BlockWhisperList.RemoveAt(i);
-                //    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandPrvMsgUnLimitMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
+                //    PlayObject.SysMsg(string.Format(Settings.g_sGameCommandPrvMsgUnLimitMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
                 //    return;
                 //}
             }

@@ -61,8 +61,8 @@ namespace GameSvr.GameCommand.Commands
             //{
             //    Guild = ((TGUild)(List14[i]));
             //    Guild.EndTeamFight();
-            //    M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor,
-            //        M2Share.g_Config.btCryMsgBColor, string.Format(" - {0} 行会争霸赛已结束。", Guild.sGuildName));
+            //    M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, Settings.g_Config.btCryMsgFColor,
+            //        Settings.g_Config.btCryMsgBColor, string.Format(" - {0} 行会争霸赛已结束。", Guild.sGuildName));
             //}
             //HUtil32.Dispose(List10);
             //HUtil32.Dispose(List14);

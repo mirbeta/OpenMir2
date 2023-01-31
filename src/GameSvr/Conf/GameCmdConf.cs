@@ -3035,20 +3035,20 @@ namespace GameSvr.Conf
             LoadString = ReadString("Command", "GMRedMsgCmd", "");
             if (string.IsNullOrEmpty(LoadString))
             {
-                WriteString("Command", "GMRedMsgCmd", M2Share.g_GMRedMsgCmd);
+                WriteString("Command", "GMRedMsgCmd", M2Share.GMRedMsgCmd);
             }
             else
             {
-                M2Share.g_GMRedMsgCmd = LoadString[0];
+                M2Share.GMRedMsgCmd = LoadString[0];
             }
             nLoadInteger = ReadInteger("Permission", "GMRedMsgCmd", -1);
             if (nLoadInteger < 0)
             {
-                WriteInteger("Permission", "GMRedMsgCmd", M2Share.g_nGMREDMSGCMD);
+                WriteInteger("Permission", "GMRedMsgCmd", M2Share.GMREDMSGCMD);
             }
             else
             {
-                M2Share.g_nGMREDMSGCMD = nLoadInteger;
+                M2Share.GMREDMSGCMD = nLoadInteger;
             }
         }
     }

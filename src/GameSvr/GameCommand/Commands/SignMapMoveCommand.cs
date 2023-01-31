@@ -16,7 +16,7 @@ namespace GameSvr.GameCommand.Commands
             //    Envirnoment Envir = null;
             //    if ((PlayObject.m_btPermission >= this.Attributes.nPermissionMin) || M2Share.CanMoveMap(PlayObject.m_sLastMapName))
             //    {
-            //        Envir = M2Share.g_MapManager.FindMap(PlayObject.m_sLastMapName);
+            //        Envir = Settings.g_MapManager.FindMap(PlayObject.m_sLastMapName);
             //        if (Envir != null)
             //        {
             //            if (Envir.CanWalk(PlayObject.m_nLastCurrX, PlayObject.m_nLastCurrY, true))
@@ -25,14 +25,14 @@ namespace GameSvr.GameCommand.Commands
             //            }
             //            else
             //            {
-            //                PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandPositionMoveCanotMoveToMap1, PlayObject.m_sLastMapName, PlayObject.m_nLastCurrX,
+            //                PlayObject.SysMsg(string.Format(Settings.g_sGameCommandPositionMoveCanotMoveToMap1, PlayObject.m_sLastMapName, PlayObject.m_nLastCurrX,
             //                    PlayObject.m_nLastCurrY), TMsgColor.c_Green, TMsgType.t_Hint);
             //            }
             //        }
             //    }
             //    else
             //    {
-            //        PlayObject.SysMsg(string.Format(M2Share.g_sTheMapDisableMove, PlayObject.m_sLastMapName, Envir.sMapDesc), TMsgColor.c_Red, TMsgType.t_Hint);
+            //        PlayObject.SysMsg(string.Format(Settings.g_sTheMapDisableMove, PlayObject.m_sLastMapName, Envir.sMapDesc), TMsgColor.c_Red, TMsgType.t_Hint);
             //    }
             //}
             //catch (Exception E)

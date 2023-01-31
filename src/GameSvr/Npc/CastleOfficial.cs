@@ -411,7 +411,7 @@ namespace GameSvr.Npc
         {
             if (!M2Share.Config.SubkMasterSendMsg)
             {
-                PlayObject.SysMsg(M2Share.g_sSubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Settings.g_sSubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.BoSendMsgFlag)

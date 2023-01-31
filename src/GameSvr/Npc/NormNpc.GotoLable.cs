@@ -567,28 +567,28 @@ namespace GameSvr.Npc
                     case ScriptConst.nDAYTIME:
                         if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (M2Share.g_nGameTime != 0)
+                            if (M2Share.GameTime != 0)
                             {
                                 result = false;
                             }
                         }
                         if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (M2Share.g_nGameTime != 1)
+                            if (M2Share.GameTime != 1)
                             {
                                 result = false;
                             }
                         }
                         if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (M2Share.g_nGameTime != 2)
+                            if (M2Share.GameTime != 2)
                             {
                                 result = false;
                             }
                         }
                         if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (M2Share.g_nGameTime != 3)
+                            if (M2Share.GameTime != 3)
                             {
                                 result = false;
                             }
@@ -2402,7 +2402,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            PlayObject.SysMsg(M2Share.g_sQUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
+                            PlayObject.SysMsg(Settings.g_sQUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                         }
                         break;
                     case ScriptConst.nSC_SETRANDOMNO:

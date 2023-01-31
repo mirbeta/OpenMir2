@@ -45,22 +45,22 @@ namespace GameSvr.GameCommand.Commands
             //}
             //if ((nItem < 0) || (nBind < 0) || (string.IsNullOrEmpty(sHumanName)) || ((!string.IsNullOrEmpty(sHumanName)) && (sHumanName[0] == '?')))
             //{
-            //    if (M2Share.g_Config.boGMShowFailMsg)
+            //    if (Settings.g_Config.boGMShowFailMsg)
             //    {
-            //        PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandBindUseItemHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+            //        PlayObject.SysMsg(string.Format(Settings.g_sGameCommandParamUnKnow, this.Attributes.Name, Settings.g_sGameCommandBindUseItemHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
             //    }
             //    return;
             //}
             //m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             //if (m_PlayObject == null)
             //{
-            //    PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
+            //    PlayObject.SysMsg(string.Format(Settings.g_sNowNotOnLineOrOnOtherServer, sHumanName), TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
             //UserItem = m_PlayObject.m_UseItems[nItem];
             //if (UserItem.wIndex == 0)
             //{
-            //    PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemNoItemMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
+            //    PlayObject.SysMsg(string.Format(Settings.g_sGameCommandBindUseItemNoItemMsg, sHumanName, sItem), TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
             //nItemIdx = UserItem.wIndex;
@@ -79,7 +79,7 @@ namespace GameSvr.GameCommand.Commands
             //                    ItemBind = M2Share.g_ItemBindAccount[i];
             //                    if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
             //                    {
-            //                        PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
+            //                        PlayObject.SysMsg(string.Format(Settings.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
             //                        return;
             //                    }
             //                }
@@ -110,7 +110,7 @@ namespace GameSvr.GameCommand.Commands
             //                    //ItemBind = M2Share.g_ItemBindChrName[i];
             //                    //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
             //                    //{
-            //                    //    this.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
+            //                    //    this.SysMsg(string.Format(Settings.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
             //                    //    return;
             //                    //}
             //                }
@@ -141,7 +141,7 @@ namespace GameSvr.GameCommand.Commands
             //                    //ItemBind = M2Share.g_ItemBindIPaddr[i];
             //                    //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.nMakeIdex == nMakeIdex))
             //                    //{
-            //                    //    this.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
+            //                    //    this.SysMsg(string.Format(Settings.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
             //                    //    return;
             //                    //}
             //                }
@@ -162,17 +162,17 @@ namespace GameSvr.GameCommand.Commands
             //        break;
             //    case 3:// 人物装备死亡不爆绑定
             //        sBindName = m_PlayObject.m_sChrName;
-            //        HUtil32.EnterCriticalSection(M2Share.g_ItemBindDieNoDropName);
+            //        HUtil32.EnterCriticalSection(Settings.g_ItemBindDieNoDropName);
             //        try
             //        {
-            //            if (M2Share.g_ItemBindDieNoDropName.Count > 0)
+            //            if (Settings.g_ItemBindDieNoDropName.Count > 0)
             //            {
-            //                for (int i = 0; i < M2Share.g_ItemBindDieNoDropName.Count; i++)
+            //                for (int i = 0; i < Settings.g_ItemBindDieNoDropName.Count; i++)
             //                {
-            //                    //ItemBind = M2Share.g_ItemBindDieNoDropName[i];
+            //                    //ItemBind = Settings.g_ItemBindDieNoDropName[i];
             //                    //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.sBindName == sBindName))
             //                    //{
-            //                    //    this.SysMsg(string.Format(M2Share.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
+            //                    //    this.SysMsg(string.Format(Settings.g_sGameCommandBindUseItemAlreadBindMsg, new string[] { sHumanName, sItem }), TMsgColor.c_Red, TMsgType.t_Hint);
             //                    //    return;
             //                    //}
             //                }
@@ -181,11 +181,11 @@ namespace GameSvr.GameCommand.Commands
             //            ItemBind.nItemIdx = nItemIdx;
             //            ItemBind.nMakeIdex = 0;
             //            ItemBind.sBindName = sBindName;
-            //            //M2Share.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
+            //            //Settings.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
             //        }
             //        finally
             //        {
-            //            HUtil32.LeaveCriticalSection(M2Share.g_ItemBindDieNoDropName);
+            //            HUtil32.LeaveCriticalSection(Settings.g_ItemBindDieNoDropName);
             //        }
             //        M2Share.SaveItemBindDieNoDropName();
             //        // 保存人物装备死亡不爆列表 20081127

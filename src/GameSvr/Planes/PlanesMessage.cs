@@ -357,7 +357,7 @@ namespace GameSvr.Planes
             Str = HUtil32.GetValidStr3(Str, ref minstr, HUtil32.Backslash);
             if (whostr != "")
             {
-                //PlayObject.CmdShutup(M2Share.g_GameCommand.SHUTUP, whostr, minstr);
+                //PlayObject.CmdShutup(Settings.g_GameCommand.SHUTUP, whostr, minstr);
                 CommandMgr.GetInstance().ExecCmd("Shutup", PlayObject);
             }
         }
@@ -367,7 +367,7 @@ namespace GameSvr.Planes
             var whostr = Body;
             if (whostr != "")
             {
-                //PlayObject.CmdShutup(M2Share.g_GameCommand.SHUTUP, whostr, "");
+                //PlayObject.CmdShutup(Settings.g_GameCommand.SHUTUP, whostr, "");
             }
         }
 

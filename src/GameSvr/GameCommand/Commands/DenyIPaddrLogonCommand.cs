@@ -28,13 +28,13 @@ namespace GameSvr.GameCommand.Commands
             {
                 if (sFixDeny != "" && sFixDeny[0] == '1')
                 {
-                    //M2Share.g_DenyIPAddrList.Add(sIPaddr, ((1) as Object));
+                    //Settings.g_DenyIPAddrList.Add(sIPaddr, ((1) as Object));
                     M2Share.SaveDenyIPAddrList();
                     PlayObject.SysMsg(sIPaddr + "已加入禁止登录IP列表", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    //M2Share.g_DenyIPAddrList.Add(sIPaddr, ((0) as Object));
+                    //Settings.g_DenyIPAddrList.Add(sIPaddr, ((0) as Object));
                     PlayObject.SysMsg(sIPaddr + "已加入临时禁止登录IP列表", MsgColor.Green, MsgType.Hint);
                 }
             }

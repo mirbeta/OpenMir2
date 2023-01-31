@@ -97,7 +97,7 @@ namespace GameSvr.DataSource
                     }
                 }
                 M2Share.GameLogGold = M2Share.GetGameLogItemNameList(Grobal2.sSTRING_GOLDNAME) == 1;
-                M2Share.boGameLogHumanDie = M2Share.GetGameLogItemNameList(CommandHelp.HumanDieEvent) == 1;
+                M2Share.GameLogHumanDie = M2Share.GetGameLogItemNameList(CommandHelp.HumanDieEvent) == 1;
                 M2Share.GameLogGameGold = M2Share.GetGameLogItemNameList(M2Share.Config.GameGoldName) == 1;
                 M2Share.GameLogGamePoint = M2Share.GetGameLogItemNameList(M2Share.Config.GamePointName) == 1;
             }
@@ -293,7 +293,7 @@ namespace GameSvr.DataSource
                             DealOffInfo.nSellGold = nSellGold;
                             DealOffInfo.UseItems = JsonSerializer.Deserialize<UserItem[]>(sUseItems);
                             DealOffInfo.Flag = nState;
-                            M2Share.sSellOffItemList.Add(DealOffInfo);
+                            M2Share.SellOffItemList.Add(DealOffInfo);
                         }
                     }
                 }
@@ -324,12 +324,12 @@ namespace GameSvr.DataSource
             const string sSQLString = "delete from goldsales";
             try
             {
-                if (M2Share.sSellOffItemList.Count > 0)
+                if (M2Share.SellOffItemList.Count > 0)
                 {
                     Execute(sSQLString);
-                    for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
+                    for (var i = 0; i < M2Share.SellOffItemList.Count; i++)
                     {
-                        DealOffInfo = M2Share.sSellOffItemList[i];
+                        DealOffInfo = M2Share.SellOffItemList[i];
                         if (DealOffInfo != null)
                         {
                             var command = new MySqlCommand();

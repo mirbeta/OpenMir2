@@ -25,7 +25,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 m_PlayObject.FilterSendMsg = true;
             }
-            M2Share.g_DisableSendMsgList.Add(sHumanName);
+            M2Share.DisableSendMsgList.Add(sHumanName);
             M2Share.SaveDisableSendMsgList();
             PlayObject.SysMsg(sHumanName + " 已加入禁言列表。", MsgColor.Green, MsgType.Hint);
         }

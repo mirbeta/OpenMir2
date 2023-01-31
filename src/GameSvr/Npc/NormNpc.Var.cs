@@ -2073,12 +2073,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$STATSERVERTIME":// 显示M2启动时间
-                                       // sValue = FormatDateTime("dddddd,dddd,hh:mm:nn", M2Share.g_dwRunStartTick);
+                                       // sValue = FormatDateTime("dddddd,dddd,hh:mm:nn", Settings.g_dwRunStartTick);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RUNDATETIME":// 开区间隔时间 显示为XX小时。
-                                    // IntDays = MinutesBetween(DateTime.Now, M2Share.g_dwDiyStartTick);
+                                    // IntDays = MinutesBetween(DateTime.Now, Settings.g_dwDiyStartTick);
                                     //sValue = (IntDays / 60).ToString();
                     nDataType = 0;
                     result = true;
@@ -2411,7 +2411,7 @@ namespace GameSvr.Npc
             if (HUtil32.CompareLStr(sVariable, "$GLOBAL", 6))//  全局变量
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref sVarValue2);
-                if (M2Share.g_DynamicVarList.TryGetValue(sVarValue2, out DynamicVar))
+                if (M2Share.DynamicVarList.TryGetValue(sVarValue2, out DynamicVar))
                 {
                     switch (DynamicVar.VarType)
                     {

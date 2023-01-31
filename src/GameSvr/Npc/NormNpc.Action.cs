@@ -67,13 +67,13 @@ namespace GameSvr.Npc
                 {
                     if (PlayObject.SellOffInTime(0))
                     {
-                        if (M2Share.sSellOffItemList.Count > 0)
+                        if (M2Share.SellOffItemList.Count > 0)
                         {
                             ClientDealOffInfo sClientDealOffInfo = new ClientDealOffInfo();
                             sClientDealOffInfo.UseItems = new ClientItem[9];
-                            for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
+                            for (var i = 0; i < M2Share.SellOffItemList.Count; i++)
                             {
-                                DealOffInfo = M2Share.sSellOffItemList[i];
+                                DealOffInfo = M2Share.SellOffItemList[i];
                                 if (string.Compare(DealOffInfo.sDealChrName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && (DealOffInfo.Flag == 0 || DealOffInfo.Flag == 3))
                                 {
                                     for (var j = 0; j < 9; j++)
@@ -90,7 +90,7 @@ namespace GameSvr.Npc
                                             if (!bo12 && DealOffInfo.UseItems[j].MakeIndex > 0 && DealOffInfo.UseItems[j].Index == ushort.MaxValue && DealOffInfo.UseItems[j].Dura == ushort.MaxValue && DealOffInfo.UseItems[j].DuraMax == ushort.MaxValue)
                                             {
                                                 ClientItem _wvar1 = sClientDealOffInfo.UseItems[j];// '金刚石'
-                                                //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
+                                                //_wvar1.S.Name = Settings.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;// 金刚石数量
                                                 _wvar1.Dura = ushort.MaxValue;// 客户端金刚石特征
                                                 _wvar1.Item.DuraMax = ushort.MaxValue;// 客户端金刚石特征
@@ -180,13 +180,13 @@ namespace GameSvr.Npc
                     // 已开通元宝服务
                     if (PlayObject.SellOffInTime(1))
                     {
-                        if (M2Share.sSellOffItemList.Count > 0)
+                        if (M2Share.SellOffItemList.Count > 0)
                         {
                             ClientDealOffInfo sClientDealOffInfo = new ClientDealOffInfo();
                             sClientDealOffInfo.UseItems = new ClientItem[9];
-                            for (var i = 0; i < M2Share.sSellOffItemList.Count; i++)
+                            for (var i = 0; i < M2Share.SellOffItemList.Count; i++)
                             {
-                                DealOffInfo = M2Share.sSellOffItemList[i];
+                                DealOffInfo = M2Share.SellOffItemList[i];
                                 if (string.Compare(DealOffInfo.sBuyChrName, PlayObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && DealOffInfo.Flag == 0)
                                 {
                                     for (var k = 0; k < 9; k++)
@@ -203,7 +203,7 @@ namespace GameSvr.Npc
                                             if (!bo12 && DealOffInfo.UseItems[k].MakeIndex > 0 && DealOffInfo.UseItems[k].Index == short.MaxValue && DealOffInfo.UseItems[k].Dura == short.MaxValue && DealOffInfo.UseItems[k].DuraMax == short.MaxValue)
                                             {
                                                 ClientItem _wvar1 = sClientDealOffInfo.UseItems[k];// '金刚石'
-                                                //_wvar1.S.Name = M2Share.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
+                                                //_wvar1.S.Name = Settings.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;
                                                 //// 金刚石数量
                                                 //_wvar1.Dura = UInt16.MaxValue;// 客户端金刚石特征
@@ -974,16 +974,16 @@ namespace GameSvr.Npc
                         GotoLable(PoseHuman, "@StartMarry", false);
                         if (PlayObject.Gender == PlayGender.Man && PoseHuman.Gender == PlayGender.WoMan)
                         {
-                            sSayMsg = string.Format(M2Share.g_sStartMarryManMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
+                            sSayMsg = string.Format(Settings.g_sStartMarryManMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(M2Share.g_sStartMarryManAskQuestionMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
+                            sSayMsg = string.Format(Settings.g_sStartMarryManAskQuestionMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                         else if (PlayObject.Gender == PlayGender.WoMan && PoseHuman.Gender == PlayGender.Man)
                         {
-                            sSayMsg = string.Format(M2Share.g_sStartMarryWoManMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
+                            sSayMsg = string.Format(Settings.g_sStartMarryWoManMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(M2Share.g_sStartMarryWoManAskQuestionMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
+                            sSayMsg = string.Format(Settings.g_sStartMarryWoManAskQuestionMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                         PlayObject.MBoStartMarry = true;
@@ -1009,11 +1009,11 @@ namespace GameSvr.Npc
                 {
                     if (PlayObject.Gender == PlayGender.Man && PoseHuman.Gender == PlayGender.WoMan)
                     {
-                        sSayMsg = M2Share.g_sMarryManAnswerQuestionMsg.Replace("%n", ChrName);
+                        sSayMsg = Settings.g_sMarryManAnswerQuestionMsg.Replace("%n", ChrName);
                         sSayMsg = sSayMsg.Replace("%s", PlayObject.ChrName);
                         sSayMsg = sSayMsg.Replace("%d", PoseHuman.ChrName);
                         M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                        sSayMsg = M2Share.g_sMarryManAskQuestionMsg.Replace("%n", ChrName);
+                        sSayMsg = Settings.g_sMarryManAskQuestionMsg.Replace("%n", ChrName);
                         sSayMsg = sSayMsg.Replace("%s", PlayObject.ChrName);
                         sSayMsg = sSayMsg.Replace("%d", PoseHuman.ChrName);
                         M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
@@ -1032,9 +1032,9 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.MBoStartMarry && PoseHuman.MBoStartMarry)
                         {
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManAnswerQuestionMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
+                            sSayMsg = string.Format(Settings.g_sMarryWoManAnswerQuestionMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManGetMarryMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
+                            sSayMsg = string.Format(Settings.g_sMarryWoManGetMarryMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             GotoLable(PlayObject, "@EndMarry", false);
                             GotoLable(PoseHuman, "@EndMarry", false);
@@ -1056,9 +1056,9 @@ namespace GameSvr.Npc
                             GotoLable(PoseHuman, "@EndMarryFail", false);
                             PlayObject.MBoStartMarry = false;
                             PoseHuman.MBoStartMarry = false;
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManDenyMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
+                            sSayMsg = string.Format(Settings.g_sMarryWoManDenyMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(M2Share.g_sMarryWoManCancelMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
+                            sSayMsg = string.Format(Settings.g_sMarryWoManCancelMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                     }
@@ -1158,9 +1158,9 @@ namespace GameSvr.Npc
         {
             if (QuestActionInfo.sParam1 != "" && QuestActionInfo.nParam2 > 0 && QuestActionInfo.nParam3 > 0)
             {
-                M2Share.g_sMissionMap = QuestActionInfo.sParam1;
-                M2Share.g_nMissionX = (short)QuestActionInfo.nParam2;
-                M2Share.g_nMissionY = (short)QuestActionInfo.nParam3;
+                M2Share.MissionMap = QuestActionInfo.sParam1;
+                M2Share.MissionX = (short)QuestActionInfo.nParam2;
+                M2Share.MissionY = (short)QuestActionInfo.nParam3;
             }
             else
             {
@@ -1204,12 +1204,12 @@ namespace GameSvr.Npc
             {
                 nRandX = (short)(M2Share.RandomNumber.Random(nRange * 2 + 1) + (nX - nRange));
                 nRandY = (short)(M2Share.RandomNumber.Random(nRange * 2 + 1) + (nY - nRange));
-                Mon = M2Share.WorldEngine.RegenMonsterByName(M2Share.g_sMissionMap, nRandX, nRandY, QuestActionInfo.sParam1);
+                Mon = M2Share.WorldEngine.RegenMonsterByName(M2Share.MissionMap, nRandX, nRandY, QuestActionInfo.sParam1);
                 if (Mon != null)
                 {
                     Mon.Mission = true;
-                    Mon.MissionX = M2Share.g_nMissionX;
-                    Mon.MissionY = M2Share.g_nMissionY;
+                    Mon.MissionX = M2Share.MissionX;
+                    Mon.MissionY = M2Share.MissionY;
                 }
                 else
                 {
@@ -1407,7 +1407,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            //sUnMarryFileName = M2Share.g_Config.sEnvirDir + "UnMarry.txt";
+                            //sUnMarryFileName = Settings.g_Config.sEnvirDir + "UnMarry.txt";
                             //LoadList = new StringList();
                             //if (File.Exists(sUnMarryFileName))
                             //{
@@ -2128,7 +2128,7 @@ namespace GameSvr.Npc
                         PlayObject.MBoStartUnMaster = true;
                         if (PlayObject.MBoStartUnMaster && PoseHuman.MBoStartUnMaster)
                         {
-                            sMsg = string.Format(M2Share.g_sNPCSayUnMasterOKMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
+                            sMsg = string.Format(Settings.g_sNPCSayUnMasterOKMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
                             PlayObject.MasterName = "";
                             PoseHuman.MasterName = "";
@@ -2152,7 +2152,7 @@ namespace GameSvr.Npc
                     // 强行出师
                     if (string.Compare(QuestActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        sMsg = string.Format(M2Share.g_sNPCSayForceUnMasterMsg, ChrName, PlayObject.ChrName, PlayObject.MasterName);
+                        sMsg = string.Format(Settings.g_sNPCSayForceUnMasterMsg, ChrName, PlayObject.ChrName, PlayObject.MasterName);
                         M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
                         PoseHuman = M2Share.WorldEngine.GetPlayObject(PlayObject.MasterName);
                         if (PoseHuman != null)
@@ -2162,7 +2162,7 @@ namespace GameSvr.Npc
                         }
                         else
                         {
-                            M2Share.g_UnForceMasterList.Add(PlayObject.MasterName);
+                            M2Share.UnForceMasterList.Add(PlayObject.MasterName);
                             M2Share.SaveUnForceMasterList();
                         }
                         PlayObject.MasterName = "";
@@ -2571,7 +2571,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sChangeMemberLevelMsg, new[] { PlayObject.MemberLevel }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sChangeMemberLevelMsg, new[] { PlayObject.MemberLevel }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2606,7 +2606,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sChangeMemberTypeMsg, new[] { PlayObject.MemberType }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sChangeMemberTypeMsg, new[] { PlayObject.MemberType }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2711,7 +2711,7 @@ namespace GameSvr.Npc
             }
             if (PlayObject.MyGuild == null)
             {
-                PlayObject.SysMsg(M2Share.g_sScriptGuildAuraePointNoGuild, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Settings.g_sScriptGuildAuraePointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = PlayObject.MyGuild;
@@ -2744,7 +2744,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptGuildAuraePointMsg, new[] { Guild.Aurae }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sScriptGuildAuraePointMsg, new[] { Guild.Aurae }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2758,7 +2758,7 @@ namespace GameSvr.Npc
             }
             if (PlayObject.MyGuild == null)
             {
-                PlayObject.SysMsg(M2Share.g_sScriptGuildBuildPointNoGuild, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Settings.g_sScriptGuildBuildPointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = PlayObject.MyGuild;
@@ -2791,7 +2791,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptGuildBuildPointMsg, Guild.BuildPoint), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sScriptGuildBuildPointMsg, Guild.BuildPoint), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2805,7 +2805,7 @@ namespace GameSvr.Npc
             }
             if (PlayObject.MyGuild == null)
             {
-                PlayObject.SysMsg(M2Share.g_sScriptGuildFlourishPointNoGuild, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Settings.g_sScriptGuildFlourishPointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = PlayObject.MyGuild;
@@ -2838,7 +2838,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptChiefItemCountMsg, Guild.ChiefItemCount), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sScriptChiefItemCountMsg, Guild.ChiefItemCount), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2852,7 +2852,7 @@ namespace GameSvr.Npc
             }
             if (PlayObject.MyGuild == null)
             {
-                PlayObject.SysMsg(M2Share.g_sScriptGuildFlourishPointNoGuild, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Settings.g_sScriptGuildFlourishPointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = PlayObject.MyGuild;
@@ -2885,7 +2885,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptGuildFlourishPointMsg, Guild.Flourishing), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sScriptGuildFlourishPointMsg, Guild.Flourishing), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2899,7 +2899,7 @@ namespace GameSvr.Npc
             }
             if (PlayObject.MyGuild == null)
             {
-                PlayObject.SysMsg(M2Share.g_sScriptGuildStabilityPointNoGuild, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Settings.g_sScriptGuildStabilityPointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var Guild = PlayObject.MyGuild;
@@ -2932,7 +2932,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptGuildStabilityPointMsg, Guild.Stability), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sScriptGuildStabilityPointMsg, Guild.Stability), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -2970,7 +2970,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanHPMsg, PlayObject.WAbil.MaxHP), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sScriptChangeHumanHPMsg, PlayObject.WAbil.MaxHP), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3008,7 +3008,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sScriptChangeHumanMPMsg, new[] { PlayObject.WAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sScriptChangeHumanMPMsg, new[] { PlayObject.WAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3210,7 +3210,7 @@ namespace GameSvr.Npc
             PlayObject.KillMonExpRateTime = nTime;
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sChangeKillMonExpRateMsg, PlayObject.KillMonExpRate / 100, PlayObject.KillMonExpRateTime), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sChangeKillMonExpRateMsg, PlayObject.KillMonExpRate / 100, PlayObject.KillMonExpRateTime), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3300,7 +3300,7 @@ namespace GameSvr.Npc
             PlayObject.PowerRateTime = nTime;
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sChangePowerRateMsg, new object[] { PlayObject.PowerRate / 100, PlayObject.PowerRateTime }), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sChangePowerRateMsg, new object[] { PlayObject.PowerRate / 100, PlayObject.PowerRateTime }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -3316,33 +3316,33 @@ namespace GameSvr.Npc
                         PlayObject.AdminMode = boOpen;
                         if (PlayObject.AdminMode)
                         {
-                            PlayObject.SysMsg(M2Share.sGameMasterMode, MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(Settings.sGameMasterMode, MsgColor.Green, MsgType.Hint);
                         }
                         else
                         {
-                            PlayObject.SysMsg(M2Share.sReleaseGameMasterMode, MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(Settings.sReleaseGameMasterMode, MsgColor.Green, MsgType.Hint);
                         }
                         break;
                     case 2:
                         PlayObject.SuperMan = boOpen;
                         if (PlayObject.SuperMan)
                         {
-                            PlayObject.SysMsg(M2Share.sSupermanMode, MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(Settings.sSupermanMode, MsgColor.Green, MsgType.Hint);
                         }
                         else
                         {
-                            PlayObject.SysMsg(M2Share.sReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(Settings.sReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
                         }
                         break;
                     case 3:
                         PlayObject.ObMode = boOpen;
                         if (PlayObject.ObMode)
                         {
-                            PlayObject.SysMsg(M2Share.sObserverMode, MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(Settings.sObserverMode, MsgColor.Green, MsgType.Hint);
                         }
                         else
                         {
-                            PlayObject.SysMsg(M2Share.g_sReleaseObserverMode, MsgColor.Green, MsgType.Hint);
+                            PlayObject.SysMsg(Settings.g_sReleaseObserverMode, MsgColor.Green, MsgType.Hint);
                         }
                         break;
                 }
@@ -3367,7 +3367,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.Config.ShowScriptActionMsg)
             {
-                PlayObject.SysMsg(Format(M2Share.g_sChangePermissionMsg, PlayObject.Permission), MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Format(Settings.g_sChangePermissionMsg, PlayObject.Permission), MsgColor.Green, MsgType.Hint);
             }
         }
 

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void Total(PlayObject PlayObject)
         {
-            PlayObject.HearMsg(string.Format("总在线数{0}", M2Share.g_nTotalHumCount));
+            PlayObject.HearMsg(string.Format("总在线数{0}", M2Share.TotalHumCount));
         }
     }
 }

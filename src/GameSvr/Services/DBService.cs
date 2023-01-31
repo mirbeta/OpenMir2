@@ -168,7 +168,7 @@ namespace GameSvr.Services
 
         private void DBSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            HUtil32.EnterCriticalSection(M2Share.UserDBSection);
+            HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
                 var nMsgLen = e.BuffLen;
@@ -189,7 +189,7 @@ namespace GameSvr.Services
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(M2Share.UserDBSection);
+                HUtil32.LeaveCriticalSection(M2Share.UserDBCriticalSection);
             }
         }
 

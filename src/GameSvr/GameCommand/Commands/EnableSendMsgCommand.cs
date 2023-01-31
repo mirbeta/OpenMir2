@@ -23,20 +23,20 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = M2Share.g_DisableSendMsgList.Count - 1; i >= 0; i--)
+            for (var i = M2Share.DisableSendMsgList.Count - 1; i >= 0; i--)
             {
-                if (M2Share.g_DisableSendMsgList.Count <= 0)
+                if (M2Share.DisableSendMsgList.Count <= 0)
                 {
                     break;
                 }
-                //if ((sHumanName).CompareTo((M2Share.g_DisableSendMsgList[i])) == 0)
+                //if ((sHumanName).CompareTo((Settings.g_DisableSendMsgList[i])) == 0)
                 //{
                 //    m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
                 //    if (m_PlayObject != null)
                 //    {
                 //        m_PlayObject.m_boFilterSendMsg = false;
                 //    }
-                //    M2Share.g_DisableSendMsgList.RemoveAt(i);
+                //    Settings.g_DisableSendMsgList.RemoveAt(i);
                 //    M2Share.SaveDisableSendMsgList();
                 //    PlayObject.SysMsg(sHumanName + " 已从禁言列表中删除。", TMsgColor.c_Green, TMsgType.t_Hint);
                 //    return;

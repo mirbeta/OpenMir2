@@ -28,7 +28,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 dwTime = M2Share.Config.SpiritMutinyTime;
             }
-            M2Share.g_dwSpiritMutinyTick = HUtil32.GetTickCount() + dwTime;
+            M2Share.SpiritMutinyTick = HUtil32.GetTickCount() + dwTime;
             PlayObject.SysMsg("祈祷叛变已开始。持续时长 " + dwTime / 1000 + " 秒。", MsgColor.Green, MsgType.Hint);
         }
     }

@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void SpirtStop(PlayObject PlayObject)
         {
-            M2Share.g_dwSpiritMutinyTick = 0;
+            M2Share.SpiritMutinyTick = 0;
             PlayObject.SysMsg("祈祷叛变已停止。", MsgColor.Green, MsgType.Hint);
         }
     }

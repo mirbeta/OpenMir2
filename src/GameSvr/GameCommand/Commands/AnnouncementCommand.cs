@@ -26,24 +26,24 @@ namespace GameSvr.GameCommand.Commands
             //    PlayObject.SysMsg("此命令不能在当前地图中使用!!!", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
-            //Guild = M2Share.g_GuildManager.FindGuild(sGuildName);
+            //Guild = Settings.g_GuildManager.FindGuild(sGuildName);
             //if (Guild != null)
             //{
-            //    M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, M2Share.g_Config.btCryMsgFColor,
-            //        M2Share.g_Config.btCryMsgBColor, string.Format(" - %s 行会争霸赛结果: ", Guild.sGuildName));
+            //    M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000, Settings.g_Config.btCryMsgFColor,
+            //        Settings.g_Config.btCryMsgBColor, string.Format(" - %s 行会争霸赛结果: ", Guild.sGuildName));
             //    for (int i = 0; i < Guild.TeamFightDeadList.Count; i++)
             //    {
             //        nPoint = HUtil32.ObjectToInt(Guild.TeamFightDeadList[i]);
             //        sHumanName = Guild.TeamFightDeadList[i];
             //        M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000,
-            //            M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, string.Format(" - %s  : %d 分/死亡%d次。 ",
+            //            Settings.g_Config.btCryMsgFColor, Settings.g_Config.btCryMsgBColor, string.Format(" - %s  : %d 分/死亡%d次。 ",
             //            sHumanName, HUtil32.HiWord(nPoint), HUtil32.LoWord(nPoint)));
             //    }
             //}
             //M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000,
-            //    M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, string.Format(" - [%s] : %d 分。", Guild.sGuildName, Guild.nContestPoint));
+            //    Settings.g_Config.btCryMsgFColor, Settings.g_Config.btCryMsgBColor, string.Format(" - [%s] : %d 分。", Guild.sGuildName, Guild.nContestPoint));
             //M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, 1000,
-            //    M2Share.g_Config.btCryMsgFColor, M2Share.g_Config.btCryMsgBColor, "------------------------------------");
+            //    Settings.g_Config.btCryMsgFColor, Settings.g_Config.btCryMsgBColor, "------------------------------------");
         }
     }
 }

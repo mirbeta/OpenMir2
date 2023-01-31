@@ -307,10 +307,10 @@ namespace GameSvr.GameGate
                     }
                 }
             }
-            M2Share.g_nSockCountMin = HUtil32.GetTickCount() - dwRunTick;
-            if (M2Share.g_nSockCountMin > M2Share.g_nSockCountMax)
+            M2Share.SockCountMin = HUtil32.GetTickCount() - dwRunTick;
+            if (M2Share.SockCountMin > M2Share.SockCountMax)
             {
-                M2Share.g_nSockCountMax = M2Share.g_nSockCountMin;
+                M2Share.SockCountMax = M2Share.SockCountMin;
             }
         }
 

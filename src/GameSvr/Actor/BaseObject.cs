@@ -783,9 +783,9 @@ namespace GameSvr.Actor
             RecalcLevelAbilitys();
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
-            if (M2Share.g_FunctionNPC != null)
+            if (M2Share.FunctionNPC != null)
             {
-                M2Share.g_FunctionNPC.GotoLable(this as PlayObject, "@LevelUp", false);
+                M2Share.FunctionNPC.GotoLable(this as PlayObject, "@LevelUp", false);
             }
         }
 
@@ -1047,14 +1047,14 @@ namespace GameSvr.Actor
             if (UseItems[Grobal2.U_WEAPON].Desc[3] > 0)
             {
                 UseItems[Grobal2.U_WEAPON].Desc[3] -= 1;
-                SysMsg(M2Share.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
+                SysMsg(Settings.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
             }
             else
             {
                 if (UseItems[Grobal2.U_WEAPON].Desc[4] < 10)
                 {
                     UseItems[Grobal2.U_WEAPON].Desc[4]++;
-                    SysMsg(M2Share.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.g_sTheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
                 }
             }
             if (Race == ActorRace.Play)
@@ -2516,9 +2516,9 @@ namespace GameSvr.Actor
         /// </summary>
         internal void LoadSayMsg()
         {
-            for (var i = 0; i < M2Share.g_MonSayMsgList.Count; i++)
+            for (var i = 0; i < M2Share.MonSayMsgList.Count; i++)
             {
-                if (M2Share.g_MonSayMsgList.TryGetValue(ChrName, out SayMsgList))
+                if (M2Share.MonSayMsgList.TryGetValue(ChrName, out SayMsgList))
                 {
                     break;
                 }
@@ -3569,7 +3569,7 @@ namespace GameSvr.Actor
             }
             if (Race == ActorRace.Play)
             {
-                SysMsg(Format(M2Share.sYouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
+                SysMsg(Format(Settings.sYouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
             }
             return true;
         }
@@ -3758,7 +3758,7 @@ namespace GameSvr.Actor
                 result = true;
             }
             StatusArrTick[PoisonState.DEFENCEUP] = HUtil32.GetTickCount();
-            SysMsg(Format(M2Share.g_sDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
+            SysMsg(Format(Settings.g_sDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
@@ -3768,7 +3768,7 @@ namespace GameSvr.Actor
         {
             ((PlayObject)this).ExtraAbil[0] = (ushort)nPower;
             ((PlayObject)this).ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
-            SysMsg(Format(M2Share.g_sAttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
+            SysMsg(Format(Settings.g_sAttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return true;
@@ -3791,7 +3791,7 @@ namespace GameSvr.Actor
                 result = true;
             }
             StatusArrTick[PoisonState.MAGDEFENCEUP] = HUtil32.GetTickCount();
-            SysMsg(Format(M2Share.g_sMagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
+            SysMsg(Format(Settings.g_sMagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
             return result;

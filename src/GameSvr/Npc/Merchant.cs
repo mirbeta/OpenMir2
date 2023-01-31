@@ -1800,7 +1800,7 @@ namespace GameSvr.Npc
                 var UserItem = PlayObject.UseItems[btWhere];
                 if (UserItem.Index == 0)
                 {
-                    var sMsg = Format(M2Share.g_sYourUseItemIsNul, M2Share.GetUseItemName(btWhere));
+                    var sMsg = Format(Settings.g_sYourUseItemIsNul, M2Share.GetUseItemName(btWhere));
                     PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, sMsg);
                     return;
                 }

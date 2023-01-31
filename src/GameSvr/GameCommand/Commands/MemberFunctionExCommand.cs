@@ -8,9 +8,9 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void MemberFunctionEx(PlayObject PlayObject)
         {
-            if (M2Share.g_FunctionNPC != null)
+            if (M2Share.FunctionNPC != null)
             {
-                M2Share.g_FunctionNPC.GotoLable(PlayObject, "@Member", false);
+                M2Share.FunctionNPC.GotoLable(PlayObject, "@Member", false);
             }
         }
     }

@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
             PlayObject.FeatureChanged();
             if (PlayObject.OnHorse)
             {
-                M2Share.g_FunctionNPC.GotoLable(PlayObject, "@OnHorse", false);
+                M2Share.FunctionNPC.GotoLable(PlayObject, "@OnHorse", false);
             }
         }
     }

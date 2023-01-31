@@ -19,7 +19,7 @@ namespace GameSvr.GameCommand.Commands
             var nRange = @Params.Length > 4 ? Convert.ToInt32(@Params[4]) : 0;
             if (sMap == "" || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?')
             {
-                //PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandCLEARITEMMAPHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                //PlayObject.SysMsg(string.Format(Settings.g_sGameCommandParamUnKnow, this.Attributes.Name, Settings.g_sGameCommandCLEARITEMMAPHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
             if (sItemName == "ALL")
@@ -27,7 +27,7 @@ namespace GameSvr.GameCommand.Commands
             }
             // TMapItem MapItem = null;
             // var ItemList = new List<TMapItem>();
-            // var Envir = M2Share.g_MapManager.FindMap(sMap);// 查找地图
+            // var Envir = Settings.g_MapManager.FindMap(sMap);// 查找地图
             // if (Envir != null)
             // {
             //     ItemList = new List<TMapItem>();

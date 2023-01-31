@@ -54,7 +54,7 @@ namespace GameSvr.Player
                 if (FireHitSkill && (HUtil32.GetTickCount() - LatestFireHitTick) > 20 * 1000)
                 {
                     FireHitSkill = false;
-                    SysMsg(M2Share.sSpiritsGone, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Settings.sSpiritsGone, MsgColor.Red, MsgType.Hint);
                     SendSocket("+UFIR");
                 }
                 if (TwinHitSkill && (HUtil32.GetTickCount() - LatestTwinHitTick) > 60 * 1000)
@@ -73,11 +73,11 @@ namespace GameSvr.Player
                     {
                         if ((HUtil32.GetTickCount() - AutoTimerTick[i]) > AutoTimerStatus[i])
                         {
-                            if (M2Share.g_ManageNPC != null)
+                            if (M2Share.ManageNPC != null)
                             {
                                 AutoTimerTick[i] = HUtil32.GetTickCount();
                                 ScriptGotoCount = 0;
-                                M2Share.g_ManageNPC.GotoLable(this, "@OnTimer" + i, false);
+                                M2Share.ManageNPC.GotoLable(this, "@OnTimer" + i, false);
                             }
                         }
                     }
@@ -579,104 +579,104 @@ namespace GameSvr.Player
             try
             {
                 // 取得在线最高等级、PK、攻击力、魔法、道术 的人物
-                if (M2Share.g_HighLevelHuman == this && (Death || Ghost))
+                if (M2Share.HighLevelHuman == this && (Death || Ghost))
                 {
-                    M2Share.g_HighLevelHuman = null;
+                    M2Share.HighLevelHuman = null;
                 }
-                if (M2Share.g_HighPKPointHuman == this && (Death || Ghost))
+                if (M2Share.HighPKPointHuman == this && (Death || Ghost))
                 {
-                    M2Share.g_HighPKPointHuman = null;
+                    M2Share.HighPKPointHuman = null;
                 }
-                if (M2Share.g_HighDCHuman == this && (Death || Ghost))
+                if (M2Share.HighDCHuman == this && (Death || Ghost))
                 {
-                    M2Share.g_HighDCHuman = null;
+                    M2Share.HighDCHuman = null;
                 }
-                if (M2Share.g_HighMCHuman == this && (Death || Ghost))
+                if (M2Share.HighMCHuman == this && (Death || Ghost))
                 {
-                    M2Share.g_HighMCHuman = null;
+                    M2Share.HighMCHuman = null;
                 }
-                if (M2Share.g_HighSCHuman == this && (Death || Ghost))
+                if (M2Share.HighSCHuman == this && (Death || Ghost))
                 {
-                    M2Share.g_HighSCHuman = null;
+                    M2Share.HighSCHuman = null;
                 }
-                if (M2Share.g_HighOnlineHuman == this && (Death || Ghost))
+                if (M2Share.HighOnlineHuman == this && (Death || Ghost))
                 {
-                    M2Share.g_HighOnlineHuman = null;
+                    M2Share.HighOnlineHuman = null;
                 }
                 if (Permission < 6)
                 {
-                    if (M2Share.g_HighLevelHuman == null || (M2Share.g_HighLevelHuman as PlayObject).Ghost)
+                    if (M2Share.HighLevelHuman == null || (M2Share.HighLevelHuman as PlayObject).Ghost)
                     {
-                        M2Share.g_HighLevelHuman = this;
+                        M2Share.HighLevelHuman = this;
                     }
                     else
                     {
-                        if (Abil.Level > (M2Share.g_HighLevelHuman as PlayObject).Abil.Level)
+                        if (Abil.Level > (M2Share.HighLevelHuman as PlayObject).Abil.Level)
                         {
-                            M2Share.g_HighLevelHuman = this;
+                            M2Share.HighLevelHuman = this;
                         }
                     }
                     // 最高PK
-                    if (M2Share.g_HighPKPointHuman == null || (M2Share.g_HighPKPointHuman as PlayObject).Ghost)
+                    if (M2Share.HighPKPointHuman == null || (M2Share.HighPKPointHuman as PlayObject).Ghost)
                     {
                         if (PkPoint > 0)
                         {
-                            M2Share.g_HighPKPointHuman = this;
+                            M2Share.HighPKPointHuman = this;
                         }
                     }
                     else
                     {
-                        if (PkPoint > (M2Share.g_HighPKPointHuman as PlayObject).PkPoint)
+                        if (PkPoint > (M2Share.HighPKPointHuman as PlayObject).PkPoint)
                         {
-                            M2Share.g_HighPKPointHuman = this;
+                            M2Share.HighPKPointHuman = this;
                         }
                     }
                     // 最高攻击力
-                    if (M2Share.g_HighDCHuman == null || (M2Share.g_HighDCHuman as PlayObject).Ghost)
+                    if (M2Share.HighDCHuman == null || (M2Share.HighDCHuman as PlayObject).Ghost)
                     {
-                        M2Share.g_HighDCHuman = this;
+                        M2Share.HighDCHuman = this;
                     }
                     else
                     {
-                        if (HUtil32.HiWord(WAbil.DC) > HUtil32.HiWord((M2Share.g_HighDCHuman as PlayObject).WAbil.DC))
+                        if (HUtil32.HiWord(WAbil.DC) > HUtil32.HiWord((M2Share.HighDCHuman as PlayObject).WAbil.DC))
                         {
-                            M2Share.g_HighDCHuman = this;
+                            M2Share.HighDCHuman = this;
                         }
                     }
                     // 最高魔法
-                    if (M2Share.g_HighMCHuman == null || (M2Share.g_HighMCHuman as PlayObject).Ghost)
+                    if (M2Share.HighMCHuman == null || (M2Share.HighMCHuman as PlayObject).Ghost)
                     {
-                        M2Share.g_HighMCHuman = this;
+                        M2Share.HighMCHuman = this;
                     }
                     else
                     {
-                        if (HUtil32.HiWord(WAbil.MC) > HUtil32.HiWord((M2Share.g_HighMCHuman as PlayObject).WAbil.MC))
+                        if (HUtil32.HiWord(WAbil.MC) > HUtil32.HiWord((M2Share.HighMCHuman as PlayObject).WAbil.MC))
                         {
-                            M2Share.g_HighMCHuman = this;
+                            M2Share.HighMCHuman = this;
                         }
                     }
                     // 最高道术
-                    if (M2Share.g_HighSCHuman == null || (M2Share.g_HighSCHuman as PlayObject).Ghost)
+                    if (M2Share.HighSCHuman == null || (M2Share.HighSCHuman as PlayObject).Ghost)
                     {
-                        M2Share.g_HighSCHuman = this;
+                        M2Share.HighSCHuman = this;
                     }
                     else
                     {
-                        if (HUtil32.HiWord(WAbil.SC) > HUtil32.HiWord((M2Share.g_HighSCHuman as PlayObject).WAbil.SC))
+                        if (HUtil32.HiWord(WAbil.SC) > HUtil32.HiWord((M2Share.HighSCHuman as PlayObject).WAbil.SC))
                         {
-                            M2Share.g_HighSCHuman = this;
+                            M2Share.HighSCHuman = this;
                         }
                     }
                     // 最长在线时间
-                    if (M2Share.g_HighOnlineHuman == null || (M2Share.g_HighOnlineHuman as PlayObject).Ghost)
+                    if (M2Share.HighOnlineHuman == null || (M2Share.HighOnlineHuman as PlayObject).Ghost)
                     {
-                        M2Share.g_HighOnlineHuman = this;
+                        M2Share.HighOnlineHuman = this;
                     }
                     else
                     {
-                        if (LogonTick < (M2Share.g_HighOnlineHuman as PlayObject).LogonTick)
+                        if (LogonTick < (M2Share.HighOnlineHuman as PlayObject).LogonTick)
                         {
-                            M2Share.g_HighOnlineHuman = this;
+                            M2Share.HighOnlineHuman = this;
                         }
                     }
                 }
@@ -803,7 +803,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        SysMsg(M2Share.g_sQUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
+                        SysMsg(Settings.g_sQUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case Grobal2.CM_QUERYUSERSTATE:
@@ -853,7 +853,7 @@ namespace GameSvr.Player
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Settings.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
@@ -1041,7 +1041,7 @@ namespace GameSvr.Player
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Settings.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
@@ -1092,7 +1092,7 @@ namespace GameSvr.Player
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Settings.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
@@ -1151,7 +1151,7 @@ namespace GameSvr.Player
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Settings.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
@@ -1199,7 +1199,7 @@ namespace GameSvr.Player
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Settings.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
@@ -1262,7 +1262,7 @@ namespace GameSvr.Player
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Settings.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
@@ -1317,7 +1317,7 @@ namespace GameSvr.Player
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Settings.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
@@ -1372,7 +1372,7 @@ namespace GameSvr.Player
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
-                                        SysMsg(M2Share.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Settings.g_sKickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (M2Share.Config.ViewHackMessage)
@@ -1633,9 +1633,9 @@ namespace GameSvr.Player
                         ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NOWDEATH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         if (processMsg.BaseObject == ActorId)
                         {
-                            if (M2Share.g_FunctionNPC != null)
+                            if (M2Share.FunctionNPC != null)
                             {
-                                M2Share.g_FunctionNPC.GotoLable(this, "@OnDeath", false);
+                                M2Share.FunctionNPC.GotoLable(this, "@OnDeath", false);
                             }
                         }
                     }

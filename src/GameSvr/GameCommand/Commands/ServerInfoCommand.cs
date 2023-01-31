@@ -13,15 +13,15 @@ namespace GameSvr.GameCommand.Commands
             //sb.AppendLine(string.Format("({0}) [{1}/{2}] [{3}/{4}] [{5}/{6}]", M2Share.WorldEngine.MonsterCount,
             //       TRunSocket.g_nGateRecvMsgLenMin, TRunSocket.g_nGateRecvMsgLenMax, M2Share.WorldEngine.OnlinePlayObject,
             //       M2Share.WorldEngine.PlayObjectCount, M2Share.WorldEngine.LoadPlayCount, M2Share.WorldEngine.m_PlayObjectFreeList.Count));
-            //sb.AppendLine(string.Format("Run({0}/{1}) Soc({2}/{3}) Usr({4}/{5})", M2Share.nRunTimeMin, M2Share.nRunTimeMax, M2Share.g_nSockCountMin,
-            //        M2Share.g_nSockCountMax, M2Share.g_nUsrTimeMin, M2Share.g_nUsrTimeMax));
-            //sb.AppendLine(string.Format("Hum{0}/{1} Usr{2}/{3} Mer{4}/{5} Npc{6}/{7}", M2Share.g_nHumCountMin, M2Share.g_nHumCountMax,
+            //sb.AppendLine(string.Format("Run({0}/{1}) Soc({2}/{3}) Usr({4}/{5})", M2Share.nRunTimeMin, M2Share.nRunTimeMax, Settings.g_nSockCountMin,
+            //        Settings.g_nSockCountMax, Settings.g_nUsrTimeMin, Settings.g_nUsrTimeMax));
+            //sb.AppendLine(string.Format("Hum{0}/{1} Usr{2}/{3} Mer{4}/{5} Npc{6}/{7}", Settings.g_nHumCountMin, Settings.g_nHumCountMax,
             //        M2Share.dwUsrRotCountMin, M2Share.dwUsrRotCountMax, M2Share.WorldEngine.dwProcessMerchantTimeMin,
             //        M2Share.WorldEngine.dwProcessMerchantTimeMax, M2Share.WorldEngine.dwProcessNpcTimeMin, M2Share.WorldEngine.dwProcessNpcTimeMax,
-            //        M2Share.g_nProcessHumanLoopTime));
-            //sb.AppendLine(string.Format("MonG({0}/{1}/{2}) MonP({3}/{4}/{5}) ObjRun({6}/{7})", M2Share.g_nMonGenTime, M2Share.g_nMonGenTimeMin,
-            //      M2Share.g_nMonGenTimeMax, M2Share.g_nMonProcTime, M2Share.g_nMonProcTimeMin, M2Share.g_nMonProcTimeMax, M2Share.g_nBaseObjTimeMin,
-            //      M2Share.g_nBaseObjTimeMax));
+            //        Settings.g_nProcessHumanLoopTime));
+            //sb.AppendLine(string.Format("MonG({0}/{1}/{2}) MonP({3}/{4}/{5}) ObjRun({6}/{7})", Settings.g_nMonGenTime, Settings.g_nMonGenTimeMin,
+            //      Settings.g_nMonGenTimeMax, Settings.g_nMonProcTime, Settings.g_nMonProcTimeMin, Settings.g_nMonProcTimeMax, Settings.g_nBaseObjTimeMin,
+            //      Settings.g_nBaseObjTimeMax));
             //if (M2Share.dwStartTimeTick == 0)
             //{
             //    M2Share.dwStartTimeTick = HUtil32.GetTickCount();

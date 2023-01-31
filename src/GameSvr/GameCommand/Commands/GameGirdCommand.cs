@@ -22,16 +22,16 @@ namespace GameSvr.GameCommand.Commands
             //}
             //if ((string.IsNullOrEmpty(sHumanName)) || !(new ArrayList(new string[] { "=", "+", "-" }).Contains(Ctr)) || (nGameGird < 0) || (nGameGird > 200000000) || ((!string.IsNullOrEmpty(sHumanName)) && (sHumanName[0] == '?')))
             //{
-            //    if (M2Share.g_Config.boGMShowFailMsg)
+            //    if (Settings.g_Config.boGMShowFailMsg)
             //    {
-            //        PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandParamUnKnow, this.Attributes.Name, M2Share.g_sGameCommandGameGirdHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+            //        PlayObject.SysMsg(string.Format(Settings.g_sGameCommandParamUnKnow, this.Attributes.Name, Settings.g_sGameCommandGameGirdHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
             //    }
             //    return;
             //}
             //m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             //if (m_PlayObject == null)
             //{
-            //    PlayObject.SysMsg(string.Format(M2Share.g_sNowNotOnLineOrOnOtherServer, new string[] { sHumanName }), TMsgColor.c_Red, TMsgType.t_Hint);
+            //    PlayObject.SysMsg(string.Format(Settings.g_sNowNotOnLineOrOnOtherServer, new string[] { sHumanName }), TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
             //switch (sCtr[1])
@@ -51,13 +51,13 @@ namespace GameSvr.GameCommand.Commands
             //        }
             //        break;
             //}
-            //if (M2Share.g_boGameLogGameGird)
+            //if (Settings.g_boGameLogGameGird)
             //{
-            //    M2Share.ItemEventSource.AddGameLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GameGird, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, m_PlayObject.m_sChrName, M2Share.g_Config.sGameGird, m_PlayObject.m_nGAMEGIRD, sCtr[1] + "(" + (nGameGird).ToString() + ")", PlayObject.m_sChrName));
+            //    M2Share.ItemEventSource.AddGameLog(string.Format(Settings.g_sGameLogMsg1, M2Share.LOG_GameGird, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY, m_PlayObject.m_sChrName, Settings.g_Config.sGameGird, m_PlayObject.m_nGAMEGIRD, sCtr[1] + "(" + (nGameGird).ToString() + ")", PlayObject.m_sChrName));
             //}
             //PlayObject.GameGoldChanged();
-            //m_PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGirdHumanMsg, M2Share.g_Config.sGameGird, nGameGird, m_PlayObject.m_nGAMEGIRD, M2Share.g_Config.sGameGird), TMsgColor.c_Green, TMsgType.t_Hint);
-            //PlayObject.SysMsg(string.Format(M2Share.g_sGameCommandGameGirdGMMsg, sHumanName, M2Share.g_Config.sGameGird, nGameGird, m_PlayObject.m_nGAMEGIRD, M2Share.g_Config.sGameGird), TMsgColor.c_Green, TMsgType.t_Hint);
+            //m_PlayObject.SysMsg(string.Format(Settings.g_sGameCommandGameGirdHumanMsg, Settings.g_Config.sGameGird, nGameGird, m_PlayObject.m_nGAMEGIRD, Settings.g_Config.sGameGird), TMsgColor.c_Green, TMsgType.t_Hint);
+            //PlayObject.SysMsg(string.Format(Settings.g_sGameCommandGameGirdGMMsg, sHumanName, Settings.g_Config.sGameGird, nGameGird, m_PlayObject.m_nGAMEGIRD, Settings.g_Config.sGameGird), TMsgColor.c_Green, TMsgType.t_Hint);
         }
     }
 }

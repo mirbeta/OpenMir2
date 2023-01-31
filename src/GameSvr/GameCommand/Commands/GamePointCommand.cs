@@ -58,8 +58,8 @@ namespace GameSvr.GameCommand.Commands
             }
             if (M2Share.GameLogGamePoint)
             {
-                //M2Share.ItemEventSource.AddGameLog(string.Format(M2Share.g_sGameLogMsg1, M2Share.LOG_GAMEPOINT, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY,
-                //    m_PlayObject.m_sChrName, M2Share.g_Config.sGamePointName, nPoint, sCtr[1], m_PlayObject.m_sChrName));
+                //M2Share.ItemEventSource.AddGameLog(string.Format(Settings.g_sGameLogMsg1, M2Share.LOG_GAMEPOINT, m_PlayObject.m_sMapName, m_PlayObject.m_nCurrX, m_PlayObject.m_nCurrY,
+                //    m_PlayObject.m_sChrName, Settings.g_Config.sGamePointName, nPoint, sCtr[1], m_PlayObject.m_sChrName));
             }
             PlayObject.GameGoldChanged();
             m_PlayObject.SysMsg(string.Format(CommandHelp.GameCommandGamePointHumanMsg, nPoint, m_PlayObject.GamePoint), MsgColor.Green, MsgType.Hint);

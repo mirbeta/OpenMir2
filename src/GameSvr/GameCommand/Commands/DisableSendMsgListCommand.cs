@@ -10,15 +10,15 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void DisableSendMsgList(PlayObject PlayObject)
         {
-            if (M2Share.g_DisableSendMsgList.Count <= 0)
+            if (M2Share.DisableSendMsgList.Count <= 0)
             {
                 PlayObject.SysMsg("禁言列表为空!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject.SysMsg("禁言列表:", MsgColor.Blue, MsgType.Hint);
-            for (var i = 0; i < M2Share.g_DisableSendMsgList.Count; i++)
+            for (var i = 0; i < M2Share.DisableSendMsgList.Count; i++)
             {
-                //PlayObject.SysMsg(M2Share.g_DisableSendMsgList[i], TMsgColor.c_Green, TMsgType.t_Hint);
+                //PlayObject.SysMsg(Settings.g_DisableSendMsgList[i], TMsgColor.c_Green, TMsgType.t_Hint);
             }
         }
     }

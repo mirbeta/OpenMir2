@@ -21,11 +21,11 @@ namespace GameSvr.GameCommand.Commands
             PlayObject.ObMode = boFlag;
             if (PlayObject.ObMode)
             {
-                PlayObject.SysMsg(M2Share.sObserverMode, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Settings.sObserverMode, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(M2Share.g_sReleaseObserverMode, MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg(Settings.g_sReleaseObserverMode, MsgColor.Green, MsgType.Hint);
             }
         }
     }

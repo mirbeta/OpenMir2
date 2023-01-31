@@ -10,10 +10,10 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void ReloadRobotManage(PlayObject PlayObject)
         {
-            if (M2Share.g_RobotNPC != null)
+            if (M2Share.RobotNPC != null)
             {
-                M2Share.g_RobotNPC.ClearScript();
-                M2Share.g_RobotNPC.LoadNPCScript();
+                M2Share.RobotNPC.ClearScript();
+                M2Share.RobotNPC.LoadNPCScript();
                 PlayObject.SysMsg("重新加载机器人专用脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else

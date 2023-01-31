@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             //TFlowerEvent FlowerEvent = null;
             //if ((sEffect == "") || (HUtil32.Str_ToInt(sEffect, -1) <= 0))
             //{
-            //    if (M2Share.g_Config.boGMShowFailMsg)
+            //    if (Settings.g_Config.boGMShowFailMsg)
             //    {
             //        PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 烟花类型(79-85)", TMsgColor.c_Red, TMsgType.t_Hint);
             //    }
@@ -65,7 +65,7 @@ namespace GameSvr.GameCommand.Commands
             //{
             //    // Modify the A .. B: 79 .. 85
             //    case 79:
-            //        M2Share.g_EventManager.AddEvent(FlowerEvent);
+            //        Settings.g_EventManager.AddEvent(FlowerEvent);
             //        break;
             //}
         }

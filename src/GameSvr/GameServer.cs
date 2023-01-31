@@ -22,7 +22,7 @@ namespace GameSvr
         public void StartWorld(CancellationToken stoppingToken)
         {
             M2Share.DataServer.Start();
-            M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
+            M2Share.UsrRotCountTick = HUtil32.GetTickCount();
             M2Share.GateMgr.Start(stoppingToken);
             _worldThread = new Thread(Execute);
             _worldThread.IsBackground = true;
@@ -56,10 +56,10 @@ namespace GameSvr
 
         private static void ProcessGameNotice()
         {
-            if (M2Share.Config.SendOnlineCount && (HUtil32.GetTickCount() - M2Share.g_dwSendOnlineTick) > M2Share.Config.SendOnlineTime)
+            if (M2Share.Config.SendOnlineCount && (HUtil32.GetTickCount() - M2Share.SendOnlineTick) > M2Share.Config.SendOnlineTime)
             {
-                M2Share.g_dwSendOnlineTick = HUtil32.GetTickCount();
-                var sMsg = string.Format(M2Share.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (M2Share.Config.SendOnlineCountRate / 10)));
+                M2Share.SendOnlineTick = HUtil32.GetTickCount();
+                var sMsg = string.Format(Settings.g_sSendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (M2Share.Config.SendOnlineCountRate / 10)));
                 M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }

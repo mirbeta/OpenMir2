@@ -692,18 +692,18 @@ namespace GameSvr.World
             }
             ProcessPlayObjectData();
             ProcessHumanLoopTime++;
-            M2Share.g_nProcessHumanLoopTime = ProcessHumanLoopTime;
+            M2Share.ProcessHumanLoopTime = ProcessHumanLoopTime;
             if (ProcHumIdx == 0)
             {
                 ProcessHumanLoopTime = 0;
-                M2Share.g_nProcessHumanLoopTime = ProcessHumanLoopTime;
-                var dwUsrRotTime = HUtil32.GetTickCount() - M2Share.g_dwUsrRotCountTick;
-                M2Share.dwUsrRotCountMin = dwUsrRotTime;
-                M2Share.g_dwUsrRotCountTick = HUtil32.GetTickCount();
-                if (M2Share.dwUsrRotCountMax < dwUsrRotTime) M2Share.dwUsrRotCountMax = dwUsrRotTime;
+                M2Share.ProcessHumanLoopTime = ProcessHumanLoopTime;
+                var dwUsrRotTime = HUtil32.GetTickCount() - M2Share.UsrRotCountTick;
+                M2Share.UsrRotCountMin = dwUsrRotTime;
+                M2Share.UsrRotCountTick = HUtil32.GetTickCount();
+                if (M2Share.UsrRotCountMax < dwUsrRotTime) M2Share.UsrRotCountMax = dwUsrRotTime;
             }
-            M2Share.g_nHumCountMin = HUtil32.GetTickCount() - dwCheckTime;
-            if (M2Share.g_nHumCountMax < M2Share.g_nHumCountMin) M2Share.g_nHumCountMax = M2Share.g_nHumCountMin;
+            M2Share.HumCountMin = HUtil32.GetTickCount() - dwCheckTime;
+            if (M2Share.HumCountMax < M2Share.HumCountMin) M2Share.HumCountMax = M2Share.HumCountMin;
         }
 
         private void ProcessRobotPlayData()
@@ -821,7 +821,7 @@ namespace GameSvr.World
                                         playObject.ShowLineNoticeTick = HUtil32.GetTickCount();
                                         if (M2Share.LineNoticeList.Count > playObject.ShowLineNoticeIdx)
                                         {
-                                            var lineNoticeMsg = M2Share.g_ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
+                                            var lineNoticeMsg = M2Share.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
                                             switch (lineNoticeMsg[0])
                                             {
                                                 case 'R':
@@ -2268,7 +2268,7 @@ namespace GameSvr.World
             {
                 playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost)
-                    M2Share.g_ManageNPC.GotoLable(playObject, sQuestName, false);
+                    M2Share.ManageNPC.GotoLable(playObject, sQuestName, false);
             }
         }
 

@@ -383,7 +383,7 @@ namespace GameSvr.Services
 
         private static void SetTotalHumanCount(string sData)
         {
-            M2Share.g_nTotalHumCount = HUtil32.StrToInt(sData, 0);
+            M2Share.TotalHumCount = HUtil32.StrToInt(sData, 0);
         }
 
         private void GetCancelAdmissionA(string sData)
@@ -434,7 +434,7 @@ namespace GameSvr.Services
 
         private void IDSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            // if (!M2Share.g_Config.boIDSocketConnected)
+            // if (!Settings.g_Config.boIDSocketConnected)
             // {
             //     return;
             // }
