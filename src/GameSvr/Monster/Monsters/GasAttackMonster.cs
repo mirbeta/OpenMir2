@@ -18,7 +18,7 @@ namespace GameSvr.Monster.Monsters
             int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nPower > 0)
             {
-                SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 BaseObject baseObject = GetPoseCreate();
                 if (baseObject != null && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                 {
@@ -26,7 +26,7 @@ namespace GameSvr.Monster.Monsters
                     if (nPower > 0)
                     {
                         baseObject.StruckDamage((ushort)nPower);
-                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
+                        baseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
                         if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 20) == 0)
                         {
                             baseObject.MakePosion(PoisonState.STONE, 5, 0);

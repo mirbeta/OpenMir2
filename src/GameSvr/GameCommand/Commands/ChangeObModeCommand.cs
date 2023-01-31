@@ -16,7 +16,7 @@ namespace GameSvr.GameCommand.Commands
             bool boFlag = !PlayObject.ObMode;
             if (boFlag)
             {
-                PlayObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");// 发送刷新数据到客户端，解决隐身有影子问题
+                PlayObject.SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");// 发送刷新数据到客户端，解决隐身有影子问题
             }
             PlayObject.ObMode = boFlag;
             if (PlayObject.ObMode)

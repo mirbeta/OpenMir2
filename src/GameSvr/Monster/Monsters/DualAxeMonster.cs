@@ -23,9 +23,9 @@ namespace GameSvr.Monster.Monsters
                 if (nDamage > 0)
                 {
                     target.StruckDamage((ushort)nDamage);
-                    target.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, target.WAbil.HP, target.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - target.CurrX), Math.Abs(CurrY - target.CurrY)) * 50 + 600);
+                    target.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, target.WAbil.HP, target.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - target.CurrX), Math.Abs(CurrY - target.CurrY)) * 50 + 600);
                 }
-                SendRefMsg(Grobal2.RM_FLYAXE, Direction, CurrX, CurrY, target.ActorId, "");
+                SendRefMsg(Messages.RM_FLYAXE, Direction, CurrX, CurrY, target.ActorId, "");
             }
         }
 

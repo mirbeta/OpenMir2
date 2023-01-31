@@ -498,7 +498,7 @@ namespace DBSvr.Services
                 {
                     if (!_loginService.GetGlobaSessionStatus(userInfo.nSessionID))
                     {
-                        _loginService.SendSocketMsg(Grobal2.SS_SOFTOUTSESSION, userInfo.sAccount + "/" + userInfo.nSessionID);
+                        _loginService.SendSocketMsg(Messages.SS_SOFTOUTSESSION, userInfo.sAccount + "/" + userInfo.nSessionID);
                         _loginService.CloseSession(userInfo.sAccount, userInfo.nSessionID);
                     }
                     userInfo = null;
@@ -515,7 +515,7 @@ namespace DBSvr.Services
             var clientPacket = EDCode.DecodePacket(sDefMsg);
             switch (clientPacket.Ident)
             {
-                case Grobal2.CM_QUERYCHR:
+                case Messages.CM_QUERYCHR:
                     if (!userInfo.boChrQueryed || ((HUtil32.GetTickCount() - userInfo.dwChrTick) > 200))
                     {
                         userInfo.dwChrTick = HUtil32.GetTickCount();
@@ -534,7 +534,7 @@ namespace DBSvr.Services
                         _logger.LogWarning("[Hacker Attack] QueryChr:" + userInfo.sUserIPaddr);
                     }
                     break;
-                case Grobal2.CM_NEWCHR:
+                case Messages.CM_NEWCHR:
                     if ((HUtil32.GetTickCount() - userInfo.dwChrTick) > 1000)
                     {
                         userInfo.dwChrTick = HUtil32.GetTickCount();
@@ -555,7 +555,7 @@ namespace DBSvr.Services
                         _logger.LogWarning("[Hacker Attack] NEWCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
-                case Grobal2.CM_DELCHR:
+                case Messages.CM_DELCHR:
                     if ((HUtil32.GetTickCount() - userInfo.dwChrTick) > 1000)
                     {
                         userInfo.dwChrTick = HUtil32.GetTickCount();
@@ -574,7 +574,7 @@ namespace DBSvr.Services
                         _logger.LogWarning("[Hacker Attack] DELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
-                case Grobal2.CM_SELCHR:
+                case Messages.CM_SELCHR:
                     if (userInfo.boChrQueryed)
                     {
                         if ((!string.IsNullOrEmpty(userInfo.sAccount)) && _loginService.CheckSession(userInfo.sAccount, userInfo.sUserIPaddr, userInfo.nSessionID))
@@ -647,12 +647,12 @@ namespace DBSvr.Services
                     }
                 }
                 chrList = null;
-                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDCode.EncodeString(sSendMsg));
+                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Messages.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDCode.EncodeString(sSendMsg));
                 result = true;
             }
             else
             {
-                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
+                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Messages.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
                 CloseUser(userInfo.SessionId, ref curGate);
             }
             return result;
@@ -663,7 +663,7 @@ namespace DBSvr.Services
         /// </summary>
         private void OutOfConnect(SessionUserInfo userInfo)
         {
-            var msg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            var msg = Grobal2.MakeDefaultMsg(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
         }
@@ -708,11 +708,11 @@ namespace DBSvr.Services
             }
             if (boCheck)
             {
-                msg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELCHR_SUCCESS, 0, 0, 0, 0);
+                msg = Grobal2.MakeDefaultMsg(Messages.SM_DELCHR_SUCCESS, 0, 0, 0, 0);
             }
             else
             {
-                msg = Grobal2.MakeDefaultMsg(Grobal2.SM_DELCHR_FAIL, 0, 0, 0, 0);
+                msg = Grobal2.MakeDefaultMsg(Messages.SM_DELCHR_FAIL, 0, 0, 0, 0);
             }
             var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
@@ -815,11 +815,11 @@ namespace DBSvr.Services
             }
             if (nCode == 1)
             {
-                msg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWCHR_SUCCESS, 0, 0, 0, 0);
+                msg = Grobal2.MakeDefaultMsg(Messages.SM_NEWCHR_SUCCESS, 0, 0, 0, 0);
             }
             else
             {
-                msg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
+                msg = Grobal2.MakeDefaultMsg(Messages.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
             }
             var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
@@ -881,7 +881,7 @@ namespace DBSvr.Services
             if (boDataOk)
             {
                 var nMapIndex = GetMapIndex(sCurMap);
-                var sDefMsg = EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTPLAY, 0, 0, 0, 0));
+                var sDefMsg = EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Messages.SM_STARTPLAY, 0, 0, 0, 0));
                 var sRouteIp = GateRouteIp(curGate.RemoteEndPoint.GetIPAddress(), ref nRoutePort);
                 if (_conf.DynamicIpMode)// 使用动态IP
                 {
@@ -895,7 +895,7 @@ namespace DBSvr.Services
             }
             else
             {
-                SendUserSocket(curGate.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Grobal2.SM_STARTFAIL, 0, 0, 0, 0)));
+                SendUserSocket(curGate.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Messages.SM_STARTFAIL, 0, 0, 0, 0)));
             }
             return result;
         }

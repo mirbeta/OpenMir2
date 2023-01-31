@@ -52,13 +52,13 @@ namespace GameSvr.GameCommand.Commands
             //        FlowerEvent = new TFlowerEvent(PlayObject.m_PEnvir, PlayObject.m_nCurrX, PlayObject.m_nCurrY, Grobal2.ET_FIREFLOWER_7, 4000);
             //        break;
             //    case 87:// 护体神盾  受攻击
-            //        PlayObject.SendRefMsg(Grobal2.RM_MYSHOW, Grobal2.ET_PROTECTION_STRUCK, 0, 0, 0, "");
+            //        PlayObject.SendRefMsg(Messages.RM_MYSHOW, Grobal2.ET_PROTECTION_STRUCK, 0, 0, 0, "");
             //        break;
             //    case 89:// 护体神盾  破盾
-            //        PlayObject.SendRefMsg(Grobal2.RM_MYSHOW, Grobal2.ET_PROTECTION_PIP, 0, 0, 0, "");
+            //        PlayObject.SendRefMsg(Messages.RM_MYSHOW, Grobal2.ET_PROTECTION_PIP, 0, 0, 0, "");
             //        break;
             //    case 90: // 人物升级动画
-            //        PlayObject.SendRefMsg(Grobal2.RM_MYSHOW, Grobal2.ET_OBJECTLEVELUP, 0, 0, 0, "");
+            //        PlayObject.SendRefMsg(Messages.RM_MYSHOW, Grobal2.ET_OBJECTLEVELUP, 0, 0, 0, "");
             //        break;
             //}
             //switch (nEffectType)

@@ -15,7 +15,7 @@
                 {
                     if (Math.Abs(this.CurrX - this.TargetX) > 5 || Math.Abs(this.CurrY - this.TargetY) > 5)
                     {
-                        this.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                        this.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         this.SpaceMove(this.TargetCret.MapName, this.TargetCret.CurrX, this.TargetCret.CurrY, 0);
                     }
                 }

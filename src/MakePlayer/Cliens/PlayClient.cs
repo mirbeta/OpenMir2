@@ -195,7 +195,7 @@ namespace MakePlayer.Cliens
             ua.MobilePhone = "";
             ua.Memo = "";
             ua.Memo2 = "";
-            var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_ADDNEWUSER, 0, 0, 0, 0);
+            var Msg = Grobal2.MakeDefaultMsg(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
         }
 
@@ -229,7 +229,7 @@ namespace MakePlayer.Cliens
             MainOutMessage($"[{LoginAccount}] 选择人物：{sChrName}");
             ConnectionStep = TConnectionStep.cnsSelChr;
             ChrName = sChrName;
-            var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELCHR, 0, 0, 0, 0);
+            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_SELCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(LoginAccount + "/" + sChrName));
         }
 
@@ -237,7 +237,7 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{LoginAccount}] 开始登录");
             ConnectionStep = TConnectionStep.cnsLogin;
-            var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_IDPASSWORD, 0, 0, 0, 0);
+            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sAccount + "/" + sPassword));
             m_boSendLogin = true;
         }
@@ -246,7 +246,7 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{LoginAccount}] 创建人物：{sChrName}");
             ConnectionStep = TConnectionStep.cnsNewChr;
-            var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_NEWCHR, 0, 0, 0, 0);
+            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_NEWCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sAccount + "/" + sChrName + "/" + sHair + "/" + sJob + "/" + sSex));
         }
 
@@ -254,7 +254,7 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{LoginAccount}] 查询人物");
             ConnectionStep = TConnectionStep.cnsQueryChr;
-            var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_QUERYCHR, 0, 0, 0, 0);
+            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_QUERYCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(LoginAccount + "/" + Certification.ToString()));
         }
 
@@ -262,7 +262,7 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{LoginAccount}] 选择服务器：{sServerName}");
             ConnectionStep = TConnectionStep.cnsSelServer;
-            var DefMsg = Grobal2.MakeDefaultMsg(Grobal2.CM_SELECTSERVER, 0, 0, 0, 0);
+            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sServerName));
         }
 
@@ -320,7 +320,7 @@ namespace MakePlayer.Cliens
         private void ClientGetSendNotice(string sData)
         {
             MainOutMessage($"[{LoginAccount}] 发送公告");
-            SendClientMessage(Grobal2.CM_LOGINNOTICEOK, HUtil32.GetTickCount(), 0, 0, 0);
+            SendClientMessage(Messages.CM_LOGINNOTICEOK, HUtil32.GetTickCount(), 0, 0, 0);
         }
 
         private void ClientGetUserLogin(CommandPacket DefMsg, string sData)
@@ -335,7 +335,7 @@ namespace MakePlayer.Cliens
         public void ClientLoginSay(string message)
         {
             m_dwSayTick = HUtil32.GetTickCount();
-            var Msg = Grobal2.MakeDefaultMsg(Grobal2.CM_SAY, 0, 0, 0, 0);
+            var Msg = Grobal2.MakeDefaultMsg(Messages.CM_SAY, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeString(message));
         }
 
@@ -700,62 +700,62 @@ namespace MakePlayer.Cliens
             var DefMsg = EDCode.DecodePacket(sDefMsg);
             switch (DefMsg.Ident)
             {
-                case Grobal2.SM_NEWID_SUCCESS:
+                case Messages.SM_NEWID_SUCCESS:
                     ClientNewIdSuccess(sBody);
                     break;
-                case Grobal2.SM_SELECTSERVER_OK:
+                case Messages.SM_SELECTSERVER_OK:
                     ClientGetPasswdSuccess(sBody);
                     break;
-                case Grobal2.SM_NEWID_FAIL:
+                case Messages.SM_NEWID_FAIL:
                     ClientNewIDFail(DefMsg.Recog);
                     break;
-                case Grobal2.SM_PASSWD_FAIL:
+                case Messages.SM_PASSWD_FAIL:
                     ClientLoginFail(DefMsg.Recog);
                     break;
-                case Grobal2.SM_PASSOK_SELECTSERVER:
+                case Messages.SM_PASSOK_SELECTSERVER:
                     ClientGetPasswordOK(sBody);
                     break;
-                case Grobal2.SM_QUERYCHR:
+                case Messages.SM_QUERYCHR:
                     ClientGetReceiveChrs(sBody);
                     break;
-                case Grobal2.SM_QUERYCHR_FAIL:
+                case Messages.SM_QUERYCHR_FAIL:
                     ClientQueryChrFail(DefMsg.Recog);
                     break;
-                case Grobal2.SM_NEWCHR_SUCCESS:
+                case Messages.SM_NEWCHR_SUCCESS:
                     SendQueryChr();
                     break;
-                case Grobal2.SM_NEWCHR_FAIL:
+                case Messages.SM_NEWCHR_FAIL:
                     ClientNewChrFail(DefMsg.Recog);
                     break;
-                case Grobal2.SM_DELCHR_SUCCESS:
+                case Messages.SM_DELCHR_SUCCESS:
                     SendQueryChr();
                     break;
-                case Grobal2.SM_STARTPLAY:
+                case Messages.SM_STARTPLAY:
                     ClientGetStartPlay(sBody);
                     break;
-                case Grobal2.SM_STARTFAIL:
+                case Messages.SM_STARTFAIL:
                     ClientStartPlayFail();
                     break;
-                case Grobal2.SM_VERSION_FAIL:
+                case Messages.SM_VERSION_FAIL:
                     ClientVersionFail();
                     break;
-                case Grobal2.SM_OUTOFCONNECTION:
-                case Grobal2.SM_NEWMAP:
-                case Grobal2.SM_RECONNECT:
+                case Messages.SM_OUTOFCONNECTION:
+                case Messages.SM_NEWMAP:
+                case Messages.SM_RECONNECT:
                     break;
-                case Grobal2.SM_ABILITY:
+                case Messages.SM_ABILITY:
                     ClientGetAbility(DefMsg, sBody);
                     break;
-                case Grobal2.SM_WINEXP:
+                case Messages.SM_WINEXP:
                     ClientGetWinExp(DefMsg);
                     break;
-                case Grobal2.SM_LEVELUP:
+                case Messages.SM_LEVELUP:
                     ClientGetLevelUp(DefMsg);
                     break;
-                case Grobal2.SM_SENDNOTICE:
+                case Messages.SM_SENDNOTICE:
                     ClientGetSendNotice(sBody);
                     break;
-                case Grobal2.SM_LOGON:
+                case Messages.SM_LOGON:
                     ClientGetUserLogin(DefMsg, sBody);
                     break;
                     /*default:

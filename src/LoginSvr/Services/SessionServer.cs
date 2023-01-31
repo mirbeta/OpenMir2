@@ -135,11 +135,11 @@ namespace LoginSvr.Services
                         var nCode = HUtil32.StrToInt(sCode, -1);
                         switch (nCode)
                         {
-                            case Grobal2.SS_SOFTOUTSESSION:
+                            case Messages.SS_SOFTOUTSESSION:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, '/');
                                 CloseUser(msgServer, sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
-                            case Grobal2.SS_SERVERINFO:
+                            case Messages.SS_SERVERINFO:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, '/');
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sIndex, '/');
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sOnlineCount, '/');
@@ -155,24 +155,24 @@ namespace LoginSvr.Services
                                 {
                                     LsShare.OnlineCountMax = LsShare.OnlineCountMin;
                                 }
-                                SendServerMsgA(Grobal2.SS_KEEPALIVE, LsShare.OnlineCountMin.ToString());
+                                SendServerMsgA(Messages.SS_KEEPALIVE, LsShare.OnlineCountMin.ToString());
                                 RefServerLimit(sServerName);
                                 break;
-                            case Grobal2.ISM_GAMETIMEOFTIMECARDUSER:
+                            case Messages.ISM_GAMETIMEOFTIMECARDUSER:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sServerName, '/');
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, '/');
                                 ChanggePlayTimeUser(msgServer, sServerName, sAccount, HUtil32.StrToInt(sMsg, 0));
                                 break;
-                            case Grobal2.ISM_QUERYACCOUNTEXPIRETIME:
+                            case Messages.ISM_QUERYACCOUNTEXPIRETIME:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, '/');
                                 QueryPlayTime(msgServer, sAccount);
                                 break;
-                            case Grobal2.ISM_CHECKTIMEACCOUNT:
+                            case Messages.ISM_CHECKTIMEACCOUNT:
                                 sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, '/');
                                 CheckTimeAccount(msgServer, sAccount);
                                 break;
-                            case Grobal2.UNKNOWMSG:
-                                SendServerMsgA(Grobal2.UNKNOWMSG, sMsg);
+                            case Messages.UNKNOWMSG:
+                                SendServerMsgA(Messages.UNKNOWMSG, sMsg);
                                 break;
                             default:
                                 Console.WriteLine(nCode);
@@ -207,7 +207,7 @@ namespace LoginSvr.Services
                     {
                         if ((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
                         {
-                            SendServerMsg(Grobal2.ISM_QUERYPLAYTIME, certUser.ServerName, certUser.LoginID + "/" + seconds);
+                            SendServerMsg(Messages.ISM_QUERYPLAYTIME, certUser.ServerName, certUser.LoginID + "/" + seconds);
                             _logger.DebugLog($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
                         }
                     }
@@ -258,14 +258,14 @@ namespace LoginSvr.Services
             }
             else
             {
-                SendServerMsg(Grobal2.ISM_QUERYPLAYTIME, serverName, account + "/" + seconds);
+                SendServerMsg(Messages.ISM_QUERYPLAYTIME, serverName, account + "/" + seconds);
                 _logger.DebugLog($"[GameServer/Send] ISM_QUERYPLAYTIME : {account} PlayTime: ({seconds})");
             }
         }
 
         private void SendCancelAdmissionUser(string serverName, CertUser certUser)
         {
-            SendServerMsg(Grobal2.SS_CLOSESESSION, serverName, certUser.LoginID + "/" + certUser.Certification);
+            SendServerMsg(Messages.SS_CLOSESESSION, serverName, certUser.LoginID + "/" + certUser.Certification);
             _logger.DebugLog($"[GameServer/Send] ISM_CANCELADMISSION : {certUser.LoginID} TO ({certUser.Addr})");
         }
 
@@ -304,7 +304,7 @@ namespace LoginSvr.Services
 
         private void SendAccountExpireUser(CertUser certUser)
         {
-            SendServerMsg(Grobal2.ISM_ACCOUNTEXPIRED, certUser.ServerName, certUser.LoginID + "/" + certUser.Certification);
+            SendServerMsg(Messages.ISM_ACCOUNTEXPIRED, certUser.ServerName, certUser.LoginID + "/" + certUser.Certification);
         }
 
         private void CloseUser(ServerSessionInfo serverInfo, string account, int sessionId)
@@ -314,7 +314,7 @@ namespace LoginSvr.Services
                 var connInfo = serverInfo.SessionList[i];
                 if ((connInfo.Account == account) || (connInfo.SessionID == sessionId))
                 {
-                    SendServerMsg(Grobal2.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
+                    SendServerMsg(Messages.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
                     connInfo = null;
                     serverInfo.SessionList.RemoveAt(i);
                 }
@@ -391,7 +391,7 @@ namespace LoginSvr.Services
                                 connInfo.StartTick = HUtil32.GetTickCount();
                                 if (!connInfo.IsPayMent) //todo 完善处理方式，如果游戏是付费，但账号是免费模式则需要额外处理
                                 {
-                                    SendServerMsg(Grobal2.SS_KICKUSER, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
+                                    SendServerMsg(Messages.SS_KICKUSER, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
                                     sessionServer.SessionList[j] = null;
                                     sessionServer.SessionList.RemoveAt(j);
                                 }

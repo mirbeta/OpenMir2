@@ -19,113 +19,113 @@ namespace GameSvr.Planes
         {
             switch (ident)
             {
-                case Grobal2.ISM_GROUPSERVERHEART:
+                case Messages.ISM_GROUPSERVERHEART:
                     ServerHeartMessage(serverNum, body);
                     break;
-                case Grobal2.ISM_USERSERVERCHANGE:
+                case Messages.ISM_USERSERVERCHANGE:
                     MsgGetUserServerChange(serverNum, body);
                     break;
-                case Grobal2.ISM_CHANGESERVERRECIEVEOK:
+                case Messages.ISM_CHANGESERVERRECIEVEOK:
                     MsgGetUserChangeServerRecieveOk(serverNum, body);
                     break;
-                case Grobal2.ISM_USERLOGON:
+                case Messages.ISM_USERLOGON:
                     MsgGetUserLogon(serverNum, body);
                     break;
-                case Grobal2.ISM_USERLOGOUT:
+                case Messages.ISM_USERLOGOUT:
                     MsgGetUserLogout(serverNum, body);
                     break;
-                case Grobal2.ISM_WHISPER:
+                case Messages.ISM_WHISPER:
                     MsgGetWhisper(serverNum, body);
                     break;
-                case Grobal2.ISM_GMWHISPER:
+                case Messages.ISM_GMWHISPER:
                     MsgGetGMWhisper(serverNum, body);
                     break;
-                case Grobal2.ISM_LM_WHISPER:
+                case Messages.ISM_LM_WHISPER:
                     MsgGetLoverWhisper(serverNum, body);
                     break;
-                case Grobal2.ISM_SYSOPMSG:
+                case Messages.ISM_SYSOPMSG:
                     MsgGetSysopMsg(serverNum, body);
                     break;
-                case Grobal2.ISM_ADDGUILD:
+                case Messages.ISM_ADDGUILD:
                     MsgGetAddGuild(serverNum, body);
                     break;
-                case Grobal2.ISM_DELGUILD:
+                case Messages.ISM_DELGUILD:
                     MsgGetDelGuild(serverNum, body);
                     break;
-                case Grobal2.ISM_RELOADGUILD:
+                case Messages.ISM_RELOADGUILD:
                     MsgGetReloadGuild(serverNum, body);
                     break;
-                case Grobal2.ISM_GUILDMSG:
+                case Messages.ISM_GUILDMSG:
                     MsgGetGuildMsg(serverNum, body);
                     break;
-                case Grobal2.ISM_GUILDWAR:
+                case Messages.ISM_GUILDWAR:
                     MsgGetGuildWarInfo(serverNum, body);
                     break;
-                case Grobal2.ISM_CHATPROHIBITION:
+                case Messages.ISM_CHATPROHIBITION:
                     MsgGetChatProhibition(serverNum, body);
                     break;
-                case Grobal2.ISM_CHATPROHIBITIONCANCEL:
+                case Messages.ISM_CHATPROHIBITIONCANCEL:
                     MsgGetChatProhibitionCancel(serverNum, body);
                     break;
-                case Grobal2.ISM_CHANGECASTLEOWNER:
+                case Messages.ISM_CHANGECASTLEOWNER:
                     MsgGetChangeCastleOwner(serverNum, body);
                     break;
-                case Grobal2.ISM_RELOADCASTLEINFO:
+                case Messages.ISM_RELOADCASTLEINFO:
                     MsgGetReloadCastleAttackers(serverNum);
                     break;
-                case Grobal2.ISM_RELOADADMIN:
+                case Messages.ISM_RELOADADMIN:
                     MsgGetReloadAdmin();
                     break;
-                case Grobal2.ISM_MARKETOPEN:
+                case Messages.ISM_MARKETOPEN:
                     MsgGetMarketOpen(true);
                     break;
-                case Grobal2.ISM_MARKETCLOSE:
+                case Messages.ISM_MARKETCLOSE:
                     MsgGetMarketOpen(false);
                     break;
-                case Grobal2.ISM_RELOADCHATLOG:
+                case Messages.ISM_RELOADCHATLOG:
                     MsgGetReloadChatLog();
                     break;
-                case Grobal2.ISM_USER_INFO:
-                case Grobal2.ISM_FRIEND_INFO:
-                case Grobal2.ISM_FRIEND_DELETE:
-                case Grobal2.ISM_FRIEND_OPEN:
-                case Grobal2.ISM_FRIEND_CLOSE:
-                case Grobal2.ISM_FRIEND_RESULT:
-                case Grobal2.ISM_TAG_SEND:
-                case Grobal2.ISM_TAG_RESULT:
+                case Messages.ISM_USER_INFO:
+                case Messages.ISM_FRIEND_INFO:
+                case Messages.ISM_FRIEND_DELETE:
+                case Messages.ISM_FRIEND_OPEN:
+                case Messages.ISM_FRIEND_CLOSE:
+                case Messages.ISM_FRIEND_RESULT:
+                case Messages.ISM_TAG_SEND:
+                case Messages.ISM_TAG_RESULT:
                     MsgGetUserMgr(serverNum, body, ident);
                     break;
-                case Grobal2.ISM_RELOADMAKEITEMLIST:
+                case Messages.ISM_RELOADMAKEITEMLIST:
                     MsgGetReloadMakeItemList();
                     break;
-                case Grobal2.ISM_GUILDMEMBER_RECALL:
+                case Messages.ISM_GUILDMEMBER_RECALL:
                     MsgGetGuildMemberRecall(serverNum, body);
                     break;
-                case Grobal2.ISM_RELOADGUILDAGIT:
+                case Messages.ISM_RELOADGUILDAGIT:
                     MsgGetReloadGuildAgit(serverNum, body);
                     break;
-                case Grobal2.ISM_LM_LOGIN:
+                case Messages.ISM_LM_LOGIN:
                     MsgGetLoverLogin(serverNum, body);
                     break;
-                case Grobal2.ISM_LM_LOGOUT:
+                case Messages.ISM_LM_LOGOUT:
                     MsgGetLoverLogout(serverNum, body);
                     break;
-                case Grobal2.ISM_LM_LOGIN_REPLY:
+                case Messages.ISM_LM_LOGIN_REPLY:
                     MsgGetLoverLoginReply(serverNum, body);
                     break;
-                case Grobal2.ISM_LM_KILLED_MSG:
+                case Messages.ISM_LM_KILLED_MSG:
                     MsgGetLoverKilledMsg(serverNum, body);
                     break;
-                case Grobal2.ISM_RECALL:
+                case Messages.ISM_RECALL:
                     MsgGetRecall(serverNum, body);
                     break;
-                case Grobal2.ISM_REQUEST_RECALL:
+                case Messages.ISM_REQUEST_RECALL:
                     MsgGetRequestRecall(serverNum, body);
                     break;
-                case Grobal2.ISM_REQUEST_LOVERRECALL:
+                case Messages.ISM_REQUEST_LOVERRECALL:
                     MsgGetRequestLoverRecall(serverNum, body);
                     break;
-                case Grobal2.ISM_GRUOPMESSAGE:
+                case Messages.ISM_GRUOPMESSAGE:
                     M2Share.Log.Info("跨服消息");
                     break;
             }
@@ -146,7 +146,7 @@ namespace GameSvr.Planes
                 try
                 {
                     M2Share.WorldEngine.AddSwitchData(new SwitchDataInfo());
-                    World.WorldServer.SendServerGroupMsg(Grobal2.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
+                    World.WorldServer.SendServerGroupMsg(Messages.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
                 }
                 catch
                 {
@@ -423,7 +423,7 @@ namespace GameSvr.Planes
                 {
                     if (hum.AllowGuildReCall)
                     {
-                        hum.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                        hum.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         hum.SpaceMove(Str, dx, dy, 0);
                     }
                 }
@@ -453,7 +453,7 @@ namespace GameSvr.Planes
                     int svidx = 0;
                     if (M2Share.WorldEngine.FindOtherServerUser(uname, ref svidx))
                     {
-                        World.WorldServer.SendServerGroupMsg(Grobal2.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.Envir.MapDesc);
+                        World.WorldServer.SendServerGroupMsg(Messages.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.Envir.MapDesc);
                     }
                 }
             }
@@ -511,7 +511,7 @@ namespace GameSvr.Planes
                 PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    hum.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                    hum.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                     hum.SpaceMove(Str, dx, dy, 0);
                 }
             }

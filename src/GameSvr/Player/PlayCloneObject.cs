@@ -18,7 +18,7 @@ namespace GameSvr.Player
             this.Gender = PlayObject.Gender;
             this.Hair = PlayObject.Hair;
             this.Envir.AddToMap(this.CurrX, this.CurrY, CellType.Play, this);
-            this.SendRefMsg(Grobal2.RM_TURN, this.Direction, this.CurrX, this.CurrY, 0, this.ChrName);
+            this.SendRefMsg(Messages.RM_TURN, this.Direction, this.CurrX, this.CurrY, 0, this.ChrName);
         }
 
         protected override bool Operate(ProcessMessage ProcessMsg)

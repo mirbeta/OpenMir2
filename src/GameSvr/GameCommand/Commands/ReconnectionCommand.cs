@@ -35,7 +35,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (sIPaddr != "" && sPort != "")
             {
-                PlayObject.SendMsg(PlayObject, Grobal2.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
+                PlayObject.SendMsg(PlayObject, Messages.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
             }
         }
     }

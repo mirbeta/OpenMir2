@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (playObject.StoragePwd == "")
             {
-                playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.MBoSetStoragePwd = true;
                 playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                 return;
@@ -37,7 +37,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
-                playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.MBoCheckOldPwd = true;
                 playObject.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }

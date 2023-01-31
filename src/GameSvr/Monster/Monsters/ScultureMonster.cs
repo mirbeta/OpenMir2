@@ -17,7 +17,7 @@ namespace GameSvr.Monster.Monsters
         {
             CharStatusEx = 0;
             CharStatus = GetCharStatus();
-            SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             StoneMode = false;
         }
 

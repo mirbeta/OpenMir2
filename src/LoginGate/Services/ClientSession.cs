@@ -84,14 +84,14 @@ namespace LoginGate.Services
                 }
             }
 
-            /*if (CltCmd.Cmd == Grobal2.CM_QUERYDYNCODE)
+            /*if (CltCmd.Cmd == Messages.CM_QUERYDYNCODE)
             { 
                 m_dwClientTimeOutTick = HUtil32.GetTickCount();
             }*/
             //ClientMesaagePacket cltCmd = ClientPackage.ToPacket<ClientMesaagePacket>(packBuff);
             //switch (cltCmd.Cmd)
             //{
-            //    case Grobal2.CM_ADDNEWUSER://注册账号
+            //    case Messages.CM_ADDNEWUSER://注册账号
             //        m_dwClientTimeOutTick = HUtil32.GetTickCount();
             //        /*if (nDeCodeLen > TCmdPack.PackSize)
             //        {
@@ -103,18 +103,18 @@ namespace LoginGate.Services
             //            _lastLoginSvr.SendPacket(accountPacket);
             //        }*/
             //        break;
-            //    case Grobal2.CM_IDPASSWORD://登录消息
+            //    case Messages.CM_IDPASSWORD://登录消息
             //        m_dwClientTimeOutTick = HUtil32.GetTickCount();
             //        //pszSendBuff = new byte[nDeCodeLen];
             //        //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
             //        //accountPacket = new AccountPacket((int)Session.Socket.Handle, pszSendBuff);
             //        //lastGameSvr.SendBuffer(accountPacket.GetPacket());
             //        break;
-            //    case Grobal2.CM_PROTOCOL:
-            //    case Grobal2.CM_SELECTSERVER:
-            //    case Grobal2.CM_CHANGEPASSWORD:
-            //    case Grobal2.CM_UPDATEUSER:
-            //    case Grobal2.CM_GETBACKPASSWORD:
+            //    case Messages.CM_PROTOCOL:
+            //    case Messages.CM_SELECTSERVER:
+            //    case Messages.CM_CHANGEPASSWORD:
+            //    case Messages.CM_UPDATEUSER:
+            //    case Messages.CM_GETBACKPASSWORD:
             //        m_dwClientTimeOutTick = HUtil32.GetTickCount();
             //        //pszSendBuff = new byte[nDeCodeLen];
             //        //Misc.EncodeBuf(userData.Body, nDeCodeLen, pszSendBuff);
@@ -146,7 +146,7 @@ namespace LoginGate.Services
                     {
                         return;
                     }
-                    SendDefMessage(Grobal2.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0);
+                    SendDefMessage(Messages.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0);
                     m_KickFlag = true;
                     //BlockUser(this);
                     _logger.Debug($"Client Connect TimeOut: {Session.ClientIP}");

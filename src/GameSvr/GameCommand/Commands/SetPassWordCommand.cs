@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (playObject.StoragePwd == "")
             {
-                playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.MBoSetStoragePwd = true;
                 playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
@@ -79,7 +79,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (playObject.StoragePwd != "")
             {
-                playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.MBoCheckOldPwd = true;
                 playObject.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
@@ -114,7 +114,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 if (!playObject.MBoUnLockStoragePwd)
                 {
-                    playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                    playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                     playObject.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
                     playObject.MBoUnLockStoragePwd = true;
                 }
@@ -154,7 +154,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 if (!playObject.MBoUnLockPwd)
                 {
-                    playObject.SendMsg(playObject, Grobal2.RM_PASSWORD, 0, 0, 0, 0, "");
+                    playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                     playObject.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
                     playObject.MBoUnLockPwd = true;
                 }

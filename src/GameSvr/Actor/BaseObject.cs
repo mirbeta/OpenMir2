@@ -737,7 +737,7 @@ namespace GameSvr.Actor
                 MapItem pr = (MapItem)Envir.AddToMap(dx, dy, CellType.Item, mapItem);
                 if (pr == mapItem)
                 {
-                    SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dx, dy, mapItem.Name);
+                    SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dx, dy, mapItem.Name);
                     int logcap;
                     if (boDieDrop)
                     {
@@ -765,7 +765,7 @@ namespace GameSvr.Actor
         {
             if (Race == ActorRace.Play)
             {
-                SendUpdateMsg(this, Grobal2.RM_GOLDCHANGED, 0, 0, 0, 0, "");
+                SendUpdateMsg(this, Messages.RM_GOLDCHANGED, 0, 0, 0, 0, "");
             }
         }
 
@@ -773,7 +773,7 @@ namespace GameSvr.Actor
         {
             if (Race == ActorRace.Play)
             {
-                SendUpdateMsg(this, Grobal2.RM_GAMEGOLDCHANGED, 0, 0, 0, 0, "");
+                SendUpdateMsg(this, Messages.RM_GAMEGOLDCHANGED, 0, 0, 0, 0, "");
             }
         }
 
@@ -782,7 +782,7 @@ namespace GameSvr.Actor
             Abil.MaxExp = GetLevelExp(Abil.Level);
             RecalcLevelAbilitys();
             RecalcAbilitys();
-            SendMsg(this, Grobal2.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
+            SendMsg(this, Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
             if (M2Share.FunctionNPC != null)
             {
                 M2Share.FunctionNPC.GotoLable(this as PlayObject, "@LevelUp", false);
@@ -868,7 +868,7 @@ namespace GameSvr.Actor
                 }
                 if (CurrX != oldX || CurrY != oldY)
                 {
-                    if (Walk(Grobal2.RM_WALK))
+                    if (Walk(Messages.RM_WALK))
                     {
                         if (Transparent && HideMode)
                         {
@@ -897,12 +897,12 @@ namespace GameSvr.Actor
         {
             if (Race == ActorRace.Play)
             {
-                SendUpdateMsg(this, Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
+                SendUpdateMsg(this, Messages.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
             }
 
             if (ShowHp)
             {
-                SendRefMsg(Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
+                SendRefMsg(Messages.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
             }
         }
 
@@ -926,7 +926,7 @@ namespace GameSvr.Actor
 
         public void RefNameColor()
         {
-            SendRefMsg(Grobal2.RM_CHANGENAMECOLOR, 0, 0, 0, 0, "");
+            SendRefMsg(Messages.RM_CHANGENAMECOLOR, 0, 0, 0, 0, "");
         }
 
         private int GainSlaveUpKillCount()
@@ -981,7 +981,7 @@ namespace GameSvr.Actor
                 {
                     mapItem = mapItemA;
                 }
-                SendRefMsg(Grobal2.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, nX, nY, mapItem.Name);
+                SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, nX, nY, mapItem.Name);
                 if (Race == ActorRace.Play)
                 {
                     if (boFalg)
@@ -1060,8 +1060,8 @@ namespace GameSvr.Actor
             if (Race == ActorRace.Play)
             {
                 RecalcAbilitys();
-                SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
+                SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
             }
         }
 
@@ -1214,7 +1214,7 @@ namespace GameSvr.Actor
                     {
                         CurrX = nx;
                         CurrY = ny;
-                        SendRefMsg(Grobal2.RM_PUSH, nBackDir, CurrX, CurrY, 0, "");
+                        SendRefMsg(Messages.RM_PUSH, nBackDir, CurrX, CurrY, 0, "");
                         result++;
                         if (Race >= ActorRace.Animal)
                         {
@@ -1255,7 +1255,7 @@ namespace GameSvr.Actor
                             {
                                 magPwr = HUtil32.Round(magPwr * 1.5);
                             }
-                            baseObject.SendDelayMsg(this, Grobal2.RM_MAGSTRUCK, 0, magPwr, 0, 0, "", 600);
+                            baseObject.SendDelayMsg(this, Messages.RM_MAGSTRUCK, 0, magPwr, 0, 0, "", 600);
                             tcount++;
                         }
                     }
@@ -1283,7 +1283,7 @@ namespace GameSvr.Actor
                 ShowHp = false;
                 CharStatusEx = CharStatusEx ^ PoisonState.OPENHEATH;
                 CharStatus = GetCharStatus();
-                SendRefMsg(Grobal2.RM_CLOSEHEALTH, 0, 0, 0, 0, "");
+                SendRefMsg(Messages.RM_CLOSEHEALTH, 0, 0, 0, 0, "");
             }
         }
 
@@ -1292,7 +1292,7 @@ namespace GameSvr.Actor
             ShowHp = true;
             CharStatusEx = CharStatusEx | PoisonState.OPENHEATH;
             CharStatus = GetCharStatus();
-            SendRefMsg(Grobal2.RM_OPENHEALTH, 0, WAbil.HP, WAbil.MaxHP, 0, "");
+            SendRefMsg(Messages.RM_OPENHEALTH, 0, WAbil.HP, WAbil.MaxHP, 0, "");
         }
 
         protected void IncHealthSpell(int nHp, int nMp)
@@ -1351,7 +1351,7 @@ namespace GameSvr.Actor
                             }
                             if (tDura != HUtil32.Round(nDura / 1000.0)) // 1.03
                             {
-                                SendMsg(this, Grobal2.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
+                                SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
                             }
                         }
                     }
@@ -1517,15 +1517,15 @@ namespace GameSvr.Actor
                     if (SpaceMoveGetRandXY(Envir, ref CurrX, ref CurrY))
                     {
                         Envir.AddToMap(CurrX, CurrY, MapCell, this);
-                        SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
-                        SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
+                        SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                        SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
                         {
-                            SendRefMsg(Grobal2.RM_SPACEMOVE_SHOW2, Direction, CurrX, CurrY, 0, "");
+                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW2, Direction, CurrX, CurrY, 0, "");
                         }
                         else
                         {
-                            SendRefMsg(Grobal2.RM_SPACEMOVE_SHOW, Direction, CurrX, CurrY, 0, "");
+                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW, Direction, CurrX, CurrY, 0, "");
                         }
                         MapMoveTick = HUtil32.GetTickCount();
                         SpaceMoved = true;
@@ -1561,7 +1561,7 @@ namespace GameSvr.Actor
 
         public void RefShowName()
         {
-            SendRefMsg(Grobal2.RM_USERNAME, 0, 0, 0, 0, GetShowName());
+            SendRefMsg(Messages.RM_USERNAME, 0, 0, 0, 0, GetShowName());
         }
 
         public BaseObject MakeSlave(string sMonName, int nMakeLevel, int nExpLevel, int nMaxMob, int dwRoyaltySec)
@@ -1625,7 +1625,7 @@ namespace GameSvr.Actor
 
         public bool AddItemToBag(UserItem userItem)
         {
-            if (ItemList.Count >= Grobal2.MAXBAGITEM)
+            if (ItemList.Count >= Grobal2.MaxBagItem)
                 return false;
             ItemList.Add(userItem);
             WeightChanged();
@@ -1666,8 +1666,8 @@ namespace GameSvr.Actor
                         }
                         UseItems[Grobal2.U_RIGHTHAND].Index = 0;
                         Light = 0;
-                        SendRefMsg(Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
-                        SendMsg(this, Grobal2.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
+                        SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
+                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
                         RecalcAbilitys();
                     }
                     else
@@ -1676,7 +1676,7 @@ namespace GameSvr.Actor
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000))
                     {
-                        SendMsg(this, Grobal2.RM_LAMPCHANGEDURA, 0, UseItems[Grobal2.U_RIGHTHAND].Dura, 0, 0, "");
+                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, UseItems[Grobal2.U_RIGHTHAND].Dura, 0, 0, "");
                     }
                 }
             }
@@ -1811,7 +1811,7 @@ namespace GameSvr.Actor
             bool result = point != null;
             if (!FixedHideMode)
             {
-                SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, 0, "");
             }
             return result;
         }
@@ -1880,7 +1880,7 @@ namespace GameSvr.Actor
                     }
                 }
                 UseItems[Grobal2.U_WEAPON].Index = 0;
-                SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, nDura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+                SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_WEAPON, nDura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             }
             else
             {
@@ -1888,7 +1888,7 @@ namespace GameSvr.Actor
             }
             if ((ushort)Math.Abs((nDura / 1.03)) != nDuraPoint)
             {
-                SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+                SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             }
         }
 
@@ -1936,7 +1936,7 @@ namespace GameSvr.Actor
         {
             if (!string.IsNullOrEmpty(sMsg))
             {
-                SendMsg(null, Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sMsg);
+                SendMsg(null, Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sMsg);
             }
         }
 
@@ -2109,7 +2109,7 @@ namespace GameSvr.Actor
                         LateDelivery = true,
                         Buff = sMsg
                     };
-                    sendMessage.BaseObject = baseObject == Grobal2.RM_STRUCK ? Grobal2.RM_STRUCK : baseObject;
+                    sendMessage.BaseObject = baseObject == Messages.RM_STRUCK ? Messages.RM_STRUCK : baseObject;
                     MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
@@ -2199,12 +2199,12 @@ namespace GameSvr.Actor
                     }
                     if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
                     {
-                        if ((sendMessage.wIdent == Grobal2.CM_TURN) || (sendMessage.wIdent == Grobal2.CM_WALK) ||
-                            (sendMessage.wIdent == Grobal2.CM_SITDOWN) || (sendMessage.wIdent == Grobal2.CM_HORSERUN) ||
-                            (sendMessage.wIdent == Grobal2.CM_RUN) || (sendMessage.wIdent == Grobal2.CM_HIT) ||
-                            (sendMessage.wIdent == Grobal2.CM_HEAVYHIT) || (sendMessage.wIdent == Grobal2.CM_BIGHIT) ||
-                            (sendMessage.wIdent == Grobal2.CM_POWERHIT) || (sendMessage.wIdent == Grobal2.CM_LONGHIT) ||
-                            (sendMessage.wIdent == Grobal2.CM_WIDEHIT) || (sendMessage.wIdent == Grobal2.CM_FIREHIT))
+                        if ((sendMessage.wIdent == Messages.CM_TURN) || (sendMessage.wIdent == Messages.CM_WALK) ||
+                            (sendMessage.wIdent == Messages.CM_SITDOWN) || (sendMessage.wIdent == Messages.CM_HORSERUN) ||
+                            (sendMessage.wIdent == Messages.CM_RUN) || (sendMessage.wIdent == Messages.CM_HIT) ||
+                            (sendMessage.wIdent == Messages.CM_HEAVYHIT) || (sendMessage.wIdent == Messages.CM_BIGHIT) ||
+                            (sendMessage.wIdent == Messages.CM_POWERHIT) || (sendMessage.wIdent == Messages.CM_LONGHIT) ||
+                            (sendMessage.wIdent == Messages.CM_WIDEHIT) || (sendMessage.wIdent == Messages.CM_FIREHIT))
                         {
                             MsgQueue.TryDequeue(out sendMessage, out priority);
                             Dispose(sendMessage);
@@ -2376,7 +2376,7 @@ namespace GameSvr.Actor
                                                             }
                                                             else if (baseObject.WantRefMsg)
                                                             {
-                                                                if ((wIdent == Grobal2.RM_STRUCK) || (wIdent == Grobal2.RM_HEAR) || (wIdent == Grobal2.RM_DEATH))
+                                                                if ((wIdent == Messages.RM_STRUCK) || (wIdent == Messages.RM_HEAR) || (wIdent == Messages.RM_DEATH))
                                                                 {
                                                                     baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                                                                     VisibleHumanList.Add(baseObject);
@@ -2420,7 +2420,7 @@ namespace GameSvr.Actor
                         }
                         else if (baseObject.WantRefMsg)
                         {
-                            if ((wIdent == Grobal2.RM_STRUCK) || (wIdent == Grobal2.RM_HEAR) || (wIdent == Grobal2.RM_DEATH))
+                            if ((wIdent == Messages.RM_STRUCK) || (wIdent == Messages.RM_HEAR) || (wIdent == Messages.RM_DEATH))
                             {
                                 baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                             }
@@ -2532,18 +2532,18 @@ namespace GameSvr.Actor
 
         public void FeatureChanged()
         {
-            SendRefMsg(Grobal2.RM_FEATURECHANGED, GetFeatureEx(), GetFeatureToLong(), 0, 0, "");
+            SendRefMsg(Messages.RM_FEATURECHANGED, GetFeatureEx(), GetFeatureToLong(), 0, 0, "");
         }
 
         public void StatusChanged()
         {
-            SendRefMsg(Grobal2.RM_CHARSTATUSCHANGED, HitSpeed, CharStatus, 0, 0, "");
+            SendRefMsg(Messages.RM_CHARSTATUSCHANGED, HitSpeed, CharStatus, 0, 0, "");
         }
 
         protected void DisappearA()
         {
             Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
-            SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+            SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
         }
 
         protected void KickException()
@@ -2631,7 +2631,7 @@ namespace GameSvr.Actor
                                     {
                                         if (mapEvent.OwnBaseObject.IsProperTarget(this))
                                         {
-                                            SendMsg(mapEvent.OwnBaseObject, Grobal2.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage, 0, 0, "");
+                                            SendMsg(mapEvent.OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage, 0, 0, "");
                                         }
                                     }
                                     break;
@@ -2717,13 +2717,13 @@ namespace GameSvr.Actor
                     VisibleActors[i] = null;
                 }
                 VisibleActors.Clear();
-                SendMsg(this, Grobal2.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                 Envir = envir;
                 MapName = envir.MapName;
                 MapFileName = envir.MapFileName;
                 CurrX = nDMapX;
                 CurrY = nDMapY;
-                SendMsg(this, Grobal2.RM_CHANGEMAP, 0, 0, 0, 0, envir.MapFileName);
+                SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, envir.MapFileName);
                 if (AddToMap())
                 {
                     MapMoveTick = HUtil32.GetTickCount();
@@ -2759,7 +2759,7 @@ namespace GameSvr.Actor
         protected void TurnTo(byte nDir)
         {
             Direction = nDir;
-            SendRefMsg(Grobal2.RM_TURN, nDir, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_TURN, nDir, CurrX, CurrY, 0, "");
         }
 
         public void SysMsg(string sMsg, MsgColor msgColor, MsgType msgType)
@@ -2804,7 +2804,7 @@ namespace GameSvr.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Grobal2.RM_MOVEMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
+                            SendMsg(this, Messages.RM_MOVEMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
                             break;
                         }
                     case '<':// 聊天框彩色公告
@@ -2815,7 +2815,7 @@ namespace GameSvr.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
+                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
                             break;
                         }
                     case '{': // 屏幕居中公告
@@ -2828,7 +2828,7 @@ namespace GameSvr.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Grobal2.RM_MOVEMESSAGE, 1, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), HUtil32.StrToInt(nTime, 0), sMsg);
+                            SendMsg(this, Messages.RM_MOVEMESSAGE, 1, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), HUtil32.StrToInt(nTime, 0), sMsg);
                             break;
                         }
                     default:
@@ -2839,21 +2839,21 @@ namespace GameSvr.Actor
                                 {
                                     sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
+                                SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Green:
                                 if (M2Share.Config.ShowPreFixMsg)
                                 {
                                     sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
+                                SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Blue:
                                 if (M2Share.Config.ShowPreFixMsg)
                                 {
                                     sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
+                                SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                                 break;
                         }
                         break;
@@ -2864,19 +2864,19 @@ namespace GameSvr.Actor
                 switch (msgColor)
                 {
                     case MsgColor.Green:
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
+                        SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                         break;
                     case MsgColor.Blue:
-                        SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
+                        SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                         break;
                     default:
                         if (msgType == MsgType.Cust)
                         {
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor, 0, sMsg);
+                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor, 0, sMsg);
                         }
                         else
                         {
-                            SendMsg(this, Grobal2.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
+                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                         }
                         break;
                 }
@@ -3159,7 +3159,7 @@ namespace GameSvr.Actor
         protected void WeightChanged()
         {
             WAbil.Weight = RecalcBagWeight();
-            SendUpdateMsg(this, Grobal2.RM_WEIGHTCHANGED, 0, 0, 0, 0, "");
+            SendUpdateMsg(this, Messages.RM_WEIGHTCHANGED, 0, 0, 0, 0, "");
         }
 
         public bool InSafeZone()
@@ -3421,7 +3421,7 @@ namespace GameSvr.Actor
 
                 if (nOldDura != HUtil32.Round(nDura / 1000))
                 {
-                    SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
+                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
                 }
             }
 
@@ -3460,7 +3460,7 @@ namespace GameSvr.Actor
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000))
                     {
-                        SendMsg(this, Grobal2.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
+                        SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
                     }
                 }
             }
@@ -3588,7 +3588,7 @@ namespace GameSvr.Actor
                 {
                     if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
                     {
-                        if (sendMessage.wIdent == Grobal2.RM_10401)
+                        if (sendMessage.wIdent == Messages.RM_10401)
                         {
                             result = true;
                             break;
@@ -3760,7 +3760,7 @@ namespace GameSvr.Actor
             StatusArrTick[PoisonState.DEFENCEUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.DefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
         }
 
@@ -3770,7 +3770,7 @@ namespace GameSvr.Actor
             ((PlayObject)this).ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
             SysMsg(Format(Settings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return true;
         }
 
@@ -3793,7 +3793,7 @@ namespace GameSvr.Actor
             StatusArrTick[PoisonState.MAGDEFENCEUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.MagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
         }
 
@@ -4359,7 +4359,7 @@ namespace GameSvr.Actor
             RecalcAbilitys();
             Death = false;
             Invisible = false;
-            SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, GetFeatureToLong(), "");
+            SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, GetFeatureToLong(), "");
             MonsterSayMsg(null, MonStatus.MonGen);
             return true;
         }
@@ -4398,10 +4398,10 @@ namespace GameSvr.Actor
             //                    MessageBodyW.Tag2 = 0;
             //                    sSENDMSG = EDcode.EncodeBuffer(@MessageBodyW);
             //                }
-            //                ((TPlayObject)(this)).m_DefMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
+            //                ((TPlayObject)(this)).m_DefMsg = Grobal2.MakeDefaultMsg(Messages.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
             //                ((TPlayObject)(this)).SendSocket(((TPlayObject)(this)).m_DefMsg, sSENDMSG);
             //                ((TPlayObject)(this)).protectedPowerPointChanged();
-            //                SendUpdateMsg(this, Grobal2.RM_USERNAME, 0, 0, 0, 0, GetShowName());
+            //                SendUpdateMsg(this, Messages.RM_USERNAME, 0, 0, 0, 0, GetShowName());
             //            }
             //            HealthSpellChanged();
             //        }

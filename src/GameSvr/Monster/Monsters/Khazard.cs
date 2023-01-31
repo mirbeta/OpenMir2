@@ -24,7 +24,7 @@ namespace GameSvr.Monster.Monsters
                         if (M2Share.RandomNumber.Random(2) == 0)
                         {
                             GetFrontPosition(ref nX, ref nY);
-                            TargetCret.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                            TargetCret.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                             TargetCret.SpaceMove(MapName, nX, nY, 0);
                             if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6)
                             {
@@ -38,7 +38,7 @@ namespace GameSvr.Monster.Monsters
                             {
                                 GetFrontPosition(ref nX, ref nY);
                             }
-                            TargetCret.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                            TargetCret.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                             TargetCret.SpaceMove(MapName, nX, nY, 0);
                             if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6)
                             {

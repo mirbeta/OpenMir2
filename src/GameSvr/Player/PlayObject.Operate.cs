@@ -19,12 +19,12 @@ namespace GameSvr.Player
             if (CretInNearXy(baseObject, x, y))
             {
                 byte nameColor = GetChrColor(baseObject);
-                CommandPacket defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, baseObject.ActorId, nameColor, 0, 0);
+                CommandPacket defMsg = Grobal2.MakeDefaultMsg(Messages.SM_USERNAME, baseObject.ActorId, nameColor, 0, 0);
                 SendSocket(defMsg, EDCode.EncodeString(baseObject.GetShowName()));
             }
             else
             {
-                SendDefMessage(Grobal2.SM_GHOST, baseObject.ActorId, x, y, 0, "");
+                SendDefMessage(Messages.SM_GHOST, baseObject.ActorId, x, y, 0, "");
             }
         }
 
@@ -52,7 +52,7 @@ namespace GameSvr.Player
             }
             if (!string.IsNullOrEmpty(sSendMsg))
             {
-                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BAGITEMS, ActorId, 0, 0, (short)ItemList.Count);
+                ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_BAGITEMS, ActorId, 0, 0, (short)ItemList.Count);
                 SendSocket(ClientMsg, sSendMsg);
             }
         }
@@ -104,7 +104,7 @@ namespace GameSvr.Player
                     userState.UseItems[i] = clientItem;
                 }
             }
-            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDUSERSTATE, 0, 0, 0, 0);
+            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SENDUSERSTATE, 0, 0, 0, 0);
             SendSocket(ClientMsg, EDCode.EncodeBuffer(userState));
         }
 
@@ -208,10 +208,10 @@ namespace GameSvr.Player
                 }
                 switch (nIdent)
                 {
-                    case Grobal2.CM_USERBUYITEM:
+                    case Messages.CM_USERBUYITEM:
                         merchant.ClientBuyItem(this, sMsg, nInt);
                         break;
-                    case Grobal2.CM_USERGETDETAILITEM:
+                    case Messages.CM_USERGETDETAILITEM:
                         merchant.ClientGetDetailGoodsList(this, sMsg, nZz);
                         break;
                 }
@@ -227,17 +227,17 @@ namespace GameSvr.Player
         {
             if (M2Share.Config.InSafeDisableDrop && InSafeZone())
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
                 return false;
             }
             if (M2Share.Config.ControlDropItem && nGold < M2Share.Config.CanDropGold)
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropGoldMsg);
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropGoldMsg);
                 return false;
             }
             if (!BoCanDrop || Envir.Flag.boNOTHROWITEM)
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
                 return false;
             }
             if (nGold >= Gold)
@@ -258,12 +258,12 @@ namespace GameSvr.Player
             bool result = false;
             if (M2Share.Config.InSafeDisableDrop && InSafeZone())
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
                 return false;
             }
             if (!BoCanDrop || Envir.Flag.boNOTHROWITEM)
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
                 return false;
             }
             if (sItemName.IndexOf(' ') > 0)
@@ -335,7 +335,7 @@ namespace GameSvr.Player
             if (nX == CurrX && nY == CurrY)
             {
                 Direction = (byte)nDir;
-                if (Walk(Grobal2.RM_TURN))
+                if (Walk(Messages.RM_TURN))
                 {
                     MDwTurnTick = HUtil32.GetTickCount();
                     return true;
@@ -360,7 +360,7 @@ namespace GameSvr.Player
                 }
                 MDwTurnTick = HUtil32.GetTickCount();
             }
-            SendRefMsg(Grobal2.RM_POWERHIT, 0, 0, 0, 0, "");
+            SendRefMsg(Messages.RM_POWERHIT, 0, 0, 0, 0, "");
             return true;
         }
 
@@ -457,9 +457,9 @@ namespace GameSvr.Player
                                 SendAddItem(takeOffItem);
                             }
                             RecalcAbilitys();
-                            SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                            SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-                            SendDefMessage(Grobal2.SM_TAKEON_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
+                            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                            SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                            SendDefMessage(Messages.SM_TAKEON_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
                             FeatureChanged();
 
                             if ((stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_MAN) || (stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_WOMAN))
@@ -497,7 +497,7 @@ namespace GameSvr.Player
         FailExit:
             if (n18 <= 0)
             {
-                SendDefMessage(Grobal2.SM_TAKEON_FAIL, n18, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_TAKEON_FAIL, n18, 0, 0, 0, "");
             }
         }
 
@@ -547,9 +547,9 @@ namespace GameSvr.Player
                                 //m_UseItems[btWhere].wIndex = 0;
                                 UseItems[btWhere] = null;
                                 RecalcAbilitys();
-                                SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
-                                SendMsg(this, Grobal2.RM_SUBABILITY, 0, 0, 0, 0, "");
-                                SendDefMessage(Grobal2.SM_TAKEOFF_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
+                                SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                                SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                                SendDefMessage(Messages.SM_TAKEOFF_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
                                 FeatureChanged();
                                 if (M2Share.FunctionNPC != null)
                                 {
@@ -576,7 +576,7 @@ namespace GameSvr.Player
         FailExit:
             if (n10 <= 0)
             {
-                SendDefMessage(Grobal2.SM_TAKEOFF_FAIL, n10, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_TAKEOFF_FAIL, n10, 0, 0, 0, "");
             }
         }
 
@@ -666,7 +666,7 @@ namespace GameSvr.Player
                                     case 31: // 解包物品
                                         if (stdItem.AniCount == 0)
                                         {
-                                            if (ItemList.Count + 6 - 1 <= Grobal2.MAXBAGITEM)
+                                            if (ItemList.Count + 6 - 1 <= Grobal2.MaxBagItem)
                                             {
                                                 Dispose(userItem);
                                                 ItemList.RemoveAt(i);
@@ -693,12 +693,12 @@ namespace GameSvr.Player
             }
             else
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotUseItemMsg);
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotUseItemMsg);
             }
             if (boEatOk)
             {
                 WeightChanged();
-                SendDefMessage(Grobal2.SM_EAT_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_EAT_OK, 0, 0, 0, 0, "");
                 if (stdItem.NeedIdentify == 1)
                 {
                     M2Share.EventSource.AddEventLog(11, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + itemIndex + "\t" + '1' + "\t" + '0');
@@ -706,7 +706,7 @@ namespace GameSvr.Player
             }
             else
             {
-                SendDefMessage(Grobal2.SM_EAT_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_EAT_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -744,7 +744,7 @@ namespace GameSvr.Player
                             {
                                 baseObject.Skeleton = true;
                                 ApplyMeatQuality();
-                                baseObject.SendRefMsg(Grobal2.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
+                                baseObject.SendRefMsg(Messages.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                             }
                             if (!TakeBagItems(baseObject))
                             {
@@ -757,7 +757,7 @@ namespace GameSvr.Player
                 }
                 Direction = btDir;
             }
-            SendRefMsg(Grobal2.RM_BUTCH, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_BUTCH, Direction, CurrX, CurrY, 0, "");
             return false;
         }
 
@@ -801,22 +801,22 @@ namespace GameSvr.Player
             PlayObject playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != null)
             {
-                SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
                 return;
             }
             if (playObject == null || playObject == this || playObject.Death || playObject.Ghost)
             {
-                SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -2, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -2, 0, 0, 0, "");
                 return;
             }
             if (playObject.GroupOwner != null)
             {
-                SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
                 return;
             }
             if (!playObject.AllowGroup)
             {
-                SendDefMessage(Grobal2.SM_CREATEGROUP_FAIL, -4, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -4, 0, 0, 0, "");
                 return;
             }
             GroupMembers.Clear();
@@ -825,7 +825,7 @@ namespace GameSvr.Player
             JoinGroup(this);
             playObject.JoinGroup(this);
             AllowGroup = true;
-            SendDefMessage(Grobal2.SM_CREATEGROUP_OK, 0, 0, 0, 0, "");
+            SendDefMessage(Messages.SM_CREATEGROUP_OK, 0, 0, 0, 0, "");
             SendGroupMembers();
             if (M2Share.FunctionNPC != null)
             {
@@ -838,32 +838,32 @@ namespace GameSvr.Player
             PlayObject playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != this)
             {
-                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
                 return;
             }
             if (GroupMembers.Count > M2Share.Config.GroupMembersMax)
             {
-                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0, "");
                 return;
             }
             if (playObject == null || playObject == this || playObject.Death || playObject.Ghost)
             {
-                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0, "");
                 return;
             }
             if (playObject.GroupOwner != null)
             {
-                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
                 return;
             }
             if (!playObject.AllowGroup)
             {
-                SendDefMessage(Grobal2.SM_GROUPADDMEM_FAIL, -4, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -4, 0, 0, 0, "");
                 return;
             }
             this.GroupMembers.Add(playObject);
             playObject.JoinGroup(this);
-            SendDefMessage(Grobal2.SM_GROUPADDMEM_OK, 0, 0, 0, 0, "");
+            SendDefMessage(Messages.SM_GROUPADDMEM_OK, 0, 0, 0, 0, "");
             SendGroupMembers();
             if (M2Share.FunctionNPC != null)
             {
@@ -876,21 +876,21 @@ namespace GameSvr.Player
             PlayObject playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != this)
             {
-                SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
                 return;
             }
             if (playObject == null)
             {
-                SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -2, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -2, 0, 0, 0, "");
                 return;
             }
             if (!IsGroupMember(playObject))
             {
-                SendDefMessage(Grobal2.SM_GROUPDELMEM_FAIL, -3, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -3, 0, 0, 0, "");
                 return;
             }
             DelMember(playObject);
-            SendDefMessage(Grobal2.SM_GROUPDELMEM_OK, 0, 0, 0, 0, sHumName);
+            SendDefMessage(Messages.SM_GROUPDELMEM_OK, 0, 0, 0, 0, sHumName);
             if (M2Share.FunctionNPC != null)
             {
                 M2Share.FunctionNPC.GotoLable(this, "@GroupDelMember", false);
@@ -901,7 +901,7 @@ namespace GameSvr.Player
         {
             if (M2Share.Config.DisableDeal)
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DisableDealItemsMsg);
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DisableDealItemsMsg);
                 return;
             }
             if (Dealing)
@@ -910,12 +910,12 @@ namespace GameSvr.Player
             }
             if ((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.TryDealTime)
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.PleaseTryDealLaterMsg);
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.PleaseTryDealLaterMsg);
                 return;
             }
             if (!BoCanDeal)
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
                 return;
             }
             PlayObject targetPlayObject = (PlayObject)GetPoseCreate();
@@ -940,12 +940,12 @@ namespace GameSvr.Player
                 }
                 else
                 {
-                    SendDefMessage(Grobal2.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
                 }
             }
             else
             {
-                SendDefMessage(Grobal2.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -982,7 +982,7 @@ namespace GameSvr.Player
             }
             if (!dealSuccess)
             {
-                SendDefMessage(Grobal2.SM_DEALADDITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALADDITEM_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -990,8 +990,8 @@ namespace GameSvr.Player
         {
             if (M2Share.Config.CanNotGetBackDeal)
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
-                SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
+                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
                 return;
             }
             if (DealCreat == null || !Dealing)
@@ -1025,7 +1025,7 @@ namespace GameSvr.Player
             }
             if (!bo11)
             {
-                SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -1038,13 +1038,13 @@ namespace GameSvr.Player
         {
             if (DealGolds > 0 && M2Share.Config.CanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
-                SendMsg(M2Share.ManageNPC, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
-                SendDefMessage(Grobal2.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
+                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
                 return;
             }
             if (nGold < 0)
             {
-                SendDefMessage(Grobal2.SM_DEALCHGGOLD_FAIL, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
+                SendDefMessage(Messages.SM_DEALCHGGOLD_FAIL, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
                 return;
             }
             bool bo09 = false;
@@ -1056,8 +1056,8 @@ namespace GameSvr.Player
                     {
                         Gold = Gold + DealGolds - nGold;
                         DealGolds = nGold;
-                        SendDefMessage(Grobal2.SM_DEALCHGGOLD_OK, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
-                        DealCreat.SendDefMessage(Grobal2.SM_DEALREMOTECHGGOLD, DealGolds, 0, 0, 0, "");
+                        SendDefMessage(Messages.SM_DEALCHGGOLD_OK, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
+                        DealCreat.SendDefMessage(Messages.SM_DEALREMOTECHGGOLD, DealGolds, 0, 0, 0, "");
                         DealCreat.DealLastTick = HUtil32.GetTickCount();
                         bo09 = true;
                         DealLastTick = HUtil32.GetTickCount();
@@ -1066,7 +1066,7 @@ namespace GameSvr.Player
             }
             if (!bo09)
             {
-                SendDefMessage(Grobal2.SM_DEALCHGGOLD_FAIL, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
+                SendDefMessage(Messages.SM_DEALCHGGOLD_FAIL, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
             }
         }
 
@@ -1086,7 +1086,7 @@ namespace GameSvr.Player
             if (DealCreat.DealSuccess)
             {
                 bool bo11 = true;
-                if (Grobal2.MAXBAGITEM - ItemList.Count < DealCreat.DealItemList.Count)
+                if (Grobal2.MaxBagItem - ItemList.Count < DealCreat.DealItemList.Count)
                 {
                     bo11 = false;
                     SysMsg(Settings.YourBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
@@ -1096,7 +1096,7 @@ namespace GameSvr.Player
                     SysMsg(Settings.YourGoldLargeThenLimit, MsgColor.Red, MsgType.Hint);
                     bo11 = false;
                 }
-                if (Grobal2.MAXBAGITEM - DealCreat.ItemList.Count < DealItemList.Count)
+                if (Grobal2.MaxBagItem - DealCreat.ItemList.Count < DealItemList.Count)
                 {
                     SysMsg(Settings.DealHumanBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
                     bo11 = false;
@@ -1163,14 +1163,14 @@ namespace GameSvr.Player
                         }
                     }
                     PlayObject playObject = DealCreat;
-                    playObject.SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
+                    playObject.SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0, "");
                     playObject.SysMsg(Settings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     playObject.DealCreat = null;
                     playObject.Dealing = false;
                     playObject.DealItemList.Clear();
                     playObject.DealGolds = 0;
                     playObject.DealSuccess = false;
-                    SendDefMessage(Grobal2.SM_DEALSUCCESS, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0, "");
                     SysMsg(Settings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     DealCreat = null;
                     Dealing = false;
@@ -1195,11 +1195,11 @@ namespace GameSvr.Player
             int nMinMap = Envir.MinMap;
             if (nMinMap > 0)
             {
-                SendDefMessage(Grobal2.SM_READMINIMAP_OK, 0, (short)nMinMap, 0, 0, "");
+                SendDefMessage(Messages.SM_READMINIMAP_OK, 0, (short)nMinMap, 0, 0, "");
             }
             else
             {
-                SendDefMessage(Grobal2.SM_READMINIMAP_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_READMINIMAP_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -1257,12 +1257,12 @@ namespace GameSvr.Player
                     }
                     sC = sC + MyGuild.GuildAllList[i] + '\r';
                 }
-                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OPENGUILDDLG, 0, 0, 0, 1);
+                ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_OPENGUILDDLG, 0, 0, 0, 1);
                 SendSocket(ClientMsg, EDCode.EncodeString(sC));
             }
             else
             {
-                SendDefMessage(Grobal2.SM_OPENGUILDDLG_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_OPENGUILDDLG_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -1291,7 +1291,7 @@ namespace GameSvr.Player
                     sSendMsg = sSendMsg + guildRank.MemberList[j].sMemberName + '/';
                 }
             }
-            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
+            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
             SendSocket(ClientMsg, EDCode.EncodeString(sSendMsg));
         }
 
@@ -1312,7 +1312,7 @@ namespace GameSvr.Player
                                 if (playObject.MyGuild == null && MyGuild.m_RankList.Count < 400)
                                 {
                                     MyGuild.AddMember(playObject);
-                                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                                     playObject.MyGuild = MyGuild;
                                     playObject.GuildRankName = MyGuild.GetRankName(playObject, ref playObject.GuildRankNo);
                                     playObject.RefShowName();
@@ -1347,11 +1347,11 @@ namespace GameSvr.Player
             }
             if (nC == 0)
             {
-                SendDefMessage(Grobal2.SM_GUILDADDMEMBER_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDADDMEMBER_OK, 0, 0, 0, 0, "");
             }
             else
             {
-                SendDefMessage(Grobal2.SM_GUILDADDMEMBER_FAIL, nC, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDADDMEMBER_FAIL, nC, 0, 0, 0, "");
             }
         }
 
@@ -1373,7 +1373,7 @@ namespace GameSvr.Player
                                 playObject.RefRankInfo(0, "");
                                 playObject.RefShowName();
                             }
-                            WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                            WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                             nC = 0;
                         }
                         else
@@ -1388,7 +1388,7 @@ namespace GameSvr.Player
                         if (MyGuild.CancelGuld(sHumName))
                         {
                             M2Share.GuildMgr.DelGuild(s14);
-                            WorldServer.SendServerGroupMsg(Grobal2.SS_206, M2Share.ServerIndex, s14);
+                            WorldServer.SendServerGroupMsg(Messages.SS_206, M2Share.ServerIndex, s14);
                             MyGuild = null;
                             RefRankInfo(0, "");
                             RefShowName();
@@ -1404,11 +1404,11 @@ namespace GameSvr.Player
             }
             if (nC == 0)
             {
-                SendDefMessage(Grobal2.SM_GUILDDELMEMBER_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDDELMEMBER_OK, 0, 0, 0, 0, "");
             }
             else
             {
-                SendDefMessage(Grobal2.SM_GUILDDELMEMBER_FAIL, nC, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDDELMEMBER_FAIL, nC, 0, 0, 0, "");
             }
         }
 
@@ -1426,7 +1426,7 @@ namespace GameSvr.Player
                 MyGuild.NoticeList.Add(sC);
             }
             MyGuild.SaveGuildInfoFile();
-            WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+            WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
             ClientOpenGuildDlg();
         }
 
@@ -1439,14 +1439,14 @@ namespace GameSvr.Player
             int nC = MyGuild.UpdateRank(sRankInfo);
             if (nC == 0)
             {
-                WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
                 ClientGuildMemberList();
             }
             else
             {
                 if (nC <= -2)
                 {
-                    SendDefMessage(Grobal2.SM_GUILDRANKUPDATE_FAIL, nC, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_GUILDRANKUPDATE_FAIL, nC, 0, 0, 0, "");
                 }
             }
         }
@@ -1475,8 +1475,8 @@ namespace GameSvr.Player
                                     posePlay.MyGuild.SendGuildMsg(MyGuild.sGuildName + "行会已经和您的行会联盟成功。");
                                     MyGuild.RefMemberName();
                                     posePlay.MyGuild.RefMemberName();
-                                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
-                                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, posePlay.MyGuild.sGuildName);
+                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, posePlay.MyGuild.sGuildName);
                                     n8 = 0;
                                 }
                                 else
@@ -1497,11 +1497,11 @@ namespace GameSvr.Player
                 }
                 if (n8 == 0)
                 {
-                    SendDefMessage(Grobal2.SM_GUILDMAKEALLY_OK, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_GUILDMAKEALLY_OK, 0, 0, 0, 0, "");
                 }
                 else
                 {
-                    SendDefMessage(Grobal2.SM_GUILDMAKEALLY_FAIL, n8, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_GUILDMAKEALLY_FAIL, n8, 0, 0, 0, "");
                 }
             }
             catch (Exception e)
@@ -1529,8 +1529,8 @@ namespace GameSvr.Player
                     guild.SendGuildMsg(MyGuild.sGuildName + " 行会解除了与您行会的联盟!!!");
                     MyGuild.RefMemberName();
                     guild.RefMemberName();
-                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
-                    WorldServer.SendServerGroupMsg(Grobal2.SS_207, M2Share.ServerIndex, guild.sGuildName);
+                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
+                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, guild.sGuildName);
                     n10 = 0;
                 }
                 else
@@ -1544,11 +1544,11 @@ namespace GameSvr.Player
             }
             if (n10 == 0)
             {
-                SendDefMessage(Grobal2.SM_GUILDBREAKALLY_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDBREAKALLY_OK, 0, 0, 0, 0, "");
             }
             else
             {
-                SendDefMessage(Grobal2.SM_GUILDMAKEALLY_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDMAKEALLY_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -1630,7 +1630,7 @@ namespace GameSvr.Player
                             StorageItemList.Add(userItem);
                             ItemList.RemoveAt(i);
                             WeightChanged();
-                            SendDefMessage(Grobal2.SM_STORAGE_OK, 0, 0, 0, 0, "");
+                            SendDefMessage(Messages.SM_STORAGE_OK, 0, 0, 0, 0, "");
                             StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
@@ -1639,7 +1639,7 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            SendDefMessage(Grobal2.SM_STORAGE_FULL, 0, 0, 0, 0, "");
+                            SendDefMessage(Messages.SM_STORAGE_FULL, 0, 0, 0, 0, "");
                         }
                         bo19 = true;
                     }
@@ -1648,7 +1648,7 @@ namespace GameSvr.Player
             }
             if (!bo19)
             {
-                SendDefMessage(Grobal2.SM_STORAGE_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_STORAGE_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -1668,7 +1668,7 @@ namespace GameSvr.Player
             }
             if (!BoCanGetBackItem)
             {
-                SendMsg(merchant, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, Settings.StorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + CommandMgr.GameCommands.UnlockStorage.CmdName + '\\' + "仓库加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
+                SendMsg(merchant, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.StorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + CommandMgr.GameCommands.UnlockStorage.CmdName + '\\' + "仓库加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
                 return;
             }
             for (int i = 0; i < StorageItemList.Count; i++)
@@ -1686,7 +1686,7 @@ namespace GameSvr.Player
                             {
                                 SendAddItem(userItem);
                                 StorageItemList.RemoveAt(i);
-                                SendDefMessage(Grobal2.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0, "");
+                                SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0, "");
                                 StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                                 if (stdItem.NeedIdentify == 1)
                                 {
@@ -1695,7 +1695,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                SendDefMessage(Grobal2.SM_TAKEBACKSTORAGEITEM_FULLBAG, 0, 0, 0, 0, "");
+                                SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_FULLBAG, 0, 0, 0, 0, "");
                             }
                             bo19 = true;
                         }
@@ -1710,7 +1710,7 @@ namespace GameSvr.Player
             }
             if (!bo19)
             {
-                SendDefMessage(Grobal2.SM_TAKEBACKSTORAGEITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_FAIL, 0, 0, 0, 0, "");
             }
         }
     }

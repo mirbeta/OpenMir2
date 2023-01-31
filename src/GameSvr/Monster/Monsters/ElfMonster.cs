@@ -44,7 +44,7 @@ namespace GameSvr.Monster.Monsters
             {
                 BoIsFirst = false;
                 FixedHideMode = false;
-                SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
                 ResetElfMon();
             }
             if (Death)

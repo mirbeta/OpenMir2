@@ -105,7 +105,7 @@ namespace GameSvr.Player
                             //    break;
                             //}
                             SellOffItemList.Add(UserItem);
-                            this.SendMsg(this, Grobal2.RM_SELLOFFADDITEM_OK, 0, 0, 0, 0, ""); // 放物品成功
+                            this.SendMsg(this, Messages.RM_SELLOFFADDITEM_OK, 0, 0, 0, 0, ""); // 放物品成功
                             this.ItemList.RemoveAt(i);
                             //ClearCopyItem(0, UserItem.wIndex, UserItem.MakeIndex); // 清理包裹和仓库复制物品
                             bo11 = true;
@@ -116,7 +116,7 @@ namespace GameSvr.Player
             }
             if (!bo11)
             {
-                this.SendMsg(this, Grobal2.RM_SellOffADDITEM_FAIL, 0, 0, 0, 0, "");
+                this.SendMsg(this, Messages.RM_SellOffADDITEM_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -159,7 +159,7 @@ namespace GameSvr.Player
                         {
                             //ClearCopyItem(0, UserItem.wIndex, UserItem.MakeIndex); // 清理包裹和仓库复制物品 
                             this.ItemList.Add(UserItem);
-                            this.SendMsg(this, Grobal2.RM_SELLOFFDELITEM_OK, 0, 0, 0, 0, "");
+                            this.SendMsg(this, Messages.RM_SELLOFFDELITEM_OK, 0, 0, 0, 0, "");
                             SellOffItemList.RemoveAt(i);
                             bo11 = true;
                             break;
@@ -169,7 +169,7 @@ namespace GameSvr.Player
             }
             if (!bo11)
             {
-                this.SendMsg(this, Grobal2.RM_SELLOFFDELITEM_FAIL, 0, 0, 0, 0, "");
+                this.SendMsg(this, Messages.RM_SELLOFFDELITEM_FAIL, 0, 0, 0, 0, "");
             }
         }
 
@@ -235,7 +235,7 @@ namespace GameSvr.Player
                             }
                             M2Share.SellOffItemList.RemoveAt(i);
                             Dispose(DealOffInfo);
-                            this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "取消寄售成功!");
+                            this.SendMsg(this, Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "取消寄售成功!");
                             M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                         }
                     }
@@ -268,7 +268,7 @@ namespace GameSvr.Player
                         dealOffInfo.Flag = 3;// 购买人取消标识
                         // sSellOffItemList.Delete(I);
                         // sSellOffItemList.Add(DealOffInfo);
-                        this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "取消交易成功!");
+                        this.SendMsg(this, Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "取消交易成功!");
                         break;
                     }
                 }
@@ -329,7 +329,7 @@ namespace GameSvr.Player
                                         PlayObject.SysMsg(string.Format(CommandHelp.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
                                         if (M2Share.GameLogGameGold)
                                         {
-                                            M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, PlayObject.GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.ChrName));
+                                            M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, PlayObject.GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.ChrName));
                                         }
                                     }
                                 }
@@ -365,14 +365,14 @@ namespace GameSvr.Player
                                         this.SysMsg(dealOffInfo.UseItems[j].MakeIndex + " 颗金刚石增加", MsgColor.Blue, MsgType.Hint);
                                     }
                                 }
-                                this.SendMsg(this, Grobal2.RM_SELLOFFBUY_OK, 0, 0, 0, 0, "");// 购买成功
-                                this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "[成功] 系统已经成功接受您的申请");
+                                this.SendMsg(this, Messages.RM_SELLOFFBUY_OK, 0, 0, 0, 0, "");// 购买成功
+                                this.SendMsg(this, Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "[成功] 系统已经成功接受您的申请");
                                 break;
                             }
                             else
                             {
                                 dealOffInfo.Flag = 0;
-                                this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "[错误] 您的申请提交不成功");
+                                this.SendMsg(this, Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "[错误] 您的申请提交不成功");
                                 break;
                             }
                         }
@@ -416,7 +416,7 @@ namespace GameSvr.Player
                             this.SysMsg(string.Format(CommandHelp.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
                             if (M2Share.GameLogGameGold)
                             {
-                                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
+                                M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
                             }
                             break;
                         }
@@ -553,8 +553,8 @@ namespace GameSvr.Player
                     {
                         if (nGameDiamond > Gold) // 金刚石数量大于玩家的数量时则反回失败
                         {
-                            this.SendMsg(this, Grobal2.RM_SELLOFFEND_FAIL, 0, 0, 0, 0, "");
-                            this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "[错误] 你没有那么多金币");
+                            this.SendMsg(this, Messages.RM_SELLOFFEND_FAIL, 0, 0, 0, 0, "");
+                            this.SendMsg(this, Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "[错误] 你没有那么多金币");
                             GetBackSellOffItems(); // 返回物品
                             return;
                         }
@@ -573,13 +573,13 @@ namespace GameSvr.Player
                 DealOffInfo.dSellDateTime = DateTime.Now; // 操作时间
                 DealOffInfo.Flag = 0; // 标识
                 M2Share.SellOffItemList.Add(DealOffInfo); // 增加到元宝寄售列表中
-                this.SendMsg(this, Grobal2.RM_SELLOFFEND_OK, 0, 0, 0, 0, "");
+                this.SendMsg(this, Messages.RM_SELLOFFEND_OK, 0, 0, 0, 0, "");
                 GameGold -= M2Share.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
                 if (GameGold < 0)
                 {
                     GameGold = 0;
                 }
-                this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "[成功] 系统已经成功接受您的申请");
+                this.SendMsg(this, Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "[成功] 系统已经成功接受您的申请");
                 bo11 = true;
                 M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表 
                 SellOffConfirm = false;
@@ -588,8 +588,8 @@ namespace GameSvr.Player
             if (!bo11)
             {
                 // 失败则返回物品给玩家
-                this.SendMsg(this, Grobal2.RM_SELLOFFEND_FAIL, 0, 0, 0, 0, "");
-                this.SendMsg(this, Grobal2.RM_MENU_OK, 0, this.ActorId, 0, 0, "[错误:] 寄售物品失败");
+                this.SendMsg(this, Messages.RM_SELLOFFEND_FAIL, 0, 0, 0, 0, "");
+                this.SendMsg(this, Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "[错误:] 寄售物品失败");
                 GetBackSellOffItems();
             }
         }
@@ -599,7 +599,7 @@ namespace GameSvr.Player
         /// </summary>
         private void SellOffCancel()
         {
-            this.SendMsg(this, Grobal2.RM_SELLOFFCANCEL, 0, 0, 0, 0, "");
+            this.SendMsg(this, Messages.RM_SELLOFFCANCEL, 0, 0, 0, 0, "");
             GetBackSellOffItems();
         }
 

@@ -12,7 +12,7 @@ namespace GameSvr.Monster.Monsters
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            if (processMsg.wIdent == Grobal2.RM_STRUCK || processMsg.wIdent == Grobal2.RM_MAGSTRUCK || processMsg.wIdent == Grobal2.RM_SPELL)
+            if (processMsg.wIdent == Messages.RM_STRUCK || processMsg.wIdent == Messages.RM_MAGSTRUCK || processMsg.wIdent == Messages.RM_SPELL)
             {
                 if (Master != null)
                 {
@@ -20,7 +20,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         WAbil.HP = 0;
                     }
-                    if (processMsg.wIdent == Grobal2.RM_SPELL)
+                    if (processMsg.wIdent == Messages.RM_SPELL)
                     {
                         Master.WAbil.MP -= (ushort)processMsg.nParam3;
                     }
@@ -40,7 +40,7 @@ namespace GameSvr.Monster.Monsters
             short nTx = 0;
             short nTy = 0;
             Direction = nDir;
-            SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
+            SendRefMsg(Messages.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
             if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSx, ref nSy))
             {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTx, ref nTy);

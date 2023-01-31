@@ -1827,7 +1827,7 @@ namespace GameSvr.Npc
                         GotoLable_TakeWItem(PlayObject, QuestActionInfo.sParam1, QuestActionInfo.nParam2);
                         break;
                     case ScriptConst.nCLOSE:
-                        PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
+                        PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                         break;
                     case ScriptConst.nRESET:
                         for (int k = 0; k < QuestActionInfo.nParam2; k++)
@@ -1883,12 +1883,12 @@ namespace GameSvr.Npc
                         ExeAction(PlayObject, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.nParam1, QuestActionInfo.nParam2, QuestActionInfo.nParam3);
                         break;
                     case ScriptConst.nMAPMOVE:
-                        PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                        PlayObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         PlayObject.SpaceMove(QuestActionInfo.sParam1, (short)QuestActionInfo.nParam2, (short)QuestActionInfo.nParam3, 0);
                         bo11 = true;
                         break;
                     case ScriptConst.nMAP:
-                        PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                        PlayObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         PlayObject.MapRandomMove(QuestActionInfo.sParam1, 0);
                         bo11 = true;
                         break;
@@ -2068,13 +2068,13 @@ namespace GameSvr.Npc
                         for (int k = 0; k < BatchParamsList.Count; k++)
                         {
                             ScriptParams batchParam = BatchParamsList[k];
-                            PlayObject.SendDelayMsg(ActorId, Grobal2.RM_RANDOMSPACEMOVE, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
+                            PlayObject.SendDelayMsg(ActorId, Messages.RM_RANDOMSPACEMOVE, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
                             n20 += batchParam.nParams;
                         }
                         break;
                     case ScriptConst.nPLAYDICE:
                         PlayObject.MSPlayDiceLabel = QuestActionInfo.sParam2;
-                        PlayObject.SendMsg(this, Grobal2.RM_PLAYDICE, (short)QuestActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[0], (ushort)PlayObject.MDyVal[1]), HUtil32.MakeWord((ushort)PlayObject.MDyVal[2], (ushort)PlayObject.MDyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[4], (ushort)PlayObject.MDyVal[5]), HUtil32.MakeWord((ushort)PlayObject.MDyVal[6], (ushort)PlayObject.MDyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[8], (ushort)PlayObject.MDyVal[9]), 0), QuestActionInfo.sParam2);
+                        PlayObject.SendMsg(this, Messages.RM_PLAYDICE, (short)QuestActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[0], (ushort)PlayObject.MDyVal[1]), HUtil32.MakeWord((ushort)PlayObject.MDyVal[2], (ushort)PlayObject.MDyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[4], (ushort)PlayObject.MDyVal[5]), HUtil32.MakeWord((ushort)PlayObject.MDyVal[6], (ushort)PlayObject.MDyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[8], (ushort)PlayObject.MDyVal[9]), 0), QuestActionInfo.sParam2);
                         bo11 = true;
                         break;
                     case ScriptConst.nADDNAMELIST:
@@ -2484,7 +2484,7 @@ namespace GameSvr.Npc
             PlayObject.MSGotoNpcLabel = QuestActionInfo.sParam2;
             string sHint = QuestActionInfo.sParam1;
             if (string.IsNullOrEmpty(sHint)) sHint = "请输入:";
-            PlayObject.SendDefMessage(Grobal2.SM_QUERYITEMDLG, ActorId, 0, 0, 0, sHint);
+            PlayObject.SendDefMessage(Messages.SM_QUERYITEMDLG, ActorId, 0, 0, 0, sHint);
         }
 
         private void ActionOfKillSlaveName(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
@@ -2543,7 +2543,7 @@ namespace GameSvr.Npc
             {
                 sHint = "请输入：";
             }
-            PlayObject.SendDefMessage(Grobal2.SM_QUERYVALUE, 0, HUtil32.MakeWord((ushort)btType, (ushort)btLen), 0, 0, sHint);
+            PlayObject.SendDefMessage(Messages.SM_QUERYVALUE, 0, HUtil32.MakeWord((ushort)btType, (ushort)btLen), 0, 0, sHint);
         }
 
         private void GotoLableSendMerChantSayMsg(PlayObject PlayObject, string sMsg, bool boFlag)
@@ -2552,11 +2552,11 @@ namespace GameSvr.Npc
             PlayObject.GetScriptLabel(sMsg);
             if (boFlag)
             {
-                PlayObject.SendPriorityMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg, MessagePriority.High);
+                PlayObject.SendPriorityMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg, MessagePriority.High);
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
+                PlayObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
             }
         }
     }

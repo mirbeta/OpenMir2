@@ -26,7 +26,7 @@ namespace GameSvr.Monster.Monsters
                     }
                 }
             }
-            SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
         }
 
         public override void Run()

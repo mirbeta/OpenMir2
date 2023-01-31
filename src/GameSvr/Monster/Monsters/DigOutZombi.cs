@@ -17,7 +17,7 @@ namespace GameSvr.Monster.Monsters
             EventInfo digEvent = new EventInfo(Envir, CurrX, CurrY, 1, 5 * 60 * 1000, true);
             M2Share.EventMgr.AddEvent(digEvent);
             FixedHideMode = false;
-            SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, digEvent.Id, "");
+            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, digEvent.Id, "");
         }
 
         public override void Run()

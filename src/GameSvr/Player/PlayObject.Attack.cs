@@ -33,7 +33,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        wHitMode = Grobal2.RM_HIT;
+                        wHitMode = Messages.RM_HIT;
                     }
                     break;
                 case 8 when (MagicArr[MagicConst.SKILL_CROSSMOON] != null):
@@ -44,7 +44,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        wHitMode = Grobal2.RM_HIT;
+                        wHitMode = Messages.RM_HIT;
                     }
                     break;
                 case 12 when (MagicArr[MagicConst.SKILL_REDBANWOL] != null):
@@ -55,7 +55,7 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        wHitMode = Grobal2.RM_HIT;
+                        wHitMode = Messages.RM_HIT;
                     }
                     break;
             }
@@ -71,58 +71,58 @@ namespace GameSvr.Player
 
         private int GetHitMode(short wHitMode)
         {
-            int wIdent = Grobal2.RM_HIT;
+            int wIdent = Messages.RM_HIT;
             switch (wHitMode)
             {
                 case 0:
-                    wIdent = Grobal2.RM_HIT;
+                    wIdent = Messages.RM_HIT;
                     break;
                 case 1:
-                    wIdent = Grobal2.RM_HEAVYHIT;
+                    wIdent = Messages.RM_HEAVYHIT;
                     break;
                 case 2:
-                    wIdent = Grobal2.RM_BIGHIT;
+                    wIdent = Messages.RM_BIGHIT;
                     break;
                 case 3:
                     if (PowerHit)
                     {
-                        wIdent = Grobal2.RM_SPELL2;
+                        wIdent = Messages.RM_SPELL2;
                     }
                     break;
                 case 4:
                     if (MagicArr[MagicConst.SKILL_ERGUM] != null)
                     {
-                        wIdent = Grobal2.RM_LONGHIT;
+                        wIdent = Messages.RM_LONGHIT;
                     }
                     break;
                 case 5:
                     if (MagicArr[MagicConst.SKILL_BANWOL] != null)
                     {
-                        wIdent = Grobal2.RM_WIDEHIT;
+                        wIdent = Messages.RM_WIDEHIT;
                     }
                     break;
                 case 7:
                     if (FireHitSkill)
                     {
-                        wIdent = Grobal2.RM_FIREHIT;
+                        wIdent = Messages.RM_FIREHIT;
                     }
                     break;
                 case 8:
                     if (MagicArr[MagicConst.SKILL_CROSSMOON] != null)
                     {
-                        wIdent = Grobal2.RM_CRSHIT;
+                        wIdent = Messages.RM_CRSHIT;
                     }
                     break;
                 case 9:
                     if (TwinHitSkill)
                     {
-                        wIdent = Grobal2.RM_TWINHIT;
+                        wIdent = Messages.RM_TWINHIT;
                     }
                     break;
                 case 12:
                     if (MagicArr[MagicConst.SKILL_REDBANWOL] != null)
                     {
-                        wIdent = Grobal2.RM_WIDEHIT;
+                        wIdent = Messages.RM_WIDEHIT;
                     }
                     break;
             }
@@ -198,7 +198,7 @@ namespace GameSvr.Player
                     TrainSkill(attackMagic, nTranPoint);
                     if (!CheckMagicLevelup(attackMagic))
                     {
-                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
+                        SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                     }
                 }
             }
@@ -359,7 +359,7 @@ namespace GameSvr.Player
                     TrainSkill(MagicArr[MagicConst.SKILL_ONESWORD], M2Share.RandomNumber.Random(3) + 1);
                     if (!CheckMagicLevelup(MagicArr[MagicConst.SKILL_ONESWORD]))
                     {
-                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ONESWORD].Magic.MagicId, MagicArr[MagicConst.SKILL_ONESWORD].Level, MagicArr[MagicConst.SKILL_ONESWORD].TranPoint, "", 3000);
+                        SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ONESWORD].Magic.MagicId, MagicArr[MagicConst.SKILL_ONESWORD].Level, MagicArr[MagicConst.SKILL_ONESWORD].TranPoint, "", 3000);
                     }
                 }
             }
@@ -370,7 +370,7 @@ namespace GameSvr.Player
                     TrainSkill(MagicArr[MagicConst.SKILL_ILKWANG], M2Share.RandomNumber.Random(3) + 1);
                     if (!CheckMagicLevelup(MagicArr[MagicConst.SKILL_ILKWANG]))
                     {
-                        SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ILKWANG].Magic.MagicId, MagicArr[MagicConst.SKILL_ILKWANG].Level, MagicArr[MagicConst.SKILL_ILKWANG].TranPoint, "", 3000);
+                        SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ILKWANG].Magic.MagicId, MagicArr[MagicConst.SKILL_ILKWANG].Level, MagicArr[MagicConst.SKILL_ILKWANG].TranPoint, "", 3000);
                     }
                 }
             }
@@ -383,7 +383,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[MagicConst.SKILL_YEDO], M2Share.RandomNumber.Random(3) + 1);
                             if (!CheckMagicLevelup(MagicArr[MagicConst.SKILL_YEDO]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_YEDO].Magic.MagicId, MagicArr[MagicConst.SKILL_YEDO].Level, MagicArr[MagicConst.SKILL_YEDO].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_YEDO].Magic.MagicId, MagicArr[MagicConst.SKILL_YEDO].Level, MagicArr[MagicConst.SKILL_YEDO].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -395,7 +395,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[MagicConst.SKILL_ERGUM], 1);
                             if (!CheckMagicLevelup(MagicArr[MagicConst.SKILL_ERGUM]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ERGUM].Magic.MagicId, MagicArr[MagicConst.SKILL_ERGUM].Level, MagicArr[MagicConst.SKILL_ERGUM].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ERGUM].Magic.MagicId, MagicArr[MagicConst.SKILL_ERGUM].Level, MagicArr[MagicConst.SKILL_ERGUM].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -407,7 +407,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[MagicConst.SKILL_BANWOL], 1);
                             if (!CheckMagicLevelup(MagicArr[MagicConst.SKILL_BANWOL]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_BANWOL].Magic.MagicId, MagicArr[MagicConst.SKILL_BANWOL].Level, MagicArr[MagicConst.SKILL_BANWOL].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_BANWOL].Magic.MagicId, MagicArr[MagicConst.SKILL_BANWOL].Level, MagicArr[MagicConst.SKILL_BANWOL].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -419,7 +419,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[MagicConst.SKILL_FIRESWORD], 1);
                             if (!CheckMagicLevelup(MagicArr[MagicConst.SKILL_FIRESWORD]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_FIRESWORD].Magic.MagicId, MagicArr[MagicConst.SKILL_FIRESWORD].Level, MagicArr[MagicConst.SKILL_FIRESWORD].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_FIRESWORD].Magic.MagicId, MagicArr[MagicConst.SKILL_FIRESWORD].Level, MagicArr[MagicConst.SKILL_FIRESWORD].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -431,7 +431,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[43], 1);
                             if (!CheckMagicLevelup(MagicArr[43]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[43].Magic.MagicId, MagicArr[43].Level, MagicArr[43].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[43].Magic.MagicId, MagicArr[43].Level, MagicArr[43].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -443,7 +443,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[56], 1);
                             if (!CheckMagicLevelup(MagicArr[56]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[56].Magic.MagicId, MagicArr[56].Level, MagicArr[56].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[56].Magic.MagicId, MagicArr[56].Level, MagicArr[56].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -455,7 +455,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[40], 1);
                             if (!CheckMagicLevelup(MagicArr[40]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[40].Magic.MagicId, MagicArr[40].Level, MagicArr[40].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[40].Magic.MagicId, MagicArr[40].Level, MagicArr[40].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -467,7 +467,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[42], 1);
                             if (!CheckMagicLevelup(MagicArr[42]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[42].Magic.MagicId, MagicArr[42].Level, MagicArr[42].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[42].Magic.MagicId, MagicArr[42].Level, MagicArr[42].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -479,7 +479,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[66], 1);
                             if (!CheckMagicLevelup(MagicArr[66]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[66].Magic.MagicId, MagicArr[66].Level, MagicArr[66].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[66].Magic.MagicId, MagicArr[66].Level, MagicArr[66].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -491,7 +491,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[61], 1);
                             if (!CheckMagicLevelup(MagicArr[61]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[61].Magic.MagicId, MagicArr[61].Level, MagicArr[61].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[61].Magic.MagicId, MagicArr[61].Level, MagicArr[61].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -503,7 +503,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[101], 1);
                             if (!CheckMagicLevelup(MagicArr[101]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[101].Magic.MagicId, MagicArr[101].Level, MagicArr[101].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[101].Magic.MagicId, MagicArr[101].Level, MagicArr[101].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -515,7 +515,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[102], 1);
                             if (!CheckMagicLevelup(MagicArr[102]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[102].Magic.MagicId, MagicArr[102].Level, MagicArr[102].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[102].Magic.MagicId, MagicArr[102].Level, MagicArr[102].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -527,7 +527,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[103], 1);
                             if (!CheckMagicLevelup(MagicArr[103]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[103].Magic.MagicId, MagicArr[103].Level, MagicArr[103].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[103].Magic.MagicId, MagicArr[103].Level, MagicArr[103].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -539,7 +539,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[114], 1);
                             if (!CheckMagicLevelup(MagicArr[114]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[114].Magic.MagicId, MagicArr[114].Level, MagicArr[114].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[114].Magic.MagicId, MagicArr[114].Level, MagicArr[114].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -551,7 +551,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[113], 1);
                             if (!CheckMagicLevelup(MagicArr[113]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[113].Magic.MagicId, MagicArr[113].Level, MagicArr[113].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[113].Magic.MagicId, MagicArr[113].Level, MagicArr[113].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -563,7 +563,7 @@ namespace GameSvr.Player
                             TrainSkill(MagicArr[115], 1);
                             if (!CheckMagicLevelup(MagicArr[115]))
                             {
-                                SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, MagicArr[115].Magic.MagicId, MagicArr[115].Level, MagicArr[115].TranPoint, "", 3000);
+                                SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, MagicArr[115].Magic.MagicId, MagicArr[115].Level, MagicArr[115].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -879,7 +879,7 @@ namespace GameSvr.Player
                 {
                     result = true;
                     MDwAttackTick = HUtil32.GetTickCount();
-                    if (wIdent == Grobal2.CM_HEAVYHIT && UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Dura > 0)// 挖矿
+                    if (wIdent == Messages.CM_HEAVYHIT && UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Dura > 0)// 挖矿
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false))
                         {
@@ -901,34 +901,34 @@ namespace GameSvr.Player
                     }
                     switch (wIdent)
                     {
-                        case Grobal2.CM_HIT:
+                        case Messages.CM_HIT:
                             AttackDir(null, 0, nDir);
                             break;
-                        case Grobal2.CM_HEAVYHIT:
+                        case Messages.CM_HEAVYHIT:
                             AttackDir(null, 1, nDir);
                             break;
-                        case Grobal2.CM_BIGHIT:
+                        case Messages.CM_BIGHIT:
                             AttackDir(null, 2, nDir);
                             break;
-                        case Grobal2.CM_POWERHIT:
+                        case Messages.CM_POWERHIT:
                             AttackDir(null, 3, nDir);
                             break;
-                        case Grobal2.CM_LONGHIT:
+                        case Messages.CM_LONGHIT:
                             AttackDir(null, 4, nDir);
                             break;
-                        case Grobal2.CM_WIDEHIT:
+                        case Messages.CM_WIDEHIT:
                             AttackDir(null, 5, nDir);
                             break;
-                        case Grobal2.CM_FIREHIT:
+                        case Messages.CM_FIREHIT:
                             AttackDir(null, 7, nDir);
                             break;
-                        case Grobal2.CM_CRSHIT:
+                        case Messages.CM_CRSHIT:
                             AttackDir(null, 8, nDir);
                             break;
-                        case Grobal2.CM_TWINHIT:
+                        case Messages.CM_TWINHIT:
                             AttackDir(null, 9, nDir);
                             break;
-                        case Grobal2.CM_42HIT:
+                        case Messages.CM_42HIT:
                             AttackDir(null, 10, nDir);
                             AttackDir(null, 11, nDir);
                             break;
@@ -1202,7 +1202,7 @@ namespace GameSvr.Player
                                         TrainSkill(UserMagic, M2Share.RandomNumber.Random(3) + 1);
                                         if (!CheckMagicLevelup(UserMagic))
                                         {
-                                            SendDelayMsg(this, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 1000);
+                                            SendDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 1000);
                                         }
                                     }
                                 }
@@ -1272,7 +1272,7 @@ namespace GameSvr.Player
                     }
                     if (!DoSpell(UserMagic, nTargetX, nTargetY, BaseObject))
                     {
-                        SendRefMsg(Grobal2.RM_MAGICFIREFAIL, 0, 0, 0, 0, "");
+                        SendRefMsg(Messages.RM_MAGICFIREFAIL, 0, 0, 0, 0, "");
                     }
                     result = true;
                     break;

@@ -22,7 +22,7 @@
                     if (WAbil.HP <= HUtil32.Round(WAbil.MaxHP / 2))
                     {
                         GetFrontPosition(ref nx, ref ny);
-                        SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                        SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         SpaceMove(MapName, (short)(nx - 2), (short)(ny - 2), 0);
                         borunaway = true;
                     }

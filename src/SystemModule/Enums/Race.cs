@@ -23,6 +23,10 @@ namespace SystemModule.Enums
         /// </summary>
         public const byte Animal = 50;
         /// <summary>
+        /// 游戏商人
+        /// </summary>
+        public const byte Merchant = 50;
+        /// <summary>
         /// 练功师
         /// </summary>
         public const byte Exercise = 55;

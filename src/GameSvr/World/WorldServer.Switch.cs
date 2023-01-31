@@ -43,7 +43,7 @@ namespace GameSvr.World
                 if (switchData.SlaveArr[nCount].SlaveName == "") break;
                 int slaveId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(slaveId, switchData.SlaveArr[nCount]);
-                playObject.SendDelayMsg(playObject, Grobal2.RM_10401, 0, slaveId, 0, 0, "", 500);
+                playObject.SendDelayMsg(playObject, Messages.RM_10401, 0, slaveId, 0, 0, "", 500);
                 nCount++;
                 if (nCount >= 5) break;
             }
@@ -82,7 +82,7 @@ namespace GameSvr.World
             MakeSwitchData(playObject, ref switchData);
             string flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
             playObject.MSSwitchDataTempFile = flName;
-            SendServerGroupMsg(Grobal2.ISM_USERSERVERCHANGE, nServerIndex, flName);//发送消息切换服务器
+            SendServerGroupMsg(Messages.ISM_USERSERVERCHANGE, nServerIndex, flName);//发送消息切换服务器
             M2Share.ShareFileNameNum++;
             return true;
         }

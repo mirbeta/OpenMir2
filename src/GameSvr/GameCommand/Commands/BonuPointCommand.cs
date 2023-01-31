@@ -33,7 +33,7 @@ namespace GameSvr.GameCommand.Commands
             if (nCount > 0)
             {
                 m_PlayObject.BonusPoint = nCount;
-                m_PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                m_PlayObject.SendMsg(PlayObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 return;
             }
             string sMsg = string.Format("未分配点数:{0} 已分配点数:(DC:{1} MC:{2} SC:{3} AC:{4} MAC:{5} HP:{6} MP:{7} HIT:{8} SPEED:{9})", m_PlayObject.BonusPoint,

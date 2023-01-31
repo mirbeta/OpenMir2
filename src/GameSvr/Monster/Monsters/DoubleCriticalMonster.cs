@@ -46,7 +46,7 @@ namespace GameSvr.Monster.Monsters
             {
                 return;
             }
-            SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
             for (int i = 0; i < 4; i++)
             {
                 for (int k = 0; k < 4; k++)
@@ -62,7 +62,7 @@ namespace GameSvr.Monster.Monsters
                             if (nDamage > 0)
                             {
                                 baseObject.StruckDamage((ushort)nDamage);
-                                baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
+                                baseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
                             }
                         }
                     }

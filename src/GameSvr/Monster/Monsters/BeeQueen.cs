@@ -23,13 +23,13 @@ namespace GameSvr.Monster.Monsters
             {
                 return;
             }
-            SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
-            SendDelayMsg(this, Grobal2.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
+            SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
+            SendDelayMsg(this, Messages.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
         }
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            if (processMsg.wIdent == Grobal2.RM_ZEN_BEE)
+            if (processMsg.wIdent == Messages.RM_ZEN_BEE)
             {
                 BaseObject bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, M2Share.Config.Bee);
                 if (bb != null)

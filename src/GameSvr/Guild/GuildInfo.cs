@@ -452,7 +452,7 @@ namespace GameSvr.Guild
                         }
                         if (guildMember.BanGuildChat)
                         {
-                            guildMember.SendMsg(guildMember, Grobal2.RM_GUILDMESSAGE, 0, M2Share.Config.GuildMsgFColor, M2Share.Config.GuildMsgBColor, 0, sMsg);
+                            guildMember.SendMsg(guildMember, Messages.RM_GUILDMESSAGE, 0, M2Share.Config.GuildMsgFColor, M2Share.Config.GuildMsgBColor, 0, sMsg);
                         }
                     }
                 }
@@ -498,7 +498,7 @@ namespace GameSvr.Guild
                         nRankNo = GuildRank.nRankNo;
                         result = GuildRank.sRankName;
                         // PlayObject.RefShowName();
-                        PlayObject.SendMsg(PlayObject, Grobal2.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
+                        PlayObject.SendMsg(PlayObject, Messages.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
                         return result;
                     }
                 }

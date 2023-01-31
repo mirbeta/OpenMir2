@@ -110,13 +110,13 @@ namespace DBSvr.Services
                 int nIdent = HUtil32.StrToInt(sCode, 0);
                 switch (nIdent)
                 {
-                    case Grobal2.SS_OPENSESSION:
+                    case Messages.SS_OPENSESSION:
                         ProcessAddSession(sBody);
                         break;
-                    case Grobal2.SS_CLOSESESSION:
+                    case Messages.SS_CLOSESESSION:
                         ProcessDelSession(sBody);
                         break;
-                    case Grobal2.SS_KEEPALIVE:
+                    case Messages.SS_KEEPALIVE:
                         ProcessGetOnlineCount(sBody);
                         break;
                 }
@@ -336,7 +336,7 @@ namespace DBSvr.Services
         {
             if (_clientScoket.IsConnected)
             {
-                _clientScoket.SendText("(" + Grobal2.SS_SERVERINFO + "/" + _conf.ServerName + "/" + "99" + "/" + userCount + ")");
+                _clientScoket.SendText("(" + Messages.SS_SERVERINFO + "/" + _conf.ServerName + "/" + "99" + "/" + userCount + ")");
             }
         }
     }

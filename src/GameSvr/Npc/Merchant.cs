@@ -3,6 +3,7 @@ using GameSvr.Maps;
 using GameSvr.Player;
 using GameSvr.Script;
 using SystemModule.Data;
+using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Npc
@@ -78,7 +79,7 @@ namespace GameSvr.Npc
 
         public Merchant() : base()
         {
-            RaceImg = Grobal2.RCC_MERCHANT;
+            RaceImg = ActorRace.Merchant;
             Appr = 0;
             PriceRate = 100;
             CastleMerchant = false;
@@ -134,14 +135,14 @@ namespace GameSvr.Npc
                 {
                     if (M2Share.RandomNumber.Random(50) == 0)
                     {
-                        SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+                        SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                     }
                 }
                 if (CastleMerchant && Castle != null && Castle.UnderWar)
                 {
                     if (!FixedHideMode)
                     {
-                        SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                        SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         FixedHideMode = true;
                     }
                 }
@@ -150,13 +151,13 @@ namespace GameSvr.Npc
                     if (FixedHideMode)
                     {
                         FixedHideMode = false;
-                        SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+                        SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                     }
                 }
                 if (BoCanMove && (HUtil32.GetTickCount() - MoveTick) > MoveTime * 1000)
                 {
                     MoveTick = HUtil32.GetTickCount();
-                    SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                    SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                     MapRandomMove(MapName, 0);
                 }
             }
@@ -524,7 +525,7 @@ namespace GameSvr.Npc
             {
                 int objectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(objectId, DelItemList);
-                User.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                User.SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }
             if (DuraList != null)
             {
@@ -574,7 +575,7 @@ namespace GameSvr.Npc
                 User.UseItems[Grobal2.U_WEAPON].Index = 0;
                 User.RecalcAbilitys();
                 User.FeatureChanged();
-                User.SendMsg(User, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                User.SendMsg(User, Messages.RM_ABILITY, 0, 0, 0, 0, "");
                 UpgradeWaponAddValue(User, User.ItemList, ref upgradeInfo.Dc, ref upgradeInfo.Sc, ref upgradeInfo.Mc, ref upgradeInfo.Dura);
                 upgradeInfo.UpgradeTime = DateTime.Now;
                 upgradeInfo.GetBackTick = HUtil32.GetTickCount();
@@ -924,7 +925,7 @@ namespace GameSvr.Npc
                         }
                         else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -956,7 +957,7 @@ namespace GameSvr.Npc
         /// </summary>
         private void UserSelectSuperRepairItem(PlayObject User)
         {
-            User.SendMsg(this, Grobal2.RM_SENDUSERSREPAIR, 0, ActorId, 0, 0, "");
+            User.SendMsg(this, Messages.RM_SENDUSERSREPAIR, 0, ActorId, 0, 0, "");
         }
 
         /// <summary>
@@ -989,17 +990,17 @@ namespace GameSvr.Npc
                     n10++;
                 }
             }
-            User.SendMsg(this, Grobal2.RM_SENDGOODSLIST, 0, ActorId, n10, 0, sSendMsg);
+            User.SendMsg(this, Messages.RM_SENDGOODSLIST, 0, ActorId, n10, 0, sSendMsg);
         }
 
         private void UserSelectSellItem(PlayObject User)
         {
-            User.SendMsg(this, Grobal2.RM_SENDUSERSELL, 0, ActorId, 0, 0, "");
+            User.SendMsg(this, Messages.RM_SENDUSERSELL, 0, ActorId, 0, 0, "");
         }
 
         private void UserSelectRepairItem(PlayObject User)
         {
-            User.SendMsg(this, Grobal2.RM_SENDUSERREPAIR, 0, ActorId, 0, 0, "");
+            User.SendMsg(this, Messages.RM_SENDUSERREPAIR, 0, ActorId, 0, 0, "");
         }
 
         private void UserSelectMakeDurg(PlayObject User)
@@ -1016,7 +1017,7 @@ namespace GameSvr.Npc
             }
             if (!string.IsNullOrEmpty(sSendMsg))
             {
-                User.SendMsg(this, Grobal2.RM_USERMAKEDRUGITEMLIST, 0, ActorId, 0, 0, sSendMsg);
+                User.SendMsg(this, Messages.RM_USERMAKEDRUGITEMLIST, 0, ActorId, 0, 0, sSendMsg);
             }
         }
 
@@ -1027,12 +1028,12 @@ namespace GameSvr.Npc
 
         private void UserSelectStorage(PlayObject User)
         {
-            User.SendMsg(this, Grobal2.RM_USERSTORAGEITEM, 0, ActorId, 0, 0, "");
+            User.SendMsg(this, Messages.RM_USERSTORAGEITEM, 0, ActorId, 0, 0, "");
         }
 
         private void UserSelectGetBack(PlayObject User)
         {
-            User.SendMsg(this, Grobal2.RM_USERGETBACKITEM, 0, ActorId, 0, 0, "");
+            User.SendMsg(this, Messages.RM_USERGETBACKITEM, 0, ActorId, 0, 0, "");
         }
 
         /// <summary>
@@ -1045,17 +1046,17 @@ namespace GameSvr.Npc
             {
                 if (!User.SellOffInTime(0))
                 {
-                    User.SendMsg(this, Grobal2.RM_SENDDEALOFFFORM, 0, ActorId, 0, 0, "");
+                    User.SendMsg(this, Messages.RM_SENDDEALOFFFORM, 0, ActorId, 0, 0, "");
                     User.GetBackSellOffItems();
                 }
                 else
                 {
-                    User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您还有元宝服务正在进行!!\\ \\<返回/@main>");
+                    User.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您还有元宝服务正在进行!!\\ \\<返回/@main>");
                 }
             }
             else
             {
-                User.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您未开通元宝服务,请先开通元宝服务!!\\ \\<返回/@main>");
+                User.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您未开通元宝服务,请先开通元宝服务!!\\ \\<返回/@main>");
             }
         }
 
@@ -1301,11 +1302,11 @@ namespace GameSvr.Npc
             }
             if (n1C == 0)
             {
-                PlayObject.SendMsg(this, Grobal2.SM_BUYITEM_SUCCESS, 0, PlayObject.Gold, nInt, 0, "");
+                PlayObject.SendMsg(this, Messages.SM_BUYITEM_SUCCESS, 0, PlayObject.Gold, nInt, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.SM_BUYITEM_FAIL, 0, n1C, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.SM_BUYITEM_FAIL, 0, n1C, 0, 0, "");
             }
         }
 
@@ -1348,7 +1349,7 @@ namespace GameSvr.Npc
                     break;
                 }
             }
-            PlayObject.SendMsg(this, Grobal2.RM_SENDDETAILGOODSLIST, 0, ActorId, nItemCount, nInt, sSendMsg);
+            PlayObject.SendMsg(this, Messages.RM_SENDDETAILGOODSLIST, 0, ActorId, nItemCount, nInt, sSendMsg);
         }
 
         public void ClientQuerySellPrice(PlayObject PlayObject, UserItem UserItem)
@@ -1356,11 +1357,11 @@ namespace GameSvr.Npc
             int nC = GetSellItemPrice(GetUserItemPrice(UserItem));
             if (nC >= 0)
             {
-                PlayObject.SendMsg(this, Grobal2.RM_SENDBUYPRICE, 0, nC, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_SENDBUYPRICE, 0, nC, 0, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_SENDBUYPRICE, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_SENDBUYPRICE, 0, 0, 0, 0, "");
             }
         }
 
@@ -1402,7 +1403,7 @@ namespace GameSvr.Npc
                             M2Share.CastleMgr.IncRateGold(M2Share.Config.UpgradeWeaponPrice);
                         }
                     }
-                    PlayObject.SendMsg(this, Grobal2.RM_USERSELLITEM_OK, 0, PlayObject.Gold, 0, 0, "");
+                    PlayObject.SendMsg(this, Messages.RM_USERSELLITEM_OK, 0, PlayObject.Gold, 0, 0, "");
                     AddItemToGoodsList(UserItem);
                     StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem.NeedIdentify == 1)
@@ -1413,12 +1414,12 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_USERSELLITEM_FAIL, 0, 0, 0, 0, "");
+                    PlayObject.SendMsg(this, Messages.RM_USERSELLITEM_FAIL, 0, 0, 0, 0, "");
                 }
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_USERSELLITEM_FAIL, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_USERSELLITEM_FAIL, 0, 0, 0, 0, "");
             }
             return result;
         }
@@ -1503,7 +1504,7 @@ namespace GameSvr.Npc
                 {
                     int ObjectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(ObjectId, List28);
-                    PlayObject.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                    PlayObject.SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
                 }
             }
             return result;
@@ -1556,11 +1557,11 @@ namespace GameSvr.Npc
             }
             if (n14 == 0)
             {
-                PlayObject.SendMsg(this, Grobal2.RM_MAKEDRUG_SUCCESS, 0, PlayObject.Gold, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_MAKEDRUG_SUCCESS, 0, PlayObject.Gold, 0, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_MAKEDRUG_FAIL, 0, n14, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_MAKEDRUG_FAIL, 0, n14, 0, 0, "");
             }
         }
 
@@ -1599,11 +1600,11 @@ namespace GameSvr.Npc
                         nRepairPrice = -1;
                     }
                 }
-                PlayObject.SendMsg(this, Grobal2.RM_SENDREPAIRCOST, 0, nRepairPrice, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_SENDREPAIRCOST, 0, nRepairPrice, 0, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_SENDREPAIRCOST, 0, -1, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_SENDREPAIRCOST, 0, -1, 0, 0, "");
             }
         }
 
@@ -1629,7 +1630,7 @@ namespace GameSvr.Npc
             if (PlayObject.ScriptLable == "@fail_s_repair")
             {
                 SendMsgToUser(PlayObject, "对不起!我不能帮你修理这个物品。\\ \\ \\<返回/@main>");
-                PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
                 return result;
             }
             int nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
@@ -1666,26 +1667,26 @@ namespace GameSvr.Npc
                         if (PlayObject.ScriptLable == ScriptConst.sSUPERREPAIR)
                         {
                             UserItem.Dura = UserItem.DuraMax;
-                            PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_OK, 0, PlayObject.Gold, UserItem.Dura, UserItem.DuraMax, "");
+                            PlayObject.SendMsg(this, Messages.RM_USERREPAIRITEM_OK, 0, PlayObject.Gold, UserItem.Dura, UserItem.DuraMax, "");
                             GotoLable(PlayObject, ScriptConst.sSUPERREPAIROK, false);
                         }
                         else
                         {
                             UserItem.DuraMax -= (ushort)((UserItem.DuraMax - UserItem.Dura) / M2Share.Config.RepairItemDecDura);
                             UserItem.Dura = UserItem.DuraMax;
-                            PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_OK, 0, PlayObject.Gold, UserItem.Dura, UserItem.DuraMax, "");
+                            PlayObject.SendMsg(this, Messages.RM_USERREPAIRITEM_OK, 0, PlayObject.Gold, UserItem.Dura, UserItem.DuraMax, "");
                             GotoLable(PlayObject, ScriptConst.sREPAIROK, false);
                         }
                         result = true;
                     }
                     else
                     {
-                        PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
+                        PlayObject.SendMsg(this, Messages.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
                     }
                 }
                 else
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
+                    PlayObject.SendMsg(this, Messages.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0, "");
                 }
             }
             return result;
@@ -1804,7 +1805,7 @@ namespace GameSvr.Npc
                 if (UserItem.Index == 0)
                 {
                     string sMsg = Format(Settings.YourUseItemIsNul, M2Share.GetUseItemName(btWhere));
-                    PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, sMsg);
+                    PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, sMsg);
                     return;
                 }
                 if (UserItem.Desc[13] == 1)
@@ -1822,8 +1823,8 @@ namespace GameSvr.Npc
                     UserItem.Desc[13] = 0;
                 }
                 M2Share.CustomItemMgr.SaveCustomItemName();
-                PlayObject.SendMsg(PlayObject, Grobal2.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
-                PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, "");
+                PlayObject.SendMsg(PlayObject, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, "");
             }
         }
 

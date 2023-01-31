@@ -92,7 +92,7 @@ namespace GameSvr.Services
                     break;
                 }
             }
-            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SOFTOUTSESSION, sUserId, nId));
+            SendSocket(string.Format(sFormatMsg, Messages.SS_SOFTOUTSESSION, sUserId, nId));
         }
 
         public void SendHumanLogOutMsgA(string sUserID, int nID)
@@ -110,19 +110,19 @@ namespace GameSvr.Services
         public void SendLogonCostMsg(string sAccount, int nTime)
         {
             const string sFormatMsg = "({0}/{1}/{2})";
-            SendSocket(string.Format(sFormatMsg, Grobal2.SS_LOGINCOST, sAccount, nTime));
+            SendSocket(string.Format(sFormatMsg, Messages.SS_LOGINCOST, sAccount, nTime));
         }
 
         public void SendOnlineHumCountMsg(int nCount)
         {
             const string sFormatMsg = "({0}/{1}/{2}/{3}/{4})";
-            SendSocket(string.Format(sFormatMsg, Grobal2.SS_SERVERINFO, M2Share.Config.ServerName, M2Share.ServerIndex, nCount, M2Share.Config.PayMentMode));
+            SendSocket(string.Format(sFormatMsg, Messages.SS_SERVERINFO, M2Share.Config.ServerName, M2Share.ServerIndex, nCount, M2Share.Config.PayMentMode));
         }
 
         public void SendUserPlayTime(string account, long playTime)
         {
             const string sFormatMsg = "({0}/{1}/{2}/{3})";
-            SendSocket(string.Format(sFormatMsg, Grobal2.ISM_GAMETIMEOFTIMECARDUSER, M2Share.Config.ServerName, account, playTime));
+            SendSocket(string.Format(sFormatMsg, Messages.ISM_GAMETIMEOFTIMECARDUSER, M2Share.Config.ServerName, account, playTime));
         }
 
         public void Run()
@@ -162,27 +162,27 @@ namespace GameSvr.Services
                     string sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
                     switch (HUtil32.StrToInt(sCode, 0))
                     {
-                        case Grobal2.SS_OPENSESSION:// 100
+                        case Messages.SS_OPENSESSION:// 100
                             GetPasswdSuccess(sBody);
                             break;
-                        case Grobal2.SS_CLOSESESSION:// 101
+                        case Messages.SS_CLOSESESSION:// 101
                             GetCancelAdmission(sBody);
                             break;
-                        case Grobal2.SS_KEEPALIVE:// 104
+                        case Messages.SS_KEEPALIVE:// 104
                             SetTotalHumanCount(sBody);
                             break;
-                        case Grobal2.UNKNOWMSG:
+                        case Messages.UNKNOWMSG:
                             break;
-                        case Grobal2.SS_KICKUSER:// 111
+                        case Messages.SS_KICKUSER:// 111
                             GetCancelAdmissionA(sBody);
                             break;
-                        case Grobal2.SS_SERVERLOAD:// 113
+                        case Messages.SS_SERVERLOAD:// 113
                             GetServerLoad(sBody);
                             break;
-                        case Grobal2.ISM_ACCOUNTEXPIRED:
+                        case Messages.ISM_ACCOUNTEXPIRED:
                             GetAccountExpired(sBody);
                             break;
-                        case Grobal2.ISM_QUERYPLAYTIME:
+                        case Messages.ISM_QUERYPLAYTIME:
                             QueryAccountExpired(sBody);
                             break;
                     }

@@ -66,10 +66,10 @@ namespace SelGate
             var cltCmd = SerializerUtil.Deserialize<CommandPacket>(packBuff);
             switch (cltCmd.Ident)
             {
-                case Grobal2.CM_QUERYCHR:
-                case Grobal2.CM_NEWCHR:
-                case Grobal2.CM_DELCHR:
-                case Grobal2.CM_SELCHR:
+                case Messages.CM_QUERYCHR:
+                case Messages.CM_NEWCHR:
+                case Messages.CM_DELCHR:
+                case Messages.CM_SELCHR:
                     _clientTimeOutTick = HUtil32.GetTickCount();
                     var accountPacket = new ServerDataMessage();
                     accountPacket.Data = userData.Body;
@@ -98,7 +98,7 @@ namespace SelGate
                 if (HUtil32.GetTickCount() - _clientTimeOutTick > Config.m_nClientTimeOutTime)
                 {
                     _clientTimeOutTick = HUtil32.GetTickCount();
-                    SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
                     _kickFlag = true;
                     //BlockUser(this);
                     success = true;

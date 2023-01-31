@@ -23,9 +23,9 @@
                     WAbil.HP += (ushort)(nDamage / btGetBackHp);
                 }
                 TargetCret.StruckDamage(nDamage);
-                TargetCret.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, TargetCret.WAbil.HP, TargetCret.WAbil.MaxHP, ActorId, "", 200);
+                TargetCret.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, TargetCret.WAbil.HP, TargetCret.WAbil.MaxHP, ActorId, "", 200);
             }
-            SendRefMsg(Grobal2.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
+            SendRefMsg(Messages.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
         }
 
         public override void Run()

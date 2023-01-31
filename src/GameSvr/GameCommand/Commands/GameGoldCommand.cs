@@ -51,7 +51,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (M2Share.GameLogGameGold)
             {
-                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, string.Format(CommandHelp.GameLogMsg1, m_PlayObject.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY,
+                M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, m_PlayObject.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY,
                     m_PlayObject.ChrName, M2Share.Config.GameGoldName, nGold, sCtr[1], PlayObject.ChrName));
             }
             PlayObject.GameGoldChanged();

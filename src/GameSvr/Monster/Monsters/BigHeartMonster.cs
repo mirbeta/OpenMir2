@@ -16,7 +16,7 @@ namespace GameSvr.Monster.Monsters
             if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
             {
                 AttackTick = HUtil32.GetTickCount();
-                SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
@@ -29,8 +29,8 @@ namespace GameSvr.Monster.Monsters
                     {
                         if (Math.Abs(CurrX - baseObject.CurrX) <= ViewRange && Math.Abs(CurrY - baseObject.CurrY) <= ViewRange)
                         {
-                            SendDelayMsg(this, Grobal2.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 1, baseObject.ActorId, "", 200);
-                            SendRefMsg(Grobal2.RM_10205, 0, baseObject.CurrX, baseObject.CurrY, 1, "");
+                            SendDelayMsg(this, Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 1, baseObject.ActorId, "", 200);
+                            SendRefMsg(Messages.RM_10205, 0, baseObject.CurrX, baseObject.CurrY, 1, "");
                         }
                     }
                 }

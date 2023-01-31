@@ -31,7 +31,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (PlayObject.Permission >= this.GameCommand.nPermissionMin || M2Share.CanMoveMap(sMapName))
             {
-                PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                PlayObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                 PlayObject.MapRandomMove(sMapName, 0);
             }
             else

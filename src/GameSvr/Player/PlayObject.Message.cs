@@ -247,7 +247,7 @@ namespace GameSvr.Player
                                     if (castle.CanGetCastle(MyGuild))
                                     {
                                         castle.GetCastle(MyGuild);
-                                        WorldServer.SendServerGroupMsg(Grobal2.SS_211, M2Share.ServerIndex, MyGuild.sGuildName);
+                                        WorldServer.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, MyGuild.sGuildName);
                                         if (castle.InPalaceGuildCount() <= 1)
                                         {
                                             castle.StopWallconquestWar();
@@ -294,7 +294,7 @@ namespace GameSvr.Player
                     MakeGhost();
                     if (BoKickFlag)
                     {
-                        SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
+                        SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
                     }
                     if (!BoReconnection && BoSoftClose)
                     {
@@ -302,7 +302,7 @@ namespace GameSvr.Player
                         if (MyGuild != null)
                         {
                             MyGuild.SendGuildMsg(ChrName + " 已经退出游戏.");
-                            WorldServer.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + "" + '/' + ChrName + " has exited the game.");
+                            WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.sGuildName + '/' + "" + '/' + ChrName + " has exited the game.");
                         }
                         IdSrvClient.Instance.SendHumanLogOutMsg(UserAccount, SessionId);
                     }
@@ -378,7 +378,7 @@ namespace GameSvr.Player
                 }
                 if (M2Share.GameLogGameGold)
                 {
-                    M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
+                    M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (BoIncGameGold && (HUtil32.GetTickCount() - IncGameGoldTick) > IncGameGoldTime)
@@ -397,7 +397,7 @@ namespace GameSvr.Player
                 }
                 if (M2Share.GameLogGameGold)
                 {
-                    M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
+                    M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (!BoDecGameGold && Envir.Flag.boDECGAMEGOLD)
@@ -419,7 +419,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.GameLogGameGold)
                     {
-                        M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Map"));
+                        M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Map"));
                     }
                 }
             }
@@ -440,13 +440,13 @@ namespace GameSvr.Player
                     }
                     if (M2Share.GameLogGameGold)
                     {
-                        M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '+', "Map"));
+                        M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '+', "Map"));
                     }
                 }
             }
             if (tObjCount != GameGold)
             {
-                SendUpdateMsg(this, Grobal2.RM_GOLDCHANGED, 0, 0, 0, 0, "");
+                SendUpdateMsg(this, Messages.RM_GOLDCHANGED, 0, 0, 0, 0, "");
             }
             if (Envir.Flag.boFight3Zone)
             {
@@ -462,7 +462,7 @@ namespace GameSvr.Player
                     {
                         lastHiterPlay.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
                         string tStr = lastHiterPlay.MyGuild.sGuildName + ':' + lastHiterPlay.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
-                        M2Share.WorldEngine.CryCry(Grobal2.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
+                        M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
                     }
                 }
             }
@@ -483,7 +483,7 @@ namespace GameSvr.Player
                     }
                     if (M2Share.GameLogGamePoint)
                     {
-                        M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEPOINT, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GamePointName, nInteger, '+', "Map"));
+                        M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GamePointName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -804,10 +804,10 @@ namespace GameSvr.Player
             MessageBodyWL messageBodyWl;
             switch (processMsg.wIdent)
             {
-                case Grobal2.CM_QUERYUSERNAME:
+                case Messages.CM_QUERYUSERNAME:
                     ClientQueryUserName(processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
                     break;
-                case Grobal2.CM_QUERYBAGITEMS: //僵尸攻击：不断刷新包裹发送大量数据，导致网络阻塞
+                case Messages.CM_QUERYBAGITEMS: //僵尸攻击：不断刷新包裹发送大量数据，导致网络阻塞
                     if ((HUtil32.GetTickCount() - QueryBagItemsTick) > 30 * 1000)
                     {
                         QueryBagItemsTick = HUtil32.GetTickCount();
@@ -818,41 +818,41 @@ namespace GameSvr.Player
                         SysMsg(Settings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                     }
                     break;
-                case Grobal2.CM_QUERYUSERSTATE:
+                case Messages.CM_QUERYUSERSTATE:
                     ClientQueryUserInformation(processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
                     break;
-                case Grobal2.CM_QUERYUSERSET:
+                case Messages.CM_QUERYUSERSET:
                     ClientQueryUserSet(processMsg);
                     break;
-                case Grobal2.CM_DROPITEM:
+                case Messages.CM_DROPITEM:
                     if (ClientDropItem(processMsg.Msg, processMsg.nParam1))
                     {
-                        SendDefMessage(Grobal2.SM_DROPITEM_SUCCESS, processMsg.nParam1, 0, 0, 0, processMsg.Msg);
+                        SendDefMessage(Messages.SM_DROPITEM_SUCCESS, processMsg.nParam1, 0, 0, 0, processMsg.Msg);
                     }
                     else
                     {
-                        SendDefMessage(Grobal2.SM_DROPITEM_FAIL, processMsg.nParam1, 0, 0, 0, processMsg.Msg);
+                        SendDefMessage(Messages.SM_DROPITEM_FAIL, processMsg.nParam1, 0, 0, 0, processMsg.Msg);
                     }
                     break;
-                case Grobal2.CM_PICKUP:
+                case Messages.CM_PICKUP:
                     if (CurrX == processMsg.nParam2 && CurrY == processMsg.nParam3)
                     {
                         ClientPickUpItem();
                     }
                     break;
-                case Grobal2.CM_OPENDOOR:
+                case Messages.CM_OPENDOOR:
                     ClientOpenDoor(processMsg.nParam2, processMsg.nParam3);
                     break;
-                case Grobal2.CM_TAKEONITEM:
+                case Messages.CM_TAKEONITEM:
                     ClientTakeOnItems((byte)processMsg.nParam2, processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_TAKEOFFITEM:
+                case Messages.CM_TAKEOFFITEM:
                     ClientTakeOffItems((byte)processMsg.nParam2, processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_EAT:
+                case Messages.CM_EAT:
                     ClientUseItems(processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_BUTCH:
+                case Messages.CM_BUTCH:
                     if (!ClientGetButchItem(processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, (byte)processMsg.wParam, ref dwDelayTime))
                     {
                         if (dwDelayTime != 0)
@@ -873,7 +873,7 @@ namespace GameSvr.Player
                                         M2Share.Log.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
+                                SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
@@ -894,10 +894,10 @@ namespace GameSvr.Player
                         }
                     }
                     break;
-                case Grobal2.CM_MAGICKEYCHANGE:
+                case Messages.CM_MAGICKEYCHANGE:
                     ClientChangeMagicKey(processMsg.nParam1, (char)processMsg.nParam2);
                     break;
-                case Grobal2.CM_SOFTCLOSE:
+                case Messages.CM_SOFTCLOSE:
                     if (!OffLineFlag)
                     {
                         BoReconnection = true;
@@ -908,34 +908,34 @@ namespace GameSvr.Player
                         }
                     }
                     break;
-                case Grobal2.CM_CLICKNPC:
+                case Messages.CM_CLICKNPC:
                     ClientClickNpc(processMsg.nParam1);
                     break;
-                case Grobal2.CM_MERCHANTDLGSELECT:
+                case Messages.CM_MERCHANTDLGSELECT:
                     ClientMerchantDlgSelect(processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_MERCHANTQUERYSELLPRICE:
+                case Messages.CM_MERCHANTQUERYSELLPRICE:
                     ClientMerchantQuerySellPrice(processMsg.nParam1, HUtil32.MakeLong((short)processMsg.nParam2, (short)processMsg.nParam3), processMsg.Msg);
                     break;
-                case Grobal2.CM_USERSELLITEM:
+                case Messages.CM_USERSELLITEM:
                     ClientUserSellItem(processMsg.nParam1, HUtil32.MakeLong((ushort)processMsg.nParam2, (ushort)processMsg.nParam3), processMsg.Msg);
                     break;
-                case Grobal2.CM_USERBUYITEM:
+                case Messages.CM_USERBUYITEM:
                     ClientUserBuyItem(processMsg.wIdent, processMsg.nParam1, HUtil32.MakeLong((ushort)processMsg.nParam2, (ushort)processMsg.nParam3), 0, processMsg.Msg);
                     break;
-                case Grobal2.CM_USERGETDETAILITEM:
+                case Messages.CM_USERGETDETAILITEM:
                     ClientUserBuyItem(processMsg.wIdent, processMsg.nParam1, 0, processMsg.nParam2, processMsg.Msg);
                     break;
-                case Grobal2.CM_DROPGOLD:
+                case Messages.CM_DROPGOLD:
                     if (processMsg.nParam1 > 0)
                     {
                         ClientDropGold(processMsg.nParam1);
                     }
                     break;
-                case Grobal2.CM_TEST:
+                case Messages.CM_TEST:
                     SendDefMessage(1, 0, 0, 0, 0, "");
                     break;
-                case Grobal2.CM_GROUPMODE:
+                case Messages.CM_GROUPMODE:
                     if (processMsg.nParam2 == 0)
                     {
                         ClientGroupClose();
@@ -946,92 +946,92 @@ namespace GameSvr.Player
                     }
                     if (AllowGroup)
                     {
-                        SendDefMessage(Grobal2.SM_GROUPMODECHANGED, 0, 1, 0, 0, "");
+                        SendDefMessage(Messages.SM_GROUPMODECHANGED, 0, 1, 0, 0, "");
                     }
                     else
                     {
-                        SendDefMessage(Grobal2.SM_GROUPMODECHANGED, 0, 0, 0, 0, "");
+                        SendDefMessage(Messages.SM_GROUPMODECHANGED, 0, 0, 0, 0, "");
                     }
                     break;
-                case Grobal2.CM_CREATEGROUP:
+                case Messages.CM_CREATEGROUP:
                     ClientCreateGroup(processMsg.Msg.Trim());
                     break;
-                case Grobal2.CM_ADDGROUPMEMBER:
+                case Messages.CM_ADDGROUPMEMBER:
                     ClientAddGroupMember(processMsg.Msg.Trim());
                     break;
-                case Grobal2.CM_DELGROUPMEMBER:
+                case Messages.CM_DELGROUPMEMBER:
                     ClientDelGroupMember(processMsg.Msg.Trim());
                     break;
-                case Grobal2.CM_USERREPAIRITEM:
+                case Messages.CM_USERREPAIRITEM:
                     ClientRepairItem(processMsg.nParam1, HUtil32.MakeLong((ushort)processMsg.nParam2, (ushort)processMsg.nParam3), processMsg.Msg);
                     break;
-                case Grobal2.CM_MERCHANTQUERYREPAIRCOST:
+                case Messages.CM_MERCHANTQUERYREPAIRCOST:
                     ClientQueryRepairCost(processMsg.nParam1, HUtil32.MakeLong((ushort)processMsg.nParam2, (ushort)processMsg.nParam3), processMsg.Msg);
                     break;
-                case Grobal2.CM_DEALTRY:
+                case Messages.CM_DEALTRY:
                     ClientDealTry(processMsg.Msg.Trim());
                     break;
-                case Grobal2.CM_DEALADDITEM:
+                case Messages.CM_DEALADDITEM:
                     ClientAddDealItem(processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_DEALDELITEM:
+                case Messages.CM_DEALDELITEM:
                     ClientDelDealItem(processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_DEALCANCEL:
+                case Messages.CM_DEALCANCEL:
                     ClientCancelDeal();
                     break;
-                case Grobal2.CM_DEALCHGGOLD:
+                case Messages.CM_DEALCHGGOLD:
                     ClientChangeDealGold(processMsg.nParam1);
                     break;
-                case Grobal2.CM_DEALEND:
+                case Messages.CM_DEALEND:
                     ClientDealEnd();
                     break;
-                case Grobal2.CM_USERSTORAGEITEM:
+                case Messages.CM_USERSTORAGEITEM:
                     ClientStorageItem(processMsg.nParam1, HUtil32.MakeLong((ushort)processMsg.nParam2, (ushort)processMsg.nParam3), processMsg.Msg);
                     break;
-                case Grobal2.CM_USERTAKEBACKSTORAGEITEM:
+                case Messages.CM_USERTAKEBACKSTORAGEITEM:
                     ClientTakeBackStorageItem(processMsg.nParam1, HUtil32.MakeLong((ushort)processMsg.nParam2, (ushort)processMsg.nParam3), processMsg.Msg);
                     break;
-                case Grobal2.CM_WANTMINIMAP:
+                case Messages.CM_WANTMINIMAP:
                     ClientGetMinMap();
                     break;
-                case Grobal2.CM_USERMAKEDRUGITEM:
+                case Messages.CM_USERMAKEDRUGITEM:
                     ClientMakeDrugItem(processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_OPENGUILDDLG:
+                case Messages.CM_OPENGUILDDLG:
                     ClientOpenGuildDlg();
                     break;
-                case Grobal2.CM_GUILDHOME:
+                case Messages.CM_GUILDHOME:
                     ClientGuildHome();
                     break;
-                case Grobal2.CM_GUILDMEMBERLIST:
+                case Messages.CM_GUILDMEMBERLIST:
                     ClientGuildMemberList();
                     break;
-                case Grobal2.CM_GUILDADDMEMBER:
+                case Messages.CM_GUILDADDMEMBER:
                     ClientGuildAddMember(processMsg.Msg);
                     break;
-                case Grobal2.CM_GUILDDELMEMBER:
+                case Messages.CM_GUILDDELMEMBER:
                     ClientGuildDelMember(processMsg.Msg);
                     break;
-                case Grobal2.CM_GUILDUPDATENOTICE:
+                case Messages.CM_GUILDUPDATENOTICE:
                     ClientGuildUpdateNotice(processMsg.Msg);
                     break;
-                case Grobal2.CM_GUILDUPDATERANKINFO:
+                case Messages.CM_GUILDUPDATERANKINFO:
                     ClientGuildUpdateRankInfo(processMsg.Msg);
                     break;
-                case Grobal2.CM_1042:
+                case Messages.CM_1042:
                     M2Share.Log.Warn("[非法数据] " + ChrName);
                     break;
-                case Grobal2.CM_ADJUST_BONUS:
+                case Messages.CM_ADJUST_BONUS:
                     ClientAdjustBonus(processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_GUILDALLY:
+                case Messages.CM_GUILDALLY:
                     ClientGuildAlly();
                     break;
-                case Grobal2.CM_GUILDBREAKALLY:
+                case Messages.CM_GUILDBREAKALLY:
                     ClientGuildBreakAlly(processMsg.Msg);
                     break;
-                case Grobal2.CM_TURN:
+                case Messages.CM_TURN:
                     if (ClientChangeDir((short)processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
                     {
                         MDwActionTick = HUtil32.GetTickCount();
@@ -1041,7 +1041,7 @@ namespace GameSvr.Player
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                            SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1061,7 +1061,7 @@ namespace GameSvr.Player
                                         M2Share.Log.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
+                                SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
@@ -1082,7 +1082,7 @@ namespace GameSvr.Player
                         }
                     }
                     break;
-                case Grobal2.CM_WALK:
+                case Messages.CM_WALK:
                     if (ClientWalkXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime))
                     {
                         MDwActionTick = HUtil32.GetTickCount();
@@ -1092,7 +1092,7 @@ namespace GameSvr.Player
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                            SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1112,7 +1112,7 @@ namespace GameSvr.Player
                                         M2Share.Log.Warn(Format(CommandHelp.WalkOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
+                                SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                                 if (TestSpeedMode)
                                 {
                                     SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
@@ -1122,7 +1122,7 @@ namespace GameSvr.Player
                             {
                                 if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
-                                    SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                                    SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
@@ -1141,7 +1141,7 @@ namespace GameSvr.Player
                         }
                     }
                     break;
-                case Grobal2.CM_HORSERUN:
+                case Messages.CM_HORSERUN:
                     if (ClientHorseRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime))
                     {
                         MDwActionTick = HUtil32.GetTickCount();
@@ -1151,7 +1151,7 @@ namespace GameSvr.Player
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                            SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1171,7 +1171,7 @@ namespace GameSvr.Player
                                         M2Share.Log.Warn(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
+                                SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
                                 if (TestSpeedMode)
                                 {
                                     SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
@@ -1189,7 +1189,7 @@ namespace GameSvr.Player
                         }
                     }
                     break;
-                case Grobal2.CM_RUN:
+                case Messages.CM_RUN:
                     if (ClientRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.nParam3, ref dwDelayTime))
                     {
                         MDwActionTick = HUtil32.GetTickCount();
@@ -1199,7 +1199,7 @@ namespace GameSvr.Player
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                            SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1219,13 +1219,13 @@ namespace GameSvr.Player
                                         M2Share.Log.Warn(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
+                                SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
                             }
                             else
                             {
                                 if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
-                                    SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                                    SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
@@ -1237,22 +1237,22 @@ namespace GameSvr.Player
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, Grobal2.CM_RUN, "", dwDelayTime);
+                                    SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, Messages.CM_RUN, "", dwDelayTime);
                                     result = false;
                                 }
                             }
                         }
                     }
                     break;
-                case Grobal2.CM_HIT:
-                case Grobal2.CM_HEAVYHIT:
-                case Grobal2.CM_BIGHIT:
-                case Grobal2.CM_POWERHIT:
-                case Grobal2.CM_LONGHIT:
-                case Grobal2.CM_WIDEHIT:
-                case Grobal2.CM_CRSHIT:
-                case Grobal2.CM_TWINHIT:
-                case Grobal2.CM_FIREHIT:
+                case Messages.CM_HIT:
+                case Messages.CM_HEAVYHIT:
+                case Messages.CM_BIGHIT:
+                case Messages.CM_POWERHIT:
+                case Messages.CM_LONGHIT:
+                case Messages.CM_WIDEHIT:
+                case Messages.CM_CRSHIT:
+                case Messages.CM_TWINHIT:
+                case Messages.CM_FIREHIT:
                     if (ClientHitXY(processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, processMsg.LateDelivery, ref dwDelayTime))
                     {
                         MDwActionTick = HUtil32.GetTickCount();
@@ -1262,7 +1262,7 @@ namespace GameSvr.Player
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                            SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1282,7 +1282,7 @@ namespace GameSvr.Player
                                         M2Share.Log.Warn(Format(CommandHelp.HitOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
+                                SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
@@ -1307,7 +1307,7 @@ namespace GameSvr.Player
                         }
                     }
                     break;
-                case Grobal2.CM_SITDOWN:
+                case Messages.CM_SITDOWN:
                     if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
                     {
                         MDwActionTick = HUtil32.GetTickCount();
@@ -1317,7 +1317,7 @@ namespace GameSvr.Player
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                            SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1337,7 +1337,7 @@ namespace GameSvr.Player
                                         M2Share.Log.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
+                                SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
@@ -1362,7 +1362,7 @@ namespace GameSvr.Player
                         }
                     }
                     break;
-                case Grobal2.CM_SPELL:
+                case Messages.CM_SPELL:
                     if (ClientSpellXY(processMsg.wIdent, processMsg.wParam, (short)processMsg.nParam1, (short)processMsg.nParam2, M2Share.ActorMgr.Get(processMsg.nParam3), processMsg.LateDelivery, ref dwDelayTime))
                     {
                         MDwActionTick = HUtil32.GetTickCount();
@@ -1372,7 +1372,7 @@ namespace GameSvr.Player
                     {
                         if (dwDelayTime == 0)
                         {
-                            SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                            SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
                         else
                         {
@@ -1392,13 +1392,13 @@ namespace GameSvr.Player
                                         M2Share.Log.Warn(Format(CommandHelp.SpellOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
-                                SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
+                                SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
                                 if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
                                 {
-                                    SendRefMsg(Grobal2.RM_MOVEFAIL, 0, 0, 0, 0, "");
+                                    SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
                                     {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
@@ -1417,155 +1417,155 @@ namespace GameSvr.Player
                         }
                     }
                     break;
-                case Grobal2.CM_SAY:
+                case Messages.CM_SAY:
                     ProcessUserLineMsg(processMsg.Msg);
                     break;
-                case Grobal2.CM_PASSWORD:
+                case Messages.CM_PASSWORD:
                     ProcessClientPassword(processMsg);
                     break;
-                case Grobal2.CM_QUERYVAL:
+                case Messages.CM_QUERYVAL:
                     ProcessQueryValue(processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.RM_WALK:
+                case Messages.RM_WALK:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WALK, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_WALK, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                         charDesc = new CharDesc();
                         charDesc.Feature = baseObject.GetFeature(baseObject);
                         charDesc.Status = baseObject.CharStatus;
                         SendSocket(ClientMsg, EDCode.EncodeBuffer(charDesc));
                     }
                     break;
-                case Grobal2.RM_HORSERUN:
+                case Messages.RM_HORSERUN:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HORSERUN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HORSERUN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                         charDesc = new CharDesc();
                         charDesc.Feature = baseObject.GetFeature(baseObject);
                         charDesc.Status = baseObject.CharStatus;
                         SendSocket(ClientMsg, EDCode.EncodeBuffer(charDesc));
                     }
                     break;
-                case Grobal2.RM_RUN:
+                case Messages.RM_RUN:
                     if (processMsg.BaseObject != this.ActorId && baseObject != null)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_RUN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                         charDesc = new CharDesc();
                         charDesc.Feature = baseObject.GetFeature(baseObject);
                         charDesc.Status = baseObject.CharStatus;
                         SendSocket(ClientMsg, EDCode.EncodeBuffer(charDesc));
                     }
                     break;
-                case Grobal2.RM_HIT:
+                case Messages.RM_HIT:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_HEAVYHIT:
+                case Messages.RM_HEAVYHIT:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAVYHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HEAVYHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg, processMsg.Msg);
                     }
                     break;
-                case Grobal2.RM_BIGHIT:
+                case Messages.RM_BIGHIT:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BIGHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_BIGHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_SPELL:
+                case Messages.RM_SPELL:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPELL, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SPELL, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg, processMsg.nParam3.ToString());
                     }
                     break;
-                case Grobal2.RM_SPELL2:
+                case Messages.RM_SPELL2:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_POWERHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_POWERHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_MOVEFAIL:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEFAIL, ActorId, CurrX, CurrY, Direction);
+                case Messages.RM_MOVEFAIL:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MOVEFAIL, ActorId, CurrX, CurrY, Direction);
                     charDesc = new CharDesc();
                     charDesc.Feature = baseObject.GetFeatureToLong();
                     charDesc.Status = baseObject.CharStatus;
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(charDesc));
                     break;
-                case Grobal2.RM_LONGHIT:
+                case Messages.RM_LONGHIT:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LONGHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LONGHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_WIDEHIT:
+                case Messages.RM_WIDEHIT:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WIDEHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_WIDEHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_FIREHIT:
+                case Messages.RM_FIREHIT:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FIREHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_FIREHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_CRSHIT:
+                case Messages.RM_CRSHIT:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CRSHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_CRSHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_41:
+                case Messages.RM_41:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_41, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_41, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_TWINHIT:
+                case Messages.RM_TWINHIT:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_TWINHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_TWINHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_43:
+                case Messages.RM_43:
                     if (processMsg.BaseObject != this.ActorId)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_43, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_43, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_TURN:
-                case Grobal2.RM_PUSH:
-                case Grobal2.RM_RUSH:
-                case Grobal2.RM_RUSHKUNG:
-                    if (processMsg.BaseObject != this.ActorId || processMsg.wIdent == Grobal2.RM_PUSH || processMsg.wIdent == Grobal2.RM_RUSH || processMsg.wIdent == Grobal2.RM_RUSHKUNG)
+                case Messages.RM_TURN:
+                case Messages.RM_PUSH:
+                case Messages.RM_RUSH:
+                case Messages.RM_RUSHKUNG:
+                    if (processMsg.BaseObject != this.ActorId || processMsg.wIdent == Messages.RM_PUSH || processMsg.wIdent == Messages.RM_RUSH || processMsg.wIdent == Messages.RM_RUSHKUNG)
                     {
                         switch (processMsg.wIdent)
                         {
-                            case Grobal2.RM_PUSH:
-                                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BACKSTEP, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                            case Messages.RM_PUSH:
+                                ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_BACKSTEP, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                                 break;
-                            case Grobal2.RM_RUSH:
-                                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                            case Messages.RM_RUSH:
+                                ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_RUSH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                                 break;
-                            case Grobal2.RM_RUSHKUNG:
-                                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_RUSHKUNG, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                            case Messages.RM_RUSHKUNG:
+                                ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_RUSHKUNG, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                                 break;
                             default:
-                                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_TURN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                                ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_TURN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                                 break;
                         }
                         charDesc = new CharDesc();
@@ -1578,15 +1578,15 @@ namespace GameSvr.Player
                             sendMsg = sendMsg + EDCode.EncodeString($"{processMsg.Msg}/{nObjCount}");
                         }
                         SendSocket(ClientMsg, sendMsg);
-                        if (processMsg.wIdent == Grobal2.RM_TURN)
+                        if (processMsg.wIdent == Messages.RM_TURN)
                         {
                             nObjCount = baseObject.GetFeatureToLong();
-                            SendDefMessage(Grobal2.SM_FEATURECHANGED, processMsg.BaseObject, HUtil32.LoWord(nObjCount), HUtil32.HiWord(nObjCount), baseObject.GetFeatureEx(), "");
+                            SendDefMessage(Messages.SM_FEATURECHANGED, processMsg.BaseObject, HUtil32.LoWord(nObjCount), HUtil32.HiWord(nObjCount), baseObject.GetFeatureEx(), "");
                         }
                     }
                     break;
-                case Grobal2.RM_STRUCK:
-                case Grobal2.RM_STRUCK_MAG:
+                case Messages.RM_STRUCK:
+                case Messages.RM_STRUCK_MAG:
                     if (processMsg.wParam > 0)
                     {
                         if (processMsg.BaseObject == ActorId)
@@ -1617,16 +1617,16 @@ namespace GameSvr.Player
                         {
                             if (processMsg.BaseObject == ActorId && M2Share.Config.DisableSelfStruck || baseObject.Race == ActorRace.Play && M2Share.Config.DisableStruck)
                             {
-                                baseObject.SendRefMsg(Grobal2.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
+                                baseObject.SendRefMsg(Messages.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
                             }
                             else
                             {
-                                ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_STRUCK, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, processMsg.wParam);
+                                ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_STRUCK, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, processMsg.wParam);
                                 messageBodyWl = new MessageBodyWL();
                                 messageBodyWl.Param1 = baseObject.GetFeature(this);
                                 messageBodyWl.Param2 = baseObject.CharStatus;
                                 messageBodyWl.Tag1 = processMsg.nParam3;
-                                if (processMsg.wIdent == Grobal2.RM_STRUCK_MAG)
+                                if (processMsg.wIdent == Messages.RM_STRUCK_MAG)
                                 {
                                     messageBodyWl.Tag2 = 1;
                                 }
@@ -1639,10 +1639,10 @@ namespace GameSvr.Player
                         }
                     }
                     break;
-                case Grobal2.RM_DEATH:
+                case Messages.RM_DEATH:
                     if (processMsg.nParam3 == 1)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NOWDEATH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_NOWDEATH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         if (processMsg.BaseObject == ActorId)
                         {
                             if (M2Share.FunctionNPC != null)
@@ -1653,248 +1653,248 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DEATH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DEATH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                     }
                     charDesc = new CharDesc();
                     charDesc.Feature = baseObject.GetFeature(this);
                     charDesc.Status = baseObject.CharStatus;
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(charDesc));
                     break;
-                case Grobal2.RM_DISAPPEAR:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DISAPPEAR, processMsg.BaseObject, 0, 0, 0);
+                case Messages.RM_DISAPPEAR:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DISAPPEAR, processMsg.BaseObject, 0, 0, 0);
                     SendSocket(ClientMsg);
                     break;
-                case Grobal2.RM_SKELETON:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SKELETON, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                case Messages.RM_SKELETON:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SKELETON, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                     charDesc = new CharDesc();
                     charDesc.Feature = baseObject.GetFeature(this);
                     charDesc.Status = baseObject.CharStatus;
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(charDesc));
                     break;
-                case Grobal2.RM_USERNAME:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_USERNAME, processMsg.BaseObject, GetChrColor(baseObject), 0, 0);
+                case Messages.RM_USERNAME:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_USERNAME, processMsg.BaseObject, GetChrColor(baseObject), 0, 0);
                     SendSocket(ClientMsg, EDCode.EncodeString(processMsg.Msg));
                     break;
-                case Grobal2.RM_WINEXP:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WINEXP, Abil.Exp, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), 0);
+                case Messages.RM_WINEXP:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_WINEXP, Abil.Exp, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), 0);
                     SendSocket(ClientMsg);
                     break;
-                case Grobal2.RM_LEVELUP:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LEVELUP, Abil.Exp, Abil.Level, 0, 0);
+                case Messages.RM_LEVELUP:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LEVELUP, Abil.Exp, Abil.Level, 0, 0);
                     SendSocket(ClientMsg);
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(WAbil));
-                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
+                    SendDefMessage(Messages.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
-                case Grobal2.RM_CHANGENAMECOLOR:
-                    SendDefMessage(Grobal2.SM_CHANGENAMECOLOR, processMsg.BaseObject, GetChrColor(baseObject), 0, 0, "");
+                case Messages.RM_CHANGENAMECOLOR:
+                    SendDefMessage(Messages.SM_CHANGENAMECOLOR, processMsg.BaseObject, GetChrColor(baseObject), 0, 0, "");
                     break;
-                case Grobal2.RM_LOGON:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_NEWMAP, ActorId, CurrX, CurrY, DayBright());
+                case Messages.RM_LOGON:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_NEWMAP, ActorId, CurrX, CurrY, DayBright());
                     SendSocket(ClientMsg, EDCode.EncodeString(MapFileName));
-                    SendMsg(this, Grobal2.RM_CHANGELIGHT, 0, 0, 0, 0, "");
+                    SendMsg(this, Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                     SendLogon();
                     SendServerConfig();
                     ClientQueryUserName(ActorId, CurrX, CurrY);
                     RefUserState();
                     SendMapDescription();
                     SendGoldInfo(true);
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_VERSION_FAIL, M2Share.Config.nClientFile1_CRC, HUtil32.LoWord(M2Share.Config.nClientFile2_CRC), HUtil32.HiWord(M2Share.Config.nClientFile2_CRC), 0);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_VERSION_FAIL, M2Share.Config.nClientFile1_CRC, HUtil32.LoWord(M2Share.Config.nClientFile2_CRC), HUtil32.HiWord(M2Share.Config.nClientFile2_CRC), 0);
                     SendSocket(ClientMsg, "<<<<<<");
                     break;
-                case Grobal2.RM_HEAR:
-                case Grobal2.RM_WHISPER:
-                case Grobal2.RM_CRY:
-                case Grobal2.RM_SYSMESSAGE:
-                case Grobal2.RM_GROUPMESSAGE:
-                case Grobal2.RM_SYSMESSAGE2:
-                case Grobal2.RM_GUILDMESSAGE:
-                case Grobal2.RM_SYSMESSAGE3:
-                case Grobal2.RM_MOVEMESSAGE:
-                case Grobal2.RM_MERCHANTSAY:
+                case Messages.RM_HEAR:
+                case Messages.RM_WHISPER:
+                case Messages.RM_CRY:
+                case Messages.RM_SYSMESSAGE:
+                case Messages.RM_GROUPMESSAGE:
+                case Messages.RM_SYSMESSAGE2:
+                case Messages.RM_GUILDMESSAGE:
+                case Messages.RM_SYSMESSAGE3:
+                case Messages.RM_MOVEMESSAGE:
+                case Messages.RM_MERCHANTSAY:
                     switch (processMsg.wIdent)
                     {
-                        case Grobal2.RM_HEAR:
-                            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
+                        case Messages.RM_HEAR:
+                            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HEAR, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
                             break;
-                        case Grobal2.RM_WHISPER:
-                            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_WHISPER, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
+                        case Messages.RM_WHISPER:
+                            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_WHISPER, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
                             break;
-                        case Grobal2.RM_CRY:
-                            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEAR, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
+                        case Messages.RM_CRY:
+                            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HEAR, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
                             break;
-                        case Grobal2.RM_SYSMESSAGE:
-                            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
+                        case Messages.RM_SYSMESSAGE:
+                            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SYSMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
                             break;
-                        case Grobal2.RM_GROUPMESSAGE:
-                            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
+                        case Messages.RM_GROUPMESSAGE:
+                            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SYSMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
                             break;
-                        case Grobal2.RM_GUILDMESSAGE:
-                            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_GUILDMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
+                        case Messages.RM_GUILDMESSAGE:
+                            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_GUILDMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
                             break;
-                        case Grobal2.RM_MERCHANTSAY:
-                            ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MERCHANTSAY, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
+                        case Messages.RM_MERCHANTSAY:
+                            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MERCHANTSAY, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
                             break;
-                        case Grobal2.RM_MOVEMESSAGE:
-                            this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MOVEMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), processMsg.nParam3, processMsg.wParam);
+                        case Messages.RM_MOVEMESSAGE:
+                            this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MOVEMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), processMsg.nParam3, processMsg.wParam);
                             break;
                     }
                     SendSocket(ClientMsg, EDCode.EncodeString(processMsg.Msg));
                     break;
-                case Grobal2.RM_ABILITY:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
+                case Messages.RM_ABILITY:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(WAbil));
                     break;
-                case Grobal2.RM_HEALTHSPELLCHANGED:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_HEALTHSPELLCHANGED, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MP, baseObject.WAbil.MaxHP);
+                case Messages.RM_HEALTHSPELLCHANGED:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HEALTHSPELLCHANGED, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MP, baseObject.WAbil.MaxHP);
                     SendSocket(ClientMsg);
                     break;
-                case Grobal2.RM_DAYCHANGING:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DAYCHANGING, 0, MBtBright, DayBright(), 0);
+                case Messages.RM_DAYCHANGING:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DAYCHANGING, 0, MBtBright, DayBright(), 0);
                     SendSocket(ClientMsg);
                     break;
-                case Grobal2.RM_ITEMSHOW:
-                    SendDefMessage(Grobal2.SM_ITEMSHOW, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam, processMsg.Msg);
+                case Messages.RM_ITEMSHOW:
+                    SendDefMessage(Messages.SM_ITEMSHOW, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam, processMsg.Msg);
                     break;
-                case Grobal2.RM_ITEMHIDE:
-                    SendDefMessage(Grobal2.SM_ITEMHIDE, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, "");
+                case Messages.RM_ITEMHIDE:
+                    SendDefMessage(Messages.SM_ITEMHIDE, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, "");
                     break;
-                case Grobal2.RM_DOOROPEN:
-                    SendDefMessage(Grobal2.SM_OPENDOOR_OK, 0, processMsg.nParam1, processMsg.nParam2, 0, "");
+                case Messages.RM_DOOROPEN:
+                    SendDefMessage(Messages.SM_OPENDOOR_OK, 0, processMsg.nParam1, processMsg.nParam2, 0, "");
                     break;
-                case Grobal2.RM_DOORCLOSE:
-                    SendDefMessage(Grobal2.SM_CLOSEDOOR, 0, processMsg.nParam1, processMsg.nParam2, 0, "");
+                case Messages.RM_DOORCLOSE:
+                    SendDefMessage(Messages.SM_CLOSEDOOR, 0, processMsg.nParam1, processMsg.nParam2, 0, "");
                     break;
-                case Grobal2.RM_SENDUSEITEMS:
+                case Messages.RM_SENDUSEITEMS:
                     SendUseItems();
                     break;
-                case Grobal2.RM_WEIGHTCHANGED:
-                    SendDefMessage(Grobal2.SM_WEIGHTCHANGED, WAbil.Weight, WAbil.WearWeight, WAbil.HandWeight, (((WAbil.Weight + WAbil.WearWeight + WAbil.HandWeight) ^ 0x3A5F) ^ 0x1F35) ^ 0xaa21, "");
+                case Messages.RM_WEIGHTCHANGED:
+                    SendDefMessage(Messages.SM_WEIGHTCHANGED, WAbil.Weight, WAbil.WearWeight, WAbil.HandWeight, (((WAbil.Weight + WAbil.WearWeight + WAbil.HandWeight) ^ 0x3A5F) ^ 0x1F35) ^ 0xaa21, "");
                     break;
-                case Grobal2.RM_FEATURECHANGED:
-                    SendDefMessage(Grobal2.SM_FEATURECHANGED, processMsg.BaseObject, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam, "");
+                case Messages.RM_FEATURECHANGED:
+                    SendDefMessage(Messages.SM_FEATURECHANGED, processMsg.BaseObject, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam, "");
                     break;
-                case Grobal2.RM_CLEAROBJECTS:
-                    SendDefMessage(Grobal2.SM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                case Messages.RM_CLEAROBJECTS:
+                    SendDefMessage(Messages.SM_CLEAROBJECTS, 0, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_CHANGEMAP:
-                    SendDefMessage(Grobal2.SM_CHANGEMAP, ActorId, CurrX, CurrY, DayBright(), processMsg.Msg);
+                case Messages.RM_CHANGEMAP:
+                    SendDefMessage(Messages.SM_CHANGEMAP, ActorId, CurrX, CurrY, DayBright(), processMsg.Msg);
                     RefUserState();
                     SendMapDescription();
                     SendServerConfig();
                     break;
-                case Grobal2.RM_BUTCH:
+                case Messages.RM_BUTCH:
                     if (processMsg.BaseObject != 0)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_BUTCH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_BUTCH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
-                case Grobal2.RM_MAGICFIRE:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_MAGICFIRE, processMsg.BaseObject, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), processMsg.nParam1);
+                case Messages.RM_MAGICFIRE:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MAGICFIRE, processMsg.BaseObject, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), processMsg.nParam1);
                     byte[] by = BitConverter.GetBytes(processMsg.nParam3);
                     string sSendStr = EDCode.EncodeBuffer(by, by.Length);
                     SendSocket(ClientMsg, sSendStr);
                     break;
-                case Grobal2.RM_MAGICFIREFAIL:
-                    SendDefMessage(Grobal2.SM_MAGICFIRE_FAIL, processMsg.BaseObject, 0, 0, 0, "");
+                case Messages.RM_MAGICFIREFAIL:
+                    SendDefMessage(Messages.SM_MAGICFIRE_FAIL, processMsg.BaseObject, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_SENDMYMAGIC:
+                case Messages.RM_SENDMYMAGIC:
                     SendUseMagic();
                     break;
-                case Grobal2.RM_MAGIC_LVEXP:
-                    SendDefMessage(Grobal2.SM_MAGIC_LVEXP, processMsg.nParam1, processMsg.nParam2, HUtil32.LoWord(processMsg.nParam3), HUtil32.HiWord(processMsg.nParam3), "");
+                case Messages.RM_MAGIC_LVEXP:
+                    SendDefMessage(Messages.SM_MAGIC_LVEXP, processMsg.nParam1, processMsg.nParam2, HUtil32.LoWord(processMsg.nParam3), HUtil32.HiWord(processMsg.nParam3), "");
                     break;
-                case Grobal2.RM_DURACHANGE:
-                    SendDefMessage(Grobal2.SM_DURACHANGE, processMsg.nParam1, processMsg.wParam, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), "");
+                case Messages.RM_DURACHANGE:
+                    SendDefMessage(Messages.SM_DURACHANGE, processMsg.nParam1, processMsg.wParam, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), "");
                     break;
-                case Grobal2.RM_MERCHANTDLGCLOSE:
-                    SendDefMessage(Grobal2.SM_MERCHANTDLGCLOSE, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_MERCHANTDLGCLOSE:
+                    SendDefMessage(Messages.SM_MERCHANTDLGCLOSE, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_SENDGOODSLIST:
-                    SendDefMessage(Grobal2.SM_SENDGOODSLIST, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
+                case Messages.RM_SENDGOODSLIST:
+                    SendDefMessage(Messages.SM_SENDGOODSLIST, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
                     break;
-                case Grobal2.RM_SENDUSERSELL:
-                    SendDefMessage(Grobal2.SM_SENDUSERSELL, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
+                case Messages.RM_SENDUSERSELL:
+                    SendDefMessage(Messages.SM_SENDUSERSELL, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
                     break;
-                case Grobal2.RM_SENDBUYPRICE:
-                    SendDefMessage(Grobal2.SM_SENDBUYPRICE, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_SENDBUYPRICE:
+                    SendDefMessage(Messages.SM_SENDBUYPRICE, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_USERSELLITEM_OK:
-                    SendDefMessage(Grobal2.SM_USERSELLITEM_OK, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_USERSELLITEM_OK:
+                    SendDefMessage(Messages.SM_USERSELLITEM_OK, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_USERSELLITEM_FAIL:
-                    SendDefMessage(Grobal2.SM_USERSELLITEM_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_USERSELLITEM_FAIL:
+                    SendDefMessage(Messages.SM_USERSELLITEM_FAIL, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_BUYITEM_SUCCESS:
-                    SendDefMessage(Grobal2.SM_BUYITEM_SUCCESS, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0, "");
+                case Messages.RM_BUYITEM_SUCCESS:
+                    SendDefMessage(Messages.SM_BUYITEM_SUCCESS, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0, "");
                     break;
-                case Grobal2.RM_BUYITEM_FAIL:
-                    SendDefMessage(Grobal2.SM_BUYITEM_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_BUYITEM_FAIL:
+                    SendDefMessage(Messages.SM_BUYITEM_FAIL, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_SENDDETAILGOODSLIST:
-                    SendDefMessage(Grobal2.SM_SENDDETAILGOODSLIST, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, processMsg.Msg);
+                case Messages.RM_SENDDETAILGOODSLIST:
+                    SendDefMessage(Messages.SM_SENDDETAILGOODSLIST, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, processMsg.Msg);
                     break;
-                case Grobal2.RM_GOLDCHANGED:
-                    SendDefMessage(Grobal2.SM_GOLDCHANGED, Gold, HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold), 0, "");
+                case Messages.RM_GOLDCHANGED:
+                    SendDefMessage(Messages.SM_GOLDCHANGED, Gold, HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold), 0, "");
                     break;
-                case Grobal2.RM_GAMEGOLDCHANGED:
+                case Messages.RM_GAMEGOLDCHANGED:
                     SendGoldInfo(false);
                     break;
-                case Grobal2.RM_CHANGELIGHT:
-                    SendDefMessage(Grobal2.SM_CHANGELIGHT, processMsg.BaseObject, baseObject.Light, (short)M2Share.Config.nClientKey, 0, "");
+                case Messages.RM_CHANGELIGHT:
+                    SendDefMessage(Messages.SM_CHANGELIGHT, processMsg.BaseObject, baseObject.Light, (short)M2Share.Config.nClientKey, 0, "");
                     break;
-                case Grobal2.RM_LAMPCHANGEDURA:
-                    SendDefMessage(Grobal2.SM_LAMPCHANGEDURA, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_LAMPCHANGEDURA:
+                    SendDefMessage(Messages.SM_LAMPCHANGEDURA, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_CHARSTATUSCHANGED:
-                    SendDefMessage(Grobal2.SM_CHARSTATUSCHANGED, processMsg.BaseObject, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam, "");
+                case Messages.RM_CHARSTATUSCHANGED:
+                    SendDefMessage(Messages.SM_CHARSTATUSCHANGED, processMsg.BaseObject, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam, "");
                     break;
-                case Grobal2.RM_GROUPCANCEL:
-                    SendDefMessage(Grobal2.SM_GROUPCANCEL, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_GROUPCANCEL:
+                    SendDefMessage(Messages.SM_GROUPCANCEL, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_SENDUSERREPAIR:
-                case Grobal2.RM_SENDUSERSREPAIR:
-                    SendDefMessage(Grobal2.SM_SENDUSERREPAIR, processMsg.nParam1, processMsg.nParam2, 0, 0, "");
+                case Messages.RM_SENDUSERREPAIR:
+                case Messages.RM_SENDUSERSREPAIR:
+                    SendDefMessage(Messages.SM_SENDUSERREPAIR, processMsg.nParam1, processMsg.nParam2, 0, 0, "");
                     break;
-                case Grobal2.RM_USERREPAIRITEM_OK:
-                    SendDefMessage(Grobal2.SM_USERREPAIRITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, "");
+                case Messages.RM_USERREPAIRITEM_OK:
+                    SendDefMessage(Messages.SM_USERREPAIRITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, "");
                     break;
-                case Grobal2.RM_SENDREPAIRCOST:
-                    SendDefMessage(Grobal2.SM_SENDREPAIRCOST, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_SENDREPAIRCOST:
+                    SendDefMessage(Messages.SM_SENDREPAIRCOST, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_USERREPAIRITEM_FAIL:
-                    SendDefMessage(Grobal2.SM_USERREPAIRITEM_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_USERREPAIRITEM_FAIL:
+                    SendDefMessage(Messages.SM_USERREPAIRITEM_FAIL, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_USERSTORAGEITEM:
-                    SendDefMessage(Grobal2.SM_SENDUSERSTORAGEITEM, processMsg.nParam1, processMsg.nParam2, 0, 0, "");
+                case Messages.RM_USERSTORAGEITEM:
+                    SendDefMessage(Messages.SM_SENDUSERSTORAGEITEM, processMsg.nParam1, processMsg.nParam2, 0, 0, "");
                     break;
-                case Grobal2.RM_USERGETBACKITEM:
+                case Messages.RM_USERGETBACKITEM:
                     SendSaveItemList(processMsg.nParam1);
                     break;
-                case Grobal2.RM_SENDDELITEMLIST:
+                case Messages.RM_SENDDELITEMLIST:
                     IList<DeleteItem> delItemList = (IList<DeleteItem>)M2Share.ActorMgr.GetOhter(processMsg.nParam1);
                     SendDelItemList(delItemList);
                     M2Share.ActorMgr.RevomeOhter(processMsg.nParam1);
                     break;
-                case Grobal2.RM_USERMAKEDRUGITEMLIST:
-                    SendDefMessage(Grobal2.SM_SENDUSERMAKEDRUGITEMLIST, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
+                case Messages.RM_USERMAKEDRUGITEMLIST:
+                    SendDefMessage(Messages.SM_SENDUSERMAKEDRUGITEMLIST, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
                     break;
-                case Grobal2.RM_MAKEDRUG_SUCCESS:
-                    SendDefMessage(Grobal2.SM_MAKEDRUG_SUCCESS, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_MAKEDRUG_SUCCESS:
+                    SendDefMessage(Messages.SM_MAKEDRUG_SUCCESS, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_MAKEDRUG_FAIL:
-                    SendDefMessage(Grobal2.SM_MAKEDRUG_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_MAKEDRUG_FAIL:
+                    SendDefMessage(Messages.SM_MAKEDRUG_FAIL, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_ALIVE:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_ALIVE, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                case Messages.RM_ALIVE:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ALIVE, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                     charDesc = new CharDesc();
                     charDesc.Feature = baseObject.GetFeature(this);
                     charDesc.Status = baseObject.CharStatus;
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(charDesc));
                     break;
-                case Grobal2.RM_DIGUP:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGUP, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                case Messages.RM_DIGUP:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DIGUP, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                     messageBodyWl = new MessageBodyWL();
                     messageBodyWl.Param1 = baseObject.GetFeature(this);
                     messageBodyWl.Param2 = baseObject.CharStatus;
@@ -1903,11 +1903,11 @@ namespace GameSvr.Player
                     sendMsg = EDCode.EncodeBuffer(messageBodyWl);
                     SendSocket(ClientMsg, sendMsg);
                     break;
-                case Grobal2.RM_DIGDOWN:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_DIGDOWN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, 0);
+                case Messages.RM_DIGDOWN:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DIGDOWN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, 0);
                     SendSocket(ClientMsg);
                     break;
-                case Grobal2.RM_FLYAXE:
+                case Messages.RM_FLYAXE:
                     if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
                     {
                         MessageBodyW messageBodyW = new MessageBodyW();
@@ -1915,11 +1915,11 @@ namespace GameSvr.Player
                         messageBodyW.Param2 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
                         messageBodyW.Tag1 = HUtil32.LoWord(processMsg.nParam3);
                         messageBodyW.Tag2 = HUtil32.HiWord(processMsg.nParam3);
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_FLYAXE, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_FLYAXE, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg, EDCode.EncodeBuffer(messageBodyW));
                     }
                     break;
-                case Grobal2.RM_LIGHTING:
+                case Messages.RM_LIGHTING:
                     if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
                     {
                         messageBodyWl = new MessageBodyWL();
@@ -1927,58 +1927,58 @@ namespace GameSvr.Player
                         messageBodyWl.Param2 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
                         messageBodyWl.Tag1 = processMsg.nParam3;
                         messageBodyWl.Tag2 = processMsg.wParam;
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_LIGHTING, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, baseObject.Direction);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LIGHTING, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, baseObject.Direction);
                         SendSocket(ClientMsg, EDCode.EncodeBuffer(messageBodyWl));
                     }
                     break;
-                case Grobal2.RM_10205:
-                    SendDefMessage(Grobal2.SM_716, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "");
+                case Messages.RM_10205:
+                    SendDefMessage(Messages.SM_716, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "");
                     break;
-                case Grobal2.RM_CHANGEGUILDNAME:
+                case Messages.RM_CHANGEGUILDNAME:
                     SendChangeGuildName();
                     break;
-                case Grobal2.RM_SUBABILITY:
-                    SendDefMessage(Grobal2.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
+                case Messages.RM_SUBABILITY:
+                    SendDefMessage(Messages.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
-                case Grobal2.RM_BUILDGUILD_OK:
-                    SendDefMessage(Grobal2.SM_BUILDGUILD_OK, 0, 0, 0, 0, "");
+                case Messages.RM_BUILDGUILD_OK:
+                    SendDefMessage(Messages.SM_BUILDGUILD_OK, 0, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_BUILDGUILD_FAIL:
-                    SendDefMessage(Grobal2.SM_BUILDGUILD_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_BUILDGUILD_FAIL:
+                    SendDefMessage(Messages.SM_BUILDGUILD_FAIL, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_DONATE_OK:
-                    SendDefMessage(Grobal2.SM_DONATE_OK, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_DONATE_OK:
+                    SendDefMessage(Messages.SM_DONATE_OK, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_DONATE_FAIL:
-                    SendDefMessage(Grobal2.SM_DONATE_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                case Messages.RM_DONATE_FAIL:
+                    SendDefMessage(Messages.SM_DONATE_FAIL, processMsg.nParam1, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_MYSTATUS:
-                    SendDefMessage(Grobal2.SM_MYSTATUS, 0, (short)GetMyStatus(), 0, 0, "");
+                case Messages.RM_MYSTATUS:
+                    SendDefMessage(Messages.SM_MYSTATUS, 0, (short)GetMyStatus(), 0, 0, "");
                     break;
-                case Grobal2.RM_MENU_OK:
-                    SendDefMessage(Grobal2.SM_MENU_OK, processMsg.nParam1, 0, 0, 0, processMsg.Msg);
+                case Messages.RM_MENU_OK:
+                    SendDefMessage(Messages.SM_MENU_OK, processMsg.nParam1, 0, 0, 0, processMsg.Msg);
                     break;
-                case Grobal2.RM_SPACEMOVE_FIRE:
-                case Grobal2.RM_SPACEMOVE_FIRE2:
-                    if (processMsg.wIdent == Grobal2.RM_SPACEMOVE_FIRE)
+                case Messages.RM_SPACEMOVE_FIRE:
+                case Messages.RM_SPACEMOVE_FIRE2:
+                    if (processMsg.wIdent == Messages.RM_SPACEMOVE_FIRE)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_HIDE, processMsg.BaseObject, 0, 0, 0);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SPACEMOVE_HIDE, processMsg.BaseObject, 0, 0, 0);
                     }
                     else
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_HIDE2, processMsg.BaseObject, 0, 0, 0);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SPACEMOVE_HIDE2, processMsg.BaseObject, 0, 0, 0);
                     }
                     SendSocket(ClientMsg);
                     break;
-                case Grobal2.RM_SPACEMOVE_SHOW:
-                case Grobal2.RM_SPACEMOVE_SHOW2:
-                    if (processMsg.wIdent == Grobal2.RM_SPACEMOVE_SHOW)
+                case Messages.RM_SPACEMOVE_SHOW:
+                case Messages.RM_SPACEMOVE_SHOW2:
+                    if (processMsg.wIdent == Messages.RM_SPACEMOVE_SHOW)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SPACEMOVE_SHOW, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                     }
                     else
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SPACEMOVE_SHOW2, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SPACEMOVE_SHOW2, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                     }
                     charDesc = new CharDesc();
                     charDesc.Feature = baseObject.GetFeature(this);
@@ -1991,127 +1991,127 @@ namespace GameSvr.Player
                     }
                     SendSocket(ClientMsg, sendMsg);
                     break;
-                case Grobal2.RM_RECONNECTION:
+                case Messages.RM_RECONNECTION:
                     BoReconnection = true;
-                    SendDefMessage(Grobal2.SM_RECONNECT, 0, 0, 0, 0, processMsg.Msg);
+                    SendDefMessage(Messages.SM_RECONNECT, 0, 0, 0, 0, processMsg.Msg);
                     break;
-                case Grobal2.RM_HIDEEVENT:
-                    SendDefMessage(Grobal2.SM_HIDEEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3, "");
+                case Messages.RM_HIDEEVENT:
+                    SendDefMessage(Messages.SM_HIDEEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3, "");
                     break;
-                case Grobal2.RM_SHOWEVENT:
+                case Messages.RM_SHOWEVENT:
                     ShortMessage shortMessage = new ShortMessage();
                     shortMessage.Ident = HUtil32.HiWord(processMsg.nParam2);
                     shortMessage.wMsg = 0;
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SHOWEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SHOWEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3);
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(shortMessage));
                     break;
-                case Grobal2.RM_ADJUST_BONUS:
+                case Messages.RM_ADJUST_BONUS:
                     SendAdjustBonus();
                     break;
-                case Grobal2.RM_10401:
+                case Messages.RM_10401:
                     ChangeServerMakeSlave((SlaveInfo)M2Share.ActorMgr.GetOhter(processMsg.nParam1));
                     M2Share.ActorMgr.RevomeOhter(processMsg.nParam1);
                     break;
-                case Grobal2.RM_OPENHEALTH:
-                    SendDefMessage(Grobal2.SM_OPENHEALTH, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0, "");
+                case Messages.RM_OPENHEALTH:
+                    SendDefMessage(Messages.SM_OPENHEALTH, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0, "");
                     break;
-                case Grobal2.RM_CLOSEHEALTH:
-                    SendDefMessage(Grobal2.SM_CLOSEHEALTH, processMsg.BaseObject, 0, 0, 0, "");
+                case Messages.RM_CLOSEHEALTH:
+                    SendDefMessage(Messages.SM_CLOSEHEALTH, processMsg.BaseObject, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_BREAKWEAPON:
-                    SendDefMessage(Grobal2.SM_BREAKWEAPON, processMsg.BaseObject, 0, 0, 0, "");
+                case Messages.RM_BREAKWEAPON:
+                    SendDefMessage(Messages.SM_BREAKWEAPON, processMsg.BaseObject, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_10414:
-                    SendDefMessage(Grobal2.SM_INSTANCEHEALGUAGE, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0, "");
+                case Messages.RM_10414:
+                    SendDefMessage(Messages.SM_INSTANCEHEALGUAGE, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0, "");
                     break;
-                case Grobal2.RM_CHANGEFACE:
+                case Messages.RM_CHANGEFACE:
                     if (processMsg.nParam1 != 0 && processMsg.nParam2 != 0)
                     {
-                        ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_CHANGEFACE, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_CHANGEFACE, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0);
                         charDesc = new CharDesc();
                         charDesc.Feature = M2Share.ActorMgr.Get(processMsg.nParam2).GetFeature(this);
                         charDesc.Status = M2Share.ActorMgr.Get(processMsg.nParam2).CharStatus;
                         SendSocket(ClientMsg, EDCode.EncodeBuffer(charDesc));
                     }
                     break;
-                case Grobal2.RM_PASSWORD:
-                    SendDefMessage(Grobal2.SM_PASSWORD, 0, 0, 0, 0, "");
+                case Messages.RM_PASSWORD:
+                    SendDefMessage(Messages.SM_PASSWORD, 0, 0, 0, 0, "");
                     break;
-                case Grobal2.RM_PLAYDICE:
+                case Messages.RM_PLAYDICE:
                     messageBodyWl = new MessageBodyWL();
                     messageBodyWl.Param1 = processMsg.nParam1;
                     messageBodyWl.Param2 = processMsg.nParam2;
                     messageBodyWl.Tag1 = processMsg.nParam3;
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PLAYDICE, processMsg.BaseObject, processMsg.wParam, 0, 0);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_PLAYDICE, processMsg.BaseObject, processMsg.wParam, 0, 0);
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(messageBodyWl) + EDCode.EncodeString(processMsg.Msg));
                     break;
-                case Grobal2.RM_PASSWORDSTATUS:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_PASSWORDSTATUS, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
+                case Messages.RM_PASSWORDSTATUS:
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_PASSWORDSTATUS, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
                     SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 // ---------------------------元宝寄售系统---------------------------------------
-                case Grobal2.RM_SENDDEALOFFFORM:// 打开出售物品窗口
-                    SendDefMessage(Grobal2.SM_SENDDEALOFFFORM, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
+                case Messages.RM_SENDDEALOFFFORM:// 打开出售物品窗口
+                    SendDefMessage(Messages.SM_SENDDEALOFFFORM, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
                     break;
-                case Grobal2.RM_QUERYYBSELL:// 查询正在出售的物品
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYYBSELL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_QUERYYBSELL:// 查询正在出售的物品
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_QUERYYBSELL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
-                case Grobal2.RM_QUERYYBDEAL:// 查询可以的购买物品
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_QUERYYBDEAL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_QUERYYBDEAL:// 查询可以的购买物品
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_QUERYYBDEAL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
-                case Grobal2.CM_SELLOFFADDITEM:// 客户端往出售物品窗口里加物品 
+                case Messages.CM_SELLOFFADDITEM:// 客户端往出售物品窗口里加物品 
                     ClientAddSellOffItem(processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_SELLOFFDELITEM:// 客户端删除出售物品窗里的物品 
+                case Messages.CM_SELLOFFDELITEM:// 客户端删除出售物品窗里的物品 
                     ClientDelSellOffItem(processMsg.nParam1, processMsg.Msg);
                     break;
-                case Grobal2.CM_SELLOFFCANCEL:// 客户端取消元宝寄售 
+                case Messages.CM_SELLOFFCANCEL:// 客户端取消元宝寄售 
                     ClientCancelSellOff();
                     break;
-                case Grobal2.CM_SELLOFFEND:// 客户端元宝寄售结束 
+                case Messages.CM_SELLOFFEND:// 客户端元宝寄售结束 
                     ClientSellOffEnd(processMsg.Msg, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
                     break;
-                case Grobal2.CM_CANCELSELLOFFITEMING:// 取消正在寄售的物品(出售人)
+                case Messages.CM_CANCELSELLOFFITEMING:// 取消正在寄售的物品(出售人)
                     ClientCancelSellOffIng();
                     break;
-                case Grobal2.CM_SELLOFFBUYCANCEL:// 取消寄售 物品购买(购买人)
+                case Messages.CM_SELLOFFBUYCANCEL:// 取消寄售 物品购买(购买人)
                     ClientBuyCancelSellOff(processMsg.Msg);// 出售人
                     break;
-                case Grobal2.CM_SELLOFFBUY:// 确定购买寄售物品
+                case Messages.CM_SELLOFFBUY:// 确定购买寄售物品
                     ClientBuySellOffItme(processMsg.Msg);// 出售人
                     break;
-                case Grobal2.RM_SELLOFFCANCEL:// 元宝寄售取消出售
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SellOffCANCEL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_SELLOFFCANCEL:// 元宝寄售取消出售
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SellOffCANCEL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
-                case Grobal2.RM_SELLOFFADDITEM_OK:// 客户端往出售物品窗口里加物品 成功
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFADDITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_SELLOFFADDITEM_OK:// 客户端往出售物品窗口里加物品 成功
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFADDITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
-                case Grobal2.RM_SellOffADDITEM_FAIL:// 客户端往出售物品窗口里加物品 失败
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SellOffADDITEM_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_SellOffADDITEM_FAIL:// 客户端往出售物品窗口里加物品 失败
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SellOffADDITEM_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
-                case Grobal2.RM_SELLOFFDELITEM_OK:// 客户端删除出售物品窗里的物品 成功
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFDELITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_SELLOFFDELITEM_OK:// 客户端删除出售物品窗里的物品 成功
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFDELITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
-                case Grobal2.RM_SELLOFFDELITEM_FAIL:// 客户端删除出售物品窗里的物品 失败
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFDELITEM_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_SELLOFFDELITEM_FAIL:// 客户端删除出售物品窗里的物品 失败
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFDELITEM_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
-                case Grobal2.RM_SELLOFFEND_OK:// 客户端元宝寄售结束 成功
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFEND_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_SELLOFFEND_OK:// 客户端元宝寄售结束 成功
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFEND_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
-                case Grobal2.RM_SELLOFFEND_FAIL:// 客户端元宝寄售结束 失败
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFEND_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_SELLOFFEND_FAIL:// 客户端元宝寄售结束 失败
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFEND_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
-                case Grobal2.RM_SELLOFFBUY_OK:// 购买成功
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SELLOFFBUY_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                case Messages.RM_SELLOFFBUY_OK:// 购买成功
+                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFBUY_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(this.ClientMsg, processMsg.Msg);
                     break;
                 default:
@@ -2210,7 +2210,7 @@ namespace GameSvr.Player
                 {
                     int objectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(objectId, dropItemList);
-                    this.SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                    this.SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
                 }
             }
             catch (Exception ex)

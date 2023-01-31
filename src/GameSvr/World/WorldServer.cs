@@ -587,7 +587,7 @@ namespace GameSvr.World
                                         PlayObjectList.Add(playObject);
                                     }
                                     NewHumanList.Add(playObject);
-                                    SendServerGroupMsg(Grobal2.ISM_USERLOGON, M2Share.ServerIndex, playObject.ChrName);
+                                    SendServerGroupMsg(Messages.ISM_USERLOGON, M2Share.ServerIndex, playObject.ChrName);
                                 }
                             }
                             else
@@ -755,7 +755,7 @@ namespace GameSvr.World
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
                             M2Share.GateMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
-                            SendServerGroupMsg(Grobal2.SS_202, M2Share.ServerIndex, playObject.ChrName);
+                            SendServerGroupMsg(Messages.SS_202, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }
                     }
@@ -862,7 +862,7 @@ namespace GameSvr.World
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
                             M2Share.GateMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
-                            SendServerGroupMsg(Grobal2.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);
+                            SendServerGroupMsg(Messages.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }
                     }
@@ -1124,7 +1124,7 @@ namespace GameSvr.World
             if (!string.IsNullOrEmpty(buff)) sMsg = buff;
             switch (defMsg.Ident)
             {
-                case Grobal2.CM_SPELL:
+                case Messages.CM_SPELL:
                     if (M2Share.Config.SpellSendUpdateMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendUpdateMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), HUtil32.MakeLong(defMsg.Param, defMsg.Series), "");
@@ -1134,60 +1134,60 @@ namespace GameSvr.World
                         playObject.SendMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), HUtil32.MakeLong(defMsg.Param, defMsg.Series), "");
                     }
                     break;
-                case Grobal2.CM_QUERYUSERNAME:
+                case Messages.CM_QUERYUSERNAME:
                     playObject.SendMsg(playObject, defMsg.Ident, 0, defMsg.Recog, defMsg.Param, defMsg.Tag, "");
                     break;
-                case Grobal2.CM_DROPITEM:
-                case Grobal2.CM_TAKEONITEM:
-                case Grobal2.CM_TAKEOFFITEM:
-                case Grobal2.CM_1005:
-                case Grobal2.CM_MERCHANTDLGSELECT:
-                case Grobal2.CM_MERCHANTQUERYSELLPRICE:
-                case Grobal2.CM_USERSELLITEM:
-                case Grobal2.CM_USERBUYITEM:
-                case Grobal2.CM_USERGETDETAILITEM:
-                case Grobal2.CM_CREATEGROUP:
-                case Grobal2.CM_ADDGROUPMEMBER:
-                case Grobal2.CM_DELGROUPMEMBER:
-                case Grobal2.CM_USERREPAIRITEM:
-                case Grobal2.CM_MERCHANTQUERYREPAIRCOST:
-                case Grobal2.CM_DEALTRY:
-                case Grobal2.CM_DEALADDITEM:
-                case Grobal2.CM_DEALDELITEM:
-                case Grobal2.CM_USERSTORAGEITEM:
-                case Grobal2.CM_USERTAKEBACKSTORAGEITEM:
-                case Grobal2.CM_USERMAKEDRUGITEM:
-                case Grobal2.CM_GUILDADDMEMBER:
-                case Grobal2.CM_GUILDDELMEMBER:
-                case Grobal2.CM_GUILDUPDATENOTICE:
-                case Grobal2.CM_GUILDUPDATERANKINFO:
+                case Messages.CM_DROPITEM:
+                case Messages.CM_TAKEONITEM:
+                case Messages.CM_TAKEOFFITEM:
+                case Messages.CM_1005:
+                case Messages.CM_MERCHANTDLGSELECT:
+                case Messages.CM_MERCHANTQUERYSELLPRICE:
+                case Messages.CM_USERSELLITEM:
+                case Messages.CM_USERBUYITEM:
+                case Messages.CM_USERGETDETAILITEM:
+                case Messages.CM_CREATEGROUP:
+                case Messages.CM_ADDGROUPMEMBER:
+                case Messages.CM_DELGROUPMEMBER:
+                case Messages.CM_USERREPAIRITEM:
+                case Messages.CM_MERCHANTQUERYREPAIRCOST:
+                case Messages.CM_DEALTRY:
+                case Messages.CM_DEALADDITEM:
+                case Messages.CM_DEALDELITEM:
+                case Messages.CM_USERSTORAGEITEM:
+                case Messages.CM_USERTAKEBACKSTORAGEITEM:
+                case Messages.CM_USERMAKEDRUGITEM:
+                case Messages.CM_GUILDADDMEMBER:
+                case Messages.CM_GUILDDELMEMBER:
+                case Messages.CM_GUILDUPDATENOTICE:
+                case Messages.CM_GUILDUPDATERANKINFO:
                     playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag,
                         sMsg);
                     break;
-                case Grobal2.CM_PASSWORD:
-                case Grobal2.CM_CHGPASSWORD:
-                case Grobal2.CM_SETPASSWORD:
+                case Messages.CM_PASSWORD:
+                case Messages.CM_CHGPASSWORD:
+                case Messages.CM_SETPASSWORD:
                     playObject.SendMsg(playObject, defMsg.Ident, defMsg.Param, defMsg.Recog, defMsg.Series, defMsg.Tag,
                         sMsg);
                     break;
-                case Grobal2.CM_ADJUST_BONUS:
+                case Messages.CM_ADJUST_BONUS:
                     playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag,
                         sMsg);
                     break;
-                case Grobal2.CM_HORSERUN:
-                case Grobal2.CM_TURN:
-                case Grobal2.CM_WALK:
-                case Grobal2.CM_SITDOWN:
-                case Grobal2.CM_RUN:
-                case Grobal2.CM_HIT:
-                case Grobal2.CM_HEAVYHIT:
-                case Grobal2.CM_BIGHIT:
-                case Grobal2.CM_POWERHIT:
-                case Grobal2.CM_LONGHIT:
-                case Grobal2.CM_CRSHIT:
-                case Grobal2.CM_TWINHIT:
-                case Grobal2.CM_WIDEHIT:
-                case Grobal2.CM_FIREHIT:
+                case Messages.CM_HORSERUN:
+                case Messages.CM_TURN:
+                case Messages.CM_WALK:
+                case Messages.CM_SITDOWN:
+                case Messages.CM_RUN:
+                case Messages.CM_HIT:
+                case Messages.CM_HEAVYHIT:
+                case Messages.CM_BIGHIT:
+                case Messages.CM_POWERHIT:
+                case Messages.CM_LONGHIT:
+                case Messages.CM_CRSHIT:
+                case Messages.CM_TWINHIT:
+                case Messages.CM_WIDEHIT:
+                case Messages.CM_FIREHIT:
                     if (M2Share.Config.ActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendActionMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog),
@@ -1199,8 +1199,8 @@ namespace GameSvr.World
                             HUtil32.HiWord(defMsg.Recog), 0, "");
                     }
                     break;
-                case Grobal2.CM_SAY:
-                    playObject.SendMsg(playObject, Grobal2.CM_SAY, 0, 0, 0, 0, sMsg);
+                case Messages.CM_SAY:
+                    playObject.SendMsg(playObject, Messages.CM_SAY, 0, 0, 0, 0, sMsg);
                     break;
                 default:
                     playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag,
@@ -1210,19 +1210,19 @@ namespace GameSvr.World
             if (!playObject.BoReadyRun) return;
             switch (defMsg.Ident)
             {
-                case Grobal2.CM_TURN:
-                case Grobal2.CM_WALK:
-                case Grobal2.CM_SITDOWN:
-                case Grobal2.CM_RUN:
-                case Grobal2.CM_HIT:
-                case Grobal2.CM_HEAVYHIT:
-                case Grobal2.CM_BIGHIT:
-                case Grobal2.CM_POWERHIT:
-                case Grobal2.CM_LONGHIT:
-                case Grobal2.CM_WIDEHIT:
-                case Grobal2.CM_FIREHIT:
-                case Grobal2.CM_CRSHIT:
-                case Grobal2.CM_TWINHIT:
+                case Messages.CM_TURN:
+                case Messages.CM_WALK:
+                case Messages.CM_SITDOWN:
+                case Messages.CM_RUN:
+                case Messages.CM_HIT:
+                case Messages.CM_HEAVYHIT:
+                case Messages.CM_BIGHIT:
+                case Messages.CM_POWERHIT:
+                case Messages.CM_LONGHIT:
+                case Messages.CM_WIDEHIT:
+                case Messages.CM_FIREHIT:
+                case Messages.CM_CRSHIT:
+                case Messages.CM_TWINHIT:
                     playObject.RunTick -= 100;
                     break;
             }
@@ -1447,7 +1447,7 @@ namespace GameSvr.World
             if (M2Share.GetMultiServerAddrPort(nServerIndex, ref sIPaddr, ref nPort))
             {
                 playObject.BoReconnection = true;
-                playObject.SendDefMessage(Grobal2.SM_RECONNECT, 0, 0, 0, 0, string.Format(sMsg, sIPaddr, nPort));
+                playObject.SendDefMessage(Messages.SM_RECONNECT, 0, 0, 0, 0, string.Format(sMsg, sIPaddr, nPort));
             }
         }
 
@@ -1687,11 +1687,11 @@ namespace GameSvr.World
             ServerUserItem[] BagItems = humanRcd.Data.BagItems;
             if (BagItems == null)
             {
-                BagItems = new ServerUserItem[Grobal2.MAXBAGITEM];
+                BagItems = new ServerUserItem[Grobal2.MaxBagItem];
             }
             for (int i = 0; i < playObject.ItemList.Count; i++)
             {
-                if (i < Grobal2.MAXBAGITEM)
+                if (i < Grobal2.MaxBagItem)
                 {
                     BagItems[i] = playObject.ItemList[i].ToServerItem();
                 }
@@ -1806,7 +1806,7 @@ namespace GameSvr.World
             {
                 door.Status.Opened = true;
                 door.Status.OpenTick = HUtil32.GetTickCount();
-                SendDoorStatus(envir, nX, nY, Grobal2.RM_DOOROPEN, 0, nX, nY);
+                SendDoorStatus(envir, nX, nY, Messages.RM_DOOROPEN, 0, nX, nY);
             }
         }
 
@@ -1815,7 +1815,7 @@ namespace GameSvr.World
             if (door == null || !door.Status.Opened)
                 return;
             door.Status.Opened = false;
-            SendDoorStatus(envir, door.nX, door.nY, Grobal2.RM_DOORCLOSE, 0, door.nX, door.nY);
+            SendDoorStatus(envir, door.nX, door.nY, Messages.RM_DOORCLOSE, 0, door.nX, door.nY);
         }
 
         private static void SendDoorStatus(Envirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY)

@@ -385,10 +385,10 @@ namespace GameSvr.Castle
                             AttackGuildList.Add(MasterGuild);
                             StartWallconquestWar();
                             SaveAttackSabukWall();
-                            World.WorldServer.SendServerGroupMsg(Grobal2.SS_212, M2Share.ServerIndex, "");
+                            World.WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
                             string s20 = string.Format(sWarStartMsg, sName);
                             M2Share.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            World.WorldServer.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
+                            World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
                             _logger.Info(s20);
                             MainDoorControl(true);
                         }
@@ -420,7 +420,7 @@ namespace GameSvr.Castle
                             ShowOverMsg = true;
                             string s20 = string.Format(sWarStopTimeMsg, sName, M2Share.Config.ShowCastleWarEndMsgTime / (60 * 1000));
                             M2Share.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            World.WorldServer.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
+                            World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
                             _logger.Warn(s20);
                         }
                     }
@@ -543,7 +543,7 @@ namespace GameSvr.Castle
             }
             string castleMessage = string.Format(sGetCastleMsg, sName, OwnGuild);
             M2Share.WorldEngine.SendBroadCastMsgExt(castleMessage, MsgType.System);
-            World.WorldServer.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, castleMessage);
+            World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, castleMessage);
             _logger.Info(castleMessage);
         }
 
@@ -581,7 +581,7 @@ namespace GameSvr.Castle
             }
             string stopMessage = string.Format(sWallWarStop, sName);
             M2Share.WorldEngine.SendBroadCastMsgExt(stopMessage, MsgType.System);
-            World.WorldServer.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, stopMessage);
+            World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, stopMessage);
             _logger.Info(stopMessage);
         }
 
@@ -930,7 +930,7 @@ namespace GameSvr.Castle
             AttackerInfo.Guild = Guild;
             AttackWarList.Add(AttackerInfo);
             SaveAttackSabukWall();
-            World.WorldServer.SendServerGroupMsg(Grobal2.SS_212, M2Share.ServerIndex, "");
+            World.WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
             return true;
         }
 

@@ -659,7 +659,7 @@ namespace GameSvr.RobotPlay
                                     {
                                         if (!baseObject.FixedHideMode && !baseObject.Ghost)
                                         {
-                                            SendMsg(baseObject, Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                                            SendMsg(baseObject, Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
                                         }
                                     }
                                 }
@@ -681,18 +681,18 @@ namespace GameSvr.RobotPlay
                                             {
                                                 if (baseObject.Skeleton)
                                                 {
-                                                    SendMsg(baseObject, Grobal2.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
+                                                    SendMsg(baseObject, Messages.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                                                 }
                                                 else
                                                 {
-                                                    SendMsg(baseObject, Grobal2.RM_DEATH, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
+                                                    SendMsg(baseObject, Messages.RM_DEATH, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                                                 }
                                             }
                                             else
                                             {
                                                 if (baseObject != null)
                                                 {
-                                                    SendMsg(baseObject, Grobal2.RM_TURN, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, baseObject.GetShowName());
+                                                    SendMsg(baseObject, Messages.RM_TURN, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, baseObject.GetShowName());
                                                 }
                                             }
                                         }
@@ -789,7 +789,7 @@ namespace GameSvr.RobotPlay
                             switch (mapEvent.VisibleFlag)
                             {
                                 case VisibleFlag.Visible:
-                                    SendMsg(this, Grobal2.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
+                                    SendMsg(this, Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
                                     VisibleEvents.RemoveAt(position);
                                     if (VisibleEvents.Count > 0)
                                     {
@@ -800,7 +800,7 @@ namespace GameSvr.RobotPlay
                                     mapEvent.VisibleFlag = 0;
                                     break;
                                 case VisibleFlag.Hidden:
-                                    SendMsg(this, Grobal2.RM_SHOWEVENT, mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
+                                    SendMsg(this, Messages.RM_SHOWEVENT, mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
                                     mapEvent.VisibleFlag = 0;
                                     break;
                             }
@@ -876,7 +876,7 @@ namespace GameSvr.RobotPlay
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + m_AISayMsgList[M2Share.RandomNumber.Random(m_AISayMsgList.Count)]);
+                            SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + m_AISayMsgList[M2Share.RandomNumber.Random(m_AISayMsgList.Count)]);
                         }
                     }
                 }
@@ -962,7 +962,7 @@ namespace GameSvr.RobotPlay
             {
                 int objectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(objectId, dropItemList);
-                SendMsg(this, Grobal2.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }
         }
     }

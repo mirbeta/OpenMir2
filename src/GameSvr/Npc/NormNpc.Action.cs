@@ -25,7 +25,7 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.BoYbDeal)
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您已开通寄售服务,不需要再开通!!!\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您已开通寄售服务,不需要再开通!!!\\ \\<返回/@main>");
                     return;// 如已开通元宝服务则退出
                 }
                 if (!GetValValue(PlayObject, QuestActionInfo.sParam1, ref nGameGold))
@@ -37,11 +37,11 @@ namespace GameSvr.Npc
                     // 玩家的元宝数大于或等于开通所需的元宝数
                     PlayObject.GameGold -= nGameGold;
                     PlayObject.BoYbDeal = true;
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/开通寄售服务成功!!!\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/开通寄售服务成功!!!\\ \\<返回/@main>");
                 }
                 else
                 {
-                    PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您身上没有" + M2Share.Config.GameGoldName + ",或" + M2Share.Config.GameGoldName + "数不够!!!\\ \\<返回/@main>");
+                    PlayObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您身上没有" + M2Share.Config.GameGoldName + ",或" + M2Share.Config.GameGoldName + "数不够!!!\\ \\<返回/@main>");
                 }
             }
             catch
@@ -140,7 +140,7 @@ namespace GameSvr.Npc
                                     sClientDealOffInfo.SellGold = DealOffInfo.nSellGold;
                                     sClientDealOffInfo.N = DealOffInfo.Flag;
                                     sSendStr = EDCode.EncodeBuffer(sClientDealOffInfo);
-                                    PlayObject.SendMsg(this, Grobal2.RM_QUERYYBSELL, 0, 0, 0, 0, sSendStr);
+                                    PlayObject.SendMsg(this, Messages.RM_QUERYYBSELL, 0, 0, 0, 0, sSendStr);
                                     break;
                                 }
                             }
@@ -153,7 +153,7 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, "您未开通寄售服务,请先开通!!!");
+                    PlayObject.SendMsg(PlayObject, Messages.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, "您未开通寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -254,7 +254,7 @@ namespace GameSvr.Npc
                                     sClientDealOffInfo.SellGold = DealOffInfo.nSellGold;
                                     sClientDealOffInfo.N = DealOffInfo.Flag;
                                     sSendStr = EDCode.EncodeBuffer(sClientDealOffInfo);
-                                    PlayObject.SendMsg(this, Grobal2.RM_QUERYYBDEAL, 0, 0, 0, 0, sSendStr);
+                                    PlayObject.SendMsg(this, Messages.RM_QUERYYBDEAL, 0, 0, 0, 0, sSendStr);
                                     break;
                                 }
                             }
@@ -267,7 +267,7 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, "您未开通元宝寄售服务,请先开通!!!");
+                    PlayObject.SendMsg(PlayObject, Messages.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, "您未开通元宝寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -444,7 +444,7 @@ namespace GameSvr.Npc
         private static void ActionOfOffLine(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
-            PlayObject.ClientMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
+            PlayObject.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SYSMESSAGE, PlayObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
             PlayObject.SendSocket(PlayObject.ClientMsg, EDCode.EncodeString(sOffLineStartMsg));
             int nTime = HUtil32.StrToInt(QuestActionInfo.sParam1, 5);
             int nPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, 500);
@@ -456,7 +456,7 @@ namespace GameSvr.Npc
             PlayObject.OffLineFlag = true;
             PlayObject.KickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
             IdSrvClient.Instance.SendHumanLogOutMsgA(PlayObject.UserAccount, PlayObject.SessionId);
-            PlayObject.SendDefMessage(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
+            PlayObject.SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
         }
 
         private void ActionOfAutoSubGameGold(PlayObject PlayObject, QuestActionInfo QuestActionInfo, int nPoint, int nTime)
@@ -583,7 +583,7 @@ namespace GameSvr.Npc
                     }
                     PlayObject.Abil.Exp += dwInt;
                     // PlayObject.GetExp(dwInt);
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_WINEXP, 0, dwInt, 0, 0, "");
+                    PlayObject.SendMsg(PlayObject, Messages.RM_WINEXP, 0, dwInt, 0, 0, "");
                     break;
             }
         }
@@ -819,7 +819,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.GameLogGameGold)
             {
-                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEGOLD, Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, ChrName));
+                M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, ChrName));
             }
             if (nOldGameGold != PlayObject.GameGold)
             {
@@ -856,7 +856,7 @@ namespace GameSvr.Npc
             }
             if (M2Share.GameLogGamePoint)
             {
-                M2Share.EventSource.AddEventLog(Grobal2.LOG_GAMEPOINT, Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, ChrName));
+                M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, ChrName));
             }
             if (nOldGamePoint != PlayObject.GamePoint)
             {
@@ -932,7 +932,7 @@ namespace GameSvr.Npc
                     if (PlayObject.MyGuild != null)
                     {
                         PlayObject.MyGuild.SendGuildMsg(sMsg);
-                        World.WorldServer.SendServerGroupMsg(Grobal2.SS_208, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName + "/" + PlayObject.ChrName + "/" + sMsg);
+                        World.WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, PlayObject.MyGuild.sGuildName + "/" + PlayObject.ChrName + "/" + sMsg);
                     }
                     break;
                 default:
@@ -1151,7 +1151,7 @@ namespace GameSvr.Npc
 
         private void ActionOfMessageBox(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, GetLineVariableText(PlayObject, QuestActionInfo.sParam1));
+            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, PlayObject.ActorId, 0, 0, GetLineVariableText(PlayObject, QuestActionInfo.sParam1));
         }
 
         private void ActionOfMission(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
@@ -1301,7 +1301,7 @@ namespace GameSvr.Npc
                                 }
                                 break;
                         }
-                        PlayObject.SendDelayMsg(PlayObject, Grobal2.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 100);
+                        PlayObject.SendDelayMsg(PlayObject, Messages.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 100);
                         break;
                     }
                 }
@@ -1681,7 +1681,7 @@ namespace GameSvr.Npc
                     continue;
                 }
                 PlayObject.UseItems[i].Dura = PlayObject.UseItems[i].DuraMax;
-                PlayObject.SendMsg(this, Grobal2.RM_DURACHANGE, (short)i, PlayObject.UseItems[i].Dura, PlayObject.UseItems[i].DuraMax, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_DURACHANGE, (short)i, PlayObject.UseItems[i].Dura, PlayObject.UseItems[i].DuraMax, 0, "");
                 boIsHasItem = true;
             }
             if (boIsHasItem)
@@ -3062,13 +3062,13 @@ namespace GameSvr.Npc
                 case '=':
                     PlayObject.HasLevelUp(0);
                     PlayObject.BonusPoint = nBonusPoint;
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                    PlayObject.SendMsg(PlayObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     break;
                 case '-':
                     break;
                 case '+':
                     PlayObject.BonusPoint += nBonusPoint;
-                    PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                    PlayObject.SendMsg(PlayObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     break;
             }
         }
@@ -3089,7 +3089,7 @@ namespace GameSvr.Npc
         {
             int nTotleUsePoint = PlayObject.BonusAbil.DC + PlayObject.BonusAbil.MC + PlayObject.BonusAbil.SC + PlayObject.BonusAbil.AC + PlayObject.BonusAbil.MAC + PlayObject.BonusAbil.HP + PlayObject.BonusAbil.MP + PlayObject.BonusAbil.Hit + PlayObject.BonusAbil.Speed + PlayObject.BonusAbil.Reserved;
             PlayObject.BonusPoint += nTotleUsePoint;
-            PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+            PlayObject.SendMsg(PlayObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
             PlayObject.HasLevelUp(0);
             PlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
         }
@@ -3169,7 +3169,7 @@ namespace GameSvr.Npc
                     PlayObject.Abil.Exp = 0;
                 }
                 PlayObject.BonusPoint += nBounsuPoint;
-                PlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(PlayObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 PlayObject.HasLevelUp(0);
                 PlayObject.RefShowName();
             }
@@ -3445,7 +3445,7 @@ namespace GameSvr.Npc
                                 Dispose(MapItem);
                                 MapItem = MapItemA;
                             }
-                            SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ActorId, dX, dY, MapItem.Name + "@0");
+                            SendRefMsg(Messages.RM_ITEMSHOW, MapItem.Looks, MapItem.ActorId, dX, dY, MapItem.Name + "@0");
                         }
                         else
                         {
@@ -3506,7 +3506,7 @@ namespace GameSvr.Npc
                                         Dispose(MapItem);
                                         MapItem = MapItemA;
                                     }
-                                    SendRefMsg(Grobal2.RM_ITEMSHOW, MapItem.Looks, MapItem.ActorId, dX, dY, MapItem.Name + NameCorlr);
+                                    SendRefMsg(Messages.RM_ITEMSHOW, MapItem.Looks, MapItem.ActorId, dX, dY, MapItem.Name + NameCorlr);
                                 }
                                 else
                                 {

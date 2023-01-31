@@ -135,7 +135,7 @@ namespace GameSvr.Npc
                         else if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             SendCustemMsg(PlayObject, sMsg);
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sCASTLENAME, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -151,7 +151,7 @@ namespace GameSvr.Npc
                             {
                                 s18 = "城堡名称更改失败!!!";
                             }
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sWITHDRAWAL, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -173,7 +173,7 @@ namespace GameSvr.Npc
                                     GotoLable(PlayObject, ScriptConst.sMAIN, false);
                                     break;
                             }
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sRECEIPTS, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -195,7 +195,7 @@ namespace GameSvr.Npc
                                     GotoLable(PlayObject, ScriptConst.sMAIN, false);
                                     break;
                             }
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
+                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sOPENMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -229,17 +229,17 @@ namespace GameSvr.Npc
                         {
                             s20 = sLabel.Substring(ScriptConst.sHIREGUARDNOW.Length, sLabel.Length);
                             HireGuard(s20, PlayObject);
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "");
                         }
                         else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREARCHERNOW))
                         {
                             s20 = sLabel.Substring(ScriptConst.sHIREARCHERNOW.Length, sLabel.Length);
                             HireArcher(s20, PlayObject);
-                            PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "");
                         }
                         else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -254,7 +254,7 @@ namespace GameSvr.Npc
                 else
                 {
                     s18 = "你没有权利使用.";
-                    PlayObject.SendMsg(this, Grobal2.RM_MENU_OK, 0, ActorId, 0, 0, s18);
+                    PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                 }
             }
             catch

@@ -47,7 +47,7 @@ namespace GameSvr.GameCommand.Commands
             }
             for (int i = 0; i < nCount; i++)
             {
-                if (PlayObject.ItemList.Count >= Grobal2.MAXBAGITEM) return;
+                if (PlayObject.ItemList.Count >= Grobal2.MaxBagItem) return;
                 UserItem UserItem = null;
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
                 {

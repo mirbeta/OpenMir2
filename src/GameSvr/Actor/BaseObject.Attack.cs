@@ -46,13 +46,13 @@ namespace GameSvr.Actor
                 if (nPower > 0)
                 {
                     attackTarget.StruckDamage(nPower);
-                    attackTarget.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "", 200);
+                    attackTarget.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "", 200);
                     result = true;
                 }
             }
             if (attackTarget.Race > ActorRace.Play)
             {
-                attackTarget.SendMsg(attackTarget, Grobal2.RM_STRUCK, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "");
+                attackTarget.SendMsg(attackTarget, Messages.RM_STRUCK, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "");
             }
             return result;
         }
@@ -67,10 +67,10 @@ namespace GameSvr.Actor
                     if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < HitPoint)
                     {
                         BaseObject.StruckDamage((ushort)nSecPwr);
-                        BaseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "", 500);
+                        BaseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "", 500);
                         if (BaseObject.Race != ActorRace.Play)
                         {
-                            BaseObject.SendMsg(BaseObject, Grobal2.RM_STRUCK, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "");
+                            BaseObject.SendMsg(BaseObject, Messages.RM_STRUCK, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "");
                         }
                         result = true;
                     }

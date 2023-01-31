@@ -109,7 +109,7 @@ namespace GameSvr.Services
         private static bool SaveRcd(SavePlayerRcd saveRcd, ref int queryId)
         {
             queryId = GetQueryId();
-            ServerRequestMessage packet = new ServerRequestMessage(Grobal2.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
+            ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
             SavePlayerDataMessage saveHumData = new SavePlayerDataMessage(saveRcd.Account, saveRcd.ChrName, saveRcd.HumanRcd);
             if (M2Share.DataServer.SendRequest(queryId, packet, saveHumData))
             {
@@ -133,7 +133,7 @@ namespace GameSvr.Services
                     byte[] data = null;
                     if (GetDBSockMsg(queryId, ref nIdent, ref nRecog, ref data, 5000, false))
                     {
-                        if (nIdent == Grobal2.DBR_SAVEHUMANRCD && nRecog == 1)
+                        if (nIdent == Messages.DBR_SAVEHUMANRCD && nRecog == 1)
                         {
                             M2Share.FrontEngine.RemoveSaveList(queryId);
                         }
@@ -170,7 +170,7 @@ namespace GameSvr.Services
                     byte[] data = null;
                     if (GetDBSockMsg(queryData.QueryId, ref nIdent, ref nRecog, ref data, 5000, true))
                     {
-                        if (nIdent == Grobal2.DBR_LOADHUMANRCD && nRecog == 1)
+                        if (nIdent == Messages.DBR_LOADHUMANRCD && nRecog == 1)
                         {
                             byte[] humRespData = EDCode.DecodeBuff(data);
                             LoadPlayerDataPacket responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(humRespData);
@@ -197,7 +197,7 @@ namespace GameSvr.Services
         private static bool LoadRcd(LoadPlayerDataMessage loadHuman, ref int queryId)
         {
             int nQueryId = GetQueryId();
-            ServerRequestMessage packet = new ServerRequestMessage(Grobal2.DB_LOADHUMANRCD, 0, 0, 0, 0);
+            ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
             if (M2Share.DataServer.SendRequest(nQueryId, packet, loadHuman))
             {
                 queryProcessList.Enqueue(new QueryPlayData()

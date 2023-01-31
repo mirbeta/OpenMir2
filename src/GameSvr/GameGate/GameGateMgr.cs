@@ -250,12 +250,12 @@ namespace GameSvr.GameGate
         public static void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx)
         {
             //todo 
-            //var defMsg = Grobal2.MakeDefaultMsg(Grobal2.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            //var defMsg = Grobal2.MakeDefaultMsg(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             //var msgHeader = new ServerMessagePacket();
             //msgHeader.PacketCode = Grobal2.RUNGATECODE;
             //msgHeader.Socket = nSocket;
             //msgHeader.SessionId = nGsIdx;
-            //msgHeader.Ident = Grobal2.GM_DATA;
+            //msgHeader.Ident = Messages.GM_DATA;
             //msgHeader.PackLength = ClientCommandPacket.PackSize;
             //ClientOutMessage outMessage = new ClientOutMessage();
             //outMessage.MessagePacket = msgHeader;
@@ -321,7 +321,7 @@ namespace GameSvr.GameGate
             {
                 PacketCode = Grobal2.RUNGATECODE,
                 Socket = 0,
-                Ident = Grobal2.GM_TEST,
+                Ident = Messages.GM_TEST,
                 PackLength = 100
             };
             int nLen = msgHdr.PackLength + ServerMessage.PacketSize;

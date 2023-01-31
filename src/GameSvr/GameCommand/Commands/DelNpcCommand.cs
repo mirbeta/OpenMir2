@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
                     {
                         BaseObject.Ghost = true;
                         BaseObject.GhostTick = HUtil32.GetTickCount();
-                        BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                        BaseObject.SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         PlayObject.SysMsg(sDelOK, MsgColor.Red, MsgType.Hint);
                         return;
                     }
@@ -35,7 +35,7 @@ namespace GameSvr.GameCommand.Commands
                     {
                         BaseObject.Ghost = true;
                         BaseObject.GhostTick = HUtil32.GetTickCount();
-                        BaseObject.SendRefMsg(Grobal2.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                        BaseObject.SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         PlayObject.SysMsg(sDelOK, MsgColor.Red, MsgType.Hint);
                         return;
                     }

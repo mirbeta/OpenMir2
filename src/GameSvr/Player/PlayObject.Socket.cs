@@ -46,7 +46,7 @@ namespace GameSvr.Player
         /// <param name="defMsg"></param>
         private void SendSocket(CommandPacket defMsg)
         {
-            if (OffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
+            if (OffLineFlag && defMsg.Ident != Messages.SM_OUTOFCONNECTION)
             {
                 return;
             }
@@ -60,7 +60,7 @@ namespace GameSvr.Player
 
         internal virtual void SendSocket(CommandPacket defMsg, string sMsg)
         {
-            if (OffLineFlag && defMsg.Ident != Grobal2.SM_OUTOFCONNECTION)
+            if (OffLineFlag && defMsg.Ident != Messages.SM_OUTOFCONNECTION)
             {
                 return;
             }

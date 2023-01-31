@@ -30,7 +30,7 @@ namespace GameSvr.GameCommand.Commands
                         if ((HUtil32.GetTickCount() - PlayObject.TeleportTick) > M2Share.Config.dwUserMoveTime * 1000)
                         {
                             PlayObject.TeleportTick = HUtil32.GetTickCount();
-                            PlayObject.SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
+                            PlayObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                             PlayObject.SpaceMove(PlayObject.MapName, nX, nY, 0);
                         }
                         else

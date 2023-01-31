@@ -33,10 +33,10 @@ namespace GameSvr.GameCommand.Commands
                     Castle.m_WarDate = DateTime.Now;
                     Castle.StartCastleWarTick = HUtil32.GetTickCount();
                     Castle.StartWallconquestWar();
-                    World.WorldServer.SendServerGroupMsg(Grobal2.SS_212, M2Share.ServerIndex, "");
+                    World.WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
                     string s20 = "[" + Castle.sName + " 攻城战已经开始]";
                     M2Share.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
-                    World.WorldServer.SendServerGroupMsg(Grobal2.SS_204, M2Share.ServerIndex, s20);
+                    World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
                     Castle.MainDoorControl(true);
                 }
                 else

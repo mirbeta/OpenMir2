@@ -52,12 +52,12 @@ namespace GameSvr.Npc
         {
             bool result = false;
             int nSize = QuestConditionInfo.nParam1;
-            if ((nSize <= 0) || (nSize > Grobal2.MAXBAGITEM))
+            if ((nSize <= 0) || (nSize > Grobal2.MaxBagItem))
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKBAGSIZE);
                 return result;
             }
-            if (PlayObject.ItemList.Count + nSize <= Grobal2.MAXBAGITEM)
+            if (PlayObject.ItemList.Count + nSize <= Grobal2.MaxBagItem)
             {
                 result = true;
             }

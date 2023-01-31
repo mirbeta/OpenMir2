@@ -1620,7 +1620,7 @@ namespace GameSvr.Npc
 
         protected void SendMsgToUser(PlayObject PlayObject, string sMsg)
         {
-            PlayObject.SendMsg(this, Grobal2.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
+            PlayObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
         }
 
         protected static string ReplaceVariableText(string sMsg, string sStr, string sText)

@@ -14,7 +14,7 @@ namespace GameSvr.Npc
     {
         public GuildOfficial() : base()
         {
-            RaceImg = Grobal2.RCC_MERCHANT;
+            RaceImg = ActorRace.Merchant;
             Appr = 8;
         }
 
@@ -50,7 +50,7 @@ namespace GameSvr.Npc
             {
                 if (M2Share.RandomNumber.Random(30) == 0)
                 {
-                    SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+                    SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 }
             }
             base.Run();
@@ -90,7 +90,7 @@ namespace GameSvr.Npc
                     }
                     else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        PlayObject.SendMsg(this, Grobal2.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
+                        PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                     }
                     else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -146,7 +146,7 @@ namespace GameSvr.Npc
             {
                 if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName))
                 {
-                    World.WorldServer.SendServerGroupMsg(Grobal2.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
+                    World.WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.WomaHorn);
                     PlayObject.DecGold(M2Share.Config.BuildGuildPrice);
@@ -165,11 +165,11 @@ namespace GameSvr.Npc
             }
             if (result >= 0)
             {
-                PlayObject.SendMsg(this, Grobal2.RM_BUILDGUILD_OK, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_BUILDGUILD_OK, 0, 0, 0, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_BUILDGUILD_FAIL, 0, result, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_BUILDGUILD_FAIL, 0, result, 0, 0, "");
             }
             return result;
         }
@@ -203,7 +203,7 @@ namespace GameSvr.Npc
 
         private void DoNate(PlayObject PlayObject)
         {
-            PlayObject.SendMsg(this, Grobal2.RM_DONATE_OK, 0, 0, 0, 0, "");
+            PlayObject.SendMsg(this, Messages.RM_DONATE_OK, 0, 0, 0, 0, "");
         }
 
         private void ReQuestCastleWar(PlayObject PlayObject, string sIndex)

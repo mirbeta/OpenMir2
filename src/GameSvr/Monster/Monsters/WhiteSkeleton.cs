@@ -32,7 +32,7 @@ namespace GameSvr.Monster.Monsters
                 BoIsFirst = false;
                 this.Direction = 5;
                 this.FixedHideMode = false;
-                this.SendRefMsg(Grobal2.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
+                this.SendRefMsg(Messages.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
             }
             base.Run();
         }

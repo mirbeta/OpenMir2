@@ -65,7 +65,7 @@ namespace GameSvr.Actor
         {
             ushort nPower = GetBaseAttackPoewr();
             AttackDir(targetObject, nPower, nDir);
-            SendAttackMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY);
+            SendAttackMsg(Messages.RM_HIT, Direction, CurrX, CurrY);
         }
 
         protected void GotoTargetXy()
@@ -152,7 +152,7 @@ namespace GameSvr.Actor
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            if (processMsg.wIdent == Grobal2.RM_STRUCK)
+            if (processMsg.wIdent == Messages.RM_STRUCK)
             {
                 BaseObject struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                 if (processMsg.BaseObject == ActorId && struckObject != null)
@@ -212,12 +212,12 @@ namespace GameSvr.Actor
                     if (nDamage > 0)
                     {
                         baseObject.StruckDamage((ushort)nDamage);
-                        baseObject.SendDelayMsg(Grobal2.RM_STRUCK, Grobal2.RM_REFMESSAGE, nDamage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 200);
+                        baseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 200);
                     }
                 }
             }
             baseObjectList.Clear();
-            SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
         }
 
         protected override void DelTargetCreat()

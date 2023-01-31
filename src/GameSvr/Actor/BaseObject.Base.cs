@@ -488,7 +488,7 @@ namespace GameSvr.Actor
                 if (boNeedRecalc)
                 {
                     RecalcAbilitys();
-                    SendMsg(this, Grobal2.RM_ABILITY, 0, 0, 0, 0, "");
+                    SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
                 }
             }
             catch (Exception)
@@ -562,7 +562,7 @@ namespace GameSvr.Actor
                 Envir.DelObjectCount(this);
                 DelFormMaped = true;
             }
-            SendRefMsg(Grobal2.RM_DEATH, Direction, CurrX, CurrY, 1, "");
+            SendRefMsg(Messages.RM_DEATH, Direction, CurrX, CurrY, 1, "");
         }
 
         /// <summary>
@@ -606,7 +606,7 @@ namespace GameSvr.Actor
                             {
                                 if (Race == ActorRace.Play)
                                 {
-                                    SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
+                                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
                                 }
                             }
                             else
@@ -645,7 +645,7 @@ namespace GameSvr.Actor
                             {
                                 if (Race == ActorRace.Play)
                                 {
-                                    SendMsg(this, Grobal2.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
+                                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
                                 }
                             }
                             else
@@ -732,7 +732,7 @@ namespace GameSvr.Actor
         internal virtual void ReAlive()
         {
             Death = false;
-            SendRefMsg(Grobal2.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
         }
 
         protected virtual bool IsProtectTarget(BaseObject targetObject)
@@ -752,7 +752,7 @@ namespace GameSvr.Actor
         protected virtual void ProcessSayMsg(string sMsg)
         {
             string sChrName = Race == ActorRace.Play ? ChrName : M2Share.FilterShowName(ChrName);
-            SendRefMsg(Grobal2.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sChrName + ':' + sMsg);
+            SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sChrName + ':' + sMsg);
         }
 
         /// <summary>
@@ -885,9 +885,9 @@ namespace GameSvr.Actor
                 BaseObject targetBaseObject;
                 switch (processMsg.wIdent)
                 {
-                    case Grobal2.RM_MAGSTRUCK:
-                    case Grobal2.RM_MAGSTRUCK_MINE:
-                        if ((processMsg.wIdent == Grobal2.RM_MAGSTRUCK) && (Race >= ActorRace.Animal) && !RushMode && (WAbil.Level < 50))
+                    case Messages.RM_MAGSTRUCK:
+                    case Messages.RM_MAGSTRUCK_MINE:
+                        if ((processMsg.wIdent == Messages.RM_MAGSTRUCK) && (Race >= ActorRace.Animal) && !RushMode && (WAbil.Level < 50))
                         {
                             WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
                         }
@@ -896,7 +896,7 @@ namespace GameSvr.Actor
                         {
                             StruckDamage(nDamage);
                             HealthSpellChanged();
-                            SendRefMsg(Grobal2.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.BaseObject, "");
+                            SendRefMsg(Messages.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.BaseObject, "");
                             targetBaseObject = M2Share.ActorMgr.Get(processMsg.BaseObject);
                             if (M2Share.Config.MonDelHptoExp)
                             {
@@ -945,7 +945,7 @@ namespace GameSvr.Actor
                                 {
                                     MeatQuality -= (ushort)(nDamage * 1000);
                                 }
-                                SendMsg(this, Grobal2.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.BaseObject, "");
+                                SendMsg(this, Messages.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.BaseObject, "");
                             }
                         }
                         if (FastParalysis)
@@ -954,7 +954,7 @@ namespace GameSvr.Actor
                             FastParalysis = false;
                         }
                         break;
-                    case Grobal2.RM_MAGHEALING:
+                    case Messages.RM_MAGHEALING:
                         if ((IncHealing + processMsg.nParam1) < 300)
                         {
                             if (Race == ActorRace.Play)
@@ -973,9 +973,9 @@ namespace GameSvr.Actor
                             IncHealing = 300;
                         }
                         break;
-                    case Grobal2.RM_REFMESSAGE:
+                    case Messages.RM_REFMESSAGE:
                         SendRefMsg(processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
-                        if ((processMsg.BaseObject == Grobal2.RM_STRUCK) && (Race != ActorRace.Play))
+                        if ((processMsg.BaseObject == Messages.RM_STRUCK) && (Race != ActorRace.Play))
                         {
                             SendMsg(this, processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
                         }
@@ -985,7 +985,7 @@ namespace GameSvr.Actor
                             FastParalysis = false;
                         }
                         break;
-                    case Grobal2.RM_DELAYMAGIC:
+                    case Messages.RM_DELAYMAGIC:
                         int nPower = processMsg.wParam;
                         ushort nTargetX = HUtil32.LoWord(processMsg.nParam1);
                         ushort nTargetY = HUtil32.HiWord(processMsg.nParam1);
@@ -1000,21 +1000,21 @@ namespace GameSvr.Actor
                             }
                             if ((Math.Abs(nTargetX - targetBaseObject.CurrX) <= nRage) && (Math.Abs(nTargetY - targetBaseObject.CurrY) <= nRage))
                             {
-                                targetBaseObject.SendMsg(this, Grobal2.RM_MAGSTRUCK, 0, nPower, 0, 0, "");
+                                targetBaseObject.SendMsg(this, Messages.RM_MAGSTRUCK, 0, nPower, 0, 0, "");
                             }
                         }
                         break;
-                    case Grobal2.RM_RANDOMSPACEMOVE:
+                    case Messages.RM_RANDOMSPACEMOVE:
                         MapRandomMove(processMsg.Msg, processMsg.wParam);
                         break;
-                    case Grobal2.RM_DELAYPUSHED:
+                    case Messages.RM_DELAYPUSHED:
                         targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                         if (targetBaseObject != null)
                         {
                             targetBaseObject.CharPushed((byte)processMsg.wParam, processMsg.nParam2);
                         }
                         break;
-                    case Grobal2.RM_POISON:
+                    case Messages.RM_POISON:
                         targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam2);
                         if (targetBaseObject != null)
                         {
@@ -1034,10 +1034,10 @@ namespace GameSvr.Actor
                             MakePosion(processMsg.wParam, (ushort)processMsg.nParam1, processMsg.nParam3);// 中毒类型
                         }
                         break;
-                    case Grobal2.RM_TRANSPARENT:
+                    case Messages.RM_TRANSPARENT:
                         Magic.MagicManager.MagMakePrivateTransparent(this, (ushort)processMsg.nParam1);
                         break;
-                    case Grobal2.RM_DOOPENHEALTH:
+                    case Messages.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
                 }

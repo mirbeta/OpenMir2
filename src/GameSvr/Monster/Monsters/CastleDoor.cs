@@ -49,7 +49,7 @@ namespace GameSvr.Monster.Monsters
                 return;
             }
             Direction = 7;
-            SendRefMsg(Grobal2.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             IsOpened = true;
             StoneMode = true;
             SetMapXyFlag(0);
@@ -67,7 +67,7 @@ namespace GameSvr.Monster.Monsters
             {
                 Direction = 0;
             }
-            SendRefMsg(Grobal2.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
             IsOpened = false;
             StoneMode = false;
             SetMapXyFlag(1);
@@ -96,7 +96,7 @@ namespace GameSvr.Monster.Monsters
                 if (Direction != n08 && n08 < 3)
                 {
                     Direction = (byte)n08;
-                    SendRefMsg(Grobal2.RM_TURN, Direction, CurrX, CurrY, 0, "");
+                    SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, 0, "");
                 }
             }
             base.Run();
@@ -110,7 +110,7 @@ namespace GameSvr.Monster.Monsters
                 n08 = 0;
             }
             Direction = (byte)n08;
-            SendRefMsg(Grobal2.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
         }
 
         public override void Initialize()

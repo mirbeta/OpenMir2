@@ -21,7 +21,7 @@ namespace GameSvr.Npc
         protected override bool Operate(ProcessMessage ProcessMsg)
         {
             bool result = false;
-            if (ProcessMsg.wIdent == Grobal2.RM_STRUCK || ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)
+            if (ProcessMsg.wIdent == Messages.RM_STRUCK || ProcessMsg.wIdent == Messages.RM_MAGSTRUCK)
             {
                 if (ProcessMsg.BaseObject == ActorId)
                 {
@@ -31,7 +31,7 @@ namespace GameSvr.Npc
                     ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + _attackPower / _attackCount);
                 }
             }
-            if (ProcessMsg.wIdent == Grobal2.RM_MAGSTRUCK)
+            if (ProcessMsg.wIdent == Messages.RM_MAGSTRUCK)
             {
                 result = base.Operate(ProcessMsg);
             }

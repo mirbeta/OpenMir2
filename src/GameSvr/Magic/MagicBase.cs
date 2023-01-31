@@ -114,7 +114,7 @@ namespace GameSvr.Magic
             if (PlayObject.UseItems[Idx] != null && PlayObject.UseItems[Idx].Dura > dura)
             {
                 PlayObject.UseItems[Idx].Dura -= dura;//减少护身符持久即数量
-                PlayObject.SendMsg(PlayObject, Grobal2.RM_DURACHANGE, Idx, PlayObject.UseItems[Idx].Dura, PlayObject.UseItems[Idx].DuraMax, 0, "");
+                PlayObject.SendMsg(PlayObject, Messages.RM_DURACHANGE, Idx, PlayObject.UseItems[Idx].Dura, PlayObject.UseItems[Idx].DuraMax, 0, "");
             }
             else
             {

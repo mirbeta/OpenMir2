@@ -27,7 +27,7 @@ namespace GameSvr.GameCommand.Commands
             if (targerPlayObject != null)
             {
                 targerPlayObject.BonusPoint = 0;
-                targerPlayObject.SendMsg(PlayObject, Grobal2.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                targerPlayObject.SendMsg(PlayObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 targerPlayObject.HasLevelUp(0);
                 targerPlayObject.SysMsg("分配点数已清除!!!", MsgColor.Red, MsgType.Hint);
                 PlayObject.SysMsg(sHumName + " 的分配点数已清除.", MsgColor.Green, MsgType.Hint);

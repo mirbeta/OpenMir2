@@ -276,7 +276,7 @@ namespace GameGate.Services
                             var sessionPacket = new SessionMessage(dataMemory.ToArray(), packetHeader.PackLength, packetHeader.SessionId, GateInfo.ServiceId);
                             SessionManager.Enqueue(sessionPacket);
                             break;
-                        case Grobal2.GM_TEST:
+                        case Messages.GM_TEST:
                             break;
                     }
                     dataLen -= nCheckMsgLen;
