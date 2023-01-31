@@ -323,7 +323,7 @@ namespace GameSvr.GameGate
                         tHwid = MD5.MD5UnPrInt(sHwid);
                         result = true;
                     }
-                    M2Share.Log.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHwid}]");
+                    M2Share.Logger.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHwid}]");
                 }
             }
             catch

@@ -90,7 +90,7 @@ namespace GameSvr.DataSource
                         }
                         else
                         {
-                            M2Share.Log.Error($"加载物品(Idx:{Idx} Name:{Item.Name})数据失败!!!");
+                            M2Share.Logger.Error($"加载物品(Idx:{Idx} Name:{Item.Name})数据失败!!!");
                             result = -100;
                             return result;
                         }
@@ -103,7 +103,7 @@ namespace GameSvr.DataSource
             }
             catch (Exception ex)
             {
-                M2Share.Log.Error(ex.StackTrace);
+                M2Share.Logger.Error(ex.StackTrace);
                 return result;
             }
             finally
@@ -170,7 +170,7 @@ namespace GameSvr.DataSource
             }
             catch (Exception ex)
             {
-                M2Share.Log.Error(ex.StackTrace);
+                M2Share.Logger.Error(ex.StackTrace);
             }
             finally
             {
@@ -244,7 +244,7 @@ namespace GameSvr.DataSource
                         M2Share.LocalDb.LoadMonitems(Monster.Name, ref Monster.ItemList);
                         if (M2Share.WorldEngine.MonsterList.ContainsKey(Monster.Name))
                         {
-                            M2Share.Log.Error($"怪物名称[{Monster.Name}]重复,请确认数据是否正常.");
+                            M2Share.Logger.Error($"怪物名称[{Monster.Name}]重复,请确认数据是否正常.");
                             continue;
                         }
                         M2Share.WorldEngine.MonsterList.Add(Monster.Name, Monster);
@@ -267,7 +267,7 @@ namespace GameSvr.DataSource
         {
             if (!Open())
             {
-                M2Share.Log.Error("读取物品寄售列表失败.");
+                M2Share.Logger.Error("读取物品寄售列表失败.");
                 return;
             }
             try
@@ -317,7 +317,7 @@ namespace GameSvr.DataSource
         {
             if (!Open())
             {
-                M2Share.Log.Error("保存物品寄售数据失败.");
+                M2Share.Logger.Error("保存物品寄售数据失败.");
                 return;
             }
             DealOffInfo DealOffInfo;
@@ -397,7 +397,7 @@ namespace GameSvr.DataSource
                 catch (Exception e)
                 {
                     Console.WriteLine(M2Share.Config.ConnctionString);
-                    M2Share.Log.Error(e.StackTrace);
+                    M2Share.Logger.Error(e.StackTrace);
                     return false;
                 }
             }

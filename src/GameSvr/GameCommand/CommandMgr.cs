@@ -107,7 +107,7 @@ namespace GameSvr.GameCommand
                 CommandAttribute groupAttribute = attributes[0];
                 if (CommandMaps.ContainsKey(groupAttribute.Name))
                 {
-                    M2Share.Log.Error($"重复游戏命令: {groupAttribute.Name}");
+                    M2Share.Logger.Error($"重复游戏命令: {groupAttribute.Name}");
                 }
                 Command gameCommand = (Command)Activator.CreateInstance(type);
                 if (gameCommand == null)

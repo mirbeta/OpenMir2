@@ -27,8 +27,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg0);
-                M2Share.Log.Error(e.StackTrace);
+                M2Share.Logger.Error(sExceptionMsg0);
+                M2Share.Logger.Error(e.StackTrace);
             }
             if (SuperMan)
             {
@@ -122,8 +122,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg1);
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error(sExceptionMsg1);
+                M2Share.Logger.Error(e.Message);
             }
             try
             {
@@ -225,7 +225,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.Error(sExceptionMsg2);
+                M2Share.Logger.Error(sExceptionMsg2);
             }
             LifeStone();
             // TBaseObject.Run 3 清理目标对象
@@ -372,7 +372,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.Error(sExceptionMsg3);
+                M2Share.Logger.Error(sExceptionMsg3);
             }
             try
             {
@@ -428,8 +428,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg4);
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error(sExceptionMsg4);
+                M2Share.Logger.Error(e.Message);
             }
             try
             {
@@ -493,7 +493,7 @@ namespace GameSvr.Actor
             }
             catch (Exception)
             {
-                M2Share.Log.Error(sExceptionMsg5);
+                M2Share.Logger.Error(sExceptionMsg5);
             }
             try
             {
@@ -515,7 +515,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.Error(sExceptionMsg6);
+                M2Share.Logger.Error(sExceptionMsg6);
             }
         }
 
@@ -724,8 +724,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg);
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(e.Message);
             }
         }
 
@@ -819,7 +819,7 @@ namespace GameSvr.Actor
             }
             catch
             {
-                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Logger.Error(sExceptionMsg);
             }
         }
 
@@ -1044,8 +1044,8 @@ namespace GameSvr.Actor
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg);
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(e.Message);
             }
             return false;
         }

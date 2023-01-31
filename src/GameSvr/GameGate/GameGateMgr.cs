@@ -382,7 +382,7 @@ namespace GameSvr.GameGate
         private void GateSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
             //M2Share.RunSocket.CloseErrGate();
-            M2Share.Log.Error(e.Exception.StackTrace);
+            M2Share.Logger.Error(e.Exception.StackTrace);
         }
 
         private void GateSocketClientDisconnect(object sender, AsyncUserToken e)

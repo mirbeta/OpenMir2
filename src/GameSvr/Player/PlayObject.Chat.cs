@@ -220,8 +220,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(Format(sExceptionMsg, sData));
-                M2Share.Log.Error(e.StackTrace);
+                M2Share.Logger.Error(Format(sExceptionMsg, sData));
+                M2Share.Logger.Error(e.StackTrace);
             }
         }
 
@@ -437,8 +437,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(Format(sExceptionMsg, sData));
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error(Format(sExceptionMsg, sData));
+                M2Share.Logger.Error(e.Message);
             }
         }
     }

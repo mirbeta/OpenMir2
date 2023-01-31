@@ -13,8 +13,8 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void DisableFilter(PlayObject PlayObject)
         {
-            M2Share.boFilterWord = !M2Share.boFilterWord;
-            if (M2Share.boFilterWord)
+            M2Share.FilterWord = !M2Share.FilterWord;
+            if (M2Share.FilterWord)
             {
                 PlayObject.SysMsg("已启用文字过滤。", MsgColor.Green, MsgType.Hint);
             }

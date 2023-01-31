@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
                                                 + "\09" + PlayObject.ChrName + "\09" + PlayObject.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
             if (M2Share.Config.ShowMakeItemMsg)
             {
-                M2Share.Log.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayObject.ChrName, nOLevel, PlayObject.Abil.Level));
+                M2Share.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayObject.ChrName, nOLevel, PlayObject.Abil.Level));
             }
         }
     }

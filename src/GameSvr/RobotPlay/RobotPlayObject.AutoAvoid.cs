@@ -81,7 +81,7 @@ namespace GameSvr.RobotPlay
             }
             catch
             {
-                M2Share.Log.Error("RobotPlayObject.IsNeedAvoid");
+                M2Share.Logger.Error("RobotPlayObject.IsNeedAvoid");
             }
             return result;
         }

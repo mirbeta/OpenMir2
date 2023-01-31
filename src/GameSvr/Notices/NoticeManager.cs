@@ -36,7 +36,7 @@ namespace GameSvr.Notices
                 }
                 catch
                 {
-                    M2Share.Log.Error("Error in loading notice text. file name is " + fileName);
+                    M2Share.Logger.Error("Error in loading notice text. file name is " + fileName);
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace GameSvr.Notices
                         }
                         catch (Exception)
                         {
-                            M2Share.Log.Error("Error in loading notice text. file name is " + fileName);
+                            M2Share.Logger.Error("Error in loading notice text. file name is " + fileName);
                         }
                         NoticeList[i].sMsg = sStr;
                         break;

@@ -1082,7 +1082,7 @@ namespace GameSvr.World
             if (OtherUserNameList.TryGetValue(sName, out ServerGruopInfo groupServer))
             {
                 nServerIndex = groupServer.nServerIdx;
-                M2Share.Log.Info($"玩家在[{nServerIndex}]服务器上.");
+                M2Share.Logger.Info($"玩家在[{nServerIndex}]服务器上.");
                 return true;
             }
             return false;

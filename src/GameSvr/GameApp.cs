@@ -27,8 +27,6 @@ namespace GameSvr
 
         public GameApp()
         {
-            M2Share.LocalDb = new LocalDB();
-            M2Share.CommonDb = new CommonDB();
             M2Share.SockCountMax = 0;
             M2Share.HumCountMax = 0;
             M2Share.UsrRotCountMin = 0;
@@ -47,7 +45,7 @@ namespace GameSvr
             M2Share.Config.ItemNumber = 0;
             M2Share.Config.ItemNumberEx = int.MaxValue / 2;
             M2Share.StartReady = false;
-            M2Share.boFilterWord = true;
+            M2Share.FilterWord = true;
             M2Share.Config.WinLotteryCount = 0;
             M2Share.Config.NoWinLotteryCount = 0;
             M2Share.Config.WinLotteryLevel1 = 0;
@@ -59,8 +57,6 @@ namespace GameSvr
             M2Share.DataServer = new DBService();
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.GateMgr = new GameGateMgr();
-            M2Share.FindPath = new FindPath();
-            M2Share.CellObjectMgr = new CellObjectMgr();
             M2Share.EventSource = new GameEventSource();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MapMgr = new MapManager();
@@ -98,9 +94,9 @@ namespace GameSvr
             M2Share.DenyAccountList = new List<string>();
             M2Share.NoClearMonLIst = new List<string>();
             M2Share.NoHptoexpMonLIst = new List<string>();
-            M2Share.ItemBindIPaddr = new List<TItemBind>();
-            M2Share.ItemBindAccount = new List<TItemBind>();
-            M2Share.ItemBindChrName = new List<TItemBind>();
+            M2Share.ItemBindIPaddr = new List<ItemBind>();
+            M2Share.ItemBindAccount = new List<ItemBind>();
+            M2Share.ItemBindChrName = new List<ItemBind>();
             M2Share.ProcessMsgCriticalSection = new object();
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.Config.UserIDSection = new object();

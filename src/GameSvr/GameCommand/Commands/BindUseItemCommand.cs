@@ -57,7 +57,7 @@ namespace GameSvr.GameCommand.Commands
             }
             int nItemIdx = UserItem.Index;
             int nMakeIdex = UserItem.MakeIndex;
-            TItemBind ItemBind;
+            ItemBind ItemBind;
             string sBindName;
             bool boFind;
             switch (nBind)
@@ -80,7 +80,7 @@ namespace GameSvr.GameCommand.Commands
                         }
                         if (!boFind)
                         {
-                            ItemBind = new TItemBind();
+                            ItemBind = new ItemBind();
                             ItemBind.nItemIdx = nItemIdx;
                             ItemBind.nMakeIdex = nMakeIdex;
                             ItemBind.sBindName = sBindName;
@@ -118,7 +118,7 @@ namespace GameSvr.GameCommand.Commands
                         }
                         if (!boFind)
                         {
-                            ItemBind = new TItemBind();
+                            ItemBind = new ItemBind();
                             ItemBind.nItemIdx = nItemIdx;
                             ItemBind.nMakeIdex = nMakeIdex;
                             ItemBind.sBindName = sBindName;
@@ -157,7 +157,7 @@ namespace GameSvr.GameCommand.Commands
                         }
                         if (!boFind)
                         {
-                            ItemBind = new TItemBind();
+                            ItemBind = new ItemBind();
                             ItemBind.nItemIdx = nItemIdx;
                             ItemBind.nMakeIdex = nMakeIdex;
                             ItemBind.sBindName = sBindName;
@@ -189,7 +189,7 @@ namespace GameSvr.GameCommand.Commands
                         //    return;
                         //}
                     }
-                    ItemBind = new TItemBind
+                    ItemBind = new ItemBind
                     {
                         nItemIdx = nItemIdx,
                         nMakeIdex = 0,

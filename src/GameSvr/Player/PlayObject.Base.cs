@@ -1041,7 +1041,7 @@ namespace GameSvr.Player
                 }
                 catch (Exception)
                 {
-                    M2Share.Log.Error(sExceptionMsg);
+                    M2Share.Logger.Error(sExceptionMsg);
                 }
             }
         }
@@ -1403,8 +1403,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg);
-                M2Share.Log.Error(e.StackTrace);
+                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(e.StackTrace);
             }
             // ReadAllBook();
         }
@@ -1656,7 +1656,7 @@ namespace GameSvr.Player
             }
             catch (Exception ex)
             {
-                M2Share.Log.Error(ex);
+                M2Share.Logger.Error(ex);
             }
             if (!Envir.Flag.boFightZone && !Envir.Flag.boFight3Zone && !killObject.Animal)
             {
@@ -2878,7 +2878,7 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(e.StackTrace);
+                M2Share.Logger.Error(e.StackTrace);
                 KickException();
             }
         }
@@ -2972,8 +2972,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg);
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(e.Message);
             }
             return result;
         }
@@ -3077,8 +3077,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg);
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(e.Message);
             }
             base.MakeGhost();
         }
@@ -3126,7 +3126,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Logger.Error(sExceptionMsg);
             }
         }
 

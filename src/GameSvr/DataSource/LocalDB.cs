@@ -152,7 +152,7 @@ namespace GameSvr.DataSource
             }
             catch (Exception ex)
             {
-                M2Share.Log.Error(ex.StackTrace);
+                M2Share.Logger.Error(ex.StackTrace);
             }
         }
 
@@ -908,7 +908,7 @@ namespace GameSvr.DataSource
                         {
                             if (M2Share.UnbindList.ContainsKey(n10))
                             {
-                                M2Share.Log.Warn($"重复解包物品[{sItemName}]...");
+                                M2Share.Logger.Warn($"重复解包物品[{sItemName}]...");
                                 continue;
                             }
                             M2Share.UnbindList.Add(n10, sItemName);

@@ -243,7 +243,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.Log.Error("{异常} TPlayObject.ClientCancelSellOffIng");
+                M2Share.Logger.Error("{异常} TPlayObject.ClientCancelSellOffIng");
             }
         }
 
@@ -381,7 +381,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.Log.Error("{异常} TPlayObject.ClientBuySellOffItme");
+                M2Share.Logger.Error("{异常} TPlayObject.ClientBuySellOffItme");
             }
         }
 
@@ -425,7 +425,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.Log.Error("{异常} TPlayObject.GetSellOffGlod");
+                M2Share.Logger.Error("{异常} TPlayObject.GetSellOffGlod");
             }
         }
 

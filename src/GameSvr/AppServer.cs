@@ -47,7 +47,6 @@ namespace GameSvr
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            M2Share.ActorMgr = new ActorMgr();
             await Builder.RunConsoleAsync(cancellationToken);
             //await ProcessLoopAsync();
             //Stop();

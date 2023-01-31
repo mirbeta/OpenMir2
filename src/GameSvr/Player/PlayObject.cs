@@ -429,7 +429,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Logger.Error(sExceptionMsg);
             }
             return result;
         }
@@ -523,7 +523,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Logger.Error(sExceptionMsg);
             }
             return result;
         }
@@ -776,7 +776,7 @@ namespace GameSvr.Player
             }
             catch
             {
-                M2Share.Log.Error(sExceptionMsg);
+                M2Share.Logger.Error(sExceptionMsg);
             }
         }
 
@@ -987,7 +987,7 @@ namespace GameSvr.Player
         {
             if (Envir == null)
             {
-                M2Share.Log.Error("CretInNearXY nil PEnvir");
+                M2Share.Logger.Error("CretInNearXY nil PEnvir");
                 return false;
             }
             for (int cX = nX - 1; cX <= nX + 1; cX++)
@@ -1523,8 +1523,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(Format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, targetX, targetY));
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error(Format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, targetX, targetY));
+                M2Share.Logger.Error(e.Message);
             }
             return result;
         }
@@ -3283,7 +3283,7 @@ namespace GameSvr.Player
 
         private bool CheckItemBindUse(UserItem userItem)
         {
-            TItemBind itemBind;
+            ItemBind itemBind;
             bool result = true;
             for (int i = 0; i < M2Share.ItemBindAccount.Count; i++)
             {

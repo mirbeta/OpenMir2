@@ -218,8 +218,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
+                M2Share.Logger.Error(e.Message);
             }
         }
 
@@ -1506,8 +1506,8 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                M2Share.Log.Error(sExceptionMsg);
-                M2Share.Log.Error(e.Message);
+                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(e.Message);
             }
         }
 
