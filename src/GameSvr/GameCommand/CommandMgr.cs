@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly GameCmdConf CommandConf;
-        public static readonly GameCommands Commands = new GameCommands();
+        public static readonly GameCommands GameCommands = new GameCommands();
         private static readonly Dictionary<string, Command> CommandMaps = new Dictionary<string, Command>(StringComparer.OrdinalIgnoreCase);
         private static CommandMgr instance = null;
         private static readonly object locker = new object();
@@ -36,7 +36,12 @@ namespace GameSvr.GameCommand
         public void RegisterCommand()
         {
             CommandConf.LoadConfig();
-            Dictionary<string, GameCmd> customCommandMap = RegisterCustomCommand();
+            var customCommandMap = RegisterCustomCommand();
+            if (customCommandMap == null)
+            {
+                _logger.Info("读取自定义命令配置失败.");
+                return;
+            }
             RegisterCommandGroups(customCommandMap);
             _logger.Info("读取游戏命令配置完成...");
         }
@@ -46,54 +51,51 @@ namespace GameSvr.GameCommand
         /// </summary>
         private Dictionary<string, GameCmd> RegisterCustomCommand()
         {
-            var customCommandList = new List<GameCmd>();
-            foreach (var command in Commands.GetType().GetFields())
+            var commands = GameCommands.GetType().GetFields();
+            if (commands.Length <= 0)
             {
-                customCommandList.Add((GameCmd)command.GetValue(Commands));
+                _logger.Info("获取游戏命令失败");
+                return null;
+            }
+            var customCommandList = new GameCmd[commands.Length];
+            for (var i = 0; i < customCommandList.Length; i++)
+            {
+                customCommandList[i] = (GameCmd)commands[i].GetValue(GameCommands);
             }
             var customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
-            if (customCommandList.Count <= 0)
+            for (var i = 0; i < commands.Length; i++)
             {
-                return customCommandMap;
-            }
-            var cmdIndex = -1;
-            foreach (var command in Commands.GetType().GetFields())
-            {
-                cmdIndex++;
-                var attributes = (CustomCommandAttribute)command.GetCustomAttribute(typeof(CustomCommandAttribute), true);
+                var attributes = commands[i].GetCustomAttribute(typeof(CommandHandleAttribute), true);
                 if (attributes == null) continue;
-                if (cmdIndex > customCommandList.Count)
-                {
-                    break;
-                }
-                var customCmd = customCommandList[cmdIndex];
+                var commandAttribute = (CommandHandleAttribute)attributes;
+                var customCmd = customCommandList[i];
                 if (customCmd == null || string.IsNullOrEmpty(customCmd.CmdName))
                 {
                     continue;
                 }
-                var commandInfo = (CommandAttribute)attributes.CommandType.GetCustomAttribute(typeof(CommandAttribute), true);
+                var commandInfo = (CommandAttribute)commandAttribute.CommandHandle.GetCustomAttribute(typeof(CommandAttribute), true);
                 if (commandInfo == null)
                 {
                     continue;
                 }
                 if (customCommandMap.ContainsKey(commandInfo.Name))
                 {
-                    M2Share.Log.Error($"重复定义游戏命令[{commandInfo.Name}]");
+                    _logger.Warn($"游戏命令[{commandInfo.Name}]重复定义,请确认配置文件是否正确.");
                     continue;
                 }
                 customCommandMap.Add(commandInfo.Name, customCmd);
             }
-            customCommandList.Clear();
+            customCommandList = null;
             return customCommandMap;
         }
 
         /// <summary>
         /// 注册游戏命令
         /// </summary>
-        private void RegisterCommandGroups(IReadOnlyDictionary<string, GameCmd> customCommands)
+        private static void RegisterCommandGroups(IReadOnlyDictionary<string, GameCmd> customCommands)
         {
             var commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(Command))).ToList();//只有继承Commond，才能添加到命令对象中
-            if (commands.Count <= 0)
+            if (!commands.Any())
             {
                 return;
             }
@@ -107,19 +109,17 @@ namespace GameSvr.GameCommand
                 {
                     M2Share.Log.Error($"重复游戏命令: {groupAttribute.Name}");
                 }
-
+                var gameCommand = (Command)Activator.CreateInstance(type);
+                if (gameCommand == null)
+                {
+                    return;
+                }
                 if (customCommands.TryGetValue(groupAttribute.Name, out var customCommand))
                 {
                     groupAttribute.Command = groupAttribute.Command;
                     groupAttribute.Name = customCommand.CmdName;
                     groupAttribute.nPermissionMax = (byte)customCommand.PerMissionMax;
                     groupAttribute.nPermissionMin = (byte)customCommand.PerMissionMin;
-                }
-
-                var gameCommand = (Command)Activator.CreateInstance(type);
-                if (gameCommand == null)
-                {
-                    return;
                 }
                 MethodInfo methodInfo = null;
                 foreach (var method in gameCommand.GetType().GetMethods())
@@ -142,26 +142,6 @@ namespace GameSvr.GameCommand
         }
 
         /// <summary>
-        /// 更新游戏命令
-        /// </summary>
-        public void UpdataRegisterCommandGroups(CommandAttribute OldCmd, string sCmd)
-        {
-            if (CommandMaps.ContainsKey(OldCmd.Command))
-            {
-                //foreach (var pair in CommandGroups)
-                //{
-                //    if (pair.Key.Name != "make") continue;
-                //    pair.Key.Name = "item";
-                //}
-
-                //var commandGroup = (CommandGroup)Activator.CreateInstance(typeof(MakeItmeCommand));
-                //commandGroup.Register(NewCmd);
-                //CommandGroups.Add(NewCmd, commandGroup);
-                //CommandGroups.Remove(OldCmd);
-            }
-        }
-
-        /// <summary>
         /// 执行游戏命令
         /// </summary>
         /// <param name="line">命令字符串</param>
@@ -172,16 +152,13 @@ namespace GameSvr.GameCommand
             if (playObject == null)
                 throw new ArgumentException("PlayObject");
 
+            if (!ExtractCommandAndParameters(line, out var commandName, out var parameters))
+                return false;
+
             var output = string.Empty;
-            string commandName;
-            string parameters;
             var found = false;
-
-            if (!ExtractCommandAndParameters(line, out commandName, out parameters))
-                return found;
-
-            Command commond;
-            if (CommandMaps.TryGetValue(commandName, out commond))
+            
+            if (CommandMaps.TryGetValue(commandName, out var commond))
             {
                 output = commond.Handle(parameters, playObject);
                 found = true;

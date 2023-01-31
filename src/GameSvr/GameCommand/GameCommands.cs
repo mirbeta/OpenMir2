@@ -39,319 +39,319 @@ namespace GameSvr.GameCommand
         public readonly GameCmd Recall;
         public readonly GameCmd Regoto;
 
-        [CustomCommand(typeof(WhoCommand))]
+        [CommandHandle(typeof(WhoCommand))]
         public readonly GameCmd Who;
-        [CustomCommand(typeof(TotalCommand))]
+        [CommandHandle(typeof(TotalCommand))]
         public readonly GameCmd Total;
-        [CustomCommand((typeof(ReloadGuildCommand)))]
+        [CommandHandle((typeof(ReloadGuildCommand)))]
         public readonly GameCmd ReloadGuild;
-        [CustomCommand(typeof(SearchMasterCommand))]
+        [CommandHandle(typeof(SearchMasterCommand))]
         public readonly GameCmd Master;
-        [CustomCommand(typeof(SearchDearCommand))]
+        [CommandHandle(typeof(SearchDearCommand))]
         public readonly GameCmd Dear;
-        [CustomCommand(typeof(NpcScriptCommand))]
+        [CommandHandle(typeof(NpcScriptCommand))]
         public readonly GameCmd NpcScript;
-        [CustomCommand(typeof(GroupRecallCommand))]
+        [CommandHandle(typeof(GroupRecallCommand))]
         public readonly GameCmd GroupRecalll;
-        [CustomCommand(typeof(GuildRecallCommand))]
+        [CommandHandle(typeof(GuildRecallCommand))]
         public readonly GameCmd GuildRecalll;
-        [CustomCommand(typeof(SearchHumanCommand))]
+        [CommandHandle(typeof(SearchHumanCommand))]
         public readonly GameCmd Searching;
-        [CustomCommand(typeof(RecallMobCommand))]
+        [CommandHandle(typeof(RecallMobCommand))]
         public readonly GameCmd RecallMob;
-        [CustomCommand(typeof(ChangeSalveStatusCommand))]
+        [CommandHandle(typeof(ChangeSalveStatusCommand))]
         public readonly GameCmd Rest;
-        [CustomCommand(typeof(EndGuildCommand))]
+        [CommandHandle(typeof(EndGuildCommand))]
         public readonly GameCmd Endguild;
-        [CustomCommand(typeof(AuthallyCommand))]
+        [CommandHandle(typeof(AuthallyCommand))]
         public readonly GameCmd Authally;
-        [CustomCommand(typeof(LetGuildCommand))]
+        [CommandHandle(typeof(LetGuildCommand))]
         public readonly GameCmd Letguild;
-        [CustomCommand(typeof(BanGuildChatCommand))]
+        [CommandHandle(typeof(BanGuildChatCommand))]
         public readonly GameCmd BanGuildChat;
-        [CustomCommand(typeof(LetTradeCommand))]
+        [CommandHandle(typeof(LetTradeCommand))]
         public readonly GameCmd LetTrade;
-        [CustomCommand(typeof(LetShoutCommand))]
+        [CommandHandle(typeof(LetShoutCommand))]
         public readonly GameCmd Letshout;
-        [CustomCommand(typeof(AllowMsgCommand))]
+        [CommandHandle(typeof(AllowMsgCommand))]
         public readonly GameCmd AllowMsg;
-        [CustomCommand(typeof(ShowHumanUnitOpenCommand))]
+        [CommandHandle(typeof(ShowHumanUnitOpenCommand))]
         public readonly GameCmd ShowOpen;
-        [CustomCommand(typeof(ShowUnitCommand))]
+        [CommandHandle(typeof(ShowUnitCommand))]
         public readonly GameCmd ShowUnit;
-        [CustomCommand(typeof(AllowGuildRecallCommand))]
+        [CommandHandle(typeof(AllowGuildRecallCommand))]
         public readonly GameCmd AllowGuildRecall;
-        [CustomCommand(typeof(DelBonuPointCommand))]
+        [CommandHandle(typeof(DelBonuPointCommand))]
         public readonly GameCmd DelBonusPoint;
-        [CustomCommand(typeof(BonuPointCommand))]
+        [CommandHandle(typeof(BonuPointCommand))]
         public readonly GameCmd BonusPoint;
-        [CustomCommand(typeof(ShowSbkGoldCommand))]
+        [CommandHandle(typeof(ShowSbkGoldCommand))]
         public readonly GameCmd SabukwallGold;
-        [CustomCommand(typeof(MapInfoCommand))]
+        [CommandHandle(typeof(MapInfoCommand))]
         public readonly GameCmd Info;
-        [CustomCommand(typeof(SetPassWordCommand))]
+        [CommandHandle(typeof(SetPassWordCommand))]
         public readonly GameCmd SetPassword;
-        [CustomCommand(typeof(ChgpassWordCommand))]
+        [CommandHandle(typeof(ChgpassWordCommand))]
         public readonly GameCmd ChgPassword;
-        [CustomCommand(typeof(ClearHumanPasswordCommand))]
+        [CommandHandle(typeof(ClearHumanPasswordCommand))]
         public readonly GameCmd ClrPassword;
-        [CustomCommand(typeof(UnPasswWordCommand))]
+        [CommandHandle(typeof(UnPasswWordCommand))]
         public readonly GameCmd UnPassword;
-        [CustomCommand(typeof(UnlockStorageCommand))]
+        [CommandHandle(typeof(UnlockStorageCommand))]
         public readonly GameCmd UnlockStorage;
-        [CustomCommand(typeof(UnLockCommand))]
+        [CommandHandle(typeof(UnLockCommand))]
         public readonly GameCmd Unlock;
-        [CustomCommand(typeof(LockCommand))]
+        [CommandHandle(typeof(LockCommand))]
         public readonly GameCmd Lock;
-        [CustomCommand(typeof(SetFlagCommand))]
+        [CommandHandle(typeof(SetFlagCommand))]
         public readonly GameCmd SetFlag;
-        [CustomCommand(typeof(SetOpenCommand))]
+        [CommandHandle(typeof(SetOpenCommand))]
         public readonly GameCmd SetOpen;
-        [CustomCommand(typeof(SetUnitCommand))]
+        [CommandHandle(typeof(SetUnitCommand))]
         public readonly GameCmd SetUnit;
-        [CustomCommand(typeof(PasswordLockCommand))]
+        [CommandHandle(typeof(PasswordLockCommand))]
         public readonly GameCmd PasswordLock;
-        [CustomCommand(typeof(AuthCancelCommand))]
+        [CommandHandle(typeof(AuthCancelCommand))]
         public readonly GameCmd AuthCancel;
-        [CustomCommand(typeof(AuthCommand))]
+        [CommandHandle(typeof(AuthCommand))]
         public readonly GameCmd Auth;
-        [CustomCommand(typeof(DataCommand))]
+        [CommandHandle(typeof(DataCommand))]
         public readonly GameCmd Data;
-        [CustomCommand(typeof(PrvMsgCommand))]
+        [CommandHandle(typeof(PrvMsgCommand))]
         public readonly GameCmd Prvmsg;
-        [CustomCommand(typeof(UserMoveXYCommand))]
+        [CommandHandle(typeof(UserMoveXYCommand))]
         public readonly GameCmd UserMove;
-        [CustomCommand(typeof(AllowGroupReCallCommand))]
+        [CommandHandle(typeof(AllowGroupReCallCommand))]
         public readonly GameCmd AllowGroupCall;
-        [CustomCommand(typeof(MemberFunctionCommand))]
+        [CommandHandle(typeof(MemberFunctionCommand))]
         public readonly GameCmd MemberFunction;
-        [CustomCommand(typeof(MemberFunctionExCommand))]
+        [CommandHandle(typeof(MemberFunctionExCommand))]
         public readonly GameCmd MemberFunctioneX;
-        [CustomCommand(typeof(AllowDearRecallCommand))]
+        [CommandHandle(typeof(AllowDearRecallCommand))]
         public readonly GameCmd AllowDearRcall;
-        [CustomCommand(typeof(DearRecallCommond))]
+        [CommandHandle(typeof(DearRecallCommond))]
         public readonly GameCmd DearRecall;
-        [CustomCommand(typeof(AllowMasterRecallCommand))]
+        [CommandHandle(typeof(AllowMasterRecallCommand))]
         public readonly GameCmd AllowMasterRecall;
-        [CustomCommand(typeof(MasterRecallCommand))]
+        [CommandHandle(typeof(MasterRecallCommand))]
         public readonly GameCmd MasteRecall;
-        [CustomCommand(typeof(ChangeAttackModeCommand))]
+        [CommandHandle(typeof(ChangeAttackModeCommand))]
         public readonly GameCmd AttackMode;
-        [CustomCommand(typeof(TakeOnHorseCommand))]
+        [CommandHandle(typeof(TakeOnHorseCommand))]
         public readonly GameCmd TakeonHorse;
-        [CustomCommand(typeof(TakeOffHorseCommand))]
+        [CommandHandle(typeof(TakeOffHorseCommand))]
         public readonly GameCmd TakeofHorse;
-        [CustomCommand(typeof(HumanLocalCommand))]
+        [CommandHandle(typeof(HumanLocalCommand))]
         public readonly GameCmd HumanLocal;
-        [CustomCommand(typeof(PositionMoveCommand))]
+        [CommandHandle(typeof(PositionMoveCommand))]
         public readonly GameCmd Move;
-        [CustomCommand(typeof(PositionMoveCommand))]
+        [CommandHandle(typeof(PositionMoveCommand))]
         public readonly GameCmd PositionMove;
-        [CustomCommand(typeof(MobLevelCommand))]
+        [CommandHandle(typeof(MobLevelCommand))]
         public readonly GameCmd MobLevel;
-        [CustomCommand(typeof(MobCountCommand))]
+        [CommandHandle(typeof(MobCountCommand))]
         public readonly GameCmd MobCount;
-        [CustomCommand(typeof(HumanCountCommand))]
+        [CommandHandle(typeof(HumanCountCommand))]
         public readonly GameCmd HumanCount;
-        [CustomCommand(typeof(ShowMapInfoCommand))]
+        [CommandHandle(typeof(ShowMapInfoCommand))]
         public readonly GameCmd Map;
-        [CustomCommand(typeof(KickHumanCommand))]
+        [CommandHandle(typeof(KickHumanCommand))]
         public readonly GameCmd Kick;
-        [CustomCommand(typeof(TingCommand))]
+        [CommandHandle(typeof(TingCommand))]
         public readonly GameCmd Ting;
-        [CustomCommand(typeof(SuperTingCommand))]
+        [CommandHandle(typeof(SuperTingCommand))]
         public readonly GameCmd Superting;
-        [CustomCommand(typeof(MapMoveCommand))]
+        [CommandHandle(typeof(MapMoveCommand))]
         public readonly GameCmd MapMove;
-        [CustomCommand(typeof(ShutupCommand))]
+        [CommandHandle(typeof(ShutupCommand))]
         public readonly GameCmd ShutUp;
-        [CustomCommand(typeof(ShutupReleaseCommand))]
+        [CommandHandle(typeof(ShutupReleaseCommand))]
         public readonly GameCmd ReleaseShutup;
-        [CustomCommand(typeof(ShutupListCommand))]
+        [CommandHandle(typeof(ShutupListCommand))]
         public readonly GameCmd ShutupList;
-        [CustomCommand(typeof(ChangeAdminModeCommand))]
+        [CommandHandle(typeof(ChangeAdminModeCommand))]
         public readonly GameCmd GameMaster;
-        [CustomCommand(typeof(ChangeObModeCommand))]
+        [CommandHandle(typeof(ChangeObModeCommand))]
         public readonly GameCmd ObServer;
-        [CustomCommand(typeof(ChangeSuperManModeCommand))]
+        [CommandHandle(typeof(ChangeSuperManModeCommand))]
         public readonly GameCmd SueprMan;
-        [CustomCommand(typeof(ChangeLevelCommand))]
+        [CommandHandle(typeof(ChangeLevelCommand))]
         public readonly GameCmd Level;
-        [CustomCommand(typeof(ShowHumanFlagCommand))]
+        [CommandHandle(typeof(ShowHumanFlagCommand))]
         public readonly GameCmd Showflag;
-        [CustomCommand(typeof(MobCommand))]
+        [CommandHandle(typeof(MobCommand))]
         public readonly GameCmd Mob;
-        [CustomCommand(typeof(MobNpcCommand))]
+        [CommandHandle(typeof(MobNpcCommand))]
         public readonly GameCmd MobNpc;
-        [CustomCommand(typeof(DelNpcCommand))]
+        [CommandHandle(typeof(DelNpcCommand))]
         public readonly GameCmd DeleteNpc;
-        [CustomCommand(typeof(LuckPointCommand))]
+        [CommandHandle(typeof(LuckPointCommand))]
         public readonly GameCmd LuckyPoint;
-        [CustomCommand(typeof(LotteryTicketCommandL))]
+        [CommandHandle(typeof(LotteryTicketCommandL))]
         public readonly GameCmd LotteryTicket;
-        [CustomCommand(typeof(ReloadLineNoticeCommand))]
+        [CommandHandle(typeof(ReloadLineNoticeCommand))]
         public readonly GameCmd ReloadLineNotice;
-        [CustomCommand(typeof(ReloadAbuseCommand))]
+        [CommandHandle(typeof(ReloadAbuseCommand))]
         public readonly GameCmd ReloadAbuse;
-        [CustomCommand(typeof(BackStepCommand))]
+        [CommandHandle(typeof(BackStepCommand))]
         public readonly GameCmd BackStep;
-        [CustomCommand(typeof(FreePenaltyCommand))]
+        [CommandHandle(typeof(FreePenaltyCommand))]
         public readonly GameCmd FreePenalty;
-        [CustomCommand(typeof(PKpointCommand))]
+        [CommandHandle(typeof(PKpointCommand))]
         public readonly GameCmd PkPoint;
-        [CustomCommand(typeof(IncPkPointCommand))]
+        [CommandHandle(typeof(IncPkPointCommand))]
         public readonly GameCmd Incpkpoint;
-        [CustomCommand(typeof(HungerCommand))]
+        [CommandHandle(typeof(HungerCommand))]
         public readonly GameCmd Hunger;
-        [CustomCommand(typeof(HairCommand))]
+        [CommandHandle(typeof(HairCommand))]
         public readonly GameCmd Hair;
-        [CustomCommand(typeof(TrainingCommand))]
+        [CommandHandle(typeof(TrainingCommand))]
         public readonly GameCmd Training;
-        [CustomCommand(typeof(DelSkillCommand))]
+        [CommandHandle(typeof(DelSkillCommand))]
         public readonly GameCmd DeleteSkill;
-        [CustomCommand(typeof(ChangeJobCommand))]
+        [CommandHandle(typeof(ChangeJobCommand))]
         public readonly GameCmd ChangeJob;
-        [CustomCommand(typeof(ChangeGenderCommand))]
+        [CommandHandle(typeof(ChangeGenderCommand))]
         public readonly GameCmd ChangeGender;
-        [CustomCommand(typeof(MissionCommand))]
+        [CommandHandle(typeof(MissionCommand))]
         public readonly GameCmd Mission;
-        [CustomCommand(typeof(MobPlaceCommand))]
+        [CommandHandle(typeof(MobPlaceCommand))]
         public readonly GameCmd MobPlace;
-        [CustomCommand(typeof(DeleteItemCommand))]
+        [CommandHandle(typeof(DeleteItemCommand))]
         public readonly GameCmd DeleteItem;
-        [CustomCommand(typeof(ClearMissionCommand))]
+        [CommandHandle(typeof(ClearMissionCommand))]
         public readonly GameCmd ClearMission;
-        [CustomCommand(typeof(ReconnectionCommand))]
+        [CommandHandle(typeof(ReconnectionCommand))]
         public readonly GameCmd Reconnection;
-        [CustomCommand(typeof(DisableFilterCommand))]
+        [CommandHandle(typeof(DisableFilterCommand))]
         public readonly GameCmd DisableFilter;
-        [CustomCommand(typeof(ChangeUserFullCommand))]
+        [CommandHandle(typeof(ChangeUserFullCommand))]
         public readonly GameCmd ChguserFull;
-        [CustomCommand(typeof(ChangeZenFastStepCommand))]
+        [CommandHandle(typeof(ChangeZenFastStepCommand))]
         public readonly GameCmd ChgZenFastStep;
-        [CustomCommand(typeof(ContestPointCommand))]
+        [CommandHandle(typeof(ContestPointCommand))]
         public readonly GameCmd ContestPoint;
-        [CustomCommand(typeof(StartContestCommand))]
+        [CommandHandle(typeof(StartContestCommand))]
         public readonly GameCmd StartContest;
-        [CustomCommand(typeof(EndContestCommand))]
+        [CommandHandle(typeof(EndContestCommand))]
         public readonly GameCmd EndContest;
-        [CustomCommand(typeof(AnnouncementCommand))]
+        [CommandHandle(typeof(AnnouncementCommand))]
         public readonly GameCmd Announcement;
-        [CustomCommand(typeof(ChangeItemNameCommand))]
+        [CommandHandle(typeof(ChangeItemNameCommand))]
         public readonly GameCmd ChangeItemName;
-        [CustomCommand(typeof(DisableSendMsgCommand))]
+        [CommandHandle(typeof(DisableSendMsgCommand))]
         public readonly GameCmd DisableSendMsg;
-        [CustomCommand(typeof(EnableSendMsgCommand))]
+        [CommandHandle(typeof(EnableSendMsgCommand))]
         public readonly GameCmd EnableSendMsg;
-        [CustomCommand(typeof(DisableSendMsgListCommand))]
+        [CommandHandle(typeof(DisableSendMsgListCommand))]
         public readonly GameCmd DisableSendMsgList;
-        [CustomCommand(typeof(KillCommand))]
+        [CommandHandle(typeof(KillCommand))]
         public readonly GameCmd Kill;
-        [CustomCommand(typeof(MakeItemCommond))]
+        [CommandHandle(typeof(MakeItemCommond))]
         public readonly GameCmd Make;
-        [CustomCommand(typeof(SmakeItemCommand))]
+        [CommandHandle(typeof(SmakeItemCommand))]
         public readonly GameCmd Smake;
-        [CustomCommand(typeof(FireBurnCommand))]
+        [CommandHandle(typeof(FireBurnCommand))]
         public readonly GameCmd FireBurn;
-        [CustomCommand(typeof(TestFireCommand))]
+        [CommandHandle(typeof(TestFireCommand))]
         public readonly GameCmd TestFire;
-        [CustomCommand(typeof(TestStatusCommand))]
+        [CommandHandle(typeof(TestStatusCommand))]
         public readonly GameCmd TestStatus;
-        [CustomCommand(typeof(DelGoldCommand))]
+        [CommandHandle(typeof(DelGoldCommand))]
         public readonly GameCmd DelGold;
-        [CustomCommand(typeof(AddGoldCommand))]
+        [CommandHandle(typeof(AddGoldCommand))]
         public readonly GameCmd AddGold;
-        [CustomCommand(typeof(DelGameGoldCommand))]
+        [CommandHandle(typeof(DelGameGoldCommand))]
         public readonly GameCmd DelGameGold;
-        [CustomCommand(typeof(AddGameGoldCommand))]
+        [CommandHandle(typeof(AddGameGoldCommand))]
         public readonly GameCmd AddGameGold;
-        [CustomCommand(typeof(GameGoldCommand))]
+        [CommandHandle(typeof(GameGoldCommand))]
         public readonly GameCmd GameGold;
-        [CustomCommand(typeof(GamePointCommand))]
+        [CommandHandle(typeof(GamePointCommand))]
         public readonly GameCmd GamePoint;
-        [CustomCommand(typeof(CreditPointCommand))]
+        [CommandHandle(typeof(CreditPointCommand))]
         public readonly GameCmd CreditPoint;
-        [CustomCommand(typeof(RefineWeaponCommand))]
+        [CommandHandle(typeof(RefineWeaponCommand))]
         public readonly GameCmd RefineWeapon;
-        [CustomCommand(typeof(ReLoadAdminCommand))]
+        [CommandHandle(typeof(ReLoadAdminCommand))]
         public readonly GameCmd ReloadAdmin;
-        [CustomCommand(typeof(ReloadNpcCommand))]
+        [CommandHandle(typeof(ReloadNpcCommand))]
         public readonly GameCmd ReloadNpc;
-        [CustomCommand(typeof(ReloadManageCommand))]
+        [CommandHandle(typeof(ReloadManageCommand))]
         public readonly GameCmd ReloadManage;
-        [CustomCommand(typeof(ReloadManageCommand))]
+        [CommandHandle(typeof(ReloadManageCommand))]
         public readonly GameCmd ReloadRobotManage;
-        [CustomCommand(typeof(ReloadRobotCommand))]
+        [CommandHandle(typeof(ReloadRobotCommand))]
         public readonly GameCmd ReloadRobot;
-        [CustomCommand(typeof(ReloadMonItemsCommand))]
+        [CommandHandle(typeof(ReloadMonItemsCommand))]
         public readonly GameCmd ReloadMonItems;
-        [CustomCommand(typeof(ReloadMagicDBCommand))]
+        [CommandHandle(typeof(ReloadMagicDBCommand))]
         public readonly GameCmd ReloadMagicDb;
-        [CustomCommand(typeof(ReAliveCommand))]
+        [CommandHandle(typeof(ReAliveCommand))]
         public readonly GameCmd ReaLive;
-        [CustomCommand(typeof(AdjuestLevelCommand))]
+        [CommandHandle(typeof(AdjuestLevelCommand))]
         public readonly GameCmd AdjuestLevel;
-        [CustomCommand(typeof(AdjuestExpCommand))]
+        [CommandHandle(typeof(AdjuestExpCommand))]
         public readonly GameCmd AdjuestExp;
-        [CustomCommand(typeof(AddGuildCommand))]
+        [CommandHandle(typeof(AddGuildCommand))]
         public readonly GameCmd AddGuild;
-        [CustomCommand(typeof(DelGuildCommand))]
+        [CommandHandle(typeof(DelGuildCommand))]
         public readonly GameCmd DelGuild;
-        [CustomCommand(typeof(ChangeSabukLordCommand))]
+        [CommandHandle(typeof(ChangeSabukLordCommand))]
         public readonly GameCmd ChangeSabukLord;
-        [CustomCommand(typeof(ForcedWallconquestWarCommand))]
+        [CommandHandle(typeof(ForcedWallconquestWarCommand))]
         public readonly GameCmd ForcedWallConQuestWar;
-        [CustomCommand(typeof(TrainingSkillCommand))]
+        [CommandHandle(typeof(TrainingSkillCommand))]
         public readonly GameCmd TrainingSkill;
-        [CustomCommand(typeof(ReloadAllGuildCommand))]
+        [CommandHandle(typeof(ReloadAllGuildCommand))]
         public readonly GameCmd ReloadGuildAll;
-        [CustomCommand(typeof(ShowMapInfoCommand))]
+        [CommandHandle(typeof(ShowMapInfoCommand))]
         public readonly GameCmd MapInfo;
-        [CustomCommand(typeof(SbkDoorControlCommand))]
+        [CommandHandle(typeof(SbkDoorControlCommand))]
         public readonly GameCmd SbkDoor;
-        [CustomCommand(typeof(ChangeDearNameCommand))]
+        [CommandHandle(typeof(ChangeDearNameCommand))]
         public readonly GameCmd ChangeDearName;
-        [CustomCommand(typeof(ChangeMasterNameCommand))]
+        [CommandHandle(typeof(ChangeMasterNameCommand))]
         public readonly GameCmd ChangeMasterName;
-        [CustomCommand(typeof(StartQuestCommand))]
+        [CommandHandle(typeof(StartQuestCommand))]
         public readonly GameCmd StartQuest;
-        [CustomCommand(typeof(SetPermissionCommand))]
+        [CommandHandle(typeof(SetPermissionCommand))]
         public readonly GameCmd SetperMission;
-        [CustomCommand(typeof(ClearMapMonsterCommand))]
+        [CommandHandle(typeof(ClearMapMonsterCommand))]
         public readonly GameCmd ClearMon;
-        [CustomCommand(typeof(ReNewLevelCommand))]
+        [CommandHandle(typeof(ReNewLevelCommand))]
         public readonly GameCmd RenewLevel;
-        [CustomCommand(typeof(DenyIPaddrLogonCommand))]
+        [CommandHandle(typeof(DenyIPaddrLogonCommand))]
         public readonly GameCmd DenyipLogon;
-        [CustomCommand(typeof(DenyAccountLogonCommand))]
+        [CommandHandle(typeof(DenyAccountLogonCommand))]
         public readonly GameCmd DenyAccountLogon;
-        [CustomCommand(typeof(DenyChrNameLogonCommand))]
+        [CommandHandle(typeof(DenyChrNameLogonCommand))]
         public readonly GameCmd DenyChrNameLogon;
-        [CustomCommand(typeof(DelDenyIPaddrLogonCommand))]
+        [CommandHandle(typeof(DelDenyIPaddrLogonCommand))]
         public readonly GameCmd DelDenyIpLogon;
-        [CustomCommand(typeof(DelDenyAccountLogonCommand))]
+        [CommandHandle(typeof(DelDenyAccountLogonCommand))]
         public readonly GameCmd DelDenyAccountLogon;
-        [CustomCommand(typeof(DelDenyChrNameLogonCommand))]
+        [CommandHandle(typeof(DelDenyChrNameLogonCommand))]
         public readonly GameCmd DelDenyChrNameLogon;
-        [CustomCommand(typeof(ShowDenyIPaddrLogonCommand))]
+        [CommandHandle(typeof(ShowDenyIPaddrLogonCommand))]
         public readonly GameCmd ShowDenyIpLogon;
-        [CustomCommand(typeof(ShowDenyAccountLogonCommand))]
+        [CommandHandle(typeof(ShowDenyAccountLogonCommand))]
         public readonly GameCmd ShowDenyAccountLogon;
-        [CustomCommand(typeof(ShowDenyChrNameLogonCommand))]
+        [CommandHandle(typeof(ShowDenyChrNameLogonCommand))]
         public readonly GameCmd ShowDenyChrNameLogon;
-        [CustomCommand(typeof(ViewWhisperCommand))]
+        [CommandHandle(typeof(ViewWhisperCommand))]
         public readonly GameCmd ViewWhisper;
-        [CustomCommand(typeof(SpirtStartCommand))]
+        [CommandHandle(typeof(SpirtStartCommand))]
         public readonly GameCmd Spirit;
-        [CustomCommand(typeof(SpirtStopCommand))]
+        [CommandHandle(typeof(SpirtStopCommand))]
         public readonly GameCmd SpiritStop;
-        [CustomCommand(typeof(SetMapModeCommamd))]
+        [CommandHandle(typeof(SetMapModeCommamd))]
         public readonly GameCmd SetMapMode;
-        [CustomCommand(typeof(ShowMapModeCommand))]
+        [CommandHandle(typeof(ShowMapModeCommand))]
         public readonly GameCmd ShowMapMode;
-        [CustomCommand(typeof(ClearBagItemCommand))]
+        [CommandHandle(typeof(ClearBagItemCommand))]
         public readonly GameCmd ClearBag;
-        [CustomCommand(typeof(LockLoginCommand))]
+        [CommandHandle(typeof(LockLoginCommand))]
         public readonly GameCmd LockLogon;
 
         public GameCommands()

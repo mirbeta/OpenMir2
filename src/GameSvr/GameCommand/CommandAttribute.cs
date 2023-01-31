@@ -104,13 +104,13 @@
     }
 
     [AttributeUsage(AttributeTargets.Field)]
-    public class CustomCommandAttribute : Attribute
+    public class CommandHandleAttribute : Attribute
     {
-        public Type CommandType;
+        public readonly Type CommandHandle;
 
-        public CustomCommandAttribute(Type commond)
+        public CommandHandleAttribute(Type commond)
         {
-            CommandType = commond;
+            CommandHandle = commond;
         }
     }
 }

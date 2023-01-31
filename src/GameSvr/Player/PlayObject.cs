@@ -3345,7 +3345,7 @@ namespace GameSvr.Player
         {
             if (processMsg.wParam == 0)
             {
-                ProcessUserLineMsg("@" + CommandMgr.Commands.Unlock.CmdName);
+                ProcessUserLineMsg("@" + CommandMgr.GameCommands.Unlock.CmdName);
                 return;
             }
             var sData = processMsg.Msg;

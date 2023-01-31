@@ -30,13 +30,10 @@ namespace GameSvr.GameCommand.Commands
             IList<DeleteItem> DelList = null;
             if (m_PlayObject.ItemList.Count > 0)
             {
+                DelList = new List<DeleteItem>();
                 for (var i = m_PlayObject.ItemList.Count - 1; i >= 0; i--)
                 {
                     var UserItem = m_PlayObject.ItemList[i];
-                    if (DelList == null)
-                    {
-                        DelList = new List<DeleteItem>();
-                    }
                     DelList.Add(new DeleteItem()
                     {
                         ItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index),

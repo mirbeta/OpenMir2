@@ -1000,67 +1000,67 @@ namespace GameSvr.Npc
                         return;
                     }
                 case "$CMD_DATE":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_DATE>", CommandMgr.Commands.Data.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_DATE>", CommandMgr.GameCommands.Data.CmdName);
                     return;
                 case "$CMD_ALLOWMSG":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWMSG>", CommandMgr.Commands.AllowMsg.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWMSG>", CommandMgr.GameCommands.AllowMsg.CmdName);
                     return;
                 case "$CMD_LETSHOUT":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETSHOUT>", CommandMgr.Commands.Letshout.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETSHOUT>", CommandMgr.GameCommands.Letshout.CmdName);
                     return;
                 case "$CMD_LETTRADE":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETTRADE>", CommandMgr.Commands.LetTrade.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETTRADE>", CommandMgr.GameCommands.LetTrade.CmdName);
                     return;
                 case "$CMD_LETGUILD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETGUILD>", CommandMgr.Commands.Letguild.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETGUILD>", CommandMgr.GameCommands.Letguild.CmdName);
                     return;
                 case "$CMD_ENDGUILD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ENDGUILD>", CommandMgr.Commands.Endguild.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.Endguild.CmdName);
                     return;
                 case "$CMD_BANGUILDCHAT":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.Commands.BanGuildChat.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.GameCommands.BanGuildChat.CmdName);
                     return;
                 case "$CMD_AUTHALLY":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHALLY>", CommandMgr.Commands.Authally.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHALLY>", CommandMgr.GameCommands.Authally.CmdName);
                     return;
                 case "$CMD_AUTH":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTH>", CommandMgr.Commands.Auth.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTH>", CommandMgr.GameCommands.Auth.CmdName);
                     return;
                 case "$CMD_AUTHCANCEL":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHCANCEL>", CommandMgr.Commands.AuthCancel.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHCANCEL>", CommandMgr.GameCommands.AuthCancel.CmdName);
                     return;
                 case "$CMD_USERMOVE":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_USERMOVE>", CommandMgr.Commands.UserMove.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_USERMOVE>", CommandMgr.GameCommands.UserMove.CmdName);
                     return;
                 case "$CMD_SEARCHING":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_SEARCHING>", CommandMgr.Commands.Searching.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_SEARCHING>", CommandMgr.GameCommands.Searching.CmdName);
                     return;
                 case "$CMD_ALLOWGROUPCALL":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWGROUPCALL>", CommandMgr.Commands.AllowGroupCall.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWGROUPCALL>", CommandMgr.GameCommands.AllowGroupCall.CmdName);
                     return;
                 case "$CMD_GROUPRECALLL":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_GROUPRECALLL>", CommandMgr.Commands.GroupRecalll.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_GROUPRECALLL>", CommandMgr.GameCommands.GroupRecalll.CmdName);
                     return;
                 case "$CMD_ATTACKMODE":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ATTACKMODE>", CommandMgr.Commands.AttackMode.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ATTACKMODE>", CommandMgr.GameCommands.AttackMode.CmdName);
                     return;
                 case "$CMD_REST":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_REST>", CommandMgr.Commands.Rest.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_REST>", CommandMgr.GameCommands.Rest.CmdName);
                     return;
                 case "$CMD_STORAGESETPASSWORD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGESETPASSWORD>", CommandMgr.Commands.SetPassword.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGESETPASSWORD>", CommandMgr.GameCommands.SetPassword.CmdName);
                     return;
                 case "$CMD_STORAGECHGPASSWORD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGECHGPASSWORD>", CommandMgr.Commands.ChgPassword.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGECHGPASSWORD>", CommandMgr.GameCommands.ChgPassword.CmdName);
                     return;
                 case "$CMD_STORAGELOCK":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGELOCK>", CommandMgr.Commands.Lock.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGELOCK>", CommandMgr.GameCommands.Lock.CmdName);
                     return;
                 case "$CMD_STORAGEUNLOCK":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGEUNLOCK>", CommandMgr.Commands.UnlockStorage.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGEUNLOCK>", CommandMgr.GameCommands.UnlockStorage.CmdName);
                     return;
                 case "$CMD_UNLOCK":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_UNLOCK>", CommandMgr.Commands.Unlock.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_UNLOCK>", CommandMgr.GameCommands.Unlock.CmdName);
                     return;
             }
             if (HUtil32.CompareLStr(sVariable, "$MAPMONSTERCOUNT[")) // 地图怪物数量
