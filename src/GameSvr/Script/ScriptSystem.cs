@@ -1527,72 +1527,72 @@ namespace GameSvr.Script
                                     sScript = HUtil32.GetValidStr3(sScript, ref s30, HUtil32.Separator);
                                     if (s30.Equals(ScriptConst.sBUY, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boBuy = true;
+                                        ((Merchant)NPC).IsBuy = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sSELL, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boSell = true;
+                                        ((Merchant)NPC).IsSell = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boMakeDrug = true;
+                                        ((Merchant)NPC).IsMakeDrug = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sPRICES, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boPrices = true;
+                                        ((Merchant)NPC).IsPrices = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sSTORAGE, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boStorage = true;
+                                        ((Merchant)NPC).IsStorage = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sGETBACK, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boGetback = true;
+                                        ((Merchant)NPC).IsGetback = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boUpgradenow = true;
+                                        ((Merchant)NPC).IsUpgradenow = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boGetBackupgnow = true;
+                                        ((Merchant)NPC).IsGetBackupgnow = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boRepair = true;
+                                        ((Merchant)NPC).IsRepair = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boS_repair = true;
+                                        ((Merchant)NPC).IsSupRepair = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boSendmsg = true;
+                                        ((Merchant)NPC).IsSendMsg = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sUSEITEMNAME, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boUseItemName = true;
+                                        ((Merchant)NPC).IsUseItemName = true;
                                         continue;
                                     }
                                     if (s30.Equals(ScriptConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).m_boOffLineMsg = true;
+                                        ((Merchant)NPC).IsOffLineMsg = true;
                                         continue;
                                     }
                                     if (string.Compare(s30, ScriptConst.sybdeal, StringComparison.OrdinalIgnoreCase) == 0)
                                     {
-                                        ((Merchant)NPC).m_boYBDeal = true;
+                                        ((Merchant)NPC).IsYBDeal = true;
                                         continue;
                                     }
                                 }

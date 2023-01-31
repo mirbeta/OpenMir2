@@ -19,18 +19,18 @@ namespace GameSvr.Npc
         /// <summary>
         /// 用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)
         /// </summary>
-        public short m_nFlag = 0;
+        public short NpcFlag = 0;
         public int[] FGotoLable;
         public IList<TScript> m_ScriptList;
-        public string m_sFilePath = string.Empty;
+        public string FilePath;
         /// <summary>
         /// 此NPC是否是隐藏的，不显示在地图中
         /// </summary>
-        public bool m_boIsHide;
+        public bool IsHide;
         /// <summary>
         /// NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         /// </summary>
-        public bool m_boIsQuest;
+        public bool IsQuest;
         protected string m_sPath = string.Empty;
         private IList<ScriptParams> BatchParamsList;
         public int ProcessRefillIndex;
@@ -43,9 +43,9 @@ namespace GameSvr.Npc
             AntiPoison = 99;
             m_ScriptList = new List<TScript>();
             StickMode = true;
-            m_sFilePath = "";
-            m_boIsHide = false;
-            m_boIsQuest = true;
+            FilePath = "";
+            IsHide = false;
+            IsQuest = true;
             FGotoLable = new int[100];
             MapCell = CellType.Merchant;
         }
@@ -1578,16 +1578,16 @@ namespace GameSvr.Npc
 
         public void LoadNPCScript()
         {
-            if (m_boIsQuest)
+            if (IsQuest)
             {
                 m_sPath = ScriptConst.sNpc_def;
                 string sScriptName = ChrName + '-' + MapName;
-                M2Share.ScriptSystem.LoadScript(this, m_sFilePath, sScriptName);
+                M2Share.ScriptSystem.LoadScript(this, FilePath, sScriptName);
             }
             else
             {
-                m_sPath = m_sFilePath;
-                M2Share.ScriptSystem.LoadScript(this, m_sFilePath, ChrName);
+                m_sPath = FilePath;
+                M2Share.ScriptSystem.LoadScript(this, FilePath, ChrName);
             }
         }
 

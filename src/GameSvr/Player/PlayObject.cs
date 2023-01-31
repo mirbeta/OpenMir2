@@ -3647,7 +3647,7 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                if (npc.Envir == Envir && Math.Abs(npc.CurrX - CurrX) < 15 && Math.Abs(npc.CurrY - CurrY) < 15 || npc.m_boIsHide)
+                if (npc.Envir == Envir && Math.Abs(npc.CurrX - CurrX) < 15 && Math.Abs(npc.CurrY - CurrY) < 15 || npc.IsHide)
                 {
                     DlgItemIndex = HUtil32.MakeLong(nParam2, nParam3);
                     int nTemp;

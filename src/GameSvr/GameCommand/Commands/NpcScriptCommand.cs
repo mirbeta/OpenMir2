@@ -43,7 +43,7 @@ namespace GameSvr.GameCommand.Commands
             if (nNPCType == 0)
             {
                 Merchant Merchant = (Merchant)BaseObject;
-                sScriptFileName = M2Share.BasePath + M2Share.Config.EnvirDir + ScriptConst.sMarket_Def + Merchant.m_sScript + "-" + Merchant.MapName + ".txt";
+                sScriptFileName = M2Share.BasePath + M2Share.Config.EnvirDir + ScriptConst.sMarket_Def + Merchant.ScriptName + "-" + Merchant.MapName + ".txt";
             }
             if (nNPCType == 1)
             {

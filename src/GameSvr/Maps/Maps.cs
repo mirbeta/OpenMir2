@@ -449,11 +449,11 @@ namespace GameSvr.Maps
                 CurrX = 0,
                 CurrY = 0,
                 ChrName = sName,
-                m_nFlag = 0,
+                NpcFlag = 0,
                 Appr = 0,
-                m_sFilePath = "MapQuest_def",
-                m_boIsHide = true,
-                m_boIsQuest = false
+                FilePath = "MapQuest_def",
+                IsHide = true,
+                IsQuest = false
             };
             M2Share.WorldEngine.QuestNpcList.Add(questNPC);
             return questNPC;

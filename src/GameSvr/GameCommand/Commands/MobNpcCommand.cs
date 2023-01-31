@@ -41,9 +41,9 @@ namespace GameSvr.GameCommand.Commands
             Merchant.MapName = PlayObject.MapName;
             Merchant.Envir = PlayObject.Envir;
             Merchant.Appr = (ushort)nAppr;
-            Merchant.m_nFlag = 0;
+            Merchant.NpcFlag = 0;
             Merchant.CastleMerchant = boIsCastle;
-            Merchant.m_sScript = sParam2;
+            Merchant.ScriptName = sParam2;
             PlayObject.GetFrontPosition(ref nX, ref nY);
             Merchant.CurrX = nX;
             Merchant.CurrY = nY;

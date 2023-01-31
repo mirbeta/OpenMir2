@@ -127,7 +127,7 @@ namespace GameSvr.Npc
                         string s20;
                         if (string.Compare(sLabel, ScriptConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boOffLineMsg)
+                            if (IsOffLineMsg)
                             {
                                 SetOffLineMsg(PlayObject, sMsg);
                             }

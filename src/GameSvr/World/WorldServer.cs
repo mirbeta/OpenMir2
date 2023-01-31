@@ -211,7 +211,7 @@ namespace GameSvr.World
                 {
                     merchant.OnEnvirnomentChanged();
                     merchant.Initialize();
-                    if (merchant.AddtoMapSuccess && !merchant.m_boIsHide)
+                    if (merchant.AddtoMapSuccess && !merchant.IsHide)
                     {
                         _logger.Warn("Merchant Initalize fail..." + merchant.ChrName + ' ' + merchant.MapName + '(' + merchant.CurrX + ':' + merchant.CurrY + ')');
                         MerchantList.RemoveAt(i);
@@ -240,7 +240,7 @@ namespace GameSvr.World
                 {
                     normNpc.OnEnvirnomentChanged();
                     normNpc.Initialize();
-                    if (normNpc.AddtoMapSuccess && !normNpc.m_boIsHide)
+                    if (normNpc.AddtoMapSuccess && !normNpc.IsHide)
                     {
                         _logger.Warn(normNpc.ChrName + " Npc Initalize fail... ");
                         QuestNpcList.RemoveAt(i);

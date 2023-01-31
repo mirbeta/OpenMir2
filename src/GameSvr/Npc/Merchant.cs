@@ -13,7 +13,10 @@ namespace GameSvr.Npc
     /// </summary>
     public class Merchant : NormNpc
     {
-        public string m_sScript = string.Empty;
+        /// <summary>
+        /// 脚本路径
+        /// </summary>
+        public string ScriptName  = string.Empty;
         /// <summary>
         /// 物品价格倍率 默认为 100%
         /// </summary>
@@ -47,31 +50,31 @@ namespace GameSvr.Npc
         /// 物品升级列表
         /// </summary>
         private readonly IList<WeaponUpgradeInfo> UpgradeWeaponList;
-        public bool m_boCanMove = false;
-        public int m_dwMoveTime = 0;
-        public int m_dwMoveTick;
+        public bool BoCanMove = false;
+        public int MoveTime = 0;
+        public int MoveTick;
         /// <summary>
         /// 是否购买物品
         /// </summary>
-        public bool m_boBuy;
+        public bool IsBuy;
         /// <summary>
         /// 是否交易物品
         /// </summary>
-        public bool m_boSell;
-        public bool m_boMakeDrug;
-        public bool m_boPrices;
-        public bool m_boStorage;
-        public bool m_boGetback;
-        public bool m_boUpgradenow;
-        public bool m_boGetBackupgnow;
-        public bool m_boRepair;
-        public bool m_boS_repair;
-        public bool m_boSendmsg = false;
-        public bool m_boGetMarry;
-        public bool m_boGetMaster;
-        public bool m_boUseItemName;
-        public bool m_boOffLineMsg = false;
-        public bool m_boYBDeal = false;
+        public bool IsSell;
+        public bool IsMakeDrug;
+        public bool IsPrices;
+        public bool IsStorage;
+        public bool IsGetback;
+        public bool IsUpgradenow;
+        public bool IsGetBackupgnow;
+        public bool IsRepair;
+        public bool IsSupRepair;
+        public bool IsSendMsg = false;
+        public bool IsGetMarry;
+        public bool IsGetMaster;
+        public bool IsUseItemName;
+        public bool IsOffLineMsg = false;
+        public bool IsYBDeal = false;
 
         public Merchant() : base()
         {
@@ -86,20 +89,20 @@ namespace GameSvr.Npc
             UpgradeWeaponList = new List<WeaponUpgradeInfo>();
             RefillGoodsTick = HUtil32.GetTickCount();
             ClearExpreUpgradeTick = HUtil32.GetTickCount();
-            m_boBuy = false;
-            m_boSell = false;
-            m_boMakeDrug = false;
-            m_boPrices = false;
-            m_boStorage = false;
-            m_boGetback = false;
-            m_boUpgradenow = false;
-            m_boGetBackupgnow = false;
-            m_boRepair = false;
-            m_boS_repair = false;
-            m_boGetMarry = false;
-            m_boGetMaster = false;
-            m_boUseItemName = false;
-            m_dwMoveTick = HUtil32.GetTickCount();
+            IsBuy = false;
+            IsSell = false;
+            IsMakeDrug = false;
+            IsPrices = false;
+            IsStorage = false;
+            IsGetback = false;
+            IsUpgradenow = false;
+            IsGetBackupgnow = false;
+            IsRepair = false;
+            IsSupRepair = false;
+            IsGetMarry = false;
+            IsGetMaster = false;
+            IsUseItemName = false;
+            MoveTick = HUtil32.GetTickCount();
             MapCell = CellType.Merchant;
         }
 
@@ -150,9 +153,9 @@ namespace GameSvr.Npc
                         SendRefMsg(Grobal2.RM_HIT, Direction, CurrX, CurrY, 0, "");
                     }
                 }
-                if (m_boCanMove && (HUtil32.GetTickCount() - m_dwMoveTick) > m_dwMoveTime * 1000)
+                if (BoCanMove && (HUtil32.GetTickCount() - MoveTick) > MoveTime * 1000)
                 {
-                    m_dwMoveTick = HUtil32.GetTickCount();
+                    MoveTick = HUtil32.GetTickCount();
                     SendRefMsg(Grobal2.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                     MapRandomMove(MapName, 0);
                 }
@@ -177,7 +180,7 @@ namespace GameSvr.Npc
                 nPrice = nPrice
             };
             ItemPriceList.Add(itemPrice);
-            DataSource.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
+            DataSource.LocalDB.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
         }
 
         private void CheckItemPrice(ushort nIndex)
@@ -231,14 +234,14 @@ namespace GameSvr.Npc
                             {
                                 CheckItemPrice(nIndex);
                                 RefillGoodsItems(ref refillList, Goods.ItemName, Goods.Count - nRefillCount);
-                                DataSource.LocalDB.SaveGoodRecord(this, m_sScript + '-' + MapName);
-                                DataSource.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
+                                DataSource.LocalDB.SaveGoodRecord(this, ScriptName + '-' + MapName);
+                                DataSource.LocalDB.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
                             }
                             if (Goods.Count < nRefillCount)
                             {
                                 RefillDelReFillItem(ref refillList, nRefillCount - Goods.Count);
-                                DataSource.LocalDB.SaveGoodRecord(this, m_sScript + '-' + MapName);
-                                DataSource.LocalDB.SaveGoodPriceRecord(this, m_sScript + '-' + MapName);
+                                DataSource.LocalDB.SaveGoodRecord(this, ScriptName + '-' + MapName);
+                                DataSource.LocalDB.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
                             }
                         }
                     }
@@ -816,105 +819,105 @@ namespace GameSvr.Npc
                         }
                         if (string.Compare(sLabel, ScriptConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0)// 增加挂机
                         {
-                            if (m_boOffLineMsg)
+                            if (IsOffLineMsg)
                             {
                                 SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boSendmsg)
+                            if (IsSendMsg)
                             {
                                 SendCustemMsg(PlayObject, sMsg);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boS_repair)
+                            if (IsSupRepair)
                             {
                                 UserSelectSuperRepairItem(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBUY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boBuy)
+                            if (IsBuy)
                             {
                                 UserSelectBuyItem(PlayObject, 0);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sSELL, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boSell)
+                            if (IsSell)
                             {
                                 UserSelectSellItem(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sREPAIR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boRepair)
+                            if (IsRepair)
                             {
                                 UserSelectRepairItem(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boMakeDrug)
+                            if (IsMakeDrug)
                             {
                                 UserSelectMakeDurg(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sPRICES, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boPrices)
+                            if (IsPrices)
                             {
                                 UserSelectItemPrices(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sSTORAGE, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boStorage)
+                            if (IsStorage)
                             {
                                 UserSelectStorage(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sGETBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boGetback)
+                            if (IsGetback)
                             {
                                 UserSelectGetBack(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boUpgradenow)
+                            if (IsUpgradenow)
                             {
                                 UpgradeWapon(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boGetBackupgnow)
+                            if (IsGetBackupgnow)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sGETMARRY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boGetMarry)
+                            if (IsGetMarry)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
                         else if (string.Compare(sLabel, ScriptConst.sGETMASTER, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (m_boGetMaster)
+                            if (IsGetMaster)
                             {
                                 GetBackupgWeapon(PlayObject);
                             }
                         }
                         else if (HUtil32.CompareLStr(sLabel, ScriptConst.sUSEITEMNAME))
                         {
-                            if (m_boUseItemName)
+                            if (IsUseItemName)
                             {
                                 ChangeUseItemName(PlayObject, sLabel, sMsg);
                             }
@@ -933,7 +936,7 @@ namespace GameSvr.Npc
                         }
                         else if (string.Compare(sLabel, ScriptConst.sDealYBme, StringComparison.OrdinalIgnoreCase) == 0) // 元宝寄售:出售物品 
                         {
-                            if (m_boYBDeal)
+                            if (IsYBDeal)
                             {
                                 UserSelectOpenDealOffForm(PlayObject); // 打开出售物品窗口
                             }
@@ -1058,7 +1061,7 @@ namespace GameSvr.Npc
 
         public void LoadNPCData()
         {
-            string sFile = m_sScript + '-' + MapName;
+            string sFile = ScriptName + '-' + MapName;
             DataSource.LocalDB.LoadGoodRecord(this, sFile);
             DataSource.LocalDB.LoadGoodPriceRecord(this, sFile);
             LoadUpgradeList();
@@ -1066,7 +1069,7 @@ namespace GameSvr.Npc
 
         private void SaveNPCData()
         {
-            string sFile = m_sScript + '-' + MapName;
+            string sFile = ScriptName + '-' + MapName;
             DataSource.LocalDB.SaveGoodRecord(this, sFile);
             DataSource.LocalDB.SaveGoodPriceRecord(this, sFile);
         }
@@ -1091,8 +1094,8 @@ namespace GameSvr.Npc
         {
             ItemTypeList.Clear();
             m_sPath = ScriptConst.sMarket_Def;
-            string sC = m_sScript + '-' + MapName;
-            M2Share.ScriptSystem.LoadScriptFile(this, ScriptConst.sMarket_Def, sC, true);
+            string scriptPath = ScriptName + '-' + MapName;
+            M2Share.ScriptSystem.LoadScriptFile(this, ScriptConst.sMarket_Def, scriptPath, true);
         }
 
         public override void Click(PlayObject PlayObject)
@@ -1298,11 +1301,11 @@ namespace GameSvr.Npc
             }
             if (n1C == 0)
             {
-                PlayObject.SendMsg(this, Grobal2.RM_BUYITEM_SUCCESS, 0, PlayObject.Gold, nInt, 0, "");
+                PlayObject.SendMsg(this, Grobal2.SM_BUYITEM_SUCCESS, 0, PlayObject.Gold, nInt, 0, "");
             }
             else
             {
-                PlayObject.SendMsg(this, Grobal2.RM_BUYITEM_FAIL, 0, n1C, 0, 0, "");
+                PlayObject.SendMsg(this, Grobal2.SM_BUYITEM_FAIL, 0, n1C, 0, 0, "");
             }
         }
 
@@ -1580,7 +1583,7 @@ namespace GameSvr.Npc
                 }
                 if (PlayObject.ScriptLable == ScriptConst.sSUPERREPAIR)
                 {
-                    if (m_boS_repair)
+                    if (IsSupRepair)
                     {
                         nRepairPrice = nRepairPrice * M2Share.Config.SuperRepairPriceRate;
                     }
@@ -1591,7 +1594,7 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    if (!m_boRepair)
+                    if (!IsRepair)
                     {
                         nRepairPrice = -1;
                     }
@@ -1615,11 +1618,11 @@ namespace GameSvr.Npc
             int nRepairPrice;
             bool result = false;
             bool boCanRepair = true;
-            if (PlayObject.ScriptLable == ScriptConst.sSUPERREPAIR && !m_boS_repair)
+            if (PlayObject.ScriptLable == ScriptConst.sSUPERREPAIR && !IsSupRepair)
             {
                 boCanRepair = false;
             }
-            if (PlayObject.ScriptLable != ScriptConst.sSUPERREPAIR && !m_boRepair)
+            if (PlayObject.ScriptLable != ScriptConst.sSUPERREPAIR && !IsRepair)
             {
                 boCanRepair = false;
             }
@@ -1690,19 +1693,19 @@ namespace GameSvr.Npc
 
         public override void ClearScript()
         {
-            m_boBuy = false;
-            m_boSell = false;
-            m_boMakeDrug = false;
-            m_boPrices = false;
-            m_boStorage = false;
-            m_boGetback = false;
-            m_boUpgradenow = false;
-            m_boGetBackupgnow = false;
-            m_boRepair = false;
-            m_boS_repair = false;
-            m_boGetMarry = false;
-            m_boGetMaster = false;
-            m_boUseItemName = false;
+            IsBuy = false;
+            IsSell = false;
+            IsMakeDrug = false;
+            IsPrices = false;
+            IsStorage = false;
+            IsGetback = false;
+            IsUpgradenow = false;
+            IsGetBackupgnow = false;
+            IsRepair = false;
+            IsSupRepair = false;
+            IsGetMarry = false;
+            IsGetMaster = false;
+            IsUseItemName = false;
             base.ClearScript();
         }
 
@@ -1715,7 +1718,7 @@ namespace GameSvr.Npc
             UpgradeWeaponList.Clear();
             try
             {
-                DataSource.CommonDB.LoadUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
+                DataSource.CommonDB.LoadUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
             }
             catch
             {
@@ -1727,7 +1730,7 @@ namespace GameSvr.Npc
         {
             try
             {
-                DataSource.CommonDB.SaveUpgradeWeaponRecord(m_sScript + '-' + MapName, UpgradeWeaponList);
+                DataSource.CommonDB.SaveUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
             }
             catch
             {

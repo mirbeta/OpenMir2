@@ -123,7 +123,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (npc.Envir == Envir && Math.Abs(npc.CurrX - CurrX) < 15 && Math.Abs(npc.CurrY - CurrY) < 15 || npc.m_boIsHide)
+            if (npc.Envir == Envir && Math.Abs(npc.CurrX - CurrX) < 15 && Math.Abs(npc.CurrY - CurrY) < 15 || npc.IsHide)
             {
                 npc.UserSelect(this, sMsg.Trim());
             }
@@ -156,7 +156,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (merchant.Envir == Envir && merchant.m_boSell && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+            if (merchant.Envir == Envir && merchant.IsSell && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
             {
                 merchant.ClientQuerySellPrice(this, userItem18);
             }
@@ -173,7 +173,7 @@ namespace GameSvr.Player
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         Merchant merchant = WorldServer.FindMerchant<Merchant>(nParam1);
-                        if (merchant != null && merchant.m_boSell && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+                        if (merchant != null && merchant.IsSell && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
                         {
                             if (merchant.ClientSellItem(this, userItem))
                             {
@@ -202,7 +202,7 @@ namespace GameSvr.Player
                     return;
                 }
                 Merchant merchant = WorldServer.FindMerchant<Merchant>(nParam1);
-                if (merchant == null || !merchant.m_boBuy || merchant.Envir != Envir || Math.Abs(merchant.CurrX - CurrX) > 15 || Math.Abs(merchant.CurrY - CurrY) > 15)
+                if (merchant == null || !merchant.IsBuy || merchant.Envir != Envir || Math.Abs(merchant.CurrX - CurrX) > 15 || Math.Abs(merchant.CurrY - CurrY) > 15)
                 {
                     return;
                 }
@@ -1206,7 +1206,7 @@ namespace GameSvr.Player
         private void ClientMakeDrugItem(int objectId, string nItemName)
         {
             Merchant merchant = WorldServer.FindMerchant<Merchant>(objectId);
-            if (merchant == null || !merchant.m_boMakeDrug)
+            if (merchant == null || !merchant.IsMakeDrug)
             {
                 return;
             }
@@ -1623,7 +1623,7 @@ namespace GameSvr.Player
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     // 检查NPC是否允许存物品
-                    if (merchant != null && merchant.m_boStorage && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.FunctionNPC))
+                    if (merchant != null && merchant.IsStorage && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.FunctionNPC))
                     {
                         if (StorageItemList.Count < 39)
                         {
@@ -1680,7 +1680,7 @@ namespace GameSvr.Player
                     if (IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index)))
                     {
                         // 检查NPC是否允许取物品
-                        if (merchant.m_boGetback && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.FunctionNPC))
+                        if (merchant.IsGetback && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.FunctionNPC))
                         {
                             if (AddItemToBag(userItem))
                             {
