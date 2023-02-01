@@ -107,7 +107,7 @@ namespace GameSvr.Maps
                 {
                     _mapDoorList.Add(envirnoment);
                 }
-                if (envirnoment.Flag.boMINE || envirnoment.Flag.boMINE2)
+                if (envirnoment.Flag.Mine || envirnoment.Flag.boMINE2)
                 {
                     _mapMineList.Add(envirnoment);
                 }
@@ -128,10 +128,10 @@ namespace GameSvr.Maps
             {
                 GateObject GateObj = new GateObject
                 {
-                    boFlag = false,
+                    Flag = false,
                     Envir = DEnvir,
-                    nX = (short)nDMapX,
-                    nY = (short)nDMapY
+                    X = (short)nDMapX,
+                    Y = (short)nDMapY
                 };
                 SEnvir.AddToMap(nSMapX, nSMapY, CellType.Route, GateObj);
                 result = true;

@@ -18,11 +18,11 @@ namespace GameSvr.Maps
         /// <summary>
         /// 怪物数量
         /// </summary>
-        public int MonCount => _monCount;
+        public int MonCount => monCount;
         /// <summary>
         /// 玩家数量
         /// </summary>
-        public int HumCount => _humCount;
+        public int HumCount => humCount;
         public short Width;
         public short Height;
         public string MapFileName = string.Empty;
@@ -34,7 +34,7 @@ namespace GameSvr.Maps
         /// <summary>
         /// 进入本地图所需等级
         /// </summary>
-        public readonly int RequestLevel = 0;
+        public readonly int EnterLevel = 0;
         public MapInfoFlag Flag;
         public bool Bo2C;
         /// <summary>
@@ -46,8 +46,8 @@ namespace GameSvr.Maps
         /// 任务
         /// </summary>
         private readonly IList<MapQuestInfo> QuestList;
-        private int _monCount;
-        private int _humCount;
+        private int monCount;
+        private int humCount;
         public readonly IList<PointInfo> PointList;
         public readonly ConcurrentDictionary<int, ActorEntity> CellMap = new ConcurrentDictionary<int, ActorEntity>();
 
@@ -55,8 +55,8 @@ namespace GameSvr.Maps
         {
             ServerIndex = 0;
             MinMap = 0;
-            _monCount = 0;
-            _humCount = 0;
+            monCount = 0;
+            humCount = 0;
             Flag = new MapInfoFlag();
             DoorList = new List<DoorInfo>();
             QuestList = new List<MapQuestInfo>();
@@ -498,7 +498,7 @@ namespace GameSvr.Maps
                                             }
                                         default:
                                             {
-                                                if (M2Share.Config.boRunMon || Flag.boRUNMON)
+                                                if (M2Share.Config.boRunMon || Flag.RunMon)
                                                 {
                                                     continue;
                                                 }
@@ -778,7 +778,7 @@ namespace GameSvr.Maps
                     fileStream.Position = 52;
 
                     MapUnitInfo mapUnitInfo = new MapUnitInfo();
-                    if (Flag.boMINE || Flag.boMINE2)
+                    if (Flag.Mine || Flag.boMINE2)
                     {
                         for (int nW = 0; nW < Width; nW++)
                         {
@@ -1528,17 +1528,17 @@ namespace GameSvr.Maps
         {
             StringBuilder messgae = new StringBuilder();
             messgae.AppendFormat("Map:{0}({1}) DAY:{2} DARK:{3} SAFE:{4} FIGHT:{5} FIGHT3:{6} QUIZ:{7} NORECONNECT:{8}({9}) MUSIC:{10}({11}) EXPRATE:{12}({13}) PKWINLEVEL:{14}({15}) PKLOSTLEVEL:{16}({17}) PKWINEXP:{18}({19}) ",
-                MapName, MapDesc, HUtil32.BoolToStr(Flag.boDayLight), HUtil32.BoolToStr(Flag.boDarkness), HUtil32.BoolToStr(Flag.boSAFE), HUtil32.BoolToStr(Flag.boFightZone),
+                MapName, MapDesc, HUtil32.BoolToStr(Flag.DayLight), HUtil32.BoolToStr(Flag.boDarkness), HUtil32.BoolToStr(Flag.SafeArea), HUtil32.BoolToStr(Flag.FightZone),
                 HUtil32.BoolToStr(Flag.boFight3Zone), HUtil32.BoolToStr(Flag.boQUIZ), HUtil32.BoolToStr(Flag.boNORECONNECT), Flag.sNoReConnectMap, HUtil32.BoolToStr(Flag.boMUSIC), Flag.nMUSICID, HUtil32.BoolToStr(Flag.boEXPRATE),
-                Flag.nEXPRATE / 100, HUtil32.BoolToStr(Flag.boPKWINLEVEL), Flag.nPKWINLEVEL, HUtil32.BoolToStr(Flag.boPKLOSTLEVEL), Flag.nPKLOSTLEVEL, HUtil32.BoolToStr(Flag.boPKWINEXP), Flag.nPKWINEXP);
+                Flag.ExpRate / 100, HUtil32.BoolToStr(Flag.boPKWINLEVEL), Flag.nPKWINLEVEL, HUtil32.BoolToStr(Flag.boPKLOSTLEVEL), Flag.nPKLOSTLEVEL, HUtil32.BoolToStr(Flag.boPKWINEXP), Flag.nPKWINEXP);
             messgae.AppendFormat("PKLOSTEXP:{0}({1}) DECHP:{2}({3}/{4}) INCHP:{5}({6}/{7}) DECGAMEGOLD:{8}({9}/{10}) INCGAMEGOLD:{11}({12}/{13}) INCGAMEPOINT:{14}({15}/{16}) RUNHUMAN:{17} RUNMON:{18} NEEDHOLE:{19} NORECALL:{20} ",
                 HUtil32.BoolToStr(Flag.boPKLOSTEXP), Flag.nPKLOSTEXP, HUtil32.BoolToStr(Flag.boDECHP), Flag.nDECHPTIME, Flag.nDECHPPOINT, HUtil32.BoolToStr(Flag.boINCHP), Flag.nINCHPTIME, Flag.nINCHPPOINT, HUtil32.BoolToStr(Flag.boDECGAMEGOLD),
                 Flag.nDECGAMEGOLDTIME, Flag.nDECGAMEGOLD, HUtil32.BoolToStr(Flag.boINCGAMEGOLD), Flag.nINCGAMEGOLDTIME, Flag.nINCGAMEGOLD, HUtil32.BoolToStr(Flag.boINCGAMEPOINT), Flag.nINCGAMEPOINTTIME, Flag.nINCGAMEPOINT,
-                HUtil32.BoolToStr(Flag.boRUNHUMAN), HUtil32.BoolToStr(Flag.boRUNMON), HUtil32.BoolToStr(Flag.boNEEDHOLE), HUtil32.BoolToStr(Flag.boNORECALL));
+                HUtil32.BoolToStr(Flag.boRUNHUMAN), HUtil32.BoolToStr(Flag.RunMon), HUtil32.BoolToStr(Flag.boNEEDHOLE), HUtil32.BoolToStr(Flag.NoReCall));
             messgae.AppendFormat("NOGUILDRECALL:{0} NODEARRECALL:{1} NOMASTERRECALL:{2} NODRUG:{3} MINE:{4} MINE2:{5} NODROPITEM:{6} NOTHROWITEM:{7} NOPOSITIONMOVE:{8} NOHORSE:{9} NOHUMNOMON:{10} NOCHAT:{11}",
                 HUtil32.BoolToStr(Flag.boNOGUILDRECALL), HUtil32.BoolToStr(Flag.boNODEARRECALL), HUtil32.BoolToStr(Flag.boNOMASTERRECALL),
-                HUtil32.BoolToStr(Flag.boNODRUG), HUtil32.BoolToStr(Flag.boMINE), HUtil32.BoolToStr(Flag.boMINE2), HUtil32.BoolToStr(Flag.boNODROPITEM), HUtil32.BoolToStr(Flag.boNOTHROWITEM), HUtil32.BoolToStr(Flag.boNOPOSITIONMOVE),
-                HUtil32.BoolToStr(Flag.boNOHORSE), HUtil32.BoolToStr(Flag.boNOHUMNOMON), HUtil32.BoolToStr(Flag.boNOCHAT));
+                HUtil32.BoolToStr(Flag.boNODRUG), HUtil32.BoolToStr(Flag.Mine), HUtil32.BoolToStr(Flag.boMINE2), HUtil32.BoolToStr(Flag.NoDropItem), HUtil32.BoolToStr(Flag.NoThrowItem), HUtil32.BoolToStr(Flag.boNOPOSITIONMOVE),
+                HUtil32.BoolToStr(Flag.NoHorse), HUtil32.BoolToStr(Flag.boNOHUMNOMON), HUtil32.BoolToStr(Flag.boNOCHAT));
             return messgae.ToString();
         }
 
@@ -1547,10 +1547,10 @@ namespace GameSvr.Maps
             switch (baseObject.Race)
             {
                 case ActorRace.Play:
-                    _humCount++;
+                    humCount++;
                     break;
                 case >= ActorRace.Animal:
-                    _monCount++;
+                    monCount++;
                     break;
             }
         }
@@ -1560,10 +1560,10 @@ namespace GameSvr.Maps
             switch (baseObject.Race)
             {
                 case ActorRace.Play:
-                    _humCount--;
+                    humCount--;
                     break;
                 case >= ActorRace.Animal:
-                    _monCount--;
+                    monCount--;
                     break;
             }
         }

@@ -1746,7 +1746,7 @@ namespace GameSvr.Npc
         /// <param name="sMsg"></param>
         protected static void SetOffLineMsg(PlayObject PlayObject, string sMsg)
         {
-            PlayObject.MsOffLineLeaveword = sMsg;
+            PlayObject.OffLineLeaveWord = sMsg;
         }
 
         protected override void SendCustemMsg(PlayObject PlayObject, string sMsg)

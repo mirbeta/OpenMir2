@@ -542,7 +542,7 @@ namespace GameSvr.Planes
                 PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
-                    if (!hum.Envir.Flag.boNORECALL)
+                    if (!hum.Envir.Flag.NoReCall)
                     {
                         hum.RecallHuman(Str);
                     }

@@ -425,6 +425,9 @@ namespace GameSvr.Actor
         /// </summary>
         protected int PoisoningTick;
         protected int VerifyTick;
+        /// <summary>
+        /// 怪物叛变时间间隔
+        /// </summary>
         protected int CheckRoyaltyTick;
         /// <summary>
         /// 恢复血量和魔法间隔
@@ -1878,7 +1881,7 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            bool result = Envir.Flag.boSAFE;
+            bool result = Envir.Flag.SafeArea;
             if (result)
             {
                 return true;
@@ -1905,15 +1908,15 @@ namespace GameSvr.Actor
         private void MonsterRecalcAbilitys()
         {
             WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC));
-            int n8 = 0;
+            int maxHp = 0;
             if ((Race == ActorRace.MonsterWhiteskeleton) || (Race == ActorRace.MonsterElfmonster) || (Race == ActorRace.MonsterElfwarrior))
             {
                 WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(WAbil.DC)));
-                n8 = n8 + HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * WAbil.MaxHP) * SlaveExpLevel;
-                n8 = n8 + WAbil.MaxHP;
+                maxHp = maxHp + HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * WAbil.MaxHP) * SlaveExpLevel;
+                maxHp = maxHp + WAbil.MaxHP;
                 if (SlaveExpLevel > 0)
                 {
-                    WAbil.MaxHP = (ushort)n8;
+                    WAbil.MaxHP = (ushort)maxHp;
                 }
                 else
                 {
@@ -1922,10 +1925,10 @@ namespace GameSvr.Actor
             }
             else
             {
-                n8 = WAbil.MaxHP;
+                maxHp = WAbil.MaxHP;
                 WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(WAbil.DC)));
-                n8 = n8 + HUtil32.Round(WAbil.MaxHP * 0.15) * SlaveExpLevel;
-                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + SlaveExpLevel * 60), n8);
+                maxHp = maxHp + HUtil32.Round(WAbil.MaxHP * 0.15) * SlaveExpLevel;
+                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + SlaveExpLevel * 60), maxHp);
             }
         }
 
@@ -2531,7 +2534,7 @@ namespace GameSvr.Actor
                                             {
                                                 if (M2Share.ServerIndex == gateObj.Envir.ServerIndex)
                                                 {
-                                                    if (!EnterAnotherMap(((PlayObject)this), gateObj.Envir, gateObj.nX, gateObj.nY))
+                                                    if (!EnterAnotherMap(gateObj.Envir, gateObj.X, gateObj.Y))
                                                     {
                                                         result = false;
                                                     }
@@ -2540,7 +2543,7 @@ namespace GameSvr.Actor
                                                 {
                                                     DisappearA();
                                                     SpaceMoved = true;
-                                                    ((PlayObject)this).ChangeSpaceMove(gateObj.Envir, gateObj.nX, gateObj.nY);
+                                                    ((PlayObject)this).ChangeSpaceMove(gateObj.Envir, gateObj.X, gateObj.Y);
                                                 }
                                             }
                                         }
@@ -2593,24 +2596,24 @@ namespace GameSvr.Actor
         /// <summary>
         /// 切换地图
         /// </summary>
-        private bool EnterAnotherMap(PlayObject playObject, Envirnoment envir, short nDMapX, short nDMapY)
+        private bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY)
         {
             bool result = false;
             const string sExceptionMsg = "[Exception] TBaseObject::EnterAnotherMap";
             try
             {
-                if (Abil.Level < envir.RequestLevel)
+                if (Abil.Level < envir.EnterLevel)
                 {
-                    SysMsg($"需要 {envir.Flag.nL - 1} 级以上才能进入 {envir.MapDesc}", MsgColor.Red, MsgType.Hint);
+                    SysMsg($"需要 {envir.Flag.RequestLevel - 1} 级以上才能进入 {envir.MapDesc}", MsgColor.Red, MsgType.Hint);
                     return false;
                 }
                 if (envir.QuestNpc != null)
                 {
                     envir.QuestNpc.Click((PlayObject)this);
                 }
-                if (envir.Flag.nNEEDSETONFlag >= 0)
+                if (envir.Flag.NeedSetonFlag >= 0)
                 {
-                    if (playObject.GetQuestFalgStatus(envir.Flag.nNEEDSETONFlag) != envir.Flag.nNeedONOFF)
+                    if (((PlayObject)this).GetQuestFalgStatus(envir.Flag.NeedSetonFlag) != envir.Flag.NeedOnOff)
                     {
                         return false;
                     }
@@ -2629,7 +2632,7 @@ namespace GameSvr.Actor
                         return false;
                     }
                 }
-                if (envir.Flag.boNOHORSE)
+                if (envir.Flag.NoHorse)
                 {
                     OnHorse = false;
                 }
@@ -3100,7 +3103,7 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            bool result = Envir.Flag.boSAFE;
+            bool result = Envir.Flag.SafeArea;
             if (result)
             {
                 return true;
@@ -3140,7 +3143,7 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            bool result = Envir.Flag.boSAFE;
+            bool result = Envir.Flag.SafeArea;
             if (result)
             {
                 return true;

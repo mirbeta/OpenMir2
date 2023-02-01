@@ -67,7 +67,7 @@ namespace GameSvr.Maps
                         sMapName = "";
                         MapInfoFlag MapFlag = new MapInfoFlag
                         {
-                            boSAFE = false
+                            SafeArea = false
                         };
                         sFlag = HUtil32.ArrestStringEx(sFlag, "[", "]", ref sMapName);
                         string sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, HUtil32.Separator);
@@ -81,11 +81,11 @@ namespace GameSvr.Maps
                         {
                             continue;
                         }
-                        MapFlag.nL = 1;
+                        MapFlag.RequestLevel = 1;
                         Merchant QuestNPC = null;
-                        MapFlag.boSAFE = false;
-                        MapFlag.nNEEDSETONFlag = -1;
-                        MapFlag.nNeedONOFF = -1;
+                        MapFlag.SafeArea = false;
+                        MapFlag.NeedSetonFlag = -1;
+                        MapFlag.NeedOnOff = -1;
                         MapFlag.nMUSICID = -1;
                         while (true)
                         {
@@ -100,7 +100,7 @@ namespace GameSvr.Maps
                             }
                             if (s34.Equals("SAFE", StringComparison.OrdinalIgnoreCase))
                             {
-                                MapFlag.boSAFE = true;
+                                MapFlag.SafeArea = true;
                                 continue;
                             }
                             if (string.Compare(s34, "DARK", StringComparison.OrdinalIgnoreCase) == 0)
@@ -110,7 +110,7 @@ namespace GameSvr.Maps
                             }
                             if (string.Compare(s34, "FIGHT", StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                MapFlag.boFightZone = true;
+                                MapFlag.FightZone = true;
                                 continue;
                             }
                             if (string.Compare(s34, "FIGHT3", StringComparison.OrdinalIgnoreCase) == 0)
@@ -120,7 +120,7 @@ namespace GameSvr.Maps
                             }
                             if (string.Compare(s34, "DAY", StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                MapFlag.boDayLight = true;
+                                MapFlag.DayLight = true;
                                 continue;
                             }
                             if (string.Compare(s34, "QUIZ", StringComparison.OrdinalIgnoreCase) == 0)
@@ -146,16 +146,16 @@ namespace GameSvr.Maps
                             }
                             if (HUtil32.CompareLStr(s34, "NEEDSET_ON"))
                             {
-                                MapFlag.nNeedONOFF = 1;
+                                MapFlag.NeedOnOff = 1;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
-                                MapFlag.nNEEDSETONFlag = HUtil32.StrToInt(sLine, -1);
+                                MapFlag.NeedSetonFlag = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
                             if (HUtil32.CompareLStr(s34, "NEEDSET_OFF"))
                             {
-                                MapFlag.nNeedONOFF = 0;
+                                MapFlag.NeedOnOff = 0;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
-                                MapFlag.nNEEDSETONFlag = HUtil32.StrToInt(sLine, -1);
+                                MapFlag.NeedSetonFlag = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
                             if (HUtil32.CompareLStr(s34, "MUSIC"))
@@ -169,7 +169,7 @@ namespace GameSvr.Maps
                             {
                                 MapFlag.boEXPRATE = true;
                                 HUtil32.ArrestStringEx(s34, "(", ")", ref sLine);
-                                MapFlag.nEXPRATE = HUtil32.StrToInt(sLine, -1);
+                                MapFlag.ExpRate = HUtil32.StrToInt(sLine, -1);
                                 continue;
                             }
                             if (HUtil32.CompareLStr(s34, "PKWINLEVEL"))
@@ -255,7 +255,7 @@ namespace GameSvr.Maps
                             }
                             if (s34.Equals("RUNMON", StringComparison.OrdinalIgnoreCase))
                             {
-                                MapFlag.boRUNMON = true;
+                                MapFlag.RunMon = true;
                                 continue;
                             }
                             if (s34.Equals("NEEDHOLE", StringComparison.OrdinalIgnoreCase))
@@ -265,7 +265,7 @@ namespace GameSvr.Maps
                             }
                             if (s34.Equals("NORECALL", StringComparison.OrdinalIgnoreCase))
                             {
-                                MapFlag.boNORECALL = true;
+                                MapFlag.NoReCall = true;
                                 continue;
                             }
                             if (s34.Equals("NOGUILDRECALL", StringComparison.OrdinalIgnoreCase))
@@ -295,7 +295,7 @@ namespace GameSvr.Maps
                             }
                             if (s34.Equals("MINE", StringComparison.OrdinalIgnoreCase))
                             {
-                                MapFlag.boMINE = true;
+                                MapFlag.Mine = true;
                                 continue;
                             }
                             if (s34.Equals("MINE2", StringComparison.OrdinalIgnoreCase))
@@ -305,12 +305,12 @@ namespace GameSvr.Maps
                             }
                             if (s34.Equals("NOTHROWITEM", StringComparison.OrdinalIgnoreCase))
                             {
-                                MapFlag.boNOTHROWITEM = true;
+                                MapFlag.NoThrowItem = true;
                                 continue;
                             }
                             if (s34.Equals("NODROPITEM", StringComparison.OrdinalIgnoreCase))
                             {
-                                MapFlag.boNODROPITEM = true;
+                                MapFlag.NoDropItem = true;
                                 continue;
                             }
                             if (s34.Equals("NOPOSITIONMOVE", StringComparison.OrdinalIgnoreCase))
@@ -343,7 +343,7 @@ namespace GameSvr.Maps
                             }
                             if (s34[0] == 'L')
                             {
-                                MapFlag.nL = HUtil32.StrToInt(s34[1..], 1);
+                                MapFlag.RequestLevel = HUtil32.StrToInt(s34[1..], 1);
                             }
                         }
                         if (M2Share.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)

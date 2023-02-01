@@ -2190,11 +2190,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boSAFE = true;
+                    Envir.Flag.SafeArea = true;
                 }
                 else
                 {
-                    Envir.Flag.boSAFE = false;
+                    Envir.Flag.SafeArea = false;
                 }
             }
             else if (string.Compare(sMapMode, "DARK", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2212,11 +2212,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boFightZone = true;
+                    Envir.Flag.FightZone = true;
                 }
                 else
                 {
-                    Envir.Flag.boFightZone = false;
+                    Envir.Flag.FightZone = false;
                 }
             }
             else if (string.Compare(sMapMode, "FIGHT3", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2234,11 +2234,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boDayLight = true;
+                    Envir.Flag.DayLight = true;
                 }
                 else
                 {
-                    Envir.Flag.boDayLight = false;
+                    Envir.Flag.DayLight = false;
                 }
             }
             else if (string.Compare(sMapMode, "QUIZ", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2281,7 +2281,7 @@ namespace GameSvr.Npc
                 if (sParam1 != "")
                 {
                     Envir.Flag.boEXPRATE = true;
-                    Envir.Flag.nEXPRATE = HUtil32.StrToInt(sParam1, -1);
+                    Envir.Flag.ExpRate = HUtil32.StrToInt(sParam1, -1);
                 }
                 else
                 {
@@ -2377,11 +2377,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boRUNMON = true;
+                    Envir.Flag.RunMon = true;
                 }
                 else
                 {
-                    Envir.Flag.boRUNMON = false;
+                    Envir.Flag.RunMon = false;
                 }
             }
             else if (string.Compare(sMapMode, "NEEDHOLE", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2399,11 +2399,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boNORECALL = true;
+                    Envir.Flag.NoReCall = true;
                 }
                 else
                 {
-                    Envir.Flag.boNORECALL = false;
+                    Envir.Flag.NoReCall = false;
                 }
             }
             else if (string.Compare(sMapMode, "NOGUILDRECALL", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2465,11 +2465,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boMINE = true;
+                    Envir.Flag.Mine = true;
                 }
                 else
                 {
-                    Envir.Flag.boMINE = false;
+                    Envir.Flag.Mine = false;
                 }
             }
             else if (string.Compare(sMapMode, "MINE2", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2487,22 +2487,22 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boNOTHROWITEM = true;
+                    Envir.Flag.NoThrowItem = true;
                 }
                 else
                 {
-                    Envir.Flag.boNOTHROWITEM = false;
+                    Envir.Flag.NoThrowItem = false;
                 }
             }
             else if (string.Compare(sMapMode, "NODROPITEM", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boNODROPITEM = true;
+                    Envir.Flag.NoDropItem = true;
                 }
                 else
                 {
-                    Envir.Flag.boNODROPITEM = false;
+                    Envir.Flag.NoDropItem = false;
                 }
             }
             else if (string.Compare(sMapMode, "NOPOSITIONMOVE", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2520,11 +2520,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boNOHORSE = true;
+                    Envir.Flag.NoHorse = true;
                 }
                 else
                 {
-                    Envir.Flag.boNOHORSE = false;
+                    Envir.Flag.NoHorse = false;
                 }
             }
             else if (string.Compare(sMapMode, "NOCHAT", StringComparison.OrdinalIgnoreCase) == 0)

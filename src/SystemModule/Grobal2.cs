@@ -44,6 +44,9 @@ namespace SystemModule
         public const byte ET_MINE = 2;
         public const byte ET_PILESTONES = 3;
         public const byte ET_HOLYCURTAIN = 4;
+        /// <summary>
+        /// 火墙事件
+        /// </summary>
         public const byte ET_FIRE = 5;
         public const byte ET_SCULPEICE = 6;
 

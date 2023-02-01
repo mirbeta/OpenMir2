@@ -315,7 +315,7 @@ namespace GameSvr.RobotPlay
                 dwExp = HUtil32.Round(KillMonExpRate / 100 * dwExp); // 人物指定的杀怪经验倍数
                 if (Envir.Flag.boEXPRATE)
                 {
-                    dwExp = HUtil32.Round(Envir.Flag.nEXPRATE / 100 * dwExp); // 地图上指定杀怪经验倍数
+                    dwExp = HUtil32.Round(Envir.Flag.ExpRate / 100 * dwExp); // 地图上指定杀怪经验倍数
                 }
                 GetExp(dwExp);
             }

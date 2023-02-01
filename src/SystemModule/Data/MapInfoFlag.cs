@@ -2,17 +2,17 @@
 {
     public class MapInfoFlag
     {
-        public bool boSAFE;
-        public int nL;
-        public int nNEEDSETONFlag;
-        public int nNeedONOFF;
+        public bool SafeArea;
+        public int RequestLevel;
+        public int NeedSetonFlag;
+        public int NeedOnOff;
         public int nMUSICID;
         public bool boDarkness;
-        public bool boDayLight;
+        public bool DayLight;
         /// <summary>
         /// 行会战争地图
         /// </summary>
-        public bool boFightZone;
+        public bool FightZone;
         /// <summary>
         /// 行会战争地图
         /// </summary>
@@ -22,7 +22,7 @@
         public string sNoReConnectMap;
         public bool boMUSIC;
         public bool boEXPRATE;
-        public int nEXPRATE;
+        public int ExpRate;
         public bool boPKWINLEVEL;
         public int nPKWINLEVEL;
         public bool boPKWINEXP;
@@ -50,20 +50,20 @@
         public int nINCGAMEPOINT;
         public int nINCGAMEPOINTTIME;
         public bool boRUNHUMAN;
-        public bool boRUNMON;
+        public bool RunMon;
         public bool boNEEDHOLE;
-        public bool boNORECALL;
+        public bool NoReCall;
         public bool boNOGUILDRECALL;
         public bool boNODEARRECALL;
         public bool boNOMASTERRECALL;
         public bool boNORANDOMMOVE;
         public bool boNODRUG;
-        public bool boMINE;
+        public bool Mine;
         public bool boMINE2;
         public bool boNOPOSITIONMOVE;
-        public bool boNODROPITEM;
-        public bool boNOTHROWITEM;
-        public bool boNOHORSE;
+        public bool NoDropItem;
+        public bool NoThrowItem;
+        public bool NoHorse;
         public bool boNOCHAT;
         public bool boKILLFUNC;
         public int nKILLFUNCNO;

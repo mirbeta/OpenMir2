@@ -49,9 +49,9 @@ namespace GameSvr.Maps
     public class GateObject : ActorEntity
     {
         public Envirnoment Envir;
-        public short nX;
-        public short nY;
-        public bool boFlag;
+        public short X;
+        public short Y;
+        public bool Flag;
     }
 
     /// <summary>

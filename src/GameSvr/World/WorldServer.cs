@@ -2310,7 +2310,7 @@ namespace GameSvr.World
 
         public int GetPlayExpireTime(string account)
         {
-            for (int i = 0; i < PlayObjectList.Count(); i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -2322,7 +2322,7 @@ namespace GameSvr.World
 
         public void SetPlayExpireTime(string account, int playTime)
         {
-            for (int i = 0; i < PlayObjectList.Count(); i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -2334,7 +2334,7 @@ namespace GameSvr.World
 
         public void AccountExpired(string account)
         {
-            for (int i = 0; i < PlayObjectList.Count(); i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -2346,7 +2346,7 @@ namespace GameSvr.World
 
         public void TimeAccountExpired(string account)
         {
-            for (int i = 0; i < PlayObjectList.Count(); i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {

@@ -139,7 +139,7 @@ namespace GameSvr.Player
                 dwExp = HUtil32.Round(KillMonExpRate / 100 * dwExp);// 人物指定的杀怪经验倍数
                 if (Envir.Flag.boEXPRATE)
                 {
-                    dwExp = HUtil32.Round(Envir.Flag.nEXPRATE / 100 * dwExp);// 地图上指定杀怪经验倍数
+                    dwExp = HUtil32.Round(Envir.Flag.ExpRate / 100 * dwExp);// 地图上指定杀怪经验倍数
                 }
                 GetExp(dwExp);
             }
@@ -243,7 +243,7 @@ namespace GameSvr.Player
         private byte DayBright()
         {
             byte result;
-            if (Envir.Flag.boDayLight)
+            if (Envir.Flag.DayLight)
             {
                 return 0;
             }
@@ -269,11 +269,11 @@ namespace GameSvr.Player
         private void RefUserState()
         {
             int n8 = 0;
-            if (Envir.Flag.boFightZone)
+            if (Envir.Flag.FightZone)
             {
                 n8 = n8 | 1;
             }
-            if (Envir.Flag.boSAFE)
+            if (Envir.Flag.SafeArea)
             {
                 n8 = n8 | 2;
             }
@@ -295,11 +295,11 @@ namespace GameSvr.Player
         /// </summary>
         private void ProcessSpiritSuite()
         {
-            if (!M2Share.Config.SpiritMutiny || !MBopirit)
+            if (!M2Share.Config.SpiritMutiny || !MBoPirit)
             {
                 return;
             }
-            MBopirit = false;
+            MBoPirit = false;
             for (int i = 0; i < UseItems.Length; i++)
             {
                 UserItem useItem = UseItems[i];
@@ -338,7 +338,7 @@ namespace GameSvr.Player
             {
                 n08 = 0;
             }
-            string sC = LoginIpAddr + "\t" + UserAccount + "\t" + ChrName + "\t" + n08 + "\t" + LogonTime.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + PayMode;
+            string sC = LoginIpAddr + "\t" + UserAccount + "\t" + ChrName + "\t" + n08 + "\t" + DateTimeOffset.FromUnixTimeMilliseconds(LogonTime).ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + PayMode;
             M2Share.AddLogonCostLog(sC);
             if (PayMode == 2)
             {
@@ -818,7 +818,7 @@ namespace GameSvr.Player
                 + HUtil32.HiWord(this.WAbil.MC) + " 道术: " + HUtil32.LoWord(this.WAbil.SC) + '-' + HUtil32.HiWord(this.WAbil.SC)
                 + " 防御力: " + HUtil32.LoWord(this.WAbil.AC) + '-' + HUtil32.HiWord(this.WAbil.AC) + " 魔防力: " + HUtil32.LoWord(this.WAbil.MAC)
                 + '-' + HUtil32.HiWord(this.WAbil.MAC) + " 准确:" + this.HitPoint + " 敏捷:" + this.SpeedPoint + " 速度:" + this.HitSpeed
-                + " 仓库密码:" + StoragePwd + " 登录IP:" + LoginIpAddr + '(' + LoginIpLocal + ')' + " 登录帐号:" + UserAccount + " 登录时间:" + LogonTime
+                + " 仓库密码:" + StoragePwd + " 登录IP:" + LoginIpAddr + '(' + LoginIpLocal + ')' + " 登录帐号:" + UserAccount + " 登录时间:" + DateTimeOffset.FromUnixTimeMilliseconds(LogonTime).ToString("yyyy-MM-dd HH:mm:ss")
                 + " 在线时长(分钟):" + (HUtil32.GetTickCount() - LogonTick) / 60000 + " 登录模式:" + PayMent + ' ' + M2Share.Config.GameGoldName + ':' + GameGold
                 + ' ' + M2Share.Config.GamePointName + ':' + GamePoint + ' ' + M2Share.Config.PayMentPointName + ':' + PayMentPoint + " 会员类型:" + MemberType
                 + " 会员等级:" + MemberLevel + " 经验倍数:" + KillMonExpRate / 100 + " 攻击倍数:" + PowerRate / 100 + " 声望值:" + CreditPoint;
@@ -959,7 +959,7 @@ namespace GameSvr.Player
                 if (M2Share.Config.boRunHuman || Envir.Flag.boRUNHUMAN)
                 {
                 }
-                if (M2Share.Config.boRunMon || Envir.Flag.boRUNMON)
+                if (M2Share.Config.boRunMon || Envir.Flag.RunMon)
                 {
                 }
                 if (M2Share.Config.boRunNpc)
@@ -1564,7 +1564,7 @@ namespace GameSvr.Player
                         }
                         if (M2Share.RandomNumber.Random(M2Share.Config.MakeMineRate) == 0)
                         {
-                            if (Envir.Flag.boMINE)
+                            if (Envir.Flag.Mine)
                             {
                                 MakeMine();
                             }
@@ -3280,7 +3280,7 @@ namespace GameSvr.Player
             sMyInfo = sMyInfo.Replace("%maxmc", HUtil32.HiWord(WAbil.MC).ToString());
             sMyInfo = sMyInfo.Replace("%minsc", HUtil32.LoWord(WAbil.SC).ToString());
             sMyInfo = sMyInfo.Replace("%maxsc", HUtil32.HiWord(WAbil.SC).ToString());
-            sMyInfo = sMyInfo.Replace("%logontime", LogonTime.ToString("yyyy-MM-dd HH:ss:mm"));
+            sMyInfo = sMyInfo.Replace("%logontime", DateTimeOffset.FromUnixTimeMilliseconds(LogonTime).ToString("yyyy-MM-dd HH:ss:mm"));
             sMyInfo = sMyInfo.Replace("%logonint", ((HUtil32.GetTickCount() - LogonTick) / 60000).ToString());
             return sMyInfo;
         }

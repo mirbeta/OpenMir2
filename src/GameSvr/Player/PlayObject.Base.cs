@@ -147,7 +147,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 祈祷
         /// </summary>
-        protected bool MBopirit = false;
+        protected bool MBoPirit = false;
         /// <summary>
         /// 野蛮冲撞间隔
         /// </summary>
@@ -266,7 +266,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 挂机字符
         /// </summary>
-        public string MsOffLineLeaveword = string.Empty;
+        public string OffLineLeaveWord = string.Empty;
         /// <summary>
         /// Socket Handle
         /// </summary>
@@ -281,9 +281,9 @@ namespace GameSvr.Player
         public int GateIdx = 0;
         public int SoftVersionDate = 0;
         /// <summary>
-        /// 登录时间
+        /// 登录时间戳
         /// </summary>
-        public DateTime LogonTime;
+        public long LogonTime;
         /// <summary>
         /// 战领沙城时间
         /// </summary>
@@ -874,7 +874,7 @@ namespace GameSvr.Player
             SayMsgTick = HUtil32.GetTickCount();
             DisableSayMsg = false;
             DisableSayMsgTick = HUtil32.GetTickCount();
-            LogonTime = DateTime.Now;
+            LogonTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             LogonTick = HUtil32.GetTickCount();
             SwitchData = false;
             SwitchDataSended = false;
@@ -1113,7 +1113,7 @@ namespace GameSvr.Player
                     PayMent = 3;
                 }
                 MapMoveTick = HUtil32.GetTickCount();
-                LogonTime = DateTime.Now;
+                LogonTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 LogonTick = HUtil32.GetTickCount();
                 Initialize();
                 SendPriorityMsg(this, Messages.RM_LOGON, 0, 0, 0, 0, "", MessagePriority.High);
@@ -1584,7 +1584,7 @@ namespace GameSvr.Player
             try
             {
                 bool boPK = false;
-                if (!M2Share.Config.VentureServer && !Envir.Flag.boFightZone && !Envir.Flag.boFight3Zone)
+                if (!M2Share.Config.VentureServer && !Envir.Flag.FightZone && !Envir.Flag.boFight3Zone)
                 {
                     if (PvpLevel() < 2)
                     {
@@ -1677,7 +1677,7 @@ namespace GameSvr.Player
             {
                 M2Share.Logger.Error(ex);
             }
-            if (!Envir.Flag.boFightZone && !Envir.Flag.boFight3Zone && !killObject.Animal)
+            if (!Envir.Flag.FightZone && !Envir.Flag.boFight3Zone && !killObject.Animal)
             {
                 BaseObject AttackBaseObject = killObject;
                 if (killObject.Master != null)
@@ -1687,18 +1687,18 @@ namespace GameSvr.Player
                 if (killObject.Race != ActorRace.Play)
                 {
                     killObject.DropUseItems(this.ActorId);
-                    if (Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
+                    if (Master == null && (!NoItem || !Envir.Flag.NoDropItem))
                     {
                         killObject.ScatterBagItems(this.ActorId);
                     }
-                    if (killObject.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.boNODROPITEM))
+                    if (killObject.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.NoDropItem))
                     {
                         killObject.ScatterGolds(this.ActorId);
                     }
                 }
                 else
                 {
-                    if (!NoItem || !Envir.Flag.boNODROPITEM)//允许设置 m_boNoItem 后人物死亡不掉物品
+                    if (!NoItem || !Envir.Flag.NoDropItem)//允许设置 m_boNoItem 后人物死亡不掉物品
                     {
                         if (AttackBaseObject != null)
                         {
@@ -1782,7 +1782,7 @@ namespace GameSvr.Player
                 {
                     tStr = "####";
                 }
-                M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.boFightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
+                M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.FightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
             }
             base.Die();
         }
@@ -3106,7 +3106,7 @@ namespace GameSvr.Player
         internal override void ScatterBagItems(int itemOfCreat)
         {
             const int dropWide = 2;
-            if (AngryRing || NoDropItem || Envir.Flag.boNODROPITEM)
+            if (AngryRing || NoDropItem || Envir.Flag.NoDropItem)
             {
                 return;// 不死戒指
             }
@@ -3431,7 +3431,7 @@ namespace GameSvr.Player
 
         private void CheckExpiredTime()
         {
-            ExpireCount = ExpireCount - 1;
+            ExpireCount--;
             switch (ExpireCount)
             {
                 case 30:
@@ -3804,7 +3804,7 @@ namespace GameSvr.Player
             if (baseObject.Race == ActorRace.Play)
             {
                 PlayObject targetObject = (PlayObject)baseObject;
-                if ((PvpLevel() < 2) && (targetObject.PvpLevel() < 2) && (!Envir.Flag.boFightZone) && (!Envir.Flag.boFight3Zone) && !PvpFlag)
+                if ((PvpLevel() < 2) && (targetObject.PvpLevel() < 2) && (!Envir.Flag.FightZone) && (!Envir.Flag.boFight3Zone) && !PvpFlag)
                 {
                     targetObject.PvpNameColorTick = HUtil32.GetTickCount();
                     if (!targetObject.PvpFlag)

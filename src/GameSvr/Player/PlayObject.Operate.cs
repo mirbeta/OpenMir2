@@ -235,7 +235,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropGoldMsg);
                 return false;
             }
-            if (!IsCanDrop || Envir.Flag.boNOTHROWITEM)
+            if (!IsCanDrop || Envir.Flag.NoThrowItem)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
                 return false;
@@ -261,7 +261,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
                 return false;
             }
-            if (!IsCanDrop || Envir.Flag.boNOTHROWITEM)
+            if (!IsCanDrop || Envir.Flag.NoThrowItem)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
                 return false;

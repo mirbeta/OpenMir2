@@ -230,7 +230,7 @@ namespace GameSvr.Player
                         {
                             LogonTimcCost();
                             LogonTick = HUtil32.GetTickCount();
-                            LogonTime = DateTime.Now;
+                            LogonTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                         }
                     }
                     if (MyGuild != null)

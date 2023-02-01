@@ -2288,7 +2288,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$LOGINTIME":
-                    sValue = PlayObject.LogonTime.ToString();
+                    sValue = DateTimeOffset.FromUnixTimeMilliseconds(PlayObject.LogonTime).ToString("yyyy-MM-dd HH:mm:ss");
                     nDataType = 0;
                     result = true;
                     return result;

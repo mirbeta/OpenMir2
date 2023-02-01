@@ -12,14 +12,6 @@ namespace GameSvr.Monster.Monsters
             FixedHideMode = true;
         }
 
-        private void sub_4AA8DC()
-        {
-            EventInfo digEvent = new EventInfo(Envir, CurrX, CurrY, 1, 5 * 60 * 1000, true);
-            M2Share.EventMgr.AddEvent(digEvent);
-            FixedHideMode = false;
-            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, digEvent.Id, "");
-        }
-
         public override void Run()
         {
             if (CanMove() && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
@@ -39,7 +31,7 @@ namespace GameSvr.Monster.Monsters
                             {
                                 if (Math.Abs(CurrX - baseObject.CurrX) <= 3 && Math.Abs(CurrY - baseObject.CurrY) <= 3)
                                 {
-                                    sub_4AA8DC();
+                                    Turned();
                                     WalkTick = HUtil32.GetTickCount() + 1000;
                                     break;
                                 }
@@ -57,6 +49,14 @@ namespace GameSvr.Monster.Monsters
                 }
             }
             base.Run();
+        }
+
+        private void Turned()
+        {
+            EventInfo digEvent = new EventInfo(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI, 5 * 60 * 1000, true);
+            M2Share.EventMgr.AddEvent(digEvent);
+            FixedHideMode = false;
+            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, digEvent.Id, "");
         }
     }
 }

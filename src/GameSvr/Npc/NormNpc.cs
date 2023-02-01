@@ -605,7 +605,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$HUNGER>", sText);
                     return;
                 case "$LOGINTIME":
-                    sText = PlayObject.LogonTime.ToString();
+                    sText = DateTimeOffset.FromUnixTimeMilliseconds(PlayObject.LogonTime).ToString("yyyy-MM-dd HH:mm:ss");
                     sMsg = ReplaceVariableText(sMsg, "<$LOGINTIME>", sText);
                     return;
                 case "$LOGINLONG":

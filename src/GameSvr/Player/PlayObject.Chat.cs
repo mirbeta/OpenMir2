@@ -29,9 +29,9 @@ namespace GameSvr.Player
                 }
                 if (!OffLineFlag && PlayObject.OffLineFlag)
                 {
-                    if (PlayObject.MsOffLineLeaveword != "")
+                    if (PlayObject.OffLineLeaveWord != "")
                     {
-                        PlayObject.Whisper(ChrName, PlayObject.MsOffLineLeaveword);
+                        PlayObject.Whisper(ChrName, PlayObject.OffLineLeaveWord);
                     }
                     else
                     {
