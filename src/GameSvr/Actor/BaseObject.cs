@@ -390,11 +390,11 @@ namespace GameSvr.Actor
         /// </summary>
         protected byte MagBubbleDefenceLevel;
         /// <summary>
-        /// 搜索时间间隔
+        /// 视觉搜索时间间隔
         /// </summary>
         public int SearchTime;
         /// <summary>
-        /// 搜索间隔
+        /// 视觉搜索间隔
         /// </summary>
         public int SearchTick;
         /// <summary>
@@ -424,7 +424,6 @@ namespace GameSvr.Actor
         /// 中毒处理间隔时间
         /// </summary>
         protected int PoisoningTick;
-        protected int DecLightItemDrugTick;
         protected int VerifyTick;
         protected int CheckRoyaltyTick;
         /// <summary>
@@ -603,7 +602,6 @@ namespace GameSvr.Actor
             RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(2000) + 2000;
             SearchTick = HUtil32.GetTickCount();
-            DecLightItemDrugTick = HUtil32.GetTickCount();
             PoisoningTick = HUtil32.GetTickCount();
             VerifyTick = HUtil32.GetTickCount();
             CheckRoyaltyTick = HUtil32.GetTickCount();
@@ -636,21 +634,21 @@ namespace GameSvr.Actor
         /// 获取物品掉落位置
         /// </summary>
         /// <returns></returns>
-        private bool GetDropPosition(int nOrgX, int nOrgY, int nRange, ref int pX, ref int pY)
+        private bool GetDropPosition(short nOrgX, short nOrgY, int nRange, ref short pX, ref short pY)
         {
             bool result = false;
             int nItemCount = 0;
             int n24 = 999;
-            int n28 = 0;
-            int n2C = 0;
-            for (int i = 0; i < nRange; i++)
+            short n28 = 0;
+            short n2C = 0;
+            for (var i = 0; i < nRange; i++)
             {
-                for (int ii = -i; ii <= i; ii++)
+                for (var ii = -i; ii <= i; ii++)
                 {
-                    for (int iii = -i; iii <= i; iii++)
+                    for (var iii = -i; iii <= i; iii++)
                     {
-                        pX = (nOrgX + iii) - 1;
-                        pY = (nOrgY + ii) - 1;
+                        pX = (short)(nOrgX + iii - 1);
+                        pY = (short)(nOrgY + ii - 1);
                         if (Envir.GetItemEx(pX, pY, ref nItemCount) == 0)
                         {
                             if (Envir.Bo2C)
@@ -702,8 +700,8 @@ namespace GameSvr.Actor
                 return false;
             }
             bool result = false;
-            int dx = 0;
-            int dy = 0;
+            short dx = 0;
+            short dy = 0;
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
@@ -774,18 +772,6 @@ namespace GameSvr.Actor
             if (Race == ActorRace.Play)
             {
                 SendUpdateMsg(this, Messages.RM_GAMEGOLDCHANGED, 0, 0, 0, 0, "");
-            }
-        }
-
-        public void HasLevelUp(int nLevel)
-        {
-            Abil.MaxExp = GetLevelExp(Abil.Level);
-            RecalcLevelAbilitys();
-            RecalcAbilitys();
-            SendMsg(this, Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
-            if (M2Share.FunctionNPC != null)
-            {
-                M2Share.FunctionNPC.GotoLable(this as PlayObject, "@LevelUp", false);
             }
         }
 
@@ -961,8 +947,8 @@ namespace GameSvr.Actor
         protected bool DropGoldDown(int nGold, bool boFalg, int goldOfCreat, int dropGoldCreat)
         {
             bool result = false;
-            int nX = 0;
-            int nY = 0;
+            short nX = 0;
+            short nY = 0;
             int s20;
             MapItem mapItem = new MapItem
             {
@@ -1630,60 +1616,6 @@ namespace GameSvr.Actor
             ItemList.Add(userItem);
             WeightChanged();
             return true;
-        }
-
-        /// <summary>
-        /// 蜡烛勋章减少持久
-        /// </summary>
-        private void UseLamp()
-        {
-            const string sExceptionMsg = "[Exception] TBaseObject::UseLamp";
-            try
-            {
-                if (UseItems[Grobal2.U_RIGHTHAND] != null && UseItems[Grobal2.U_RIGHTHAND].Index > 0)
-                {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].Index);
-                    if ((stdItem == null) || (stdItem.SpecialPwr != 0))
-                    {
-                        return;
-                    }
-                    int nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
-                    ushort nDura;
-                    if (M2Share.Config.DecLampDura)
-                    {
-                        nDura = (ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura - 1);
-                    }
-                    else
-                    {
-                        nDura = UseItems[Grobal2.U_RIGHTHAND].Dura;
-                    }
-                    if (nDura <= 0)
-                    {
-                        UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
-                        if (Race == ActorRace.Play)
-                        {
-                            ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
-                        }
-                        UseItems[Grobal2.U_RIGHTHAND].Index = 0;
-                        Light = 0;
-                        SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
-                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
-                        RecalcAbilitys();
-                    }
-                    else
-                    {
-                        UseItems[Grobal2.U_RIGHTHAND].Dura = nDura;
-                    }
-                    if (nOldDura != HUtil32.Round(nDura / 1000))
-                    {
-                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, UseItems[Grobal2.U_RIGHTHAND].Dura, 0, 0, "");
-                    }
-                }
-            }
-            catch
-            {
-                M2Share.Logger.Error(sExceptionMsg);
-            }
         }
 
         public BaseObject GetPoseCreate()
@@ -3441,11 +3373,8 @@ namespace GameSvr.Actor
                             stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY +
-                                                       "\t" + ChrName + "\t" + stdItem.Name + "\t" +
-                                                       UseItems[i].MakeIndex + "\t"
-                                                       + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
-                                                       "\t" + '0');
+                                M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
+                                                       UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                             }
                             UseItems[i].Index = 0;
                             FeatureChanged();

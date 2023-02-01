@@ -376,15 +376,6 @@ namespace GameSvr.Actor
             }
             try
             {
-                if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.DecLightItemDrugTime)
-                {
-                    DecLightItemDrugTick += M2Share.Config.DecLightItemDrugTime;
-                    if (Race == ActorRace.Play)
-                    {
-                        UseLamp();
-                        ((PlayObject)this).CheckPkStatus();
-                    }
-                }
                 if ((HUtil32.GetTickCount() - CheckRoyaltyTick) > 10000)
                 {
                     CheckRoyaltyTick = HUtil32.GetTickCount();

@@ -1103,8 +1103,8 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.IsStartMaster && PoseHuman.IsStartMaster)
                 {
-                    PlayObject.PoseBaseObject = PoseHuman;
-                    PoseHuman.PoseBaseObject = PlayObject;
+                    PlayObject.PoseBaseObject = PoseHuman.ActorId;
+                    PoseHuman.PoseBaseObject = PlayObject.ActorId;
                     GotoLable(PlayObject, "@WateMaster", false);
                     GotoLable(PoseHuman, "@RevMaster", false);
                 }
@@ -1114,7 +1114,7 @@ namespace GameSvr.Npc
             {
                 if (string.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (PlayObject.PoseBaseObject == PoseHuman && PoseHuman.PoseBaseObject == PlayObject)
+                    if (PlayObject.PoseBaseObject == PoseHuman.ActorId && PoseHuman.PoseBaseObject == PlayObject.ActorId)
                     {
                         if (PlayObject.IsStartMaster && PoseHuman.IsStartMaster)
                         {

@@ -548,6 +548,10 @@ namespace GameSvr.Player
         public short TimeRecallMoveX;
         public short TimeRecallMoveY;
         /// <summary>
+        /// 减少勋章持久间隔
+        /// </summary>
+        protected int DecLightItemDrugTick;
+        /// <summary>
         /// 保存人物数据时间间隔
         /// </summary>
         public int SaveRcdTick;
@@ -607,6 +611,10 @@ namespace GameSvr.Player
         public IList<PlayObject> MasterList;
         public bool IsMaster = false;
         /// <summary>
+        /// 对面玩家
+        /// </summary>
+        public int PoseBaseObject = 0;
+        /// <summary>
         /// 声望点
         /// </summary>
         public byte CreditPoint = 0;
@@ -648,7 +656,6 @@ namespace GameSvr.Player
         public bool IsLockLogoned;
         public string MSTempPwd;
         public string StoragePwd;
-        public BaseObject PoseBaseObject = null;
         public bool IsStartMarry = false;
         public bool IsStartMaster = false;
         public bool IsStartUnMarry = false;
@@ -908,6 +915,7 @@ namespace GameSvr.Player
             DecGameGold = 1;
             DecGameGoldTick = HUtil32.GetTickCount();
             DecGameGoldTime = 60 * 1000;
+            DecLightItemDrugTick = HUtil32.GetTickCount();
             BoIncGameGold = false;
             IncGameGold = 1;
             IncGameGoldTick = HUtil32.GetTickCount();
@@ -4701,6 +4709,18 @@ namespace GameSvr.Player
                 {
                     AbilSeeHealGauge = true;
                 }
+            }
+        }
+
+        public void HasLevelUp(int nLevel)
+        {
+            Abil.MaxExp = GetLevelExp(Abil.Level);
+            RecalcLevelAbilitys();
+            RecalcAbilitys();
+            SendMsg(this, Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
+            if (M2Share.FunctionNPC != null)
+            {
+                M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
             }
         }
     }

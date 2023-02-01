@@ -180,6 +180,15 @@ namespace GameSvr.Player
                         DecPkPoint(M2Share.Config.DecPkPointCount);
                     }
                 }
+                if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.DecLightItemDrugTime)
+                {
+                    DecLightItemDrugTick += M2Share.Config.DecLightItemDrugTime;
+                    if (Race == ActorRace.Play)
+                    {
+                        UseLamp();
+                        CheckPkStatus();
+                    }
+                }
                 if ((HUtil32.GetTickCount() - CheckDupObjTick) > 3000)
                 {
                     CheckDupObjTick = HUtil32.GetTickCount();
@@ -2222,5 +2231,58 @@ namespace GameSvr.Player
             }
         }
 
+        /// <summary>
+        /// 蜡烛勋章减少持久
+        /// </summary>
+        private void UseLamp()
+        {
+            const string sExceptionMsg = "[Exception] TBaseObject::UseLamp";
+            try
+            {
+                if (UseItems[Grobal2.U_RIGHTHAND] != null && UseItems[Grobal2.U_RIGHTHAND].Index > 0)
+                {
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].Index);
+                    if ((stdItem == null) || (stdItem.SpecialPwr != 0))
+                    {
+                        return;
+                    }
+                    int nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
+                    ushort nDura;
+                    if (M2Share.Config.DecLampDura)
+                    {
+                        nDura = (ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura - 1);
+                    }
+                    else
+                    {
+                        nDura = UseItems[Grobal2.U_RIGHTHAND].Dura;
+                    }
+                    if (nDura <= 0)
+                    {
+                        UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
+                        if (Race == ActorRace.Play)
+                        {
+                            ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
+                        }
+                        UseItems[Grobal2.U_RIGHTHAND].Index = 0;
+                        Light = 0;
+                        SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
+                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
+                        RecalcAbilitys();
+                    }
+                    else
+                    {
+                        UseItems[Grobal2.U_RIGHTHAND].Dura = nDura;
+                    }
+                    if (nOldDura != HUtil32.Round(nDura / 1000))
+                    {
+                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, UseItems[Grobal2.U_RIGHTHAND].Dura, 0, 0, "");
+                    }
+                }
+            }
+            catch
+            {
+                M2Share.Logger.Error(sExceptionMsg);
+            }
+        }
     }
 }
