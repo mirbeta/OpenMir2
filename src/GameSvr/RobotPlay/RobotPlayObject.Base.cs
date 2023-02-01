@@ -89,7 +89,7 @@ namespace GameSvr.RobotPlay
                             }
                             else if (IsNeedAvoid()) // 自动躲避
                             {
-                                MDwActionTick = HUtil32.GetTickCount() - 10;
+                                ActionTick = HUtil32.GetTickCount() - 10;
                                 AutoAvoid();
                                 base.Run();
                                 return;
@@ -98,7 +98,7 @@ namespace GameSvr.RobotPlay
                             {
                                 if (IsNeedGotoXY())// 是否走向目标
                                 {
-                                    MDwActionTick = HUtil32.GetTickCount();
+                                    ActionTick = HUtil32.GetTickCount();
                                     TargetX = TargetCret.CurrX;
                                     TargetY = TargetCret.CurrY;
                                     if (AllowUseMagic(12) && Job == 0)

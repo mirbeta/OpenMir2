@@ -3096,7 +3096,7 @@ namespace GameSvr.Npc
 
         private static void ActionOfRestReNewLevel(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            PlayObject.MBtReLevel = 0;
+            PlayObject.ReLevel = 0;
             PlayObject.HasLevelUp(0);
         }
 
@@ -3116,7 +3116,7 @@ namespace GameSvr.Npc
         private static void ActionOfClearPassword(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.StoragePwd = "";
-            PlayObject.MBoPasswordLocked = false;
+            PlayObject.IsPasswordLocked = false;
         }
 
         // 挂机的
@@ -3157,9 +3157,9 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_RENEWLEVEL);
                 return;
             }
-            if (PlayObject.MBtReLevel + nReLevel <= 255)
+            if (PlayObject.ReLevel + nReLevel <= 255)
             {
-                PlayObject.MBtReLevel += (byte)nReLevel;
+                PlayObject.ReLevel += (byte)nReLevel;
                 if (nLevel > 0)
                 {
                     PlayObject.Abil.Level = (byte)nLevel;

@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             if (playObject.StoragePwd == "")
             {
                 playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
-                playObject.MBoSetStoragePwd = true;
+                playObject.IsSetStoragePwd = true;
                 playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
             else
@@ -45,7 +45,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!playObject.MBoPasswordLocked)
+            if (!playObject.IsPasswordLocked)
             {
                 playObject.StoragePwd = "";
                 playObject.SysMsg(Settings.OldPasswordIsClearMsg, MsgColor.Green, MsgType.Hint);
@@ -74,13 +74,13 @@ namespace GameSvr.GameCommand.Commands
             if (playObject.PwdFailCount > 3)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.MBoPasswordLocked = true;
+                playObject.IsPasswordLocked = true;
                 return;
             }
             if (playObject.StoragePwd != "")
             {
                 playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
-                playObject.MBoCheckOldPwd = true;
+                playObject.IsCheckOldPwd = true;
                 playObject.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
             else
@@ -107,16 +107,16 @@ namespace GameSvr.GameCommand.Commands
             if (playObject.PwdFailCount > M2Share.Config.PasswordErrorCountLock)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.MBoPasswordLocked = true;
+                playObject.IsPasswordLocked = true;
                 return;
             }
             if (playObject.StoragePwd != "")
             {
-                if (!playObject.MBoUnLockStoragePwd)
+                if (!playObject.IsUnLockStoragePwd)
                 {
                     playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                     playObject.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
-                    playObject.MBoUnLockStoragePwd = true;
+                    playObject.IsUnLockStoragePwd = true;
                 }
                 else
                 {
@@ -147,16 +147,16 @@ namespace GameSvr.GameCommand.Commands
             if (playObject.PwdFailCount > M2Share.Config.PasswordErrorCountLock)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.MBoPasswordLocked = true;
+                playObject.IsPasswordLocked = true;
                 return;
             }
             if (playObject.StoragePwd != "")
             {
-                if (!playObject.MBoUnLockPwd)
+                if (!playObject.IsUnLockPwd)
                 {
                     playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                     playObject.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
-                    playObject.MBoUnLockPwd = true;
+                    playObject.IsUnLockPwd = true;
                 }
                 else
                 {
@@ -184,12 +184,12 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!playObject.MBoPasswordLocked)
+            if (!playObject.IsPasswordLocked)
             {
                 if (playObject.StoragePwd != "")
                 {
-                    playObject.MBoPasswordLocked = true;
-                    playObject.BoCanGetBackItem = false;
+                    playObject.IsPasswordLocked = true;
+                    playObject.IsCanGetBackItem = false;
                     playObject.SysMsg(Settings.LockStorageSuccessMsg, MsgColor.Green, MsgType.Hint);
                 }
                 else

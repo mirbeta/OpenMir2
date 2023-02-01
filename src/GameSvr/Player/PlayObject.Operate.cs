@@ -235,7 +235,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropGoldMsg);
                 return false;
             }
-            if (!BoCanDrop || Envir.Flag.boNOTHROWITEM)
+            if (!IsCanDrop || Envir.Flag.boNOTHROWITEM)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
                 return false;
@@ -261,7 +261,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
                 return false;
             }
-            if (!BoCanDrop || Envir.Flag.boNOTHROWITEM)
+            if (!IsCanDrop || Envir.Flag.boNOTHROWITEM)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
                 return false;
@@ -319,10 +319,10 @@ namespace GameSvr.Player
             }
             if (!CheckActionStatus(wIdent, ref dwDelayTime))
             {
-                MBoFilterAction = false;
+                IsFilterAction = false;
                 return false;
             }
-            MBoFilterAction = true;
+            IsFilterAction = true;
             if (!M2Share.Config.CloseSpeedHackCheck)
             {
                 int dwCheckTime = HUtil32.GetTickCount() - MDwTurnTick;
@@ -914,7 +914,7 @@ namespace GameSvr.Player
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.PleaseTryDealLaterMsg);
                 return;
             }
-            if (!BoCanDeal)
+            if (!IsCanDeal)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
                 return;
@@ -926,7 +926,7 @@ namespace GameSvr.Player
                 {
                     if (targetPlayObject.Race == ActorRace.Play)
                     {
-                        if (targetPlayObject.AllowDeal && targetPlayObject.BoCanDeal)
+                        if (targetPlayObject.AllowDeal && targetPlayObject.IsCanDeal)
                         {
                             targetPlayObject.SysMsg(ChrName + Settings.OpenedDealMsg, MsgColor.Green, MsgType.Hint);
                             SysMsg(targetPlayObject.ChrName + Settings.OpenedDealMsg, MsgColor.Green, MsgType.Hint);
@@ -1667,7 +1667,7 @@ namespace GameSvr.Player
                 SysMsg(Settings.TryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!BoCanGetBackItem)
+            if (!IsCanGetBackItem)
             {
                 SendMsg(merchant, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.StorageIsLockedMsg + "\\ \\" + "仓库开锁命令: @" + CommandMgr.GameCommands.UnlockStorage.CmdName + '\\' + "仓库加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
                 return;

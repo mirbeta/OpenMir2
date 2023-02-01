@@ -251,7 +251,7 @@ namespace GameSvr.Player
             {
                 return 1;
             }
-            switch (MBtBright)
+            switch (Bright)
             {
                 case 1:
                     result = 0;
@@ -630,7 +630,7 @@ namespace GameSvr.Player
 
         private void ClientClickNpc(int actorId)
         {
-            if (!BoCanDeal)
+            if (!IsCanDeal)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
                 return;
@@ -786,9 +786,9 @@ namespace GameSvr.Player
 
         public void GameTimeChanged()
         {
-            if (MBtBright != M2Share.GameTime)
+            if (Bright != M2Share.GameTime)
             {
-                MBtBright = M2Share.GameTime;
+                Bright = M2Share.GameTime;
                 SendMsg(this, Messages.RM_DAYCHANGING, 0, 0, 0, 0, "");
             }
         }
@@ -812,7 +812,7 @@ namespace GameSvr.Player
         {
             return this.ChrName + " 标识:" + this.ActorId + " 权限等级: " + this.Permission + " 管理模式: " + HUtil32.BoolToStr(this.AdminMode)
                 + " 隐身模式: " + HUtil32.BoolToStr(this.ObMode) + " 无敌模式: " + HUtil32.BoolToStr(this.SuperMan) + " 地图:" + this.MapName + '(' + this.Envir.MapDesc + ')'
-                + " 座标:" + this.CurrX + ':' + this.CurrY + " 等级:" + this.Abil.Level + " 转生等级:" + MBtReLevel
+                + " 座标:" + this.CurrX + ':' + this.CurrY + " 等级:" + this.Abil.Level + " 转生等级:" + ReLevel
                 + " 经验:" + this.Abil.Exp + " 生命值: " + this.WAbil.HP + '-' + this.WAbil.MaxHP + " 魔法值: " + this.WAbil.MP + '-' + this.WAbil.MaxMP
                 + " 攻击力: " + HUtil32.LoWord(this.WAbil.DC) + '-' + HUtil32.HiWord(this.WAbil.DC) + " 魔法力: " + HUtil32.LoWord(this.WAbil.MC) + '-'
                 + HUtil32.HiWord(this.WAbil.MC) + " 道术: " + HUtil32.LoWord(this.WAbil.SC) + '-' + HUtil32.HiWord(this.WAbil.SC)
@@ -1841,7 +1841,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 4:
-                    if (MBtReLevel >= clientItem.Item.NeedLevel)
+                    if (ReLevel >= clientItem.Item.NeedLevel)
                     {
                         result = true;
                     }
@@ -1851,7 +1851,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 40:
-                    if (MBtReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
+                    if (ReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
                     {
                         if (Abil.Level >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                         {
@@ -1868,7 +1868,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 41:
-                    if (MBtReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
+                    if (ReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
                     {
                         if (HUtil32.HiByte(WAbil.DC) >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                         {
@@ -1885,7 +1885,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 42:
-                    if (MBtReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
+                    if (ReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
                     {
                         if (HUtil32.HiByte(WAbil.MC) >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                         {
@@ -1902,7 +1902,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 43:
-                    if (MBtReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
+                    if (ReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
                     {
                         if (HUtil32.HiByte(WAbil.SC) >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                         {
@@ -1919,7 +1919,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 44:
-                    if (MBtReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
+                    if (ReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
                     {
                         if (CreditPoint >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                         {
@@ -2331,7 +2331,7 @@ namespace GameSvr.Player
             Envirnoment envir = Envir;
             if (envir != Envir && Race == ActorRace.Play)
             {
-                BoTimeRecall = false;
+                IsTimeRecall = false;
             }
         }
 
@@ -2842,12 +2842,12 @@ namespace GameSvr.Player
                 }
             }
             // 检查二个不同操作之间所需间隔时间
-            dwCheckTime = HUtil32.GetTickCount() - MDwActionTick;
+            dwCheckTime = HUtil32.GetTickCount() - ActionTick;
             if (TestSpeedMode)
             {
                 SysMsg("间隔: " + dwCheckTime, MsgColor.Blue, MsgType.Notice);
             }
-            if (MWOldIdent == wIdent)
+            if (OldIdent == wIdent)
             {
                 // 当二次操作一样时，则将 boFirst 设置为 真 ，退出由调用函数本身检查二个相同操作之间的间隔时间
                 return true;
@@ -2860,47 +2860,47 @@ namespace GameSvr.Player
             switch (wIdent)
             {
                 case Messages.CM_LONGHIT:
-                    if (M2Share.Config.boControlRunLongHit && MWOldIdent == Messages.CM_RUN && MBtOldDir != Direction)
+                    if (M2Share.Config.boControlRunLongHit && OldIdent == Messages.CM_RUN && MBtOldDir != Direction)
                     {
                         dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Messages.CM_HIT:
-                    if (M2Share.Config.boControlWalkHit && MWOldIdent == Messages.CM_WALK && MBtOldDir != Direction)
+                    if (M2Share.Config.boControlWalkHit && OldIdent == Messages.CM_WALK && MBtOldDir != Direction)
                     {
                         dwActionIntervalTime = WalkHitIntervalTime; // 走位攻击
                     }
-                    if (M2Share.Config.boControlRunHit && MWOldIdent == Messages.CM_RUN && MBtOldDir != Direction)
+                    if (M2Share.Config.boControlRunHit && OldIdent == Messages.CM_RUN && MBtOldDir != Direction)
                     {
                         dwActionIntervalTime = RunHitIntervalTime;// 跑位攻击
                     }
                     break;
                 case Messages.CM_RUN:
-                    if (M2Share.Config.boControlRunLongHit && MWOldIdent == Messages.CM_LONGHIT && MBtOldDir != Direction)
+                    if (M2Share.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Direction)
                     {
                         dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
-                    if (M2Share.Config.boControlRunHit && MWOldIdent == Messages.CM_HIT && MBtOldDir != Direction)
+                    if (M2Share.Config.boControlRunHit && OldIdent == Messages.CM_HIT && MBtOldDir != Direction)
                     {
                         dwActionIntervalTime = RunHitIntervalTime;// 跑位攻击
                     }
-                    if (M2Share.Config.boControlRunMagic && MWOldIdent == Messages.CM_SPELL && MBtOldDir != Direction)
+                    if (M2Share.Config.boControlRunMagic && OldIdent == Messages.CM_SPELL && MBtOldDir != Direction)
                     {
                         dwActionIntervalTime = RunMagicIntervalTime;// 跑位魔法
                     }
                     break;
                 case Messages.CM_WALK:
-                    if (M2Share.Config.boControlWalkHit && MWOldIdent == Messages.CM_HIT && MBtOldDir != Direction)
+                    if (M2Share.Config.boControlWalkHit && OldIdent == Messages.CM_HIT && MBtOldDir != Direction)
                     {
                         dwActionIntervalTime = WalkHitIntervalTime;// 走位攻击
                     }
-                    if (M2Share.Config.boControlRunLongHit && MWOldIdent == Messages.CM_LONGHIT && MBtOldDir != Direction)
+                    if (M2Share.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Direction)
                     {
                         dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Messages.CM_SPELL:
-                    if (M2Share.Config.boControlRunMagic && MWOldIdent == Messages.CM_RUN && MBtOldDir != Direction)
+                    if (M2Share.Config.boControlRunMagic && OldIdent == Messages.CM_RUN && MBtOldDir != Direction)
                     {
                         dwActionIntervalTime = RunMagicIntervalTime;// 跑位魔法
                     }
@@ -2913,14 +2913,14 @@ namespace GameSvr.Player
             }
             if (dwCheckTime >= dwActionIntervalTime)
             {
-                MDwActionTick = HUtil32.GetTickCount();
+                ActionTick = HUtil32.GetTickCount();
                 result = true;
             }
             else
             {
                 dwDelayTime = dwActionIntervalTime - dwCheckTime;
             }
-            MWOldIdent = wIdent;
+            OldIdent = wIdent;
             MBtOldDir = Direction;
             return result;
         }
@@ -2976,9 +2976,9 @@ namespace GameSvr.Player
             {
                 return true;
             }
-            if (string.Compare(sLabel, MSPlayDiceLabel, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(sLabel, PlayDiceLabel, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                MSPlayDiceLabel = string.Empty;
+                PlayDiceLabel = string.Empty;
                 return true;
             }
             return false;
@@ -3352,13 +3352,13 @@ namespace GameSvr.Player
             }
             string sData = processMsg.Msg;
             int nLen = sData.Length;
-            if (MBoSetStoragePwd)
+            if (IsSetStoragePwd)
             {
-                MBoSetStoragePwd = false;
+                IsSetStoragePwd = false;
                 if (nLen > 3 && nLen < 8)
                 {
                     MSTempPwd = sData;
-                    MBoReConfigPwd = true;
+                    IsReConfigPwd = true;
                     SysMsg(Settings.ReSetPasswordMsg, MsgColor.Green, MsgType.Hint);// '请重复输入一次仓库密码：'
                     SendMsg(this, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                 }
@@ -3368,13 +3368,13 @@ namespace GameSvr.Player
                 }
                 return;
             }
-            if (MBoReConfigPwd)
+            if (IsReConfigPwd)
             {
-                MBoReConfigPwd = false;
+                IsReConfigPwd = false;
                 if (string.Compare(MSTempPwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     StoragePwd = sData;
-                    MBoPasswordLocked = true;
+                    IsPasswordLocked = true;
                     MSTempPwd = "";
                     SysMsg(Settings.ReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);// '密码设置成功!!，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
                 }
@@ -3385,40 +3385,40 @@ namespace GameSvr.Player
                 }
                 return;
             }
-            if (MBoUnLockPwd || MBoUnLockStoragePwd)
+            if (IsUnLockPwd || IsUnLockStoragePwd)
             {
                 if (string.Compare(StoragePwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    MBoPasswordLocked = false;
-                    if (MBoUnLockPwd)
+                    IsPasswordLocked = false;
+                    if (IsUnLockPwd)
                     {
                         if (M2Share.Config.LockDealAction)
                         {
-                            BoCanDeal = true;
+                            IsCanDeal = true;
                         }
                         if (M2Share.Config.LockDropAction)
                         {
-                            BoCanDrop = true;
+                            IsCanDrop = true;
                         }
                         if (M2Share.Config.LockWalkAction)
                         {
-                            BoCanWalk = true;
+                            IsCanWalk = true;
                         }
                         if (M2Share.Config.LockRunAction)
                         {
-                            BoCanRun = true;
+                            IsCanRun = true;
                         }
                         if (M2Share.Config.LockHitAction)
                         {
-                            BoCanHit = true;
+                            IsCanHit = true;
                         }
                         if (M2Share.Config.LockSpellAction)
                         {
-                            BoCanSpell = true;
+                            IsCanSpell = true;
                         }
                         if (M2Share.Config.LockSendMsgAction)
                         {
-                            BoCanSendMsg = true;
+                            IsCanSendMsg = true;
                         }
                         if (M2Share.Config.LockUserItemAction)
                         {
@@ -3432,11 +3432,11 @@ namespace GameSvr.Player
                         IsLockLogoned = true;
                         SysMsg(Settings.PasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
-                    if (MBoUnLockStoragePwd)
+                    if (IsUnLockStoragePwd)
                     {
                         if (M2Share.Config.LockGetBackItemAction)
                         {
-                            BoCanGetBackItem = true;
+                            IsCanGetBackItem = true;
                         }
                         SysMsg(Settings.StorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
@@ -3450,18 +3450,18 @@ namespace GameSvr.Player
                         SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                     }
                 }
-                MBoUnLockPwd = false;
-                MBoUnLockStoragePwd = false;
+                IsUnLockPwd = false;
+                IsUnLockStoragePwd = false;
                 return;
             }
-            if (MBoCheckOldPwd)
+            if (IsCheckOldPwd)
             {
-                MBoCheckOldPwd = false;
+                IsCheckOldPwd = false;
                 if (StoragePwd == sData)
                 {
                     SendMsg(this, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                     SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
-                    MBoSetStoragePwd = true;
+                    IsSetStoragePwd = true;
                 }
                 else
                 {
@@ -3470,7 +3470,7 @@ namespace GameSvr.Player
                     if (PwdFailCount > 3)
                     {
                         SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                        MBoPasswordLocked = true;
+                        IsPasswordLocked = true;
                     }
                 }
             }

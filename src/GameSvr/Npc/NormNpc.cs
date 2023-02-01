@@ -429,7 +429,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$RANDOMNO>", PlayObject.RandomNo);
                     return;
                 case "$RELEVEL":
-                    sText = PlayObject.MBtReLevel.ToString();
+                    sText = PlayObject.ReLevel.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$RELEVEL>", sText);
                     return;
                 case "$HUMANSHOWNAME":

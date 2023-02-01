@@ -245,13 +245,13 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                if (MBoSetStoragePwd)
+                if (IsSetStoragePwd)
                 {
-                    MBoSetStoragePwd = false;
+                    IsSetStoragePwd = false;
                     if (nLen > 3 && nLen < 8)
                     {
                         MSTempPwd = sData;
-                        MBoReConfigPwd = true;
+                        IsReConfigPwd = true;
                         SysMsg(Settings.ReSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                         SendMsg(this, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                     }
@@ -261,14 +261,14 @@ namespace GameSvr.Player
                     }
                     return;
                 }
-                if (MBoReConfigPwd)
+                if (IsReConfigPwd)
                 {
-                    MBoReConfigPwd = false;
+                    IsReConfigPwd = false;
                     if (string.Compare(MSTempPwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         StoragePwd = sData;
-                        MBoPasswordLocked = true;
-                        BoCanGetBackItem = false;
+                        IsPasswordLocked = true;
+                        IsCanGetBackItem = false;
                         MSTempPwd = "";
                         SysMsg(Settings.ReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
@@ -279,40 +279,40 @@ namespace GameSvr.Player
                     }
                     return;
                 }
-                if (MBoUnLockPwd || MBoUnLockStoragePwd)
+                if (IsUnLockPwd || IsUnLockStoragePwd)
                 {
                     if (string.Compare(StoragePwd, sData, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        MBoPasswordLocked = false;
-                        if (MBoUnLockPwd)
+                        IsPasswordLocked = false;
+                        if (IsUnLockPwd)
                         {
                             if (M2Share.Config.LockDealAction)
                             {
-                                BoCanDeal = true;
+                                IsCanDeal = true;
                             }
                             if (M2Share.Config.LockDropAction)
                             {
-                                BoCanDrop = true;
+                                IsCanDrop = true;
                             }
                             if (M2Share.Config.LockWalkAction)
                             {
-                                BoCanWalk = true;
+                                IsCanWalk = true;
                             }
                             if (M2Share.Config.LockRunAction)
                             {
-                                BoCanRun = true;
+                                IsCanRun = true;
                             }
                             if (M2Share.Config.LockHitAction)
                             {
-                                BoCanHit = true;
+                                IsCanHit = true;
                             }
                             if (M2Share.Config.LockSpellAction)
                             {
-                                BoCanSpell = true;
+                                IsCanSpell = true;
                             }
                             if (M2Share.Config.LockSendMsgAction)
                             {
-                                BoCanSendMsg = true;
+                                IsCanSendMsg = true;
                             }
                             if (M2Share.Config.LockUserItemAction)
                             {
@@ -326,11 +326,11 @@ namespace GameSvr.Player
                             IsLockLogoned = true;
                             SysMsg(Settings.PasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
-                        if (MBoUnLockStoragePwd)
+                        if (IsUnLockStoragePwd)
                         {
                             if (M2Share.Config.LockGetBackItemAction)
                             {
-                                BoCanGetBackItem = true;
+                                IsCanGetBackItem = true;
                             }
                             SysMsg(Settings.StorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
@@ -344,18 +344,18 @@ namespace GameSvr.Player
                             SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         }
                     }
-                    MBoUnLockPwd = false;
-                    MBoUnLockStoragePwd = false;
+                    IsUnLockPwd = false;
+                    IsUnLockStoragePwd = false;
                     return;
                 }
-                if (MBoCheckOldPwd)
+                if (IsCheckOldPwd)
                 {
-                    MBoCheckOldPwd = false;
+                    IsCheckOldPwd = false;
                     if (StoragePwd == sData)
                     {
                         SendMsg(this, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                         SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
-                        MBoSetStoragePwd = true;
+                        IsSetStoragePwd = true;
                     }
                     else
                     {
@@ -364,7 +364,7 @@ namespace GameSvr.Player
                         if (PwdFailCount > 3)
                         {
                             SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                            MBoPasswordLocked = true;
+                            IsPasswordLocked = true;
                         }
                     }
                     return;

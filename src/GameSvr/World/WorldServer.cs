@@ -346,7 +346,7 @@ namespace GameSvr.World
                             abil.MaxExp = 100;
                             abil.Weight = 0;
                             abil.MaxWeight = 30;
-                            playObject.MBoNewHuman = true;
+                            playObject.IsNewHuman = true;
                         }
                     }
                     Envirnoment envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
@@ -845,9 +845,9 @@ namespace GameSvr.World
                                         }
                                     }
                                     playObject.Run();
-                                    if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.MDwSaveRcdTick) > M2Share.Config.SaveHumanRcdTime)
+                                    if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.SaveRcdTick) > M2Share.Config.SaveHumanRcdTime)
                                     {
-                                        playObject.MDwSaveRcdTick = HUtil32.GetTickCount();
+                                        playObject.SaveRcdTick = HUtil32.GetTickCount();
                                         playObject.DealCancelA();
                                         SaveHumanRcd(playObject);
                                     }
@@ -1290,7 +1290,7 @@ namespace GameSvr.World
                     PlayObject playObject = PlayObjectList[i];
                     if (!playObject.Ghost)
                     {
-                        if (!(playObject.MBoPasswordLocked && playObject.ObMode && playObject.AdminMode))
+                        if (!(playObject.IsPasswordLocked && playObject.ObMode && playObject.AdminMode))
                         {
                             result = playObject;
                         }
@@ -1508,14 +1508,14 @@ namespace GameSvr.World
             playObject.BonusAbil = humData.BonusAbil;
             playObject.BonusPoint = humData.BonusPoint;
             playObject.CreditPoint = humData.CreditPoint;
-            playObject.MBtReLevel = humData.ReLevel;
+            playObject.ReLevel = humData.ReLevel;
             playObject.MasterName = humData.MasterName;
             playObject.IsMaster = humData.IsMaster;
             playObject.DearName = humData.DearName;
             playObject.StoragePwd = humData.StoragePwd;
             if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
-                playObject.MBoPasswordLocked = true;
+                playObject.IsPasswordLocked = true;
             }
             playObject.GameGold = humData.GameGold;
             playObject.GamePoint = humData.GamePoint;
@@ -1642,7 +1642,7 @@ namespace GameSvr.World
             humanRcd.Data.BonusPoint = playObject.BonusPoint;
             humanRcd.Data.StoragePwd = playObject.StoragePwd;
             humanRcd.Data.CreditPoint = playObject.CreditPoint;
-            humanRcd.Data.ReLevel = playObject.MBtReLevel;
+            humanRcd.Data.ReLevel = playObject.ReLevel;
             humanRcd.Data.MasterName = playObject.MasterName;
             humanRcd.Data.IsMaster = playObject.IsMaster;
             humanRcd.Data.DearName = playObject.DearName;

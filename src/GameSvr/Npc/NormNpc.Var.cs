@@ -2133,7 +2133,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$RELEVEL":
-                    nValue = PlayObject.MBtReLevel;
+                    nValue = PlayObject.ReLevel;
                     nDataType = 1;
                     result = true;
                     return result;

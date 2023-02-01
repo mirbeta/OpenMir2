@@ -1860,25 +1860,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.MBtReLevel == nLevel)
+                    if (PlayObject.ReLevel == nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MBtReLevel > nLevel)
+                    if (PlayObject.ReLevel > nLevel)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MBtReLevel < nLevel)
+                    if (PlayObject.ReLevel < nLevel)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MBtReLevel >= nLevel)
+                    if (PlayObject.ReLevel >= nLevel)
                     {
                         result = true;
                     }
@@ -2265,12 +2265,12 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfIsLockPassword(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return PlayObject.MBoPasswordLocked;
+            return PlayObject.IsPasswordLocked;
         }
 
         private static bool ConditionOfIsLockStorage(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !PlayObject.BoCanGetBackItem;
+            return !PlayObject.IsCanGetBackItem;
         }
 
         private bool ConditionOfCheckPayMent(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)

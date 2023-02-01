@@ -1048,7 +1048,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nSC_ISNEWHUMAN:
-                        if (!PlayObject.MBoNewHuman)
+                        if (!PlayObject.IsNewHuman)
                         {
                             result = false;
                         }
@@ -1855,7 +1855,7 @@ namespace GameSvr.Npc
                         result = false;
                         break;
                     case ScriptConst.nTIMERECALL:
-                        PlayObject.BoTimeRecall = true;
+                        PlayObject.IsTimeRecall = true;
                         PlayObject.TimeRecallMoveMap = PlayObject.MapName;
                         PlayObject.TimeRecallMoveX = PlayObject.CurrX;
                         PlayObject.TimeRecallMoveY = PlayObject.CurrY;
@@ -1943,7 +1943,7 @@ namespace GameSvr.Npc
                         PercentData(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nBREAKTIMERECALL:
-                        PlayObject.BoTimeRecall = false;
+                        PlayObject.IsTimeRecall = false;
                         break;
                     case ScriptConst.nCHANGEMODE:
                         switch (QuestActionInfo.nParam1)
@@ -2073,7 +2073,7 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nPLAYDICE:
-                        PlayObject.MSPlayDiceLabel = QuestActionInfo.sParam2;
+                        PlayObject.PlayDiceLabel = QuestActionInfo.sParam2;
                         PlayObject.SendMsg(this, Messages.RM_PLAYDICE, (short)QuestActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[0], (ushort)PlayObject.MDyVal[1]), HUtil32.MakeWord((ushort)PlayObject.MDyVal[2], (ushort)PlayObject.MDyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[4], (ushort)PlayObject.MDyVal[5]), HUtil32.MakeWord((ushort)PlayObject.MDyVal[6], (ushort)PlayObject.MDyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)PlayObject.MDyVal[8], (ushort)PlayObject.MDyVal[9]), 0), QuestActionInfo.sParam2);
                         bo11 = true;
                         break;
@@ -2426,7 +2426,7 @@ namespace GameSvr.Npc
                         ActionOfQueryTrustDeal(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nDELAYGOTO:
-                        PlayObject.BoTimeGoto = true;
+                        PlayObject.IsTimeGoto = true;
                         int m_DelayGoto = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
                         if (m_DelayGoto == 0)
                         {
@@ -2446,7 +2446,7 @@ namespace GameSvr.Npc
                         PlayObject.TimeGotoNpc = this;
                         break;
                     case ScriptConst.nCLEARDELAYGOTO:
-                        PlayObject.BoTimeGoto = false;
+                        PlayObject.IsTimeGoto = false;
                         PlayObject.TimeGotoLable = "";
                         PlayObject.TimeGotoNpc = null;
                         break;

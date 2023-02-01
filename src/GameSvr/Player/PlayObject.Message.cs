@@ -62,9 +62,9 @@ namespace GameSvr.Player
                     TwinHitSkill = false;
                     SendSocket("+UTWN");
                 }
-                if (BoTimeRecall && HUtil32.GetTickCount() > TimeRecallTick) //执行 TimeRecall回到原地
+                if (IsTimeRecall && HUtil32.GetTickCount() > TimeRecallTick) //执行 TimeRecall回到原地
                 {
-                    BoTimeRecall = false;
+                    IsTimeRecall = false;
                     SpaceMove(TimeRecallMoveMap, TimeRecallMoveX, TimeRecallMoveY, 0);
                 }
                 for (int i = 0; i < 20; i++) //个人定时器
@@ -148,9 +148,9 @@ namespace GameSvr.Player
                 {
                     HealthSpellChanged();
                 }
-                if (BoTimeGoto && (HUtil32.GetTickCount() > TimeGotoTick)) //Delaygoto延时跳转
+                if (IsTimeGoto && (HUtil32.GetTickCount() > TimeGotoTick)) //Delaygoto延时跳转
                 {
-                    BoTimeGoto = false;
+                    IsTimeGoto = false;
                     ((Merchant)TimeGotoNpc)?.GotoLable(this, TimeGotoLable, false);
                 }
                 // 增加挂机
@@ -697,15 +697,15 @@ namespace GameSvr.Player
             {
                 M2Share.Logger.Error(sExceptionMsg3);
             }
-            if (M2Share.Config.ReNewChangeColor && MBtReLevel > 0 && (HUtil32.GetTickCount() - MDwReColorTick) > M2Share.Config.ReNewNameColorTime)
+            if (M2Share.Config.ReNewChangeColor && ReLevel > 0 && (HUtil32.GetTickCount() - ReColorTick) > M2Share.Config.ReNewNameColorTime)
             {
-                MDwReColorTick = HUtil32.GetTickCount();
-                MBtReColorIdx++;
-                if (MBtReColorIdx >= M2Share.Config.ReNewNameColor.Length)
+                ReColorTick = HUtil32.GetTickCount();
+                ReColorIdx++;
+                if (ReColorIdx >= M2Share.Config.ReNewNameColor.Length)
                 {
-                    MBtReColorIdx = 0;
+                    ReColorIdx = 0;
                 }
-                NameColor = M2Share.Config.ReNewNameColor[MBtReColorIdx];
+                NameColor = M2Share.Config.ReNewNameColor[ReColorIdx];
                 RefNameColor();
             }
             // 检测侦听私聊对像
@@ -1035,7 +1035,7 @@ namespace GameSvr.Player
                 case Messages.CM_TURN:
                     if (ClientChangeDir((short)processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
                     {
-                        MDwActionTick = HUtil32.GetTickCount();
+                        ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1086,7 +1086,7 @@ namespace GameSvr.Player
                 case Messages.CM_WALK:
                     if (ClientWalkXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime))
                     {
-                        MDwActionTick = HUtil32.GetTickCount();
+                        ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1121,7 +1121,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
@@ -1145,7 +1145,7 @@ namespace GameSvr.Player
                 case Messages.CM_HORSERUN:
                     if (ClientHorseRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime))
                     {
-                        MDwActionTick = HUtil32.GetTickCount();
+                        ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1193,7 +1193,7 @@ namespace GameSvr.Player
                 case Messages.CM_RUN:
                     if (ClientRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.nParam3, ref dwDelayTime))
                     {
-                        MDwActionTick = HUtil32.GetTickCount();
+                        ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1224,7 +1224,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
@@ -1256,7 +1256,7 @@ namespace GameSvr.Player
                 case Messages.CM_FIREHIT:
                     if (ClientHitXY(processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, processMsg.LateDelivery, ref dwDelayTime))
                     {
-                        MDwActionTick = HUtil32.GetTickCount();
+                        ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1287,7 +1287,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (TestSpeedMode)
@@ -1311,7 +1311,7 @@ namespace GameSvr.Player
                 case Messages.CM_SITDOWN:
                     if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
                     {
-                        MDwActionTick = HUtil32.GetTickCount();
+                        ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1366,7 +1366,7 @@ namespace GameSvr.Player
                 case Messages.CM_SPELL:
                     if (ClientSpellXY(processMsg.wIdent, processMsg.wParam, (short)processMsg.nParam1, (short)processMsg.nParam2, M2Share.ActorMgr.Get(processMsg.nParam3), processMsg.LateDelivery, ref dwDelayTime))
                     {
-                        MDwActionTick = HUtil32.GetTickCount();
+                        ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
@@ -1397,7 +1397,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && MBoFilterAction)
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
@@ -1751,7 +1751,7 @@ namespace GameSvr.Player
                     SendSocket(ClientMsg);
                     break;
                 case Messages.RM_DAYCHANGING:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DAYCHANGING, 0, MBtBright, DayBright(), 0);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DAYCHANGING, 0, Bright, DayBright(), 0);
                     SendSocket(ClientMsg);
                     break;
                 case Messages.RM_ITEMSHOW:

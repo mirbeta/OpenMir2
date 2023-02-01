@@ -541,8 +541,8 @@ namespace GameSvr.Player
         /// 组成员
         /// </summary>
         public IList<PlayObject> GroupMembers;
-        public string MSPlayDiceLabel = string.Empty;
-        public bool BoTimeRecall;
+        public string PlayDiceLabel = string.Empty;
+        public bool IsTimeRecall;
         public int TimeRecallTick = 0;
         public string TimeRecallMoveMap = string.Empty;
         public short TimeRecallMoveX;
@@ -550,9 +550,9 @@ namespace GameSvr.Player
         /// <summary>
         /// 保存人物数据时间间隔
         /// </summary>
-        public int MDwSaveRcdTick;
-        public byte MBtBright;
-        public bool MBoNewHuman;
+        public int SaveRcdTick;
+        public byte Bright;
+        public bool IsNewHuman;
         private bool IsSendNotice;
         private int WaitLoginNoticeOkTick;
         public bool LoginNoticeOk;
@@ -565,21 +565,25 @@ namespace GameSvr.Player
         /// </summary>
         private readonly Hashtable CanJmpScriptLableMap;
         public int ScriptGotoCount = 0;
+        /// <summary>
+        /// 用于处理 @back 脚本命令
+        /// </summary>
         public string ScriptCurrLable = string.Empty;
-        // 用于处理 @back 脚本命令
+        /// <summary>
+        /// 用于处理 @back 脚本命令
+        /// </summary>        
         public string ScriptGoBackLable = string.Empty;
-        // 用于处理 @back 脚本命令
         public int MDwTurnTick;
-        public int MWOldIdent = 0;
+        public int OldIdent = 0;
         public byte MBtOldDir = 0;
         /// <summary>
         /// 第一个操作
         /// </summary>
-        public bool MBoFirstAction = false;
+        public bool IsFirstAction = false;
         /// <summary>
         /// 二次操作之间间隔时间
         /// </summary>        
-        public int MDwActionTick;
+        public int ActionTick;
         /// <summary>
         /// 配偶名称
         /// </summary>
@@ -613,9 +617,9 @@ namespace GameSvr.Player
         /// <summary>
         /// 转生等级
         /// </summary>
-        public byte MBtReLevel = 0;
-        public byte MBtReColorIdx;
-        public int MDwReColorTick = 0;
+        public byte ReLevel = 0;
+        public byte ReColorIdx;
+        public int ReColorTick = 0;
         /// <summary>
         /// 杀怪经验倍数
         /// </summary>
@@ -624,13 +628,15 @@ namespace GameSvr.Player
         /// 处理消息循环时间控制
         /// </summary>        
         public int MDwGetMsgTick = 0;
-        public bool MBoSetStoragePwd;
-        public bool MBoReConfigPwd;
-        public bool MBoCheckOldPwd;
-        public bool MBoUnLockPwd;
-        public bool MBoUnLockStoragePwd;
-        public bool MBoPasswordLocked;
-        // 锁密码
+        public bool IsSetStoragePwd;
+        public bool IsReConfigPwd;
+        public bool IsCheckOldPwd;
+        public bool IsUnLockPwd;
+        public bool IsUnLockStoragePwd;
+        /// <summary>
+        /// 锁密码
+        /// </summary>
+        public bool IsPasswordLocked;
         public byte PwdFailCount;
         /// <summary>
         /// 是否启用锁登录功能
@@ -670,14 +676,14 @@ namespace GameSvr.Player
         /// 是否允许使用物品
         /// </summary>
         public bool MBoCanUseItem;
-        public bool BoCanDeal;
-        public bool BoCanDrop;
-        public bool BoCanGetBackItem;
-        public bool BoCanWalk;
-        public bool BoCanRun;
-        public bool BoCanHit;
-        public bool BoCanSpell;
-        public bool BoCanSendMsg;
+        public bool IsCanDeal;
+        public bool IsCanDrop;
+        public bool IsCanGetBackItem;
+        public bool IsCanWalk;
+        public bool IsCanRun;
+        public bool IsCanHit;
+        public bool IsCanSpell;
+        public bool IsCanSendMsg;
         /// <summary>
         /// 会员类型
         /// </summary>
@@ -713,7 +719,7 @@ namespace GameSvr.Player
         // 游戏点数
         public int IncGamePointTick;
         public int PayMentPoint;
-        public int MDwPayMentPointTick = 0;
+        public int PayMentPointTick = 0;
         public int DecHpTick = 0;
         public int IncHpTick = 0;
         /// <summary>
@@ -734,14 +740,14 @@ namespace GameSvr.Player
         public int ClearInvalidObjTick = 0;
         public short MWContribution;
         public string RankLevelName = string.Empty;
-        public bool MBoFilterAction = false;
+        public bool IsFilterAction = false;
         public int AutoGetExpTick;
         public int AutoGetExpTime = 0;
         public int AutoGetExpPoint;
         public Envirnoment AutoGetExpEnvir;
         public bool AutoGetExpInSafeZone = false;
         public readonly Dictionary<string, DynamicVar> DynamicVarMap;
-        public short MDwClientTick;
+        public short ClientTick;
         /// <summary>
         /// 进入速度测试模式
         /// </summary>
@@ -751,7 +757,7 @@ namespace GameSvr.Player
         /// 刷新包裹间隔
         /// </summary>
         public int QueryBagItemsTick = 0;
-        public bool BoTimeGoto;
+        public bool IsTimeGoto;
         public int TimeGotoTick;
         public string TimeGotoLable;
         public BaseObject TimeGotoNpc;
@@ -816,7 +822,7 @@ namespace GameSvr.Player
             BoKickFlag = false;
             BoSoftClose = false;
             BoReadyRun = false;
-            MDwSaveRcdTick = HUtil32.GetTickCount();
+            SaveRcdTick = HUtil32.GetTickCount();
             DecHungerPointTick = HUtil32.GetTickCount();
             GroupRcallTick = HUtil32.GetTickCount();
             WantRefMsg = true;
@@ -826,7 +832,7 @@ namespace GameSvr.Player
             IsDelayCall = false;
             MDelayCallNpc = 0;
             MScript = null;
-            BoTimeRecall = false;
+            IsTimeRecall = false;
             TimeRecallMoveX = 0;
             TimeRecallMoveY = 0;
             RunTick = HUtil32.GetTickCount();
@@ -837,7 +843,7 @@ namespace GameSvr.Player
             AllowGuild = false;
             ViewRange = 12;
             InGuildWarArea = false;
-            MBoNewHuman = false;
+            IsNewHuman = false;
             LoginNoticeOk = false;
             Bo6Ab = false;
             BonusAbil = new NakedAbility();
@@ -851,7 +857,7 @@ namespace GameSvr.Player
             AttackTick = HUtil32.GetTickCount();
             MoveTick = HUtil32.GetTickCount();
             MDwTurnTick = HUtil32.GetTickCount();
-            MDwActionTick = HUtil32.GetTickCount();
+            ActionTick = HUtil32.GetTickCount();
             AttackCount = 0;
             AttackCountA = 0;
             MagicAttackCount = 0;
@@ -875,25 +881,25 @@ namespace GameSvr.Player
             KillMonExpRate = 100;
             ExpRateTick = HUtil32.GetTickCount();
             PowerRate = 100;
-            MBoSetStoragePwd = false;
-            MBoReConfigPwd = false;
-            MBoCheckOldPwd = false;
-            MBoUnLockPwd = false;
-            MBoUnLockStoragePwd = false;
-            MBoPasswordLocked = false;
+            IsSetStoragePwd = false;
+            IsReConfigPwd = false;
+            IsCheckOldPwd = false;
+            IsUnLockPwd = false;
+            IsUnLockStoragePwd = false;
+            IsPasswordLocked = false;
             PvpFlag = false;
             // 锁仓库
             PwdFailCount = 0;
             MSTempPwd = "";
             StoragePwd = "";
             FilterSendMsg = false;
-            BoCanDeal = true;
-            BoCanDrop = true;
-            BoCanGetBackItem = true;
-            BoCanWalk = true;
-            BoCanRun = true;
-            BoCanHit = true;
-            BoCanSpell = true;
+            IsCanDeal = true;
+            IsCanDrop = true;
+            IsCanGetBackItem = true;
+            IsCanWalk = true;
+            IsCanRun = true;
+            IsCanHit = true;
+            IsCanSpell = true;
             MBoCanUseItem = true;
             MemberType = 0;
             MemberLevel = 0;
@@ -918,7 +924,7 @@ namespace GameSvr.Player
             CanDearRecall = false;
             DearRecallTick = HUtil32.GetTickCount();
             MasterRecallTick = HUtil32.GetTickCount();
-            MBtReColorIdx = 0;
+            ReColorIdx = 0;
             WhisperHuman = null;
             OnHorse = false;
             MWContribution = 0;
@@ -958,7 +964,7 @@ namespace GameSvr.Player
             TestSpeedMode = false;
             IsLockLogon = true;
             IsLockLogoned = false;
-            BoTimeGoto = false;
+            IsTimeGoto = false;
             TimeGotoTick = HUtil32.GetTickCount();
             TimeGotoLable = "";
             TimeGotoNpc = null;
@@ -1036,8 +1042,8 @@ namespace GameSvr.Player
                             if (msg.wIdent == Messages.CM_LOGINNOTICEOK)
                             {
                                 LoginNoticeOk = true;
-                                MDwClientTick = (short)msg.nParam1;
-                                SysMsg(MDwClientTick.ToString(), MsgColor.Red, MsgType.Notice);
+                                ClientTick = (short)msg.nParam1;
+                                SysMsg(ClientTick.ToString(), MsgColor.Red, MsgType.Notice);
                             }
                         }
                     }
@@ -1131,7 +1137,7 @@ namespace GameSvr.Player
                     CheckSeeHealGauge(MagicList[i]);
                 }
                 UserItem userItem;
-                if (MBoNewHuman)
+                if (IsNewHuman)
                 {
                     userItem = new UserItem();
                     if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.Candle, ref userItem))
@@ -1302,7 +1308,7 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                MBtBright = M2Share.GameTime;
+                Bright = M2Share.GameTime;
                 SendPriorityMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(this, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "", MessagePriority.High);
@@ -1368,30 +1374,30 @@ namespace GameSvr.Player
                 // 密码保护系统
                 if (M2Share.Config.PasswordLockSystem)
                 {
-                    if (MBoPasswordLocked)
+                    if (IsPasswordLocked)
                     {
-                        BoCanGetBackItem = !M2Share.Config.LockGetBackItemAction;
+                        IsCanGetBackItem = !M2Share.Config.LockGetBackItemAction;
                     }
-                    if (M2Share.Config.LockHumanLogin && IsLockLogon && MBoPasswordLocked)
+                    if (M2Share.Config.LockHumanLogin && IsLockLogon && IsPasswordLocked)
                     {
-                        BoCanDeal = !M2Share.Config.LockDealAction;
-                        BoCanDrop = !M2Share.Config.LockDropAction;
+                        IsCanDeal = !M2Share.Config.LockDealAction;
+                        IsCanDrop = !M2Share.Config.LockDropAction;
                         MBoCanUseItem = !M2Share.Config.LockUserItemAction;
-                        BoCanWalk = !M2Share.Config.LockWalkAction;
-                        BoCanRun = !M2Share.Config.LockRunAction;
-                        BoCanHit = !M2Share.Config.LockHitAction;
-                        BoCanSpell = !M2Share.Config.LockSpellAction;
-                        BoCanSendMsg = !M2Share.Config.LockSendMsgAction;
+                        IsCanWalk = !M2Share.Config.LockWalkAction;
+                        IsCanRun = !M2Share.Config.LockRunAction;
+                        IsCanHit = !M2Share.Config.LockHitAction;
+                        IsCanSpell = !M2Share.Config.LockSpellAction;
+                        IsCanSendMsg = !M2Share.Config.LockSendMsgAction;
                         ObMode = M2Share.Config.LockInObModeAction;
                         AdminMode = M2Share.Config.LockInObModeAction;
                         SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.LockLogon.CmdName, MsgColor.Red, MsgType.Hint);
                         SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "密码命令: @" + CommandMgr.GameCommands.PasswordLock.CmdName);
                     }
-                    if (!MBoPasswordLocked)
+                    if (!IsPasswordLocked)
                     {
                         SysMsg(Format(Settings.PasswordNotSetMsg, CommandMgr.GameCommands.PasswordLock.CmdName), MsgColor.Red, MsgType.Hint);
                     }
-                    if (!IsLockLogon && MBoPasswordLocked)
+                    if (!IsLockLogon && IsPasswordLocked)
                     {
                         SysMsg(Format(Settings.NotPasswordProtectMode, CommandMgr.GameCommands.LockLogon.CmdName), MsgColor.Red, MsgType.Hint);
                     }
@@ -2924,7 +2930,7 @@ namespace GameSvr.Player
                 }
                 if (!M2Share.Config.ShowRankLevelName)
                 {
-                    if (MBtReLevel > 0)
+                    if (ReLevel > 0)
                     {
                         switch (Job)
                         {

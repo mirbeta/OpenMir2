@@ -25,20 +25,20 @@ namespace GameSvr.GameCommand.Commands
             if (playObject.StoragePwd == "")
             {
                 playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
-                playObject.MBoSetStoragePwd = true;
+                playObject.IsSetStoragePwd = true;
                 playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                 return;
             }
             if (playObject.PwdFailCount > 3)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.MBoPasswordLocked = true;
+                playObject.IsPasswordLocked = true;
                 return;
             }
             if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
                 playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
-                playObject.MBoCheckOldPwd = true;
+                playObject.IsCheckOldPwd = true;
                 playObject.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
         }

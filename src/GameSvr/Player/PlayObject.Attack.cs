@@ -824,7 +824,7 @@ namespace GameSvr.Player
             dwDelayTime = 0;
             try
             {
-                if (!BoCanHit)
+                if (!IsCanHit)
                 {
                     return false;
                 }
@@ -838,10 +838,10 @@ namespace GameSvr.Player
                     {
                         if (!CheckActionStatus(wIdent, ref dwDelayTime))
                         {
-                            MBoFilterAction = false;
+                            IsFilterAction = false;
                             return false;
                         }
-                        MBoFilterAction = true;
+                        IsFilterAction = true;
                         int dwAttackTime = HUtil32._MAX(0, M2Share.Config.HitIntervalTime - HitSpeed * M2Share.Config.ItemSpeed);
                         int dwCheckTime = HUtil32.GetTickCount() - AttackTick;
                         if (dwCheckTime < dwAttackTime)
@@ -968,7 +968,7 @@ namespace GameSvr.Player
             byte n14;
             int dwCheckTime;
             dwDelayTime = 0;
-            if (!BoCanRun)
+            if (!IsCanRun)
             {
                 return result;
             }
@@ -982,10 +982,10 @@ namespace GameSvr.Player
                 {
                     if (!CheckActionStatus(wIdent, ref dwDelayTime))
                     {
-                        MBoFilterAction = false;
+                        IsFilterAction = false;
                         return result;
                     }
-                    MBoFilterAction = true;
+                    IsFilterAction = true;
                     dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                     if (dwCheckTime < M2Share.Config.RunIntervalTime)
                     {
@@ -1049,7 +1049,7 @@ namespace GameSvr.Player
         private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject targetBaseObject, bool boLateDelivery, ref int dwDelayTime)
         {
             dwDelayTime = 0;
-            if (!BoCanSpell)
+            if (!IsCanSpell)
             {
                 return false;
             }
@@ -1067,10 +1067,10 @@ namespace GameSvr.Player
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
-                    MBoFilterAction = false;
+                    IsFilterAction = false;
                     return false;
                 }
-                MBoFilterAction = true;
+                IsFilterAction = true;
                 int dwCheckTime = HUtil32.GetTickCount() - MagicAttackTick;
                 if (dwCheckTime < MagicAttackInterval)
                 {
@@ -1285,7 +1285,7 @@ namespace GameSvr.Player
             bool result = false;
             byte nDir;
             dwDelayTime = 0;
-            if (!BoCanRun)
+            if (!IsCanRun)
             {
                 return false;
             }
@@ -1297,10 +1297,10 @@ namespace GameSvr.Player
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
-                    MBoFilterAction = false;
+                    IsFilterAction = false;
                     return false;
                 }
-                MBoFilterAction = true;
+                IsFilterAction = true;
                 int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                 if (dwCheckTime < M2Share.Config.RunIntervalTime)
                 {
@@ -1362,7 +1362,7 @@ namespace GameSvr.Player
             bool result = false;
             int n14;
             dwDelayTime = 0;
-            if (!BoCanWalk)
+            if (!IsCanWalk)
             {
                 return false;
             }
@@ -1374,10 +1374,10 @@ namespace GameSvr.Player
             {
                 if (!CheckActionStatus(wIdent, ref dwDelayTime))
                 {
-                    MBoFilterAction = false;
+                    IsFilterAction = false;
                     return false;
                 }
-                MBoFilterAction = true;
+                IsFilterAction = true;
                 int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                 if (dwCheckTime < M2Share.Config.WalkIntervalTime)
                 {

@@ -28,7 +28,7 @@ namespace GameSvr.RobotPlay
                     {
                         TargetFocusTick = HUtil32.GetTickCount();
                         AttackDir(TargetCret, wHitMode, bt06);
-                        MDwActionTick = HUtil32.GetTickCount();
+                        ActionTick = HUtil32.GetTickCount();
                         BreakHolySeizeMode();
                         result = true;
                     }

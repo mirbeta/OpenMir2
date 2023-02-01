@@ -1916,7 +1916,7 @@ namespace GameSvr.RobotPlay
             BaseObject BaseObject;
             bool boIsWarrSkill;
             bool result = false;
-            if (!BoCanSpell)
+            if (!IsCanSpell)
             {
                 return false;
             }
@@ -2482,7 +2482,7 @@ namespace GameSvr.RobotPlay
             {
                 return false; // 麻痹不能跑动 
             }
-            if (!BoCanRun) // 禁止跑,则退出
+            if (!IsCanRun) // 禁止跑,则退出
             {
                 return false;
             }
