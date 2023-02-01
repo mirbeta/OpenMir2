@@ -198,7 +198,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 减PK值时间`
         /// </summary>
-        private int _decPkPointTick;
+        private int DecPkPointTick;
         /// <summary>
         /// 人物的PK值
         /// </summary>
@@ -308,7 +308,7 @@ namespace GameSvr.Player
         /// 全局会话信息
         /// </summary>
         public PlayerSession SessInfo;
-        public int MDwLoadTick = 0;
+        public int LoadTick = 0;
         /// <summary>
         /// 人物当前所在服务器序号
         /// </summary>
@@ -329,16 +329,16 @@ namespace GameSvr.Player
         /// 是否重连
         /// </summary>
         public bool BoReconnection;
-        public bool MBoRcdSaved;
-        public bool MBoSwitchData;
-        public bool MBoSwitchDataOk = false;
-        public string MSSwitchDataTempFile = string.Empty;
-        public int MNWriteChgDataErrCount;
-        public string MSSwitchMapName = string.Empty;
-        public short MNSwitchMapX = 0;
-        public short MNSwitchMapY = 0;
-        public bool MBoSwitchDataSended;
-        public int MDwChgDataWritedTick = 0;
+        public bool RcdSaved;
+        public bool SwitchData;
+        public bool SwitchDataOk = false;
+        public string SwitchDataTempFile = string.Empty;
+        public int WriteChgDataErrCount;
+        public string SwitchMapName = string.Empty;
+        public short SwitchMapX = 0;
+        public short SwitchMapY = 0;
+        public bool SwitchDataSended;
+        public int ChgDataWritedTick = 0;
         /// <summary>
         /// 心灵启示
         /// </summary>
@@ -346,79 +346,79 @@ namespace GameSvr.Player
         /// <summary>
         /// 攻击间隔
         /// </summary>
-        public int MDwHitIntervalTime;
+        public int HitIntervalTime;
         /// <summary>
         /// 魔法间隔
         /// </summary>
-        public int MDwMagicHitIntervalTime;
+        public int MagicHitIntervalTime;
         /// <summary>
         /// 走路间隔
         /// </summary>
-        public int MDwRunIntervalTime;
+        public int RunIntervalTime;
         /// <summary>
         /// 走路间隔
         /// </summary>
-        public int MDwWalkIntervalTime;
+        public int WalkIntervalTime;
         /// <summary>
         /// 换方向间隔
         /// </summary>
-        public int MDwTurnIntervalTime;
+        public int TurnIntervalTime;
         /// <summary>
         /// 组合操作间隔
         /// </summary>
-        public int MDwActionIntervalTime;
+        public int ActionIntervalTime;
         /// <summary>
         /// 移动刺杀间隔
         /// </summary>
-        public int MDwRunLongHitIntervalTime;
+        public int RunLongHitIntervalTime;
         /// <summary>
         /// 跑位攻击间隔
         /// </summary>        
-        public int MDwRunHitIntervalTime;
+        public int RunHitIntervalTime;
         /// <summary>
         /// 走位攻击间隔
         /// </summary>        
-        public int MDwWalkHitIntervalTime;
+        public int WalkHitIntervalTime;
         /// <summary>
         /// 跑位魔法间隔
         /// </summary>        
-        public int MDwRunMagicIntervalTime;
+        public int RunMagicIntervalTime;
         /// <summary>
         /// 魔法攻击时间
         /// </summary>        
-        public int MDwMagicAttackTick;
+        public int MagicAttackTick;
         /// <summary>
         /// 魔法攻击间隔时间
         /// </summary>
-        public int MDwMagicAttackInterval;
+        public int MagicAttackInterval;
         /// <summary>
         /// 攻击时间
         /// </summary>
-        public int MDwAttackTick;
+        public int AttackTick;
         /// <summary>
         /// 人物跑动时间
         /// </summary>
-        public int MDwMoveTick;
+        public int MoveTick;
         /// <summary>
         /// 人物攻击计数
         /// </summary>
-        public int MDwAttackCount;
+        public int AttackCount;
         /// <summary>
         /// 人物攻击计数
         /// </summary>
-        public int MDwAttackCountA;
+        public int AttackCountA;
         /// <summary>
         /// 魔法攻击计数
         /// </summary>
-        public int MDwMagicAttackCount;
+        public int MagicAttackCount;
         /// <summary>
         /// 人物跑计数
         /// </summary>
-        public int MDwMoveCount;
+        public int MoveCount;
         /// <summary>
         /// 超速计数
         /// </summary>
-        public int MNOverSpeedCount;
+        public int OverSpeedCount;
         /// <summary>
         /// 复活戒指
         /// </summary>
@@ -438,7 +438,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 火焰戒指
         /// </summary>
-        private bool _flameRing = false;
+        private bool FlameRing = false;
         /// <summary>
         /// 治愈戒指
         /// </summary>
@@ -458,7 +458,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 活力戒指
         /// </summary>
-        private bool _muscleRing = false;
+        private bool MuscleRing = false;
         /// <summary>
         /// 探测项链
         /// </summary>
@@ -482,13 +482,13 @@ namespace GameSvr.Player
         internal double SuckupEnemyHealth;
         public double BodyLuck;
         public int BodyLuckLevel;
-        public bool MBoDieInFight3Zone;
-        public string MSGotoNpcLabel = string.Empty;
+        public bool DieInFight3Zone;
+        public string GotoNpcLabel = string.Empty;
         public bool TakeDlgItem = false;
         public int DlgItemIndex = 0;
-        public int MNDelayCall;
-        public int MDwDelayCallTick = 0;
-        public bool MBoDelayCall;
+        public int DelayCall;
+        public int DelayCallTick = 0;
+        public bool IsDelayCall;
         public int MDelayCallNpc;
         public string DelayCallLabel = string.Empty;
         public TScript MScript;
@@ -533,7 +533,10 @@ namespace GameSvr.Player
         /// 技能表
         /// </summary>
         public readonly IList<UserMagic> MagicList;
-        public PlayObject GroupOwner;
+        /// <summary>
+        /// 组队长
+        /// </summary>
+        public int GroupOwner;
         /// <summary>
         /// 组成员
         /// </summary>
@@ -585,28 +588,28 @@ namespace GameSvr.Player
         /// <summary>
         /// 是否允许夫妻传送
         /// </summary>
-        public bool MBoCanDearRecall;
-        public bool MBoCanMasterRecall;
+        public bool CanDearRecall;
+        public bool CanMasterRecall;
         /// <summary>
         /// 夫妻传送时间
         /// </summary>
-        public int MDwDearRecallTick;
-        public int MDwMasterRecallTick;
+        public int DearRecallTick;
+        public int MasterRecallTick;
         /// <summary>
         /// 师徒名称
         /// </summary>
         public string MasterName;
         public PlayObject MasterHuman;
         public IList<PlayObject> MasterList;
-        public bool MBoMaster = false;
+        public bool IsMaster = false;
         /// <summary>
         /// 声望点
         /// </summary>
-        public byte MBtCreditPoint = 0;
+        public byte CreditPoint = 0;
         /// <summary>
         /// 离婚次数
         /// </summary>        
-        public byte MBtMarryCount = 0;
+        public byte MarryCount = 0;
         /// <summary>
         /// 转生等级
         /// </summary>
@@ -628,22 +631,22 @@ namespace GameSvr.Player
         public bool MBoUnLockStoragePwd;
         public bool MBoPasswordLocked;
         // 锁密码
-        public byte MBtPwdFailCount;
+        public byte PwdFailCount;
         /// <summary>
         /// 是否启用锁登录功能
         /// </summary>
-        public bool MBoLockLogon;
+        public bool IsLockLogon;
         /// <summary>
         /// 是否打开登录锁
         /// </summary>        
-        public bool BoLockLogoned;
+        public bool IsLockLogoned;
         public string MSTempPwd;
         public string StoragePwd;
         public BaseObject PoseBaseObject = null;
-        public bool MBoStartMarry = false;
-        public bool MBoStartMaster = false;
-        public bool MBoStartUnMarry = false;
-        public bool MBoStartUnMaster = false;
+        public bool IsStartMarry = false;
+        public bool IsStartMaster = false;
+        public bool IsStartUnMarry = false;
+        public bool IsStartUnMaster = false;
         /// <summary>
         /// 禁止发方字(发的文字只能自己看到)
         /// </summary>
@@ -732,11 +735,11 @@ namespace GameSvr.Player
         public short MWContribution;
         public string RankLevelName = string.Empty;
         public bool MBoFilterAction = false;
-        public int MDwAutoGetExpTick;
-        public int MNAutoGetExpTime = 0;
-        public int MNAutoGetExpPoint;
-        public Envirnoment MAutoGetExpEnvir;
-        public bool MBoAutoGetExpInSafeZone = false;
+        public int AutoGetExpTick;
+        public int AutoGetExpTime = 0;
+        public int AutoGetExpPoint;
+        public Envirnoment AutoGetExpEnvir;
+        public bool AutoGetExpInSafeZone = false;
         public readonly Dictionary<string, DynamicVar> DynamicVarMap;
         public short MDwClientTick;
         /// <summary>
@@ -808,7 +811,7 @@ namespace GameSvr.Player
             StorageItemList = new List<UserItem>();
             LockWhisperList = new List<string>();
             BoEmergencyClose = false;
-            MBoSwitchData = false;
+            SwitchData = false;
             BoReconnection = false;
             BoKickFlag = false;
             BoSoftClose = false;
@@ -817,10 +820,10 @@ namespace GameSvr.Player
             DecHungerPointTick = HUtil32.GetTickCount();
             GroupRcallTick = HUtil32.GetTickCount();
             WantRefMsg = true;
-            MBoRcdSaved = false;
-            MBoDieInFight3Zone = false;
-            MNDelayCall = 0;
-            MBoDelayCall = false;
+            RcdSaved = false;
+            DieInFight3Zone = false;
+            DelayCall = 0;
+            IsDelayCall = false;
             MDelayCallNpc = 0;
             MScript = null;
             BoTimeRecall = false;
@@ -843,26 +846,26 @@ namespace GameSvr.Player
             CheckDupObjTick = HUtil32.GetTickCount();
             DiscountForNightTick = HUtil32.GetTickCount();
             IsSafeArea = false;
-            MDwMagicAttackTick = HUtil32.GetTickCount();
-            MDwMagicAttackInterval = 0;
-            MDwAttackTick = HUtil32.GetTickCount();
-            MDwMoveTick = HUtil32.GetTickCount();
+            MagicAttackTick = HUtil32.GetTickCount();
+            MagicAttackInterval = 0;
+            AttackTick = HUtil32.GetTickCount();
+            MoveTick = HUtil32.GetTickCount();
             MDwTurnTick = HUtil32.GetTickCount();
             MDwActionTick = HUtil32.GetTickCount();
-            MDwAttackCount = 0;
-            MDwAttackCountA = 0;
-            MDwMagicAttackCount = 0;
-            MDwMoveCount = 0;
-            MNOverSpeedCount = 0;
+            AttackCount = 0;
+            AttackCountA = 0;
+            MagicAttackCount = 0;
+            MoveCount = 0;
+            OverSpeedCount = 0;
             OldSayMsg = "";
             SayMsgTick = HUtil32.GetTickCount();
             DisableSayMsg = false;
             DisableSayMsgTick = HUtil32.GetTickCount();
             LogonTime = DateTime.Now;
             LogonTick = HUtil32.GetTickCount();
-            MBoSwitchData = false;
-            MBoSwitchDataSended = false;
-            MNWriteChgDataErrCount = 0;
+            SwitchData = false;
+            SwitchDataSended = false;
+            WriteChgDataErrCount = 0;
             ShowLineNoticeTick = HUtil32.GetTickCount();
             ShowLineNoticeIdx = 0;
             SoftVersionDateEx = 0;
@@ -880,7 +883,7 @@ namespace GameSvr.Player
             MBoPasswordLocked = false;
             PvpFlag = false;
             // 锁仓库
-            MBtPwdFailCount = 0;
+            PwdFailCount = 0;
             MSTempPwd = "";
             StoragePwd = "";
             FilterSendMsg = false;
@@ -911,10 +914,10 @@ namespace GameSvr.Player
             MasterList = new List<PlayObject>();
             BoSendMsgFlag = false;
             BoChangeItemNameFlag = false;
-            MBoCanMasterRecall = false;
-            MBoCanDearRecall = false;
-            MDwDearRecallTick = HUtil32.GetTickCount();
-            MDwMasterRecallTick = HUtil32.GetTickCount();
+            CanMasterRecall = false;
+            CanDearRecall = false;
+            DearRecallTick = HUtil32.GetTickCount();
+            MasterRecallTick = HUtil32.GetTickCount();
             MBtReColorIdx = 0;
             WhisperHuman = null;
             OnHorse = false;
@@ -936,25 +939,25 @@ namespace GameSvr.Player
             BanShout = true;
             BanGuildChat = true;
             AllowDeal = true;
-            MDwAutoGetExpTick = HUtil32.GetTickCount();
-            _decPkPointTick = HUtil32.GetTickCount();
-            MNAutoGetExpPoint = 0;
-            MAutoGetExpEnvir = null;
-            MDwHitIntervalTime = M2Share.Config.HitIntervalTime;// 攻击间隔
-            MDwMagicHitIntervalTime = M2Share.Config.MagicHitIntervalTime;// 魔法间隔
-            MDwRunIntervalTime = M2Share.Config.RunIntervalTime;// 走路间隔
-            MDwWalkIntervalTime = M2Share.Config.WalkIntervalTime;// 走路间隔
-            MDwTurnIntervalTime = M2Share.Config.TurnIntervalTime;// 换方向间隔
-            MDwActionIntervalTime = M2Share.Config.ActionIntervalTime;// 组合操作间隔
-            MDwRunLongHitIntervalTime = M2Share.Config.RunLongHitIntervalTime;// 组合操作间隔
-            MDwRunHitIntervalTime = M2Share.Config.RunHitIntervalTime;// 组合操作间隔
-            MDwWalkHitIntervalTime = M2Share.Config.WalkHitIntervalTime;// 组合操作间隔
-            MDwRunMagicIntervalTime = M2Share.Config.RunMagicIntervalTime;// 跑位魔法间隔
+            AutoGetExpTick = HUtil32.GetTickCount();
+            DecPkPointTick = HUtil32.GetTickCount();
+            AutoGetExpPoint = 0;
+            AutoGetExpEnvir = null;
+            HitIntervalTime = M2Share.Config.HitIntervalTime;// 攻击间隔
+            MagicHitIntervalTime = M2Share.Config.MagicHitIntervalTime;// 魔法间隔
+            RunIntervalTime = M2Share.Config.RunIntervalTime;// 走路间隔
+            WalkIntervalTime = M2Share.Config.WalkIntervalTime;// 走路间隔
+            TurnIntervalTime = M2Share.Config.TurnIntervalTime;// 换方向间隔
+            ActionIntervalTime = M2Share.Config.ActionIntervalTime;// 组合操作间隔
+            RunLongHitIntervalTime = M2Share.Config.RunLongHitIntervalTime;// 组合操作间隔
+            RunHitIntervalTime = M2Share.Config.RunHitIntervalTime;// 组合操作间隔
+            WalkHitIntervalTime = M2Share.Config.WalkHitIntervalTime;// 组合操作间隔
+            RunMagicIntervalTime = M2Share.Config.RunMagicIntervalTime;// 跑位魔法间隔
             DynamicVarMap = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             SessInfo = null;
             TestSpeedMode = false;
-            MBoLockLogon = true;
-            BoLockLogoned = false;
+            IsLockLogon = true;
+            IsLockLogoned = false;
             BoTimeGoto = false;
             TimeGotoTick = HUtil32.GetTickCount();
             TimeGotoLable = "";
@@ -1107,7 +1110,7 @@ namespace GameSvr.Player
                         MapRandomMove(Envir.MapName, 0);
                     }
                 }
-                if (MBoDieInFight3Zone)
+                if (DieInFight3Zone)
                 {
                     MapRandomMove(Envir.MapName, 0);
                 }
@@ -1369,7 +1372,7 @@ namespace GameSvr.Player
                     {
                         BoCanGetBackItem = !M2Share.Config.LockGetBackItemAction;
                     }
-                    if (M2Share.Config.LockHumanLogin && MBoLockLogon && MBoPasswordLocked)
+                    if (M2Share.Config.LockHumanLogin && IsLockLogon && MBoPasswordLocked)
                     {
                         BoCanDeal = !M2Share.Config.LockDealAction;
                         BoCanDrop = !M2Share.Config.LockDropAction;
@@ -1388,7 +1391,7 @@ namespace GameSvr.Player
                     {
                         SysMsg(Format(Settings.PasswordNotSetMsg, CommandMgr.GameCommands.PasswordLock.CmdName), MsgColor.Red, MsgType.Hint);
                     }
-                    if (!MBoLockLogon && MBoPasswordLocked)
+                    if (!IsLockLogon && MBoPasswordLocked)
                     {
                         SysMsg(Format(Settings.NotPasswordProtectMode, CommandMgr.GameCommands.LockLogon.CmdName), MsgColor.Red, MsgType.Hint);
                     }
@@ -1398,7 +1401,7 @@ namespace GameSvr.Player
                 // 重置泡点方面计时
                 IncGamePointTick = HUtil32.GetTickCount();
                 IncGameGoldTick = HUtil32.GetTickCount();
-                MDwAutoGetExpTick = HUtil32.GetTickCount();
+                AutoGetExpTick = HUtil32.GetTickCount();
                 GetSellOffGlod();// 检查是否有元宝寄售交易结束还没得到元宝
             }
             catch (Exception e)
@@ -1535,11 +1538,13 @@ namespace GameSvr.Player
             if (Envir.IsCheapStuff())// 地图是否有任务脚本
             {
                 Merchant QuestNPC;
-                if (GroupOwner != null)
+                if (GroupOwner != 0)
                 {
-                    for (int i = 0; i < GroupOwner.GroupMembers.Count; i++)
+                    var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+
+                    for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                     {
-                        PlayObject GroupHuman = GroupOwner.GroupMembers[i];
+                        PlayObject GroupHuman = groupOwnerPlay.GroupMembers[i];
                         bool tCheck;
                         if (!GroupHuman.Death && Envir == GroupHuman.Envir && Math.Abs(CurrX - GroupHuman.CurrX) <= 12 && Math.Abs(CurrX - GroupHuman.CurrX) <= 12 && this == GroupHuman)
                         {
@@ -1743,9 +1748,10 @@ namespace GameSvr.Player
             if (Race == ActorRace.Play)
             {
                 string tStr;
-                if (GroupOwner != null)
+                if (GroupOwner != 0)
                 {
-                    GroupOwner.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
+                    var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                    groupOwnerPlay.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
                 }
                 if (LastHiter != null)
                 {
@@ -2002,7 +2008,7 @@ namespace GameSvr.Player
                                                 Revival = true;
                                                 break;
                                             case ItemShapeConst.RING_FIREBALL_ITEM:
-                                                _flameRing = true;
+                                                FlameRing = true;
                                                 break;
                                             case ItemShapeConst.RING_HEALING_ITEM:
                                                 RecoveryRing = true;
@@ -2014,7 +2020,7 @@ namespace GameSvr.Player
                                                 MagicShield = true;
                                                 break;
                                             case ItemShapeConst.RING_SUPERSTRENGTH_ITEM:
-                                                _muscleRing = true;
+                                                MuscleRing = true;
                                                 break;
                                             case ItemShapeConst.RING_CHUN_ITEM:
                                                 cghi[0] = true;
@@ -2505,7 +2511,7 @@ namespace GameSvr.Player
                 }
                 WAbil.Weight = RecalcBagWeight();
 
-                if (_flameRing)
+                if (FlameRing)
                 {
                     AddItemSkill(Settings.AM_FIREBALL);
                 }
@@ -2521,7 +2527,7 @@ namespace GameSvr.Player
                 {
                     DelItemSkill(Settings.AM_HEALING);
                 }
-                if (_muscleRing)
+                if (MuscleRing)
                 {
                     WAbil.MaxWeight = (ushort)(WAbil.MaxWeight * 2);
                     WAbil.MaxWearWeight = (byte)HUtil32._MIN(255, WAbil.MaxWearWeight * 2);
@@ -2944,7 +2950,7 @@ namespace GameSvr.Player
                 }
                 if (!string.IsNullOrEmpty(MasterName))
                 {
-                    if (MBoMaster)
+                    if (IsMaster)
                     {
                         sMasterName = Format(Settings.MasterName, MasterName);
                     }
@@ -3034,7 +3040,7 @@ namespace GameSvr.Player
                 }
                 if (MasterHuman != null || MasterList.Count > 0)
                 {
-                    if (MBoMaster)
+                    if (IsMaster)
                     {
                         for (int i = MasterList.Count - 1; i >= 0; i--)
                         {
@@ -3679,7 +3685,7 @@ namespace GameSvr.Player
                         {
                             result = true;
                         }
-                        else if (MBoMaster)
+                        else if (IsMaster)
                         {
                             for (int i = 0; i < MasterList.Count; i++)
                             {
@@ -3690,7 +3696,7 @@ namespace GameSvr.Player
                                 }
                             }
                         }
-                        else if (((PlayObject)cret).MBoMaster)
+                        else if (((PlayObject)cret).IsMaster)
                         {
                             for (int i = 0; i < ((PlayObject)cret).MasterList.Count; i++)
                             {
@@ -4573,7 +4579,7 @@ namespace GameSvr.Player
 
         private void DelMember(PlayObject baseObject)
         {
-            if (GroupOwner != baseObject)
+            if (GroupOwner != baseObject.ActorId)
             {
                 for (int i = 0; i < GroupMembers.Count; i++)
                 {
@@ -4610,13 +4616,15 @@ namespace GameSvr.Player
         private bool IsGroupMember(BaseObject target)
         {
             bool result = false;
-            if (GroupOwner == null)
+            if (GroupOwner == 0)
             {
                 return false;
             }
-            for (int i = 0; i < GroupOwner.GroupMembers.Count; i++)
+            var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+
+            for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
             {
-                if (GroupOwner.GroupMembers[i] == target)
+                if (groupOwnerPlay.GroupMembers[i] == target)
                 {
                     result = true;
                     break;
@@ -4629,19 +4637,19 @@ namespace GameSvr.Player
         {
             const string sExitGropMsg = "{0} 已经退出了本组.";
             SendGroupText(Format(sExitGropMsg, ChrName));
-            GroupOwner = null;
+            GroupOwner = 0;
             SendMsg(this, Messages.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
 
         public void SendGroupText(string sMsg)
         {
             sMsg = M2Share.Config.GroupMsgPreFix + sMsg;
-            if (GroupOwner != null)
+            if (GroupOwner != 0)
             {
-                for (int i = 0; i < GroupOwner.GroupMembers.Count; i++)
+                var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                 {
-                    GroupOwner.GroupMembers[i].SendMsg(this, Messages.RM_GROUPMESSAGE, 0, M2Share.Config.GroupMsgFColor,
-                        M2Share.Config.GroupMsgBColor, 0, sMsg);
+                    groupOwnerPlay.GroupMembers[i].SendMsg(this, Messages.RM_GROUPMESSAGE, 0, M2Share.Config.GroupMsgFColor, M2Share.Config.GroupMsgBColor, 0, sMsg);
                 }
             }
         }

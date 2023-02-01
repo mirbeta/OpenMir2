@@ -654,7 +654,7 @@ namespace GameSvr.Player
                     if (baseObject.Race == ActorRace.Play)
                     {
                         result = true;
-                        if (MBoMaster)
+                        if (IsMaster)
                         {
                             for (int i = 0; i < MasterList.Count; i++)
                             {
@@ -665,7 +665,7 @@ namespace GameSvr.Player
                                 }
                             }
                         }
-                        if (((PlayObject)baseObject).MBoMaster)
+                        if (((PlayObject)baseObject).IsMaster)
                         {
                             for (int i = 0; i < ((PlayObject)baseObject).MasterList.Count; i++)
                             {
@@ -843,17 +843,17 @@ namespace GameSvr.Player
                         }
                         MBoFilterAction = true;
                         int dwAttackTime = HUtil32._MAX(0, M2Share.Config.HitIntervalTime - HitSpeed * M2Share.Config.ItemSpeed);
-                        int dwCheckTime = HUtil32.GetTickCount() - MDwAttackTick;
+                        int dwCheckTime = HUtil32.GetTickCount() - AttackTick;
                         if (dwCheckTime < dwAttackTime)
                         {
-                            MDwAttackCount++;
+                            AttackCount++;
                             dwDelayTime = dwAttackTime - dwCheckTime;
                             if (dwDelayTime > M2Share.Config.DropOverSpeed)
                             {
-                                if (MDwAttackCount >= 4)
+                                if (AttackCount >= 4)
                                 {
-                                    MDwAttackTick = HUtil32.GetTickCount();
-                                    MDwAttackCount = 0;
+                                    AttackTick = HUtil32.GetTickCount();
+                                    AttackCount = 0;
                                     dwDelayTime = M2Share.Config.DropOverSpeed;
                                     if (TestSpeedMode)
                                     {
@@ -862,7 +862,7 @@ namespace GameSvr.Player
                                 }
                                 else
                                 {
-                                    MDwAttackCount = 0;
+                                    AttackCount = 0;
                                 }
                                 return false;
                             }
@@ -878,7 +878,7 @@ namespace GameSvr.Player
                 if (nX == CurrX && nY == CurrY)
                 {
                     result = true;
-                    MDwAttackTick = HUtil32.GetTickCount();
+                    AttackTick = HUtil32.GetTickCount();
                     if (wIdent == Messages.CM_HEAVYHIT && UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Dura > 0)// 挖矿
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false))
@@ -986,17 +986,17 @@ namespace GameSvr.Player
                         return result;
                     }
                     MBoFilterAction = true;
-                    dwCheckTime = HUtil32.GetTickCount() - MDwMoveTick;
+                    dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                     if (dwCheckTime < M2Share.Config.RunIntervalTime)
                     {
-                        MDwMoveCount++;
+                        MoveCount++;
                         dwDelayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
                         if (dwDelayTime > M2Share.Config.DropOverSpeed)
                         {
-                            if (MDwMoveCount >= 4)
+                            if (MoveCount >= 4)
                             {
-                                MDwMoveTick = HUtil32.GetTickCount();
-                                MDwMoveCount = 0;
+                                MoveTick = HUtil32.GetTickCount();
+                                MoveCount = 0;
                                 dwDelayTime = M2Share.Config.DropOverSpeed;
                                 if (TestSpeedMode)
                                 {
@@ -1005,7 +1005,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                MDwMoveCount = 0;
+                                MoveCount = 0;
                             }
                             return result;
                         }
@@ -1020,7 +1020,7 @@ namespace GameSvr.Player
                     }
                 }
             }
-            MDwMoveTick = HUtil32.GetTickCount();
+            MoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (HorseRunTo(n14, false))
@@ -1041,7 +1041,7 @@ namespace GameSvr.Player
             }
             else
             {
-                MDwMoveCount = 0;
+                MoveCount = 0;
             }
             return result;
         }
@@ -1071,17 +1071,17 @@ namespace GameSvr.Player
                     return false;
                 }
                 MBoFilterAction = true;
-                int dwCheckTime = HUtil32.GetTickCount() - MDwMagicAttackTick;
-                if (dwCheckTime < MDwMagicAttackInterval)
+                int dwCheckTime = HUtil32.GetTickCount() - MagicAttackTick;
+                if (dwCheckTime < MagicAttackInterval)
                 {
-                    MDwMagicAttackCount++;
-                    dwDelayTime = MDwMagicAttackInterval - dwCheckTime;
+                    MagicAttackCount++;
+                    dwDelayTime = MagicAttackInterval - dwCheckTime;
                     if (dwDelayTime > M2Share.Config.MagicHitIntervalTime / 3)
                     {
-                        if (MDwMagicAttackCount >= 4)
+                        if (MagicAttackCount >= 4)
                         {
-                            MDwMagicAttackTick = HUtil32.GetTickCount();
-                            MDwMagicAttackCount = 0;
+                            MagicAttackTick = HUtil32.GetTickCount();
+                            MagicAttackCount = 0;
                             dwDelayTime = M2Share.Config.MagicHitIntervalTime / 3;
                             if (TestSpeedMode)
                             {
@@ -1090,7 +1090,7 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            MDwMagicAttackCount = 0;
+                            MagicAttackCount = 0;
                         }
                         return false;
                     }
@@ -1105,9 +1105,9 @@ namespace GameSvr.Player
             SpellTick = HUtil32._MAX(0, SpellTick);
             if (!boIsWarrSkill)
             {
-                MDwMagicAttackInterval = UserMagic.Magic.DelayTime + M2Share.Config.MagicHitIntervalTime;
+                MagicAttackInterval = UserMagic.Magic.DelayTime + M2Share.Config.MagicHitIntervalTime;
             }
-            MDwMagicAttackTick = HUtil32.GetTickCount();
+            MagicAttackTick = HUtil32.GetTickCount();
             ushort nSpellPoint;
             bool result;
             switch (UserMagic.MagIdx)
@@ -1301,17 +1301,17 @@ namespace GameSvr.Player
                     return false;
                 }
                 MBoFilterAction = true;
-                int dwCheckTime = HUtil32.GetTickCount() - MDwMoveTick;
+                int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                 if (dwCheckTime < M2Share.Config.RunIntervalTime)
                 {
-                    MDwMoveCount++;
+                    MoveCount++;
                     dwDelayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
                     if (dwDelayTime > M2Share.Config.RunIntervalTime / 3)
                     {
-                        if (MDwMoveCount >= 4)
+                        if (MoveCount >= 4)
                         {
-                            MDwMoveTick = HUtil32.GetTickCount();
-                            MDwMoveCount = 0;
+                            MoveTick = HUtil32.GetTickCount();
+                            MoveCount = 0;
                             dwDelayTime = M2Share.Config.RunIntervalTime / 3;
                             if (TestSpeedMode)
                             {
@@ -1320,7 +1320,7 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            MDwMoveCount = 0;
+                            MoveCount = 0;
                         }
                         return result;
                     }
@@ -1331,7 +1331,7 @@ namespace GameSvr.Player
                     return result;
                 }
             }
-            MDwMoveTick = HUtil32.GetTickCount();
+            MoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
             nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (RunTo(nDir, false, nX, nY))
@@ -1352,7 +1352,7 @@ namespace GameSvr.Player
             }
             else
             {
-                MDwMoveCount = 0;
+                MoveCount = 0;
             }
             return result;
         }
@@ -1378,17 +1378,17 @@ namespace GameSvr.Player
                     return false;
                 }
                 MBoFilterAction = true;
-                int dwCheckTime = HUtil32.GetTickCount() - MDwMoveTick;
+                int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                 if (dwCheckTime < M2Share.Config.WalkIntervalTime)
                 {
-                    MDwMoveCount++;
+                    MoveCount++;
                     dwDelayTime = M2Share.Config.WalkIntervalTime - dwCheckTime;
                     if (dwDelayTime > M2Share.Config.WalkIntervalTime / 3)
                     {
-                        if (MDwMoveCount >= 4)
+                        if (MoveCount >= 4)
                         {
-                            MDwMoveTick = HUtil32.GetTickCount();
-                            MDwMoveCount = 0;
+                            MoveTick = HUtil32.GetTickCount();
+                            MoveCount = 0;
                             dwDelayTime = M2Share.Config.WalkIntervalTime / 3;
                             if (TestSpeedMode)
                             {
@@ -1397,7 +1397,7 @@ namespace GameSvr.Player
                         }
                         else
                         {
-                            MDwMoveCount = 0;
+                            MoveCount = 0;
                         }
                         return false;
                     }
@@ -1408,7 +1408,7 @@ namespace GameSvr.Player
                     return false;
                 }
             }
-            MDwMoveTick = HUtil32.GetTickCount();
+            MoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
             n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (WalkTo((byte)n14, false))
@@ -1421,7 +1421,7 @@ namespace GameSvr.Player
             }
             else
             {
-                MDwMoveCount = 0;
+                MoveCount = 0;
             }
             return result;
         }

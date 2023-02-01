@@ -2228,7 +2228,7 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$CREDITPOINT":
-                    nValue = PlayObject.MBtCreditPoint;
+                    nValue = PlayObject.CreditPoint;
                     nDataType = 1;
                     result = true;
                     return result;

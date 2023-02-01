@@ -71,7 +71,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.MBtPwdFailCount > 3)
+            if (playObject.PwdFailCount > 3)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 playObject.MBoPasswordLocked = true;
@@ -104,7 +104,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.MBtPwdFailCount > M2Share.Config.PasswordErrorCountLock)
+            if (playObject.PwdFailCount > M2Share.Config.PasswordErrorCountLock)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 playObject.MBoPasswordLocked = true;
@@ -144,7 +144,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.MBtPwdFailCount > M2Share.Config.PasswordErrorCountLock)
+            if (playObject.PwdFailCount > M2Share.Config.PasswordErrorCountLock)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 playObject.MBoPasswordLocked = true;

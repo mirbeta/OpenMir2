@@ -18,13 +18,13 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg("本服务器还没有启用登录锁功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.MBoLockLogon && !PlayObject.BoLockLogoned)
+            if (PlayObject.IsLockLogon && !PlayObject.IsLockLogoned)
             {
                 PlayObject.SysMsg("您还没有打开登录锁或还没有设置锁密码!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.MBoLockLogon = !PlayObject.MBoLockLogon;
-            if (PlayObject.MBoLockLogon)
+            PlayObject.IsLockLogon = !PlayObject.IsLockLogon;
+            if (PlayObject.IsLockLogon)
             {
                 PlayObject.SysMsg("已开启登录锁", MsgColor.Green, MsgType.Hint);
             }

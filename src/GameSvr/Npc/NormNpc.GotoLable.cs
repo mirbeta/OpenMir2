@@ -1373,9 +1373,9 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nSC_ISGROUPMASTER:
-                        if (PlayObject.GroupOwner != null)
+                        if (PlayObject.GroupOwner != 0)
                         {
-                            if (PlayObject.GroupOwner != PlayObject)
+                            if (PlayObject.GroupOwner != PlayObject.ActorId)
                             {
                                 result = false;
                             }
@@ -2481,7 +2481,7 @@ namespace GameSvr.Npc
         private void ActionOfQueryItemDlg(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             PlayObject.TakeDlgItem = QuestActionInfo.nParam3 != 0;
-            PlayObject.MSGotoNpcLabel = QuestActionInfo.sParam2;
+            PlayObject.GotoNpcLabel = QuestActionInfo.sParam2;
             string sHint = QuestActionInfo.sParam1;
             if (string.IsNullOrEmpty(sHint)) sHint = "请输入:";
             PlayObject.SendDefMessage(Messages.SM_QUERYITEMDLG, ActorId, 0, 0, 0, sHint);
@@ -2528,7 +2528,7 @@ namespace GameSvr.Npc
             }
             PlayObject.ValType = (byte)btType;
             int btLen = HUtil32._MAX(1, QuestActionInfo.nParam3);
-            PlayObject.MSGotoNpcLabel = QuestActionInfo.sParam4;
+            PlayObject.GotoNpcLabel = QuestActionInfo.sParam4;
             string sHint = QuestActionInfo.sParam5;
             PlayObject.ValNpcType = 0;
             if (string.Compare(QuestActionInfo.sParam6, "QF", StringComparison.OrdinalIgnoreCase) == 0)

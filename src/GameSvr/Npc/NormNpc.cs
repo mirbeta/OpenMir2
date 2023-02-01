@@ -561,7 +561,7 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$PKPOINT>", sText);
                     return;
                 case "$CREDITPOINT":
-                    sText = PlayObject.MBtCreditPoint.ToString();
+                    sText = PlayObject.CreditPoint.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$CREDITPOINT>", sText);
                     return;
                 case "$HW":

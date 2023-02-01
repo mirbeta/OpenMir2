@@ -824,7 +824,7 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckGroupCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             bool result = false;
-            if (PlayObject.GroupOwner == null)
+            if (PlayObject.GroupOwner == 0)
             {
                 return false;
             }
@@ -835,28 +835,29 @@ namespace GameSvr.Npc
                 return false;
             }
             char cMethod = QuestConditionInfo.sParam1[0];
+            var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(PlayObject.GroupOwner);
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.GroupOwner.GroupMembers.Count == nCount)
+                    if (groupOwnerPlay.GroupMembers.Count == nCount)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.GroupOwner.GroupMembers.Count > nCount)
+                    if (groupOwnerPlay.GroupMembers.Count > nCount)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.GroupOwner.GroupMembers.Count < nCount)
+                    if (groupOwnerPlay.GroupMembers.Count < nCount)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.GroupOwner.GroupMembers.Count >= nCount)
+                    if (groupOwnerPlay.GroupMembers.Count >= nCount)
                     {
                         result = true;
                     }
@@ -1127,7 +1128,7 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckIsMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.MasterName) && PlayObject.MBoMaster;
+            return !string.IsNullOrEmpty(PlayObject.MasterName) && PlayObject.IsMaster;
         }
 
         private static bool ConditionOfCheckListCount(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
@@ -1309,25 +1310,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.MBtMarryCount == nCount)
+                    if (PlayObject.MarryCount == nCount)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MBtMarryCount > nCount)
+                    if (PlayObject.MarryCount > nCount)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MBtMarryCount < nCount)
+                    if (PlayObject.MarryCount < nCount)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MBtMarryCount >= nCount)
+                    if (PlayObject.MarryCount >= nCount)
                     {
                         result = true;
                     }
@@ -1338,7 +1339,7 @@ namespace GameSvr.Npc
 
         private static bool ConditionOfCheckMaster(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
-            return !string.IsNullOrEmpty(PlayObject.MasterName) && !PlayObject.MBoMaster;
+            return !string.IsNullOrEmpty(PlayObject.MasterName) && !PlayObject.IsMaster;
         }
 
         private bool ConditionOfCheckMemBerLevel(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
@@ -1523,7 +1524,7 @@ namespace GameSvr.Npc
             BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if ((((PlayObject)PoseHuman).MasterName != "") && ((PlayObject)PoseHuman).MBoMaster)
+                if ((((PlayObject)PoseHuman).MasterName != "") && ((PlayObject)PoseHuman).IsMaster)
                 {
                     result = true;
                 }
@@ -1595,7 +1596,7 @@ namespace GameSvr.Npc
             BaseObject PoseHuman = PlayObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.Race == ActorRace.Play))
             {
-                if ((((PlayObject)PoseHuman).MasterName != "") && !((PlayObject)PoseHuman).MBoMaster)
+                if ((((PlayObject)PoseHuman).MasterName != "") && !((PlayObject)PoseHuman).IsMaster)
                 {
                     result = true;
                 }
@@ -1747,7 +1748,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHANGEJOB);
                 return result;
             }
-            if (PlayObject.GroupOwner != null)
+            if (PlayObject.GroupOwner != 0)
             {
                 for (int i = 0; i < PlayObject.GroupMembers.Count; i++)
                 {
@@ -2136,25 +2137,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.MBtCreditPoint == nCreditPoint)
+                    if (PlayObject.CreditPoint == nCreditPoint)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MBtCreditPoint > nCreditPoint)
+                    if (PlayObject.CreditPoint > nCreditPoint)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MBtCreditPoint < nCreditPoint)
+                    if (PlayObject.CreditPoint < nCreditPoint)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MBtCreditPoint >= nCreditPoint)
+                    if (PlayObject.CreditPoint >= nCreditPoint)
                     {
                         result = true;
                     }
@@ -2235,25 +2236,25 @@ namespace GameSvr.Npc
             switch (cMethod)
             {
                 case '=':
-                    if (PlayObject.MBtPwdFailCount == nErrorCount)
+                    if (PlayObject.PwdFailCount == nErrorCount)
                     {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MBtPwdFailCount > nErrorCount)
+                    if (PlayObject.PwdFailCount > nErrorCount)
                     {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MBtPwdFailCount < nErrorCount)
+                    if (PlayObject.PwdFailCount < nErrorCount)
                     {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MBtPwdFailCount >= nErrorCount)
+                    if (PlayObject.PwdFailCount >= nErrorCount)
                     {
                         result = true;
                     }

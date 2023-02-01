@@ -1521,7 +1521,7 @@ namespace GameSvr.Conf
             M2Share.Config.GuildRecallTime = ReadInteger("Setup", "GuildRecallTime", M2Share.Config.GuildRecallTime);
             if (ReadInteger("Setup", "GroupRecallTime", -1) < 0)
                 WriteInteger("Setup", "GroupRecallTime", M2Share.Config.GroupRecallTime);
-            M2Share.Config.GroupRecallTime = ReadInteger("Setup", "GroupRecallTime", M2Share.Config.GroupRecallTime);
+            M2Share.Config.GroupRecallTime = (short)ReadInteger("Setup", "GroupRecallTime", M2Share.Config.GroupRecallTime);
             if (ReadInteger("Setup", "ControlDropItem", -1) < 0)
                 WriteBool("Setup", "ControlDropItem", M2Share.Config.ControlDropItem);
             M2Share.Config.ControlDropItem = ReadBool("Setup", "ControlDropItem", M2Share.Config.ControlDropItem);

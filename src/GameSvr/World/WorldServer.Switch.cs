@@ -9,9 +9,9 @@ namespace GameSvr.World
         private SwitchDataInfo GetSwitchData(string sChrName, int nCode)
         {
             SwitchDataInfo result = null;
-            for (int i = 0; i < _mChangeServerList.Count; i++)
+            for (int i = 0; i < ChangeServerList.Count; i++)
             {
-                SwitchDataInfo switchData = _mChangeServerList[i];
+                SwitchDataInfo switchData = ChangeServerList[i];
                 if (string.Compare(switchData.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0 && switchData.nCode == nCode)
                 {
                     result = switchData;
@@ -60,17 +60,17 @@ namespace GameSvr.World
         public void AddSwitchData(SwitchDataInfo switchData)
         {
             switchData.dwWaitTime = HUtil32.GetTickCount();
-            _mChangeServerList.Add(switchData);
+            ChangeServerList.Add(switchData);
         }
 
         private void DelSwitchData(SwitchDataInfo switchData)
         {
-            for (int i = 0; i < _mChangeServerList.Count; i++)
+            for (int i = 0; i < ChangeServerList.Count; i++)
             {
-                SwitchDataInfo switchDataInfo = _mChangeServerList[i];
+                SwitchDataInfo switchDataInfo = ChangeServerList[i];
                 if (switchDataInfo == switchData)
                 {
-                    _mChangeServerList.RemoveAt(i);
+                    ChangeServerList.RemoveAt(i);
                     break;
                 }
             }
@@ -81,7 +81,7 @@ namespace GameSvr.World
             SwitchDataInfo switchData = null;
             MakeSwitchData(playObject, ref switchData);
             string flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
-            playObject.MSSwitchDataTempFile = flName;
+            playObject.SwitchDataTempFile = flName;
             SendServerGroupMsg(Messages.ISM_USERSERVERCHANGE, nServerIndex, flName);//发送消息切换服务器
             M2Share.ShareFileNameNum++;
             return true;
@@ -133,12 +133,12 @@ namespace GameSvr.World
 
         public void CheckSwitchServerTimeOut()
         {
-            for (int i = _mChangeServerList.Count - 1; i >= 0; i--)
+            for (int i = ChangeServerList.Count - 1; i >= 0; i--)
             {
-                if ((HUtil32.GetTickCount() - _mChangeServerList[i].dwWaitTime) > 30 * 1000)
+                if ((HUtil32.GetTickCount() - ChangeServerList[i].dwWaitTime) > 30 * 1000)
                 {
-                    _mChangeServerList[i] = null;
-                    _mChangeServerList.RemoveAt(i);
+                    ChangeServerList[i] = null;
+                    ChangeServerList.RemoveAt(i);
                 }
             }
         }

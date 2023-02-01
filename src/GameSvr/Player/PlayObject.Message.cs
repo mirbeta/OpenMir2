@@ -159,9 +159,9 @@ namespace GameSvr.Player
                     OffLineFlag = false;
                     BoSoftClose = true;
                 }
-                if (MBoDelayCall && (HUtil32.GetTickCount() - MDwDelayCallTick) > MNDelayCall)
+                if (IsDelayCall && (HUtil32.GetTickCount() - DelayCallTick) > DelayCall)
                 {
-                    MBoDelayCall = false;
+                    IsDelayCall = false;
                     NormNpc normNpc = WorldServer.FindMerchant<Merchant>(MDelayCallNpc);
                     if (normNpc == null)
                     {
@@ -172,9 +172,9 @@ namespace GameSvr.Player
                         normNpc.GotoLable(this, DelayCallLabel, false);
                     }
                 }
-                if ((HUtil32.GetTickCount() - _decPkPointTick) > M2Share.Config.DecPkPointTime)// 减少PK值
+                if ((HUtil32.GetTickCount() - DecPkPointTick) > M2Share.Config.DecPkPointTime)// 减少PK值
                 {
-                    _decPkPointTick = HUtil32.GetTickCount();
+                    DecPkPointTick = HUtil32.GetTickCount();
                     if (PkPoint > 0)
                     {
                         DecPkPoint(M2Share.Config.DecPkPointCount);
@@ -285,11 +285,11 @@ namespace GameSvr.Player
                 }
                 if (BoEmergencyClose || BoKickFlag || BoSoftClose)
                 {
-                    if (MBoSwitchData)
+                    if (SwitchData)
                     {
-                        MapName = MSSwitchMapName;
-                        CurrX = MNSwitchMapX;
-                        CurrY = MNSwitchMapY;
+                        MapName = SwitchMapName;
+                        CurrX = SwitchMapX;
+                        CurrY = SwitchMapY;
                     }
                     MakeGhost();
                     if (BoKickFlag)
@@ -726,7 +726,7 @@ namespace GameSvr.Player
                     {
                         DearHuman = null;
                     }
-                    if (MBoMaster)
+                    if (IsMaster)
                     {
                         for (int i = MasterList.Count - 1; i >= 0; i--)
                         {
@@ -745,15 +745,16 @@ namespace GameSvr.Player
                     }
 
                     // 清组队已死亡成员
-                    if (GroupOwner != null)
+                    if (GroupOwner != 0)
                     {
-                        if (GroupOwner.Death || GroupOwner.Ghost)
+                        var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                        if (groupOwnerPlay.Death || groupOwnerPlay.Ghost)
                         {
-                            GroupOwner = null;
+                            GroupOwner = 0;
                         }
                     }
 
-                    if (GroupOwner == this)
+                    if (GroupOwner == this.ActorId)
                     {
                         for (int i = GroupMembers.Count - 1; i >= 0; i--)
                         {
@@ -777,12 +778,12 @@ namespace GameSvr.Player
                 M2Share.Logger.Error(sExceptionMsg4);
                 M2Share.Logger.Error(e.Message);
             }
-            if (MNAutoGetExpPoint > 0 && (MAutoGetExpEnvir == null || MAutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - MDwAutoGetExpTick) > MNAutoGetExpTime)
+            if (AutoGetExpPoint > 0 && (AutoGetExpEnvir == null || AutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - AutoGetExpTick) > AutoGetExpTime)
             {
-                MDwAutoGetExpTick = HUtil32.GetTickCount();
-                if (!MBoAutoGetExpInSafeZone || MBoAutoGetExpInSafeZone && InSafeZone())
+                AutoGetExpTick = HUtil32.GetTickCount();
+                if (!AutoGetExpInSafeZone || AutoGetExpInSafeZone && InSafeZone())
                 {
-                    GetExp(MNAutoGetExpPoint);
+                    GetExp(AutoGetExpPoint);
                 }
             }
             base.Run();
@@ -860,8 +861,8 @@ namespace GameSvr.Player
                             nMsgCount = GetDigUpMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxDigUpMsgCount)
                             {
-                                MNOverSpeedCount++;
-                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                OverSpeedCount++;
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
@@ -1048,8 +1049,8 @@ namespace GameSvr.Player
                             nMsgCount = GetTurnMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxTurnMsgCount)
                             {
-                                MNOverSpeedCount++;
-                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                OverSpeedCount++;
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
@@ -1099,8 +1100,8 @@ namespace GameSvr.Player
                             nMsgCount = GetWalkMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxWalkMsgCount)
                             {
-                                MNOverSpeedCount++;
-                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                OverSpeedCount++;
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
@@ -1158,8 +1159,8 @@ namespace GameSvr.Player
                             nMsgCount = GetRunMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
                             {
-                                MNOverSpeedCount++;
-                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                OverSpeedCount++;
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
@@ -1206,8 +1207,8 @@ namespace GameSvr.Player
                             nMsgCount = GetRunMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
                             {
-                                MNOverSpeedCount++;
-                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                OverSpeedCount++;
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
@@ -1269,8 +1270,8 @@ namespace GameSvr.Player
                             nMsgCount = GetHitMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxHitMsgCount)
                             {
-                                MNOverSpeedCount++;
-                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                OverSpeedCount++;
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
@@ -1324,8 +1325,8 @@ namespace GameSvr.Player
                             nMsgCount = GetSiteDownMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxSitDonwMsgCount)
                             {
-                                MNOverSpeedCount++;
-                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                OverSpeedCount++;
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
@@ -1379,8 +1380,8 @@ namespace GameSvr.Player
                             nMsgCount = GetSpellMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxSpellMsgCount)
                             {
-                                MNOverSpeedCount++;
-                                if (MNOverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                OverSpeedCount++;
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
                                 {
                                     if (M2Share.Config.KickOverSpeed)
                                     {
@@ -2131,9 +2132,10 @@ namespace GameSvr.Player
             {
                 StatusArr[PoisonState.STATE_TRANSPARENT] = 0;
             }
-            if (GroupOwner != null)
+            if (GroupOwner != 0)
             {
-                GroupOwner.DelMember(this);
+                var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                groupOwnerPlay.DelMember(this);
             }
             if (MyGuild != null)
             {

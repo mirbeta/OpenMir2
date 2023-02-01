@@ -603,7 +603,7 @@ namespace GameSvr.Conf.Model
         public int ItemNumber;
         public int ItemNumberEx;
         public int GuildRecallTime;
-        public int GroupRecallTime;
+        public short GroupRecallTime;
         public bool ControlDropItem;
         public bool InSafeDisableDrop;
         public int CanDropGold;

@@ -776,14 +776,15 @@ namespace GameSvr.Player
 
         private void ClientGroupClose()
         {
-            if (GroupOwner == null)
+            if (GroupOwner == 0)
             {
                 AllowGroup = false;
                 return;
             }
-            if (GroupOwner != this)
+            if (GroupOwner != this.ActorId)
             {
-                GroupOwner.DelMember(this);
+                var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                groupOwnerPlay.DelMember(this);
                 AllowGroup = false;
             }
             else
@@ -799,7 +800,7 @@ namespace GameSvr.Player
         private void ClientCreateGroup(string sHumName)
         {
             PlayObject playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
-            if (GroupOwner != null)
+            if (GroupOwner != 0)
             {
                 SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
                 return;
@@ -809,7 +810,7 @@ namespace GameSvr.Player
                 SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -2, 0, 0, 0, "");
                 return;
             }
-            if (playObject.GroupOwner != null)
+            if (playObject.GroupOwner != 0)
             {
                 SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
                 return;
@@ -836,7 +837,7 @@ namespace GameSvr.Player
         private void ClientAddGroupMember(string sHumName)
         {
             PlayObject playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
-            if (GroupOwner != this)
+            if (GroupOwner != this.ActorId)
             {
                 SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
                 return;
@@ -851,7 +852,7 @@ namespace GameSvr.Player
                 SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0, "");
                 return;
             }
-            if (playObject.GroupOwner != null)
+            if (playObject.GroupOwner != 0)
             {
                 SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
                 return;
@@ -874,7 +875,7 @@ namespace GameSvr.Player
         private void ClientDelGroupMember(string sHumName)
         {
             PlayObject playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
-            if (GroupOwner != this)
+            if (GroupOwner != this.ActorId)
             {
                 SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
                 return;

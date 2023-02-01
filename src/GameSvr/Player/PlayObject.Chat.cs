@@ -323,7 +323,7 @@ namespace GameSvr.Player
                                 ObMode = false;
                                 AdminMode = false;
                             }
-                            BoLockLogoned = true;
+                            IsLockLogoned = true;
                             SysMsg(Settings.PasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
                         if (MBoUnLockStoragePwd)
@@ -337,9 +337,9 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        MBtPwdFailCount++;
+                        PwdFailCount++;
                         SysMsg(Settings.UnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
-                        if (MBtPwdFailCount > 3)
+                        if (PwdFailCount > 3)
                         {
                             SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         }
@@ -359,9 +359,9 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        MBtPwdFailCount++;
+                        PwdFailCount++;
                         SysMsg(Settings.OldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
-                        if (MBtPwdFailCount > 3)
+                        if (PwdFailCount > 3)
                         {
                             SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                             MBoPasswordLocked = true;

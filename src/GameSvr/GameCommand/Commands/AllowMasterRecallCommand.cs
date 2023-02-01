@@ -13,8 +13,8 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void AllowMasterRecall(PlayObject PlayObject)
         {
-            PlayObject.MBoCanMasterRecall = !PlayObject.MBoCanMasterRecall;
-            if (PlayObject.MBoCanMasterRecall)
+            PlayObject.CanMasterRecall = !PlayObject.CanMasterRecall;
+            if (PlayObject.CanMasterRecall)
             {
                 PlayObject.SysMsg(CommandHelp.EnableMasterRecall, MsgColor.Blue, MsgType.Hint);
             }

@@ -29,7 +29,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                 return;
             }
-            if (playObject.MBtPwdFailCount > 3)
+            if (playObject.PwdFailCount > 3)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 playObject.MBoPasswordLocked = true;

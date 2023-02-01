@@ -34,7 +34,7 @@ namespace GameSvr.World
         /// <summary>
         /// 交易NPC处理位置
         /// </summary>
-        private int _merchantPosition;
+        private int MerchantPosition { get; set; }
         /// <summary>
         /// NPC处理位置
         /// </summary>
@@ -48,8 +48,8 @@ namespace GameSvr.World
         /// </summary>
         public long RobotLogonTick { get; set; }
         public readonly IList<AdminInfo> AdminList;
-        private readonly IList<GoldChangeInfo> _mChangeHumanDbGoldList;
-        private readonly IList<SwitchDataInfo> _mChangeServerList;
+        private readonly IList<GoldChangeInfo> ChangeHumanDbGoldList;
+        private readonly IList<SwitchDataInfo> ChangeServerList;
         private readonly IList<int> ListOfGateIdx;
         private readonly IList<int> ListOfSocket;
         /// <summary>
@@ -65,7 +65,7 @@ namespace GameSvr.World
         protected readonly Dictionary<string, ServerGruopInfo> OtherUserNameList;
         protected readonly IList<PlayObject> PlayObjectList;
         protected readonly IList<PlayObject> BotPlayObjectList;
-        private readonly ArrayList _oldMagicList;
+        private readonly ArrayList OldMagicList;
         public readonly IList<NormNpc> QuestNpcList;
         /// <summary>
         /// 物品列表
@@ -86,7 +86,7 @@ namespace GameSvr.World
             LoadPlayList = new List<UserOpenInfo>();
             PlayObjectList = new List<PlayObject>();
             PlayObjectFreeList = new List<PlayObject>();
-            _mChangeHumanDbGoldList = new List<GoldChangeInfo>();
+            ChangeHumanDbGoldList = new List<GoldChangeInfo>();
             ShowOnlineTick = HUtil32.GetTickCount();
             SendOnlineHumTime = HUtil32.GetTickCount();
             ProcessMapDoorTick = HUtil32.GetTickCount();
@@ -95,7 +95,7 @@ namespace GameSvr.World
             ProcHumIdx = 0;
             ProcBotHubIdx = 0;
             ProcessHumanLoopTime = 0;
-            _merchantPosition = 0;
+            MerchantPosition = 0;
             NpcPosition = 0;
             StdItemList = new List<Items.StdItem>();
             MonsterList = new Dictionary<string, MonsterInfo>(StringComparer.OrdinalIgnoreCase);
@@ -106,7 +106,7 @@ namespace GameSvr.World
             AdminList = new List<AdminInfo>();
             MerchantList = new List<Merchant>();
             QuestNpcList = new List<NormNpc>();
-            _mChangeServerList = new List<SwitchDataInfo>();
+            ChangeServerList = new List<SwitchDataInfo>();
             MagicEventList = new List<MagicEvent>();
             ProcessMerchantTimeMin = 0;
             ProcessMerchantTimeMax = 0;
@@ -115,7 +115,7 @@ namespace GameSvr.World
             NewHumanList = new List<PlayObject>();
             ListOfGateIdx = new List<int>();
             ListOfSocket = new List<int>();
-            _oldMagicList = new ArrayList();
+            OldMagicList = new ArrayList();
             OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
             RobotLogonList = new List<RoBotLogon>();
             BotPlayObjectList = new List<PlayObject>();
@@ -359,7 +359,7 @@ namespace GameSvr.World
                             {
                                 playObject.Abil.HP = playObject.Abil.MaxHP;
                                 playObject.Abil.MP = playObject.Abil.MaxMP;
-                                playObject.MBoDieInFight3Zone = true;
+                                playObject.DieInFight3Zone = true;
                             }
                             else
                             {
@@ -522,7 +522,7 @@ namespace GameSvr.World
                 playObject.PayMode = (byte)userOpenInfo.LoadUser.PayMode;
                 playObject.ExpireTime = userOpenInfo.LoadUser.PlayTime;
                 playObject.ExpireCount = (int)Math.Round(TimeSpan.FromSeconds(playObject.ExpireTime).TotalMinutes, 1);
-                playObject.MDwLoadTick = userOpenInfo.LoadUser.NewUserTick;
+                playObject.LoadTick = userOpenInfo.LoadUser.NewUserTick;
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 playObject.SoftVersionDate = userOpenInfo.LoadUser.SoftVersionDate;
                 playObject.SoftVersionDateEx = userOpenInfo.LoadUser.SoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
@@ -603,9 +603,9 @@ namespace GameSvr.World
                             LoadPlayList.RemoveAt(i);
                         }
                         //LoadPlayList.Clear();
-                        for (int i = 0; i < _mChangeHumanDbGoldList.Count; i++)
+                        for (int i = 0; i < ChangeHumanDbGoldList.Count; i++)
                         {
-                            GoldChangeInfo goldChangeInfo = _mChangeHumanDbGoldList[i];
+                            GoldChangeInfo goldChangeInfo = ChangeHumanDbGoldList[i];
                             playObject = GetPlayObject(goldChangeInfo.sGameMasterName);
                             if (playObject != null)
                             {
@@ -613,7 +613,7 @@ namespace GameSvr.World
                             }
                             goldChangeInfo = null;
                         }
-                        _mChangeHumanDbGoldList.Clear();
+                        ChangeHumanDbGoldList.Clear();
                     }
                     finally
                     {
@@ -665,23 +665,23 @@ namespace GameSvr.World
                         PlayObjectFreeList.RemoveAt(i);
                         break;
                     }
-                    if (playObject.MBoSwitchData && playObject.MBoRcdSaved)
+                    if (playObject.SwitchData && playObject.RcdSaved)
                     {
-                        if (SendSwitchData(playObject, playObject.ServerIndex) || playObject.MNWriteChgDataErrCount > 20)
+                        if (SendSwitchData(playObject, playObject.ServerIndex) || playObject.WriteChgDataErrCount > 20)
                         {
-                            playObject.MBoSwitchData = false;
-                            playObject.MBoSwitchDataOk = true;
-                            playObject.MBoSwitchDataSended = true;
-                            playObject.MDwChgDataWritedTick = HUtil32.GetTickCount();
+                            playObject.SwitchData = false;
+                            playObject.SwitchDataOk = true;
+                            playObject.SwitchDataSended = true;
+                            playObject.ChgDataWritedTick = HUtil32.GetTickCount();
                         }
                         else
                         {
-                            playObject.MNWriteChgDataErrCount++;
+                            playObject.WriteChgDataErrCount++;
                         }
                     }
-                    if (playObject.MBoSwitchDataSended && HUtil32.GetTickCount() - playObject.MDwChgDataWritedTick > 100)
+                    if (playObject.SwitchDataSended && HUtil32.GetTickCount() - playObject.ChgDataWritedTick > 100)
                     {
-                        playObject.MBoSwitchDataSended = false;
+                        playObject.SwitchDataSended = false;
                         SendChangeServer(playObject, playObject.ServerIndex);
                     }
                 }
@@ -891,7 +891,7 @@ namespace GameSvr.World
             try
             {
                 int dwCurrTick = HUtil32.GetTickCount();
-                for (int i = _merchantPosition; i < MerchantList.Count; i++)
+                for (int i = MerchantPosition; i < MerchantList.Count; i++)
                 {
                     Merchant merchantNpc = MerchantList[i];
                     if (!merchantNpc.Ghost)
@@ -921,14 +921,14 @@ namespace GameSvr.World
                     }
                     if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.NpcLimit)
                     {
-                        _merchantPosition = i;
+                        MerchantPosition = i;
                         boProcessLimit = true;
                         break;
                     }
                 }
                 if (!boProcessLimit)
                 {
-                    _merchantPosition = 0;
+                    MerchantPosition = 0;
                 }
             }
             catch
@@ -1245,9 +1245,9 @@ namespace GameSvr.World
             for (int i = 0; i < PlayObjectFreeList.Count; i++)
             {
                 PlayObject hum = PlayObjectFreeList[i];
-                if (hum.MSSwitchDataTempFile == flName)
+                if (hum.SwitchDataTempFile == flName)
                 {
-                    hum.MBoSwitchDataOk = true;
+                    hum.SwitchDataOk = true;
                     break;
                 }
             }
@@ -1507,10 +1507,10 @@ namespace GameSvr.World
             playObject.HomeY = humData.HomeY;
             playObject.BonusAbil = humData.BonusAbil;
             playObject.BonusPoint = humData.BonusPoint;
-            playObject.MBtCreditPoint = humData.CreditPoint;
+            playObject.CreditPoint = humData.CreditPoint;
             playObject.MBtReLevel = humData.ReLevel;
             playObject.MasterName = humData.MasterName;
-            playObject.MBoMaster = humData.IsMaster;
+            playObject.IsMaster = humData.IsMaster;
             playObject.DearName = humData.DearName;
             playObject.StoragePwd = humData.StoragePwd;
             if (!string.IsNullOrEmpty(playObject.StoragePwd))
@@ -1528,7 +1528,7 @@ namespace GameSvr.World
             playObject.IncSpell = humData.IncSpell;
             playObject.IncHealing = humData.IncHealing;
             playObject.FightZoneDieCount = humData.FightZoneDieCount;
-            playObject.MBoLockLogon = humData.LockLogon;
+            playObject.IsLockLogon = humData.LockLogon;
             playObject.MWContribution = humData.Contribution;
             playObject.HungerStatus = humData.HungerStatus;
             playObject.AllowGuildReCall = humData.AllowGuildReCall;
@@ -1641,10 +1641,10 @@ namespace GameSvr.World
             humanRcd.Data.BonusAbil = playObject.BonusAbil;
             humanRcd.Data.BonusPoint = playObject.BonusPoint;
             humanRcd.Data.StoragePwd = playObject.StoragePwd;
-            humanRcd.Data.CreditPoint = playObject.MBtCreditPoint;
+            humanRcd.Data.CreditPoint = playObject.CreditPoint;
             humanRcd.Data.ReLevel = playObject.MBtReLevel;
             humanRcd.Data.MasterName = playObject.MasterName;
-            humanRcd.Data.IsMaster = playObject.MBoMaster;
+            humanRcd.Data.IsMaster = playObject.IsMaster;
             humanRcd.Data.DearName = playObject.DearName;
             humanRcd.Data.GameGold = playObject.GameGold;
             humanRcd.Data.GamePoint = playObject.GamePoint;
@@ -1656,7 +1656,7 @@ namespace GameSvr.World
             humanRcd.Data.IncHealing = (byte)playObject.IncHealing;
             humanRcd.Data.FightZoneDieCount = (byte)playObject.FightZoneDieCount;
             humanRcd.Data.Account = playObject.UserAccount;
-            humanRcd.Data.LockLogon = playObject.MBoLockLogon;
+            humanRcd.Data.LockLogon = playObject.IsLockLogon;
             humanRcd.Data.Contribution = playObject.MWContribution;
             humanRcd.Data.HungerStatus = playObject.HungerStatus;
             humanRcd.Data.AllowGuildReCall = playObject.AllowGuildReCall;
@@ -2095,7 +2095,7 @@ namespace GameSvr.World
         {
             GoldChangeInfo goldChange = goldChangeInfo;
             HUtil32.EnterCriticalSection(LoadPlaySection);
-            _mChangeHumanDbGoldList.Add(goldChange);
+            ChangeHumanDbGoldList.Add(goldChange);
         }
 
         public void ClearMonSayMsg()
@@ -2282,7 +2282,7 @@ namespace GameSvr.World
         {
             if (MagicList.Count > 0)
             {
-                _oldMagicList.Add(MagicList);
+                OldMagicList.Add(MagicList);
                 MagicList = null;
                 MagicList = new List<MagicInfo>();
             }

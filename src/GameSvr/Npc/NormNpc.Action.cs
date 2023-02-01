@@ -432,10 +432,10 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_SETAUTOGETEXP);
                 return;
             }
-            PlayObject.MBoAutoGetExpInSafeZone = boIsSafeZone;
-            PlayObject.MAutoGetExpEnvir = Envir;
-            PlayObject.MNAutoGetExpTime = nTime * 1000;
-            PlayObject.MNAutoGetExpPoint = nPoint;
+            PlayObject.AutoGetExpInSafeZone = boIsSafeZone;
+            PlayObject.AutoGetExpEnvir = Envir;
+            PlayObject.AutoGetExpTime = nTime * 1000;
+            PlayObject.AutoGetExpPoint = nPoint;
         }
 
         /// <summary>
@@ -449,10 +449,10 @@ namespace GameSvr.Npc
             int nTime = HUtil32.StrToInt(QuestActionInfo.sParam1, 5);
             int nPoint = HUtil32.StrToInt(QuestActionInfo.sParam2, 500);
             int nKickOffLine = HUtil32.StrToInt(QuestActionInfo.sParam3, 1440 * 15);
-            PlayObject.MBoAutoGetExpInSafeZone = true;
-            PlayObject.MAutoGetExpEnvir = PlayObject.Envir;
-            PlayObject.MNAutoGetExpTime = nTime * 1000;
-            PlayObject.MNAutoGetExpPoint = nPoint;
+            PlayObject.AutoGetExpInSafeZone = true;
+            PlayObject.AutoGetExpEnvir = PlayObject.Envir;
+            PlayObject.AutoGetExpTime = nTime * 1000;
+            PlayObject.AutoGetExpPoint = nPoint;
             PlayObject.OffLineFlag = true;
             PlayObject.KickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
             IdSrvClient.Instance.SendHumanLogOutMsgA(PlayObject.UserAccount, PlayObject.SessionId);
@@ -496,32 +496,32 @@ namespace GameSvr.Npc
                     {
                         if (nCreditPoint > byte.MaxValue)
                         {
-                            PlayObject.MBtCreditPoint = byte.MaxValue;
+                            PlayObject.CreditPoint = byte.MaxValue;
                         }
                         else
                         {
-                            PlayObject.MBtCreditPoint = (byte)nCreditPoint;
+                            PlayObject.CreditPoint = (byte)nCreditPoint;
                         }
                     }
                     break;
                 case '-':
-                    if (PlayObject.MBtCreditPoint > (byte)nCreditPoint)
+                    if (PlayObject.CreditPoint > (byte)nCreditPoint)
                     {
-                        PlayObject.MBtCreditPoint -= (byte)nCreditPoint;
+                        PlayObject.CreditPoint -= (byte)nCreditPoint;
                     }
                     else
                     {
-                        PlayObject.MBtCreditPoint = 0;
+                        PlayObject.CreditPoint = 0;
                     }
                     break;
                 case '+':
-                    if (PlayObject.MBtCreditPoint + (byte)nCreditPoint > byte.MaxValue)
+                    if (PlayObject.CreditPoint + (byte)nCreditPoint > byte.MaxValue)
                     {
-                        PlayObject.MBtCreditPoint = byte.MaxValue;
+                        PlayObject.CreditPoint = byte.MaxValue;
                     }
                     else
                     {
-                        PlayObject.MBtCreditPoint += (byte)nCreditPoint;
+                        PlayObject.CreditPoint += (byte)nCreditPoint;
                     }
                     break;
                 default:
@@ -986,8 +986,8 @@ namespace GameSvr.Npc
                             sSayMsg = string.Format(Settings.StartMarryWoManAskQuestionMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
-                        PlayObject.MBoStartMarry = true;
-                        PoseHuman.MBoStartMarry = true;
+                        PlayObject.IsStartMarry = true;
+                        PoseHuman.IsStartMarry = true;
                     }
                     else
                     {
@@ -1005,7 +1005,7 @@ namespace GameSvr.Npc
             // sREQUESTMARRY
             if (string.Compare(QuestActionInfo.sParam1, "REQUESTMARRY", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (PlayObject.MBoStartMarry && PoseHuman.MBoStartMarry)
+                if (PlayObject.IsStartMarry && PoseHuman.IsStartMarry)
                 {
                     if (PlayObject.Gender == PlayGender.Man && PoseHuman.Gender == PlayGender.WoMan)
                     {
@@ -1030,7 +1030,7 @@ namespace GameSvr.Npc
                 {
                     if (string.Compare(QuestActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        if (PlayObject.MBoStartMarry && PoseHuman.MBoStartMarry)
+                        if (PlayObject.IsStartMarry && PoseHuman.IsStartMarry)
                         {
                             sSayMsg = string.Format(Settings.MarryWoManAnswerQuestionMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
@@ -1038,8 +1038,8 @@ namespace GameSvr.Npc
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             GotoLable(PlayObject, "@EndMarry", false);
                             GotoLable(PoseHuman, "@EndMarry", false);
-                            PlayObject.MBoStartMarry = false;
-                            PoseHuman.MBoStartMarry = false;
+                            PlayObject.IsStartMarry = false;
+                            PoseHuman.IsStartMarry = false;
                             PlayObject.DearName = PoseHuman.ChrName;
                             PlayObject.DearHuman = PoseHuman;
                             PoseHuman.DearName = PlayObject.ChrName;
@@ -1050,12 +1050,12 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        if (PlayObject.MBoStartMarry && PoseHuman.MBoStartMarry)
+                        if (PlayObject.IsStartMarry && PoseHuman.IsStartMarry)
                         {
                             GotoLable(PlayObject, "@EndMarryFail", false);
                             GotoLable(PoseHuman, "@EndMarryFail", false);
-                            PlayObject.MBoStartMarry = false;
-                            PoseHuman.MBoStartMarry = false;
+                            PlayObject.IsStartMarry = false;
+                            PoseHuman.IsStartMarry = false;
                             sSayMsg = string.Format(Settings.MarryWoManDenyMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             sSayMsg = string.Format(Settings.MarryWoManCancelMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
@@ -1089,8 +1089,8 @@ namespace GameSvr.Npc
                 {
                     GotoLable(PlayObject, "@StartGetMaster", false);
                     GotoLable(PoseHuman, "@StartMaster", false);
-                    PlayObject.MBoStartMaster = true;
-                    PoseHuman.MBoStartMaster = true;
+                    PlayObject.IsStartMaster = true;
+                    PoseHuman.IsStartMaster = true;
                 }
                 else
                 {
@@ -1101,7 +1101,7 @@ namespace GameSvr.Npc
             }
             if (string.Compare(QuestActionInfo.sParam1, "REQUESTMASTER", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (PlayObject.MBoStartMaster && PoseHuman.MBoStartMaster)
+                if (PlayObject.IsStartMaster && PoseHuman.IsStartMaster)
                 {
                     PlayObject.PoseBaseObject = PoseHuman;
                     PoseHuman.PoseBaseObject = PlayObject;
@@ -1116,20 +1116,20 @@ namespace GameSvr.Npc
                 {
                     if (PlayObject.PoseBaseObject == PoseHuman && PoseHuman.PoseBaseObject == PlayObject)
                     {
-                        if (PlayObject.MBoStartMaster && PoseHuman.MBoStartMaster)
+                        if (PlayObject.IsStartMaster && PoseHuman.IsStartMaster)
                         {
                             GotoLable(PlayObject, "@EndMaster", false);
                             GotoLable(PoseHuman, "@EndMaster", false);
-                            PlayObject.MBoStartMaster = false;
-                            PoseHuman.MBoStartMaster = false;
+                            PlayObject.IsStartMaster = false;
+                            PoseHuman.IsStartMaster = false;
                             if (PlayObject.MasterName == "")
                             {
                                 PlayObject.MasterName = PoseHuman.ChrName;
-                                PlayObject.MBoMaster = true;
+                                PlayObject.IsMaster = true;
                             }
                             PlayObject.MasterList.Add(PoseHuman);
                             PoseHuman.MasterName = PlayObject.ChrName;
-                            PoseHuman.MBoMaster = false;
+                            PoseHuman.IsMaster = false;
                             PlayObject.RefShowName();
                             PoseHuman.RefShowName();
                         }
@@ -1137,12 +1137,12 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    if (PlayObject.MBoStartMaster && PoseHuman.MBoStartMaster)
+                    if (PlayObject.IsStartMaster && PoseHuman.IsStartMaster)
                     {
                         GotoLable(PlayObject, "@EndMasterFail", false);
                         GotoLable(PoseHuman, "@EndMasterFail", false);
-                        PlayObject.MBoStartMaster = false;
-                        PoseHuman.MBoStartMaster = false;
+                        PlayObject.IsStartMaster = false;
+                        PoseHuman.IsStartMaster = false;
                     }
                 }
                 return;
@@ -1366,8 +1366,8 @@ namespace GameSvr.Npc
                 {
                     if (PoseHuman != null)
                     {
-                        PlayObject.MBoStartUnMarry = true;
-                        if (PlayObject.MBoStartUnMarry && PoseHuman.MBoStartUnMarry)
+                        PlayObject.IsStartUnMarry = true;
+                        if (PlayObject.IsStartUnMarry && PoseHuman.IsStartUnMarry)
                         {
                             // sUnMarryMsg8
                             // sMarryMsg0
@@ -1375,10 +1375,10 @@ namespace GameSvr.Npc
                             M2Share.WorldEngine.SendBroadCastMsg('[' + ChrName + "]: " + "我宣布" + PoseHuman.ChrName + ' ' + '与' + PlayObject.ChrName + ' ' + ' ' + "正式脱离夫妻关系。", MsgType.Say);
                             PlayObject.DearName = "";
                             PoseHuman.DearName = "";
-                            PlayObject.MBtMarryCount++;
-                            PoseHuman.MBtMarryCount++;
-                            PlayObject.MBoStartUnMarry = false;
-                            PoseHuman.MBoStartUnMarry = false;
+                            PlayObject.MarryCount++;
+                            PoseHuman.MarryCount++;
+                            PlayObject.IsStartUnMarry = false;
+                            PoseHuman.IsStartUnMarry = false;
                             PlayObject.RefShowName();
                             PoseHuman.RefShowName();
                             GotoLable(PlayObject, "@UnMarryEnd", false);
@@ -1402,7 +1402,7 @@ namespace GameSvr.Npc
                         if (PoseHuman != null)
                         {
                             PoseHuman.DearName = "";
-                            PoseHuman.MBtMarryCount++;
+                            PoseHuman.MarryCount++;
                             PoseHuman.RefShowName();
                         }
                         else
@@ -1418,7 +1418,7 @@ namespace GameSvr.Npc
                             //LoadList.Free;
                         }
                         PlayObject.DearName = "";
-                        PlayObject.MBtMarryCount++;
+                        PlayObject.MarryCount++;
                         GotoLable(PlayObject, "@UnMarryEnd", false);
                         PlayObject.RefShowName();
                     }
@@ -1495,10 +1495,10 @@ namespace GameSvr.Npc
 
         private void ActionOfDelayCall(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            PlayObject.MNDelayCall = HUtil32._MAX(1, QuestActionInfo.nParam1);
+            PlayObject.DelayCall = HUtil32._MAX(1, QuestActionInfo.nParam1);
             PlayObject.DelayCallLabel = QuestActionInfo.sParam2;
-            PlayObject.MDwDelayCallTick = HUtil32.GetTickCount();
-            PlayObject.MBoDelayCall = true;
+            PlayObject.DelayCallTick = HUtil32.GetTickCount();
+            PlayObject.IsDelayCall = true;
             PlayObject.MDelayCallNpc = ActorId;
         }
 
@@ -1630,7 +1630,7 @@ namespace GameSvr.Npc
         private static void ActionOfGroupAddList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string ffile = QuestActionInfo.sParam1;
-            if (PlayObject.GroupOwner != null)
+            if (PlayObject.GroupOwner != 0)
             {
                 for (int i = 0; i < PlayObject.GroupMembers.Count; i++)
                 {
@@ -1653,7 +1653,7 @@ namespace GameSvr.Npc
 
         private static void ActionOfGroupRecall(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
-            if (PlayObject.GroupOwner != null)
+            if (PlayObject.GroupOwner != 0)
             {
                 // PlayObject.GroupRecall('GroupRecall');
             }
@@ -1694,7 +1694,7 @@ namespace GameSvr.Npc
         {
             PlayObject PlayObjectEx;
             bool boFlag = false;
-            if (PlayObject.GroupOwner != null)
+            if (PlayObject.GroupOwner != 0)
             {
                 Envirnoment Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                 if (Envir != null)
@@ -2101,7 +2101,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.MasterName == PoseHuman.ChrName)
                         {
-                            if (PlayObject.MBoMaster)
+                            if (PlayObject.IsMaster)
                             {
                                 GotoLable(PlayObject, "@UnIsMaster", false);
                                 return;
@@ -2125,15 +2125,15 @@ namespace GameSvr.Npc
                 {
                     if (PoseHuman != null)
                     {
-                        PlayObject.MBoStartUnMaster = true;
-                        if (PlayObject.MBoStartUnMaster && PoseHuman.MBoStartUnMaster)
+                        PlayObject.IsStartUnMaster = true;
+                        if (PlayObject.IsStartUnMaster && PoseHuman.IsStartUnMaster)
                         {
                             sMsg = string.Format(Settings.NPCSayUnMasterOKMsg, ChrName, PlayObject.ChrName, PoseHuman.ChrName);
                             M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
                             PlayObject.MasterName = "";
                             PoseHuman.MasterName = "";
-                            PlayObject.MBoStartUnMaster = false;
-                            PoseHuman.MBoStartUnMaster = false;
+                            PlayObject.IsStartUnMaster = false;
+                            PoseHuman.IsStartUnMaster = false;
                             PlayObject.RefShowName();
                             PoseHuman.RefShowName();
                             GotoLable(PlayObject, "@UnMasterEnd", false);

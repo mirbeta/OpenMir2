@@ -2742,7 +2742,7 @@ namespace GameSvr.Actor
                 {
                     ((PlayObject)this).IncGamePointTick = HUtil32.GetTickCount();
                     ((PlayObject)this).IncGameGoldTick = HUtil32.GetTickCount();
-                    ((PlayObject)this).MDwAutoGetExpTick = HUtil32.GetTickCount();
+                    ((PlayObject)this).AutoGetExpTick = HUtil32.GetTickCount();
                 }
                 if (Envir.Flag.boFight3Zone && (Envir.Flag.boFight3Zone != oldEnvir.Flag.boFight3Zone))
                 {

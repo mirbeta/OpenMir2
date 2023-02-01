@@ -35,13 +35,13 @@ namespace GameSvr.GameCommand.Commands
                 }
                 return;
             }
-            if (HUtil32.GetTickCount() - PlayObject.MDwDearRecallTick < 10000)
+            if (HUtil32.GetTickCount() - PlayObject.DearRecallTick < 10000)
             {
                 PlayObject.SysMsg("稍等会才能再次使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.MDwDearRecallTick = HUtil32.GetTickCount();
-            if (PlayObject.DearHuman.MBoCanDearRecall)
+            PlayObject.DearRecallTick = HUtil32.GetTickCount();
+            if (PlayObject.DearHuman.CanDearRecall)
             {
                 PlayObject.RecallHuman(PlayObject.DearHuman.ChrName);
             }

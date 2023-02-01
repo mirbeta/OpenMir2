@@ -44,28 +44,28 @@ namespace GameSvr.GameCommand.Commands
                 case '=':
                     if (nPoint >= 0)
                     {
-                        m_PlayObject.MBtCreditPoint = (byte)nPoint;
+                        m_PlayObject.CreditPoint = (byte)nPoint;
                     }
                     break;
 
                 case '+':
-                    nCreditPoint = m_PlayObject.MBtCreditPoint + nPoint;
+                    nCreditPoint = m_PlayObject.CreditPoint + nPoint;
                     if (nPoint >= 0)
                     {
-                        m_PlayObject.MBtCreditPoint = (byte)nCreditPoint;
+                        m_PlayObject.CreditPoint = (byte)nCreditPoint;
                     }
                     break;
 
                 case '-':
-                    nCreditPoint = m_PlayObject.MBtCreditPoint - nPoint;
+                    nCreditPoint = m_PlayObject.CreditPoint - nPoint;
                     if (nPoint >= 0)
                     {
-                        m_PlayObject.MBtCreditPoint = (byte)nCreditPoint;
+                        m_PlayObject.CreditPoint = (byte)nCreditPoint;
                     }
                     break;
             }
-            m_PlayObject.SysMsg(string.Format(CommandHelp.GameCommandCreditPointHumanMsg, nPoint, m_PlayObject.MBtCreditPoint), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandCreditPointGMMsg, sHumanName, nPoint, m_PlayObject.MBtCreditPoint), MsgColor.Green, MsgType.Hint);
+            m_PlayObject.SysMsg(string.Format(CommandHelp.GameCommandCreditPointHumanMsg, nPoint, m_PlayObject.CreditPoint), MsgColor.Green, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandCreditPointGMMsg, sHumanName, nPoint, m_PlayObject.CreditPoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

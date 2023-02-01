@@ -13,8 +13,8 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public static void AllowDearRecall(string[] @Params, PlayObject PlayObject)
         {
-            PlayObject.MBoCanDearRecall = !PlayObject.MBoCanDearRecall;
-            if (PlayObject.MBoCanDearRecall)
+            PlayObject.CanDearRecall = !PlayObject.CanDearRecall;
+            if (PlayObject.CanDearRecall)
             {
                 PlayObject.SysMsg(CommandHelp.EnableDearRecall, MsgColor.Blue, MsgType.Hint);
             }

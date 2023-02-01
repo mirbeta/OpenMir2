@@ -32,7 +32,7 @@ namespace GameSvr.GameCommand.Commands
                 {
                     m_PlayObject.MasterName = "";
                     m_PlayObject.RefShowName();
-                    m_PlayObject.MBoMaster = false;
+                    m_PlayObject.IsMaster = false;
                     PlayObject.SysMsg(sHumanName + " 的师徒名清除成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else
@@ -40,11 +40,11 @@ namespace GameSvr.GameCommand.Commands
                     m_PlayObject.MasterName = sMasterName;
                     if (sIsMaster != "" && sIsMaster[0] == '1')
                     {
-                        m_PlayObject.MBoMaster = true;
+                        m_PlayObject.IsMaster = true;
                     }
                     else
                     {
-                        m_PlayObject.MBoMaster = false;
+                        m_PlayObject.IsMaster = false;
                     }
                     m_PlayObject.RefShowName();
                     PlayObject.SysMsg(sHumanName + " 的师徒名更改成功。", MsgColor.Green, MsgType.Hint);

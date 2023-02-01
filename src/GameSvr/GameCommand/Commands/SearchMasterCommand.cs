@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(Settings.YouAreNotMasterMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.MBoMaster)
+            if (PlayObject.IsMaster)
             {
                 if (PlayObject.MasterList.Count <= 0)
                 {

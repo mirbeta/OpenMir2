@@ -198,7 +198,7 @@ namespace GameSvr.Services
                     {
                         if (SaveRcd.PlayObject != null)
                         {
-                            ((PlayObject)SaveRcd.PlayObject).MBoRcdSaved = true;
+                            ((PlayObject)SaveRcd.PlayObject).RcdSaved = true;
                         }
                     }
                 }

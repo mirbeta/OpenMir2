@@ -32,13 +32,14 @@ namespace GameSvr.Player
 
         private bool ClientPickUpItemIsOfGroup(int actorId)
         {
-            if (GroupOwner == null)
+            if (GroupOwner == 0)
             {
                 return false;
             }
-            for (int i = 0; i < GroupOwner.GroupMembers.Count; i++)
+            var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+            for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
             {
-                if (GroupOwner.GroupMembers[i].ActorId == actorId)
+                if (groupOwnerPlay.GroupMembers[i].ActorId == actorId)
                 {
                     return true;
                 }
@@ -729,28 +730,31 @@ namespace GameSvr.Player
             double[] bonus = { 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2 };
             try
             {
-                if (GroupOwner != null)
+                if (GroupOwner != 0)
                 {
                     sumlv = 0;
                     n = 0;
-                    for (int i = 0; i < GroupOwner.GroupMembers.Count; i++)
+                    var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+
+                    for (var i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                     {
-                        playObject = GroupOwner.GroupMembers[i];
+                        playObject = groupOwnerPlay.GroupMembers[i];
                         if (!playObject.Death && Envir == playObject.Envir && Math.Abs(CurrX - playObject.CurrX) <= 12 && Math.Abs(CurrX - playObject.CurrX) <= 12)
                         {
                             sumlv = sumlv + playObject.Abil.Level;
                             n++;
                         }
                     }
+                    
                     if (sumlv > 0 && n > 1)
                     {
                         if (n >= 0 && n <= Grobal2.GroupMax)
                         {
                             dwExp = HUtil32.Round(dwExp * bonus[n]);
                         }
-                        for (int i = 0; i < GroupOwner.GroupMembers.Count; i++)
+                        for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                         {
-                            playObject = GroupOwner.GroupMembers[i];
+                            playObject = groupOwnerPlay.GroupMembers[i];
                             if (!playObject.Death && Envir == playObject.Envir && Math.Abs(CurrX - playObject.CurrX) <= 12 && Math.Abs(CurrX - playObject.CurrX) <= 12)
                             {
                                 if (M2Share.Config.HighLevelKillMonFixExp)
@@ -817,7 +821,7 @@ namespace GameSvr.Player
                 + " 仓库密码:" + StoragePwd + " 登录IP:" + LoginIpAddr + '(' + LoginIpLocal + ')' + " 登录帐号:" + UserAccount + " 登录时间:" + LogonTime
                 + " 在线时长(分钟):" + (HUtil32.GetTickCount() - LogonTick) / 60000 + " 登录模式:" + PayMent + ' ' + M2Share.Config.GameGoldName + ':' + GameGold
                 + ' ' + M2Share.Config.GamePointName + ':' + GamePoint + ' ' + M2Share.Config.PayMentPointName + ':' + PayMentPoint + " 会员类型:" + MemberType
-                + " 会员等级:" + MemberLevel + " 经验倍数:" + KillMonExpRate / 100 + " 攻击倍数:" + PowerRate / 100 + " 声望值:" + MBtCreditPoint;
+                + " 会员等级:" + MemberLevel + " 经验倍数:" + KillMonExpRate / 100 + " 攻击倍数:" + PowerRate / 100 + " 声望值:" + CreditPoint;
         }
 
         private int GetDigUpMsgCount()
@@ -898,10 +902,10 @@ namespace GameSvr.Player
 
         public void ChangeSpaceMove(Envirnoment envir, short nX, short nY)
         {
-            MSSwitchMapName = envir.MapName;
-            MNSwitchMapX = nX;
-            MNSwitchMapY = nY;
-            MBoSwitchData = true;
+            SwitchMapName = envir.MapName;
+            SwitchMapX = nX;
+            SwitchMapY = nY;
+            SwitchData = true;
             ServerIndex = envir.ServerIndex;
             BoEmergencyClose = true;
             BoReconnection = true;
@@ -1343,7 +1347,7 @@ namespace GameSvr.Player
             {
                 SendGroupText(sCanceGrop);
                 GroupMembers.Clear();
-                GroupOwner = null;
+                GroupOwner = 0;
                 result = false;
             }
             return result;
@@ -1917,7 +1921,7 @@ namespace GameSvr.Player
                 case 44:
                     if (MBtReLevel >= HUtil32.LoByte(clientItem.Item.NeedLevel))
                     {
-                        if (MBtCreditPoint >= HUtil32.HiByte(clientItem.Item.NeedLevel))
+                        if (CreditPoint >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                         {
                             result = true;
                         }
@@ -1932,7 +1936,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 5:
-                    if (MBtCreditPoint >= clientItem.Item.NeedLevel)
+                    if (CreditPoint >= clientItem.Item.NeedLevel)
                     {
                         result = true;
                     }
@@ -2416,7 +2420,7 @@ namespace GameSvr.Player
 
         private void JoinGroup(PlayObject playObject)
         {
-            GroupOwner = playObject;
+            GroupOwner = playObject.ActorId;
             SendGroupText(Format(Settings.JoinGroup, ChrName));
         }
 
@@ -2852,53 +2856,53 @@ namespace GameSvr.Player
             {
                 return true;
             }
-            int dwActionIntervalTime = MDwActionIntervalTime;
+            int dwActionIntervalTime = ActionIntervalTime;
             switch (wIdent)
             {
                 case Messages.CM_LONGHIT:
                     if (M2Share.Config.boControlRunLongHit && MWOldIdent == Messages.CM_RUN && MBtOldDir != Direction)
                     {
-                        dwActionIntervalTime = MDwRunLongHitIntervalTime;// 跑位刺杀
+                        dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Messages.CM_HIT:
                     if (M2Share.Config.boControlWalkHit && MWOldIdent == Messages.CM_WALK && MBtOldDir != Direction)
                     {
-                        dwActionIntervalTime = MDwWalkHitIntervalTime; // 走位攻击
+                        dwActionIntervalTime = WalkHitIntervalTime; // 走位攻击
                     }
                     if (M2Share.Config.boControlRunHit && MWOldIdent == Messages.CM_RUN && MBtOldDir != Direction)
                     {
-                        dwActionIntervalTime = MDwRunHitIntervalTime;// 跑位攻击
+                        dwActionIntervalTime = RunHitIntervalTime;// 跑位攻击
                     }
                     break;
                 case Messages.CM_RUN:
                     if (M2Share.Config.boControlRunLongHit && MWOldIdent == Messages.CM_LONGHIT && MBtOldDir != Direction)
                     {
-                        dwActionIntervalTime = MDwRunLongHitIntervalTime;// 跑位刺杀
+                        dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
                     if (M2Share.Config.boControlRunHit && MWOldIdent == Messages.CM_HIT && MBtOldDir != Direction)
                     {
-                        dwActionIntervalTime = MDwRunHitIntervalTime;// 跑位攻击
+                        dwActionIntervalTime = RunHitIntervalTime;// 跑位攻击
                     }
                     if (M2Share.Config.boControlRunMagic && MWOldIdent == Messages.CM_SPELL && MBtOldDir != Direction)
                     {
-                        dwActionIntervalTime = MDwRunMagicIntervalTime;// 跑位魔法
+                        dwActionIntervalTime = RunMagicIntervalTime;// 跑位魔法
                     }
                     break;
                 case Messages.CM_WALK:
                     if (M2Share.Config.boControlWalkHit && MWOldIdent == Messages.CM_HIT && MBtOldDir != Direction)
                     {
-                        dwActionIntervalTime = MDwWalkHitIntervalTime;// 走位攻击
+                        dwActionIntervalTime = WalkHitIntervalTime;// 走位攻击
                     }
                     if (M2Share.Config.boControlRunLongHit && MWOldIdent == Messages.CM_LONGHIT && MBtOldDir != Direction)
                     {
-                        dwActionIntervalTime = MDwRunLongHitIntervalTime;// 跑位刺杀
+                        dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Messages.CM_SPELL:
                     if (M2Share.Config.boControlRunMagic && MWOldIdent == Messages.CM_RUN && MBtOldDir != Direction)
                     {
-                        dwActionIntervalTime = MDwRunMagicIntervalTime;// 跑位魔法
+                        dwActionIntervalTime = RunMagicIntervalTime;// 跑位魔法
                     }
                     break;
             }
@@ -3115,7 +3119,7 @@ namespace GameSvr.Player
             }
             if (boIsfound)
             {
-                if (MBoMaster)
+                if (IsMaster)
                 {
                     sSayMsg = string.Format(Settings.fUnMasterLoginMsg, MasterName);
                 }
@@ -3127,7 +3131,7 @@ namespace GameSvr.Player
                 MasterName = "";
                 RefShowName();
             }
-            if (!string.IsNullOrEmpty(MasterName) && !MBoMaster)
+            if (!string.IsNullOrEmpty(MasterName) && !IsMaster)
             {
                 if (Abil.Level >= M2Share.Config.MasterOKLevel)
                 {
@@ -3152,9 +3156,9 @@ namespace GameSvr.Player
                         }
                         MasterName = "";
                         RefShowName();
-                        if (human.MBtCreditPoint + M2Share.Config.MasterOKCreditPoint <= byte.MaxValue)
+                        if (human.CreditPoint + M2Share.Config.MasterOKCreditPoint <= byte.MaxValue)
                         {
-                            human.MBtCreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
+                            human.CreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
                         }
                         human.BonusPoint += M2Share.Config.nMasterOKBonusPoint;
                         human.SendMsg(human, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
@@ -3197,14 +3201,14 @@ namespace GameSvr.Player
                     break;
                 }
             }
-            if (boIsfound && MBoMaster)
+            if (boIsfound && IsMaster)
             {
                 SysMsg(Settings.UnMasterLoginMsg, MsgColor.Red, MsgType.Hint);
                 MasterName = "";
                 RefShowName();
-                if (MBtCreditPoint + M2Share.Config.MasterOKCreditPoint <= byte.MaxValue)
+                if (CreditPoint + M2Share.Config.MasterOKCreditPoint <= byte.MaxValue)
                 {
-                    MBtCreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
+                    CreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
                 }
                 BonusPoint += M2Share.Config.nMasterOKBonusPoint;
                 SendMsg(this, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
@@ -3213,7 +3217,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (MBoMaster) // 师父上线通知
+            if (IsMaster) // 师父上线通知
             {
                 MasterHuman = M2Share.WorldEngine.GetPlayObject(MasterName);
                 if (MasterHuman != null)
@@ -3425,7 +3429,7 @@ namespace GameSvr.Player
                             ObMode = false;
                             AdminMode = false;
                         }
-                        BoLockLogoned = true;
+                        IsLockLogoned = true;
                         SysMsg(Settings.PasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     if (MBoUnLockStoragePwd)
@@ -3439,9 +3443,9 @@ namespace GameSvr.Player
                 }
                 else
                 {
-                    MBtPwdFailCount++;
+                    PwdFailCount++;
                     SysMsg(Settings.UnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
-                    if (MBtPwdFailCount > 3)
+                    if (PwdFailCount > 3)
                     {
                         SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                     }
@@ -3461,9 +3465,9 @@ namespace GameSvr.Player
                 }
                 else
                 {
-                    MBtPwdFailCount++;
+                    PwdFailCount++;
                     SysMsg(Settings.OldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
-                    if (MBtPwdFailCount > 3)
+                    if (PwdFailCount > 3)
                     {
                         SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         MBoPasswordLocked = true;
@@ -3575,7 +3579,7 @@ namespace GameSvr.Player
         {
             NormNpc normNpc;
             string sRefMsg = string.Empty;
-            if (!Ghost && !string.IsNullOrEmpty(MSGotoNpcLabel))
+            if (!Ghost && !string.IsNullOrEmpty(GotoNpcLabel))
             {
                 sRefMsg = EDCode.DeCodeString(sData);
                 //if (IsInGuildRankNameFilterList(sRefMsg))
@@ -3605,24 +3609,24 @@ namespace GameSvr.Player
                     {
                         if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
                         {
-                            normNpc.GotoLable(this, MSGotoNpcLabel, false);
+                            normNpc.GotoLable(this, GotoNpcLabel, false);
                         }
                     }
                     break;
                 case 1:
                     if (M2Share.FunctionNPC != null)
                     {
-                        M2Share.FunctionNPC.GotoLable(this, MSGotoNpcLabel, false);
+                        M2Share.FunctionNPC.GotoLable(this, GotoNpcLabel, false);
                     }
                     break;
                 case 2:
                     if (M2Share.ManageNPC != null)
                     {
-                        M2Share.ManageNPC.GotoLable(this, MSGotoNpcLabel, false);
+                        M2Share.ManageNPC.GotoLable(this, GotoNpcLabel, false);
                     }
                     break;
             }
-            MSGotoNpcLabel = string.Empty;
+            GotoNpcLabel = string.Empty;
         }
 
         private void ClientMerchantItemDlgSelect(int nParam1, ushort nParam2, ushort nParam3)
@@ -3679,8 +3683,8 @@ namespace GameSvr.Player
                     }
                     SendDefMessage(Messages.SM_ITEMDLGSELECT, 1, nTemp, 0, 0, "");
                     //Npc.m_OprCount = 0;
-                    npc.GotoLable(this, MSGotoNpcLabel, false);
-                    MSGotoNpcLabel = string.Empty;
+                    npc.GotoLable(this, GotoNpcLabel, false);
+                    GotoNpcLabel = string.Empty;
                 }
             }
         }

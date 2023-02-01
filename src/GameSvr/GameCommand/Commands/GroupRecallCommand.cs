@@ -15,7 +15,7 @@ namespace GameSvr.GameCommand.Commands
         {
             if (PlayObject.RecallSuite || PlayObject.Permission >= 6)
             {
-                int dwValue = (HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000;
+                short dwValue = (short)((HUtil32.GetTickCount() - PlayObject.GroupRcallTick) / 1000);
                 PlayObject.GroupRcallTick = PlayObject.GroupRcallTick + dwValue * 1000;
                 if (PlayObject.Permission >= 6)
                 {
@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
                 }
                 if (PlayObject.GroupRcallTime > dwValue)
                 {
-                    PlayObject.GroupRcallTime -= (short)dwValue;
+                    PlayObject.GroupRcallTime -= dwValue;
                 }
                 else
                 {
@@ -31,7 +31,7 @@ namespace GameSvr.GameCommand.Commands
                 }
                 if (PlayObject.GroupRcallTime == 0)
                 {
-                    if (PlayObject.GroupOwner == PlayObject)
+                    if (PlayObject.GroupOwner == PlayObject.ActorId)
                     {
                         for (int i = 0; i < PlayObject.GroupMembers.Count; i++)
                         {
@@ -53,7 +53,7 @@ namespace GameSvr.GameCommand.Commands
                             }
                         }
                         PlayObject.GroupRcallTick = HUtil32.GetTickCount();
-                        PlayObject.GroupRcallTime = (short)M2Share.Config.GroupRecallTime;
+                        PlayObject.GroupRcallTime = M2Share.Config.GroupRecallTime;
                     }
                 }
                 else

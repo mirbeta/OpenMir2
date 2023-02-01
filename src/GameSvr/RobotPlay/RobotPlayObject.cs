@@ -869,7 +869,7 @@ namespace GameSvr.RobotPlay
             }
             if (nTargetX != CurrX || nTargetY != CurrY)
             {
-                if ((HUtil32.GetTickCount() - DwTick3F4) > MDwTurnIntervalTime)// 转向间隔
+                if ((HUtil32.GetTickCount() - DwTick3F4) > TurnIntervalTime)// 转向间隔
                 {
                     n10 = nTargetX;
                     n14 = nTargetY;
@@ -2486,7 +2486,7 @@ namespace GameSvr.RobotPlay
             {
                 return false;
             }
-            if (HUtil32.GetTickCount() - dwTick5F4 > MDwRunIntervalTime) // 跑步使用单独的变量计数
+            if (HUtil32.GetTickCount() - dwTick5F4 > RunIntervalTime) // 跑步使用单独的变量计数
             {
                 short nX = nTargetX;
                 short nY = nTargetY;
@@ -2620,7 +2620,7 @@ namespace GameSvr.RobotPlay
             }
             if (Math.Abs(nTargetX - CurrX) > 1 || Math.Abs(nTargetY - CurrY) > 1)
             {
-                if (HUtil32.GetTickCount() - DwTick3F4 > MDwWalkIntervalTime)
+                if (HUtil32.GetTickCount() - DwTick3F4 > WalkIntervalTime)
                 {
                     n10 = nTargetX;
                     n14 = nTargetY;
