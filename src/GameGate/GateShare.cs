@@ -55,7 +55,7 @@ namespace GameGate
             TempBlockIPList = new List<string>();
             AbusiveFilter = AbusiveFilter.Instance;
             ChatCommandFilter = ChatCommandFilter.Instance;
-            PunishList = new Dictionary<string, ClientSession>();
+            PunishList = new Dictionary<string, ClientSession>(StringComparer.OrdinalIgnoreCase);
             ChatCommandFilterMap = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
         }
 

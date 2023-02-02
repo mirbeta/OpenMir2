@@ -1119,8 +1119,7 @@ namespace GameGate.Services
                         success = false;
                         return;
                     }
-                    var userType = GateShare.PunishList.ContainsKey(sHumName);
-                    if (userType)
+                    if (GateShare.PunishList.TryGetValue(sHumName, out var userType))
                     {
                         _gameSpeed.SpeedLimit = true;
                         GateShare.PunishList[sHumName] = this;
