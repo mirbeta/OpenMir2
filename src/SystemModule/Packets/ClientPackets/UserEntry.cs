@@ -34,12 +34,12 @@ namespace SystemModule.Packets.ClientPackets
         }
     }
 
-    public class UserFullEntry : ClientPackage
+    public class UserAccountPacket : ClientPackage
     {
         public UserEntry UserEntry;
         public UserEntryAdd UserEntryAdd;
 
-        public UserFullEntry()
+        public UserAccountPacket()
         {
             UserEntry = new UserEntry();
             UserEntryAdd = new UserEntryAdd();

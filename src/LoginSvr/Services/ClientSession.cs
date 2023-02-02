@@ -369,7 +369,7 @@ namespace LoginSvr.Services
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
-                var userFullEntry = ClientPackage.ToPacket<UserFullEntry>(accountBuff);
+                var userFullEntry = ClientPackage.ToPacket<UserAccountPacket>(accountBuff);
                 if (userFullEntry == null)
                 {
                     _logger.LogWarning("[新建账号失败] 解析封包出现异常.");
@@ -560,18 +560,18 @@ namespace LoginSvr.Services
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
-                var userFullEntry = ClientPackage.ToPacket<UserFullEntry>(accountBuff);
+                var userAccount = ClientPackage.ToPacket<UserAccountPacket>(accountBuff);
                 var nCode = -1;
-                if (string.Compare(userInfo.Account, userFullEntry.UserEntry.Account, StringComparison.OrdinalIgnoreCase) == 0 && LsShare.CheckAccountName(userFullEntry.UserEntry.Account))
+                if (string.Compare(userInfo.Account, userAccount.UserEntry.Account, StringComparison.OrdinalIgnoreCase) == 0 && LsShare.CheckAccountName(userAccount.UserEntry.Account))
                 {
-                    var accountIndex = _accountStorage.Index(userFullEntry.UserEntry.Account);
+                    var accountIndex = _accountStorage.Index(userAccount.UserEntry.Account);
                     if (accountIndex >= 0)
                     {
                         AccountRecord accountRecord = null;
                         if (_accountStorage.Get(accountIndex, ref accountRecord) >= 0)
                         {
-                            accountRecord.UserEntry = userFullEntry.UserEntry;
-                            accountRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
+                            accountRecord.UserEntry = userAccount.UserEntry;
+                            accountRecord.UserEntryAdd = userAccount.UserEntryAdd;
                             nCode = _accountStorage.UpdateAccount(accountIndex, ref accountRecord);
                         }
                     }
