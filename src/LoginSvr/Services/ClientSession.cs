@@ -370,6 +370,11 @@ namespace LoginSvr.Services
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
                 var userFullEntry = ClientPackage.ToPacket<UserFullEntry>(accountBuff);
+                if (userFullEntry == null)
+                {
+                    _logger.LogWarning("[新建账号失败] 解析封包出现异常.");
+                    return;
+                }
                 var nErrCode = -1;
                 if (LsShare.CheckAccountName(userFullEntry.UserEntry.Account))
                 {
