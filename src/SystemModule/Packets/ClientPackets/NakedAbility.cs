@@ -4,7 +4,7 @@ using MemoryPack;
 namespace SystemModule.Packets.ClientPackets
 {
     [MemoryPackable]
-    public partial class NakedAbility : ClientPackage
+    public partial class NakedAbility : ClientPacket
     {
         public ushort DC{ get; set; }
         public ushort MC{ get; set; }

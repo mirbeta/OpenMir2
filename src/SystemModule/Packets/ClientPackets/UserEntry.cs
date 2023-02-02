@@ -3,7 +3,7 @@ using SystemModule.Extensions;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class UserEntry : ClientPackage
+    public class UserEntry : ClientPacket
     {
         public string Account;
         public string Password;
@@ -34,7 +34,7 @@ namespace SystemModule.Packets.ClientPackets
         }
     }
 
-    public class UserAccountPacket : ClientPackage
+    public class UserAccountPacket : ClientPacket
     {
         public UserEntry UserEntry;
         public UserEntryAdd UserEntryAdd;

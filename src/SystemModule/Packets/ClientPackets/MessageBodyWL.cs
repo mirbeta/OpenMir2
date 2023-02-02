@@ -2,7 +2,7 @@
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class MessageBodyWL : ClientPackage
+    public class MessageBodyWL : ClientPacket
     {
         public int Param1;
         public int Param2;

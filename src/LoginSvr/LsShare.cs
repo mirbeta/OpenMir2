@@ -17,10 +17,10 @@ namespace LoginSvr
         public static string[] ServerAddr = new string[200];
 
         /// <summary>
-        /// 检查账号是否符合规则
+        /// 验证账号是否符合规则
         /// </summary>
         /// <returns></returns>
-        public static bool CheckAccountName(string account)
+        public static bool VerifyAccountRule(string account)
         {
             if (string.IsNullOrEmpty(account))
             {

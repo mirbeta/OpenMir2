@@ -287,7 +287,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private string FormatSecond(long second)
+        private static string FormatSecond(long second)
         {
             var days = Math.Floor(second / 86400f);
             var hours = Math.Floor((second % 86400f) / 3600);
@@ -296,12 +296,12 @@ namespace LoginSvr.Services
             return $"{days}天{hours}小时{minutes}分钟{seconds}秒";
         }
 
-        private bool CheckBadAccount(string account)
+        private static bool CheckBadAccount(string account)
         {
             return true;
         }
 
-        private void AddCertUser(UserInfo pUser)
+        private static void AddCertUser(UserInfo pUser)
         {
             var pCert = new CertUser();
             pCert.LoginID = pUser.Account;
@@ -333,7 +333,7 @@ namespace LoginSvr.Services
             LsShare.CertList.Add(pCert);
         }
 
-        private void DelCertUser(int cert)
+        private static void DelCertUser(int cert)
         {
             for (var i = LsShare.CertList.Count - 1; i >= 0; i--)
             {
@@ -369,28 +369,28 @@ namespace LoginSvr.Services
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
-                var userFullEntry = ClientPackage.ToPacket<UserAccountPacket>(accountBuff);
-                if (userFullEntry == null)
+                var userAccount = ClientPacket.ToPacket<UserAccountPacket>(accountBuff);
+                if (userAccount == null || userAccount.UserEntry == null || userAccount.UserEntryAdd == null)
                 {
                     _logger.LogWarning("[新建账号失败] 解析封包出现异常.");
                     return;
                 }
                 var nErrCode = -1;
-                if (LsShare.CheckAccountName(userFullEntry.UserEntry.Account))
+                if (LsShare.VerifyAccountRule(userAccount.UserEntry.Account))
                 {
                     success = true;
                 }
                 if (success)
                 {
-                    var n10 = _accountStorage.Index(userFullEntry.UserEntry.Account);
+                    var n10 = _accountStorage.Index(userAccount.UserEntry.Account);
                     if (n10 <= 0)
                     {
                         var accountRecord = new AccountRecord();
-                        accountRecord.UserEntry = userFullEntry.UserEntry;
-                        accountRecord.UserEntryAdd = userFullEntry.UserEntryAdd;
-                        if (!string.IsNullOrEmpty(userFullEntry.UserEntry.Account))
+                        accountRecord.UserEntry = userAccount.UserEntry;
+                        accountRecord.UserEntryAdd = userAccount.UserEntryAdd;
+                        if (!string.IsNullOrEmpty(userAccount.UserEntry.Account))
                         {
-                            if (_accountStorage.Add(ref accountRecord))
+                            if (_accountStorage.Add(accountRecord))
                             {
                                 nErrCode = 1;
                             }
@@ -403,7 +403,7 @@ namespace LoginSvr.Services
                 }
                 else
                 {
-                    _logger.LogWarning(string.Format(sAddNewuserFail, userFullEntry.UserEntry.Account, userFullEntry.UserEntryAdd.Quiz2));
+                    _logger.LogWarning(string.Format(sAddNewuserFail, userAccount.UserEntry.Account, userAccount.UserEntryAdd.Quiz2));
                 }
                 CommandPacket defMsg;
                 if (nErrCode == 1)
@@ -560,9 +560,9 @@ namespace LoginSvr.Services
                 var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
-                var userAccount = ClientPackage.ToPacket<UserAccountPacket>(accountBuff);
+                var userAccount = ClientPacket.ToPacket<UserAccountPacket>(accountBuff);
                 var nCode = -1;
-                if (string.Compare(userInfo.Account, userAccount.UserEntry.Account, StringComparison.OrdinalIgnoreCase) == 0 && LsShare.CheckAccountName(userAccount.UserEntry.Account))
+                if (string.Compare(userInfo.Account, userAccount.UserEntry.Account, StringComparison.OrdinalIgnoreCase) == 0 && LsShare.VerifyAccountRule(userAccount.UserEntry.Account))
                 {
                     var accountIndex = _accountStorage.Index(userAccount.UserEntry.Account);
                     if (accountIndex >= 0)
@@ -747,7 +747,7 @@ namespace LoginSvr.Services
             }
         }
 
-        private void SendMessage(Socket socket, byte[] sendBuffer)
+        private static void SendMessage(Socket socket, byte[] sendBuffer)
         {
             using var memoryStream = new MemoryStream();
             using var backingStream = new BinaryWriter(memoryStream);
@@ -872,7 +872,7 @@ namespace LoginSvr.Services
             return result;
         }
 
-        private void SendGateKickMsg(Socket socket, int sSockIndex)
+        private static void SendGateKickMsg(Socket socket, int sSockIndex)
         {
             var sSendMsg = $"%+-{sSockIndex}$";
             socket.SendText(sSendMsg);

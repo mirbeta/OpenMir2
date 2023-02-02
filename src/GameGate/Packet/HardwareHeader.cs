@@ -5,7 +5,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameGate.Packet
 {
-    public class HardwareHeader : ClientPackage
+    public class HardwareHeader : ClientPacket
     {
         public uint dwMagicCode;
         public byte[] xMd5Digest;

@@ -3,7 +3,7 @@ using SystemModule.Data;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class UserMagic : ClientPackage
+    public class UserMagic : ClientPacket
     {
         public MagicInfo Magic;
         public ushort MagIdx;

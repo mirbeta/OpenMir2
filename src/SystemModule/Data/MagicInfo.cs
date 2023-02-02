@@ -4,7 +4,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule.Data
 {
-    public class MagicInfo : ClientPackage
+    public class MagicInfo : ClientPacket
     {
         /// <summary>
         /// 技能ID

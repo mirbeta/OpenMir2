@@ -4,13 +4,13 @@ using System.Text;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public abstract class ClientPackage
+    public abstract class ClientPacket
     {
         private readonly BinaryReader binaryReader;
 
-        public ClientPackage() { }
+        public ClientPacket() { }
 
-        public ClientPackage(byte[] segment)
+        public ClientPacket(byte[] segment)
         {
             if (segment == null)
             {
@@ -124,9 +124,9 @@ namespace SystemModule.Packets.ClientPackets
             return (int)stream.Length;
         }
 
-        public static T ToPacket<T>(Span<byte> rawBytes) where T : ClientPackage, new()
+        public static T ToPacket<T>(Span<byte> rawBytes) where T : ClientPacket, new()
         {
-            ClientPackage packet = Activator.CreateInstance<T>();
+            ClientPacket packet = Activator.CreateInstance<T>();
             using var stream = new MemoryStream(rawBytes.ToArray());
             using var reader = new BinaryReader(stream);
             try
@@ -141,9 +141,9 @@ namespace SystemModule.Packets.ClientPackets
             return (T)packet;
         }
         
-        public static T ToPacket<T>(byte[] rawBytes) where T : ClientPackage, new()
+        public static T ToPacket<T>(byte[] rawBytes) where T : ClientPacket, new()
         {
-            ClientPackage packet = Activator.CreateInstance<T>();
+            ClientPacket packet = Activator.CreateInstance<T>();
             using var stream = new MemoryStream(rawBytes, 0, rawBytes.Length);
             using var reader = new BinaryReader(stream);
             try

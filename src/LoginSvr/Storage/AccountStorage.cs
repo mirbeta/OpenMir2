@@ -533,7 +533,7 @@ namespace LoginSvr.Storage
             return result;
         }
 
-        public bool Add(ref AccountRecord accountRecord)
+        public bool Add(AccountRecord accountRecord)
         {
             bool result;
             var sAccount = accountRecord.UserEntry.Account;

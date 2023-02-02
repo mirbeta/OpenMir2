@@ -5,7 +5,7 @@ using MemoryPack;
 namespace SystemModule.Packets.ClientPackets
 {
     [MemoryPackable]
-    public partial class Ability : ClientPackage, ICloneable
+    public partial class Ability : ClientPacket, ICloneable
     {
         public byte Level{ get; set; }
         public byte Reserved1{ get; set; }

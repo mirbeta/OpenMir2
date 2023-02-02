@@ -92,13 +92,13 @@ namespace SystemModule
             return EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
         }
 
-        public static T DecodeBuffer<T>(string src) where T : ClientPackage, new()
+        public static T DecodeBuffer<T>(string src) where T : ClientPacket, new()
         {
             if (src == null) throw new ArgumentNullException(nameof(src));
             var bSrc = HUtil32.GetBytes(src);
             var nLen = 0;
             var data = EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
-            return ClientPackage.ToPacket<T>(data);
+            return ClientPacket.ToPacket<T>(data);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace SystemModule
             return HUtil32.GetString(encBuf, 0, destLen);
         }
 
-        public static string EncodeBuffer<T>(T obj) where T : ClientPackage, new()
+        public static string EncodeBuffer<T>(T obj) where T : ClientPacket, new()
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
             var result = string.Empty;

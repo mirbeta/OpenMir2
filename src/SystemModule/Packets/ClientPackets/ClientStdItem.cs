@@ -3,7 +3,7 @@ using SystemModule.Extensions;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class ClientStdItem : ClientPackage
+    public class ClientStdItem : ClientPacket
     {
         public string Name;
         public byte StdMode;

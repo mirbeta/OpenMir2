@@ -2,7 +2,7 @@
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class ShortMessage : ClientPackage
+    public class ShortMessage : ClientPacket
     {
         public ushort Ident;
         public ushort wMsg;
