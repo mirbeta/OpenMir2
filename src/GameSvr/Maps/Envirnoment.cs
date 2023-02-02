@@ -473,7 +473,7 @@ namespace GameSvr.Maps
                                     {
                                         case ActorRace.Play:
                                             {
-                                                if (M2Share.Config.boRunHuman || Flag.boRUNHUMAN)
+                                                if (M2Share.Config.boRunHuman || Flag.RunHuman)
                                                 {
                                                     continue;
                                                 }
@@ -1529,14 +1529,14 @@ namespace GameSvr.Maps
             StringBuilder messgae = new StringBuilder();
             messgae.AppendFormat("Map:{0}({1}) DAY:{2} DARK:{3} SAFE:{4} FIGHT:{5} FIGHT3:{6} QUIZ:{7} NORECONNECT:{8}({9}) MUSIC:{10}({11}) EXPRATE:{12}({13}) PKWINLEVEL:{14}({15}) PKLOSTLEVEL:{16}({17}) PKWINEXP:{18}({19}) ",
                 MapName, MapDesc, HUtil32.BoolToStr(Flag.DayLight), HUtil32.BoolToStr(Flag.boDarkness), HUtil32.BoolToStr(Flag.SafeArea), HUtil32.BoolToStr(Flag.FightZone),
-                HUtil32.BoolToStr(Flag.boFight3Zone), HUtil32.BoolToStr(Flag.boQUIZ), HUtil32.BoolToStr(Flag.boNORECONNECT), Flag.sNoReConnectMap, HUtil32.BoolToStr(Flag.boMUSIC), Flag.nMUSICID, HUtil32.BoolToStr(Flag.boEXPRATE),
+                HUtil32.BoolToStr(Flag.Fight3Zone), HUtil32.BoolToStr(Flag.boQUIZ), HUtil32.BoolToStr(Flag.boNORECONNECT), Flag.sNoReConnectMap, HUtil32.BoolToStr(Flag.Music), Flag.MusicId, HUtil32.BoolToStr(Flag.boEXPRATE),
                 Flag.ExpRate / 100, HUtil32.BoolToStr(Flag.boPKWINLEVEL), Flag.nPKWINLEVEL, HUtil32.BoolToStr(Flag.boPKLOSTLEVEL), Flag.nPKLOSTLEVEL, HUtil32.BoolToStr(Flag.boPKWINEXP), Flag.nPKWINEXP);
             messgae.AppendFormat("PKLOSTEXP:{0}({1}) DECHP:{2}({3}/{4}) INCHP:{5}({6}/{7}) DECGAMEGOLD:{8}({9}/{10}) INCGAMEGOLD:{11}({12}/{13}) INCGAMEPOINT:{14}({15}/{16}) RUNHUMAN:{17} RUNMON:{18} NEEDHOLE:{19} NORECALL:{20} ",
                 HUtil32.BoolToStr(Flag.boPKLOSTEXP), Flag.nPKLOSTEXP, HUtil32.BoolToStr(Flag.boDECHP), Flag.nDECHPTIME, Flag.nDECHPPOINT, HUtil32.BoolToStr(Flag.boINCHP), Flag.nINCHPTIME, Flag.nINCHPPOINT, HUtil32.BoolToStr(Flag.boDECGAMEGOLD),
                 Flag.nDECGAMEGOLDTIME, Flag.nDECGAMEGOLD, HUtil32.BoolToStr(Flag.boINCGAMEGOLD), Flag.nINCGAMEGOLDTIME, Flag.nINCGAMEGOLD, HUtil32.BoolToStr(Flag.boINCGAMEPOINT), Flag.nINCGAMEPOINTTIME, Flag.nINCGAMEPOINT,
-                HUtil32.BoolToStr(Flag.boRUNHUMAN), HUtil32.BoolToStr(Flag.RunMon), HUtil32.BoolToStr(Flag.boNEEDHOLE), HUtil32.BoolToStr(Flag.NoReCall));
+                HUtil32.BoolToStr(Flag.RunHuman), HUtil32.BoolToStr(Flag.RunMon), HUtil32.BoolToStr(Flag.boNEEDHOLE), HUtil32.BoolToStr(Flag.NoReCall));
             messgae.AppendFormat("NOGUILDRECALL:{0} NODEARRECALL:{1} NOMASTERRECALL:{2} NODRUG:{3} MINE:{4} MINE2:{5} NODROPITEM:{6} NOTHROWITEM:{7} NOPOSITIONMOVE:{8} NOHORSE:{9} NOHUMNOMON:{10} NOCHAT:{11}",
-                HUtil32.BoolToStr(Flag.boNOGUILDRECALL), HUtil32.BoolToStr(Flag.boNODEARRECALL), HUtil32.BoolToStr(Flag.boNOMASTERRECALL),
+                HUtil32.BoolToStr(Flag.NoGuildReCall), HUtil32.BoolToStr(Flag.boNODEARRECALL), HUtil32.BoolToStr(Flag.MasterReCall),
                 HUtil32.BoolToStr(Flag.boNODRUG), HUtil32.BoolToStr(Flag.Mine), HUtil32.BoolToStr(Flag.boMINE2), HUtil32.BoolToStr(Flag.NoDropItem), HUtil32.BoolToStr(Flag.NoThrowItem), HUtil32.BoolToStr(Flag.boNOPOSITIONMOVE),
                 HUtil32.BoolToStr(Flag.NoHorse), HUtil32.BoolToStr(Flag.boNOHUMNOMON), HUtil32.BoolToStr(Flag.boNOCHAT));
             return messgae.ToString();

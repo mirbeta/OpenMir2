@@ -6,7 +6,8 @@
         public int RequestLevel;
         public int NeedSetonFlag;
         public int NeedOnOff;
-        public int nMUSICID;
+        public bool Music;
+        public int MusicId;
         public bool boDarkness;
         public bool DayLight;
         /// <summary>
@@ -16,11 +17,10 @@
         /// <summary>
         /// 行会战争地图
         /// </summary>
-        public bool boFight3Zone;
+        public bool Fight3Zone;
         public bool boQUIZ;
         public bool boNORECONNECT;
         public string sNoReConnectMap;
-        public bool boMUSIC;
         public bool boEXPRATE;
         public int ExpRate;
         public bool boPKWINLEVEL;
@@ -49,13 +49,13 @@
         public bool boINCGAMEPOINT;
         public int nINCGAMEPOINT;
         public int nINCGAMEPOINTTIME;
-        public bool boRUNHUMAN;
+        public bool RunHuman;
         public bool RunMon;
         public bool boNEEDHOLE;
         public bool NoReCall;
-        public bool boNOGUILDRECALL;
+        public bool NoGuildReCall;
         public bool boNODEARRECALL;
-        public bool boNOMASTERRECALL;
+        public bool MasterReCall;
         public bool boNORANDOMMOVE;
         public bool boNODRUG;
         public bool Mine;

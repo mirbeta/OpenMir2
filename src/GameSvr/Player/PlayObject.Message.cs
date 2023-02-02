@@ -457,7 +457,7 @@ namespace GameSvr.Player
             {
                 SendUpdateMsg(this, Messages.RM_GOLDCHANGED, 0, 0, 0, 0, "");
             }
-            if (Envir.Flag.boFight3Zone)
+            if (Envir.Flag.Fight3Zone)
             {
                 FightZoneDieCount++;
                 if (MyGuild != null)

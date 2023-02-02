@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
             PlayObject m_PlayObject;
             PlayObject PlayObjectA;
             bool bo19;
-            if (!PlayObject.Envir.Flag.boFight3Zone)
+            if (!PlayObject.Envir.Flag.Fight3Zone)
             {
                 PlayObject.SysMsg("此命令不能在当前地图中使用!!!", MsgColor.Red, MsgType.Hint);
                 return;

@@ -353,7 +353,7 @@ namespace GameSvr.World
                     if (envir != null)
                     {
                         playObject.MapFileName = envir.MapFileName;
-                        if (envir.Flag.boFight3Zone) // 是否在行会战争地图死亡
+                        if (envir.Flag.Fight3Zone) // 是否在行会战争地图死亡
                         {
                             if (playObject.Abil.HP <= 0 && playObject.FightZoneDieCount < 3)
                             {

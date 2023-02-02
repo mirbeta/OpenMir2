@@ -877,9 +877,9 @@ namespace GameSvr.Player
         private void SendMapDescription()
         {
             int nMusicid = -1;
-            if (Envir.Flag.boMUSIC)
+            if (Envir.Flag.Music)
             {
-                nMusicid = Envir.Flag.nMUSICID;
+                nMusicid = Envir.Flag.MusicId;
             }
             SendDefMessage(Messages.SM_MAPDESCRIPTION, nMusicid, 0, 0, 0, Envir.MapDesc);
         }
@@ -956,7 +956,7 @@ namespace GameSvr.Player
             }
             else
             {
-                if (M2Share.Config.boRunHuman || Envir.Flag.boRUNHUMAN)
+                if (M2Share.Config.boRunHuman || Envir.Flag.RunHuman)
                 {
                 }
                 if (M2Share.Config.boRunMon || Envir.Flag.RunMon)

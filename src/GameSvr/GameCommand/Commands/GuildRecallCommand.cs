@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg("行会掌门人才可以使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.Envir.Flag.boNOGUILDRECALL)
+            if (PlayObject.Envir.Flag.NoGuildReCall)
             {
                 PlayObject.SysMsg("本地图不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;

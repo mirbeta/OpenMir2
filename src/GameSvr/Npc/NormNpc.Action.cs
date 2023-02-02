@@ -2223,11 +2223,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boFight3Zone = true;
+                    Envir.Flag.Fight3Zone = true;
                 }
                 else
                 {
-                    Envir.Flag.boFight3Zone = false;
+                    Envir.Flag.Fight3Zone = false;
                 }
             }
             else if (string.Compare(sMapMode, "DAY", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2268,12 +2268,12 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boMUSIC = true;
-                    Envir.Flag.nMUSICID = HUtil32.StrToInt(sParam1, -1);
+                    Envir.Flag.Music = true;
+                    Envir.Flag.MusicId = HUtil32.StrToInt(sParam1, -1);
                 }
                 else
                 {
-                    Envir.Flag.boMUSIC = false;
+                    Envir.Flag.Music = false;
                 }
             }
             else if (string.Compare(sMapMode, "EXPRATE", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2366,11 +2366,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boRUNHUMAN = true;
+                    Envir.Flag.RunHuman = true;
                 }
                 else
                 {
-                    Envir.Flag.boRUNHUMAN = false;
+                    Envir.Flag.RunHuman = false;
                 }
             }
             else if (string.Compare(sMapMode, "RUNMON", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2410,11 +2410,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boNOGUILDRECALL = true;
+                    Envir.Flag.NoGuildReCall = true;
                 }
                 else
                 {
-                    Envir.Flag.boNOGUILDRECALL = false;
+                    Envir.Flag.NoGuildReCall = false;
                 }
             }
             else if (string.Compare(sMapMode, "NODEARRECALL", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2432,11 +2432,11 @@ namespace GameSvr.Npc
             {
                 if (sParam1 != "")
                 {
-                    Envir.Flag.boNOMASTERRECALL = true;
+                    Envir.Flag.MasterReCall = true;
                 }
                 else
                 {
-                    Envir.Flag.boNOMASTERRECALL = false;
+                    Envir.Flag.MasterReCall = false;
                 }
             }
             else if (string.Compare(sMapMode, "NORANDOMMOVE", StringComparison.OrdinalIgnoreCase) == 0)

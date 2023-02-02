@@ -1584,7 +1584,7 @@ namespace GameSvr.Player
             try
             {
                 bool boPK = false;
-                if (!M2Share.Config.VentureServer && !Envir.Flag.FightZone && !Envir.Flag.boFight3Zone)
+                if (!M2Share.Config.VentureServer && !Envir.Flag.FightZone && !Envir.Flag.Fight3Zone)
                 {
                     if (PvpLevel() < 2)
                     {
@@ -1677,7 +1677,7 @@ namespace GameSvr.Player
             {
                 M2Share.Logger.Error(ex);
             }
-            if (!Envir.Flag.FightZone && !Envir.Flag.boFight3Zone && !killObject.Animal)
+            if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && !killObject.Animal)
             {
                 BaseObject AttackBaseObject = killObject;
                 if (killObject.Master != null)
@@ -1782,7 +1782,7 @@ namespace GameSvr.Player
                 {
                     tStr = "####";
                 }
-                M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.FightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.boFight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
+                M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.FightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.Fight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
             }
             base.Die();
         }
@@ -3183,7 +3183,7 @@ namespace GameSvr.Player
                             result = M2Share.Config.WarGuildNameColor;
                             break;
                     }
-                    if (targetObject.Envir.Flag.boFight3Zone)
+                    if (targetObject.Envir.Flag.Fight3Zone)
                     {
                         result = MyGuild == targetObject.MyGuild ? M2Share.Config.btAllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
                     }
@@ -3804,7 +3804,7 @@ namespace GameSvr.Player
             if (baseObject.Race == ActorRace.Play)
             {
                 PlayObject targetObject = (PlayObject)baseObject;
-                if ((PvpLevel() < 2) && (targetObject.PvpLevel() < 2) && (!Envir.Flag.FightZone) && (!Envir.Flag.boFight3Zone) && !PvpFlag)
+                if ((PvpLevel() < 2) && (targetObject.PvpLevel() < 2) && (!Envir.Flag.FightZone) && (!Envir.Flag.Fight3Zone) && !PvpFlag)
                 {
                     targetObject.PvpNameColorTick = HUtil32.GetTickCount();
                     if (!targetObject.PvpFlag)
