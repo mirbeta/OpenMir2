@@ -12,1584 +12,199 @@ namespace GameSvr.Conf
 
         public void LoadString()
         {
-            string LoadString;
-            if (ReadWriteString("Server", "ServerIP", "") == "")
-            {
-                WriteString("Server", "ServerIP", M2Share.Config.ServerIPaddr);
-            }
+            var LoadString = string.Empty;
+
             M2Share.Config.ServerIPaddr = ReadWriteString("Server", "ServerIP", M2Share.Config.ServerIPaddr);
-            if (ReadWriteString("Server", "WebSite", "") == "")
-            {
-                WriteString("Server", "WebSite", M2Share.Config.sWebSite);
-            }
             M2Share.Config.sWebSite = ReadWriteString("Server", "WebSite", M2Share.Config.sWebSite);
-            if (ReadWriteString("Server", "BbsSite", "") == "")
-            {
-                WriteString("Server", "BbsSite", M2Share.Config.sBbsSite);
-            }
             M2Share.Config.sBbsSite = ReadWriteString("Server", "BbsSite", M2Share.Config.sBbsSite);
-            if (ReadWriteString("Server", "ClientDownload", "") == "")
-            {
-                WriteString("Server", "ClientDownload", M2Share.Config.sClientDownload);
-            }
             M2Share.Config.sClientDownload = ReadWriteString("Server", "ClientDownload", M2Share.Config.sClientDownload);
-            if (ReadWriteString("Server", "QQ", "") == "")
-            {
-                WriteString("Server", "QQ", M2Share.Config.sQQ);
-            }
             M2Share.Config.sQQ = ReadWriteString("Server", "QQ", M2Share.Config.sQQ);
-            if (ReadWriteString("Server", "Phone", "") == "")
-            {
-                WriteString("Server", "Phone", M2Share.Config.sPhone);
-            }
             M2Share.Config.sPhone = ReadWriteString("Server", "Phone", M2Share.Config.sPhone);
-            if (ReadWriteString("Server", "BankAccount0", "") == "")
-            {
-                WriteString("Server", "BankAccount0", M2Share.Config.sBankAccount0);
-            }
             M2Share.Config.sBankAccount0 = ReadWriteString("Server", "BankAccount0", M2Share.Config.sBankAccount0);
-            if (ReadWriteString("Server", "BankAccount1", "") == "")
-            {
-                WriteString("Server", "BankAccount1", M2Share.Config.sBankAccount1);
-            }
             M2Share.Config.sBankAccount1 = ReadWriteString("Server", "BankAccount1", M2Share.Config.sBankAccount1);
-            if (ReadWriteString("Server", "BankAccount2", "") == "")
-            {
-                WriteString("Server", "BankAccount2", M2Share.Config.sBankAccount2);
-            }
             M2Share.Config.sBankAccount2 = ReadWriteString("Server", "BankAccount2", M2Share.Config.sBankAccount2);
-            if (ReadWriteString("Server", "BankAccount3", "") == "")
-            {
-                WriteString("Server", "BankAccount3", M2Share.Config.sBankAccount3);
-            }
             M2Share.Config.sBankAccount3 = ReadWriteString("Server", "BankAccount3", M2Share.Config.sBankAccount3);
-            if (ReadWriteString("Server", "BankAccount4", "") == "")
-            {
-                WriteString("Server", "BankAccount4", M2Share.Config.sBankAccount4);
-            }
             M2Share.Config.sBankAccount4 = ReadWriteString("Server", "BankAccount4", M2Share.Config.sBankAccount4);
             M2Share.Config.sBankAccount5 = ReadWriteString("Server", "BankAccount5", M2Share.Config.sBankAccount5);
-            if (ReadWriteString("Server", "BankAccount6", "") == "")
-            {
-                WriteString("Server", "BankAccount6", M2Share.Config.sBankAccount6);
-            }
             M2Share.Config.sBankAccount6 = ReadWriteString("Server", "BankAccount6", M2Share.Config.sBankAccount6);
-            if (ReadWriteString("Server", "BankAccount7", "") == "")
-            {
-                WriteString("Server", "BankAccount7", M2Share.Config.sBankAccount7);
-            }
             M2Share.Config.sBankAccount7 = ReadWriteString("Server", "BankAccount7", M2Share.Config.sBankAccount7);
-            if (ReadWriteString("Server", "BankAccount8", "") == "")
-            {
-                WriteString("Server", "BankAccount8", M2Share.Config.sBankAccount8);
-            }
             M2Share.Config.sBankAccount8 = ReadWriteString("Server", "BankAccount8", M2Share.Config.sBankAccount8);
-            if (ReadWriteString("Server", "BankAccount9", "") == "")
-            {
-                WriteString("Server", "BankAccount9", M2Share.Config.sBankAccount9);
-            }
             M2Share.Config.sBankAccount9 = ReadWriteString("Server", "BankAccount9", M2Share.Config.sBankAccount9);
-            if (ReadWriteString("Guild", "GuildNotice", "") == "")
-            {
-                WriteString("Guild", "GuildNotice", M2Share.Config.GuildNotice);
-            }
             M2Share.Config.GuildNotice = ReadWriteString("Guild", "GuildNotice", M2Share.Config.GuildNotice);
-            if (ReadWriteString("Guild", "GuildWar", "") == "")
-            {
-                WriteString("Guild", "GuildWar", M2Share.Config.GuildWar);
-            }
             M2Share.Config.GuildWar = ReadWriteString("Guild", "GuildWar", M2Share.Config.GuildWar);
-            if (ReadWriteString("Guild", "GuildAll", "") == "")
-            {
-                WriteString("Guild", "GuildAll", M2Share.Config.GuildAll);
-            }
             M2Share.Config.GuildAll = ReadWriteString("Guild", "GuildAll", M2Share.Config.GuildAll);
-            if (ReadWriteString("Guild", "GuildMember", "") == "")
-            {
-                WriteString("Guild", "GuildMember", M2Share.Config.GuildMember);
-            }
             M2Share.Config.GuildMember = ReadWriteString("Guild", "GuildMember", M2Share.Config.GuildMember);
-            if (ReadWriteString("Guild", "GuildMemberRank", "") == "")
-            {
-                WriteString("Guild", "GuildMemberRank", M2Share.Config.GuildMemberRank);
-            }
             M2Share.Config.GuildMemberRank = ReadWriteString("Guild", "GuildMemberRank", M2Share.Config.GuildMemberRank);
-            if (ReadWriteString("Guild", "GuildChief", "") == "")
-            {
-                WriteString("Guild", "GuildChief", M2Share.Config.GuildChief);
-            }
             M2Share.Config.GuildChief = ReadWriteString("Guild", "GuildChief", M2Share.Config.GuildChief);
-            LoadString = ReadWriteString("String", "ClientSoftVersionError", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ClientSoftVersionError", Settings.ClientSoftVersionError);
-            }
-            else
-            {
-                Settings.ClientSoftVersionError = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DownLoadNewClientSoft", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DownLoadNewClientSoft", Settings.DownLoadNewClientSoft);
-            }
-            else
-            {
-                Settings.DownLoadNewClientSoft = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ForceDisConnect", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ForceDisConnect", Settings.ForceDisConnect);
-            }
-            else
-            {
-                Settings.ForceDisConnect = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ClientSoftVersionTooOld", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ClientSoftVersionTooOld", Settings.ClientSoftVersionTooOld);
-            }
-            else
-            {
-                Settings.ClientSoftVersionTooOld = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DownLoadAndUseNewClient", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DownLoadAndUseNewClient", Settings.DownLoadAndUseNewClient);
-            }
-            else
-            {
-                Settings.DownLoadAndUseNewClient = LoadString;
-            }
-            LoadString = ReadWriteString("String", "OnlineUserFull", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "OnlineUserFull", Settings.OnlineUserFull);
-            }
-            else
-            {
-                Settings.OnlineUserFull = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YouNowIsTryPlayMode", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YouNowIsTryPlayMode", Settings.YouNowIsTryPlayMode);
-            }
-            else
-            {
-                Settings.YouNowIsTryPlayMode = LoadString;
-            }
-            LoadString = ReadWriteString("String", "NowIsFreePlayMode", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "NowIsFreePlayMode", Settings.NowIsFreePlayMode);
-            }
-            else
-            {
-                Settings.NowIsFreePlayMode = LoadString;
-            }
-            LoadString = ReadWriteString("String", "AttackModeOfAll", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "AttackModeOfAll", Settings.AttackModeOfAll);
-            }
-            else
-            {
-                Settings.AttackModeOfAll = LoadString;
-            }
-            LoadString = ReadWriteString("String", "AttackModeOfPeaceful", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "AttackModeOfPeaceful", Settings.AttackModeOfPeaceful);
-            }
-            else
-            {
-                Settings.AttackModeOfPeaceful = LoadString;
-            }
-            LoadString = ReadWriteString("String", "AttackModeOfGroup", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "AttackModeOfGroup", Settings.AttackModeOfGroup);
-            }
-            else
-            {
-                Settings.AttackModeOfGroup = LoadString;
-            }
-            LoadString = ReadWriteString("String", "AttackModeOfGuild", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "AttackModeOfGuild", Settings.AttackModeOfGuild);
-            }
-            else
-            {
-                Settings.AttackModeOfGuild = LoadString;
-            }
-            LoadString = ReadWriteString("String", "AttackModeOfRedWhite", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "AttackModeOfRedWhite", Settings.AttackModeOfRedWhite);
-            }
-            else
-            {
-                Settings.AttackModeOfRedWhite = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StartChangeAttackModeHelp", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StartChangeAttackModeHelp", Settings.StartChangeAttackModeHelp);
-            }
-            else
-            {
-                Settings.StartChangeAttackModeHelp = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StartNoticeMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StartNoticeMsg", Settings.StartNoticeMsg);
-            }
-            else
-            {
-                Settings.StartNoticeMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ThrustingOn", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ThrustingOn", Settings.ThrustingOn);
-            }
-            else
-            {
-                Settings.ThrustingOn = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ThrustingOff", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ThrustingOff", Settings.ThrustingOff);
-            }
-            else
-            {
-                Settings.ThrustingOff = LoadString;
-            }
-            LoadString = ReadWriteString("String", "HalfMoonOn", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "HalfMoonOn", Settings.HalfMoonOn);
-            }
-            else
-            {
-                Settings.HalfMoonOn = LoadString;
-            }
-            LoadString = ReadWriteString("String", "HalfMoonOff", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "HalfMoonOff", Settings.HalfMoonOff);
-            }
-            else
-            {
-                Settings.HalfMoonOff = LoadString;
-            }
-            Settings.CrsHitOn = LoadConfigString("String", "CrsHitOn", Settings.CrsHitOn);
-            Settings.CrsHitOff = LoadConfigString("String", "CrsHitOff", Settings.CrsHitOff);
+            M2Share.Config.LineNoticePreFix = ReadWriteString("String", "LineNoticePreFix", M2Share.Config.LineNoticePreFix);
+            M2Share.Config.SysMsgPreFix = ReadWriteString("String", "SysMsgPreFix", M2Share.Config.SysMsgPreFix);
+            M2Share.Config.GuildMsgPreFix = ReadWriteString("String", "GuildMsgPreFix", M2Share.Config.GuildMsgPreFix);
+            M2Share.Config.GroupMsgPreFix = ReadWriteString("String", "GroupMsgPreFix", M2Share.Config.GroupMsgPreFix);
+            M2Share.Config.HintMsgPreFix = ReadWriteString("String", "HintMsgPreFix", M2Share.Config.HintMsgPreFix);
+            M2Share.Config.GameManagerRedMsgPreFix = ReadWriteString("String", "GMRedMsgpreFix", M2Share.Config.GameManagerRedMsgPreFix);
+            M2Share.Config.MonSayMsgPreFix = ReadWriteString("String", "MonSayMsgpreFix", M2Share.Config.MonSayMsgPreFix);
+            M2Share.Config.CustMsgPreFix = ReadWriteString("String", "CustMsgpreFix", M2Share.Config.CustMsgPreFix);
+            M2Share.Config.CastleMsgPreFix = ReadWriteString("String", "CastleMsgpreFix", M2Share.Config.CastleMsgPreFix);
+            
+            Settings.ClientSoftVersionError = ReadWriteString("String", "ClientSoftVersionError", Settings.ClientSoftVersionError);
+            Settings.DownLoadNewClientSoft = ReadWriteString("String", "DownLoadNewClientSoft", Settings.DownLoadNewClientSoft);    
+            Settings.ForceDisConnect = ReadWriteString("String", "ForceDisConnect", Settings.ForceDisConnect);
+            Settings.ClientSoftVersionTooOld = ReadWriteString("String", "ClientSoftVersionTooOld", Settings.ClientSoftVersionTooOld);
+            Settings.DownLoadAndUseNewClient = ReadWriteString("String", "DownLoadAndUseNewClient", Settings.DownLoadAndUseNewClient);
+            Settings.OnlineUserFull = ReadWriteString("String", "OnlineUserFull", Settings.OnlineUserFull);
+            Settings.YouNowIsTryPlayMode = ReadWriteString("String", "YouNowIsTryPlayMode", Settings.YouNowIsTryPlayMode);
+            Settings.NowIsFreePlayMode = ReadWriteString("String", "NowIsFreePlayMode", Settings.NowIsFreePlayMode);
+            Settings.AttackModeOfAll = ReadWriteString("String", "AttackModeOfAll",  Settings.AttackModeOfAll);
+            Settings.AttackModeOfPeaceful = ReadWriteString("String", "AttackModeOfPeaceful", Settings.AttackModeOfPeaceful);
+            Settings.AttackModeOfGroup = ReadWriteString("String", "AttackModeOfGroup", Settings.AttackModeOfGroup);
+            Settings.AttackModeOfGuild = ReadWriteString("String", "AttackModeOfGuild", Settings.AttackModeOfGuild);
+            Settings.AttackModeOfRedWhite = ReadWriteString("String", "AttackModeOfRedWhite", Settings.AttackModeOfRedWhite);
+            Settings.AttackModeOfMaster = ReadWriteString("String", "AttackModeOfMaster", Settings.AttackModeOfMaster);
+            Settings.StartChangeAttackModeHelp = ReadWriteString("String", "StartChangeAttackModeHelp", Settings.StartChangeAttackModeHelp);
+            Settings.StartNoticeMsg = ReadWriteString("String", "StartNoticeMsg", Settings.StartNoticeMsg);
+            Settings.ThrustingOn = ReadWriteString("String", "ThrustingOn", Settings.ThrustingOn);
+            Settings.ThrustingOff = ReadWriteString("String", "ThrustingOff", Settings.ThrustingOff);
+            Settings.HalfMoonOn = ReadWriteString("String", "HalfMoonOn", Settings.HalfMoonOn);
+            Settings.HalfMoonOff = ReadWriteString("String", "HalfMoonOff", Settings.HalfMoonOff);
+            Settings.CrsHitOn = ReadWriteString("String", "CrsHitOn", Settings.CrsHitOn);
+            Settings.CrsHitOff = ReadWriteString("String", "CrsHitOff", Settings.CrsHitOff);
             Settings.TwinHitOn = LoadConfigString("String", "TwinHitOn", Settings.TwinHitOn);
             Settings.TwinHitOff = LoadConfigString("String", "TwinHitOff", Settings.TwinHitOff);
-            LoadString = ReadWriteString("String", "FireSpiritsSummoned", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "FireSpiritsSummoned", Settings.FireSpiritsSummoned);
-            }
-            else
-            {
-                Settings.FireSpiritsSummoned = LoadString;
-            }
-            LoadString = ReadWriteString("String", "FireSpiritsFail", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "FireSpiritsFail", Settings.FireSpiritsFail);
-            }
-            else
-            {
-                Settings.FireSpiritsFail = LoadString;
-            }
-            LoadString = ReadWriteString("String", "SpiritsGone", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "SpiritsGone", Settings.SpiritsGone);
-            }
-            else
-            {
-                Settings.SpiritsGone = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MateDoTooweak", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MateDoTooweak", Settings.MateDoTooweak);
-            }
-            else
-            {
-                Settings.MateDoTooweak = LoadString;
-            }
-            LoadString = ReadWriteString("String", "TheWeaponBroke", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "TheWeaponBroke", Settings.TheWeaponBroke);
-            }
-            else
-            {
-                Settings.TheWeaponBroke = LoadString;
-            }
-            LoadString = ReadWriteString("String", "TheWeaponRefineSuccessfull", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "TheWeaponRefineSuccessfull", Settings.TheWeaponRefineSuccessfull);
-            }
-            else
-            {
-                Settings.TheWeaponRefineSuccessfull = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YouPoisoned", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YouPoisoned", Settings.YouPoisoned);
-            }
-            else
-            {
-                Settings.YouPoisoned = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PetRest", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PetRest", Settings.PetRest);
-            }
-            else
-            {
-                Settings.PetRest = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PetAttack", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PetAttack", Settings.PetAttack);
-            }
-            else
-            {
-                Settings.PetAttack = LoadString;
-            }
-            LoadString = ReadWriteString("String", "WearNotOfWoMan", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "WearNotOfWoMan", Settings.WearNotOfWoMan);
-            }
-            else
-            {
-                Settings.WearNotOfWoMan = LoadString;
-            }
-            LoadString = ReadWriteString("String", "WearNotOfMan", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "WearNotOfMan", Settings.WearNotOfMan);
-            }
-            else
-            {
-                Settings.WearNotOfMan = LoadString;
-            }
-            LoadString = ReadWriteString("String", "HandWeightNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "HandWeightNot", Settings.HandWeightNot);
-            }
-            else
-            {
-                Settings.HandWeightNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "WearWeightNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "WearWeightNot", Settings.WearWeightNot);
-            }
-            else
-            {
-                Settings.WearWeightNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ItemIsNotThisAccount", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ItemIsNotThisAccount", Settings.ItemIsNotThisAccount);
-            }
-            else
-            {
-                Settings.ItemIsNotThisAccount = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ItemIsNotThisIPaddr", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ItemIsNotThisIPaddr", Settings.ItemIsNotThisIPaddr);
-            }
-            else
-            {
-                Settings.ItemIsNotThisIPaddr = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ItemIsNotThisChrName", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ItemIsNotThisChrName", Settings.ItemIsNotThisChrName);
-            }
-            else
-            {
-                Settings.ItemIsNotThisChrName = LoadString;
-            }
-            LoadString = ReadWriteString("String", "LevelNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "LevelNot", Settings.LevelNot);
-            }
-            else
-            {
-                Settings.LevelNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "JobOrLevelNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "JobOrLevelNot", Settings.JobOrLevelNot);
-            }
-            else
-            {
-                Settings.JobOrLevelNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "JobOrDCNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "JobOrDCNot", Settings.JobOrDCNot);
-            }
-            else
-            {
-                Settings.JobOrDCNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "JobOrMCNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "JobOrMCNot", Settings.JobOrMCNot);
-            }
-            else
-            {
-                Settings.JobOrMCNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "JobOrSCNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "JobOrSCNot", Settings.JobOrSCNot);
-            }
-            else
-            {
-                Settings.JobOrSCNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DCNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DCNot", Settings.DCNot);
-            }
-            else
-            {
-                Settings.DCNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MCNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MCNot", Settings.MCNot);
-            }
-            else
-            {
-                Settings.MCNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "SCNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "SCNot", Settings.SCNot);
-            }
-            else
-            {
-                Settings.SCNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CreditPointNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CreditPointNot", Settings.CreditPointNot);
-            }
-            else
-            {
-                Settings.CreditPointNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ReNewLevelNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ReNewLevelNot", Settings.ReNewLevelNot);
-            }
-            else
-            {
-                Settings.ReNewLevelNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "GuildNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "GuildNot", Settings.GuildNot);
-            }
-            else
-            {
-                Settings.GuildNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "GuildMasterNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "GuildMasterNot", Settings.GuildMasterNot);
-            }
-            else
-            {
-                Settings.GuildMasterNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "SabukHumanNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "SabukHumanNot", Settings.SabukHumanNot);
-            }
-            else
-            {
-                Settings.SabukHumanNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "SabukMasterManNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "SabukMasterManNot", Settings.SabukMasterManNot);
-            }
-            else
-            {
-                Settings.SabukMasterManNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MemberNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MemberNot", Settings.MemberNot);
-            }
-            else
-            {
-                Settings.MemberNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MemberTypeNot", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MemberTypeNot", Settings.MemberTypeNot);
-            }
-            else
-            {
-                Settings.MemberTypeNot = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CanottWearIt", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CanottWearIt", Settings.CanottWearIt);
-            }
-            else
-            {
-                Settings.CanottWearIt = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CanotUseDrugOnThisMap", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CanotUseDrugOnThisMap", Settings.CanotUseDrugOnThisMap);
-            }
-            else
-            {
-                Settings.CanotUseDrugOnThisMap = LoadString;
-            }
-            LoadString = ReadWriteString("String", "GameMasterMode", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "GameMasterMode", Settings.GameMasterMode);
-            }
-            else
-            {
-                Settings.GameMasterMode = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ReleaseGameMasterMode", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ReleaseGameMasterMode", Settings.ReleaseGameMasterMode);
-            }
-            else
-            {
-                Settings.ReleaseGameMasterMode = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ObserverMode", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ObserverMode", Settings.ObserverMode);
-            }
-            else
-            {
-                Settings.ObserverMode = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ReleaseObserverMode", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ReleaseObserverMode", Settings.ReleaseObserverMode);
-            }
-            else
-            {
-                Settings.ReleaseObserverMode = LoadString;
-            }
-            LoadString = ReadWriteString("String", "SupermanMode", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "SupermanMode", Settings.SupermanMode);
-            }
-            else
-            {
-                Settings.SupermanMode = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ReleaseSupermanMode", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ReleaseSupermanMode", Settings.ReleaseSupermanMode);
-            }
-            else
-            {
-                Settings.ReleaseSupermanMode = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YouFoundNothing", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YouFoundNothing", Settings.YouFoundNothing);
-            }
-            else
-            {
-                Settings.YouFoundNothing = LoadString;
-            }
-            LoadString = ReadWriteString("String", "LineNoticePreFix", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "LineNoticePreFix", M2Share.Config.LineNoticePreFix);
-            }
-            else
-            {
-                M2Share.Config.LineNoticePreFix = LoadString;
-            }
-            LoadString = ReadWriteString("String", "SysMsgPreFix", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "SysMsgPreFix", M2Share.Config.SysMsgPreFix);
-            }
-            else
-            {
-                M2Share.Config.SysMsgPreFix = LoadString;
-            }
-            LoadString = ReadWriteString("String", "GuildMsgPreFix", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "GuildMsgPreFix", M2Share.Config.GuildMsgPreFix);
-            }
-            else
-            {
-                M2Share.Config.GuildMsgPreFix = LoadString;
-            }
-            LoadString = ReadWriteString("String", "GroupMsgPreFix", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "GroupMsgPreFix", M2Share.Config.GroupMsgPreFix);
-            }
-            else
-            {
-                M2Share.Config.GroupMsgPreFix = LoadString;
-            }
-            LoadString = ReadWriteString("String", "HintMsgPreFix", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "HintMsgPreFix", M2Share.Config.HintMsgPreFix);
-            }
-            else
-            {
-                M2Share.Config.HintMsgPreFix = LoadString;
-            }
-            LoadString = ReadWriteString("String", "GMRedMsgpreFix", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "GMRedMsgpreFix", M2Share.Config.GameManagerRedMsgPreFix);
-            }
-            else
-            {
-                M2Share.Config.GameManagerRedMsgPreFix = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MonSayMsgpreFix", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MonSayMsgpreFix", M2Share.Config.MonSayMsgPreFix);
-            }
-            else
-            {
-                M2Share.Config.MonSayMsgPreFix = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CustMsgpreFix", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CustMsgpreFix", M2Share.Config.CustMsgPreFix);
-            }
-            else
-            {
-                M2Share.Config.CustMsgPreFix = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CastleMsgpreFix", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CastleMsgpreFix", M2Share.Config.CastleMsgPreFix);
-            }
-            else
-            {
-                M2Share.Config.CastleMsgPreFix = LoadString;
-            }
-            LoadString = ReadWriteString("String", "NoPasswordLockSystemMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "NoPasswordLockSystemMsg", Settings.NoPasswordLockSystemMsg);
-            }
-            else
-            {
-                Settings.NoPasswordLockSystemMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "AlreadySetPassword", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "AlreadySetPassword", Settings.AlreadySetPasswordMsg);
-            }
-            else
-            {
-                Settings.AlreadySetPasswordMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ReSetPassword", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ReSetPassword", Settings.ReSetPasswordMsg);
-            }
-            else
-            {
-                Settings.ReSetPasswordMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PasswordOverLong", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PasswordOverLong", Settings.PasswordOverLongMsg);
-            }
-            else
-            {
-                Settings.PasswordOverLongMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ReSetPasswordOK", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ReSetPasswordOK", Settings.ReSetPasswordOKMsg);
-            }
-            else
-            {
-                Settings.ReSetPasswordOKMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ReSetPasswordNotMatch", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ReSetPasswordNotMatch", Settings.ReSetPasswordNotMatchMsg);
-            }
-            else
-            {
-                Settings.ReSetPasswordNotMatchMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PleaseInputUnLockPassword", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PleaseInputUnLockPassword", Settings.PleaseInputUnLockPasswordMsg);
-            }
-            else
-            {
-                Settings.PleaseInputUnLockPasswordMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StorageUnLockOK", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StorageUnLockOK", Settings.StorageUnLockOKMsg);
-            }
-            else
-            {
-                Settings.StorageUnLockOKMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StorageAlreadyUnLock", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StorageAlreadyUnLock", Settings.StorageAlreadyUnLockMsg);
-            }
-            else
-            {
-                Settings.StorageAlreadyUnLockMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StorageNoPassword", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StorageNoPassword", Settings.StorageNoPasswordMsg);
-            }
-            else
-            {
-                Settings.StorageNoPasswordMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "UnLockPasswordFail", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "UnLockPasswordFail", Settings.UnLockPasswordFailMsg);
-            }
-            else
-            {
-                Settings.UnLockPasswordFailMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "LockStorageSuccess", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "LockStorageSuccess", Settings.LockStorageSuccessMsg);
-            }
-            else
-            {
-                Settings.LockStorageSuccessMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StoragePasswordClearMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StoragePasswordClearMsg", Settings.StoragePasswordClearMsg);
-            }
-            else
-            {
-                Settings.StoragePasswordClearMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PleaseUnloadStoragePasswordMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PleaseUnloadStoragePasswordMsg", Settings.PleaseUnloadStoragePasswordMsg);
-            }
-            else
-            {
-                Settings.PleaseUnloadStoragePasswordMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StorageAlreadyLock", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StorageAlreadyLock", Settings.StorageAlreadyLockMsg);
-            }
-            else
-            {
-                Settings.StorageAlreadyLockMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StoragePasswordLocked", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StoragePasswordLocked", Settings.StoragePasswordLockedMsg);
-            }
-            else
-            {
-                Settings.StoragePasswordLockedMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StorageSetPassword", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StorageSetPassword", Settings.SetPasswordMsg);
-            }
-            else
-            {
-                Settings.SetPasswordMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PleaseInputOldPassword", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PleaseInputOldPassword", Settings.PleaseInputOldPasswordMsg);
-            }
-            else
-            {
-                Settings.PleaseInputOldPasswordMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PasswordIsClearMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PasswordIsClearMsg", Settings.OldPasswordIsClearMsg);
-            }
-            else
-            {
-                Settings.OldPasswordIsClearMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "NoPasswordSet", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "NoPasswordSet", Settings.NoPasswordSetMsg);
-            }
-            else
-            {
-                Settings.NoPasswordSetMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "OldPasswordIncorrect", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "OldPasswordIncorrect", Settings.OldPasswordIncorrectMsg);
-            }
-            else
-            {
-                Settings.OldPasswordIncorrectMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StorageIsLocked", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StorageIsLocked", Settings.StorageIsLockedMsg);
-            }
-            else
-            {
-                Settings.StorageIsLockedMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PleaseTryDealLaterMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PleaseTryDealLaterMsg", Settings.PleaseTryDealLaterMsg);
-            }
-            else
-            {
-                Settings.PleaseTryDealLaterMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DealItemsDenyGetBackMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DealItemsDenyGetBackMsg", Settings.DealItemsDenyGetBackMsg);
-            }
-            else
-            {
-                Settings.DealItemsDenyGetBackMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DisableDealItemsMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DisableDealItemsMsg", Settings.DisableDealItemsMsg);
-            }
-            else
-            {
-                Settings.DisableDealItemsMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CanotTryDealMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CanotTryDealMsg", Settings.CanotTryDealMsg);
-            }
-            else
-            {
-                Settings.CanotTryDealMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DealActionCancelMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DealActionCancelMsg", Settings.DealActionCancelMsg);
-            }
-            else
-            {
-                Settings.DealActionCancelMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PoseDisableDealMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PoseDisableDealMsg", Settings.PoseDisableDealMsg);
-            }
-            else
-            {
-                Settings.PoseDisableDealMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DealSuccessMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DealSuccessMsg", Settings.DealSuccessMsg);
-            }
-            else
-            {
-                Settings.DealSuccessMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DealOKTooFast", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DealOKTooFast", Settings.DealOKTooFast);
-            }
-            else
-            {
-                Settings.DealOKTooFast = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourBagSizeTooSmall", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourBagSizeTooSmall", Settings.YourBagSizeTooSmall);
-            }
-            else
-            {
-                Settings.YourBagSizeTooSmall = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DealHumanBagSizeTooSmall", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DealHumanBagSizeTooSmall", Settings.DealHumanBagSizeTooSmall);
-            }
-            else
-            {
-                Settings.DealHumanBagSizeTooSmall = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourGoldLargeThenLimit", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourGoldLargeThenLimit", Settings.YourGoldLargeThenLimit);
-            }
-            else
-            {
-                Settings.YourGoldLargeThenLimit = LoadString;
-            }
-            LoadString = ReadWriteString("String", "DealHumanGoldLargeThenLimit", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "DealHumanGoldLargeThenLimit", Settings.DealHumanGoldLargeThenLimit);
-            }
-            else
-            {
-                Settings.DealHumanGoldLargeThenLimit = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YouDealOKMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YouDealOKMsg", Settings.YouDealOKMsg);
-            }
-            else
-            {
-                Settings.YouDealOKMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PoseDealOKMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PoseDealOKMsg", Settings.PoseDealOKMsg);
-            }
-            else
-            {
-                Settings.PoseDealOKMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "KickClientUserMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "KickClientUserMsg", Settings.KickClientUserMsg);
-            }
-            else
-            {
-                Settings.KickClientUserMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ActionIsLockedMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ActionIsLockedMsg", Settings.ActionIsLockedMsg);
-            }
-            else
-            {
-                Settings.ActionIsLockedMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "PasswordNotSetMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "PasswordNotSetMsg", Settings.PasswordNotSetMsg);
-            }
-            else
-            {
-                Settings.PasswordNotSetMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "NotPasswordProtectMode", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "NotPasswordProtectMode", Settings.NotPasswordProtectMode);
-            }
-            else
-            {
-                Settings.NotPasswordProtectMode = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CanotDropGoldMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CanotDropGoldMsg", Settings.CanotDropGoldMsg);
-            }
-            else
-            {
-                Settings.CanotDropGoldMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CanotDropInSafeZoneMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CanotDropInSafeZoneMsg", Settings.CanotDropInSafeZoneMsg);
-            }
-            else
-            {
-                Settings.CanotDropInSafeZoneMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CanotDropItemMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CanotDropItemMsg", Settings.CanotDropItemMsg);
-            }
-            else
-            {
-                Settings.CanotDropItemMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CanotDropItemMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CanotDropItemMsg", Settings.CanotDropItemMsg);
-            }
-            else
-            {
-                Settings.CanotDropItemMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "CanotUseItemMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "CanotUseItemMsg", Settings.CanotUseItemMsg);
-            }
-            else
-            {
-                Settings.CanotUseItemMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StartMarryManMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StartMarryManMsg", Settings.StartMarryManMsg);
-            }
-            else
-            {
-                Settings.StartMarryManMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StartMarryWoManMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StartMarryWoManMsg", Settings.StartMarryWoManMsg);
-            }
-            else
-            {
-                Settings.StartMarryWoManMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StartMarryManAskQuestionMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StartMarryManAskQuestionMsg", Settings.StartMarryManAskQuestionMsg);
-            }
-            else
-            {
-                Settings.StartMarryManAskQuestionMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "StartMarryWoManAskQuestionMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "StartMarryWoManAskQuestionMsg", Settings.StartMarryWoManAskQuestionMsg);
-            }
-            else
-            {
-                Settings.StartMarryWoManAskQuestionMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MarryManAnswerQuestionMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MarryManAnswerQuestionMsg", Settings.MarryManAnswerQuestionMsg);
-            }
-            else
-            {
-                Settings.MarryManAnswerQuestionMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MarryManAskQuestionMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MarryManAskQuestionMsg", Settings.MarryManAskQuestionMsg);
-            }
-            else
-            {
-                Settings.MarryManAskQuestionMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MarryWoManAnswerQuestionMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MarryWoManAnswerQuestionMsg", Settings.MarryWoManAnswerQuestionMsg);
-            }
-            else
-            {
-                Settings.MarryWoManAnswerQuestionMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MarryWoManGetMarryMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MarryWoManGetMarryMsg", Settings.MarryWoManGetMarryMsg);
-            }
-            else
-            {
-                Settings.MarryWoManGetMarryMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MarryWoManDenyMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MarryWoManDenyMsg", Settings.MarryWoManDenyMsg);
-            }
-            else
-            {
-                Settings.MarryWoManDenyMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MarryWoManCancelMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MarryWoManCancelMsg", Settings.MarryWoManCancelMsg);
-            }
-            else
-            {
-                Settings.MarryWoManCancelMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ForceUnMarryManLoginMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ForceUnMarryManLoginMsg", Settings.fUnMarryManLoginMsg);
-            }
-            else
-            {
-                Settings.fUnMarryManLoginMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ForceUnMarryWoManLoginMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ForceUnMarryWoManLoginMsg", Settings.fUnMarryWoManLoginMsg);
-            }
-            else
-            {
-                Settings.fUnMarryWoManLoginMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ManLoginDearOnlineSelfMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ManLoginDearOnlineSelfMsg", Settings.ManLoginDearOnlineSelfMsg);
-            }
-            else
-            {
-                Settings.ManLoginDearOnlineSelfMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ManLoginDearOnlineDearMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ManLoginDearOnlineDearMsg", Settings.ManLoginDearOnlineDearMsg);
-            }
-            else
-            {
-                Settings.ManLoginDearOnlineDearMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "WoManLoginDearOnlineSelfMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "WoManLoginDearOnlineSelfMsg", Settings.WoManLoginDearOnlineSelfMsg);
-            }
-            else
-            {
-                Settings.WoManLoginDearOnlineSelfMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "WoManLoginDearOnlineDearMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "WoManLoginDearOnlineDearMsg", Settings.WoManLoginDearOnlineDearMsg);
-            }
-            else
-            {
-                Settings.WoManLoginDearOnlineDearMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ManLoginDearNotOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ManLoginDearNotOnlineMsg", Settings.ManLoginDearNotOnlineMsg);
-            }
-            else
-            {
-                Settings.ManLoginDearNotOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "WoManLoginDearNotOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "WoManLoginDearNotOnlineMsg", Settings.WoManLoginDearNotOnlineMsg);
-            }
-            else
-            {
-                Settings.WoManLoginDearNotOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "ManLongOutDearOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "ManLongOutDearOnlineMsg", Settings.ManLongOutDearOnlineMsg);
-            }
-            else
-            {
-                Settings.ManLongOutDearOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "WoManLongOutDearOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "WoManLongOutDearOnlineMsg", Settings.WoManLongOutDearOnlineMsg);
-            }
-            else
-            {
-                Settings.WoManLongOutDearOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YouAreNotMarryedMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YouAreNotMarryedMsg", Settings.YouAreNotMarryedMsg);
-            }
-            else
-            {
-                Settings.YouAreNotMarryedMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourWifeNotOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourWifeNotOnlineMsg", Settings.YourWifeNotOnlineMsg);
-            }
-            else
-            {
-                Settings.YourWifeNotOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourHusbandNotOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourHusbandNotOnlineMsg", Settings.YourHusbandNotOnlineMsg);
-            }
-            else
-            {
-                Settings.YourHusbandNotOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourWifeNowLocateMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourWifeNowLocateMsg", Settings.YourWifeNowLocateMsg);
-            }
-            else
-            {
-                Settings.YourWifeNowLocateMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourHusbandSearchLocateMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourHusbandSearchLocateMsg", Settings.YourHusbandSearchLocateMsg);
-            }
-            else
-            {
-                Settings.YourHusbandSearchLocateMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourHusbandNowLocateMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourHusbandNowLocateMsg", Settings.YourHusbandNowLocateMsg);
-            }
-            else
-            {
-                Settings.YourHusbandNowLocateMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourWifeSearchLocateMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourWifeSearchLocateMsg", Settings.YourWifeSearchLocateMsg);
-            }
-            else
-            {
-                Settings.YourWifeSearchLocateMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "FUnMasterLoginMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "FUnMasterLoginMsg", Settings.fUnMasterLoginMsg);
-            }
-            else
-            {
-                Settings.fUnMasterLoginMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "UnMasterListLoginMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "UnMasterListLoginMsg", Settings.fUnMasterListLoginMsg);
-            }
-            else
-            {
-                Settings.fUnMasterListLoginMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MasterListOnlineSelfMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MasterListOnlineSelfMsg", Settings.MasterListOnlineSelfMsg);
-            }
-            else
-            {
-                Settings.MasterListOnlineSelfMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MasterListOnlineMasterMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MasterListOnlineMasterMsg", Settings.MasterListOnlineMasterMsg);
-            }
-            else
-            {
-                Settings.MasterListOnlineMasterMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MasterOnlineSelfMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MasterOnlineSelfMsg", Settings.MasterOnlineSelfMsg);
-            }
-            else
-            {
-                Settings.MasterOnlineSelfMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MasterOnlineMasterListMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MasterOnlineMasterListMsg", Settings.MasterOnlineMasterListMsg);
-            }
-            else
-            {
-                Settings.MasterOnlineMasterListMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MasterLongOutMasterListOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MasterLongOutMasterListOnlineMsg", Settings.MasterLongOutMasterListOnlineMsg);
-            }
-            else
-            {
-                Settings.MasterLongOutMasterListOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MasterListLongOutMasterOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MasterListLongOutMasterOnlineMsg", Settings.MasterListLongOutMasterOnlineMsg);
-            }
-            else
-            {
-                Settings.MasterListLongOutMasterOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MasterListNotOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MasterListNotOnlineMsg", Settings.MasterListNotOnlineMsg);
-            }
-            else
-            {
-                Settings.MasterListNotOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "MasterNotOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "MasterNotOnlineMsg", Settings.MasterNotOnlineMsg);
-            }
-            else
-            {
-                Settings.MasterNotOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YouAreNotMasterMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YouAreNotMasterMsg", Settings.YouAreNotMasterMsg);
-            }
-            else
-            {
-                Settings.YouAreNotMasterMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourMasterNotOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourMasterNotOnlineMsg", Settings.YourMasterNotOnlineMsg);
-            }
-            else
-            {
-                Settings.YourMasterNotOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourMasterListNotOnlineMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourMasterListNotOnlineMsg", Settings.YourMasterListNotOnlineMsg);
-            }
-            else
-            {
-                Settings.YourMasterListNotOnlineMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourMasterNowLocateMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourMasterNowLocateMsg", Settings.YourMasterNowLocateMsg);
-            }
-            else
-            {
-                Settings.YourMasterNowLocateMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourMasterListSearchLocateMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourMasterListSearchLocateMsg", Settings.YourMasterListSearchLocateMsg);
-            }
-            else
-            {
-                Settings.YourMasterListSearchLocateMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourMasterListNowLocateMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourMasterListNowLocateMsg", Settings.YourMasterListNowLocateMsg);
-            }
-            else
-            {
-                Settings.YourMasterListNowLocateMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourMasterSearchLocateMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourMasterSearchLocateMsg", Settings.YourMasterSearchLocateMsg);
-            }
-            else
-            {
-                Settings.YourMasterSearchLocateMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YourMasterListUnMasterOKMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YourMasterListUnMasterOKMsg", Settings.YourMasterListUnMasterOKMsg);
-            }
-            else
-            {
-                Settings.YourMasterListUnMasterOKMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "YouAreUnMasterOKMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "YouAreUnMasterOKMsg", Settings.YouAreUnMasterOKMsg);
-            }
-            else
-            {
-                Settings.YouAreUnMasterOKMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "UnMasterLoginMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "UnMasterLoginMsg", Settings.UnMasterLoginMsg);
-            }
-            else
-            {
-                Settings.UnMasterLoginMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "NPCSayUnMasterOKMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "NPCSayUnMasterOKMsg", Settings.NPCSayUnMasterOKMsg);
-            }
-            else
-            {
-                Settings.NPCSayUnMasterOKMsg = LoadString;
-            }
-            LoadString = ReadWriteString("String", "NPCSayForceUnMasterMsg", "");
-            if (LoadString == "")
-            {
-                WriteString("String", "NPCSayForceUnMasterMsg", Settings.NPCSayForceUnMasterMsg);
-            }
-            else
-            {
-                Settings.NPCSayForceUnMasterMsg = LoadString;
-            }
+            Settings.FireSpiritsSummoned = ReadWriteString("String", "FireSpiritsSummoned", Settings.FireSpiritsSummoned);
+            Settings.FireSpiritsFail = ReadWriteString("String", "FireSpiritsFail", Settings.FireSpiritsFail);
+            Settings.SpiritsGone = ReadWriteString("String", "SpiritsGone", Settings.SpiritsGone);
+            Settings.MateDoTooweak = ReadWriteString("String", "MateDoTooweak", Settings.MateDoTooweak);
+            Settings.TheWeaponBroke = ReadWriteString("String", "TheWeaponBroke", Settings.TheWeaponBroke);
+            Settings.TheWeaponRefineSuccessfull = ReadWriteString("String", "TheWeaponRefineSuccessfull", Settings.TheWeaponRefineSuccessfull);
+            Settings.YouPoisoned = ReadWriteString("String", "YouPoisoned", Settings.YouPoisoned);
+            Settings.PetRest = ReadWriteString("String", "PetRest", Settings.PetRest);
+            Settings.PetAttack = ReadWriteString("String", "PetAttack", Settings.PetAttack);
+            Settings.WearNotOfWoMan = ReadWriteString("String", "WearNotOfWoMan", Settings.WearNotOfWoMan);
+            Settings.WearNotOfMan = ReadWriteString("String", "WearNotOfMan", Settings.WearNotOfMan);
+            Settings.HandWeightNot = ReadWriteString("String", "HandWeightNot", Settings.HandWeightNot);
+            Settings.WearWeightNot = ReadWriteString("String", "WearWeightNot", Settings.WearWeightNot);
+            Settings.ItemIsNotThisAccount = ReadWriteString("String", "ItemIsNotThisAccount", Settings.ItemIsNotThisAccount);
+            Settings.ItemIsNotThisIPaddr = ReadWriteString("String", "ItemIsNotThisIPaddr", Settings.ItemIsNotThisIPaddr);
+            Settings.ItemIsNotThisChrName = ReadWriteString("String", "ItemIsNotThisChrName", Settings.ItemIsNotThisChrName);
+            Settings.LevelNot = ReadWriteString("String", "LevelNot", Settings.LevelNot);
+            Settings.JobOrLevelNot = ReadWriteString("String", "JobOrLevelNot", Settings.JobOrLevelNot);
+            Settings.JobOrDCNot = ReadWriteString("String", "JobOrDCNot", Settings.JobOrDCNot);
+            Settings.JobOrMCNot = ReadWriteString("String", "JobOrMCNot", Settings.JobOrMCNot);
+            Settings.JobOrSCNot = ReadWriteString("String", "JobOrSCNot",  Settings.JobOrSCNot);
+            Settings.DCNot = ReadWriteString("String", "DCNot", Settings.DCNot);
+            Settings.MCNot = ReadWriteString("String", "MCNot", Settings.MCNot);
+            Settings.SCNot = ReadWriteString("String", "SCNot", Settings.SCNot);
+            Settings.CreditPointNot = ReadWriteString("String", "CreditPointNot", Settings.CreditPointNot);
+            Settings.ReNewLevelNot = ReadWriteString("String", "ReNewLevelNot", Settings.ReNewLevelNot);
+            Settings.GuildNot = ReadWriteString("String", "GuildNot", Settings.GuildNot);
+            Settings.GuildMasterNot = ReadWriteString("String", "GuildMasterNot", Settings.GuildMasterNot);
+            Settings.SabukHumanNot = ReadWriteString("String", "SabukHumanNot", Settings.SabukHumanNot);
+            Settings.SabukMasterManNot = ReadWriteString("String", "SabukMasterManNot", Settings.SabukMasterManNot);
+            Settings.MemberNot = ReadWriteString("String", "MemberNot", Settings.MemberNot);
+            Settings.MemberTypeNot = ReadWriteString("String", "MemberTypeNot", Settings.MemberTypeNot);
+            Settings.CanottWearIt = ReadWriteString("String", "CanottWearIt", Settings.CanottWearIt);
+            Settings.CanotUseDrugOnThisMap = ReadWriteString("String", "CanotUseDrugOnThisMap", Settings.CanotUseDrugOnThisMap);
+            Settings.GameMasterMode = ReadWriteString("String", "GameMasterMode", Settings.GameMasterMode);
+            Settings.ReleaseGameMasterMode = ReadWriteString("String", "ReleaseGameMasterMode", Settings.ReleaseGameMasterMode);
+            Settings.ObserverMode = ReadWriteString("String", "ObserverMode", Settings.ObserverMode);
+            Settings.ReleaseObserverMode = ReadWriteString("String", "ReleaseObserverMode", Settings.ReleaseObserverMode);
+            Settings.SupermanMode = ReadWriteString("String", "SupermanMode", Settings.SupermanMode);
+            Settings.ReleaseSupermanMode = ReadWriteString("String", "ReleaseSupermanMode", Settings.ReleaseSupermanMode);
+            Settings.YouFoundNothing = ReadWriteString("String", "YouFoundNothing", Settings.YouFoundNothing);
+            Settings.NoPasswordLockSystemMsg = ReadWriteString("String", "NoPasswordLockSystemMsg", Settings.NoPasswordLockSystemMsg);
+            Settings.AlreadySetPasswordMsg = ReadWriteString("String", "AlreadySetPassword", Settings.AlreadySetPasswordMsg);
+            Settings.ReSetPasswordMsg = ReadWriteString("String", "ReSetPassword", Settings.ReSetPasswordMsg);
+            Settings.PasswordOverLongMsg = ReadWriteString("String", "PasswordOverLong", Settings.PasswordOverLongMsg);
+            Settings.ReSetPasswordOKMsg = ReadWriteString("String", "ReSetPasswordOK", Settings.ReSetPasswordOKMsg);
+            Settings.ReSetPasswordNotMatchMsg = ReadWriteString("String", "ReSetPasswordNotMatch", Settings.ReSetPasswordNotMatchMsg);
+            Settings.PleaseInputUnLockPasswordMsg = ReadWriteString("String", "PleaseInputUnLockPassword", Settings.PleaseInputUnLockPasswordMsg);
+            Settings.StorageUnLockOKMsg = ReadWriteString("String", "StorageUnLockOK", Settings.StorageUnLockOKMsg);
+            Settings.StorageAlreadyUnLockMsg = ReadWriteString("String", "StorageAlreadyUnLock", Settings.StorageAlreadyUnLockMsg);
+            Settings.StorageNoPasswordMsg = ReadWriteString("String", "StorageNoPassword", Settings.StorageNoPasswordMsg);
+            Settings.UnLockPasswordFailMsg = ReadWriteString("String", "UnLockPasswordFail", Settings.UnLockPasswordFailMsg);
+            Settings.LockStorageSuccessMsg = ReadWriteString("String", "LockStorageSuccess", Settings.LockStorageSuccessMsg);
+            Settings.StoragePasswordClearMsg = ReadWriteString("String", "StoragePasswordClear", Settings.StoragePasswordClearMsg);
+            Settings.PleaseUnloadStoragePasswordMsg = ReadWriteString("String", "PleaseUnloadStoragePassword", Settings.PleaseUnloadStoragePasswordMsg);
+            Settings.StorageAlreadyLockMsg = ReadWriteString("String", "StorageAlreadyLock", Settings.StorageAlreadyLockMsg);
+            Settings.StoragePasswordLockedMsg = ReadWriteString("String", "StoragePasswordLocked", Settings.StoragePasswordLockedMsg);
+            Settings.SetPasswordMsg = ReadWriteString("String", "StorageSetPassword", Settings.SetPasswordMsg);
+            Settings.PleaseInputOldPasswordMsg = ReadWriteString("String", "PleaseInputOldPassword", Settings.PleaseInputOldPasswordMsg);
+            Settings.OldPasswordIsClearMsg = ReadWriteString("String", "PasswordIsClearMsg", Settings.OldPasswordIsClearMsg);
+            Settings.NoPasswordSetMsg = ReadWriteString("String", "NoPasswordSet", Settings.NoPasswordSetMsg);
+            Settings.OldPasswordIncorrectMsg = ReadWriteString("String", "OldPasswordIncorrect", Settings.OldPasswordIncorrectMsg);
+            Settings.StorageIsLockedMsg = ReadWriteString("String", "StorageIsLocked", Settings.StorageIsLockedMsg);
+            Settings.PleaseTryDealLaterMsg = ReadWriteString("String", "PleaseTryDealLaterMsg", Settings.PleaseTryDealLaterMsg);
+            Settings.DealItemsDenyGetBackMsg = ReadWriteString("String", "DealItemsDenyGetBackMsg", Settings.DealItemsDenyGetBackMsg);
+            Settings.DisableDealItemsMsg = ReadWriteString("String", "DisableDealItemsMsg", Settings.DisableDealItemsMsg);
+            Settings.CanotTryDealMsg = ReadWriteString("String", "CanotTryDealMsg", Settings.CanotTryDealMsg);
+            Settings.DealActionCancelMsg = ReadWriteString("String", "DealActionCancelMsg", Settings.DealActionCancelMsg);
+            Settings.PoseDisableDealMsg = ReadWriteString("String", "PoseDisableDealMsg", Settings.PoseDisableDealMsg);
+            Settings.DealSuccessMsg = ReadWriteString("String", "DealSuccessMsg", Settings.DealSuccessMsg);
+            Settings.DealOKTooFast = ReadWriteString("String", "DealOKTooFast", Settings.DealOKTooFast);
+            Settings.YourBagSizeTooSmall = ReadWriteString("String", "YourBagSizeTooSmall", Settings.YourBagSizeTooSmall);
+            Settings.DealHumanBagSizeTooSmall = ReadWriteString("String", "DealHumanBagSizeTooSmall", Settings.DealHumanBagSizeTooSmall);
+            Settings.YourGoldLargeThenLimit = ReadWriteString("String", "YourGoldLargeThenLimit", Settings.YourGoldLargeThenLimit);
+            Settings.DealHumanGoldLargeThenLimit = ReadWriteString("String", "DealHumanGoldLargeThenLimit", Settings.DealHumanGoldLargeThenLimit);
+            Settings.YouDealOKMsg = ReadWriteString("String", "YouDealOKMsg", Settings.YouDealOKMsg);
+            Settings.PoseDealOKMsg = ReadWriteString("String", "PoseDealOKMsg", Settings.PoseDealOKMsg);
+            Settings.KickClientUserMsg = ReadWriteString("String", "KickClientUserMsg", Settings.KickClientUserMsg);
+            Settings.ActionIsLockedMsg = ReadWriteString("String", "ActionIsLockedMsg", Settings.ActionIsLockedMsg);
+            Settings.PasswordNotSetMsg = ReadWriteString("String", "PasswordNotSetMsg", Settings.PasswordNotSetMsg);
+            Settings.NotPasswordProtectMode = ReadWriteString("String", "NotPasswordProtectMode", Settings.NotPasswordProtectMode);
+            Settings.CanotDropGoldMsg = ReadWriteString("String", "CanotDropGoldMsg", Settings.CanotDropGoldMsg);
+            Settings.CanotDropInSafeZoneMsg = ReadWriteString("String", "CanotDropInSafeZoneMsg", Settings.CanotDropInSafeZoneMsg);
+            Settings.CanotDropItemMsg = ReadWriteString("String", "CanotDropItemMsg", Settings.CanotDropItemMsg);
+            Settings.CanotUseItemMsg = ReadWriteString("String", "CanotUseItemMsg", Settings.CanotUseItemMsg);
+            Settings.StartMarryManMsg = ReadWriteString("String", "StartMarryManMsg", Settings.StartMarryManMsg);
+            Settings.StartMarryWoManMsg = ReadWriteString("String", "StartMarryWoManMsg", Settings.StartMarryWoManMsg);
+            Settings.StartMarryManAskQuestionMsg = ReadWriteString("String", "StartMarryManAskQuestionMsg", Settings.StartMarryManAskQuestionMsg);
+            Settings.StartMarryWoManAskQuestionMsg = ReadWriteString("String", "StartMarryWoManAskQuestionMsg", Settings.StartMarryWoManAskQuestionMsg);
+            Settings.MarryManAnswerQuestionMsg = ReadWriteString("String", "MarryManAnswerQuestionMsg", Settings.MarryManAnswerQuestionMsg);
+            Settings.MarryManAskQuestionMsg = ReadWriteString("String", "MarryManAskQuestionMsg", Settings.MarryManAskQuestionMsg);
+            Settings.MarryWoManAnswerQuestionMsg = ReadWriteString("String", "MarryWoManAnswerQuestionMsg", Settings.MarryWoManAnswerQuestionMsg);
+            Settings.MarryWoManGetMarryMsg = ReadWriteString("String", "MarryWoManGetMarryMsg", Settings.MarryWoManGetMarryMsg);
+            Settings.MarryWoManDenyMsg = ReadWriteString("String", "MarryWoManDenyMsg", Settings.MarryWoManDenyMsg);
+            Settings.MarryWoManCancelMsg = ReadWriteString("String", "MarryWoManCancelMsg", Settings.MarryWoManCancelMsg);
+            Settings.fUnMarryManLoginMsg = ReadWriteString("String", "ForceUnMarryManLoginMsg", Settings.fUnMarryManLoginMsg);
+            Settings.fUnMarryWoManLoginMsg = ReadWriteString("String", "ForceUnMarryWoManLoginMsg", Settings.fUnMarryWoManLoginMsg);
+            Settings.ManLoginDearOnlineSelfMsg = ReadWriteString("String", "ManLoginDearOnlineSelfMsg", Settings.ManLoginDearOnlineSelfMsg);
+            Settings.ManLoginDearOnlineDearMsg = ReadWriteString("String", "ManLoginDearOnlineDearMsg", Settings.ManLoginDearOnlineDearMsg);
+            Settings.WoManLoginDearOnlineSelfMsg = ReadWriteString("String", "WoManLoginDearOnlineSelfMsg", Settings.WoManLoginDearOnlineSelfMsg);
+            Settings.WoManLoginDearOnlineDearMsg = ReadWriteString("String", "WoManLoginDearOnlineDearMsg", Settings.WoManLoginDearOnlineDearMsg);
+            Settings.ManLoginDearNotOnlineMsg = ReadWriteString("String", "ManLoginDearNotOnlineMsg", Settings.ManLoginDearNotOnlineMsg);
+            Settings.WoManLoginDearNotOnlineMsg = ReadWriteString("String", "WoManLoginDearNotOnlineMsg", Settings.WoManLoginDearNotOnlineMsg);
+            Settings.ManLongOutDearOnlineMsg = ReadWriteString("String", "ManLongOutDearOnlineMsg", Settings.ManLongOutDearOnlineMsg);
+            Settings.WoManLongOutDearOnlineMsg = ReadWriteString("String", "WoManLongOutDearOnlineMsg", Settings.WoManLongOutDearOnlineMsg);
+            Settings.YouAreNotMarryedMsg = ReadWriteString("String", "YouAreNotMarryedMsg", Settings.YouAreNotMarryedMsg);
+            Settings.YourWifeNotOnlineMsg = ReadWriteString("String", "YourWifeNotOnlineMsg", Settings.YourWifeNotOnlineMsg);
+            Settings.YourHusbandNotOnlineMsg = ReadWriteString("String", "YourHusbandNotOnlineMsg", Settings.YourHusbandNotOnlineMsg);
+            Settings.YourWifeNowLocateMsg = ReadWriteString("String", "YourWifeNowLocateMsg", Settings.YourWifeNowLocateMsg);
+            Settings.YourHusbandSearchLocateMsg = ReadWriteString("String", "YourHusbandSearchLocateMsg", Settings.YourHusbandSearchLocateMsg);
+            Settings.YourHusbandNowLocateMsg = ReadWriteString("String", "YourHusbandNowLocateMsg", Settings.YourHusbandNowLocateMsg);
+            Settings.YourWifeSearchLocateMsg = ReadWriteString("String", "YourWifeSearchLocateMsg", Settings.YourWifeSearchLocateMsg);
+            Settings.fUnMasterLoginMsg = ReadWriteString("String", "FUnMasterLoginMsg", Settings.fUnMasterLoginMsg);
+            Settings.fUnMasterListLoginMsg = ReadWriteString("String", "UnMasterListLoginMsg", Settings.fUnMasterListLoginMsg);
+            Settings.MasterListOnlineSelfMsg = ReadWriteString("String", "MasterListOnlineSelfMsg", Settings.MasterListOnlineSelfMsg);
+            Settings.MasterListOnlineMasterMsg = ReadWriteString("String", "MasterListOnlineMasterMsg", Settings.MasterListOnlineMasterMsg);
+            Settings.MasterOnlineSelfMsg = ReadWriteString("String", "MasterOnlineSelfMsg", Settings.MasterOnlineSelfMsg);
+            Settings.MasterOnlineMasterListMsg = ReadWriteString("String", "MasterOnlineMasterListMsg", Settings.MasterOnlineMasterListMsg);
+            Settings.MasterLongOutMasterListOnlineMsg = ReadWriteString("String", "MasterLongOutMasterListOnlineMsg", Settings.MasterLongOutMasterListOnlineMsg);
+            Settings.MasterListLongOutMasterOnlineMsg = ReadWriteString("String", "MasterListLongOutMasterOnlineMsg", Settings.MasterListLongOutMasterOnlineMsg);
+            Settings.MasterListNotOnlineMsg = ReadWriteString("String", "MasterListNotOnlineMsg", Settings.MasterListNotOnlineMsg);
+            Settings.MasterNotOnlineMsg = ReadWriteString("String", "MasterNotOnlineMsg", Settings.MasterNotOnlineMsg);
+            Settings.YouAreNotMasterMsg = ReadWriteString("String", "YouAreNotMasterMsg", Settings.YouAreNotMasterMsg);
+            Settings.YourMasterNotOnlineMsg = ReadWriteString("String", "YourMasterNotOnlineMsg", Settings.YourMasterNotOnlineMsg);
+            Settings.YourMasterListNotOnlineMsg = ReadWriteString("String", "YourMasterListNotOnlineMsg", Settings.YourMasterListNotOnlineMsg);
+            Settings.YourMasterNowLocateMsg = ReadWriteString("String", "YourMasterNowLocateMsg", Settings.YourMasterNowLocateMsg);
+            Settings.YourMasterListSearchLocateMsg = ReadWriteString("String", "YourMasterListSearchLocateMsg", Settings.YourMasterListSearchLocateMsg);
+            Settings.YourMasterListNowLocateMsg = ReadWriteString("String", "YourMasterListNowLocateMsg", Settings.YourMasterListNowLocateMsg);
+            Settings.YourMasterSearchLocateMsg = ReadWriteString("String", "YourMasterSearchLocateMsg", Settings.YourMasterSearchLocateMsg);
+            Settings.YourMasterListUnMasterOKMsg = ReadWriteString("String", "YourMasterListUnMasterOKMsg",  Settings.YourMasterListUnMasterOKMsg);
+            Settings.YouAreUnMasterOKMsg = ReadWriteString("String", "YouAreUnMasterOKMsg", Settings.YouAreUnMasterOKMsg);
+            Settings.UnMasterLoginMsg = ReadWriteString("String", "UnMasterLoginMsg", Settings.UnMasterLoginMsg);
+            Settings.NPCSayUnMasterOKMsg = ReadWriteString("String", "NPCSayUnMasterOKMsg", Settings.NPCSayUnMasterOKMsg);
+            Settings.NPCSayForceUnMasterMsg = ReadWriteString("String", "NPCSayForceUnMasterMsg", Settings.NPCSayForceUnMasterMsg);
+            
             LoadString = ReadWriteString("String", "MyInfo", "");
             if (LoadString == "")
             {
