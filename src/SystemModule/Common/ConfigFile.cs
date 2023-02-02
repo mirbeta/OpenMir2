@@ -358,7 +358,7 @@ namespace SystemModule.Common
             {
                 fi.IsReadOnly = false;
             }
-            var sw = new StreamWriter(File.Open(FileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite), Encoding.GetEncoding("GB2312"));
+            var sw = new StreamWriter(File.Open(FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite), Encoding.GetEncoding("GB2312"));
             foreach (var pair in iniCahce)
             {
                 sw.WriteLine("[" + pair.Key + "]");
