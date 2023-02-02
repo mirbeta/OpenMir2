@@ -30,7 +30,7 @@ namespace GameSvr.GameCommand.Commands
                 if (Castle.UnderWar)
                 {
                     Castle.ShowOverMsg = false;
-                    Castle.m_WarDate = DateTime.Now;
+                    Castle.WarDate = DateTime.Now;
                     Castle.StartCastleWarTick = HUtil32.GetTickCount();
                     Castle.StartWallconquestWar();
                     World.WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");

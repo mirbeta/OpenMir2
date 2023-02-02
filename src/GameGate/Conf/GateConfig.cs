@@ -16,11 +16,11 @@ namespace GameGate.Conf
         /// <summary>
         /// 日志等级
         /// </summary>
-        public int ShowLogLevel;
+        public byte LogLevel;
         /// <summary>
         /// 是否显示Debug日志
         /// </summary>
-        public bool ShowDebugLog;
+        public bool DebugLog;
         /// <summary>
         /// 是否使用云网关
         /// </summary>
@@ -41,7 +41,7 @@ namespace GameGate.Conf
         /// 消息工作线程数
         /// 最多255个工作线程
         /// </summary>
-        public int MessageWorkThread;
+        public byte MessageWorkThread;
         /// <summary>
         /// 网关数
         /// 最多50个ServerService线程
@@ -297,7 +297,7 @@ namespace GameGate.Conf
             ClientMoveSpeedRate = 0;
             ClientSpellSpeedRate = 0;
             ClientAttackSpeedRate = 0;
-            ShowDebugLog = false;
+            DebugLog = false;
             MessageWorkThread = 1;
         }
     }

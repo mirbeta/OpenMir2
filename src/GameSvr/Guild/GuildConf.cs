@@ -2,7 +2,7 @@ using SystemModule.Common;
 
 namespace GameSvr.Guild
 {
-    public class GuildConf : IniFile
+    public class GuildConf : ConfigFile
     {
         public GuildConf(string guidName, string fileName) : base(fileName)
         {
@@ -15,11 +15,11 @@ namespace GameSvr.Guild
 
         public void LoadConfig(GuildInfo guild)
         {
-            guild.m_nBuildPoint = ReadInteger("Guild", "BuildPoint", guild.m_nBuildPoint);
-            guild.m_nAurae = ReadInteger("Guild", "Aurae", guild.m_nAurae);
-            guild.m_nStability = ReadInteger("Guild", "Stability", guild.m_nStability);
-            guild.m_nFlourishing = ReadInteger("Guild", "Flourishing", guild.m_nFlourishing);
-            guild.m_nChiefItemCount = ReadInteger("Guild", "ChiefItemCount", guild.m_nChiefItemCount);
+            guild.m_nBuildPoint = ReadWriteInteger("Guild", "BuildPoint", guild.m_nBuildPoint);
+            guild.m_nAurae = ReadWriteInteger("Guild", "Aurae", guild.m_nAurae);
+            guild.m_nStability = ReadWriteInteger("Guild", "Stability", guild.m_nStability);
+            guild.m_nFlourishing = ReadWriteInteger("Guild", "Flourishing", guild.m_nFlourishing);
+            guild.m_nChiefItemCount = ReadWriteInteger("Guild", "ChiefItemCount", guild.m_nChiefItemCount);
         }
 
         public void SaveGuildConfig(GuildInfo guild)
@@ -31,5 +31,6 @@ namespace GameSvr.Guild
             WriteInteger("Guild", "Flourishing", guild.m_nFlourishing);
             WriteInteger("Guild", "ChiefItemCount", guild.m_nChiefItemCount);
         }
+
     }
 }

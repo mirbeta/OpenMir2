@@ -1953,10 +1953,10 @@ namespace GameSvr.Npc
                 /*switch (DynamicVar.VarType)
                 {
                     case TVarType.Integer:
-                        DynamicVar.nInternet = IniFile.ReadInteger(sName, DynamicVar.sName, 0);
+                        DynamicVar.nInternet = IniFile.ReadWriteInteger(sName, DynamicVar.sName, 0);
                         break;
                     case TVarType.String:
-                        DynamicVar.sString = IniFile.ReadString(sName, DynamicVar.sName, "");
+                        DynamicVar.sString = IniFile.ReadWriteString(sName, DynamicVar.sName, "");
                         break;
                 }*/
                 boFoundVar = true;

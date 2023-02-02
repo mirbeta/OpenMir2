@@ -856,7 +856,7 @@ namespace GameSvr.Npc
                     {
                         if (Castle != null)
                         {
-                            sText = Castle.m_WarDate.ToString("yyyy-MM-dd HH:mm:ss");
+                            sText = Castle.WarDate.ToString("yyyy-MM-dd HH:mm:ss");
                         }
                         else
                         {
@@ -1204,7 +1204,7 @@ namespace GameSvr.Npc
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}
-                //sText = MonDie.ReadString("杀怪人名称", s14, "错误");
+                //sText = MonDie.ReadWriteString("杀怪人名称", s14, "错误");
                 //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
                 //MonDie.Free;
                 return;
@@ -1221,7 +1221,7 @@ namespace GameSvr.Npc
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}
-                //sText = MonDie.ReadString("怪物死亡-时", s14, "错误");
+                //sText = MonDie.ReadWriteString("怪物死亡-时", s14, "错误");
                 //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
                 //MonDie.Free;
                 return;
@@ -1238,7 +1238,7 @@ namespace GameSvr.Npc
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">"); // 替换变量
                 //}
-                //sText = MonDie.ReadString("怪物死亡-分", s14, "错误");
+                //sText = MonDie.ReadWriteString("怪物死亡-分", s14, "错误");
                 //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
                 //MonDie.Free;
                 return;
@@ -1255,7 +1255,7 @@ namespace GameSvr.Npc
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">"); // 替换变量
                 //}
-                //sText = MonDie.ReadString("怪物死亡-秒", s14, "错误");
+                //sText = MonDie.ReadWriteString("怪物死亡-秒", s14, "错误");
                 //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
                 //MonDie.Free;
                 return;
@@ -1272,7 +1272,7 @@ namespace GameSvr.Npc
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}
-                //sText = MonDie.ReadString("怪物死亡-年", s14, "错误");
+                //sText = MonDie.ReadWriteString("怪物死亡-年", s14, "错误");
                 //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
                 //MonDie.Free;
                 return;
@@ -1289,7 +1289,7 @@ namespace GameSvr.Npc
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}
-                //sText = MonDie.ReadString("怪物死亡-月", s14, "错误");
+                //sText = MonDie.ReadWriteString("怪物死亡-月", s14, "错误");
                 //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
                 //MonDie.Free;
                 return;
@@ -1306,7 +1306,7 @@ namespace GameSvr.Npc
                 //{
                 //    s14 = M2Share.g_ManageNPC.GetLineVariableText(PlayObject, "<" + s14 + ">");// 替换变量
                 //}
-                //sText = MonDie.ReadString("怪物死亡-日", s14, "错误");
+                //sText = MonDie.ReadWriteString("怪物死亡-日", s14, "错误");
                 //sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", sText);
                 //MonDie.Free;
                 return;

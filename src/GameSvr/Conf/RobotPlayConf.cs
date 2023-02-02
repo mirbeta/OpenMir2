@@ -8,7 +8,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Conf
 {
-    public class RobotPlayConf : IniFile
+    public class RobotPlayConf : ConfigFile
     {
         private readonly string m_sFilePath = string.Empty;
         private readonly string m_sConfigListFileName = string.Empty;
@@ -31,21 +31,21 @@ namespace GameSvr.Conf
             MagicInfo Magic;
             UserMagic UserMagic;
             StdItem StdItem;
-            playObject.NoDropItem = ReadBool("Info", "NoDropItem", true);// 是否掉包裹物品
-            playObject.NoDropUseItem = ReadBool("Info", "DropUseItem", true);// 是否掉装备
-            playObject.m_nDropUseItemRate = ReadInteger("Info", "DropUseItemRate", 100);// 掉装备机率
-            playObject.Job = (PlayJob)ReadInteger("Info", "Job", 0);
-            playObject.Gender = Enum.Parse<PlayGender>(ReadString("Info", "Gender", "0"));
-            playObject.Hair = (byte)ReadInteger("Info", "Hair", 0);
-            playObject.Abil.Level = (byte)ReadInteger("Info", "Level", 1);
+            playObject.NoDropItem = ReadWriteBool("Info", "NoDropItem", true);// 是否掉包裹物品
+            playObject.NoDropUseItem = ReadWriteBool("Info", "DropUseItem", true);// 是否掉装备
+            playObject.m_nDropUseItemRate = ReadWriteInteger("Info", "DropUseItemRate", 100);// 掉装备机率
+            playObject.Job = (PlayJob)ReadWriteInteger("Info", "Job", 0);
+            playObject.Gender = Enum.Parse<PlayGender>(ReadWriteString("Info", "Gender", "0"));
+            playObject.Hair = (byte)ReadWriteInteger("Info", "Hair", 0);
+            playObject.Abil.Level = (byte)ReadWriteInteger("Info", "Level", 1);
             playObject.Abil.MaxExp = BaseObject.GetLevelExp(playObject.Abil.Level);
-            playObject.m_boProtectStatus = ReadBool("Info", "ProtectStatus", false);// 是否守护模式
-            nAttatckMode = (byte)ReadInteger("Info", "AttatckMode", 6);// 攻击模式
+            playObject.m_boProtectStatus = ReadWriteBool("Info", "ProtectStatus", false);// 是否守护模式
+            nAttatckMode = (byte)ReadWriteInteger("Info", "AttatckMode", 6);// 攻击模式
             if (nAttatckMode >= 0 && nAttatckMode <= 6)
             {
                 playObject.AttatckMode = (AttackMode)nAttatckMode;
             }
-            sLineText = ReadString("Info", "UseSkill", "");
+            sLineText = ReadWriteString("Info", "UseSkill", "");
             if (sLineText != "")
             {
                 TempList = new List<string>();
@@ -80,7 +80,7 @@ namespace GameSvr.Conf
                     //TempList.Free;
                 }
             }
-            sLineText = ReadString("Info", "InitItems", "");
+            sLineText = ReadWriteString("Info", "InitItems", "");
             if (sLineText != "")
             {
                 TempList = new List<string>();
@@ -125,7 +125,7 @@ namespace GameSvr.Conf
             }
             for (int i = 0; i < 9; i++)
             {
-                sSayMsg = ReadString("MonSay", i.ToString(), "");
+                sSayMsg = ReadWriteString("MonSay", i.ToString(), "");
                 if (sSayMsg != "")
                 {
                     playObject.m_AISayMsgList.Add(sSayMsg);
@@ -135,15 +135,15 @@ namespace GameSvr.Conf
                     break;
                 }
             }
-            playObject.m_UseItemNames[Grobal2.U_DRESS] = ReadString("UseItems", "UseItems0", "布衣(男)"); // '衣服';
-            playObject.m_UseItemNames[Grobal2.U_WEAPON] = ReadString("UseItems", "UseItems1", "木剑"); // '武器';
-            playObject.m_UseItemNames[Grobal2.U_RIGHTHAND] = ReadString("UseItems", "UseItems2", ""); // '照明物';
-            playObject.m_UseItemNames[Grobal2.U_NECKLACE] = ReadString("UseItems", "UseItems3", ""); // '项链';
-            playObject.m_UseItemNames[Grobal2.U_HELMET] = ReadString("UseItems", "UseItems4", ""); // '头盔';
-            playObject.m_UseItemNames[Grobal2.U_ARMRINGL] = ReadString("UseItems", "UseItems5", ""); // '左手镯';
-            playObject.m_UseItemNames[Grobal2.U_ARMRINGR] = ReadString("UseItems", "UseItems6", ""); // '右手镯';
-            playObject.m_UseItemNames[Grobal2.U_RINGL] = ReadString("UseItems", "UseItems7", ""); // '左戒指';
-            playObject.m_UseItemNames[Grobal2.U_RINGR] = ReadString("UseItems", "UseItems8", ""); // '右戒指';
+            playObject.m_UseItemNames[Grobal2.U_DRESS] = ReadWriteString("UseItems", "UseItems0", "布衣(男)"); // '衣服';
+            playObject.m_UseItemNames[Grobal2.U_WEAPON] = ReadWriteString("UseItems", "UseItems1", "木剑"); // '武器';
+            playObject.m_UseItemNames[Grobal2.U_RIGHTHAND] = ReadWriteString("UseItems", "UseItems2", ""); // '照明物';
+            playObject.m_UseItemNames[Grobal2.U_NECKLACE] = ReadWriteString("UseItems", "UseItems3", ""); // '项链';
+            playObject.m_UseItemNames[Grobal2.U_HELMET] = ReadWriteString("UseItems", "UseItems4", ""); // '头盔';
+            playObject.m_UseItemNames[Grobal2.U_ARMRINGL] = ReadWriteString("UseItems", "UseItems5", ""); // '左手镯';
+            playObject.m_UseItemNames[Grobal2.U_ARMRINGR] = ReadWriteString("UseItems", "UseItems6", ""); // '右手镯';
+            playObject.m_UseItemNames[Grobal2.U_RINGL] = ReadWriteString("UseItems", "UseItems7", ""); // '左戒指';
+            playObject.m_UseItemNames[Grobal2.U_RINGR] = ReadWriteString("UseItems", "UseItems8", ""); // '右戒指';
             for (byte i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
             {
                 if (!string.IsNullOrEmpty(playObject.m_UseItemNames[i]))

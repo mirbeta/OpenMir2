@@ -3,7 +3,7 @@ using SystemModule.Common;
 
 namespace GameSvr.Conf
 {
-    public class GameCmdConf : IniFile
+    public class GameCmdConf : ConfigFile
     {
         public GameCmdConf(string fileName) : base(fileName)
         {
@@ -17,7 +17,7 @@ namespace GameSvr.Conf
         {
             GameCommands gameCommands = CommandMgr.GameCommands;
             int nLoadInteger;
-            string LoadString = ReadString("Command", "Date", "");
+            string LoadString = ReadWriteString("Command", "Date", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Date", gameCommands.Data.CmdName);
@@ -26,7 +26,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Data.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Date", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Date", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Date", gameCommands.Data.PerMissionMin);
@@ -35,7 +35,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Data.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "PrvMsg", "");
+            LoadString = ReadWriteString("Command", "PrvMsg", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "PrvMsg", gameCommands.Prvmsg.CmdName);
@@ -44,7 +44,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Prvmsg.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "PrvMsg", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "PrvMsg", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "PrvMsg", gameCommands.Prvmsg.PerMissionMin);
@@ -53,7 +53,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Prvmsg.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "AllowMsg", "");
+            LoadString = ReadWriteString("Command", "AllowMsg", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AllowMsg", gameCommands.AllowMsg.CmdName);
@@ -62,7 +62,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AllowMsg.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "AllowMsg", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "AllowMsg", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "AllowMsg", gameCommands.AllowMsg.PerMissionMin);
@@ -71,7 +71,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AllowMsg.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "LetShout", "");
+            LoadString = ReadWriteString("Command", "LetShout", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "LetShout", gameCommands.Letshout.CmdName);
@@ -80,7 +80,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Letshout.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "LetTrade", "");
+            LoadString = ReadWriteString("Command", "LetTrade", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "LetTrade", gameCommands.LetTrade.CmdName);
@@ -89,7 +89,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.LetTrade.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "LetGuild", "");
+            LoadString = ReadWriteString("Command", "LetGuild", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "LetGuild", gameCommands.Letguild.CmdName);
@@ -98,7 +98,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Letguild.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "EndGuild", "");
+            LoadString = ReadWriteString("Command", "EndGuild", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "EndGuild", gameCommands.Endguild.CmdName);
@@ -107,7 +107,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Endguild.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "BanGuildChat", "");
+            LoadString = ReadWriteString("Command", "BanGuildChat", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "BanGuildChat", gameCommands.BanGuildChat.CmdName);
@@ -116,7 +116,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.BanGuildChat.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "AuthAlly", "");
+            LoadString = ReadWriteString("Command", "AuthAlly", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AuthAlly", gameCommands.Authally.CmdName);
@@ -125,7 +125,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Authally.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "Auth", "");
+            LoadString = ReadWriteString("Command", "Auth", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Auth", gameCommands.Auth.CmdName);
@@ -134,7 +134,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Auth.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "AuthCancel", "");
+            LoadString = ReadWriteString("Command", "AuthCancel", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AuthCancel", gameCommands.AuthCancel.CmdName);
@@ -143,7 +143,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AuthCancel.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "ViewDiary", "");
+            LoadString = ReadWriteString("Command", "ViewDiary", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ViewDiary", gameCommands.Diary.CmdName);
@@ -152,7 +152,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Diary.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "UserMove", "");
+            LoadString = ReadWriteString("Command", "UserMove", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "UserMove", gameCommands.UserMove.CmdName);
@@ -161,7 +161,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.UserMove.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "Searching", "");
+            LoadString = ReadWriteString("Command", "Searching", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Searching", gameCommands.Searching.CmdName);
@@ -170,7 +170,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Searching.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "AllowGroupCall", "");
+            LoadString = ReadWriteString("Command", "AllowGroupCall", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AllowGroupCall", gameCommands.AllowGroupCall.CmdName);
@@ -179,7 +179,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AllowGroupCall.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "GroupCall", "");
+            LoadString = ReadWriteString("Command", "GroupCall", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "GroupCall", gameCommands.GroupRecalll.CmdName);
@@ -188,7 +188,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.GroupRecalll.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "AllowGuildReCall", "");
+            LoadString = ReadWriteString("Command", "AllowGuildReCall", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AllowGuildReCall", gameCommands.AllowGuildRecall.CmdName);
@@ -197,7 +197,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AllowGuildRecall.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "GuildReCall", "");
+            LoadString = ReadWriteString("Command", "GuildReCall", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "GuildReCall", gameCommands.GuildRecalll.CmdName);
@@ -206,7 +206,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.GuildRecalll.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "StorageUnLock", "");
+            LoadString = ReadWriteString("Command", "StorageUnLock", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StorageUnLock", gameCommands.UnlockStorage.CmdName);
@@ -215,7 +215,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.UnlockStorage.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "PasswordUnLock", "");
+            LoadString = ReadWriteString("Command", "PasswordUnLock", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "PasswordUnLock", gameCommands.Unlock.CmdName);
@@ -224,7 +224,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Unlock.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "StorageLock", "");
+            LoadString = ReadWriteString("Command", "StorageLock", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StorageLock", gameCommands.Lock.CmdName);
@@ -233,7 +233,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Lock.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "StorageSetPassword", "");
+            LoadString = ReadWriteString("Command", "StorageSetPassword", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StorageSetPassword", gameCommands.SetPassword.CmdName);
@@ -242,7 +242,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetPassword.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "PasswordLock", "");
+            LoadString = ReadWriteString("Command", "PasswordLock", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "PasswordLock", gameCommands.PasswordLock.CmdName);
@@ -251,7 +251,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.PasswordLock.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "StorageChgPassword", "");
+            LoadString = ReadWriteString("Command", "StorageChgPassword", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StorageChgPassword", gameCommands.ChgPassword.CmdName);
@@ -260,7 +260,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChgPassword.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "StorageClearPassword", "");
+            LoadString = ReadWriteString("Command", "StorageClearPassword", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StorageClearPassword", gameCommands.ClrPassword.CmdName);
@@ -269,7 +269,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ClrPassword.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "StorageClearPassword", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "StorageClearPassword", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "StorageClearPassword", gameCommands.ClrPassword.PerMissionMin);
@@ -278,7 +278,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ClrPassword.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "StorageUserClearPassword", "");
+            LoadString = ReadWriteString("Command", "StorageUserClearPassword", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StorageUserClearPassword", gameCommands.UnPassword.CmdName);
@@ -287,7 +287,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.UnPassword.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "MemberFunc", "");
+            LoadString = ReadWriteString("Command", "MemberFunc", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "MemberFunc", gameCommands.MemberFunction.CmdName);
@@ -296,7 +296,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MemberFunction.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "MemberFuncEx", "");
+            LoadString = ReadWriteString("Command", "MemberFuncEx", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "MemberFuncEx", gameCommands.MemberFunctioneX.CmdName);
@@ -305,7 +305,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MemberFunctioneX.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "Dear", "");
+            LoadString = ReadWriteString("Command", "Dear", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Dear", gameCommands.Dear.CmdName);
@@ -314,7 +314,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Dear.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "Master", "");
+            LoadString = ReadWriteString("Command", "Master", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Master", gameCommands.Master.CmdName);
@@ -323,7 +323,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Master.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "DearRecall", "");
+            LoadString = ReadWriteString("Command", "DearRecall", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DearRecall", gameCommands.DearRecall.CmdName);
@@ -332,7 +332,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DearRecall.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "MasterRecall", "");
+            LoadString = ReadWriteString("Command", "MasterRecall", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "MasterRecall", gameCommands.MasteRecall.CmdName);
@@ -341,7 +341,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MasteRecall.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "AllowDearRecall", "");
+            LoadString = ReadWriteString("Command", "AllowDearRecall", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AllowDearRecall", gameCommands.AllowDearRcall.CmdName);
@@ -350,7 +350,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AllowDearRcall.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "AllowMasterRecall", "");
+            LoadString = ReadWriteString("Command", "AllowMasterRecall", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AllowMasterRecall", gameCommands.AllowMasterRecall.CmdName);
@@ -359,7 +359,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AllowMasterRecall.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "AttackMode", "");
+            LoadString = ReadWriteString("Command", "AttackMode", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AttackMode", gameCommands.AttackMode.CmdName);
@@ -368,7 +368,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AttackMode.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "Rest", "");
+            LoadString = ReadWriteString("Command", "Rest", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Rest", gameCommands.Rest.CmdName);
@@ -377,7 +377,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Rest.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "TakeOnHorse", "");
+            LoadString = ReadWriteString("Command", "TakeOnHorse", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "TakeOnHorse", gameCommands.TakeonHorse.CmdName);
@@ -386,7 +386,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.TakeonHorse.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "TakeOffHorse", "");
+            LoadString = ReadWriteString("Command", "TakeOffHorse", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "TakeOffHorse", gameCommands.TakeofHorse.CmdName);
@@ -395,7 +395,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.TakeofHorse.CmdName = LoadString;
             }
-            LoadString = ReadString("Command", "HumanLocal", "");
+            LoadString = ReadWriteString("Command", "HumanLocal", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "HumanLocal", gameCommands.HumanLocal.CmdName);
@@ -404,7 +404,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.HumanLocal.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "HumanLocal", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "HumanLocal", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "HumanLocal", gameCommands.HumanLocal.PerMissionMin);
@@ -413,7 +413,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.HumanLocal.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Move", "");
+            LoadString = ReadWriteString("Command", "Move", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Move", gameCommands.Move.CmdName);
@@ -422,7 +422,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Move.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "MoveMin", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MoveMin", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MoveMin", gameCommands.Move.PerMissionMin);
@@ -431,7 +431,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Move.PerMissionMin = nLoadInteger;
             }
-            nLoadInteger = ReadInteger("Permission", "MoveMax", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MoveMax", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MoveMax", gameCommands.Move.PerMissionMax);
@@ -440,7 +440,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Move.PerMissionMax = nLoadInteger;
             }
-            LoadString = ReadString("Command", "PositionMove", "");
+            LoadString = ReadWriteString("Command", "PositionMove", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "PositionMove", gameCommands.PositionMove.CmdName);
@@ -449,7 +449,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.PositionMove.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "PositionMoveMin", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "PositionMoveMin", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "PositionMoveMin", gameCommands.PositionMove.PerMissionMin);
@@ -458,7 +458,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.PositionMove.PerMissionMin = nLoadInteger;
             }
-            nLoadInteger = ReadInteger("Permission", "PositionMoveMax", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "PositionMoveMax", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "PositionMoveMax", gameCommands.PositionMove.PerMissionMax);
@@ -467,7 +467,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.PositionMove.PerMissionMax = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Info", "");
+            LoadString = ReadWriteString("Command", "Info", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Info", gameCommands.Info.CmdName);
@@ -476,7 +476,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Info.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Info", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Info", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Info", gameCommands.Info.PerMissionMin);
@@ -485,7 +485,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Info.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "MobLevel", "");
+            LoadString = ReadWriteString("Command", "MobLevel", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "MobLevel", gameCommands.MobLevel.CmdName);
@@ -494,7 +494,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MobLevel.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "MobLevel", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MobLevel", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MobLevel", gameCommands.MobLevel.PerMissionMin);
@@ -503,7 +503,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MobLevel.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "MobCount", "");
+            LoadString = ReadWriteString("Command", "MobCount", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "MobCount", gameCommands.MobCount.CmdName);
@@ -512,7 +512,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MobCount.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "MobCount", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MobCount", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MobCount", gameCommands.MobCount.PerMissionMin);
@@ -521,7 +521,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MobCount.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "HumanCount", "");
+            LoadString = ReadWriteString("Command", "HumanCount", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "HumanCount", gameCommands.HumanCount.CmdName);
@@ -530,7 +530,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.HumanCount.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "HumanCount", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "HumanCount", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "HumanCount", gameCommands.HumanCount.PerMissionMin);
@@ -539,7 +539,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.HumanCount.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Map", "");
+            LoadString = ReadWriteString("Command", "Map", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Map", gameCommands.Map.CmdName);
@@ -548,7 +548,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Map.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Map", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Map", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Map", gameCommands.Map.PerMissionMin);
@@ -557,7 +557,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Map.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Kick", "");
+            LoadString = ReadWriteString("Command", "Kick", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Kick", gameCommands.Kick.CmdName);
@@ -566,7 +566,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Kick.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Kick", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Kick", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Kick", gameCommands.Kick.PerMissionMin);
@@ -575,7 +575,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Kick.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Ting", "");
+            LoadString = ReadWriteString("Command", "Ting", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Ting", gameCommands.Ting.CmdName);
@@ -584,7 +584,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Ting.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Ting", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Ting", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Ting", gameCommands.Ting.PerMissionMin);
@@ -593,7 +593,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Ting.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SuperTing", "");
+            LoadString = ReadWriteString("Command", "SuperTing", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SuperTing", gameCommands.Superting.CmdName);
@@ -602,7 +602,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Superting.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SuperTing", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SuperTing", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SuperTing", gameCommands.Superting.PerMissionMin);
@@ -611,7 +611,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Superting.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "MapMove", "");
+            LoadString = ReadWriteString("Command", "MapMove", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "MapMove", gameCommands.MapMove.CmdName);
@@ -620,7 +620,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MapMove.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "MapMove", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MapMove", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MapMove", gameCommands.MapMove.PerMissionMin);
@@ -629,7 +629,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MapMove.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Shutup", "");
+            LoadString = ReadWriteString("Command", "Shutup", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Shutup", gameCommands.ShutUp.CmdName);
@@ -638,7 +638,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShutUp.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Shutup", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Shutup", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Shutup", gameCommands.ShutUp.PerMissionMin);
@@ -647,7 +647,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShutUp.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReleaseShutup", "");
+            LoadString = ReadWriteString("Command", "ReleaseShutup", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReleaseShutup", gameCommands.ReleaseShutup.CmdName);
@@ -656,7 +656,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReleaseShutup.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReleaseShutup", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReleaseShutup", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReleaseShutup", gameCommands.ReleaseShutup.PerMissionMin);
@@ -665,7 +665,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReleaseShutup.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ShutupList", "");
+            LoadString = ReadWriteString("Command", "ShutupList", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ShutupList", gameCommands.ShutupList.CmdName);
@@ -674,7 +674,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShutupList.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ShutupList", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ShutupList", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ShutupList", gameCommands.ShutupList.PerMissionMin);
@@ -683,7 +683,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShutupList.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "GameMaster", "");
+            LoadString = ReadWriteString("Command", "GameMaster", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "GameMaster", gameCommands.GameMaster.CmdName);
@@ -692,7 +692,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.GameMaster.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "GameMaster", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "GameMaster", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "GameMaster", gameCommands.GameMaster.PerMissionMin);
@@ -701,7 +701,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.GameMaster.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ObServer", "");
+            LoadString = ReadWriteString("Command", "ObServer", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ObServer", gameCommands.ObServer.CmdName);
@@ -710,7 +710,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ObServer.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ObServer", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ObServer", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ObServer", gameCommands.ObServer.PerMissionMin);
@@ -719,7 +719,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ObServer.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SuperMan", "");
+            LoadString = ReadWriteString("Command", "SuperMan", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SuperMan", gameCommands.SueprMan.CmdName);
@@ -728,7 +728,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SueprMan.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SuperMan", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SuperMan", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SuperMan", gameCommands.SueprMan.PerMissionMin);
@@ -737,7 +737,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SueprMan.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Level", "");
+            LoadString = ReadWriteString("Command", "Level", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Level", gameCommands.Level.CmdName);
@@ -746,7 +746,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Level.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Level", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Level", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Level", gameCommands.Level.PerMissionMin);
@@ -755,7 +755,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Level.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SabukWallGold", "");
+            LoadString = ReadWriteString("Command", "SabukWallGold", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SabukWallGold", gameCommands.SabukwallGold.CmdName);
@@ -764,7 +764,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SabukwallGold.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SabukWallGold", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SabukWallGold", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SabukWallGold", gameCommands.SabukwallGold.PerMissionMin);
@@ -773,7 +773,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SabukwallGold.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Recall", "");
+            LoadString = ReadWriteString("Command", "Recall", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Recall", gameCommands.Recall.CmdName);
@@ -782,7 +782,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Recall.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Recall", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Recall", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Recall", gameCommands.Recall.PerMissionMin);
@@ -791,7 +791,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Recall.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReGoto", "");
+            LoadString = ReadWriteString("Command", "ReGoto", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReGoto", gameCommands.Regoto.CmdName);
@@ -800,7 +800,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Regoto.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReGoto", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReGoto", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReGoto", gameCommands.Regoto.PerMissionMin);
@@ -809,7 +809,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Regoto.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Flag", "");
+            LoadString = ReadWriteString("Command", "Flag", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Flag", gameCommands.Showflag.CmdName);
@@ -818,7 +818,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Showflag.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Flag", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Flag", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Flag", gameCommands.Showflag.PerMissionMin);
@@ -827,7 +827,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Showflag.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ShowOpen", "");
+            LoadString = ReadWriteString("Command", "ShowOpen", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ShowOpen", gameCommands.ShowOpen.CmdName);
@@ -836,7 +836,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowOpen.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ShowOpen", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ShowOpen", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ShowOpen", gameCommands.ShowOpen.PerMissionMin);
@@ -845,7 +845,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowOpen.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ShowUnit", "");
+            LoadString = ReadWriteString("Command", "ShowUnit", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ShowUnit", gameCommands.ShowUnit.CmdName);
@@ -854,7 +854,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowUnit.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ShowUnit", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ShowUnit", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ShowUnit", gameCommands.ShowUnit.PerMissionMin);
@@ -863,7 +863,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowUnit.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Attack", "");
+            LoadString = ReadWriteString("Command", "Attack", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Attack", gameCommands.Attack.CmdName);
@@ -872,7 +872,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Attack.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Attack", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Attack", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Attack", gameCommands.Attack.PerMissionMin);
@@ -881,7 +881,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Attack.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Mob", "");
+            LoadString = ReadWriteString("Command", "Mob", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Mob", gameCommands.Mob.CmdName);
@@ -890,7 +890,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Mob.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Mob", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Mob", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Mob", gameCommands.Mob.PerMissionMin);
@@ -899,7 +899,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Mob.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "MobNpc", "");
+            LoadString = ReadWriteString("Command", "MobNpc", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "MobNpc", gameCommands.MobNpc.CmdName);
@@ -908,7 +908,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MobNpc.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "MobNpc", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MobNpc", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MobNpc", gameCommands.MobNpc.PerMissionMin);
@@ -917,7 +917,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MobNpc.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DelNpc", "");
+            LoadString = ReadWriteString("Command", "DelNpc", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DelNpc", gameCommands.DeleteNpc.CmdName);
@@ -926,7 +926,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DeleteNpc.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DelNpc", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DelNpc", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DelNpc", gameCommands.DeleteNpc.PerMissionMin);
@@ -935,7 +935,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DeleteNpc.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "NpcScript", "");
+            LoadString = ReadWriteString("Command", "NpcScript", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "NpcScript", gameCommands.NpcScript.CmdName);
@@ -944,7 +944,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.NpcScript.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "NpcScript", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "NpcScript", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "NpcScript", gameCommands.NpcScript.PerMissionMin);
@@ -953,7 +953,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.NpcScript.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "RecallMob", "");
+            LoadString = ReadWriteString("Command", "RecallMob", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "RecallMob", gameCommands.RecallMob.CmdName);
@@ -962,7 +962,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.RecallMob.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "RecallMob", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "RecallMob", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "RecallMob", gameCommands.RecallMob.PerMissionMin);
@@ -971,7 +971,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.RecallMob.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "LuckPoint", "");
+            LoadString = ReadWriteString("Command", "LuckPoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "LuckPoint", gameCommands.LuckyPoint.CmdName);
@@ -980,7 +980,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.LuckyPoint.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "LuckPoint", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "LuckPoint", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "LuckPoint", gameCommands.LuckyPoint.PerMissionMin);
@@ -989,7 +989,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.LuckyPoint.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "LotteryTicket", "");
+            LoadString = ReadWriteString("Command", "LotteryTicket", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "LotteryTicket", gameCommands.LotteryTicket.CmdName);
@@ -998,7 +998,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.LotteryTicket.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "LotteryTicket", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "LotteryTicket", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "LotteryTicket", gameCommands.LotteryTicket.PerMissionMin);
@@ -1007,7 +1007,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.LotteryTicket.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadGuild", "");
+            LoadString = ReadWriteString("Command", "ReloadGuild", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadGuild", gameCommands.ReloadGuild.CmdName);
@@ -1016,7 +1016,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadGuild.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadGuild", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadGuild", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadGuild", gameCommands.ReloadGuild.PerMissionMin);
@@ -1025,7 +1025,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadGuild.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadLineNotice", "");
+            LoadString = ReadWriteString("Command", "ReloadLineNotice", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadLineNotice", gameCommands.ReloadLineNotice.CmdName);
@@ -1034,7 +1034,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadLineNotice.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadLineNotice", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadLineNotice", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadLineNotice", gameCommands.ReloadLineNotice.PerMissionMin);
@@ -1043,7 +1043,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadLineNotice.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadAbuse", "");
+            LoadString = ReadWriteString("Command", "ReloadAbuse", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadAbuse", gameCommands.ReloadAbuse.CmdName);
@@ -1052,7 +1052,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadAbuse.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadAbuse", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadAbuse", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadAbuse", gameCommands.ReloadAbuse.PerMissionMin);
@@ -1061,7 +1061,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadAbuse.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "BackStep", "");
+            LoadString = ReadWriteString("Command", "BackStep", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "BackStep", gameCommands.BackStep.CmdName);
@@ -1070,7 +1070,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.BackStep.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "BackStep", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "BackStep", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "BackStep", gameCommands.BackStep.PerMissionMin);
@@ -1079,7 +1079,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.BackStep.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Ball", "");
+            LoadString = ReadWriteString("Command", "Ball", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Ball", gameCommands.Ball.CmdName);
@@ -1088,7 +1088,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Ball.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Ball", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Ball", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Ball", gameCommands.Ball.PerMissionMin);
@@ -1097,7 +1097,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Ball.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "FreePenalty", "");
+            LoadString = ReadWriteString("Command", "FreePenalty", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "FreePenalty", gameCommands.FreePenalty.CmdName);
@@ -1106,7 +1106,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.FreePenalty.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "FreePenalty", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "FreePenalty", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "FreePenalty", gameCommands.FreePenalty.PerMissionMin);
@@ -1115,7 +1115,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.FreePenalty.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "PkPoint", "");
+            LoadString = ReadWriteString("Command", "PkPoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "PkPoint", gameCommands.PkPoint.CmdName);
@@ -1124,7 +1124,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.PkPoint.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "PkPoint", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "PkPoint", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "PkPoint", gameCommands.PkPoint.PerMissionMin);
@@ -1133,7 +1133,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.PkPoint.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "IncPkPoint", "");
+            LoadString = ReadWriteString("Command", "IncPkPoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "IncPkPoint", gameCommands.Incpkpoint.CmdName);
@@ -1142,7 +1142,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Incpkpoint.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "IncPkPoint", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "IncPkPoint", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "IncPkPoint", gameCommands.Incpkpoint.PerMissionMin);
@@ -1151,7 +1151,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Incpkpoint.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeLuck", "");
+            LoadString = ReadWriteString("Command", "ChangeLuck", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeLuck", gameCommands.ChangeLuck.CmdName);
@@ -1160,7 +1160,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeLuck.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeLuck", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeLuck", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeLuck", gameCommands.ChangeLuck.PerMissionMin);
@@ -1169,7 +1169,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeLuck.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Hunger", "");
+            LoadString = ReadWriteString("Command", "Hunger", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Hunger", gameCommands.Hunger.CmdName);
@@ -1178,7 +1178,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Hunger.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Hunger", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Hunger", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Hunger", gameCommands.Hunger.PerMissionMin);
@@ -1187,7 +1187,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Hunger.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Hair", "");
+            LoadString = ReadWriteString("Command", "Hair", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Hair", gameCommands.Hair.CmdName);
@@ -1196,7 +1196,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Hair.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Hair", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Hair", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Hair", gameCommands.Hair.PerMissionMin);
@@ -1205,7 +1205,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Hair.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Training", "");
+            LoadString = ReadWriteString("Command", "Training", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Training", gameCommands.Training.CmdName);
@@ -1214,7 +1214,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Training.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Training", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Training", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Training", gameCommands.Training.PerMissionMin);
@@ -1223,7 +1223,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Training.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DeleteSkill", "");
+            LoadString = ReadWriteString("Command", "DeleteSkill", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DeleteSkill", gameCommands.DeleteSkill.CmdName);
@@ -1232,7 +1232,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DeleteSkill.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DeleteSkill", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DeleteSkill", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DeleteSkill", gameCommands.DeleteSkill.PerMissionMin);
@@ -1241,7 +1241,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DeleteSkill.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeJob", "");
+            LoadString = ReadWriteString("Command", "ChangeJob", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeJob", gameCommands.ChangeJob.CmdName);
@@ -1250,7 +1250,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeJob.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeJob", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeJob", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeJob", gameCommands.ChangeJob.PerMissionMin);
@@ -1259,7 +1259,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeJob.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeGender", "");
+            LoadString = ReadWriteString("Command", "ChangeGender", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeGender", gameCommands.ChangeGender.CmdName);
@@ -1268,7 +1268,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeGender.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeGender", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeGender", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeGender", gameCommands.ChangeGender.PerMissionMin);
@@ -1277,7 +1277,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeGender.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "NameColor", "");
+            LoadString = ReadWriteString("Command", "NameColor", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "NameColor", gameCommands.Namecolor.CmdName);
@@ -1286,7 +1286,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Namecolor.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "NameColor", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "NameColor", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "NameColor", gameCommands.Namecolor.PerMissionMin);
@@ -1295,7 +1295,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Namecolor.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Mission", "");
+            LoadString = ReadWriteString("Command", "Mission", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Mission", gameCommands.Mission.CmdName);
@@ -1304,7 +1304,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Mission.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Mission", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Mission", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Mission", gameCommands.Mission.PerMissionMin);
@@ -1313,7 +1313,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Mission.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "MobPlace", "");
+            LoadString = ReadWriteString("Command", "MobPlace", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "MobPlace", gameCommands.MobPlace.CmdName);
@@ -1322,7 +1322,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MobPlace.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "MobPlace", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MobPlace", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MobPlace", gameCommands.MobPlace.PerMissionMin);
@@ -1331,7 +1331,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MobPlace.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Transparecy", "");
+            LoadString = ReadWriteString("Command", "Transparecy", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Transparecy", gameCommands.Transparecy.CmdName);
@@ -1340,7 +1340,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Transparecy.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Transparecy", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Transparecy", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Transparecy", gameCommands.Transparecy.PerMissionMin);
@@ -1349,7 +1349,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Transparecy.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DeleteItem", "");
+            LoadString = ReadWriteString("Command", "DeleteItem", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DeleteItem", gameCommands.DeleteItem.CmdName);
@@ -1358,7 +1358,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DeleteItem.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DeleteItem", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DeleteItem", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DeleteItem", gameCommands.DeleteItem.PerMissionMin);
@@ -1367,7 +1367,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DeleteItem.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Level0", "");
+            LoadString = ReadWriteString("Command", "Level0", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Level0", gameCommands.Level.CmdName);
@@ -1376,7 +1376,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Level.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Level0", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Level0", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Level0", gameCommands.Level.PerMissionMin);
@@ -1385,7 +1385,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Level.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ClearMission", "");
+            LoadString = ReadWriteString("Command", "ClearMission", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ClearMission", gameCommands.ClearMission.CmdName);
@@ -1394,7 +1394,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ClearMission.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ClearMission", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ClearMission", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ClearMission", gameCommands.ClearMission.PerMissionMin);
@@ -1403,7 +1403,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ClearMission.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SetFlag", "");
+            LoadString = ReadWriteString("Command", "SetFlag", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SetFlag", gameCommands.SetFlag.CmdName);
@@ -1412,7 +1412,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetFlag.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SetFlag", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SetFlag", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SetFlag", gameCommands.SetFlag.PerMissionMin);
@@ -1421,7 +1421,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetFlag.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SetOpen", "");
+            LoadString = ReadWriteString("Command", "SetOpen", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SetOpen", gameCommands.SetOpen.CmdName);
@@ -1430,7 +1430,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetOpen.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SetOpen", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SetOpen", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SetOpen", gameCommands.SetOpen.PerMissionMin);
@@ -1439,7 +1439,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetOpen.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SetUnit", "");
+            LoadString = ReadWriteString("Command", "SetUnit", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SetUnit", gameCommands.SetUnit.CmdName);
@@ -1448,7 +1448,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetUnit.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SetUnit", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SetUnit", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SetUnit", gameCommands.SetUnit.PerMissionMin);
@@ -1457,7 +1457,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetUnit.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReConnection", "");
+            LoadString = ReadWriteString("Command", "ReConnection", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReConnection", gameCommands.Reconnection.CmdName);
@@ -1466,7 +1466,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Reconnection.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReConnection", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReConnection", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReConnection", gameCommands.Reconnection.PerMissionMin);
@@ -1475,7 +1475,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Reconnection.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DisableFilter", "");
+            LoadString = ReadWriteString("Command", "DisableFilter", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DisableFilter", gameCommands.DisableFilter.CmdName);
@@ -1484,7 +1484,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DisableFilter.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DisableFilter", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DisableFilter", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DisableFilter", gameCommands.DisableFilter.PerMissionMin);
@@ -1493,7 +1493,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DisableFilter.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeUserFull", "");
+            LoadString = ReadWriteString("Command", "ChangeUserFull", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeUserFull", gameCommands.ChguserFull.CmdName);
@@ -1502,7 +1502,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChguserFull.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeUserFull", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeUserFull", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeUserFull", gameCommands.ChguserFull.PerMissionMin);
@@ -1511,7 +1511,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChguserFull.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeZenFastStep", "");
+            LoadString = ReadWriteString("Command", "ChangeZenFastStep", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeZenFastStep", gameCommands.ChgZenFastStep.CmdName);
@@ -1520,7 +1520,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChgZenFastStep.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeZenFastStep", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeZenFastStep", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeZenFastStep", gameCommands.ChgZenFastStep.PerMissionMin);
@@ -1529,7 +1529,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChgZenFastStep.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ContestPoint", "");
+            LoadString = ReadWriteString("Command", "ContestPoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ContestPoint", gameCommands.ContestPoint.CmdName);
@@ -1538,7 +1538,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ContestPoint.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ContestPoint", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ContestPoint", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ContestPoint", gameCommands.ContestPoint.PerMissionMin);
@@ -1547,7 +1547,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ContestPoint.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "StartContest", "");
+            LoadString = ReadWriteString("Command", "StartContest", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StartContest", gameCommands.StartContest.CmdName);
@@ -1556,7 +1556,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.StartContest.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "StartContest", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "StartContest", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "StartContest", gameCommands.StartContest.PerMissionMin);
@@ -1565,7 +1565,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.StartContest.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "EndContest", "");
+            LoadString = ReadWriteString("Command", "EndContest", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "EndContest", gameCommands.EndContest.CmdName);
@@ -1574,7 +1574,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.EndContest.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "EndContest", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "EndContest", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "EndContest", gameCommands.EndContest.PerMissionMin);
@@ -1583,7 +1583,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.EndContest.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Announcement", "");
+            LoadString = ReadWriteString("Command", "Announcement", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Announcement", gameCommands.Announcement.CmdName);
@@ -1592,7 +1592,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Announcement.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Announcement", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Announcement", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Announcement", gameCommands.Announcement.PerMissionMin);
@@ -1601,7 +1601,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Announcement.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "OXQuizRoom", "");
+            LoadString = ReadWriteString("Command", "OXQuizRoom", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "OXQuizRoom", gameCommands.Oxquizroom.CmdName);
@@ -1610,7 +1610,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Oxquizroom.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "OXQuizRoom", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "OXQuizRoom", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "OXQuizRoom", gameCommands.Oxquizroom.PerMissionMin);
@@ -1619,7 +1619,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Oxquizroom.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Gsa", "");
+            LoadString = ReadWriteString("Command", "Gsa", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Gsa", gameCommands.Gsa.CmdName);
@@ -1628,7 +1628,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Gsa.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Gsa", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Gsa", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Gsa", gameCommands.Gsa.PerMissionMin);
@@ -1637,7 +1637,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Gsa.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeItemName", "");
+            LoadString = ReadWriteString("Command", "ChangeItemName", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeItemName", gameCommands.ChangeItemName.CmdName);
@@ -1646,7 +1646,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeItemName.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeItemName", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeItemName", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeItemName", gameCommands.ChangeItemName.PerMissionMin);
@@ -1655,7 +1655,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeItemName.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DisableSendMsg", "");
+            LoadString = ReadWriteString("Command", "DisableSendMsg", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DisableSendMsg", gameCommands.DisableSendMsg.CmdName);
@@ -1664,7 +1664,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DisableSendMsg.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DisableSendMsg", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DisableSendMsg", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DisableSendMsg", gameCommands.DisableSendMsg.PerMissionMin);
@@ -1673,7 +1673,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DisableSendMsg.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "EnableSendMsg", "");
+            LoadString = ReadWriteString("Command", "EnableSendMsg", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "EnableSendMsg", gameCommands.EnableSendMsg.CmdName);
@@ -1682,7 +1682,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.EnableSendMsg.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "EnableSendMsg", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "EnableSendMsg", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "EnableSendMsg", gameCommands.EnableSendMsg.PerMissionMin);
@@ -1691,7 +1691,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.EnableSendMsg.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DisableSendMsgList", "");
+            LoadString = ReadWriteString("Command", "DisableSendMsgList", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DisableSendMsgList", gameCommands.DisableSendMsgList.CmdName);
@@ -1700,7 +1700,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DisableSendMsgList.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DisableSendMsgList", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DisableSendMsgList", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DisableSendMsgList", gameCommands.DisableSendMsgList.PerMissionMin);
@@ -1709,7 +1709,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DisableSendMsgList.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Kill", "");
+            LoadString = ReadWriteString("Command", "Kill", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Kill", gameCommands.Kill.CmdName);
@@ -1718,7 +1718,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Kill.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Kill", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Kill", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Kill", gameCommands.Kill.PerMissionMin);
@@ -1727,7 +1727,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Kill.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Make", "");
+            LoadString = ReadWriteString("Command", "Make", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Make", gameCommands.Make.CmdName);
@@ -1736,7 +1736,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Make.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "MakeMin", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MakeMin", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MakeMin", gameCommands.Make.PerMissionMin);
@@ -1745,7 +1745,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Make.PerMissionMin = nLoadInteger;
             }
-            nLoadInteger = ReadInteger("Permission", "MakeMax", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MakeMax", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MakeMax", gameCommands.Make.PerMissionMax);
@@ -1754,7 +1754,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Make.PerMissionMax = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SuperMake", "");
+            LoadString = ReadWriteString("Command", "SuperMake", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SuperMake", gameCommands.Smake.CmdName);
@@ -1763,7 +1763,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Smake.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SuperMake", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SuperMake", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SuperMake", gameCommands.Smake.PerMissionMin);
@@ -1772,7 +1772,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Smake.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "BonusPoint", "");
+            LoadString = ReadWriteString("Command", "BonusPoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "BonusPoint", gameCommands.BonusPoint.CmdName);
@@ -1781,7 +1781,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.BonusPoint.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "BonusPoint", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "BonusPoint", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "BonusPoint", gameCommands.BonusPoint.PerMissionMin);
@@ -1790,7 +1790,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.BonusPoint.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DelBonuPoint", "");
+            LoadString = ReadWriteString("Command", "DelBonuPoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DelBonuPoint", gameCommands.DelBonusPoint.CmdName);
@@ -1799,7 +1799,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelBonusPoint.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DelBonuPoint", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DelBonuPoint", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DelBonuPoint", gameCommands.DelBonusPoint.PerMissionMin);
@@ -1808,7 +1808,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelBonusPoint.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "RestBonuPoint", "");
+            LoadString = ReadWriteString("Command", "RestBonuPoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "RestBonuPoint", gameCommands.Restbonuspoint.CmdName);
@@ -1817,7 +1817,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Restbonuspoint.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "RestBonuPoint", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "RestBonuPoint", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "RestBonuPoint", gameCommands.Restbonuspoint.PerMissionMin);
@@ -1826,7 +1826,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Restbonuspoint.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "FireBurn", "");
+            LoadString = ReadWriteString("Command", "FireBurn", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "FireBurn", gameCommands.FireBurn.CmdName);
@@ -1835,7 +1835,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.FireBurn.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "FireBurn", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "FireBurn", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "FireBurn", gameCommands.FireBurn.PerMissionMin);
@@ -1844,7 +1844,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.FireBurn.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "TestStatus", "");
+            LoadString = ReadWriteString("Command", "TestStatus", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "TestStatus", gameCommands.TestStatus.CmdName);
@@ -1853,7 +1853,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.TestStatus.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "TestStatus", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "TestStatus", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "TestStatus", gameCommands.TestStatus.PerMissionMin);
@@ -1862,7 +1862,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.TestStatus.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DelGold", "");
+            LoadString = ReadWriteString("Command", "DelGold", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DelGold", gameCommands.DelGold.CmdName);
@@ -1871,7 +1871,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelGold.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DelGold", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DelGold", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DelGold", gameCommands.DelGold.PerMissionMin);
@@ -1880,7 +1880,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelGold.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "AddGold", "");
+            LoadString = ReadWriteString("Command", "AddGold", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AddGold", gameCommands.AddGold.CmdName);
@@ -1889,7 +1889,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AddGold.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "AddGold", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "AddGold", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "AddGold", gameCommands.AddGold.PerMissionMin);
@@ -1898,7 +1898,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AddGold.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DelGameGold", "");
+            LoadString = ReadWriteString("Command", "DelGameGold", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DelGameGold", gameCommands.DelGameGold.CmdName);
@@ -1907,7 +1907,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelGameGold.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DelGameGold", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DelGameGold", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DelGameGold", gameCommands.DelGameGold.PerMissionMin);
@@ -1916,7 +1916,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelGameGold.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "AddGamePoint", "");
+            LoadString = ReadWriteString("Command", "AddGamePoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AddGamePoint", gameCommands.AddGameGold.CmdName);
@@ -1925,7 +1925,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AddGameGold.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "AddGameGold", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "AddGameGold", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "AddGameGold", gameCommands.AddGameGold.PerMissionMin);
@@ -1934,7 +1934,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AddGameGold.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "GameGold", "");
+            LoadString = ReadWriteString("Command", "GameGold", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "GameGold", gameCommands.GameGold.CmdName);
@@ -1943,7 +1943,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.GameGold.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "GameGold", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "GameGold", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "GameGold", gameCommands.GameGold.PerMissionMin);
@@ -1952,7 +1952,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.GameGold.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "GamePoint", "");
+            LoadString = ReadWriteString("Command", "GamePoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "GamePoint", gameCommands.GamePoint.CmdName);
@@ -1961,7 +1961,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.GamePoint.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "GamePoint", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "GamePoint", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "GamePoint", gameCommands.GamePoint.PerMissionMin);
@@ -1970,7 +1970,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.GamePoint.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "CreditPoint", "");
+            LoadString = ReadWriteString("Command", "CreditPoint", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "CreditPoint", gameCommands.CreditPoint.CmdName);
@@ -1979,7 +1979,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.CreditPoint.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "CreditPoint", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "CreditPoint", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "CreditPoint", gameCommands.CreditPoint.PerMissionMin);
@@ -1988,7 +1988,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.CreditPoint.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "TestGoldChange", "");
+            LoadString = ReadWriteString("Command", "TestGoldChange", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "TestGoldChange", gameCommands.Testgoldchange.CmdName);
@@ -1997,7 +1997,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Testgoldchange.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "TestGoldChange", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "TestGoldChange", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "TestGoldChange", gameCommands.Testgoldchange.PerMissionMin);
@@ -2006,7 +2006,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Testgoldchange.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "RefineWeapon", "");
+            LoadString = ReadWriteString("Command", "RefineWeapon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "RefineWeapon", gameCommands.RefineWeapon.CmdName);
@@ -2015,7 +2015,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.RefineWeapon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "RefineWeapon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "RefineWeapon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "RefineWeapon", gameCommands.RefineWeapon.PerMissionMin);
@@ -2024,7 +2024,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.RefineWeapon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadAdmin", "");
+            LoadString = ReadWriteString("Command", "ReloadAdmin", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadAdmin", gameCommands.ReloadAdmin.CmdName);
@@ -2033,7 +2033,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadAdmin.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadAdmin", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadAdmin", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadAdmin", gameCommands.ReloadAdmin.PerMissionMin);
@@ -2042,7 +2042,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadAdmin.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadNpc", "");
+            LoadString = ReadWriteString("Command", "ReloadNpc", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadNpc", gameCommands.ReloadNpc.CmdName);
@@ -2051,7 +2051,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadNpc.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadNpc", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadNpc", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadNpc", gameCommands.ReloadNpc.PerMissionMin);
@@ -2060,7 +2060,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadNpc.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadManage", "");
+            LoadString = ReadWriteString("Command", "ReloadManage", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadManage", gameCommands.ReloadManage.CmdName);
@@ -2069,7 +2069,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadManage.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadManage", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadManage", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadManage", gameCommands.ReloadManage.PerMissionMin);
@@ -2078,7 +2078,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadManage.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadRobotManage", "");
+            LoadString = ReadWriteString("Command", "ReloadRobotManage", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadRobotManage", gameCommands.ReloadRobotManage.CmdName);
@@ -2087,7 +2087,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadRobotManage.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadRobotManage", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadRobotManage", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadRobotManage", gameCommands.ReloadRobotManage.PerMissionMin);
@@ -2096,7 +2096,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadRobotManage.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadRobot", "");
+            LoadString = ReadWriteString("Command", "ReloadRobot", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadRobot", gameCommands.ReloadRobot.CmdName);
@@ -2105,7 +2105,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadRobot.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadRobot", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadRobot", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadRobot", gameCommands.ReloadRobot.PerMissionMin);
@@ -2114,7 +2114,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadRobot.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadMonitems", "");
+            LoadString = ReadWriteString("Command", "ReloadMonitems", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadMonitems", gameCommands.ReloadMonItems.CmdName);
@@ -2123,7 +2123,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadMonItems.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadMonitems", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadMonitems", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadMonitems", gameCommands.ReloadMonItems.PerMissionMin);
@@ -2132,7 +2132,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadMonItems.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadDiary", "");
+            LoadString = ReadWriteString("Command", "ReloadDiary", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadDiary", gameCommands.Reloaddiary.CmdName);
@@ -2141,7 +2141,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Reloaddiary.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadDiary", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadDiary", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadDiary", gameCommands.Reloaddiary.PerMissionMin);
@@ -2150,7 +2150,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Reloaddiary.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadItemDB", "");
+            LoadString = ReadWriteString("Command", "ReloadItemDB", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadItemDB", gameCommands.ReloadItemDB.CmdName);
@@ -2159,7 +2159,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadItemDB.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadItemDB", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadItemDB", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadItemDB", gameCommands.ReloadItemDB.PerMissionMin);
@@ -2168,7 +2168,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadItemDB.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadMagicDB", "");
+            LoadString = ReadWriteString("Command", "ReloadMagicDB", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadMagicDB", gameCommands.ReloadMagicDb.CmdName);
@@ -2177,7 +2177,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadMagicDb.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadMagicDB", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadMagicDB", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadMagicDB", gameCommands.ReloadMagicDb.PerMissionMin);
@@ -2186,7 +2186,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadMagicDb.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadMonsterDB", "");
+            LoadString = ReadWriteString("Command", "ReloadMonsterDB", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadMonsterDB", gameCommands.Reloadmonsterdb.CmdName);
@@ -2195,7 +2195,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Reloadmonsterdb.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadMonsterDB", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadMonsterDB", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadMonsterDB", gameCommands.Reloadmonsterdb.PerMissionMin);
@@ -2204,7 +2204,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Reloadmonsterdb.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReAlive", "");
+            LoadString = ReadWriteString("Command", "ReAlive", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReAlive", gameCommands.ReaLive.CmdName);
@@ -2213,7 +2213,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReaLive.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReAlive", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReAlive", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReAlive", gameCommands.ReaLive.PerMissionMin);
@@ -2222,7 +2222,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReaLive.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "AdjuestTLevel", "");
+            LoadString = ReadWriteString("Command", "AdjuestTLevel", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AdjuestTLevel", gameCommands.AdjuestLevel.CmdName);
@@ -2231,7 +2231,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AdjuestLevel.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "AdjuestTLevel", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "AdjuestTLevel", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "AdjuestTLevel", gameCommands.AdjuestLevel.PerMissionMin);
@@ -2240,7 +2240,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AdjuestLevel.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "AdjuestExp", "");
+            LoadString = ReadWriteString("Command", "AdjuestExp", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AdjuestExp", gameCommands.AdjuestExp.CmdName);
@@ -2249,7 +2249,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AdjuestExp.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "AdjuestExp", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "AdjuestExp", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "AdjuestExp", gameCommands.AdjuestExp.PerMissionMin);
@@ -2258,7 +2258,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AdjuestExp.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "AddGuild", "");
+            LoadString = ReadWriteString("Command", "AddGuild", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AddGuild", gameCommands.AddGuild.CmdName);
@@ -2267,7 +2267,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AddGuild.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "AddGuild", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "AddGuild", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "AddGuild", gameCommands.AddGuild.PerMissionMin);
@@ -2276,7 +2276,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.AddGuild.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DelGuild", "");
+            LoadString = ReadWriteString("Command", "DelGuild", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DelGuild", gameCommands.DelGuild.CmdName);
@@ -2285,7 +2285,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelGuild.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DelGuild", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DelGuild", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DelGuild", gameCommands.DelGuild.PerMissionMin);
@@ -2294,7 +2294,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelGuild.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeSabukLord", "");
+            LoadString = ReadWriteString("Command", "ChangeSabukLord", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeSabukLord", gameCommands.ChangeSabukLord.CmdName);
@@ -2303,7 +2303,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeSabukLord.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeSabukLord", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeSabukLord", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeSabukLord", gameCommands.ChangeSabukLord.PerMissionMin);
@@ -2312,7 +2312,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeSabukLord.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ForcedWallConQuestWar", "");
+            LoadString = ReadWriteString("Command", "ForcedWallConQuestWar", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ForcedWallConQuestWar", gameCommands.ForcedWallConQuestWar.CmdName);
@@ -2321,7 +2321,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ForcedWallConQuestWar.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ForcedWallConQuestWar", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ForcedWallConQuestWar", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ForcedWallConQuestWar", gameCommands.ForcedWallConQuestWar.PerMissionMin);
@@ -2330,7 +2330,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ForcedWallConQuestWar.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "AddToItemEvent", "");
+            LoadString = ReadWriteString("Command", "AddToItemEvent", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AddToItemEvent", gameCommands.Addtoitemevent.CmdName);
@@ -2339,7 +2339,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Addtoitemevent.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "AddToItemEvent", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "AddToItemEvent", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "AddToItemEvent", gameCommands.Addtoitemevent.PerMissionMin);
@@ -2348,7 +2348,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Addtoitemevent.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "AddToItemEventAspieces", "");
+            LoadString = ReadWriteString("Command", "AddToItemEventAspieces", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AddToItemEventAspieces", gameCommands.Addtoitemeventaspieces.CmdName);
@@ -2357,7 +2357,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Addtoitemeventaspieces.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "AddToItemEventAspieces", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "AddToItemEventAspieces", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "AddToItemEventAspieces", gameCommands.Addtoitemeventaspieces.PerMissionMin);
@@ -2366,7 +2366,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Addtoitemeventaspieces.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ItemEventList", "");
+            LoadString = ReadWriteString("Command", "ItemEventList", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ItemEventList", gameCommands.Itemeventlist.CmdName);
@@ -2375,7 +2375,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Itemeventlist.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ItemEventList", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ItemEventList", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ItemEventList", gameCommands.Itemeventlist.PerMissionMin);
@@ -2384,7 +2384,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Itemeventlist.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "StartIngGiftNO", "");
+            LoadString = ReadWriteString("Command", "StartIngGiftNO", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StartIngGiftNO", gameCommands.Startinggiftno.CmdName);
@@ -2393,7 +2393,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Startinggiftno.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "StartIngGiftNO", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "StartIngGiftNO", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "StartIngGiftNO", gameCommands.Startinggiftno.PerMissionMin);
@@ -2402,7 +2402,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Startinggiftno.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DeleteAllItemEvent", "");
+            LoadString = ReadWriteString("Command", "DeleteAllItemEvent", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DeleteAllItemEvent", gameCommands.Deleteallitemevent.CmdName);
@@ -2411,7 +2411,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Deleteallitemevent.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DeleteAllItemEvent", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DeleteAllItemEvent", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DeleteAllItemEvent", gameCommands.Deleteallitemevent.PerMissionMin);
@@ -2420,7 +2420,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Deleteallitemevent.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "StartItemEvent", "");
+            LoadString = ReadWriteString("Command", "StartItemEvent", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StartItemEvent", gameCommands.Startitemevent.CmdName);
@@ -2429,7 +2429,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Startitemevent.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "StartItemEvent", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "StartItemEvent", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "StartItemEvent", gameCommands.Startitemevent.PerMissionMin);
@@ -2438,7 +2438,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Startitemevent.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ItemEventTerm", "");
+            LoadString = ReadWriteString("Command", "ItemEventTerm", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ItemEventTerm", gameCommands.Itemeventterm.CmdName);
@@ -2447,7 +2447,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Itemeventterm.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ItemEventTerm", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ItemEventTerm", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ItemEventTerm", gameCommands.Itemeventterm.PerMissionMin);
@@ -2456,7 +2456,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Itemeventterm.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "AdjuestTestLevel", "");
+            LoadString = ReadWriteString("Command", "AdjuestTestLevel", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "AdjuestTestLevel", gameCommands.Adjuesttestlevel.CmdName);
@@ -2465,7 +2465,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Adjuesttestlevel.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "AdjuestTestLevel", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "AdjuestTestLevel", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "AdjuestTestLevel", gameCommands.Adjuesttestlevel.PerMissionMin);
@@ -2474,7 +2474,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Adjuesttestlevel.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "OpTraining", "");
+            LoadString = ReadWriteString("Command", "OpTraining", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "OpTraining", gameCommands.TrainingSkill.CmdName);
@@ -2483,7 +2483,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.TrainingSkill.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "OpTraining", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "OpTraining", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "OpTraining", gameCommands.TrainingSkill.PerMissionMin);
@@ -2492,7 +2492,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.TrainingSkill.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "OpDeleteSkill", "");
+            LoadString = ReadWriteString("Command", "OpDeleteSkill", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "OpDeleteSkill", gameCommands.Opdeleteskill.CmdName);
@@ -2501,7 +2501,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Opdeleteskill.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "OpDeleteSkill", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "OpDeleteSkill", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "OpDeleteSkill", gameCommands.Opdeleteskill.PerMissionMin);
@@ -2510,7 +2510,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Opdeleteskill.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeWeaponDura", "");
+            LoadString = ReadWriteString("Command", "ChangeWeaponDura", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeWeaponDura", gameCommands.Changeweapondura.CmdName);
@@ -2519,7 +2519,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Changeweapondura.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeWeaponDura", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeWeaponDura", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeWeaponDura", gameCommands.Changeweapondura.PerMissionMin);
@@ -2528,7 +2528,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Changeweapondura.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReloadGuildAll", "");
+            LoadString = ReadWriteString("Command", "ReloadGuildAll", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReloadGuildAll", gameCommands.ReloadGuildAll.CmdName);
@@ -2537,7 +2537,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadGuildAll.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReloadGuildAll", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReloadGuildAll", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReloadGuildAll", gameCommands.ReloadGuildAll.PerMissionMin);
@@ -2546,7 +2546,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ReloadGuildAll.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Who", "");
+            LoadString = ReadWriteString("Command", "Who", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Who", gameCommands.Who.CmdName);
@@ -2555,7 +2555,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Who.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Who", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Who", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Who", gameCommands.Who.PerMissionMin);
@@ -2564,7 +2564,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Who.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "Total", "");
+            LoadString = ReadWriteString("Command", "Total", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "Total", gameCommands.Total.CmdName);
@@ -2573,7 +2573,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Total.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "Total", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "Total", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "Total", gameCommands.Total.PerMissionMin);
@@ -2582,7 +2582,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Total.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "TestGa", "");
+            LoadString = ReadWriteString("Command", "TestGa", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "TestGa", gameCommands.Testga.CmdName);
@@ -2591,7 +2591,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Testga.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "TestGa", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "TestGa", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "TestGa", gameCommands.Testga.PerMissionMin);
@@ -2600,7 +2600,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Testga.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "MapInfo", "");
+            LoadString = ReadWriteString("Command", "MapInfo", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "MapInfo", gameCommands.MapInfo.CmdName);
@@ -2609,7 +2609,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MapInfo.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "MapInfo", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "MapInfo", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "MapInfo", gameCommands.MapInfo.PerMissionMin);
@@ -2618,7 +2618,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.MapInfo.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SbkDoor", "");
+            LoadString = ReadWriteString("Command", "SbkDoor", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SbkDoor", gameCommands.SbkDoor.CmdName);
@@ -2627,7 +2627,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SbkDoor.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SbkDoor", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SbkDoor", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SbkDoor", gameCommands.SbkDoor.PerMissionMin);
@@ -2636,7 +2636,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SbkDoor.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeDearName", "");
+            LoadString = ReadWriteString("Command", "ChangeDearName", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeDearName", gameCommands.ChangeDearName.CmdName);
@@ -2645,7 +2645,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeDearName.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeDearName", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeDearName", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeDearName", gameCommands.ChangeDearName.PerMissionMin);
@@ -2654,7 +2654,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeDearName.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ChangeMasterName", "");
+            LoadString = ReadWriteString("Command", "ChangeMasterName", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ChangeMasterrName", gameCommands.ChangeMasterName.CmdName);
@@ -2663,7 +2663,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeMasterName.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ChangeMasterName", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ChangeMasterName", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ChangeMasterName", gameCommands.ChangeMasterName.PerMissionMin);
@@ -2672,7 +2672,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ChangeMasterName.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "StartQuest", "");
+            LoadString = ReadWriteString("Command", "StartQuest", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "StartQuest", gameCommands.StartQuest.CmdName);
@@ -2681,7 +2681,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.StartQuest.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "StartQuest", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "StartQuest", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "StartQuest", gameCommands.StartQuest.PerMissionMin);
@@ -2690,7 +2690,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.StartQuest.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SetPermission", "");
+            LoadString = ReadWriteString("Command", "SetPermission", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SetPermission", gameCommands.SetperMission.CmdName);
@@ -2699,7 +2699,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetperMission.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SetPermission", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SetPermission", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SetPermission", gameCommands.SetperMission.PerMissionMin);
@@ -2708,7 +2708,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetperMission.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ClearMon", "");
+            LoadString = ReadWriteString("Command", "ClearMon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ClearMon", gameCommands.ClearMon.CmdName);
@@ -2717,7 +2717,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ClearMon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ClearMon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ClearMon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ClearMon", gameCommands.ClearMon.PerMissionMin);
@@ -2726,7 +2726,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ClearMon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ReNewLevel", "");
+            LoadString = ReadWriteString("Command", "ReNewLevel", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ReNewLevel", gameCommands.RenewLevel.CmdName);
@@ -2735,7 +2735,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.RenewLevel.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ReNewLevel", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ReNewLevel", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ReNewLevel", gameCommands.RenewLevel.PerMissionMin);
@@ -2744,7 +2744,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.RenewLevel.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DenyIPaddrLogon", "");
+            LoadString = ReadWriteString("Command", "DenyIPaddrLogon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DenyIPaddrLogon", gameCommands.DenyipLogon.CmdName);
@@ -2753,7 +2753,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DenyipLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DenyIPaddrLogon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DenyIPaddrLogon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DenyIPaddrLogon", gameCommands.DenyipLogon.PerMissionMin);
@@ -2762,7 +2762,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DenyipLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DenyAccountLogon", "");
+            LoadString = ReadWriteString("Command", "DenyAccountLogon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DenyAccountLogon", gameCommands.DenyAccountLogon.CmdName);
@@ -2771,7 +2771,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DenyAccountLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DenyAccountLogon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DenyAccountLogon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DenyAccountLogon", gameCommands.DenyAccountLogon.PerMissionMin);
@@ -2780,7 +2780,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DenyAccountLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DenyChrNameLogon", "");
+            LoadString = ReadWriteString("Command", "DenyChrNameLogon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DenyChrNameLogon", gameCommands.DenyChrNameLogon.CmdName);
@@ -2789,7 +2789,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DenyChrNameLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DenyChrNameLogon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DenyChrNameLogon", gameCommands.DenyChrNameLogon.PerMissionMin);
@@ -2798,7 +2798,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DenyChrNameLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DelDenyIPLogon", "");
+            LoadString = ReadWriteString("Command", "DelDenyIPLogon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DelDenyIPLogon", gameCommands.DelDenyIpLogon.CmdName);
@@ -2807,7 +2807,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelDenyIpLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DelDenyIPLogon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DelDenyIPLogon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DelDenyIPLogon", gameCommands.DelDenyIpLogon.PerMissionMin);
@@ -2816,7 +2816,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelDenyIpLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DelDenyAccountLogon", "");
+            LoadString = ReadWriteString("Command", "DelDenyAccountLogon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DelDenyAccountLogon", gameCommands.DelDenyAccountLogon.CmdName);
@@ -2825,7 +2825,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelDenyAccountLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DelDenyAccountLogon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DelDenyAccountLogon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DelDenyAccountLogon", gameCommands.DelDenyAccountLogon.PerMissionMin);
@@ -2834,7 +2834,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelDenyAccountLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "DelDenyChrNameLogon", "");
+            LoadString = ReadWriteString("Command", "DelDenyChrNameLogon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "DelDenyChrNameLogon", gameCommands.DelDenyChrNameLogon.CmdName);
@@ -2843,7 +2843,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelDenyChrNameLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "DelDenyChrNameLogon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "DelDenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "DelDenyChrNameLogon", gameCommands.DelDenyChrNameLogon.PerMissionMin);
@@ -2852,7 +2852,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.DelDenyChrNameLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ShowDenyIPLogon", "");
+            LoadString = ReadWriteString("Command", "ShowDenyIPLogon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ShowDenyIPLogon", gameCommands.ShowDenyIpLogon.CmdName);
@@ -2861,7 +2861,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowDenyIpLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ShowDenyIPLogon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ShowDenyIPLogon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ShowDenyIPLogon", gameCommands.ShowDenyIpLogon.PerMissionMin);
@@ -2870,7 +2870,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowDenyIpLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ShowDenyAccountLogon", "");
+            LoadString = ReadWriteString("Command", "ShowDenyAccountLogon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ShowDenyAccountLogon", gameCommands.ShowDenyAccountLogon.CmdName);
@@ -2879,7 +2879,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowDenyAccountLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ShowDenyAccountLogon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ShowDenyAccountLogon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ShowDenyAccountLogon", gameCommands.ShowDenyAccountLogon.PerMissionMin);
@@ -2888,7 +2888,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowDenyAccountLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ShowDenyChrNameLogon", "");
+            LoadString = ReadWriteString("Command", "ShowDenyChrNameLogon", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ShowDenyChrNameLogon", gameCommands.ShowDenyChrNameLogon.CmdName);
@@ -2897,7 +2897,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowDenyChrNameLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ShowDenyChrNameLogon", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ShowDenyChrNameLogon", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ShowDenyChrNameLogon", gameCommands.ShowDenyChrNameLogon.PerMissionMin);
@@ -2906,7 +2906,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowDenyChrNameLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ViewWhisper", "");
+            LoadString = ReadWriteString("Command", "ViewWhisper", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ViewWhisper", gameCommands.ViewWhisper.CmdName);
@@ -2915,7 +2915,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ViewWhisper.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ViewWhisper", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ViewWhisper", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ViewWhisper", gameCommands.ViewWhisper.PerMissionMin);
@@ -2924,7 +2924,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ViewWhisper.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SpiritStart", "");
+            LoadString = ReadWriteString("Command", "SpiritStart", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SpiritStart", gameCommands.Spirit.CmdName);
@@ -2933,7 +2933,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Spirit.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SpiritStart", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SpiritStart", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SpiritStart", gameCommands.Spirit.PerMissionMin);
@@ -2942,7 +2942,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.Spirit.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SpiritStop", "");
+            LoadString = ReadWriteString("Command", "SpiritStop", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SpiritStop", gameCommands.SpiritStop.CmdName);
@@ -2951,7 +2951,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SpiritStop.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SpiritStop", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SpiritStop", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SpiritStop", gameCommands.SpiritStop.PerMissionMin);
@@ -2960,7 +2960,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SpiritStop.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "SetMapMode", "");
+            LoadString = ReadWriteString("Command", "SetMapMode", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "SetMapMode", gameCommands.SetMapMode.CmdName);
@@ -2969,7 +2969,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetMapMode.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "SetMapMode", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "SetMapMode", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "SetMapMode", gameCommands.SetMapMode.PerMissionMin);
@@ -2978,7 +2978,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.SetMapMode.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ShoweMapMode", "");
+            LoadString = ReadWriteString("Command", "ShoweMapMode", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ShoweMapMode", gameCommands.ShowMapMode.CmdName);
@@ -2987,7 +2987,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowMapMode.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ShoweMapMode", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ShoweMapMode", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ShoweMapMode", gameCommands.ShowMapMode.PerMissionMin);
@@ -2996,7 +2996,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ShowMapMode.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "ClearBag", "");
+            LoadString = ReadWriteString("Command", "ClearBag", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "ClearBag", gameCommands.ClearBag.CmdName);
@@ -3005,7 +3005,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ClearBag.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "ClearBag", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "ClearBag", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "ClearBag", gameCommands.ClearBag.PerMissionMin);
@@ -3014,7 +3014,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.ClearBag.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "LockLogin", "");
+            LoadString = ReadWriteString("Command", "LockLogin", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "LockLogin", gameCommands.LockLogon.CmdName);
@@ -3023,7 +3023,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.LockLogon.CmdName = LoadString;
             }
-            nLoadInteger = ReadInteger("Permission", "LockLogin", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "LockLogin", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "LockLogin", gameCommands.LockLogon.PerMissionMin);
@@ -3032,7 +3032,7 @@ namespace GameSvr.Conf
             {
                 gameCommands.LockLogon.PerMissionMin = nLoadInteger;
             }
-            LoadString = ReadString("Command", "GMRedMsgCmd", "");
+            LoadString = ReadWriteString("Command", "GMRedMsgCmd", "");
             if (string.IsNullOrEmpty(LoadString))
             {
                 WriteString("Command", "GMRedMsgCmd", M2Share.GMRedMsgCmd);
@@ -3041,7 +3041,7 @@ namespace GameSvr.Conf
             {
                 M2Share.GMRedMsgCmd = LoadString[0];
             }
-            nLoadInteger = ReadInteger("Permission", "GMRedMsgCmd", -1);
+            nLoadInteger = ReadWriteInteger("Permission", "GMRedMsgCmd", -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger("Permission", "GMRedMsgCmd", M2Share.GMREDMSGCMD);

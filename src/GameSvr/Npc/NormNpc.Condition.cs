@@ -990,7 +990,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CASTLEWARDAY);
                 return false;
             }
-            int nWarDay = HUtil32.GetDayCount(DateTime.Now, Castle.m_WarDate);
+            int nWarDay = HUtil32.GetDayCount(DateTime.Now, Castle.WarDate);
             char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod)
             {

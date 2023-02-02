@@ -32,6 +32,7 @@ namespace GameGate
             _logger.Info("正在启动服务...", 2);
             _logger.Info("正在加载配置信息...", 3);
             ConfigManager.LoadConfig();
+            ConfigManager.SaveConfig();
             GateShare.HardwareFilter = new HardwareFilter();
             _logger.Info("配置信息加载完成...", 3);
             return base.StartAsync(cancellationToken);

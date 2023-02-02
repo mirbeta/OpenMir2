@@ -122,7 +122,10 @@ namespace GameSvr.Castle
         /// 密道地图名称
         /// </summary>
         public string SecretMap = string.Empty;
-        public DateTime m_WarDate;
+        /// <summary>
+        /// 攻城日期
+        /// </summary>
+        public DateTime WarDate;
         private readonly CastleConfMgr castleConf;
 
         public UserCastle(string sCastleDir)
@@ -373,7 +376,7 @@ namespace GameSvr.Castle
                             {
                                 UnderWar = true;
                                 ShowOverMsg = false;
-                                m_WarDate = DateTime.Now;
+                                WarDate = DateTime.Now;
                                 StartCastleWarTick = HUtil32.GetTickCount();
                                 AttackGuildList.Add(attackerInfo.Guild);
                                 attackerInfo = null;

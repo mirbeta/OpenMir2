@@ -2261,7 +2261,7 @@ namespace GameSvr.Player
                         UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
                         if (Race == ActorRace.Play)
                         {
-                            ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
+                            this.SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
                         }
                         UseItems[Grobal2.U_RIGHTHAND].Index = 0;
                         Light = 0;

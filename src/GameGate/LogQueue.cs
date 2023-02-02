@@ -19,7 +19,7 @@ namespace GameGate
 
         public void Log(string msg, int msgLevel)
         {
-            if (Config.ShowLogLevel >= msgLevel)
+            if (Config.LogLevel >= msgLevel)
             {
                 MessageLogQueue.Enqueue(msg);
             }
@@ -37,7 +37,7 @@ namespace GameGate
 
         public void DebugLog(string msg)
         {
-            if (Config.ShowDebugLog)
+            if (Config.DebugLog)
             {
                 if (DebugLogQueue.Count < 100)
                     DebugLogQueue.Enqueue(msg);

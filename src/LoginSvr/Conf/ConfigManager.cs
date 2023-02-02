@@ -6,7 +6,7 @@ using SystemModule.Common;
 
 namespace LoginSvr.Conf
 {
-    public class ConfigManager : IniFile
+    public class ConfigManager : ConfigFile
     {
         private const string sSectionServer = "Server";
         private const string sDB = "DataBase";
@@ -51,14 +51,14 @@ namespace LoginSvr.Conf
             Config.EnableMakingID = LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.EnableMakingID);
             Config.DynamicIPMode = LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.DynamicIPMode);
             Config.ConnctionString = LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
-            Config.ShowLogLevel = ReadInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
-            Config.ShowDebugLog = ReadBool("Server", "ShowDebugLog", Config.ShowDebugLog);
+            Config.ShowLogLevel = ReadWriteInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
+            Config.ShowDebugLog = ReadWriteBool("Server", "ShowDebugLog", Config.ShowDebugLog);
         }
 
         private string LoadConfigString(string sSection, string sIdent, string sDefault)
         {
             string result;
-            string sString = ReadString(sSection, sIdent, "");
+            string sString = ReadWriteString(sSection, sIdent, "");
             if (sString == "")
             {
                 WriteString(sSection, sIdent, sDefault);
@@ -74,7 +74,7 @@ namespace LoginSvr.Conf
         private int LoadConfigInteger(string sSection, string sIdent, int nDefault)
         {
             int result;
-            var nLoadInteger = ReadInteger(sSection, sIdent, -1);
+            var nLoadInteger = ReadWriteInteger(sSection, sIdent, -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger(sSection, sIdent, nDefault);
@@ -90,7 +90,7 @@ namespace LoginSvr.Conf
         private bool LoadConfigBoolean(string sSection, string sIdent, bool boDefault)
         {
             bool result;
-            var nLoadInteger = ReadInteger(sSection, sIdent, -1);
+            var nLoadInteger = ReadWriteInteger(sSection, sIdent, -1);
             if (nLoadInteger < 0)
             {
                 WriteBool(sSection, sIdent, boDefault);

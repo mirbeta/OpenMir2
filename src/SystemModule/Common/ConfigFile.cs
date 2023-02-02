@@ -8,7 +8,7 @@ namespace SystemModule.Common
     /// <summary>
     /// Provides methods for reading and writing to an conf file.
     /// </summary>
-    public abstract class IniFile
+    public abstract class ConfigFile
     {
         private string _fileName;
         private readonly Dictionary<string, Dictionary<string, string>> iniCahce = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
@@ -17,12 +17,12 @@ namespace SystemModule.Common
 
         protected int ConfigCount => iniCahce.Count;
 
-        protected IniFile()
+        protected ConfigFile()
         {
 
         }
 
-        protected IniFile(string fileName)
+        protected ConfigFile(string fileName)
         {
             FileName = fileName;
         }
@@ -42,110 +42,162 @@ namespace SystemModule.Common
             return iniCahce.Keys;
         }
 
-        private bool GetBool(string section, string key, bool defValue)
+        protected byte ReadWriteByte(string section, string key, byte defValue)
         {
-            if (iniCahce.ContainsKey(section))
+            if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
             {
-                Dictionary<string, string> hash = iniCahce[section];
-                if (hash.ContainsKey(key))
-                {
-                    var str = hash[key].ToUpper();
-                    if (string.IsNullOrEmpty(str))
-                    {
-                        return defValue;
-                    }
-                    return ((((str == "是") || (str == "YES")) || (str == "1")) || (str == "TRUE"));
-                }
+                return Read<byte>(section, key, defValue);
             }
+            WriteInteger(section, key, defValue);
             return defValue;
         }
 
-        protected bool ReadBool(string section, string key, bool defValue)
+        protected int ReadWriteInteger(string section, string key, int defValue)
         {
-            return GetBool(section, key, defValue);
-        }
-
-        protected double ReadFloat(string section, string key, double defValue)
-        {
-            if (iniCahce.ContainsKey(section))
+            if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
             {
-                Dictionary<string, string> hash = iniCahce[section];
-                if (hash.ContainsKey(key))
-                {
-                    var str = hash[key].ToUpper();
-                    if (string.IsNullOrEmpty(str))
-                    {
-                        return defValue;
-                    }
-                    return double.Parse(str);
-                }
+                return ReadInteger(section, key, defValue);
             }
+            WriteInteger(section, key, defValue);
             return defValue;
         }
 
-        protected DateTime ReadDateTime(string section, string key, DateTime defValue)
+        protected short ReadWriteInt16(string section, string key, short defValue)
         {
-            if (iniCahce.ContainsKey(section))
+            if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
             {
-                Dictionary<string, string> hash = iniCahce[section];
-                if (hash.ContainsKey(key))
-                {
-                    var str = hash[key].ToUpper();
-                    if (string.IsNullOrEmpty(str))
-                    {
-                        return defValue;
-                    }
-                    return DateTime.Parse(str);
-                }
+                return Read<short>(section, key, defValue);
             }
+            WriteInteger(section, key, defValue);
             return defValue;
         }
 
-        public int ReadInteger(string section, string key, int defValue)
+        protected ushort ReadWriteUInt16(string section, string key, ushort defValue)
         {
-            return GetInt(section, key, defValue);
+            if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
+            {
+                return Read<ushort>(section, key, defValue);
+            }
+            WriteInteger(section, key, defValue);
+            return defValue;
         }
 
-        protected T Read<T>(string section, string key, object defValue)
+        protected bool ReadWriteBool(string section, string key, bool defValue)
         {
-            if (iniCahce.ContainsKey(section))
+            if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
             {
-                Dictionary<string, string> hash = iniCahce[section];
-                if (hash.ContainsKey(key))
+                return ReadBool(section, key, defValue);
+            }
+            WriteBool(section, key, defValue);
+            return defValue;
+        }
+
+        protected double ReadWriteFloat(string section, string key, double defValue)
+        {
+            if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
+            {
+                return ReadFloat(section, key, defValue);
+            }
+            WriteFloat(section, key, defValue);
+            return defValue;
+        }
+
+        protected string ReadWriteString(string section, string key, string defValue)
+        {
+            if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
+            {
+                return ReadString(section, key, defValue);
+            }
+            WriteString(section, key, defValue);
+            return defValue;
+        }
+
+        protected DateTime ReadWriteDate(string section, string key, DateTime defValue)
+        {
+            if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
+            {
+                return ReadDateTime(section, key, defValue);
+            }
+            WriteDateTime(section, key, defValue);
+            return defValue;
+        }
+
+        private T Read<T>(string section, string key, object defValue)
+        {
+            var hash = iniCahce[section];
+            if (hash.ContainsKey(key))
+            {
+                var str = hash[key];
+                if (string.IsNullOrEmpty(str))
                 {
-                    var str = hash[key];
-                    if (string.IsNullOrEmpty(str))
-                    {
-                        return (T)Convert.ChangeType(defValue, typeof(T));
-                    }
-                    return (T)Convert.ChangeType(str, typeof(T));
+                    return (T)Convert.ChangeType(defValue, typeof(T));
                 }
+                return (T)Convert.ChangeType(str, typeof(T));
             }
             return (T)Convert.ChangeType(defValue, typeof(T));
         }
 
-        protected int ReadInteger(string section, string key, byte defValue)
+        private double ReadFloat(string section, string key, double defValue)
         {
-            return GetInt(section, key, defValue);
+            var hash = iniCahce[section];
+            if (hash.ContainsKey(key))
+            {
+                var str = hash[key];
+                if (string.IsNullOrEmpty(str))
+                {
+                    return defValue;
+                }
+                return double.Parse(str);
+            }
+            return defValue;
         }
 
-        private int GetInt(string section, string key, int defValue)
+        private DateTime ReadDateTime(string section, string key, DateTime defValue)
         {
-            if (iniCahce.ContainsKey(section))
+            var hash = iniCahce[section];
+            if (hash.ContainsKey(key))
             {
-                Dictionary<string, string> hash = iniCahce[section];
-                int ret;
+                var str = hash[key];
+                if (string.IsNullOrEmpty(str))
+                {
+                    return defValue;
+                }
+                return DateTime.Parse(str);
+            }
+            return defValue;
+        }
+
+        private int ReadInteger(string section, string key, int defValue)
+        {
+            var hash = iniCahce[section];
+            if (hash.ContainsKey(key))
+            {
+                var str = hash[key];
+                if (string.IsNullOrEmpty(str))
+                {
+                    return defValue;
+                }
+                if (int.TryParse(str, out var ret))
+                {
+                    return ret;
+                }
+            }
+            return defValue;
+        }
+
+        private bool ReadBool(string section, string key, bool defValue)
+        {
+            if (CheckSectionExists(section))
+            {
+                var hash = iniCahce[section];
                 if (hash.ContainsKey(key))
                 {
-                    var str = hash[key];
+                    var str = hash[key].ToUpper();
                     if (string.IsNullOrEmpty(str))
                     {
                         return defValue;
                     }
-                    if (int.TryParse(str, out ret))
-                    {
-                        return ret;
-                    }
+                    return (str == "是") || (str == "YES") || (str == "1") || (str == "TRUE");
                 }
             }
             return defValue;
@@ -161,9 +213,9 @@ namespace SystemModule.Common
 
         protected ICollection<string> GetSectionItemName(string sectName)
         {
-            if (iniCahce.ContainsKey(sectName))
+            if (CheckSectionExists(sectName))
             {
-                Dictionary<string, string> tbl = iniCahce[sectName];
+                var tbl = iniCahce[sectName];
                 return tbl.Keys;
             }
             return new List<string>();
@@ -171,15 +223,15 @@ namespace SystemModule.Common
 
         protected ICollection<string> GetAllValues(string sectName)
         {
-            if (iniCahce.ContainsKey(sectName))
+            if (CheckSectionExists(sectName))
             {
-                Dictionary<string, string> tbl = iniCahce[sectName];
+                var tbl = iniCahce[sectName];
                 return tbl.Values;
             }
             return new List<String>();
         }
 
-        public string ReadString(string section, string key, string defval)
+        private string ReadString(string section, string key, string defval)
         {
             var result = GetString(section, key);
             return string.IsNullOrEmpty(result) ? defval : result;
@@ -187,7 +239,7 @@ namespace SystemModule.Common
 
         private string GetString(string section, string key)
         {
-            if (iniCahce.ContainsKey(section))
+            if (CheckSectionExists(section))
             {
                 var hash = iniCahce[section];
                 if (hash.ContainsKey(key))
@@ -244,7 +296,7 @@ namespace SystemModule.Common
                                 }
                                 isCurSecComment = false;
                             }
-                            if (iniCahce.ContainsKey(sec))
+                            if (CheckSectionExists(sec))
                             {
                                 // Output.ShowMessageBox(sec + " 段重复, 请修改配置文件!");
                                 goto Label_02AE;
@@ -290,22 +342,6 @@ namespace SystemModule.Common
             Load();
         }
 
-        private string ReadLine(StreamReader rd)
-        {
-            var str = "";
-            var s = rd.ReadLine();
-            if (s == null)
-            {
-                return null;
-            }
-            s = s.Trim();
-            if (!string.IsNullOrEmpty(s))
-            {
-                str += s;
-            }
-            return str;
-        }
-
         protected void Save()
         {
             if (!File.Exists(FileName))
@@ -322,12 +358,12 @@ namespace SystemModule.Common
             {
                 fi.IsReadOnly = false;
             }
-            var sw = new StreamWriter(File.Open(FileName, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite), Encoding.GetEncoding("GB2312"));
-            foreach (KeyValuePair<string, Dictionary<string, string>> pair in iniCahce)
+            var sw = new StreamWriter(File.Open(FileName, FileMode.Append, FileAccess.Write, FileShare.ReadWrite), Encoding.GetEncoding("GB2312"));
+            foreach (var pair in iniCahce)
             {
                 sw.WriteLine("[" + pair.Key + "]");
-                Dictionary<string, string> tbl = pair.Value;
-                foreach (KeyValuePair<string, string> pair2 in tbl)
+                var tbl = pair.Value;
+                foreach (var pair2 in tbl)
                 {
                     sw.WriteLine(pair2.Key + "=" + pair2.Value);
                 }
@@ -341,7 +377,7 @@ namespace SystemModule.Common
             }
         }
 
-        private string[] SplitKeyVal(string str)
+        private static string[] SplitKeyVal(string str)
         {
             var pos = -1;
             for (var i = 0; i < str.Length; i++)
@@ -366,13 +402,13 @@ namespace SystemModule.Common
 
         protected void WriteBool(string section, string key, bool val)
         {
-            if (!iniCahce.ContainsKey(section))
+            if (!CheckSectionExists(section))
             {
                 iniCahce.Add(section, new Dictionary<string, string>());
             }
             if (!string.IsNullOrEmpty(key))
             {
-                Dictionary<string, string> secTbl = iniCahce[section];
+                var secTbl = iniCahce[section];
                 secTbl[key] = (val ? 1 : 0).ToString();
             }
         }
@@ -383,20 +419,41 @@ namespace SystemModule.Common
             {
                 return;
             }
-            if (!iniCahce.ContainsKey(section))
+            if (!CheckSectionExists(section))
             {
                 iniCahce.Add(section, new Dictionary<string, string>());
             }
             if (!string.IsNullOrEmpty(key))
             {
-                Dictionary<string, string> secTbl = iniCahce[section];
+                var secTbl = iniCahce[section];
                 secTbl[key] = val.ToString();
+            }
+        }
+
+        private void WriteFloat(string section, string key, double val)
+        {
+            if (!CheckSectionExists(section))
+            {
+                iniCahce.Add(section, new Dictionary<string, string>());
+            }
+            if (!string.IsNullOrEmpty(key))
+            {
+                var secTbl = iniCahce[section];
+                secTbl[key] = val.ToString("f2");
             }
         }
 
         protected void WriteDateTime(string section, string key, DateTime val)
         {
-            //Console.WriteLine("todo ini WriteDateTime");
+            if (!CheckSectionExists(section))
+            {
+                iniCahce.Add(section, new Dictionary<string, string>());
+            }
+            if (!string.IsNullOrEmpty(key))
+            {
+                var secTbl = iniCahce[section];
+                secTbl[key] = val.ToString("yyyy-MM-dd HH:mm:ss");
+            }
         }
 
         protected void WriteString(string section, string key, object str)
@@ -405,13 +462,13 @@ namespace SystemModule.Common
             {
                 return;
             }
-            if (!iniCahce.ContainsKey(section))
+            if (!CheckSectionExists(section))
             {
                 iniCahce.Add(section, new Dictionary<string, string>());
             }
             if (!string.IsNullOrEmpty(key))
             {
-                Dictionary<string, string> secTbl = iniCahce[section];
+                var secTbl = iniCahce[section];
                 secTbl[key] = str.ToString();
             }
         }
@@ -426,6 +483,16 @@ namespace SystemModule.Common
             {
                 _fileName = value;
             }
+        }
+
+        private bool CheckSectionExists(string sectionName)
+        {
+            return iniCahce.ContainsKey(sectionName);
+        }
+
+        private bool CheckSectionNodeExists(string sectionName, string nodeName)
+        {
+            return iniCahce[sectionName].ContainsKey(nodeName);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace LoginGate.Conf
     /// <summary>
     /// 网关配置类
     /// </summary>
-    public class GateConfig : IniFile
+    public class GateConfig : ConfigFile
     {
         public int ShowLogLevel;
         public bool ShowDebugLog;

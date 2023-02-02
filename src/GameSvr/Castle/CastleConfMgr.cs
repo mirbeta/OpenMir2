@@ -2,7 +2,7 @@ using SystemModule.Common;
 
 namespace GameSvr.Castle
 {
-    public class CastleConfMgr : IniFile
+    public class CastleConfMgr : ConfigFile
     {
         public CastleConfMgr(string fileName) : base(fileName)
         {
@@ -11,14 +11,14 @@ namespace GameSvr.Castle
 
         public void LoadConfig(UserCastle userCastle)
         {
-            userCastle.sName = ReadString("Setup", "CastleName", userCastle.sName);
-            userCastle.OwnGuild = ReadString("Setup", "OwnGuild", "");
-            userCastle.ChangeDate = ReadDateTime("Setup", "ChangeDate", DateTime.Now);
-            userCastle.m_WarDate = ReadDateTime("Setup", "WarDate", DateTime.Now);
-            userCastle.IncomeToday = ReadDateTime("Setup", "IncomeToday", DateTime.Now);
-            userCastle.TotalGold = ReadInteger("Setup", "TotalGold", 0);
-            userCastle.TodayIncome = ReadInteger("Setup", "TodayIncome", 0);
-            string sMapList = ReadString("Defense", "CastleMapList", "");
+            userCastle.sName = ReadWriteString("Setup", "CastleName", userCastle.sName);
+            userCastle.OwnGuild = ReadWriteString("Setup", "OwnGuild", "");
+            userCastle.ChangeDate = ReadWriteDate("Setup", "ChangeDate", DateTime.Now);
+            userCastle.WarDate = ReadWriteDate("Setup", "WarDate", DateTime.Now);
+            userCastle.IncomeToday = ReadWriteDate("Setup", "IncomeToday", DateTime.Now);
+            userCastle.TotalGold = ReadWriteInteger("Setup", "TotalGold", 0);
+            userCastle.TodayIncome = ReadWriteInteger("Setup", "TodayIncome", 0);
+            string sMapList = ReadWriteString("Defense", "CastleMapList", "");
             string sMap = string.Empty;
             if (!string.IsNullOrEmpty(sMapList))
             {
@@ -29,58 +29,58 @@ namespace GameSvr.Castle
                     userCastle.EnvirList.Add(sMap);
                 }
             }
-            userCastle.MapName = ReadString("Defense", "CastleMap", "3");
-            userCastle.HomeMap = ReadString("Defense", "CastleHomeMap", userCastle.HomeMap);
-            userCastle.HomeX = ReadInteger("Defense", "CastleHomeX", userCastle.HomeX);
-            userCastle.HomeY = ReadInteger("Defense", "CastleHomeY", userCastle.HomeY);
-            userCastle.WarRangeX = ReadInteger("Defense", "CastleWarRangeX", userCastle.WarRangeX);
-            userCastle.WarRangeY = ReadInteger("Defense", "CastleWarRangeY", userCastle.WarRangeY);
-            userCastle.PalaceMap = ReadString("Defense", "CastlePlaceMap", userCastle.PalaceMap);
-            userCastle.SecretMap = ReadString("Defense", "CastleSecretMap", userCastle.SecretMap);
-            userCastle.PalaceDoorX = ReadInteger("Defense", "CastlePalaceDoorX", 631);
-            userCastle.PalaceDoorY = ReadInteger("Defense", "CastlePalaceDoorY", 274);
+            userCastle.MapName = ReadWriteString("Defense", "CastleMap", "3");
+            userCastle.HomeMap = ReadWriteString("Defense", "CastleHomeMap", userCastle.HomeMap);
+            userCastle.HomeX = ReadWriteInteger("Defense", "CastleHomeX", userCastle.HomeX);
+            userCastle.HomeY = ReadWriteInteger("Defense", "CastleHomeY", userCastle.HomeY);
+            userCastle.WarRangeX = ReadWriteInteger("Defense", "CastleWarRangeX", userCastle.WarRangeX);
+            userCastle.WarRangeY = ReadWriteInteger("Defense", "CastleWarRangeY", userCastle.WarRangeY);
+            userCastle.PalaceMap = ReadWriteString("Defense", "CastlePlaceMap", userCastle.PalaceMap);
+            userCastle.SecretMap = ReadWriteString("Defense", "CastleSecretMap", userCastle.SecretMap);
+            userCastle.PalaceDoorX = ReadWriteInteger("Defense", "CastlePalaceDoorX", 631);
+            userCastle.PalaceDoorY = ReadWriteInteger("Defense", "CastlePalaceDoorY", 274);
             userCastle.MainDoor = new ArcherUnit();
-            userCastle.MainDoor.nX = Read<short>("Defense", "MainDoorX", (short)672);
-            userCastle.MainDoor.nY = Read<short>("Defense", "MainDoorY", (short)330);
-            userCastle.MainDoor.sName = ReadString("Defense", "MainDoorName", "MainDoor");
-            userCastle.MainDoor.nStatus = ReadBool("Defense", "MainDoorOpen", true);
-            userCastle.MainDoor.nHP = Read<ushort>("Defense", "MainDoorHP", (short)2000);
+            userCastle.MainDoor.nX = ReadWriteInt16("Defense", "MainDoorX", 672);
+            userCastle.MainDoor.nY = ReadWriteInt16("Defense", "MainDoorY", 330);
+            userCastle.MainDoor.sName = ReadWriteString("Defense", "MainDoorName", "MainDoor");
+            userCastle.MainDoor.nStatus = ReadWriteBool("Defense", "MainDoorOpen", true);
+            userCastle.MainDoor.nHP = ReadWriteUInt16("Defense", "MainDoorHP", 2000);
             userCastle.MainDoor.BaseObject = null;
             userCastle.LeftWall = new ArcherUnit();
-            userCastle.LeftWall.nX = Read<short>("Defense", "LeftWallX", (short)624);
-            userCastle.LeftWall.nY = Read<short>("Defense", "LeftWallY", (short)278);
-            userCastle.LeftWall.sName = ReadString("Defense", "LeftWallName", "LeftWall");
-            userCastle.LeftWall.nHP = Read<ushort>("Defense", "LeftWallHP", (short)2000);
+            userCastle.LeftWall.nX = ReadWriteInt16("Defense", "LeftWallX", 624);
+            userCastle.LeftWall.nY = ReadWriteInt16("Defense", "LeftWallY", 278);
+            userCastle.LeftWall.sName = ReadWriteString("Defense", "LeftWallName", "LeftWall");
+            userCastle.LeftWall.nHP = ReadWriteUInt16("Defense", "LeftWallHP", 2000);
             userCastle.LeftWall.BaseObject = null;
             userCastle.CenterWall = new ArcherUnit();
-            userCastle.CenterWall.nX = Read<short>("Defense", "CenterWallX", (short)627);
-            userCastle.CenterWall.nY = Read<short>("Defense", "CenterWallY", (short)278);
-            userCastle.CenterWall.sName = ReadString("Defense", "CenterWallName", "CenterWall");
-            userCastle.CenterWall.nHP = Read<ushort>("Defense", "CenterWallHP", (short)2000);
+            userCastle.CenterWall.nX = ReadWriteInt16("Defense", "CenterWallX", 627);
+            userCastle.CenterWall.nY = ReadWriteInt16("Defense", "CenterWallY", 278);
+            userCastle.CenterWall.sName = ReadWriteString("Defense", "CenterWallName", "CenterWall");
+            userCastle.CenterWall.nHP = ReadWriteUInt16("Defense", "CenterWallHP", 2000);
             userCastle.CenterWall.BaseObject = null;
             userCastle.RightWall = new ArcherUnit();
-            userCastle.RightWall.nX = Read<short>("Defense", "RightWallX", (short)634);
-            userCastle.RightWall.nY = Read<short>("Defense", "RightWallY", (short)271);
-            userCastle.RightWall.sName = ReadString("Defense", "RightWallName", "RightWall");
-            userCastle.RightWall.nHP = Read<ushort>("Defense", "RightWallHP", (short)2000);
+            userCastle.RightWall.nX = ReadWriteInt16("Defense", "RightWallX", 634);
+            userCastle.RightWall.nY = ReadWriteInt16("Defense", "RightWallY", 271);
+            userCastle.RightWall.sName = ReadWriteString("Defense", "RightWallName", "RightWall");
+            userCastle.RightWall.nHP = ReadWriteUInt16("Defense", "RightWallHP", 2000);
             userCastle.RightWall.BaseObject = null;
             for (int i = 0; i < userCastle.Archers.Length; i++)
             {
                 ArcherUnit objUnit = new ArcherUnit();
-                objUnit.nX = Read<short>("Defense", $"Archer_{i + 1}_X", (short)0);
-                objUnit.nY = Read<short>("Defense", $"Archer_{i + 1}_Y", (short)0);
-                objUnit.sName = ReadString("Defense", $"Archer_{i + 1}_Name", "弓箭手");
-                objUnit.nHP = Read<ushort>("Defense", $"Archer_{i + 1}_HP", (short)2000);
+                objUnit.nX = ReadWriteInt16("Defense", $"Archer_{i + 1}_X", 0);
+                objUnit.nY = ReadWriteInt16("Defense", $"Archer_{i + 1}_Y", 0);
+                objUnit.sName = ReadWriteString("Defense", $"Archer_{i + 1}_Name", "弓箭手");
+                objUnit.nHP = ReadWriteUInt16("Defense", $"Archer_{i + 1}_HP", 2000);
                 objUnit.BaseObject = null;
                 userCastle.Archers[i] = objUnit;
             }
             for (int i = 0; i < userCastle.Guards.Length; i++)
             {
                 ArcherUnit objUnit = new ArcherUnit();
-                objUnit.nX = Read<short>("Defense", $"Guard_{i + 1}_X", (short)0);
-                objUnit.nY = Read<short>("Defense", $"Guard_{i + 1}_Y", (short)0);
-                objUnit.sName = ReadString("Defense", $"Guard_{i + 1}_Name", "守卫");
-                objUnit.nHP = Read<ushort>("Defense", $"Guard_{i + 1}_HP", (short)2000);
+                objUnit.nX = ReadWriteInt16("Defense", $"Guard_{i + 1}_X", 0);
+                objUnit.nY = ReadWriteInt16("Defense", $"Guard_{i + 1}_Y", 0);
+                objUnit.sName = ReadWriteString("Defense", $"Guard_{i + 1}_Name", "守卫");
+                objUnit.nHP = ReadWriteUInt16("Defense", $"Guard_{i + 1}_HP", 2000);
                 objUnit.BaseObject = null;
                 userCastle.Guards[i] = objUnit;
             }
@@ -104,7 +104,7 @@ namespace GameSvr.Castle
                 WriteString("Setup", "OwnGuild", userCastle.OwnGuild);
             }
             WriteDateTime("Setup", "ChangeDate", userCastle.ChangeDate);
-            WriteDateTime("Setup", "WarDate", userCastle.m_WarDate);
+            WriteDateTime("Setup", "WarDate", userCastle.WarDate);
             WriteDateTime("Setup", "IncomeToday", userCastle.IncomeToday);
             if (userCastle.TotalGold != 0)
                 WriteInteger("Setup", "TotalGold", userCastle.TotalGold);

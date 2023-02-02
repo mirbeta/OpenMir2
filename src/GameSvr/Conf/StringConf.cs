@@ -3,7 +3,7 @@ using SystemModule.Common;
 
 namespace GameSvr.Conf
 {
-    public class StringConf : IniFile
+    public class StringConf : ConfigFile
     {
         public StringConf(string fileName) : base(fileName)
         {
@@ -13,117 +13,113 @@ namespace GameSvr.Conf
         public void LoadString()
         {
             string LoadString;
-            if (ReadString("Server", "ServerIP", "") == "")
+            if (ReadWriteString("Server", "ServerIP", "") == "")
             {
                 WriteString("Server", "ServerIP", M2Share.Config.ServerIPaddr);
             }
-            M2Share.Config.ServerIPaddr = ReadString("Server", "ServerIP", M2Share.Config.ServerIPaddr);
-            if (ReadString("Server", "WebSite", "") == "")
+            M2Share.Config.ServerIPaddr = ReadWriteString("Server", "ServerIP", M2Share.Config.ServerIPaddr);
+            if (ReadWriteString("Server", "WebSite", "") == "")
             {
                 WriteString("Server", "WebSite", M2Share.Config.sWebSite);
             }
-            M2Share.Config.sWebSite = ReadString("Server", "WebSite", M2Share.Config.sWebSite);
-            if (ReadString("Server", "BbsSite", "") == "")
+            M2Share.Config.sWebSite = ReadWriteString("Server", "WebSite", M2Share.Config.sWebSite);
+            if (ReadWriteString("Server", "BbsSite", "") == "")
             {
                 WriteString("Server", "BbsSite", M2Share.Config.sBbsSite);
             }
-            M2Share.Config.sBbsSite = ReadString("Server", "BbsSite", M2Share.Config.sBbsSite);
-            if (ReadString("Server", "ClientDownload", "") == "")
+            M2Share.Config.sBbsSite = ReadWriteString("Server", "BbsSite", M2Share.Config.sBbsSite);
+            if (ReadWriteString("Server", "ClientDownload", "") == "")
             {
                 WriteString("Server", "ClientDownload", M2Share.Config.sClientDownload);
             }
-            M2Share.Config.sClientDownload = ReadString("Server", "ClientDownload", M2Share.Config.sClientDownload);
-            if (ReadString("Server", "QQ", "") == "")
+            M2Share.Config.sClientDownload = ReadWriteString("Server", "ClientDownload", M2Share.Config.sClientDownload);
+            if (ReadWriteString("Server", "QQ", "") == "")
             {
                 WriteString("Server", "QQ", M2Share.Config.sQQ);
             }
-            M2Share.Config.sQQ = ReadString("Server", "QQ", M2Share.Config.sQQ);
-            if (ReadString("Server", "Phone", "") == "")
+            M2Share.Config.sQQ = ReadWriteString("Server", "QQ", M2Share.Config.sQQ);
+            if (ReadWriteString("Server", "Phone", "") == "")
             {
                 WriteString("Server", "Phone", M2Share.Config.sPhone);
             }
-            M2Share.Config.sPhone = ReadString("Server", "Phone", M2Share.Config.sPhone);
-            if (ReadString("Server", "BankAccount0", "") == "")
+            M2Share.Config.sPhone = ReadWriteString("Server", "Phone", M2Share.Config.sPhone);
+            if (ReadWriteString("Server", "BankAccount0", "") == "")
             {
                 WriteString("Server", "BankAccount0", M2Share.Config.sBankAccount0);
             }
-            M2Share.Config.sBankAccount0 = ReadString("Server", "BankAccount0", M2Share.Config.sBankAccount0);
-            if (ReadString("Server", "BankAccount1", "") == "")
+            M2Share.Config.sBankAccount0 = ReadWriteString("Server", "BankAccount0", M2Share.Config.sBankAccount0);
+            if (ReadWriteString("Server", "BankAccount1", "") == "")
             {
                 WriteString("Server", "BankAccount1", M2Share.Config.sBankAccount1);
             }
-            M2Share.Config.sBankAccount1 = ReadString("Server", "BankAccount1", M2Share.Config.sBankAccount1);
-            if (ReadString("Server", "BankAccount2", "") == "")
+            M2Share.Config.sBankAccount1 = ReadWriteString("Server", "BankAccount1", M2Share.Config.sBankAccount1);
+            if (ReadWriteString("Server", "BankAccount2", "") == "")
             {
                 WriteString("Server", "BankAccount2", M2Share.Config.sBankAccount2);
             }
-            M2Share.Config.sBankAccount2 = ReadString("Server", "BankAccount2", M2Share.Config.sBankAccount2);
-            if (ReadString("Server", "BankAccount3", "") == "")
+            M2Share.Config.sBankAccount2 = ReadWriteString("Server", "BankAccount2", M2Share.Config.sBankAccount2);
+            if (ReadWriteString("Server", "BankAccount3", "") == "")
             {
                 WriteString("Server", "BankAccount3", M2Share.Config.sBankAccount3);
             }
-            M2Share.Config.sBankAccount3 = ReadString("Server", "BankAccount3", M2Share.Config.sBankAccount3);
-            if (ReadString("Server", "BankAccount4", "") == "")
+            M2Share.Config.sBankAccount3 = ReadWriteString("Server", "BankAccount3", M2Share.Config.sBankAccount3);
+            if (ReadWriteString("Server", "BankAccount4", "") == "")
             {
                 WriteString("Server", "BankAccount4", M2Share.Config.sBankAccount4);
             }
-            M2Share.Config.sBankAccount4 = ReadString("Server", "BankAccount4", M2Share.Config.sBankAccount4);
-            if (ReadString("Server", "BankAccount5", "") == "")
-            {
-                WriteString("Server", "BankAccount5", M2Share.Config.sBankAccount5);
-            }
-            M2Share.Config.sBankAccount5 = ReadString("Server", "BankAccount5", M2Share.Config.sBankAccount5);
-            if (ReadString("Server", "BankAccount6", "") == "")
+            M2Share.Config.sBankAccount4 = ReadWriteString("Server", "BankAccount4", M2Share.Config.sBankAccount4);
+            M2Share.Config.sBankAccount5 = ReadWriteString("Server", "BankAccount5", M2Share.Config.sBankAccount5);
+            if (ReadWriteString("Server", "BankAccount6", "") == "")
             {
                 WriteString("Server", "BankAccount6", M2Share.Config.sBankAccount6);
             }
-            M2Share.Config.sBankAccount6 = ReadString("Server", "BankAccount6", M2Share.Config.sBankAccount6);
-            if (ReadString("Server", "BankAccount7", "") == "")
+            M2Share.Config.sBankAccount6 = ReadWriteString("Server", "BankAccount6", M2Share.Config.sBankAccount6);
+            if (ReadWriteString("Server", "BankAccount7", "") == "")
             {
                 WriteString("Server", "BankAccount7", M2Share.Config.sBankAccount7);
             }
-            M2Share.Config.sBankAccount7 = ReadString("Server", "BankAccount7", M2Share.Config.sBankAccount7);
-            if (ReadString("Server", "BankAccount8", "") == "")
+            M2Share.Config.sBankAccount7 = ReadWriteString("Server", "BankAccount7", M2Share.Config.sBankAccount7);
+            if (ReadWriteString("Server", "BankAccount8", "") == "")
             {
                 WriteString("Server", "BankAccount8", M2Share.Config.sBankAccount8);
             }
-            M2Share.Config.sBankAccount8 = ReadString("Server", "BankAccount8", M2Share.Config.sBankAccount8);
-            if (ReadString("Server", "BankAccount9", "") == "")
+            M2Share.Config.sBankAccount8 = ReadWriteString("Server", "BankAccount8", M2Share.Config.sBankAccount8);
+            if (ReadWriteString("Server", "BankAccount9", "") == "")
             {
                 WriteString("Server", "BankAccount9", M2Share.Config.sBankAccount9);
             }
-            M2Share.Config.sBankAccount9 = ReadString("Server", "BankAccount9", M2Share.Config.sBankAccount9);
-            if (ReadString("Guild", "GuildNotice", "") == "")
+            M2Share.Config.sBankAccount9 = ReadWriteString("Server", "BankAccount9", M2Share.Config.sBankAccount9);
+            if (ReadWriteString("Guild", "GuildNotice", "") == "")
             {
                 WriteString("Guild", "GuildNotice", M2Share.Config.GuildNotice);
             }
-            M2Share.Config.GuildNotice = ReadString("Guild", "GuildNotice", M2Share.Config.GuildNotice);
-            if (ReadString("Guild", "GuildWar", "") == "")
+            M2Share.Config.GuildNotice = ReadWriteString("Guild", "GuildNotice", M2Share.Config.GuildNotice);
+            if (ReadWriteString("Guild", "GuildWar", "") == "")
             {
                 WriteString("Guild", "GuildWar", M2Share.Config.GuildWar);
             }
-            M2Share.Config.GuildWar = ReadString("Guild", "GuildWar", M2Share.Config.GuildWar);
-            if (ReadString("Guild", "GuildAll", "") == "")
+            M2Share.Config.GuildWar = ReadWriteString("Guild", "GuildWar", M2Share.Config.GuildWar);
+            if (ReadWriteString("Guild", "GuildAll", "") == "")
             {
                 WriteString("Guild", "GuildAll", M2Share.Config.GuildAll);
             }
-            M2Share.Config.GuildAll = ReadString("Guild", "GuildAll", M2Share.Config.GuildAll);
-            if (ReadString("Guild", "GuildMember", "") == "")
+            M2Share.Config.GuildAll = ReadWriteString("Guild", "GuildAll", M2Share.Config.GuildAll);
+            if (ReadWriteString("Guild", "GuildMember", "") == "")
             {
                 WriteString("Guild", "GuildMember", M2Share.Config.GuildMember);
             }
-            M2Share.Config.GuildMember = ReadString("Guild", "GuildMember", M2Share.Config.GuildMember);
-            if (ReadString("Guild", "GuildMemberRank", "") == "")
+            M2Share.Config.GuildMember = ReadWriteString("Guild", "GuildMember", M2Share.Config.GuildMember);
+            if (ReadWriteString("Guild", "GuildMemberRank", "") == "")
             {
                 WriteString("Guild", "GuildMemberRank", M2Share.Config.GuildMemberRank);
             }
-            M2Share.Config.GuildMemberRank = ReadString("Guild", "GuildMemberRank", M2Share.Config.GuildMemberRank);
-            if (ReadString("Guild", "GuildChief", "") == "")
+            M2Share.Config.GuildMemberRank = ReadWriteString("Guild", "GuildMemberRank", M2Share.Config.GuildMemberRank);
+            if (ReadWriteString("Guild", "GuildChief", "") == "")
             {
                 WriteString("Guild", "GuildChief", M2Share.Config.GuildChief);
             }
-            M2Share.Config.GuildChief = ReadString("Guild", "GuildChief", M2Share.Config.GuildChief);
-            LoadString = ReadString("String", "ClientSoftVersionError", "");
+            M2Share.Config.GuildChief = ReadWriteString("Guild", "GuildChief", M2Share.Config.GuildChief);
+            LoadString = ReadWriteString("String", "ClientSoftVersionError", "");
             if (LoadString == "")
             {
                 WriteString("String", "ClientSoftVersionError", Settings.ClientSoftVersionError);
@@ -132,7 +128,7 @@ namespace GameSvr.Conf
             {
                 Settings.ClientSoftVersionError = LoadString;
             }
-            LoadString = ReadString("String", "DownLoadNewClientSoft", "");
+            LoadString = ReadWriteString("String", "DownLoadNewClientSoft", "");
             if (LoadString == "")
             {
                 WriteString("String", "DownLoadNewClientSoft", Settings.DownLoadNewClientSoft);
@@ -141,7 +137,7 @@ namespace GameSvr.Conf
             {
                 Settings.DownLoadNewClientSoft = LoadString;
             }
-            LoadString = ReadString("String", "ForceDisConnect", "");
+            LoadString = ReadWriteString("String", "ForceDisConnect", "");
             if (LoadString == "")
             {
                 WriteString("String", "ForceDisConnect", Settings.ForceDisConnect);
@@ -150,7 +146,7 @@ namespace GameSvr.Conf
             {
                 Settings.ForceDisConnect = LoadString;
             }
-            LoadString = ReadString("String", "ClientSoftVersionTooOld", "");
+            LoadString = ReadWriteString("String", "ClientSoftVersionTooOld", "");
             if (LoadString == "")
             {
                 WriteString("String", "ClientSoftVersionTooOld", Settings.ClientSoftVersionTooOld);
@@ -159,7 +155,7 @@ namespace GameSvr.Conf
             {
                 Settings.ClientSoftVersionTooOld = LoadString;
             }
-            LoadString = ReadString("String", "DownLoadAndUseNewClient", "");
+            LoadString = ReadWriteString("String", "DownLoadAndUseNewClient", "");
             if (LoadString == "")
             {
                 WriteString("String", "DownLoadAndUseNewClient", Settings.DownLoadAndUseNewClient);
@@ -168,7 +164,7 @@ namespace GameSvr.Conf
             {
                 Settings.DownLoadAndUseNewClient = LoadString;
             }
-            LoadString = ReadString("String", "OnlineUserFull", "");
+            LoadString = ReadWriteString("String", "OnlineUserFull", "");
             if (LoadString == "")
             {
                 WriteString("String", "OnlineUserFull", Settings.OnlineUserFull);
@@ -177,7 +173,7 @@ namespace GameSvr.Conf
             {
                 Settings.OnlineUserFull = LoadString;
             }
-            LoadString = ReadString("String", "YouNowIsTryPlayMode", "");
+            LoadString = ReadWriteString("String", "YouNowIsTryPlayMode", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouNowIsTryPlayMode", Settings.YouNowIsTryPlayMode);
@@ -186,7 +182,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouNowIsTryPlayMode = LoadString;
             }
-            LoadString = ReadString("String", "NowIsFreePlayMode", "");
+            LoadString = ReadWriteString("String", "NowIsFreePlayMode", "");
             if (LoadString == "")
             {
                 WriteString("String", "NowIsFreePlayMode", Settings.NowIsFreePlayMode);
@@ -195,7 +191,7 @@ namespace GameSvr.Conf
             {
                 Settings.NowIsFreePlayMode = LoadString;
             }
-            LoadString = ReadString("String", "AttackModeOfAll", "");
+            LoadString = ReadWriteString("String", "AttackModeOfAll", "");
             if (LoadString == "")
             {
                 WriteString("String", "AttackModeOfAll", Settings.AttackModeOfAll);
@@ -204,7 +200,7 @@ namespace GameSvr.Conf
             {
                 Settings.AttackModeOfAll = LoadString;
             }
-            LoadString = ReadString("String", "AttackModeOfPeaceful", "");
+            LoadString = ReadWriteString("String", "AttackModeOfPeaceful", "");
             if (LoadString == "")
             {
                 WriteString("String", "AttackModeOfPeaceful", Settings.AttackModeOfPeaceful);
@@ -213,7 +209,7 @@ namespace GameSvr.Conf
             {
                 Settings.AttackModeOfPeaceful = LoadString;
             }
-            LoadString = ReadString("String", "AttackModeOfGroup", "");
+            LoadString = ReadWriteString("String", "AttackModeOfGroup", "");
             if (LoadString == "")
             {
                 WriteString("String", "AttackModeOfGroup", Settings.AttackModeOfGroup);
@@ -222,7 +218,7 @@ namespace GameSvr.Conf
             {
                 Settings.AttackModeOfGroup = LoadString;
             }
-            LoadString = ReadString("String", "AttackModeOfGuild", "");
+            LoadString = ReadWriteString("String", "AttackModeOfGuild", "");
             if (LoadString == "")
             {
                 WriteString("String", "AttackModeOfGuild", Settings.AttackModeOfGuild);
@@ -231,7 +227,7 @@ namespace GameSvr.Conf
             {
                 Settings.AttackModeOfGuild = LoadString;
             }
-            LoadString = ReadString("String", "AttackModeOfRedWhite", "");
+            LoadString = ReadWriteString("String", "AttackModeOfRedWhite", "");
             if (LoadString == "")
             {
                 WriteString("String", "AttackModeOfRedWhite", Settings.AttackModeOfRedWhite);
@@ -240,7 +236,7 @@ namespace GameSvr.Conf
             {
                 Settings.AttackModeOfRedWhite = LoadString;
             }
-            LoadString = ReadString("String", "StartChangeAttackModeHelp", "");
+            LoadString = ReadWriteString("String", "StartChangeAttackModeHelp", "");
             if (LoadString == "")
             {
                 WriteString("String", "StartChangeAttackModeHelp", Settings.StartChangeAttackModeHelp);
@@ -249,7 +245,7 @@ namespace GameSvr.Conf
             {
                 Settings.StartChangeAttackModeHelp = LoadString;
             }
-            LoadString = ReadString("String", "StartNoticeMsg", "");
+            LoadString = ReadWriteString("String", "StartNoticeMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "StartNoticeMsg", Settings.StartNoticeMsg);
@@ -258,7 +254,7 @@ namespace GameSvr.Conf
             {
                 Settings.StartNoticeMsg = LoadString;
             }
-            LoadString = ReadString("String", "ThrustingOn", "");
+            LoadString = ReadWriteString("String", "ThrustingOn", "");
             if (LoadString == "")
             {
                 WriteString("String", "ThrustingOn", Settings.ThrustingOn);
@@ -267,7 +263,7 @@ namespace GameSvr.Conf
             {
                 Settings.ThrustingOn = LoadString;
             }
-            LoadString = ReadString("String", "ThrustingOff", "");
+            LoadString = ReadWriteString("String", "ThrustingOff", "");
             if (LoadString == "")
             {
                 WriteString("String", "ThrustingOff", Settings.ThrustingOff);
@@ -276,7 +272,7 @@ namespace GameSvr.Conf
             {
                 Settings.ThrustingOff = LoadString;
             }
-            LoadString = ReadString("String", "HalfMoonOn", "");
+            LoadString = ReadWriteString("String", "HalfMoonOn", "");
             if (LoadString == "")
             {
                 WriteString("String", "HalfMoonOn", Settings.HalfMoonOn);
@@ -285,7 +281,7 @@ namespace GameSvr.Conf
             {
                 Settings.HalfMoonOn = LoadString;
             }
-            LoadString = ReadString("String", "HalfMoonOff", "");
+            LoadString = ReadWriteString("String", "HalfMoonOff", "");
             if (LoadString == "")
             {
                 WriteString("String", "HalfMoonOff", Settings.HalfMoonOff);
@@ -298,7 +294,7 @@ namespace GameSvr.Conf
             Settings.CrsHitOff = LoadConfigString("String", "CrsHitOff", Settings.CrsHitOff);
             Settings.TwinHitOn = LoadConfigString("String", "TwinHitOn", Settings.TwinHitOn);
             Settings.TwinHitOff = LoadConfigString("String", "TwinHitOff", Settings.TwinHitOff);
-            LoadString = ReadString("String", "FireSpiritsSummoned", "");
+            LoadString = ReadWriteString("String", "FireSpiritsSummoned", "");
             if (LoadString == "")
             {
                 WriteString("String", "FireSpiritsSummoned", Settings.FireSpiritsSummoned);
@@ -307,7 +303,7 @@ namespace GameSvr.Conf
             {
                 Settings.FireSpiritsSummoned = LoadString;
             }
-            LoadString = ReadString("String", "FireSpiritsFail", "");
+            LoadString = ReadWriteString("String", "FireSpiritsFail", "");
             if (LoadString == "")
             {
                 WriteString("String", "FireSpiritsFail", Settings.FireSpiritsFail);
@@ -316,7 +312,7 @@ namespace GameSvr.Conf
             {
                 Settings.FireSpiritsFail = LoadString;
             }
-            LoadString = ReadString("String", "SpiritsGone", "");
+            LoadString = ReadWriteString("String", "SpiritsGone", "");
             if (LoadString == "")
             {
                 WriteString("String", "SpiritsGone", Settings.SpiritsGone);
@@ -325,7 +321,7 @@ namespace GameSvr.Conf
             {
                 Settings.SpiritsGone = LoadString;
             }
-            LoadString = ReadString("String", "MateDoTooweak", "");
+            LoadString = ReadWriteString("String", "MateDoTooweak", "");
             if (LoadString == "")
             {
                 WriteString("String", "MateDoTooweak", Settings.MateDoTooweak);
@@ -334,7 +330,7 @@ namespace GameSvr.Conf
             {
                 Settings.MateDoTooweak = LoadString;
             }
-            LoadString = ReadString("String", "TheWeaponBroke", "");
+            LoadString = ReadWriteString("String", "TheWeaponBroke", "");
             if (LoadString == "")
             {
                 WriteString("String", "TheWeaponBroke", Settings.TheWeaponBroke);
@@ -343,7 +339,7 @@ namespace GameSvr.Conf
             {
                 Settings.TheWeaponBroke = LoadString;
             }
-            LoadString = ReadString("String", "TheWeaponRefineSuccessfull", "");
+            LoadString = ReadWriteString("String", "TheWeaponRefineSuccessfull", "");
             if (LoadString == "")
             {
                 WriteString("String", "TheWeaponRefineSuccessfull", Settings.TheWeaponRefineSuccessfull);
@@ -352,7 +348,7 @@ namespace GameSvr.Conf
             {
                 Settings.TheWeaponRefineSuccessfull = LoadString;
             }
-            LoadString = ReadString("String", "YouPoisoned", "");
+            LoadString = ReadWriteString("String", "YouPoisoned", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouPoisoned", Settings.YouPoisoned);
@@ -361,7 +357,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouPoisoned = LoadString;
             }
-            LoadString = ReadString("String", "PetRest", "");
+            LoadString = ReadWriteString("String", "PetRest", "");
             if (LoadString == "")
             {
                 WriteString("String", "PetRest", Settings.PetRest);
@@ -370,7 +366,7 @@ namespace GameSvr.Conf
             {
                 Settings.PetRest = LoadString;
             }
-            LoadString = ReadString("String", "PetAttack", "");
+            LoadString = ReadWriteString("String", "PetAttack", "");
             if (LoadString == "")
             {
                 WriteString("String", "PetAttack", Settings.PetAttack);
@@ -379,7 +375,7 @@ namespace GameSvr.Conf
             {
                 Settings.PetAttack = LoadString;
             }
-            LoadString = ReadString("String", "WearNotOfWoMan", "");
+            LoadString = ReadWriteString("String", "WearNotOfWoMan", "");
             if (LoadString == "")
             {
                 WriteString("String", "WearNotOfWoMan", Settings.WearNotOfWoMan);
@@ -388,7 +384,7 @@ namespace GameSvr.Conf
             {
                 Settings.WearNotOfWoMan = LoadString;
             }
-            LoadString = ReadString("String", "WearNotOfMan", "");
+            LoadString = ReadWriteString("String", "WearNotOfMan", "");
             if (LoadString == "")
             {
                 WriteString("String", "WearNotOfMan", Settings.WearNotOfMan);
@@ -397,7 +393,7 @@ namespace GameSvr.Conf
             {
                 Settings.WearNotOfMan = LoadString;
             }
-            LoadString = ReadString("String", "HandWeightNot", "");
+            LoadString = ReadWriteString("String", "HandWeightNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "HandWeightNot", Settings.HandWeightNot);
@@ -406,7 +402,7 @@ namespace GameSvr.Conf
             {
                 Settings.HandWeightNot = LoadString;
             }
-            LoadString = ReadString("String", "WearWeightNot", "");
+            LoadString = ReadWriteString("String", "WearWeightNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "WearWeightNot", Settings.WearWeightNot);
@@ -415,7 +411,7 @@ namespace GameSvr.Conf
             {
                 Settings.WearWeightNot = LoadString;
             }
-            LoadString = ReadString("String", "ItemIsNotThisAccount", "");
+            LoadString = ReadWriteString("String", "ItemIsNotThisAccount", "");
             if (LoadString == "")
             {
                 WriteString("String", "ItemIsNotThisAccount", Settings.ItemIsNotThisAccount);
@@ -424,7 +420,7 @@ namespace GameSvr.Conf
             {
                 Settings.ItemIsNotThisAccount = LoadString;
             }
-            LoadString = ReadString("String", "ItemIsNotThisIPaddr", "");
+            LoadString = ReadWriteString("String", "ItemIsNotThisIPaddr", "");
             if (LoadString == "")
             {
                 WriteString("String", "ItemIsNotThisIPaddr", Settings.ItemIsNotThisIPaddr);
@@ -433,7 +429,7 @@ namespace GameSvr.Conf
             {
                 Settings.ItemIsNotThisIPaddr = LoadString;
             }
-            LoadString = ReadString("String", "ItemIsNotThisChrName", "");
+            LoadString = ReadWriteString("String", "ItemIsNotThisChrName", "");
             if (LoadString == "")
             {
                 WriteString("String", "ItemIsNotThisChrName", Settings.ItemIsNotThisChrName);
@@ -442,7 +438,7 @@ namespace GameSvr.Conf
             {
                 Settings.ItemIsNotThisChrName = LoadString;
             }
-            LoadString = ReadString("String", "LevelNot", "");
+            LoadString = ReadWriteString("String", "LevelNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "LevelNot", Settings.LevelNot);
@@ -451,7 +447,7 @@ namespace GameSvr.Conf
             {
                 Settings.LevelNot = LoadString;
             }
-            LoadString = ReadString("String", "JobOrLevelNot", "");
+            LoadString = ReadWriteString("String", "JobOrLevelNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "JobOrLevelNot", Settings.JobOrLevelNot);
@@ -460,7 +456,7 @@ namespace GameSvr.Conf
             {
                 Settings.JobOrLevelNot = LoadString;
             }
-            LoadString = ReadString("String", "JobOrDCNot", "");
+            LoadString = ReadWriteString("String", "JobOrDCNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "JobOrDCNot", Settings.JobOrDCNot);
@@ -469,7 +465,7 @@ namespace GameSvr.Conf
             {
                 Settings.JobOrDCNot = LoadString;
             }
-            LoadString = ReadString("String", "JobOrMCNot", "");
+            LoadString = ReadWriteString("String", "JobOrMCNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "JobOrMCNot", Settings.JobOrMCNot);
@@ -478,7 +474,7 @@ namespace GameSvr.Conf
             {
                 Settings.JobOrMCNot = LoadString;
             }
-            LoadString = ReadString("String", "JobOrSCNot", "");
+            LoadString = ReadWriteString("String", "JobOrSCNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "JobOrSCNot", Settings.JobOrSCNot);
@@ -487,7 +483,7 @@ namespace GameSvr.Conf
             {
                 Settings.JobOrSCNot = LoadString;
             }
-            LoadString = ReadString("String", "DCNot", "");
+            LoadString = ReadWriteString("String", "DCNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "DCNot", Settings.DCNot);
@@ -496,7 +492,7 @@ namespace GameSvr.Conf
             {
                 Settings.DCNot = LoadString;
             }
-            LoadString = ReadString("String", "MCNot", "");
+            LoadString = ReadWriteString("String", "MCNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "MCNot", Settings.MCNot);
@@ -505,7 +501,7 @@ namespace GameSvr.Conf
             {
                 Settings.MCNot = LoadString;
             }
-            LoadString = ReadString("String", "SCNot", "");
+            LoadString = ReadWriteString("String", "SCNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "SCNot", Settings.SCNot);
@@ -514,7 +510,7 @@ namespace GameSvr.Conf
             {
                 Settings.SCNot = LoadString;
             }
-            LoadString = ReadString("String", "CreditPointNot", "");
+            LoadString = ReadWriteString("String", "CreditPointNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "CreditPointNot", Settings.CreditPointNot);
@@ -523,7 +519,7 @@ namespace GameSvr.Conf
             {
                 Settings.CreditPointNot = LoadString;
             }
-            LoadString = ReadString("String", "ReNewLevelNot", "");
+            LoadString = ReadWriteString("String", "ReNewLevelNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "ReNewLevelNot", Settings.ReNewLevelNot);
@@ -532,7 +528,7 @@ namespace GameSvr.Conf
             {
                 Settings.ReNewLevelNot = LoadString;
             }
-            LoadString = ReadString("String", "GuildNot", "");
+            LoadString = ReadWriteString("String", "GuildNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "GuildNot", Settings.GuildNot);
@@ -541,7 +537,7 @@ namespace GameSvr.Conf
             {
                 Settings.GuildNot = LoadString;
             }
-            LoadString = ReadString("String", "GuildMasterNot", "");
+            LoadString = ReadWriteString("String", "GuildMasterNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "GuildMasterNot", Settings.GuildMasterNot);
@@ -550,7 +546,7 @@ namespace GameSvr.Conf
             {
                 Settings.GuildMasterNot = LoadString;
             }
-            LoadString = ReadString("String", "SabukHumanNot", "");
+            LoadString = ReadWriteString("String", "SabukHumanNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "SabukHumanNot", Settings.SabukHumanNot);
@@ -559,7 +555,7 @@ namespace GameSvr.Conf
             {
                 Settings.SabukHumanNot = LoadString;
             }
-            LoadString = ReadString("String", "SabukMasterManNot", "");
+            LoadString = ReadWriteString("String", "SabukMasterManNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "SabukMasterManNot", Settings.SabukMasterManNot);
@@ -568,7 +564,7 @@ namespace GameSvr.Conf
             {
                 Settings.SabukMasterManNot = LoadString;
             }
-            LoadString = ReadString("String", "MemberNot", "");
+            LoadString = ReadWriteString("String", "MemberNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "MemberNot", Settings.MemberNot);
@@ -577,7 +573,7 @@ namespace GameSvr.Conf
             {
                 Settings.MemberNot = LoadString;
             }
-            LoadString = ReadString("String", "MemberTypeNot", "");
+            LoadString = ReadWriteString("String", "MemberTypeNot", "");
             if (LoadString == "")
             {
                 WriteString("String", "MemberTypeNot", Settings.MemberTypeNot);
@@ -586,7 +582,7 @@ namespace GameSvr.Conf
             {
                 Settings.MemberTypeNot = LoadString;
             }
-            LoadString = ReadString("String", "CanottWearIt", "");
+            LoadString = ReadWriteString("String", "CanottWearIt", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanottWearIt", Settings.CanottWearIt);
@@ -595,7 +591,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanottWearIt = LoadString;
             }
-            LoadString = ReadString("String", "CanotUseDrugOnThisMap", "");
+            LoadString = ReadWriteString("String", "CanotUseDrugOnThisMap", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotUseDrugOnThisMap", Settings.CanotUseDrugOnThisMap);
@@ -604,7 +600,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotUseDrugOnThisMap = LoadString;
             }
-            LoadString = ReadString("String", "GameMasterMode", "");
+            LoadString = ReadWriteString("String", "GameMasterMode", "");
             if (LoadString == "")
             {
                 WriteString("String", "GameMasterMode", Settings.GameMasterMode);
@@ -613,7 +609,7 @@ namespace GameSvr.Conf
             {
                 Settings.GameMasterMode = LoadString;
             }
-            LoadString = ReadString("String", "ReleaseGameMasterMode", "");
+            LoadString = ReadWriteString("String", "ReleaseGameMasterMode", "");
             if (LoadString == "")
             {
                 WriteString("String", "ReleaseGameMasterMode", Settings.ReleaseGameMasterMode);
@@ -622,7 +618,7 @@ namespace GameSvr.Conf
             {
                 Settings.ReleaseGameMasterMode = LoadString;
             }
-            LoadString = ReadString("String", "ObserverMode", "");
+            LoadString = ReadWriteString("String", "ObserverMode", "");
             if (LoadString == "")
             {
                 WriteString("String", "ObserverMode", Settings.ObserverMode);
@@ -631,7 +627,7 @@ namespace GameSvr.Conf
             {
                 Settings.ObserverMode = LoadString;
             }
-            LoadString = ReadString("String", "ReleaseObserverMode", "");
+            LoadString = ReadWriteString("String", "ReleaseObserverMode", "");
             if (LoadString == "")
             {
                 WriteString("String", "ReleaseObserverMode", Settings.ReleaseObserverMode);
@@ -640,7 +636,7 @@ namespace GameSvr.Conf
             {
                 Settings.ReleaseObserverMode = LoadString;
             }
-            LoadString = ReadString("String", "SupermanMode", "");
+            LoadString = ReadWriteString("String", "SupermanMode", "");
             if (LoadString == "")
             {
                 WriteString("String", "SupermanMode", Settings.SupermanMode);
@@ -649,7 +645,7 @@ namespace GameSvr.Conf
             {
                 Settings.SupermanMode = LoadString;
             }
-            LoadString = ReadString("String", "ReleaseSupermanMode", "");
+            LoadString = ReadWriteString("String", "ReleaseSupermanMode", "");
             if (LoadString == "")
             {
                 WriteString("String", "ReleaseSupermanMode", Settings.ReleaseSupermanMode);
@@ -658,7 +654,7 @@ namespace GameSvr.Conf
             {
                 Settings.ReleaseSupermanMode = LoadString;
             }
-            LoadString = ReadString("String", "YouFoundNothing", "");
+            LoadString = ReadWriteString("String", "YouFoundNothing", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouFoundNothing", Settings.YouFoundNothing);
@@ -667,7 +663,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouFoundNothing = LoadString;
             }
-            LoadString = ReadString("String", "LineNoticePreFix", "");
+            LoadString = ReadWriteString("String", "LineNoticePreFix", "");
             if (LoadString == "")
             {
                 WriteString("String", "LineNoticePreFix", M2Share.Config.LineNoticePreFix);
@@ -676,7 +672,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.LineNoticePreFix = LoadString;
             }
-            LoadString = ReadString("String", "SysMsgPreFix", "");
+            LoadString = ReadWriteString("String", "SysMsgPreFix", "");
             if (LoadString == "")
             {
                 WriteString("String", "SysMsgPreFix", M2Share.Config.SysMsgPreFix);
@@ -685,7 +681,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.SysMsgPreFix = LoadString;
             }
-            LoadString = ReadString("String", "GuildMsgPreFix", "");
+            LoadString = ReadWriteString("String", "GuildMsgPreFix", "");
             if (LoadString == "")
             {
                 WriteString("String", "GuildMsgPreFix", M2Share.Config.GuildMsgPreFix);
@@ -694,7 +690,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.GuildMsgPreFix = LoadString;
             }
-            LoadString = ReadString("String", "GroupMsgPreFix", "");
+            LoadString = ReadWriteString("String", "GroupMsgPreFix", "");
             if (LoadString == "")
             {
                 WriteString("String", "GroupMsgPreFix", M2Share.Config.GroupMsgPreFix);
@@ -703,7 +699,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.GroupMsgPreFix = LoadString;
             }
-            LoadString = ReadString("String", "HintMsgPreFix", "");
+            LoadString = ReadWriteString("String", "HintMsgPreFix", "");
             if (LoadString == "")
             {
                 WriteString("String", "HintMsgPreFix", M2Share.Config.HintMsgPreFix);
@@ -712,7 +708,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.HintMsgPreFix = LoadString;
             }
-            LoadString = ReadString("String", "GMRedMsgpreFix", "");
+            LoadString = ReadWriteString("String", "GMRedMsgpreFix", "");
             if (LoadString == "")
             {
                 WriteString("String", "GMRedMsgpreFix", M2Share.Config.GameManagerRedMsgPreFix);
@@ -721,7 +717,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.GameManagerRedMsgPreFix = LoadString;
             }
-            LoadString = ReadString("String", "MonSayMsgpreFix", "");
+            LoadString = ReadWriteString("String", "MonSayMsgpreFix", "");
             if (LoadString == "")
             {
                 WriteString("String", "MonSayMsgpreFix", M2Share.Config.MonSayMsgPreFix);
@@ -730,7 +726,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.MonSayMsgPreFix = LoadString;
             }
-            LoadString = ReadString("String", "CustMsgpreFix", "");
+            LoadString = ReadWriteString("String", "CustMsgpreFix", "");
             if (LoadString == "")
             {
                 WriteString("String", "CustMsgpreFix", M2Share.Config.CustMsgPreFix);
@@ -739,7 +735,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.CustMsgPreFix = LoadString;
             }
-            LoadString = ReadString("String", "CastleMsgpreFix", "");
+            LoadString = ReadWriteString("String", "CastleMsgpreFix", "");
             if (LoadString == "")
             {
                 WriteString("String", "CastleMsgpreFix", M2Share.Config.CastleMsgPreFix);
@@ -748,7 +744,7 @@ namespace GameSvr.Conf
             {
                 M2Share.Config.CastleMsgPreFix = LoadString;
             }
-            LoadString = ReadString("String", "NoPasswordLockSystemMsg", "");
+            LoadString = ReadWriteString("String", "NoPasswordLockSystemMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "NoPasswordLockSystemMsg", Settings.NoPasswordLockSystemMsg);
@@ -757,7 +753,7 @@ namespace GameSvr.Conf
             {
                 Settings.NoPasswordLockSystemMsg = LoadString;
             }
-            LoadString = ReadString("String", "AlreadySetPassword", "");
+            LoadString = ReadWriteString("String", "AlreadySetPassword", "");
             if (LoadString == "")
             {
                 WriteString("String", "AlreadySetPassword", Settings.AlreadySetPasswordMsg);
@@ -766,7 +762,7 @@ namespace GameSvr.Conf
             {
                 Settings.AlreadySetPasswordMsg = LoadString;
             }
-            LoadString = ReadString("String", "ReSetPassword", "");
+            LoadString = ReadWriteString("String", "ReSetPassword", "");
             if (LoadString == "")
             {
                 WriteString("String", "ReSetPassword", Settings.ReSetPasswordMsg);
@@ -775,7 +771,7 @@ namespace GameSvr.Conf
             {
                 Settings.ReSetPasswordMsg = LoadString;
             }
-            LoadString = ReadString("String", "PasswordOverLong", "");
+            LoadString = ReadWriteString("String", "PasswordOverLong", "");
             if (LoadString == "")
             {
                 WriteString("String", "PasswordOverLong", Settings.PasswordOverLongMsg);
@@ -784,7 +780,7 @@ namespace GameSvr.Conf
             {
                 Settings.PasswordOverLongMsg = LoadString;
             }
-            LoadString = ReadString("String", "ReSetPasswordOK", "");
+            LoadString = ReadWriteString("String", "ReSetPasswordOK", "");
             if (LoadString == "")
             {
                 WriteString("String", "ReSetPasswordOK", Settings.ReSetPasswordOKMsg);
@@ -793,7 +789,7 @@ namespace GameSvr.Conf
             {
                 Settings.ReSetPasswordOKMsg = LoadString;
             }
-            LoadString = ReadString("String", "ReSetPasswordNotMatch", "");
+            LoadString = ReadWriteString("String", "ReSetPasswordNotMatch", "");
             if (LoadString == "")
             {
                 WriteString("String", "ReSetPasswordNotMatch", Settings.ReSetPasswordNotMatchMsg);
@@ -802,7 +798,7 @@ namespace GameSvr.Conf
             {
                 Settings.ReSetPasswordNotMatchMsg = LoadString;
             }
-            LoadString = ReadString("String", "PleaseInputUnLockPassword", "");
+            LoadString = ReadWriteString("String", "PleaseInputUnLockPassword", "");
             if (LoadString == "")
             {
                 WriteString("String", "PleaseInputUnLockPassword", Settings.PleaseInputUnLockPasswordMsg);
@@ -811,7 +807,7 @@ namespace GameSvr.Conf
             {
                 Settings.PleaseInputUnLockPasswordMsg = LoadString;
             }
-            LoadString = ReadString("String", "StorageUnLockOK", "");
+            LoadString = ReadWriteString("String", "StorageUnLockOK", "");
             if (LoadString == "")
             {
                 WriteString("String", "StorageUnLockOK", Settings.StorageUnLockOKMsg);
@@ -820,7 +816,7 @@ namespace GameSvr.Conf
             {
                 Settings.StorageUnLockOKMsg = LoadString;
             }
-            LoadString = ReadString("String", "StorageAlreadyUnLock", "");
+            LoadString = ReadWriteString("String", "StorageAlreadyUnLock", "");
             if (LoadString == "")
             {
                 WriteString("String", "StorageAlreadyUnLock", Settings.StorageAlreadyUnLockMsg);
@@ -829,7 +825,7 @@ namespace GameSvr.Conf
             {
                 Settings.StorageAlreadyUnLockMsg = LoadString;
             }
-            LoadString = ReadString("String", "StorageNoPassword", "");
+            LoadString = ReadWriteString("String", "StorageNoPassword", "");
             if (LoadString == "")
             {
                 WriteString("String", "StorageNoPassword", Settings.StorageNoPasswordMsg);
@@ -838,7 +834,7 @@ namespace GameSvr.Conf
             {
                 Settings.StorageNoPasswordMsg = LoadString;
             }
-            LoadString = ReadString("String", "UnLockPasswordFail", "");
+            LoadString = ReadWriteString("String", "UnLockPasswordFail", "");
             if (LoadString == "")
             {
                 WriteString("String", "UnLockPasswordFail", Settings.UnLockPasswordFailMsg);
@@ -847,7 +843,7 @@ namespace GameSvr.Conf
             {
                 Settings.UnLockPasswordFailMsg = LoadString;
             }
-            LoadString = ReadString("String", "LockStorageSuccess", "");
+            LoadString = ReadWriteString("String", "LockStorageSuccess", "");
             if (LoadString == "")
             {
                 WriteString("String", "LockStorageSuccess", Settings.LockStorageSuccessMsg);
@@ -856,7 +852,7 @@ namespace GameSvr.Conf
             {
                 Settings.LockStorageSuccessMsg = LoadString;
             }
-            LoadString = ReadString("String", "StoragePasswordClearMsg", "");
+            LoadString = ReadWriteString("String", "StoragePasswordClearMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "StoragePasswordClearMsg", Settings.StoragePasswordClearMsg);
@@ -865,7 +861,7 @@ namespace GameSvr.Conf
             {
                 Settings.StoragePasswordClearMsg = LoadString;
             }
-            LoadString = ReadString("String", "PleaseUnloadStoragePasswordMsg", "");
+            LoadString = ReadWriteString("String", "PleaseUnloadStoragePasswordMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "PleaseUnloadStoragePasswordMsg", Settings.PleaseUnloadStoragePasswordMsg);
@@ -874,7 +870,7 @@ namespace GameSvr.Conf
             {
                 Settings.PleaseUnloadStoragePasswordMsg = LoadString;
             }
-            LoadString = ReadString("String", "StorageAlreadyLock", "");
+            LoadString = ReadWriteString("String", "StorageAlreadyLock", "");
             if (LoadString == "")
             {
                 WriteString("String", "StorageAlreadyLock", Settings.StorageAlreadyLockMsg);
@@ -883,7 +879,7 @@ namespace GameSvr.Conf
             {
                 Settings.StorageAlreadyLockMsg = LoadString;
             }
-            LoadString = ReadString("String", "StoragePasswordLocked", "");
+            LoadString = ReadWriteString("String", "StoragePasswordLocked", "");
             if (LoadString == "")
             {
                 WriteString("String", "StoragePasswordLocked", Settings.StoragePasswordLockedMsg);
@@ -892,7 +888,7 @@ namespace GameSvr.Conf
             {
                 Settings.StoragePasswordLockedMsg = LoadString;
             }
-            LoadString = ReadString("String", "StorageSetPassword", "");
+            LoadString = ReadWriteString("String", "StorageSetPassword", "");
             if (LoadString == "")
             {
                 WriteString("String", "StorageSetPassword", Settings.SetPasswordMsg);
@@ -901,7 +897,7 @@ namespace GameSvr.Conf
             {
                 Settings.SetPasswordMsg = LoadString;
             }
-            LoadString = ReadString("String", "PleaseInputOldPassword", "");
+            LoadString = ReadWriteString("String", "PleaseInputOldPassword", "");
             if (LoadString == "")
             {
                 WriteString("String", "PleaseInputOldPassword", Settings.PleaseInputOldPasswordMsg);
@@ -910,7 +906,7 @@ namespace GameSvr.Conf
             {
                 Settings.PleaseInputOldPasswordMsg = LoadString;
             }
-            LoadString = ReadString("String", "PasswordIsClearMsg", "");
+            LoadString = ReadWriteString("String", "PasswordIsClearMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "PasswordIsClearMsg", Settings.OldPasswordIsClearMsg);
@@ -919,7 +915,7 @@ namespace GameSvr.Conf
             {
                 Settings.OldPasswordIsClearMsg = LoadString;
             }
-            LoadString = ReadString("String", "NoPasswordSet", "");
+            LoadString = ReadWriteString("String", "NoPasswordSet", "");
             if (LoadString == "")
             {
                 WriteString("String", "NoPasswordSet", Settings.NoPasswordSetMsg);
@@ -928,7 +924,7 @@ namespace GameSvr.Conf
             {
                 Settings.NoPasswordSetMsg = LoadString;
             }
-            LoadString = ReadString("String", "OldPasswordIncorrect", "");
+            LoadString = ReadWriteString("String", "OldPasswordIncorrect", "");
             if (LoadString == "")
             {
                 WriteString("String", "OldPasswordIncorrect", Settings.OldPasswordIncorrectMsg);
@@ -937,7 +933,7 @@ namespace GameSvr.Conf
             {
                 Settings.OldPasswordIncorrectMsg = LoadString;
             }
-            LoadString = ReadString("String", "StorageIsLocked", "");
+            LoadString = ReadWriteString("String", "StorageIsLocked", "");
             if (LoadString == "")
             {
                 WriteString("String", "StorageIsLocked", Settings.StorageIsLockedMsg);
@@ -946,7 +942,7 @@ namespace GameSvr.Conf
             {
                 Settings.StorageIsLockedMsg = LoadString;
             }
-            LoadString = ReadString("String", "PleaseTryDealLaterMsg", "");
+            LoadString = ReadWriteString("String", "PleaseTryDealLaterMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "PleaseTryDealLaterMsg", Settings.PleaseTryDealLaterMsg);
@@ -955,7 +951,7 @@ namespace GameSvr.Conf
             {
                 Settings.PleaseTryDealLaterMsg = LoadString;
             }
-            LoadString = ReadString("String", "DealItemsDenyGetBackMsg", "");
+            LoadString = ReadWriteString("String", "DealItemsDenyGetBackMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "DealItemsDenyGetBackMsg", Settings.DealItemsDenyGetBackMsg);
@@ -964,7 +960,7 @@ namespace GameSvr.Conf
             {
                 Settings.DealItemsDenyGetBackMsg = LoadString;
             }
-            LoadString = ReadString("String", "DisableDealItemsMsg", "");
+            LoadString = ReadWriteString("String", "DisableDealItemsMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableDealItemsMsg", Settings.DisableDealItemsMsg);
@@ -973,7 +969,7 @@ namespace GameSvr.Conf
             {
                 Settings.DisableDealItemsMsg = LoadString;
             }
-            LoadString = ReadString("String", "CanotTryDealMsg", "");
+            LoadString = ReadWriteString("String", "CanotTryDealMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotTryDealMsg", Settings.CanotTryDealMsg);
@@ -982,7 +978,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotTryDealMsg = LoadString;
             }
-            LoadString = ReadString("String", "DealActionCancelMsg", "");
+            LoadString = ReadWriteString("String", "DealActionCancelMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "DealActionCancelMsg", Settings.DealActionCancelMsg);
@@ -991,7 +987,7 @@ namespace GameSvr.Conf
             {
                 Settings.DealActionCancelMsg = LoadString;
             }
-            LoadString = ReadString("String", "PoseDisableDealMsg", "");
+            LoadString = ReadWriteString("String", "PoseDisableDealMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "PoseDisableDealMsg", Settings.PoseDisableDealMsg);
@@ -1000,7 +996,7 @@ namespace GameSvr.Conf
             {
                 Settings.PoseDisableDealMsg = LoadString;
             }
-            LoadString = ReadString("String", "DealSuccessMsg", "");
+            LoadString = ReadWriteString("String", "DealSuccessMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "DealSuccessMsg", Settings.DealSuccessMsg);
@@ -1009,7 +1005,7 @@ namespace GameSvr.Conf
             {
                 Settings.DealSuccessMsg = LoadString;
             }
-            LoadString = ReadString("String", "DealOKTooFast", "");
+            LoadString = ReadWriteString("String", "DealOKTooFast", "");
             if (LoadString == "")
             {
                 WriteString("String", "DealOKTooFast", Settings.DealOKTooFast);
@@ -1018,7 +1014,7 @@ namespace GameSvr.Conf
             {
                 Settings.DealOKTooFast = LoadString;
             }
-            LoadString = ReadString("String", "YourBagSizeTooSmall", "");
+            LoadString = ReadWriteString("String", "YourBagSizeTooSmall", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourBagSizeTooSmall", Settings.YourBagSizeTooSmall);
@@ -1027,7 +1023,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourBagSizeTooSmall = LoadString;
             }
-            LoadString = ReadString("String", "DealHumanBagSizeTooSmall", "");
+            LoadString = ReadWriteString("String", "DealHumanBagSizeTooSmall", "");
             if (LoadString == "")
             {
                 WriteString("String", "DealHumanBagSizeTooSmall", Settings.DealHumanBagSizeTooSmall);
@@ -1036,7 +1032,7 @@ namespace GameSvr.Conf
             {
                 Settings.DealHumanBagSizeTooSmall = LoadString;
             }
-            LoadString = ReadString("String", "YourGoldLargeThenLimit", "");
+            LoadString = ReadWriteString("String", "YourGoldLargeThenLimit", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourGoldLargeThenLimit", Settings.YourGoldLargeThenLimit);
@@ -1045,7 +1041,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourGoldLargeThenLimit = LoadString;
             }
-            LoadString = ReadString("String", "DealHumanGoldLargeThenLimit", "");
+            LoadString = ReadWriteString("String", "DealHumanGoldLargeThenLimit", "");
             if (LoadString == "")
             {
                 WriteString("String", "DealHumanGoldLargeThenLimit", Settings.DealHumanGoldLargeThenLimit);
@@ -1054,7 +1050,7 @@ namespace GameSvr.Conf
             {
                 Settings.DealHumanGoldLargeThenLimit = LoadString;
             }
-            LoadString = ReadString("String", "YouDealOKMsg", "");
+            LoadString = ReadWriteString("String", "YouDealOKMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouDealOKMsg", Settings.YouDealOKMsg);
@@ -1063,7 +1059,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouDealOKMsg = LoadString;
             }
-            LoadString = ReadString("String", "PoseDealOKMsg", "");
+            LoadString = ReadWriteString("String", "PoseDealOKMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "PoseDealOKMsg", Settings.PoseDealOKMsg);
@@ -1072,7 +1068,7 @@ namespace GameSvr.Conf
             {
                 Settings.PoseDealOKMsg = LoadString;
             }
-            LoadString = ReadString("String", "KickClientUserMsg", "");
+            LoadString = ReadWriteString("String", "KickClientUserMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "KickClientUserMsg", Settings.KickClientUserMsg);
@@ -1081,7 +1077,7 @@ namespace GameSvr.Conf
             {
                 Settings.KickClientUserMsg = LoadString;
             }
-            LoadString = ReadString("String", "ActionIsLockedMsg", "");
+            LoadString = ReadWriteString("String", "ActionIsLockedMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ActionIsLockedMsg", Settings.ActionIsLockedMsg);
@@ -1090,7 +1086,7 @@ namespace GameSvr.Conf
             {
                 Settings.ActionIsLockedMsg = LoadString;
             }
-            LoadString = ReadString("String", "PasswordNotSetMsg", "");
+            LoadString = ReadWriteString("String", "PasswordNotSetMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "PasswordNotSetMsg", Settings.PasswordNotSetMsg);
@@ -1099,7 +1095,7 @@ namespace GameSvr.Conf
             {
                 Settings.PasswordNotSetMsg = LoadString;
             }
-            LoadString = ReadString("String", "NotPasswordProtectMode", "");
+            LoadString = ReadWriteString("String", "NotPasswordProtectMode", "");
             if (LoadString == "")
             {
                 WriteString("String", "NotPasswordProtectMode", Settings.NotPasswordProtectMode);
@@ -1108,7 +1104,7 @@ namespace GameSvr.Conf
             {
                 Settings.NotPasswordProtectMode = LoadString;
             }
-            LoadString = ReadString("String", "CanotDropGoldMsg", "");
+            LoadString = ReadWriteString("String", "CanotDropGoldMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotDropGoldMsg", Settings.CanotDropGoldMsg);
@@ -1117,7 +1113,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotDropGoldMsg = LoadString;
             }
-            LoadString = ReadString("String", "CanotDropInSafeZoneMsg", "");
+            LoadString = ReadWriteString("String", "CanotDropInSafeZoneMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotDropInSafeZoneMsg", Settings.CanotDropInSafeZoneMsg);
@@ -1126,7 +1122,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotDropInSafeZoneMsg = LoadString;
             }
-            LoadString = ReadString("String", "CanotDropItemMsg", "");
+            LoadString = ReadWriteString("String", "CanotDropItemMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotDropItemMsg", Settings.CanotDropItemMsg);
@@ -1135,7 +1131,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotDropItemMsg = LoadString;
             }
-            LoadString = ReadString("String", "CanotDropItemMsg", "");
+            LoadString = ReadWriteString("String", "CanotDropItemMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotDropItemMsg", Settings.CanotDropItemMsg);
@@ -1144,7 +1140,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotDropItemMsg = LoadString;
             }
-            LoadString = ReadString("String", "CanotUseItemMsg", "");
+            LoadString = ReadWriteString("String", "CanotUseItemMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotUseItemMsg", Settings.CanotUseItemMsg);
@@ -1153,7 +1149,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotUseItemMsg = LoadString;
             }
-            LoadString = ReadString("String", "StartMarryManMsg", "");
+            LoadString = ReadWriteString("String", "StartMarryManMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "StartMarryManMsg", Settings.StartMarryManMsg);
@@ -1162,7 +1158,7 @@ namespace GameSvr.Conf
             {
                 Settings.StartMarryManMsg = LoadString;
             }
-            LoadString = ReadString("String", "StartMarryWoManMsg", "");
+            LoadString = ReadWriteString("String", "StartMarryWoManMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "StartMarryWoManMsg", Settings.StartMarryWoManMsg);
@@ -1171,7 +1167,7 @@ namespace GameSvr.Conf
             {
                 Settings.StartMarryWoManMsg = LoadString;
             }
-            LoadString = ReadString("String", "StartMarryManAskQuestionMsg", "");
+            LoadString = ReadWriteString("String", "StartMarryManAskQuestionMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "StartMarryManAskQuestionMsg", Settings.StartMarryManAskQuestionMsg);
@@ -1180,7 +1176,7 @@ namespace GameSvr.Conf
             {
                 Settings.StartMarryManAskQuestionMsg = LoadString;
             }
-            LoadString = ReadString("String", "StartMarryWoManAskQuestionMsg", "");
+            LoadString = ReadWriteString("String", "StartMarryWoManAskQuestionMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "StartMarryWoManAskQuestionMsg", Settings.StartMarryWoManAskQuestionMsg);
@@ -1189,7 +1185,7 @@ namespace GameSvr.Conf
             {
                 Settings.StartMarryWoManAskQuestionMsg = LoadString;
             }
-            LoadString = ReadString("String", "MarryManAnswerQuestionMsg", "");
+            LoadString = ReadWriteString("String", "MarryManAnswerQuestionMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MarryManAnswerQuestionMsg", Settings.MarryManAnswerQuestionMsg);
@@ -1198,7 +1194,7 @@ namespace GameSvr.Conf
             {
                 Settings.MarryManAnswerQuestionMsg = LoadString;
             }
-            LoadString = ReadString("String", "MarryManAskQuestionMsg", "");
+            LoadString = ReadWriteString("String", "MarryManAskQuestionMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MarryManAskQuestionMsg", Settings.MarryManAskQuestionMsg);
@@ -1207,7 +1203,7 @@ namespace GameSvr.Conf
             {
                 Settings.MarryManAskQuestionMsg = LoadString;
             }
-            LoadString = ReadString("String", "MarryWoManAnswerQuestionMsg", "");
+            LoadString = ReadWriteString("String", "MarryWoManAnswerQuestionMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MarryWoManAnswerQuestionMsg", Settings.MarryWoManAnswerQuestionMsg);
@@ -1216,7 +1212,7 @@ namespace GameSvr.Conf
             {
                 Settings.MarryWoManAnswerQuestionMsg = LoadString;
             }
-            LoadString = ReadString("String", "MarryWoManGetMarryMsg", "");
+            LoadString = ReadWriteString("String", "MarryWoManGetMarryMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MarryWoManGetMarryMsg", Settings.MarryWoManGetMarryMsg);
@@ -1225,7 +1221,7 @@ namespace GameSvr.Conf
             {
                 Settings.MarryWoManGetMarryMsg = LoadString;
             }
-            LoadString = ReadString("String", "MarryWoManDenyMsg", "");
+            LoadString = ReadWriteString("String", "MarryWoManDenyMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MarryWoManDenyMsg", Settings.MarryWoManDenyMsg);
@@ -1234,7 +1230,7 @@ namespace GameSvr.Conf
             {
                 Settings.MarryWoManDenyMsg = LoadString;
             }
-            LoadString = ReadString("String", "MarryWoManCancelMsg", "");
+            LoadString = ReadWriteString("String", "MarryWoManCancelMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MarryWoManCancelMsg", Settings.MarryWoManCancelMsg);
@@ -1243,7 +1239,7 @@ namespace GameSvr.Conf
             {
                 Settings.MarryWoManCancelMsg = LoadString;
             }
-            LoadString = ReadString("String", "ForceUnMarryManLoginMsg", "");
+            LoadString = ReadWriteString("String", "ForceUnMarryManLoginMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ForceUnMarryManLoginMsg", Settings.fUnMarryManLoginMsg);
@@ -1252,7 +1248,7 @@ namespace GameSvr.Conf
             {
                 Settings.fUnMarryManLoginMsg = LoadString;
             }
-            LoadString = ReadString("String", "ForceUnMarryWoManLoginMsg", "");
+            LoadString = ReadWriteString("String", "ForceUnMarryWoManLoginMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ForceUnMarryWoManLoginMsg", Settings.fUnMarryWoManLoginMsg);
@@ -1261,7 +1257,7 @@ namespace GameSvr.Conf
             {
                 Settings.fUnMarryWoManLoginMsg = LoadString;
             }
-            LoadString = ReadString("String", "ManLoginDearOnlineSelfMsg", "");
+            LoadString = ReadWriteString("String", "ManLoginDearOnlineSelfMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ManLoginDearOnlineSelfMsg", Settings.ManLoginDearOnlineSelfMsg);
@@ -1270,7 +1266,7 @@ namespace GameSvr.Conf
             {
                 Settings.ManLoginDearOnlineSelfMsg = LoadString;
             }
-            LoadString = ReadString("String", "ManLoginDearOnlineDearMsg", "");
+            LoadString = ReadWriteString("String", "ManLoginDearOnlineDearMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ManLoginDearOnlineDearMsg", Settings.ManLoginDearOnlineDearMsg);
@@ -1279,7 +1275,7 @@ namespace GameSvr.Conf
             {
                 Settings.ManLoginDearOnlineDearMsg = LoadString;
             }
-            LoadString = ReadString("String", "WoManLoginDearOnlineSelfMsg", "");
+            LoadString = ReadWriteString("String", "WoManLoginDearOnlineSelfMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WoManLoginDearOnlineSelfMsg", Settings.WoManLoginDearOnlineSelfMsg);
@@ -1288,7 +1284,7 @@ namespace GameSvr.Conf
             {
                 Settings.WoManLoginDearOnlineSelfMsg = LoadString;
             }
-            LoadString = ReadString("String", "WoManLoginDearOnlineDearMsg", "");
+            LoadString = ReadWriteString("String", "WoManLoginDearOnlineDearMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WoManLoginDearOnlineDearMsg", Settings.WoManLoginDearOnlineDearMsg);
@@ -1297,7 +1293,7 @@ namespace GameSvr.Conf
             {
                 Settings.WoManLoginDearOnlineDearMsg = LoadString;
             }
-            LoadString = ReadString("String", "ManLoginDearNotOnlineMsg", "");
+            LoadString = ReadWriteString("String", "ManLoginDearNotOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ManLoginDearNotOnlineMsg", Settings.ManLoginDearNotOnlineMsg);
@@ -1306,7 +1302,7 @@ namespace GameSvr.Conf
             {
                 Settings.ManLoginDearNotOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "WoManLoginDearNotOnlineMsg", "");
+            LoadString = ReadWriteString("String", "WoManLoginDearNotOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WoManLoginDearNotOnlineMsg", Settings.WoManLoginDearNotOnlineMsg);
@@ -1315,7 +1311,7 @@ namespace GameSvr.Conf
             {
                 Settings.WoManLoginDearNotOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "ManLongOutDearOnlineMsg", "");
+            LoadString = ReadWriteString("String", "ManLongOutDearOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ManLongOutDearOnlineMsg", Settings.ManLongOutDearOnlineMsg);
@@ -1324,7 +1320,7 @@ namespace GameSvr.Conf
             {
                 Settings.ManLongOutDearOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "WoManLongOutDearOnlineMsg", "");
+            LoadString = ReadWriteString("String", "WoManLongOutDearOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WoManLongOutDearOnlineMsg", Settings.WoManLongOutDearOnlineMsg);
@@ -1333,7 +1329,7 @@ namespace GameSvr.Conf
             {
                 Settings.WoManLongOutDearOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouAreNotMarryedMsg", "");
+            LoadString = ReadWriteString("String", "YouAreNotMarryedMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouAreNotMarryedMsg", Settings.YouAreNotMarryedMsg);
@@ -1342,7 +1338,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouAreNotMarryedMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourWifeNotOnlineMsg", "");
+            LoadString = ReadWriteString("String", "YourWifeNotOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourWifeNotOnlineMsg", Settings.YourWifeNotOnlineMsg);
@@ -1351,7 +1347,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourWifeNotOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourHusbandNotOnlineMsg", "");
+            LoadString = ReadWriteString("String", "YourHusbandNotOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourHusbandNotOnlineMsg", Settings.YourHusbandNotOnlineMsg);
@@ -1360,7 +1356,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourHusbandNotOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourWifeNowLocateMsg", "");
+            LoadString = ReadWriteString("String", "YourWifeNowLocateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourWifeNowLocateMsg", Settings.YourWifeNowLocateMsg);
@@ -1369,7 +1365,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourWifeNowLocateMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourHusbandSearchLocateMsg", "");
+            LoadString = ReadWriteString("String", "YourHusbandSearchLocateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourHusbandSearchLocateMsg", Settings.YourHusbandSearchLocateMsg);
@@ -1378,7 +1374,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourHusbandSearchLocateMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourHusbandNowLocateMsg", "");
+            LoadString = ReadWriteString("String", "YourHusbandNowLocateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourHusbandNowLocateMsg", Settings.YourHusbandNowLocateMsg);
@@ -1387,7 +1383,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourHusbandNowLocateMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourWifeSearchLocateMsg", "");
+            LoadString = ReadWriteString("String", "YourWifeSearchLocateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourWifeSearchLocateMsg", Settings.YourWifeSearchLocateMsg);
@@ -1396,7 +1392,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourWifeSearchLocateMsg = LoadString;
             }
-            LoadString = ReadString("String", "FUnMasterLoginMsg", "");
+            LoadString = ReadWriteString("String", "FUnMasterLoginMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "FUnMasterLoginMsg", Settings.fUnMasterLoginMsg);
@@ -1405,7 +1401,7 @@ namespace GameSvr.Conf
             {
                 Settings.fUnMasterLoginMsg = LoadString;
             }
-            LoadString = ReadString("String", "UnMasterListLoginMsg", "");
+            LoadString = ReadWriteString("String", "UnMasterListLoginMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "UnMasterListLoginMsg", Settings.fUnMasterListLoginMsg);
@@ -1414,7 +1410,7 @@ namespace GameSvr.Conf
             {
                 Settings.fUnMasterListLoginMsg = LoadString;
             }
-            LoadString = ReadString("String", "MasterListOnlineSelfMsg", "");
+            LoadString = ReadWriteString("String", "MasterListOnlineSelfMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MasterListOnlineSelfMsg", Settings.MasterListOnlineSelfMsg);
@@ -1423,7 +1419,7 @@ namespace GameSvr.Conf
             {
                 Settings.MasterListOnlineSelfMsg = LoadString;
             }
-            LoadString = ReadString("String", "MasterListOnlineMasterMsg", "");
+            LoadString = ReadWriteString("String", "MasterListOnlineMasterMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MasterListOnlineMasterMsg", Settings.MasterListOnlineMasterMsg);
@@ -1432,7 +1428,7 @@ namespace GameSvr.Conf
             {
                 Settings.MasterListOnlineMasterMsg = LoadString;
             }
-            LoadString = ReadString("String", "MasterOnlineSelfMsg", "");
+            LoadString = ReadWriteString("String", "MasterOnlineSelfMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MasterOnlineSelfMsg", Settings.MasterOnlineSelfMsg);
@@ -1441,7 +1437,7 @@ namespace GameSvr.Conf
             {
                 Settings.MasterOnlineSelfMsg = LoadString;
             }
-            LoadString = ReadString("String", "MasterOnlineMasterListMsg", "");
+            LoadString = ReadWriteString("String", "MasterOnlineMasterListMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MasterOnlineMasterListMsg", Settings.MasterOnlineMasterListMsg);
@@ -1450,7 +1446,7 @@ namespace GameSvr.Conf
             {
                 Settings.MasterOnlineMasterListMsg = LoadString;
             }
-            LoadString = ReadString("String", "MasterLongOutMasterListOnlineMsg", "");
+            LoadString = ReadWriteString("String", "MasterLongOutMasterListOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MasterLongOutMasterListOnlineMsg", Settings.MasterLongOutMasterListOnlineMsg);
@@ -1459,7 +1455,7 @@ namespace GameSvr.Conf
             {
                 Settings.MasterLongOutMasterListOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "MasterListLongOutMasterOnlineMsg", "");
+            LoadString = ReadWriteString("String", "MasterListLongOutMasterOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MasterListLongOutMasterOnlineMsg", Settings.MasterListLongOutMasterOnlineMsg);
@@ -1468,7 +1464,7 @@ namespace GameSvr.Conf
             {
                 Settings.MasterListLongOutMasterOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "MasterListNotOnlineMsg", "");
+            LoadString = ReadWriteString("String", "MasterListNotOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MasterListNotOnlineMsg", Settings.MasterListNotOnlineMsg);
@@ -1477,7 +1473,7 @@ namespace GameSvr.Conf
             {
                 Settings.MasterListNotOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "MasterNotOnlineMsg", "");
+            LoadString = ReadWriteString("String", "MasterNotOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "MasterNotOnlineMsg", Settings.MasterNotOnlineMsg);
@@ -1486,7 +1482,7 @@ namespace GameSvr.Conf
             {
                 Settings.MasterNotOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouAreNotMasterMsg", "");
+            LoadString = ReadWriteString("String", "YouAreNotMasterMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouAreNotMasterMsg", Settings.YouAreNotMasterMsg);
@@ -1495,7 +1491,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouAreNotMasterMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourMasterNotOnlineMsg", "");
+            LoadString = ReadWriteString("String", "YourMasterNotOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourMasterNotOnlineMsg", Settings.YourMasterNotOnlineMsg);
@@ -1504,7 +1500,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourMasterNotOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourMasterListNotOnlineMsg", "");
+            LoadString = ReadWriteString("String", "YourMasterListNotOnlineMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourMasterListNotOnlineMsg", Settings.YourMasterListNotOnlineMsg);
@@ -1513,7 +1509,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourMasterListNotOnlineMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourMasterNowLocateMsg", "");
+            LoadString = ReadWriteString("String", "YourMasterNowLocateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourMasterNowLocateMsg", Settings.YourMasterNowLocateMsg);
@@ -1522,7 +1518,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourMasterNowLocateMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourMasterListSearchLocateMsg", "");
+            LoadString = ReadWriteString("String", "YourMasterListSearchLocateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourMasterListSearchLocateMsg", Settings.YourMasterListSearchLocateMsg);
@@ -1531,7 +1527,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourMasterListSearchLocateMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourMasterListNowLocateMsg", "");
+            LoadString = ReadWriteString("String", "YourMasterListNowLocateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourMasterListNowLocateMsg", Settings.YourMasterListNowLocateMsg);
@@ -1540,7 +1536,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourMasterListNowLocateMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourMasterSearchLocateMsg", "");
+            LoadString = ReadWriteString("String", "YourMasterSearchLocateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourMasterSearchLocateMsg", Settings.YourMasterSearchLocateMsg);
@@ -1549,7 +1545,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourMasterSearchLocateMsg = LoadString;
             }
-            LoadString = ReadString("String", "YourMasterListUnMasterOKMsg", "");
+            LoadString = ReadWriteString("String", "YourMasterListUnMasterOKMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourMasterListUnMasterOKMsg", Settings.YourMasterListUnMasterOKMsg);
@@ -1558,7 +1554,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourMasterListUnMasterOKMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouAreUnMasterOKMsg", "");
+            LoadString = ReadWriteString("String", "YouAreUnMasterOKMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouAreUnMasterOKMsg", Settings.YouAreUnMasterOKMsg);
@@ -1567,7 +1563,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouAreUnMasterOKMsg = LoadString;
             }
-            LoadString = ReadString("String", "UnMasterLoginMsg", "");
+            LoadString = ReadWriteString("String", "UnMasterLoginMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "UnMasterLoginMsg", Settings.UnMasterLoginMsg);
@@ -1576,7 +1572,7 @@ namespace GameSvr.Conf
             {
                 Settings.UnMasterLoginMsg = LoadString;
             }
-            LoadString = ReadString("String", "NPCSayUnMasterOKMsg", "");
+            LoadString = ReadWriteString("String", "NPCSayUnMasterOKMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "NPCSayUnMasterOKMsg", Settings.NPCSayUnMasterOKMsg);
@@ -1585,7 +1581,7 @@ namespace GameSvr.Conf
             {
                 Settings.NPCSayUnMasterOKMsg = LoadString;
             }
-            LoadString = ReadString("String", "NPCSayForceUnMasterMsg", "");
+            LoadString = ReadWriteString("String", "NPCSayForceUnMasterMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "NPCSayForceUnMasterMsg", Settings.NPCSayForceUnMasterMsg);
@@ -1594,7 +1590,7 @@ namespace GameSvr.Conf
             {
                 Settings.NPCSayForceUnMasterMsg = LoadString;
             }
-            LoadString = ReadString("String", "MyInfo", "");
+            LoadString = ReadWriteString("String", "MyInfo", "");
             if (LoadString == "")
             {
                 WriteString("String", "MyInfo", Settings.MyInfo);
@@ -1603,7 +1599,7 @@ namespace GameSvr.Conf
             {
                 Settings.MyInfo = LoadString;
             }
-            LoadString = ReadString("String", "OpenedDealMsg", "");
+            LoadString = ReadWriteString("String", "OpenedDealMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "OpenedDealMsg", Settings.OpenedDealMsg);
@@ -1612,7 +1608,7 @@ namespace GameSvr.Conf
             {
                 Settings.OpenedDealMsg = LoadString;
             }
-            LoadString = ReadString("String", "SendCustMsgCanNotUseNowMsg", "");
+            LoadString = ReadWriteString("String", "SendCustMsgCanNotUseNowMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "SendCustMsgCanNotUseNowMsg", Settings.SendCustMsgCanNotUseNowMsg);
@@ -1621,7 +1617,7 @@ namespace GameSvr.Conf
             {
                 Settings.SendCustMsgCanNotUseNowMsg = LoadString;
             }
-            LoadString = ReadString("String", "SubkMasterMsgCanNotUseNowMsg", "");
+            LoadString = ReadWriteString("String", "SubkMasterMsgCanNotUseNowMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "SubkMasterMsgCanNotUseNowMsg", Settings.SubkMasterMsgCanNotUseNowMsg);
@@ -1630,7 +1626,7 @@ namespace GameSvr.Conf
             {
                 Settings.SubkMasterMsgCanNotUseNowMsg = LoadString;
             }
-            LoadString = ReadString("String", "SendOnlineCountMsg", "");
+            LoadString = ReadWriteString("String", "SendOnlineCountMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "SendOnlineCountMsg", Settings.SendOnlineCountMsg);
@@ -1639,7 +1635,7 @@ namespace GameSvr.Conf
             {
                 Settings.SendOnlineCountMsg = LoadString;
             }
-            LoadString = ReadString("String", "WeaponRepairSuccess", "");
+            LoadString = ReadWriteString("String", "WeaponRepairSuccess", "");
             if (LoadString == "")
             {
                 WriteString("String", "WeaponRepairSuccess", Settings.WeaponRepairSuccess);
@@ -1648,7 +1644,7 @@ namespace GameSvr.Conf
             {
                 Settings.WeaponRepairSuccess = LoadString;
             }
-            LoadString = ReadString("String", "DefenceUpTime", "");
+            LoadString = ReadWriteString("String", "DefenceUpTime", "");
             if (LoadString == "")
             {
                 WriteString("String", "DefenceUpTime", Settings.DefenceUpTime);
@@ -1657,7 +1653,7 @@ namespace GameSvr.Conf
             {
                 Settings.DefenceUpTime = LoadString;
             }
-            LoadString = ReadString("String", "MagDefenceUpTime", "");
+            LoadString = ReadWriteString("String", "MagDefenceUpTime", "");
             if (LoadString == "")
             {
                 WriteString("String", "MagDefenceUpTime", Settings.MagDefenceUpTime);
@@ -1666,7 +1662,7 @@ namespace GameSvr.Conf
             {
                 Settings.MagDefenceUpTime = LoadString;
             }
-            LoadString = ReadString("String", "WinLottery1Msg", "");
+            LoadString = ReadWriteString("String", "WinLottery1Msg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WinLottery1Msg", Settings.WinLottery1Msg);
@@ -1675,7 +1671,7 @@ namespace GameSvr.Conf
             {
                 Settings.WinLottery1Msg = LoadString;
             }
-            LoadString = ReadString("String", "WinLottery2Msg", "");
+            LoadString = ReadWriteString("String", "WinLottery2Msg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WinLottery2Msg", Settings.WinLottery2Msg);
@@ -1684,7 +1680,7 @@ namespace GameSvr.Conf
             {
                 Settings.WinLottery2Msg = LoadString;
             }
-            LoadString = ReadString("String", "WinLottery3Msg", "");
+            LoadString = ReadWriteString("String", "WinLottery3Msg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WinLottery3Msg", Settings.WinLottery3Msg);
@@ -1693,7 +1689,7 @@ namespace GameSvr.Conf
             {
                 Settings.WinLottery3Msg = LoadString;
             }
-            LoadString = ReadString("String", "WinLottery4Msg", "");
+            LoadString = ReadWriteString("String", "WinLottery4Msg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WinLottery4Msg", Settings.WinLottery4Msg);
@@ -1702,7 +1698,7 @@ namespace GameSvr.Conf
             {
                 Settings.WinLottery4Msg = LoadString;
             }
-            LoadString = ReadString("String", "WinLottery5Msg", "");
+            LoadString = ReadWriteString("String", "WinLottery5Msg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WinLottery5Msg", Settings.WinLottery5Msg);
@@ -1711,7 +1707,7 @@ namespace GameSvr.Conf
             {
                 Settings.WinLottery5Msg = LoadString;
             }
-            LoadString = ReadString("String", "WinLottery6Msg", "");
+            LoadString = ReadWriteString("String", "WinLottery6Msg", "");
             if (LoadString == "")
             {
                 WriteString("String", "WinLottery6Msg", Settings.WinLottery6Msg);
@@ -1720,7 +1716,7 @@ namespace GameSvr.Conf
             {
                 Settings.WinLottery6Msg = LoadString;
             }
-            LoadString = ReadString("String", "NotWinLotteryMsg", "");
+            LoadString = ReadWriteString("String", "NotWinLotteryMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "NotWinLotteryMsg", Settings.NotWinLotteryMsg);
@@ -1729,7 +1725,7 @@ namespace GameSvr.Conf
             {
                 Settings.NotWinLotteryMsg = LoadString;
             }
-            LoadString = ReadString("String", "WeaptonMakeLuck", "");
+            LoadString = ReadWriteString("String", "WeaptonMakeLuck", "");
             if (LoadString == "")
             {
                 WriteString("String", "WeaptonMakeLuck", Settings.WeaptonMakeLuck);
@@ -1738,7 +1734,7 @@ namespace GameSvr.Conf
             {
                 Settings.WeaptonMakeLuck = LoadString;
             }
-            LoadString = ReadString("String", "WeaptonNotMakeLuck", "");
+            LoadString = ReadWriteString("String", "WeaptonNotMakeLuck", "");
             if (LoadString == "")
             {
                 WriteString("String", "WeaptonNotMakeLuck", Settings.WeaptonNotMakeLuck);
@@ -1747,7 +1743,7 @@ namespace GameSvr.Conf
             {
                 Settings.WeaptonNotMakeLuck = LoadString;
             }
-            LoadString = ReadString("String", "TheWeaponIsCursed", "");
+            LoadString = ReadWriteString("String", "TheWeaponIsCursed", "");
             if (LoadString == "")
             {
                 WriteString("String", "TheWeaponIsCursed", Settings.TheWeaponIsCursed);
@@ -1756,7 +1752,7 @@ namespace GameSvr.Conf
             {
                 Settings.TheWeaponIsCursed = LoadString;
             }
-            LoadString = ReadString("String", "CanotTakeOffItem", "");
+            LoadString = ReadWriteString("String", "CanotTakeOffItem", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotTakeOffItem", Settings.CanotTakeOffItem);
@@ -1765,7 +1761,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotTakeOffItem = LoadString;
             }
-            LoadString = ReadString("String", "JoinGroupMsg", "");
+            LoadString = ReadWriteString("String", "JoinGroupMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "JoinGroupMsg", Settings.JoinGroup);
@@ -1774,7 +1770,7 @@ namespace GameSvr.Conf
             {
                 Settings.JoinGroup = LoadString;
             }
-            LoadString = ReadString("String", "TryModeCanotUseStorage", "");
+            LoadString = ReadWriteString("String", "TryModeCanotUseStorage", "");
             if (LoadString == "")
             {
                 WriteString("String", "TryModeCanotUseStorage", Settings.TryModeCanotUseStorage);
@@ -1783,7 +1779,7 @@ namespace GameSvr.Conf
             {
                 Settings.TryModeCanotUseStorage = LoadString;
             }
-            LoadString = ReadString("String", "CanotGetItemsMsg", "");
+            LoadString = ReadWriteString("String", "CanotGetItemsMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotGetItemsMsg", Settings.CanotGetItems);
@@ -1792,7 +1788,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotGetItems = LoadString;
             }
-            LoadString = ReadString("String", "EnableDearRecall", "");
+            LoadString = ReadWriteString("String", "EnableDearRecall", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableDearRecall", CommandHelp.EnableDearRecall);
@@ -1801,7 +1797,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableDearRecall = LoadString;
             }
-            LoadString = ReadString("String", "DisableDearRecall", "");
+            LoadString = ReadWriteString("String", "DisableDearRecall", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableDearRecall", CommandHelp.DisableDearRecall);
@@ -1810,7 +1806,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableDearRecall = LoadString;
             }
-            LoadString = ReadString("String", "EnableMasterRecall", "");
+            LoadString = ReadWriteString("String", "EnableMasterRecall", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableMasterRecall", CommandHelp.EnableMasterRecall);
@@ -1819,7 +1815,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableMasterRecall = LoadString;
             }
-            LoadString = ReadString("String", "DisableMasterRecall", "");
+            LoadString = ReadWriteString("String", "DisableMasterRecall", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableMasterRecall", CommandHelp.DisableMasterRecall);
@@ -1828,7 +1824,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableMasterRecall = LoadString;
             }
-            LoadString = ReadString("String", "NowCurrDateTime", "");
+            LoadString = ReadWriteString("String", "NowCurrDateTime", "");
             if (LoadString == "")
             {
                 WriteString("String", "NowCurrDateTime", CommandHelp.NowCurrDateTime);
@@ -1837,7 +1833,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.NowCurrDateTime = LoadString;
             }
-            LoadString = ReadString("String", "EnableHearWhisper", "");
+            LoadString = ReadWriteString("String", "EnableHearWhisper", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableHearWhisper", CommandHelp.EnableHearWhisper);
@@ -1846,7 +1842,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableHearWhisper = LoadString;
             }
-            LoadString = ReadString("String", "DisableHearWhisper", "");
+            LoadString = ReadWriteString("String", "DisableHearWhisper", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableHearWhisper", CommandHelp.DisableHearWhisper);
@@ -1855,7 +1851,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableHearWhisper = LoadString;
             }
-            LoadString = ReadString("String", "EnableShoutMsg", "");
+            LoadString = ReadWriteString("String", "EnableShoutMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableShoutMsg", CommandHelp.EnableShoutMsg);
@@ -1864,7 +1860,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableShoutMsg = LoadString;
             }
-            LoadString = ReadString("String", "DisableShoutMsg", "");
+            LoadString = ReadWriteString("String", "DisableShoutMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableShoutMsg", CommandHelp.DisableShoutMsg);
@@ -1873,7 +1869,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableShoutMsg = LoadString;
             }
-            LoadString = ReadString("String", "EnableDealMsg", "");
+            LoadString = ReadWriteString("String", "EnableDealMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableDealMsg", CommandHelp.EnableDealMsg);
@@ -1882,7 +1878,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableDealMsg = LoadString;
             }
-            LoadString = ReadString("String", "DisableDealMsg", "");
+            LoadString = ReadWriteString("String", "DisableDealMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableDealMsg", CommandHelp.DisableDealMsg);
@@ -1891,7 +1887,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableDealMsg = LoadString;
             }
-            LoadString = ReadString("String", "EnableGuildChat", "");
+            LoadString = ReadWriteString("String", "EnableGuildChat", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableGuildChat", CommandHelp.EnableGuildChat);
@@ -1900,7 +1896,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableGuildChat = LoadString;
             }
-            LoadString = ReadString("String", "DisableGuildChat", "");
+            LoadString = ReadWriteString("String", "DisableGuildChat", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableGuildChat", CommandHelp.DisableGuildChat);
@@ -1909,7 +1905,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableGuildChat = LoadString;
             }
-            LoadString = ReadString("String", "EnableJoinGuild", "");
+            LoadString = ReadWriteString("String", "EnableJoinGuild", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableJoinGuild", CommandHelp.EnableJoinGuild);
@@ -1918,7 +1914,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableJoinGuild = LoadString;
             }
-            LoadString = ReadString("String", "DisableJoinGuild", "");
+            LoadString = ReadWriteString("String", "DisableJoinGuild", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableJoinGuild", CommandHelp.DisableJoinGuild);
@@ -1927,7 +1923,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableJoinGuild = LoadString;
             }
-            LoadString = ReadString("String", "EnableAuthAllyGuild", "");
+            LoadString = ReadWriteString("String", "EnableAuthAllyGuild", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableAuthAllyGuild", CommandHelp.EnableAuthAllyGuild);
@@ -1936,7 +1932,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableAuthAllyGuild = LoadString;
             }
-            LoadString = ReadString("String", "DisableAuthAllyGuild", "");
+            LoadString = ReadWriteString("String", "DisableAuthAllyGuild", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableAuthAllyGuild", CommandHelp.DisableAuthAllyGuild);
@@ -1945,7 +1941,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableAuthAllyGuild = LoadString;
             }
-            LoadString = ReadString("String", "EnableGroupRecall", "");
+            LoadString = ReadWriteString("String", "EnableGroupRecall", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableGroupRecall", CommandHelp.EnableGroupRecall);
@@ -1954,7 +1950,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableGroupRecall = LoadString;
             }
-            LoadString = ReadString("String", "DisableGroupRecall", "");
+            LoadString = ReadWriteString("String", "DisableGroupRecall", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableGroupRecall", CommandHelp.DisableGroupRecall);
@@ -1963,7 +1959,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableGroupRecall = LoadString;
             }
-            LoadString = ReadString("String", "EnableGuildRecall", "");
+            LoadString = ReadWriteString("String", "EnableGuildRecall", "");
             if (LoadString == "")
             {
                 WriteString("String", "EnableGuildRecall", CommandHelp.EnableGuildRecall);
@@ -1972,7 +1968,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.EnableGuildRecall = LoadString;
             }
-            LoadString = ReadString("String", "DisableGuildRecall", "");
+            LoadString = ReadWriteString("String", "DisableGuildRecall", "");
             if (LoadString == "")
             {
                 WriteString("String", "DisableGuildRecall", CommandHelp.DisableGuildRecall);
@@ -1981,7 +1977,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.DisableGuildRecall = LoadString;
             }
-            LoadString = ReadString("String", "PleaseInputPassword", "");
+            LoadString = ReadWriteString("String", "PleaseInputPassword", "");
             if (LoadString == "")
             {
                 WriteString("String", "PleaseInputPassword", CommandHelp.PleaseInputPassword);
@@ -1990,7 +1986,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.PleaseInputPassword = LoadString;
             }
-            LoadString = ReadString("String", "TheMapDisableMove", "");
+            LoadString = ReadWriteString("String", "TheMapDisableMove", "");
             if (LoadString == "")
             {
                 WriteString("String", "TheMapDisableMove", CommandHelp.TheMapDisableMove);
@@ -1999,7 +1995,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.TheMapDisableMove = LoadString;
             }
-            LoadString = ReadString("String", "TheMapNotFound", "");
+            LoadString = ReadWriteString("String", "TheMapNotFound", "");
             if (LoadString == "")
             {
                 WriteString("String", "TheMapNotFound", CommandHelp.TheMapNotFound);
@@ -2008,7 +2004,7 @@ namespace GameSvr.Conf
             {
                 CommandHelp.TheMapNotFound = LoadString;
             }
-            LoadString = ReadString("String", "YourIPaddrDenyLogon", "");
+            LoadString = ReadWriteString("String", "YourIPaddrDenyLogon", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourIPaddrDenyLogon", Settings.YourIPaddrDenyLogon);
@@ -2017,7 +2013,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourIPaddrDenyLogon = LoadString;
             }
-            LoadString = ReadString("String", "YourAccountDenyLogon", "");
+            LoadString = ReadWriteString("String", "YourAccountDenyLogon", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourAccountDenyLogon", Settings.YourAccountDenyLogon);
@@ -2026,7 +2022,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourAccountDenyLogon = LoadString;
             }
-            LoadString = ReadString("String", "YourChrNameDenyLogon", "");
+            LoadString = ReadWriteString("String", "YourChrNameDenyLogon", "");
             if (LoadString == "")
             {
                 WriteString("String", "YourChrNameDenyLogon", Settings.YourChrNameDenyLogon);
@@ -2035,7 +2031,7 @@ namespace GameSvr.Conf
             {
                 Settings.YourChrNameDenyLogon = LoadString;
             }
-            LoadString = ReadString("String", "CanotPickUpItem", "");
+            LoadString = ReadWriteString("String", "CanotPickUpItem", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotPickUpItem", Settings.CanotPickUpItem);
@@ -2044,7 +2040,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotPickUpItem = LoadString;
             }
-            LoadString = ReadString("String", "sQUERYBAGITEMS", "");
+            LoadString = ReadWriteString("String", "sQUERYBAGITEMS", "");
             if (LoadString == "")
             {
                 WriteString("String", "sQUERYBAGITEMS", Settings.QUERYBAGITEMS);
@@ -2053,7 +2049,7 @@ namespace GameSvr.Conf
             {
                 Settings.QUERYBAGITEMS = LoadString;
             }
-            LoadString = ReadString("String", "CanotSendmsg", "");
+            LoadString = ReadWriteString("String", "CanotSendmsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "CanotSendmsg", Settings.CanotSendmsg);
@@ -2062,7 +2058,7 @@ namespace GameSvr.Conf
             {
                 Settings.CanotSendmsg = LoadString;
             }
-            LoadString = ReadString("String", "UserDenyWhisperMsg", "");
+            LoadString = ReadWriteString("String", "UserDenyWhisperMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "UserDenyWhisperMsg", Settings.UserDenyWhisperMsg);
@@ -2071,7 +2067,7 @@ namespace GameSvr.Conf
             {
                 Settings.UserDenyWhisperMsg = LoadString;
             }
-            LoadString = ReadString("String", "UserNotOnLine", "");
+            LoadString = ReadWriteString("String", "UserNotOnLine", "");
             if (LoadString == "")
             {
                 WriteString("String", "UserNotOnLine", Settings.UserNotOnLine);
@@ -2080,7 +2076,7 @@ namespace GameSvr.Conf
             {
                 Settings.UserNotOnLine = LoadString;
             }
-            LoadString = ReadString("String", "RevivalRecoverMsg", "");
+            LoadString = ReadWriteString("String", "RevivalRecoverMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "RevivalRecoverMsg", Settings.RevivalRecoverMsg);
@@ -2089,7 +2085,7 @@ namespace GameSvr.Conf
             {
                 Settings.RevivalRecoverMsg = LoadString;
             }
-            LoadString = ReadString("String", "ClientVersionTooOld", "");
+            LoadString = ReadWriteString("String", "ClientVersionTooOld", "");
             if (LoadString == "")
             {
                 WriteString("String", "ClientVersionTooOld", Settings.ClientVersionTooOld);
@@ -2098,7 +2094,7 @@ namespace GameSvr.Conf
             {
                 Settings.ClientVersionTooOld = LoadString;
             }
-            LoadString = ReadString("String", "CastleGuildName", "");
+            LoadString = ReadWriteString("String", "CastleGuildName", "");
             if (LoadString == "")
             {
                 WriteString("String", "CastleGuildName", Settings.CastleGuildName);
@@ -2107,7 +2103,7 @@ namespace GameSvr.Conf
             {
                 Settings.CastleGuildName = LoadString;
             }
-            LoadString = ReadString("String", "NoCastleGuildName", "");
+            LoadString = ReadWriteString("String", "NoCastleGuildName", "");
             if (LoadString == "")
             {
                 WriteString("String", "NoCastleGuildName", Settings.NoCastleGuildName);
@@ -2116,7 +2112,7 @@ namespace GameSvr.Conf
             {
                 Settings.NoCastleGuildName = LoadString;
             }
-            LoadString = ReadString("String", "WarrReNewName", "");
+            LoadString = ReadWriteString("String", "WarrReNewName", "");
             if (LoadString == "")
             {
                 WriteString("String", "WarrReNewName", Settings.WarrReNewName);
@@ -2125,7 +2121,7 @@ namespace GameSvr.Conf
             {
                 Settings.WarrReNewName = LoadString;
             }
-            LoadString = ReadString("String", "WizardReNewName", "");
+            LoadString = ReadWriteString("String", "WizardReNewName", "");
             if (LoadString == "")
             {
                 WriteString("String", "WizardReNewName", Settings.WizardReNewName);
@@ -2134,7 +2130,7 @@ namespace GameSvr.Conf
             {
                 Settings.WizardReNewName = LoadString;
             }
-            LoadString = ReadString("String", "TaosReNewName", "");
+            LoadString = ReadWriteString("String", "TaosReNewName", "");
             if (LoadString == "")
             {
                 WriteString("String", "TaosReNewName", Settings.TaosReNewName);
@@ -2143,7 +2139,7 @@ namespace GameSvr.Conf
             {
                 Settings.TaosReNewName = LoadString;
             }
-            LoadString = ReadString("String", "RankLevelName", "");
+            LoadString = ReadWriteString("String", "RankLevelName", "");
             if (LoadString == "")
             {
                 WriteString("String", "RankLevelName", Settings.RankLevelName);
@@ -2152,7 +2148,7 @@ namespace GameSvr.Conf
             {
                 Settings.RankLevelName = LoadString.Replace("%s", "{0}");
             }
-            LoadString = ReadString("String", "ManDearName", "");
+            LoadString = ReadWriteString("String", "ManDearName", "");
             if (LoadString == "")
             {
                 WriteString("String", "ManDearName", Settings.ManDearName);
@@ -2161,7 +2157,7 @@ namespace GameSvr.Conf
             {
                 Settings.ManDearName = LoadString;
             }
-            LoadString = ReadString("String", "WoManDearName", "");
+            LoadString = ReadWriteString("String", "WoManDearName", "");
             if (LoadString == "")
             {
                 WriteString("String", "WoManDearName", Settings.WoManDearName);
@@ -2170,7 +2166,7 @@ namespace GameSvr.Conf
             {
                 Settings.WoManDearName = LoadString;
             }
-            LoadString = ReadString("String", "MasterName", "");
+            LoadString = ReadWriteString("String", "MasterName", "");
             if (LoadString == "")
             {
                 WriteString("String", "MasterName", Settings.MasterName);
@@ -2180,7 +2176,7 @@ namespace GameSvr.Conf
                 Settings.MasterName = LoadString;
             }
 
-            LoadString = ReadString("String", "NoMasterName", "");
+            LoadString = ReadWriteString("String", "NoMasterName", "");
             if (LoadString == "")
             {
                 WriteString("String", "NoMasterName", Settings.NoMasterName);
@@ -2189,7 +2185,7 @@ namespace GameSvr.Conf
             {
                 Settings.NoMasterName = LoadString;
             }
-            LoadString = ReadString("String", "HumanShowName", "");
+            LoadString = ReadWriteString("String", "HumanShowName", "");
             if (LoadString == "")
             {
                 WriteString("String", "HumanShowName", Settings.HumanShowName);
@@ -2198,7 +2194,7 @@ namespace GameSvr.Conf
             {
                 Settings.HumanShowName = LoadString;
             }
-            LoadString = ReadString("String", "ChangePermissionMsg", "");
+            LoadString = ReadWriteString("String", "ChangePermissionMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ChangePermissionMsg", Settings.ChangePermissionMsg);
@@ -2207,7 +2203,7 @@ namespace GameSvr.Conf
             {
                 Settings.ChangePermissionMsg = LoadString;
             }
-            LoadString = ReadString("String", "ChangeKillMonExpRateMsg", "");
+            LoadString = ReadWriteString("String", "ChangeKillMonExpRateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ChangeKillMonExpRateMsg", Settings.ChangeKillMonExpRateMsg);
@@ -2216,7 +2212,7 @@ namespace GameSvr.Conf
             {
                 Settings.ChangeKillMonExpRateMsg = LoadString;
             }
-            LoadString = ReadString("String", "ChangePowerRateMsg", "");
+            LoadString = ReadWriteString("String", "ChangePowerRateMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ChangePowerRateMsg", Settings.ChangePowerRateMsg);
@@ -2225,7 +2221,7 @@ namespace GameSvr.Conf
             {
                 Settings.ChangePowerRateMsg = LoadString;
             }
-            LoadString = ReadString("String", "ChangeMemberLevelMsg", "");
+            LoadString = ReadWriteString("String", "ChangeMemberLevelMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ChangeMemberLevelMsg", Settings.ChangeMemberLevelMsg);
@@ -2234,7 +2230,7 @@ namespace GameSvr.Conf
             {
                 Settings.ChangeMemberLevelMsg = LoadString;
             }
-            LoadString = ReadString("String", "ChangeMemberTypeMsg", "");
+            LoadString = ReadWriteString("String", "ChangeMemberTypeMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ChangeMemberTypeMsg", Settings.ChangeMemberTypeMsg);
@@ -2243,7 +2239,7 @@ namespace GameSvr.Conf
             {
                 Settings.ChangeMemberTypeMsg = LoadString;
             }
-            LoadString = ReadString("String", "ScriptChangeHumanHPMsg", "");
+            LoadString = ReadWriteString("String", "ScriptChangeHumanHPMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ScriptChangeHumanHPMsg", Settings.ScriptChangeHumanHPMsg);
@@ -2252,7 +2248,7 @@ namespace GameSvr.Conf
             {
                 Settings.ScriptChangeHumanHPMsg = LoadString;
             }
-            LoadString = ReadString("String", "ScriptChangeHumanMPMsg", "");
+            LoadString = ReadWriteString("String", "ScriptChangeHumanMPMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ScriptChangeHumanMPMsg", Settings.ScriptChangeHumanMPMsg);
@@ -2261,7 +2257,7 @@ namespace GameSvr.Conf
             {
                 Settings.ScriptChangeHumanMPMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouCanotDisableSayMsg", "");
+            LoadString = ReadWriteString("String", "YouCanotDisableSayMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouCanotDisableSayMsg", Settings.DisableSayMsg);
@@ -2270,7 +2266,7 @@ namespace GameSvr.Conf
             {
                 Settings.DisableSayMsg = LoadString;
             }
-            LoadString = ReadString("String", "OnlineCountMsg", "");
+            LoadString = ReadWriteString("String", "OnlineCountMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "OnlineCountMsg", Settings.OnlineCountMsg);
@@ -2279,7 +2275,7 @@ namespace GameSvr.Conf
             {
                 Settings.OnlineCountMsg = LoadString;
             }
-            LoadString = ReadString("String", "TotalOnlineCountMsg", "");
+            LoadString = ReadWriteString("String", "TotalOnlineCountMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "TotalOnlineCountMsg", Settings.TotalOnlineCountMsg);
@@ -2288,7 +2284,7 @@ namespace GameSvr.Conf
             {
                 Settings.TotalOnlineCountMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouNeedLevelSendMsg", "");
+            LoadString = ReadWriteString("String", "YouNeedLevelSendMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouNeedLevelSendMsg", Settings.YouNeedLevelMsg);
@@ -2297,7 +2293,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouNeedLevelMsg = LoadString;
             }
-            LoadString = ReadString("String", "ThisMapDisableSendCyCyMsg", "");
+            LoadString = ReadWriteString("String", "ThisMapDisableSendCyCyMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "ThisMapDisableSendCyCyMsg", Settings.ThisMapDisableSendCyCyMsg);
@@ -2306,7 +2302,7 @@ namespace GameSvr.Conf
             {
                 Settings.ThisMapDisableSendCyCyMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouCanSendCyCyLaterMsg", "");
+            LoadString = ReadWriteString("String", "YouCanSendCyCyLaterMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouCanSendCyCyLaterMsg", Settings.YouCanSendCyCyLaterMsg);
@@ -2315,7 +2311,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouCanSendCyCyLaterMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouIsDisableSendMsg", "");
+            LoadString = ReadWriteString("String", "YouIsDisableSendMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouIsDisableSendMsg", Settings.YouIsDisableSendMsg);
@@ -2324,7 +2320,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouIsDisableSendMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouMurderedMsg", "");
+            LoadString = ReadWriteString("String", "YouMurderedMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouMurderedMsg", Settings.YouMurderedMsg);
@@ -2333,7 +2329,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouMurderedMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouKilledByMsg", "");
+            LoadString = ReadWriteString("String", "YouKilledByMsg", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouKilledByMsg", Settings.YouKilledByMsg);
@@ -2342,7 +2338,7 @@ namespace GameSvr.Conf
             {
                 Settings.YouKilledByMsg = LoadString;
             }
-            LoadString = ReadString("String", "YouprotectedByLawOfDefense", "");
+            LoadString = ReadWriteString("String", "YouprotectedByLawOfDefense", "");
             if (LoadString == "")
             {
                 WriteString("String", "YouprotectedByLawOfDefense", Settings.YouprotectedByLawOfDefense);
@@ -2357,7 +2353,7 @@ namespace GameSvr.Conf
         {
             string result;
             string sString;
-            sString = ReadString(sSection, sIdent, "");
+            sString = ReadWriteString(sSection, sIdent, "");
             if (sString == "")
             {
                 WriteString(sSection, sIdent, sDefault);
@@ -2369,5 +2365,6 @@ namespace GameSvr.Conf
             }
             return result;
         }
+
     }
 }
