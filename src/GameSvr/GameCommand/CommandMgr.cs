@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand
 
         private CommandMgr()
         {
-            CommandConf = new GameCmdConf(Path.Combine(M2Share.BasePath, ConfConst.sCommandFileName));
+            CommandConf = new GameCmdConf(Path.Combine(M2Share.BasePath, ConfConst.CommandFileName));
         }
 
         public static CommandMgr GetInstance()

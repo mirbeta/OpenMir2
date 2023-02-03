@@ -219,11 +219,11 @@ namespace GameSvr
         static M2Share()
         {
             BasePath = AppContext.BaseDirectory;
-            ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.sConfigFileName));
-            StringConf = new StringConf(Path.Combine(BasePath, ConfConst.sStringFileName));
-            ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.sExpConfigFileName));
-            GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.sGlobalConfigFileName));
-            GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.sGameSettingFileName));
+            ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.ConfigFileName));
+            StringConf = new StringConf(Path.Combine(BasePath, ConfConst.StringFileName));
+            ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.ExpConfigFileName));
+            GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.GlobalConfigFileName));
+            GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.GameSettingFileName));
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
             ActorMgr = new ActorMgr();

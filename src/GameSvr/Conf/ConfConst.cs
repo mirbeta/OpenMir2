@@ -1,12 +1,12 @@
 namespace GameSvr.Conf
 {
-    public class ConfConst
+    public static class ConfConst
     {
-        public const string sConfigFileName = "server.conf";
-        public const string sExpConfigFileName = "exps.conf";
-        public const string sCommandFileName = "command.conf";
-        public const string sStringFileName = "string.conf";
-        public const string sGlobalConfigFileName = "global.conf";
-        public const string sGameSettingFileName = "setting.conf";
+        public const string ConfigFileName = "server.conf";
+        public const string ExpConfigFileName = "exps.conf";
+        public const string CommandFileName = "command.conf";
+        public const string StringFileName = "string.conf";
+        public const string GlobalConfigFileName = "global.conf";
+        public const string GameSettingFileName = "setting.conf";
     }
 }
