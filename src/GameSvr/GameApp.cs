@@ -119,7 +119,7 @@ namespace GameSvr
             M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
             _logger.Info("正在加载物品数据库...");
-            int nCode = M2Share.CommonDb.LoadItemsDB();
+            var nCode = M2Share.CommonDb.LoadItemsDB();
             if (nCode < 0)
             {
                 _logger.Info("物品数据库加载失败!!!" + "Code: " + nCode);
@@ -155,7 +155,7 @@ namespace GameSvr
             }
             _logger.Info($"加载技能数据库成功...[{M2Share.WorldEngine.MagicList.Count}]");
             _logger.Info("正在加载怪物刷新配置信息...");
-            nCode = M2Share.LocalDb.LoadMonGen(out int mongenCount);
+            nCode = M2Share.LocalDb.LoadMonGen(out var mongenCount);
             if (nCode < 0)
             {
                 _logger.Info("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
@@ -273,23 +273,23 @@ namespace GameSvr
 
         private static void LoadServerTable()
         {
-            int nRouteIdx = 0;
-            string sIdx = string.Empty;
-            string sSelGateIPaddr = string.Empty;
-            string sGameGateIPaddr = string.Empty;
-            string sGameGatePort = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.BaseDir, "!servertable.txt");
+            var nRouteIdx = 0;
+            var sIdx = string.Empty;
+            var sSelGateIPaddr = string.Empty;
+            var sGameGateIPaddr = string.Empty;
+            var sGameGatePort = string.Empty;
+            var sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.BaseDir, "!servertable.txt");
             if (File.Exists(sFileName))
             {
-                StringList loadList = new StringList();
+                var loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
-                for (int i = 0; i < loadList.Count; i++)
+                for (var i = 0; i < loadList.Count; i++)
                 {
-                    string sLineText = loadList[i];
-                    if (sLineText != "" && sLineText[0] != ';')
+                    var sLineText = loadList[i];
+                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIdx, new[] { " ", "\09" });
-                        string sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
+                        var sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
                         if (string.IsNullOrEmpty(sIdx) || string.IsNullOrEmpty(sGameGate) || string.IsNullOrEmpty(sSelGateIPaddr))
                         {
                             continue;
@@ -298,19 +298,19 @@ namespace GameSvr
                         {
                             M2Share.ServerTableList[nRouteIdx] = new TRouteInfo();
                         }
-                        M2Share.ServerTableList[nRouteIdx].nGateCount = 0;
-                        M2Share.ServerTableList[nRouteIdx].nServerIdx = HUtil32.StrToInt(sIdx, 0);
-                        M2Share.ServerTableList[nRouteIdx].sSelGateIP = sSelGateIPaddr.Trim();
-                        int nGateIdx = 0;
+                        M2Share.ServerTableList[nRouteIdx].GateCount = 0;
+                        M2Share.ServerTableList[nRouteIdx].ServerIdx = HUtil32.StrToInt(sIdx, 0);
+                        M2Share.ServerTableList[nRouteIdx].SelGateIP = sSelGateIPaddr.Trim();
+                        var nGateIdx = 0;
                         while (!string.IsNullOrEmpty(sGameGate))
                         {
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
-                            M2Share.ServerTableList[nRouteIdx].sGameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
-                            M2Share.ServerTableList[nRouteIdx].nGameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
+                            M2Share.ServerTableList[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
+                            M2Share.ServerTableList[nRouteIdx].GameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
                             nGateIdx++;
                         }
-                        M2Share.ServerTableList[nRouteIdx].nGateCount = nGateIdx;
+                        M2Share.ServerTableList[nRouteIdx].GateCount = nGateIdx;
                         nRouteIdx++;
                         if (nRouteIdx > M2Share.ServerTableList.Length)
                         {
@@ -328,8 +328,8 @@ namespace GameSvr
         /// <returns></returns>
         private static bool LoadAbuseInformation(string fileName)
         {
-            int lineCount = 0;
-            bool result = false;
+            var lineCount = 0;
+            var result = false;
             if (File.Exists(fileName))
             {
                 M2Share.AbuseTextList.Clear();
@@ -340,7 +340,7 @@ namespace GameSvr
                     {
                         break;
                     }
-                    string sText = M2Share.AbuseTextList[lineCount].Trim();
+                    var sText = M2Share.AbuseTextList[lineCount].Trim();
                     if (string.IsNullOrEmpty(sText))
                     {
                         M2Share.AbuseTextList.RemoveAt(lineCount);

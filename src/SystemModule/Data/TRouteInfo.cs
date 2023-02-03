@@ -2,16 +2,16 @@
 {
     public class TRouteInfo
     {
-        public int nServerIdx;
-        public int nGateCount;
-        public string sSelGateIP;
-        public string[] sGameGateIP;
-        public int[] nGameGatePort;
+        public int ServerIdx;
+        public int GateCount;
+        public string SelGateIP;
+        public string[] GameGateIP;
+        public int[] GameGatePort;
 
         public TRouteInfo()
         {
-            sGameGateIP = new string[16];
-            nGameGatePort = new int[16];
+            GameGateIP = new string[16];
+            GameGatePort = new int[16];
         }
     }
 }

@@ -1888,12 +1888,12 @@ namespace GameSvr.Actor
             }
             for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (M2Share.StartPointList[i].m_sMapName == Envir.MapName)
+                if (M2Share.StartPointList[i].MapName == Envir.MapName)
                 {
                     if (M2Share.StartPointList[i] != null)
                     {
-                        int cX = M2Share.StartPointList[i].m_nCurrX;
-                        int cY = M2Share.StartPointList[i].m_nCurrY;
+                        int cX = M2Share.StartPointList[i].CurrX;
+                        int cY = M2Share.StartPointList[i].CurrY;
                         if ((Math.Abs(CurrX - cX) <= 60) && (Math.Abs(CurrY - cY) <= 60))
                         {
                             result = true;
@@ -3120,12 +3120,12 @@ namespace GameSvr.Actor
             }
             for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (M2Share.StartPointList[i].m_sMapName == Envir.MapName)
+                if (M2Share.StartPointList[i].MapName == Envir.MapName)
                 {
                     if (M2Share.StartPointList[i] != null)
                     {
-                        int nSafeX = M2Share.StartPointList[i].m_nCurrX;
-                        int nSafeY = M2Share.StartPointList[i].m_nCurrY;
+                        int nSafeX = M2Share.StartPointList[i].CurrX;
+                        int nSafeY = M2Share.StartPointList[i].CurrY;
                         if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.SafeZoneSize) &&
                             (Math.Abs(CurrY - nSafeY) <= M2Share.Config.SafeZoneSize))
                         {
@@ -3160,12 +3160,12 @@ namespace GameSvr.Actor
             }
             for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (M2Share.StartPointList[i].m_sMapName == envir.MapName)
+                if (M2Share.StartPointList[i].MapName == envir.MapName)
                 {
                     if (M2Share.StartPointList[i] != null)
                     {
-                        int nSafeX = M2Share.StartPointList[i].m_nCurrX;
-                        int nSafeY = M2Share.StartPointList[i].m_nCurrY;
+                        int nSafeX = M2Share.StartPointList[i].CurrX;
+                        int nSafeY = M2Share.StartPointList[i].CurrY;
                         if ((Math.Abs(nX - nSafeX) <= M2Share.Config.SafeZoneSize) &&
                             (Math.Abs(nY - nSafeY) <= M2Share.Config.SafeZoneSize))
                         {

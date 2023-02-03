@@ -25,22 +25,22 @@ namespace GameSvr.Maps
             for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 StartPoint StartPoint = M2Share.StartPointList[i];
-                if (StartPoint != null && StartPoint.m_nType > 0)
+                if (StartPoint != null && StartPoint.Type > 0)
                 {
-                    Envirnoment Envir = FindMap(StartPoint.m_sMapName);
+                    Envirnoment Envir = FindMap(StartPoint.MapName);
                     if (Envir != null)
                     {
-                        int nMinX = StartPoint.m_nCurrX - StartPoint.m_nRange;
-                        int nMaxX = StartPoint.m_nCurrX + StartPoint.m_nRange;
-                        int nMinY = StartPoint.m_nCurrY - StartPoint.m_nRange;
-                        int nMaxY = StartPoint.m_nCurrY + StartPoint.m_nRange;
+                        int nMinX = StartPoint.CurrX - StartPoint.Range;
+                        int nMaxX = StartPoint.CurrX + StartPoint.Range;
+                        int nMinY = StartPoint.CurrY - StartPoint.Range;
+                        int nMaxY = StartPoint.CurrY + StartPoint.Range;
                         for (int nX = nMinX; nX <= nMaxX; nX++)
                         {
                             for (int nY = nMinY; nY <= nMaxY; nY++)
                             {
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                                 {
-                                    SafeEvent SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.m_nType);
+                                    SafeEvent SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.Type);
                                     M2Share.EventMgr.AddEvent(SafeEvent);
                                 }
                             }

@@ -19,7 +19,7 @@ namespace GameSvr.Player
         private bool ClientPickUpItemIsSelf(int actorId)
         {
             bool result;
-            if (actorId == 0 || this.ActorId == actorId)
+            if (actorId == 0 || ActorId == actorId)
             {
                 result = true;
             }
@@ -111,7 +111,7 @@ namespace GameSvr.Player
                         Dispose(mapItem);
                         if (Race == ActorRace.Play)
                         {
-                            this.SendAddItem(userItem);
+                            SendAddItem(userItem);
                         }
                         result = true;
                     }
@@ -229,9 +229,9 @@ namespace GameSvr.Player
         internal bool IsBlockWhisper(string sName)
         {
             bool result = false;
-            for (int i = 0; i < this.LockWhisperList.Count; i++)
+            for (int i = 0; i < LockWhisperList.Count; i++)
             {
-                if (string.Compare(sName, this.LockWhisperList[i], StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(sName, LockWhisperList[i], StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                     break;
@@ -667,15 +667,15 @@ namespace GameSvr.Player
                 HomeY = M2Share.Config.RedHomeY;
                 return;
             }
-            for (int i = 0; i < M2Share.StartPointList.Count; i++)
+            for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (M2Share.StartPointList[i].m_sMapName == Envir.MapName)
+                if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (M2Share.StartPointList[i] != null)
                     {
-                        HomeMap = M2Share.StartPointList[i].m_sMapName;
-                        HomeX = M2Share.StartPointList[i].m_nCurrX;
-                        HomeY = M2Share.StartPointList[i].m_nCurrY;
+                        HomeMap = M2Share.StartPointList[i].MapName;
+                        HomeX = M2Share.StartPointList[i].CurrX;
+                        HomeY = M2Share.StartPointList[i].CurrY;
                         break;
                     }
                 }
@@ -723,8 +723,6 @@ namespace GameSvr.Player
 
         public void GainExp(int dwExp)
         {
-            int n;
-            int sumlv;
             PlayObject playObject;
             const string sExceptionMsg = "[Exception] TPlayObject::GainExp";
             double[] bonus = { 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2 };
@@ -732,10 +730,9 @@ namespace GameSvr.Player
             {
                 if (GroupOwner != 0)
                 {
-                    sumlv = 0;
-                    n = 0;
+                    var sumlv = 0;
+                    var n = 0;
                     var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-
                     for (var i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                     {
                         playObject = groupOwnerPlay.GroupMembers[i];
@@ -752,7 +749,7 @@ namespace GameSvr.Player
                         {
                             dwExp = HUtil32.Round(dwExp * bonus[n]);
                         }
-                        for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
+                        for (var i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                         {
                             playObject = groupOwnerPlay.GroupMembers[i];
                             if (!playObject.Death && Envir == playObject.Envir && Math.Abs(CurrX - playObject.CurrX) <= 12 && Math.Abs(CurrX - playObject.CurrX) <= 12)
@@ -797,7 +794,7 @@ namespace GameSvr.Player
         {
             if (DealItemList.Count > 0)
             {
-                for (int i = 0; i < DealItemList.Count; i++)
+                for (var i = 0; i < DealItemList.Count; i++)
                 {
                     ItemList.Add(DealItemList[i]);
                 }
@@ -810,14 +807,14 @@ namespace GameSvr.Player
 
         public override string GetBaseObjectInfo()
         {
-            return this.ChrName + " 标识:" + this.ActorId + " 权限等级: " + this.Permission + " 管理模式: " + HUtil32.BoolToStr(this.AdminMode)
-                + " 隐身模式: " + HUtil32.BoolToStr(this.ObMode) + " 无敌模式: " + HUtil32.BoolToStr(this.SuperMan) + " 地图:" + this.MapName + '(' + this.Envir.MapDesc + ')'
-                + " 座标:" + this.CurrX + ':' + this.CurrY + " 等级:" + this.Abil.Level + " 转生等级:" + ReLevel
-                + " 经验:" + this.Abil.Exp + " 生命值: " + this.WAbil.HP + '-' + this.WAbil.MaxHP + " 魔法值: " + this.WAbil.MP + '-' + this.WAbil.MaxMP
-                + " 攻击力: " + HUtil32.LoWord(this.WAbil.DC) + '-' + HUtil32.HiWord(this.WAbil.DC) + " 魔法力: " + HUtil32.LoWord(this.WAbil.MC) + '-'
-                + HUtil32.HiWord(this.WAbil.MC) + " 道术: " + HUtil32.LoWord(this.WAbil.SC) + '-' + HUtil32.HiWord(this.WAbil.SC)
-                + " 防御力: " + HUtil32.LoWord(this.WAbil.AC) + '-' + HUtil32.HiWord(this.WAbil.AC) + " 魔防力: " + HUtil32.LoWord(this.WAbil.MAC)
-                + '-' + HUtil32.HiWord(this.WAbil.MAC) + " 准确:" + this.HitPoint + " 敏捷:" + this.SpeedPoint + " 速度:" + this.HitSpeed
+            return ChrName + " 标识:" + ActorId + " 权限等级: " + Permission + " 管理模式: " + HUtil32.BoolToStr(AdminMode)
+                + " 隐身模式: " + HUtil32.BoolToStr(ObMode) + " 无敌模式: " + HUtil32.BoolToStr(SuperMan) + " 地图:" + MapName + '(' + Envir.MapDesc + ')'
+                + " 座标:" + CurrX + ':' + CurrY + " 等级:" + Abil.Level + " 转生等级:" + ReLevel
+                + " 经验:" + Abil.Exp + " 生命值: " + WAbil.HP + '-' + WAbil.MaxHP + " 魔法值: " + WAbil.MP + '-' + WAbil.MaxMP
+                + " 攻击力: " + HUtil32.LoWord(WAbil.DC) + '-' + HUtil32.HiWord(WAbil.DC) + " 魔法力: " + HUtil32.LoWord(WAbil.MC) + '-'
+                + HUtil32.HiWord(WAbil.MC) + " 道术: " + HUtil32.LoWord(WAbil.SC) + '-' + HUtil32.HiWord(WAbil.SC)
+                + " 防御力: " + HUtil32.LoWord(WAbil.AC) + '-' + HUtil32.HiWord(WAbil.AC) + " 魔防力: " + HUtil32.LoWord(WAbil.MAC)
+                + '-' + HUtil32.HiWord(WAbil.MAC) + " 准确:" + HitPoint + " 敏捷:" + SpeedPoint + " 速度:" + HitSpeed
                 + " 仓库密码:" + StoragePwd + " 登录IP:" + LoginIpAddr + '(' + LoginIpLocal + ')' + " 登录帐号:" + UserAccount + " 登录时间:" + DateTimeOffset.FromUnixTimeMilliseconds(LogonTime).ToString("yyyy-MM-dd HH:mm:ss")
                 + " 在线时长(分钟):" + (HUtil32.GetTickCount() - LogonTick) / 60000 + " 登录模式:" + PayMent + ' ' + M2Share.Config.GameGoldName + ':' + GameGold
                 + ' ' + M2Share.Config.GamePointName + ':' + GamePoint + ' ' + M2Share.Config.PayMentPointName + ':' + PayMentPoint + " 会员类型:" + MemberType
@@ -832,7 +829,7 @@ namespace GameSvr.Player
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent == Messages.CM_BUTCH)
                         {
@@ -871,7 +868,7 @@ namespace GameSvr.Player
 
         public void ClearStatusTime()
         {
-            this.StatusArr = new ushort[15];
+            StatusArr = new ushort[15];
         }
 
         private void SendMapDescription()
@@ -1163,16 +1160,16 @@ namespace GameSvr.Player
             if (nPoint + nTotleUsePoint == BonusPoint)
             {
                 BonusPoint = nPoint;
-                this.BonusAbil.DC += bonusAbil.DC;
-                this.BonusAbil.MC += bonusAbil.MC;
-                this.BonusAbil.SC += bonusAbil.SC;
-                this.BonusAbil.AC += bonusAbil.AC;
-                this.BonusAbil.MAC += bonusAbil.MAC;
-                this.BonusAbil.HP += bonusAbil.HP;
-                this.BonusAbil.MP += bonusAbil.MP;
-                this.BonusAbil.Hit += bonusAbil.Hit;
-                this.BonusAbil.Speed += bonusAbil.Speed;
-                this.BonusAbil.Reserved += bonusAbil.Reserved;
+                BonusAbil.DC += bonusAbil.DC;
+                BonusAbil.MC += bonusAbil.MC;
+                BonusAbil.SC += bonusAbil.SC;
+                BonusAbil.AC += bonusAbil.AC;
+                BonusAbil.MAC += bonusAbil.MAC;
+                BonusAbil.HP += bonusAbil.HP;
+                BonusAbil.MP += bonusAbil.MP;
+                BonusAbil.Hit += bonusAbil.Hit;
+                BonusAbil.Speed += bonusAbil.Speed;
+                BonusAbil.Reserved += bonusAbil.Reserved;
                 RecalcAbilitys();
                 SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
                 SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
@@ -2195,7 +2192,7 @@ namespace GameSvr.Player
                             RecalcAbilitys();
                             if (Race == ActorRace.Play)
                             {
-                                this.SendAddMagic(userMagic);
+                                SendAddMagic(userMagic);
                             }
                             result = true;
                         }
@@ -3047,7 +3044,7 @@ namespace GameSvr.Player
                 loadList.LoadFromFile(sUnMarryFileName);
                 for (int i = 0; i < loadList.Count; i++)
                 {
-                    if (string.Compare(loadList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(loadList[i], ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         loadList.RemoveAt(i);
                         boIsfound = true;
@@ -3109,7 +3106,7 @@ namespace GameSvr.Player
             string sSayMsg;
             for (int i = 0; i < M2Share.UnForceMasterList.Count; i++) // 处理强行脱离师徒关系
             {
-                if (string.Compare(M2Share.UnForceMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.UnForceMasterList[i], ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     M2Share.UnForceMasterList.RemoveAt(i);
                     M2Share.SaveUnForceMasterList();
@@ -3169,7 +3166,7 @@ namespace GameSvr.Player
                         boIsfound = false;
                         for (int i = 0; i < M2Share.UnMasterList.Count; i++)
                         {
-                            if (string.Compare(M2Share.UnMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(M2Share.UnMasterList[i], ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 boIsfound = true;
                                 break;
@@ -3193,7 +3190,7 @@ namespace GameSvr.Player
             boIsfound = false;
             for (int i = 0; i < M2Share.UnMasterList.Count; i++)
             {
-                if (string.Compare(M2Share.UnMasterList[i], this.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.UnMasterList[i], ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     M2Share.UnMasterList.RemoveAt(i);
                     M2Share.SaveUnMasterList();
@@ -3572,7 +3569,7 @@ namespace GameSvr.Player
         /// </summary>
         public void ChangePlanesServer(string serveraddr, int gamePort)
         {
-            this.SendMsg(this, Messages.RM_RECONNECTION, 0, 0, 0, 0, serveraddr + '/' + gamePort);
+            SendMsg(this, Messages.RM_RECONNECTION, 0, 0, 0, 0, serveraddr + '/' + gamePort);
         }
 
         private void ProcessQueryValue(int npc, string sData)

@@ -862,14 +862,14 @@ namespace GameSvr.DataSource
                         {
                             StartPoint startPoint = new StartPoint
                             {
-                                m_sMapName = mapName,
-                                m_nCurrX = (short)HUtil32.StrToInt(cX, 0),
-                                m_nCurrY = (short)HUtil32.StrToInt(cY, 0),
-                                m_boNotAllowSay = Convert.ToBoolean(HUtil32.StrToInt(allSay, 0)),
-                                m_nRange = HUtil32.StrToInt(range, 0),
-                                m_nType = HUtil32.StrToInt(type, 0),
-                                m_nPkZone = HUtil32.StrToInt(zone, 0),
-                                m_nPkFire = HUtil32.StrToInt(fire, 0)
+                                MapName = mapName,
+                                CurrX = (short)HUtil32.StrToInt(cX, 0),
+                                CurrY = (short)HUtil32.StrToInt(cY, 0),
+                                NotAllowSay = Convert.ToBoolean(HUtil32.StrToInt(allSay, 0)),
+                                Range = HUtil32.StrToInt(range, 0),
+                                Type = HUtil32.StrToInt(type, 0),
+                                PkZone = HUtil32.StrToInt(zone, 0),
+                                PkFire = HUtil32.StrToInt(fire, 0)
                             };
                             M2Share.StartPointList.Add(startPoint);
                         }
