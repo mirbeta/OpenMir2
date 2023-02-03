@@ -41,7 +41,6 @@ namespace GameGate
         /// 聊天过滤命令列表
         /// </summary>
         public static ConcurrentDictionary<string, byte> ChatCommandFilterMap;
-
         public static readonly ArrayPool<byte> BytePool = ArrayPool<byte>.Shared;
         public static Dictionary<string, ClientSession> PunishList;
         public static HardwareFilter HardwareFilter;
@@ -168,15 +167,6 @@ namespace GameGate
 
     public class Protocol
     {
-        public static bool g_fServiceStarted = false;
         public const string CmdFilter = "{0} 此命令禁止使用！";
-        public const string _STR_CONFIG_FILE = "Config.ini";
-        public const string _STR_BLOCK_FILE = "BlockIPList.txt";
-        public const string _STR_BLOCK_AREA_FILE = "BlockIPAreaList.txt";
-        public const string _STR_CHAT_FILTER_FILE = "ChatFilter.txt";
-        public const string _STR_PUNISH_USER_FILE = "PunishList.txt";
-        public const int FIRST_PAKCET_MAX_LEN = 254;
-        public const int MAGIC_NUM = 0128;
-        public const int DELAY_BUFFER_LEN = 1024;
     }
 }
