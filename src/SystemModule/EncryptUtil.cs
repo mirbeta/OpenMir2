@@ -103,7 +103,12 @@ namespace SystemModule
             }
             return dstPos - dstOffset;
         }
-                
+
+        public static Span<byte> DecodeSpan(byte[] srcBuf, int len, ref int decodeLen)
+        {
+            return Decode(srcBuf, len, ref decodeLen);
+        }
+
         /// <summary>
         /// 解密
         /// </summary>
@@ -112,12 +117,12 @@ namespace SystemModule
             byte temp;
             byte remainder;
             byte c;
-            var nCycles = len / 4;
-            var nBytesLeft = len % 4;
+            var cycles = len / 4;
+            var bytesLeft = len % 4;
             var dstPos = 0;
-            decodeLen = GetDecodeLen(nCycles, nBytesLeft);
+            decodeLen = GetDecodeLen(cycles, bytesLeft);
             var dstBuffer = new byte[decodeLen];
-            for (var i = 0; i < nCycles; i++)
+            for (var i = 0; i < cycles; i++)
             {
                 var curCycleBegin = i * 4;
                 remainder = (byte)((srcBuf[curCycleBegin + 3]) - ByBase);
@@ -134,14 +139,14 @@ namespace SystemModule
                 dstBuffer[dstPos] = (byte)(c ^ BySeed);
                 dstPos++;
             }
-            if (nBytesLeft == 2)
+            if (bytesLeft == 2)
             {
                 remainder = (byte)(srcBuf[len - 1] - ByBase);
                 temp = (byte)(srcBuf[len - 2] - ByBase);
                 c = (byte)(((temp << 2) & 0xF0) | ((remainder << 2) & 0x0C) | (temp & 0x3));
                 dstBuffer[dstPos] = (byte)(c ^ BySeed);
             }
-            else if (nBytesLeft == 3)
+            else if (bytesLeft == 3)
             {
                 remainder = (byte)(srcBuf[len - 1] - ByBase);
                 temp = (byte)(srcBuf[len - 3] - ByBase);

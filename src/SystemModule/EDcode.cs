@@ -77,14 +77,14 @@ namespace SystemModule
             return EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
         }
 
-        public static byte[] DecodeBuffer(byte[] buffer)
+        public static Span<byte> DecodeBuffer(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             var nLen = 0;
             return EncryptUtil.Decode(buffer, buffer.Length, ref nLen);
         }
 
-        public static byte[] DecodeBuffer(string src, int size)
+        public static Span<byte> DecodeBuffer(string src, int size)
         {
             if (src == null) throw new ArgumentNullException(nameof(src));
             var bSrc = HUtil32.GetBytes(src);

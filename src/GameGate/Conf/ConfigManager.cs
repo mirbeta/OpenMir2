@@ -51,12 +51,12 @@ namespace GameGate.Conf
                 GateList[i].GatePort = ReadWriteInteger("GameGate", "GatePort" + (i + 1), GateList[i].GatePort);
                 if (string.IsNullOrEmpty(GateList[i].ServerAdress) || GateList[i].ServerPort <= 0)
                 {
-                    logger.Info($"配置文件节点[ServerAddr{i}]配置错误或端口错误.", 1);
+                    logger.Info("配置文件节点[ServerAddr{I}]配置错误或端口错误.",  i);
                     continue;
                 }
                 if (string.IsNullOrEmpty(GateList[i].GateAddress) || GateList[i].GatePort <= 0)
                 {
-                    logger.Info($"配置文件节点[GateAddress{i}]配置错误或端口错误.", 1);
+                    logger.Info("配置文件节点[GateAddress{I}]配置错误或端口错误.",  i);
                     continue;
                 }
             }
@@ -65,7 +65,7 @@ namespace GameGate.Conf
             {
                 GateConfig.MessageWorkThread = 1;
             }
-            if (GateConfig.MessageWorkThread > byte.MaxValue)
+            if (GateConfig.MessageWorkThread >= byte.MaxValue)
             {
                 GateConfig.MessageWorkThread = byte.MaxValue;
             }

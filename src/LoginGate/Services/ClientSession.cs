@@ -62,7 +62,7 @@ namespace LoginGate.Services
             bool success = false;
             byte[] tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             int nDeCodeLen = 0;
-            byte[] packBuff = EncryptUtil.Decode(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+            var packBuff = EncryptUtil.DecodeSpan(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
             string sReviceMsg = HUtil32.GetString(userData.Body, 0, userData.Body.Length);
             if (!string.IsNullOrEmpty(sReviceMsg))
             {
