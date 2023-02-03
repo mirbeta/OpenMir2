@@ -474,7 +474,7 @@ namespace GameSvr.World
                     MonsterDropItem monItem = itemList[i];
                     if (M2Share.RandomNumber.Random(monItem.MaxPoint) <= monItem.SelPoint)
                     {
-                        if (string.Compare(monItem.ItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(monItem.ItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             mon.Gold = mon.Gold + monItem.Count / 2 + M2Share.RandomNumber.Random(monItem.Count);
                         }

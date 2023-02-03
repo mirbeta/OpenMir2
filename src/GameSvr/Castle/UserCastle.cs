@@ -734,7 +734,7 @@ namespace GameSvr.Castle
                 SaveTick = HUtil32.GetTickCount();
                 if (M2Share.GameLogGold)
                 {
-                    M2Share.EventSource.AddEventLog(GameEventLogType.CastleTodayIncome, '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + TotalGold + "\t" + '1' + "\t" + '0');
+                    M2Share.EventSource.AddEventLog(GameEventLogType.CastleTodayIncome, '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" + Grobal2.StringGoldName + "\t" + TotalGold + "\t" + '1' + "\t" + '0');
                 }
             }
         }
@@ -763,7 +763,7 @@ namespace GameSvr.Castle
                         PlayObject.IncGold(nGold);
                         if (M2Share.GameLogGold)
                         {
-                            M2Share.EventSource.AddEventLog(22, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                            M2Share.EventSource.AddEventLog(22, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         }
                         PlayObject.GoldChanged();
                         result = 1;
@@ -799,7 +799,7 @@ namespace GameSvr.Castle
                         TotalGold += nGold;
                         if (M2Share.GameLogGold)
                         {
-                            M2Share.EventSource.AddEventLog(GameEventLogType.CastleReceiptGolds, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                            M2Share.EventSource.AddEventLog(GameEventLogType.CastleReceiptGolds, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         }
                         PlayObject.GoldChanged();
                         result = 1;

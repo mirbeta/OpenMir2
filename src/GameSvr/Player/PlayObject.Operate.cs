@@ -1134,7 +1134,7 @@ namespace GameSvr.Player
                         DealCreat.GoldChanged();
                         if (M2Share.GameLogGold)
                         {
-                            M2Share.EventSource.AddEventLog(8, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + Gold + "\t" + '1' + "\t" + DealCreat.ChrName);
+                            M2Share.EventSource.AddEventLog(8, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName + "\t" + Gold + "\t" + '1' + "\t" + DealCreat.ChrName);
                         }
                     }
                     for (int i = 0; i < DealCreat.DealItemList.Count; i++)
@@ -1160,7 +1160,7 @@ namespace GameSvr.Player
                         GoldChanged();
                         if (M2Share.GameLogGold)
                         {
-                            M2Share.EventSource.AddEventLog(8, DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + DealCreat.Gold + "\t" + '1' + "\t" + ChrName);
+                            M2Share.EventSource.AddEventLog(8, DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.ChrName + "\t" + Grobal2.StringGoldName + "\t" + DealCreat.Gold + "\t" + '1' + "\t" + ChrName);
                         }
                     }
                     PlayObject playObject = DealCreat;

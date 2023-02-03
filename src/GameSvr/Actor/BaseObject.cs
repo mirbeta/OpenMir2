@@ -476,7 +476,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 是否刷新在地图上信息
         /// </summary>
-        protected readonly bool DenyRefStatus;
+        protected bool DenyRefStatus;
         /// <summary>
         /// 是否增加地图计数
         /// </summary>
@@ -791,8 +791,8 @@ namespace GameSvr.Actor
             }
             try
             {
-                short oldX = CurrX;
-                short oldY = CurrY;
+                var oldX = CurrX;
+                var oldY = CurrY;
                 Direction = btDir;
                 short newX = 0;
                 short newY = 0;
@@ -955,7 +955,7 @@ namespace GameSvr.Actor
             int s20;
             MapItem mapItem = new MapItem
             {
-                Name = Grobal2.sSTRING_GOLDNAME,
+                Name = Grobal2.StringGoldName,
                 Count = nGold,
                 Looks = M2Share.GetGoldShape(nGold),
                 OfBaseObject = goldOfCreat,
@@ -983,7 +983,7 @@ namespace GameSvr.Actor
                     }
                     if (M2Share.GameLogGold)
                     {
-                        M2Share.EventSource.AddEventLog(s20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                        M2Share.EventSource.AddEventLog(s20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }
                 result = true;
@@ -2165,10 +2165,6 @@ namespace GameSvr.Actor
             {
                 while (count > 0)
                 {
-                    if (count <= 0)
-                    {
-                        break;
-                    }
                     if (MsgQueue.TryDequeue(out SendMessage sendMessage, out int priority))
                     {
                         if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
@@ -2189,7 +2185,7 @@ namespace GameSvr.Actor
                         }
                         msg.DeliveryTime = sendMessage.DeliveryTime;
                         msg.LateDelivery = sendMessage.LateDelivery;
-                        msg.Msg = !string.IsNullOrEmpty(sendMessage.Buff) ? sendMessage.Buff : string.Empty;
+                        msg.Msg = sendMessage.Buff;
                         result = true;
                     }
                     break;

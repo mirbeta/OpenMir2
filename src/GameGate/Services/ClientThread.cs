@@ -227,10 +227,15 @@ namespace GameGate.Services
                 while (dataLen >= GateShare.HeaderMessageSize)
                 {
                     var packetHeader = SerializerUtil.Deserialize<ServerMessage>(dataSpan[..GateShare.HeaderMessageSize]);
-                    if (packetHeader.PacketCode != Grobal2.RUNGATECODE)
+                    if (packetHeader.PacketCode != Grobal2.RunGateCode)
                     {
                         srcOffset++;
                         dataSpan = dataSpan[srcOffset..GateShare.HeaderMessageSize];
+                        if (dataSpan.Length < GateShare.HeaderMessageSize)
+                        {
+                            _logger.Warn("丢弃错误封包数据.");
+                            return;
+                        }
                         dataLen -= 1;
                         //_logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         _logger.Debug("解析消息封包错误");
@@ -329,7 +334,7 @@ namespace GameGate.Services
         {
             var gateMsg = new ServerMessage
             {
-                PacketCode = Grobal2.RUNGATECODE,
+                PacketCode = Grobal2.RunGateCode,
                 Socket = nSocket,
                 SessionId = socketIndex,
                 Ident = command,

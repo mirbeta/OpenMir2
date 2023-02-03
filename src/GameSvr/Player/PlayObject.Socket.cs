@@ -9,7 +9,7 @@ namespace GameSvr.Player
 
         private ServerMessage messageHead = new ServerMessage
         {
-            PacketCode = Grobal2.RUNGATECODE,
+            PacketCode = Grobal2.RunGateCode,
             Ident = Grobal2.GM_DATA
         };
 

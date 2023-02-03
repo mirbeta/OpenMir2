@@ -621,7 +621,7 @@ namespace GameGate.Services
                 byte[] bodyBuffer;
                 var commandPack = new ServerMessage
                 {
-                    PacketCode = Grobal2.RUNGATECODE,
+                    PacketCode = Grobal2.RunGateCode,
                     Socket = _session.SckHandle,
                     Ident = Grobal2.GM_DATA,
                     ServerIndex = SvrListIdx
@@ -1260,7 +1260,7 @@ namespace GameGate.Services
                 tempBuff = new byte[ServerMessage.PacketSize + len];
             }
             var packetHeader = new ServerMessage();
-            packetHeader.PacketCode = Grobal2.RUNGATECODE;
+            packetHeader.PacketCode = Grobal2.RunGateCode;
             packetHeader.Socket = (int)_session.Socket.Handle;
             packetHeader.SessionId = _session.SessionId;
             packetHeader.Ident = Grobal2.GM_DATA;

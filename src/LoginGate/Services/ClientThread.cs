@@ -179,7 +179,7 @@ namespace LoginGate.Services
             {
                 var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
                 var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
-                if (message.PacketCode != Grobal2.RUNGATECODE)
+                if (message.PacketCode != Grobal2.RunGateCode)
                 {
                     srcOffset++;
                     dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
@@ -275,7 +275,7 @@ namespace LoginGate.Services
             using var backingStream = new BinaryWriter(memoryStream);
             var serverMessage = new ServerDataPacket
             {
-                PacketCode = Grobal2.RUNGATECODE,
+                PacketCode = Grobal2.RunGateCode,
                 PacketLen = (short)sendBuffer.Length
             };
             backingStream.Write(serverMessage.GetBuffer());

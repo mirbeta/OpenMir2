@@ -2620,13 +2620,13 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_GIVE);
                 return;
             }
-            if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(sItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 PlayObject.IncGold(nItemCount);
                 PlayObject.GoldChanged();
                 if (M2Share.GameLogGold)
                 {
-                    M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
+                    M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
                 }
                 return;
             }
@@ -3426,12 +3426,12 @@ namespace GameSvr.Npc
                 {
                     nCount = 1;
                 }
-                if (string.Compare(sItemName, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)// 金币
+                if (string.Compare(sItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)// 金币
                 {
                     if (ActionOfTHROWITEM_RobotGetDropPosition(Envir, nX, nY, nRange, ref dX, ref dY))
                     {
                         MapItem = new MapItem();
-                        MapItem.Name = Grobal2.sSTRING_GOLDNAME;
+                        MapItem.Name = Grobal2.StringGoldName;
                         MapItem.Count = nCount;
                         MapItem.Looks = M2Share.GetGoldShape(nCount);
                         MapItem.OfBaseObject = PlayObject.ActorId;

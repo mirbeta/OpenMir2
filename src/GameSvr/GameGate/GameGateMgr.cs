@@ -319,7 +319,7 @@ namespace GameSvr.GameGate
             CommandPacket defMsg = new CommandPacket();
             ServerMessage msgHdr = new ServerMessage
             {
-                PacketCode = Grobal2.RUNGATECODE,
+                PacketCode = Grobal2.RunGateCode,
                 Socket = 0,
                 Ident = Messages.GM_TEST,
                 PackLength = 100

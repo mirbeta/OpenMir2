@@ -68,7 +68,7 @@ namespace GameSvr.Player
                 SysMsg(Settings.CanotPickUpItem, MsgColor.Red, MsgType.Hint);
                 return false;
             }
-            if (mapItem.Name.Equals(Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase))
+            if (mapItem.Name.Equals(Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase))
             {
                 if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem) == 1)
                 {
@@ -77,7 +77,7 @@ namespace GameSvr.Player
                         SendRefMsg(Messages.RM_ITEMHIDE, 0, mapItem.ActorId, CurrX, CurrY, "");
                         if (M2Share.GameLogGold)
                         {
-                            M2Share.EventSource.AddEventLog(4, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME
+                            M2Share.EventSource.AddEventLog(4, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName
                                                                + "\t" + mapItem.Count + "\t" + '1' + "\t" + '0');
                         }
                         GoldChanged();
@@ -862,7 +862,7 @@ namespace GameSvr.Player
             SysMsg(sChrName + " 的金币 " + nGold + " 金币" + s14, MsgColor.Green, MsgType.Hint);
             if (M2Share.GameLogGold)
             {
-                M2Share.EventSource.AddEventLog(s10, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.sSTRING_GOLDNAME + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
+                M2Share.EventSource.AddEventLog(s10, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + sChrName);
             }
         }
 

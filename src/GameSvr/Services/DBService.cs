@@ -70,7 +70,7 @@ namespace GameSvr.Services
             using BinaryWriter backingStream = new BinaryWriter(memoryStream);
             ServerDataPacket serverMessage = new ServerDataPacket
             {
-                PacketCode = Grobal2.RUNGATECODE,
+                PacketCode = Grobal2.RunGateCode,
                 PacketLen = (short)sendBuffer.Length
             };
             backingStream.Write(serverMessage.GetBuffer());
@@ -121,7 +121,7 @@ namespace GameSvr.Services
                 {
                     Span<byte> packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
                     ServerDataPacket message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
-                    if (message.PacketCode != Grobal2.RUNGATECODE)
+                    if (message.PacketCode != Grobal2.RunGateCode)
                     {
                         srcOffset++;
                         dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);

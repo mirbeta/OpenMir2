@@ -50,7 +50,7 @@ namespace LoginSvr.Conf
             Config.nLogPort = LoadConfigInteger(sSectionServer, sIdentLogPort, Config.nLogPort);
             Config.EnableMakingID = LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.EnableMakingID);
             Config.DynamicIPMode = LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.DynamicIPMode);
-            Config.ConnctionString = LoadConfigString(sDB, "ConnctionString", Config.ConnctionString);
+            Config.ConnctionString = ReadWriteString(sDB, "ConnctionString", Config.ConnctionString);
             Config.ShowLogLevel = ReadWriteInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
             Config.ShowDebugLog = ReadWriteBool("Server", "ShowDebugLog", Config.ShowDebugLog);
         }

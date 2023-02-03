@@ -61,7 +61,7 @@ namespace GameSvr.GameGate
                 while (nLen >= ServerMessage.PacketSize)
                 {
                     ServerMessage packetHeader = SerializerUtil.Deserialize<ServerMessage>(processBuff.Slice(processLen, ServerMessage.PacketSize));
-                    if (packetHeader.PacketCode == Grobal2.RUNGATECODE)
+                    if (packetHeader.PacketCode == Grobal2.RunGateCode)
                     {
                         int nCheckMsgLen = Math.Abs(packetHeader.PackLength) + ServerMessage.PacketSize;
                         if (nLen < nCheckMsgLen && nCheckMsgLen < 0x8000)
@@ -184,7 +184,7 @@ namespace GameSvr.GameGate
         {
             ServerMessage msgHeader = new ServerMessage
             {
-                PacketCode = Grobal2.RUNGATECODE,
+                PacketCode = Grobal2.RunGateCode,
                 Socket = 0,
                 Ident = nIdent,
                 PackLength = 0
@@ -496,7 +496,7 @@ namespace GameSvr.GameGate
                 return;
             }
             ServerMessage msgHeader = new ServerMessage();
-            msgHeader.PacketCode = Grobal2.RUNGATECODE;
+            msgHeader.PacketCode = Grobal2.RunGateCode;
             msgHeader.Socket = nSocket;
             msgHeader.SessionId = socketId;
             msgHeader.Ident = Grobal2.GM_SERVERUSERINDEX;

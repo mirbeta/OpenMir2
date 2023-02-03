@@ -5,12 +5,12 @@ namespace SystemModule
     public class Grobal2
     {
         public const int CLIENT_VERSION_NUMBER = 120040918;
-        public const uint RUNGATECODE = 0xAA55AA55 + 0x00450045;
+        public const uint RunGateCode = 0xAA55AA55 + 0x00450045;
         /// <summary>
         /// 最大魔法技能数
         /// </summary>
         public const byte MaxMagicCount = 54;
-        public const string sSTRING_GOLDNAME = "金币";
+        public const string StringGoldName = "金币";
         /// <summary>
         /// 最高等级
         /// </summary>

@@ -105,7 +105,7 @@ namespace GameSvr.Maps
                     {
                         if (cellType == CellType.Item)
                         {
-                            if (string.Compare(((MapItem)mapObject).Name, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(((MapItem)mapObject).Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 for (int i = 0; i < cellInfo.Count; i++)
                                 {
@@ -113,7 +113,7 @@ namespace GameSvr.Maps
                                     if (cellObject.CellType == CellType.Item)
                                     {
                                         MapItem mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
-                                        if (mapItem.Name == Grobal2.sSTRING_GOLDNAME)
+                                        if (mapItem.Name == Grobal2.StringGoldName)
                                         {
                                             int nGoldCount = mapItem.Count + ((MapItem)mapObject).Count;
                                             if (nGoldCount <= 2000)

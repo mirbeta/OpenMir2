@@ -46,7 +46,7 @@ namespace GameSvr.GameCommand.Commands
                 if (M2Share.GameLogGold)
                 {
                     M2Share.EventSource.AddEventLog(14, PlayObject.MapName + "\09" + PlayObject.CurrX + "\09" + PlayObject.CurrY
-                                                        + "\09" + PlayObject.ChrName + "\09" + Grobal2.sSTRING_GOLDNAME + "\09" + nCount + "\09" + "1" + "\09" + sHumName);
+                                                        + "\09" + PlayObject.ChrName + "\09" + Grobal2.StringGoldName + "\09" + nCount + "\09" + "1" + "\09" + sHumName);
                 }
             }
             else

@@ -644,7 +644,7 @@ namespace GameSvr.RobotPlay
             {
                 return result;
             }
-            if (string.Compare(MapItem.Name, Grobal2.sSTRING_GOLDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(MapItem.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (Envir.DeleteFromMap(nX, nY, CellType.Item, MapItem) == 1)
                 {

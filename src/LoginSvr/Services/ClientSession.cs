@@ -753,7 +753,7 @@ namespace LoginSvr.Services
             using var backingStream = new BinaryWriter(memoryStream);
             var serverMessage = new ServerDataPacket
             {
-                PacketCode = Grobal2.RUNGATECODE,
+                PacketCode = Grobal2.RunGateCode,
                 PacketLen = (short)sendBuffer.Length
             };
             backingStream.Write(serverMessage.GetBuffer());
