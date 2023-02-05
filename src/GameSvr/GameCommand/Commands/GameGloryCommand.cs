@@ -3,7 +3,7 @@
 namespace GameSvr.GameCommand.Commands
 {
     [Command("GameGlory", "调整玩家灵符", 10)]
-    public class GameGloryCommand : Command
+    public class GameGloryCommand : GameCommand
     {
         [ExecuteCommand]
         public static void GameGlory(string[] @Params, PlayObject PlayObject)

@@ -3,7 +3,7 @@
 namespace GameSvr.GameCommand.Commands
 {
     [Command("Training", "", 10)]
-    public class TrainingCommand : Command
+    public class TrainingCommand : GameCommand
     {
         [ExecuteCommand]
         public static void Training(PlayObject PlayObject)

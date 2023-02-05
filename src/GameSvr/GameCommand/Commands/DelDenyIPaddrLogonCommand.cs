@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("DelDenyIPaddrLogon", "", "IP地址", 10)]
-    public class DelDenyIPaddrLogonCommand : Command
+    public class DelDenyIPaddrLogonCommand : GameCommand
     {
         [ExecuteCommand]
         public void DelDenyIPaddrLogon(string[] @Params, PlayObject PlayObject)
@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands
             string sIPaddr = @Params.Length > 0 ? @Params[0] : "";
             if (sIPaddr == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boDelete = false;

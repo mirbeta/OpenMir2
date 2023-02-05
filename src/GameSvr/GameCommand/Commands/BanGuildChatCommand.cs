@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("Banguildchat", "", "", 0)]
-    public class BanGuildChatCommand : Command
+    public class BanGuildChatCommand : GameCommand
     {
         [ExecuteCommand]
         public static void Banguildchat(PlayObject playObject)
@@ -19,7 +19,6 @@ namespace GameSvr.GameCommand.Commands
             {
                 playObject.SysMsg(CommandHelp.DisableGuildChat, MsgColor.Green, MsgType.Hint);
             }
-            return;
         }
     }
 }

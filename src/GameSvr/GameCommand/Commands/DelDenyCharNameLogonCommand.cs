@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("DelDenyChrNameLogon", "", "人物名称", 10)]
-    public class DelDenyChrNameLogonCommand : Command
+    public class DelDenyChrNameLogonCommand : GameCommand
     {
         [ExecuteCommand]
         public void DelDenyChrNameLogon(string[] @Params, PlayObject PlayObject)
@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands
             string sChrName = @Params.Length > 0 ? @Params[0] : "";
             if (sChrName == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boDelete = false;

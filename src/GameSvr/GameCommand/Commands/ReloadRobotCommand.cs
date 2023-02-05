@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 重新加载机器人脚本
     /// </summary>
     [Command("ReloadRobot", "重新加载机器人脚本", 10)]
-    public class ReloadRobotCommand : Command
+    public class ReloadRobotCommand : GameCommand
     {
         public static void ReloadRobot(PlayObject PlayObject)
         {

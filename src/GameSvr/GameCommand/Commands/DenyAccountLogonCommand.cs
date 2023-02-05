@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("DenyAccountLogon", "", "登录帐号 是否永久封(0,1)", 10)]
-    public class DenyAccountLogonCommand : Command
+    public class DenyAccountLogonCommand : GameCommand
     {
         [ExecuteCommand]
         public void DenyAccountLogon(string[] @Params, PlayObject PlayObject)
@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
             string sFixDeny = @Params.Length > 1 ? @Params[1] : "";
             if (sAccount == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             try

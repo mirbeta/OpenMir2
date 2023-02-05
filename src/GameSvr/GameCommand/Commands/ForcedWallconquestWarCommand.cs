@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 开始工程战役
     /// </summary>
     [Command("ForcedWallconquestWar", "开始攻城战役", "城堡名称", 10)]
-    public class ForcedWallconquestWarCommand : Command
+    public class ForcedWallconquestWarCommand : GameCommand
     {
         [ExecuteCommand]
         public void ForcedWallconquestWar(string[] @Params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sCastleName = @Params.Length > 0 ? @Params[0] : "";
             if (sCastleName == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             Castle.UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);

@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("ShutupRelease", "恢复禁言", CommandHelp.GameCommandShutupReleaseHelpMsg, 10)]
-    public class ShutupReleaseCommand : Command
+    public class ShutupReleaseCommand : GameCommand
     {
         [ExecuteCommand]
         public void ShutupRelease(string[] @params, PlayObject PlayObject)
@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
             bool boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);

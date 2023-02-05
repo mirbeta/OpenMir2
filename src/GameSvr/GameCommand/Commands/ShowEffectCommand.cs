@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 播放特效
     /// </summary>
     [Command("ShowEffect", "播放特效", 10)]
-    public class ShowEffectCommand : Command
+    public class ShowEffectCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ShowEffect(string[] @Params, PlayObject PlayObject)

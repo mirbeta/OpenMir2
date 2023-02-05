@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家技能
     /// </summary>
     [Command("TrainingMagic", "调整指定玩家技能", "人物名称  技能名称 修炼等级(0-3)", 10)]
-    public class TrainingMagicCommand : Command
+    public class TrainingMagicCommand : GameCommand
     {
         [ExecuteCommand]
         public void TrainingMagic(string[] @Params, PlayObject PlayObject)
@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
             int nLevel = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

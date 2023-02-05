@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家金币
     /// </summary>
     [Command("AddGold", "调整指定玩家金币", "人物名称  金币数量", 10)]
-    public class AddGoldCommand : Command
+    public class AddGoldCommand : GameCommand
     {
         [ExecuteCommand]
         public void AddGold(string[] @Params, PlayObject PlayObject)
@@ -26,7 +26,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (string.IsNullOrEmpty(sHumName) || nCount <= 0)
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);

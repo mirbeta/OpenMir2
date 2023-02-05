@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 暂时不清楚干啥的
     /// </summary>
     [Command("AdjustExp", "", 10)]
-    public class AdjustExpCommand : Command
+    public class AdjustExpCommand : GameCommand
     {
         [ExecuteCommand]
         public static void AdjustExp(string[] @Params, PlayObject PlayObject)

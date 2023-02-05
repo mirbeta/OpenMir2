@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 删除指定玩家属性点
     /// </summary>
     [Command("DelBonuPoint", "删除指定玩家属性点", "人物名称", 10)]
-    public class DelBonuPointCommand : Command
+    public class DelBonuPointCommand : GameCommand
     {
         [ExecuteCommand]
         public void DelBonuPoint(string[] @Params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sHumName = @Params.Length > 0 ? @Params[0] : "";
             if (sHumName == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject targerPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);

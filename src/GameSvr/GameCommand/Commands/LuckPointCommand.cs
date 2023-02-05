@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家幸运点
     /// </summary>
     [Command("LuckPoint", "查看指定玩家幸运点", CommandHelp.GameCommandLuckPointHelpMsg, 10)]
-    public class LuckPointCommand : Command
+    public class LuckPointCommand : GameCommand
     {
         [ExecuteCommand]
         public void LuckPoint(string[] @Params, PlayObject PlayObject)
@@ -22,7 +22,7 @@ namespace GameSvr.GameCommand.Commands
             string sPoint = @Params.Length > 2 ? @Params[2] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 召唤指定怪物为宠物，宝宝等级直接为1级
     /// </summary>
     [Command("ReCallMobEx", "召唤宝宝", "怪物名称 名字颜色 X Y", 10)]
-    public class ReCallMobExCommand : Command
+    public class ReCallMobExCommand : GameCommand
     {
         [ExecuteCommand]
         public void ReCallMobEx(string[] @Params, PlayObject PlayObject)
@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
             short nY = @Params.Length > 0 ? Convert.ToInt16(@Params[3]) : (short)0;
             if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nX < 0)

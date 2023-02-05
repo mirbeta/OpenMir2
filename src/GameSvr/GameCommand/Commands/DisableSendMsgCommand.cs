@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("DisableSendMsg", "", "人物名称", 10)]
-    public class DisableSendMsgCommand : Command
+    public class DisableSendMsgCommand : GameCommand
     {
         [ExecuteCommand]
         public void DisableSendMsg(string[] @Params, PlayObject PlayObject)
@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

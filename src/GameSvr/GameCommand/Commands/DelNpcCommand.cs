@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 删除对面面NPC
     /// </summary>
     [Command("DelNpc", "删除对面面NPC", 10)]
-    public class DelNpcCommand : Command
+    public class DelNpcCommand : GameCommand
     {
         [ExecuteCommand]
         public static void DelNpc(PlayObject PlayObject)

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 清除指定玩家PK值
     /// </summary>
     [Command("FreePenalty", "清除指定玩家PK值", "人物名称", 10)]
-    public class FreePenaltyCommand : Command
+    public class FreePenaltyCommand : GameCommand
     {
         [ExecuteCommand]
         public void FreePenalty(string[] @Params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

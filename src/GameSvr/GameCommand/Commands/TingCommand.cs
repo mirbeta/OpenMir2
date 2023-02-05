@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 将指定人物随机传送(支持权限分配)
     /// </summary>
     [Command("Ting", "将指定人物随机传送(支持权限分配)", CommandHelp.GameCommandTingHelpMsg, 10)]
-    public class TingCommand : Command
+    public class TingCommand : GameCommand
     {
         [ExecuteCommand]
         public void Ting(string[] @Params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 此命令用于改变客户端连接网关的
     /// </summary>
     [Command("Reconnection", "此命令用于改变客户端连接网关的IP及端口", " IP地址 端口", 10)]
-    public class ReconnectionCommand : Command
+    public class ReconnectionCommand : GameCommand
     {
         [ExecuteCommand]
         public void Reconnection(string[] @params, PlayObject PlayObject)
@@ -30,7 +30,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (sIPaddr == "" || sPort == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sIPaddr != "" && sPort != "")

@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("ShowDenyIPaddrLogon", "", 10)]
-    public class ShowDenyIPaddrLogonCommand : Command
+    public class ShowDenyIPaddrLogonCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ShowDenyIPaddrLogon(PlayObject PlayObject)

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 密码锁定
     /// </summary>
     [Command("PasswordLock", "锁定登录", "", 0)]
-    public class PasswordLockCommand : Command
+    public class PasswordLockCommand : GameCommand
     {
         [ExecuteCommand]
         public static void PasswordLock(string[] @params, PlayObject playObject)

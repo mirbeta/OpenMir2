@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 显示指定地图信息
     /// </summary>
     [Command("ShowMapMode", "显示指定地图信息", "地图号", 10)]
-    public class ShowMapModeCommand : Command
+    public class ShowMapModeCommand : GameCommand
     {
         [ExecuteCommand]
         public void ShowMapMode(string[] @Params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sMapName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sMapName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             Maps.Envirnoment Envir = M2Share.MapMgr.FindMap(sMapName);

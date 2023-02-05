@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
     /// MOBFIREBURN  3 329 329 3 60 0
     /// </summary>
     [Command("MobFireBurn", "调整安全去光环", 10)]
-    public class MobFireBurnCommand : Command
+    public class MobFireBurnCommand : GameCommand
     {
         [ExecuteCommand]
         public void MobFireBurn(string[] @Params, PlayObject PlayObject)
@@ -27,7 +27,7 @@ namespace GameSvr.GameCommand.Commands
             string sPoint = @Params.Length > 5 ? @Params[5] : "";//未知
             if (sMAP == "" || sMAP != "" && sMAP[1] == '?')
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nX = HUtil32.StrToInt(sX, -1);
@@ -41,7 +41,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (sMAP == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.GameCommand.Name, sMAP, sX, sY,
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMAP, sX, sY,
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
@@ -55,7 +55,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.Envir = OldEnvir;
                 return;
             }
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnMapNotFountMsg, this.GameCommand.Name, sMAP), MsgColor.Red, MsgType.Hint);
+            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnMapNotFountMsg, this.Command.Name, sMAP), MsgColor.Red, MsgType.Hint);
         }
     }
 }

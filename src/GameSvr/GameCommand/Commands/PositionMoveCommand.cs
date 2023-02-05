@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 移动到某地图XY坐标处
     /// </summary>
     [Command("PositionMove", "移动到某地图XY坐标处", CommandHelp.GameCommandPositionMoveHelpMsg, 10)]
-    public class PositionMoveCommand : Command
+    public class PositionMoveCommand : GameCommand
     {
         [ExecuteCommand]
         public void PositionMove(string[] @Params, PlayObject PlayObject)
@@ -26,10 +26,10 @@ namespace GameSvr.GameCommand.Commands
                 Envirnoment Envir = null;
                 if (sMapName == "" || sX == "" || sY == "" || sMapName != "" && sMapName[0] == '?')
                 {
-                    PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (PlayObject.Permission >= this.GameCommand.nPermissionMin || M2Share.CanMoveMap(sMapName))
+                if (PlayObject.Permission >= this.Command.PermissionMin || M2Share.CanMoveMap(sMapName))
                 {
                     Envir = M2Share.MapMgr.FindMap(sMapName);
                     if (Envir != null)

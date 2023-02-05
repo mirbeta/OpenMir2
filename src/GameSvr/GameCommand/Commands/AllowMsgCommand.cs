@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("Allowmsg", "", "", 0)]
-    public class AllowMsgCommand : Command
+    public class AllowMsgCommand : GameCommand
     {
         [ExecuteCommand]
         public static void AllowMsg(PlayObject playObject)

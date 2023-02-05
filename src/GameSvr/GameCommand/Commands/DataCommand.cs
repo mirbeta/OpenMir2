@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 查看时间日期
     /// </summary>
     [Command("Date", "查看时间日期", "", 0)]
-    public class DataCommand : Command
+    public class DataCommand : GameCommand
     {
         [ExecuteCommand]
         public static void Date(PlayObject PlayObject)

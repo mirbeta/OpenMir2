@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("DisableSendMsgList", "", 10)]
-    public class DisableSendMsgListCommand : Command
+    public class DisableSendMsgListCommand : GameCommand
     {
         [ExecuteCommand]
         public static void DisableSendMsgList(PlayObject PlayObject)

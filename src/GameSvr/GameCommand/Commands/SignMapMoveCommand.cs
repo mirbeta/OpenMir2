@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 回到上次死亡地点
     /// </summary>
     [Command("SignMapMove", "回到上次死亡地点", 10)]
-    public class SignMapMoveCommand : Command
+    public class SignMapMoveCommand : GameCommand
     {
         [ExecuteCommand]
         public static void SignMapMove(PlayObject PlayObject)

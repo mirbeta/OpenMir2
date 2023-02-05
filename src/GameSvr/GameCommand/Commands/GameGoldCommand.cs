@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家游戏币
     /// </summary>
     [Command("GameGold", "调整指定玩家游戏币", CommandHelp.GameCommandGameGoldHelpMsg, 10)]
-    public class GameGoldCommand : Command
+    public class GameGoldCommand : GameCommand
     {
         [ExecuteCommand]
         public void GameGold(string[] @Params, PlayObject PlayObject)
@@ -28,7 +28,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new[] { '=', '+', '-' }).Contains(Ctr) || nGold < 0 || nGold > 200000000 || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 清楚指定玩家仓库密码
     /// </summary>
     [Command("ClearHumanPassword", "清楚指定玩家仓库密码", "人物名称", 10)]
-    public class ClearHumanPasswordCommand : Command
+    public class ClearHumanPasswordCommand : GameCommand
     {
         [ExecuteCommand]
         public void ClearHumanPassword(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayObject.SysMsg("清除玩家的仓库密码!!!", MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

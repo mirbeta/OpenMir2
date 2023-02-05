@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家等级
     /// </summary>
     [Command("AdjuestLevel", "调整指定玩家等级", "人物名称 等级", 10)]
-    public class AdjuestLevelCommand : Command
+    public class AdjuestLevelCommand : GameCommand
     {
         [ExecuteCommand]
         public void AdjuestLevel(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             int nLevel = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

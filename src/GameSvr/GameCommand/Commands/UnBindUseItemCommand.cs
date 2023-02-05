@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 解除指定玩家物品绑定属性
     /// </summary>
     [Command("UnBindUseItem", "解除指定玩家物品绑定属性", 10)]
-    public class UnBindUseItemCommand : Command
+    public class UnBindUseItemCommand : GameCommand
     {
         [ExecuteCommand]
         public static void UnBindUseItem(string[] @Params, PlayObject PlayObject)

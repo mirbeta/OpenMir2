@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 锁定登录
     /// </summary>
     [Command("LockLogin", "锁定登录", 0)]
-    public class LockLoginCommand : Command
+    public class LockLoginCommand : GameCommand
     {
         [ExecuteCommand]
         public static void LockLogin(PlayObject PlayObject)

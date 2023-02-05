@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("ShowMapInfo", "显示当前地图信息", 0)]
-    public class ShowMapInfoCommand : Command
+    public class ShowMapInfoCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ShowMapInfo(PlayObject PlayObject)

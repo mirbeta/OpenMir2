@@ -5,9 +5,9 @@ using SystemModule.Enums;
 
 namespace GameSvr.GameCommand
 {
-    public class Command
+    public class GameCommand
     {
-        public CommandAttribute GameCommand { get; private set; }
+        public CommandAttribute Command { get; private set; }
 
         private MethodInfo CommandMethod { get; set; }
 
@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand
         /// </summary>
         public void Register(CommandAttribute attributes, MethodInfo method)
         {
-            this.GameCommand = attributes;
+            this.Command = attributes;
             this.CommandMethod = method;
             this.MethodParameterCount = method.GetParameters().Length;
         }
@@ -35,7 +35,7 @@ namespace GameSvr.GameCommand
                 playObject.Permission = 10;
                 playObject.SysMsg("当前运行调试模式,权限等级：10", MsgColor.Red, MsgType.Hint);
 #endif
-                if (playObject.Permission < this.GameCommand.nPermissionMin)// 检查用户是否有权限来调用命令。
+                if (playObject.Permission < this.Command.PermissionMin)// 检查用户是否有权限来调用命令。
                 {
                     return CommandHelp.GameCommandPermissionTooLow;
                 }
@@ -44,7 +44,7 @@ namespace GameSvr.GameCommand
             {
                 case 2:
                     {
-                        string[] @params = parameters.Split(' ');
+                        var @params = parameters.Split(' ');
                         return (string)CommandMethod.Invoke(this, new object[] { @params, playObject });
                     }
                 case 1:

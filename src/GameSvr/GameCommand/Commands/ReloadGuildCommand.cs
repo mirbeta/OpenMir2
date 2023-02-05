@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 重新读取行会
     /// </summary>
     [Command("ReloadGuild", "重新读取指定行会", 10)]
-    public class ReloadGuildCommand : Command
+    public class ReloadGuildCommand : GameCommand
     {
         [ExecuteCommand]
         public void ReloadGuild(string[] @Params, PlayObject PlayObject)
@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
                 sParam1 = @Params.Length > 0 ? @Params[0] : "";
                 if (string.IsNullOrEmpty(sParam1))
                 {
-                    PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.GameCommand.Name, CommandHelp.GameCommandReloadGuildHelpMsg), MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandReloadGuildHelpMsg), MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }

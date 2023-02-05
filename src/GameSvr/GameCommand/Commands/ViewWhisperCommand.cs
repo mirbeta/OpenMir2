@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 监听指定玩家私聊信息
     /// </summary>
     [Command("ViewWhisper", "监听指定玩家私聊信息", CommandHelp.GameCommandViewWhisperHelpMsg, 10)]
-    public class ViewWhisperCommand : Command
+    public class ViewWhisperCommand : GameCommand
     {
         [ExecuteCommand]
         public void ViewWhisper(string[] @Params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sChrName = @Params.Length > 0 ? @Params[0] : "";
             if (sChrName == "" || sChrName != "" && sChrName[1] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sChrName);

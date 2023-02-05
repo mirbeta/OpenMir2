@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 取指定地图玩家数量
     /// </summary>
     [Command("HumanCount", "取指定地图玩家数量", CommandHelp.GameCommandHumanCountHelpMsg, 10)]
-    public class HumanCountCommand : Command
+    public class HumanCountCommand : GameCommand
     {
         [ExecuteCommand]
         public void HumanCount(string[] @Params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sMapName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sMapName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             Maps.Envirnoment Envir = M2Share.MapMgr.FindMap(sMapName);

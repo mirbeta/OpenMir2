@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("DelDenyAccountLogon", "", "登录帐号", 10)]
-    public class DelDenyAccountLogonCommand : Command
+    public class DelDenyAccountLogonCommand : GameCommand
     {
         [ExecuteCommand]
         public void DelDenyAccountLogon(string[] @Params, PlayObject PlayObject)
@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
             string sFixDeny = @Params.Length > 1 ? @Params[1] : "";
             if (sAccount == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boDelete = false;

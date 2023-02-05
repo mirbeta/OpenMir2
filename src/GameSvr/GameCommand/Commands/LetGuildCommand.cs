@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("Letguild", "加入公会", "", 0)]
-    public class LetGuildCommand : Command
+    public class LetGuildCommand : GameCommand
     {
         [ExecuteCommand]
         public static void Letguild(PlayObject playObject)

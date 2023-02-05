@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("Hair", "修改玩家发型", "人物名称 类型值", 10)]
-    public class HairCommand : Command
+    public class HairCommand : GameCommand
     {
         [ExecuteCommand]
         public void Hair(string[] @Params, PlayObject PlayObject)
@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
             int nHair = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             if (string.IsNullOrEmpty(sHumanName) || nHair < 0)
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

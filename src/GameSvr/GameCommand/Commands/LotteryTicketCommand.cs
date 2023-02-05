@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("LotteryTicket", "", 10)]
-    public class LotteryTicketCommandL : Command
+    public class LotteryTicketCommandL : GameCommand
     {
         [ExecuteCommand]
         public static void LotteryTicket(PlayObject PlayObject)

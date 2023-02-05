@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("TestStatus", "", 10)]
-    public class TestStatusCommand : Command
+    public class TestStatusCommand : GameCommand
     {
         [ExecuteCommand]
         public static void TestStatus(string[] @Params, PlayObject PlayObject)

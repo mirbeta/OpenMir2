@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 删除指定玩家技能
     /// </summary>
     [Command("DelSkill", "删除指定玩家技能", "人物名称 技能名称", 10)]
-    public class DelSkillCommand : Command
+    public class DelSkillCommand : GameCommand
     {
         [ExecuteCommand]
         public void DelSkill(string[] @Params, PlayObject PlayObject)
@@ -25,7 +25,7 @@ namespace GameSvr.GameCommand.Commands
             UserMagic UserMagic;
             if (string.IsNullOrEmpty(sHumanName) || (sSkillName == ""))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (string.Compare(sSkillName, "All", StringComparison.OrdinalIgnoreCase) == 0)

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 重新加载管理员列表
     /// </summary>
     [Command("LoadAdmin", "重新加载管理员列表", 10)]
-    public class LoadAdminCommand : Command
+    public class LoadAdminCommand : GameCommand
     {
         [ExecuteCommand]
         public static void LoadAdmin(PlayObject PlayObject)

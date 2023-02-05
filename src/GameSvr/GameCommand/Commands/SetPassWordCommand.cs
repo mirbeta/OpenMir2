@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 设置密码
     /// </summary>
     [Command("SetPassWord", "设置登录密码", "", 0)]
-    public class SetPassWordCommand : Command
+    public class SetPassWordCommand : GameCommand
     {
         [ExecuteCommand]
         public static void SetPassWord(string[] @params, PlayObject playObject)
@@ -35,7 +35,7 @@ namespace GameSvr.GameCommand.Commands
     /// 解除密码
     /// </summary>
     [Command("UnPassWord", "解除登录密码", "", 0)]
-    public class UnPasswWordCommand : Command
+    public class UnPasswWordCommand : GameCommand
     {
         [ExecuteCommand]
         public static void UnPassWord(string[] @params, PlayObject playObject)
@@ -61,7 +61,7 @@ namespace GameSvr.GameCommand.Commands
     /// 修改登录密码
     /// </summary>
     [Command("ChgpassWordCommand", "修改登录密码", "", 0)]
-    public class ChgpassWordCommand : Command
+    public class ChgpassWordCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ChgpassWord(string[] @params, PlayObject playObject)
@@ -94,7 +94,7 @@ namespace GameSvr.GameCommand.Commands
     /// 解除仓库密码
     /// </summary>
     [Command("UnlockStorage", "解除仓库密码", "", 0)]
-    public class UnlockStorageCommand : Command
+    public class UnlockStorageCommand : GameCommand
     {
         [ExecuteCommand]
         public static void UnlockStorage(string[] @params, PlayObject playObject)
@@ -134,7 +134,7 @@ namespace GameSvr.GameCommand.Commands
     /// 解除密码
     /// </summary>
     [Command("UnLock", "解除密码", "", 0)]
-    public class UnLockCommand : Command
+    public class UnLockCommand : GameCommand
     {
         [ExecuteCommand]
         public static void UnLock(string[] @params, PlayObject playObject)
@@ -174,7 +174,7 @@ namespace GameSvr.GameCommand.Commands
     /// 锁定密码
     /// </summary>
     [Command("Lock", "锁定密码", "", 0)]
-    public class LockCommand : Command
+    public class LockCommand : GameCommand
     {
         [ExecuteCommand]
         public static void Lock(string[] @params, PlayObject playObject)
@@ -209,7 +209,7 @@ namespace GameSvr.GameCommand.Commands
     /// SetFlag
     /// </summary>
     [Command("SetFlag", "SetFlag", "", 4)]
-    public class SetFlagCommand : Command
+    public class SetFlagCommand : GameCommand
     {
         [ExecuteCommand]
         public void SetFlag(string[] @params, PlayObject playObject)
@@ -235,7 +235,7 @@ namespace GameSvr.GameCommand.Commands
             }
             else
             {
-                playObject.SysMsg('@' + this.GameCommand.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg('@' + this.Command.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
             }
             return;
         }
@@ -245,7 +245,7 @@ namespace GameSvr.GameCommand.Commands
     /// SetOpen
     /// </summary>
     [Command("SetOpen", "SetOpen", "", 4)]
-    public class SetOpenCommand : Command
+    public class SetOpenCommand : GameCommand
     {
         [ExecuteCommand]
         public void SetOpen(string[] @params, PlayObject playObject)
@@ -271,7 +271,7 @@ namespace GameSvr.GameCommand.Commands
             }
             else
             {
-                playObject.SysMsg('@' + this.GameCommand.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg('@' + this.Command.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
             }
             return;
         }
@@ -281,7 +281,7 @@ namespace GameSvr.GameCommand.Commands
     /// SetUnit
     /// </summary>
     [Command("SetUnit", "SetUnit", "", 4)]
-    public class SetUnitCommand : Command
+    public class SetUnitCommand : GameCommand
     {
         [ExecuteCommand]
         public void SetUnit(string[] @params, PlayObject playObject)
@@ -307,7 +307,7 @@ namespace GameSvr.GameCommand.Commands
             }
             else
             {
-                playObject.SysMsg('@' + this.GameCommand.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg('@' + this.Command.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
             }
             return;
         }

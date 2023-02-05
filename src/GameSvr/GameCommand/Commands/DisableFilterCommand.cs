@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 启用/禁止文字过滤功能
     /// </summary>
     [Command("DisableFilter", "启用/禁止文字过滤功能", 10)]
-    public class DisableFilterCommand : Command
+    public class DisableFilterCommand : GameCommand
     {
         [ExecuteCommand]
         public static void DisableFilter(PlayObject PlayObject)

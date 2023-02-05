@@ -75,8 +75,8 @@
         public const string GameCommandPKPointHelpMsg = "人物名称";
         public const string GameCommandPKPointMsg = "{0}的PK点数为:{1}";
         public const string GameCommandIncPkPointHelpMsg = "人物名称 PK点数";
-        public const string GameCommandIncPkPointAddPointMsg = "{0}的PK值已增加%d点...";
-        public const string GameCommandIncPkPointDecPointMsg = "{0}的PK值已减少%d点...";
+        public const string GameCommandIncPkPointAddPointMsg = "{0}的PK值已增加{1}点...";
+        public const string GameCommandIncPkPointDecPointMsg = "{0}的PK值已减少{1}点...";
         public const string GameCommandHumanLocalHelpMsg = "人物名称";
         public const string GameCommandHumanLocalMsg = "{0}来自:{1}";
         public const string GameCommandPrvMsgHelpMsg = "人物名称";

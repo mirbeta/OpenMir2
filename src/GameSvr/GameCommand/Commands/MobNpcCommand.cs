@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 在当前XY坐标创建NPC
     /// </summary>
     [Command("MobNpc", "在当前XY坐标创建NPC", CommandHelp.GameCommandMobNpcHelpMsg, 10)]
-    public class MobNpcCommand : Command
+    public class MobNpcCommand : GameCommand
     {
         [ExecuteCommand]
         public void MobNpc(string[] @Params, PlayObject PlayObject)
@@ -24,14 +24,14 @@ namespace GameSvr.GameCommand.Commands
             string sParam4 = @Params.Length > 3 ? @Params[3] : "";
             if (sParam1 == "" || sParam2 == "" || sParam1 != "" && sParam1[0] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nAppr = HUtil32.StrToInt(sParam3, 0);
             bool boIsCastle = HUtil32.StrToInt(sParam4, 0) == 1;
             if (sParam1 == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             short nX = 0;

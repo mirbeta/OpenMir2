@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 设置地图模式
     /// </summary>
     [Command("SetMapMode", "设置地图模式", 10)]
-    public class SetMapModeCommamd : Command
+    public class SetMapModeCommamd : GameCommand
     {
         [ExecuteCommand]
         public static void SetMapMode(string[] @Params, PlayObject PlayObject)

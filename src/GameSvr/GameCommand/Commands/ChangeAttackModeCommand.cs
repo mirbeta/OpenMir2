@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整当前玩家攻击模式
     /// </summary>
     [Command("AttackMode", "调整当前玩家攻击模式", 0)]
-    public class ChangeAttackModeCommand : Command
+    public class ChangeAttackModeCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ChangeAttackMode(PlayObject PlayObject)

@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 此命令用于允许或禁止编组传送功能
     /// </summary>
     [Command("GameGird", "调整指定玩家灵符", 10)]
-    public class GameGirdCommand : Command
+    public class GameGirdCommand : GameCommand
     {
         [ExecuteCommand]
         public static void GameGird(string[] @Params, PlayObject PlayObject)

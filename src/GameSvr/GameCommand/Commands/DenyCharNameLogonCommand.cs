@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 将指定玩家添加到禁止人物列表
     /// </summary>
     [Command("DenyChrNameLogon", "将指定玩家添加到禁止人物列表", "人物名称 是否永久封(0,1)", 10)]
-    public class DenyChrNameLogonCommand : Command
+    public class DenyChrNameLogonCommand : GameCommand
     {
         [ExecuteCommand]
         public void DenyChrNameLogon(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             string sFixDeny = @Params.Length > 1 ? @Params[1] : "";
             if (sChrName == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             try

@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 剔除制定玩家下线
     /// </summary>
     [Command("Kill", "剔除面对面玩家下线", "玩家名称", 10)]
-    public class KillCommand : Command
+    public class KillCommand : GameCommand
     {
         [ExecuteCommand]
         public static void Kill(string[] @Params, PlayObject PlayObject)

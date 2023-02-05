@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整身上装备附加属性
     /// </summary>
     [Command("SmakeItem", "调整身上装备附加属性", 10)]
-    public class SmakeItemCommand : Command
+    public class SmakeItemCommand : GameCommand
     {
         [ExecuteCommand]
         public static void SmakeItem(string[] @Params, PlayObject PlayObject)

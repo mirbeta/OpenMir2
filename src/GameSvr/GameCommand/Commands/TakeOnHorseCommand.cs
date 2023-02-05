@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("TakeOnHorse", "", 10)]
-    public class TakeOnHorseCommand : Command
+    public class TakeOnHorseCommand : GameCommand
     {
         [ExecuteCommand]
         public static void TakeOnHorse(PlayObject PlayObject)

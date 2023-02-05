@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// </summary>
     [Command("ReloadMagicDB", "重新加载技能数据库", 10)]
 
-    public class ReloadMagicDBCommand : Command
+    public class ReloadMagicDBCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ReloadMonItems(PlayObject PlayObject)

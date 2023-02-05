@@ -4,7 +4,7 @@ using GameSvr.Player;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("TestFire", "", 10)]
-    public class TestFireCommand : Command
+    public class TestFireCommand : GameCommand
     {
         [ExecuteCommand]
         public static void TestFire(string[] @params, PlayObject PlayObject)

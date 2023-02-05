@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家游戏币
     /// </summary>
     [Command("DelGameGold", "调整指定玩家游戏币", help: "人物名称 数量", 10)]
-    public class DelGameGoldCommand : Command
+    public class DelGameGoldCommand : GameCommand
     {
         [ExecuteCommand]
         public void DelGameGold(string[] @params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             int nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0; //数量
             if (sHumName == "" || nPoint <= 0)
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);

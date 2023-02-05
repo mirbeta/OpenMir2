@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 结束行会争霸赛
     /// </summary>
     [Command("EndContest", "结束行会争霸赛", 10)]
-    public class EndContestCommand : Command
+    public class EndContestCommand : GameCommand
     {
         [ExecuteCommand]
         public static void EndContest(string[] @Params, PlayObject PlayObject)

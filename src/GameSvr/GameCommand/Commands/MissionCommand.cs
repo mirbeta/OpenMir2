@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 设置怪物集中目标
     /// </summary>
     [Command("Mission", "设置怪物集中目标", " X Y", 10)]
-    public class MissionCommand : Command
+    public class MissionCommand : GameCommand
     {
         [ExecuteCommand]
         public void Mission(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             string sY = @Params.Length > 1 ? @Params[1] : "";
             if (sX == "" || sY == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             short nX = (short)HUtil32.StrToInt(sX, 0);

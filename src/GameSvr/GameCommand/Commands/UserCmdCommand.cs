@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 自定义命令
     /// </summary>
     [Command("UserCmd", "自定义命令", 10)]
-    public class UserCmdCommand : Command
+    public class UserCmdCommand : GameCommand
     {
         [ExecuteCommand]
         public static void UserCmd(string[] @Params, PlayObject PlayObject)

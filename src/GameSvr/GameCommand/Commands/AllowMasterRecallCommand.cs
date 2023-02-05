@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 此命令用于允许或禁止师徒传送
     /// </summary>
     [Command("AllowMasterRecall", "此命令用于允许或禁止师徒传送", 0)]
-    public class AllowMasterRecallCommand : Command
+    public class AllowMasterRecallCommand : GameCommand
     {
         [ExecuteCommand]
         public static void AllowMasterRecall(PlayObject PlayObject)

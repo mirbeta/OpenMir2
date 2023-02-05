@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整沙巴克所属行会
     /// </summary>
     [Command("ChangeSabukLord", "调整沙巴克所属行会", "城堡名称 行会名称", 10)]
-    public class ChangeSabukLordCommand : Command
+    public class ChangeSabukLordCommand : GameCommand
     {
         [ExecuteCommand]
         public void ChangeSabukLord(string[] @Params, PlayObject PlayObject)
@@ -22,7 +22,7 @@ namespace GameSvr.GameCommand.Commands
             bool boFlag = @Params.Length > 2 && bool.Parse(@Params[2]);
             if (sCastleName == "" || sGuildName == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             Castle.UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);
