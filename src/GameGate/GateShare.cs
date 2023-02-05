@@ -116,14 +116,14 @@ namespace GameGate
         public byte[] Buffer;
     }
 
-    public enum TBlockIPMethod
+    public enum BlockIPMethod
     {
-        mDisconnect,
-        mBlock,
-        mBlockList
+        Disconnect,
+        Block,
+        BlockList
     }
 
-    public enum TPunishMethod
+    public enum PunishMethod
     {
         /// <summary>
         /// 转换封包

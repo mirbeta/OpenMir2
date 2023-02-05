@@ -221,8 +221,8 @@ namespace GameGate.Conf
         public int ClientMoveSpeedRate;
         public int ClientSpellSpeedRate;
         public int ClientAttackSpeedRate;
-        public TPunishMethod OverSpeedPunishMethod;
-        public TBlockIPMethod BlockIPMethod;
+        public PunishMethod OverSpeedPunishMethod;
+        public BlockIPMethod BlockIPMethod;
         public ChatFilterMethod ChatFilterMethod;
         public OverSpeedMsgMethod SpeedHackWarnMethod;
 
@@ -238,7 +238,7 @@ namespace GameGate.Conf
             IsItemSpeedCompensate = false;
             IsDoMotaeboSpeedCheck = true;
             IsKickOverPacketSize = true;
-            BlockIPMethod = TBlockIPMethod.mDisconnect;
+            BlockIPMethod = BlockIPMethod.Disconnect;
             NomClientPacketSize = 400;
             MaxClientPacketSize = 10240;
             MaxConnectOfIP = 50;
@@ -283,7 +283,7 @@ namespace GameGate.Conf
             SpaceMoveNextPickupInterval = 600;
             PunishBaseInterval = 20;
             PunishIntervalRate = 1.00;
-            OverSpeedPunishMethod = TPunishMethod.DelaySend;
+            OverSpeedPunishMethod = PunishMethod.DelaySend;
             PunishMoveInterval = 150;
             PunishSpellInterval = 150;
             PunishAttackInterval = 150;

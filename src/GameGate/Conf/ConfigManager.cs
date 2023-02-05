@@ -126,8 +126,8 @@ namespace GameGate.Conf
             GateConfig.ClientSpellSpeedRate = ReadWriteInteger("Integer", "ClientSpellSpeedRate", GateConfig.ClientSpellSpeedRate);
             GateConfig.ClientAttackSpeedRate = ReadWriteInteger("Integer", "ClientAttackSpeedRate", GateConfig.ClientAttackSpeedRate);
             // Method
-            GateConfig.OverSpeedPunishMethod = (TPunishMethod)ReadWriteInteger("Method", "OverSpeedPunishMethod", (int)GateConfig.OverSpeedPunishMethod);
-            GateConfig.BlockIPMethod = (TBlockIPMethod)ReadWriteInteger("Method", "BlockIPMethod", (int)GateConfig.BlockIPMethod);
+            GateConfig.OverSpeedPunishMethod = (PunishMethod)ReadWriteInteger("Method", "OverSpeedPunishMethod", (int)GateConfig.OverSpeedPunishMethod);
+            GateConfig.BlockIPMethod = (BlockIPMethod)ReadWriteInteger("Method", "BlockIPMethod", (int)GateConfig.BlockIPMethod);
             GateConfig.ChatFilterMethod = (ChatFilterMethod)ReadWriteInteger("Method", "ChatFilterMethod", (int)GateConfig.ChatFilterMethod);
             GateConfig.SpeedHackWarnMethod = (OverSpeedMsgMethod)ReadWriteInteger("Method", "SpeedHackWarnMethod", (int)GateConfig.SpeedHackWarnMethod);
             // Boolean

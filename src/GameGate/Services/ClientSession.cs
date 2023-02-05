@@ -215,7 +215,7 @@ namespace GameGate.Services
                             }
                             else
                             {
-                                if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                if (Config.OverSpeedPunishMethod == PunishMethod.DelaySend)
                                 {
                                     delayMsgCount = GetDelayMsgCount();
                                     if (delayMsgCount == 0)
@@ -277,7 +277,7 @@ namespace GameGate.Services
                             }
                             else
                             {
-                                if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                if (Config.OverSpeedPunishMethod == PunishMethod.DelaySend)
                                 {
                                     delayMsgCount = GetDelayMsgCount();
                                     if (delayMsgCount == 0)
@@ -341,7 +341,7 @@ namespace GameGate.Services
                                 }
                                 else
                                 {
-                                    if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                    if (Config.OverSpeedPunishMethod == PunishMethod.DelaySend)
                                     {
                                         delayMsgCount = GetDelayMsgCount();
                                         if (delayMsgCount == 0)
@@ -372,7 +372,7 @@ namespace GameGate.Services
                             }
                             else
                             {
-                                if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                if (Config.OverSpeedPunishMethod == PunishMethod.DelaySend)
                                 {
                                     delayMsgCount = GetDelayMsgCount();
                                     if (delayMsgCount == 0)
@@ -405,7 +405,7 @@ namespace GameGate.Services
                             }
                             else
                             {
-                                if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                if (Config.OverSpeedPunishMethod == PunishMethod.DelaySend)
                                 {
                                     if (!PeekDelayMsg(ident))
                                     {
@@ -422,7 +422,7 @@ namespace GameGate.Services
                         }
                         break;
                     case Messages.CM_TURN:
-                        if (Config.IsTurnInterval && (Config.OverSpeedPunishMethod != TPunishMethod.TurnPack))
+                        if (Config.IsTurnInterval && (Config.OverSpeedPunishMethod != PunishMethod.TurnPack))
                         {
                             if (LastDirection != tag)
                             {
@@ -434,7 +434,7 @@ namespace GameGate.Services
                                 }
                                 else
                                 {
-                                    if (Config.OverSpeedPunishMethod == TPunishMethod.DelaySend)
+                                    if (Config.OverSpeedPunishMethod == PunishMethod.DelaySend)
                                     {
                                         if (!PeekDelayMsg(ident))
                                         {
