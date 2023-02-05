@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class DelGuildCommand : GameCommand
     {
         [ExecuteCommand]
-        public void DelGuild(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

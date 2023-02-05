@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeUserFullCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ChangeUserFull(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

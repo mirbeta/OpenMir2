@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class ClearBagItemCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ClearBagItem(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ShutupListCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ShutupList(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
             try

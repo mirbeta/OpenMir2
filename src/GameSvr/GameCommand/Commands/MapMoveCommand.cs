@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class MapMoveCommand : GameCommand
     {
         [ExecuteCommand]
-        public void MapMove(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

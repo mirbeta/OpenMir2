@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class SuperTingCommand : GameCommand
     {
         [ExecuteCommand]
-        public void SuperTing(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

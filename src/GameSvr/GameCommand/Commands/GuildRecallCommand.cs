@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class GuildRecallCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void GuildRecall(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (!PlayObject.GuildMove && PlayObject.Permission < 6)
             {

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ClearHumanPasswordCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ClearHumanPassword(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

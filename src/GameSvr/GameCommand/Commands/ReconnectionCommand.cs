@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReconnectionCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Reconnection(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

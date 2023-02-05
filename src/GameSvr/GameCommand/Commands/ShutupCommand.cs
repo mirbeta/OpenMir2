@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ShutupCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Shutup(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

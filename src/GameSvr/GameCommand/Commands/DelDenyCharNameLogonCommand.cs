@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class DelDenyChrNameLogonCommand : GameCommand
     {
         [ExecuteCommand]
-        public void DelDenyChrNameLogon(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

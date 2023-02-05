@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class MapMoveHumanCommand : GameCommand
     {
         [ExecuteCommand]
-        public void MapMoveHuman(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

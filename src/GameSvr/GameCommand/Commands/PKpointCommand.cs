@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class PKpointCommand : GameCommand
     {
         [ExecuteCommand]
-        public void PKpoint(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

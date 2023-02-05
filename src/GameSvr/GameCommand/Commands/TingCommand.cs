@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class TingCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Ting(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

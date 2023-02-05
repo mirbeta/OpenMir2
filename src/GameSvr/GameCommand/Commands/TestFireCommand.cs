@@ -7,7 +7,7 @@ namespace GameSvr.GameCommand.Commands
     public class TestFireCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void TestFire(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

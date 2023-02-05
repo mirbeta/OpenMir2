@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class MapInfoCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ShowMapInfo(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)
             {

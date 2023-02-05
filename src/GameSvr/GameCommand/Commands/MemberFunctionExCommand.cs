@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     public class MemberFunctionExCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void MemberFunctionEx(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (M2Share.FunctionNPC != null)
             {

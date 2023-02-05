@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class DisableFilterCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void DisableFilter(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             M2Share.FilterWord = !M2Share.FilterWord;
             if (M2Share.FilterWord)

@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands
     public class GetUserItemsCommand : GameCommand
     {
         [ExecuteCommand]
-        public void GetUserItems(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

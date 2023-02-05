@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class HungerCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Hunger(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

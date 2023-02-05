@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class DataCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void Date(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             PlayObject.SysMsg(CommandHelp.NowCurrDateTime + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), MsgColor.Blue, MsgType.Hint);
         }

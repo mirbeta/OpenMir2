@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class BindUseItemCommand : GameCommand
     {
         [ExecuteCommand]
-        public void BindUseItem(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null || @Params.Length <= 0)
             {

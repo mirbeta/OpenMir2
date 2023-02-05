@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class GroupRecallCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void GroupRecall(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (PlayObject.RecallSuite || PlayObject.Permission >= 6)
             {

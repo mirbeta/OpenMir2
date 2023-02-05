@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class TestSpeedModeCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void TestSpeedMode(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             PlayObject.TestSpeedMode = !PlayObject.TestSpeedMode;
             if (PlayObject.TestSpeedMode)

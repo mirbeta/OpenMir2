@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class HumanCountCommand : GameCommand
     {
         [ExecuteCommand]
-        public void HumanCount(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

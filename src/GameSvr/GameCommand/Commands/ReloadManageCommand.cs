@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadManageCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ReloadManage(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (M2Share.ManageNPC != null)
             {

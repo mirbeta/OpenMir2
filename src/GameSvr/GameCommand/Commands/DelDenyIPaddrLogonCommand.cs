@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class DelDenyIPaddrLogonCommand : GameCommand
     {
         [ExecuteCommand]
-        public void DelDenyIPaddrLogon(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

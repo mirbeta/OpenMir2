@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     public class TrainingCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void Training(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (PlayObject.Permission < 6)
             {

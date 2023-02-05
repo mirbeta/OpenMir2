@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class AllowDearRecallCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void AllowDearRecall(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             PlayObject.CanDearRecall = !PlayObject.CanDearRecall;
             if (PlayObject.CanDearRecall)

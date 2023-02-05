@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReAliveCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ReAlive(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

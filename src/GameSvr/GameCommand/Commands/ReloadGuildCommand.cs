@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadGuildCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ReloadGuild(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

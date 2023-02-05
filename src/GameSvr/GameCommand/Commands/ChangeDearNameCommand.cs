@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeDearNameCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ChangeDearName(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

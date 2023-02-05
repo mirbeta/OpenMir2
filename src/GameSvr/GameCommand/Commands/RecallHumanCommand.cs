@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class RecallHumanCommand : GameCommand
     {
         [ExecuteCommand]
-        public void RecallHuman(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

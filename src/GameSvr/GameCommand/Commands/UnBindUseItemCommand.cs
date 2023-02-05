@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class UnBindUseItemCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void UnBindUseItem(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

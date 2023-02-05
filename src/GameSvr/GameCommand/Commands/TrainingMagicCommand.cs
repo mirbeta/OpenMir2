@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class TrainingMagicCommand : GameCommand
     {
         [ExecuteCommand]
-        public void TrainingMagic(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

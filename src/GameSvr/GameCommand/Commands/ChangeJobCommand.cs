@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeJobCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ChangeJob(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

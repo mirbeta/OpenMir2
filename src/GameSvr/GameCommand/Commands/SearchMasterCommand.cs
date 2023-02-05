@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class SearchMasterCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void SearchMaster(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (PlayObject.MasterName == "")
             {

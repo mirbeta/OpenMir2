@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
     public class CreateAIUserCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void AddRebotPlay(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

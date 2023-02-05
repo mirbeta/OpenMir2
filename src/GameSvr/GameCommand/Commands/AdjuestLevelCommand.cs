@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class AdjuestLevelCommand : GameCommand
     {
         [ExecuteCommand]
-        public void AdjuestLevel(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

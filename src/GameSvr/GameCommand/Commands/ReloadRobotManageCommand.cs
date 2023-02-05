@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadRobotManageCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ReloadRobotManage(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (M2Share.RobotNPC != null)
             {

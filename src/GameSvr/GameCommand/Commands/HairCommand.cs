@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class HairCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Hair(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

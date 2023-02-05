@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class SetPassWordCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void SetPassWord(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -38,7 +38,7 @@ namespace GameSvr.GameCommand.Commands
     public class UnPasswWordCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void UnPassWord(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -64,7 +64,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChgpassWordCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ChgpassWord(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -97,7 +97,7 @@ namespace GameSvr.GameCommand.Commands
     public class UnlockStorageCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void UnlockStorage(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -137,7 +137,7 @@ namespace GameSvr.GameCommand.Commands
     public class UnLockCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void UnLock(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -177,7 +177,7 @@ namespace GameSvr.GameCommand.Commands
     public class LockCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void Lock(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (!M2Share.Config.PasswordLockSystem)
             {
@@ -212,7 +212,7 @@ namespace GameSvr.GameCommand.Commands
     public class SetFlagCommand : GameCommand
     {
         [ExecuteCommand]
-        public void SetFlag(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)
             {
@@ -248,7 +248,7 @@ namespace GameSvr.GameCommand.Commands
     public class SetOpenCommand : GameCommand
     {
         [ExecuteCommand]
-        public void SetOpen(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)
             {
@@ -284,7 +284,7 @@ namespace GameSvr.GameCommand.Commands
     public class SetUnitCommand : GameCommand
     {
         [ExecuteCommand]
-        public void SetUnit(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)
             {

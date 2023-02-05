@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ShowSbkGoldCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ShowSbkGold(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

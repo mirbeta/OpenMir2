@@ -9,10 +9,10 @@ namespace GameSvr.GameCommand.Commands
     public class WhoCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void Who(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
-            int offlineCount = 0;
-            PlayObject.HearMsg(string.Format("当前服务器在线人数: {0}({1}/{2})", M2Share.WorldEngine.PlayObjectCount, offlineCount, (M2Share.WorldEngine.PlayObjectCount - offlineCount)));
+            var offlineCount = 0;
+            PlayObject.HearMsg($"当前服务器在线人数: {M2Share.WorldEngine.PlayObjectCount}({offlineCount}/{(M2Share.WorldEngine.PlayObjectCount - offlineCount)})");
         }
     }
 }

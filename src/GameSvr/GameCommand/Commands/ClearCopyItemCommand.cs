@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class ClearCopyItemCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ClearCopyItem(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

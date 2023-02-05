@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class ShowMapInfoCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ShowMapInfo(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMapInfoMsg, PlayObject.Envir.MapName, PlayObject.Envir.MapDesc), MsgColor.Green, MsgType.Hint);
             PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMapInfoSizeMsg, PlayObject.Envir.Width, PlayObject.Envir.Height), MsgColor.Green, MsgType.Hint);

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ForcedWallconquestWarCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ForcedWallconquestWar(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (Params == null)
             {

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class NpcScriptCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void NpcScript(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             string sScriptFileName = string.Empty;
             int nNPCType = -1;

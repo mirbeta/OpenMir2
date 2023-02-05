@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadMonItemsCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ReloadMonItems(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             try
             {

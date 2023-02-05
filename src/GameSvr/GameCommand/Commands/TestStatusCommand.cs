@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class TestStatusCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void TestStatus(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class ShowHumanUnitOpenCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ShowOpen(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
 
         }

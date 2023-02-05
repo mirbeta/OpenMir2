@@ -55,7 +55,7 @@ namespace GameSvr.GameCommand
             FieldInfo[] commands = GameCommands.GetType().GetFields();
             if (commands.Length <= 0)
             {
-                _logger.Info("获取游戏命令失败");
+                _logger.Info("获取游戏命令类型失败,请确认游戏命令是否注册.");
                 return null;
             }
             var customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
@@ -95,43 +95,35 @@ namespace GameSvr.GameCommand
             }
             foreach (var command in commands)
             {
-                var attributes = (CommandAttribute[])command.GetCustomAttributes(typeof(CommandAttribute), true);
-                if (attributes.Length == 0) continue;
-
-                var groupAttribute = attributes[0];
-                if (CommandMaps.ContainsKey(groupAttribute.Name))
+                var commandAttribute = (CommandAttribute)command.GetCustomAttribute(typeof(CommandAttribute), true);
+                if (commandAttribute == null) continue;
+                if (CommandMaps.ContainsKey(commandAttribute.Name))
                 {
-                    M2Share.Logger.Error($"重复游戏命令: {groupAttribute.Name}");
+                    M2Share.Logger.Error($"重复游戏命令: {commandAttribute.Name}");
+                    continue;
                 }
                 var gameCommand = (GameCommand)Activator.CreateInstance(command);
                 if (gameCommand == null)
                 {
-                    return;
+                    continue;
                 }
-                if (customCommands.TryGetValue(groupAttribute.Name, out var customCommand))
+                if (!customCommands.TryGetValue(commandAttribute.Name, out var customCommand))
                 {
-                    groupAttribute.Command = groupAttribute.Command;
-                    groupAttribute.Name = customCommand.CmdName;
-                    groupAttribute.PermissionMax = (byte)customCommand.PerMissionMax;
-                    groupAttribute.PermissionMin = (byte)customCommand.PerMissionMin;
+                    M2Share.Logger.Error($"获取命令:{commandAttribute.Name}失败.");
+                    continue;
                 }
-                MethodInfo methodInfo = null;
-                foreach (var method in gameCommand.GetType().GetMethods())
+                commandAttribute.Command = commandAttribute.Command;
+                commandAttribute.Name = customCommand.CmdName;
+                commandAttribute.PermissionMax = (byte)customCommand.PerMissionMax;
+                commandAttribute.PermissionMin = (byte)customCommand.PerMissionMin;
+                var executeMethod = gameCommand.GetType().GetMethod("Execute");
+                if (executeMethod == null)
                 {
-                    var methodAttributes = method.GetCustomAttribute(typeof(ExecuteCommand), true);
-                    if (methodAttributes == null)
-                    {
-                        continue;
-                    }
-                    methodInfo = method;
-                    break;
+                    M2Share.Logger.Error($"游戏命令:{customCommand.CmdName}未注册执行方法.");
+                    continue;
                 }
-                if (methodInfo == null)
-                {
-                    return;
-                }
-                gameCommand.Register(groupAttribute, methodInfo);
-                CommandMaps.Add(groupAttribute.Name, gameCommand);
+                gameCommand.Register(commandAttribute, executeMethod);
+                CommandMaps.Add(commandAttribute.Name, gameCommand);
             }
         }
 
@@ -141,7 +133,7 @@ namespace GameSvr.GameCommand
         /// <param name="line">命令字符串</param>
         /// <param name="playObject">命令对象</param>
         /// <returns><see cref="bool"/></returns>
-        public bool ExecCmd(string line, PlayObject playObject)
+        public bool Execute(string line, PlayObject playObject)
         {
             if (playObject == null)
                 throw new ArgumentException("PlayObject");
@@ -223,6 +215,11 @@ namespace GameSvr.GameCommand
         [Command("commands", "列出可用的命令")]
         public class CommandsCommandGroup : GameCommand
         {
+            public void Execute()
+            {
+                
+            }
+            
             public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)
             {
                 string output = "Available commands: ";
@@ -240,6 +237,11 @@ namespace GameSvr.GameCommand
         [Command("help", "帮助命令")]
         public class HelpCommandGroup : GameCommand
         {
+            public void Execute()
+            {
+                
+            }
+
             public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)
             {
                 return "usage: help <command>";

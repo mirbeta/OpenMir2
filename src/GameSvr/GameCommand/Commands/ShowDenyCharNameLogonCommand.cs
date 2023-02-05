@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class ShowDenyChrNameLogonCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ShowDenyChrNameLogon(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             try
             {

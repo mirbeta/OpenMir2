@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReGotoHumanCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ReGotoHuman(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

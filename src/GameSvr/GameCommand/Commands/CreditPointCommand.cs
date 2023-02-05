@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class CreditPointCommand : GameCommand
     {
         [ExecuteCommand]
-        public void CreditPoint(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

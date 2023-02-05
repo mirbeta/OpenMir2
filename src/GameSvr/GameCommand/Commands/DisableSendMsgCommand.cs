@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class DisableSendMsgCommand : GameCommand
     {
         [ExecuteCommand]
-        public void DisableSendMsg(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

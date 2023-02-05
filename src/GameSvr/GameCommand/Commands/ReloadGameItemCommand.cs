@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadGameItemCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ReloadMonItems(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             M2Share.CommonDb.LoadItemsDB();
             PlayObject.SysMsg("物品数据库重新加载完成。", MsgColor.Green, MsgType.Hint);

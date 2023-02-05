@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class DenyChrNameLogonCommand : GameCommand
     {
         [ExecuteCommand]
-        public void DenyChrNameLogon(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

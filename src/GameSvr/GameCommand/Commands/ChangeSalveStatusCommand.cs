@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeSalveStatusCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ChangeSalveStatus(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             PlayObject.SlaveRelax = !PlayObject.SlaveRelax;
             if (PlayObject.SlaveList.Count > 0)

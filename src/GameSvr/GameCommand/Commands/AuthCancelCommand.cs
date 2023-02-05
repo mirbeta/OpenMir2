@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class AuthCancelCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void AuthCancel(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null || @params.Length <= 0)
             {

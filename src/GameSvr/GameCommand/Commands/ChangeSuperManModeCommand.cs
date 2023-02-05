@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeSuperManModeCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ChangeSuperManMode(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             bool boFlag = !PlayObject.SuperMan;
             PlayObject.SuperMan = boFlag;

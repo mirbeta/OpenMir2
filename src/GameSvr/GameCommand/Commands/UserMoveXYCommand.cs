@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class UserMoveXYCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void UserMoveXY(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

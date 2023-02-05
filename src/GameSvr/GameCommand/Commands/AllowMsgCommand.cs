@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class AllowMsgCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void AllowMsg(PlayObject playObject)
+        public void Execute(PlayObject playObject)
         {
             playObject.HearWhisper = !playObject.HearWhisper;
             if (playObject.HearWhisper)

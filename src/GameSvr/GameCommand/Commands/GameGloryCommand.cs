@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     public class GameGloryCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void GameGlory(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";

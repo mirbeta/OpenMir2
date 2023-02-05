@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class RestBonuPointCommand : GameCommand
     {
         [ExecuteCommand]
-        public void RestBonuPoint(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

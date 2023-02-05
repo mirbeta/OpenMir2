@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     public class GameDiaMondCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void GameDiaMond(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";

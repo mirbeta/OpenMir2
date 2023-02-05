@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class ShowDenyIPaddrLogonCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ShowDenyIPaddrLogon(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             int nCount;
             try

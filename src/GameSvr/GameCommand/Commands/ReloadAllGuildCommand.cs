@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReloadAllGuildCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ReloadAllGuild(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (M2Share.ServerIndex != 0)
             {

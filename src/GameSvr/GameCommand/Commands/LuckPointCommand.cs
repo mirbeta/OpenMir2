@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class LuckPointCommand : GameCommand
     {
         [ExecuteCommand]
-        public void LuckPoint(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class TestGetBagItemsCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void TestGetBagItems(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             byte btDc = 0;
             byte btSc = 0;

@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class GiveMineCommand : GameCommand
     {
         [ExecuteCommand]
-        public void GiveMine(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class StartQuestCommand : GameCommand
     {
         [ExecuteCommand]
-        public void StartQuest(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

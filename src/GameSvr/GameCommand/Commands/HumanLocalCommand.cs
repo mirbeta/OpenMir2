@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class HumanLocalCommand : GameCommand
     {
         [ExecuteCommand]
-        public void HumanLocal(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

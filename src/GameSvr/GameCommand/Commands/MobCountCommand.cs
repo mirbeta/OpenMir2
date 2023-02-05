@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class MobCountCommand : GameCommand
     {
         [ExecuteCommand]
-        public void MobCount(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -4,8 +4,8 @@
     [Command("ShowUnit", "", "", 10)]
     public class ShowUnitCommand : GameCommand
     {
-        [ExecuteCommand()]
-        public static void ShowUnit()
+        [ExecuteCommand]
+        public void Execute()
         {
 
         }

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class MasterRecallCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void MasterRecall(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (!PlayObject.IsMaster)
             {

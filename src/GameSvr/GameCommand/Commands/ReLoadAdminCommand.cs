@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ReLoadAdminCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ReLoadAdmin(PlayObject playObject)
+        public void Execute(PlayObject playObject)
         {
             DataSource.LocalDB.LoadAdminList();
             World.WorldServer.SendServerGroupMsg(213, M2Share.ServerIndex, "");

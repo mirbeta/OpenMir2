@@ -1949,13 +1949,13 @@ namespace GameSvr.Npc
                         switch (QuestActionInfo.nParam1)
                         {
                             case 1:
-                                CommandMgr.GetInstance().ExecCmd("ChangeAdminMode", PlayObject);
+                                CommandMgr.GetInstance().Execute("ChangeAdminMode", PlayObject);
                                 break;
                             case 2:
-                                CommandMgr.GetInstance().ExecCmd("ChangeSuperManMode", PlayObject);
+                                CommandMgr.GetInstance().Execute("ChangeSuperManMode", PlayObject);
                                 break;
                             case 3:
-                                CommandMgr.GetInstance().ExecCmd("ChangeObMode", PlayObject);
+                                CommandMgr.GetInstance().Execute("ChangeObMode", PlayObject);
                                 break;
                             default:
                                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sCHANGEMODE);

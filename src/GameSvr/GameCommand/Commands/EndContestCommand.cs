@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class EndContestCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void EndContest(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             //string sParam1 = @Params.Length > 0 ? @Params[0] : "";
             //List<TPlayObject> List10;

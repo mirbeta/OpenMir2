@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class MobNpcCommand : GameCommand
     {
         [ExecuteCommand]
-        public void MobNpc(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

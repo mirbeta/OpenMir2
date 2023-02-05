@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class SetPermissionCommand : GameCommand
     {
         [ExecuteCommand]
-        public void SetPermission(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

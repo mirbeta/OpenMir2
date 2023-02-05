@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands
     public class StartContestCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void StartContest(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             PlayObject m_PlayObject;
             PlayObject PlayObjectA;

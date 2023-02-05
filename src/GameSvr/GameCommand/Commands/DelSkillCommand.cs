@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class DelSkillCommand : GameCommand
     {
         [ExecuteCommand]
-        public void DelSkill(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

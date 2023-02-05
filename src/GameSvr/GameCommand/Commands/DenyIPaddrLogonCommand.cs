@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class DenyIPaddrLogonCommand : GameCommand
     {
         [ExecuteCommand]
-        public void DenyIPaddrLogon(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

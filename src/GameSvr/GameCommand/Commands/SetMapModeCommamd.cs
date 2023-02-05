@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class SetMapModeCommamd : GameCommand
     {
         [ExecuteCommand]
-        public static void SetMapMode(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class SearchDearCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void SearchDear(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (PlayObject.DearName == "")
             {

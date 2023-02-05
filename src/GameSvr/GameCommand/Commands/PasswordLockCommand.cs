@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class PasswordLockCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void PasswordLock(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null || @params.Length <= 0)
             {

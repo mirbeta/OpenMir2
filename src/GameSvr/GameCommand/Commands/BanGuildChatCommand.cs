@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class BanGuildChatCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void Banguildchat(PlayObject playObject)
+        public void Execute(PlayObject playObject)
         {
             playObject.BanGuildChat = !playObject.BanGuildChat;
             if (playObject.BanGuildChat)

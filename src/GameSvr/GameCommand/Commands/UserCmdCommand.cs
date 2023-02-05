@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class UserCmdCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void UserCmd(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             // string sLable = @Params.Length > 0 ? @Params[0] : "";
             // byte Flag = 0;

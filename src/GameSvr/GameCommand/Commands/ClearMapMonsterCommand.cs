@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands
     public class ClearMapMonsterCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ClearMapMonster(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

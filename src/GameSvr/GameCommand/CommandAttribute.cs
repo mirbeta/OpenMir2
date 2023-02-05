@@ -103,6 +103,9 @@
         }
     }
 
+    /// <summary>
+    /// 游戏命令注册实现Attribute
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class CommandHandleAttribute : Attribute
     {

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class EndGuildCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void EndGuild(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (PlayObject.MyGuild != null)
             {

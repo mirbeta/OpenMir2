@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class AddGuildCommand : GameCommand
     {
         [ExecuteCommand]
-        public void AddGuild(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

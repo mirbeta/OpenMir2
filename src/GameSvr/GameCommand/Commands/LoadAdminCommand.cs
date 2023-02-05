@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class LoadAdminCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void LoadAdmin(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (PlayObject.Permission < 6)
             {

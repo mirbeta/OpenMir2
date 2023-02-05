@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class EnableSendMsgCommand : GameCommand
     {
         [ExecuteCommand]
-        public void EnableSendMsg(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

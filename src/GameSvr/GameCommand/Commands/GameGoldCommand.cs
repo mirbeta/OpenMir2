@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class GameGoldCommand : GameCommand
     {
         [ExecuteCommand]
-        public void GameGold(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

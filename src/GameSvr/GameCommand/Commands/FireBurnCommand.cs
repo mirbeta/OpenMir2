@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class FireBurnCommand : GameCommand
     {
         [ExecuteCommand]
-        public void FireBurn(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeAdminModeCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void ChangeAdminMode(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             PlayObject.AdminMode = !PlayObject.AdminMode;
             PlayObject.SysMsg(PlayObject.AdminMode ? Settings.GameMasterMode : Settings.ReleaseGameMasterMode, MsgColor.Green, MsgType.Hint);

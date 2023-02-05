@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeZenFastStepCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ChangeZenFastStep(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

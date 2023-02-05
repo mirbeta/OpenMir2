@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class LetTradeCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void Lettrade(PlayObject playObject)
+        public void Execute(PlayObject playObject)
         {
             playObject.AllowDeal = !playObject.AllowDeal;
             if (playObject.AllowDeal)

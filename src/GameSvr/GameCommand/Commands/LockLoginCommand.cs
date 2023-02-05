@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class LockLoginCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void LockLogin(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (!M2Share.Config.LockHumanLogin)
             {

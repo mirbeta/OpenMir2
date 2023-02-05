@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     public class LetShoutCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void Letshout(PlayObject playObject)
+        public void Execute(PlayObject playObject)
         {
             playObject.BanShout = !playObject.BanShout;
             if (playObject.BanShout)

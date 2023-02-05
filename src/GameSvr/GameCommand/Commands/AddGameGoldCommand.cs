@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class AddGameGoldCommand : GameCommand
     {
         [ExecuteCommand]
-        public void AddGameGold(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

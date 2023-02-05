@@ -12,7 +12,7 @@ namespace GameSvr.GameCommand.Commands
     public class ChangeGenderCommand : GameCommand
     {
         [ExecuteCommand]
-        public void ChangeGender(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @Params, PlayObject PlayObject)
         {
             if (@Params == null)
             {

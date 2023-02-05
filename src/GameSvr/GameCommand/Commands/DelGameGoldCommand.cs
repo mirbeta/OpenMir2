@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
     public class DelGameGoldCommand : GameCommand
     {
         [ExecuteCommand]
-        public void DelGameGold(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject PlayObject)
         {
             if (@params == null)
             {

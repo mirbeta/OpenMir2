@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     public class GuildWarCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void GuildWar(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             if (PlayObject.Permission < 6)
             {

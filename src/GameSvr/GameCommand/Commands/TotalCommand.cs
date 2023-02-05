@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     public class TotalCommand : GameCommand
     {
         [ExecuteCommand]
-        public static void Total(PlayObject PlayObject)
+        public void Execute(PlayObject PlayObject)
         {
             PlayObject.HearMsg(string.Format("总在线数{0}", M2Share.TotalHumCount));
         }
