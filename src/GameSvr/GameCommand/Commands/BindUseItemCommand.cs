@@ -6,7 +6,7 @@ using SystemModule.Packets.ClientPackets;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("BindUseItem", "", CommandHelp.GameCommandBindUseItemHelpMsg, 10)]
-    public class BindUseItemCommand : Command
+    public class BindUseItemCommand : GameCommand
     {
         [ExecuteCommand]
         public void BindUseItem(string[] @Params, PlayObject PlayObject)
@@ -40,7 +40,7 @@ namespace GameSvr.GameCommand.Commands
             bool boLight = sLight == "1";
             if (nItem < 0 || nBind < 0 || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

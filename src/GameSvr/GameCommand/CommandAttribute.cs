@@ -26,19 +26,19 @@
         /// <summary>
         /// 命令等级最小权限
         /// </summary>
-        public byte nPermissionMin { get; set; }
+        public byte PermissionMin { get; set; }
 
         /// <summary>
         /// 命令等级最大权限
         /// </summary>
-        public byte nPermissionMax { get; set; }
+        public byte PermissionMax { get; set; }
 
         public CommandAttribute(string name, string desc, byte minUserLevel = 0, byte maxUserLevel = 10)
         {
             this.Name = name;
             this.Desc = desc;
-            this.nPermissionMin = minUserLevel;
-            this.nPermissionMax = maxUserLevel;
+            this.PermissionMin = minUserLevel;
+            this.PermissionMax = maxUserLevel;
         }
 
         public CommandAttribute(string name, string desc, string help, byte minUserLevel = 0, byte maxUserLevel = 10)
@@ -46,11 +46,11 @@
             this.Name = name;
             this.Desc = desc;
             this.Help = help;
-            this.nPermissionMin = minUserLevel;
-            this.nPermissionMax = maxUserLevel;
+            this.PermissionMin = minUserLevel;
+            this.PermissionMax = maxUserLevel;
         }
 
-        public string ShowHelp => $"命令格式: @{Name} {Help}";
+        public string CommandHelp => $"命令格式: @{Name} {Help}";
     }
 
     /// <summary>
@@ -106,11 +106,11 @@
     [AttributeUsage(AttributeTargets.Field)]
     public class CommandHandleAttribute : Attribute
     {
-        public readonly Type CommandHandle;
+        public readonly Type HandleType;
 
         public CommandHandleAttribute(Type commond)
         {
-            CommandHandle = commond;
+            HandleType = commond;
         }
     }
 }

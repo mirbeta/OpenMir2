@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 随机传送一个指定玩家和他身边的人
     /// </summary>
     [Command("SuperTing", "随机传送一个指定玩家和他身边的人", CommandHelp.GameCommandSuperTingHelpMsg, 10)]
-    public class SuperTingCommand : Command
+    public class SuperTingCommand : GameCommand
     {
         [ExecuteCommand]
         public void SuperTing(string[] @Params, PlayObject PlayObject)
@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
             IList<BaseObject> HumanList;
             if (sRange == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nRange = HUtil32._MAX(10, HUtil32.StrToInt(sRange, 2));

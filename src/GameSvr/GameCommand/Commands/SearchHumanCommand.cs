@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 搜索指定玩家所在地图XY坐标
     /// </summary>
     [Command("SearchHuman", "搜索指定玩家所在地图XY坐标", "人物名称", 0)]
-    public class SearchHumanCommand : Command
+    public class SearchHumanCommand : GameCommand
     {
         [ExecuteCommand]
         public void SearchHuman(string[] @Params, PlayObject PlayObject)
@@ -22,7 +22,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 if (string.IsNullOrEmpty(sHumanName))
                 {
-                    PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (HUtil32.GetTickCount() - PlayObject.ProbeTick > 10000 || PlayObject.Permission >= 3)

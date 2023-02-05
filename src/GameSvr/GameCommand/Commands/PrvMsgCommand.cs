@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 拒绝发言
     /// </summary>
     [Command("PrvMsg", "拒绝发言", CommandHelp.GameCommandPrvMsgHelpMsg, 10)]
-    public class PrvMsgCommand : Command
+    public class PrvMsgCommand : GameCommand
     {
         [ExecuteCommand]
         public void PrvMsg(string[] @Params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (int i = PlayObject.LockWhisperList.Count - 1; i >= 0; i--)

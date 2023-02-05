@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 查询师徒当前所在位置
     /// </summary>
     [Command("SearchMaster", "查询师徒当前所在位置", 0)]
-    public class SearchMasterCommand : Command
+    public class SearchMasterCommand : GameCommand
     {
         [ExecuteCommand]
         public static void SearchMaster(PlayObject PlayObject)

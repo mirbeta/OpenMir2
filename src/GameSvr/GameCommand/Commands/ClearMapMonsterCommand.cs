@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
     /// 清楚指定地图怪物
     /// </summary>
     [Command("ClearMapMonster", "清楚指定地图怪物", "地图号(* 为所有) 怪物名称(* 为所有) 掉物品(0,1)", 10)]
-    public class ClearMapMonsterCommand : Command
+    public class ClearMapMonsterCommand : GameCommand
     {
         [ExecuteCommand]
         public void ClearMapMonster(string[] @Params, PlayObject PlayObject)
@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
             string sItems = @Params.Length > 2 ? @Params[2] : "";
             if (sMapName == "" || sMonName == "" || sItems == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boKillAll = false;

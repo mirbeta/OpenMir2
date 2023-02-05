@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 删除指定玩家包裹物品
     /// </summary>
     [Command("DeleteItem", "删除人物身上指定的物品", help: "人物名称 物品名称 数量", 10)]
-    public class DeleteItemCommand : Command
+    public class DeleteItemCommand : GameCommand
     {
         [ExecuteCommand]
         public void DeleteItem(string[] @Params, PlayObject PlayObject)
@@ -25,7 +25,7 @@ namespace GameSvr.GameCommand.Commands
             UserItem UserItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 复活指定玩家
     /// </summary>
     [Command("ReAlive", "复活指定玩家", CommandHelp.GameCommandPrvMsgHelpMsg, 10)]
-    public class ReAliveCommand : Command
+    public class ReAliveCommand : GameCommand
     {
         [ExecuteCommand]
         public void ReAlive(string[] @params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

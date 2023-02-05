@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 显示沙巴克收入金币
     /// </summary>
     [Command("ShowSbkGold", "显示沙巴克收入金币", 10)]
-    public class ShowSbkGoldCommand : Command
+    public class ShowSbkGoldCommand : GameCommand
     {
         [ExecuteCommand]
         public void ShowSbkGold(string[] @Params, PlayObject PlayObject)
@@ -22,7 +22,7 @@ namespace GameSvr.GameCommand.Commands
             string sGold = @Params.Length > 2 ? @Params[2] : "";
             if (sCastleName != "" && sCastleName[0] == '?')
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.GameCommand.Name, ""), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, ""), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (sCastleName == "")
@@ -46,7 +46,7 @@ namespace GameSvr.GameCommand.Commands
             int nGold = HUtil32.StrToInt(sGold, -1);
             if (!new List<char>(new[] { '=', '-', '+' }).Contains(Ctr) || nGold < 0 || nGold > 100000000)
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.GameCommand.Name, CommandHelp.GameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (Ctr)

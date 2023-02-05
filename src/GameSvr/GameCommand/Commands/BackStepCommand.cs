@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 推开范围内对象
     /// </summary>
     [Command("BackStep", "推开范围内对象", 10)]
-    public class BackStepCommand : Command
+    public class BackStepCommand : GameCommand
     {
         [ExecuteCommand]
         public static void BackStep(string[] @Params, PlayObject PlayObject)

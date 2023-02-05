@@ -8,7 +8,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("NpcScript", "重新读取面对面NPC脚本", "重新读取面对面NPC脚本", 10)]
-    public class NpcScriptCommand : Command
+    public class NpcScriptCommand : GameCommand
     {
         [ExecuteCommand]
         public static void NpcScript(PlayObject PlayObject)

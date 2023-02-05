@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("TestSpeedMode", "", 10)]
-    public class TestSpeedModeCommand : Command
+    public class TestSpeedModeCommand : GameCommand
     {
         [ExecuteCommand]
         public static void TestSpeedMode(PlayObject PlayObject)

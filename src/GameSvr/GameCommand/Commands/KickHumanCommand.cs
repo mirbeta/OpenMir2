@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 剔除指定玩家下线
     /// </summary>
     [Command("KickHuman", "剔除指定玩家下线", CommandHelp.GameCommandHumanLocalHelpMsg, 10)]
-    public class KickHumanCommand : Command
+    public class KickHumanCommand : GameCommand
     {
         [ExecuteCommand]
         public static void KickHuman(string[] @params, PlayObject PlayObject)

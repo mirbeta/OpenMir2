@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("MapInfo", "显示当前地图信息", 10)]
-    public class MapInfoCommand : Command
+    public class MapInfoCommand : GameCommand
     {
         [ExecuteCommand]
         public void ShowMapInfo(string[] @params, PlayObject playObject)
@@ -40,7 +40,7 @@ namespace GameSvr.GameCommand.Commands
             }
             else
             {
-                playObject.SysMsg("请按正确格式输入: " + this.GameCommand.Name + " 地图号 X Y", MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg("请按正确格式输入: " + this.Command.Name + " 地图号 X Y", MsgColor.Green, MsgType.Hint);
             }
         }
     }

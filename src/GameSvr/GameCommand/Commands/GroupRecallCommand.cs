@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 组队传送
     /// </summary>
     [Command("GroupRecall", "组队传送", 0)]
-    public class GroupRecallCommand : Command
+    public class GroupRecallCommand : GameCommand
     {
         [ExecuteCommand]
         public static void GroupRecall(PlayObject PlayObject)

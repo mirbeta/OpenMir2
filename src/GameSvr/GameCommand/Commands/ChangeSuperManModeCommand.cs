@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整当前玩家进入无敌模式
     /// </summary>
     [Command("ChangeSuperManMode", "进入/退出无敌模式(进入模式后人物不会死亡)", 10)]
-    public class ChangeSuperManModeCommand : Command
+    public class ChangeSuperManModeCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ChangeSuperManMode(PlayObject PlayObject)

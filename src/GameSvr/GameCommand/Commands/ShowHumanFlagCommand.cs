@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 取用户任务状态
     /// </summary>
     [Command("ShowHumanFlag", "取用户任务状态", CommandHelp.GameCommandShowHumanFlagHelpMsg, 10)]
-    public class ShowHumanFlagCommand : Command
+    public class ShowHumanFlagCommand : GameCommand
     {
         [ExecuteCommand]
         public void ShowHumanFlag(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             string sFlag = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

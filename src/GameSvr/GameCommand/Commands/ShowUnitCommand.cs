@@ -2,7 +2,7 @@
 {
 
     [Command("ShowUnit", "", "", 10)]
-    public class ShowUnitCommand : Command
+    public class ShowUnitCommand : GameCommand
     {
         [ExecuteCommand()]
         public static void ShowUnit()

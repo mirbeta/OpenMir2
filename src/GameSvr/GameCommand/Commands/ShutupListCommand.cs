@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 查看禁言列表中的内容(支持权限分配)
     /// </summary>
     [Command("ShutupList", "查看禁言列表中的内容", 10)]
-    public class ShutupListCommand : Command
+    public class ShutupListCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ShutupList(PlayObject PlayObject)

@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 查看行会争霸赛结果
     /// </summary>
     [Command("Announcement", "查看行会争霸赛结果", 10)]
-    public class AnnouncementCommand : Command
+    public class AnnouncementCommand : GameCommand
     {
         [ExecuteCommand]
         public static void Announcement(string[] @Params, PlayObject PlayObject)

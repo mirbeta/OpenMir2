@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 此命令用于停止祈祷生效导致宝宝叛变
     /// </summary>
     [Command("SpirtStop", "此命令用于停止祈祷生效导致宝宝叛变", 10)]
-    public class SpirtStopCommand : Command
+    public class SpirtStopCommand : GameCommand
     {
         [ExecuteCommand]
         public static void SpirtStop(PlayObject PlayObject)

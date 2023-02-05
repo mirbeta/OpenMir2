@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整自己的等级
     /// </summary>
     [Command("ChangeLevel", "调整自己的等级", "等级(1-65535)", 10)]
-    public class ChangeLevelCommand : Command
+    public class ChangeLevelCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ChangeLevel(string[] @Params, PlayObject PlayObject)

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整当前玩家属下状态
     /// </summary>
     [Command("Rest", "调整当前玩家属下状态", 0)]
-    public class ChangeSalveStatusCommand : Command
+    public class ChangeSalveStatusCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ChangeSalveStatus(PlayObject PlayObject)

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家经验值
     /// </summary>
     [Command("AdjuestExp", "调整指定人物的经验值", "物名称 经验值", 10)]
-    public class AdjuestExpCommand : Command
+    public class AdjuestExpCommand : GameCommand
     {
         [ExecuteCommand]
         public void AdjuestExp(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             string sExp = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             int dwExp = HUtil32.StrToInt(sExp, 0);

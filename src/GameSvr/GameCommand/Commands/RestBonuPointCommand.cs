@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家属性的复位
     /// </summary>
     [Command("RestBonuPoint", "调整指定玩家属性的复位", "人物名称", 10)]
-    public class RestBonuPointCommand : Command
+    public class RestBonuPointCommand : GameCommand
     {
         [ExecuteCommand]
         public void RestBonuPoint(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             int nTotleUsePoint;
             if (sHumName == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);

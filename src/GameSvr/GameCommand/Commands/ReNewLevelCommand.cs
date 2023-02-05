@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家转生等级
     /// </summary>
     [Command("ReNewLevel", "调整指定玩家转生等级", "人物名称 点数(为空则查看)", 10)]
-    public class ReNewLevelCommand : Command
+    public class ReNewLevelCommand : GameCommand
     {
         [ExecuteCommand]
         public void ReNewLevel(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             string sLevel = @Params.Length > 1 ? @Params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nLevel = HUtil32.StrToInt(sLevel, -1);

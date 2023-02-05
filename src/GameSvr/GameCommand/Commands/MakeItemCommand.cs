@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
     /// 要求权限默认等级：10
     /// </summary>
     [Command("Make", desc: "制造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)", help: CommandHelp.GamecommandMakeHelpMsg, minUserLevel: 10)]
-    public class MakeItemCommond : Command
+    public class MakeItemCommond : GameCommand
     {
         [ExecuteCommand]
         public void CmdMakeItem(string[] Params, PlayObject PlayObject)
@@ -21,12 +21,12 @@ namespace GameSvr.GameCommand.Commands
             string sParam = Params.Length > 2 ? Params[2] : ""; //可选参数（持久力）
             if (string.IsNullOrEmpty(sItemName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nCount <= 0) nCount = 1;
             if (nCount > 10) nCount = 10;
-            if (PlayObject.Permission < GameCommand.nPermissionMax)
+            if (PlayObject.Permission < Command.PermissionMax)
             {
                 if (!M2Share.CanMakeItem(sItemName))
                 {
@@ -60,7 +60,7 @@ namespace GameSvr.GameCommand.Commands
                     {
                         stdItem.RandomUpgradeItem(UserItem);
                     }
-                    if (PlayObject.Permission >= GameCommand.nPermissionMax)
+                    if (PlayObject.Permission >= Command.PermissionMax)
                     {
                         UserItem.MakeIndex = M2Share.GetItemNumberEx(); // 制造的物品另行取得物品ID
                     }

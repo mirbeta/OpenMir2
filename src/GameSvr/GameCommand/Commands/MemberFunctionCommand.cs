@@ -3,7 +3,7 @@
 namespace GameSvr.GameCommand.Commands
 {
     [Command("MemberFunction", "", help: "打开会员功能窗口", 0)]
-    public class MemberFunctionCommand : Command
+    public class MemberFunctionCommand : GameCommand
     {
         [ExecuteCommand]
         public static void MemberFunction(PlayObject PlayObject)

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 重新加载游戏公告
     /// </summary>
     [Command("ReloadLineNotice", "重新加载游戏公告", 10)]
-    public class ReloadLineNoticeCommand : Command
+    public class ReloadLineNoticeCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ReloadLineNotice(PlayObject PlayObject)

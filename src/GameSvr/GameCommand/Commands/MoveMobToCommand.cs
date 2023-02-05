@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 将指定坐标的怪物移动到新坐标，名称为ALL则移动该坐标所有怪物
     /// </summary>
     [Command("MoveMobTo", "将指定坐标的怪物移动到新坐标", "怪物名称 原地图 原X 原Y 新地图 新X 新Y", 10)]
-    public class MoveMobToCommand : Command
+    public class MoveMobToCommand : GameCommand
     {
         [ExecuteCommand]
         public void MoveMobTo(string[] @Params, PlayObject PlayObject)
@@ -28,7 +28,7 @@ namespace GameSvr.GameCommand.Commands
             BaseObject MoveMon;
             if (sMonName == "" || OleMap == "" || NewMap == "" || sMonName != "" && sMonName[0] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boMoveAll = false;

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 移动地图指定座标(需要戴传送装备)
     /// </summary>
     [Command("UserMoveXY", "移动地图指定座标(需要戴传送装备)", 0)]
-    public class UserMoveXYCommand : Command
+    public class UserMoveXYCommand : GameCommand
     {
         [ExecuteCommand]
         public static void UserMoveXY(string[] @Params, PlayObject PlayObject)

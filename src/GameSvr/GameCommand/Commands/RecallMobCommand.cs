@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
     /// 格式:RECALLMOB 怪物名称 宝宝等级(最高为 7) 叛变时间(分钟) 是否自动变色（0、1）固定颜色（1-7）
     /// </summary>
     [Command("RecallMob", "召唤指定怪物为宠物", "怪物名称 数量 等级(0-7) 叛变时间(分钟) 是否自动变色（0、1）固定颜色（1-7）", 10)]
-    public class RecallMobCommand : Command
+    public class RecallMobCommand : GameCommand
     {
         [ExecuteCommand]
         public void RecallMob(string[] @Params, PlayObject PlayObject)
@@ -31,7 +31,7 @@ namespace GameSvr.GameCommand.Commands
             BaseObject mon;
             if (sMonName == "" || sMonName != "" && sMonName[0] == '?')
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nLevel >= 10)

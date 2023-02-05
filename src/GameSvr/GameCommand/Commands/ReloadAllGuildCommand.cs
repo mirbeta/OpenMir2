@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 重新读取所有行会
     /// </summary>
     [Command("ReloadAllGuild", "重新读取所有行会", 10)]
-    public class ReloadAllGuildCommand : Command
+    public class ReloadAllGuildCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ReloadAllGuild(PlayObject PlayObject)

@@ -1,6 +1,7 @@
 ﻿using GameSvr.Conf;
 using GameSvr.Player;
 using NLog;
+using System.ComponentModel;
 using System.Reflection;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -12,7 +13,7 @@ namespace GameSvr.GameCommand
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly GameCmdConf CommandConf;
         public static readonly GameCommands GameCommands = new GameCommands();
-        private static readonly Dictionary<string, Command> CommandMaps = new Dictionary<string, Command>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, GameCommand> CommandMaps = new Dictionary<string, GameCommand>(StringComparer.OrdinalIgnoreCase);
         private static CommandMgr instance = null;
         private static readonly object locker = new object();
 
@@ -57,23 +58,17 @@ namespace GameSvr.GameCommand
                 _logger.Info("获取游戏命令失败");
                 return null;
             }
-            GameCmd[] customCommandList = new GameCmd[commands.Length];
-            for (int i = 0; i < customCommandList.Length; i++)
+            var customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
+            for (var i = 0; i < commands.Length; i++)
             {
-                customCommandList[i] = (GameCmd)commands[i].GetValue(GameCommands);
-            }
-            Dictionary<string, GameCmd> customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
-            for (int i = 0; i < commands.Length; i++)
-            {
-                Attribute attributes = commands[i].GetCustomAttribute(typeof(CommandHandleAttribute), true);
-                if (attributes == null) continue;
-                CommandHandleAttribute commandAttribute = (CommandHandleAttribute)attributes;
-                GameCmd customCmd = customCommandList[i];
+                var customCmd = (GameCmd)commands[i].GetValue(GameCommands);
                 if (customCmd == null || string.IsNullOrEmpty(customCmd.CmdName))
                 {
                     continue;
                 }
-                CommandAttribute commandInfo = (CommandAttribute)commandAttribute.CommandHandle.GetCustomAttribute(typeof(CommandAttribute), true);
+                var commandAttribute = (CommandHandleAttribute)commands[i].GetCustomAttribute(typeof(CommandHandleAttribute), true);
+                if (commandAttribute == null) continue;
+                var commandInfo = (CommandAttribute)commandAttribute.HandleType.GetCustomAttribute(typeof(CommandAttribute), true);
                 if (commandInfo == null)
                 {
                     continue;
@@ -85,7 +80,6 @@ namespace GameSvr.GameCommand
                 }
                 customCommandMap.Add(commandInfo.Name, customCmd);
             }
-            customCommandList = null;
             return customCommandMap;
         }
 
@@ -94,37 +88,37 @@ namespace GameSvr.GameCommand
         /// </summary>
         private static void RegisterCommandGroups(IReadOnlyDictionary<string, GameCmd> customCommands)
         {
-            List<Type> commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(Command))).ToList();//只有继承Commond，才能添加到命令对象中
+            var commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(GameCommand))).ToList();//只有继承Commond，才能添加到命令对象中
             if (!commands.Any())
             {
                 return;
             }
-            foreach (Type type in commands)
+            foreach (var command in commands)
             {
-                CommandAttribute[] attributes = (CommandAttribute[])type.GetCustomAttributes(typeof(CommandAttribute), true);
+                var attributes = (CommandAttribute[])command.GetCustomAttributes(typeof(CommandAttribute), true);
                 if (attributes.Length == 0) continue;
 
-                CommandAttribute groupAttribute = attributes[0];
+                var groupAttribute = attributes[0];
                 if (CommandMaps.ContainsKey(groupAttribute.Name))
                 {
                     M2Share.Logger.Error($"重复游戏命令: {groupAttribute.Name}");
                 }
-                Command gameCommand = (Command)Activator.CreateInstance(type);
+                var gameCommand = (GameCommand)Activator.CreateInstance(command);
                 if (gameCommand == null)
                 {
                     return;
                 }
-                if (customCommands.TryGetValue(groupAttribute.Name, out GameCmd customCommand))
+                if (customCommands.TryGetValue(groupAttribute.Name, out var customCommand))
                 {
                     groupAttribute.Command = groupAttribute.Command;
                     groupAttribute.Name = customCommand.CmdName;
-                    groupAttribute.nPermissionMax = (byte)customCommand.PerMissionMax;
-                    groupAttribute.nPermissionMin = (byte)customCommand.PerMissionMin;
+                    groupAttribute.PermissionMax = (byte)customCommand.PerMissionMax;
+                    groupAttribute.PermissionMin = (byte)customCommand.PerMissionMin;
                 }
                 MethodInfo methodInfo = null;
-                foreach (MethodInfo method in gameCommand.GetType().GetMethods())
+                foreach (var method in gameCommand.GetType().GetMethods())
                 {
-                    Attribute methodAttributes = method.GetCustomAttribute(typeof(ExecuteCommand), true);
+                    var methodAttributes = method.GetCustomAttribute(typeof(ExecuteCommand), true);
                     if (methodAttributes == null)
                     {
                         continue;
@@ -158,7 +152,7 @@ namespace GameSvr.GameCommand
             string output = string.Empty;
             bool found = false;
 
-            if (CommandMaps.TryGetValue(commandName, out Command commond))
+            if (CommandMaps.TryGetValue(commandName, out GameCommand commond))
             {
                 output = commond.Handle(parameters, playObject);
                 found = true;
@@ -187,7 +181,7 @@ namespace GameSvr.GameCommand
                 return;
             string output;
 
-            Command commond;
+            GameCommand commond;
             if (CommandMaps.TryGetValue(command, out commond))
             {
                 output = commond.Handle(parameters);
@@ -227,16 +221,16 @@ namespace GameSvr.GameCommand
         }
 
         [Command("commands", "列出可用的命令")]
-        public class CommandsCommandGroup : Command
+        public class CommandsCommandGroup : GameCommand
         {
             public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)
             {
                 string output = "Available commands: ";
-                List<Command> commandList = CommandMaps.Values.ToList();
-                foreach (Command pair in commandList)
+                List<GameCommand> commandList = CommandMaps.Values.ToList();
+                foreach (GameCommand pair in commandList)
                 {
-                    if (PlayObject != null && pair.GameCommand.nPermissionMin > PlayObject.Permission) continue;
-                    output += pair.GameCommand.Name + ", ";
+                    if (PlayObject != null && pair.Command.PermissionMin > PlayObject.Permission) continue;
+                    output += pair.Command.Name + ", ";
                 }
                 output = output[..^2] + ".";
                 return output + "\nType 'help <command>' to get help.";
@@ -244,7 +238,7 @@ namespace GameSvr.GameCommand
         }
 
         [Command("help", "帮助命令")]
-        public class HelpCommandGroup : Command
+        public class HelpCommandGroup : GameCommand
         {
             public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)
             {

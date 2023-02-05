@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 总在线数
     /// </summary>
     [Command("Total", "查看在线人数", "统计服务器在线人数", 10)]
-    public class TotalCommand : Command
+    public class TotalCommand : GameCommand
     {
         [ExecuteCommand]
         public static void Total(PlayObject PlayObject)

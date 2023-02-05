@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 此命令允许或禁止夫妻传送
     /// </summary>
     [Command("AllowDearRecall", "", 10)]
-    public class AllowDearRecallCommand : Command
+    public class AllowDearRecallCommand : GameCommand
     {
         [ExecuteCommand]
         public static void AllowDearRecall(string[] @Params, PlayObject PlayObject)

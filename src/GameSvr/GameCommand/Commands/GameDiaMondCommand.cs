@@ -3,7 +3,7 @@
 namespace GameSvr.GameCommand.Commands
 {
     [Command("GameDiaMond", "调整玩家金刚石", 10)]
-    public class GameDiaMondCommand : Command
+    public class GameDiaMondCommand : GameCommand
     {
         [ExecuteCommand]
         public static void GameDiaMond(string[] @Params, PlayObject PlayObject)

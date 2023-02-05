@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// ShowOpen
     /// </summary>
     [Command("ShowOpen", "", "", 10)]
-    public class ShowHumanUnitOpenCommand : Command
+    public class ShowHumanUnitOpenCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ShowOpen(string[] @params, PlayObject playObject)

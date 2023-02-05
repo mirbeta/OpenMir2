@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 设定怪物集中点
     /// </summary>
     [Command("MobPlace", "设定怪物集中点", "X  Y 怪物名称 怪物数量", 10)]
-    public class MobPlaceCommand : Command
+    public class MobPlaceCommand : GameCommand
     {
         [ExecuteCommand]
         public void MobPlace(string[] @Params, PlayObject PlayObject)
@@ -31,14 +31,14 @@ namespace GameSvr.GameCommand.Commands
             nY = (short)HUtil32.StrToInt(sY, 0);
             if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0)
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             Maps.Envirnoment MEnvir = M2Share.MapMgr.FindMap(M2Share.MissionMap);
             if (!M2Share.BoMission || MEnvir == null)
             {
                 PlayObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg("请先用命令" + this.GameCommand.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg("请先用命令" + this.Command.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (int i = 0; i < nCount; i++)

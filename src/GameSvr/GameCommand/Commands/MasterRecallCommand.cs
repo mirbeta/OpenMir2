@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。
     /// </summary>
     [Command("MasterRecall", "师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。", 0)]
-    public class MasterRecallCommand : Command
+    public class MasterRecallCommand : GameCommand
     {
         [ExecuteCommand]
         public static void MasterRecall(PlayObject PlayObject)

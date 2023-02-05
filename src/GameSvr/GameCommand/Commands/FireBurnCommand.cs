@@ -6,7 +6,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("FireBurn", "", 10)]
-    public class FireBurnCommand : Command
+    public class FireBurnCommand : GameCommand
     {
         [ExecuteCommand]
         public void FireBurn(string[] @Params, PlayObject PlayObject)
@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (nInt == 0 || nTime == 0 || nN == 0)
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, PlayObject.CurrX, PlayObject.CurrY, (byte)nInt, nTime, nN);

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定物品名称
     /// </summary>
     [Command("ChangeItemName", "调整指定物品名称", 10, Help = "物品编号 物品ID号 物品名称")]
-    public class ChangeItemNameCommand : Command
+    public class ChangeItemNameCommand : GameCommand
     {
         [ExecuteCommand]
         public void ChangeItemName(string[] @params, PlayObject PlayObject)
@@ -22,14 +22,14 @@ namespace GameSvr.GameCommand.Commands
             string sItemName = @params.Length > 2 ? @params[2] : "";
             if (sMakeIndex == "" || sItemIndex == "" || string.IsNullOrEmpty(sItemName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
             int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
             if (nMakeIndex <= 0 || nItemIndex < 0)
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))

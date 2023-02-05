@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("StartQuest", "", "问答名称", 10)]
-    public class StartQuestCommand : Command
+    public class StartQuestCommand : GameCommand
     {
         [ExecuteCommand]
         public void StartQuest(string[] @params, PlayObject PlayObject)
@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands
             string sQuestName = @params.Length > 0 ? @params[0] : "";
             if (sQuestName == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             M2Share.WorldEngine.SendQuestMsg(sQuestName);

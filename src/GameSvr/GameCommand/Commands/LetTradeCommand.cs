@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("Lettrade", "", "", 0)]
-    public class LetTradeCommand : Command
+    public class LetTradeCommand : GameCommand
     {
         [ExecuteCommand]
         public static void Lettrade(PlayObject playObject)

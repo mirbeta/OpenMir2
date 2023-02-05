@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
     /// 开始行会争霸赛
     /// </summary>
     [Command("StartContest", "开始行会争霸赛", 10)]
-    public class StartContestCommand : Command
+    public class StartContestCommand : GameCommand
     {
         [ExecuteCommand]
         public static void StartContest(PlayObject PlayObject)

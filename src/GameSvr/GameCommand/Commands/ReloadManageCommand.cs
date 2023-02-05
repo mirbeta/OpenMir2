@@ -5,7 +5,7 @@ using SystemModule.Enums;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("ReloadManage", "重新加载脚本", 10)]
-    public class ReloadManageCommand : Command
+    public class ReloadManageCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ReloadManage(PlayObject PlayObject)

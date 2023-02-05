@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 删除指定行会名称
     /// </summary>
     [Command("DelGuild", "删除指定行会名称", help: "行会名称", 10)]
-    public class DelGuildCommand : Command
+    public class DelGuildCommand : GameCommand
     {
         [ExecuteCommand]
         public void DelGuild(string[] @Params, PlayObject PlayObject)
@@ -25,7 +25,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (sGuildName == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (M2Share.GuildMgr.DelGuild(sGuildName))

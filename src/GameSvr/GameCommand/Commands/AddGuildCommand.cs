@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 创建行会
     /// </summary>
     [Command("AddGuild", "新建一个行会", "行会名称 掌门人名称", 10)]
-    public class AddGuildCommand : Command
+    public class AddGuildCommand : GameCommand
     {
         [ExecuteCommand]
         public void AddGuild(string[] @Params, PlayObject PlayObject)
@@ -17,8 +17,8 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            string sGuildName = @Params.Length > 0 ? @Params[0] : "";
-            string sGuildChief = @Params.Length > 1 ? @Params[1] : "";
+            var sGuildName = @Params.Length > 0 ? @Params[0] : "";
+            var sGuildChief = @Params.Length > 1 ? @Params[1] : "";
             if (M2Share.ServerIndex != 0)
             {
                 PlayObject.SysMsg("这个命令只能使用在主服务器上", MsgColor.Red, MsgType.Hint);
@@ -26,12 +26,12 @@ namespace GameSvr.GameCommand.Commands
             }
             if (string.IsNullOrEmpty(sGuildName) || sGuildChief == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boAddState = false;
-            PlayObject Human = M2Share.WorldEngine.GetPlayObject(sGuildChief);
-            if (Human == null)
+            var chiefObject = M2Share.WorldEngine.GetPlayObject(sGuildChief);
+            if (chiefObject == null)
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
                 return;
@@ -47,11 +47,11 @@ namespace GameSvr.GameCommand.Commands
             }
             if (boAddState)
             {
-                Human.MyGuild = M2Share.GuildMgr.MemberOfGuild(Human.ChrName);
-                if (Human.MyGuild != null)
+                chiefObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(chiefObject.ChrName);
+                if (chiefObject.MyGuild != null)
                 {
-                    Human.GuildRankName = Human.MyGuild.GetRankName(PlayObject, ref Human.GuildRankNo);
-                    Human.RefShowName();
+                    chiefObject.GuildRankName = chiefObject.MyGuild.GetRankName(PlayObject, ref chiefObject.GuildRankNo);
+                    chiefObject.RefShowName();
                 }
             }
         }

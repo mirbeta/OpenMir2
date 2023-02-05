@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家属性点
     /// </summary>
     [Command("BonuPoint", "调整指定玩家属性点", "人物名称 属性点数(不输入为查看点数)", 10)]
-    public class BonuPointCommand : Command
+    public class BonuPointCommand : GameCommand
     {
         [ExecuteCommand]
         public void BonuPoint(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             int nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
             if (string.IsNullOrEmpty(sHumName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);

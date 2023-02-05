@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 清除游戏中指定玩家复制物品
     /// </summary>
     [Command("ClearCopyItem", "清除游戏中指定玩家复制物品", "人物名称", 10)]
-    public class ClearCopyItemCommand : Command
+    public class ClearCopyItemCommand : GameCommand
     {
         [ExecuteCommand]
         public void ClearCopyItem(string[] @Params, PlayObject PlayObject)
@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
             string s14;
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject TargerObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

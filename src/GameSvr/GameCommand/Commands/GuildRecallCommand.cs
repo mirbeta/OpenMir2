@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 行会传送，行会掌门人可以将整个行会成员全部集中。
     /// </summary>
     [Command("GuildRecall", "行会传送，行会掌门人可以将整个行会成员全部集中。", 0)]
-    public class GuildRecallCommand : Command
+    public class GuildRecallCommand : GameCommand
     {
         [ExecuteCommand]
         public static void GuildRecall(PlayObject PlayObject)

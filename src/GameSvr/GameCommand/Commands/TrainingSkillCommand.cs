@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家技能等级
     /// </summary>
     [Command("TrainingSkill", "调整指定玩家技能等级", "人物名称  技能名称 修炼等级(0-3)", 10)]
-    public class TrainingSkillCommand : Command
+    public class TrainingSkillCommand : GameCommand
     {
         [ExecuteCommand]
         public void TrainingSkill(string[] @Params, PlayObject PlayObject)
@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
             UserMagic UserMagic;
             if (string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel <= 0)
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             nLevel = HUtil32._MIN(3, nLevel);

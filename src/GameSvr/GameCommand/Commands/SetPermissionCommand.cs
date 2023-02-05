@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家权限
     /// </summary>
     [Command("SetPermission", "调整指定玩家权限", "人物名称 权限等级(0 - 10)", 10)]
-    public class SetPermissionCommand : Command
+    public class SetPermissionCommand : GameCommand
     {
         [ExecuteCommand]
         public void SetPermission(string[] @Params, PlayObject PlayObject)
@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
             const string sOutFormatMsg = "[权限调整] {0} [{1} {2} -> {3}]";
             if (string.IsNullOrEmpty(sHumanName) || !(nPerission >= 0 && nPerission <= 10))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 退出行会
     /// </summary>
     [Command("EndGuild", "退出行会", 0)]
-    public class EndGuildCommand : Command
+    public class EndGuildCommand : GameCommand
     {
         [ExecuteCommand]
         public static void EndGuild(PlayObject PlayObject)

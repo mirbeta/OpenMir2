@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 调整指定玩家师傅名称
     /// </summary>
     [Command("ChangeMasterName", "调整指定玩家师傅名称", "人物名称 师徒名称(如果为 无 则清除)", 10)]
-    public class ChangeMasterNameCommand : Command
+    public class ChangeMasterNameCommand : GameCommand
     {
         [ExecuteCommand]
         public void ChangeMasterName(string[] @Params, PlayObject PlayObject)
@@ -22,7 +22,7 @@ namespace GameSvr.GameCommand.Commands
             string sIsMaster = @Params.Length > 2 ? @Params[2] : "";
             if (string.IsNullOrEmpty(sHumanName) || sMasterName == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

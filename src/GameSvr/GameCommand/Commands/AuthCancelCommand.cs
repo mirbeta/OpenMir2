@@ -6,7 +6,7 @@ namespace GameSvr.GameCommand.Commands
     /// 此命令允许公会取消联盟
     /// </summary>
     [Command("AuthCancel", "", 0)]
-    public class AuthCancelCommand : Command
+    public class AuthCancelCommand : GameCommand
     {
         [ExecuteCommand]
         public static void AuthCancel(string[] @params, PlayObject PlayObject)

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 此命令用于允许或禁止编组传送功能
     /// </summary>
     [Command("AllowGroupReCall", "此命令用于允许或禁止编组传送功能", 0)]
-    public class AllowGroupReCallCommand : Command
+    public class AllowGroupReCallCommand : GameCommand
     {
         [ExecuteCommand]
         public static void AllowGroupReCall(PlayObject PlayObject)

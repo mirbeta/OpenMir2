@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 从禁言列表中删除指定玩家
     /// </summary>
     [Command("EnableSendMsg", "从禁言列表中删除指定玩家", "人物名称", 10)]
-    public class EnableSendMsgCommand : Command
+    public class EnableSendMsgCommand : GameCommand
     {
         [ExecuteCommand]
         public void EnableSendMsg(string[] @params, PlayObject PlayObject)
@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (int i = M2Share.DisableSendMsgList.Count - 1; i >= 0; i--)

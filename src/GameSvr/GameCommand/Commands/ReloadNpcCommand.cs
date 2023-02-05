@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands
     /// 重新加载当前12格范围内NPC
     /// </summary>
     [Command("ReloadNpc", "重新加载当前9格范围内NPC", 10)]
-    public class ReloadNpcCommand : Command
+    public class ReloadNpcCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ReloadNpc(string[] @Params, PlayObject PlayObject)

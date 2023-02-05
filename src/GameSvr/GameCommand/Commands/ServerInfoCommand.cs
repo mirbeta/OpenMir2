@@ -4,7 +4,7 @@ using System.Text;
 namespace GameSvr.GameCommand.Commands
 {
     [Command("ServerInfo", "查看服务器信息", 10)]
-    public class ServerInfoCommand : Command
+    public class ServerInfoCommand : GameCommand
     {
         [ExecuteCommand]
         public static void ServerInfo(string[] @Params, PlayObject PlayObject)

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 添加IP地址到禁止登录列表
     /// </summary>
     [Command("DenyIPaddrLogon", "添加IP地址到禁止登录列表", "IP地址 是否永久封(0,1)", 10)]
-    public class DenyIPaddrLogonCommand : Command
+    public class DenyIPaddrLogonCommand : GameCommand
     {
         [ExecuteCommand]
         public void DenyIPaddrLogon(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             string sFixDeny = @Params.Length > 1 ? @Params[3] : "";
             if (sIPaddr == "")
             {
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             try

@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 此命令用于开始祈祷生效宝宝叛变
     /// </summary>
     [Command("SpirtStart", "此命令用于开始祈祷生效宝宝叛变", 10)]
-    public class SpirtStartCommand : Command
+    public class SpirtStartCommand : GameCommand
     {
         [ExecuteCommand]
         public static void SpirtStart(string[] @Params, PlayObject PlayObject)

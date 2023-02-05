@@ -8,7 +8,7 @@ namespace GameSvr.GameCommand.Commands
     /// 查看行会战的得分数
     /// </summary>
     [Command("ContestPoint", "查看行会战的得分数", "行会名称", 10)]
-    public class ContestPointCommand : Command
+    public class ContestPointCommand : GameCommand
     {
         [ExecuteCommand]
         public void ContestPoint(string[] @Params, PlayObject PlayObject)
@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands
             if (sGuildName == "" || sGuildName != "" && sGuildName[0] == '?')
             {
                 PlayObject.SysMsg("查看行会战的得分数。", MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg(GameCommand.ShowHelp, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             Guild.GuildInfo Guild = M2Share.GuildMgr.FindGuild(sGuildName);
