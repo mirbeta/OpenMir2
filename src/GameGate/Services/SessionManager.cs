@@ -74,6 +74,10 @@ namespace GameGate.Services
 
         public ClientSession GetSession(byte serviceId, int sessionId)
         {
+            if (_sessionMap[serviceId] == null)
+            {
+                return null;
+            }
             return _sessionMap[serviceId][sessionId];
         }
 
