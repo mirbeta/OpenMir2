@@ -114,8 +114,8 @@ namespace GameSvr.GameCommand
                 }
                 commandAttribute.Command = commandAttribute.Command;
                 commandAttribute.Name = customCommand.CmdName;
-                commandAttribute.PermissionMax = (byte)customCommand.PerMissionMax;
-                commandAttribute.PermissionMin = (byte)customCommand.PerMissionMin;
+                commandAttribute.PermissionMax = customCommand.PerMissionMax;
+                commandAttribute.PermissionMin = customCommand.PerMissionMin;
                 var executeMethod = gameCommand.GetType().GetMethod("Execute");
                 if (executeMethod == null)
                 {

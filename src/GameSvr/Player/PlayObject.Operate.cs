@@ -1333,7 +1333,7 @@ namespace GameSvr.Player
                         else
                         {
                             nC = 5; // '对方不允许加入行会。'
-                            playObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + CommandMgr.GameCommands.Letguild.CmdName + ']', MsgColor.Red, MsgType.Hint);
+                            playObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + CommandMgr.GameCommands.LetGuild.CmdName + ']', MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else

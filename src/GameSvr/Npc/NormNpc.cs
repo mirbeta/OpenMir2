@@ -1011,10 +1011,10 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$CMD_LETTRADE>", CommandMgr.GameCommands.LetTrade.CmdName);
                     return;
                 case "$CMD_LETGUILD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETGUILD>", CommandMgr.GameCommands.Letguild.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETGUILD>", CommandMgr.GameCommands.LetGuild.CmdName);
                     return;
                 case "$CMD_ENDGUILD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.Endguild.CmdName);
+                    sMsg = ReplaceVariableText(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.EndGuild.CmdName);
                     return;
                 case "$CMD_BANGUILDCHAT":
                     sMsg = ReplaceVariableText(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.GameCommands.BanGuildChat.CmdName);

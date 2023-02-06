@@ -204,7 +204,7 @@ namespace GameSvr
         public static int DecLimit = 20;
         public static byte GameTime = 0;
         public static char GMRedMsgCmd = '!';
-        public static int GMREDMSGCMD = 6;
+        public static byte GMREDMSGCMD = 6;
         public static int SendOnlineTick = 0;
         public static int SpiritMutinyTick = 0;
         public static int[] OldNeedExps = new int[Grobal2.MaxChangeLevel];

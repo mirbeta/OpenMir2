@@ -62,11 +62,11 @@ namespace GameSvr.GameCommand
         [CommandHandle(typeof(ChangeSalveStatusCommand))]
         public readonly GameCmd Rest;
         [CommandHandle(typeof(EndGuildCommand))]
-        public readonly GameCmd Endguild;
+        public readonly GameCmd EndGuild;
         [CommandHandle(typeof(AuthallyCommand))]
         public readonly GameCmd Authally;
         [CommandHandle(typeof(LetGuildCommand))]
-        public readonly GameCmd Letguild;
+        public readonly GameCmd LetGuild;
         [CommandHandle(typeof(BanGuildChatCommand))]
         public readonly GameCmd BanGuildChat;
         [CommandHandle(typeof(LetTradeCommand))]
@@ -86,7 +86,7 @@ namespace GameSvr.GameCommand
         [CommandHandle(typeof(BonuPointCommand))]
         public readonly GameCmd BonusPoint;
         [CommandHandle(typeof(ShowSbkGoldCommand))]
-        public readonly GameCmd SabukwallGold;
+        public readonly GameCmd SabukWallGold;
         [CommandHandle(typeof(MapInfoCommand))]
         public readonly GameCmd Info;
         [CommandHandle(typeof(SetPassWordCommand))]
@@ -118,7 +118,7 @@ namespace GameSvr.GameCommand
         [CommandHandle(typeof(DataCommand))]
         public readonly GameCmd Data;
         [CommandHandle(typeof(PrvMsgCommand))]
-        public readonly GameCmd Prvmsg;
+        public readonly GameCmd PrvMsg;
         [CommandHandle(typeof(UserMoveXYCommand))]
         public readonly GameCmd UserMove;
         [CommandHandle(typeof(AllowGroupReCallCommand))]
@@ -178,7 +178,7 @@ namespace GameSvr.GameCommand
         [CommandHandle(typeof(ChangeLevelCommand))]
         public readonly GameCmd Level;
         [CommandHandle(typeof(ShowHumanFlagCommand))]
-        public readonly GameCmd Showflag;
+        public readonly GameCmd ShowFlag;
         [CommandHandle(typeof(MobCommand))]
         public readonly GameCmd Mob;
         [CommandHandle(typeof(MobNpcCommand))]
@@ -200,7 +200,7 @@ namespace GameSvr.GameCommand
         [CommandHandle(typeof(PKpointCommand))]
         public readonly GameCmd PkPoint;
         [CommandHandle(typeof(IncPkPointCommand))]
-        public readonly GameCmd Incpkpoint;
+        public readonly GameCmd IncpkPoint;
         [CommandHandle(typeof(HungerCommand))]
         public readonly GameCmd Hunger;
         [CommandHandle(typeof(HairCommand))]
@@ -357,12 +357,12 @@ namespace GameSvr.GameCommand
         public GameCommands()
         {
             Data = new GameCmd();
-            Prvmsg = new GameCmd();
+            PrvMsg = new GameCmd();
             AllowMsg = new GameCmd();
             Letshout = new GameCmd();
             LetTrade = new GameCmd();
-            Letguild = new GameCmd();
-            Endguild = new GameCmd();
+            LetGuild = new GameCmd();
+            EndGuild = new GameCmd();
             BanGuildChat = new GameCmd();
             Authally = new GameCmd();
             Auth = new GameCmd();
@@ -413,10 +413,10 @@ namespace GameSvr.GameCommand
             ObServer = new GameCmd();
             SueprMan = new GameCmd();
             Level = new GameCmd();
-            SabukwallGold = new GameCmd();
+            SabukWallGold = new GameCmd();
             Recall = new GameCmd();
             Regoto = new GameCmd();
-            Showflag = new GameCmd();
+            ShowFlag = new GameCmd();
             ShowOpen = new GameCmd();
             ShowUnit = new GameCmd();
             Attack = new GameCmd();
@@ -434,7 +434,7 @@ namespace GameSvr.GameCommand
             Ball = new GameCmd();
             FreePenalty = new GameCmd();
             PkPoint = new GameCmd();
-            Incpkpoint = new GameCmd();
+            IncpkPoint = new GameCmd();
             ChangeLuck = new GameCmd();
             Hunger = new GameCmd();
             Hair = new GameCmd();
@@ -560,10 +560,10 @@ namespace GameSvr.GameCommand
         /// <summary>
         /// 最小权限
         /// </summary>
-        public int PerMissionMin { get; set; }
+        public byte PerMissionMin { get; set; }
         /// <summary>
         /// 最大权限
         /// </summary>
-        public int PerMissionMax { get; set; }
+        public byte PerMissionMax { get; set; }
     }
 }
