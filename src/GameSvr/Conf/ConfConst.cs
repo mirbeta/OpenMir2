@@ -2,7 +2,7 @@ namespace GameSvr.Conf
 {
     public static class ConfConst
     {
-        public const string ConfigFileName = "server.conf";
+        public const string ServerFileName = "server.conf";
         public const string ExpConfigFileName = "exps.conf";
         public const string CommandFileName = "command.conf";
         public const string StringFileName = "string.conf";

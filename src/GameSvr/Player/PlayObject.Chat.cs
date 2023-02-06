@@ -404,7 +404,7 @@ namespace GameSvr.Player
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam7, new[] { ' ', ':', ',', '\t' });
                 }
-                if (CommandMgr.GetInstance().Execute(sData, this))
+                if (CommandMgr.Execute(sData, this))
                 {
                     return;
                 }

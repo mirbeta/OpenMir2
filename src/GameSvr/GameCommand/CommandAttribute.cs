@@ -107,11 +107,11 @@
     /// 游戏命令注册实现Attribute
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
-    public class CommandHandleAttribute : Attribute
+    public class RegisterCommandAttribute : Attribute
     {
         public readonly Type HandleType;
 
-        public CommandHandleAttribute(Type commond)
+        public RegisterCommandAttribute(Type commond)
         {
             HandleType = commond;
         }

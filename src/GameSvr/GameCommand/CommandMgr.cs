@@ -1,43 +1,28 @@
 ﻿using GameSvr.Conf;
 using GameSvr.Player;
 using NLog;
-using System.ComponentModel;
 using System.Reflection;
 using SystemModule.Data;
 using SystemModule.Enums;
 
 namespace GameSvr.GameCommand
 {
-    public class CommandMgr
+    public static class CommandMgr
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly GameCmdConf CommandConf;
-        public static readonly GameCommands GameCommands = new GameCommands();
-        private static readonly Dictionary<string, GameCommand> CommandMaps = new Dictionary<string, GameCommand>(StringComparer.OrdinalIgnoreCase);
-        private static CommandMgr instance = null;
-        private static readonly object locker = new object();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly GameCmdConf CommandConf;
+        public static readonly GameCommands GameCommands = new();
+        private static readonly Dictionary<string, GameCommand> CommandMaps = new(StringComparer.OrdinalIgnoreCase);
 
-        private CommandMgr()
+        static CommandMgr()
         {
             CommandConf = new GameCmdConf(Path.Combine(M2Share.BasePath, ConfConst.CommandFileName));
         }
 
-        public static CommandMgr GetInstance()
-        {
-            lock (locker)
-            {
-                if (instance == null)
-                {
-                    instance = new CommandMgr();
-                }
-            }
-            return instance;
-        }
-
-        public void RegisterCommand()
+        public static void RegisterCommand()
         {
             CommandConf.LoadConfig();
-            Dictionary<string, GameCmd> customCommandMap = RegisterCustomCommand();
+            var customCommandMap = RegisterCustomCommand();
             if (customCommandMap == null)
             {
                 _logger.Info("读取自定义命令配置失败.");
@@ -50,9 +35,9 @@ namespace GameSvr.GameCommand
         /// <summary>
         /// 注册自定义命令
         /// </summary>
-        private Dictionary<string, GameCmd> RegisterCustomCommand()
+        private static Dictionary<string, GameCmd> RegisterCustomCommand()
         {
-            FieldInfo[] commands = GameCommands.GetType().GetFields();
+            var commands = GameCommands.GetType().GetFields();
             if (commands.Length <= 0)
             {
                 _logger.Info("获取游戏命令类型失败,请确认游戏命令是否注册.");
@@ -66,9 +51,8 @@ namespace GameSvr.GameCommand
                 {
                     continue;
                 }
-                var commandAttribute = (CommandHandleAttribute)commands[i].GetCustomAttribute(typeof(CommandHandleAttribute), true);
-                if (commandAttribute == null) continue;
-                var commandInfo = (CommandAttribute)commandAttribute.HandleType.GetCustomAttribute(typeof(CommandAttribute), true);
+                var commandAttribute = (RegisterCommandAttribute)commands[i].GetCustomAttribute(typeof(RegisterCommandAttribute), true);
+                var commandInfo = (CommandAttribute)commandAttribute?.HandleType.GetCustomAttribute(typeof(CommandAttribute), true);
                 if (commandInfo == null)
                 {
                     continue;
@@ -88,7 +72,7 @@ namespace GameSvr.GameCommand
         /// </summary>
         private static void RegisterCommandGroups(IReadOnlyDictionary<string, GameCmd> customCommands)
         {
-            var commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(GameCommand))).ToList();//只有继承Commond，才能添加到命令对象中
+            var commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(GameCommand))).ToList();//只有继承GameCommand，才添加到命令Map中
             if (!commands.Any())
             {
                 return;
@@ -107,19 +91,17 @@ namespace GameSvr.GameCommand
                 {
                     continue;
                 }
-                if (!customCommands.TryGetValue(commandAttribute.Name, out var customCommand))
+                if (customCommands.TryGetValue(commandAttribute.Name, out var customCommand))
                 {
-                    M2Share.Logger.Error($"获取命令:{commandAttribute.Name}失败.");
-                    continue;
+                    commandAttribute.Command = commandAttribute.Name;
+                    commandAttribute.Name = customCommand.CmdName;
+                    commandAttribute.PermissionMax = customCommand.PerMissionMax;
+                    commandAttribute.PermissionMin = customCommand.PerMissionMin;
                 }
-                commandAttribute.Command = commandAttribute.Command;
-                commandAttribute.Name = customCommand.CmdName;
-                commandAttribute.PermissionMax = customCommand.PerMissionMax;
-                commandAttribute.PermissionMin = customCommand.PerMissionMin;
                 var executeMethod = gameCommand.GetType().GetMethod("Execute");
                 if (executeMethod == null)
                 {
-                    M2Share.Logger.Error($"游戏命令:{customCommand.CmdName}未注册执行方法.");
+                    M2Share.Logger.Error($"游戏命令:{customCommand.CmdName}未注册命令执行方法.");
                     continue;
                 }
                 gameCommand.Register(commandAttribute, executeMethod);
@@ -133,7 +115,7 @@ namespace GameSvr.GameCommand
         /// <param name="line">命令字符串</param>
         /// <param name="playObject">命令对象</param>
         /// <returns><see cref="bool"/></returns>
-        public bool Execute(string line, PlayObject playObject)
+        public static bool Execute(string line, PlayObject playObject)
         {
             if (playObject == null)
                 throw new ArgumentException("PlayObject");
@@ -163,7 +145,7 @@ namespace GameSvr.GameCommand
             return found;
         }
 
-        public void ExecCmd(string line)
+        public static void ExecCmd(string line)
         {
             string command;
             string parameters;
@@ -199,7 +181,7 @@ namespace GameSvr.GameCommand
             command = string.Empty;
             parameters = string.Empty;
 
-            if (line == string.Empty)
+            if (string.IsNullOrEmpty(line))
                 return false;
 
             if (line[0] != '@') // 检查命令首字母是否为指定的字符串
@@ -217,9 +199,9 @@ namespace GameSvr.GameCommand
         {
             public void Execute()
             {
-                
+
             }
-            
+
             public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)
             {
                 string output = "Available commands: ";
@@ -239,7 +221,7 @@ namespace GameSvr.GameCommand
         {
             public void Execute()
             {
-                
+
             }
 
             public override string Fallback(string[] parameters = null, PlayObject PlayObject = null)

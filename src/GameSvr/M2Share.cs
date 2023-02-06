@@ -219,7 +219,7 @@ namespace GameSvr
         static M2Share()
         {
             BasePath = AppContext.BaseDirectory;
-            ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.ConfigFileName));
+            ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.ServerFileName));
             StringConf = new StringConf(Path.Combine(BasePath, ConfConst.StringFileName));
             ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.ExpConfigFileName));
             GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.GlobalConfigFileName));

@@ -156,8 +156,8 @@ namespace GameSvr.Conf
             gameCommands.ChangeJob.PerMissionMin = ReadWriteByte("Permission", "ChangeJob", gameCommands.ChangeJob.PerMissionMin);
             gameCommands.ChangeGender.CmdName = ReadWriteString("Command", "ChangeGender", gameCommands.ChangeGender.CmdName);
             gameCommands.ChangeGender.PerMissionMin = ReadWriteByte("Permission", "ChangeGender", gameCommands.ChangeGender.PerMissionMin);
-            gameCommands.Namecolor.CmdName = ReadWriteString("Command", "NameColor", gameCommands.Namecolor.CmdName);
-            gameCommands.Namecolor.PerMissionMin = ReadWriteByte("Permission", "NameColor", gameCommands.Namecolor.PerMissionMin);
+            gameCommands.NameColor.CmdName = ReadWriteString("Command", "NameColor", gameCommands.NameColor.CmdName);
+            gameCommands.NameColor.PerMissionMin = ReadWriteByte("Permission", "NameColor", gameCommands.NameColor.PerMissionMin);
             gameCommands.Mission.CmdName = ReadWriteString("Command", "Mission", gameCommands.Mission.CmdName);
             gameCommands.Mission.PerMissionMin = ReadWriteByte("Permission", "Mission", gameCommands.Mission.PerMissionMin);
             gameCommands.MobPlace.CmdName = ReadWriteString("Command", "MobPlace", gameCommands.MobPlace.CmdName);
@@ -229,8 +229,8 @@ namespace GameSvr.Conf
             gameCommands.AddGold.PerMissionMin = ReadWriteByte("Permission", "AddGold", gameCommands.AddGold.PerMissionMin);
             gameCommands.DelGameGold.CmdName = ReadWriteString("Command", "DelGameGold", gameCommands.DelGameGold.CmdName);
             gameCommands.DelGameGold.PerMissionMin = ReadWriteByte("Permission", "DelGameGold", gameCommands.DelGameGold.PerMissionMin);
-            gameCommands.AddGameGold.CmdName = ReadWriteString("Command", "AddGameGold", gameCommands.AddGameGold.CmdName);
-            gameCommands.AddGameGold.PerMissionMin = ReadWriteByte("Permission", "AddGameGold", gameCommands.AddGameGold.PerMissionMin);
+            gameCommands.AddGameGold.CmdName = ReadWriteString("Command", "AddGamePoint", gameCommands.AddGameGold.CmdName);
+            gameCommands.AddGameGold.PerMissionMin = ReadWriteByte("Permission", "AddGamePoint", gameCommands.AddGameGold.PerMissionMin);
             gameCommands.GameGold.CmdName = ReadWriteString("Command", "GameGold", gameCommands.GameGold.CmdName);
             gameCommands.GameGold.PerMissionMin = ReadWriteByte("Permission", "GameGold", gameCommands.GameGold.PerMissionMin);
             gameCommands.GamePoint.CmdName = ReadWriteString("Command", "GamePoint", gameCommands.GamePoint.CmdName);
@@ -265,8 +265,8 @@ namespace GameSvr.Conf
             gameCommands.ReaLive.PerMissionMin = ReadWriteByte("Permission", "ReAlive", gameCommands.ReaLive.PerMissionMin);
             gameCommands.AdjuestLevel.CmdName = ReadWriteString("Command", "AdjuestTLevel", gameCommands.AdjuestLevel.CmdName);
             gameCommands.AdjuestLevel.PerMissionMin = ReadWriteByte("Permission", "AdjuestTLevel", gameCommands.AdjuestLevel.PerMissionMin);
-            gameCommands.AdjuestExp.CmdName = ReadWriteString("Command", "AdjuestTExp", gameCommands.AdjuestExp.CmdName);
-            gameCommands.AdjuestExp.PerMissionMin = ReadWriteByte("Permission", "AdjuestTExp", gameCommands.AdjuestExp.PerMissionMin);
+            gameCommands.AdjuestExp.CmdName = ReadWriteString("Command", "AdjuestExp", gameCommands.AdjuestExp.CmdName);
+            gameCommands.AdjuestExp.PerMissionMin = ReadWriteByte("Permission", "AdjuestExp", gameCommands.AdjuestExp.PerMissionMin);
             gameCommands.AddGuild.CmdName = ReadWriteString("Command", "AddGuild", gameCommands.AddGuild.CmdName);
             gameCommands.AddGuild.PerMissionMin = ReadWriteByte("Permission", "AddGuild", gameCommands.AddGuild.PerMissionMin);
             gameCommands.DelGuild.CmdName = ReadWriteString("Command", "DelGuild", gameCommands.DelGuild.CmdName);
@@ -279,8 +279,8 @@ namespace GameSvr.Conf
             gameCommands.Addtoitemevent.PerMissionMin = ReadWriteByte("Permission", "AddToItemEvent", gameCommands.Addtoitemevent.PerMissionMin);
             gameCommands.Addtoitemeventaspieces.CmdName = ReadWriteString("Command", "AddToItemEventAspieces", gameCommands.Addtoitemeventaspieces.CmdName);
             gameCommands.Addtoitemeventaspieces.PerMissionMin = ReadWriteByte("Permission", "AddToItemEventAspieces", gameCommands.Addtoitemeventaspieces.PerMissionMin);
-            gameCommands.Itemeventlist.CmdName = ReadWriteString("Command", "ItemEventList", gameCommands.Itemeventlist.CmdName);
-            gameCommands.Itemeventlist.PerMissionMin = ReadWriteByte("Permission", "ItemEventList", gameCommands.Itemeventlist.PerMissionMin);
+            gameCommands.ItemEventList.CmdName = ReadWriteString("Command", "ItemEventList", gameCommands.ItemEventList.CmdName);
+            gameCommands.ItemEventList.PerMissionMin = ReadWriteByte("Permission", "ItemEventList", gameCommands.ItemEventList.PerMissionMin);
             gameCommands.Startinggiftno.CmdName = ReadWriteString("Command", "StartIngGiftNO", gameCommands.Startinggiftno.CmdName);
             gameCommands.Startinggiftno.PerMissionMin = ReadWriteByte("Permission", "StartIngGiftNO", gameCommands.Startinggiftno.PerMissionMin);
             gameCommands.Deleteallitemevent.CmdName = ReadWriteString("Command", "DeleteAllItemEvent", gameCommands.Deleteallitemevent.CmdName);

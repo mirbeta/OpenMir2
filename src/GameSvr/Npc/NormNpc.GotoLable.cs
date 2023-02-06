@@ -1949,13 +1949,13 @@ namespace GameSvr.Npc
                         switch (QuestActionInfo.nParam1)
                         {
                             case 1:
-                                CommandMgr.GetInstance().Execute("ChangeAdminMode", PlayObject);
+                                CommandMgr.Execute("ChangeAdminMode", PlayObject);
                                 break;
                             case 2:
-                                CommandMgr.GetInstance().Execute("ChangeSuperManMode", PlayObject);
+                                CommandMgr.Execute("ChangeSuperManMode", PlayObject);
                                 break;
                             case 3:
-                                CommandMgr.GetInstance().Execute("ChangeObMode", PlayObject);
+                                CommandMgr.Execute("ChangeObMode", PlayObject);
                                 break;
                             default:
                                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sCHANGEMODE);
@@ -2521,12 +2521,12 @@ namespace GameSvr.Npc
                 btStrLabel = 0;
             }
             PlayObject.ValLabel = (byte)btStrLabel;
-            int btType = QuestActionInfo.nParam2;
+            var btType = (byte)QuestActionInfo.nParam2;
             if (btType > 3)
             {
                 btType = 0;
             }
-            PlayObject.ValType = (byte)btType;
+            PlayObject.ValType = btType;
             int btLen = HUtil32._MAX(1, QuestActionInfo.nParam3);
             PlayObject.GotoNpcLabel = QuestActionInfo.sParam4;
             string sHint = QuestActionInfo.sParam5;

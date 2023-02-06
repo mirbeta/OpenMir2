@@ -358,7 +358,7 @@ namespace GameSvr.Planes
             if (whostr != "")
             {
                 //PlayObject.CmdShutup(Settings.g_GameCommand.SHUTUP, whostr, minstr);
-                CommandMgr.GetInstance().Execute("Shutup", PlayObject);
+                CommandMgr.Execute("Shutup", PlayObject);
             }
         }
 
