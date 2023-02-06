@@ -463,7 +463,6 @@ namespace GameSvr.Actor
         /// 走路间隔
         /// </summary>
         protected int WalkTick;
-        protected bool NameColorChanged;
         /// <summary>
         /// 走路速度
         /// </summary>

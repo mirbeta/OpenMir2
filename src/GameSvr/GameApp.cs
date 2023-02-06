@@ -262,8 +262,6 @@ namespace GameSvr
                 M2Share.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
                 M2Share.StartReady = true;
-                _logger.Info(Settings.Version);
-                _logger.Info(Settings.UpDateTime);
             }
             catch (Exception ex)
             {

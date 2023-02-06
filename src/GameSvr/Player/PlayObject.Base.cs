@@ -207,6 +207,7 @@ namespace GameSvr.Player
         /// 人物攻击变色时间长度
         /// </summary>
         public int PvpNameColorTick;
+        protected bool NameColorChanged;
         /// <summary>
         /// 是否在开行会战
         /// </summary>
@@ -391,10 +392,6 @@ namespace GameSvr.Player
         /// 魔法攻击间隔时间
         /// </summary>
         public int MagicAttackInterval;
-        /// <summary>
-        /// 攻击时间
-        /// </summary>
-        public int AttackTick;
         /// <summary>
         /// 人物跑动时间
         /// </summary>

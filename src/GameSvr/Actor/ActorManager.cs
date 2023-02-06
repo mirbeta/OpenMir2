@@ -6,23 +6,6 @@ using SystemModule.Enums;
 
 namespace GameSvr.Actor
 {
-    public class ProductIdComparer : IEqualityComparer<int>
-    {
-        public bool Equals(int x, int y)
-        {
-            if (x == null)
-                return y == null;
-            return x == y;
-        }
-
-        public int GetHashCode(int obj)
-        {
-            if (obj == null)
-                return 0;
-            return obj.GetHashCode();
-        }
-    }
-
     /// <summary>
     /// 精灵管理
     /// </summary>

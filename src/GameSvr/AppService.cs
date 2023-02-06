@@ -36,27 +36,39 @@ namespace GameSvr
                 _application.ShowHelp();
                 return 0;
             });
+            _application.Command("reloadconf", command =>
+            {
+                command.Description = "重新读取配置文件";
+                command.OnExecute(() =>
+                {
+                    Console.WriteLine("重新读取所有配置文件");
+                });
+            });
             _application.Command("save", command =>
             {
+                command.Description = "立即保存游戏数据";
                 command.OnExecute(SavePlayer);
             });
-            _application.Command("s", command =>
+            _application.Command("gamestatus", command =>
             {
+                command.Description = "查看游戏网关状况";
                 command.OnExecuteAsync(async (cancellationToken) =>
                 {
-                    await ShowServerStatus(cancellationToken);
+                    await ShowGameStatus(cancellationToken);
                 });
             });
             _application.Command("exit", command =>
             {
+                command.Description = "停止游戏服务";
                 command.OnExecute(() =>
                 {
                     _appLifetime.StopApplication();
                     return 0;
                 });
             });
-            _application.Command("q", command =>
+            _application.Command("quit", command =>
             {
+                command.Description = "退出程序";
                 command.OnExecute(() =>
                 {
                     Exit();
@@ -65,6 +77,7 @@ namespace GameSvr
             });
             _application.Command("status", command =>
             {
+                command.Description = "查看系统状态";
                 command.OnExecute(() =>
                 {
                     ShowWordStatus(stoppingToken);
@@ -271,7 +284,7 @@ namespace GameSvr
                 });
         }
 
-        private static Task ShowServerStatus(CancellationToken cancellationToken)
+        private static Task ShowGameStatus(CancellationToken cancellationToken)
         {
             //GateShare.ShowLog = false;
             //_timer = new PeriodicTimer(TimeSpan.FromSeconds(2));

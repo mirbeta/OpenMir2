@@ -1,5 +1,4 @@
-﻿using GameSvr.Actor;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
@@ -85,13 +84,6 @@ namespace GameSvr
                 Color = Color.Aqua
             };
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
-            sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
-            sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
-            sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-            Markup markup = new Markup(sb.ToString());
-
             table.AddColumn(new TableColumn("Two"));
 
             Table rightTable = new Table()
@@ -106,7 +98,9 @@ namespace GameSvr
             table.AddRow(rightTable);
 
             AnsiConsole.Write(table);
-            AnsiConsole.WriteLine();
+
+            AnsiConsole.Write(new Rule($"[green3] Free open source, OpenMir2 creates unlimited possibilities.[/]").RuleStyle("grey").LeftJustified());
+            AnsiConsole.Write(new Rule($"[green3] Version:{Settings.Version} UpdateTime:{Settings.UpDateTime}[/]").RuleStyle("grey").LeftJustified());
         }
 
         public override void Dispose()

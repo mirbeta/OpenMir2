@@ -13,7 +13,7 @@ namespace GameSvr.Player
             Ident = Grobal2.GM_DATA
         };
 
-        internal void SetSocketHead()
+        internal void SetSocket()
         {
             messageHead.Socket = SocketId;
             messageHead.SessionId = SocketIdx;

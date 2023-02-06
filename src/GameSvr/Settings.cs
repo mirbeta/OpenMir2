@@ -25,8 +25,8 @@
         public const string BELTNAME = "腰带";
         public const string BOOTSNAME = "鞋子";
         public const string CHARMNAME = "宝石";
-        public const string Version = "引擎版本: 1.00 Build 20161001";
-        public const string UpDateTime = "更新日期: 2016/10/01";
+        public const string Version = "1.00 Build 20230206";
+        public const string UpDateTime = "2023/02/06";
 
         public static string ClientSoftVersionError = "游戏版本错误!!!";
         public static string DownLoadNewClientSoft = "请到网站上下载最新版本游戏客户端软件。";
