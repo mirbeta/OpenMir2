@@ -52,13 +52,13 @@ namespace MakePlayer.Cliens
         public bool m_boLogin = false;
         public long m_dwSayTick = 0;
         private Action? FNotifyEvent = null;
-        public readonly ClientScoket ClientSocket;
+        public readonly ScoketClient ClientSocket;
         private readonly ClientManager _clientManager;
 
         public PlayClient(ClientManager clientManager)
         {
             SessionId = string.Empty;
-            ClientSocket = new ClientScoket();
+            ClientSocket = new ScoketClient();
             ClientSocket.OnConnected += SocketConnect;
             ClientSocket.OnDisconnected += SocketDisconnect;
             ClientSocket.OnReceivedData += SocketRead;

@@ -12,13 +12,13 @@ namespace GameSvr.Services
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int _dwClearEmptySessionTick;
         private readonly IList<PlayerSession> _sessionList;
-        private readonly ClientScoket _clientScoket;
+        private readonly ScoketClient _clientScoket;
 
         public AccountService()
         {
             _sessionList = new List<PlayerSession>();
             M2Share.Config.boIDSocketConnected = false;
-            _clientScoket = new ClientScoket(new IPEndPoint(IPAddress.Parse(M2Share.Config.sIDSAddr), M2Share.Config.nIDSPort));
+            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.sIDSAddr), M2Share.Config.nIDSPort));
             _clientScoket.OnConnected += IDSocketConnect;
             _clientScoket.OnDisconnected += IDSocketDisconnect;
             _clientScoket.OnError += IDSocketError;

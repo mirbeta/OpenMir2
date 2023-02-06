@@ -13,7 +13,7 @@ namespace GameSvr.Planes
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private string sRecvMsg = string.Empty;
-        private readonly ClientScoket _msgClient;
+        private readonly ScoketClient _msgClient;
         private readonly PlanesMessage _groupMessageHandle;
 
         private static PlanesClient instance;
@@ -32,7 +32,7 @@ namespace GameSvr.Planes
 
         private PlanesClient()
         {
-            _msgClient = new ClientScoket(new IPEndPoint(IPAddress.Parse(M2Share.Config.MsgSrvAddr), M2Share.Config.MsgSrvPort));
+            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.MsgSrvAddr), M2Share.Config.MsgSrvPort));
             _msgClient.OnConnected += MsgClientConnect;
             _msgClient.OnReceivedData += MsgClientRead;
             _msgClient.OnError += MsgClientError;

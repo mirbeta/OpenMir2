@@ -20,7 +20,7 @@ namespace SelGate.Services
         /// <summary>
         /// Socket客户端
         /// </summary>
-        private readonly ClientScoket _clientSocket;
+        private readonly ScoketClient _clientSocket;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>
@@ -75,7 +75,7 @@ namespace SelGate.Services
             _logger = logger;
             SessionArray = new TSessionInfo[MaxSession];
             _sessionManager = sessionManager;
-            _clientSocket = new ClientScoket(new IPEndPoint(IPAddress.Parse(serverAddr), serverPort), 512);
+            _clientSocket = new ScoketClient(new IPEndPoint(IPAddress.Parse(serverAddr), serverPort), 512);
             _clientSocket.OnConnected += ClientSocketConnect;
             _clientSocket.OnDisconnected += ClientSocketDisconnect;
             _clientSocket.OnReceivedData += ClientSocketRead;

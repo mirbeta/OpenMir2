@@ -15,7 +15,7 @@ namespace DBSvr.Services
     public class LoginSessionServer
     {
         private readonly MirLogger _logger;
-        private readonly ClientScoket _clientScoket;
+        private readonly ScoketClient _clientScoket;
         private readonly IList<GlobaSessionInfo> _globaSessionList = null;
         private readonly DBSvrConf _conf;
         private string _sockMsg = string.Empty;
@@ -24,7 +24,7 @@ namespace DBSvr.Services
         {
             _logger = logger;
             _conf = conf;
-            _clientScoket = new ClientScoket(new IPEndPoint(IPAddress.Parse(_conf.LoginServerAddr), _conf.LoginServerPort));
+            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(_conf.LoginServerAddr), _conf.LoginServerPort));
             _clientScoket.OnReceivedData += LoginSocketRead;
             _clientScoket.OnConnected += LoginSocketConnected;
             _clientScoket.OnDisconnected += LoginSocketDisconnected;

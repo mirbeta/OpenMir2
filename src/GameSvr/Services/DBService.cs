@@ -9,14 +9,14 @@ namespace GameSvr.Services
     public class DBService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ClientScoket _clientScoket;
+        private readonly ScoketClient _clientScoket;
         private byte[] ReceiveBuffer { get; set; }
         public int BuffLen { get; set; }
         private bool SocketWorking { get; set; }
 
         public DBService()
         {
-            _clientScoket = new ClientScoket(new IPEndPoint(IPAddress.Parse(M2Share.Config.sDBAddr), M2Share.Config.nDBPort), 4096);
+            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.sDBAddr), M2Share.Config.nDBPort), 4096);
             _clientScoket.OnConnected += DbScoketConnected;
             _clientScoket.OnDisconnected += DbScoketDisconnected;
             _clientScoket.OnReceivedData += DBSocketRead;

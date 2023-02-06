@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -10,7 +10,7 @@ namespace SystemModule.Sockets
     /// </summary>
     internal class SocketAsyncEventArgsPool
     {
-        private readonly Stack<SocketAsyncEventArgs> m_pool;
+        private readonly ConcurrentStack<SocketAsyncEventArgs> m_pool;
         private readonly ReaderWriterLock toolLock = new ReaderWriterLock();
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace SystemModule.Sockets
         /// <param name="capacity">对象池可以管理的最大SocketAsyncEventArgs对象数量</param>
         public SocketAsyncEventArgsPool(int capacity)
         {
-            m_pool = new Stack<SocketAsyncEventArgs>(capacity);
+            m_pool = new ConcurrentStack<SocketAsyncEventArgs>();
         }
 
         /// <summary>
@@ -42,15 +42,19 @@ namespace SystemModule.Sockets
         {
             try
             {
-                if (Count <= 100)
+                if (Count <= 200)
                 {
                     toolLock.AcquireReaderLock(50);
                 }
                 else
                 {
-                    toolLock.AcquireReaderLock(10);
+                    toolLock.AcquireReaderLock(5);
                 }
-                return m_pool.Pop();
+                if (m_pool.TryPop(out var pop))
+                {
+                    return pop;
+                }
+                return null;
             }
             finally
             {

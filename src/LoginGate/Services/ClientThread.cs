@@ -30,7 +30,7 @@ namespace LoginGate.Services
         /// <summary>
         /// Socket
         /// </summary>
-        private readonly ClientScoket _clientSocket;
+        private readonly ScoketClient _clientSocket;
         /// <summary>
         /// Client管理
         /// </summary>
@@ -52,7 +52,7 @@ namespace LoginGate.Services
         {
             _clientManager = clientManager;
             _sessionManager = sessionManager;
-            _clientSocket = new ClientScoket();
+            _clientSocket = new ScoketClient();
             _clientSocket.OnConnected += ClientSocketConnect;
             _clientSocket.OnDisconnected += ClientSocketDisconnect;
             _clientSocket.OnReceivedData += ClientSocketRead;
