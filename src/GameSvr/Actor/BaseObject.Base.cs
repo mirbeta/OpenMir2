@@ -132,8 +132,8 @@ namespace GameSvr.Actor
                     int dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
                     if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
                     {
-                        int dwC = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
-                        IncHealthSpellTick = HUtil32.GetTickCount() + dwC;
+                        int incHealthTick = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
+                        IncHealthSpellTick = HUtil32.GetTickCount() + incHealthTick;
                         if ((IncSpell > 0) || (IncHealth > 0) || (PerHealing > 0))
                         {
                             if (PerHealth <= 0)
@@ -227,7 +227,6 @@ namespace GameSvr.Actor
             {
                 M2Share.Logger.Error(sExceptionMsg2);
             }
-            LifeStone();
             // TBaseObject.Run 3 清理目标对象
             try
             {
@@ -263,7 +262,7 @@ namespace GameSvr.Actor
                         switch (AutoChangeIdx)
                         {
                             case 0:
-                                nInteger = PoisonState.STATE_TRANSPARENT;
+                                nInteger = PoisonState.STATETRANSPARENT;
                                 break;
                             case 1:
                                 nInteger = PoisonState.STONE;
@@ -285,7 +284,7 @@ namespace GameSvr.Actor
                                 break;
                             default:
                                 AutoChangeIdx = 0;
-                                nInteger = PoisonState.STATE_TRANSPARENT;
+                                nInteger = PoisonState.STATETRANSPARENT;
                                 break;
                         }
                         AutoChangeIdx++;
@@ -297,7 +296,7 @@ namespace GameSvr.Actor
                         switch (FixColorIdx)
                         {
                             case 0:
-                                nInteger = PoisonState.STATE_TRANSPARENT;
+                                nInteger = PoisonState.STATETRANSPARENT;
                                 break;
                             case 1:
                                 nInteger = PoisonState.STONE;
@@ -319,7 +318,7 @@ namespace GameSvr.Actor
                                 break;
                             default:
                                 FixColorIdx = 0;
-                                nInteger = PoisonState.STATE_TRANSPARENT;
+                                nInteger = PoisonState.STATETRANSPARENT;
                                 break;
                         }
                         CharStatus = (int)(CharStatusEx | ((0x80000000 >> nInteger) | 0));
@@ -428,43 +427,43 @@ namespace GameSvr.Actor
                 bool boNeedRecalc = false;
                 for (int i = 0; i < StatusArrTick.Length; i++)
                 {
-                    if ((StatusArr[i] > 0) && (StatusArr[i] < 60000))
+                    if ((StatusTimeArr[i] > 0) && (StatusTimeArr[i] < 60000))
                     {
                         if ((HUtil32.GetTickCount() - StatusArrTick[i]) > 1000)
                         {
-                            StatusArr[i] -= 1;
+                            StatusTimeArr[i] -= 1;
                             StatusArrTick[i] += 1000;
-                            if (StatusArr[i] == 0)
+                            if (StatusTimeArr[i] == 0)
                             {
                                 boChg = true;
                                 switch (i)
                                 {
-                                    case PoisonState.DEFENCEUP:
+                                    case PoisonState.DefenceUP:
                                         boNeedRecalc = true;
                                         SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                         break;
-                                    case PoisonState.MAGDEFENCEUP:
+                                    case PoisonState.MagDefenceUP:
                                         boNeedRecalc = true;
                                         SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                         break;
-                                    case PoisonState.BUBBLEDEFENCEUP:
-                                        AbilMagBubbleDefence = false;
+                                    case PoisonState.BubbleDefenceUP:
+                                        ((this as CharacterObject)).AbilMagBubbleDefence = false;
                                         break;
-                                    case PoisonState.STATE_TRANSPARENT:
+                                    case PoisonState.STATETRANSPARENT:
                                         HideMode = false;
                                         break;
                                 }
                             }
-                            else if (StatusArr[i] == 10)
+                            else if (StatusTimeArr[i] == 10)
                             {
-                                if (i == PoisonState.DEFENCEUP)
+                                if (i == PoisonState.DefenceUP)
                                 {
-                                    SysMsg("防御力" + StatusArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    SysMsg($"防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 }
-                                if (i == PoisonState.MAGDEFENCEUP)
+                                if (i == PoisonState.MagDefenceUP)
                                 {
-                                    SysMsg("魔法防御力" + StatusArr[i] + "秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                    SysMsg($"魔法防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
                                 }
                             }
@@ -491,7 +490,7 @@ namespace GameSvr.Actor
                 if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime)
                 {
                     PoisoningTick = HUtil32.GetTickCount();
-                    if (StatusArr[PoisonState.DECHEALTH] > 0)
+                    if (StatusTimeArr[PoisonState.DECHEALTH] > 0)
                     {
                         if (Animal)
                         {
@@ -554,104 +553,6 @@ namespace GameSvr.Actor
                 DelFormMaped = true;
             }
             SendRefMsg(Messages.RM_DEATH, Direction, CurrX, CurrY, 1, "");
-        }
-
-        /// <summary>
-        /// 气血石和魔血石处理
-        /// </summary>
-        private void LifeStone()
-        {
-            if (!Death && Race == ActorRace.Play || Race == ActorRace.PlayClone)
-            {
-                if (UseItems.Length >= Grobal2.U_CHARM && UseItems[Grobal2.U_CHARM] != null && UseItems[Grobal2.U_CHARM].Index > 0)
-                {
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
-                    if ((StdItem.StdMode == 7) && (StdItem.Shape == 2 || StdItem.Shape == 3))
-                    {
-                        ushort stoneDura;
-                        ushort dCount;
-                        ushort bCount;
-                        // 加HP
-                        if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
-                        {
-                            IncHpStoneTime = HUtil32.GetTickCount();
-                            stoneDura = (ushort)(UseItems[Grobal2.U_CHARM].Dura * 10);
-                            bCount = (ushort)(stoneDura / M2Share.Config.HPStoneAddRate);
-                            dCount = (ushort)(WAbil.MaxHP - WAbil.HP);
-                            if (dCount > bCount)
-                            {
-                                dCount = bCount;
-                            }
-                            if (stoneDura > dCount)
-                            {
-                                IncHealth += dCount;
-                                UseItems[Grobal2.U_CHARM].Dura -= (ushort)HUtil32.Round(dCount / 10);
-                            }
-                            else
-                            {
-                                stoneDura = 0;
-                                IncHealth += stoneDura;
-                                UseItems[Grobal2.U_CHARM].Dura = 0;
-                            }
-                            if (UseItems[Grobal2.U_CHARM].Dura >= 1000)
-                            {
-                                if (Race == ActorRace.Play)
-                                {
-                                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
-                                }
-                            }
-                            else
-                            {
-                                UseItems[Grobal2.U_CHARM].Dura = 0;
-                                if (Race == ActorRace.Play)
-                                {
-                                    ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_CHARM]);
-                                }
-                                UseItems[Grobal2.U_CHARM].Index = 0;
-                            }
-                        }
-                        // 加MP
-                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
-                        {
-                            IncMpStoneTime = HUtil32.GetTickCount();
-                            stoneDura = (ushort)(UseItems[Grobal2.U_CHARM].Dura * 10);
-                            bCount = (ushort)(stoneDura / M2Share.Config.MPStoneAddRate);
-                            dCount = (ushort)(WAbil.MaxMP - WAbil.MP);
-                            if (dCount > bCount)
-                            {
-                                dCount = bCount;
-                            }
-                            if (stoneDura > dCount)
-                            {
-                                IncSpell += dCount;
-                                UseItems[Grobal2.U_CHARM].Dura -= (ushort)HUtil32.Round(dCount / 10);
-                            }
-                            else
-                            {
-                                stoneDura = 0;
-                                IncSpell += stoneDura;
-                                UseItems[Grobal2.U_CHARM].Dura = 0;
-                            }
-                            if (UseItems[Grobal2.U_CHARM].Dura >= 1000)
-                            {
-                                if (Race == ActorRace.Play)
-                                {
-                                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
-                                }
-                            }
-                            else
-                            {
-                                UseItems[Grobal2.U_CHARM].Dura = 0;
-                                if (Race == ActorRace.Play)
-                                {
-                                    ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_CHARM]);
-                                }
-                                UseItems[Grobal2.U_CHARM].Index = 0;
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         private void KillTarget()
@@ -941,7 +842,7 @@ namespace GameSvr.Actor
                         }
                         if (FastParalysis)
                         {
-                            StatusArr[PoisonState.STONE] = 1;
+                            StatusTimeArr[PoisonState.STONE] = 1;
                             FastParalysis = false;
                         }
                         break;
@@ -972,7 +873,7 @@ namespace GameSvr.Actor
                         }
                         if (FastParalysis)
                         {
-                            StatusArr[PoisonState.STONE] = 1;
+                            StatusTimeArr[PoisonState.STONE] = 1;
                             FastParalysis = false;
                         }
                         break;

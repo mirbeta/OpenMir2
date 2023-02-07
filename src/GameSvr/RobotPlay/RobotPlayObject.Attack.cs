@@ -338,11 +338,11 @@ namespace GameSvr.RobotPlay
                             break;
                         case MagicConst.SKILL_AMYOUNSUL:
                         case MagicConst.SKILL_GROUPAMYOUNSUL:
-                            if (TargetCret.StatusArr[PoisonState.DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0)
+                            if (TargetCret.StatusTimeArr[PoisonState.DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0)
                             {
                                 n_AmuletIndx = 1;
                             }
-                            else if (TargetCret.StatusArr[PoisonState.DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0)
+                            else if (TargetCret.StatusTimeArr[PoisonState.DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0)
                             {
                                 n_AmuletIndx = 2;
                             }

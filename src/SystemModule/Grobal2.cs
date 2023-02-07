@@ -139,15 +139,5 @@ namespace SystemModule
             };
             return result;
         }
-
-        public static int MakeMonsterFeature(byte btRaceImg, byte btWeapon, ushort wAppr)
-        {
-            return HUtil32.MakeLong(HUtil32.MakeWord(btRaceImg, btWeapon), wAppr);
-        }
-
-        public static int MakeHumanFeature(byte btRaceImg, byte btDress, byte btWeapon, byte btHair)
-        {
-            return HUtil32.MakeLong(HUtil32.MakeWord(btRaceImg, btWeapon), HUtil32.MakeWord(btHair, btDress));
-        }
     }
 }

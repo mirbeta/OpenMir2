@@ -497,19 +497,19 @@ namespace GameSvr.Magic
                     {
                         if (M2Share.RandomNumber.Random(7) - (userMagic.Level + 1) < 0)
                         {
-                            if (targetObject.StatusArr[PoisonState.DECHEALTH] != 0)
+                            if (targetObject.StatusTimeArr[PoisonState.DECHEALTH] != 0)
                             {
-                                targetObject.StatusArr[PoisonState.DECHEALTH] = 1;
+                                targetObject.StatusTimeArr[PoisonState.DECHEALTH] = 1;
                                 boTrain = true;
                             }
-                            if (targetObject.StatusArr[PoisonState.DAMAGEARMOR] != 0)
+                            if (targetObject.StatusTimeArr[PoisonState.DAMAGEARMOR] != 0)
                             {
-                                targetObject.StatusArr[PoisonState.DAMAGEARMOR] = 1;
+                                targetObject.StatusTimeArr[PoisonState.DAMAGEARMOR] = 1;
                                 boTrain = true;
                             }
-                            if (targetObject.StatusArr[PoisonState.STONE] != 0)
+                            if (targetObject.StatusTimeArr[PoisonState.STONE] != 0)
                             {
-                                targetObject.StatusArr[PoisonState.STONE] = 1;
+                                targetObject.StatusTimeArr[PoisonState.STONE] = 1;
                                 boTrain = true;
                             }
                         }
@@ -668,7 +668,7 @@ namespace GameSvr.Magic
 
         public static bool MagMakePrivateTransparent(BaseObject baseObject, ushort nHTime)
         {
-            if (baseObject.StatusArr[PoisonState.STATE_TRANSPARENT] > 0)
+            if (baseObject.StatusTimeArr[PoisonState.STATETRANSPARENT] > 0)
             {
                 return false;
             }
@@ -686,7 +686,7 @@ namespace GameSvr.Magic
                 }
             }
             baseObjectList.Clear();
-            baseObject.StatusArr[PoisonState.STATE_TRANSPARENT] = nHTime;
+            baseObject.StatusTimeArr[PoisonState.STATETRANSPARENT] = nHTime;
             baseObject.CharStatus = baseObject.GetCharStatus();
             baseObject.StatusChanged();
             baseObject.HideMode = true;
@@ -820,7 +820,7 @@ namespace GameSvr.Magic
             return result;
         }
 
-        private static bool MagTurnUndead(BaseObject baseObject, BaseObject targetBaseObject, int nTargetX, int nTargetY, int nLevel)
+        private static bool MagTurnUndead(PlayObject baseObject, BaseObject targetBaseObject, int nTargetX, int nTargetY, int nLevel)
         {
             bool result = false;
             if (targetBaseObject.SuperMan || targetBaseObject.LifeAttrib != Grobal2.LA_UNDEAD)
@@ -1220,7 +1220,7 @@ namespace GameSvr.Magic
                 BaseObject targetBaseObject = baseObjectList[i];
                 if (baseObject.IsProperFriend(targetBaseObject))
                 {
-                    if (targetBaseObject.StatusArr[PoisonState.STATE_TRANSPARENT] == 0)
+                    if (targetBaseObject.StatusTimeArr[PoisonState.STATETRANSPARENT] == 0)
                     {
                         targetBaseObject.SendDelayMsg(targetBaseObject, Messages.RM_TRANSPARENT, 0, nHTime, 0, 0, "", 800);
                         result = true;

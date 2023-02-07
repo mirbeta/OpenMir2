@@ -15,14 +15,14 @@ namespace GameSvr.Monster.Monsters
             {
                 if (TargetCret == null)
                 {
-                    if (StatusArr[PoisonState.STATE_TRANSPARENT] == 0)
+                    if (StatusTimeArr[PoisonState.STATETRANSPARENT] == 0)
                     {
                         Magic.MagicManager.MagMakePrivateTransparent(this, 180);
                     }
                 }
                 else
                 {
-                    StatusArr[PoisonState.STATE_TRANSPARENT] = 0;
+                    StatusTimeArr[PoisonState.STATETRANSPARENT] = 0;
                 }
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
                 {

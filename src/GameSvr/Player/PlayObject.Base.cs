@@ -849,6 +849,7 @@ namespace GameSvr.Player
             InGuildWarArea = false;
             IsNewHuman = false;
             LoginNoticeOk = false;
+            AttatckMode = 0;
             Bo6Ab = false;
             BonusAbil = new NakedAbility();
             AccountExpired = false;
@@ -1231,7 +1232,7 @@ namespace GameSvr.Player
                 }
                 for (int i = 0; i < StatusArrTick.Length; i++)
                 {
-                    if (StatusArr[i] > 0)
+                    if (StatusTimeArr[i] > 0)
                     {
                         StatusArrTick[i] = HUtil32.GetTickCount();
                     }
@@ -1683,14 +1684,14 @@ namespace GameSvr.Player
                 }
                 if (killObject.Race != ActorRace.Play)
                 {
-                    killObject.DropUseItems(this.ActorId);
+                    killObject.DropUseItems(ActorId);
                     if (Master == null && (!NoItem || !Envir.Flag.NoDropItem))
                     {
-                        killObject.ScatterBagItems(this.ActorId);
+                        killObject.ScatterBagItems(ActorId);
                     }
                     if (killObject.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.NoDropItem))
                     {
-                        killObject.ScatterGolds(this.ActorId);
+                        killObject.ScatterGolds(ActorId);
                     }
                 }
                 else
@@ -2006,7 +2007,7 @@ namespace GameSvr.Player
                                         switch (stdItem.Shape)
                                         {
                                             case ItemShapeConst.RING_TRANSPARENT_ITEM:
-                                                StatusArr[PoisonState.STATE_TRANSPARENT] = 60000;
+                                                StatusTimeArr[PoisonState.STATETRANSPARENT] = 60000;
                                                 HideMode = true;
                                                 break;
                                             case ItemShapeConst.RING_SPACEMOVE_ITEM:
@@ -2607,26 +2608,26 @@ namespace GameSvr.Player
                     bool fastmoveflag = UseItems[Grobal2.U_BOOTS] != null && UseItems[Grobal2.U_BOOTS].Dura > 0 && UseItems[Grobal2.U_BOOTS].Index == Settings.INDEX_MIRBOOTS;
                     if (fastmoveflag)
                     {
-                        StatusArr[PoisonState.FASTMOVE] = 60000;
+                        StatusTimeArr[PoisonState.FASTMOVE] = 60000;
                     }
                     else
                     {
-                        StatusArr[PoisonState.FASTMOVE] = 0;
+                        StatusTimeArr[PoisonState.FASTMOVE] = 0;
                     }
                     //if ((Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL))
                     //{
                     //    if (BoHighLevelEffect)
                     //    {
-                    //        StatusArr[Grobal2.STATE_50LEVELEFFECT] = 60000;
+                    //        StatusTimeArr[Grobal2.STATE_50LEVELEFFECT] = 60000;
                     //    }
                     //    else
                     //    {
-                    //        StatusArr[Grobal2.STATE_50LEVELEFFECT] = 0;
+                    //        StatusTimeArr[Grobal2.STATE_50LEVELEFFECT] = 0;
                     //    }
                     //}
                     //else
                     //{
-                    //    StatusArr[Grobal2.STATE_50LEVELEFFECT] = 0;
+                    //    StatusTimeArr[Grobal2.STATE_50LEVELEFFECT] = 0;
                     //}
                     CharStatus = GetCharStatus();
                     StatusChanged();
@@ -2995,32 +2996,67 @@ namespace GameSvr.Player
             return result;
         }
 
+        /// <summary>
+        /// 计算角色外形代码
+        /// </summary>
+        /// <returns></returns>
+        public override int GetFeature(BaseObject baseObject)
+        {
+            if (Race == ActorRace.Play)
+            {
+                byte nDress = 0;
+                StdItem stdItem;
+                if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0) // 衣服
+                {
+                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
+                    if (stdItem != null)
+                    {
+                        nDress = (byte)(stdItem.Shape * 2);
+                    }
+                }
+                PlayGender playGender = Gender;
+                nDress += (byte)playGender;
+                byte nWeapon = (byte)playGender;
+                if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Index > 0) // 武器
+                {
+                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
+                    if (stdItem != null)
+                    {
+                        nWeapon += (byte)(stdItem.Shape * 2);
+                    }
+                }
+                byte nHair = (byte)(Hair * 2 + (byte)playGender);
+                return M2Share.MakeHumanFeature(0, nDress, nWeapon, nHair);
+            }
+            return base.GetFeature(baseObject);
+        }
+        
         public override void MakeGhost()
         {
             const string sExceptionMsg = "[Exception] TPlayObject::MakeGhost";
             try
             {
-                if (M2Share.HighLevelHuman == this.ActorId)
+                if (M2Share.HighLevelHuman == ActorId)
                 {
                     M2Share.HighLevelHuman = 0;
                 }
-                if (M2Share.HighPKPointHuman == this.ActorId)
+                if (M2Share.HighPKPointHuman == ActorId)
                 {
                     M2Share.HighPKPointHuman = 0;
                 }
-                if (M2Share.HighDCHuman == this.ActorId)
+                if (M2Share.HighDCHuman == ActorId)
                 {
                     M2Share.HighDCHuman = 0;
                 }
-                if (M2Share.HighMCHuman == this.ActorId)
+                if (M2Share.HighMCHuman == ActorId)
                 {
                     M2Share.HighMCHuman = 0;
                 }
-                if (M2Share.HighSCHuman == this.ActorId)
+                if (M2Share.HighSCHuman == ActorId)
                 {
                     M2Share.HighSCHuman = 0;
                 }
-                if (M2Share.HighOnlineHuman == this.ActorId)
+                if (M2Share.HighOnlineHuman == ActorId)
                 {
                     M2Share.HighOnlineHuman = 0;
                 }
@@ -3118,7 +3154,7 @@ namespace GameSvr.Player
                     {
                         if (boDropall || M2Share.RandomNumber.Random(M2Share.Config.DieScatterBagRate) == 0)
                         {
-                            if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, this.ActorId))
+                            if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, ActorId))
                             {
                                 if (Race == ActorRace.Play)
                                 {

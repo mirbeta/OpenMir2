@@ -34,19 +34,19 @@ namespace SystemModule.Consts
         /// <summary>
         /// 隐身
         /// </summary>
-        public const byte STATE_TRANSPARENT = 8;
+        public const byte STATETRANSPARENT = 8;
         /// <summary>
         /// 神圣战甲术  防御力
         /// </summary>
-        public const byte DEFENCEUP = 9;
+        public const byte DefenceUP = 9;
         /// <summary>
         /// 幽灵盾  魔御力
         /// </summary>
-        public const byte MAGDEFENCEUP = 10;
+        public const byte MagDefenceUP = 10;
         /// <summary>
         /// 魔法盾
         /// </summary>
-        public const byte BUBBLEDEFENCEUP = 11;
+        public const byte BubbleDefenceUP = 11;
         /// <summary>
         /// 被石化
         /// </summary>

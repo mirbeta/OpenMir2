@@ -148,6 +148,7 @@ namespace GameSvr.Player
                 {
                     HealthSpellChanged();
                 }
+                LifeStone();
                 if (IsTimeGoto && (HUtil32.GetTickCount() > TimeGotoTick)) //Delaygoto延时跳转
                 {
                     IsTimeGoto = false;
@@ -2139,7 +2140,7 @@ namespace GameSvr.Player
             }
             if (Transparent && HideMode)
             {
-                StatusArr[PoisonState.STATE_TRANSPARENT] = 0;
+                StatusTimeArr[PoisonState.STATETRANSPARENT] = 0;
             }
             if (GroupOwner != 0)
             {

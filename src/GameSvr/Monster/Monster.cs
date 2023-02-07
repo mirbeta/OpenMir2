@@ -34,7 +34,7 @@ namespace GameSvr.Monster
                 ElfMon.RecalcAbilitys();
                 ElfMon.RefNameColor();
                 ElfMon.Abil = OldMon.Abil;
-                ElfMon.StatusArr = OldMon.StatusArr;
+                ElfMon.StatusTimeArr = OldMon.StatusTimeArr;
                 ElfMon.TargetCret = OldMon.TargetCret;
                 ElfMon.TargetFocusTick = OldMon.TargetFocusTick;
                 ElfMon.LastHiter = OldMon.LastHiter;

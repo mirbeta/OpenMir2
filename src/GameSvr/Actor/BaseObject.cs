@@ -52,19 +52,9 @@ namespace GameSvr.Actor
         /// 骑马
         /// </summary>
         public bool OnHorse;
-        /// <summary>
-        /// 马类型
-        /// </summary>
-        public byte HorseType;
-        /// <summary>
-        /// 衣服特效(如天外飞仙衣服效果)
-        /// </summary>
-        private readonly byte DressEffType;
         public ushort IncHealth;
         public ushort IncSpell;
         public ushort IncHealing;
-        private int IncHpStoneTime;
-        private int IncMpStoneTime;
         /// <summary>
         /// 怪物经验值
         /// </summary>
@@ -86,14 +76,14 @@ namespace GameSvr.Actor
         /// </summary>
         public byte ViewRange;
         /// <summary>
-        /// 人物状态属性值 
+        /// 状态属性值结束时间
         /// 0-绿毒(减HP) 1-红毒(减MP) 2-防、魔防为0(唯我独尊3级) 3-不能跑动(中蛛网)
         /// 4-不能移动(中战连击) 5-麻痹(石化) 6-减血，被连击技能万剑归宗击中后掉血
         /// 7-冰冻(不能跑动，不能魔法) 8-隐身 9-防御力(神圣战甲术) 10-魔御力(幽灵盾) 11-魔法盾
         /// </summary>
-        internal ushort[] StatusArr;
+        internal ushort[] StatusTimeArr;
         /// <summary>
-        /// 人物状态持续的开始时间
+        /// 状态持续的开始时间
         /// </summary>
         internal int[] StatusArrTick;
         /// <summary>
@@ -137,7 +127,7 @@ namespace GameSvr.Actor
         public byte PerHealing;
         public byte PerSpell;
         /// <summary>
-        /// 增加攻击的间隔
+        /// 增加血量的间隔
         /// </summary>
         public int IncHealthSpellTick;
         /// <summary>
@@ -197,10 +187,6 @@ namespace GameSvr.Actor
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
         public bool SlaveRelax = false;
-        /// <summary>
-        /// 攻击状态
-        /// </summary>
-        public AttackMode AttatckMode;
         /// <summary>
         /// 人物名字的颜色
         /// </summary>        
@@ -382,14 +368,6 @@ namespace GameSvr.Actor
         /// </summary>
         protected byte PowerItem = 0;
         /// <summary>
-        /// 魔法盾
-        /// </summary>
-        protected bool AbilMagBubbleDefence;
-        /// <summary>
-        /// 魔法盾等级
-        /// </summary>
-        protected byte MagBubbleDefenceLevel;
-        /// <summary>
         /// 视觉搜索时间间隔
         /// </summary>
         public int SearchTime;
@@ -534,8 +512,6 @@ namespace GameSvr.Actor
             IncSpell = 0;
             IncHealth = 0;
             IncHealing = 0;
-            IncHpStoneTime = HUtil32.GetTickCount();
-            IncMpStoneTime = HUtil32.GetTickCount();
             PerHealth = 5;
             PerHealing = 5;
             PerSpell = 5;
@@ -543,9 +519,8 @@ namespace GameSvr.Actor
             GreenPoisoningPoint = 0;
             CharStatus = 0;
             CharStatusEx = 0;
-            StatusArr = new ushort[15];
+            StatusTimeArr = new ushort[15];
             StatusArrTick = new int[15];
-            AttatckMode = 0;
             GuildWarArea = false;
             SuperMan = false;
             Skeleton = false;
@@ -860,7 +835,7 @@ namespace GameSvr.Actor
                     {
                         if (Transparent && HideMode)
                         {
-                            StatusArr[PoisonState.STATE_TRANSPARENT] = 1;
+                            StatusTimeArr[PoisonState.STATETRANSPARENT] = 1;
                         }
                         result = true;
                     }
@@ -2369,41 +2344,9 @@ namespace GameSvr.Actor
             return GetFeature(null);
         }
 
-        public ushort GetFeatureEx()
+        public virtual int GetFeature(BaseObject baseObject)
         {
-            return HUtil32.MakeWord(OnHorse ? HorseType : (byte)0, DressEffType);
-        }
-
-        public int GetFeature(BaseObject baseObject)
-        {
-            if (Race == ActorRace.Play)
-            {
-                byte nDress = 0;
-                StdItem stdItem;
-                if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0) // 衣服
-                {
-                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
-                    if (stdItem != null)
-                    {
-                        nDress = (byte)(stdItem.Shape * 2);
-                    }
-                }
-                PlayGender playGender = ((PlayObject)this).Gender;
-                nDress += (byte)playGender;
-                byte nWeapon = 0;
-                if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Index > 0) // 武器
-                {
-                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
-                    if (stdItem != null)
-                    {
-                        nWeapon = (byte)(stdItem.Shape * 2);
-                    }
-                }
-                nWeapon += (byte)playGender;
-                byte nHair = (byte)(((PlayObject)this).Hair * 2 + (byte)playGender);
-                return Grobal2.MakeHumanFeature(0, nDress, nWeapon, nHair);
-            }
-            return Grobal2.MakeMonsterFeature(RaceImg, MonsterWeapon, Appr);
+            return M2Share.MakeMonsterFeature(RaceImg, MonsterWeapon, Appr);
         }
 
         public int GetCharStatus()
@@ -2415,9 +2358,9 @@ namespace GameSvr.Actor
             //and 表示 当对应位均为1时返回1，其余为0
             //从上面算法得到，最终 nStatus得到是1,
             int nStatus = 0;
-            for (int i = 0; i < StatusArr.Length; i++)
+            for (int i = 0; i < StatusTimeArr.Length; i++)
             {
-                if (StatusArr[i] > 0)
+                if (StatusTimeArr[i] > 0)
                 {
                     nStatus = (int)(nStatus | (0x80000000 >> i));
                 }
@@ -2463,6 +2406,11 @@ namespace GameSvr.Actor
         public void FeatureChanged()
         {
             SendRefMsg(Messages.RM_FEATURECHANGED, GetFeatureEx(), GetFeatureToLong(), 0, 0, "");
+        }
+
+        public virtual ushort GetFeatureEx()
+        {
+            return 0;
         }
 
         public void StatusChanged()
@@ -3235,7 +3183,7 @@ namespace GameSvr.Actor
             }
         }
 
-        public ushort GetHitStruckDamage(BaseObject target, int nDamage)
+        public virtual ushort GetHitStruckDamage(BaseObject target, int nDamage)
         {
             int nArmor;
             int nRnd = HUtil32.LoByte(WAbil.AC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.AC) - HUtil32.LoByte(WAbil.AC)) + 1);
@@ -3254,16 +3202,11 @@ namespace GameSvr.Actor
                 {
                     nDamage += target.AddAbil.UndeadPower;
                 }
-                if (AbilMagBubbleDefence)
-                {
-                    nDamage = HUtil32.Round(nDamage / 100 * (MagBubbleDefenceLevel + 2) * 8);
-                    DamageBubbleDefence(nDamage);
-                }
             }
             return (ushort)nDamage;
         }
 
-        public ushort GetMagStruckDamage(BaseObject baseObject, ushort nDamage)
+        public virtual ushort GetMagStruckDamage(BaseObject baseObject, ushort nDamage)
         {
             int n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
             nDamage = (ushort)HUtil32._MAX(0, nDamage - n14);
@@ -3271,19 +3214,11 @@ namespace GameSvr.Actor
             {
                 nDamage += AddAbil.UndeadPower;
             }
-            if ((nDamage > 0) && AbilMagBubbleDefence)
-            {
-                nDamage = (ushort)HUtil32.Round(nDamage / 1.0e2 * (MagBubbleDefenceLevel + 2) * 8.0);//魔法盾减伤
-                DamageBubbleDefence(nDamage);
-            }
             return nDamage;
         }
 
         public void StruckDamage(ushort nDamage)
         {
-            int nDam;
-            int nDura;
-            int nOldDura;
             PlayObject playObject;
             StdItem stdItem;
             bool bo19;
@@ -3310,13 +3245,15 @@ namespace GameSvr.Actor
             {
                 nDamage = (ushort)(nDamage * M2Share.Config.MonHum / 10);
             }
-            nDam = M2Share.RandomNumber.Random(10) + 5; // 1 0x62
-            if (StatusArr[PoisonState.DAMAGEARMOR] > 0)
+            ushort nDam = (ushort)(M2Share.RandomNumber.Random(10) + 5);
+            if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
             {
-                nDam = HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
+                nDam = (ushort)HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
                 nDamage = (ushort)HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
             }
             bo19 = false;
+            ushort nDura;
+            int nOldDura;
             if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0)
             {
                 nDura = UseItems[Grobal2.U_DRESS].Dura;
@@ -3476,16 +3413,16 @@ namespace GameSvr.Actor
             if (nType >= Grobal2.MAX_STATUS_ATTRIBUTE)
                 return false;
             int nOldCharStatus = CharStatus;
-            if (StatusArr[nType] > 0)
+            if (StatusTimeArr[nType] > 0)
             {
-                if (StatusArr[nType] < nTime)
+                if (StatusTimeArr[nType] < nTime)
                 {
-                    StatusArr[nType] = nTime;
+                    StatusTimeArr[nType] = nTime;
                 }
             }
             else
             {
-                StatusArr[nType] = nTime;
+                StatusTimeArr[nType] = nTime;
             }
             StatusArrTick[nType] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
@@ -3574,17 +3511,21 @@ namespace GameSvr.Actor
             return result;
         }
 
-        private void DamageBubbleDefence(int nInt)
+        /// <summary>
+        /// 破魔法盾
+        /// </summary>
+        /// <param name="nInt"></param>
+        internal void DamageBubbleDefence(int nInt)
         {
-            if (StatusArr[PoisonState.BUBBLEDEFENCEUP] > 0)
+            if (StatusTimeArr[PoisonState.BubbleDefenceUP] > 0)
             {
-                if (StatusArr[PoisonState.BUBBLEDEFENCEUP] > 3)
+                if (StatusTimeArr[PoisonState.BubbleDefenceUP] > 3)
                 {
-                    StatusArr[PoisonState.BUBBLEDEFENCEUP] -= 3;
+                    StatusTimeArr[PoisonState.BubbleDefenceUP] -= 3;
                 }
                 else
                 {
-                    StatusArr[PoisonState.BUBBLEDEFENCEUP] = 1;
+                    StatusTimeArr[PoisonState.BubbleDefenceUP] = 1;
                 }
             }
         }
@@ -3671,20 +3612,20 @@ namespace GameSvr.Actor
         private bool DefenceUp(ushort nSec)
         {
             bool result = false;
-            if (StatusArr[PoisonState.DEFENCEUP] > 0)
+            if (StatusTimeArr[PoisonState.DefenceUP] > 0)
             {
-                if (StatusArr[PoisonState.DEFENCEUP] < nSec)
+                if (StatusTimeArr[PoisonState.DefenceUP] < nSec)
                 {
-                    StatusArr[PoisonState.DEFENCEUP] = nSec;
+                    StatusTimeArr[PoisonState.DefenceUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusArr[PoisonState.DEFENCEUP] = nSec;
+                StatusTimeArr[PoisonState.DefenceUP] = nSec;
                 result = true;
             }
-            StatusArrTick[PoisonState.DEFENCEUP] = HUtil32.GetTickCount();
+            StatusArrTick[PoisonState.DefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.DefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
@@ -3704,47 +3645,24 @@ namespace GameSvr.Actor
         private bool MagDefenceUp(ushort nSec)
         {
             bool result = false;
-            if (StatusArr[PoisonState.MAGDEFENCEUP] > 0)
+            if (StatusTimeArr[PoisonState.MagDefenceUP] > 0)
             {
-                if (StatusArr[PoisonState.MAGDEFENCEUP] < nSec)
+                if (StatusTimeArr[PoisonState.MagDefenceUP] < nSec)
                 {
-                    StatusArr[PoisonState.MAGDEFENCEUP] = nSec;
+                    StatusTimeArr[PoisonState.MagDefenceUP] = nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusArr[PoisonState.MAGDEFENCEUP] = nSec;
+                StatusTimeArr[PoisonState.MagDefenceUP] = nSec;
                 result = true;
             }
-            StatusArrTick[PoisonState.MAGDEFENCEUP] = HUtil32.GetTickCount();
+            StatusArrTick[PoisonState.MagDefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.MagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
-        }
-
-        /// <summary>
-        /// 魔法盾
-        /// </summary>
-        /// <returns></returns>
-        public bool MagBubbleDefenceUp(byte nLevel, ushort nSec)
-        {
-            if (StatusArr[PoisonState.BUBBLEDEFENCEUP] != 0)
-            {
-                return false;
-            }
-            int nOldStatus = CharStatus;
-            StatusArr[PoisonState.BUBBLEDEFENCEUP] = nSec;
-            StatusArrTick[PoisonState.BUBBLEDEFENCEUP] = HUtil32.GetTickCount();
-            CharStatus = GetCharStatus();
-            if (nOldStatus != CharStatus)
-            {
-                StatusChanged();
-            }
-            AbilMagBubbleDefence = true;
-            MagBubbleDefenceLevel = nLevel;
-            return true;
         }
 
         public UserItem CheckItemCount(string sItemName, ref int nCount)

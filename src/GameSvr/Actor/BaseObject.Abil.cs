@@ -31,7 +31,7 @@ namespace GameSvr.Actor
             HitSpeed = 0;
             bool oldhmode = HideMode;
             HideMode = false;
-            if (Transparent && (StatusArr[PoisonState.STATE_TRANSPARENT] > 0))
+            if (Transparent && (StatusTimeArr[PoisonState.STATETRANSPARENT] > 0))
             {
                 HideMode = true;
             }
@@ -47,7 +47,7 @@ namespace GameSvr.Actor
             {
                 if (oldhmode)
                 {
-                    StatusArr[PoisonState.STATE_TRANSPARENT] = 0;
+                    StatusTimeArr[PoisonState.STATETRANSPARENT] = 0;
                     CharStatus = GetCharStatus();
                     StatusChanged();
                 }
@@ -79,13 +79,13 @@ namespace GameSvr.Actor
             WAbil.DC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
             WAbil.MC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
             WAbil.SC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
-            if (StatusArr[PoisonState.DEFENCEUP] > 0)
+            if (StatusTimeArr[PoisonState.DefenceUP] > 0)
             {
-                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + StatusArrTick[PoisonState.DEFENCEUP]));
+                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + StatusArrTick[PoisonState.DefenceUP]));
             }
-            if (StatusArr[PoisonState.MAGDEFENCEUP] > 0)
+            if (StatusTimeArr[PoisonState.MagDefenceUP] > 0)
             {
-                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + StatusArrTick[PoisonState.MAGDEFENCEUP]));
+                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + StatusArrTick[PoisonState.MagDefenceUP]));
             }
             if (Race >= ActorRace.Animal)
             {

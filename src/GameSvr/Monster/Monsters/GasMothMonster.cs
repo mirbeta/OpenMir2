@@ -15,7 +15,7 @@ namespace GameSvr.Monster.Monsters
             BaseObject baseObject = base.GasAttack(bt05);
             if (baseObject != null && M2Share.RandomNumber.Random(3) == 0 && baseObject.HideMode)
             {
-                baseObject.StatusArr[PoisonState.STATE_TRANSPARENT] = 1;
+                baseObject.StatusTimeArr[PoisonState.STATETRANSPARENT] = 1;
             }
             return baseObject;
         }

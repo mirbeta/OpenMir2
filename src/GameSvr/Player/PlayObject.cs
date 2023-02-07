@@ -14,7 +14,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Player
 {
-    public partial class PlayObject : AnimalObject
+    public partial class PlayObject : CharacterObject
     {
         private bool ClientPickUpItemIsSelf(int actorId)
         {
@@ -868,7 +868,7 @@ namespace GameSvr.Player
 
         public void ClearStatusTime()
         {
-            StatusArr = new ushort[15];
+            StatusTimeArr = new ushort[15];
         }
 
         private void SendMapDescription()

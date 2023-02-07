@@ -58,7 +58,7 @@ namespace GameSvr.Actor
         /// <returns></returns>
         protected bool CanMove()
         {
-            return !Ghost && !Death && StatusArr[PoisonState.STONE] == 0;
+            return !Ghost && !Death && StatusTimeArr[PoisonState.STONE] == 0;
         }
 
         protected virtual void Attack(BaseObject targetObject, byte nDir)
