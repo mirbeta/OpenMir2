@@ -101,7 +101,7 @@ namespace GameSvr.GameCommand
                 var executeMethod = gameCommand.GetType().GetMethod("Execute");
                 if (executeMethod == null)
                 {
-                    M2Share.Logger.Error($"游戏命令:{customCommand.CmdName}未注册命令执行方法.");
+                    M2Share.Logger.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
                     continue;
                 }
                 gameCommand.Register(commandAttribute, executeMethod);

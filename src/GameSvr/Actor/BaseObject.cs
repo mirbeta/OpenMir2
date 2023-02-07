@@ -315,7 +315,7 @@ namespace GameSvr.Actor
         /// </summary>
         public byte MonsterWeapon = 0;
         /// <summary>
-        /// 弯腰间隔
+        /// 受攻击间隔
         /// </summary>
         public int StruckTick = 0;
         /// <summary>
