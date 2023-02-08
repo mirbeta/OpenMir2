@@ -606,9 +606,9 @@ namespace GameSvr.Actor
         /// <returns></returns>
         private bool GetDropPosition(short nOrgX, short nOrgY, int nRange, ref short pX, ref short pY)
         {
-            bool result = false;
-            int nItemCount = 0;
-            int n24 = 999;
+            var result = false;
+            var nItemCount = 0;
+            var n24 = 999;
             short n28 = 0;
             short n2C = 0;
             for (var i = 0; i < nRange; i++)
@@ -669,15 +669,15 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            bool result = false;
+            var result = false;
             short dx = 0;
             short dy = 0;
-            StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 if (stdItem.StdMode == 40)
                 {
-                    ushort idura = userItem.Dura;
+                    var idura = userItem.Dura;
                     idura = (ushort)(idura - 2000);
                     if (idura <= 0)
                     {
@@ -685,7 +685,7 @@ namespace GameSvr.Actor
                     }
                     userItem.Dura = idura;
                 }
-                MapItem mapItem = new MapItem
+                var mapItem = new MapItem
                 {
                     UserItem = new UserItem(userItem),
                     Name = CustomItem.GetItemName(userItem),// 取自定义物品名称
@@ -702,7 +702,7 @@ namespace GameSvr.Actor
                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
                 mapItem.DropBaseObject = dropCreat;
                 GetDropPosition(CurrX, CurrY, nScatterRange, ref dx, ref dy);
-                MapItem pr = (MapItem)Envir.AddToMap(dx, dy, CellType.Item, mapItem);
+                var pr = (MapItem)Envir.AddToMap(dx, dy, CellType.Item, mapItem);
                 if (pr == mapItem)
                 {
                     SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dx, dy, mapItem.Name);
@@ -751,7 +751,7 @@ namespace GameSvr.Actor
             short n24 = 0;
             bool bo29;
             const string sExceptionMsg = "[Exception] TBaseObject::WalkTo";
-            bool result = false;
+            var result = false;
             if (HolySeize)
             {
                 return false;
@@ -916,11 +916,11 @@ namespace GameSvr.Actor
 
         protected bool DropGoldDown(int nGold, bool boFalg, int goldOfCreat, int dropGoldCreat)
         {
-            bool result = false;
+            var result = false;
             short nX = 0;
             short nY = 0;
             int s20;
-            MapItem mapItem = new MapItem
+            var mapItem = new MapItem
             {
                 Name = Grobal2.StringGoldName,
                 Count = nGold,
@@ -930,7 +930,7 @@ namespace GameSvr.Actor
                 DropBaseObject = dropGoldCreat
             };
             GetDropPosition(CurrX, CurrY, 3, ref nX, ref nY);
-            MapItem mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.Item, mapItem);
+            var mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.Item, mapItem);
             if (mapItemA != null)
             {
                 if (mapItemA.ActorId != mapItem.ActorId)
@@ -974,7 +974,7 @@ namespace GameSvr.Actor
                 return 0;
             }
             GuildWarArea = true;
-            int result = 0;
+            var result = 0;
             if (play.MyGuild.IsWarGuild(target.MyGuild) && target.MyGuild.IsWarGuild(play.MyGuild))
             {
                 result = 2;
@@ -1049,7 +1049,7 @@ namespace GameSvr.Actor
             {
                 if (Race == ActorRace.Play && ((PlayObject)this).MagicShield && (nDamage > 0) && (WAbil.MP > 0))
                 {
-                    int nSpdam = HUtil32.Round(nDamage * 1.5);
+                    var nSpdam = HUtil32.Round(nDamage * 1.5);
                     if (WAbil.MP >= nSpdam)
                     {
                         WAbil.MP = (ushort)(WAbil.MP - nSpdam);
@@ -1126,11 +1126,11 @@ namespace GameSvr.Actor
         {
             short nx = 0;
             short ny = 0;
-            int result = 0;
-            byte olddir = Direction;
+            var result = 0;
+            var olddir = Direction;
             Direction = nDir;
-            byte nBackDir = GetBackDir(nDir);
-            for (int i = 0; i < nPushCount; i++)
+            var nBackDir = GetBackDir(nDir);
+            for (var i = 0; i < nPushCount; i++)
             {
                 GetFrontPosition(ref nx, ref ny);
                 if (Envir.CanWalk(nx, ny, false))
@@ -1166,10 +1166,10 @@ namespace GameSvr.Actor
 
         public int MagPassThroughMagic(short sx, short sy, short tx, short ty, byte nDir, int magPwr, bool undeadAttack)
         {
-            int tcount = 0;
-            for (int i = 0; i < 12; i++)
+            var tcount = 0;
+            for (var i = 0; i < 12; i++)
             {
-                BaseObject baseObject = (BaseObject)Envir.GetMovingObject(sx, sy, true);
+                var baseObject = (BaseObject)Envir.GetMovingObject(sx, sy, true);
                 if (baseObject != null)
                 {
                     if (IsProperTarget(baseObject))
@@ -1247,17 +1247,17 @@ namespace GameSvr.Actor
 
         private void ItemDamageRevivalRing()
         {
-            for (int i = 0; i < UseItems.Length; i++)
+            for (var i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    StdItem pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    var pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (pSItem != null)
                     {
                         if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount)))
                         {
-                            ushort nDura = UseItems[i].Dura;
-                            ushort tDura = (ushort)HUtil32.Round(nDura / 1000.0);
+                            var nDura = UseItems[i].Dura;
+                            var tDura = (ushort)HUtil32.Round(nDura / 1000.0);
                             nDura -= 1000;
                             if (nDura <= 0)
                             {
@@ -1286,7 +1286,7 @@ namespace GameSvr.Actor
 
         public bool GetFrontPosition(ref short nX, ref short nY)
         {
-            Envirnoment envir = Envir;
+            var envir = Envir;
             nX = CurrX;
             nY = CurrY;
             switch (Direction)
@@ -1352,7 +1352,7 @@ namespace GameSvr.Actor
             int n14;
             short n18;
             int n1C;
-            bool result = false;
+            var result = false;
             if (envir.Width < 80)
             {
                 n18 = 3;
@@ -1412,23 +1412,23 @@ namespace GameSvr.Actor
 
         public void SpaceMove(string sMap, short nX, short nY, int nInt)
         {
-            Envirnoment envir = M2Share.MapMgr.FindMap(sMap);
+            var envir = M2Share.MapMgr.FindMap(sMap);
             if (envir != null)
             {
                 if (M2Share.ServerIndex == envir.ServerIndex)
                 {
-                    Envirnoment oldEnvir = Envir;
+                    var oldEnvir = Envir;
                     int nOldX = CurrX;
                     int nOldY = CurrY;
-                    bool moveSuccess = false;
+                    var moveSuccess = false;
                     Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
                     VisibleHumanList.Clear();
-                    for (int i = 0; i < VisibleItems.Count; i++)
+                    for (var i = 0; i < VisibleItems.Count; i++)
                     {
                         VisibleItems[i] = null;
                     }
                     VisibleItems.Clear();
-                    for (int i = 0; i < VisibleActors.Count; i++)
+                    for (var i = 0; i < VisibleActors.Count; i++)
                     {
                         VisibleActors[i] = null;
                     }
@@ -1496,7 +1496,7 @@ namespace GameSvr.Actor
                 short nX = 0;
                 short nY = 0;
                 GetFrontPosition(ref nX, ref nY);
-                BaseObject monObj = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
+                var monObj = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
                 if (monObj != null)
                 {
                     monObj.Master = this;
@@ -1523,7 +1523,7 @@ namespace GameSvr.Actor
         public void MapRandomMove(string sMapName, int nInt)
         {
             int nEgdey;
-            Envirnoment envir = M2Share.MapMgr.FindMap(sMapName);
+            var envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir != null)
             {
                 if (envir.Height < 150)
@@ -1542,8 +1542,8 @@ namespace GameSvr.Actor
                     nEgdey = 50;
                 }
 
-                short nX = (short)(M2Share.RandomNumber.Random(envir.Width - nEgdey - 1) + nEgdey);
-                short nY = (short)(M2Share.RandomNumber.Random(envir.Height - nEgdey - 1) + nEgdey);
+                var nX = (short)(M2Share.RandomNumber.Random(envir.Width - nEgdey - 1) + nEgdey);
+                var nY = (short)(M2Share.RandomNumber.Random(envir.Height - nEgdey - 1) + nEgdey);
                 SpaceMove(sMapName, nX, nY, nInt);
             }
         }
@@ -1570,7 +1570,7 @@ namespace GameSvr.Actor
 
         protected bool GetAttackDir(BaseObject baseObject, ref byte btDir)
         {
-            bool result = false;
+            var result = false;
             if ((CurrX - 1 <= baseObject.CurrX) && (CurrX + 1 >= baseObject.CurrX) &&
                 (CurrY - 1 <= baseObject.CurrY) && (CurrY + 1 >= baseObject.CurrY) &&
                 ((CurrX != baseObject.CurrX) || (CurrY != baseObject.CurrY)))
@@ -1635,11 +1635,11 @@ namespace GameSvr.Actor
 
         protected bool TargetInSpitRange(BaseObject baseObject, ref byte btDir)
         {
-            bool result = false;
+            var result = false;
             if ((Math.Abs(baseObject.CurrX - CurrX) <= 2) && (Math.Abs(baseObject.CurrY - CurrY) <= 2))
             {
-                int nX = baseObject.CurrX - CurrX;
-                int nY = baseObject.CurrY - CurrY;
+                var nX = baseObject.CurrX - CurrX;
+                var nY = baseObject.CurrY - CurrY;
                 if ((Math.Abs(nX) <= 1) && (Math.Abs(nY) <= 1))
                 {
                     GetAttackDir(baseObject, ref btDir);
@@ -1665,9 +1665,9 @@ namespace GameSvr.Actor
         protected ushort RecalcBagWeight()
         {
             ushort result = 0;
-            for (int i = 0; i < ItemList.Count; i++)
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                StdItem stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
+                var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     result += stdItem.Weight;
@@ -1678,8 +1678,8 @@ namespace GameSvr.Actor
 
         private bool AddToMap()
         {
-            object point = Envir.AddToMap(CurrX, CurrY, MapCell, this);
-            bool result = point != null;
+            var point = Envir.AddToMap(CurrX, CurrY, MapCell, this);
+            var result = point != null;
             if (!FixedHideMode)
             {
                 SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, 0, "");
@@ -1733,8 +1733,8 @@ namespace GameSvr.Actor
             {
                 return;
             }
-            ushort nDura = UseItems[Grobal2.U_WEAPON].Dura;
-            int nDuraPoint = HUtil32.Round(nDura / 1.03);
+            var nDura = UseItems[Grobal2.U_WEAPON].Dura;
+            var nDuraPoint = HUtil32.Round(nDura / 1.03);
             nDura -= nWeaponDamage;
             if (nDura <= 0)
             {
@@ -1743,7 +1743,7 @@ namespace GameSvr.Actor
                 if (Race == ActorRace.Play)
                 {
                     ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_WEAPON]);
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
                         M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
@@ -1817,12 +1817,12 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            bool result = Envir.Flag.SafeArea;
+            var result = Envir.Flag.SafeArea;
             if (result)
             {
                 return true;
             }
-            for (int i = 0; i < M2Share.StartPointList.Count; i++)
+            for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 if (M2Share.StartPointList[i].MapName == Envir.MapName)
                 {
@@ -1844,7 +1844,7 @@ namespace GameSvr.Actor
         private void MonsterRecalcAbilitys()
         {
             WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), HUtil32.HiWord(WAbil.DC));
-            int maxHp = 0;
+            var maxHp = 0;
             if ((Race == ActorRace.MonsterWhiteskeleton) || (Race == ActorRace.MonsterElfmonster) || (Race == ActorRace.MonsterElfwarrior))
             {
                 WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(WAbil.DC)));
@@ -1878,7 +1878,7 @@ namespace GameSvr.Actor
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!Ghost)
                 {
-                    SendMessage sendMessage = new SendMessage
+                    var sendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -1907,7 +1907,7 @@ namespace GameSvr.Actor
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!Ghost)
                 {
-                    SendMessage sendMessage = new SendMessage
+                    var sendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -1938,7 +1938,7 @@ namespace GameSvr.Actor
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!Ghost)
                 {
-                    SendMessage sendMessage = new SendMessage
+                    var sendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -1969,7 +1969,7 @@ namespace GameSvr.Actor
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!Ghost)
                 {
-                    SendMessage sendMessage = new SendMessage
+                    var sendMessage = new SendMessage
                     {
                         wIdent = wIdent,
                         wParam = wParam,
@@ -2004,7 +2004,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if ((sendMessage.wIdent == wIdent) && (sendMessage.nParam1 == lParam1))
                         {
@@ -2036,7 +2036,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent == wIdent)
                         {
@@ -2068,7 +2068,7 @@ namespace GameSvr.Actor
                     {
                         break;
                     }
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if ((sendMessage.wIdent == Messages.CM_TURN) || (sendMessage.wIdent == Messages.CM_WALK) ||
                             (sendMessage.wIdent == Messages.CM_SITDOWN) || (sendMessage.wIdent == Messages.CM_HORSERUN) ||
@@ -2093,15 +2093,15 @@ namespace GameSvr.Actor
 
         protected virtual bool GetMessage(out ProcessMessage msg)
         {
-            bool result = false;
-            int count = MsgQueue.Count;
+            var result = false;
+            var count = MsgQueue.Count;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-            msg = null;
             try
             {
+                msg = new ProcessMessage();
                 while (count > 0)
                 {
-                    if (MsgQueue.TryDequeue(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryDequeue(out var sendMessage, out var priority))
                     {
                         if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
                         {
@@ -2109,7 +2109,6 @@ namespace GameSvr.Actor
                             MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
                             continue;
                         }
-                        msg = new ProcessMessage();
                         msg.wIdent = sendMessage.wIdent;
                         msg.wParam = sendMessage.wParam;
                         msg.nParam1 = sendMessage.nParam1;
@@ -2143,24 +2142,24 @@ namespace GameSvr.Actor
             }
             try
             {
-                int nStartX = nX - nRage;
-                int nEndX = nX + nRage;
-                int nStartY = nY - nRage;
-                int nEndY = nY + nRage;
-                for (int x = nStartX; x <= nEndX; x++)
+                var nStartX = nX - nRage;
+                var nEndX = nX + nRage;
+                var nStartY = nY - nRage;
+                var nEndY = nY + nRage;
+                for (var x = nStartX; x <= nEndX; x++)
                 {
-                    for (int y = nStartY; y <= nEndY; y++)
+                    for (var y = nStartY; y <= nEndY; y++)
                     {
-                        bool cellSuccess = false;
-                        MapCellInfo cellInfo = envir.GetCellInfo(x, y, ref cellSuccess);
+                        var cellSuccess = false;
+                        var cellInfo = envir.GetCellInfo(x, y, ref cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            for (int i = 0; i < cellInfo.Count; i++)
+                            for (var i = 0; i < cellInfo.Count; i++)
                             {
-                                CellObject cellObject = cellInfo.ObjList[i];
+                                var cellObject = cellInfo.ObjList[i];
                                 if (cellObject != null && cellObject.ActorObject)
                                 {
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
                                     {
                                         rList.Add(baseObject);
@@ -2180,23 +2179,20 @@ namespace GameSvr.Actor
 
         private void SendSelfMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
-            if (ExpHitter.Race == ActorRace.Play)
+            if (!Ghost)
             {
-                if (!Ghost)
+                var sendMessage = new SendMessage
                 {
-                    SendMessage sendMessage = new SendMessage
-                    {
-                        wIdent = wIdent,
-                        wParam = wParam,
-                        nParam1 = nParam1,
-                        nParam2 = nParam2,
-                        nParam3 = nParam3,
-                        DeliveryTime = 0,
-                        LateDelivery = false,
-                        Buff = sMsg
-                    };
-                    MsgQueue.Enqueue(sendMessage, 0);//优先处理自身消息
-                }
+                    wIdent = wIdent,
+                    wParam = wParam,
+                    nParam1 = nParam1,
+                    nParam2 = nParam2,
+                    nParam3 = nParam3,
+                    DeliveryTime = 0,
+                    LateDelivery = false,
+                    Buff = sMsg
+                };
+                MsgQueue.Enqueue(sendMessage, 0);//优先处理自身消息
             }
         }
 
@@ -2221,23 +2217,23 @@ namespace GameSvr.Actor
                 {
                     SendRefMsgTick = HUtil32.GetTickCount();
                     VisibleHumanList.Clear();
-                    short nLx = (short)(CurrX - M2Share.Config.SendRefMsgRange); // 12
-                    short nHx = (short)(CurrX + M2Share.Config.SendRefMsgRange); // 12
-                    short nLy = (short)(CurrY - M2Share.Config.SendRefMsgRange); // 12
-                    short nHy = (short)(CurrY + M2Share.Config.SendRefMsgRange); // 12
-                    for (short nCx = nLx; nCx <= nHx; nCx++)
+                    var nLx = (short)(CurrX - M2Share.Config.SendRefMsgRange); // 12
+                    var nHx = (short)(CurrX + M2Share.Config.SendRefMsgRange); // 12
+                    var nLy = (short)(CurrY - M2Share.Config.SendRefMsgRange); // 12
+                    var nHy = (short)(CurrY + M2Share.Config.SendRefMsgRange); // 12
+                    for (var nCx = nLx; nCx <= nHx; nCx++)
                     {
-                        for (short nCy = nLy; nCy <= nHy; nCy++)
+                        for (var nCy = nLy; nCy <= nHy; nCy++)
                         {
-                            bool cellSuccess = false;
-                            MapCellInfo cellInfo = Envir.GetCellInfo(nCx, nCy, ref cellSuccess);
+                            var cellSuccess = false;
+                            var cellInfo = Envir.GetCellInfo(nCx, nCy, ref cellSuccess);
                             if (cellSuccess)
                             {
                                 if (cellInfo.IsAvailable)
                                 {
-                                    for (int i = 0; i < cellInfo.Count; i++)
+                                    for (var i = 0; i < cellInfo.Count; i++)
                                     {
-                                        CellObject cellObject = cellInfo.ObjList[i];
+                                        var cellObject = cellInfo.ObjList[i];
                                         if (cellObject != null)
                                         {
                                             if (cellObject.ActorObject)
@@ -2294,7 +2290,7 @@ namespace GameSvr.Actor
                     return;
                 }
 
-                for (int nC = 0; nC < VisibleHumanList.Count; nC++)
+                for (var nC = 0; nC < VisibleHumanList.Count; nC++)
                 {
                     baseObject = VisibleHumanList[nC];
                     if (baseObject.Ghost)
@@ -2341,8 +2337,8 @@ namespace GameSvr.Actor
             //or 代表运算, 需要两个运算数，即两个数的位运算，只有其中一个是1就返回1; 都是0才返回0
             //and 表示 当对应位均为1时返回1，其余为0
             //从上面算法得到，最终 nStatus得到是1,
-            int nStatus = 0;
-            for (int i = 0; i < StatusTimeArr.Length; i++)
+            var nStatus = 0;
+            for (var i = 0; i < StatusTimeArr.Length; i++)
             {
                 if (StatusTimeArr[i] > 0)
                 {
@@ -2373,7 +2369,7 @@ namespace GameSvr.Actor
         /// </summary>
         internal void LoadSayMsg()
         {
-            for (int i = 0; i < M2Share.MonSayMsgList.Count; i++)
+            for (var i = 0; i < M2Share.MonSayMsgList.Count; i++)
             {
                 if (M2Share.MonSayMsgList.TryGetValue(ChrName, out SayMsgList))
                 {
@@ -2428,7 +2424,7 @@ namespace GameSvr.Actor
         protected bool Walk(int nIdent)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::Walk {0} {1} {2}:{3}";
-            bool result = true;
+            var result = true;
             if (Envir == null)
             {
                 M2Share.Logger.Error("Walk nil PEnvir");
@@ -2436,13 +2432,13 @@ namespace GameSvr.Actor
             }
             try
             {
-                bool cellSuccess = false;
-                MapCellInfo cellInfo = Envir.GetCellInfo(CurrX, CurrY, ref cellSuccess);
+                var cellSuccess = false;
+                var cellInfo = Envir.GetCellInfo(CurrX, CurrY, ref cellSuccess);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
-                    for (int i = 0; i < cellInfo.Count; i++)
+                    for (var i = 0; i < cellInfo.Count; i++)
                     {
-                        CellObject cellObject = cellInfo.ObjList[i];
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject == null)
                         {
                             continue;
@@ -2450,7 +2446,7 @@ namespace GameSvr.Actor
                         switch (cellObject.CellType)
                         {
                             case CellType.Route:
-                                GateObject gateObj = (GateObject)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                var gateObj = (GateObject)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                 if (gateObj != null)
                                 {
                                     if (Race == ActorRace.Play)
@@ -2484,7 +2480,7 @@ namespace GameSvr.Actor
                             case CellType.Event:
                                 {
                                     EventInfo mapEvent = null;
-                                    EventInfo owinEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                    var owinEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
                                     if (owinEvent.OwnBaseObject != null)
                                     {
                                         mapEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
@@ -2525,7 +2521,7 @@ namespace GameSvr.Actor
         /// </summary>
         private bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY)
         {
-            bool result = false;
+            var result = false;
             const string sExceptionMsg = "[Exception] TBaseObject::EnterAnotherMap";
             try
             {
@@ -2545,13 +2541,13 @@ namespace GameSvr.Actor
                         return false;
                     }
                 }
-                bool cellSuccess = false;
+                var cellSuccess = false;
                 envir.GetCellInfo(nDMapX, nDMapY, ref cellSuccess);
                 if (!cellSuccess)
                 {
                     return false;
                 }
-                UserCastle castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
+                var castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
                 if ((castle != null) && (Race == ActorRace.Play))
                 {
                     if (!castle.CheckInPalace(CurrX, CurrY))
@@ -2563,18 +2559,18 @@ namespace GameSvr.Actor
                 {
                     OnHorse = false;
                 }
-                Envirnoment oldEnvir = Envir;
-                short nOldX = CurrX;
-                short nOldY = CurrY;
+                var oldEnvir = Envir;
+                var nOldX = CurrX;
+                var nOldY = CurrY;
                 DisappearA();
                 VisibleHumanList.Clear();
-                for (int i = 0; i < VisibleItems.Count; i++)
+                for (var i = 0; i < VisibleItems.Count; i++)
                 {
                     VisibleItems[i] = null;
                 }
                 VisibleItems.Clear();
                 VisibleEvents.Clear();
-                for (int i = 0; i < VisibleActors.Count; i++)
+                for (var i = 0; i < VisibleActors.Count; i++)
                 {
                     VisibleActors[i] = null;
                 }
@@ -2652,10 +2648,10 @@ namespace GameSvr.Actor
             }
             if (msgType == MsgType.Notice) // 公告
             {
-                string str = string.Empty;
-                string fColor = string.Empty;
-                string bColor = string.Empty;
-                string nTime = string.Empty;
+                var str = string.Empty;
+                var fColor = string.Empty;
+                var bColor = string.Empty;
+                var nTime = string.Empty;
                 switch (sMsg[0])
                 {
                     case '[':// 顶部滚动公告
@@ -2779,10 +2775,10 @@ namespace GameSvr.Actor
             {
                 sAttackName = attackBaseObject.ChrName;
             }
-            for (int i = 0; i < SayMsgList.Count; i++)
+            for (var i = 0; i < SayMsgList.Count; i++)
             {
-                MonsterSayMsg monSayMsg = SayMsgList[i];
-                string sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(ChrName));
+                var monSayMsg = SayMsgList[i];
+                var sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(ChrName));
                 sMsg = sMsg.Replace("%d", sAttackName);
                 if ((monSayMsg.State == monStatus) && (M2Share.RandomNumber.Random(monSayMsg.nRate) == 0))
                 {
@@ -2809,9 +2805,9 @@ namespace GameSvr.Actor
         /// </summary>
         protected void ApplyMeatQuality()
         {
-            for (int i = 0; i < ItemList.Count; i++)
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                StdItem stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
+                var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     if (stdItem.StdMode == 40)
@@ -2824,14 +2820,14 @@ namespace GameSvr.Actor
 
         protected bool TakeBagItems(BaseObject baseObject)
         {
-            bool result = false;
+            var result = false;
             while (true)
             {
                 if (baseObject.ItemList.Count <= 0)
                 {
                     break;
                 }
-                UserItem userItem = baseObject.ItemList[0];
+                var userItem = baseObject.ItemList[0];
                 if (!AddItemToBag(userItem))
                 {
                     break;
@@ -2925,7 +2921,7 @@ namespace GameSvr.Actor
         /// <returns></returns>
         protected virtual bool IsAttackTarget(BaseObject baseObject)
         {
-            bool result = false;
+            var result = false;
             if ((baseObject == null) || (baseObject == this))
             {
                 return false;
@@ -3030,7 +3026,7 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            bool result = Envir.Flag.SafeArea;
+            var result = Envir.Flag.SafeArea;
             if (result)
             {
                 return true;
@@ -3045,7 +3041,7 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            for (int i = 0; i < M2Share.StartPointList.Count; i++)
+            for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 if (M2Share.StartPointList[i].MapName == Envir.MapName)
                 {
@@ -3070,7 +3066,7 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            bool result = Envir.Flag.SafeArea;
+            var result = Envir.Flag.SafeArea;
             if (result)
             {
                 return true;
@@ -3085,7 +3081,7 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            for (int i = 0; i < M2Share.StartPointList.Count; i++)
+            for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
                 if (M2Share.StartPointList[i].MapName == envir.MapName)
                 {
@@ -3143,13 +3139,13 @@ namespace GameSvr.Actor
         {
             short nX = 0;
             short nY = 0;
-            int nFlag = -1;
+            var nFlag = -1;
             GetFrontPosition(ref nX, ref nY);
             if (sSlaveName == M2Share.Config.Dragon)
             {
                 nFlag = 1;
             }
-            for (int i = SlaveList.Count - 1; i >= 0; i--)
+            for (var i = SlaveList.Count - 1; i >= 0; i--)
             {
                 if (nFlag == 1)
                 {
@@ -3170,7 +3166,7 @@ namespace GameSvr.Actor
         public virtual ushort GetHitStruckDamage(BaseObject target, int nDamage)
         {
             int nArmor;
-            int nRnd = HUtil32.LoByte(WAbil.AC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.AC) - HUtil32.LoByte(WAbil.AC)) + 1);
+            var nRnd = HUtil32.LoByte(WAbil.AC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.AC) - HUtil32.LoByte(WAbil.AC)) + 1);
             if (nRnd > 0)
             {
                 nArmor = HUtil32.LoByte(WAbil.AC) + M2Share.RandomNumber.Random(nRnd);
@@ -3192,7 +3188,7 @@ namespace GameSvr.Actor
 
         public virtual ushort GetMagStruckDamage(BaseObject baseObject, ushort nDamage)
         {
-            int n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
+            var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
             nDamage = (ushort)HUtil32._MAX(0, nDamage - n14);
             if ((LifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
@@ -3241,7 +3237,7 @@ namespace GameSvr.Actor
 
         public bool GetBackPosition(ref short nX, ref short nY)
         {
-            Envirnoment envir = Envir;
+            var envir = Envir;
             nX = CurrX;
             nY = CurrY;
             switch (Direction)
@@ -3306,7 +3302,7 @@ namespace GameSvr.Actor
         {
             if (nType >= Grobal2.MAX_STATUS_ATTRIBUTE)
                 return false;
-            int nOldCharStatus = CharStatus;
+            var nOldCharStatus = CharStatus;
             if (StatusTimeArr[nType] > 0)
             {
                 if (StatusTimeArr[nType] < nTime)
@@ -3338,13 +3334,13 @@ namespace GameSvr.Actor
         /// <returns></returns>
         public bool CheckServerMakeSlave()
         {
-            bool result = false;
+            var result = false;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
-                for (int i = 0; i < MsgQueue.Count; i++)
+                for (var i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent == Messages.RM_10401)
                         {
@@ -3363,7 +3359,7 @@ namespace GameSvr.Actor
 
         protected bool GetRecallXy(short nX, short nY, int nRange, ref short nDx, ref short nDy)
         {
-            bool result = false;
+            var result = false;
             if (Envir.GetMovingObject(nX, nY, true) == null)
             {
                 result = true;
@@ -3372,11 +3368,11 @@ namespace GameSvr.Actor
             }
             if (!result)
             {
-                for (int i = 0; i < nRange; i++)
+                for (var i = 0; i < nRange; i++)
                 {
-                    for (int j = -i; j <= i; j++)
+                    for (var j = -i; j <= i; j++)
                     {
-                        for (int k = -i; k <= i; k++)
+                        for (var k = -i; k <= i; k++)
                         {
                             nDx = (short)(nX + k);
                             nDy = (short)(nY + j);
@@ -3426,16 +3422,16 @@ namespace GameSvr.Actor
 
         public bool MagCanHitTarget(short nX, short nY, BaseObject targeBaseObject)
         {
-            bool result = false;
+            var result = false;
             if (targeBaseObject == null)
             {
                 return false;
             }
-            int n20 = Math.Abs(nX - targeBaseObject.CurrX) + Math.Abs(nY - targeBaseObject.CurrY);
-            int n14 = 0;
+            var n20 = Math.Abs(nX - targeBaseObject.CurrX) + Math.Abs(nY - targeBaseObject.CurrY);
+            var n14 = 0;
             while (n14 < 13)
             {
-                byte n18 = M2Share.GetNextDirection(nX, nY, targeBaseObject.CurrX, targeBaseObject.CurrY);
+                var n18 = M2Share.GetNextDirection(nX, nY, targeBaseObject.CurrX, targeBaseObject.CurrY);
                 if (Envir.GetNextPosition(nX, nY, n18, 1, ref nX, ref nY) && Envir.IsValidCell(nX, nY))
                 {
                     if ((nX == targeBaseObject.CurrX) && (nY == targeBaseObject.CurrY))
@@ -3443,7 +3439,7 @@ namespace GameSvr.Actor
                         result = true;
                         break;
                     }
-                    int n1C = Math.Abs(nX - targeBaseObject.CurrX) + Math.Abs(nY - targeBaseObject.CurrY);
+                    var n1C = Math.Abs(nX - targeBaseObject.CurrX) + Math.Abs(nY - targeBaseObject.CurrY);
                     if (n1C > n20)
                     {
                         result = true;
@@ -3461,25 +3457,25 @@ namespace GameSvr.Actor
 
         public int MagMakeDefenceArea(int nX, int nY, int nRange, ushort nSec, byte btState)
         {
-            int result = 0;
-            int nStartX = nX - nRange;
-            int nEndX = nX + nRange;
-            int nStartY = nY - nRange;
-            int nEndY = nY + nRange;
-            for (int cX = nStartX; cX <= nEndX; cX++)
+            var result = 0;
+            var nStartX = nX - nRange;
+            var nEndX = nX + nRange;
+            var nStartY = nY - nRange;
+            var nEndY = nY + nRange;
+            for (var cX = nStartX; cX <= nEndX; cX++)
             {
-                for (int cY = nStartY; cY <= nEndY; cY++)
+                for (var cY = nStartY; cY <= nEndY; cY++)
                 {
-                    bool cellSuccess = false;
-                    MapCellInfo cellInfo = Envir.GetCellInfo(cX, cY, ref cellSuccess);
+                    var cellSuccess = false;
+                    var cellInfo = Envir.GetCellInfo(cX, cY, ref cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        for (int k = 0; k < cellInfo.Count; k++)
+                        for (var k = 0; k < cellInfo.Count; k++)
                         {
-                            CellObject cellObject = cellInfo.ObjList[k];
+                            var cellObject = cellInfo.ObjList[k];
                             if ((cellObject != null) && (cellObject.CellType == CellType.Play || cellObject.CellType == CellType.Monster))
                             {
-                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if ((baseObject != null) && (!baseObject.Ghost))
                                 {
                                     if (IsProperFriend(baseObject))
@@ -3505,7 +3501,7 @@ namespace GameSvr.Actor
 
         private bool DefenceUp(ushort nSec)
         {
-            bool result = false;
+            var result = false;
             if (StatusTimeArr[PoisonState.DefenceUP] > 0)
             {
                 if (StatusTimeArr[PoisonState.DefenceUP] < nSec)
@@ -3538,7 +3534,7 @@ namespace GameSvr.Actor
 
         private bool MagDefenceUp(ushort nSec)
         {
-            bool result = false;
+            var result = false;
             if (StatusTimeArr[PoisonState.MagDefenceUP] > 0)
             {
                 if (StatusTimeArr[PoisonState.MagDefenceUP] < nSec)
@@ -3563,13 +3559,13 @@ namespace GameSvr.Actor
         {
             UserItem result = null;
             nCount = 0;
-            for (int i = 0; i < UseItems.Length; i++)
+            for (var i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] == null)
                 {
                     continue;
                 }
-                string sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index);
+                var sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index);
                 if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UseItems[i];
@@ -3581,9 +3577,9 @@ namespace GameSvr.Actor
 
         public UserItem CheckItems(string sItemName)
         {
-            for (int i = 0; i < ItemList.Count; i++)
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                UserItem userItem = ItemList[i];
+                var userItem = ItemList[i];
                 if (userItem == null)
                 {
                     continue;
@@ -3608,10 +3604,10 @@ namespace GameSvr.Actor
 
         public bool DelBagItem(int nItemIndex, string sItemName)
         {
-            bool result = false;
-            for (int i = 0; i < ItemList.Count; i++)
+            var result = false;
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                UserItem userItem = ItemList[i];
+                var userItem = ItemList[i];
                 if ((userItem.MakeIndex == nItemIndex) &&
                     string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -3660,8 +3656,8 @@ namespace GameSvr.Actor
 
         public bool CanRun(short nCurrX, short nCurrY, short nX, short nY, bool boFlag)
         {
-            byte btDir = M2Share.GetNextDirection(nCurrX, nCurrY, nX, nY);
-            bool canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
+            var btDir = M2Share.GetNextDirection(nCurrX, nCurrY, nX, nY);
+            var canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Grobal2.DR_UP:
@@ -3727,8 +3723,8 @@ namespace GameSvr.Actor
 
         private bool CanRun(short nX, short nY, bool boFlag)
         {
-            byte btDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
-            bool canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
+            var btDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
+            var canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Grobal2.DR_UP:
@@ -3797,7 +3793,7 @@ namespace GameSvr.Actor
         {
             if (Race != ActorRace.Play)
             {
-                BaseObject masterObject = Master;
+                var masterObject = Master;
                 if (masterObject != null)
                 {
                     while (true)
@@ -4054,7 +4050,7 @@ namespace GameSvr.Actor
             }
 
             UseItems = new UserItem[13];
-            for (int i = 0; i < ItemList.Count; i++)
+            for (var i = 0; i < ItemList.Count; i++)
             {
                 ItemList[i] = null;
             }
@@ -4068,9 +4064,9 @@ namespace GameSvr.Actor
                 return false;
             }
 
-            int nX = monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1);
-            int nY = monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1);
-            bool mBoErrorOnInit = true;
+            var nX = monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1);
+            var nY = monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1);
+            var mBoErrorOnInit = true;
             if (Envir.CanWalk(nX, nY, true))
             {
                 CurrX = (short)nX;
@@ -4081,8 +4077,8 @@ namespace GameSvr.Actor
                 }
             }
 
-            int nRange = 0;
-            int nRange2 = 0;
+            var nRange = 0;
+            var nRange2 = 0;
             if (mBoErrorOnInit)
             {
                 if (Envir.Width < 50)
@@ -4111,10 +4107,10 @@ namespace GameSvr.Actor
                 }
             }
 
-            int nC = 0;
+            var nC = 0;
             object addObj = null;
-            short nX2 = CurrX;
-            short nY2 = CurrY;
+            var nX2 = CurrX;
+            var nY2 = CurrY;
             while (true)
             {
                 if (!Envir.CanWalk(nX, nY, false))

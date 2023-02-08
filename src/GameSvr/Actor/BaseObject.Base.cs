@@ -20,9 +20,9 @@ namespace GameSvr.Actor
             const string sExceptionMsg6 = "[Exception] TBaseObject::Run 6";
             try
             {
-                while (GetMessage(out ProcessMessage ProcessMsg))
+                while (GetMessage(out var processMsg))
                 {
-                    Operate(ProcessMsg);
+                    Operate(processMsg);
                 }
             }
             catch (Exception e)
@@ -39,7 +39,7 @@ namespace GameSvr.Actor
             {
                 if (!Death)
                 {
-                    int recoveryTick = (HUtil32.GetTickCount() - AutoRecoveryTick) / 20;
+                    var recoveryTick = (HUtil32.GetTickCount() - AutoRecoveryTick) / 20;
                     AutoRecoveryTick = HUtil32.GetTickCount();
                     HealthTick += recoveryTick;
                     SpellTick += recoveryTick;
@@ -101,7 +101,7 @@ namespace GameSvr.Actor
                 {
                     if (CanReAlive && MonGen != null)
                     {
-                        int dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
+                        var dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
                         if (dwMakeGhostTime > M2Share.Config.MakeGhostTime)
                         {
                             dwMakeGhostTime = M2Share.Config.MakeGhostTime;
@@ -129,10 +129,10 @@ namespace GameSvr.Actor
             {
                 if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (IncHealing > 0)))
                 {
-                    int dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
+                    var dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
                     if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
                     {
-                        int incHealthTick = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
+                        var incHealthTick = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
                         IncHealthSpellTick = HUtil32.GetTickCount() + incHealthTick;
                         if ((IncSpell > 0) || (IncHealth > 0) || (PerHealing > 0))
                         {
@@ -207,7 +207,7 @@ namespace GameSvr.Actor
                     HealthSpellChanged();
                 }
                 // 检查HP/MP值是否大于最大值，大于则降低到正常大小
-                bool boNeedRecalc = false;
+                var boNeedRecalc = false;
                 if (WAbil.HP > WAbil.MaxHP)
                 {
                     boNeedRecalc = true;
@@ -349,7 +349,7 @@ namespace GameSvr.Actor
                     }
                 }
                 // 清除宝宝列表中已经死亡及叛变的宝宝信息
-                for (int i = SlaveList.Count - 1; i >= 0; i--)
+                for (var i = SlaveList.Count - 1; i >= 0; i--)
                 {
                     if (SlaveList[i].Death || SlaveList[i].Ghost || (SlaveList[i].Master != this))
                     {
@@ -386,7 +386,7 @@ namespace GameSvr.Actor
                         }
                         if (HUtil32.GetTickCount() > MasterRoyaltyTick)
                         {
-                            for (int i = 0; i < Master.SlaveList.Count; i++)
+                            for (var i = 0; i < Master.SlaveList.Count; i++)
                             {
                                 if (Master.SlaveList[i] == this)
                                 {
@@ -423,9 +423,9 @@ namespace GameSvr.Actor
             }
             try
             {
-                bool boChg = false;
-                bool boNeedRecalc = false;
-                for (int i = 0; i < StatusArrTick.Length; i++)
+                var boChg = false;
+                var boNeedRecalc = false;
+                for (var i = 0; i < StatusArrTick.Length; i++)
                 {
                     if ((StatusTimeArr[i] > 0) && (StatusTimeArr[i] < 60000))
                     {
@@ -563,21 +563,20 @@ namespace GameSvr.Actor
 
         protected virtual bool IsProtectTarget(BaseObject targetObject)
         {
-            bool result = true;
             if (targetObject == null)
             {
                 return true;
             }
             if (InSafeZone() || targetObject.InSafeZone())
             {
-                result = false;
+               return false;
             }
-            return result;
+            return true;
         }
 
         protected virtual void ProcessSayMsg(string sMsg)
         {
-            string sChrName = Race == ActorRace.Play ? ChrName : M2Share.FilterShowName(ChrName);
+            var sChrName = Race == ActorRace.Play ? ChrName : M2Share.FilterShowName(ChrName);
             SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sChrName + ':' + sMsg);
         }
 
@@ -610,14 +609,14 @@ namespace GameSvr.Actor
                 {
                     return;
                 }
-                int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
-                for (int i = ItemList.Count - 1; i >= 0; i--)
+                var dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
+                for (var i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
-                    bool boCanNotDrop = false;
+                    var StdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
+                    var boCanNotDrop = false;
                     if (StdItem != null)
                     {
-                        if (M2Share.MonDropLimitLIst.TryGetValue(StdItem.Name, out MonsterLimitDrop MonDrop))
+                        if (M2Share.MonDropLimitLIst.TryGetValue(StdItem.Name, out var MonDrop))
                         {
                             if (MonDrop.DropCount < MonDrop.CountLimit)
                             {
@@ -629,7 +628,6 @@ namespace GameSvr.Actor
                                 MonDrop.NoDropCount++;
                                 boCanNotDrop = true;
                             }
-                            break;
                         }
                     }
                     if (boCanNotDrop)
@@ -669,7 +667,7 @@ namespace GameSvr.Actor
         {
             if (VisibleActors.Count > 0)
             {
-                for (int i = 0; i < VisibleActors.Count; i++)
+                for (var i = 0; i < VisibleActors.Count; i++)
                 {
                     if (VisibleActors[i].BaseObject == baseObject)
                     {
@@ -683,7 +681,7 @@ namespace GameSvr.Actor
 
         public virtual bool IsProperFriend(BaseObject attackTarget)
         {
-            bool result = false;
+            var result = false;
             if (attackTarget == null)
             {
                 return false;
@@ -705,7 +703,7 @@ namespace GameSvr.Actor
 
         protected virtual bool Operate(ProcessMessage processMsg)
         {
-            const string sExceptionMsg = "[Exception] TBaseObject::Operate ";
+            const string sExceptionMsg = "[Exception] BaseObject::Operate ";
             try
             {
                 BaseObject targetBaseObject;
@@ -717,7 +715,7 @@ namespace GameSvr.Actor
                         {
                             WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
                         }
-                        ushort nDamage = GetMagStruckDamage(null, (ushort)processMsg.nParam1);
+                        var nDamage = GetMagStruckDamage(null, (ushort)processMsg.nParam1);
                         if (nDamage > 0)
                         {
                             StruckDamage(nDamage);
@@ -812,17 +810,17 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Messages.RM_DELAYMAGIC:
-                        int nPower = processMsg.wParam;
-                        ushort nTargetX = HUtil32.LoWord(processMsg.nParam1);
-                        ushort nTargetY = HUtil32.HiWord(processMsg.nParam1);
-                        int nRage = processMsg.nParam2;
+                        var nPower = (ushort)processMsg.wParam;
+                        var nTargetX = HUtil32.LoWord(processMsg.nParam1);
+                        var nTargetY = HUtil32.HiWord(processMsg.nParam1);
+                        var nRage = processMsg.nParam2;
                         targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
-                        if ((targetBaseObject != null) && (targetBaseObject.GetMagStruckDamage(this, (ushort)nPower) > 0))
+                        if ((targetBaseObject != null) && (targetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
                             SetTargetCreat(targetBaseObject);
                             if (targetBaseObject.Race >= ActorRace.Animal)
                             {
-                                nPower = HUtil32.Round(nPower / 1.2);
+                                nPower = (ushort)HUtil32.Round(nPower / 1.2);
                             }
                             if ((Math.Abs(nTargetX - targetBaseObject.CurrX) <= nRage) && (Math.Abs(nTargetY - targetBaseObject.CurrY) <= nRage))
                             {
@@ -878,7 +876,7 @@ namespace GameSvr.Actor
 
         public virtual string GetShowName()
         {
-            string result = M2Share.FilterShowName(ChrName);
+            var result = M2Share.FilterShowName(ChrName);
             if ((Master != null) && !Master.ObMode)
             {
                 result = result + '(' + Master.ChrName + ')';

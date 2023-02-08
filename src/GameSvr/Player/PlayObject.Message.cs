@@ -18,7 +18,7 @@ namespace GameSvr.Player
         {
             int tObjCount;
             int nInteger;
-            ProcessMessage processMsg = null;
+            var processMsg = default(ProcessMessage);
             const string sPayMentExpire = "您的帐户充值时间已到期!!!";
             const string sDisConnectMsg = "游戏被强行中断!!!";
             const string sExceptionMsg1 = "[Exception] TPlayObject::Run -> Operate 1";
@@ -67,7 +67,7 @@ namespace GameSvr.Player
                     IsTimeRecall = false;
                     SpaceMove(TimeRecallMoveMap, TimeRecallMoveX, TimeRecallMoveY, 0);
                 }
-                for (int i = 0; i < 20; i++) //个人定时器
+                for (var i = 0; i < 20; i++) //个人定时器
                 {
                     if (AutoTimerStatus[i] > 500)
                     {
@@ -82,8 +82,8 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                bool boNeedRecalc = false;
-                for (int i = 0; i < ExtraAbil.Length; i++)
+                var boNeedRecalc = false;
+                for (var i = 0; i < ExtraAbil.Length; i++)
                 {
                     if (ExtraAbil[i] > 0)
                     {
@@ -184,11 +184,8 @@ namespace GameSvr.Player
                 if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.DecLightItemDrugTime)
                 {
                     DecLightItemDrugTick += M2Share.Config.DecLightItemDrugTime;
-                    if (Race == ActorRace.Play)
-                    {
-                        UseLamp();
-                        CheckPkStatus();
-                    }
+                    UseLamp();
+                    CheckPkStatus();
                 }
                 if ((HUtil32.GetTickCount() - CheckDupObjTick) > 3000)
                 {
@@ -213,7 +210,7 @@ namespace GameSvr.Player
                         CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
                 }
-                Castle.UserCastle castle = M2Share.CastleMgr.InCastleWarArea(this);
+                var castle = M2Share.CastleMgr.InCastleWarArea(this);
                 if (castle != null && castle.UnderWar)
                 {
                     ChangePkStatus(true);
@@ -221,10 +218,10 @@ namespace GameSvr.Player
                 if ((HUtil32.GetTickCount() - DiscountForNightTick) > 1000)
                 {
                     DiscountForNightTick = HUtil32.GetTickCount();
-                    int wHour = DateTime.Now.Hour;
-                    int wMin = DateTime.Now.Minute;
-                    int wSec = DateTime.Now.Second;
-                    int wMSec = DateTime.Now.Millisecond;
+                    var wHour = DateTime.Now.Hour;
+                    var wMin = DateTime.Now.Minute;
+                    var wSec = DateTime.Now.Second;
+                    var wMSec = DateTime.Now.Millisecond;
                     if (M2Share.Config.DiscountForNightTime && (wHour == M2Share.Config.HalfFeeStart || wHour == M2Share.Config.HalfFeeEnd))
                     {
                         if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - LogonTick) > 60000)
@@ -238,7 +235,7 @@ namespace GameSvr.Player
                     {
                         if (MyGuild.GuildWarList.Count > 0)
                         {
-                            bool boInSafeArea = InSafeArea();
+                            var boInSafeArea = InSafeArea();
                             if (boInSafeArea != IsSafeArea)
                             {
                                 IsSafeArea = boInSafeArea;
@@ -320,29 +317,29 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                if (processMsg != null)
+                if (processMsg.wIdent >= 0)
                 {
                     if (processMsg.wIdent == 0)
                     {
-                        MakeGhost(); //用于处理 人物异常退出，但人物还在游戏中问题
+                        MakeGhost();//用于处理 人物异常退出，但人物还在游戏中问题
                     }
                     M2Share.Logger.Error(Format(sExceptionMsg2, ChrName, processMsg.wIdent, processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
                 }
                 M2Share.Logger.Error(e.Message);
             }
-            bool boTakeItem = false;
+            var boTakeItem = false;
             // 检查身上的装备有没不符合
-            for (int i = 0; i < UseItems.Length; i++)
+            for (var i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         if (!CheckItemsNeed(stdItem))
                         {
                             // m_ItemList.Add((UserItem));
-                            UserItem userItem = UseItems[i];
+                            var userItem = UseItems[i];
                             if (AddItemToBag(userItem))
                             {
                                 SendAddItem(userItem);
@@ -351,7 +348,7 @@ namespace GameSvr.Player
                             }
                             else
                             {
-                                if (DropItemDown(UseItems[i], 1, false, 0, this.ActorId))
+                                if (DropItemDown(UseItems[i], 1, false, 0, ActorId))
                                 {
                                     boTakeItem = true;
                                 }
@@ -467,11 +464,11 @@ namespace GameSvr.Player
                 }
                 if (LastHiter != null && LastHiter.Race == ActorRace.Play)
                 {
-                    PlayObject lastHiterPlay = LastHiter as PlayObject;
+                    var lastHiterPlay = LastHiter as PlayObject;
                     if (lastHiterPlay.MyGuild != null && MyGuild != null)
                     {
                         lastHiterPlay.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
-                        string tStr = lastHiterPlay.MyGuild.sGuildName + ':' + lastHiterPlay.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
+                        var tStr = lastHiterPlay.MyGuild.sGuildName + ':' + lastHiterPlay.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
                         M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
                     }
                 }
@@ -589,43 +586,43 @@ namespace GameSvr.Player
             try
             {
                 // 取得在线最高等级、PK、攻击力、魔法、道术 的人物
-                if (M2Share.HighLevelHuman == this.ActorId && (Death || Ghost))
+                if (M2Share.HighLevelHuman == ActorId && (Death || Ghost))
                 {
                     M2Share.HighLevelHuman = 0;
                 }
-                if (M2Share.HighPKPointHuman == this.ActorId && (Death || Ghost))
+                if (M2Share.HighPKPointHuman == ActorId && (Death || Ghost))
                 {
                     M2Share.HighPKPointHuman = 0;
                 }
-                if (M2Share.HighDCHuman == this.ActorId && (Death || Ghost))
+                if (M2Share.HighDCHuman == ActorId && (Death || Ghost))
                 {
                     M2Share.HighDCHuman = 0;
                 }
-                if (M2Share.HighMCHuman == this.ActorId && (Death || Ghost))
+                if (M2Share.HighMCHuman == ActorId && (Death || Ghost))
                 {
                     M2Share.HighMCHuman = 0;
                 }
-                if (M2Share.HighSCHuman == this.ActorId && (Death || Ghost))
+                if (M2Share.HighSCHuman == ActorId && (Death || Ghost))
                 {
                     M2Share.HighSCHuman = 0;
                 }
-                if (M2Share.HighOnlineHuman == this.ActorId && (Death || Ghost))
+                if (M2Share.HighOnlineHuman == ActorId && (Death || Ghost))
                 {
                     M2Share.HighOnlineHuman = 0;
                 }
                 if (Permission < 6)
                 {
                     // 最高等级
-                    BaseObject targetObject = M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
+                    var targetObject = M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
                     if (M2Share.HighLevelHuman == 0 || targetObject.Ghost)
                     {
-                        M2Share.HighLevelHuman = this.ActorId;
+                        M2Share.HighLevelHuman = ActorId;
                     }
                     else
                     {
                         if (Abil.Level > targetObject.Abil.Level)
                         {
-                            M2Share.HighLevelHuman = this.ActorId;
+                            M2Share.HighLevelHuman = ActorId;
                         }
                     }
 
@@ -635,14 +632,14 @@ namespace GameSvr.Player
                     {
                         if (PkPoint > 0)
                         {
-                            M2Share.HighPKPointHuman = this.ActorId;
+                            M2Share.HighPKPointHuman = ActorId;
                         }
                     }
                     else
                     {
                         if (PkPoint > ((PlayObject)targetObject).PkPoint)
                         {
-                            M2Share.HighPKPointHuman = this.ActorId;
+                            M2Share.HighPKPointHuman = ActorId;
                         }
                     }
 
@@ -650,13 +647,13 @@ namespace GameSvr.Player
                     targetObject = M2Share.ActorMgr.Get(M2Share.HighDCHuman);
                     if (M2Share.HighDCHuman == 0 || targetObject.Ghost)
                     {
-                        M2Share.HighDCHuman = this.ActorId;
+                        M2Share.HighDCHuman = ActorId;
                     }
                     else
                     {
                         if (HUtil32.HiWord(WAbil.DC) > HUtil32.HiWord(targetObject.WAbil.DC))
                         {
-                            M2Share.HighDCHuman = this.ActorId;
+                            M2Share.HighDCHuman = ActorId;
                         }
                     }
 
@@ -664,13 +661,13 @@ namespace GameSvr.Player
                     targetObject = M2Share.ActorMgr.Get(M2Share.HighMCHuman);
                     if (M2Share.HighMCHuman == 0 || targetObject.Ghost)
                     {
-                        M2Share.HighMCHuman = this.ActorId;
+                        M2Share.HighMCHuman = ActorId;
                     }
                     else
                     {
                         if (HUtil32.HiWord(WAbil.MC) > HUtil32.HiWord(targetObject.WAbil.MC))
                         {
-                            M2Share.HighMCHuman = this.ActorId;
+                            M2Share.HighMCHuman = ActorId;
                         }
                     }
 
@@ -678,13 +675,13 @@ namespace GameSvr.Player
                     targetObject = M2Share.ActorMgr.Get(M2Share.HighSCHuman);
                     if (M2Share.HighSCHuman == 0 || targetObject.Ghost)
                     {
-                        M2Share.HighSCHuman = this.ActorId;
+                        M2Share.HighSCHuman = ActorId;
                     }
                     else
                     {
                         if (HUtil32.HiWord(WAbil.SC) > HUtil32.HiWord(targetObject.WAbil.SC))
                         {
-                            M2Share.HighSCHuman = this.ActorId;
+                            M2Share.HighSCHuman = ActorId;
                         }
                     }
 
@@ -692,13 +689,13 @@ namespace GameSvr.Player
                     targetObject = M2Share.ActorMgr.Get(M2Share.HighOnlineHuman);
                     if (M2Share.HighOnlineHuman == 0 || targetObject.Ghost)
                     {
-                        M2Share.HighOnlineHuman = this.ActorId;
+                        M2Share.HighOnlineHuman = ActorId;
                     }
                     else
                     {
                         if (LogonTick < ((PlayObject)targetObject).LogonTick)
                         {
-                            M2Share.HighOnlineHuman = this.ActorId;
+                            M2Share.HighOnlineHuman = ActorId;
                         }
                     }
                 }
@@ -738,7 +735,7 @@ namespace GameSvr.Player
                     }
                     if (IsMaster)
                     {
-                        for (int i = MasterList.Count - 1; i >= 0; i--)
+                        for (var i = MasterList.Count - 1; i >= 0; i--)
                         {
                             if (MasterList[i].Death || MasterList[i].Ghost)
                             {
@@ -764,9 +761,9 @@ namespace GameSvr.Player
                         }
                     }
 
-                    if (GroupOwner == this.ActorId)
+                    if (GroupOwner == ActorId)
                     {
-                        for (int i = GroupMembers.Count - 1; i >= 0; i--)
+                        for (var i = GroupMembers.Count - 1; i >= 0; i--)
                         {
                             BaseObject baseObject = GroupMembers[i];
                             if (baseObject.Death || baseObject.Ghost)
@@ -804,9 +801,9 @@ namespace GameSvr.Player
             CharDesc charDesc;
             int nObjCount;
             string sendMsg;
-            int dwDelayTime = 0;
+            var dwDelayTime = 0;
             int nMsgCount;
-            bool result = true;
+            var result = true;
             BaseObject baseObject = null;
             if (processMsg.BaseObject > 0)
             {
@@ -1438,7 +1435,7 @@ namespace GameSvr.Player
                     ProcessQueryValue(processMsg.nParam1, processMsg.Msg);
                     break;
                 case Messages.RM_WALK:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_WALK, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                         charDesc = new CharDesc();
@@ -1448,7 +1445,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Messages.RM_HORSERUN:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HORSERUN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                         charDesc = new CharDesc();
@@ -1458,7 +1455,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case Messages.RM_RUN:
-                    if (processMsg.BaseObject != this.ActorId && baseObject != null)
+                    if (processMsg.BaseObject != ActorId && baseObject != null)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_RUN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                         charDesc = new CharDesc();
@@ -1468,35 +1465,35 @@ namespace GameSvr.Player
                     }
                     break;
                 case Messages.RM_HIT:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_HEAVYHIT:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HEAVYHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg, processMsg.Msg);
                     }
                     break;
                 case Messages.RM_BIGHIT:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_BIGHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_SPELL:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SPELL, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg, processMsg.nParam3.ToString());
                     }
                     break;
                 case Messages.RM_SPELL2:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_POWERHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
@@ -1510,49 +1507,49 @@ namespace GameSvr.Player
                     SendSocket(ClientMsg, EDCode.EncodeBuffer(charDesc));
                     break;
                 case Messages.RM_LONGHIT:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LONGHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_WIDEHIT:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_WIDEHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_FIREHIT:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_FIREHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_CRSHIT:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_CRSHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_41:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_41, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_TWINHIT:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_TWINHIT, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_43:
-                    if (processMsg.BaseObject != this.ActorId)
+                    if (processMsg.BaseObject != ActorId)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_43, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
@@ -1562,7 +1559,7 @@ namespace GameSvr.Player
                 case Messages.RM_PUSH:
                 case Messages.RM_RUSH:
                 case Messages.RM_RUSHKUNG:
-                    if (processMsg.BaseObject != this.ActorId || processMsg.wIdent == Messages.RM_PUSH || processMsg.wIdent == Messages.RM_RUSH || processMsg.wIdent == Messages.RM_RUSHKUNG)
+                    if (processMsg.BaseObject != ActorId || processMsg.wIdent == Messages.RM_PUSH || processMsg.wIdent == Messages.RM_RUSH || processMsg.wIdent == Messages.RM_RUSHKUNG)
                     {
                         switch (processMsg.wIdent)
                         {
@@ -1747,7 +1744,7 @@ namespace GameSvr.Player
                             ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MERCHANTSAY, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
                             break;
                         case Messages.RM_MOVEMESSAGE:
-                            this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MOVEMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), processMsg.nParam3, processMsg.wParam);
+                            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MOVEMESSAGE, processMsg.BaseObject, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), processMsg.nParam3, processMsg.wParam);
                             break;
                     }
                     SendSocket(ClientMsg, EDCode.EncodeString(processMsg.Msg));
@@ -1803,8 +1800,8 @@ namespace GameSvr.Player
                     break;
                 case Messages.RM_MAGICFIRE:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MAGICFIRE, processMsg.BaseObject, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), processMsg.nParam1);
-                    byte[] by = BitConverter.GetBytes(processMsg.nParam3);
-                    string sSendStr = EDCode.EncodeBuffer(by, by.Length);
+                    var by = BitConverter.GetBytes(processMsg.nParam3);
+                    var sSendStr = EDCode.EncodeBuffer(by, by.Length);
                     SendSocket(ClientMsg, sSendStr);
                     break;
                 case Messages.RM_MAGICFIREFAIL:
@@ -1884,7 +1881,7 @@ namespace GameSvr.Player
                     SendSaveItemList(processMsg.nParam1);
                     break;
                 case Messages.RM_SENDDELITEMLIST:
-                    IList<DeleteItem> delItemList = (IList<DeleteItem>)M2Share.ActorMgr.GetOhter(processMsg.nParam1);
+                    var delItemList = (IList<DeleteItem>)M2Share.ActorMgr.GetOhter(processMsg.nParam1);
                     SendDelItemList(delItemList);
                     M2Share.ActorMgr.RevomeOhter(processMsg.nParam1);
                     break;
@@ -1921,7 +1918,7 @@ namespace GameSvr.Player
                 case Messages.RM_FLYAXE:
                     if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
                     {
-                        MessageBodyW messageBodyW = new MessageBodyW();
+                        var messageBodyW = new MessageBodyW();
                         messageBodyW.Param1 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrX;
                         messageBodyW.Param2 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
                         messageBodyW.Tag1 = HUtil32.LoWord(processMsg.nParam3);
@@ -2010,7 +2007,7 @@ namespace GameSvr.Player
                     SendDefMessage(Messages.SM_HIDEEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3, "");
                     break;
                 case Messages.RM_SHOWEVENT:
-                    ShortMessage shortMessage = new ShortMessage();
+                    var shortMessage = new ShortMessage();
                     shortMessage.Ident = HUtil32.HiWord(processMsg.nParam2);
                     shortMessage.wMsg = 0;
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SHOWEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3);
@@ -2065,12 +2062,12 @@ namespace GameSvr.Player
                     SendDefMessage(Messages.SM_SENDDEALOFFFORM, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
                     break;
                 case Messages.RM_QUERYYBSELL:// 查询正在出售的物品
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_QUERYYBSELL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_QUERYYBSELL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_QUERYYBDEAL:// 查询可以的购买物品
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_QUERYYBDEAL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_QUERYYBDEAL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.CM_SELLOFFADDITEM:// 客户端往出售物品窗口里加物品 
                     ClientAddSellOffItem(processMsg.nParam1, processMsg.Msg);
@@ -2094,36 +2091,36 @@ namespace GameSvr.Player
                     ClientBuySellOffItme(processMsg.Msg);// 出售人
                     break;
                 case Messages.RM_SELLOFFCANCEL:// 元宝寄售取消出售
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SellOffCANCEL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SellOffCANCEL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_SELLOFFADDITEM_OK:// 客户端往出售物品窗口里加物品 成功
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFADDITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFADDITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_SellOffADDITEM_FAIL:// 客户端往出售物品窗口里加物品 失败
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SellOffADDITEM_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SellOffADDITEM_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_SELLOFFDELITEM_OK:// 客户端删除出售物品窗里的物品 成功
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFDELITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFDELITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_SELLOFFDELITEM_FAIL:// 客户端删除出售物品窗里的物品 失败
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFDELITEM_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFDELITEM_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_SELLOFFEND_OK:// 客户端元宝寄售结束 成功
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFEND_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFEND_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_SELLOFFEND_FAIL:// 客户端元宝寄售结束 失败
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFEND_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFEND_FAIL, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_SELLOFFBUY_OK:// 购买成功
-                    this.ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFBUY_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
-                    SendSocket(this.ClientMsg, processMsg.Msg);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELLOFFBUY_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
+                    SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 default:
                     result = base.Operate(processMsg);
@@ -2166,7 +2163,7 @@ namespace GameSvr.Player
                 }
                 IList<DeleteItem> dropItemList = new List<DeleteItem>();
                 StdItem stdItem;
-                for (int i = 0; i < UseItems.Length; i++)
+                for (var i = 0; i < UseItems.Length; i++)
                 {
                     if (UseItems[i] == null)
                     {
@@ -2177,7 +2174,7 @@ namespace GameSvr.Player
                     {
                         if ((stdItem.ItemDesc & 8) != 0)
                         {
-                            dropItemList.Add(new DeleteItem() { MakeIndex = this.UseItems[i].MakeIndex });
+                            dropItemList.Add(new DeleteItem() { MakeIndex = UseItems[i].MakeIndex });
                             if (stdItem.NeedIdentify == 1)
                             {
                                 M2Share.EventSource.AddEventLog(16, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
@@ -2186,8 +2183,8 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                int nRate = PvpLevel() > 2 ? M2Share.Config.DieRedDropUseItemRate : M2Share.Config.DieDropUseItemRate;
-                for (int i = 0; i < UseItems.Length; i++)
+                var nRate = PvpLevel() > 2 ? M2Share.Config.DieRedDropUseItemRate : M2Share.Config.DieDropUseItemRate;
+                for (var i = 0; i < UseItems.Length; i++)
                 {
                     if (M2Share.RandomNumber.Random(nRate) != 0)
                     {
@@ -2198,7 +2195,7 @@ namespace GameSvr.Player
                         continue;
                     }
                     // 检查是否在禁止取下列表,如果在列表中则不掉此物品
-                    if (DropItemDown(UseItems[i], 2, true, baseObject, this.ActorId))
+                    if (DropItemDown(UseItems[i], 2, true, baseObject, ActorId))
                     {
                         stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                         if (stdItem != null)
@@ -2210,7 +2207,7 @@ namespace GameSvr.Player
                                     dropItemList.Add(new DeleteItem()
                                     {
                                         ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index),
-                                        MakeIndex = this.UseItems[i].MakeIndex
+                                        MakeIndex = UseItems[i].MakeIndex
                                     });
                                 }
                                 UseItems[i].Index = 0;
@@ -2220,9 +2217,9 @@ namespace GameSvr.Player
                 }
                 if (dropItemList != null)
                 {
-                    int objectId = HUtil32.Sequence();
+                    var objectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(objectId, dropItemList);
-                    this.SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                    SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
                 }
             }
             catch (Exception ex)
@@ -2242,12 +2239,12 @@ namespace GameSvr.Player
             {
                 if (UseItems[Grobal2.U_RIGHTHAND] != null && UseItems[Grobal2.U_RIGHTHAND].Index > 0)
                 {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].Index);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].Index);
                     if ((stdItem == null) || (stdItem.SpecialPwr != 0))
                     {
                         return;
                     }
-                    int nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
+                    var nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
                     ushort nDura;
                     if (M2Share.Config.DecLampDura)
                     {
@@ -2262,7 +2259,7 @@ namespace GameSvr.Player
                         UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
                         if (Race == ActorRace.Play)
                         {
-                            this.SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
+                            SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
                         }
                         UseItems[Grobal2.U_RIGHTHAND].Index = 0;
                         Light = 0;
