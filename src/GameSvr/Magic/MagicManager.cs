@@ -153,12 +153,12 @@ namespace GameSvr.Magic
             playObject.SendRefMsg(Messages.RM_SPELL, userMagic.Magic.Effect, nTargetX, nTargetY, userMagic.Magic.MagicId, "");
             if (targetObject != null && targetObject.Death)
             {
-                return false;
+                targetObject = null;
             }
             var boTrain = false;
             var boSpellFail = false;
             var boSpellFire = true;
-            if (playObject.SoftVersionDateEx == 0 && playObject.ClientTick == 0)
+            if (playObject.SoftVersionDateEx == 0 && playObject.ClientTick == 0 || userMagic.Magic.MagicId > 40)
             {
                 return false;
             }

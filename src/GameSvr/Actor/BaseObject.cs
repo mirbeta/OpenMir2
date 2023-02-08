@@ -3197,13 +3197,17 @@ namespace GameSvr.Actor
             return nDamage;
         }
 
+        /// <summary>
+        /// 受攻击,减身上装备的持久
+        /// </summary>
+        /// <param name="nDamage"></param>
         public virtual void StruckDamage(ushort nDamage)
         {
             if (nDamage <= 0)
             {
                 return;
             }
-            if ((Race >= 50) && (LastHiter != null) && (LastHiter.Race == ActorRace.Play)) // 怪物攻击人
+            if ((Race >= 50) && (LastHiter != null) && (LastHiter.Race == ActorRace.Play)) // 人攻击怪物
             {
                 switch (((PlayObject)LastHiter).Job)
                 {
@@ -3217,6 +3221,10 @@ namespace GameSvr.Actor
                         nDamage = (ushort)(nDamage * M2Share.Config.TaosMon / 10);
                         break;
                 }
+            }
+            if ((Race == ActorRace.Play) && (LastHiter != null) && (LastHiter.Master != null)) // 人物下属怪物攻击人
+            {
+                nDamage = (ushort)(nDamage * M2Share.Config.MonHum / 10);
             }
             if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
             {
