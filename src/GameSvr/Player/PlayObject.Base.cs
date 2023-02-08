@@ -55,6 +55,10 @@ namespace GameSvr.Player
         /// </summary>
         public byte Permission;
         /// <summary>
+        /// 人物的幸运值
+        /// </summary>
+        public byte Luck;
+        /// <summary>
         /// 人物身上最多可带金币数
         /// </summary>
         public int GoldMax;
@@ -1790,6 +1794,9 @@ namespace GameSvr.Player
         public override void RecalcAbilitys()
         {
             base.RecalcAbilitys();
+            Luck = 0;
+            Luck = (byte)(Luck + AddAbil.Luck);
+            Luck = (byte)(Luck - AddAbil.UnLuck);
             if (Race == ActorRace.Play)
             {
                 bool mhRing = false;
@@ -2645,6 +2652,141 @@ namespace GameSvr.Player
                 }
             }
         }
+
+        public override ushort GetAttackPower(int nBasePower, int nPower)
+        {
+            if (nPower < 0)
+            {
+                nPower = 0;
+            }
+            int result = 0;
+            if (Luck > 0)
+            {
+                if (M2Share.RandomNumber.Random(10 - HUtil32._MIN(9, Luck)) == 0)
+                {
+                    result = nBasePower + nPower;
+                }
+                else
+                {
+                    result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
+                }
+            }
+            else
+            {
+                result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
+                if (Luck <= 0)
+                {
+                    if (M2Share.RandomNumber.Random(10 - HUtil32._MAX(0, -Luck)) == 0)
+                    {
+                        result = nBasePower;
+                    }
+                }
+            }
+            result = HUtil32.Round(result * (PowerRate / 100));
+            if (BoPowerItem)
+            {
+                result = HUtil32.Round(PowerItem * result);
+            }
+            if (AutoChangeColor)
+            {
+                result = result * AutoChangeIdx + 1;
+            }
+            if (FixColor)
+            {
+                result = result * FixColorIdx + 1;
+            }
+            return (ushort)result;
+        }
+
+        public override void StruckDamage(ushort nDamage)
+        {
+            if ((Race == ActorRace.Play) && (LastHiter != null) && (LastHiter.Master != null)) // 人攻击怪物
+            {
+                nDamage = (ushort)(nDamage * M2Share.Config.MonHum / 10);
+            }
+            base.StruckDamage(nDamage);
+            ushort nDam = (ushort)(M2Share.RandomNumber.Random(10) + 5);
+            if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
+            {
+                nDam = (ushort)HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
+            }
+            var boRecalcAbi = false;
+            ushort nDura;
+            int nOldDura;
+            if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0)
+            {
+                nDura = UseItems[Grobal2.U_DRESS].Dura;
+                nOldDura = HUtil32.Round(nDura / 1000);
+                nDura -= nDam;
+                if (nDura <= 0)
+                {
+                    SendDelItems(UseItems[Grobal2.U_DRESS]);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
+                    if (stdItem.NeedIdentify == 1)
+                    {
+                        M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
+                                                           ChrName + "\t" + stdItem.Name + "\t" +
+                                                           UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
+                                                           + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
+                                                           "\t" + '0');
+                    }
+                    UseItems[Grobal2.U_DRESS].Index = 0;
+                    FeatureChanged();
+                    UseItems[Grobal2.U_DRESS].Index = 0;
+                    UseItems[Grobal2.U_DRESS].Dura = 0;
+                    boRecalcAbi = true;
+                }
+                else
+                {
+                    UseItems[Grobal2.U_DRESS].Dura = nDura;
+                }
+
+                if (nOldDura != HUtil32.Round(nDura / 1000))
+                {
+                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
+                }
+            }
+
+            for (int i = 0; i < UseItems.Length; i++)
+            {
+                if ((UseItems[i] != null) && (UseItems[i].Index > 0) && (M2Share.RandomNumber.Random(8) == 0))
+                {
+                    nDura = UseItems[i].Dura;
+                    nOldDura = HUtil32.Round(nDura / 1000);
+                    nDura -= nDam;
+                    if (nDura <= 0)
+                    {
+                        SendDelItems(UseItems[i]);
+                        var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                        if (stdItem.NeedIdentify == 1)
+                        {
+                            M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
+                                                   UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                        }
+                        UseItems[i].Index = 0;
+                        FeatureChanged();
+                        UseItems[i].Index = 0;
+                        UseItems[i].Dura = 0;
+                        boRecalcAbi = true;
+                    }
+                    else
+                    {
+                        UseItems[i].Dura = nDura;
+                    }
+                    if (nOldDura != HUtil32.Round(nDura / 1000))
+                    {
+                        SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
+                    }
+                }
+            }
+            if (boRecalcAbi)
+            {
+                RecalcAbilitys();
+                SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+            }
+        }
+
 
         protected override void UpdateVisibleGay(BaseObject baseObject)
         {

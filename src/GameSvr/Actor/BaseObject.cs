@@ -119,10 +119,6 @@ namespace GameSvr.Actor
         public byte AntiPoison;
         public ushort PoisonRecover;
         public ushort AntiMagic;
-        /// <summary>
-        /// 人物的幸运值
-        /// </summary>
-        public byte Luck;
         public byte PerHealth;
         public byte PerHealing;
         public byte PerSpell;
@@ -506,7 +502,6 @@ namespace GameSvr.Actor
             HealthRecover = 0;
             SpellRecover = 0;
             AntiMagic = 0;
-            Luck = 0;
             IncSpell = 0;
             IncHealth = 0;
             IncHealing = 0;
@@ -1026,44 +1021,13 @@ namespace GameSvr.Actor
             }
         }
 
-        public ushort GetAttackPower(int nBasePower, int nPower)
+        public virtual ushort GetAttackPower(int nBasePower, int nPower)
         {
-            int result;
             if (nPower < 0)
             {
                 nPower = 0;
             }
-            if (Luck > 0)
-            {
-                if (M2Share.RandomNumber.Random(10 - HUtil32._MIN(9, Luck)) == 0)
-                {
-                    result = nBasePower + nPower;
-                }
-                else
-                {
-                    result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
-                }
-            }
-            else
-            {
-                result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
-                if (Luck <= 0)
-                {
-                    if (M2Share.RandomNumber.Random(10 - HUtil32._MAX(0, -Luck)) == 0)
-                    {
-                        result = nBasePower;
-                    }
-                }
-            }
-            if (Race == ActorRace.Play)
-            {
-                PlayObject playObject = (PlayObject)this;
-                result = HUtil32.Round(result * (playObject.PowerRate / 100));
-                if (playObject.BoPowerItem)
-                {
-                    result = HUtil32.Round(PowerItem * result);
-                }
-            }
+            var result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
             if (AutoChangeColor)
             {
                 result = result * AutoChangeIdx + 1;
@@ -3237,16 +3201,13 @@ namespace GameSvr.Actor
             return nDamage;
         }
 
-        public void StruckDamage(ushort nDamage)
+        public virtual void StruckDamage(ushort nDamage)
         {
-            PlayObject playObject;
-            StdItem stdItem;
-            bool bo19;
             if (nDamage <= 0)
             {
                 return;
             }
-            if ((Race >= 50) && (LastHiter != null) && (LastHiter.Race == ActorRace.Play)) // 人攻击怪物
+            if ((Race >= 50) && (LastHiter != null) && (LastHiter.Race == ActorRace.Play)) // 怪物攻击人
             {
                 switch (((PlayObject)LastHiter).Job)
                 {
@@ -3261,96 +3222,9 @@ namespace GameSvr.Actor
                         break;
                 }
             }
-            if ((Race == ActorRace.Play) && (LastHiter != null) && (LastHiter.Master != null)) // 怪物攻击人
-            {
-                nDamage = (ushort)(nDamage * M2Share.Config.MonHum / 10);
-            }
-            ushort nDam = (ushort)(M2Share.RandomNumber.Random(10) + 5);
             if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
             {
-                nDam = (ushort)HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
                 nDamage = (ushort)HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
-            }
-            bo19 = false;
-            ushort nDura;
-            int nOldDura;
-            if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0)
-            {
-                nDura = UseItems[Grobal2.U_DRESS].Dura;
-                nOldDura = HUtil32.Round(nDura / 1000);
-                nDura -= nDam;
-                if (nDura <= 0)
-                {
-                    if (Race == ActorRace.Play)
-                    {
-                        playObject = this as PlayObject;
-                        playObject.SendDelItems(UseItems[Grobal2.U_DRESS]);
-                        stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
-                        if (stdItem.NeedIdentify == 1)
-                        {
-                            M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
-                                                               ChrName + "\t" + stdItem.Name + "\t" +
-                                                               UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
-                                                               + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
-                                                               "\t" + '0');
-                        }
-                        UseItems[Grobal2.U_DRESS].Index = 0;
-                        FeatureChanged();
-                    }
-                    UseItems[Grobal2.U_DRESS].Index = 0;
-                    UseItems[Grobal2.U_DRESS].Dura = 0;
-                    bo19 = true;
-                }
-                else
-                {
-                    UseItems[Grobal2.U_DRESS].Dura = (ushort)nDura;
-                }
-
-                if (nOldDura != HUtil32.Round(nDura / 1000))
-                {
-                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
-                }
-            }
-
-            for (int i = 0; i < UseItems.Length; i++)
-            {
-                if ((UseItems[i] != null) && (UseItems[i].Index > 0) && (M2Share.RandomNumber.Random(8) == 0))
-                {
-                    nDura = UseItems[i].Dura;
-                    nOldDura = HUtil32.Round(nDura / 1000);
-                    nDura -= nDam;
-                    if (nDura <= 0)
-                    {
-                        if (Race == ActorRace.Play)
-                        {
-                            playObject = this as PlayObject;
-                            playObject.SendDelItems(UseItems[i]);
-                            stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                            if (stdItem.NeedIdentify == 1)
-                            {
-                                M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
-                                                       UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
-                            }
-                            UseItems[i].Index = 0;
-                            FeatureChanged();
-                        }
-                        UseItems[i].Index = 0;
-                        UseItems[i].Dura = 0;
-                        bo19 = true;
-                    }
-                    else
-                    {
-                        UseItems[i].Dura = (ushort)nDura;
-                    }
-                    if (nOldDura != HUtil32.Round(nDura / 1000))
-                    {
-                        SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
-                    }
-                }
-            }
-            if (bo19)
-            {
-                RecalcAbilitys();
             }
             DamageHealth(nDamage);
         }

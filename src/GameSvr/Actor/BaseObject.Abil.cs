@@ -27,7 +27,6 @@ namespace GameSvr.Actor
             HealthRecover = 0;
             SpellRecover = 0;
             AntiMagic = 1;
-            Luck = 0;
             HitSpeed = 0;
             bool oldhmode = HideMode;
             HideMode = false;
@@ -69,8 +68,6 @@ namespace GameSvr.Actor
             HealthRecover = (ushort)(HealthRecover + AddAbil.HealthRecover);
             SpellRecover = (ushort)(SpellRecover + AddAbil.SpellRecover);
             AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
-            Luck = (byte)(Luck + AddAbil.Luck);
-            Luck = (byte)(Luck - AddAbil.UnLuck);
             HitSpeed = AddAbil.HitSpeed;
             WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
             WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
