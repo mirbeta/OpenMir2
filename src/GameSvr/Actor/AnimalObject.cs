@@ -8,15 +8,11 @@ namespace GameSvr.Actor
 {
     public class AnimalObject : BaseObject
     {
-        /// <summary>
-        /// 未被处理次数，用于怪物处理循环
-        /// </summary>
-        private readonly int NotProcessCount;
         internal short TargetX;
         internal short TargetY;
-        public bool MBoRunAwayMode;
-        public int MDwRunAwayStart;
-        public int MDwRunAwayTime;
+        public bool RunAwayMode;
+        public int RunAwayStart;
+        public int RunAwayTime;
         protected int SearchEnemyTick = 0;
         /// <summary>
         /// 行走步伐
@@ -36,15 +32,14 @@ namespace GameSvr.Actor
 
         public AnimalObject()
         {
-            NotProcessCount = 0;
             TargetX = -1;
             Race = ActorRace.Animal;
             AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             WalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
             SearchEnemyTick = HUtil32.GetTickCount();
-            MBoRunAwayMode = false;
-            MDwRunAwayStart = HUtil32.GetTickCount();
-            MDwRunAwayTime = 0;
+            RunAwayMode = false;
+            RunAwayStart = HUtil32.GetTickCount();
+            RunAwayTime = 0;
             WalkCount = 0;
             WalkWaitTick = HUtil32.GetTickCount();
             WalkWaitLocked = false;

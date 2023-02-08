@@ -554,73 +554,7 @@ namespace GameSvr.Actor
             }
             SendRefMsg(Messages.RM_DEATH, Direction, CurrX, CurrY, 1, "");
         }
-
-        private void KillTarget()
-        {
-            if (ExpHitter != null && ExpHitter.Master != null)//如果是角色下属杀死对象
-            {
-                ((PlayObject)ExpHitter.Master).KillTargetTrigger(this);
-                return;
-            }
-            if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
-            {
-                ((PlayObject)ExpHitter).KillTargetTrigger(this);
-            }
-        }
-
-        private void KillFunc()
-        {
-            const string sExceptionMsg = "[Exception] TBaseObject::KillFunc";
-            try
-            {
-                KillTarget();
-                if ((M2Share.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
-                {
-                    if (Race != ActorRace.Play)
-                    {
-                        if (ExpHitter != null)
-                        {
-                            if (ExpHitter.Race == ActorRace.Play)
-                            {
-                                M2Share.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                            }
-
-                            if (ExpHitter.Master != null)
-                            {
-                                M2Share.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                            }
-                        }
-                        else
-                        {
-                            if (LastHiter != null)
-                            {
-                                if (LastHiter.Race == ActorRace.Play)
-                                {
-                                    M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                                }
-                                if (LastHiter.Master != null)
-                                {
-                                    M2Share.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
-                        {
-                            M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
-            }
-        }
-
+        
         internal virtual void ReAlive()
         {
             Death = false;

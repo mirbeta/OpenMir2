@@ -330,8 +330,6 @@ namespace GameSvr.Actor
         /// 换地图时，跑走不考虑坐标
         /// </summary>
         internal bool SpaceMoved;
-        protected byte AttackSkillCount;
-        protected byte AttackSkillPointCount;
         public bool Mission;
         public short MissionX = 0;
         public short MissionY = 0;
@@ -2216,6 +2214,28 @@ namespace GameSvr.Actor
             return true;
         }
 
+        private void SendSelfMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
+        {
+            if (ExpHitter.Race == ActorRace.Play)
+            {
+                if (!Ghost)
+                {
+                    SendMessage sendMessage = new SendMessage
+                    {
+                        wIdent = wIdent,
+                        wParam = wParam,
+                        nParam1 = nParam1,
+                        nParam2 = nParam2,
+                        nParam3 = nParam3,
+                        DeliveryTime = 0,
+                        LateDelivery = false,
+                        Buff = sMsg
+                    };
+                    MsgQueue.Enqueue(sendMessage, 0);//优先处理自身消息
+                }
+            }
+        }
+
         public void SendRefMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
@@ -3923,6 +3943,71 @@ namespace GameSvr.Actor
             return null;
         }
 
+        private void KillTarget()
+        {
+            if (ExpHitter != null && ExpHitter.Master != null)//如果是角色下属杀死对象
+            {
+                ((PlayObject)ExpHitter.Master).KillTargetTrigger(this);
+                return;
+            }
+            if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
+            {
+                ((PlayObject)ExpHitter).KillTargetTrigger(this);
+            }
+        }
+
+        private void KillFunc()
+        {
+            const string sExceptionMsg = "[Exception] PlayObject::KillFunc";
+            try
+            {
+                KillTarget();
+                if ((M2Share.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
+                {
+                    if (Race != ActorRace.Play)
+                    {
+                        if (ExpHitter != null)
+                        {
+                            if (ExpHitter.Race == ActorRace.Play)
+                            {
+                                M2Share.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            }
+                            if (ExpHitter.Master != null)
+                            {
+                                M2Share.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            }
+                        }
+                        else
+                        {
+                            if (LastHiter != null)
+                            {
+                                if (LastHiter.Race == ActorRace.Play)
+                                {
+                                    M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                }
+                                if (LastHiter.Master != null)
+                                {
+                                    M2Share.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
+                        {
+                            M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(e.Message);
+            }
+        }
+        
         public bool ReAliveEx(MonGenInfo monGen)
         {
             WAbil = Abil;

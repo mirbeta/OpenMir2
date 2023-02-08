@@ -231,6 +231,8 @@ namespace GameSvr.Player
         /// 喊话消息间隔
         /// </summary>
         protected int ShoutMsgTick;
+        protected byte AttackSkillCount;
+        protected byte AttackSkillPointCount;
         protected bool SmashSet = false;
         protected bool HwanDevilSet = false;
         protected bool PuritySet = false;
@@ -3481,7 +3483,7 @@ namespace GameSvr.Player
                     break;
             }
         }
-
+        
         public int GetQuestFalgStatus(int nFlag)
         {
             int result = 0;

@@ -113,7 +113,7 @@ namespace GameSvr.Monster.Monsters
                         WalkWaitLocked = true;
                         WalkWaitTick = HUtil32.GetTickCount();
                     }
-                    if (!MBoRunAwayMode)
+                    if (!RunAwayMode)
                     {
                         if (!NoAttackMode)
                         {
@@ -164,10 +164,10 @@ namespace GameSvr.Monster.Monsters
                     }
                     else
                     {
-                        if (MDwRunAwayTime > 0 && (HUtil32.GetTickCount() - MDwRunAwayStart) > MDwRunAwayTime)
+                        if (RunAwayTime > 0 && (HUtil32.GetTickCount() - RunAwayStart) > RunAwayTime)
                         {
-                            MBoRunAwayMode = false;
-                            MDwRunAwayTime = 0;
+                            RunAwayMode = false;
+                            RunAwayTime = 0;
                         }
                     }
                     if (Master != null && Master.SlaveRelax)

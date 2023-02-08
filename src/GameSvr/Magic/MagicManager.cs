@@ -830,9 +830,9 @@ namespace GameSvr.Magic
             ((AnimalObject)targetBaseObject).Struck(baseObject);
             if (targetBaseObject.TargetCret == null)
             {
-                ((AnimalObject)targetBaseObject).MBoRunAwayMode = true;
-                ((AnimalObject)targetBaseObject).MDwRunAwayStart = HUtil32.GetTickCount();
-                ((AnimalObject)targetBaseObject).MDwRunAwayTime = 10 * 1000;
+                ((AnimalObject)targetBaseObject).RunAwayMode = true;
+                ((AnimalObject)targetBaseObject).RunAwayStart = HUtil32.GetTickCount();
+                ((AnimalObject)targetBaseObject).RunAwayTime = 10 * 1000;
             }
             baseObject.SetTargetCreat(targetBaseObject);
             if (M2Share.RandomNumber.Random(2) + (baseObject.Abil.Level - 1) > targetBaseObject.Abil.Level)
