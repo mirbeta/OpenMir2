@@ -100,7 +100,6 @@ namespace GameSvr.Conf.Model
         public string EnvirDir;
         public string MapDir;
         public string NoticeDir;
-        public string LogDir;
         public string ClientFile1;
         public string ClientFile2;
         public string ClientFile3;
@@ -126,7 +125,6 @@ namespace GameSvr.Conf.Model
         public string GameGoldName;
         public string GamePointName;
         public string PayMentPointName;
-        public int DBSocket;
         public int HealthFillTime;
         public int SpellFillTime;
         public int MonUpLvNeedKillBase;
@@ -165,10 +163,10 @@ namespace GameSvr.Conf.Model
         /// <summary>
         /// 安全区范围大小
         /// </summary>
-        public int SafeZoneSize;
-        public int StartPointSize;
+        public byte SafeZoneSize;
+        public byte StartPointSize;
         public int HumanGetMsgTime;
-        public int GroupMembersMax;
+        public byte GroupMembersMax;
         public int WarrMon;
         public int WizardMon;
         public int TaosMon;
@@ -189,7 +187,7 @@ namespace GameSvr.Conf.Model
         /// <summary>
         /// 武器升级做高点数
         /// </summary>
-        public int UpgradeWeaponMaxPoint;
+        public byte UpgradeWeaponMaxPoint;
         /// <summary>
         /// 武器升级价格
         /// </summary>
@@ -201,43 +199,43 @@ namespace GameSvr.Conf.Model
         /// <summary>
         /// 清理多少天内没取走的升级数据
         /// </summary>
-        public int ClearExpireUpgradeWeaponDays;
+        public byte ClearExpireUpgradeWeaponDays;
         /// <summary>
         /// 武器升级攻击力成功几率
         /// </summary>
-        public int UpgradeWeaponDCRate;
+        public byte UpgradeWeaponDCRate;
         /// <summary>
         /// 武器升级攻击力成功几率
         /// </summary>
-        public int UpgradeWeaponDCTwoPointRate;
+        public byte UpgradeWeaponDCTwoPointRate;
         /// <summary>
         /// 武器升级攻击力成功几率
         /// </summary>
-        public int UpgradeWeaponDCThreePointRate;
+        public byte UpgradeWeaponDCThreePointRate;
         /// <summary>
         /// 武器升级道术成功几率
         /// </summary>
-        public int UpgradeWeaponSCRate;
+        public byte UpgradeWeaponSCRate;
         /// <summary>
         /// 武器升级道术成功几率
         /// </summary>
-        public int UpgradeWeaponSCTwoPointRate;
+        public byte UpgradeWeaponSCTwoPointRate;
         /// <summary>
         /// 武器升级道术成功几率
         /// </summary>
-        public int UpgradeWeaponSCThreePointRate;
+        public byte UpgradeWeaponSCThreePointRate;
         /// <summary>
         /// 武器升级魔法成功几率
         /// </summary>
-        public int UpgradeWeaponMCRate;
+        public byte UpgradeWeaponMCRate;
         /// <summary>
         /// 武器升级魔法成功几率
         /// </summary>
-        public int UpgradeWeaponMCTwoPointRate;
+        public byte UpgradeWeaponMCTwoPointRate;
         /// <summary>
         /// 武器升级魔法成功几率
         /// </summary>
-        public int UpgradeWeaponMCThreePointRate;
+        public byte UpgradeWeaponMCThreePointRate;
         /// <summary>
         /// 怪物处理间隔
         /// 处理怪物间隔时间，此设置数字越大，怪物行动越慢
@@ -259,8 +257,8 @@ namespace GameSvr.Conf.Model
         public bool CanOldClientLogon;
         public int ConsoleShowUserCountTime;
         public int ShowLineNoticeTime;
-        public int LineNoticeColor;
-        public int StartCastleWarDays;
+        public byte LineNoticeColor;
+        public byte StartCastleWarDays;
         public int StartCastlewarTime;
         public int ShowCastleWarEndMsgTime;
         public int CastleWarTime;
@@ -274,20 +272,20 @@ namespace GameSvr.Conf.Model
         /// </summary>
         public int HumanMaxGold;
         public int HumanTryModeMaxGold;
-        public int TryModeLevel;
+        public byte TryModeLevel;
         public bool TryModeUseStorage;
         public int CanShoutMsgLevel;
         public bool ShowMakeItemMsg;
         public bool ShutRedMsgShowGMName;
-        public int SayMsgMaxLen;
+        public byte SayMsgMaxLen;
         public int SayMsgTime;
-        public int SayMsgCount;
+        public byte SayMsgCount;
         public int DisableSayMsgTime;
-        public int SayRedMsgMaxLen;
+        public byte SayRedMsgMaxLen;
         public bool ShowGuildName;
         public bool ShowRankLevelName;
         public bool MonSayMsg;
-        public int StartPermission;
+        public byte StartPermission;
         public bool IsKillHumanWinLevel;
         public bool IsKilledLostLevel;
         public bool IsKillHumanWinExp;
@@ -309,10 +307,6 @@ namespace GameSvr.Conf.Model
         /// NPC点击间隔
         /// </summary>
         public int ClickNpcTime;
-        /// <summary>
-        /// 踢出未登陆人物
-        /// </summary>
-        public int ThcHumanTime;
         /// <summary>
         /// 包裹刷新间隔
         /// </summary>
@@ -445,107 +439,107 @@ namespace GameSvr.Conf.Model
         public byte CustMsgBColor;
         public byte PurpleMsgFColor;
         public byte PurpleMsgBColor;
-        public int MonRandomAddValue;
-        public int MakeRandomAddValue;
-        public int WeaponDCAddValueMaxLimit;
-        public int WeaponDCAddValueRate;
-        public int WeaponMCAddValueMaxLimit;
-        public int WeaponMCAddValueRate;
-        public int WeaponSCAddValueMaxLimit;
-        public int WeaponSCAddValueRate;
-        public int DressDCAddRate;
-        public int DressDCAddValueMaxLimit;
-        public int DressDCAddValueRate;
-        public int DressMCAddRate;
-        public int DressMCAddValueMaxLimit;
-        public int DressMCAddValueRate;
-        public int DressSCAddRate;
-        public int DressSCAddValueMaxLimit;
-        public int nDressSCAddValueRate;
-        public int NeckLace202124DCAddRate;
-        public int NeckLace202124DCAddValueMaxLimit;
-        public int NeckLace202124DCAddValueRate;
-        public int NeckLace202124MCAddRate;
-        public int NeckLace202124MCAddValueMaxLimit;
-        public int NeckLace202124MCAddValueRate;
-        public int NeckLace202124SCAddRate;
-        public int NeckLace202124SCAddValueMaxLimit;
-        public int NeckLace202124SCAddValueRate;
-        public int NeckLace19DCAddRate;
-        public int NeckLace19DCAddValueMaxLimit;
-        public int NeckLace19DCAddValueRate;
-        public int NeckLace19MCAddRate;
-        public int NeckLace19MCAddValueMaxLimit;
-        public int NeckLace19MCAddValueRate;
-        public int NeckLace19SCAddRate;
-        public int NeckLace19SCAddValueMaxLimit;
-        public int NeckLace19SCAddValueRate;
-        public int ArmRing26DCAddRate;
-        public int ArmRing26DCAddValueMaxLimit;
-        public int ArmRing26DCAddValueRate;
-        public int ArmRing26MCAddRate;
-        public int ArmRing26MCAddValueMaxLimit;
-        public int ArmRing26MCAddValueRate;
-        public int ArmRing26SCAddRate;
-        public int ArmRing26SCAddValueMaxLimit;
-        public int ArmRing26SCAddValueRate;
-        public int Ring22DCAddRate;
-        public int Ring22DCAddValueMaxLimit;
-        public int Ring22DCAddValueRate;
-        public int Ring22MCAddRate;
-        public int Ring22MCAddValueMaxLimit;
-        public int Ring22MCAddValueRate;
-        public int Ring22SCAddRate;
-        public int Ring22SCAddValueMaxLimit;
-        public int Ring22SCAddValueRate;
-        public int Ring23DCAddRate;
-        public int Ring23DCAddValueMaxLimit;
-        public int Ring23DCAddValueRate;
-        public int Ring23MCAddRate;
-        public int Ring23MCAddValueMaxLimit;
-        public int Ring23MCAddValueRate;
-        public int Ring23SCAddRate;
-        public int Ring23SCAddValueMaxLimit;
-        public int Ring23SCAddValueRate;
-        public int HelMetDCAddRate;
-        public int HelMetDCAddValueMaxLimit;
-        public int HelMetDCAddValueRate;
-        public int HelMetMCAddRate;
-        public int HelMetMCAddValueMaxLimit;
-        public int HelMetMCAddValueRate;
-        public int HelMetSCAddRate;
-        public int HelMetSCAddValueMaxLimit;
-        public int HelMetSCAddValueRate;
-        public int UnknowHelMetACAddRate;
-        public int UnknowHelMetACAddValueMaxLimit;
-        public int UnknowHelMetMACAddRate;
-        public int UnknowHelMetMACAddValueMaxLimit;
-        public int UnknowHelMetDCAddRate;
-        public int UnknowHelMetDCAddValueMaxLimit;
-        public int UnknowHelMetMCAddRate;
-        public int UnknowHelMetMCAddValueMaxLimit;
-        public int UnknowHelMetSCAddRate;
-        public int UnknowHelMetSCAddValueMaxLimit;
-        public int UnknowRingACAddRate;
-        public int UnknowRingACAddValueMaxLimit;
-        public int UnknowRingMACAddRate;
-        public int UnknowRingMACAddValueMaxLimit;
-        public int UnknowRingDCAddRate;
-        public int UnknowRingDCAddValueMaxLimit;
-        public int UnknowRingMCAddRate;
-        public int UnknowRingMCAddValueMaxLimit;
-        public int UnknowRingSCAddRate;
-        public int UnknowRingSCAddValueMaxLimit;
-        public int UnknowNecklaceACAddRate;
-        public int UnknowNecklaceACAddValueMaxLimit;
-        public int UnknowNecklaceMACAddRate;
-        public int UnknowNecklaceMACAddValueMaxLimit;
-        public int UnknowNecklaceDCAddRate;
-        public int UnknowNecklaceDCAddValueMaxLimit;
-        public int UnknowNecklaceMCAddRate;
-        public int UnknowNecklaceMCAddValueMaxLimit;
-        public int UnknowNecklaceSCAddRate;
-        public int UnknowNecklaceSCAddValueMaxLimit;
+        public byte MonRandomAddValue;
+        public byte MakeRandomAddValue;
+        public byte WeaponDCAddValueMaxLimit;
+        public byte WeaponDCAddValueRate;
+        public byte WeaponMCAddValueMaxLimit;
+        public byte WeaponMCAddValueRate;
+        public byte WeaponSCAddValueMaxLimit;
+        public byte WeaponSCAddValueRate;
+        public byte DressDCAddRate;
+        public byte DressDCAddValueMaxLimit;
+        public byte DressDCAddValueRate;
+        public byte DressMCAddRate;
+        public byte DressMCAddValueMaxLimit;
+        public byte DressMCAddValueRate;
+        public byte DressSCAddRate;
+        public byte DressSCAddValueMaxLimit;
+        public byte nDressSCAddValueRate;
+        public byte NeckLace202124DCAddRate;
+        public byte NeckLace202124DCAddValueMaxLimit;
+        public byte NeckLace202124DCAddValueRate;
+        public byte NeckLace202124MCAddRate;
+        public byte NeckLace202124MCAddValueMaxLimit;
+        public byte NeckLace202124MCAddValueRate;
+        public byte NeckLace202124SCAddRate;
+        public byte NeckLace202124SCAddValueMaxLimit;
+        public byte NeckLace202124SCAddValueRate;
+        public byte NeckLace19DCAddRate;
+        public byte NeckLace19DCAddValueMaxLimit;
+        public byte NeckLace19DCAddValueRate;
+        public byte NeckLace19MCAddRate;
+        public byte NeckLace19MCAddValueMaxLimit;
+        public byte NeckLace19MCAddValueRate;
+        public byte NeckLace19SCAddRate;
+        public byte NeckLace19SCAddValueMaxLimit;
+        public byte NeckLace19SCAddValueRate;
+        public byte ArmRing26DCAddRate;
+        public byte ArmRing26DCAddValueMaxLimit;
+        public byte ArmRing26DCAddValueRate;
+        public byte ArmRing26MCAddRate;
+        public byte ArmRing26MCAddValueMaxLimit;
+        public byte ArmRing26MCAddValueRate;
+        public byte ArmRing26SCAddRate;
+        public byte ArmRing26SCAddValueMaxLimit;
+        public byte ArmRing26SCAddValueRate;
+        public byte Ring22DCAddRate;
+        public byte Ring22DCAddValueMaxLimit;
+        public byte Ring22DCAddValueRate;
+        public byte Ring22MCAddRate;
+        public byte Ring22MCAddValueMaxLimit;
+        public byte Ring22MCAddValueRate;
+        public byte Ring22SCAddRate;
+        public byte Ring22SCAddValueMaxLimit;
+        public byte Ring22SCAddValueRate;
+        public byte Ring23DCAddRate;
+        public byte Ring23DCAddValueMaxLimit;
+        public byte Ring23DCAddValueRate;
+        public byte Ring23MCAddRate;
+        public byte Ring23MCAddValueMaxLimit;
+        public byte Ring23MCAddValueRate;
+        public byte Ring23SCAddRate;
+        public byte Ring23SCAddValueMaxLimit;
+        public byte Ring23SCAddValueRate;
+        public byte HelMetDCAddRate;
+        public byte HelMetDCAddValueMaxLimit;
+        public byte HelMetDCAddValueRate;
+        public byte HelMetMCAddRate;
+        public byte HelMetMCAddValueMaxLimit;
+        public byte HelMetMCAddValueRate;
+        public byte HelMetSCAddRate;
+        public byte HelMetSCAddValueMaxLimit;
+        public byte HelMetSCAddValueRate;
+        public byte UnknowHelMetACAddRate;
+        public byte UnknowHelMetACAddValueMaxLimit;
+        public byte UnknowHelMetMACAddRate;
+        public byte UnknowHelMetMACAddValueMaxLimit;
+        public byte UnknowHelMetDCAddRate;
+        public byte UnknowHelMetDCAddValueMaxLimit;
+        public byte UnknowHelMetMCAddRate;
+        public byte UnknowHelMetMCAddValueMaxLimit;
+        public byte UnknowHelMetSCAddRate;
+        public byte UnknowHelMetSCAddValueMaxLimit;
+        public byte UnknowRingACAddRate;
+        public byte UnknowRingACAddValueMaxLimit;
+        public byte UnknowRingMACAddRate;
+        public byte UnknowRingMACAddValueMaxLimit;
+        public byte UnknowRingDCAddRate;
+        public byte UnknowRingDCAddValueMaxLimit;
+        public byte UnknowRingMCAddRate;
+        public byte UnknowRingMCAddValueMaxLimit;
+        public byte UnknowRingSCAddRate;
+        public byte UnknowRingSCAddValueMaxLimit;
+        public byte UnknowNecklaceACAddRate;
+        public byte UnknowNecklaceACAddValueMaxLimit;
+        public byte UnknowNecklaceMACAddRate;
+        public byte UnknowNecklaceMACAddValueMaxLimit;
+        public byte UnknowNecklaceDCAddRate;
+        public byte UnknowNecklaceDCAddValueMaxLimit;
+        public byte UnknowNecklaceMCAddRate;
+        public byte UnknowNecklaceMCAddValueMaxLimit;
+        public byte UnknowNecklaceSCAddRate;
+        public byte UnknowNecklaceSCAddValueMaxLimit;
         public int MonOneDropGoldCount;
         /// <summary>
         /// 客户端时间
@@ -645,10 +639,10 @@ namespace GameSvr.Conf.Model
         public bool KillByHumanDropUseItem;
         public bool KillByMonstDropUseItem;
         public bool KickExpireHuman;
-        public int GuildRankNameLen;
+        public byte GuildRankNameLen;
         public int GuildMemberMaxLimit;
-        public int GuildNameLen;
-        public int nCastleNameLen;
+        public byte GuildNameLen;
+        public byte CastleNameLen;
         /// <summary>
         /// 中毒几率
         /// </summary>
@@ -696,12 +690,12 @@ namespace GameSvr.Conf.Model
         /// <summary>
         /// 魔法锁定范围
         /// </summary>
-        public int MagicAttackRage;
+        public byte MagicAttackRage;
         public bool nBoBoall;
         /// <summary>
         /// 物品掉落范围
         /// </summary>
-        public int DropItemRage;
+        public byte DropItemRage;
         public string Skeleton;
         public int SkeletonCount;
         public RecallMigic[] SkeletonArray;
@@ -720,9 +714,9 @@ namespace GameSvr.Conf.Model
         public int PosionDamagarmor;
         public bool LimitSwordLong;
         public int SwordLongPowerRate;
-        public int FireBoomRage;
-        public int SnowWindRange;
-        public int ElecBlizzardRange;
+        public byte FireBoomRage;
+        public byte SnowWindRange;
+        public byte ElecBlizzardRange;
         /// <summary>
         /// 圣言怪物等级限制
         /// </summary>
@@ -746,10 +740,10 @@ namespace GameSvr.Conf.Model
         public int MabMabeHitMabeTimeRate;
         public string CastleName;
         public string CastleHomeMap;
-        public int CastleHomeX;
-        public int CastleHomeY;
-        public int CastleWarRangeX;
-        public int CastleWarRangeY;
+        public short CastleHomeX;
+        public short CastleHomeY;
+        public short CastleWarRangeX;
+        public short CastleWarRangeY;
         public int CastleTaxRate;
         public bool GetAllNpcTax;
         public int HireGuardPrice;
@@ -759,19 +753,19 @@ namespace GameSvr.Conf.Model
         public int RepairDoorPrice;
         public int RepairWallPrice;
         public int CastleMemberPriceRate;
-        public int MaxHitMsgCount;
-        public int MaxSpellMsgCount;
-        public int MaxRunMsgCount;
-        public int MaxWalkMsgCount;
-        public int MaxTurnMsgCount;
-        public int MaxSitDonwMsgCount;
-        public int MaxDigUpMsgCount;
+        public byte MaxHitMsgCount;
+        public byte MaxSpellMsgCount;
+        public byte MaxRunMsgCount;
+        public byte MaxWalkMsgCount;
+        public byte MaxTurnMsgCount;
+        public byte MaxSitDonwMsgCount;
+        public byte MaxDigUpMsgCount;
         public bool SpellSendUpdateMsg;
         public bool ActionSendActionMsg;
         public bool KickOverSpeed;
         public int SpeedControlMode;
-        public int OverSpeedKickCount;
-        public int DropOverSpeed;
+        public byte OverSpeedKickCount;
+        public byte DropOverSpeed;
         /// <summary>
         /// 攻击间隔(ms)
         /// </summary>
@@ -917,15 +911,15 @@ namespace GameSvr.Conf.Model
         /// 在单怪物5w数量左右还是存在一定的行动延缓,预计要限制单怪物在刷怪线程列表的最大数量，超过刷怪限制则进入新刷怪线程
         /// todo 假如使用该方法需要预留线程4个.超过预留线程则不会在刷新新怪物.有怪物死亡减少则继续刷新，持续进入该循环
         /// </summary>
-        public int ProcessMonsterMultiThreadLimit;
+        public byte ProcessMonsterMultiThreadLimit;
         /// <summary>
         /// 怪物线程预留线程数
         /// </summary>
-        public int ProcessMonsterRetainThreadLimit;
+        public byte ProcessMonsterRetainThreadLimit;
         /// <summary>
         /// 当前怪物处理线程最大上限值.
-        /// 默认值=40000
-        /// 40000值为比较合理和保守的设定，单线程下40000值能够稳定运行
+        /// 默认值=50000
+        /// 50000值为比较合理和保守的设定，单线程下50000值能够稳定运行
         /// </summary>
         public int MonsterThreadLimit;
         /// <summary>
@@ -934,29 +928,13 @@ namespace GameSvr.Conf.Model
         /// </summary>
         public int ProcessMonsterInterval;
         public bool boCheckFail;
-        public int nAppIconCrc;
         public bool boIDSocketConnected;
         public object UserIDSection;
         public string sIDSocketRecvText;
-        public int IDSocket;
-        public int nIDSocketRecvIncLen;
-        public int nIDSocketRecvMaxLen;
-        public int nIDSocketRecvCount;
-        public int nIDReceiveMaxTime;
-        public int nIDSocketWSAErrCode;
-        public int nIDSocketErrorCount;
         public int nLoadDBCount;
         public int nLoadDBErrorCount;
         public int nSaveDBCount;
         public int nDBQueryID;
-        public bool boDBSocketConnected;
-        public int nDBSocketRecvIncLen;
-        public int nDBSocketRecvMaxLen;
-        public int nDBSocketRecvCount;
-        public int nDBReceiveMaxTime;
-        public int nDBSocketWSAErrCode;
-        public int nDBSocketErrorCount;
-        public int nServerFile_CRCB;
         public int nClientFile1_CRC;
         public int nClientFile2_CRC;
         public int nClientFile3_CRC;
@@ -972,17 +950,7 @@ namespace GameSvr.Conf.Model
         /// 变量可保存 A
         /// </summary>
         public string[] GlobalAVal;
-        public int nM2Crc;
-        public int nCheckLicenseFail;
-        public int dwCheckTick;
-        public int nCheckFail;
-        public bool boDropGoldToPlayBag;
-        public int dwSendWhisperTime;
         public int nSendWhisperPlayCount;
-        public bool boMoveCanDupObj;
-        public int nProcessTick;
-        public int nProcessTime;
-        public int nDBSocketSendLen;
         public bool PermissionSystem;
         /// <summary>
         /// 机器人自动拾取物品
@@ -1106,7 +1074,6 @@ namespace GameSvr.Conf.Model
             EnvirDir = "Envir";
             MapDir = "Map";
             NoticeDir = "Notice";
-            LogDir = "Log";
             ClientFile1 = "mir.1";
             ClientFile2 = "mir.Dat";
             ClientFile3 = "mir.3";
@@ -1132,7 +1099,6 @@ namespace GameSvr.Conf.Model
             GameGoldName = "元宝";
             GamePointName = "游戏点";
             PayMentPointName = "荣誉值";
-            DBSocket = 0;
             HealthFillTime = 300;
             SpellFillTime = 800;
             MonUpLvNeedKillBase = 100;
@@ -1708,7 +1674,6 @@ namespace GameSvr.Conf.Model
             ProcessMonsterInterval = 2;
             ProcessMonsterMultiThreadLimit = 2;
             ProcessMonsterRetainThreadLimit = 2;
-            nDBSocketSendLen = 0;
             PermissionSystem = false;
             nRenewPercent = 60;
             nAIRunIntervalTime = 1050;
