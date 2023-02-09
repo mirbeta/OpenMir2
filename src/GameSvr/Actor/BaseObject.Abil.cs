@@ -165,8 +165,7 @@ namespace GameSvr.Actor
         /// </summary>
         protected virtual void RecalcHitSpeed()
         {
-            HitPlus = 0;
-            HitDouble = 0;
+
         }
 
         protected static void ChangeItemWithLevel(ref ClientItem citem, int level)

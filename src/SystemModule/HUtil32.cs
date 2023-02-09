@@ -46,12 +46,12 @@ namespace SystemModule
         
         public static int MakeLong(short lowPart, short highPart)
         {
-            return (int)(((ushort)lowPart) | (uint)(highPart << 16));
+            return (ushort)lowPart | (highPart << 16);
         }
 
         public static int MakeLong(ushort lowPart, ushort highPart)
         {
-            return (int)(lowPart | (uint)(highPart << 16));
+            return lowPart | (highPart << 16);
         }
 
         public static ushort MakeWord(byte low, byte high)

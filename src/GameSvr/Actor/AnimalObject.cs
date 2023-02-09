@@ -58,7 +58,7 @@ namespace GameSvr.Actor
 
         protected virtual void Attack(BaseObject targetObject, byte nDir)
         {
-            ushort nPower = GetBaseAttackPoewr();
+            var nPower = GetBaseAttackPoewr();
             AttackDir(targetObject, nPower, nDir);
             SendAttackMsg(Messages.RM_HIT, Direction, CurrX, CurrY);
         }
@@ -69,7 +69,7 @@ namespace GameSvr.Actor
             {
                 int n10 = TargetX;
                 int n14 = TargetY;
-                byte nDir = Grobal2.DR_DOWN;
+                var nDir = Grobal2.DR_DOWN;
                 if (n10 > CurrX)
                 {
                     nDir = Grobal2.DR_RIGHT;
@@ -111,8 +111,8 @@ namespace GameSvr.Actor
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 WalkTo(nDir, false);
-                int n20 = M2Share.RandomNumber.Random(3);
-                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
+                var n20 = M2Share.RandomNumber.Random(3);
+                for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
                     if (nOldX == CurrX && nOldY == CurrY)
                     {
@@ -149,7 +149,7 @@ namespace GameSvr.Actor
         {
             if (processMsg.wIdent == Messages.RM_STRUCK)
             {
-                BaseObject struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                 if (processMsg.BaseObject == ActorId && struckObject != null)
                 {
                     SetLastHiter(struckObject);
@@ -196,17 +196,17 @@ namespace GameSvr.Actor
             IList<BaseObject> baseObjectList = new List<BaseObject>();
             Direction = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
             Envir.GetBaseObjects(targetBaseObject.CurrX, targetBaseObject.CurrY, false, baseObjectList);
-            for (int i = 0; i < baseObjectList.Count; i++)
+            for (var i = 0; i < baseObjectList.Count; i++)
             {
-                BaseObject baseObject = baseObjectList[i];
+                var baseObject = baseObjectList[i];
                 if (IsProperTarget(baseObject))
                 {
-                    int nDamage = 0;
+                    ushort nDamage = 0;
                     nDamage += baseObject.GetHitStruckDamage(this, nHitPower);
                     nDamage += baseObject.GetMagStruckDamage(this, (ushort)nMagPower);
                     if (nDamage > 0)
                     {
-                        baseObject.StruckDamage((ushort)nDamage);
+                        baseObject.StruckDamage(nDamage);
                         baseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 200);
                     }
                 }
@@ -228,10 +228,10 @@ namespace GameSvr.Actor
         protected virtual void SearchTarget()
         {
             BaseObject searchTarget = null;
-            int n10 = 999;
-            for (int i = 0; i < VisibleActors.Count; i++)
+            var n10 = 999;
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
-                BaseObject baseObject = VisibleActors[i].BaseObject;
+                var baseObject = VisibleActors[i].BaseObject;
                 if (baseObject.Death || baseObject.Ghost || (baseObject.Envir != Envir) || (Math.Abs(baseObject.CurrX - CurrX) > 15) || (Math.Abs(baseObject.CurrY - CurrY) > 15))
                 {
                     ClearTargetCreat(baseObject);
@@ -241,7 +241,7 @@ namespace GameSvr.Actor
                 {
                     if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye))
                     {
-                        int nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
+                        var nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
                         if (nC < n10)
                         {
                             n10 = nC;

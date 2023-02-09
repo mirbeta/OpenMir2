@@ -173,6 +173,14 @@ namespace GameSvr.Player
         /// 烈火剑法
         /// </summary>
         protected bool TwinHitSkill;
+        /// <summary>
+        /// 额外攻击伤害(攻杀)
+        /// </summary>
+        internal ushort HitPlus;
+        /// <summary>
+        /// 双倍攻击伤害(烈火专用)
+        /// </summary>
+        internal ushort HitDouble;
         protected int LatestFireHitTick = 0;
         protected int LatestTwinHitTick = 0;
         /// <summary>
@@ -940,6 +948,8 @@ namespace GameSvr.Player
             WhisperHuman = null;
             OnHorse = false;
             MWContribution = 0;
+            HitPlus = 0;
+            HitDouble = 0;
             RankLevelName = Settings.RankLevelName;
             FixedHideMode = true;
             MNVal = new int[100];
@@ -3409,6 +3419,8 @@ namespace GameSvr.Player
 
         protected override void RecalcHitSpeed()
         {
+            HitPlus = 0;
+            HitDouble = 0;
             if (Race == ActorRace.Play)
             {
                 NakedAbility bonusTick = null;
@@ -3462,7 +3474,102 @@ namespace GameSvr.Player
                         break;
                 }
             }
-            base.RecalcHitSpeed();
+        }
+        
+        /// <summary>
+        /// 切换地图
+        /// </summary>
+        internal bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY)
+        {
+            var result = false;
+            const string sExceptionMsg = "[Exception] BaseObject::EnterAnotherMap";
+            try
+            {
+                if (Abil.Level < envir.EnterLevel)
+                {
+                    SysMsg($"需要 {envir.Flag.RequestLevel - 1} 级以上才能进入 {envir.MapDesc}", MsgColor.Red, MsgType.Hint);
+                    return false;
+                }
+                if (envir.QuestNpc != null)
+                {
+                    envir.QuestNpc.Click(this);
+                }
+                if (envir.Flag.NeedSetonFlag >= 0)
+                {
+                    if (GetQuestFalgStatus(envir.Flag.NeedSetonFlag) != envir.Flag.NeedOnOff)
+                    {
+                        return false;
+                    }
+                }
+                var cellSuccess = false;
+                envir.GetCellInfo(nDMapX, nDMapY, ref cellSuccess);
+                if (!cellSuccess)
+                {
+                    return false;
+                }
+                var castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
+                if ((castle != null))
+                {
+                    if (!castle.CheckInPalace(CurrX, CurrY))
+                    {
+                        return false;
+                    }
+                }
+                if (envir.Flag.NoHorse)
+                {
+                    OnHorse = false;
+                }
+                var oldEnvir = Envir;
+                var nOldX = CurrX;
+                var nOldY = CurrY;
+                DisappearA();
+                VisibleHumanList.Clear();
+                for (var i = 0; i < VisibleItems.Count; i++)
+                {
+                    VisibleItems[i] = null;
+                }
+                VisibleItems.Clear();
+                VisibleEvents.Clear();
+                for (var i = 0; i < VisibleActors.Count; i++)
+                {
+                    VisibleActors[i] = null;
+                }
+                VisibleActors.Clear();
+                SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                Envir = envir;
+                MapName = envir.MapName;
+                MapFileName = envir.MapFileName;
+                CurrX = nDMapX;
+                CurrY = nDMapY;
+                SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, envir.MapFileName);
+                if (AddToMap())
+                {
+                    MapMoveTick = HUtil32.GetTickCount();
+                    SpaceMoved = true;
+                    result = true;
+                }
+                else
+                {
+                    Envir = oldEnvir;
+                    CurrX = nOldX;
+                    CurrY = nOldY;
+                    Envir.AddToMap(CurrX, CurrY, MapCell, this);
+                }
+                OnEnvirnomentChanged();
+                // 复位泡点，及金币，时间
+                IncGamePointTick = HUtil32.GetTickCount();
+                IncGameGoldTick = HUtil32.GetTickCount();
+                AutoGetExpTick = HUtil32.GetTickCount();
+                if (Envir.Flag.Fight3Zone && (Envir.Flag.Fight3Zone != oldEnvir.Flag.Fight3Zone))
+                {
+                    RefShowName();
+                }
+            }
+            catch
+            {
+                M2Share.Logger.Error(sExceptionMsg);
+            }
+            return result;
         }
 
         private void WinLottery()

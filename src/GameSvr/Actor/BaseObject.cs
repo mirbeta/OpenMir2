@@ -106,14 +106,6 @@ namespace GameSvr.Actor
         /// 人物攻击准确度
         /// </summary>
         public byte HitPoint;
-        /// <summary>
-        /// 额外攻击伤害(攻杀)
-        /// </summary>
-        internal ushort HitPlus;
-        /// <summary>
-        /// 双倍攻击伤害(烈火专用)
-        /// </summary>
-        internal ushort HitDouble;
         public ushort HealthRecover;
         public ushort SpellRecover;
         public byte AntiPoison;
@@ -490,8 +482,6 @@ namespace GameSvr.Actor
             ViewRange = 5;
             Light = 0;
             NameColor = 255;
-            HitPlus = 0;
-            HitDouble = 0;
             BoFearFire = false;
             HitPoint = 5;
             SpeedPoint = 15;
@@ -1676,7 +1666,7 @@ namespace GameSvr.Actor
             return result;
         }
 
-        private bool AddToMap()
+        internal bool AddToMap()
         {
             var point = Envir.AddToMap(CurrX, CurrY, MapCell, this);
             var result = point != null;
@@ -2212,7 +2202,6 @@ namespace GameSvr.Actor
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
-                BaseObject baseObject;
                 if (((HUtil32.GetTickCount() - SendRefMsgTick) >= 500) || (VisibleHumanList.Count == 0))
                 {
                     SendRefMsgTick = HUtil32.GetTickCount();
@@ -2251,7 +2240,7 @@ namespace GameSvr.Actor
                                                 {
                                                     try
                                                     {
-                                                        baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                                        var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                                         if ((baseObject != null) && !baseObject.Ghost)
                                                         {
                                                             if (baseObject.Race == ActorRace.Play)
@@ -2292,7 +2281,7 @@ namespace GameSvr.Actor
 
                 for (var nC = 0; nC < VisibleHumanList.Count; nC++)
                 {
-                    baseObject = VisibleHumanList[nC];
+                    var baseObject = VisibleHumanList[nC];
                     if (baseObject.Ghost)
                     {
                         continue;
@@ -2423,7 +2412,7 @@ namespace GameSvr.Actor
 
         protected bool Walk(int nIdent)
         {
-            const string sExceptionMsg = "[Exception] TBaseObject::Walk {0} {1} {2}:{3}";
+            const string sExceptionMsg = "[Exception] BaseObject::Walk {0} {1} {2}:{3}";
             var result = true;
             if (Envir == null)
             {
@@ -2457,7 +2446,7 @@ namespace GameSvr.Actor
                                             {
                                                 if (M2Share.ServerIndex == gateObj.Envir.ServerIndex)
                                                 {
-                                                    if (!EnterAnotherMap(gateObj.Envir, gateObj.X, gateObj.Y))
+                                                    if (!((PlayObject)this).EnterAnotherMap(gateObj.Envir, gateObj.X, gateObj.Y))
                                                     {
                                                         result = false;
                                                     }
@@ -2515,105 +2504,7 @@ namespace GameSvr.Actor
             }
             return result;
         }
-
-        /// <summary>
-        /// 切换地图
-        /// </summary>
-        private bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY)
-        {
-            var result = false;
-            const string sExceptionMsg = "[Exception] TBaseObject::EnterAnotherMap";
-            try
-            {
-                if (Abil.Level < envir.EnterLevel)
-                {
-                    SysMsg($"需要 {envir.Flag.RequestLevel - 1} 级以上才能进入 {envir.MapDesc}", MsgColor.Red, MsgType.Hint);
-                    return false;
-                }
-                if (envir.QuestNpc != null)
-                {
-                    envir.QuestNpc.Click((PlayObject)this);
-                }
-                if (envir.Flag.NeedSetonFlag >= 0)
-                {
-                    if (((PlayObject)this).GetQuestFalgStatus(envir.Flag.NeedSetonFlag) != envir.Flag.NeedOnOff)
-                    {
-                        return false;
-                    }
-                }
-                var cellSuccess = false;
-                envir.GetCellInfo(nDMapX, nDMapY, ref cellSuccess);
-                if (!cellSuccess)
-                {
-                    return false;
-                }
-                var castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
-                if ((castle != null) && (Race == ActorRace.Play))
-                {
-                    if (!castle.CheckInPalace(CurrX, CurrY))
-                    {
-                        return false;
-                    }
-                }
-                if (envir.Flag.NoHorse)
-                {
-                    OnHorse = false;
-                }
-                var oldEnvir = Envir;
-                var nOldX = CurrX;
-                var nOldY = CurrY;
-                DisappearA();
-                VisibleHumanList.Clear();
-                for (var i = 0; i < VisibleItems.Count; i++)
-                {
-                    VisibleItems[i] = null;
-                }
-                VisibleItems.Clear();
-                VisibleEvents.Clear();
-                for (var i = 0; i < VisibleActors.Count; i++)
-                {
-                    VisibleActors[i] = null;
-                }
-                VisibleActors.Clear();
-                SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
-                Envir = envir;
-                MapName = envir.MapName;
-                MapFileName = envir.MapFileName;
-                CurrX = nDMapX;
-                CurrY = nDMapY;
-                SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, envir.MapFileName);
-                if (AddToMap())
-                {
-                    MapMoveTick = HUtil32.GetTickCount();
-                    SpaceMoved = true;
-                    result = true;
-                }
-                else
-                {
-                    Envir = oldEnvir;
-                    CurrX = nOldX;
-                    CurrY = nOldY;
-                    Envir.AddToMap(CurrX, CurrY, MapCell, this);
-                }
-                OnEnvirnomentChanged();
-                if (Race == ActorRace.Play) // 复位泡点，及金币，时间
-                {
-                    ((PlayObject)this).IncGamePointTick = HUtil32.GetTickCount();
-                    ((PlayObject)this).IncGameGoldTick = HUtil32.GetTickCount();
-                    ((PlayObject)this).AutoGetExpTick = HUtil32.GetTickCount();
-                }
-                if (Envir.Flag.Fight3Zone && (Envir.Flag.Fight3Zone != oldEnvir.Flag.Fight3Zone))
-                {
-                    RefShowName();
-                }
-            }
-            catch
-            {
-                M2Share.Logger.Error(sExceptionMsg);
-            }
-            return result;
-        }
-
+        
         protected void TurnTo(byte nDir)
         {
             Direction = nDir;
