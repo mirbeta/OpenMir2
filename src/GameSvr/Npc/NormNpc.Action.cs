@@ -727,11 +727,9 @@ namespace GameSvr.Npc
         private void ActionOfClearNameList(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
         {
             string sListFileName = M2Share.GetEnvirFilePath( m_sPath, QuestActionInfo.sParam1);
-            using StringList LoadList = new StringList();
-            LoadList.Clear();
             try
             {
-                LoadList.SaveToFile(sListFileName);
+                File.WriteAllText(sListFileName, string.Empty); 
             }
             catch
             {
