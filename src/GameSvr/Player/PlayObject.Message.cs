@@ -163,10 +163,10 @@ namespace GameSvr.Player
                 if (IsDelayCall && (HUtil32.GetTickCount() - DelayCallTick) > DelayCall)
                 {
                     IsDelayCall = false;
-                    NormNpc normNpc = WorldServer.FindMerchant<Merchant>(MDelayCallNpc);
+                    NormNpc normNpc = WorldServer.FindMerchant<Merchant>(DelayCallNpc);
                     if (normNpc == null)
                     {
-                        normNpc = WorldServer.FindNpc<NormNpc>(MDelayCallNpc);
+                        normNpc = WorldServer.FindNpc<NormNpc>(DelayCallNpc);
                     }
                     if (normNpc != null)
                     {

@@ -52,7 +52,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (File.Exists(sScriptFileName))
             {
-                StringList LoadList = new StringList();
+                using StringList LoadList = new StringList();
                 try
                 {
                     LoadList.LoadFromFile(sScriptFileName);

@@ -70,9 +70,9 @@ namespace SystemModule.Common
         /// <summary>
         /// 构造函数
         /// </summary>
-        public StringList()
-            : this(10)
+        public StringList() : this(10)
         {
+            
         }
 
         /// <summary>
@@ -81,7 +81,6 @@ namespace SystemModule.Common
         public StringList(int capacity)
         {
             m_Capacity = capacity;
-
             _mStrings = new string[capacity];
             _mSize = 0;
         }
@@ -220,7 +219,7 @@ namespace SystemModule.Common
 
             return s.ToString();
         }
-
+        
         /// <summary>
         /// 转换为字符串。
         /// </summary>
@@ -274,23 +273,23 @@ namespace SystemModule.Common
         public void SaveToFile(string fileName, Encoding encoding)
         {
             var sw2 = new StreamWriter(fileName, false, encoding);
-            for (int i = 0; i < this.Count; i++)
+            for (var i = 0; i < this.Count; i++)
             {
-                sw2.Write(_mStrings[i] + "\r\n");
+                sw2.WriteLine(_mStrings[i]);
             }
-
             sw2.Close();
+            sw2.Dispose();
         }
 
         public void SaveToFile(string fileName)
         {
             var sw2 = new StreamWriter(fileName, false, Encoding.GetEncoding("gb2312"));
-            for (int i = 0; i < this.Count; i++)
+            for (var i = 0; i < this.Count; i++)
             {
-                sw2.Write(_mStrings[i] + "\r\n");
+                sw2.WriteLine(_mStrings[i]);
             }
-
             sw2.Close();
+            sw2.Dispose();
         }
 
         /// <summary>
@@ -310,6 +309,7 @@ namespace SystemModule.Common
                 this.AppendText(sr2.ReadLine());
             }
             sr2.Close();
+            sr2.Dispose();
         }
 
         public void LoadFromFile(string fileName, bool isAdd)
@@ -321,32 +321,25 @@ namespace SystemModule.Common
                 this.AppendText(sr2.ReadLine());
             }
             sr2.Close();
+            sr2.Dispose();
         }
 
         public void LoadFromFile(string fileName, Encoding encoding)
         {
             this.Clear();
-
-            StreamReader sr2 = new StreamReader(fileName, encoding);
-
+            var sr2 = new StreamReader(fileName, encoding);
             while (sr2.Peek() >= 0)
             {
                 this.AppendText(sr2.ReadLine());
             }
-
             sr2.Close();
+            sr2.Dispose();
         }
-
-        public void __Lock()
-        {
-        }
-
-        public void UnLock()
-        {
-        }
-
+        
         public void Dispose()
         {
+            _mStrings = null;
+            _mSize = 0;
         }
     }
 }

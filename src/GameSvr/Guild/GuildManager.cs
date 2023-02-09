@@ -76,7 +76,7 @@ namespace GameSvr.Guild
             GuildInfo Guild;
             if (File.Exists(M2Share.Config.GuildFile))
             {
-                StringList LoadList = new StringList();
+                using StringList LoadList = new StringList();
                 LoadList.LoadFromFile(M2Share.Config.GuildFile);
                 for (int i = 0; i < LoadList.Count; i++)
                 {

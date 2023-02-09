@@ -190,7 +190,7 @@ namespace GameSvr.Robots
             string sFileName = M2Share.GetEnvirFilePath("Robot_def", $"{ScriptFileName}.txt");
             if (File.Exists(sFileName))
             {
-                StringList LoadList = new StringList();
+                using StringList LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 for (int i = 0; i < LoadList.Count; i++)
                 {

@@ -115,7 +115,7 @@ namespace LoginSvr.Conf
             string sPublic = string.Empty;
             string sGatePort = string.Empty;
             string sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AddrTable.txt");
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 LoadList.LoadFromFile(sFileName);
@@ -170,7 +170,6 @@ namespace LoginSvr.Conf
                 }
                 Config.RouteCount = nRouteIdx;
             }
-            LoadList = null;
             GenServerNameList(Config);
         }
 

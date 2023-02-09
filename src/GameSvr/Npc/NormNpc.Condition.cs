@@ -21,7 +21,7 @@ namespace GameSvr.Npc
             string sChrName = PlayObject.ChrName;
             string sCharAccount = PlayObject.UserAccount;
             string sCharIPaddr = PlayObject.LoginIpAddr;
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             if (File.Exists(M2Share.GetEnvirFilePath(QuestConditionInfo.sParam1)))
             {
                 LoadList.LoadFromFile(M2Share.GetEnvirFilePath(QuestConditionInfo.sParam1));
@@ -1259,7 +1259,7 @@ namespace GameSvr.Npc
             string sChrName = PlayObject.ChrName;
             if (File.Exists(M2Share.GetEnvirFilePath(QuestConditionInfo.sParam1)))
             {
-                StringList LoadList = new StringList();
+                using StringList LoadList = new StringList();
                 LoadList.LoadFromFile(M2Share.GetEnvirFilePath(QuestConditionInfo.sParam1));
                 for (int i = 0; i < LoadList.Count; i++)
                 {

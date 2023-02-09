@@ -500,7 +500,7 @@ namespace GameSvr.Player
         public int DelayCall;
         public int DelayCallTick = 0;
         public bool IsDelayCall;
-        public int MDelayCallNpc;
+        public int DelayCallNpc;
         public string DelayCallLabel = string.Empty;
         public TScript MScript;
         public int LastNpc = 0;
@@ -588,7 +588,10 @@ namespace GameSvr.Player
         /// 用于处理 @back 脚本命令
         /// </summary>        
         public string ScriptGoBackLable = string.Empty;
-        public int MDwTurnTick;
+        /// <summary>
+        /// 转身间隔
+        /// </summary>
+        public int TurnTick;
         public int OldIdent = 0;
         public byte MBtOldDir = 0;
         /// <summary>
@@ -848,7 +851,7 @@ namespace GameSvr.Player
             DieInFight3Zone = false;
             DelayCall = 0;
             IsDelayCall = false;
-            MDelayCallNpc = 0;
+            DelayCallNpc = 0;
             MScript = null;
             IsTimeRecall = false;
             TimeRecallMoveX = 0;
@@ -875,7 +878,7 @@ namespace GameSvr.Player
             MagicAttackInterval = 0;
             AttackTick = HUtil32.GetTickCount();
             MoveTick = HUtil32.GetTickCount();
-            MDwTurnTick = HUtil32.GetTickCount();
+            TurnTick = HUtil32.GetTickCount();
             ActionTick = HUtil32.GetTickCount();
             AttackCount = 0;
             AttackCountA = 0;

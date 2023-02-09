@@ -154,17 +154,15 @@ namespace GameSvr.Castle
             string castleFile = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
             if (File.Exists(castleFile))
             {
-                using (StringList loadList = new StringList())
+                using var loadList = new StringList();
+                loadList.LoadFromFile(castleFile);
+                for (var i = 0; i < loadList.Count; i++)
                 {
-                    loadList.LoadFromFile(castleFile);
-                    for (int i = 0; i < loadList.Count; i++)
+                    string sCastleDir = loadList[i].Trim();
+                    if (!string.IsNullOrEmpty(sCastleDir))
                     {
-                        string sCastleDir = loadList[i].Trim();
-                        if (!string.IsNullOrEmpty(sCastleDir))
-                        {
-                            UserCastle castle = new UserCastle(sCastleDir);
-                            _castleList.Add(castle);
-                        }
+                        UserCastle castle = new UserCastle(sCastleDir);
+                        _castleList.Add(castle);
                     }
                 }
                 _logger.Info($"已读取 [{_castleList.Count}] 个城堡信息...");
@@ -182,7 +180,7 @@ namespace GameSvr.Castle
             {
                 Directory.CreateDirectory(castleDirPath);
             }
-            StringList loadList = new StringList();
+            using var loadList = new StringList(_castleList.Count);
             for (int i = 0; i < _castleList.Count; i++)
             {
                 loadList.Add(i.ToString());

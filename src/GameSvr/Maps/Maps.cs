@@ -32,7 +32,7 @@ namespace GameSvr.Maps
             string sFileName = M2Share.GetEnvirFilePath("MapInfo.txt");
             if (File.Exists(sFileName))
             {
-                StringList LoadList = new StringList();
+                using StringList LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 if (LoadList.Count < 0)
                 {

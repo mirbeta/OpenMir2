@@ -37,7 +37,7 @@ namespace GameSvr.Player
                 return false;
             }
             var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-            for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
+            for (var i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
             {
                 if (groupOwnerPlay.GroupMembers[i].ActorId == actorId)
                 {
@@ -49,12 +49,12 @@ namespace GameSvr.Player
 
         private bool ClientPickUpItem()
         {
-            bool result = false;
+            var result = false;
             if (Dealing)
             {
                 return false;
             }
-            MapItem mapItem = Envir.GetItem(CurrX, CurrY);
+            var mapItem = Envir.GetItem(CurrX, CurrY);
             if (mapItem == null)
             {
                 return false;
@@ -94,8 +94,8 @@ namespace GameSvr.Player
             {
                 if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem) == 1)
                 {
-                    UserItem userItem = mapItem.UserItem;
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                    var userItem = mapItem.UserItem;
+                    var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                     if (stdItem != null && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index)))
                     {
                         SendMsg(this, Messages.RM_ITEMHIDE, 0, mapItem.ActorId, CurrX, CurrY, "");
@@ -166,7 +166,7 @@ namespace GameSvr.Player
 
         public bool IncGold(int tGold)
         {
-            bool result = false;
+            var result = false;
             if (Gold + tGold <= M2Share.Config.HumanMaxGold)
             {
                 Gold += tGold;
@@ -196,12 +196,12 @@ namespace GameSvr.Player
 
         public void SendAddItem(UserItem userItem)
         {
-            StdItem item = M2Share.WorldEngine.GetStdItem(userItem.Index);
+            var item = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (item == null)
             {
                 return;
             }
-            ClientItem clientItem = new ClientItem();
+            var clientItem = new ClientItem();
             item.GetUpgradeStdItem(userItem, ref clientItem);
             clientItem.Item.Name = CustomItem.GetItemName(userItem);
             clientItem.MakeIndex = userItem.MakeIndex;
@@ -228,8 +228,8 @@ namespace GameSvr.Player
 
         internal bool IsBlockWhisper(string sName)
         {
-            bool result = false;
-            for (int i = 0; i < LockWhisperList.Count; i++)
+            var result = false;
+            for (var i = 0; i < LockWhisperList.Count; i++)
             {
                 if (string.Compare(sName, LockWhisperList[i], StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -268,7 +268,7 @@ namespace GameSvr.Player
 
         private void RefUserState()
         {
-            int n8 = 0;
+            var n8 = 0;
             if (Envir.Flag.FightZone)
             {
                 n8 = n8 | 1;
@@ -300,9 +300,9 @@ namespace GameSvr.Player
                 return;
             }
             MBoPirit = false;
-            for (int i = 0; i < UseItems.Length; i++)
+            for (var i = 0; i < UseItems.Length; i++)
             {
-                UserItem useItem = UseItems[i];
+                var useItem = UseItems[i];
                 if (useItem == null)
                 {
                     continue;
@@ -311,7 +311,7 @@ namespace GameSvr.Player
                 {
                     continue;
                 }
-                StdItem stdItem = M2Share.WorldEngine.GetStdItem(useItem.Index);
+                var stdItem = M2Share.WorldEngine.GetStdItem(useItem.Index);
                 if (stdItem != null)
                 {
                     if (stdItem.Shape == 126 || stdItem.Shape == 127 || stdItem.Shape == 128 || stdItem.Shape == 129)
@@ -338,7 +338,7 @@ namespace GameSvr.Player
             {
                 n08 = 0;
             }
-            string sC = LoginIpAddr + "\t" + UserAccount + "\t" + ChrName + "\t" + n08 + "\t" + DateTimeOffset.FromUnixTimeMilliseconds(LogonTime).ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + PayMode;
+            var sC = LoginIpAddr + "\t" + UserAccount + "\t" + ChrName + "\t" + n08 + "\t" + DateTimeOffset.FromUnixTimeMilliseconds(LogonTime).ToString("yyyy-mm-dd hh:mm:ss") + "\t" + DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss") + "\t" + PayMode;
             M2Share.AddLogonCostLog(sC);
             if (PayMode == 2)
             {
@@ -349,13 +349,13 @@ namespace GameSvr.Player
         private bool RunTo(byte btDir, bool boFlag, int nDestX, int nDestY)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
-            bool result = false;
+            var result = false;
             try
             {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 Direction = btDir;
-                bool canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
+                var canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
@@ -438,13 +438,13 @@ namespace GameSvr.Player
         private bool HorseRunTo(byte btDir, bool boFlag)
         {
             const string sExceptionMsg = "[Exception] TPlayObject::HorseRunTo";
-            bool result = false;
+            var result = false;
             try
             {
                 int n10 = CurrX;
                 int n14 = CurrY;
                 Direction = btDir;
-                bool canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
+                var canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
@@ -642,7 +642,7 @@ namespace GameSvr.Player
             if (HUtil32.GetTickCount() - ClickNpcTime > M2Share.Config.ClickNpcTime)
             {
                 ClickNpcTime = HUtil32.GetTickCount();
-                NormNpc normNpc = WorldServer.FindMerchant<Merchant>(actorId) ?? WorldServer.FindNpc<NormNpc>(actorId);
+                var normNpc = WorldServer.FindMerchant<Merchant>(actorId) ?? WorldServer.FindNpc<NormNpc>(actorId);
                 if (normNpc != null)
                 {
                     if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
@@ -823,11 +823,11 @@ namespace GameSvr.Player
 
         private int GetDigUpMsgCount()
         {
-            int result = 0;
+            var result = 0;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++)
+                for (var i = 0; i < MsgQueue.Count; i++)
                 {
                     if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
@@ -873,7 +873,7 @@ namespace GameSvr.Player
 
         private void SendMapDescription()
         {
-            int nMusicid = -1;
+            var nMusicid = -1;
             if (Envir.Flag.Music)
             {
                 nMusicid = Envir.Flag.MusicId;
@@ -910,10 +910,10 @@ namespace GameSvr.Player
 
         private void ReadAllBook()
         {
-            for (int i = 0; i < M2Share.WorldEngine.MagicList.Count; i++)
+            for (var i = 0; i < M2Share.WorldEngine.MagicList.Count; i++)
             {
-                MagicInfo magic = M2Share.WorldEngine.MagicList[i];
-                UserMagic userMagic = new UserMagic
+                var magic = M2Share.WorldEngine.MagicList[i];
+                var userMagic = new UserMagic
                 {
                     Magic = magic,
                     MagIdx = magic.MagicId,
@@ -929,7 +929,7 @@ namespace GameSvr.Player
 
         private void SendGoldInfo(bool boSendName)
         {
-            string sMsg = string.Empty;
+            var sMsg = string.Empty;
             if (SoftVersionDateEx == 0)
             {
                 return;
@@ -966,7 +966,7 @@ namespace GameSvr.Player
                 {
                 }
             }
-            string sMsg = EDCode.EncodeBuffer(M2Share.Config.ClientConf);
+            var sMsg = EDCode.EncodeBuffer(M2Share.Config.ClientConf);
             //var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
             //var nParam = (short)HUtil32.MakeWord(5, 0);
             SendDefMessage(Messages.SM_SERVERCONFIG, 0, 0, 0, 0, sMsg);
@@ -991,20 +991,20 @@ namespace GameSvr.Player
                 M2Share.Logger.Error("CretInNearXY nil PEnvir");
                 return false;
             }
-            for (int cX = nX - 1; cX <= nX + 1; cX++)
+            for (var cX = nX - 1; cX <= nX + 1; cX++)
             {
-                for (int cY = nY - 1; cY <= nY + 1; cY++)
+                for (var cY = nY - 1; cY <= nY + 1; cY++)
                 {
-                    bool cellSuccess = false;
-                    MapCellInfo cellInfo = Envir.GetCellInfo(cX, cY, ref cellSuccess);
+                    var cellSuccess = false;
+                    var cellInfo = Envir.GetCellInfo(cX, cY, ref cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        for (int i = 0; i < cellInfo.Count; i++)
+                        for (var i = 0; i < cellInfo.Count; i++)
                         {
-                            CellObject cellObject = cellInfo.ObjList[i];
+                            var cellObject = cellInfo.ObjList[i];
                             if (cellObject.ActorObject)
                             {
-                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null)
                                 {
                                     if (!baseObject.Ghost && baseObject == targeBaseObject)
@@ -1022,15 +1022,15 @@ namespace GameSvr.Player
 
         internal void SendUseItems()
         {
-            string sSendMsg = string.Empty;
-            for (int i = 0; i < UseItems.Length; i++)
+            var sSendMsg = string.Empty;
+            for (var i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    StdItem item = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    var item = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (item != null)
                     {
-                        ClientItem clientItem = new ClientItem();
+                        var clientItem = new ClientItem();
                         item.GetUpgradeStdItem(UseItems[i], ref clientItem);
                         //Item.GetItemAddValue(UseItems[i], ref ClientItem.Item);
                         clientItem.Item.Name = CustomItem.GetItemName(UseItems[i]);
@@ -1055,11 +1055,11 @@ namespace GameSvr.Player
 
         private void SendUseMagic()
         {
-            string sSendMsg = string.Empty;
-            for (int i = 0; i < MagicList.Count; i++)
+            var sSendMsg = string.Empty;
+            for (var i = 0; i < MagicList.Count; i++)
             {
-                UserMagic userMagic = MagicList[i];
-                ClientMagic clientMagic = new ClientMagic();
+                var userMagic = MagicList[i];
+                var clientMagic = new ClientMagic();
                 clientMagic.Key = userMagic.Key;
                 clientMagic.Level = userMagic.Level;
                 clientMagic.CurTrain = userMagic.TranPoint;
@@ -1075,7 +1075,7 @@ namespace GameSvr.Player
 
         private bool UseStdmodeFunItem(StdItem stdItem)
         {
-            bool result = false;
+            var result = false;
             if (M2Share.FunctionNPC != null)
             {
                 M2Share.FunctionNPC.GotoLable(this, "@StdModeFunc" + stdItem.AniCount, false);
@@ -1086,11 +1086,11 @@ namespace GameSvr.Player
 
         private static void RecalcAdjusBonusAdjustAb(byte abil, short val, ref short lov, ref short hiv)
         {
-            byte lo = HUtil32.LoByte(abil);
-            byte hi = HUtil32.HiByte(abil);
+            var lo = HUtil32.LoByte(abil);
+            var hi = HUtil32.HiByte(abil);
             lov = 0;
             hiv = 0;
-            for (int i = 0; i < val; i++)
+            for (var i = 0; i < val; i++)
             {
                 if (lo + 1 < hi)
                 {
@@ -1134,11 +1134,11 @@ namespace GameSvr.Player
                     nakedAbil = M2Share.Config.NakedAbilofTaos;
                     break;
             }
-            short adc = (short)(BonusAbil.DC / bonusTick.DC);
-            short amc = (short)(BonusAbil.MC / bonusTick.MC);
-            short asc = (short)(BonusAbil.SC / bonusTick.SC);
-            short aac = (short)(BonusAbil.AC / bonusTick.AC);
-            short amac = (short)(BonusAbil.MAC / bonusTick.MAC);
+            var adc = (short)(BonusAbil.DC / bonusTick.DC);
+            var amc = (short)(BonusAbil.MC / bonusTick.MC);
+            var asc = (short)(BonusAbil.SC / bonusTick.SC);
+            var aac = (short)(BonusAbil.AC / bonusTick.AC);
+            var amac = (short)(BonusAbil.MAC / bonusTick.MAC);
             RecalcAdjusBonusAdjustAb((byte)nakedAbil.DC, adc, ref ldc, ref hdc);
             RecalcAdjusBonusAdjustAb((byte)nakedAbil.MC, amc, ref lmc, ref hmc);
             RecalcAdjusBonusAdjustAb((byte)nakedAbil.SC, asc, ref lsc, ref hsc);
@@ -1155,8 +1155,8 @@ namespace GameSvr.Player
 
         private void ClientAdjustBonus(int nPoint, string sMsg)
         {
-            NakedAbility bonusAbil = new NakedAbility();
-            int nTotleUsePoint = bonusAbil.DC + bonusAbil.MC + bonusAbil.SC + bonusAbil.AC + bonusAbil.MAC + bonusAbil.HP + bonusAbil.MP + bonusAbil.Hit + bonusAbil.Speed + bonusAbil.Reserved;
+            var bonusAbil = new NakedAbility();
+            var nTotleUsePoint = bonusAbil.DC + bonusAbil.MC + bonusAbil.SC + bonusAbil.AC + bonusAbil.MAC + bonusAbil.HP + bonusAbil.MP + bonusAbil.Hit + bonusAbil.Speed + bonusAbil.Reserved;
             if (nPoint + nTotleUsePoint == BonusPoint)
             {
                 BonusPoint = nPoint;
@@ -1182,7 +1182,7 @@ namespace GameSvr.Player
 
         public int GetMyStatus()
         {
-            int result = HungerStatus / 1000;
+            var result = HungerStatus / 1000;
             if (result > 4)
             {
                 result = 4;
@@ -1192,7 +1192,7 @@ namespace GameSvr.Player
 
         private void SendAdjustBonus()
         {
-            string sSendMsg = string.Empty;
+            var sSendMsg = string.Empty;
             switch (Job)
             {
                 case PlayJob.Warrior:
@@ -1211,14 +1211,14 @@ namespace GameSvr.Player
 
         private void PvpDie(PlayObject playObject)
         {
-            int nWinLevel = M2Share.Config.KillHumanWinLevel;
-            int nLostLevel = M2Share.Config.KilledLostLevel;
-            int nWinExp = M2Share.Config.KillHumanWinExp;
-            int nLostExp = M2Share.Config.KillHumanLostExp;
-            bool boWinLEvel = M2Share.Config.IsKillHumanWinLevel;
-            bool boLostLevel = M2Share.Config.IsKilledLostLevel;
-            bool boWinExp = M2Share.Config.IsKillHumanWinExp;
-            bool boLostExp = M2Share.Config.IsKilledLostExp;
+            var nWinLevel = M2Share.Config.KillHumanWinLevel;
+            var nLostLevel = M2Share.Config.KilledLostLevel;
+            var nWinExp = M2Share.Config.KillHumanWinExp;
+            var nLostExp = M2Share.Config.KillHumanLostExp;
+            var boWinLEvel = M2Share.Config.IsKillHumanWinLevel;
+            var boLostLevel = M2Share.Config.IsKilledLostLevel;
+            var boWinExp = M2Share.Config.IsKillHumanWinExp;
+            var boLostExp = M2Share.Config.IsKilledLostExp;
             if (Envir.Flag.boPKWINLEVEL)
             {
                 boWinLEvel = true;
@@ -1338,7 +1338,7 @@ namespace GameSvr.Player
 
         public bool CancelGroup()
         {
-            bool result = true;
+            var result = true;
             const string sCanceGrop = "你的小组被解散了.";
             if (GroupMembers.Count <= 1)
             {
@@ -1353,13 +1353,13 @@ namespace GameSvr.Player
         public void SendGroupMembers()
         {
             PlayObject playObject;
-            string sSendMsg = "";
-            for (int i = 0; i < GroupMembers.Count; i++)
+            var sSendMsg = "";
+            for (var i = 0; i < GroupMembers.Count; i++)
             {
                 playObject = GroupMembers[i];
                 sSendMsg = sSendMsg + playObject.ChrName + '/';
             }
-            for (int i = 0; i < GroupMembers.Count; i++)
+            for (var i = 0; i < GroupMembers.Count; i++)
             {
                 playObject = GroupMembers[i];
                 playObject.SendDefMessage(Messages.SM_GROUPMEMBERS, 0, 0, 0, 0, sSendMsg);
@@ -1375,7 +1375,7 @@ namespace GameSvr.Player
         {
             if (Abil.Level > baseObject.Abil.Level && !baseObject.StickMode) //当前玩家等级大于目标等级，并且目标可以被冲撞
             {
-                int nC = Abil.Level - baseObject.Abil.Level;
+                var nC = Abil.Level - baseObject.Abil.Level;
                 if (M2Share.RandomNumber.Random(20) < nMagicLevel * 4 + 6 + nC)
                 {
                     if (IsProperTarget(baseObject))
@@ -1393,15 +1393,15 @@ namespace GameSvr.Player
             BaseObject baseObject34 = null;
             short nX = 0;
             short nY = 0;
-            bool result = false;
-            bool bo35 = true;
-            int n24 = nMagicLevel + 1;
-            int n28 = n24;
+            var result = false;
+            var bo35 = true;
+            var n24 = nMagicLevel + 1;
+            var n28 = n24;
             Direction = nDir;
-            BaseObject poseCreate = GetPoseCreate();
+            var poseCreate = GetPoseCreate();
             if (poseCreate != null)
             {
-                for (int i = 0; i < HUtil32._MAX(2, nMagicLevel + 1); i++)
+                for (var i = 0; i < HUtil32._MAX(2, nMagicLevel + 1); i++)
                 {
                     poseCreate = GetPoseCreate();
                     if (poseCreate != null)
@@ -1415,7 +1415,7 @@ namespace GameSvr.Player
                         {
                             if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
                             {
-                                BaseObject baseObject30 = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                                var baseObject30 = (BaseObject)Envir.GetMovingObject(nX, nY, true);
                                 if (baseObject30 != null && DoMotaeboCanMotaebo(baseObject30, nMagicLevel))
                                 {
                                     baseObject30.CharPushed(Direction, 1);
@@ -1443,7 +1443,7 @@ namespace GameSvr.Player
             else
             {
                 bo35 = false;
-                for (int i = 0; i < HUtil32._MAX(2, nMagicLevel + 1); i++)
+                for (var i = 0; i < HUtil32._MAX(2, nMagicLevel + 1); i++)
                 {
                     GetFrontPosition(ref nX, ref nY);
                     if (Envir.MoveToMovingObject(CurrX, CurrY, this, nX, nY, false) > 0)
@@ -1504,12 +1504,12 @@ namespace GameSvr.Player
 
         private bool DoSpell(UserMagic userMagic, short targetX, short targetY, BaseObject baseObject)
         {
-            bool result = false;
+            var result = false;
             try
             {
                 if (!Magic.MagicManager.IsWarrSkill(userMagic.MagIdx))
                 {
-                    ushort nSpellPoint = GetSpellPoint(userMagic);
+                    var nSpellPoint = GetSpellPoint(userMagic);
                     if (nSpellPoint > 0)
                     {
                         if (WAbil.MP < nSpellPoint)
@@ -1536,9 +1536,9 @@ namespace GameSvr.Player
         /// <returns></returns>
         private bool PileStones(int nX, int nY)
         {
-            bool result = false;
-            string s1C = string.Empty;
-            StoneMineEvent mineEvent = (StoneMineEvent)Envir.GetEvent(nX, nY);
+            var result = false;
+            var s1C = string.Empty;
+            var mineEvent = (StoneMineEvent)Envir.GetEvent(nX, nY);
             if (mineEvent != null && mineEvent.EventType == Grobal2.ET_MINE)
             {
                 if (mineEvent.MineCount > 0)
@@ -1546,7 +1546,7 @@ namespace GameSvr.Player
                     mineEvent.MineCount -= 1;
                     if (M2Share.RandomNumber.Random(M2Share.Config.MakeMineHitRate) == 0)
                     {
-                        PileStones pileEvent = (PileStones)Envir.GetEvent(CurrX, CurrY);
+                        var pileEvent = (PileStones)Envir.GetEvent(CurrX, CurrY);
                         if (pileEvent == null)
                         {
                             pileEvent = new PileStones(Envir, CurrX, CurrY, Grobal2.ET_PILESTONES, 5 * 60 * 1000);
@@ -1589,25 +1589,25 @@ namespace GameSvr.Player
 
         private void SendSaveItemList(int merchantId)
         {
-            string sSendMsg = string.Empty;
-            int maxCount = StorageItemList.Count;
-            short page = (short)Math.Ceiling(maxCount / 50f);
+            var sSendMsg = string.Empty;
+            var maxCount = StorageItemList.Count;
+            var page = (short)Math.Ceiling(maxCount / 50f);
 
-            for (int p = 0; p < page; p++)
+            for (var p = 0; p < page; p++)
             {
-                int startCount = p * 50;
-                int endCount = startCount + 50;
+                var startCount = p * 50;
+                var endCount = startCount + 50;
                 if (endCount > maxCount)
                 {
                     endCount = maxCount;
                 }
-                for (int i = startCount; i < endCount; i++)
+                for (var i = startCount; i < endCount; i++)
                 {
-                    UserItem userItem = StorageItemList[i];
-                    StdItem item = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                    var userItem = StorageItemList[i];
+                    var item = M2Share.WorldEngine.GetStdItem(userItem.Index);
                     if (item != null)
                     {
-                        ClientItem clientItem = new ClientItem();
+                        var clientItem = new ClientItem();
                         item.GetUpgradeStdItem(userItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         clientItem.Item.Name = CustomItem.GetItemName(userItem);
@@ -1636,8 +1636,8 @@ namespace GameSvr.Player
 
         private void SendDelItemList(IList<DeleteItem> itemList)
         {
-            string s10 = string.Empty;
-            for (int i = 0; i < itemList.Count; i++)
+            var s10 = string.Empty;
+            for (var i = 0; i < itemList.Count; i++)
             {
                 s10 = s10 + itemList[i].ItemName + '/' + itemList[i].MakeIndex + '/';
             }
@@ -1647,10 +1647,10 @@ namespace GameSvr.Player
 
         public void SendDelItems(UserItem userItem)
         {
-            StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
-                ClientItem clientItem = new ClientItem();
+                var clientItem = new ClientItem();
                 stdItem.GetUpgradeStdItem(userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
@@ -1667,10 +1667,10 @@ namespace GameSvr.Player
 
         public void SendUpdateItem(UserItem userItem)
         {
-            StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
-                ClientItem clientItem = new ClientItem();
+                var clientItem = new ClientItem();
                 stdItem.GetUpgradeStdItem(userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
@@ -1687,10 +1687,10 @@ namespace GameSvr.Player
 
         private void SendUpdateItemWithLevel(UserItem userItem, byte level)
         {
-            StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
-                ClientItem clientItem = new ClientItem();
+                var clientItem = new ClientItem();
                 stdItem.GetUpgradeStdItem(userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
@@ -1708,10 +1708,10 @@ namespace GameSvr.Player
 
         private void SendUpdateItemByJob(UserItem userItem, byte level)
         {
-            StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
-                ClientItem clientItem = new ClientItem();
+                var clientItem = new ClientItem();
                 stdItem.GetUpgradeStdItem(userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
@@ -1729,7 +1729,7 @@ namespace GameSvr.Player
 
         private bool CheckTakeOnItems(int nWhere, ref ClientItem clientItem)
         {
-            bool result = false;
+            var result = false;
             switch (clientItem.Item.StdMode)
             {
                 case 10 when Gender != PlayGender.Man:
@@ -2025,8 +2025,8 @@ namespace GameSvr.Player
 
         private int GetUserItemWeitht(int nWhere)
         {
-            int n14 = 0;
-            for (int i = 0; i < UseItems.Length; i++)
+            var n14 = 0;
+            for (var i = 0; i < UseItems.Length; i++)
             {
                 if (nWhere == -1 || !(i == nWhere) && !(i == 1) && !(i == 2))
                 {
@@ -2034,7 +2034,7 @@ namespace GameSvr.Player
                     {
                         continue;
                     }
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         n14 += stdItem.Weight;
@@ -2046,7 +2046,7 @@ namespace GameSvr.Player
 
         private bool EatItems(StdItem stdItem, UserItem userItem)
         {
-            bool result = false;
+            var result = false;
             if (Envir.Flag.boNODRUG)
             {
                 SysMsg(Settings.CanotUseDrugOnThisMap, MsgColor.Red, MsgType.Hint);
@@ -2083,7 +2083,7 @@ namespace GameSvr.Player
                     }
                     break;
                 case 1:
-                    int nOldStatus = GetMyStatus();
+                    var nOldStatus = GetMyStatus();
                     HungerStatus += stdItem.DuraMax / 10;
                     HungerStatus = HUtil32._MIN(5000, HungerStatus);
                     if (nOldStatus != GetMyStatus())
@@ -2099,7 +2099,7 @@ namespace GameSvr.Player
                     switch (stdItem.Shape)
                     {
                         case 12:
-                            bool boNeedRecalc = false;
+                            var boNeedRecalc = false;
                             if (HUtil32.LoByte(stdItem.DC) > 0)
                             {
                                 ExtraAbil[AbilConst.EABIL_DCUP] = (ushort)HUtil32._MAX(ExtraAbil[AbilConst.EABIL_DCUP], HUtil32.LoByte(stdItem.DC));
@@ -2170,8 +2170,8 @@ namespace GameSvr.Player
 
         private bool ReadBook(StdItem stdItem)
         {
-            bool result = false;
-            MagicInfo magic = M2Share.WorldEngine.FindMagic(stdItem.Name);
+            var result = false;
+            var magic = M2Share.WorldEngine.FindMagic(stdItem.Name);
             if (magic != null)
             {
                 if (!IsTrainingSkill(magic.MagicId))
@@ -2180,7 +2180,7 @@ namespace GameSvr.Player
                     {
                         if (Abil.Level >= magic.TrainLevel[0])
                         {
-                            UserMagic userMagic = new UserMagic
+                            var userMagic = new UserMagic
                             {
                                 Magic = magic,
                                 MagIdx = magic.MagicId,
@@ -2204,7 +2204,7 @@ namespace GameSvr.Player
 
         public void SendAddMagic(UserMagic userMagic)
         {
-            ClientMagic clientMagic = new ClientMagic
+            var clientMagic = new ClientMagic
             {
                 Key = userMagic.Key,
                 Level = userMagic.Level,
@@ -2227,7 +2227,7 @@ namespace GameSvr.Player
         /// <returns></returns>
         private bool EatUseItems(int nShape)
         {
-            bool result = false;
+            var result = false;
             switch (nShape)
             {
                 case 1:
@@ -2266,7 +2266,7 @@ namespace GameSvr.Player
                     {
                         if (!InGuildWarArea)
                         {
-                            Castle.UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
+                            var castle = M2Share.CastleMgr.IsCastleMember(this);
                             if (castle != null && castle.IsMasterGuild(MyGuild))
                             {
                                 BaseObjectMove(castle.HomeMap, castle.GetHomeX(), castle.GetHomeY());
@@ -2317,15 +2317,15 @@ namespace GameSvr.Player
             }
             if (sX != 0 && sY != 0)
             {
-                short nX = sX;
-                short nY = sY;
+                var nX = sX;
+                var nY = sY;
                 SpaceMove(sMap, nX, nY, 0);
             }
             else
             {
                 MapRandomMove(sMap, 0);
             }
-            Envirnoment envir = Envir;
+            var envir = Envir;
             if (envir != Envir && Race == ActorRace.Play)
             {
                 IsTimeRecall = false;
@@ -2334,8 +2334,8 @@ namespace GameSvr.Player
 
         private void ChangeServerMakeSlave(SlaveInfo slaveInfo)
         {
-            int nSlavecount = Job == PlayJob.Taoist ? 1 : 5;
-            BaseObject baseObject = MakeSlave(slaveInfo.SlaveName, 3, slaveInfo.SlaveLevel, nSlavecount, slaveInfo.RoyaltySec);
+            var nSlavecount = Job == PlayJob.Taoist ? 1 : 5;
+            var baseObject = MakeSlave(slaveInfo.SlaveName, 3, slaveInfo.SlaveLevel, nSlavecount, slaveInfo.RoyaltySec);
             if (baseObject != null)
             {
                 baseObject.KillMonCount = slaveInfo.KillCount;
@@ -2358,10 +2358,10 @@ namespace GameSvr.Player
         {
             if (DealCreat != null)
             {
-                StdItem pStdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                var pStdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                 if (pStdItem != null)
                 {
-                    ClientItem clientItem = new ClientItem();
+                    var clientItem = new ClientItem();
                     pStdItem.GetUpgradeStdItem(userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
@@ -2385,10 +2385,10 @@ namespace GameSvr.Player
             SendDefMessage(Messages.SM_DEALADDITEM_OK, 0, 0, 0, 0, "");
             if (DealCreat != null)
             {
-                StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
-                    ClientItem clientItem = new ClientItem();
+                    var clientItem = new ClientItem();
                     stdItem.GetUpgradeStdItem(userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
@@ -2427,7 +2427,7 @@ namespace GameSvr.Player
         /// <returns></returns>
         private static ushort MakeMineRandomDrua()
         {
-            int result = M2Share.RandomNumber.Random(M2Share.Config.StoneGeneralDuraRate) + M2Share.Config.StoneMinDura;
+            var result = M2Share.RandomNumber.Random(M2Share.Config.StoneGeneralDuraRate) + M2Share.Config.StoneMinDura;
             if (M2Share.RandomNumber.Random(M2Share.Config.StoneAddDuraRate) == 0)
             {
                 result += M2Share.RandomNumber.Random(M2Share.Config.StoneAddDuraMax);
@@ -2445,7 +2445,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            int nRandom = M2Share.RandomNumber.Random(M2Share.Config.StoneTypeRate);
+            var nRandom = M2Share.RandomNumber.Random(M2Share.Config.StoneTypeRate);
             if (nRandom >= M2Share.Config.GoldStoneMin && nRandom <= M2Share.Config.GoldStoneMax)
             {
                 userItem = new UserItem();
@@ -2534,7 +2534,7 @@ namespace GameSvr.Player
                 return;
             }
             UserItem mineItem = null;
-            int mineRate = M2Share.RandomNumber.Random(120);
+            var mineRate = M2Share.RandomNumber.Random(120);
             if (HUtil32.RangeInDefined(mineRate, 1, 2))
             {
                 if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.GemStone1, ref mineItem))
@@ -2603,9 +2603,9 @@ namespace GameSvr.Player
             nParam = 0;
             nDura = 0;
             nCount = 0;
-            for (int i = 0; i < ItemList.Count; i++)
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                UserItem userItem = ItemList[i];
+                var userItem = ItemList[i];
                 if (string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (userItem.Dura > nDura)
@@ -2626,10 +2626,10 @@ namespace GameSvr.Player
 
         public bool QuestTakeCheckItem(UserItem checkItem)
         {
-            bool result = false;
-            for (int i = 0; i < ItemList.Count; i++)
+            var result = false;
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                UserItem userItem = ItemList[i];
+                var userItem = ItemList[i];
                 if (userItem == checkItem)
                 {
                     SendDelItems(userItem);
@@ -2639,7 +2639,7 @@ namespace GameSvr.Player
                     break;
                 }
             }
-            for (int i = 0; i < UseItems.Length; i++)
+            for (var i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] == checkItem)
                 {
@@ -2665,13 +2665,13 @@ namespace GameSvr.Player
         /// <returns></returns>
         private int GetHitMsgCount()
         {
-            int result = 0;
+            var result = 0;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++)
+                for (var i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent >= Messages.CM_HIT || sendMessage.wIdent <= Messages.CM_FIREHIT)
                         {
@@ -2693,13 +2693,13 @@ namespace GameSvr.Player
         /// <returns></returns>
         private int GetSpellMsgCount()
         {
-            int result = 0;
+            var result = 0;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++)
+                for (var i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent == Messages.CM_SPELL)
                         {
@@ -2721,13 +2721,13 @@ namespace GameSvr.Player
         /// <returns></returns>
         private int GetRunMsgCount()
         {
-            int result = 0;
+            var result = 0;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++)
+                for (var i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent == Messages.CM_RUN)
                         {
@@ -2749,13 +2749,13 @@ namespace GameSvr.Player
         /// <returns></returns>
         private int GetWalkMsgCount()
         {
-            int result = 0;
+            var result = 0;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++)
+                for (var i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent == Messages.CM_WALK)
                         {
@@ -2773,13 +2773,13 @@ namespace GameSvr.Player
 
         private int GetTurnMsgCount()
         {
-            int result = 0;
+            var result = 0;
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++)
+                for (var i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent == Messages.CM_TURN)
                         {
@@ -2797,13 +2797,13 @@ namespace GameSvr.Player
 
         private int GetSiteDownMsgCount()
         {
-            int result = 0;
+            var result = 0;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
-                for (int i = 0; i < MsgQueue.Count; i++)
+                for (var i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
                     {
                         if (sendMessage.wIdent == Messages.CM_SITDOWN)
                         {
@@ -2821,7 +2821,7 @@ namespace GameSvr.Player
 
         private bool CheckActionStatus(int wIdent, ref int dwDelayTime)
         {
-            bool result = false;
+            var result = false;
             dwDelayTime = 0;
             if (M2Share.Config.CloseSpeedHackCheck)
             {
@@ -2853,7 +2853,7 @@ namespace GameSvr.Player
             {
                 return true;
             }
-            int dwActionIntervalTime = ActionIntervalTime;
+            var dwActionIntervalTime = ActionIntervalTime;
             switch (wIdent)
             {
                 case Messages.CM_LONGHIT:
@@ -2934,7 +2934,7 @@ namespace GameSvr.Player
         /// <param name="sMsg"></param>
         public void GetScriptLabel(string sMsg)
         {
-            string sText = string.Empty;
+            var sText = string.Empty;
             CanJmpScriptLableMap.Clear();
             while (true)
             {
@@ -2944,12 +2944,12 @@ namespace GameSvr.Player
                 }
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sText, '\\');
                 if (string.IsNullOrEmpty(sText)) continue;
-                MatchCollection matches = M2Share.MatchScriptLabel(sText);
+                var matches = M2Share.MatchScriptLabel(sText);
                 if (matches.Count <= 0) continue;
                 foreach (Match item in matches)
                 {
-                    string sCmdStr = item.Value;
-                    string sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, HUtil32.Backslash);
+                    var sCmdStr = item.Value;
+                    var sLabel = HUtil32.GetValidStr3(sCmdStr, ref sCmdStr, HUtil32.Backslash);
                     if (!string.IsNullOrEmpty(sLabel) && !CanJmpScriptLableMap.ContainsKey(sLabel))
                     {
                         CanJmpScriptLableMap.Add(sLabel, sLabel);
@@ -2983,8 +2983,8 @@ namespace GameSvr.Player
 
         private bool CheckItemsNeed(StdItem stdItem)
         {
-            bool result = true;
-            Castle.UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
+            var result = true;
+            var castle = M2Share.CastleMgr.IsCastleMember(this);
             switch (stdItem.Need)
             {
                 case 6:
@@ -3036,13 +3036,13 @@ namespace GameSvr.Player
         private void CheckMarry()
         {
             string sSayMsg;
-            bool boIsfound = false;
-            string sUnMarryFileName = M2Share.GetEnvirFilePath("UnMarry.txt");
+            var boIsfound = false;
+            var sUnMarryFileName = M2Share.GetEnvirFilePath("UnMarry.txt");
             if (File.Exists(sUnMarryFileName))
             {
-                StringList loadList = new StringList();
+                using var loadList = new StringList();
                 loadList.LoadFromFile(sUnMarryFileName);
-                for (int i = 0; i < loadList.Count; i++)
+                for (var i = 0; i < loadList.Count; i++)
                 {
                     if (string.Compare(loadList[i], ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -3052,7 +3052,6 @@ namespace GameSvr.Player
                     }
                 }
                 loadList.SaveToFile(sUnMarryFileName);
-                loadList.Dispose();
             }
             if (boIsfound)
             {
@@ -3102,9 +3101,9 @@ namespace GameSvr.Player
 
         private void CheckMaster()
         {
-            bool boIsfound = false;
+            var boIsfound = false;
             string sSayMsg;
-            for (int i = 0; i < M2Share.UnForceMasterList.Count; i++) // 处理强行脱离师徒关系
+            for (var i = 0; i < M2Share.UnForceMasterList.Count; i++) // 处理强行脱离师徒关系
             {
                 if (string.Compare(M2Share.UnForceMasterList[i], ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -3132,7 +3131,7 @@ namespace GameSvr.Player
             {
                 if (Abil.Level >= M2Share.Config.MasterOKLevel)
                 {
-                    PlayObject human = M2Share.WorldEngine.GetPlayObject(MasterName);
+                    var human = M2Share.WorldEngine.GetPlayObject(MasterName);
                     if (human != null && !human.Death && !human.Ghost)
                     {
                         sSayMsg = string.Format(Settings.YourMasterListUnMasterOKMsg, ChrName);
@@ -3143,7 +3142,7 @@ namespace GameSvr.Player
                             human.MasterName = "";
                             human.RefShowName();
                         }
-                        for (int i = 0; i < human.MasterList.Count; i++)
+                        for (var i = 0; i < human.MasterList.Count; i++)
                         {
                             if (human.MasterList[i] == this)
                             {
@@ -3164,7 +3163,7 @@ namespace GameSvr.Player
                     {
                         // 如果师父不在线则保存到记录表中
                         boIsfound = false;
-                        for (int i = 0; i < M2Share.UnMasterList.Count; i++)
+                        for (var i = 0; i < M2Share.UnMasterList.Count; i++)
                         {
                             if (string.Compare(M2Share.UnMasterList[i], ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                             {
@@ -3188,7 +3187,7 @@ namespace GameSvr.Player
             }
             // 处理出师记录
             boIsfound = false;
-            for (int i = 0; i < M2Share.UnMasterList.Count; i++)
+            for (var i = 0; i < M2Share.UnMasterList.Count; i++)
             {
                 if (string.Compare(M2Share.UnMasterList[i], ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -3259,7 +3258,7 @@ namespace GameSvr.Player
 
         public string GetMyInfo()
         {
-            string sMyInfo = Settings.MyInfo;
+            var sMyInfo = Settings.MyInfo;
             sMyInfo = sMyInfo.Replace("%name", ChrName);
             sMyInfo = sMyInfo.Replace("%map", Envir.MapDesc);
             sMyInfo = sMyInfo.Replace("%x", CurrX.ToString());
@@ -3285,8 +3284,8 @@ namespace GameSvr.Player
         private bool CheckItemBindUse(UserItem userItem)
         {
             ItemBind itemBind;
-            bool result = true;
-            for (int i = 0; i < M2Share.ItemBindAccount.Count; i++)
+            var result = true;
+            for (var i = 0; i < M2Share.ItemBindAccount.Count; i++)
             {
                 itemBind = M2Share.ItemBindAccount[i];
                 if (itemBind.nMakeIdex == userItem.MakeIndex && itemBind.nItemIdx == userItem.Index)
@@ -3303,7 +3302,7 @@ namespace GameSvr.Player
                     return result;
                 }
             }
-            for (int i = 0; i < M2Share.ItemBindIPaddr.Count; i++)
+            for (var i = 0; i < M2Share.ItemBindIPaddr.Count; i++)
             {
                 itemBind = M2Share.ItemBindIPaddr[i];
                 if (itemBind.nMakeIdex == userItem.MakeIndex && itemBind.nItemIdx == userItem.Index)
@@ -3320,7 +3319,7 @@ namespace GameSvr.Player
                     return result;
                 }
             }
-            for (int i = 0; i < M2Share.ItemBindChrName.Count; i++)
+            for (var i = 0; i < M2Share.ItemBindChrName.Count; i++)
             {
                 itemBind = M2Share.ItemBindChrName[i];
                 if (itemBind.nMakeIdex == userItem.MakeIndex && itemBind.nItemIdx == userItem.Index)
@@ -3347,8 +3346,8 @@ namespace GameSvr.Player
                 ProcessUserLineMsg("@" + CommandMgr.GameCommands.Unlock.CmdName);
                 return;
             }
-            string sData = processMsg.Msg;
-            int nLen = sData.Length;
+            var sData = processMsg.Msg;
+            var nLen = sData.Length;
             if (IsSetStoragePwd)
             {
                 IsSetStoragePwd = false;
@@ -3479,7 +3478,7 @@ namespace GameSvr.Player
             short nY = 0;
             short n18 = 0;
             short n1C = 0;
-            PlayObject playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (playObject != null)
             {
                 if (GetFrontPosition(ref nX, ref nY))
@@ -3513,14 +3512,14 @@ namespace GameSvr.Player
                 SysMsg("这个命令不能在本服务器上使用!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Guild.GuildInfo guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            var guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (guild == null)
             {
                 SysMsg("行会不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            bool boReQuestOk = false;
-            Guild.WarGuild warGuild = MyGuild.AddWarGuild(guild);
+            var boReQuestOk = false;
+            var warGuild = MyGuild.AddWarGuild(guild);
             if (warGuild != null)
             {
                 if (guild.AddWarGuild(MyGuild) == null)
@@ -3541,7 +3540,7 @@ namespace GameSvr.Player
 
         private bool CheckDenyLogon()
         {
-            bool result = false;
+            var result = false;
             if (M2Share.GetDenyIPAddrList(LoginIpAddr))
             {
                 SysMsg(Settings.YourIPaddrDenyLogon, MsgColor.Red, MsgType.Hint);
@@ -3575,7 +3574,7 @@ namespace GameSvr.Player
         private void ProcessQueryValue(int npc, string sData)
         {
             NormNpc normNpc;
-            string sRefMsg = string.Empty;
+            var sRefMsg = string.Empty;
             if (!Ghost && !string.IsNullOrEmpty(GotoNpcLabel))
             {
                 sRefMsg = EDCode.DeCodeString(sData);
@@ -3655,12 +3654,12 @@ namespace GameSvr.Player
                     if (TakeDlgItem && DlgItemIndex > 0)
                     {
                         nTemp = 255;
-                        for (int i = 0; i < ItemList.Count; i++)
+                        for (var i = 0; i < ItemList.Count; i++)
                         {
-                            UserItem userItem = ItemList[i];
+                            var userItem = ItemList[i];
                             if (userItem.Index == DlgItemIndex)
                             {
-                                StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                                var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                                 if (stdItem != null)
                                 {
                                     if (stdItem.NeedIdentify == 1)

@@ -1035,7 +1035,7 @@ namespace GameSvr
 
         public static bool LoadItemBindAccount()
         {
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             var sMakeIndex = string.Empty;
             var sItemIndex = string.Empty;
             var sBindName = string.Empty;
@@ -1108,7 +1108,7 @@ namespace GameSvr
             var sBindName = string.Empty;
             var result = false;
             var sFileName = GetEnvirFilePath("ItemBindChrName.txt");
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 for (var i = 0; i < ItemBindChrName.Count; i++)
@@ -1243,7 +1243,7 @@ namespace GameSvr
         {
             var result = false;
             var sFileName = GetEnvirFilePath("UnForceMaster.txt");
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 UnForceMasterList.Clear();
@@ -1335,7 +1335,7 @@ namespace GameSvr
         {
             var result = false;
             var sFileName = GetEnvirFilePath("DisableSellOffItem.txt");
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 DisableSellOffList.Clear();
@@ -1880,7 +1880,7 @@ namespace GameSvr
         {
             var result = false;
             var sFileName = GetEnvirFilePath("NoClearMonList.txt");
-            StringList LoadList = new StringList();
+            using var LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 NoClearMonLIst.Clear();

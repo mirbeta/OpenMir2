@@ -77,7 +77,7 @@ namespace GameSvr.Items
             string sItemIndex = string.Empty;
             string sItemName = string.Empty;
             string sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
-            StringList loadList = new StringList();
+            using StringList loadList = new StringList();
             if (File.Exists(sFileName))
             {
                 ItemNameList.Clear();

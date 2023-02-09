@@ -242,7 +242,7 @@ namespace GameSvr.Npc
             sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
-                StringList LoadList = new StringList();
+                using StringList LoadList = new StringList();
                 try
                 {
                     LoadList.LoadFromFile(sListFileName);
@@ -329,7 +329,7 @@ namespace GameSvr.Npc
             string Name = string.Empty;
             bool result = false;
             sListFileName = M2Share.GetEnvirFilePath(sListFileName);
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             try
             {
                 if (File.Exists(sListFileName))
@@ -1442,7 +1442,7 @@ namespace GameSvr.Npc
             string sText;
             bool bo15;
             sListFileName = M2Share.GetEnvirFilePath(sListFileName);
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 LoadList.LoadFromFile(sListFileName);
@@ -1476,7 +1476,7 @@ namespace GameSvr.Npc
         private static void GotoLable_AddList(string sHumName, string sListFileName)
         {
             sListFileName = M2Share.GetEnvirFilePath( sListFileName);
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 LoadList.LoadFromFile(sListFileName);
@@ -1510,7 +1510,7 @@ namespace GameSvr.Npc
             string s10 = string.Empty;
             string sText;
             sListFileName = M2Share.GetEnvirFilePath( sListFileName);
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 LoadList.LoadFromFile(sListFileName);
@@ -1537,7 +1537,7 @@ namespace GameSvr.Npc
         {
             bool bo15;
             sListFileName = M2Share.GetEnvirFilePath( sListFileName);
-            StringList LoadList = new StringList();
+            using StringList LoadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 LoadList.LoadFromFile(sListFileName);
@@ -2004,7 +2004,7 @@ namespace GameSvr.Npc
                         PlayObject.BoSoftClose = true;
                         break;
                     case ScriptConst.nTHROWITEM://将指定物品刷新到指定地图坐标范围内
-                        ActionOfTHROWITEM(PlayObject, QuestActionInfo);
+                        ActionOfThrowitem(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nMOVR:
                         MovrData(PlayObject, QuestActionInfo);
@@ -2314,10 +2314,10 @@ namespace GameSvr.Npc
                         ActionOfTakeCastleGold(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_HUMANHP:
-                        ActionOfHumanHP(PlayObject, QuestActionInfo);
+                        ActionOfHumanHp(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_HUMANMP:
-                        ActionOfHumanMP(PlayObject, QuestActionInfo);
+                        ActionOfHumanMp(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_BUILDPOINT:
                         ActionOfGuildBuildPoint(PlayObject, QuestActionInfo);
@@ -2417,10 +2417,10 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nOPENYBDEAL:
-                        ActionOfOPENYBDEAL(PlayObject, QuestActionInfo);
+                        ActionOfOpenybdeal(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nQUERYYBSELL:
-                        ActionOfQUERYYBSELL(PlayObject, QuestActionInfo);
+                        ActionOfQueryybsell(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nQUERYYBDEAL:
                         ActionOfQueryTrustDeal(PlayObject, QuestActionInfo);
