@@ -103,11 +103,10 @@ namespace GameSvr.Npc
                     PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                string s18;
+
                 if (!string.IsNullOrEmpty(sData) && sData[0] == '@')
                 {
                     string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
-                    s18 = "";
                     PlayObject.ScriptLable = sData;
                     if (Castle.IsMasterGuild(PlayObject.MyGuild) && PlayObject.IsGuildMaster())
                     {
@@ -125,6 +124,7 @@ namespace GameSvr.Npc
                             return;
                         }
                         string s20;
+                        string s18 = string.Empty;
                         if (string.Compare(sLabel, ScriptConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsOffLineMsg)
@@ -253,8 +253,7 @@ namespace GameSvr.Npc
                 }
                 else
                 {
-                    s18 = "你没有权利使用.";
-                    PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
+                    PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "你没有权利使用.");
                 }
             }
             catch

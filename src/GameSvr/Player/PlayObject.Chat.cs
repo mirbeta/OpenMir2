@@ -106,7 +106,7 @@ namespace GameSvr.Player
         {
             bool boDisableSayMsg;
             string sParam1 = string.Empty;
-            const string sExceptionMsg = "[Exception] TPlayObject.ProcessSayMsg Msg = {0}";
+            const string sExceptionMsg = "[Exception] PlayObject.ProcessSayMsg Msg = {0}";
             try
             {
                 if (sData.Length > M2Share.Config.SayMsgMaxLen)

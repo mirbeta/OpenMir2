@@ -1235,6 +1235,9 @@ namespace GameSvr.Actor
             HealthSpellChanged();
         }
 
+        /// <summary>
+        /// 减少复活戒指持久
+        /// </summary>
         private void ItemDamageRevivalRing()
         {
             for (var i = 0; i < UseItems.Length; i++)
@@ -1531,7 +1534,6 @@ namespace GameSvr.Actor
                 {
                     nEgdey = 50;
                 }
-
                 var nX = (short)(M2Share.RandomNumber.Random(envir.Width - nEgdey - 1) + nEgdey);
                 var nY = (short)(M2Share.RandomNumber.Random(envir.Height - nEgdey - 1) + nEgdey);
                 SpaceMove(sMapName, nX, nY, nInt);
@@ -1678,14 +1680,6 @@ namespace GameSvr.Actor
         }
 
         /// <summary>
-        /// 计算施法魔法值
-        /// </summary>
-        internal static ushort GetMagicSpell(UserMagic userMagic)
-        {
-            return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1));
-        }
-
-        /// <summary>
         /// 减少魔法值
         /// </summary>
         protected void DamageSpell(ushort nSpellPoint)
@@ -1711,45 +1705,6 @@ namespace GameSvr.Actor
                 {
                     WAbil.MP = WAbil.MaxMP;
                 }
-            }
-        }
-
-        /// <summary>
-        /// 减少武器持久值
-        /// </summary>
-        protected void DoDamageWeapon(ushort nWeaponDamage)
-        {
-            if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].Index <= 0)
-            {
-                return;
-            }
-            var nDura = UseItems[Grobal2.U_WEAPON].Dura;
-            var nDuraPoint = HUtil32.Round(nDura / 1.03);
-            nDura -= nWeaponDamage;
-            if (nDura <= 0)
-            {
-                nDura = 0;
-                UseItems[Grobal2.U_WEAPON].Dura = nDura;
-                if (Race == ActorRace.Play)
-                {
-                    ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_WEAPON]);
-                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
-                    if (stdItem.NeedIdentify == 1)
-                    {
-                        M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
-                                                           UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
-                    }
-                }
-                UseItems[Grobal2.U_WEAPON].Index = 0;
-                SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_WEAPON, nDura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
-            }
-            else
-            {
-                UseItems[Grobal2.U_WEAPON].Dura = nDura;
-            }
-            if ((ushort)Math.Abs((nDura / 1.03)) != nDuraPoint)
-            {
-                SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
             }
         }
 
@@ -2709,30 +2664,6 @@ namespace GameSvr.Actor
             }
         }
 
-        protected bool TakeBagItems(BaseObject baseObject)
-        {
-            var result = false;
-            while (true)
-            {
-                if (baseObject.ItemList.Count <= 0)
-                {
-                    break;
-                }
-                var userItem = baseObject.ItemList[0];
-                if (!AddItemToBag(userItem))
-                {
-                    break;
-                }
-                if (this is PlayObject)
-                {
-                    ((PlayObject)this)?.SendAddItem(userItem);
-                    result = true;
-                }
-                baseObject.ItemList.RemoveAt(0);
-            }
-            return result;
-        }
-
         /// <summary>
         /// 散落金币
         /// </summary>
@@ -3421,6 +3352,10 @@ namespace GameSvr.Actor
             return result;
         }
 
+        /// <summary>
+        /// 无极真气
+        /// </summary>
+        /// <returns></returns>
         public bool AttPowerUp(int nPower, int nTime)
         {
             ((PlayObject)this).ExtraAbil[0] = (ushort)nPower;

@@ -1,5 +1,4 @@
-﻿using System.Text;
-using GameSvr.Actor;
+﻿using GameSvr.Actor;
 using GameSvr.Event.Events;
 using GameSvr.GameCommand;
 using GameSvr.Items;
@@ -33,9 +32,8 @@ namespace GameSvr.Npc
                 {
                     nGameGold = HUtil32.StrToInt(GetLineVariableText(playObject, questActionInfo.sParam1), 0);
                 }
-                if (playObject.GameGold >= nGameGold)
+                if (playObject.GameGold >= nGameGold)// 玩家的元宝数大于或等于开通所需的元宝数
                 {
-                    // 玩家的元宝数大于或等于开通所需的元宝数
                     playObject.GameGold -= nGameGold;
                     playObject.BoYbDeal = true;
                     playObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/开通寄售服务成功!!!\\ \\<返回/@main>");
@@ -424,11 +422,11 @@ namespace GameSvr.Npc
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             var boIsSafeZone = questActionInfo.sParam3[1] == '1';
             var sMap = questActionInfo.sParam4;
-            if (sMap != "")
+            if (string.IsNullOrEmpty(sMap))
             {
                 envir = M2Share.MapMgr.FindMap(sMap);
             }
-            if (nTime <= 0 || nPoint <= 0 || sMap != "" && envir == null)
+            if (nTime <= 0 || nPoint <= 0 || string.IsNullOrEmpty(sMap) && envir == null)
             {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_SETAUTOGETEXP);
                 return;

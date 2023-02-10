@@ -59,7 +59,6 @@ namespace GameSvr.Npc
         public override void UserSelect(PlayObject PlayObject, string sData)
         {
             string sLabel = string.Empty;
-            const string sExceptionMsg = "[Exception] TGuildOfficial::UserSelect... ";
             base.UserSelect(PlayObject, sData);
             try
             {
@@ -102,9 +101,9 @@ namespace GameSvr.Npc
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(ex);
             }
         }
 
@@ -119,7 +118,7 @@ namespace GameSvr.Npc
             int result = 0;
             sGuildName = sGuildName.Trim();
             UserItem UserItem = null;
-            if (sGuildName == "")
+            if (string.IsNullOrEmpty(sGuildName))
             {
                 result = -4;
             }

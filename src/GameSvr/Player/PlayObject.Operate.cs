@@ -756,6 +756,27 @@ namespace GameSvr.Player
             return false;
         }
 
+        protected bool TakeBagItems(BaseObject baseObject)
+        {
+            var result = false;
+            while (true)
+            {
+                if (baseObject.ItemList.Count <= 0)
+                {
+                    break;
+                }
+                var userItem = baseObject.ItemList[0];
+                if (!AddItemToBag(userItem))
+                {
+                    break;
+                }
+                SendAddItem(userItem);
+                result = true;
+                baseObject.ItemList.RemoveAt(0);
+            }
+            return result;
+        }
+
         private void ClientChangeMagicKey(int nSkillIdx, char nKey)
         {
             for (var i = 0; i < MagicList.Count; i++)

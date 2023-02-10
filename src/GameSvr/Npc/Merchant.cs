@@ -1830,6 +1830,7 @@ namespace GameSvr.Npc
 
         private static void DisPose(object obj)
         {
+            obj = null;
         }
     }
 }

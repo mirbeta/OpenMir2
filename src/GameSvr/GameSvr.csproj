@@ -19,6 +19,14 @@
 		<Using Include="SystemModule" />
 	</ItemGroup>
 	
+	<PropertyGroup>
+		<ServerGarbageCollection>true</ServerGarbageCollection>
+		<ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+		<TieredCompilation>false</TieredCompilation>
+		<TieredCompilationQuickJit>false</TieredCompilationQuickJit>
+		<TieredCompilationQuickJitForLoops>false</TieredCompilationQuickJitForLoops>
+	</PropertyGroup>
+	
 	<Choose>
 		<When Condition="$(Configuration)=='Release'">
 			<PropertyGroup>

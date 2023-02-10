@@ -11,7 +11,14 @@ namespace GameSvr.Player
 {
     public partial class PlayObject
     {
-
+        /// <summary>
+        /// 计算施法魔法值
+        /// </summary>
+        internal static ushort GetMagicSpell(UserMagic userMagic)
+        {
+            return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1));
+        }
+        
         protected void AttackDir(BaseObject targetObject, short wHitMode, byte nDir)
         {
             BaseObject attackTarget = targetObject ?? GetPoseCreate();
@@ -1424,6 +1431,45 @@ namespace GameSvr.Player
                 MoveCount = 0;
             }
             return result;
+        }
+
+        /// <summary>
+        /// 减少武器持久值
+        /// </summary>
+        protected void DoDamageWeapon(ushort nWeaponDamage)
+        {
+            if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].Index <= 0)
+            {
+                return;
+            }
+            var nDura = UseItems[Grobal2.U_WEAPON].Dura;
+            var nDuraPoint = HUtil32.Round(nDura / 1.03);
+            nDura -= nWeaponDamage;
+            if (nDura <= 0)
+            {
+                nDura = 0;
+                UseItems[Grobal2.U_WEAPON].Dura = nDura;
+                if (Race == ActorRace.Play)
+                {
+                    this.SendDelItems(UseItems[Grobal2.U_WEAPON]);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
+                    if (stdItem.NeedIdentify == 1)
+                    {
+                        M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
+                                                           UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                    }
+                }
+                UseItems[Grobal2.U_WEAPON].Index = 0;
+                SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_WEAPON, nDura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+            }
+            else
+            {
+                UseItems[Grobal2.U_WEAPON].Dura = nDura;
+            }
+            if ((ushort)Math.Abs((nDura / 1.03)) != nDuraPoint)
+            {
+                SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+            }
         }
     }
 }

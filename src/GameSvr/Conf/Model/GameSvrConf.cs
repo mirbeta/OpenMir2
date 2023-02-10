@@ -1704,8 +1704,8 @@ namespace GameSvr.Conf.Model
             dwHeroWarrorAttackTime = 1660;
             dwHeroWizardAttackTime = 1880;
             dwHeroTaoistAttackTime = 1880;
-            sAIConfigListFileName = @"D:\SystemModule\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
-            sHeroAIConfigListFileName = @"D:\SystemModule\Mir200\Envir\QuestDiary\机器人配置文件列表.txt";
+            sAIConfigListFileName = @"\Envir\QuestDiary\机器人配置文件列表.txt";
+            sHeroAIConfigListFileName = @"\Envir\QuestDiary\机器人配置文件列表.txt";
             boHeroAttackTarget = true;
             DecUserGameGold = 10000;
             CloseSpeedHackCheck = true;
