@@ -497,12 +497,12 @@ namespace GameSvr.Conf
             M2Share.Config.dwUserMoveTime = ReadWriteInteger("Setup", "UserMoveTime", M2Share.Config.dwUserMoveTime);
             M2Share.Config.dwPKDieLostExpRate = ReadWriteInteger("Setup", "PKDieLostExpRate", M2Share.Config.dwPKDieLostExpRate);
             M2Share.Config.nPKDieLostLevelRate = ReadWriteInteger("Setup", "PKDieLostLevelRate", M2Share.Config.nPKDieLostLevelRate);
-            M2Share.Config.btPKFlagNameColor = ReadWriteByte("Setup", "PKFlagNameColor", M2Share.Config.btPKFlagNameColor);
-            M2Share.Config.btAllyAndGuildNameColor = ReadWriteByte("Setup", "AllyAndGuildNameColor", M2Share.Config.btAllyAndGuildNameColor);
+            M2Share.Config.PKFlagNameColor = ReadWriteByte("Setup", "PKFlagNameColor", M2Share.Config.PKFlagNameColor);
+            M2Share.Config.AllyAndGuildNameColor = ReadWriteByte("Setup", "AllyAndGuildNameColor", M2Share.Config.AllyAndGuildNameColor);
             M2Share.Config.WarGuildNameColor = ReadWriteByte("Setup", "WarGuildNameColor", M2Share.Config.WarGuildNameColor);
             M2Share.Config.InFreePKAreaNameColor = ReadWriteByte("Setup", "InFreePKAreaNameColor", M2Share.Config.InFreePKAreaNameColor);
-            M2Share.Config.btPKLevel1NameColor = ReadWriteByte("Setup", "PKLevel1NameColor", M2Share.Config.btPKLevel1NameColor);
-            M2Share.Config.btPKLevel2NameColor = ReadWriteByte("Setup", "PKLevel2NameColor", M2Share.Config.btPKLevel2NameColor);
+            M2Share.Config.PKLevel1NameColor = ReadWriteByte("Setup", "PKLevel1NameColor", M2Share.Config.PKLevel1NameColor);
+            M2Share.Config.PKLevel2NameColor = ReadWriteByte("Setup", "PKLevel2NameColor", M2Share.Config.PKLevel2NameColor);
             M2Share.Config.SpiritMutiny = ReadWriteBool("Setup", "SpiritMutiny", M2Share.Config.SpiritMutiny);
             M2Share.Config.SpiritMutinyTime = ReadWriteInteger("Setup", "SpiritMutinyTime", M2Share.Config.SpiritMutinyTime);
             M2Share.Config.SpiritPowerRate = ReadWriteInteger("Setup", "SpiritPowerRate", M2Share.Config.SpiritPowerRate);

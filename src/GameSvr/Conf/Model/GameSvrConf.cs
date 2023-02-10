@@ -672,13 +672,13 @@ namespace GameSvr.Conf.Model
         public int dwUserMoveTime;
         public int dwPKDieLostExpRate;
         public int nPKDieLostLevelRate;
-        public byte btPKFlagNameColor;
-        public byte btPKLevel1NameColor;
-        public byte btPKLevel2NameColor;
+        public byte PKFlagNameColor;
+        public byte PKLevel1NameColor;
+        public byte PKLevel2NameColor;
         /// <summary>
         /// 结盟行会名字颜色
         /// </summary>
-        public byte btAllyAndGuildNameColor;
+        public byte AllyAndGuildNameColor;
         /// <summary>
         /// 敌对行会名字颜色
         /// </summary>
@@ -1519,10 +1519,10 @@ namespace GameSvr.Conf.Model
             dwUserMoveTime = 10;
             dwPKDieLostExpRate = 1000;
             nPKDieLostLevelRate = 20000;
-            btPKFlagNameColor = 0x2F;
-            btPKLevel1NameColor = 0xFB;
-            btPKLevel2NameColor = 0xF9;
-            btAllyAndGuildNameColor = 0xB4;
+            PKFlagNameColor = 0x2F;
+            PKLevel1NameColor = 0xFB;
+            PKLevel2NameColor = 0xF9;
+            AllyAndGuildNameColor = 0xB4;
             WarGuildNameColor = 0x45;
             InFreePKAreaNameColor = 0xDD;
             SpiritMutiny = false;

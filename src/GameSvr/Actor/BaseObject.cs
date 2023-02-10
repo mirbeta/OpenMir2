@@ -1411,8 +1411,8 @@ namespace GameSvr.Actor
                 if (M2Share.ServerIndex == envir.ServerIndex)
                 {
                     var oldEnvir = Envir;
-                    int nOldX = CurrX;
-                    int nOldY = CurrY;
+                    var nOldX = CurrX;
+                    var nOldY = CurrY;
                     var moveSuccess = false;
                     Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
                     VisibleHumanList.Clear();
@@ -1452,8 +1452,8 @@ namespace GameSvr.Actor
                     if (!moveSuccess)
                     {
                         Envir = oldEnvir;
-                        CurrX = (short)nOldX;
-                        CurrY = (short)nOldY;
+                        CurrX = nOldX;
+                        CurrY = nOldY;
                         Envir.AddToMap(CurrX, CurrY, MapCell, this);
                     }
                     OnEnvirnomentChanged();
@@ -1762,19 +1762,19 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-            var result = Envir.Flag.SafeArea;
-            if (result)
+            if (Envir.Flag.SafeArea)
             {
                 return true;
             }
+            var result = false;
             for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (M2Share.StartPointList[i].MapName == Envir.MapName)
+                if (M2Share.StartPointList[i] != null)
                 {
-                    if (M2Share.StartPointList[i] != null)
+                    if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        int cX = M2Share.StartPointList[i].CurrX;
-                        int cY = M2Share.StartPointList[i].CurrY;
+                        short cX = M2Share.StartPointList[i].CurrX;
+                        short cY = M2Share.StartPointList[i].CurrY;
                         if ((Math.Abs(CurrX - cX) <= 60) && (Math.Abs(CurrY - cY) <= 60))
                         {
                             result = true;
@@ -1818,30 +1818,24 @@ namespace GameSvr.Actor
         /// </summary>
         public void SendPriorityMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "", MessagePriority Priority = MessagePriority.Normal)
         {
-            try
+            HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+            if (!Ghost)
             {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                if (!Ghost)
+                var sendMessage = new SendMessage
                 {
-                    var sendMessage = new SendMessage
-                    {
-                        wIdent = wIdent,
-                        wParam = wParam,
-                        nParam1 = nParam1,
-                        nParam2 = nParam2,
-                        nParam3 = nParam3,
-                        DeliveryTime = 0,
-                        BaseObject = baseObject.ActorId,
-                        LateDelivery = false,
-                        Buff = sMsg
-                    };
-                    MsgQueue.Enqueue(sendMessage, (byte)Priority);
-                }
+                    wIdent = wIdent,
+                    wParam = wParam,
+                    nParam1 = nParam1,
+                    nParam2 = nParam2,
+                    nParam3 = nParam3,
+                    DeliveryTime = 0,
+                    BaseObject = baseObject.ActorId,
+                    LateDelivery = false,
+                    Buff = sMsg
+                };
+                MsgQueue.Enqueue(sendMessage, (byte)Priority);
             }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
-            }
+            HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
         }
 
         public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3,
@@ -2853,8 +2847,7 @@ namespace GameSvr.Actor
             {
                 return true;
             }
-            if ((Envir.MapName != M2Share.Config.RedHomeMap) ||
-                (Math.Abs(CurrX - M2Share.Config.RedHomeX) > M2Share.Config.SafeZoneSize) ||
+            if ((Envir.MapName != M2Share.Config.RedHomeMap) || (Math.Abs(CurrX - M2Share.Config.RedHomeX) > M2Share.Config.SafeZoneSize) ||
                 (Math.Abs(CurrY - M2Share.Config.RedHomeY) > M2Share.Config.SafeZoneSize))
             {
                 result = false;
@@ -2963,7 +2956,7 @@ namespace GameSvr.Actor
             short nY = 0;
             var nFlag = -1;
             GetFrontPosition(ref nX, ref nY);
-            if (sSlaveName == M2Share.Config.Dragon)
+            if (string.Compare(sSlaveName, M2Share.Config.Dragon, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nFlag = 1;
             }

@@ -3343,7 +3343,7 @@ namespace GameSvr.Player
             {
                 return base.GetNameColor();
             }
-            return pvpLevel >= 2 ? M2Share.Config.btPKLevel2NameColor : M2Share.Config.btPKLevel1NameColor;
+            return pvpLevel >= 2 ? M2Share.Config.PKLevel2NameColor : M2Share.Config.PKLevel1NameColor;
         }
 
         protected override byte GetChrColor(BaseObject baseObject)
@@ -3356,14 +3356,14 @@ namespace GameSvr.Player
                 {
                     if (targetObject.PvpFlag)
                     {
-                        result = M2Share.Config.btPKFlagNameColor;
+                        result = M2Share.Config.PKFlagNameColor;
                     }
                     var n10 = GetGuildRelation(this, targetObject);
                     switch (n10)
                     {
                         case 1:
                         case 3:
-                            result = M2Share.Config.btAllyAndGuildNameColor;
+                            result = M2Share.Config.AllyAndGuildNameColor;
                             break;
                         case 2:
                             result = M2Share.Config.WarGuildNameColor;
@@ -3371,7 +3371,7 @@ namespace GameSvr.Player
                     }
                     if (targetObject.Envir.Flag.Fight3Zone)
                     {
-                        result = MyGuild == targetObject.MyGuild ? M2Share.Config.btAllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
+                        result = MyGuild == targetObject.MyGuild ? M2Share.Config.AllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
                     }
                 }
                 var castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
@@ -3387,7 +3387,7 @@ namespace GameSvr.Player
                     {
                         if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
                         {
-                            result = M2Share.Config.btAllyAndGuildNameColor;
+                            result = M2Share.Config.AllyAndGuildNameColor;
                         }
                         else
                         {
@@ -3403,7 +3403,7 @@ namespace GameSvr.Player
                         {
                             if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
                             {
-                                result = M2Share.Config.btAllyAndGuildNameColor;
+                                result = M2Share.Config.AllyAndGuildNameColor;
                             }
                             else
                             {
