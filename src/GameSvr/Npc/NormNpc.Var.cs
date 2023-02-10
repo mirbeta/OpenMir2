@@ -315,7 +315,7 @@ namespace GameSvr.Npc
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarList(PlayObject, sParam2, ref sName);
+                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam2, ref sName);
                     if (DynamicVarList == null)
                     {
                         ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ScriptConst.sINC);
@@ -505,7 +505,7 @@ namespace GameSvr.Npc
                         n3C = QuestActionInfo.nParam3;
                     }
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarList(PlayObject, sParam1, ref sName);
+                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam1, ref sName);
                     if (DynamicVarList == null)
                     {
                         ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ScriptConst.sINC);
@@ -762,7 +762,7 @@ namespace GameSvr.Npc
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarList(PlayObject, sParam2, ref sName);
+                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam2, ref sName);
                     if (DynamicVarList == null)
                     {
                         ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ScriptConst.sDEC);
@@ -961,7 +961,7 @@ namespace GameSvr.Npc
                         n3C = QuestActionInfo.nParam3;
                     }
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarList(PlayObject, sParam1, ref sName);
+                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam1, ref sName);
                     if (DynamicVarList == null)
                     {
                         ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ScriptConst.sDEC);
@@ -2740,7 +2740,7 @@ namespace GameSvr.Npc
             sValue = "";
             nValue = -1;
             nDataType = -1;
-            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return false;
@@ -2768,7 +2768,7 @@ namespace GameSvr.Npc
             DynamicVar DynamicVar;
             string sName = string.Empty;
             bool boVarFound = false;
-            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return false;

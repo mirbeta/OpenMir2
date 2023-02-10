@@ -1974,7 +1974,7 @@ namespace GameSvr.Npc
                 return result;
             }
             char cMethod = sMethod[0];
-            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sType, ref sName);
             if (DynamicVarList == null)
             {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKVAR);
@@ -2765,7 +2765,7 @@ namespace GameSvr.Npc
             bool result = false;
             DynamicVar DynamicVar;
             string sName = string.Empty;
-            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return result;

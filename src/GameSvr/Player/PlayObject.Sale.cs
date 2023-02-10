@@ -15,10 +15,8 @@ namespace GameSvr.Player
         /// 人物上线,检查是否有交易结束还没得到元宝 
         /// 交易成功后修改数据标识
         /// </summary>
-        /// <param name="code"></param>        
         private void UpdateSellOffInfo(int code)
         {
-            DealOffInfo DealOffInfo;
             if (BoYbDeal)// 已开通元宝服务
             {
                 for (int i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
@@ -27,27 +25,25 @@ namespace GameSvr.Player
                     {
                         break;
                     }
-                    DealOffInfo = M2Share.SellOffItemList[i];
-                    if (DealOffInfo != null)
+                    var dealOffInfo = M2Share.SellOffItemList[i];
+                    if (dealOffInfo != null)
                     {
-                        if (DealOffInfo.Flag == 2)
+                        if (dealOffInfo.Flag == 2)
                         {
                             switch (code)
                             {
                                 case 0: // 出售者
-                                    if (DealOffInfo.sDealChrName == this.ChrName)
+                                    if (dealOffInfo.sDealChrName == this.ChrName)
                                     {
                                         M2Share.SellOffItemList.RemoveAt(i);
-                                        Dispose(DealOffInfo);
-                                        break;
+                                        Dispose(dealOffInfo);
                                     }
                                     break;
                                 case 1: // 购买者
-                                    if (DealOffInfo.sBuyChrName == this.ChrName)
+                                    if (dealOffInfo.sBuyChrName == this.ChrName)
                                     {
                                         M2Share.SellOffItemList.RemoveAt(i);
-                                        Dispose(DealOffInfo);
-                                        break;
+                                        Dispose(dealOffInfo);
                                     }
                                     break;
                             }
@@ -62,8 +58,13 @@ namespace GameSvr.Player
         /// </summary>
         private void ClientAddSellOffItem(int nItemIdx, string sItemName)
         {
+            if (nItemIdx <= 0 || string.IsNullOrEmpty(sItemName))
+            {
+                this.SendMsg(this, Messages.RM_SellOffADDITEM_FAIL, 0, 0, 0, 0, "");
+                return;
+            }
             bool bo11;
-            string sUserItemName = string.Empty;
+            var sUserItemName = string.Empty;
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
@@ -72,7 +73,7 @@ namespace GameSvr.Player
             bo11 = false;
             if (!SellOffConfirm)
             {
-                for (int i = this.ItemList.Count - 1; i >= 0; i--)
+                for (var i = this.ItemList.Count - 1; i >= 0; i--)
                 {
                     if (this.ItemList.Count <= 0)
                     {
@@ -125,6 +126,11 @@ namespace GameSvr.Player
         /// </summary>
         private void ClientDelSellOffItem(int nItemIdx, string sItemName)
         {
+            if (nItemIdx <= 0 || string.IsNullOrEmpty(sItemName))
+            {
+                this.SendMsg(this, Messages.RM_SELLOFFDELITEM_FAIL, 0, 0, 0, 0, "");
+                return;
+            }
             string sUserItemName = string.Empty;
             if (sItemName.IndexOf(' ') >= 0)
             {
@@ -178,9 +184,6 @@ namespace GameSvr.Player
         /// </summary>
         private void ClientCancelSellOffIng()
         {
-            DealOffInfo DealOffInfo;
-            StdItem StdItem;
-            UserItem UserItem;
             try
             {
                 if (M2Share.SellOffItemList == null || M2Share.SellOffItemList.Count == 0 || !IsEnoughBag())
@@ -193,24 +196,23 @@ namespace GameSvr.Player
                     {
                         break;
                     }
-
-                    DealOffInfo = M2Share.SellOffItemList[i];
+                    var DealOffInfo = M2Share.SellOffItemList[i];
                     if (DealOffInfo != null)
                     {
                         if (string.Compare(DealOffInfo.sDealChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && (DealOffInfo.Flag == 0 || DealOffInfo.Flag == 3))
                         {
                             DealOffInfo.Flag = 4;
-                            for (int j = 0; j < 9; j++)
+                            for (var j = 0; j < 9; j++)
                             {
                                 if (DealOffInfo.UseItems[j] == null)
                                 {
                                     continue;
                                 }
-                                StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].Index);
+                                var StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].Index);
                                 if (StdItem != null)
                                 {
                                     //UserItem = new TUserItem();
-                                    UserItem = DealOffInfo.UseItems[j];
+                                    var UserItem = DealOffInfo.UseItems[j];
                                     if (IsEnoughBag())// 人物的包裹是否满了
                                     {
                                         if (this.IsAddWeightAvailable(StdItem.Weight))// 检查负重
@@ -250,7 +252,6 @@ namespace GameSvr.Player
         /// <summary>
         /// 购买人取消交易
         /// </summary>
-        /// <param name="dealChrName"></param>
         private void ClientBuyCancelSellOff(string dealChrName)
         {
             for (int i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
@@ -278,12 +279,8 @@ namespace GameSvr.Player
         /// <summary>
         /// 购买寄售物品
         /// </summary>
-        /// <param name="dealChrName"></param>
         private void ClientBuySellOffItme(string dealChrName)
         {
-            StdItem StdItem;
-            UserItem UserItem;
-            PlayObject PlayObject;
             try
             {
                 for (int i = M2Share.SellOffItemList.Count - 1; i >= 0; i--)
@@ -307,7 +304,7 @@ namespace GameSvr.Player
                                     GameGold = 0;
                                 }
                                 this.GameGoldChanged(); // 更新元宝数量
-                                PlayObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealChrName);
+                                var PlayObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealChrName);
                                 if (PlayObject == null)// 出售人不在线
                                 {
                                     dealOffInfo.Flag = 1; // 物品已出售,出售人未得到元宝
@@ -336,11 +333,11 @@ namespace GameSvr.Player
                                 M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                                 for (int j = 0; j <= 9; j++)
                                 {
-                                    StdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                    var StdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[j].Index);
                                     if (StdItem != null)
                                     {
                                         //UserItem = new TUserItem();
-                                        UserItem = dealOffInfo.UseItems[j];
+                                        var UserItem = dealOffInfo.UseItems[j];
                                         if (IsEnoughBag()) // 检查人物的包裹是否满了 
                                         {
                                             //ClearCopyItem(0, UserItem.wIndex, UserItem.MakeIndex); // 清理包裹和仓库复制物品 
@@ -475,7 +472,6 @@ namespace GameSvr.Player
         /// <summary>
         /// 查询玩家是否操作过寄售
         /// </summary>
-        /// <param name="nCode"></param>
         /// <returns></returns>
         public bool SellOffInTime(int nCode)
         {

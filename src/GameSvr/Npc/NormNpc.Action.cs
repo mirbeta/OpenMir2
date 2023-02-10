@@ -1441,7 +1441,7 @@ namespace GameSvr.Npc
                 return;
             }
             var boFoundVar = false;
-            var dynamicVarList = GetDynamicVarList(playObject, sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
@@ -1541,7 +1541,7 @@ namespace GameSvr.Npc
                 nVarValue = HUtil32.StrToInt(questActionInfo.sParam4, 0);
             }
             var cMethod = sMethod[0];
-            var dynamicVarList = GetDynamicVarList(playObject, sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
@@ -1859,7 +1859,7 @@ namespace GameSvr.Npc
             dynamicVar.nInternet = nVarValue;
             dynamicVar.sString = sVarValue;
             boFoundVar = false;
-            dynamicVarList = GetDynamicVarList(playObject, sType, ref sName);
+            dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
@@ -1915,7 +1915,7 @@ namespace GameSvr.Npc
                 return;
             }
             var boFoundVar = false;
-            dynamicVarList = GetDynamicVarList(playObject, sType, ref sName);
+            dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);

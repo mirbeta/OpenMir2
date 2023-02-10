@@ -1625,11 +1625,11 @@ namespace GameSvr.Npc
 
         protected static string ReplaceVariableText(string sMsg, string sStr, string sText)
         {
-            int n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
+            var n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
             if (n10 > -1)
             {
                 ReadOnlySpan<char> s18 = sMsg.AsSpan()[(sStr.Length + n10)..sMsg.Length];
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
                 builder.Append(sMsg[..n10]);
                 builder.Append(sText);
                 builder.Append(s18);
@@ -1687,7 +1687,7 @@ namespace GameSvr.Npc
             Castle = M2Share.CastleMgr.InCastleWarArea(this);
         }
 
-        private static Dictionary<string, DynamicVar> GetDynamicVarList(PlayObject PlayObject, string sType, ref string sName)
+        private static Dictionary<string, DynamicVar> GetDynamicVarMap(PlayObject PlayObject, string sType, ref string sName)
         {
             Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN", 5))
@@ -1699,7 +1699,7 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.MyGuild == null)
                 {
-                    return result;
+                    return null;
                 }
                 result = PlayObject.MyGuild.m_DynamicVarList;
                 sName = PlayObject.MyGuild.sGuildName;
@@ -1722,9 +1722,9 @@ namespace GameSvr.Npc
             bool result = false;
             if (string.IsNullOrEmpty(sMsg))
             {
-                return result;
+                return false;
             }
-            int n01 = M2Share.GetValNameNo(sMsg);
+            var n01 = M2Share.GetValNameNo(sMsg);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 0, 99))
