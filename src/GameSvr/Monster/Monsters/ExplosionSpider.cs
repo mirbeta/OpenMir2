@@ -28,12 +28,12 @@
                 {
                     if (Math.Abs(CurrX - baseObject.CurrX) <= 1 && Math.Abs(CurrY - baseObject.CurrY) <= 1)
                     {
-                        int damage = 0;
+                        ushort damage = 0;
                         damage += baseObject.GetHitStruckDamage(this, nPower / 2);
                         damage += baseObject.GetMagStruckDamage(this, (ushort)(nPower / 2));
                         if (damage > 0)
                         {
-                            baseObject.StruckDamage((ushort)damage);
+                            baseObject.StruckDamage(damage);
                             baseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, damage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 700);
                         }
                     }

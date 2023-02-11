@@ -5006,5 +5006,23 @@ namespace GameSvr.Player
                 M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
             }
         }
+        
+        /// <summary>
+        /// 无极真气
+        /// </summary>
+        /// <returns></returns>
+        public void AttPowerUp(ushort nPower, int nTime)
+        {
+            this.ExtraAbil[0] = nPower;
+            this.ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
+            SysMsg(Format(Settings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
+            RecalcAbilitys();
+            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+        }
+
+        private bool IsGoodKilling(BaseObject cert)
+        {
+            return ((PlayObject)cert).PvpFlag;
+        }
     }
 }
