@@ -416,8 +416,8 @@ namespace GameSvr.Planes
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dxstr, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
-                short dx = (short)HUtil32.StrToInt(dxstr, 0);
-                short dy = (short)HUtil32.StrToInt(dystr, 0);
+                short dx = HUtil32.StrToInt16(dxstr, 0);
+                short dy = HUtil32.StrToInt16(dystr, 0);
                 PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
@@ -506,8 +506,8 @@ namespace GameSvr.Planes
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dxstr, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
-                short dx = (short)HUtil32.StrToInt(dxstr, 0);
-                short dy = (short)HUtil32.StrToInt(dystr, 0);
+                short dx = HUtil32.StrToInt16(dxstr, 0);
+                short dy = HUtil32.StrToInt16(dystr, 0);
                 PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {

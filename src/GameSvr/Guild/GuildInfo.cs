@@ -257,7 +257,7 @@ namespace GameSvr.Guild
                     {
                         s18 = s18.AsSpan()[1..].ToString();
                         s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
-                        n2C = (short)HUtil32.StrToInt(s1C, 0);
+                        n2C = HUtil32.StrToInt16(s1C, 0);
                         s24 = s18.Trim();
                         GuildRank = null;
                     }
@@ -755,7 +755,7 @@ namespace GameSvr.Guild
                     }
                     GuildRank = new GuildRank
                     {
-                        nRankNo = (short)HUtil32.StrToInt(sRankNo, 99),
+                        nRankNo = HUtil32.StrToInt16(sRankNo, 99),
                         sRankName = sRankName.Trim(),
                         MemberList = new List<GuildMember>()
                     };

@@ -363,6 +363,11 @@ namespace SystemModule
         {
             return int.TryParse(str, out var result) ? result : def;
         }
+        
+        public static short StrToInt16(string str, short def)
+        {
+            return short.TryParse(str, out var result) ? result : def;
+        }
 
         public static int StrToInt(ReadOnlySpan<char> str, int def)
         {

@@ -1159,8 +1159,8 @@ namespace GameSvr.Npc
         private void ActionOfMobFireBurn(PlayObject playObject, QuestActionInfo questActionInfo)
         {
             var sMap = questActionInfo.sParam1;
-            var nX = (short)HUtil32.StrToInt(questActionInfo.sParam2, -1);
-            var nY = (short)HUtil32.StrToInt(questActionInfo.sParam3, -1);
+            var nX = HUtil32.StrToInt16(questActionInfo.sParam2, -1);
+            var nY = HUtil32.StrToInt16(questActionInfo.sParam3, -1);
             var nType = (byte)HUtil32.StrToInt(questActionInfo.sParam4, -1);
             var nTime = HUtil32.StrToInt(questActionInfo.sParam5, -1);
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam6, -1);
