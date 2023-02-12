@@ -166,10 +166,8 @@ namespace SystemModule
             if (data == null) throw new ArgumentNullException(nameof(data));
             if (bufsize < BufferSize)
             {
-                var tempBuf = new byte[data.Length];
-                var encBuf = new byte[tempBuf.Length * 2];
-                Buffer.BlockCopy(data, 0, tempBuf, 0, bufsize);
-                var destLen = EncryptUtil.Encode(tempBuf, bufsize, encBuf);
+                var encBuf = new byte[bufsize * 2];
+                var destLen = EncryptUtil.Encode(data, bufsize, encBuf);
                 return HUtil32.GetString(encBuf, 0, destLen);
             }
             return string.Empty;

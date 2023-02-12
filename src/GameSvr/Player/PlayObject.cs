@@ -1196,13 +1196,13 @@ namespace GameSvr.Player
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofWarr) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofWarr);
+                    sSendMsg = EDCode.EncodePacket(SerializerUtil.Serialize(M2Share.Config.BonusAbilofWarr)) + '/' + EDCode.EncodePacket(SerializerUtil.Serialize(BonusAbil)) + '/' + EDCode.EncodePacket(SerializerUtil.Serialize(M2Share.Config.NakedAbilofWarr));
                     break;
                 case PlayJob.Wizard:
-                    sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofWizard) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofWizard);
+                    sSendMsg = EDCode.EncodePacket(SerializerUtil.Serialize(M2Share.Config.BonusAbilofWizard)) + '/' + EDCode.EncodePacket(SerializerUtil.Serialize(BonusAbil)) + '/' + EDCode.EncodePacket(SerializerUtil.Serialize(M2Share.Config.NakedAbilofWizard));
                     break;
                 case PlayJob.Taoist:
-                    sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofTaos) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofTaos);
+                    sSendMsg = EDCode.EncodePacket(SerializerUtil.Serialize(M2Share.Config.BonusAbilofTaos)) + '/' + EDCode.EncodePacket(SerializerUtil.Serialize(BonusAbil)) + '/' + EDCode.EncodePacket(SerializerUtil.Serialize(M2Share.Config.NakedAbilofTaos));
                     break;
             }
             ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ADJUST_BONUS, BonusPoint, 0, 0, 0);
