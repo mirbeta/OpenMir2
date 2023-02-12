@@ -1499,10 +1499,10 @@ namespace GameSvr.Player
                     break;
                 case Messages.RM_MOVEFAIL:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MOVEFAIL, ActorId, CurrX, CurrY, Direction);
-                    CharDesc charDesc = default;
-                    charDesc.Feature = baseObject.GetFeatureToLong();
-                    charDesc.Status = baseObject.CharStatus;
-                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(charDesc)));
+                    CharDesc movefailMessage = default;
+                    movefailMessage.Feature = baseObject.GetFeatureToLong();
+                    movefailMessage.Status = baseObject.CharStatus;
+                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(movefailMessage)));
                     break;
                 case Messages.RM_LONGHIT:
                     if (processMsg.BaseObject != ActorId)
@@ -1574,10 +1574,10 @@ namespace GameSvr.Player
                                 ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_TURN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                                 break;
                         }
-                        charDesc = new CharDesc();
-                        charDesc.Feature = baseObject.GetFeature(baseObject);
-                        charDesc.Status = baseObject.CharStatus;
-                        sendMsg = EDCode.EncodePacket(SerializerUtil.Serialize(charDesc));
+                        CharDesc turnMessage = default;
+                        turnMessage.Feature = baseObject.GetFeature(baseObject);
+                        turnMessage.Status = baseObject.CharStatus;
+                        sendMsg = EDCode.EncodePacket(SerializerUtil.Serialize(turnMessage));
                         nObjCount = GetChrColor(baseObject);
                         if (!string.IsNullOrEmpty(processMsg.Msg))
                         {
@@ -1661,10 +1661,10 @@ namespace GameSvr.Player
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DEATH, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                     }
-                    charDesc = new CharDesc();
-                    charDesc.Feature = baseObject.GetFeature(this);
-                    charDesc.Status = baseObject.CharStatus;
-                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(charDesc)));
+                    CharDesc deathMessage = default;
+                    deathMessage.Feature = baseObject.GetFeature(this);
+                    deathMessage.Status = baseObject.CharStatus;
+                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(deathMessage)));
                     break;
                 case Messages.RM_DISAPPEAR:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DISAPPEAR, processMsg.BaseObject, 0, 0, 0);
@@ -1672,10 +1672,10 @@ namespace GameSvr.Player
                     break;
                 case Messages.RM_SKELETON:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SKELETON, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
-                    charDesc = new CharDesc();
-                    charDesc.Feature = baseObject.GetFeature(this);
-                    charDesc.Status = baseObject.CharStatus;
-                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(charDesc)));
+                    CharDesc skeletonMessage = default;
+                    skeletonMessage.Feature = baseObject.GetFeature(this);
+                    skeletonMessage.Status = baseObject.CharStatus;
+                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(skeletonMessage)));
                     break;
                 case Messages.RM_USERNAME:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_USERNAME, processMsg.BaseObject, GetChrColor(baseObject), 0, 0);
@@ -1894,10 +1894,10 @@ namespace GameSvr.Player
                     break;
                 case Messages.RM_ALIVE:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ALIVE, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
-                    charDesc = new CharDesc();
-                    charDesc.Feature = baseObject.GetFeature(this);
-                    charDesc.Status = baseObject.CharStatus;
-                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(charDesc)));
+                    CharDesc aliveMessage = default;
+                    aliveMessage.Feature = baseObject.GetFeature(this);
+                    aliveMessage.Status = baseObject.CharStatus;
+                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(aliveMessage)));
                     break;
                 case Messages.RM_DIGUP:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DIGUP, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
@@ -1985,10 +1985,10 @@ namespace GameSvr.Player
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SPACEMOVE_SHOW2, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                     }
-                    charDesc = new CharDesc();
-                    charDesc.Feature = baseObject.GetFeature(this);
-                    charDesc.Status = baseObject.CharStatus;
-                    sendMsg = EDCode.EncodePacket(SerializerUtil.Serialize(charDesc));
+                    CharDesc spacemoveMessage = default;
+                    spacemoveMessage.Feature = baseObject.GetFeature(this);
+                    spacemoveMessage.Status = baseObject.CharStatus;
+                    sendMsg = EDCode.EncodePacket(SerializerUtil.Serialize(spacemoveMessage));
                     nObjCount = GetChrColor(baseObject);
                     if (processMsg.Msg != "")
                     {
@@ -2033,10 +2033,10 @@ namespace GameSvr.Player
                     if (processMsg.nParam1 != 0 && processMsg.nParam2 != 0)
                     {
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_CHANGEFACE, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0);
-                        charDesc = new CharDesc();
-                        charDesc.Feature = M2Share.ActorMgr.Get(processMsg.nParam2).GetFeature(this);
-                        charDesc.Status = M2Share.ActorMgr.Get(processMsg.nParam2).CharStatus;
-                        SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(charDesc)));
+                        CharDesc changefaceMessage = default;
+                        changefaceMessage.Feature = M2Share.ActorMgr.Get(processMsg.nParam2).GetFeature(this);
+                        changefaceMessage.Status = M2Share.ActorMgr.Get(processMsg.nParam2).CharStatus;
+                        SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(changefaceMessage)));
                     }
                     break;
                 case Messages.RM_PASSWORD:
