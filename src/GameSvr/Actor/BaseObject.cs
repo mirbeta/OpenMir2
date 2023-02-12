@@ -1773,8 +1773,8 @@ namespace GameSvr.Actor
                 {
                     if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        short cX = M2Share.StartPointList[i].CurrX;
-                        short cY = M2Share.StartPointList[i].CurrY;
+                        var cX = M2Share.StartPointList[i].CurrX;
+                        var cY = M2Share.StartPointList[i].CurrY;
                         if ((Math.Abs(CurrX - cX) <= 60) && (Math.Abs(CurrY - cY) <= 60))
                         {
                             result = true;
@@ -2721,16 +2721,7 @@ namespace GameSvr.Actor
                 }
             }
         }
-
-        internal static bool IsGoodKilling(BaseObject cert)
-        {
-            if (cert.Race == ActorRace.Play)
-            {
-                return ((PlayObject)cert).PvpFlag;
-            }
-            return false;
-        }
-
+        
         /// <summary>
         /// 是否可以攻击的目标
         /// </summary>
@@ -2862,8 +2853,8 @@ namespace GameSvr.Actor
                 {
                     if (M2Share.StartPointList[i] != null)
                     {
-                        int nSafeX = M2Share.StartPointList[i].CurrX;
-                        int nSafeY = M2Share.StartPointList[i].CurrY;
+                        var nSafeX = M2Share.StartPointList[i].CurrX;
+                        var nSafeY = M2Share.StartPointList[i].CurrY;
                         if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.SafeZoneSize) &&
                             (Math.Abs(CurrY - nSafeY) <= M2Share.Config.SafeZoneSize))
                         {
@@ -2902,8 +2893,8 @@ namespace GameSvr.Actor
                 {
                     if (M2Share.StartPointList[i] != null)
                     {
-                        int nSafeX = M2Share.StartPointList[i].CurrX;
-                        int nSafeY = M2Share.StartPointList[i].CurrY;
+                        var nSafeX = M2Share.StartPointList[i].CurrX;
+                        var nSafeY = M2Share.StartPointList[i].CurrY;
                         if ((Math.Abs(nX - nSafeX) <= M2Share.Config.SafeZoneSize) &&
                             (Math.Abs(nY - nSafeY) <= M2Share.Config.SafeZoneSize))
                         {
@@ -3163,7 +3154,7 @@ namespace GameSvr.Actor
             {
                 for (var i = 0; i < MsgQueue.Count; i++)
                 {
-                    if (MsgQueue.TryPeek(out var sendMessage, out var priority))
+                    if (MsgQueue.TryPeek(out var sendMessage, out _))
                     {
                         if (sendMessage.wIdent == Messages.RM_10401)
                         {
@@ -3344,21 +3335,7 @@ namespace GameSvr.Actor
             SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
         }
-
-        /// <summary>
-        /// 无极真气
-        /// </summary>
-        /// <returns></returns>
-        public bool AttPowerUp(int nPower, int nTime)
-        {
-            ((PlayObject)this).ExtraAbil[0] = (ushort)nPower;
-            ((PlayObject)this).ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
-            SysMsg(Format(Settings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
-            RecalcAbilitys();
-            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
-            return true;
-        }
-
+        
         private bool MagDefenceUp(ushort nSec)
         {
             var result = false;
@@ -3460,16 +3437,13 @@ namespace GameSvr.Actor
             return CanRun(nX, nY, boFlag);
         }
 
-        public bool CanMove(short nCurrX, short nCurrY, short nX, short nY, bool boFlag)
+        protected bool CanMove(short nCurrX, short nCurrY, short nX, short nY, bool boFlag)
         {
             if ((Math.Abs(nCurrX - nX) <= 1) && (Math.Abs(nCurrY - nY) <= 1))
             {
                 return Envir.CanWalkEx(nX, nY, boFlag);
             }
-            else
-            {
-                return CanRun(nCurrX, nCurrY, nX, nY, boFlag);
-            }
+            return CanRun(nCurrX, nCurrY, nX, nY, boFlag);
         }
 
         private bool AdminCanRun()

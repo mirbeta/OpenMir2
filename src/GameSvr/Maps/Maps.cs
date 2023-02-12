@@ -47,7 +47,7 @@ namespace GameSvr.Maps
                     }
                     if (HUtil32.CompareLStr("ConnectMapInfo", LoadList[count]))
                     {
-                        string sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { ' ', '\t' });
+                        var sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { ' ', '\t' });
                         LoadList.RemoveAt(count);
                         if (sMapInfoFile != "")
                         {
@@ -82,11 +82,11 @@ namespace GameSvr.Maps
                             continue;
                         }
                         MapFlag.RequestLevel = 1;
-                        Merchant QuestNPC = null;
                         MapFlag.SafeArea = false;
                         MapFlag.NeedSetonFlag = -1;
                         MapFlag.NeedOnOff = -1;
                         MapFlag.MusicId = -1;
+                        Merchant QuestNPC = null;
                         while (true)
                         {
                             if (sFlag == "")
@@ -346,10 +346,7 @@ namespace GameSvr.Maps
                                 MapFlag.RequestLevel = HUtil32.StrToInt(sCommand[1..], 1);
                             }
                         }
-                        if (M2Share.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC) == null)
-                        {
-
-                        }
+                        M2Share.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC);
                         result = 1;
                     }
                 }

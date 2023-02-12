@@ -1159,8 +1159,8 @@ namespace GameSvr.Npc
         private void ActionOfMobFireBurn(PlayObject playObject, QuestActionInfo questActionInfo)
         {
             var sMap = questActionInfo.sParam1;
-            var nX = (short)HUtil32.StrToInt(questActionInfo.sParam2, -1);
-            var nY = (short)HUtil32.StrToInt(questActionInfo.sParam3, -1);
+            var nX = HUtil32.StrToInt16(questActionInfo.sParam2, -1);
+            var nY = HUtil32.StrToInt16(questActionInfo.sParam3, -1);
             var nType = (byte)HUtil32.StrToInt(questActionInfo.sParam4, -1);
             var nTime = HUtil32.StrToInt(questActionInfo.sParam5, -1);
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam6, -1);
@@ -1441,7 +1441,7 @@ namespace GameSvr.Npc
                 return;
             }
             var boFoundVar = false;
-            var dynamicVarList = GetDynamicVarList(playObject, sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
@@ -1541,7 +1541,7 @@ namespace GameSvr.Npc
                 nVarValue = HUtil32.StrToInt(questActionInfo.sParam4, 0);
             }
             var cMethod = sMethod[0];
-            var dynamicVarList = GetDynamicVarList(playObject, sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
@@ -1859,7 +1859,7 @@ namespace GameSvr.Npc
             dynamicVar.nInternet = nVarValue;
             dynamicVar.sString = sVarValue;
             boFoundVar = false;
-            dynamicVarList = GetDynamicVarList(playObject, sType, ref sName);
+            dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
@@ -1915,7 +1915,7 @@ namespace GameSvr.Npc
                 return;
             }
             var boFoundVar = false;
-            dynamicVarList = GetDynamicVarList(playObject, sType, ref sName);
+            dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);

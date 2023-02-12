@@ -60,7 +60,7 @@ namespace GameSvr.Maps
             return _mapDoorList;
         }
 
-        public Envirnoment AddMapInfo(string sMapName, string sMapDesc, byte nServerNumber, MapInfoFlag MapFlag, Merchant QuestNPC)
+        public void AddMapInfo(string sMapName, string sMapDesc, byte nServerNumber, MapInfoFlag MapFlag, Merchant QuestNPC)
         {
             string sMapFileName = string.Empty;
             string sTempName = sMapName;
@@ -80,7 +80,7 @@ namespace GameSvr.Maps
                     sMapName = sTempName;
                 }
             }
-            Envirnoment envirnoment = new Envirnoment
+            var envirnoment = new Envirnoment
             {
                 MapName = sMapName,
                 MapFileName = sMapFileName,
@@ -116,7 +116,6 @@ namespace GameSvr.Maps
             {
                 M2Share.Logger.Error("地图文件: " + M2Share.Config.MapDir + sMapName + ".map" + "未找到,或者加载出错!!!");
             }
-            return envirnoment;
         }
 
         public bool AddMapRoute(string sSMapNO, int nSMapX, int nSMapY, string sDMapNO, int nDMapX, int nDMapY)

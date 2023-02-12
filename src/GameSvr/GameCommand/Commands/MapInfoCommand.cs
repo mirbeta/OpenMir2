@@ -15,8 +15,8 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             string sMap = @params[2];
-            short nX = (short)HUtil32.StrToInt(@params[0], 0);
-            short nY = (short)HUtil32.StrToInt(@params[1], 0);
+            short nX = HUtil32.StrToInt16(@params[0], 0);
+            short nY = HUtil32.StrToInt16(@params[1], 0);
             if (!string.IsNullOrEmpty(sMap) && nX >= 0 && nY >= 0)
             {
                 Maps.Envirnoment Map = M2Share.MapMgr.FindMap(sMap);

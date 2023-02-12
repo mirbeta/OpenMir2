@@ -1625,7 +1625,7 @@ namespace GameSvr.Script
                         if (HUtil32.CompareLStr(sScript, "#IF"))
                         {
                             HUtil32.ArrestStringEx(sScript, "[", "]", ref s40);
-                            Script.QuestInfo[nQuestIdx].wFlag = (short)HUtil32.StrToInt(s40, 0);
+                            Script.QuestInfo[nQuestIdx].wFlag = HUtil32.StrToInt16(s40, 0);
                             HUtil32.GetValidStr3(s38, ref s44, new[] { '=', ' ', '\t' });
                             n24 = HUtil32.StrToInt(s44, 0);
                             if (n24 != 0)

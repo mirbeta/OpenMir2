@@ -2213,7 +2213,7 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                if (dropItemList != null)
+                if (dropItemList.Count > 0)
                 {
                     var objectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(objectId, dropItemList);

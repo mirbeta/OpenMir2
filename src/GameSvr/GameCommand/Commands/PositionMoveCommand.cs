@@ -34,8 +34,8 @@ namespace GameSvr.GameCommand.Commands
                     Envir = M2Share.MapMgr.FindMap(sMapName);
                     if (Envir != null)
                     {
-                        short nX = (short)HUtil32.StrToInt(sX, 0);
-                        short nY = (short)HUtil32.StrToInt(sY, 0);
+                        short nX = HUtil32.StrToInt16(sX, 0);
+                        short nY = HUtil32.StrToInt16(sY, 0);
                         if (Envir.CanWalk(nX, nY, true))
                         {
                             PlayObject.SpaceMove(sMapName, nX, nY, 0);

@@ -616,10 +616,8 @@ namespace GameSvr.Magic
                             MagicBase.UseAmulet(playObject, 1, 1, ref nAmuletIdx);
                             nPower = (ushort)(userMagic.Level + 1 + M2Share.RandomNumber.Random(userMagic.Level));
                             n14 = (short)playObject.GetAttackPower(GetPower13(userMagic, 60) + HUtil32.LoByte(playObject.WAbil.SC) * 10, HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
-                            if (targetObject.AttPowerUp(nPower, n14))
-                            {
-                                boTrain = true;
-                            }
+                            ((PlayObject)targetObject).AttPowerUp(nPower, n14);
+                            boTrain = true;
                             boSpellFail = false;
                         }
                     }
