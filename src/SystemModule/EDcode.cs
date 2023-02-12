@@ -124,12 +124,24 @@ namespace SystemModule
             if (buffSize < BufferSize)
             {
                 var encBuf = new byte[buffSize * 2];
-                var tempBuf = new byte[buffSize];
-                Buffer.BlockCopy(data, 0, tempBuf, 0, buffSize);
-                var destLen = EncryptUtil.Encode(tempBuf, buffSize, encBuf);
+                var destLen = EncryptUtil.Encode(data, buffSize, encBuf);
                 return HUtil32.GetString(encBuf, 0, destLen);
             }
             return result;
+        }
+
+        public static string EncodePacket(byte[] data)
+        {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+            var buffSize = data.Length;
+            if (buffSize <= 0) return string.Empty;
+            if (buffSize < BufferSize)
+            {
+                var encBuf = new byte[buffSize * 2];
+                var destLen = EncryptUtil.Encode(data, buffSize, encBuf);
+                return HUtil32.GetString(encBuf, 0, destLen);
+            }
+            return string.Empty;
         }
 
         /// <summary>

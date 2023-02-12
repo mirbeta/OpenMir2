@@ -20,9 +20,10 @@ namespace GameSvr.Actor
             const string sExceptionMsg6 = "[Exception] TBaseObject::Run 6";
             try
             {
-                while (GetMessage(out var processMsg))
+                ProcessMessage processMessage = default;
+                while (GetMessage(ref processMessage))
                 {
-                    Operate(processMsg);
+                    Operate(processMessage);
                 }
             }
             catch (Exception e)

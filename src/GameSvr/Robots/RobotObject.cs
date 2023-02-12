@@ -38,22 +38,22 @@ namespace GameSvr.Robots
                         switch (AutoRunInfo.Moethod)
                         {
                             case Robot.nRODAY:
-                                AutoRunInfo.RunTimeTick = DateTimeOffset.Now.AddDays(1).ToUnixTimeSeconds();
+                                AutoRunInfo.RunTimeTick = DateTimeOffset.Now.AddDays(1).ToUnixTimeMilliseconds();
                                 AutoRunInfo.RunTick = HUtil32.GetTimestamp();
                                 M2Share.RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 break;
                             case Robot.nROHOUR:
-                                AutoRunInfo.RunTimeTick = DateTimeOffset.Now.AddHours(1).ToUnixTimeSeconds();
+                                AutoRunInfo.RunTimeTick = DateTimeOffset.Now.AddHours(1).ToUnixTimeMilliseconds();
                                 AutoRunInfo.RunTick = HUtil32.GetTimestamp();
                                 M2Share.RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 break;
                             case Robot.nROMIN:
-                                AutoRunInfo.RunTimeTick = DateTimeOffset.Now.AddMinutes(1).ToUnixTimeSeconds();
+                                AutoRunInfo.RunTimeTick = DateTimeOffset.Now.AddMinutes(1).ToUnixTimeMilliseconds();
                                 AutoRunInfo.RunTick = HUtil32.GetTimestamp();
                                 M2Share.RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 break;
                             case Robot.nROSEC:
-                                AutoRunInfo.RunTimeTick = DateTimeOffset.Now.AddSeconds(1).ToUnixTimeSeconds();
+                                AutoRunInfo.RunTimeTick = DateTimeOffset.Now.AddSeconds(1).ToUnixTimeMilliseconds();
                                 AutoRunInfo.RunTick = HUtil32.GetTimestamp();
                                 M2Share.RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
                                 break;
@@ -127,8 +127,26 @@ namespace GameSvr.Robots
         {
         }
 
-        private static void AutoRunOfOnMin(AutoRunInfo AutoRunInfo)
+        private void AutoRunOfOnMin(AutoRunInfo AutoRunInfo)
         {
+            string sMin = string.Empty;
+            string sLineText = AutoRunInfo.sParam1;
+            sLineText = HUtil32.GetValidStr3(sLineText, ref sMin, ':');
+            int nMin = HUtil32.StrToInt(sMin, -1);
+            if (nMin >= 0 && nMin <= 60)
+            {
+                int wMin = DateTime.Now.Minute;
+                if (wMin == nMin)
+                {
+                    if (AutoRunInfo.boStatus) return;
+                    M2Share.RobotNPC.GotoLable(this, AutoRunInfo.sParam2, false);
+                    AutoRunInfo.boStatus = true;
+                }
+                else
+                {
+                    AutoRunInfo.boStatus = false;
+                }
+            }
         }
 
         private static void AutoRunOfOnSec(AutoRunInfo AutoRunInfo)

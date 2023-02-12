@@ -725,7 +725,7 @@ namespace GameSvr.Npc
 
         private void ActionOfClearNameList(PlayObject playObject, QuestActionInfo questActionInfo)
         {
-            var sListFileName = M2Share.GetEnvirFilePath( m_sPath, questActionInfo.sParam1);
+            var sListFileName = M2Share.GetEnvirFilePath(questActionInfo.sParam1);
             File.WriteAllBytes(sListFileName, Array.Empty<byte>());
         }
 

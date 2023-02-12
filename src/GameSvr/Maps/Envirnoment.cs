@@ -272,6 +272,7 @@ namespace GameSvr.Maps
                     }
                     else
                     {
+                        CellObject moveObject = default;
                         if (GetCellInfo(nCx, nCy, ref cellInfo) && cellInfo.IsAvailable)
                         {
                             var i = 0;
@@ -281,10 +282,10 @@ namespace GameSvr.Maps
                                 {
                                     break;
                                 }
-                                var cellObject = cellInfo.ObjList[i];
-                                if (cellObject.ActorObject && cellObject.CellObjId == cert.ActorId)
+                                moveObject = cellInfo.ObjList[i];
+                                if (moveObject.ActorObject && moveObject.CellObjId == cert.ActorId)
                                 {
-                                    cellInfo.Remove(cellObject);
+                                    cellInfo.Remove(moveObject);
                                     if (cellInfo.Count > 0)
                                     {
                                         continue;
@@ -297,28 +298,26 @@ namespace GameSvr.Maps
                         }
                         if (GetCellInfo(nX, nY, ref cellInfo))
                         {
-                            if (cellInfo.ObjList == null)
-                            {
-                                cellInfo.ObjList = new PooledList<CellObject>();
-                            }
-                            var cellObject = new CellObject
-                            {
-                                CellType = cert.MapCell,
-                                CellObjId = cert.ActorId,
-                                AddTime = HUtil32.GetTickCount()
-                            };
+                            cellInfo.ObjList ??= new PooledList<CellObject>();
+                            //var cellObject = new CellObject
+                            //{
+                            //    CellType = cert.MapCell,
+                            //    CellObjId = cert.ActorId,
+                            //    AddTime = HUtil32.GetTickCount()
+                            //};
+                            moveObject.AddTime = HUtil32.GetTickCount();
                             switch (cert.MapCell)
                             {
                                 case CellType.Play:
                                 case CellType.Monster:
                                 case CellType.Merchant:
-                                    cellObject.ActorObject = true;
+                                    moveObject.ActorObject = true;
                                     break;
                                 default:
-                                    cellObject.ActorObject = false;
+                                    moveObject.ActorObject = false;
                                     break;
                             }
-                            cellInfo.Add(cellObject, cert);
+                            cellInfo.Add(moveObject, cert);
                             result = 1;
                         }
                     }

@@ -649,7 +649,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 处理消息循环时间控制
         /// </summary>        
-        public int MDwGetMsgTick = 0;
+        public int GetMessageTick = 0;
         public bool IsSetStoragePwd;
         public bool IsReConfigPwd;
         public bool IsCheckOldPwd;
@@ -1062,7 +1062,8 @@ namespace GameSvr.Player
                         {
                             BoEmergencyClose = true;
                         }
-                        while (GetMessage(out var msg))
+                        ProcessMessage msg = default;
+                        while (GetMessage(ref msg))
                         {
                             if (msg.wIdent == Messages.CM_LOGINNOTICEOK)
                             {
@@ -1085,7 +1086,7 @@ namespace GameSvr.Player
         /// </summary>
         private void SendLogon()
         {
-            var messageBodyWl = new MessageBodyWL();
+            MessageBodyWL messageBodyWl = default;
             ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
             messageBodyWl.Param1 = GetFeatureToLong();
             messageBodyWl.Param2 = CharStatus;
@@ -1098,7 +1099,7 @@ namespace GameSvr.Player
                 messageBodyWl.Tag1 = 0;
             }
             messageBodyWl.Tag2 = 0;
-            SendSocket(ClientMsg, EDCode.EncodeBuffer(messageBodyWl));
+            SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(messageBodyWl)));
             var nRecog = GetFeatureToLong();
             SendDefMessage(Messages.SM_FEATURECHANGED, ActorId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
             SendDefMessage(Messages.SM_ATTACKMODE, (byte)AttatckMode, 0, 0, 0, "");

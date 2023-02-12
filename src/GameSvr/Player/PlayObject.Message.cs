@@ -18,7 +18,6 @@ namespace GameSvr.Player
         {
             int tObjCount;
             int nInteger;
-            var processMsg = default(ProcessMessage);
             const string sPayMentExpire = "您的帐户充值时间已到期!!!";
             const string sDisConnectMsg = "游戏被强行中断!!!";
             const string sExceptionMsg1 = "[Exception] TPlayObject::Run -> Operate 1";
@@ -280,10 +279,11 @@ namespace GameSvr.Player
             {
                 M2Share.Logger.Error(sExceptionMsg1);
             }
+            var processMsg = default(ProcessMessage);
             try
             {
-                MDwGetMsgTick = HUtil32.GetTickCount();
-                while (((HUtil32.GetTickCount() - MDwGetMsgTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(out processMsg))
+                GetMessageTick = HUtil32.GetTickCount();
+                while (((HUtil32.GetTickCount() - GetMessageTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(ref processMsg))
                 {
                     if (!Operate(processMsg))
                     {
@@ -809,7 +809,6 @@ namespace GameSvr.Player
             {
                 baseObject = M2Share.ActorMgr.Get(processMsg.BaseObject);
             }
-            MessageBodyWL messageBodyWl;
             switch (processMsg.wIdent)
             {
                 case Messages.CM_QUERYUSERNAME:
@@ -1630,19 +1629,19 @@ namespace GameSvr.Player
                             else
                             {
                                 ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_STRUCK, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, processMsg.wParam);
-                                messageBodyWl = new MessageBodyWL();
-                                messageBodyWl.Param1 = baseObject.GetFeature(this);
-                                messageBodyWl.Param2 = baseObject.CharStatus;
-                                messageBodyWl.Tag1 = processMsg.nParam3;
+                                MessageBodyWL struckMessage = default;
+                                struckMessage.Param1 = baseObject.GetFeature(this);
+                                struckMessage.Param2 = baseObject.CharStatus;
+                                struckMessage.Tag1 = processMsg.nParam3;
                                 if (processMsg.wIdent == Messages.RM_STRUCK_MAG)
                                 {
-                                    messageBodyWl.Tag2 = 1;
+                                    struckMessage.Tag2 = 1;
                                 }
                                 else
                                 {
-                                    messageBodyWl.Tag2 = 0;
+                                    struckMessage.Tag2 = 0;
                                 }
-                                SendSocket(ClientMsg, EDCode.EncodeBuffer(messageBodyWl));
+                                SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(struckMessage)));
                             }
                         }
                     }
@@ -1903,13 +1902,12 @@ namespace GameSvr.Player
                     break;
                 case Messages.RM_DIGUP:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DIGUP, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
-                    messageBodyWl = new MessageBodyWL();
-                    messageBodyWl.Param1 = baseObject.GetFeature(this);
-                    messageBodyWl.Param2 = baseObject.CharStatus;
-                    messageBodyWl.Tag1 = processMsg.nParam3;
-                    messageBodyWl.Tag1 = 0;
-                    sendMsg = EDCode.EncodeBuffer(messageBodyWl);
-                    SendSocket(ClientMsg, sendMsg);
+                    MessageBodyWL digupMessage = default;
+                    digupMessage.Param1 = baseObject.GetFeature(this);
+                    digupMessage.Param2 = baseObject.CharStatus;
+                    digupMessage.Tag1 = processMsg.nParam3;
+                    digupMessage.Tag1 = 0;
+                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(digupMessage)));
                     break;
                 case Messages.RM_DIGDOWN:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_DIGDOWN, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, 0);
@@ -1918,25 +1916,25 @@ namespace GameSvr.Player
                 case Messages.RM_FLYAXE:
                     if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
                     {
-                        var messageBodyW = new MessageBodyW();
-                        messageBodyW.Param1 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrX;
-                        messageBodyW.Param2 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
-                        messageBodyW.Tag1 = HUtil32.LoWord(processMsg.nParam3);
-                        messageBodyW.Tag2 = HUtil32.HiWord(processMsg.nParam3);
+                        MessageBodyW flyaxeMessage = default;
+                        flyaxeMessage.Param1 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrX;
+                        flyaxeMessage.Param2 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
+                        flyaxeMessage.Tag1 = HUtil32.LoWord(processMsg.nParam3);
+                        flyaxeMessage.Tag2 = HUtil32.HiWord(processMsg.nParam3);
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_FLYAXE, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
-                        SendSocket(ClientMsg, EDCode.EncodeBuffer(messageBodyW));
+                        SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(flyaxeMessage)));
                     }
                     break;
                 case Messages.RM_LIGHTING:
                     if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
                     {
-                        messageBodyWl = new MessageBodyWL();
-                        messageBodyWl.Param1 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrX;
-                        messageBodyWl.Param2 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
-                        messageBodyWl.Tag1 = processMsg.nParam3;
-                        messageBodyWl.Tag2 = processMsg.wParam;
+                        MessageBodyWL lightingMessage = default;
+                        lightingMessage.Param1 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrX;
+                        lightingMessage.Param2 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
+                        lightingMessage.Tag1 = processMsg.nParam3;
+                        lightingMessage.Tag2 = processMsg.wParam;
                         ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LIGHTING, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, baseObject.Direction);
-                        SendSocket(ClientMsg, EDCode.EncodeBuffer(messageBodyWl));
+                        SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(lightingMessage)));
                     }
                     break;
                 case Messages.RM_10205:
@@ -2046,12 +2044,12 @@ namespace GameSvr.Player
                     SendDefMessage(Messages.SM_PASSWORD, 0, 0, 0, 0, "");
                     break;
                 case Messages.RM_PLAYDICE:
-                    messageBodyWl = new MessageBodyWL();
-                    messageBodyWl.Param1 = processMsg.nParam1;
-                    messageBodyWl.Param2 = processMsg.nParam2;
-                    messageBodyWl.Tag1 = processMsg.nParam3;
+                    MessageBodyWL playdiceMessage = default;
+                    playdiceMessage.Param1 = processMsg.nParam1;
+                    playdiceMessage.Param2 = processMsg.nParam2;
+                    playdiceMessage.Tag1 = processMsg.nParam3;
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_PLAYDICE, processMsg.BaseObject, processMsg.wParam, 0, 0);
-                    SendSocket(ClientMsg, EDCode.EncodeBuffer(messageBodyWl) + EDCode.EncodeString(processMsg.Msg));
+                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(playdiceMessage)) + EDCode.EncodeString(processMsg.Msg));
                     break;
                 case Messages.RM_PASSWORDSTATUS:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_PASSWORDSTATUS, processMsg.BaseObject, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);

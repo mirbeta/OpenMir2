@@ -460,7 +460,7 @@ namespace GameSvr.RobotPlay
         {
             int nIdx;
             MapCellInfo cellInfo;
-            CellObject cellObject = null;
+            CellObject cellObject = default;
             BaseObject baseObject;
             EventInfo mapEvent;
             VisibleFlag nVisibleFlag;
@@ -520,7 +520,7 @@ namespace GameSvr.RobotPlay
                                     cellInfo.Remove(cellObject);
                                     continue;
                                 }
-                                if (cellObject != null)
+                                if (cellObject.CellObjId>0)
                                 {
                                     if (!cellObject.IsDispose)
                                     {

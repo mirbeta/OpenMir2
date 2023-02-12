@@ -2030,14 +2030,14 @@ namespace GameSvr.Actor
             SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
-        protected virtual bool GetMessage(out ProcessMessage msg)
+        protected virtual bool GetMessage(ref ProcessMessage msg)
         {
             var result = false;
             var count = MsgQueue.Count;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
-                msg = new ProcessMessage();
+                //msg = new ProcessMessage();
                 while (count > 0)
                 {
                     if (MsgQueue.TryDequeue(out var sendMessage, out var priority))
