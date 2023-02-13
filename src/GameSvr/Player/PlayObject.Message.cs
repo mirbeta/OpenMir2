@@ -8,7 +8,7 @@ using GameSvr.World;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace GameSvr.Player
 {
@@ -317,14 +317,11 @@ namespace GameSvr.Player
             }
             catch (Exception e)
             {
-                if (processMsg.wIdent >= 0)
+                if (processMsg.wIdent == 0)
                 {
-                    if (processMsg.wIdent == 0)
-                    {
-                        MakeGhost();//用于处理 人物异常退出，但人物还在游戏中问题
-                    }
-                    M2Share.Logger.Error(Format(sExceptionMsg2, ChrName, processMsg.wIdent, processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
+                    MakeGhost();//用于处理 人物异常退出，但人物还在游戏中问题
                 }
+                M2Share.Logger.Error(Format(sExceptionMsg2, ChrName, processMsg.wIdent, processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
                 M2Share.Logger.Error(e.Message);
             }
             var boTakeItem = false;
@@ -798,7 +795,6 @@ namespace GameSvr.Player
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            CharDesc charDesc;
             int nObjCount;
             string sendMsg;
             var dwDelayTime = 0;
@@ -1690,7 +1686,7 @@ namespace GameSvr.Player
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LEVELUP, Abil.Exp, Abil.Level, 0, 0);
                     SendSocket(ClientMsg);
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
-                    SendSocket(ClientMsg, EDCode.EncodeBuffer(WAbil));
+                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(WAbil)));
                     SendDefMessage(Messages.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
                 case Messages.RM_CHANGENAMECOLOR:
@@ -1750,7 +1746,7 @@ namespace GameSvr.Player
                     break;
                 case Messages.RM_ABILITY:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
-                    SendSocket(ClientMsg, EDCode.EncodeBuffer(WAbil));
+                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(WAbil)));
                     break;
                 case Messages.RM_HEALTHSPELLCHANGED:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HEALTHSPELLCHANGED, processMsg.BaseObject, baseObject.WAbil.HP, baseObject.WAbil.MP, baseObject.WAbil.MaxHP);
@@ -2213,7 +2209,7 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                if (dropItemList != null)
+                if (dropItemList.Count > 0)
                 {
                     var objectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(objectId, dropItemList);

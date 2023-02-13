@@ -1117,8 +1117,8 @@ namespace GameSvr.Player
             short hsc = 0;
             short hac = 0;
             short hmac = 0;
-            NakedAbility bonusTick = null;
-            NakedAbility nakedAbil = null;
+            NakedAbility bonusTick = default;
+            NakedAbility nakedAbil = default;
             switch (Job)
             {
                 case PlayJob.Warrior:
@@ -1196,13 +1196,13 @@ namespace GameSvr.Player
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofWarr) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofWarr);
+                    sSendMsg = EDCode.EncodePacket(M2Share.Config.BonusAbilofWarr) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(M2Share.Config.NakedAbilofWarr);
                     break;
                 case PlayJob.Wizard:
-                    sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofWizard) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofWizard);
+                    sSendMsg = EDCode.EncodePacket(M2Share.Config.BonusAbilofWizard) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(M2Share.Config.NakedAbilofWizard);
                     break;
                 case PlayJob.Taoist:
-                    sSendMsg = EDCode.EncodeBuffer(M2Share.Config.BonusAbilofTaos) + '/' + EDCode.EncodeBuffer(BonusAbil) + '/' + EDCode.EncodeBuffer(M2Share.Config.NakedAbilofTaos);
+                    sSendMsg = EDCode.EncodePacket(M2Share.Config.BonusAbilofTaos) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(M2Share.Config.NakedAbilofTaos);
                     break;
             }
             ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ADJUST_BONUS, BonusPoint, 0, 0, 0);
@@ -3647,7 +3647,7 @@ namespace GameSvr.Player
                 {
                     return;
                 }
-                if (npc.Envir == Envir && Math.Abs(npc.CurrX - CurrX) < 15 && Math.Abs(npc.CurrY - CurrY) < 15 || npc.IsHide)
+                if (npc.Envir == Envir && IsWithinSight(npc) || npc.IsHide)
                 {
                     DlgItemIndex = HUtil32.MakeLong(nParam2, nParam3);
                     int nTemp;

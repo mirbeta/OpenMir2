@@ -144,19 +144,19 @@ namespace SystemModule
             return string.Empty;
         }
 
-        //public static string EncodePacket(byte[] data)
-        //{
-        //    if (data == null) throw new ArgumentNullException(nameof(data));
-        //    var buffSize = data.Length;
-        //    if (buffSize <= 0) return string.Empty;
-        //    if (buffSize < BufferSize)
-        //    {
-        //        var encBuf = new byte[buffSize * 2];
-        //        var destLen = EncryptUtil.Encode(data, buffSize, encBuf);
-        //        return HUtil32.GetString(encBuf, 0, destLen);
-        //    }
-        //    return string.Empty;
-        //}
+         public static string EncodePacket(byte[] data)
+         {
+             if (data == null) throw new ArgumentNullException(nameof(data));
+             var buffSize = data.Length;
+             if (buffSize <= 0) return string.Empty;
+             if (buffSize < BufferSize)
+             {
+                 var encBuf = new byte[buffSize * 2];
+                 var destLen = EncryptUtil.Encode(data, buffSize, encBuf);
+                 return HUtil32.GetString(encBuf, 0, destLen);
+             }
+             return string.Empty;
+         }
 
         /// <summary>
         /// 加密Byte数组
@@ -180,10 +180,8 @@ namespace SystemModule
             if (data == null) throw new ArgumentNullException(nameof(data));
             if (bufsize < BufferSize)
             {
-                var tempBuf = new byte[data.Length];
-                var encBuf = new byte[tempBuf.Length * 2];
-                Buffer.BlockCopy(data, 0, tempBuf, 0, bufsize);
-                var destLen = EncryptUtil.Encode(tempBuf, bufsize, encBuf);
+                var encBuf = new byte[bufsize * 2];
+                var destLen = EncryptUtil.Encode(data, bufsize, encBuf);
                 return HUtil32.GetString(encBuf, 0, destLen);
             }
             return string.Empty;

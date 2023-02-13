@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public record struct ProcessMessage
+    public record class ProcessMessage
     {
         public int wIdent;
         public int wParam;

@@ -39,7 +39,7 @@ namespace GameSvr.Monster.Monsters
 
         public override void Run()
         {
-            bool boChangeFace = false;
+            var boChangeFace = false;
             if (BoIsFirst)
             {
                 BoIsFirst = false;

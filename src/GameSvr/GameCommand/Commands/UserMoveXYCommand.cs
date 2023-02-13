@@ -21,8 +21,8 @@ namespace GameSvr.GameCommand.Commands
             string sY = @Params.Length > 1 ? @Params[1] : "";
             if (PlayObject.Teleport)
             {
-                short nX = (short)HUtil32.StrToInt(sX, -1);
-                short nY = (short)HUtil32.StrToInt(sY, -1);
+                short nX = HUtil32.StrToInt16(sX, -1);
+                short nY = HUtil32.StrToInt16(sY, -1);
                 if (!PlayObject.Envir.Flag.boNOPOSITIONMOVE)
                 {
                     if (PlayObject.Envir.CanWalkOfItem(nX, nY, M2Share.Config.boUserMoveCanDupObj, M2Share.Config.boUserMoveCanOnItem))

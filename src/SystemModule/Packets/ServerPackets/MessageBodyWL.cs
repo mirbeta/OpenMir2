@@ -1,9 +1,9 @@
 ﻿using MemoryPack;
 
-namespace SystemModule.Packets.ClientPackets
+namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
-    public partial struct MessageBodyWL
+    public partial record struct MessageBodyWL
     {
         public int Param1;
         public int Param2;

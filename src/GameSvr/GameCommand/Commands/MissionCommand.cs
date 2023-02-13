@@ -24,8 +24,8 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            short nX = (short)HUtil32.StrToInt(sX, 0);
-            short nY = (short)HUtil32.StrToInt(sY, 0);
+            short nX = HUtil32.StrToInt16(sX, 0);
+            short nY = HUtil32.StrToInt16(sY, 0);
             M2Share.BoMission = true;
             M2Share.MissionMap = PlayObject.MapName;
             M2Share.MissionX = nX;

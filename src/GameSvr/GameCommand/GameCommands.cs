@@ -93,7 +93,7 @@ namespace GameSvr.GameCommand
         public readonly GameCmd BonusPoint;
         [RegisterCommand(typeof(ShowSbkGoldCommand))]
         public readonly GameCmd SabukWallGold;
-        [RegisterCommand(typeof(MapInfoCommand))]
+        [RegisterCommand(typeof(HumanInfoCommand))]
         public readonly GameCmd Info;
         [RegisterCommand(typeof(SetPassWordCommand))]
         public readonly GameCmd SetPassword;
@@ -149,7 +149,7 @@ namespace GameSvr.GameCommand
         public readonly GameCmd TakeofHorse;
         [RegisterCommand(typeof(HumanLocalCommand))]
         public readonly GameCmd HumanLocal;
-        [RegisterCommand(typeof(PositionMoveCommand))]
+        [RegisterCommand(typeof(MapMoveCommand))]
         public readonly GameCmd Move;
         [RegisterCommand(typeof(PositionMoveCommand))]
         public readonly GameCmd PositionMove;
@@ -159,7 +159,7 @@ namespace GameSvr.GameCommand
         public readonly GameCmd MobCount;
         [RegisterCommand(typeof(HumanCountCommand))]
         public readonly GameCmd HumanCount;
-        [RegisterCommand(typeof(ShowMapInfoCommand))]
+        [RegisterCommand(typeof(MapInfoCommand))]
         public readonly GameCmd Map;
         [RegisterCommand(typeof(KickHumanCommand))]
         public readonly GameCmd Kick;
@@ -167,7 +167,7 @@ namespace GameSvr.GameCommand
         public readonly GameCmd Ting;
         [RegisterCommand(typeof(SuperTingCommand))]
         public readonly GameCmd Superting;
-        [RegisterCommand(typeof(MapMoveCommand))]
+        [RegisterCommand(typeof(MapMoveHumanCommand))]
         public readonly GameCmd MapMove;
         [RegisterCommand(typeof(ShutupCommand))]
         public readonly GameCmd ShutUp;
@@ -285,7 +285,7 @@ namespace GameSvr.GameCommand
         public readonly GameCmd ReloadNpc;
         [RegisterCommand(typeof(ReloadManageCommand))]
         public readonly GameCmd ReloadManage;
-        [RegisterCommand(typeof(ReloadManageCommand))]
+        [RegisterCommand(typeof(ReloadRobotManageCommand))]
         public readonly GameCmd ReloadRobotManage;
         [RegisterCommand(typeof(ReloadRobotCommand))]
         public readonly GameCmd ReloadRobot;

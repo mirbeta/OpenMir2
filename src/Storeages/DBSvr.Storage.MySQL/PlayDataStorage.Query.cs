@@ -316,20 +316,19 @@ namespace DBSvr.Storage.MySQL
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
-                    if (humanRcd.Data.BonusAbil == null)
+                    humanRcd.Data.BonusAbil = new NakedAbility
                     {
-                        humanRcd.Data.BonusAbil = new NakedAbility();
-                    }
-                    humanRcd.Data.BonusAbil.AC = dr.GetUInt16("AC");
-                    humanRcd.Data.BonusAbil.MAC = dr.GetUInt16("MAC");
-                    humanRcd.Data.BonusAbil.DC = dr.GetUInt16("DC");
-                    humanRcd.Data.BonusAbil.MC = dr.GetUInt16("MC");
-                    humanRcd.Data.BonusAbil.SC = dr.GetUInt16("SC");
-                    humanRcd.Data.BonusAbil.HP = dr.GetUInt16("HP");
-                    humanRcd.Data.BonusAbil.MP = dr.GetUInt16("MP");
-                    humanRcd.Data.BonusAbil.Hit = dr.GetByte("HIT");
-                    humanRcd.Data.BonusAbil.Speed = dr.GetInt32("SPEED");
-                    humanRcd.Data.BonusAbil.Reserved = dr.GetByte("RESERVED");
+                        AC = dr.GetUInt16("AC"),
+                        MAC = dr.GetUInt16("MAC"),
+                        DC = dr.GetUInt16("DC"),
+                        MC = dr.GetUInt16("MC"),
+                        SC = dr.GetUInt16("SC"),
+                        HP = dr.GetUInt16("HP"),
+                        MP = dr.GetUInt16("MP"),
+                        Hit = dr.GetByte("HIT"),
+                        Speed = dr.GetInt32("SPEED"),
+                        Reserved = dr.GetByte("RESERVED")
+                    };
                 }
                 dr.Close();
                 dr.Dispose();

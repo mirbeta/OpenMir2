@@ -1223,10 +1223,6 @@ namespace GameSvr.Npc
 
         public void ClientBuyItem(PlayObject PlayObject, string sItemName, int nInt)
         {
-            IList<UserItem> List20;
-            UserItem UserItem;
-            int nPrice;
-            string sUserItemName;
             bool bo29 = false;
             int n1C = 1;
             for (int i = 0; i < GoodsList.Count; i++)
@@ -1235,12 +1231,12 @@ namespace GameSvr.Npc
                 {
                     break;
                 }
-                List20 = GoodsList[i];
-                UserItem = List20[0];
+                IList<UserItem> List20 = GoodsList[i];
+                UserItem UserItem = List20[0];
                 StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                 if (StdItem != null)
                 {
-                    sUserItemName = CustomItem.GetItemName(UserItem);
+                    string sUserItemName = CustomItem.GetItemName(UserItem);
                     if (PlayObject.IsAddWeightAvailable(StdItem.Weight))
                     {
                         if (sUserItemName == sItemName)
@@ -1250,7 +1246,7 @@ namespace GameSvr.Npc
                                 UserItem = List20[j];
                                 if (StdItem.StdMode <= 4 || StdItem.StdMode == 42 || StdItem.StdMode == 31 || UserItem.MakeIndex == nInt)
                                 {
-                                    nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
+                                    int nPrice = GetUserPrice(PlayObject, GetUserItemPrice(UserItem));
                                     if (PlayObject.Gold >= nPrice && nPrice > 0)
                                     {
                                         if (PlayObject.AddItemToBag(UserItem))
@@ -1312,12 +1308,11 @@ namespace GameSvr.Npc
 
         public void ClientGetDetailGoodsList(PlayObject PlayObject, string sItemName, int nInt)
         {
-            IList<UserItem> List20;
             string sSendMsg = string.Empty;
             int nItemCount = 0;
             for (int i = 0; i < GoodsList.Count; i++)
             {
-                List20 = GoodsList[i];
+                IList<UserItem> List20 = GoodsList[i];
                 if (List20.Count <= 0)
                 {
                     continue;

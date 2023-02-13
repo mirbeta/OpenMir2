@@ -23,12 +23,12 @@ namespace GameSvr.GameCommand.Commands
             string sMonName = @Params.Length > 2 ? @Params[2] : "";
             string sCount = @Params.Length > 3 ? @Params[3] : "";
             int nCount = HUtil32._MIN(500, HUtil32.StrToInt(sCount, 0));
-            short nX = (short)HUtil32.StrToInt(sX, 0);
-            short nY = (short)HUtil32.StrToInt(sY, 0);
+            short nX = HUtil32.StrToInt16(sX, 0);
+            short nY = HUtil32.StrToInt16(sY, 0);
             BaseObject mon = null;
             nCount = HUtil32._MIN(500, HUtil32.StrToInt(sCount, 0));
-            nX = (short)HUtil32.StrToInt(sX, 0);
-            nY = (short)HUtil32.StrToInt(sY, 0);
+            nX = HUtil32.StrToInt16(sX, 0);
+            nY = HUtil32.StrToInt16(sY, 0);
             if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0)
             {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

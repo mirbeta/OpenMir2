@@ -1,9 +1,9 @@
 ﻿using MemoryPack;
 
-namespace SystemModule.Packets.ClientPackets
+namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
-    public partial struct MessageBodyW
+    public partial record struct MessageBodyW
     {
         public ushort Param1;
         public ushort Param2;

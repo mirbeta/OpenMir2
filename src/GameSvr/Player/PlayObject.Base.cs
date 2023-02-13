@@ -13,6 +13,7 @@ using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace GameSvr.Player
 {
@@ -3427,7 +3428,7 @@ namespace GameSvr.Player
             HitDouble = 0;
             if (Race == ActorRace.Play)
             {
-                NakedAbility bonusTick = null;
+                NakedAbility bonusTick = default;
                 switch (Job)
                 {
                     case PlayJob.Warrior:
@@ -5006,6 +5007,24 @@ namespace GameSvr.Player
             {
                 M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
             }
+        }
+        
+        /// <summary>
+        /// 无极真气
+        /// </summary>
+        /// <returns></returns>
+        public void AttPowerUp(ushort nPower, int nTime)
+        {
+            this.ExtraAbil[0] = nPower;
+            this.ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
+            SysMsg(Format(Settings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
+            RecalcAbilitys();
+            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+        }
+
+        private bool IsGoodKilling(BaseObject cert)
+        {
+            return ((PlayObject)cert).PvpFlag;
         }
     }
 }

@@ -111,16 +111,12 @@ namespace GameSvr.Player
             {
                 return;
             }
-            NormNpc npc = WorldServer.FindMerchant<Merchant>(nParam1);
-            if (npc == null)
-            {
-                npc = WorldServer.FindNpc<NormNpc>(nParam1);
-            }
+            NormNpc npc = WorldServer.FindMerchant<Merchant>(nParam1) ?? WorldServer.FindNpc<NormNpc>(nParam1);
             if (npc == null)
             {
                 return;
             }
-            if (npc.Envir == Envir && Math.Abs(npc.CurrX - CurrX) < 15 && Math.Abs(npc.CurrY - CurrY) < 15 || npc.IsHide)
+            if (npc.Envir == Envir && IsWithinSight(npc) || npc.IsHide)
             {
                 npc.UserSelect(this, sMsg.Trim());
             }
@@ -1735,6 +1731,5 @@ namespace GameSvr.Player
         {
             return Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15;
         }
-
     }
 }

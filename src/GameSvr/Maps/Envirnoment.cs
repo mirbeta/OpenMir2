@@ -99,7 +99,7 @@ namespace GameSvr.Maps
                 {
                     if (cellInfo.ObjList == null)
                     {
-                        cellInfo.ObjList = new PooledList<CellObject>();
+                        cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Never);
                     }
                     else
                     {
@@ -233,7 +233,7 @@ namespace GameSvr.Maps
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
                                 var cellObject = cellInfo.ObjList[i];
-                                if (cellObject.CellObjId > 0 && cellObject.ActorObject)
+                                if (cellObject.ActorObject)
                                 {
                                     var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
@@ -299,13 +299,12 @@ namespace GameSvr.Maps
                         }
                         if (GetCellInfo(nX, nY, ref cellInfo))
                         {
-                            cellInfo.ObjList ??= new PooledList<CellObject>();
-                            //var cellObject = new CellObject
-                            //{
-                            //    CellType = cert.MapCell,
-                            //    CellObjId = cert.ActorId,
-                            //    AddTime = HUtil32.GetTickCount()
-                            //};
+                            cellInfo.ObjList ??= new PooledList<CellObject>(ClearMode.Never);
+                            if (moveObject.CellObjId <= 0)
+                            {
+                                moveObject.CellType = cert.MapCell;
+                                moveObject.CellObjId = cert.ActorId;
+                            }
                             moveObject.AddTime = HUtil32.GetTickCount();
                             switch (cert.MapCell)
                             {
@@ -640,7 +639,7 @@ namespace GameSvr.Maps
             {
                 if (cellInfo.ObjList == null)
                 {
-                    cellInfo.ObjList = new PooledList<CellObject>();
+                    cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Never);
                 }
                 if (nType == CellType.Event)
                 {
@@ -696,7 +695,7 @@ namespace GameSvr.Maps
                     {
                         if (cellInfo.ObjList == null)
                         {
-                            cellInfo.ObjList = new PooledList<CellObject>();
+                            cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Never);
                         }
                         if (!bo1A)
                         {
@@ -808,7 +807,7 @@ namespace GameSvr.Maps
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        ObjList = new PooledList<CellObject>(),
+                                        ObjList = new PooledList<CellObject>(ClearMode.Never),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
@@ -884,7 +883,7 @@ namespace GameSvr.Maps
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        ObjList = new PooledList<CellObject>(),
+                                        ObjList = new PooledList<CellObject>(ClearMode.Never),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
@@ -956,8 +955,8 @@ namespace GameSvr.Maps
                         }
                         line = HUtil32.GetValidStr3(line, ref sX, new[] { ',', '\t' });
                         line = HUtil32.GetValidStr3(line, ref sY, new[] { ',', '\t' });
-                        var nX = (short)HUtil32.StrToInt(sX, -1);
-                        var nY = (short)HUtil32.StrToInt(sY, -1);
+                        var nX = HUtil32.StrToInt16(sX, -1);
+                        var nY = HUtil32.StrToInt16(sY, -1);
                         if (nX >= 0 && nY >= 0 && nX < Width && nY < Height)
                         {
                             PointList.Add(new PointInfo(nX, nY));

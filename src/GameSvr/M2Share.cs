@@ -541,7 +541,10 @@ namespace GameSvr
             return result;
         }
 
-        // 金币在地上显示的外形ID
+        /// <summary>
+        /// 金币在地上显示的外形ID
+        /// </summary>
+        /// <returns></returns>
         public static int GetRandomLook(int nBaseLook, int nRage)
         {
             return nBaseLook + RandomNumber.Random(nRage);
@@ -591,12 +594,12 @@ namespace GameSvr
 
         public static string FilterShowName(string sName)
         {
-            var result = "";
-            var bo11 = false;
             if (string.IsNullOrEmpty(sName))
             {
                 return sName;
             }
+            var result = string.Empty;
+            var bo11 = false;
             for (var i = 0; i < sName.Length; i++)
             {
                 if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
