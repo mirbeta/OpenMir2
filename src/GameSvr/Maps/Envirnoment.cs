@@ -99,7 +99,7 @@ namespace GameSvr.Maps
                 {
                     if (cellInfo.ObjList == null)
                     {
-                        cellInfo.ObjList = new PooledList<CellObject>();
+                        cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Never);
                     }
                     else
                     {
@@ -225,33 +225,30 @@ namespace GameSvr.Maps
                 var cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
                 if (!boFlag && cellSuccess)
                 {
-                    if (cellInfo.Valid)
+                    if (cellInfo.Valid && cellInfo.IsAvailable)
                     {
-                        if (cellInfo.IsAvailable)
+                        for (var i = 0; i < cellInfo.Count; i++)
                         {
-                            for (var i = 0; i < cellInfo.Count; i++)
+                            var cellObject = cellInfo.ObjList[i];
+                            if (cellObject.ActorObject)
                             {
-                                var cellObject = cellInfo.ObjList[i];
-                                if (cellObject.ActorObject)
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                if (baseObject != null)
                                 {
-                                    var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                                    if (baseObject != null)
+                                    if (baseObject.MapCell == CellType.CastleDoor)
                                     {
-                                        if (baseObject.MapCell == CellType.CastleDoor)
+                                        if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                         {
-                                            if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
-                                            {
-                                                moveSuccess = false;
-                                                break;
-                                            }
+                                            moveSuccess = false;
+                                            break;
                                         }
-                                        else
+                                    }
+                                    else
+                                    {
+                                        if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                         {
-                                            if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
-                                            {
-                                                moveSuccess = false;
-                                                break;
-                                            }
+                                            moveSuccess = false;
+                                            break;
                                         }
                                     }
                                 }
@@ -298,13 +295,12 @@ namespace GameSvr.Maps
                         }
                         if (GetCellInfo(nX, nY, ref cellInfo))
                         {
-                            cellInfo.ObjList ??= new PooledList<CellObject>();
-                            //var cellObject = new CellObject
-                            //{
-                            //    CellType = cert.MapCell,
-                            //    CellObjId = cert.ActorId,
-                            //    AddTime = HUtil32.GetTickCount()
-                            //};
+                            cellInfo.ObjList ??= new PooledList<CellObject>(ClearMode.Never);
+                            if (moveObject.CellObjId <= 0)
+                            {
+                                moveObject.CellType = cert.MapCell;
+                                moveObject.CellObjId = cert.ActorId;
+                            }
                             moveObject.AddTime = HUtil32.GetTickCount();
                             switch (cert.MapCell)
                             {
@@ -639,7 +635,7 @@ namespace GameSvr.Maps
             {
                 if (cellInfo.ObjList == null)
                 {
-                    cellInfo.ObjList = new PooledList<CellObject>();
+                    cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Never);
                 }
                 if (nType == CellType.Event)
                 {
@@ -695,7 +691,7 @@ namespace GameSvr.Maps
                     {
                         if (cellInfo.ObjList == null)
                         {
-                            cellInfo.ObjList = new PooledList<CellObject>();
+                            cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Never);
                         }
                         if (!bo1A)
                         {
@@ -806,7 +802,7 @@ namespace GameSvr.Maps
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        ObjList = new PooledList<CellObject>(),
+                                        ObjList = new PooledList<CellObject>(ClearMode.Never),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
@@ -882,7 +878,7 @@ namespace GameSvr.Maps
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        ObjList = new PooledList<CellObject>(),
+                                        ObjList = new PooledList<CellObject>(ClearMode.Never),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
