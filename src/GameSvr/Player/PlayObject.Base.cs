@@ -1099,7 +1099,7 @@ namespace GameSvr.Player
                 messageBodyWl.Tag1 = 0;
             }
             messageBodyWl.Tag2 = 0;
-            SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(messageBodyWl)));
+            SendSocket(ClientMsg, EDCode.EncodePacket(messageBodyWl));
             var nRecog = GetFeatureToLong();
             SendDefMessage(Messages.SM_FEATURECHANGED, ActorId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
             SendDefMessage(Messages.SM_ATTACKMODE, (byte)AttatckMode, 0, 0, 0, "");

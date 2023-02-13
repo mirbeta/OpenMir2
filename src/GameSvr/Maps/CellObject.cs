@@ -3,7 +3,7 @@
     /// <summary>
     /// 地图上的对象
     /// </summary>
-    public record class CellObject
+    public record struct CellObject
     {
         /// <summary>
         /// 唯一ID

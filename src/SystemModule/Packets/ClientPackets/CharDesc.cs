@@ -1,22 +1,13 @@
-﻿using System.IO;
+﻿using MemoryPack;
+using System.IO;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class CharDesc : ClientPacket
+    [MemoryPackable]
+    public partial struct CharDesc
     {
         public int Feature;
         public int Status;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(Feature);
-            writer.Write(Status);
-        }
     }
 }
 
