@@ -2244,7 +2244,7 @@ namespace GameSvr.World
                     }
                     else
                     {
-                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, cert.MapCell, cert);
+                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, cert.CellType, cert);
                         break;
                     }
                     n1C++;

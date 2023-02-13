@@ -97,7 +97,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 在地图上的类型
         /// </summary>
-        public CellType MapCell;
+        public CellType CellType;
         /// <summary>
         /// 角色外形
         /// </summary>
@@ -824,10 +824,10 @@ namespace GameSvr.Actor
                     }
                     else
                     {
-                        Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
+                        Envir.DeleteFromMap(CurrX, CurrY, CellType, this);
                         CurrX = oldX;
                         CurrY = oldY;
-                        Envir.AddToMap(CurrX, CurrY, MapCell, this);
+                        Envir.AddToMap(CurrX, CurrY, CellType, this);
                     }
                 }
             }
@@ -1414,7 +1414,7 @@ namespace GameSvr.Actor
                     var nOldX = CurrX;
                     var nOldY = CurrY;
                     var moveSuccess = false;
-                    Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
+                    Envir.DeleteFromMap(CurrX, CurrY, CellType, this);
                     VisibleHumanList.Clear();
                     for (var i = 0; i < VisibleItems.Count; i++)
                     {
@@ -1434,7 +1434,7 @@ namespace GameSvr.Actor
                     CurrY = nY;
                     if (SpaceMoveGetRandXY(Envir, ref CurrX, ref CurrY))
                     {
-                        Envir.AddToMap(CurrX, CurrY, MapCell, this);
+                        Envir.AddToMap(CurrX, CurrY, CellType, this);
                         SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                         SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
@@ -1454,7 +1454,7 @@ namespace GameSvr.Actor
                         Envir = oldEnvir;
                         CurrX = nOldX;
                         CurrY = nOldY;
-                        Envir.AddToMap(CurrX, CurrY, MapCell, this);
+                        Envir.AddToMap(CurrX, CurrY, CellType, this);
                     }
                     OnEnvirnomentChanged();
                 }
@@ -1670,7 +1670,7 @@ namespace GameSvr.Actor
 
         internal bool AddToMap()
         {
-            var point = Envir.AddToMap(CurrX, CurrY, MapCell, this);
+            var point = Envir.AddToMap(CurrX, CurrY, CellType, this);
             var result = point != null;
             if (!FixedHideMode)
             {
@@ -1829,7 +1829,7 @@ namespace GameSvr.Actor
                     nParam2 = nParam2,
                     nParam3 = nParam3,
                     DeliveryTime = 0,
-                    BaseObject = baseObject.ActorId,
+                    ActorId = baseObject.ActorId,
                     LateDelivery = false,
                     Buff = sMsg
                 };
@@ -1854,7 +1854,7 @@ namespace GameSvr.Actor
                         nParam2 = nParam2,
                         nParam3 = nParam3,
                         DeliveryTime = 0,
-                        BaseObject = baseObject.ActorId,
+                        ActorId = baseObject.ActorId,
                         LateDelivery = false,
                         Buff = sMsg
                     };
@@ -1885,7 +1885,7 @@ namespace GameSvr.Actor
                         nParam2 = lParam2,
                         nParam3 = lParam3,
                         DeliveryTime = HUtil32.GetTickCount() + dwDelay,
-                        BaseObject = baseObject.ActorId,
+                        ActorId = baseObject.ActorId,
                         LateDelivery = true,
                         Buff = sMsg
                     };
@@ -1919,7 +1919,7 @@ namespace GameSvr.Actor
                         LateDelivery = true,
                         Buff = sMsg
                     };
-                    sendMessage.BaseObject = baseObject == Messages.RM_STRUCK ? Messages.RM_STRUCK : baseObject;
+                    sendMessage.ActorId = baseObject == Messages.RM_STRUCK ? Messages.RM_STRUCK : baseObject;
                     MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
@@ -2030,7 +2030,7 @@ namespace GameSvr.Actor
             SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
-        protected virtual bool GetMessage(ref ProcessMessage msg)
+        protected bool GetMessage(ref ProcessMessage msg)
         {
             var result = false;
             var count = MsgQueue.Count;
@@ -2039,7 +2039,7 @@ namespace GameSvr.Actor
             {
                 while (count > 0)
                 {
-                    if (MsgQueue.TryDequeue(out var sendMessage, out var priority))
+                    if (MsgQueue.TryDequeue(out var sendMessage, out _))
                     {
                         if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
                         {
@@ -2047,17 +2047,12 @@ namespace GameSvr.Actor
                             MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
                             continue;
                         }
-                        msg = new ProcessMessage();
                         msg.wIdent = sendMessage.wIdent;
                         msg.wParam = sendMessage.wParam;
                         msg.nParam1 = sendMessage.nParam1;
                         msg.nParam2 = sendMessage.nParam2;
                         msg.nParam3 = sendMessage.nParam3;
-                        if (sendMessage.BaseObject > 0)
-                        {
-                            msg.BaseObject = sendMessage.BaseObject;
-                        }
-                        msg.DeliveryTime = sendMessage.DeliveryTime;
+                        msg.ActorId = sendMessage.ActorId;
                         msg.LateDelivery = sendMessage.LateDelivery;
                         msg.Msg = sendMessage.Buff;
                         result = true;
@@ -2338,7 +2333,7 @@ namespace GameSvr.Actor
 
         protected void DisappearA()
         {
-            Envir.DeleteFromMap(CurrX, CurrY, MapCell, this);
+            Envir.DeleteFromMap(CurrX, CurrY, CellType, this);
             SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
         }
 
@@ -3938,7 +3933,7 @@ namespace GameSvr.Actor
                 {
                     CurrX = (short)nX;
                     CurrY = (short)nY;
-                    addObj = Envir.AddToMap(nX, nY, MapCell, this);
+                    addObj = Envir.AddToMap(nX, nY, CellType, this);
                     break;
                 }
                 nC++;
@@ -3951,7 +3946,7 @@ namespace GameSvr.Actor
             {
                 CurrX = nX2;
                 CurrY = nY2;
-                Envir.AddToMap(CurrX, CurrY, MapCell, this);
+                Envir.AddToMap(CurrX, CurrY, CellType, this);
             }
             Abil.HP = Abil.MaxHP;
             Abil.MP = Abil.MaxMP;

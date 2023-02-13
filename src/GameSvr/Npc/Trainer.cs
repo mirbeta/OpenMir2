@@ -23,7 +23,7 @@ namespace GameSvr.Npc
             bool result = false;
             if (ProcessMsg.wIdent == Messages.RM_STRUCK || ProcessMsg.wIdent == Messages.RM_MAGSTRUCK)
             {
-                if (ProcessMsg.BaseObject == ActorId)
+                if (ProcessMsg.ActorId == ActorId)
                 {
                     _attackPower += ProcessMsg.wParam;
                     AttackTick = HUtil32.GetTickCount();

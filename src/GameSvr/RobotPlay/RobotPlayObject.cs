@@ -1321,7 +1321,7 @@ namespace GameSvr.RobotPlay
             {
                 if (ProcessMsg.wIdent == Messages.RM_STRUCK)
                 {
-                    if (ProcessMsg.BaseObject == this.ActorId)
+                    if (ProcessMsg.ActorId == this.ActorId)
                     {
                         BaseObject AttackBaseObject = M2Share.ActorMgr.Get(ProcessMsg.nParam3);
                         if (AttackBaseObject != null)

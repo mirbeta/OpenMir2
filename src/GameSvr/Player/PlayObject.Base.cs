@@ -996,7 +996,7 @@ namespace GameSvr.Player
             TimeGotoNpc = null;
             AutoTimerTick = new int[20];
             AutoTimerStatus = new int[20];
-            MapCell = CellType.Play;
+            CellType = CellType.Play;
             QueryExpireTick = 60 * 1000;
             AccountExpiredTick = HUtil32.GetTickCount();
             GoldMax = M2Share.Config.HumanMaxGold;
@@ -2891,7 +2891,7 @@ namespace GameSvr.Player
                                                 if (Race < ActorRace.Animal || Master != null || CrazyMode || NastyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play)
                                                 {
                                                     UpdateVisibleGay(baseObject);
-                                                    if (baseObject.MapCell == CellType.Monster && MapCell == CellType.Play && !ObMode && !baseObject.FixedHideMode)
+                                                    if (baseObject.CellType == CellType.Monster && CellType == CellType.Play && !ObMode && !baseObject.FixedHideMode)
                                                     {
                                                         //我的视野 进入对方的攻击范围
                                                         if (Math.Abs(baseObject.CurrX - CurrX) <= (ViewRange - baseObject.ViewRange) && Math.Abs(baseObject.CurrY - CurrY) <= (ViewRange - baseObject.ViewRange))
@@ -3558,7 +3558,7 @@ namespace GameSvr.Player
                     Envir = oldEnvir;
                     CurrX = nOldX;
                     CurrY = nOldY;
-                    Envir.AddToMap(CurrX, CurrY, MapCell, this);
+                    Envir.AddToMap(CurrX, CurrY, CellType, this);
                 }
                 OnEnvirnomentChanged();
                 // 复位泡点，及金币，时间

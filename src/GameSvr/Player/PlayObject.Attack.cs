@@ -1367,7 +1367,6 @@ namespace GameSvr.Player
         private bool ClientWalkXY(int wIdent, short nX, short nY, bool boLateDelivery, ref int dwDelayTime)
         {
             bool result = false;
-            int n14;
             dwDelayTime = 0;
             if (!IsCanWalk)
             {
@@ -1385,7 +1384,7 @@ namespace GameSvr.Player
                     return false;
                 }
                 IsFilterAction = true;
-                int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
+                var dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                 if (dwCheckTime < M2Share.Config.WalkIntervalTime)
                 {
                     MoveCount++;
@@ -1417,8 +1416,8 @@ namespace GameSvr.Player
             }
             MoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
-            n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
-            if (WalkTo((byte)n14, false))
+            var nextDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
+            if (WalkTo(nextDir, false))
             {
                 if (SpaceMoved || CurrX == nX && CurrY == nY)
                 {

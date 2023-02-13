@@ -16,7 +16,7 @@ namespace GameSvr.Monster.Monsters
             StickMode = true;
             IsOpened = false;
             AntiPoison = 200;
-            MapCell = CellType.Door;
+            CellType = CellType.Door;
         }
 
         private void SetMapXyFlag(int nFlag)

@@ -47,7 +47,7 @@ namespace GameSvr.Npc
             IsHide = false;
             IsQuest = true;
             FGotoLable = new int[100];
-            MapCell = CellType.Merchant;
+            CellType = CellType.Merchant;
         }
 
         ~NormNpc()

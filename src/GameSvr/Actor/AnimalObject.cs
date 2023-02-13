@@ -44,7 +44,7 @@ namespace GameSvr.Actor
             WalkWaitTick = HUtil32.GetTickCount();
             WalkWaitLocked = false;
             ProcessRunCount = 0;
-            MapCell = CellType.Monster;
+            CellType = CellType.Monster;
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace GameSvr.Actor
             if (processMsg.wIdent == Messages.RM_STRUCK)
             {
                 var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
-                if (processMsg.BaseObject == ActorId && struckObject != null)
+                if (processMsg.ActorId == ActorId && struckObject != null)
                 {
                     SetLastHiter(struckObject);
                     Struck(struckObject);

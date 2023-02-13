@@ -1,6 +1,6 @@
 namespace GameSvr.Actor
 {
-    public struct SendMessage
+    public record struct SendMessage
     {
         public int wIdent;
         public int wParam;
@@ -11,7 +11,10 @@ namespace GameSvr.Actor
         /// 延时时间
         /// </summary>
         public int DeliveryTime;
-        public int BaseObject;
+        /// <summary>
+        /// 对象唯一ID
+        /// </summary>
+        public int ActorId;
         public bool LateDelivery;
         public string Buff;
     }

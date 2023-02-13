@@ -49,7 +49,6 @@ namespace GameSvr.Maps
         private int monCount;
         private int humCount;
         public readonly IList<PointInfo> PointList;
-        public readonly ConcurrentDictionary<int, ActorEntity> CellMap = new ConcurrentDictionary<int, ActorEntity>();
 
         public Envirnoment()
         {
@@ -99,7 +98,7 @@ namespace GameSvr.Maps
                 {
                     if (cellInfo.ObjList == null)
                     {
-                        cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Never);
+                        cellInfo.ObjList = new PooledList<CellObject>();
                     }
                     else
                     {
@@ -238,7 +237,7 @@ namespace GameSvr.Maps
                                     var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
                                     {
-                                        if (baseObject.MapCell == CellType.CastleDoor)
+                                        if (baseObject.CellType == CellType.CastleDoor)
                                         {
                                             if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                             {
@@ -284,7 +283,7 @@ namespace GameSvr.Maps
                                     break;
                                 }
                                 moveObject = cellInfo.ObjList[i];
-                                if (moveObject.ActorObject && moveObject.CellObjId == cert.ActorId)
+                                if (moveObject.CellObjId == cert.ActorId && moveObject.ActorObject)
                                 {
                                     cellInfo.Remove(moveObject);
                                     if (cellInfo.Count > 0)
@@ -299,24 +298,24 @@ namespace GameSvr.Maps
                         }
                         if (GetCellInfo(nX, nY, ref cellInfo))
                         {
-                            cellInfo.ObjList ??= new PooledList<CellObject>(ClearMode.Never);
-                            if (moveObject.CellObjId <= 0)
+                            cellInfo.ObjList ??= new PooledList<CellObject>();
+                            if (moveObject.CellObjId == 0)
                             {
-                                moveObject.CellType = cert.MapCell;
+                                moveObject.CellType = cert.CellType;
                                 moveObject.CellObjId = cert.ActorId;
+                                switch (cert.CellType)
+                                {
+                                    case CellType.Play:
+                                    case CellType.Monster:
+                                    case CellType.Merchant:
+                                        moveObject.ActorObject = true;
+                                        break;
+                                    default:
+                                        moveObject.ActorObject = false;
+                                        break;
+                                }
                             }
                             moveObject.AddTime = HUtil32.GetTickCount();
-                            switch (cert.MapCell)
-                            {
-                                case CellType.Play:
-                                case CellType.Monster:
-                                case CellType.Merchant:
-                                    moveObject.ActorObject = true;
-                                    break;
-                                default:
-                                    moveObject.ActorObject = false;
-                                    break;
-                            }
                             cellInfo.Add(moveObject, cert);
                             result = 1;
                         }
@@ -360,7 +359,7 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
-                                if (baseObject.MapCell == CellType.CastleDoor)
+                                if (baseObject.CellType == CellType.CastleDoor)
                                 {
                                     if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                     {
@@ -414,7 +413,7 @@ namespace GameSvr.Maps
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
-                                if (baseObject.MapCell == CellType.CastleDoor)
+                                if (baseObject.CellType == CellType.CastleDoor)
                                 {
                                     if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                     {
@@ -505,7 +504,7 @@ namespace GameSvr.Maps
                                             }
                                     }
                                 }
-                                if (baseObject.MapCell == CellType.CastleDoor)
+                                if (baseObject.CellType == CellType.CastleDoor)
                                 {
                                     if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                     {
@@ -639,7 +638,7 @@ namespace GameSvr.Maps
             {
                 if (cellInfo.ObjList == null)
                 {
-                    cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Never);
+                    cellInfo.ObjList = new PooledList<CellObject>();
                 }
                 if (nType == CellType.Event)
                 {
@@ -695,7 +694,7 @@ namespace GameSvr.Maps
                     {
                         if (cellInfo.ObjList == null)
                         {
-                            cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Never);
+                            cellInfo.ObjList = new PooledList<CellObject>();
                         }
                         if (!bo1A)
                         {
@@ -745,7 +744,7 @@ namespace GameSvr.Maps
                 }
                 if (!boVerify)
                 {
-                    AddToMap(nX, nY, baseObject.MapCell, baseObject);
+                    AddToMap(nX, nY, baseObject.CellType, baseObject);
                 }
             }
             catch
@@ -807,7 +806,7 @@ namespace GameSvr.Maps
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        ObjList = new PooledList<CellObject>(ClearMode.Never),
+                                        ObjList = new PooledList<CellObject>(),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
@@ -883,7 +882,7 @@ namespace GameSvr.Maps
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        ObjList = new PooledList<CellObject>(ClearMode.Never),
+                                        ObjList = new PooledList<CellObject>(),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
@@ -1062,7 +1061,7 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject != null)
                         {
-                            if (baseObject.MapCell == CellType.CastleDoor)
+                            if (baseObject.CellType == CellType.CastleDoor)
                             {
                                 if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                 {
@@ -1210,7 +1209,7 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null && !baseObject.Ghost)
                         {
-                            if (baseObject.MapCell == CellType.CastleDoor)
+                            if (baseObject.CellType == CellType.CastleDoor)
                             {
                                 if (((CastleDoor)baseObject).HoldPlace && (!boFlag || !baseObject.Death))
                                 {
@@ -1401,7 +1400,7 @@ namespace GameSvr.Maps
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject != null)
                         {
-                            if (baseObject.MapCell == CellType.CastleDoor)
+                            if (baseObject.CellType == CellType.CastleDoor)
                             {
                                 if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !boFlag || !baseObject.Death)
                                 {

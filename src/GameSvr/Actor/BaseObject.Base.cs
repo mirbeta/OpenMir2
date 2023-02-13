@@ -680,8 +680,8 @@ namespace GameSvr.Actor
                         {
                             StruckDamage(nDamage);
                             HealthSpellChanged();
-                            SendRefMsg(Messages.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.BaseObject, "");
-                            targetBaseObject = M2Share.ActorMgr.Get(processMsg.BaseObject);
+                            SendRefMsg(Messages.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId, "");
+                            targetBaseObject = M2Share.ActorMgr.Get(processMsg.ActorId);
                             if (M2Share.Config.MonDelHptoExp)
                             {
                                 switch (targetBaseObject.Race)
@@ -729,7 +729,7 @@ namespace GameSvr.Actor
                                 {
                                     MeatQuality -= (ushort)(nDamage * 1000);
                                 }
-                                SendMsg(this, Messages.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.BaseObject, "");
+                                SendMsg(this, Messages.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId, "");
                             }
                         }
                         if (FastParalysis)
@@ -758,10 +758,10 @@ namespace GameSvr.Actor
                         }
                         break;
                     case Messages.RM_REFMESSAGE:
-                        SendRefMsg(processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
-                        if ((processMsg.BaseObject == Messages.RM_STRUCK) && (Race != ActorRace.Play))
+                        SendRefMsg(processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
+                        if ((processMsg.ActorId == Messages.RM_STRUCK) && (Race != ActorRace.Play))
                         {
-                            SendMsg(this, processMsg.BaseObject, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
+                            SendMsg(this, processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
                         }
                         if (FastParalysis)
                         {

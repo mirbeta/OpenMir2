@@ -104,7 +104,7 @@ namespace GameSvr.Npc
             IsGetMaster = false;
             IsUseItemName = false;
             MoveTick = HUtil32.GetTickCount();
-            MapCell = CellType.Merchant;
+            CellType = CellType.Merchant;
         }
 
         public override void Run()
