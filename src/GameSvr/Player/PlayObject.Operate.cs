@@ -111,16 +111,12 @@ namespace GameSvr.Player
             {
                 return;
             }
-            NormNpc npc = WorldServer.FindMerchant<Merchant>(nParam1);
-            if (npc == null)
-            {
-                npc = WorldServer.FindNpc<NormNpc>(nParam1);
-            }
+            NormNpc npc = WorldServer.FindMerchant<Merchant>(nParam1) ?? WorldServer.FindNpc<NormNpc>(nParam1);
             if (npc == null)
             {
                 return;
             }
-            if (npc.Envir == Envir && Math.Abs(npc.CurrX - CurrX) < 15 && Math.Abs(npc.CurrY - CurrY) < 15 || npc.IsHide)
+            if (npc.Envir == Envir && IsWithinSight(npc) || npc.IsHide)
             {
                 npc.UserSelect(this, sMsg.Trim());
             }
@@ -151,7 +147,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (merchant.Envir == Envir && merchant.IsSell && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+            if (merchant.Envir == Envir && merchant.IsSell && IsWithinSight(merchant))
             {
                 merchant.ClientQuerySellPrice(this, userItem18);
             }
@@ -168,7 +164,7 @@ namespace GameSvr.Player
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         var merchant = WorldServer.FindMerchant<Merchant>(nParam1);
-                        if (merchant != null && merchant.IsSell && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+                        if (merchant != null && merchant.IsSell && merchant.Envir == Envir && IsWithinSight(merchant))
                         {
                             if (merchant.ClientSellItem(this, userItem))
                             {
@@ -1227,7 +1223,7 @@ namespace GameSvr.Player
             {
                 return;
             }
-            if (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+            if (merchant.Envir == Envir && IsWithinSight(merchant))
             {
                 merchant.ClientMakeDrugItem(this, nItemName);
             }
@@ -1591,7 +1587,7 @@ namespace GameSvr.Player
                 return;
             }
             var merchant = WorldServer.FindMerchant<Merchant>(nParam1);
-            if (merchant != null && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+            if (merchant != null && merchant.Envir == Envir && IsWithinSight(merchant))
             {
                 merchant.ClientQueryRepairCost(this, userItemA);
             }
@@ -1614,7 +1610,7 @@ namespace GameSvr.Player
                 return;
             }
             var merchant = WorldServer.FindMerchant<Merchant>(nParam1);
-            if (merchant != null && merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15)
+            if (merchant != null && merchant.Envir == Envir && IsWithinSight(merchant))
             {
                 merchant.ClientRepairItem(this, userItem);
             }
@@ -1640,7 +1636,7 @@ namespace GameSvr.Player
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     // 检查NPC是否允许存物品
-                    if (merchant != null && merchant.IsStorage && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.FunctionNPC))
+                    if (merchant != null && merchant.IsStorage && (merchant.Envir == Envir && IsWithinSight(merchant) || merchant == M2Share.FunctionNPC))
                     {
                         if (StorageItemList.Count < 39)
                         {
@@ -1697,7 +1693,7 @@ namespace GameSvr.Player
                     if (IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index)))
                     {
                         // 检查NPC是否允许取物品
-                        if (merchant.IsGetback && (merchant.Envir == Envir && Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15 || merchant == M2Share.FunctionNPC))
+                        if (merchant.IsGetback && (merchant.Envir == Envir && IsWithinSight(merchant) || merchant == M2Share.FunctionNPC))
                         {
                             if (AddItemToBag(userItem))
                             {
@@ -1729,6 +1725,11 @@ namespace GameSvr.Player
             {
                 SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_FAIL, 0, 0, 0, 0, "");
             }
+        }
+
+        private bool IsWithinSight(NormNpc merchant)
+        {
+            return Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15;
         }
     }
 }

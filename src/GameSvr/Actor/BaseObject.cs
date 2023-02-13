@@ -2034,13 +2034,12 @@ namespace GameSvr.Actor
         {
             var result = false;
             var count = MsgQueue.Count;
-            HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+            //HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
-                //msg = new ProcessMessage();
                 while (count > 0)
                 {
-                    if (MsgQueue.TryDequeue(out var sendMessage, out var priority))
+                    if (MsgQueue.TryDequeue(out var sendMessage, out _))
                     {
                         if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
                         {
@@ -2067,7 +2066,7 @@ namespace GameSvr.Actor
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+                //HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
         }

@@ -11,13 +11,8 @@ namespace GameSvr.Actor
     {
         public virtual void Run()
         {
-            const string sExceptionMsg0 = "[Exception] TBaseObject::Run 0";
-            const string sExceptionMsg1 = "[Exception] TBaseObject::Run 1";
-            const string sExceptionMsg2 = "[Exception] TBaseObject::Run 2";
-            const string sExceptionMsg3 = "[Exception] TBaseObject::Run 3";
-            const string sExceptionMsg4 = "[Exception] TBaseObject::Run 4 Code:{0}";
-            const string sExceptionMsg5 = "[Exception] TBaseObject::Run 5";
-            const string sExceptionMsg6 = "[Exception] TBaseObject::Run 6";
+            const string sExceptionMsg0 = "[Exception] BaseObject::Run 0";
+            const string sExceptionMsg1 = "[Exception] BaseObject::Run 1";
             try
             {
                 ProcessMessage processMessage = default;
@@ -102,12 +97,12 @@ namespace GameSvr.Actor
                 {
                     if (CanReAlive && MonGen != null)
                     {
-                        var dwMakeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
-                        if (dwMakeGhostTime > M2Share.Config.MakeGhostTime)
+                        var makeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
+                        if (makeGhostTime > M2Share.Config.MakeGhostTime)
                         {
-                            dwMakeGhostTime = M2Share.Config.MakeGhostTime;
+                            makeGhostTime = M2Share.Config.MakeGhostTime;
                         }
-                        if (HUtil32.GetTickCount() - DeathTick > dwMakeGhostTime)
+                        if (HUtil32.GetTickCount() - DeathTick > makeGhostTime)
                         {
                             MakeGhost();
                         }
@@ -126,387 +121,351 @@ namespace GameSvr.Actor
                 M2Share.Logger.Error(sExceptionMsg1);
                 M2Share.Logger.Error(e.Message);
             }
-            try
+            if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (IncHealing > 0)))
             {
-                if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (IncHealing > 0)))
+                var dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
+                if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
                 {
-                    var dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
-                    if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
+                    var incHealthTick = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
+                    IncHealthSpellTick = HUtil32.GetTickCount() + incHealthTick;
+                    if ((IncSpell > 0) || (IncHealth > 0) || (PerHealing > 0))
                     {
-                        var incHealthTick = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
-                        IncHealthSpellTick = HUtil32.GetTickCount() + incHealthTick;
-                        if ((IncSpell > 0) || (IncHealth > 0) || (PerHealing > 0))
+                        if (PerHealth <= 0)
                         {
-                            if (PerHealth <= 0)
-                            {
-                                PerHealth = 1;
-                            }
-                            if (PerSpell <= 0)
-                            {
-                                PerSpell = 1;
-                            }
-                            if (PerHealing <= 0)
-                            {
-                                PerHealing = 1;
-                            }
-                            int nHP;
-                            if (IncHealth < PerHealth)
-                            {
-                                nHP = IncHealth;
-                                IncHealth = 0;
-                            }
-                            else
-                            {
-                                nHP = PerHealth;
-                                IncHealth -= PerHealth;
-                            }
-                            int nMP;
-                            if (IncSpell < PerSpell)
-                            {
-                                nMP = IncSpell;
-                                IncSpell = 0;
-                            }
-                            else
-                            {
-                                nMP = PerSpell;
-                                IncSpell -= PerSpell;
-                            }
-                            if (IncHealing < PerHealing)
-                            {
-                                nHP += IncHealing;
-                                IncHealing = 0;
-                            }
-                            else
-                            {
-                                nHP += PerHealing;
-                                IncHealing -= PerHealing;
-                            }
-                            PerHealth = (byte)(WAbil.Level / 10 + 5);
-                            PerSpell = (byte)(WAbil.Level / 10 + 5);
-                            PerHealing = 5;
-                            IncHealthSpell(nHP, nMP);
-                            if (WAbil.HP == WAbil.MaxHP)
-                            {
-                                IncHealth = 0;
-                                IncHealing = 0;
-                            }
-                            if (WAbil.MP == WAbil.MaxMP)
-                            {
-                                IncSpell = 0;
-                            }
+                            PerHealth = 1;
                         }
-                    }
-                }
-                else
-                {
-                    IncHealthSpellTick = HUtil32.GetTickCount();
-                }
-                if ((HealthTick < -M2Share.Config.HealthFillTime) && (WAbil.HP > 1))
-                {
-                    WAbil.HP -= 1;
-                    HealthTick += M2Share.Config.HealthFillTime;
-                    HealthSpellChanged();
-                }
-                // 检查HP/MP值是否大于最大值，大于则降低到正常大小
-                var boNeedRecalc = false;
-                if (WAbil.HP > WAbil.MaxHP)
-                {
-                    boNeedRecalc = true;
-                    WAbil.HP = (ushort)(WAbil.MaxHP - 1);
-                }
-                if (WAbil.MP > WAbil.MaxMP)
-                {
-                    boNeedRecalc = true;
-                    WAbil.MP = (ushort)(WAbil.MaxMP - 1);
-                }
-                if (boNeedRecalc)
-                {
-                    HealthSpellChanged();
-                }
-            }
-            catch
-            {
-                M2Share.Logger.Error(sExceptionMsg2);
-            }
-            // TBaseObject.Run 3 清理目标对象
-            try
-            {
-                if (TargetCret != null)//修复弓箭卫士在人物进入房间后再出来，还会攻击人物(人物的攻击目标没清除)
-                {
-                    if (((HUtil32.GetTickCount() - TargetFocusTick) > 30000) || TargetCret.Death || TargetCret.Ghost || (TargetCret.Envir != Envir) || (Math.Abs(TargetCret.CurrX - CurrX) > 15) || (Math.Abs(TargetCret.CurrY - CurrY) > 15))
-                    {
-                        ClearTargetCreat(TargetCret);
-                    }
-                }
-                if (LastHiter != null)
-                {
-                    if (((HUtil32.GetTickCount() - LastHiterTick) > 30000) || LastHiter.Death || LastHiter.Ghost)
-                    {
-                        LastHiter = null;
-                    }
-                }
-                if (ExpHitter != null)
-                {
-                    if (((HUtil32.GetTickCount() - ExpHitterTick) > 6000) || ExpHitter.Death || ExpHitter.Ghost)
-                    {
-                        ExpHitter = null;
-                    }
-                }
-                if (Master != null)
-                {
-                    NoItem = true;
-                    // 宝宝变色
-                    int nInteger;
-                    if (AutoChangeColor && (HUtil32.GetTickCount() - AutoChangeColorTick > M2Share.Config.BBMonAutoChangeColorTime))
-                    {
-                        AutoChangeColorTick = HUtil32.GetTickCount();
-                        switch (AutoChangeIdx)
+                        if (PerSpell <= 0)
                         {
-                            case 0:
-                                nInteger = PoisonState.STATETRANSPARENT;
-                                break;
-                            case 1:
-                                nInteger = PoisonState.STONE;
-                                break;
-                            case 2:
-                                nInteger = PoisonState.DONTMOVE;
-                                break;
-                            case 3:
-                                nInteger = PoisonState.POISON_68;
-                                break;
-                            case 4:
-                                nInteger = PoisonState.DECHEALTH;
-                                break;
-                            case 5:
-                                nInteger = PoisonState.LOCKSPELL;
-                                break;
-                            case 6:
-                                nInteger = PoisonState.DAMAGEARMOR;
-                                break;
-                            default:
-                                AutoChangeIdx = 0;
-                                nInteger = PoisonState.STATETRANSPARENT;
-                                break;
+                            PerSpell = 1;
                         }
-                        AutoChangeIdx++;
-                        CharStatus = (int)(CharStatusEx | ((0x80000000 >> nInteger) | 0));
-                        StatusChanged();
-                    }
-                    if (FixColor && (FixStatus != CharStatus))
-                    {
-                        switch (FixColorIdx)
+                        if (PerHealing <= 0)
                         {
-                            case 0:
-                                nInteger = PoisonState.STATETRANSPARENT;
-                                break;
-                            case 1:
-                                nInteger = PoisonState.STONE;
-                                break;
-                            case 2:
-                                nInteger = PoisonState.DONTMOVE;
-                                break;
-                            case 3:
-                                nInteger = PoisonState.POISON_68;
-                                break;
-                            case 4:
-                                nInteger = PoisonState.DECHEALTH;
-                                break;
-                            case 5:
-                                nInteger = PoisonState.LOCKSPELL;
-                                break;
-                            case 6:
-                                nInteger = PoisonState.DAMAGEARMOR;
-                                break;
-                            default:
-                                FixColorIdx = 0;
-                                nInteger = PoisonState.STATETRANSPARENT;
-                                break;
+                            PerHealing = 1;
                         }
-                        CharStatus = (int)(CharStatusEx | ((0x80000000 >> nInteger) | 0));
-                        FixStatus = CharStatus;
-                        StatusChanged();
-                    }
-                    // 宝宝在主人死亡后死亡处理
-                    if (Master.Death && ((HUtil32.GetTickCount() - Master.DeathTick) > 1000))
-                    {
-                        if (M2Share.Config.MasterDieMutiny && (Master.LastHiter != null) && (M2Share.RandomNumber.Random(M2Share.Config.MasterDieMutinyRate) == 0))
+                        int nHP;
+                        if (IncHealth < PerHealth)
                         {
-                            Master = null;
-                            SlaveExpLevel = (byte)M2Share.Config.SlaveColor.Length;
-                            RecalcAbilitys();
-                            WAbil.DC = (ushort)HUtil32.MakeLong((short)(HUtil32.LoByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower), (short)(HUtil32.HiByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower));
-                            WalkSpeed = WalkSpeed / M2Share.Config.MasterDieMutinySpeed;
-                            RefNameColor();
-                            RefShowName();
+                            nHP = IncHealth;
+                            IncHealth = 0;
                         }
                         else
+                        {
+                            nHP = PerHealth;
+                            IncHealth -= PerHealth;
+                        }
+                        int nMP;
+                        if (IncSpell < PerSpell)
+                        {
+                            nMP = IncSpell;
+                            IncSpell = 0;
+                        }
+                        else
+                        {
+                            nMP = PerSpell;
+                            IncSpell -= PerSpell;
+                        }
+                        if (IncHealing < PerHealing)
+                        {
+                            nHP += IncHealing;
+                            IncHealing = 0;
+                        }
+                        else
+                        {
+                            nHP += PerHealing;
+                            IncHealing -= PerHealing;
+                        }
+                        PerHealth = (byte)(WAbil.Level / 10 + 5);
+                        PerSpell = (byte)(WAbil.Level / 10 + 5);
+                        PerHealing = 5;
+                        IncHealthSpell(nHP, nMP);
+                        if (WAbil.HP == WAbil.MaxHP)
+                        {
+                            IncHealth = 0;
+                            IncHealing = 0;
+                        }
+                        if (WAbil.MP == WAbil.MaxMP)
+                        {
+                            IncSpell = 0;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                IncHealthSpellTick = HUtil32.GetTickCount();
+            }
+            if ((HealthTick < -M2Share.Config.HealthFillTime) && (WAbil.HP > 1))
+            {
+                WAbil.HP -= 1;
+                HealthTick += M2Share.Config.HealthFillTime;
+                HealthSpellChanged();
+            }
+            // 检查HP/MP值是否大于最大值，大于则降低到正常大小
+            var boNeedRecalc = false;
+            if (WAbil.HP > WAbil.MaxHP)
+            {
+                boNeedRecalc = true;
+                WAbil.HP = (ushort)(WAbil.MaxHP - 1);
+            }
+            if (WAbil.MP > WAbil.MaxMP)
+            {
+                boNeedRecalc = true;
+                WAbil.MP = (ushort)(WAbil.MaxMP - 1);
+            }
+            if (boNeedRecalc)
+            {
+                HealthSpellChanged();
+            }
+            // TBaseObject.Run 3 清理目标对象
+            if (TargetCret != null)//修复弓箭卫士在人物进入房间后再出来，还会攻击人物(人物的攻击目标没清除)
+            {
+                if (((HUtil32.GetTickCount() - TargetFocusTick) > 30000) || TargetCret.Death || TargetCret.Ghost || (TargetCret.Envir != Envir) || (Math.Abs(TargetCret.CurrX - CurrX) > 15) || (Math.Abs(TargetCret.CurrY - CurrY) > 15))
+                {
+                    ClearTargetCreat(TargetCret);
+                }
+            }
+            if (LastHiter != null)
+            {
+                if (((HUtil32.GetTickCount() - LastHiterTick) > 30000) || LastHiter.Death || LastHiter.Ghost)
+                {
+                    LastHiter = null;
+                }
+            }
+            if (ExpHitter != null)
+            {
+                if (((HUtil32.GetTickCount() - ExpHitterTick) > 6000) || ExpHitter.Death || ExpHitter.Ghost)
+                {
+                    ExpHitter = null;
+                }
+            }
+            if (Master != null)
+            {
+                NoItem = true;
+                // 宝宝变色
+                int nInteger;
+                if (AutoChangeColor && (HUtil32.GetTickCount() - AutoChangeColorTick > M2Share.Config.BBMonAutoChangeColorTime))
+                {
+                    AutoChangeColorTick = HUtil32.GetTickCount();
+                    switch (AutoChangeIdx)
+                    {
+                        case 0:
+                            nInteger = PoisonState.STATETRANSPARENT;
+                            break;
+                        case 1:
+                            nInteger = PoisonState.STONE;
+                            break;
+                        case 2:
+                            nInteger = PoisonState.DONTMOVE;
+                            break;
+                        case 3:
+                            nInteger = PoisonState.POISON_68;
+                            break;
+                        case 4:
+                            nInteger = PoisonState.DECHEALTH;
+                            break;
+                        case 5:
+                            nInteger = PoisonState.LOCKSPELL;
+                            break;
+                        case 6:
+                            nInteger = PoisonState.DAMAGEARMOR;
+                            break;
+                        default:
+                            AutoChangeIdx = 0;
+                            nInteger = PoisonState.STATETRANSPARENT;
+                            break;
+                    }
+                    AutoChangeIdx++;
+                    CharStatus = (int)(CharStatusEx | ((0x80000000 >> nInteger) | 0));
+                    StatusChanged();
+                }
+                if (FixColor && (FixStatus != CharStatus))
+                {
+                    switch (FixColorIdx)
+                    {
+                        case 0:
+                            nInteger = PoisonState.STATETRANSPARENT;
+                            break;
+                        case 1:
+                            nInteger = PoisonState.STONE;
+                            break;
+                        case 2:
+                            nInteger = PoisonState.DONTMOVE;
+                            break;
+                        case 3:
+                            nInteger = PoisonState.POISON_68;
+                            break;
+                        case 4:
+                            nInteger = PoisonState.DECHEALTH;
+                            break;
+                        case 5:
+                            nInteger = PoisonState.LOCKSPELL;
+                            break;
+                        case 6:
+                            nInteger = PoisonState.DAMAGEARMOR;
+                            break;
+                        default:
+                            FixColorIdx = 0;
+                            nInteger = PoisonState.STATETRANSPARENT;
+                            break;
+                    }
+                    CharStatus = (int)(CharStatusEx | ((0x80000000 >> nInteger) | 0));
+                    FixStatus = CharStatus;
+                    StatusChanged();
+                }
+                // 宝宝在主人死亡后死亡处理
+                if (Master.Death && ((HUtil32.GetTickCount() - Master.DeathTick) > 1000))
+                {
+                    if (M2Share.Config.MasterDieMutiny && (Master.LastHiter != null) && (M2Share.RandomNumber.Random(M2Share.Config.MasterDieMutinyRate) == 0))
+                    {
+                        Master = null;
+                        SlaveExpLevel = (byte)M2Share.Config.SlaveColor.Length;
+                        RecalcAbilitys();
+                        WAbil.DC = (ushort)HUtil32.MakeLong((short)(HUtil32.LoByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower), (short)(HUtil32.HiByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower));
+                        WalkSpeed = WalkSpeed / M2Share.Config.MasterDieMutinySpeed;
+                        RefNameColor();
+                        RefShowName();
+                    }
+                    else
+                    {
+                        WAbil.HP = 0;
+                    }
+                }
+                if (Master.Ghost && ((HUtil32.GetTickCount() - Master.GhostTick) > 1000))
+                {
+                    MakeGhost();
+                }
+            }
+            // 清除宝宝列表中已经死亡及叛变的宝宝信息
+            for (var i = SlaveList.Count - 1; i >= 0; i--)
+            {
+                if (SlaveList[i].Death || SlaveList[i].Ghost || (SlaveList[i].Master != this))
+                {
+                    SlaveList.RemoveAt(i);
+                }
+            }
+            if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))
+            {
+                BreakHolySeizeMode();
+            }
+            if (CrazyMode && ((HUtil32.GetTickCount() - CrazyModeTick) > CrazyModeInterval))
+            {
+                BreakCrazyMode();
+            }
+            if (ShowHp && ((HUtil32.GetTickCount() - ShowHpTick) > ShowHpInterval))
+            {
+                BreakOpenHealth();
+            }
+            if ((HUtil32.GetTickCount() - CheckRoyaltyTick) > 10000)
+            {
+                CheckRoyaltyTick = HUtil32.GetTickCount();
+                if (Master != null)
+                {
+                    if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (SlaveExpLevel < 5))
+                    {
+                        MasterRoyaltyTick = 0;
+                    }
+                    if (HUtil32.GetTickCount() > MasterRoyaltyTick)
+                    {
+                        for (var i = 0; i < Master.SlaveList.Count; i++)
+                        {
+                            if (Master.SlaveList[i] == this)
+                            {
+                                Master.SlaveList.RemoveAt(i);
+                                break;
+                            }
+                        }
+                        Master = null;
+                        WAbil.HP = (ushort)(WAbil.HP / 10);
+                        RefShowName();
+                    }
+                    if (MasterTick != 0)
+                    {
+                        if ((HUtil32.GetTickCount() - MasterTick) > 12 * 60 * 60 * 1000)
                         {
                             WAbil.HP = 0;
                         }
                     }
-                    if (Master.Ghost && ((HUtil32.GetTickCount() - Master.GhostTick) > 1000))
-                    {
-                        MakeGhost();
-                    }
-                }
-                // 清除宝宝列表中已经死亡及叛变的宝宝信息
-                for (var i = SlaveList.Count - 1; i >= 0; i--)
-                {
-                    if (SlaveList[i].Death || SlaveList[i].Ghost || (SlaveList[i].Master != this))
-                    {
-                        SlaveList.RemoveAt(i);
-                    }
-                }
-                if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))
-                {
-                    BreakHolySeizeMode();
-                }
-                if (CrazyMode && ((HUtil32.GetTickCount() - CrazyModeTick) > CrazyModeInterval))
-                {
-                    BreakCrazyMode();
-                }
-                if (ShowHp && ((HUtil32.GetTickCount() - ShowHpTick) > ShowHpInterval))
-                {
-                    BreakOpenHealth();
                 }
             }
-            catch
+            if ((HUtil32.GetTickCount() - VerifyTick) > 30 * 1000)
             {
-                M2Share.Logger.Error(sExceptionMsg3);
-            }
-            try
-            {
-                if ((HUtil32.GetTickCount() - CheckRoyaltyTick) > 10000)
+                VerifyTick = HUtil32.GetTickCount();
+                if (!DenyRefStatus)
                 {
-                    CheckRoyaltyTick = HUtil32.GetTickCount();
-                    if (Master != null)
+                    Envir.VerifyMapTime(CurrX, CurrY, this);// 刷新在地图上位置的时间
+                }
+            }
+            var boChg = false;
+            boNeedRecalc = false;
+            for (var i = 0; i < StatusArrTick.Length; i++)
+            {
+                if ((StatusTimeArr[i] > 0) && (StatusTimeArr[i] < 60000))
+                {
+                    if ((HUtil32.GetTickCount() - StatusArrTick[i]) > 1000)
                     {
-                        if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (SlaveExpLevel < 5))
+                        StatusTimeArr[i] -= 1;
+                        StatusArrTick[i] += 1000;
+                        if (StatusTimeArr[i] == 0)
                         {
-                            MasterRoyaltyTick = 0;
-                        }
-                        if (HUtil32.GetTickCount() > MasterRoyaltyTick)
-                        {
-                            for (var i = 0; i < Master.SlaveList.Count; i++)
+                            boChg = true;
+                            switch (i)
                             {
-                                if (Master.SlaveList[i] == this)
-                                {
-                                    Master.SlaveList.RemoveAt(i);
+                                case PoisonState.DefenceUP:
+                                    boNeedRecalc = true;
+                                    SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                     break;
-                                }
-                            }
-                            Master = null;
-                            WAbil.HP = (ushort)(WAbil.HP / 10);
-                            RefShowName();
-                        }
-                        if (MasterTick != 0)
-                        {
-                            if ((HUtil32.GetTickCount() - MasterTick) > 12 * 60 * 60 * 1000)
-                            {
-                                WAbil.HP = 0;
-                            }
-                        }
-                    }
-                }
-                if ((HUtil32.GetTickCount() - VerifyTick) > 30 * 1000)
-                {
-                    VerifyTick = HUtil32.GetTickCount();
-                    if (!DenyRefStatus)
-                    {
-                        Envir.VerifyMapTime(CurrX, CurrY, this);// 刷新在地图上位置的时间
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                M2Share.Logger.Error(sExceptionMsg4);
-                M2Share.Logger.Error(e.Message);
-            }
-            try
-            {
-                var boChg = false;
-                var boNeedRecalc = false;
-                for (var i = 0; i < StatusArrTick.Length; i++)
-                {
-                    if ((StatusTimeArr[i] > 0) && (StatusTimeArr[i] < 60000))
-                    {
-                        if ((HUtil32.GetTickCount() - StatusArrTick[i]) > 1000)
-                        {
-                            StatusTimeArr[i] -= 1;
-                            StatusArrTick[i] += 1000;
-                            if (StatusTimeArr[i] == 0)
-                            {
-                                boChg = true;
-                                switch (i)
-                                {
-                                    case PoisonState.DefenceUP:
-                                        boNeedRecalc = true;
-                                        SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
-                                        break;
-                                    case PoisonState.MagDefenceUP:
-                                        boNeedRecalc = true;
-                                        SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
-                                        break;
-                                    case PoisonState.BubbleDefenceUP:
-                                        ((this as CharacterObject)).AbilMagBubbleDefence = false;
-                                        break;
-                                    case PoisonState.STATETRANSPARENT:
-                                        HideMode = false;
-                                        break;
-                                }
-                            }
-                            else if (StatusTimeArr[i] == 10)
-                            {
-                                if (i == PoisonState.DefenceUP)
-                                {
-                                    SysMsg($"防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                case PoisonState.MagDefenceUP:
+                                    boNeedRecalc = true;
+                                    SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
                                     break;
-                                }
-                                if (i == PoisonState.MagDefenceUP)
-                                {
-                                    SysMsg($"魔法防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                case PoisonState.BubbleDefenceUP:
+                                    ((this as CharacterObject)).AbilMagBubbleDefence = false;
                                     break;
-                                }
+                                case PoisonState.STATETRANSPARENT:
+                                    HideMode = false;
+                                    break;
+                            }
+                        }
+                        else if (StatusTimeArr[i] == 10)
+                        {
+                            if (i == PoisonState.DefenceUP)
+                            {
+                                SysMsg($"防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                break;
+                            }
+                            if (i == PoisonState.MagDefenceUP)
+                            {
+                                SysMsg($"魔法防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                break;
                             }
                         }
                     }
                 }
-                if (boChg)
-                {
-                    CharStatus = GetCharStatus();
-                    StatusChanged();
-                }
-                if (boNeedRecalc)
-                {
-                    RecalcAbilitys();
-                    SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                }
             }
-            catch (Exception)
+            if (boChg)
             {
-                M2Share.Logger.Error(sExceptionMsg5);
+                CharStatus = GetCharStatus();
+                StatusChanged();
             }
-            try
+            if (boNeedRecalc)
             {
-                if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime)
+                RecalcAbilitys();
+                SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            }
+            if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime)
+            {
+                PoisoningTick = HUtil32.GetTickCount();
+                if (StatusTimeArr[PoisonState.DECHEALTH] > 0)
                 {
-                    PoisoningTick = HUtil32.GetTickCount();
-                    if (StatusTimeArr[PoisonState.DECHEALTH] > 0)
+                    if (Animal)
                     {
-                        if (Animal)
-                        {
-                            MeatQuality -= 1000;
-                        }
-                        DamageHealth((ushort)(GreenPoisoningPoint + 1));
-                        HealthTick = 0;
-                        SpellTick = 0;
-                        HealthSpellChanged();
+                        MeatQuality -= 1000;
                     }
+                    DamageHealth((ushort)(GreenPoisoningPoint + 1));
+                    HealthTick = 0;
+                    SpellTick = 0;
+                    HealthSpellChanged();
                 }
-            }
-            catch
-            {
-                M2Share.Logger.Error(sExceptionMsg6);
             }
         }
 
@@ -555,7 +514,7 @@ namespace GameSvr.Actor
             }
             SendRefMsg(Messages.RM_DEATH, Direction, CurrX, CurrY, 1, "");
         }
-        
+
         internal virtual void ReAlive()
         {
             Death = false;
@@ -570,7 +529,7 @@ namespace GameSvr.Actor
             }
             if (InSafeZone() || targetObject.InSafeZone())
             {
-               return false;
+                return false;
             }
             return true;
         }
