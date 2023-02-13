@@ -520,7 +520,7 @@ namespace GameSvr.RobotPlay
                                     cellInfo.Remove(cellObject);
                                     continue;
                                 }
-                                if (cellObject.CellObjId>0)
+                                if (cellObject.CellObjId > 0)
                                 {
                                     if (!cellObject.IsDispose)
                                     {
@@ -558,11 +558,8 @@ namespace GameSvr.RobotPlay
                                                     {
                                                         if (cellObject.CellObjId > 0)
                                                         {
-                                                            M2Share.CellObjectMgr.Dispose(cellObject.CellObjId);
-                                                        }
-                                                        if (cellObject != null)
-                                                        {
                                                             cellObject.IsDispose = true;
+                                                            M2Share.CellObjectMgr.Dispose(cellObject.CellObjId);
                                                         }
                                                         cellInfo.Remove(cellObject);
                                                         if (cellInfo.Count <= 0)

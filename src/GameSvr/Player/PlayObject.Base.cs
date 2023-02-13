@@ -2868,7 +2868,7 @@ namespace GameSvr.Player
                                     break;
                                 }
                                 var cellObject = cellInfo.ObjList[nIdx];
-                                if (cellObject != null)
+                                if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
                                     {

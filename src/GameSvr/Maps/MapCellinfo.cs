@@ -45,7 +45,7 @@ namespace GameSvr.Maps
         {
             // using (M2Share.SyncLock.EnterReadLock())
             // {
-            if (ObjList != null && cell != null)
+            if (ObjList != null && cell.CellObjId > 0)
             {
                 ObjList.Remove(cell);
                 M2Share.CellObjectMgr.Remove(cell.CellObjId);

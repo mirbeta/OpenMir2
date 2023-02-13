@@ -1002,7 +1002,7 @@ namespace GameSvr.Player
                         for (var i = 0; i < cellInfo.Count; i++)
                         {
                             var cellObject = cellInfo.ObjList[i];
-                            if (cellObject.ActorObject)
+                            if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                             {
                                 var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null)

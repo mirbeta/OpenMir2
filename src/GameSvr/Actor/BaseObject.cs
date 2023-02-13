@@ -2096,7 +2096,7 @@ namespace GameSvr.Actor
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
                                 var cellObject = cellInfo.ObjList[i];
-                                if (cellObject != null && cellObject.ActorObject)
+                                if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                                 {
                                     var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
@@ -2172,7 +2172,7 @@ namespace GameSvr.Actor
                                     for (var i = 0; i < cellInfo.Count; i++)
                                     {
                                         var cellObject = cellInfo.ObjList[i];
-                                        if (cellObject != null)
+                                        if (cellObject.CellObjId > 0)
                                         {
                                             if (cellObject.ActorObject)
                                             {
@@ -2377,7 +2377,7 @@ namespace GameSvr.Actor
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var cellObject = cellInfo.ObjList[i];
-                        if (cellObject == null)
+                        if (cellObject.CellObjId == 0)
                         {
                             continue;
                         }
@@ -3296,7 +3296,7 @@ namespace GameSvr.Actor
                         for (var k = 0; k < cellInfo.Count; k++)
                         {
                             var cellObject = cellInfo.ObjList[k];
-                            if ((cellObject != null) && (cellObject.CellType == CellType.Play || cellObject.CellType == CellType.Monster))
+                            if ((cellObject.CellObjId > 0) && (cellObject.CellType == CellType.Play || cellObject.CellType == CellType.Monster))
                             {
                                 var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if ((baseObject != null) && (!baseObject.Ghost))

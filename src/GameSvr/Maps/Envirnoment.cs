@@ -125,6 +125,7 @@ namespace GameSvr.Maps
                                                 cellObject.AddTime = HUtil32.GetTickCount();
                                                 result = mapItem;
                                                 bo1E = true;
+                                                cellInfo.ObjList[i] = cellObject;
                                             }
                                         }
                                     }
@@ -139,16 +140,16 @@ namespace GameSvr.Maps
                     }
                     if (!bo1E)
                     {
+                        if (mapObject.ActorId == 0)
+                        {
+                            return null;
+                        }
                         var cellObject = new CellObject
                         {
                             CellType = cellType,
                             CellObjId = mapObject.ActorId,
                             AddTime = HUtil32.GetTickCount()
                         };
-                        if (cellObject.CellObjId == 0)
-                        {
-                            return null;
-                        }
                         if (cellType is CellType.Play or CellType.Monster or CellType.Merchant)
                         {
                             var baseObject = (BaseObject)mapObject;
@@ -232,7 +233,7 @@ namespace GameSvr.Maps
                             for (var i = 0; i < cellInfo.Count; i++)
                             {
                                 var cellObject = cellInfo.ObjList[i];
-                                if (cellObject.ActorObject)
+                                if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                                 {
                                     var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
@@ -355,7 +356,7 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var cellObject = cellInfo.ObjList[i];
-                        if (cellObject.ActorObject)
+                        if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
@@ -409,9 +410,9 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var cellObject = cellInfo.ObjList[i];
-                        if (!boFlag && cellObject.ActorObject)
+                        if (!boFlag && cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
-                            var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                            var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 if (baseObject.MapCell == CellType.CastleDoor)
@@ -456,7 +457,7 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var cellObject = cellInfo.ObjList[i];
-                        if (cellObject.ActorObject)
+                        if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
@@ -546,7 +547,7 @@ namespace GameSvr.Maps
                     for (var i = 0; i < cellInfo.Count; i++)
                     {
                         var cellObject = cellInfo.ObjList[i];
-                        if (cellObject != null)
+                        if (cellObject.CellObjId > 0)
                         {
                             if (cellObject.CellType == cellType && cellObject.CellObjId == pRemoveObject.ActorId)
                             {
@@ -737,6 +738,7 @@ namespace GameSvr.Maps
                         if (cellObject.ActorObject && cellObject.CellObjId == baseObject.ActorId)
                         {
                             cellObject.AddTime = HUtil32.GetTickCount();
+                            cellInfo.ObjList[i] = cellObject;
                             boVerify = true;
                             break;
                         }
@@ -1052,7 +1054,7 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var cellObject = cellInfo.ObjList[i];
-                    if (cellObject == null)
+                    if (cellObject.CellObjId == 0)
                     {
                         continue;
                     }
@@ -1204,7 +1206,7 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var cellObject = cellInfo.ObjList[i];
-                    if (cellObject.ActorObject)
+                    if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null && !baseObject.Ghost)
@@ -1395,7 +1397,7 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var cellObject = cellInfo.ObjList[i];
-                    if (cellObject.ActorObject)
+                    if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject != null)
@@ -1498,7 +1500,7 @@ namespace GameSvr.Maps
                 for (var i = 0; i < cellInfo.Count; i++)
                 {
                     var cellObject = cellInfo.ObjList[i];
-                    if (cellObject.ActorObject)
+                    if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject.Race == ActorRace.Play)

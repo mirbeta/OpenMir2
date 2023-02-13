@@ -186,7 +186,7 @@ namespace GameSvr.Actor
                                     break;
                                 }
                                 CellObject cellObject = cellInfo.ObjList[nIdx];
-                                if (cellObject != null)
+                                if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
                                     {
@@ -295,7 +295,7 @@ namespace GameSvr.Actor
                             for (int i = 0; i < cellInfo.Count; i++)
                             {
                                 CellObject cellObject = cellInfo.ObjList[i];
-                                if (cellObject != null)
+                                if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
                                     {

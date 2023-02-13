@@ -1835,7 +1835,7 @@ namespace GameSvr.World
                         for (int i = 0; i < cellInfo.Count; i++)
                         {
                             CellObject cellObject = cellInfo.ObjList[i];
-                            if (cellObject != null && (cellObject.CellType == CellType.Monster || cellObject.CellType == CellType.Play))
+                            if (cellObject.CellObjId > 0 && (cellObject.CellType == CellType.Monster || cellObject.CellType == CellType.Play))
                             {
                                 BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == ActorRace.Play)
