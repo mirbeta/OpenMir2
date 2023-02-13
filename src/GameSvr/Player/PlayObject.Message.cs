@@ -1686,7 +1686,7 @@ namespace GameSvr.Player
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LEVELUP, Abil.Exp, Abil.Level, 0, 0);
                     SendSocket(ClientMsg);
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
-                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(WAbil)));
+                    SendSocket(ClientMsg, EDCode.EncodeBuffer(WAbil));
                     SendDefMessage(Messages.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
                     break;
                 case Messages.RM_CHANGENAMECOLOR:
@@ -1746,7 +1746,7 @@ namespace GameSvr.Player
                     break;
                 case Messages.RM_ABILITY:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
-                    SendSocket(ClientMsg, EDCode.EncodePacket(SerializerUtil.Serialize(WAbil)));
+                    SendSocket(ClientMsg, EDCode.EncodeBuffer(WAbil));
                     break;
                 case Messages.RM_HEALTHSPELLCHANGED:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_HEALTHSPELLCHANGED, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MP, baseObject.WAbil.MaxHP);
