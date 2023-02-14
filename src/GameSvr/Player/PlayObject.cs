@@ -6,6 +6,7 @@ using GameSvr.Maps;
 using GameSvr.Npc;
 using GameSvr.Services;
 using GameSvr.World;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -999,10 +1000,9 @@ namespace GameSvr.Player
                     var cellInfo = Envir.GetCellInfo(cX, cY, ref cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                        while (current != null)
+                        for (int i = 0; i < cellInfo.ObjList.Count; i++)
                         {
-                            var cellObject = current.Value;
+                            var cellObject = cellInfo.ObjList[i];
                             if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                             {
                                 var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -1014,7 +1014,6 @@ namespace GameSvr.Player
                                     }
                                 }
                             }
-                            current = current.Next;
                         }
                     }
                 }

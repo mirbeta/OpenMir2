@@ -26,7 +26,7 @@ namespace GameSvr.Maps
         /// <summary>
         /// 地图对象列表
         /// </summary>
-        public LinkedList<CellObject> ObjList;
+        public PooledList<CellObject> ObjList;
 
         public bool IsAvailable => ObjList != null && ObjList.Count > 0;
 
@@ -34,15 +34,14 @@ namespace GameSvr.Maps
 
         public void Add(CellObject cell, ActorEntity entityId)
         {
-            ObjList.AddLast(cell);
+            ObjList.Add(cell);
             M2Share.CellObjectMgr.Add(cell.CellObjId, entityId);
         }
 
         public void Update(CellObject cell)
         {
-            ObjList.Remove(cell);
             cell.AddTime = HUtil32.GetTickCount();
-            ObjList.AddLast(cell);
+            ObjList[cell.CellObjId] = cell;
         }
 
         public void Remove(CellObject cell)

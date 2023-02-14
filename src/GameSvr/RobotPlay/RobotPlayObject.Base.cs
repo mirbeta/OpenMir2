@@ -490,10 +490,9 @@ namespace GameSvr.RobotPlay
                         cellInfo = Envir.GetCellInfo(nX, nY, ref cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                            while(current!=null)
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                var cellObject = current.Value;
+                                var cellObject = cellInfo.ObjList[i];
                                 if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
                                     break;
@@ -524,7 +523,6 @@ namespace GameSvr.RobotPlay
                                                         cellInfo.Dispose();
                                                         break;
                                                     }
-                                                    current = current.Next;
                                                     continue;
                                                 }
                                                 baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -555,7 +553,6 @@ namespace GameSvr.RobotPlay
                                                             cellInfo.Dispose();
                                                             break;
                                                         }
-                                                        current = current.Next;
                                                         continue;
                                                     }
                                                     MapItem mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
@@ -600,7 +597,6 @@ namespace GameSvr.RobotPlay
                                         }
                                     }
                                 }
-                                current = current.Next;
                             }
                         }
                     }

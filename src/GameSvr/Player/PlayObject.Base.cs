@@ -2861,10 +2861,9 @@ namespace GameSvr.Player
                         var cellInfo = Envir.GetCellInfo(nX, nY, ref cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                            while (current != null)
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                var cellObject = current.Value;
+                                var cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
@@ -2874,7 +2873,6 @@ namespace GameSvr.Player
                                             cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
-                                                current = current.Next;
                                                 continue;
                                             }
                                             cellInfo.Dispose();
@@ -2909,7 +2907,6 @@ namespace GameSvr.Player
                                                 cellInfo.Remove(cellObject);
                                                 if (cellInfo.Count > 0)
                                                 {
-                                                    current = current.Next;
                                                     continue;
                                                 }
                                                 cellInfo.Dispose();
@@ -2953,7 +2950,6 @@ namespace GameSvr.Player
                                         }
                                     }
                                 }
-                                current = current.Next;
                             }
                         }
                     }

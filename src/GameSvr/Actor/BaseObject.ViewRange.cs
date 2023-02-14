@@ -178,10 +178,9 @@ namespace GameSvr.Actor
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             n24 = 1;
-                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                            while (current != null)
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                var cellObject = current.Value;
+                                var cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
@@ -191,7 +190,6 @@ namespace GameSvr.Actor
                                             cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
-                                                current = current.Next;
                                                 continue;
                                             }
                                             cellInfo.Dispose();
@@ -206,7 +204,6 @@ namespace GameSvr.Actor
                                                 {
                                                     if (IsPassiveAttack(baseObject))
                                                     {
-                                                        current = current.Next;
                                                         continue;
                                                     }
                                                 }
@@ -221,7 +218,6 @@ namespace GameSvr.Actor
                                         }
                                     }
                                 }
-                                current = current.Next;
                             }
                         }
                     }
@@ -289,10 +285,9 @@ namespace GameSvr.Actor
                     {
                         try
                         {
-                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                            while (current != null)
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                var cellObject = current.Value;
+                                var cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
@@ -302,7 +297,6 @@ namespace GameSvr.Actor
                                             cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
-                                                current = current.Next;
                                                 continue;
                                             }
                                             cellInfo.Dispose();
@@ -316,14 +310,12 @@ namespace GameSvr.Actor
                                             cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
-                                                current = current.Next;
                                                 continue;
                                             }
                                             cellInfo.Dispose();
                                         }
                                     }
                                 }
-                                current = current.Next;
                             }
                         }
                         catch (Exception e)

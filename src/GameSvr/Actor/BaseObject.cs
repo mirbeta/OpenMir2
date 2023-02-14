@@ -2088,10 +2088,9 @@ namespace GameSvr.Actor
                         var cellInfo = envir.GetCellInfo(x, y, ref cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                            while (current != null)
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                var cellObject = current.Value;
+                                var cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                                 {
                                     var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -2100,7 +2099,6 @@ namespace GameSvr.Actor
                                         rList.Add(baseObject);
                                     }
                                 }
-                                current = current.Next;
                             }
                         }
                     }
@@ -2166,10 +2164,9 @@ namespace GameSvr.Actor
                             {
                                 if (cellInfo.IsAvailable)
                                 {
-                                    LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                                    while (current != null)
+                                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
                                     {
-                                        var cellObject = current.Value;
+                                        var cellObject = cellInfo.ObjList[i];
                                         if (cellObject.CellObjId > 0)
                                         {
                                             if (cellObject.ActorObject)
@@ -2218,7 +2215,6 @@ namespace GameSvr.Actor
                                                 }
                                             }
                                         }
-                                        current = current.Next;
                                     }
                                 }
                             }
@@ -2373,13 +2369,11 @@ namespace GameSvr.Actor
                 var cellInfo = Envir.GetCellInfo(CurrX, CurrY, ref cellSuccess);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
-                    LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                    while (current != null)
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        var cellObject = current.Value;
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject.CellObjId == 0)
                         {
-                            current = current.Next;
                             continue;
                         }
                         switch (cellObject.CellType)
@@ -2440,7 +2434,6 @@ namespace GameSvr.Actor
                             case CellType.Roon:
                                 break;
                         }
-                        current = current.Next;
                     }
                 }
                 if (result)
@@ -3286,10 +3279,9 @@ namespace GameSvr.Actor
                     var cellInfo = Envir.GetCellInfo(cX, cY, ref cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                        while (current != null)
+                        for (int i = 0; i < cellInfo.ObjList.Count; i++)
                         {
-                            var cellObject = current.Value;
+                            var cellObject = cellInfo.ObjList[i];
                             if ((cellObject.CellObjId > 0) && (cellObject.CellType == CellType.Play || cellObject.CellType == CellType.Monster))
                             {
                                 var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -3309,7 +3301,6 @@ namespace GameSvr.Actor
                                     }
                                 }
                             }
-                            current = current.Next;
                         }
                     }
                 }

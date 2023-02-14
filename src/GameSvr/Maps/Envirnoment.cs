@@ -98,7 +98,7 @@ namespace GameSvr.Maps
                 {
                     if (cellInfo.ObjList == null)
                     {
-                        cellInfo.ObjList = new LinkedList<CellObject>();
+                        cellInfo.ObjList = new PooledList<CellObject>();
                     }
                     else
                     {
@@ -106,10 +106,9 @@ namespace GameSvr.Maps
                         {
                             if (string.Compare(((MapItem)mapObject).Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                                while (current != null)
+                                for (int i = 0; i < cellInfo.ObjList.Count; i++)
                                 {
-                                    var cellObject = current.Value;
+                                    var cellObject = cellInfo.ObjList[i];
                                     if (cellObject.CellType == CellType.Item)
                                     {
                                         var mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
@@ -128,7 +127,6 @@ namespace GameSvr.Maps
                                             }
                                         }
                                     }
-                                    current = current.Next;
                                 }
                             }
                             if (!bo1E && cellInfo.Count >= 5)
@@ -230,10 +228,9 @@ namespace GameSvr.Maps
                     {
                         if (cellInfo.IsAvailable)
                         {
-                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                            while (current != null)
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                var cellObject = current.Value;
+                                var cellObject = cellInfo.ObjList[i];
                                 if (cellObject.ActorObject)
                                 {
                                     var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -257,7 +254,6 @@ namespace GameSvr.Maps
                                         }
                                     }
                                 }
-                                current = current.Next;
                             }
                         }
                     }
@@ -278,27 +274,24 @@ namespace GameSvr.Maps
                         CellObject moveObject = default;
                         if (GetCellInfo(nCx, nCy, ref cellInfo) && cellInfo.IsAvailable)
                         {
-                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                            while (current != null)
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                moveObject = current.Value;
+                                var cellObject = cellInfo.ObjList[i];
                                 if (moveObject.CellObjId == cert.ActorId && moveObject.ActorObject)
                                 {
                                     cellInfo.Remove(moveObject);
                                     if (cellInfo.Count > 0)
                                     {
-                                        current = current.Next;
                                         continue;
                                     }
                                     cellInfo.Dispose();
                                     break;
                                 }
-                                current = current.Next;
                             }
                         }
                         if (GetCellInfo(nX, nY, ref cellInfo))
                         {
-                            cellInfo.ObjList ??= new LinkedList<CellObject>();
+                            cellInfo.ObjList ??= new PooledList<CellObject>();
                             if (moveObject.CellObjId == 0)
                             {
                                 moveObject.CellType = cert.CellType;
@@ -351,10 +344,9 @@ namespace GameSvr.Maps
                 result = true;
                 if (cellInfo.IsAvailable)
                 {
-                    LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                    while (current != null)
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        var cellObject = current.Value;
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -378,7 +370,6 @@ namespace GameSvr.Maps
                                 }
                             }
                         }
-                        current = current.Next;
                     }
                 }
             }
@@ -407,10 +398,9 @@ namespace GameSvr.Maps
             {
                 if (cellInfo.IsAvailable)
                 {
-                    LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                    while (current != null)
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        var cellObject = current.Value;
+                        var cellObject = cellInfo.ObjList[i];
                         if (!boFlag && cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -439,7 +429,6 @@ namespace GameSvr.Maps
                             result = false;
                             break;
                         }
-                        current = current.Next;
                     }
                 }
             }
@@ -456,10 +445,9 @@ namespace GameSvr.Maps
                 result = true;
                 if (!boFlag && cellInfo.IsAvailable)
                 {
-                    LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                    while (current != null)
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        var cellObject = current.Value;
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
                             var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -478,7 +466,6 @@ namespace GameSvr.Maps
                                             {
                                                 if (M2Share.Config.boRunHuman || Flag.RunHuman)
                                                 {
-                                                    current = current.Next;
                                                     continue;
                                                 }
                                                 break;
@@ -487,7 +474,6 @@ namespace GameSvr.Maps
                                             {
                                                 if (M2Share.Config.boRunNpc)
                                                 {
-                                                    current = current.Next;
                                                     continue;
                                                 }
                                                 break;
@@ -497,7 +483,6 @@ namespace GameSvr.Maps
                                             {
                                                 if (M2Share.Config.boRunGuard)
                                                 {
-                                                    current = current.Next;
                                                     continue;
                                                 }
                                                 break;
@@ -506,7 +491,6 @@ namespace GameSvr.Maps
                                             {
                                                 if (M2Share.Config.boRunMon || Flag.RunMon)
                                                 {
-                                                    current = current.Next;
                                                     continue;
                                                 }
                                                 break;
@@ -531,7 +515,6 @@ namespace GameSvr.Maps
                                 }
                             }
                         }
-                        current = current.Next;
                     }
                 }
             }
@@ -552,10 +535,9 @@ namespace GameSvr.Maps
             {
                 try
                 {
-                    LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                    while (current != null)
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        var cellObject = current.Value;
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject.CellObjId > 0)
                         {
                             if (cellObject.CellType == cellType && cellObject.CellObjId == pRemoveObject.ActorId)
@@ -570,7 +552,6 @@ namespace GameSvr.Maps
                                 }
                                 if (cellInfo.Count > 0)
                                 {
-                                    current = current.Next;
                                     continue;
                                 }
                                 cellInfo.Dispose();
@@ -582,13 +563,11 @@ namespace GameSvr.Maps
                             cellInfo.ObjList.Remove(cellObject);
                             if (cellInfo.Count > 0)
                             {
-                                current = current.Next;
                                 continue;
                             }
                             cellInfo.Dispose();
                             break;
                         }
-                        current = current.Next;
                     }
                 }
                 catch
@@ -613,10 +592,9 @@ namespace GameSvr.Maps
                 Bo2C = true;
                 if (cellInfo.IsAvailable)
                 {
-                    LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                    while (current != null)
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        var cellObject = current.Value;
+                        var cellObject = cellInfo.ObjList[i];
                         switch (cellObject.CellType)
                         {
                             case CellType.Item:
@@ -634,7 +612,6 @@ namespace GameSvr.Maps
                                 }
                                 break;
                         }
-                        current = current.Next;
                     }
                 }
             }
@@ -654,7 +631,7 @@ namespace GameSvr.Maps
             {
                 if (cellInfo.ObjList == null)
                 {
-                    cellInfo.ObjList = new LinkedList<CellObject>();
+                    cellInfo.ObjList = new PooledList<CellObject>();
                 }
                 if (nType == CellType.Event)
                 {
@@ -710,7 +687,7 @@ namespace GameSvr.Maps
                     {
                         if (cellInfo.ObjList == null)
                         {
-                            cellInfo.ObjList = new LinkedList<CellObject>();
+                            cellInfo.ObjList = new PooledList<CellObject>();
                         }
                         if (!bo1A)
                         {
@@ -746,17 +723,15 @@ namespace GameSvr.Maps
                 var cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
-                    LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                    while (current != null)
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        var cellObject = current.Value;
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject.ActorObject && cellObject.CellObjId == baseObject.ActorId)
                         {
                             cellInfo.Update(cellObject);
                             boVerify = true;
                             break;
                         }
-                        current = current.Next;
                     }
                 }
                 if (!boVerify)
@@ -823,7 +798,7 @@ namespace GameSvr.Maps
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        ObjList = new LinkedList<CellObject>(),
+                                        ObjList = new PooledList<CellObject>(),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
@@ -899,7 +874,7 @@ namespace GameSvr.Maps
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        ObjList = new LinkedList<CellObject>(),
+                                        ObjList = new PooledList<CellObject>(),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
@@ -1066,13 +1041,11 @@ namespace GameSvr.Maps
             var cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                while (current != null)
+                for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    var cellObject = current.Value;
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId == 0)
                     {
-                        current = current.Next;
                         continue;
                     }
                     if (cellObject.ActorObject)
@@ -1096,7 +1069,6 @@ namespace GameSvr.Maps
                             }
                         }
                     }
-                    current = current.Next;
                 }
             }
             return result;
@@ -1180,10 +1152,9 @@ namespace GameSvr.Maps
             var cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                while (current != null)
+                for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    var cellObject = current.Value;
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
                         var owinEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
@@ -1192,7 +1163,6 @@ namespace GameSvr.Maps
                             result = false;
                         }
                     }
-                    current = current.Next;
                 }
             }
             return result;
@@ -1223,10 +1193,9 @@ namespace GameSvr.Maps
             var cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                while (current != null)
+                for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    var cellObject = current.Value;
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -1250,7 +1219,6 @@ namespace GameSvr.Maps
                             }
                         }
                     }
-                    current = current.Next;
                 }
             }
             return result;
@@ -1310,10 +1278,9 @@ namespace GameSvr.Maps
                 Bo2C = true;
                 if (cellInfo.IsAvailable)
                 {
-                    LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                    while (current != null)
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        var cellObject = current.Value;
+                        var cellObject = cellInfo.ObjList[i];
                         switch (cellObject.CellType)
                         {
                             case CellType.Item:
@@ -1334,7 +1301,6 @@ namespace GameSvr.Maps
                                     break;
                                 }
                         }
-                        current = current.Next;
                     }
                 }
             }
@@ -1364,15 +1330,13 @@ namespace GameSvr.Maps
                     var cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                        while (current != null)
+                        for (int i = 0; i < cellInfo.ObjList.Count; i++)
                         {
-                            var cellObject = current.Value;
+                            var cellObject = cellInfo.ObjList[i];
                             if (cellObject.CellObjId == baseObject.ActorId)
                             {
                                 return true;
                             }
-                            current = current.Next;
                         }
                     }
                 }
@@ -1420,10 +1384,9 @@ namespace GameSvr.Maps
             var cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                while (current != null)
+                for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    var cellObject = current.Value;
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
@@ -1445,7 +1408,6 @@ namespace GameSvr.Maps
                             }
                         }
                     }
-                    current = current.Next;
                 }
             }
             return baseObjectList.Count;
@@ -1459,15 +1421,13 @@ namespace GameSvr.Maps
             var cellInfo = GetCellInfo(nX, nY, ref cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                while (current != null)
+                for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    var cellObject = current.Value;
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
                         result = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId); ;
                     }
-                    current = current.Next;
                 }
             }
             return result;
@@ -1527,10 +1487,9 @@ namespace GameSvr.Maps
             var cellInfo = GetCellInfo(nMapX, nMapY, ref cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                LinkedListNode<CellObject> current = cellInfo.ObjList.First;
-                while (current != null)
+                for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    var cellObject = current.Value;
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
@@ -1540,7 +1499,6 @@ namespace GameSvr.Maps
                             break;
                         }
                     }
-                    current = current.Next;
                 }
             }
             return result;
