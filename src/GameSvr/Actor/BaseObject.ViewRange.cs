@@ -178,14 +178,10 @@ namespace GameSvr.Actor
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             n24 = 1;
-                            var nIdx = 0;
-                            while (true)
+                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
+                            while (current != null)
                             {
-                                if (cellInfo.Count <= nIdx)
-                                {
-                                    break;
-                                }
-                                CellObject cellObject = cellInfo.ObjList[nIdx];
+                                var cellObject = current.Value;
                                 if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
@@ -195,6 +191,7 @@ namespace GameSvr.Actor
                                             cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
+                                                current = current.Next;
                                                 continue;
                                             }
                                             cellInfo.Dispose();
@@ -205,11 +202,11 @@ namespace GameSvr.Actor
                                         {
                                             if (!baseObject.Death && !baseObject.Invisible)
                                             {
-                                                if (this.Race == ActorRace.Guard || this.Race == ActorRace.ArcherGuard)//守卫和护卫不搜索不主动攻击的怪物
+                                                if (Race == ActorRace.Guard || Race == ActorRace.ArcherGuard)//守卫和护卫不搜索不主动攻击的怪物
                                                 {
                                                     if (IsPassiveAttack(baseObject))
                                                     {
-                                                        nIdx++;
+                                                        current = current.Next;
                                                         continue;
                                                     }
                                                 }
@@ -224,7 +221,7 @@ namespace GameSvr.Actor
                                         }
                                     }
                                 }
-                                nIdx++;
+                                current = current.Next;
                             }
                         }
                     }
@@ -292,9 +289,10 @@ namespace GameSvr.Actor
                     {
                         try
                         {
-                            for (var i = 0; i < cellInfo.Count; i++)
+                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
+                            while (current != null)
                             {
-                                CellObject cellObject = cellInfo.ObjList[i];
+                                var cellObject = current.Value;
                                 if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
@@ -304,6 +302,7 @@ namespace GameSvr.Actor
                                             cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
+                                                current = current.Next;
                                                 continue;
                                             }
                                             cellInfo.Dispose();
@@ -317,12 +316,14 @@ namespace GameSvr.Actor
                                             cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
+                                                current = current.Next;
                                                 continue;
                                             }
                                             cellInfo.Dispose();
                                         }
                                     }
                                 }
+                                current = current.Next;
                             }
                         }
                         catch (Exception e)

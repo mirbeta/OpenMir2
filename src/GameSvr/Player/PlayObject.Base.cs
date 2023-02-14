@@ -2861,14 +2861,10 @@ namespace GameSvr.Player
                         var cellInfo = Envir.GetCellInfo(nX, nY, ref cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            var nIdx = 0;
-                            while (true)
+                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
+                            while (current != null)
                             {
-                                if (cellInfo.Count <= nIdx)
-                                {
-                                    break;
-                                }
-                                var cellObject = cellInfo.ObjList[nIdx];
+                                var cellObject = current.Value;
                                 if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
@@ -2878,6 +2874,7 @@ namespace GameSvr.Player
                                             cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
+                                                current = current.Next;
                                                 continue;
                                             }
                                             cellInfo.Dispose();
@@ -2912,6 +2909,7 @@ namespace GameSvr.Player
                                                 cellInfo.Remove(cellObject);
                                                 if (cellInfo.Count > 0)
                                                 {
+                                                    current = current.Next;
                                                     continue;
                                                 }
                                                 cellInfo.Dispose();
@@ -2955,7 +2953,7 @@ namespace GameSvr.Player
                                         }
                                     }
                                 }
-                                nIdx++;
+                                current = current.Next;
                             }
                         }
                     }
@@ -3185,7 +3183,7 @@ namespace GameSvr.Player
             }
             return base.GetFeature(baseObject);
         }
-        
+
         public override void MakeGhost()
         {
             const string sExceptionMsg = "[Exception] TPlayObject::MakeGhost";
@@ -3480,7 +3478,7 @@ namespace GameSvr.Player
                 }
             }
         }
-        
+
         /// <summary>
         /// 切换地图
         /// </summary>
@@ -3733,7 +3731,7 @@ namespace GameSvr.Player
                     break;
             }
         }
-        
+
         public int GetQuestFalgStatus(int nFlag)
         {
             var result = 0;
@@ -5008,7 +5006,7 @@ namespace GameSvr.Player
                 M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
             }
         }
-        
+
         /// <summary>
         /// 无极真气
         /// </summary>

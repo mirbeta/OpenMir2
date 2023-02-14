@@ -999,9 +999,10 @@ namespace GameSvr.Player
                     var cellInfo = Envir.GetCellInfo(cX, cY, ref cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        for (var i = 0; i < cellInfo.Count; i++)
+                        LinkedListNode<CellObject> current = cellInfo.ObjList.First;
+                        while (current != null)
                         {
-                            var cellObject = cellInfo.ObjList[i];
+                            var cellObject = current.Value;
                             if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                             {
                                 var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -1013,6 +1014,7 @@ namespace GameSvr.Player
                                     }
                                 }
                             }
+                            current = current.Next;
                         }
                     }
                 }

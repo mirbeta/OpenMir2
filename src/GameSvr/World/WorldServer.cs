@@ -1832,9 +1832,10 @@ namespace GameSvr.World
                     MapCellInfo cellInfo = envir.GetCellInfo(n10, n14, ref cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        for (int i = 0; i < cellInfo.Count; i++)
+                        LinkedListNode<CellObject> current = cellInfo.ObjList.First;
+                        while (current != null)
                         {
-                            CellObject cellObject = cellInfo.ObjList[i];
+                            var cellObject = current.Value;
                             if (cellObject.CellObjId > 0 && (cellObject.CellType == CellType.Monster || cellObject.CellType == CellType.Play))
                             {
                                 BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -1843,6 +1844,7 @@ namespace GameSvr.World
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0, "");
                                 }
                             }
+                            current = current.Next;
                         }
                     }
                 }

@@ -26,7 +26,9 @@ namespace GameSvr.Maps
         /// <summary>
         /// 地图对象列表
         /// </summary>
-        public PooledList<CellObject> ObjList;
+        public LinkedList<CellObject> ObjList;
+
+        public LinkedListNode<CellObject> ObjectsList => ObjList.First;
 
         public bool IsAvailable => ObjList != null && ObjList.Count > 0;
 
@@ -34,8 +36,19 @@ namespace GameSvr.Maps
 
         public void Add(CellObject cell, ActorEntity entityId)
         {
-            ObjList.Add(cell);
+            ObjList.AddLast(cell);
             M2Share.CellObjectMgr.Add(cell.CellObjId, entityId);
+        }
+
+        public void Update(CellObject cell)
+        {
+            var cellObject = ObjList.Find(cell);
+            if (cellObject != null)
+            {
+                ObjList.Remove(cell);
+                cell.AddTime = HUtil32.GetTickCount();
+                ObjList.AddLast(cell);
+            }
         }
 
         public void Remove(CellObject cell)
@@ -92,7 +105,7 @@ namespace GameSvr.Maps
             if (disposing)
             {
                 ObjList.Clear();
-                ObjList.Dispose();
+                ObjList = null;
             }
             //告诉自己已经被释放
             disposed = true;

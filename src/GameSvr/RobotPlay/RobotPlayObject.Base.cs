@@ -460,7 +460,6 @@ namespace GameSvr.RobotPlay
         {
             int nIdx;
             MapCellInfo cellInfo;
-            CellObject cellObject = default;
             BaseObject baseObject;
             EventInfo mapEvent;
             VisibleFlag nVisibleFlag;
@@ -491,9 +490,10 @@ namespace GameSvr.RobotPlay
                         cellInfo = Envir.GetCellInfo(nX, nY, ref cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            nIdx = 0;
-                            while (cellInfo.Count > 0)
+                            LinkedListNode<CellObject> current = cellInfo.ObjList.First;
+                            while(current!=null)
                             {
+                                var cellObject = current.Value;
                                 if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
                                     break;
@@ -507,19 +507,6 @@ namespace GameSvr.RobotPlay
                                 {
                                     break;
                                 }
-                                if (cellInfo.Count <= nIdx)
-                                {
-                                    break;
-                                }
-                                try
-                                {
-                                    cellObject = cellInfo.ObjList[nIdx];
-                                }
-                                catch
-                                {
-                                    cellInfo.Remove(cellObject);
-                                    continue;
-                                }
                                 if (cellObject.CellObjId > 0)
                                 {
                                     if (!cellObject.IsDispose)
@@ -530,13 +517,14 @@ namespace GameSvr.RobotPlay
                                             case CellType.Monster:
                                                 if (HUtil32.GetTickCount() - cellObject.AddTime >= 60000)
                                                 {
-                                                    cellObject.IsDispose = true;
+                                                    //cellObject.IsDispose = true;
                                                     cellInfo.Remove(cellObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
                                                         cellInfo.Dispose();
                                                         break;
                                                     }
+                                                    current = current.Next;
                                                     continue;
                                                 }
                                                 baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -558,7 +546,7 @@ namespace GameSvr.RobotPlay
                                                     {
                                                         if (cellObject.CellObjId > 0)
                                                         {
-                                                            cellObject.IsDispose = true;
+                                                            //cellObject.IsDispose = true;
                                                             M2Share.CellObjectMgr.Dispose(cellObject.CellObjId);
                                                         }
                                                         cellInfo.Remove(cellObject);
@@ -567,6 +555,7 @@ namespace GameSvr.RobotPlay
                                                             cellInfo.Dispose();
                                                             break;
                                                         }
+                                                        current = current.Next;
                                                         continue;
                                                     }
                                                     MapItem mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
@@ -611,7 +600,7 @@ namespace GameSvr.RobotPlay
                                         }
                                     }
                                 }
-                                nIdx++;
+                                current = current.Next;
                             }
                         }
                     }
