@@ -72,7 +72,7 @@ namespace GameSvr.Monster.Monsters
             }
             if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
             {
-                for (int i = 0; i < this.VisibleActors.Count; i++)
+                for (var i = 0; i < this.VisibleActors.Count; i++)
                 {
                     BaseObject attackObject = this.VisibleActors[i].BaseObject;
                     if (attackObject == null)
@@ -84,16 +84,18 @@ namespace GameSvr.Monster.Monsters
                         VisibleActors.RemoveAt(i);
                         continue;
                     }
-                    if (attackObject.Race == ActorRace.Play)
+                    if (attackObject.Race == ActorRace.Play && !attackObject.Mission)
                     {
-                        if ((attackObject as PlayObject).PvpLevel() >= 2 && !attackObject.Mission)
+                        if (((PlayObject)attackObject).PvpLevel() >= 2)
                         {
                             SetAttackTarget(attackObject);
+                            break;
                         }
                     }
                     else if (attackObject.Race >= ActorRace.Monster && !attackObject.Mission)
                     {
                         SetAttackTarget(attackObject);
+                        break;
                     }
                 }
             }
