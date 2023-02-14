@@ -28,8 +28,6 @@ namespace GameSvr.Maps
         /// </summary>
         public LinkedList<CellObject> ObjList;
 
-        public LinkedListNode<CellObject> ObjectsList => ObjList.First;
-
         public bool IsAvailable => ObjList != null && ObjList.Count > 0;
 
         private bool disposed;
@@ -42,13 +40,9 @@ namespace GameSvr.Maps
 
         public void Update(CellObject cell)
         {
-            var cellObject = ObjList.Find(cell);
-            if (cellObject != null)
-            {
-                ObjList.Remove(cell);
-                cell.AddTime = HUtil32.GetTickCount();
-                ObjList.AddLast(cell);
-            }
+            ObjList.Remove(cell);
+            cell.AddTime = HUtil32.GetTickCount();
+            ObjList.AddLast(cell);
         }
 
         public void Remove(CellObject cell)

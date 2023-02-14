@@ -287,6 +287,7 @@ namespace GameSvr.Maps
                                     cellInfo.Remove(moveObject);
                                     if (cellInfo.Count > 0)
                                     {
+                                        current = current.Next;
                                         continue;
                                     }
                                     cellInfo.Dispose();
@@ -569,6 +570,7 @@ namespace GameSvr.Maps
                                 }
                                 if (cellInfo.Count > 0)
                                 {
+                                    current = current.Next;
                                     continue;
                                 }
                                 cellInfo.Dispose();
@@ -625,7 +627,7 @@ namespace GameSvr.Maps
                             case CellType.Play:
                             case CellType.Monster:
                             case CellType.Merchant:
-                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (!baseObject.Death)
                                 {
                                     Bo2C = false;

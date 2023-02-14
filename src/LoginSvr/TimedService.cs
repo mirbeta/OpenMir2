@@ -54,11 +54,11 @@ namespace LoginSvr
                         builder.Append(msgServer.ServerName + "/" + msgServer.ServerIndex + "/" + msgServer.OnlineCount + "/");
                         if (msgServer.ServerIndex == 99)
                         {
-                            builder.Append("DB/");
+                            builder.Append("DBServer/");
                         }
                         else
                         {
-                            builder.Append("Game/");
+                            builder.Append("GameServer/");
                             switch (msgServer.PayMentMode)
                             {
                                 case 0:
