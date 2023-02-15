@@ -692,7 +692,7 @@ namespace GameSvr.Actor
                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
                 mapItem.DropBaseObject = dropCreat;
                 GetDropPosition(CurrX, CurrY, nScatterRange, ref dx, ref dy);
-                var pr = (MapItem)Envir.AddToMap(dx, dy, CellType.Item, mapItem);
+                var pr = Envir.AddToMap(dx, dy, CellType.Item, mapItem);
                 if (pr == mapItem)
                 {
                     SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dx, dy, mapItem.Name);
@@ -920,7 +920,7 @@ namespace GameSvr.Actor
                 DropBaseObject = dropGoldCreat
             };
             GetDropPosition(CurrX, CurrY, 3, ref nX, ref nY);
-            var mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.Item, mapItem);
+            var mapItemA = Envir.AddToMap(nX, nY, CellType.Item, mapItem);
             if (mapItemA != null)
             {
                 if (mapItemA.ActorId != mapItem.ActorId)
@@ -3859,14 +3859,13 @@ namespace GameSvr.Actor
             {
                 return false;
             }
-
-            var nX = monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1);
-            var nY = monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1);
+            short nX = (short)(monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
+            short nY = (short)(monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
             var mBoErrorOnInit = true;
             if (Envir.CanWalk(nX, nY, true))
             {
-                CurrX = (short)nX;
-                CurrY = (short)nY;
+                CurrX = nX;
+                CurrY = nY;
                 if (AddToMap())
                 {
                     mBoErrorOnInit = false;
@@ -3913,26 +3912,26 @@ namespace GameSvr.Actor
                 {
                     if ((Envir.Width - nRange2 - 1) > nX)
                     {
-                        nX = nX + nRange;
+                        nX = (short)(nX + nRange);
                     }
                     else
                     {
-                        nX = M2Share.RandomNumber.Random(Envir.Width / 2) + nRange2;
+                        nX = (short)(M2Share.RandomNumber.Random(Envir.Width / 2) + nRange2);
                     }
 
                     if (Envir.Height - nRange2 - 1 > nY)
                     {
-                        nY = nY + nRange;
+                        nY = (short)(nY + nRange);
                     }
                     else
                     {
-                        nY = M2Share.RandomNumber.Random(Envir.Height / 2) + nRange2;
+                        nY = (short)(M2Share.RandomNumber.Random(Envir.Height / 2) + nRange2);
                     }
                 }
                 else
                 {
-                    CurrX = (short)nX;
-                    CurrY = (short)nY;
+                    CurrX = nX;
+                    CurrY = nY;
                     addObj = Envir.AddToMap(nX, nY, CellType, this);
                     break;
                 }

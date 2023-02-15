@@ -1398,7 +1398,7 @@ namespace GameSvr.World
         public bool GetHumPermission(string sUserName, ref string sIPaddr, ref byte btPermission)
         {
             bool result = false;
-            btPermission = (byte)M2Share.Config.StartPermission;
+            btPermission = M2Share.Config.StartPermission;
             for (int i = 0; i < AdminList.Count; i++)
             {
                 AdminInfo adminInfo = AdminList[i];

@@ -1,15 +1,16 @@
+using System.Collections.Immutable;
 using Collections.Pooled;
 
 namespace GameSvr.Maps
 {
     public sealed class MapCellInfo : IDisposable
     {
-        public static MapCellInfo LowWall = new MapCellInfo
+        public static MapCellInfo LowWall = new()
         {
             Attribute = CellAttribute.LowWall
         };
 
-        public static MapCellInfo HighWall = new MapCellInfo
+        public static MapCellInfo HighWall = new()
         {
             Attribute = CellAttribute.HighWall
         };
@@ -21,16 +22,16 @@ namespace GameSvr.Maps
         /// <summary>
         /// 对象数量
         /// </summary>
-        public int Count => ObjList.Count;
+        public int? Count => ObjList.Count;
 
         /// <summary>
         /// 地图对象列表
         /// </summary>
-        public PooledList<CellObject> ObjList;
+        public IList<CellObject> ObjList;
 
         public bool IsAvailable => ObjList != null && ObjList.Count > 0;
 
-        private bool disposed;
+        private bool IsDisposed { get; set; }
 
         public void Add(CellObject cell, ActorEntity entityId)
         {
@@ -38,10 +39,11 @@ namespace GameSvr.Maps
             M2Share.CellObjectMgr.Add(cell.CellObjId, entityId);
         }
 
-        public void Update(CellObject cell)
+        public void Update(int index, CellObject cell)
         {
             cell.AddTime = HUtil32.GetTickCount();
-            ObjList[cell.CellObjId] = cell;
+            ObjList[index] = cell;
+            //M2Share.CellObjectMgr.Update(cell.CellObjId);
         }
 
         public void Remove(CellObject cell)
@@ -56,6 +58,7 @@ namespace GameSvr.Maps
         public MapCellInfo()
         {
             Attribute = CellAttribute.Walk;
+            ObjList = new List<CellObject>();
         }
 
         /// <summary>
@@ -77,20 +80,12 @@ namespace GameSvr.Maps
         }
 
         /// <summary>
-        /// 非必需的，只是为了更符合其他语言的规范，如C++、java
-        /// </summary>
-        public void Close()
-        {
-            Dispose();
-        }
-
-        /// <summary>
         /// 非密封类可重写的Dispose方法，方便子类继承时可重写
         /// </summary>
         /// <param name="disposing"></param>
         private void Dispose(bool disposing)
         {
-            if (disposed)
+            if (IsDisposed)
             {
                 return;
             }
@@ -98,10 +93,10 @@ namespace GameSvr.Maps
             if (disposing)
             {
                 ObjList.Clear();
-                ObjList = null;
+                //ObjList = null;
             }
             //告诉自己已经被释放
-            disposed = true;
+            IsDisposed = true;
         }
     }
 }

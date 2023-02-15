@@ -2543,7 +2543,7 @@ namespace GameSvr.Npc
             {
                 sHint = "请输入：";
             }
-            PlayObject.SendDefMessage(Messages.SM_QUERYVALUE, 0, HUtil32.MakeWord((ushort)btType, (ushort)btLen), 0, 0, sHint);
+            PlayObject.SendDefMessage(Messages.SM_QUERYVALUE, 0, HUtil32.MakeWord(btType, (ushort)btLen), 0, 0, sHint);
         }
 
         private void GotoLableSendMerChantSayMsg(PlayObject PlayObject, string sMsg, bool boFlag)

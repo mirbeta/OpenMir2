@@ -508,15 +508,41 @@ namespace GameSvr.RobotPlay
                                 }
                                 if (cellObject.CellObjId > 0)
                                 {
-                                    if (!cellObject.IsDispose)
+                                    switch (cellObject.CellType)
                                     {
-                                        switch (cellObject.CellType)
-                                        {
-                                            case CellType.Play:
-                                            case CellType.Monster:
-                                                if (HUtil32.GetTickCount() - cellObject.AddTime >= 60000)
+                                        case CellType.Play:
+                                        case CellType.Monster:
+                                            if (HUtil32.GetTickCount() - cellObject.AddTime >= 60000)
+                                            {
+                                                cellInfo.Remove(cellObject);
+                                                if (cellInfo.Count <= 0)
                                                 {
-                                                    //cellObject.IsDispose = true;
+                                                    cellInfo.Dispose();
+                                                    break;
+                                                }
+                                                continue;
+                                            }
+                                            baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                            if (baseObject != null)
+                                            {
+                                                if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                                {
+                                                    if (Race < ActorRace.Animal || Master != null || CrazyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play)
+                                                    {
+                                                        UpdateVisibleGay(baseObject);
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                        case CellType.Item:
+                                            if (Race == ActorRace.Play)
+                                            {
+                                                if (HUtil32.GetTickCount() - cellObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
+                                                {
+                                                    if (cellObject.CellObjId > 0)
+                                                    {
+                                                        M2Share.CellObjectMgr.Dispose(cellObject.CellObjId);
+                                                    }
                                                     cellInfo.Remove(cellObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
@@ -525,76 +551,45 @@ namespace GameSvr.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                                                if (baseObject != null)
+                                                MapItem mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                                UpdateVisibleItem(nX, nY, mapItem);
+                                                if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                 {
-                                                    if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                                    if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)
                                                     {
-                                                        if (Race < ActorRace.Animal || Master != null || CrazyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play)
-                                                        {
-                                                            UpdateVisibleGay(baseObject);
-                                                        }
+                                                        mapItem.OfBaseObject = 0;
+                                                        mapItem.DropBaseObject = 0;
                                                     }
-                                                }
-                                                break;
-                                            case CellType.Item:
-                                                if (Race == ActorRace.Play)
-                                                {
-                                                    if (HUtil32.GetTickCount() - cellObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
+                                                    else
                                                     {
-                                                        if (cellObject.CellObjId > 0)
+                                                        if (mapItem.OfBaseObject > 0)
                                                         {
-                                                            //cellObject.IsDispose = true;
-                                                            M2Share.CellObjectMgr.Dispose(cellObject.CellObjId);
-                                                        }
-                                                        cellInfo.Remove(cellObject);
-                                                        if (cellInfo.Count <= 0)
-                                                        {
-                                                            cellInfo.Dispose();
-                                                            break;
-                                                        }
-                                                        continue;
-                                                    }
-                                                    MapItem mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
-                                                    UpdateVisibleItem(nX, nY, mapItem);
-                                                    if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
-                                                    {
-                                                        if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)
-                                                        {
-                                                            mapItem.OfBaseObject = 0;
-                                                            mapItem.DropBaseObject = 0;
-                                                        }
-                                                        else
-                                                        {
-                                                            if (mapItem.OfBaseObject > 0)
+                                                            if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
                                                             {
-                                                                if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
-                                                                {
-                                                                    mapItem.OfBaseObject = 0;
-                                                                }
+                                                                mapItem.OfBaseObject = 0;
                                                             }
-                                                            if (mapItem.DropBaseObject > 0)
+                                                        }
+                                                        if (mapItem.DropBaseObject > 0)
+                                                        {
+                                                            if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
                                                             {
-                                                                if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
-                                                                {
-                                                                    mapItem.DropBaseObject = 0;
-                                                                }
+                                                                mapItem.DropBaseObject = 0;
                                                             }
                                                         }
                                                     }
                                                 }
-                                                break;
-                                            case CellType.Event:
-                                                if (Race == ActorRace.Play)
+                                            }
+                                            break;
+                                        case CellType.Event:
+                                            if (Race == ActorRace.Play)
+                                            {
+                                                if (cellObject.CellObjId < 0)
                                                 {
-                                                    if (cellObject.CellObjId < 0)
-                                                    {
-                                                        mapEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
-                                                        UpdateVisibleEvent(nX, nY, mapEvent);
-                                                    }
+                                                    mapEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                                    UpdateVisibleEvent(nX, nY, mapEvent);
                                                 }
-                                                break;
-                                        }
+                                            }
+                                            break;
                                     }
                                 }
                             }

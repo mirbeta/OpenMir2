@@ -3413,7 +3413,7 @@ namespace GameSvr.Npc
                         mapItem.OfBaseObject = playObject.ActorId;
                         mapItem.CanPickUpTick = HUtil32.GetTickCount();
                         mapItem.DropBaseObject = playObject.ActorId;
-                        mapItemA = (MapItem)envir.AddToMap(dX, dY, CellType.Item, mapItem);
+                        mapItemA = envir.AddToMap(dX, dY, CellType.Item, mapItem);
                         if (mapItemA != null)
                         {
                             if (mapItemA != mapItem)
@@ -3474,7 +3474,7 @@ namespace GameSvr.Npc
                                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
                                 mapItem.DropBaseObject = playObject.ActorId;
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
-                                mapItemA = (MapItem)envir.AddToMap(dX, dY, CellType.Item, mapItem);
+                                mapItemA = envir.AddToMap(dX, dY, CellType.Item, mapItem);
                                 if (mapItemA != null)
                                 {
                                     if (mapItemA != mapItem)
