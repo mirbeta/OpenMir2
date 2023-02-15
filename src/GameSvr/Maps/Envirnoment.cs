@@ -281,7 +281,7 @@ namespace GameSvr.Maps
                                 moveObject = cellInfo.ObjList[i];
                                 if (moveObject.CellObjId == cert.ActorId && moveObject.ActorObject)
                                 {
-                                    cellInfo.Remove(moveObject);
+                                    cellInfo.Remove(i, moveObject);
                                     if (cellInfo.Count > 0)
                                     {
                                         continue;
@@ -544,7 +544,7 @@ namespace GameSvr.Maps
                         {
                             if (cellObject.CellType == cellType && cellObject.CellObjId == pRemoveObject.ActorId)
                             {
-                                cellInfo.Remove(cellObject);
+                                cellInfo.Remove(i, cellObject);
                                 result = 1;
                                 if (cellObject.ActorObject && !((BaseObject)pRemoveObject).DelFormMaped)
                                 {
@@ -562,7 +562,7 @@ namespace GameSvr.Maps
                         }
                         else
                         {
-                            cellInfo.ObjList.Remove(cellObject);
+                            cellInfo.Remove(i, cellObject);
                             if (cellInfo.Count > 0)
                             {
                                 continue;
@@ -1154,7 +1154,7 @@ namespace GameSvr.Maps
                     if (cellObject.CellType == CellType.Event)
                     {
                         var owinEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
-                        if (owinEvent.Damage > 0)
+                        if (owinEvent?.Damage > 0)
                         {
                             result = false;
                         }

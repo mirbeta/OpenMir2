@@ -29,5 +29,6 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="AsyncSocket\" />
+      <Folder Include="NativeList" />
     </ItemGroup>
 </Project>

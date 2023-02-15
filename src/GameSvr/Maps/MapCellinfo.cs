@@ -1,5 +1,4 @@
-using System.Collections.Immutable;
-using Collections.Pooled;
+using SystemModule.NativeList.Utils;
 
 namespace GameSvr.Maps
 {
@@ -22,12 +21,12 @@ namespace GameSvr.Maps
         /// <summary>
         /// 对象数量
         /// </summary>
-        public int? Count => ObjList.Count;
+        public int? Count => ObjList?.Count;
 
         /// <summary>
         /// 地图对象列表
         /// </summary>
-        public IList<CellObject> ObjList;
+        public NativeList<CellObject> ObjList;
 
         public bool IsAvailable => ObjList != null && ObjList.Count > 0;
 
@@ -46,11 +45,11 @@ namespace GameSvr.Maps
             //M2Share.CellObjectMgr.Update(cell.CellObjId);
         }
 
-        public void Remove(CellObject cell)
+        public void Remove(int index, CellObject cell)
         {
             if (ObjList != null && cell.CellObjId > 0)
             {
-                ObjList.Remove(cell);
+                ObjList.RemoveAt(index);
                 M2Share.CellObjectMgr.Remove(cell.CellObjId);
             }
         }
@@ -58,7 +57,7 @@ namespace GameSvr.Maps
         public MapCellInfo()
         {
             Attribute = CellAttribute.Walk;
-            ObjList = new List<CellObject>();
+            ObjList = new NativeList<CellObject>();
         }
 
         /// <summary>
@@ -93,6 +92,7 @@ namespace GameSvr.Maps
             if (disposing)
             {
                 ObjList.Clear();
+                ObjList.Dispose();
                 //ObjList = null;
             }
             //告诉自己已经被释放

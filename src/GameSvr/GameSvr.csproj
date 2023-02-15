@@ -3,7 +3,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>GameSvr</RootNamespace>
 		<UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
-		<LangVersion>10</LangVersion>
+		<LangVersion>11</LangVersion>
 		<Nullable>disable</Nullable>
 		<PackageId>GameSvr</PackageId>
 		<OutputType>Exe</OutputType>
@@ -59,11 +59,11 @@
 	</Choose>
 
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Optimize>True</Optimize>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' ">

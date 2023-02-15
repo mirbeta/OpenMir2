@@ -2870,7 +2870,7 @@ namespace GameSvr.Player
                                     {
                                         if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                         {
-                                            cellInfo.Remove(cellObject);
+                                            cellInfo.Remove(i, cellObject);
                                             if (cellInfo.Count > 0)
                                             {
                                                 continue;
@@ -2904,7 +2904,7 @@ namespace GameSvr.Player
                                         {
                                             if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
-                                                cellInfo.Remove(cellObject);
+                                                cellInfo.Remove(i, cellObject);
                                                 if (cellInfo.Count > 0)
                                                 {
                                                     continue;

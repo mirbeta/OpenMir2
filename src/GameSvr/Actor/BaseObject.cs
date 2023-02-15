@@ -2173,7 +2173,7 @@ namespace GameSvr.Actor
                                             {
                                                 if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                                 {
-                                                    cellInfo.Remove(cellObject);
+                                                    cellInfo.Remove(i, cellObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
                                                         cellInfo.Dispose();
@@ -2204,7 +2204,7 @@ namespace GameSvr.Actor
                                                     }
                                                     catch (Exception e)
                                                     {
-                                                        cellInfo.Remove(cellObject);
+                                                        cellInfo.Remove(i, cellObject);
                                                         if (cellInfo.Count <= 0)
                                                         {
                                                             cellInfo.Dispose();
