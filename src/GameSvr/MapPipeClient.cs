@@ -31,7 +31,7 @@ namespace GameSvr
             int ram = RandomNumber.GetInstance().Random(pipeClientMaps.Length);
             pipeClientMaps[ram].SendPipeMessage(Encoding.UTF8.GetBytes("123"));
             pipeClientMaps[ram].Close();
-            return null;
+            return default;
         }
     }
 }

@@ -2,14 +2,14 @@ using SystemModule.NativeList.Utils;
 
 namespace GameSvr.Maps
 {
-    public sealed class MapCellInfo : IDisposable
+    public struct MapCellInfo : IDisposable
     {
-        public static MapCellInfo LowWall = new()
+        public static readonly MapCellInfo LowWall = new()
         {
             Attribute = CellAttribute.LowWall
         };
 
-        public static MapCellInfo HighWall = new()
+        public static readonly MapCellInfo HighWall = new()
         {
             Attribute = CellAttribute.HighWall
         };
@@ -21,52 +21,45 @@ namespace GameSvr.Maps
         /// <summary>
         /// 对象数量
         /// </summary>
-        public int? Count => ObjList?.Count;
+        public int Count => ObjList.Count;
 
         /// <summary>
         /// 地图对象列表
         /// </summary>
         public NativeList<CellObject> ObjList;
 
-        public bool IsAvailable => ObjList != null && ObjList.Count > 0;
+        public bool IsAvailable => ObjList?.Count > 0 && !IsDisposed;
 
-        private bool IsDisposed { get; set; }
+        public bool IsDisposed { get; set; }
 
         public void Add(CellObject cell, ActorEntity entityId)
         {
             ObjList.Add(cell);
-            M2Share.CellObjectMgr.Add(cell.CellObjId, entityId);
         }
 
         public void Update(int index, CellObject cell)
         {
             cell.AddTime = HUtil32.GetTickCount();
             ObjList[index] = cell;
-            //M2Share.CellObjectMgr.Update(cell.CellObjId);
         }
 
         public void Remove(int index, CellObject cell)
         {
-            if (ObjList != null && cell.CellObjId > 0)
+            if (cell.CellObjId > 0)
             {
                 ObjList.RemoveAt(index);
-                M2Share.CellObjectMgr.Remove(cell.CellObjId);
             }
+        }
+
+        public void Clear()
+        {
+            ObjList.Clear();
         }
 
         public MapCellInfo()
         {
             Attribute = CellAttribute.Walk;
-            ObjList = new NativeList<CellObject>();
-        }
-
-        /// <summary>
-        /// 为了防止忘记显式的调用Dispose方法
-        /// </summary>
-        ~MapCellInfo()
-        {
-            //必须为false
-            Dispose(false);
+            //ObjList = new NativeList<CellObject>();
         }
 
         /// <summary>执行与释放或重置非托管资源关联的应用程序定义的任务。</summary>
@@ -93,7 +86,6 @@ namespace GameSvr.Maps
             {
                 ObjList.Clear();
                 ObjList.Dispose();
-                //ObjList = null;
             }
             //告诉自己已经被释放
             IsDisposed = true;

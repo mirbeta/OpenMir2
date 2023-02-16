@@ -23,7 +23,7 @@ namespace DBSvr.Storage.MySQL.EqualityComparer
             unchecked
             {
                 var hashCode = obj.MakeIndex;
-                hashCode = (hashCode * 397) ^ (obj.Index != null ? obj.Index.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (obj.Index != 0 ? obj.Index.GetHashCode() : 0);
                 return hashCode;
             }
 

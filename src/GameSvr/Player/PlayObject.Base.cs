@@ -2875,7 +2875,7 @@ namespace GameSvr.Player
                                             {
                                                 continue;
                                             }
-                                            cellInfo.Dispose();
+                                            cellInfo.Clear();
                                             break;
                                         }
                                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -2909,10 +2909,10 @@ namespace GameSvr.Player
                                                 {
                                                     continue;
                                                 }
-                                                cellInfo.Dispose();
+                                                cellInfo.Clear();
                                                 break;
                                             }
-                                            var mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                            var mapItem = M2Share.ActorMgr.Get<MapItem>(cellObject.CellObjId);
                                             UpdateVisibleItem(nX, nY, mapItem);
                                             if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
                                             {
@@ -2942,7 +2942,7 @@ namespace GameSvr.Player
                                         }
                                         if (cellObject.CellType == CellType.Event)
                                         {
-                                            var mapEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                            var mapEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
                                             if (mapEvent.Visible)
                                             {
                                                 UpdateVisibleEvent(nX, nY, mapEvent);

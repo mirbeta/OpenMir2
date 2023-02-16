@@ -21,9 +21,5 @@
         /// 添加时间
         /// </summary>
         public int AddTime;
-        /// <summary>
-        /// 对象释放已释放
-        /// </summary>
-        public bool IsDispose;
     }
 }

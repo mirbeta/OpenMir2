@@ -192,7 +192,7 @@ namespace GameSvr.Actor
                                             {
                                                 continue;
                                             }
-                                            cellInfo.Dispose();
+                                            cellInfo.Clear();
                                             break;
                                         }
                                         var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -299,7 +299,7 @@ namespace GameSvr.Actor
                                             {
                                                 continue;
                                             }
-                                            cellInfo.Dispose();
+                                            cellInfo.Clear();
                                             break;
                                         }
                                     }
@@ -312,7 +312,7 @@ namespace GameSvr.Actor
                                             {
                                                 continue;
                                             }
-                                            cellInfo.Dispose();
+                                            cellInfo.Clear();
                                         }
                                     }
                                 }

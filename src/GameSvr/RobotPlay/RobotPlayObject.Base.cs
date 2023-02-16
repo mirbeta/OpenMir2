@@ -499,7 +499,7 @@ namespace GameSvr.RobotPlay
                                 }
                                 if (cellInfo.IsAvailable && cellInfo.Count <= 0)
                                 {
-                                    cellInfo.Dispose();
+                                    cellInfo.Clear();
                                     break;
                                 }
                                 if (cellInfo.ObjList == null)
@@ -517,7 +517,7 @@ namespace GameSvr.RobotPlay
                                                 cellInfo.Remove(i, cellObject);
                                                 if (cellInfo.Count <= 0)
                                                 {
-                                                    cellInfo.Dispose();
+                                                    cellInfo.Clear();
                                                     break;
                                                 }
                                                 continue;
@@ -546,12 +546,12 @@ namespace GameSvr.RobotPlay
                                                     cellInfo.Remove(i, cellObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
-                                                        cellInfo.Dispose();
+                                                        cellInfo.Clear();
                                                         break;
                                                     }
                                                     continue;
                                                 }
-                                                MapItem mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                                MapItem mapItem = M2Share.ActorMgr.Get<MapItem>(cellObject.CellObjId);
                                                 UpdateVisibleItem(nX, nY, mapItem);
                                                 if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                 {
@@ -585,7 +585,7 @@ namespace GameSvr.RobotPlay
                                             {
                                                 if (cellObject.CellObjId < 0)
                                                 {
-                                                    mapEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                                    mapEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
                                                     UpdateVisibleEvent(nX, nY, mapEvent);
                                                 }
                                             }

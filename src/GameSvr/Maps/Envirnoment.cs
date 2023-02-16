@@ -10,6 +10,7 @@ using System.Text;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.NativeList.Utils;
 
 namespace GameSvr.Maps
 {
@@ -109,7 +110,7 @@ namespace GameSvr.Maps
                                 var cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellType == CellType.Item)
                                 {
-                                    var mapItem = (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                    var mapItem = M2Share.ActorMgr.Get<MapItem>(cellObject.CellObjId);
                                     if (mapItem.Name == Grobal2.StringGoldName)
                                     {
                                         var nGoldCount = mapItem.Count + (mapObject as MapItem).Count;
@@ -203,16 +204,16 @@ namespace GameSvr.Maps
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
                 var cellInfo = _cellArray[nX * Height + nY];
-                if (cellInfo == null)
+                if (cellInfo.IsDisposed)
                 {
                     success = false;
-                    return null;
+                    return default;
                 }
                 success = true;
                 return cellInfo;
             }
             success = false;
-            return null;
+            return default;
         }
 
         public short MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
@@ -286,14 +287,13 @@ namespace GameSvr.Maps
                                     {
                                         continue;
                                     }
-                                    cellInfo.Dispose();
+                                    cellInfo.Clear();
                                     break;
                                 }
                             }
                         }
                         if (GetCellInfo(nX, nY, ref cellInfo))
                         {
-                            //cellInfo.ObjList ??= new PooledList<CellObject>();
                             if (moveObject.CellObjId == 0)
                             {
                                 moveObject.CellType = cert.CellType;
@@ -556,7 +556,7 @@ namespace GameSvr.Maps
                                 {
                                     continue;
                                 }
-                                cellInfo.Dispose();
+                                cellInfo.Clear();
                                 break;
                             }
                         }
@@ -567,7 +567,7 @@ namespace GameSvr.Maps
                             {
                                 continue;
                             }
-                            cellInfo.Dispose();
+                            cellInfo.Clear();
                             break;
                         }
                     }
@@ -600,7 +600,7 @@ namespace GameSvr.Maps
                         switch (cellObject.CellType)
                         {
                             case CellType.Item:
-                                return (MapItem)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                return M2Share.ActorMgr.Get<MapItem>(cellObject.CellObjId);
                             case CellType.Route:
                                 Bo2C = false;
                                 break;
@@ -654,7 +654,7 @@ namespace GameSvr.Maps
         /// <returns></returns>
         public object AddToMapMineEvent(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent)
         {
-            MapCellInfo mc = null;
+            MapCellInfo mc = default;
             const string sExceptionMsg = "[Exception] TEnvirnoment::AddToMapMineEvent ";
             var cellSuccess = false;
             try
@@ -686,7 +686,6 @@ namespace GameSvr.Maps
                     }
                     if (isSpace)
                     {
-                        //cellInfo.ObjList ??= new PooledList<CellObject>(ClearMode.Always);
                         var cellObject = new CellObject
                         {
                             CellType = nType,
@@ -780,20 +779,20 @@ namespace GameSvr.Maps
                                 mapUnitInfo.btAniTick = binReader.ReadByte();
                                 mapUnitInfo.btArea = binReader.ReadByte();
                                 mapUnitInfo.btLight = binReader.ReadByte();
-
                                 if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
                                 {
-                                    _cellArray[n24 + nH] = new MapCellInfo() { Attribute = CellAttribute.HighWall };
+                                    _cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.HighWall };
                                 }
-                                if ((mapUnitInfo.wFrImg & 0x8000) != 0)// wFrImg High
+
+                                if ((mapUnitInfo.wFrImg & 0x8000) != 0) // wFrImg High
                                 {
-                                    _cellArray[n24 + nH] = new MapCellInfo() { Attribute = CellAttribute.LowWall };
+                                    _cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.LowWall };
                                 }
-                                if (_cellArray[n24 + nH] == null)
+                                else
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        //ObjList = new PooledList<CellObject>(ClearMode.Always),
+                                        ObjList = new NativeList<CellObject>(),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
@@ -865,11 +864,11 @@ namespace GameSvr.Maps
                                 {
                                     _cellArray[n24 + nH] = MapCellInfo.LowWall;
                                 }
-                                if (_cellArray[n24 + nH] == null)
+                                else
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        //ObjList = new PooledList<CellObject>(ClearMode.Always),
+                                        ObjList = new NativeList<CellObject>(),
                                         Attribute = CellAttribute.Walk
                                     };
                                 }
@@ -1153,7 +1152,7 @@ namespace GameSvr.Maps
                     var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        var owinEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                        var owinEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
                         if (owinEvent?.Damage > 0)
                         {
                             result = false;
@@ -1422,7 +1421,7 @@ namespace GameSvr.Maps
                     var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        result = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId); ;
+                        result = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId); ;
                     }
                 }
             }

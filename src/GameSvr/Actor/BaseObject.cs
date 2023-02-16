@@ -2176,7 +2176,7 @@ namespace GameSvr.Actor
                                                     cellInfo.Remove(i, cellObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
-                                                        cellInfo.Dispose();
+                                                        cellInfo.Clear();
                                                         break;
                                                     }
                                                 }
@@ -2207,7 +2207,7 @@ namespace GameSvr.Actor
                                                         cellInfo.Remove(i, cellObject);
                                                         if (cellInfo.Count <= 0)
                                                         {
-                                                            cellInfo.Dispose();
+                                                            cellInfo.Clear();
                                                         }
                                                         M2Share.Logger.Error(Format(sExceptionMsg, ChrName));
                                                         M2Share.Logger.Error(e.Message);
@@ -2379,7 +2379,7 @@ namespace GameSvr.Actor
                         switch (cellObject.CellType)
                         {
                             case CellType.Route:
-                                var gateObj = (GateObject)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                var gateObj = M2Share.ActorMgr.Get<GateObject>(cellObject.CellObjId);
                                 if (gateObj != null)
                                 {
                                     if (Race == ActorRace.Play)
@@ -2413,10 +2413,10 @@ namespace GameSvr.Actor
                             case CellType.Event:
                                 {
                                     EventInfo mapEvent = null;
-                                    var owinEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                    var owinEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
                                     if (owinEvent.OwnBaseObject != null)
                                     {
-                                        mapEvent = (EventInfo)M2Share.CellObjectMgr.Get(cellObject.CellObjId);
+                                        mapEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
                                     }
                                     if (mapEvent != null)
                                     {

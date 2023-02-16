@@ -9,7 +9,7 @@ namespace GameSvr.Actor
     /// <summary>
     /// 精灵管理
     /// </summary>
-    public class ActorMgr
+    public sealed class ActorMgr
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConcurrentQueue<int> IdQueue = new ConcurrentQueue<int>();
@@ -19,7 +19,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 精灵列表
         /// </summary>
-        private readonly ConcurrentDictionary<int, BaseObject> _actorsMap = new ConcurrentDictionary<int, BaseObject>();
+        private readonly ConcurrentDictionary<int, ActorEntity> _actorsMap = new ConcurrentDictionary<int, ActorEntity>();
         /// <summary>
         /// 其他对象
         /// </summary>
@@ -27,18 +27,6 @@ namespace GameSvr.Actor
         private int MonsterDeathCount { get; set; }
         private int MonsterDisposeCount { get; set; }
         private int PlayerGhostCount { get; set; }
-
-        private const int WorkerIdBits = 10;
-        private const int DatacenterIdBits = 0;
-        private const int SequenceBits = 12;
-        private const long MaxWorkerId = -1L ^ (-1L << WorkerIdBits);
-        private const long MaxDatacenterId = -1L ^ (-1L << DatacenterIdBits);
-        private const int WorkerIdShift = SequenceBits;
-        private const int DatacenterIdShift = SequenceBits + WorkerIdBits;
-        public const int TimestampLeftShift = 2;
-        private const int SequenceMask = -1 ^ (-1 << SequenceBits);
-        public long DatacenterId { get; protected set; }
-        public const int Twepoch = 1288446507;
 
         public ActorMgr()
         {
@@ -55,12 +43,12 @@ namespace GameSvr.Actor
             {
                 if (IdQueue.Count < 20000)
                 {
-                    Stopwatch sw = new Stopwatch();
+                    var sw = new Stopwatch();
                     sw.Start();
-                    HashSet<long> hashMap = new HashSet<long>();
-                    for (int i = 0; i < 50000; i++)
+                    var hashMap = new HashSet<long>();
+                    for (var i = 0; i < 50000; i++)
                     {
-                        int sequence = IdWorker.NextId();
+                        var sequence = IdWorker.NextId();
                         if (hashMap.Contains(sequence))
                         {
                             while (true)
@@ -90,7 +78,7 @@ namespace GameSvr.Actor
 
         public int Dequeue()
         {
-            return IdQueue.TryDequeue(out int sequence) ? sequence : HUtil32.Sequence();
+            return IdQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
         }
 
         public void Add(BaseObject actor)
@@ -100,7 +88,12 @@ namespace GameSvr.Actor
 
         public BaseObject Get(int actorId)
         {
-            return _actorsMap.TryGetValue(actorId, out BaseObject actor) ? actor : null;
+            return _actorsMap.TryGetValue(actorId, out var actor) ? (BaseObject)actor : null;
+        }
+
+        public T Get<T>(int actorId) where T : ActorEntity
+        {
+            return _actorsMap.TryGetValue(actorId, out var actor) ? (T)actor : default;
         }
 
         public void AddOhter(int objectId, object obj)
@@ -110,12 +103,12 @@ namespace GameSvr.Actor
 
         public object GetOhter(int objectId)
         {
-            return _ohterMap.TryGetValue(objectId, out object obj) ? obj : null;
+            return _ohterMap.TryGetValue(objectId, out var obj) ? obj : null;
         }
 
         public void RevomeOhter(int actorId)
         {
-            _ohterMap.TryRemove(actorId, out object actor);
+            _ohterMap.TryRemove(actorId, out var actor);
         }
 
         /// <summary>
@@ -124,10 +117,10 @@ namespace GameSvr.Actor
         public void ClearObject()
         {
             ActorIds.Clear();
-            using IEnumerator<KeyValuePair<int, BaseObject>> actors = _actorsMap.GetEnumerator();
+            using var actors = _actorsMap.GetEnumerator();
             while (actors.MoveNext())
             {
-                BaseObject actor = actors.Current.Value;
+                var actor = (BaseObject)actors.Current.Value;
                 if (actor.Death)
                 {
                     MonsterDeathCount++;
@@ -139,11 +132,11 @@ namespace GameSvr.Actor
                 }
                 ActorIds.Add(actors.Current.Key);
             }
-            foreach (int actorId in ActorIds)
+            foreach (var actorId in ActorIds)
             {
-                if (_actorsMap.TryRemove(actorId, out BaseObject actor))
+                if (_actorsMap.TryRemove(actorId, out var actor))
                 {
-                    if (actor.Race != ActorRace.Play)
+                    if (((BaseObject)actor).Race != ActorRace.Play)
                     {
                         MonsterDisposeCount++;
                     }
