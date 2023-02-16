@@ -136,6 +136,10 @@ namespace GameSvr.Maps
                     }
                     if (!addSuccess)
                     {
+                        if (cellInfo.ObjList == null)
+                        {
+                            cellInfo.Init();
+                        }
                         var cellObject = new CellObject
                         {
                             CellType = cellType,
@@ -204,13 +208,13 @@ namespace GameSvr.Maps
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
                 var cellInfo = _cellArray[nX * Height + nY];
-                if (cellInfo.IsDisposed)
+                if (cellInfo.Valid)
                 {
-                    success = false;
-                    return default;
+                    success = true;
+                    return cellInfo;
                 }
-                success = true;
-                return cellInfo;
+                success = false;
+                return default;
             }
             success = false;
             return default;
@@ -282,7 +286,7 @@ namespace GameSvr.Maps
                                 moveObject = cellInfo.ObjList[i];
                                 if (moveObject.CellObjId == cert.ActorId && moveObject.ActorObject)
                                 {
-                                    cellInfo.Remove(i, moveObject);
+                                    cellInfo.Remove(i);
                                     if (cellInfo.Count > 0)
                                     {
                                         continue;
@@ -294,6 +298,10 @@ namespace GameSvr.Maps
                         }
                         if (GetCellInfo(nX, nY, ref cellInfo))
                         {
+                            if (cellInfo.ObjList == null)
+                            {
+                                cellInfo.Init();
+                            }
                             if (moveObject.CellObjId == 0)
                             {
                                 moveObject.CellType = cert.CellType;
@@ -544,7 +552,7 @@ namespace GameSvr.Maps
                         {
                             if (cellObject.CellType == cellType && cellObject.CellObjId == pRemoveObject.ActorId)
                             {
-                                cellInfo.Remove(i, cellObject);
+                                cellInfo.Remove(i);
                                 result = 1;
                                 if (cellObject.ActorObject && !((BaseObject)pRemoveObject).DelFormMaped)
                                 {
@@ -562,7 +570,7 @@ namespace GameSvr.Maps
                         }
                         else
                         {
-                            cellInfo.Remove(i, cellObject);
+                            cellInfo.Remove(i);
                             if (cellInfo.Count > 0)
                             {
                                 continue;
@@ -633,7 +641,7 @@ namespace GameSvr.Maps
             {
                 if (cellInfo.ObjList == null)
                 {
-                    //cellInfo.ObjList = new PooledList<CellObject>(ClearMode.Always);
+                    cellInfo.Init();
                 }
                 if (nType == CellType.Event)
                 {
@@ -761,6 +769,7 @@ namespace GameSvr.Maps
                     Height = binReader.ReadInt16();
                     Initialize(Width, Height);
                     fileStream.Position = 52;
+                    var isInitialize = false;
 
                     var mapUnitInfo = new MapUnitInfo();
                     if (Flag.Mine || Flag.boMINE2)
@@ -782,18 +791,18 @@ namespace GameSvr.Maps
                                 if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.HighWall };
+                                    isInitialize = true;
                                 }
-
                                 if ((mapUnitInfo.wFrImg & 0x8000) != 0) // wFrImg High
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.LowWall };
+                                    isInitialize = true;
                                 }
-                                else
+                                if (!isInitialize)
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {
-                                        ObjList = new NativeList<CellObject>(),
-                                        Attribute = CellAttribute.Walk
+                                        ObjList = new NativeList<CellObject>()
                                     };
                                 }
                                 if ((mapUnitInfo.btDoorIndex & 0x80) != 0)
@@ -859,12 +868,14 @@ namespace GameSvr.Maps
                                 if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
                                 {
                                     _cellArray[n24 + nH] = MapCellInfo.HighWall;
+                                    isInitialize = true;
                                 }
                                 if ((mapUnitInfo.wFrImg & 0x8000) != 0)// wFrImg High
                                 {
                                     _cellArray[n24 + nH] = MapCellInfo.LowWall;
+                                    isInitialize = true;
                                 }
-                                else
+                                if (!isInitialize)
                                 {
                                     _cellArray[n24 + nH] = new MapCellInfo()
                                     {

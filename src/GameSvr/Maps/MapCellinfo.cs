@@ -16,7 +16,7 @@ namespace GameSvr.Maps
 
         public bool Valid => Attribute == CellAttribute.Walk;
 
-        public CellAttribute Attribute;
+        public CellAttribute Attribute = CellAttribute.Walk;
 
         /// <summary>
         /// 对象数量
@@ -30,8 +30,18 @@ namespace GameSvr.Maps
 
         public bool IsAvailable => ObjList?.Count > 0 && !IsDisposed;
 
-        public bool IsDisposed { get; set; }
+        private bool IsDisposed { get; set; }
 
+        public MapCellInfo()
+        {
+            IsDisposed = false;
+        }
+        
+        public void Init()
+        {
+            ObjList = new NativeList<CellObject>();
+        }
+        
         public void Add(CellObject cell, ActorEntity entityId)
         {
             ObjList.Add(cell);
@@ -43,23 +53,14 @@ namespace GameSvr.Maps
             ObjList[index] = cell;
         }
 
-        public void Remove(int index, CellObject cell)
+        public void Remove(int index)
         {
-            if (cell.CellObjId > 0)
-            {
-                ObjList.RemoveAt(index);
-            }
+            ObjList.RemoveAt(index);
         }
 
         public void Clear()
         {
             ObjList.Clear();
-        }
-
-        public MapCellInfo()
-        {
-            Attribute = CellAttribute.Walk;
-            //ObjList = new NativeList<CellObject>();
         }
 
         /// <summary>执行与释放或重置非托管资源关联的应用程序定义的任务。</summary>
