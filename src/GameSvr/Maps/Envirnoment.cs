@@ -100,7 +100,7 @@ namespace GameSvr.Maps
                 var addSuccess = false;
                 var cellSuccess = false;
                 MapCellInfo mapCell = default;
-                var cellInfo = GetCellInfo(nX, nY, out cellSuccess, ref mapCell);
+                ref var cellInfo = ref GetCellInfo(nX, nY, out cellSuccess, ref mapCell);
                 if (cellSuccess && cellInfo.Valid)
                 {
                     if (cellType == CellType.Item)
@@ -201,26 +201,22 @@ namespace GameSvr.Maps
         //    return result;
         //}
 
-        public bool GetCellInfo(int nX, int nY, ref MapCellInfo cellInfo)
+        private bool GetCellInfo(int nX, int nY, ref MapCellInfo cellInfo)
         {
-            var success = false;
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
-                cellInfo = _cellArray[nX * Height + nY];
+                cellInfo = ref _cellArray[nX * Height + nY];
                 if (cellInfo.Valid)
                 {
-                    success = true;
                     if (cellInfo.ObjList == null)
                     {
                         cellInfo.ObjList = new NativeList<CellObject>();
                     }
-                    return success;
+                    return true;
                 }
-                success = false;
-                return success;
+                return false;
             }
-            success = false;
-            return success;
+            return false;
         }
 
         public ref MapCellInfo GetCellInfo(int nX, int nY, out bool success, ref MapCellInfo mapCell)
@@ -246,13 +242,13 @@ namespace GameSvr.Maps
 
         public short MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
         {
-            MapCellInfo cellInfo = default;
             var moveSuccess = true;
             const string sExceptionMsg = "[Exception] TEnvirnoment::MoveToMovingObject";
             short result = 0;
             try
             {
-                var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+                MapCellInfo mapcell = default;
+                ref var cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess, ref mapcell);
                 if (!boFlag && cellSuccess)
                 {
                     if (cellInfo.Valid)
