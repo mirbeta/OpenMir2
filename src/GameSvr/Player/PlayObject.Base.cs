@@ -2858,7 +2858,8 @@ namespace GameSvr.Player
                     for (var nY = nStartY; nY <= nEndY; nY++)
                     {
                         var cellSuccess = false;
-                        var cellInfo = Envir.GetCellInfo(nX, nY, ref cellSuccess);
+                        MapCellInfo mapCell = default;
+                        var cellInfo = Envir.GetCellInfo(nX, nY, out cellSuccess, ref mapCell);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -3501,7 +3502,8 @@ namespace GameSvr.Player
                     }
                 }
                 var cellSuccess = false;
-                envir.GetCellInfo(nDMapX, nDMapY, ref cellSuccess);
+                MapCellInfo mapCell = default;
+                envir.GetCellInfo(nDMapX, nDMapY, out cellSuccess, ref mapCell);
                 if (!cellSuccess)
                 {
                     return false;

@@ -174,7 +174,8 @@ namespace GameSvr.Actor
                     for (var n1C = nStartY; n1C <= nEndY; n1C++)
                     {
                         var cellSuccess = false;
-                        var cellInfo = Envir.GetCellInfo(n18, n1C, ref cellSuccess);
+                        MapCellInfo mapCell = default;
+                        var cellInfo = Envir.GetCellInfo(n18, n1C, out cellSuccess, ref mapCell);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             n24 = 1;
@@ -280,7 +281,8 @@ namespace GameSvr.Actor
                 for (var n1C = nStartY; n1C <= nEndY; n1C++)
                 {
                     var cellSuccess = false;
-                    var cellInfo = Envir.GetCellInfo(n18, n1C, ref cellSuccess);
+                    MapCellInfo mapCell = default;
+                    var cellInfo = Envir.GetCellInfo(n18, n1C, out cellSuccess, ref mapCell);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         try

@@ -134,6 +134,9 @@ namespace GameSvr.Maps
         /// </summary>
         Walk = 0,
         HighWall = 1,
+        /// <summary>
+        /// 不能走动
+        /// </summary>
         LowWall = 2
     }
 

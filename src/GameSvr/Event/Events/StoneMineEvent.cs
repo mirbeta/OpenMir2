@@ -2,6 +2,9 @@
 
 namespace GameSvr.Event.Events
 {
+    /// <summary>
+    /// 矿石事件
+    /// </summary>
     public class StoneMineEvent : EventInfo
     {
         private readonly int _addStoneCount;
@@ -14,7 +17,7 @@ namespace GameSvr.Event.Events
             AddToMap = true;
             if (nType is 55 or 56 or 57)
             {
-                if (!Envir.AddToMapItemEvent(nX, nY, CellType.Event, this))
+                if (!Envir.AddToMapItemEvent<StoneMineEvent>(nX, nY, CellType.Event, this))
                 {
                     AddToMap = false;
                 }
@@ -29,7 +32,7 @@ namespace GameSvr.Event.Events
             }
             else
             {
-                if (this.Envir.AddToMapMineEvent(nX, nY, CellType.Event, this) == null)
+                if (Envir.AddToMapMineEvent<StoneMineEvent>(nX, nY, CellType.Event, this) == null)
                 {
                     AddToMap = false;
                 }

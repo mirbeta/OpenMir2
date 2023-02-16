@@ -1829,7 +1829,8 @@ namespace GameSvr.World
                 for (int n14 = n20; n14 <= n28; n14++)
                 {
                     bool cellSuccess = false;
-                    MapCellInfo cellInfo = envir.GetCellInfo(n10, n14, ref cellSuccess);
+                    MapCellInfo mapCell = default;
+                    MapCellInfo cellInfo = envir.GetCellInfo(n10, n14, out cellSuccess, ref mapCell);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (int i = 0; i < cellInfo.ObjList.Count; i++)

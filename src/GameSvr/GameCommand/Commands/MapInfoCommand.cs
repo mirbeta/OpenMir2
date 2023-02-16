@@ -1,4 +1,5 @@
-﻿using GameSvr.Player;
+﻿using GameSvr.Maps;
+using GameSvr.Player;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -23,7 +24,8 @@ namespace GameSvr.GameCommand.Commands
                 if (map != null)
                 {
                     var cellSuccess = false;
-                    var cellInfo = map.GetCellInfo(nX, nY, ref cellSuccess);
+                    MapCellInfo mapCell = default;
+                    var cellInfo = map.GetCellInfo(nX, nY, out cellSuccess, ref mapCell);
                     if (cellSuccess)
                     {
                         playObject.SysMsg("标志: " + cellInfo.Attribute, MsgColor.Green, MsgType.Hint);

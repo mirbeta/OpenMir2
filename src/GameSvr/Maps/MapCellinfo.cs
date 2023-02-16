@@ -2,7 +2,7 @@ using SystemModule.NativeList.Utils;
 
 namespace GameSvr.Maps
 {
-    public struct MapCellInfo : IDisposable
+    public struct MapCellInfo
     {
         public static readonly MapCellInfo LowWall = new()
         {
@@ -13,7 +13,7 @@ namespace GameSvr.Maps
         {
             Attribute = CellAttribute.HighWall
         };
-
+        
         public bool Valid => Attribute == CellAttribute.Walk;
 
         public CellAttribute Attribute = CellAttribute.Walk;
@@ -36,8 +36,8 @@ namespace GameSvr.Maps
         {
             IsDisposed = false;
         }
-        
-        public void Init()
+
+        public void Create()
         {
             ObjList = new NativeList<CellObject>();
         }
@@ -47,7 +47,7 @@ namespace GameSvr.Maps
             ObjList.Add(cell);
         }
 
-        public void Update(int index, CellObject cell)
+        public void Update(int index, ref CellObject cell)
         {
             cell.AddTime = HUtil32.GetTickCount();
             ObjList[index] = cell;
@@ -57,39 +57,15 @@ namespace GameSvr.Maps
         {
             ObjList.RemoveAt(index);
         }
+        
+        public void SetAttribute(CellAttribute cellAttribute)
+        {
+            Attribute = cellAttribute;
+        }
 
         public void Clear()
         {
             ObjList.Clear();
-        }
-
-        /// <summary>执行与释放或重置非托管资源关联的应用程序定义的任务。</summary>
-        public void Dispose()
-        {
-            //必须为true
-            Dispose(true);
-            //通知垃圾回收器不再调用终结器
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// 非密封类可重写的Dispose方法，方便子类继承时可重写
-        /// </summary>
-        /// <param name="disposing"></param>
-        private void Dispose(bool disposing)
-        {
-            if (IsDisposed)
-            {
-                return;
-            }
-            //清理托管资源
-            if (disposing)
-            {
-                ObjList.Clear();
-                ObjList.Dispose();
-            }
-            //告诉自己已经被释放
-            IsDisposed = true;
         }
     }
 }
