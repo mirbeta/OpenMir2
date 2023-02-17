@@ -295,7 +295,8 @@ namespace GameSvr.Maps
                     else
                     {
                         CellObject moveObject = default;
-                        if (GetCellInfo(nCx, nCy, ref cellInfo) && cellInfo.IsAvailable)
+                        cellInfo = ref GetCellInfo(nCx, nCy, out cellSuccess, ref mapcell);
+                        if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
@@ -313,7 +314,8 @@ namespace GameSvr.Maps
                                 }
                             }
                         }
-                        if (GetCellInfo(nX, nY, ref cellInfo))
+                        cellInfo = ref GetCellInfo(nX, nY, out cellSuccess, ref mapcell);
+                        if (cellSuccess)
                         {
                             if (cellInfo.ObjList == null)
                             {
@@ -556,8 +558,8 @@ namespace GameSvr.Maps
         {
             const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
             int result = -1;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            MapCellInfo mapcell = default;
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess, ref mapcell);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 try
@@ -740,8 +742,8 @@ namespace GameSvr.Maps
             const string sExceptionMsg = "[Exception] TEnvirnoment::VerifyMapTime";
             try
             {
-                MapCellInfo cellInfo = default;
-                bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+                MapCellInfo mapcell = default;
+                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess, ref mapcell);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1006,8 +1008,9 @@ namespace GameSvr.Maps
                 }
                 Width = nWidth;
                 Height = nHeight;
-                _cellArray = new MapCellInfo[nWidth * nHeight];
+                //_cellArray = new MapCellInfo[nWidth * nHeight];
                 //_cellArray = GC.AllocateUninitializedArray<MapCellInfo>(nWidth * nHeight);
+                _cellArray = GC.AllocateArray<MapCellInfo>(nWidth * nHeight);
             }
         }
 
