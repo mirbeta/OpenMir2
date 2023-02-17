@@ -24,21 +24,21 @@ namespace GameSvr.Maps
         public static int LoadMapInfo()
         {
             logger.Info("正在加载地图数据...");
-            string sFlag = string.Empty;
-            string sCommand = string.Empty;
-            string sLine = string.Empty;
-            string sReConnectMap = string.Empty;
-            int result = -1;
-            string sFileName = M2Share.GetEnvirFilePath("MapInfo.txt");
+            var sFlag = string.Empty;
+            var sCommand = string.Empty;
+            var sLine = string.Empty;
+            var sReConnectMap = string.Empty;
+            var result = -1;
+            var sFileName = M2Share.GetEnvirFilePath("MapInfo.txt");
             if (File.Exists(sFileName))
             {
-                using StringList LoadList = new StringList();
+                using var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
                 if (LoadList.Count < 0)
                 {
                     return result;
                 }
-                int count = 0;
+                var count = 0;
                 while (true)
                 {
                     if (count >= LoadList.Count)
@@ -47,7 +47,7 @@ namespace GameSvr.Maps
                     }
                     if (HUtil32.CompareLStr("ConnectMapInfo", LoadList[count]))
                     {
-                        string sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { ' ', '\t' });
+                        var sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { ' ', '\t' });
                         LoadList.RemoveAt(count);
                         if (sMapInfoFile != "")
                         {
@@ -59,24 +59,24 @@ namespace GameSvr.Maps
                 result = 1;
                 // 加载地图设置
                 string sMapName;
-                for (int i = 0; i < LoadList.Count; i++)
+                for (var i = 0; i < LoadList.Count; i++)
                 {
                     sFlag = LoadList[i];
                     if (!string.IsNullOrEmpty(sFlag) && sFlag[0] == '[')
                     {
                         sMapName = "";
-                        MapInfoFlag MapFlag = new MapInfoFlag
+                        var MapFlag = new MapInfoFlag
                         {
                             SafeArea = false
                         };
                         sFlag = HUtil32.ArrestStringEx(sFlag, "[", "]", ref sMapName);
-                        string sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, HUtil32.Separator);
+                        var sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, HUtil32.Separator);
                         if (!string.IsNullOrEmpty(sMapDesc) && sMapDesc[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMapDesc, "\"", "\"", ref sMapDesc);
                         }
-                        string s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, HUtil32.Separator).Trim();
-                        byte nServerIndex = (byte)HUtil32.StrToInt(s4C, 0);
+                        var s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, HUtil32.Separator).Trim();
+                        var nServerIndex = (byte)HUtil32.StrToInt(s4C, 0);
                         if (sMapName == "")
                         {
                             continue;
@@ -352,7 +352,7 @@ namespace GameSvr.Maps
                 }
 
                 // 加载地图连接点
-                for (int i = 0; i < LoadList.Count; i++)
+                for (var i = 0; i < LoadList.Count; i++)
                 {
                     sFlag = LoadList[i];
                     if (!string.IsNullOrEmpty(sFlag) && sFlag[0] != '[' && sFlag[0] != ';')
@@ -360,15 +360,15 @@ namespace GameSvr.Maps
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, HUtil32.Separator);
                         sMapName = sCommand;
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, HUtil32.Separator);
-                        int nX = HUtil32.StrToInt(sCommand, 0);
+                        var nX = HUtil32.StrToInt(sCommand, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, HUtil32.Separator);
-                        int n18 = HUtil32.StrToInt(sCommand, 0);
+                        var n18 = HUtil32.StrToInt(sCommand, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, new[] { ' ', ',', '-', '>', '\t' });
-                        string s44 = sCommand;
+                        var s44 = sCommand;
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, HUtil32.Separator);
-                        int n1C = HUtil32.StrToInt(sCommand, 0);
+                        var n1C = HUtil32.StrToInt(sCommand, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, new[] { ' ', ',', ';', '\t' });
-                        int n20 = HUtil32.StrToInt(sCommand, 0);
+                        var n20 = HUtil32.StrToInt(sCommand, 0);
                         M2Share.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
                     }
                 }
@@ -380,23 +380,23 @@ namespace GameSvr.Maps
         public static int LoadMinMap()
         {
             logger.Info("正在加载数据图文件...");
-            string sMapNO = string.Empty;
-            string sMapIdx = string.Empty;
-            int result = 0;
-            string sFileName = M2Share.GetEnvirFilePath("MiniMap.txt");
+            var sMapNO = string.Empty;
+            var sMapIdx = string.Empty;
+            var result = 0;
+            var sFileName = M2Share.GetEnvirFilePath("MiniMap.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.MiniMapList.Clear();
-                StringList tMapList = new StringList();
+                var tMapList = new StringList();
                 tMapList.LoadFromFile(sFileName);
-                for (int i = 0; i < tMapList.Count; i++)
+                for (var i = 0; i < tMapList.Count; i++)
                 {
-                    string tStr = tMapList[i];
-                    if (tStr != "" && tStr[0] != ';')
+                    var tStr = tMapList[i];
+                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref sMapNO, new[] { ' ', '\t' });
                         tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx, new[] { ' ', '\t' });
-                        int nIdx = HUtil32.StrToInt(sMapIdx, 0);
+                        var nIdx = HUtil32.StrToInt(sMapIdx, 0);
                         if (nIdx > 0)
                         {
                             if (M2Share.MiniMapList.ContainsKey(sMapNO))
@@ -413,20 +413,23 @@ namespace GameSvr.Maps
             return result;
         }
 
+        /// <summary>
+        /// 初始化挖矿地图
+        /// </summary>
         private static void MakeStoneMines()
         {
-            Stopwatch sw = new Stopwatch();
+            var sw = new Stopwatch();
             sw.Start();
             IList<Envirnoment> mineMapList = M2Share.MapMgr.GetMineMaps();
             logger.Info($"初始化地图矿物数据...[{mineMapList.Count}]");
-            for (int i = 0; i < mineMapList.Count; i++)
+            for (var i = 0; i < mineMapList.Count; i++)
             {
-                Envirnoment envir = mineMapList[i];
-                for (int nW = 0; nW < envir.Width; nW++)
+                var envir = mineMapList[i];
+                for (short nW = 0; nW < envir.Width; nW++)
                 {
-                    for (int nH = 0; nH < envir.Height; nH++)
+                    for (short nH = 0; nH < envir.Height; nH++)
                     {
-                        StoneMineEvent mine = new StoneMineEvent(envir, (short)nW, (short)nH, Grobal2.ET_MINE);
+                        var mine = new StoneMineEvent(envir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap)
                         {
                             mine.Dispose();
@@ -440,7 +443,7 @@ namespace GameSvr.Maps
 
         private static Merchant LoadMapQuest(string sName)
         {
-            Merchant questNPC = new Merchant
+            var questNPC = new Merchant
             {
                 MapName = "0",
                 CurrX = 0,
@@ -458,17 +461,17 @@ namespace GameSvr.Maps
 
         private static void LoadSubMapInfo(StringList loadList, string sFileName)
         {
-            string sFileDir = M2Share.GetEnvirFilePath("MapInfo");
+            var sFileDir = M2Share.GetEnvirFilePath("MapInfo");
             if (!Directory.Exists(sFileDir))
             {
                 Directory.CreateDirectory(sFileDir);
             }
-            string sFilePatchName = sFileDir + sFileName;
+            var sFilePatchName = sFileDir + sFileName;
             if (File.Exists(sFilePatchName))
             {
-                StringList loadMapList = new StringList();
+                var loadMapList = new StringList();
                 loadMapList.LoadFromFile(sFilePatchName);
-                for (int i = 0; i < loadMapList.Count; i++)
+                for (var i = 0; i < loadMapList.Count; i++)
                 {
                     loadList.Add(loadMapList[i]);
                 }

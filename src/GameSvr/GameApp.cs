@@ -226,7 +226,6 @@ namespace GameSvr
             try
             {
                 M2Share.MapMgr.LoadMapDoor();
-                Map.StartMakeStoneThread();
                 M2Share.LocalDb.LoadMerchant();
                 _logger.Info("交易NPC列表加载成功...");
                 M2Share.LocalDb.LoadNpcs();
@@ -261,6 +260,7 @@ namespace GameSvr
                 M2Share.CastleMgr.LoadCastleList();
                 M2Share.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
+                Map.StartMakeStoneThread();
                 M2Share.StartReady = true;
             }
             catch (Exception ex)

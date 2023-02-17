@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class StartPoint
+    public record struct StartPoint
     {
         public string MapName;
         public short CurrX;

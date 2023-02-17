@@ -20,28 +20,31 @@ namespace GameSvr.Maps
 
         public IList<Envirnoment> Maps => _mapList.Values.ToList();
 
+        /// <summary>
+        /// 地图安全区
+        /// </summary>
         public void MakeSafePkZone()
         {
-            for (int i = 0; i < M2Share.StartPointList.Count; i++)
+            for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                StartPoint StartPoint = M2Share.StartPointList[i];
-                if (StartPoint != null && StartPoint.Type > 0)
+                var startPoint = M2Share.StartPointList[i];
+                if (string.IsNullOrEmpty(startPoint.MapName) && startPoint.Type > 0)
                 {
-                    Envirnoment Envir = FindMap(StartPoint.MapName);
-                    if (Envir != null)
+                    var envir = FindMap(startPoint.MapName);
+                    if (envir != null)
                     {
-                        int nMinX = StartPoint.CurrX - StartPoint.Range;
-                        int nMaxX = StartPoint.CurrX + StartPoint.Range;
-                        int nMinY = StartPoint.CurrY - StartPoint.Range;
-                        int nMaxY = StartPoint.CurrY + StartPoint.Range;
-                        for (int nX = nMinX; nX <= nMaxX; nX++)
+                        var nMinX = startPoint.CurrX - startPoint.Range;
+                        var nMaxX = startPoint.CurrX + startPoint.Range;
+                        var nMinY = startPoint.CurrY - startPoint.Range;
+                        var nMaxY = startPoint.CurrY + startPoint.Range;
+                        for (var nX = nMinX; nX <= nMaxX; nX++)
                         {
-                            for (int nY = nMinY; nY <= nMaxY; nY++)
+                            for (var nY = nMinY; nY <= nMaxY; nY++)
                             {
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                                 {
-                                    SafeEvent SafeEvent = new SafeEvent(Envir, nX, nY, StartPoint.Type);
-                                    M2Share.EventMgr.AddEvent(SafeEvent);
+                                    var safeEvent = new SafeEvent(envir, nX, nY, startPoint.Type);
+                                    M2Share.EventMgr.AddEvent(safeEvent);
                                 }
                             }
                         }
@@ -60,10 +63,10 @@ namespace GameSvr.Maps
             return _mapDoorList;
         }
 
-        public void AddMapInfo(string sMapName, string sMapDesc, byte nServerNumber, MapInfoFlag MapFlag, Merchant QuestNPC)
+        public void AddMapInfo(string sMapName, string sMapDesc, byte nServerNumber, MapInfoFlag mapFlag, Merchant questNpc)
         {
-            string sMapFileName = string.Empty;
-            string sTempName = sMapName;
+            var sMapFileName = string.Empty;
+            var sTempName = sMapName;
             if (sTempName.IndexOf('|') > -1)
             {
                 sMapFileName = HUtil32.GetValidStr3(sTempName, ref sMapName, '|');
@@ -80,16 +83,16 @@ namespace GameSvr.Maps
                     sMapName = sTempName;
                 }
             }
-            Envirnoment envirnoment = new Envirnoment
+            var envirnoment = new Envirnoment
             {
                 MapName = sMapName,
                 MapFileName = sMapFileName,
                 MapDesc = sMapDesc,
                 ServerIndex = nServerNumber,
-                Flag = MapFlag,
-                QuestNpc = QuestNPC
+                Flag = mapFlag,
+                QuestNpc = questNpc
             };
-            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out int minMap))
+            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out var minMap))
             {
                 envirnoment.MinMap = minMap;
             }
@@ -118,21 +121,21 @@ namespace GameSvr.Maps
             }
         }
 
-        public bool AddMapRoute(string sSMapNO, int nSMapX, int nSMapY, string sDMapNO, int nDMapX, int nDMapY)
+        public bool AddMapRoute(string sSMapNo, int nSMapX, int nSMapY, string sDMapNo, int nDMapX, int nDMapY)
         {
-            bool result = false;
-            Envirnoment SEnvir = FindMap(sSMapNO);
-            Envirnoment DEnvir = FindMap(sDMapNO);
-            if (SEnvir != null && DEnvir != null)
+            var result = false;
+            var sEnvir = FindMap(sSMapNo);
+            var dEnvir = FindMap(sDMapNo);
+            if (sEnvir != null && dEnvir != null)
             {
-                GateObject GateObj = new GateObject
+                var gateObj = new GateObject
                 {
                     Flag = false,
-                    Envir = DEnvir,
+                    Envir = dEnvir,
                     X = (short)nDMapX,
                     Y = (short)nDMapY
                 };
-                SEnvir.AddToMap(nSMapX, nSMapY, CellType.Route, GateObj);
+                sEnvir.AddToMap(nSMapX, nSMapY, CellType.Route, gateObj);
                 result = true;
             }
             return result;
@@ -140,13 +143,13 @@ namespace GameSvr.Maps
 
         public Envirnoment FindMap(string sMapName)
         {
-            return _mapList.TryGetValue(sMapName, out Envirnoment map) ? map : null;
+            return _mapList.TryGetValue(sMapName, out var map) ? map : null;
         }
 
         public Envirnoment GetMapInfo(int nServerIdx, string sMapName)
         {
             Envirnoment result = null;
-            if (_mapList.TryGetValue(sMapName, out Envirnoment envirnoment))
+            if (_mapList.TryGetValue(sMapName, out var envirnoment))
             {
                 if (envirnoment.ServerIndex == nServerIdx)
                 {
@@ -163,7 +166,7 @@ namespace GameSvr.Maps
         /// <returns></returns>
         public int GetMapOfServerIndex(string sMapName)
         {
-            if (_mapList.TryGetValue(sMapName, out Envirnoment envirnoment))
+            if (_mapList.TryGetValue(sMapName, out var envirnoment))
             {
                 return envirnoment.ServerIndex;
             }
@@ -172,7 +175,7 @@ namespace GameSvr.Maps
 
         public void LoadMapDoor()
         {
-            for (int i = 0; i < Maps.Count; i++)
+            for (var i = 0; i < Maps.Count; i++)
             {
                 this.Maps[i].AddDoorToMap();
             }
