@@ -281,7 +281,7 @@ namespace GameSvr.Conf
             M2Share.Config.boWarDisHumRun = ReadWriteBool("Setup", "WarDisableHumanRun", M2Share.Config.boWarDisHumRun);
             M2Share.Config.boGMRunAll = ReadWriteBool("Setup", "GMRunAll", M2Share.Config.boGMRunAll);
             M2Share.Config.SkeletonCount = ReadWriteInteger("Setup", "SkeletonCount", M2Share.Config.SkeletonCount);
-            for (var i = 0; i < M2Share.Config.SkeletonArray.Length; i++)
+            for (int i = 0; i < M2Share.Config.SkeletonArray.Length; i++)
             {
                 M2Share.Config.SkeletonArray[i].nHumLevel = ReadWriteInteger("Setup", "SkeletonHumLevel" + i, M2Share.Config.SkeletonArray[i].nHumLevel);
                 M2Share.Config.SkeletonArray[i].sMonName = ReadWriteString("Names", "Skeleton" + i, M2Share.Config.SkeletonArray[i].sMonName);
@@ -289,7 +289,7 @@ namespace GameSvr.Conf
                 M2Share.Config.SkeletonArray[i].nLevel = ReadWriteInteger("Setup", "SkeletonLevel" + i, M2Share.Config.SkeletonArray[i].nLevel);
             }
             M2Share.Config.DragonCount = ReadWriteInteger("Setup", "DragonCount", M2Share.Config.DragonCount);
-            for (var i = 0; i < M2Share.Config.DragonArray.Length; i++)
+            for (int i = 0; i < M2Share.Config.DragonArray.Length; i++)
             {
                 M2Share.Config.DragonArray[i].nHumLevel = ReadWriteInteger("Setup", "DragonHumLevel" + i, M2Share.Config.DragonArray[i].nHumLevel);
                 M2Share.Config.DragonArray[i].sMonName = ReadWriteString("Names", "Dragon" + i, M2Share.Config.DragonArray[i].sMonName);

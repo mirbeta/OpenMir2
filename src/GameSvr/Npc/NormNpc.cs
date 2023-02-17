@@ -1625,11 +1625,11 @@ namespace GameSvr.Npc
 
         protected static string ReplaceVariableText(string sMsg, string sStr, string sText)
         {
-            var n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
+            int n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
             if (n10 > -1)
             {
                 ReadOnlySpan<char> s18 = sMsg.AsSpan()[(sStr.Length + n10)..sMsg.Length];
-                var builder = new StringBuilder();
+                StringBuilder builder = new StringBuilder();
                 builder.Append(sMsg[..n10]);
                 builder.Append(sText);
                 builder.Append(s18);
@@ -1724,7 +1724,7 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            var n01 = M2Share.GetValNameNo(sMsg);
+            int n01 = M2Share.GetValNameNo(sMsg);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 0, 99))

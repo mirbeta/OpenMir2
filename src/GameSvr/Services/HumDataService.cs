@@ -37,8 +37,7 @@ namespace GameSvr.Services
             {
                 if (ReceivedMap.ContainsKey(queryId))
                 {
-                    ServerRequestData respPack;
-                    if (ReceivedMap.TryGetValue(queryId, out respPack))
+                    if (ReceivedMap.TryGetValue(queryId, out ServerRequestData respPack))
                     {
                         if (respPack == null)
                         {

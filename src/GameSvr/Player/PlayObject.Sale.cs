@@ -25,7 +25,7 @@ namespace GameSvr.Player
                     {
                         break;
                     }
-                    var dealOffInfo = M2Share.SellOffItemList[i];
+                    DealOffInfo dealOffInfo = M2Share.SellOffItemList[i];
                     if (dealOffInfo != null)
                     {
                         if (dealOffInfo.Flag == 2)
@@ -64,7 +64,7 @@ namespace GameSvr.Player
                 return;
             }
             bool bo11;
-            var sUserItemName = string.Empty;
+            string sUserItemName = string.Empty;
             if (sItemName.IndexOf(' ') >= 0)
             {
                 // 折分物品名称(信件物品的名称后面加了使用次数)
@@ -73,7 +73,7 @@ namespace GameSvr.Player
             bo11 = false;
             if (!SellOffConfirm)
             {
-                for (var i = this.ItemList.Count - 1; i >= 0; i--)
+                for (int i = this.ItemList.Count - 1; i >= 0; i--)
                 {
                     if (this.ItemList.Count <= 0)
                     {
@@ -196,23 +196,23 @@ namespace GameSvr.Player
                     {
                         break;
                     }
-                    var DealOffInfo = M2Share.SellOffItemList[i];
+                    DealOffInfo DealOffInfo = M2Share.SellOffItemList[i];
                     if (DealOffInfo != null)
                     {
                         if (string.Compare(DealOffInfo.sDealChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && (DealOffInfo.Flag == 0 || DealOffInfo.Flag == 3))
                         {
                             DealOffInfo.Flag = 4;
-                            for (var j = 0; j < 9; j++)
+                            for (int j = 0; j < 9; j++)
                             {
                                 if (DealOffInfo.UseItems[j] == null)
                                 {
                                     continue;
                                 }
-                                var StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].Index);
+                                StdItem StdItem = M2Share.WorldEngine.GetStdItem(DealOffInfo.UseItems[j].Index);
                                 if (StdItem != null)
                                 {
                                     //UserItem = new TUserItem();
-                                    var UserItem = DealOffInfo.UseItems[j];
+                                    UserItem UserItem = DealOffInfo.UseItems[j];
                                     if (IsEnoughBag())// 人物的包裹是否满了
                                     {
                                         if (this.IsAddWeightAvailable(StdItem.Weight))// 检查负重
@@ -304,7 +304,7 @@ namespace GameSvr.Player
                                     GameGold = 0;
                                 }
                                 this.GameGoldChanged(); // 更新元宝数量
-                                var PlayObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealChrName);
+                                PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealChrName);
                                 if (PlayObject == null)// 出售人不在线
                                 {
                                     dealOffInfo.Flag = 1; // 物品已出售,出售人未得到元宝
@@ -333,11 +333,11 @@ namespace GameSvr.Player
                                 M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                                 for (int j = 0; j <= 9; j++)
                                 {
-                                    var StdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[j].Index);
                                     if (StdItem != null)
                                     {
                                         //UserItem = new TUserItem();
-                                        var UserItem = dealOffInfo.UseItems[j];
+                                        UserItem UserItem = dealOffInfo.UseItems[j];
                                         if (IsEnoughBag()) // 检查人物的包裹是否满了 
                                         {
                                             //ClearCopyItem(0, UserItem.wIndex, UserItem.MakeIndex); // 清理包裹和仓库复制物品 

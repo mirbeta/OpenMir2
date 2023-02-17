@@ -1384,7 +1384,7 @@ namespace GameSvr.Player
                     return false;
                 }
                 IsFilterAction = true;
-                var dwCheckTime = HUtil32.GetTickCount() - MoveTick;
+                int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                 if (dwCheckTime < M2Share.Config.WalkIntervalTime)
                 {
                     MoveCount++;
@@ -1416,7 +1416,7 @@ namespace GameSvr.Player
             }
             MoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
-            var nextDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
+            byte nextDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             if (WalkTo(nextDir, false))
             {
                 if (SpaceMoved || CurrX == nX && CurrY == nY)
@@ -1441,8 +1441,8 @@ namespace GameSvr.Player
             {
                 return;
             }
-            var nDura = UseItems[Grobal2.U_WEAPON].Dura;
-            var nDuraPoint = HUtil32.Round(nDura / 1.03);
+            ushort nDura = UseItems[Grobal2.U_WEAPON].Dura;
+            int nDuraPoint = HUtil32.Round(nDura / 1.03);
             nDura -= nWeaponDamage;
             if (nDura <= 0)
             {
@@ -1451,7 +1451,7 @@ namespace GameSvr.Player
                 if (Race == ActorRace.Play)
                 {
                     this.SendDelItems(UseItems[Grobal2.U_WEAPON]);
-                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
                         M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +

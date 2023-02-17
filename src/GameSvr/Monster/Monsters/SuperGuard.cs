@@ -72,7 +72,7 @@ namespace GameSvr.Monster.Monsters
             }
             if ((HUtil32.GetTickCount() - this.AttackTick) > this.NextHitTime)
             {
-                for (var i = 0; i < this.VisibleActors.Count; i++)
+                for (int i = 0; i < this.VisibleActors.Count; i++)
                 {
                     BaseObject attackObject = this.VisibleActors[i].BaseObject;
                     if (attackObject == null)

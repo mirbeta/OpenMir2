@@ -210,8 +210,7 @@ namespace GameSvr.World
                 return;
             }
 
-            IList<MonGenInfo> mongenList;
-            if (!MonGenInfoThreadMap.TryGetValue(monsterThread.Id, out mongenList))
+            if (!MonGenInfoThreadMap.TryGetValue(monsterThread.Id, out IList<MonGenInfo> mongenList))
             {
                 return;
             }

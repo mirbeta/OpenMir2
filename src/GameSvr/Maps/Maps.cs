@@ -47,7 +47,7 @@ namespace GameSvr.Maps
                     }
                     if (HUtil32.CompareLStr("ConnectMapInfo", LoadList[count]))
                     {
-                        var sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { ' ', '\t' });
+                        string sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { ' ', '\t' });
                         LoadList.RemoveAt(count);
                         if (sMapInfoFile != "")
                         {

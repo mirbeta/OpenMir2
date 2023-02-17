@@ -12,13 +12,13 @@ namespace GameSvr.Actor
         /// <param name="baseObject"></param>
         public void UpdateMonsterVisible(BaseObject baseObject)
         {
-            var boIsVisible = false;
+            bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
             if ((baseObject.Race == ActorRace.Play) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
             {
                 IsVisibleActive = true;
             }
-            for (var i = 0; i < VisibleActors.Count; i++)
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
                 visibleBaseObject = VisibleActors[i];
                 if (visibleBaseObject.BaseObject == baseObject)
@@ -42,13 +42,13 @@ namespace GameSvr.Actor
 
         protected virtual void UpdateVisibleGay(BaseObject baseObject)
         {
-            var boIsVisible = false;
+            bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
             if ((baseObject.Race == ActorRace.Play) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
             {
                 IsVisibleActive = true;
             }
-            for (var i = 0; i < VisibleActors.Count; i++)
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
                 visibleBaseObject = VisibleActors[i];
                 if (visibleBaseObject.BaseObject == baseObject)
@@ -73,8 +73,8 @@ namespace GameSvr.Actor
         protected void UpdateVisibleItem(short wX, short wY, MapItem MapItem)
         {
             VisibleMapItem visibleMapItem;
-            var boIsVisible = false;
-            for (var i = 0; i < VisibleItems.Count; i++)
+            bool boIsVisible = false;
+            for (int i = 0; i < VisibleItems.Count; i++)
             {
                 visibleMapItem = VisibleItems[i];
                 if (visibleMapItem.MapItem == MapItem)
@@ -102,10 +102,10 @@ namespace GameSvr.Actor
 
         protected void UpdateVisibleEvent(short wX, short wY, EventInfo MapEvent)
         {
-            var boIsVisible = false;
-            for (var i = 0; i < VisibleEvents.Count; i++)
+            bool boIsVisible = false;
+            for (int i = 0; i < VisibleEvents.Count; i++)
             {
-                var mapEvent = VisibleEvents[i];
+                EventInfo mapEvent = VisibleEvents[i];
                 if (mapEvent == MapEvent)
                 {
                     mapEvent.VisibleFlag = VisibleFlag.Invisible;
@@ -125,10 +125,10 @@ namespace GameSvr.Actor
 
         public bool IsVisibleHuman()
         {
-            var result = false;
-            for (var i = 0; i < VisibleActors.Count; i++)
+            bool result = false;
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
-                var visibleBaseObject = VisibleActors[i];
+                VisibleBaseObject visibleBaseObject = VisibleActors[i];
                 if ((visibleBaseObject.BaseObject.Race == ActorRace.Play) || (visibleBaseObject.BaseObject.Master != null))
                 {
                     result = true;
@@ -157,31 +157,30 @@ namespace GameSvr.Actor
                 M2Share.Logger.Error("SearchViewRange nil PEnvir");
                 return;
             }
-            var n24 = 0;
+            int n24 = 0;
             IsVisibleActive = false;// 先置为FALSE
-            for (var i = 0; i < VisibleActors.Count; i++)
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
                 VisibleActors[i].VisibleFlag = 0;
             }
-            var nStartX = (short)(CurrX - ViewRange);
-            var nEndX = (short)(CurrX + ViewRange);
-            var nStartY = (short)(CurrY - ViewRange);
-            var nEndY = (short)(CurrY + ViewRange);
+            short nStartX = (short)(CurrX - ViewRange);
+            short nEndX = (short)(CurrX + ViewRange);
+            short nStartY = (short)(CurrY - ViewRange);
+            short nEndY = (short)(CurrY + ViewRange);
             try
             {
-                for (var n18 = nStartX; n18 <= nEndX; n18++)
+                for (short n18 = nStartX; n18 <= nEndX; n18++)
                 {
-                    for (var n1C = nStartY; n1C <= nEndY; n1C++)
+                    for (short n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        var cellSuccess = false;
                         MapCellInfo mapCell = default;
-                        var cellInfo = Envir.GetCellInfo(n18, n1C, out cellSuccess, ref mapCell);
+                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(n18, n1C, out bool cellSuccess, ref mapCell);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             n24 = 1;
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                var cellObject = cellInfo.ObjList[i];
+                                CellObject cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)
@@ -193,10 +192,10 @@ namespace GameSvr.Actor
                                             {
                                                 continue;
                                             }
-                                            cellInfo.Clear();
+                                            //cellInfo.Clear();
                                             break;
                                         }
-                                        var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                         if (baseObject != null)
                                         {
                                             if (!baseObject.Death && !baseObject.Invisible)
@@ -233,14 +232,14 @@ namespace GameSvr.Actor
             n24 = 2;
             try
             {
-                var n18 = 0;
+                int n18 = 0;
                 while (true)
                 {
                     if (VisibleActors.Count <= n18)
                     {
                         break;
                     }
-                    var visibleBaseObject = VisibleActors[n18];
+                    VisibleBaseObject visibleBaseObject = VisibleActors[n18];
                     if (visibleBaseObject.VisibleFlag == VisibleFlag.Visible)
                     {
                         VisibleActors.RemoveAt(n18);
@@ -268,28 +267,27 @@ namespace GameSvr.Actor
                 return;
             }
             IsVisibleActive = false;
-            for (var i = 0; i < VisibleActors.Count; i++)
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
                 VisibleActors[i].VisibleFlag = 0;
             }
-            var nStartX = (short)(CurrX - ViewRange);
-            var nEndX = (short)(CurrX + ViewRange);
-            var nStartY = (short)(CurrY - ViewRange);
-            var nEndY = (short)(CurrY + ViewRange);
-            for (var n18 = nStartX; n18 <= nEndX; n18++)
+            short nStartX = (short)(CurrX - ViewRange);
+            short nEndX = (short)(CurrX + ViewRange);
+            short nStartY = (short)(CurrY - ViewRange);
+            short nEndY = (short)(CurrY + ViewRange);
+            for (short n18 = nStartX; n18 <= nEndX; n18++)
             {
-                for (var n1C = nStartY; n1C <= nEndY; n1C++)
+                for (short n1C = nStartY; n1C <= nEndY; n1C++)
                 {
-                    var cellSuccess = false;
                     MapCellInfo mapCell = default;
-                    var cellInfo = Envir.GetCellInfo(n18, n1C, out cellSuccess, ref mapCell);
+                    ref MapCellInfo cellInfo = ref Envir.GetCellInfo(n18, n1C, out bool cellSuccess, ref mapCell);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         try
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                var cellObject = cellInfo.ObjList[i];
+                                CellObject cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellObjId > 0)
                                 {
                                     if (cellObject.ActorObject)

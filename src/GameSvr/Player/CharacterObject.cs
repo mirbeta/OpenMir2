@@ -71,7 +71,7 @@ namespace GameSvr.Player
         /// <returns></returns>
         public override ushort GetHitStruckDamage(BaseObject target, int nDamage)
         {
-            var damage = base.GetHitStruckDamage(target, nDamage);
+            ushort damage = base.GetHitStruckDamage(target, nDamage);
             if (nDamage > 0 && AbilMagBubbleDefence)
             {
                 damage = (ushort)HUtil32.Round(damage / 100 * (MagBubbleDefenceLevel + 2) * 8);
@@ -86,7 +86,7 @@ namespace GameSvr.Player
         /// <returns></returns>
         public override ushort GetMagStruckDamage(BaseObject baseObject, ushort nDamage)
         {
-            var damage = base.GetMagStruckDamage(baseObject, nDamage);
+            ushort damage = base.GetMagStruckDamage(baseObject, nDamage);
             if ((damage > 0) && AbilMagBubbleDefence)
             {
                 damage = (ushort)HUtil32.Round(damage / 1.0e2 * (MagBubbleDefenceLevel + 2) * 8.0);//魔法盾减伤

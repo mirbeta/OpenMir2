@@ -2521,7 +2521,7 @@ namespace GameSvr.Npc
                 btStrLabel = 0;
             }
             PlayObject.ValLabel = (byte)btStrLabel;
-            var btType = (byte)QuestActionInfo.nParam2;
+            byte btType = (byte)QuestActionInfo.nParam2;
             if (btType > 3)
             {
                 btType = 0;

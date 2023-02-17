@@ -154,9 +154,9 @@ namespace GameSvr.Castle
             string castleFile = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
             if (File.Exists(castleFile))
             {
-                using var loadList = new StringList();
+                using StringList loadList = new StringList();
                 loadList.LoadFromFile(castleFile);
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
                     string sCastleDir = loadList[i].Trim();
                     if (!string.IsNullOrEmpty(sCastleDir))
@@ -180,7 +180,7 @@ namespace GameSvr.Castle
             {
                 Directory.CreateDirectory(castleDirPath);
             }
-            using var loadList = new StringList(_castleList.Count);
+            using StringList loadList = new StringList(_castleList.Count);
             for (int i = 0; i < _castleList.Count; i++)
             {
                 loadList.Add(i.ToString());

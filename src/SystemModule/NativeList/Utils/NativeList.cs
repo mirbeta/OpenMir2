@@ -179,7 +179,7 @@ namespace SystemModule.NativeList.Utils
             ThrowIfDisposed();
 
             for (int i = 0; i < Count; i++)
-                SetAt(i, default(TItem));
+                SetAt(i, default);
 
             Count = 0;
         }

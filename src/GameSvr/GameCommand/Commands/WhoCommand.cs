@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands
         [ExecuteCommand]
         public void Execute(PlayObject PlayObject)
         {
-            var offlineCount = 0;
+            int offlineCount = 0;
             PlayObject.HearMsg($"当前服务器在线人数: {M2Share.WorldEngine.PlayObjectCount}({offlineCount}/{(M2Share.WorldEngine.PlayObjectCount - offlineCount)})");
         }
     }

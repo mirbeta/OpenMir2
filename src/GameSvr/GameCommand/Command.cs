@@ -44,7 +44,7 @@ namespace GameSvr.GameCommand
             {
                 case 2:
                     {
-                        var @params = parameters.Split(' ');
+                        string[] @params = parameters.Split(' ');
                         return (string)CommandMethod.Invoke(this, new object[] { @params, playObject });
                     }
                 case 1:

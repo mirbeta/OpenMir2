@@ -2735,7 +2735,6 @@ namespace GameSvr.Npc
 
         private bool GetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
-            DynamicVar DynamicVar;
             string sName = string.Empty;
             sValue = "";
             nValue = -1;
@@ -2745,7 +2744,7 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
+            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar DynamicVar))
             {
                 switch (DynamicVar.VarType)
                 {
@@ -2765,7 +2764,6 @@ namespace GameSvr.Npc
 
         private bool SetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType)
         {
-            DynamicVar DynamicVar;
             string sName = string.Empty;
             bool boVarFound = false;
             Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);
@@ -2773,7 +2771,7 @@ namespace GameSvr.Npc
             {
                 return false;
             }
-            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
+            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar DynamicVar))
             {
                 if (nDataType == 1 && DynamicVar.VarType == VarType.Integer)
                 {

@@ -835,7 +835,7 @@ namespace GameSvr.Npc
                 return false;
             }
             char cMethod = QuestConditionInfo.sParam1[0];
-            var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(PlayObject.GroupOwner);
+            PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(PlayObject.GroupOwner);
             switch (cMethod)
             {
                 case '=':
@@ -1960,7 +1960,6 @@ namespace GameSvr.Npc
         private bool ConditionOfCheckVar(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo)
         {
             string sName = string.Empty;
-            DynamicVar DynamicVar;
             bool boFoundVar = false;
             bool result = false;
             string sType = QuestConditionInfo.sParam1;
@@ -1980,7 +1979,7 @@ namespace GameSvr.Npc
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKVAR);
                 return result;
             }
-            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar))
+            if (DynamicVarList.TryGetValue(sVarName, out DynamicVar DynamicVar))
             {
                 switch (DynamicVar.VarType)
                 {
@@ -2763,7 +2762,6 @@ namespace GameSvr.Npc
         private bool GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject PlayObject, string sVarType, string sValName, ref int nValue)
         {
             bool result = false;
-            DynamicVar DynamicVar;
             string sName = string.Empty;
             Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);
             if (DynamicVarList == null)
@@ -2772,7 +2770,7 @@ namespace GameSvr.Npc
             }
             else
             {
-                if (DynamicVarList.TryGetValue(sValName, out DynamicVar))
+                if (DynamicVarList.TryGetValue(sValName, out DynamicVar DynamicVar))
                 {
                     switch (DynamicVar.VarType)
                     {

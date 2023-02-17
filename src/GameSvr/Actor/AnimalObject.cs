@@ -58,7 +58,7 @@ namespace GameSvr.Actor
 
         protected virtual void Attack(BaseObject targetObject, byte nDir)
         {
-            var nPower = GetBaseAttackPoewr();
+            ushort nPower = GetBaseAttackPoewr();
             AttackDir(targetObject, nPower, nDir);
             SendAttackMsg(Messages.RM_HIT, Direction, CurrX, CurrY);
         }
@@ -69,7 +69,7 @@ namespace GameSvr.Actor
             {
                 int n10 = TargetX;
                 int n14 = TargetY;
-                var nDir = Grobal2.DR_DOWN;
+                byte nDir = Grobal2.DR_DOWN;
                 if (n10 > CurrX)
                 {
                     nDir = Grobal2.DR_RIGHT;
@@ -111,8 +111,8 @@ namespace GameSvr.Actor
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 WalkTo(nDir, false);
-                var n20 = M2Share.RandomNumber.Random(3);
-                for (var i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
+                int n20 = M2Share.RandomNumber.Random(3);
+                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
                 {
                     if (nOldX == CurrX && nOldY == CurrY)
                     {
@@ -149,7 +149,7 @@ namespace GameSvr.Actor
         {
             if (processMsg.wIdent == Messages.RM_STRUCK)
             {
-                var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                BaseObject struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                 if (processMsg.ActorId == ActorId && struckObject != null)
                 {
                     SetLastHiter(struckObject);
@@ -196,9 +196,9 @@ namespace GameSvr.Actor
             IList<BaseObject> baseObjectList = new List<BaseObject>();
             Direction = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
             Envir.GetBaseObjects(targetBaseObject.CurrX, targetBaseObject.CurrY, false, baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++)
+            for (int i = 0; i < baseObjectList.Count; i++)
             {
-                var baseObject = baseObjectList[i];
+                BaseObject baseObject = baseObjectList[i];
                 if (IsProperTarget(baseObject))
                 {
                     ushort nDamage = 0;
@@ -228,10 +228,10 @@ namespace GameSvr.Actor
         protected virtual void SearchTarget()
         {
             BaseObject searchTarget = null;
-            var n10 = 999;
-            for (var i = 0; i < VisibleActors.Count; i++)
+            int n10 = 999;
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
-                var baseObject = VisibleActors[i].BaseObject;
+                BaseObject baseObject = VisibleActors[i].BaseObject;
                 if (baseObject.Death || baseObject.Ghost || (baseObject.Envir != Envir) || (Math.Abs(baseObject.CurrX - CurrX) > 15) || (Math.Abs(baseObject.CurrY - CurrY) > 15))
                 {
                     ClearTargetCreat(baseObject);
@@ -241,7 +241,7 @@ namespace GameSvr.Actor
                 {
                     if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye))
                     {
-                        var nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
+                        int nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
                         if (nC < n10)
                         {
                             n10 = nC;

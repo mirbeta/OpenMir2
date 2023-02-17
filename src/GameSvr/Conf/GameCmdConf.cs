@@ -15,7 +15,7 @@ namespace GameSvr.Conf
         /// </summary>
         public void LoadConfig()
         {
-            var gameCommands = CommandMgr.GameCommands;
+            GameCommands gameCommands = CommandMgr.GameCommands;
             gameCommands.Data.CmdName = ReadWriteString("Command", "Date", gameCommands.Data.CmdName);
             gameCommands.Data.PerMissionMin=ReadWriteByte("Permission", "Date", gameCommands.Data.PerMissionMin);
             gameCommands.PrvMsg.CmdName = ReadWriteString("Command", "PrvMsg", gameCommands.PrvMsg.CmdName);

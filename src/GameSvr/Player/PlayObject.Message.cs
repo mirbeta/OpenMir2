@@ -66,7 +66,7 @@ namespace GameSvr.Player
                     IsTimeRecall = false;
                     SpaceMove(TimeRecallMoveMap, TimeRecallMoveX, TimeRecallMoveY, 0);
                 }
-                for (var i = 0; i < 20; i++) //个人定时器
+                for (int i = 0; i < 20; i++) //个人定时器
                 {
                     if (AutoTimerStatus[i] > 500)
                     {
@@ -81,8 +81,8 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                var boNeedRecalc = false;
-                for (var i = 0; i < ExtraAbil.Length; i++)
+                bool boNeedRecalc = false;
+                for (int i = 0; i < ExtraAbil.Length; i++)
                 {
                     if (ExtraAbil[i] > 0)
                     {
@@ -209,7 +209,7 @@ namespace GameSvr.Player
                         CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
                 }
-                var castle = M2Share.CastleMgr.InCastleWarArea(this);
+                Castle.UserCastle castle = M2Share.CastleMgr.InCastleWarArea(this);
                 if (castle != null && castle.UnderWar)
                 {
                     ChangePkStatus(true);
@@ -217,10 +217,10 @@ namespace GameSvr.Player
                 if ((HUtil32.GetTickCount() - DiscountForNightTick) > 1000)
                 {
                     DiscountForNightTick = HUtil32.GetTickCount();
-                    var wHour = DateTime.Now.Hour;
-                    var wMin = DateTime.Now.Minute;
-                    var wSec = DateTime.Now.Second;
-                    var wMSec = DateTime.Now.Millisecond;
+                    int wHour = DateTime.Now.Hour;
+                    int wMin = DateTime.Now.Minute;
+                    int wSec = DateTime.Now.Second;
+                    int wMSec = DateTime.Now.Millisecond;
                     if (M2Share.Config.DiscountForNightTime && (wHour == M2Share.Config.HalfFeeStart || wHour == M2Share.Config.HalfFeeEnd))
                     {
                         if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - LogonTick) > 60000)
@@ -234,7 +234,7 @@ namespace GameSvr.Player
                     {
                         if (MyGuild.GuildWarList.Count > 0)
                         {
-                            var boInSafeArea = InSafeArea();
+                            bool boInSafeArea = InSafeArea();
                             if (boInSafeArea != IsSafeArea)
                             {
                                 IsSafeArea = boInSafeArea;
@@ -279,7 +279,7 @@ namespace GameSvr.Player
             {
                 M2Share.Logger.Error(sExceptionMsg1);
             }
-            var processMsg = default(ProcessMessage);
+            ProcessMessage processMsg = default(ProcessMessage);
             try
             {
                 GetMessageTick = HUtil32.GetTickCount();
@@ -324,19 +324,19 @@ namespace GameSvr.Player
                 M2Share.Logger.Error(Format(sExceptionMsg2, ChrName, processMsg.wIdent, processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
                 M2Share.Logger.Error(e.Message);
             }
-            var boTakeItem = false;
+            bool boTakeItem = false;
             // 检查身上的装备有没不符合
-            for (var i = 0; i < UseItems.Length; i++)
+            for (int i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         if (!CheckItemsNeed(stdItem))
                         {
                             // m_ItemList.Add((UserItem));
-                            var userItem = UseItems[i];
+                            SystemModule.Packets.ClientPackets.UserItem userItem = UseItems[i];
                             if (AddItemToBag(userItem))
                             {
                                 SendAddItem(userItem);
@@ -461,11 +461,11 @@ namespace GameSvr.Player
                 }
                 if (LastHiter != null && LastHiter.Race == ActorRace.Play)
                 {
-                    var lastHiterPlay = LastHiter as PlayObject;
+                    PlayObject lastHiterPlay = LastHiter as PlayObject;
                     if (lastHiterPlay.MyGuild != null && MyGuild != null)
                     {
                         lastHiterPlay.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
-                        var tStr = lastHiterPlay.MyGuild.sGuildName + ':' + lastHiterPlay.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
+                        string tStr = lastHiterPlay.MyGuild.sGuildName + ':' + lastHiterPlay.MyGuild.nContestPoint + "  " + MyGuild.sGuildName + ':' + MyGuild.nContestPoint;
                         M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
                     }
                 }
@@ -610,7 +610,7 @@ namespace GameSvr.Player
                 if (Permission < 6)
                 {
                     // 最高等级
-                    var targetObject = M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
+                    BaseObject targetObject = M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
                     if (M2Share.HighLevelHuman == 0 || targetObject.Ghost)
                     {
                         M2Share.HighLevelHuman = ActorId;
@@ -732,7 +732,7 @@ namespace GameSvr.Player
                     }
                     if (IsMaster)
                     {
-                        for (var i = MasterList.Count - 1; i >= 0; i--)
+                        for (int i = MasterList.Count - 1; i >= 0; i--)
                         {
                             if (MasterList[i].Death || MasterList[i].Ghost)
                             {
@@ -751,7 +751,7 @@ namespace GameSvr.Player
                     // 清组队已死亡成员
                     if (GroupOwner != 0)
                     {
-                        var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                        PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
                         if (groupOwnerPlay.Death || groupOwnerPlay.Ghost)
                         {
                             GroupOwner = 0;
@@ -760,7 +760,7 @@ namespace GameSvr.Player
 
                     if (GroupOwner == ActorId)
                     {
-                        for (var i = GroupMembers.Count - 1; i >= 0; i--)
+                        for (int i = GroupMembers.Count - 1; i >= 0; i--)
                         {
                             BaseObject baseObject = GroupMembers[i];
                             if (baseObject.Death || baseObject.Ghost)
@@ -797,9 +797,9 @@ namespace GameSvr.Player
         {
             int nObjCount;
             string sendMsg;
-            var dwDelayTime = 0;
+            int dwDelayTime = 0;
             int nMsgCount;
-            var result = true;
+            bool result = true;
             BaseObject baseObject = null;
             if (processMsg.ActorId > 0)
             {
@@ -1795,8 +1795,8 @@ namespace GameSvr.Player
                     break;
                 case Messages.RM_MAGICFIRE:
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MAGICFIRE, processMsg.ActorId, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), processMsg.nParam1);
-                    var by = BitConverter.GetBytes(processMsg.nParam3);
-                    var sSendStr = EDCode.EncodeBuffer(by, by.Length);
+                    byte[] by = BitConverter.GetBytes(processMsg.nParam3);
+                    string sSendStr = EDCode.EncodeBuffer(by, by.Length);
                     SendSocket(ClientMsg, sSendStr);
                     break;
                 case Messages.RM_MAGICFIREFAIL:
@@ -1876,7 +1876,7 @@ namespace GameSvr.Player
                     SendSaveItemList(processMsg.nParam1);
                     break;
                 case Messages.RM_SENDDELITEMLIST:
-                    var delItemList = (IList<DeleteItem>)M2Share.ActorMgr.GetOhter(processMsg.nParam1);
+                    IList<DeleteItem> delItemList = (IList<DeleteItem>)M2Share.ActorMgr.GetOhter(processMsg.nParam1);
                     SendDelItemList(delItemList);
                     M2Share.ActorMgr.RevomeOhter(processMsg.nParam1);
                     break;
@@ -2001,7 +2001,7 @@ namespace GameSvr.Player
                     SendDefMessage(Messages.SM_HIDEEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3, "");
                     break;
                 case Messages.RM_SHOWEVENT:
-                    var shortMessage = new ShortMessage();
+                    ShortMessage shortMessage = new ShortMessage();
                     shortMessage.Ident = HUtil32.HiWord(processMsg.nParam2);
                     shortMessage.wMsg = 0;
                     ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SHOWEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3);
@@ -2135,7 +2135,7 @@ namespace GameSvr.Player
             }
             if (GroupOwner != 0)
             {
-                var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
                 groupOwnerPlay.DelMember(this);
             }
             if (MyGuild != null)
@@ -2157,7 +2157,7 @@ namespace GameSvr.Player
                 }
                 IList<DeleteItem> dropItemList = new List<DeleteItem>();
                 StdItem stdItem;
-                for (var i = 0; i < UseItems.Length; i++)
+                for (int i = 0; i < UseItems.Length; i++)
                 {
                     if (UseItems[i] == null)
                     {
@@ -2177,8 +2177,8 @@ namespace GameSvr.Player
                         }
                     }
                 }
-                var nRate = PvpLevel() > 2 ? M2Share.Config.DieRedDropUseItemRate : M2Share.Config.DieDropUseItemRate;
-                for (var i = 0; i < UseItems.Length; i++)
+                int nRate = PvpLevel() > 2 ? M2Share.Config.DieRedDropUseItemRate : M2Share.Config.DieDropUseItemRate;
+                for (int i = 0; i < UseItems.Length; i++)
                 {
                     if (M2Share.RandomNumber.Random(nRate) != 0)
                     {
@@ -2211,7 +2211,7 @@ namespace GameSvr.Player
                 }
                 if (dropItemList.Count > 0)
                 {
-                    var objectId = HUtil32.Sequence();
+                    int objectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(objectId, dropItemList);
                     SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
                 }
@@ -2233,12 +2233,12 @@ namespace GameSvr.Player
             {
                 if (UseItems[Grobal2.U_RIGHTHAND] != null && UseItems[Grobal2.U_RIGHTHAND].Index > 0)
                 {
-                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].Index);
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].Index);
                     if ((stdItem == null) || (stdItem.SpecialPwr != 0))
                     {
                         return;
                     }
-                    var nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
+                    int nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
                     ushort nDura;
                     if (M2Share.Config.DecLampDura)
                     {

@@ -459,7 +459,6 @@ namespace GameSvr.RobotPlay
         public override void SearchViewRange()
         {
             int nIdx;
-            MapCellInfo cellInfo;
             BaseObject baseObject;
             EventInfo mapEvent;
             VisibleFlag nVisibleFlag;
@@ -486,14 +485,13 @@ namespace GameSvr.RobotPlay
                 {
                     for (short nY = nStartY; nY <= nEndY; nY++)
                     {
-                        bool cellSuccess = false;
                         MapCellInfo mapCell = default;
-                        cellInfo = Envir.GetCellInfo(nX, nY, out cellSuccess,ref mapCell);
+                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess, ref mapCell);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                var cellObject = cellInfo.ObjList[i];
+                                CellObject cellObject = cellInfo.ObjList[i];
                                 if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
                                     break;

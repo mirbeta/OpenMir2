@@ -1772,7 +1772,7 @@ namespace GameSvr.Script
                             {
                                 HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                             }
-                            var goods = new Goods
+                            Goods goods = new Goods
                             {
                                 ItemName = sItemName,
                                 Count = HUtil32.StrToInt(sItemCount, 0),

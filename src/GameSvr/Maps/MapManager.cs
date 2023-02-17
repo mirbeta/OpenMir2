@@ -80,7 +80,7 @@ namespace GameSvr.Maps
                     sMapName = sTempName;
                 }
             }
-            var envirnoment = new Envirnoment
+            Envirnoment envirnoment = new Envirnoment
             {
                 MapName = sMapName,
                 MapFileName = sMapFileName,
