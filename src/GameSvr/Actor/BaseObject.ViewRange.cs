@@ -191,7 +191,7 @@ namespace GameSvr.Actor
                                             {
                                                 continue;
                                             }
-                                            //cellInfo.Clear();
+                                            cellInfo.Clear();
                                             break;
                                         }
                                         BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);

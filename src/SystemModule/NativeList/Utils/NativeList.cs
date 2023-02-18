@@ -115,7 +115,7 @@ namespace SystemModule.NativeList.Utils
 
             TryIncreaseBufferCapacity();
 
-            for (int i = Count; i > index; i--)
+            for (var i = Count; i > index; i--)
                 SetAt(i, GetAt(i - 1));
 
             SetAt(index, item);
@@ -136,7 +136,7 @@ namespace SystemModule.NativeList.Utils
         {
             ThrowIfDisposed();
 
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
                 if (GetAt(i).Equals(item))
                     return i;
 
@@ -152,7 +152,7 @@ namespace SystemModule.NativeList.Utils
             if (index < 0 || index >= Count)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            for (int i = index; i < Count; i++)
+            for (var i = index; i < Count; i++)
                 SetAt(i, GetAt(i + 1));
 
             Count--;
@@ -178,8 +178,8 @@ namespace SystemModule.NativeList.Utils
         {
             ThrowIfDisposed();
 
-            for (int i = 0; i < Count; i++)
-                SetAt(i, default);
+            for (var i = 0; i < Count; i++)
+                SetAt(i, default(TItem));
 
             Count = 0;
         }

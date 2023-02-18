@@ -66,6 +66,8 @@ namespace GameSvr.Maps
         public void Clear()
         {
             ObjList.Clear();
+            ObjList.Dispose();
+            ObjList = null;
         }
     }
 }

@@ -2857,6 +2857,11 @@ namespace GameSvr.Player
                 {
                     for (short nY = nStartY; nY <= nEndY; nY++)
                     {
+                        if (!Envir.ValidCell(nX, nY))
+                        {
+                            Console.WriteLine("超出地图范围，跳出搜索范围");
+                            break;//已超出地图范围，无需继续搜索
+                        }
                         ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
@@ -3499,8 +3504,7 @@ namespace GameSvr.Player
                         return false;
                     }
                 }
-                envir.GetCellInfo(nDMapX, nDMapY, out bool cellSuccess);
-                if (!cellSuccess)
+                if (!envir.CellValid(nDMapX, nDMapY))
                 {
                     return false;
                 }

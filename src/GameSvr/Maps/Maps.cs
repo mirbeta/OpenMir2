@@ -14,10 +14,10 @@ namespace GameSvr.Maps
 
         public static void StartMakeStoneThread()
         {
-            if (_makeStoneMinesThread == null)
+            _makeStoneMinesThread ??= new Thread(MakeStoneMines)
             {
-                _makeStoneMinesThread = new Thread(MakeStoneMines) { IsBackground = true };
-            }
+                IsBackground = true
+            };
             _makeStoneMinesThread.Start();
         }
 

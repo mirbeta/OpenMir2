@@ -137,6 +137,7 @@ namespace GameSvr.Maps
                     }
                     if (!addSuccess)
                     {
+                        cellInfo.ObjList ??= new NativeList<CellObject>();
                         CellObject cellObject = new CellObject
                         {
                             CellType = cellType,
@@ -176,7 +177,7 @@ namespace GameSvr.Maps
             }
         }
 
-        private bool CellValid(int nX, int nY)
+        public bool CellValid(int nX, int nY)
         {
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
@@ -232,7 +233,6 @@ namespace GameSvr.Maps
             if (cellInfo.Valid)
             {
                 success = true;
-                cellInfo.ObjList ??= new NativeList<CellObject>();
                 return ref cellInfo;
             }
             success = false;
@@ -315,7 +315,6 @@ namespace GameSvr.Maps
                                         continue;
                                     }
                                     cellInfo.Clear();
-                                    //cellInfo.ObjList.Dispose();
                                     break;
                                 }
                             }
@@ -323,10 +322,7 @@ namespace GameSvr.Maps
                         cellInfo = ref GetCellInfo(nX, nY, out cellSuccess);
                         if (cellSuccess)
                         {
-                            if (cellInfo.ObjList == null)
-                            {
-                                cellInfo.Create();
-                            }
+                            cellInfo.ObjList ??= new NativeList<CellObject>();
                             if (moveObject.CellObjId == 0)
                             {
                                 moveObject.CellType = cert.CellType;
@@ -589,7 +585,6 @@ namespace GameSvr.Maps
                                     continue;
                                 }
                                 cellInfo.Clear();
-                                //cellInfo.ObjList.Dispose();
                                 break;
                             }
                         }
@@ -601,7 +596,6 @@ namespace GameSvr.Maps
                                 continue;
                             }
                             cellInfo.Clear();
-                            //cellInfo.ObjList.Dispose();
                             break;
                         }
                     }
