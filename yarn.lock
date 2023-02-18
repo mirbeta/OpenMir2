@@ -256,7 +256,7 @@
 
 "@types/http-cache-semantics@^4.0.1":
   version "4.0.1"
-  resolved "https://registry.npmjs.org/@types/http-cache-semantics/-/http-cache-semantics-4.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@types/http-cache-semantics/-/http-cache-semantics-4.0.1.tgz#0ea7b61496902b95890dc4c3a116b60cb8dae812"
 
 "@types/minimist@^1.2.0":
   version "1.2.2"
@@ -473,15 +473,15 @@ cacheable-lookup@^7.0.0:
   resolved "https://registry.npmjs.org/cacheable-lookup/-/cacheable-lookup-7.0.0.tgz"
 
 cacheable-request@^10.2.1:
-  version "10.2.2"
-  resolved "https://registry.npmjs.org/cacheable-request/-/cacheable-request-10.2.2.tgz"
+  version "10.2.7"
+  resolved "https://registry.yarnpkg.com/cacheable-request/-/cacheable-request-10.2.7.tgz#8bb8da66338f321b3cbbc34a71ac231178171bcc"
   dependencies:
     "@types/http-cache-semantics" "^4.0.1"
     get-stream "^6.0.1"
-    http-cache-semantics "^4.1.0"
-    keyv "^4.5.0"
+    http-cache-semantics "^4.1.1"
+    keyv "^4.5.2"
     mimic-response "^4.0.0"
-    normalize-url "^7.2.0"
+    normalize-url "^8.0.0"
     responselike "^3.0.0"
 
 cachedir@2.3.0:
@@ -1373,7 +1373,7 @@ get-pkg-repo@^4.0.0:
 
 get-stream@^6.0.0, get-stream@^6.0.1:
   version "6.0.1"
-  resolved "https://registry.npmjs.org/get-stream/-/get-stream-6.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-6.0.1.tgz#a262d8eef67aced57c2852ad6167526a43cbf7b7"
 
 get-symbol-description@^1.0.0:
   version "1.0.0"
@@ -1582,7 +1582,7 @@ hosted-git-info@^4.0.0, hosted-git-info@^4.0.1:
   dependencies:
     lru-cache "^6.0.0"
 
-http-cache-semantics@^4.1.0:
+http-cache-semantics@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/http-cache-semantics/-/http-cache-semantics-4.1.1.tgz#abe02fcb2985460bf0323be664436ec3476a6d5a"
 
@@ -1973,7 +1973,7 @@ js-tokens@^4.0.0:
 
 json-buffer@3.0.1:
   version "3.0.1"
-  resolved "https://registry.npmjs.org/json-buffer/-/json-buffer-3.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/json-buffer/-/json-buffer-3.0.1.tgz#9338802a30d3b6605fbe0613e094008ca8c05a13"
 
 json-parse-better-errors@^1.0.1:
   version "1.0.2"
@@ -2009,9 +2009,9 @@ jsonparse@^1.2.0:
   version "1.3.1"
   resolved "https://registry.npmjs.org/jsonparse/-/jsonparse-1.3.1.tgz"
 
-keyv@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.npmjs.org/keyv/-/keyv-4.5.0.tgz"
+keyv@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/keyv/-/keyv-4.5.2.tgz#0e310ce73bf7851ec702f2eaf46ec4e3805cce56"
   dependencies:
     json-buffer "3.0.1"
 
@@ -2103,7 +2103,7 @@ longest@^2.0.1:
 
 lowercase-keys@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.npmjs.org/lowercase-keys/-/lowercase-keys-3.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/lowercase-keys/-/lowercase-keys-3.0.0.tgz#c5e7d442e37ead247ae9db117a9d0a467c89d4f2"
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -2192,7 +2192,7 @@ mimic-response@^3.1.0:
 
 mimic-response@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.npmjs.org/mimic-response/-/mimic-response-4.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-4.0.0.tgz#35468b19e7c75d10f5165ea25e75a5ceea7cf70f"
 
 min-indent@^1.0.0:
   version "1.0.1"
@@ -2278,9 +2278,9 @@ normalize-package-data@^3.0.0:
     semver "^7.3.4"
     validate-npm-package-license "^3.0.1"
 
-normalize-url@^7.2.0:
-  version "7.2.0"
-  resolved "https://registry.npmjs.org/normalize-url/-/normalize-url-7.2.0.tgz"
+normalize-url@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-8.0.0.tgz#593dbd284f743e8dcf6a5ddf8fadff149c82701a"
 
 npm-run-path@^4.0.1:
   version "4.0.1"
@@ -2813,7 +2813,7 @@ resolve@^1.1.6, resolve@^1.10.0:
 
 responselike@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.npmjs.org/responselike/-/responselike-3.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/responselike/-/responselike-3.0.0.tgz#20decb6c298aff0dbee1c355ca95461d42823626"
   dependencies:
     lowercase-keys "^3.0.0"
 
