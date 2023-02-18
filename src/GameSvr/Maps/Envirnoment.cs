@@ -86,6 +86,10 @@ namespace GameSvr.Maps
         /// <returns></returns>
         public T AddToMap<T>(int nX, int nY, CellType cellType, T mapObject) where T : ActorEntity
         {
+            if (!ValidCell(nX, nY))
+            {
+                return null;
+            }
             const string sExceptionMsg = "[Exception] Envirnoment::AddToMap";
             if (mapObject.ActorId == 0)
             {
@@ -95,8 +99,7 @@ namespace GameSvr.Maps
             try
             {
                 bool addSuccess = false;
-                MapCellInfo mapCell = default;
-                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess, ref mapCell);
+                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
                 if (cellSuccess && cellInfo.Valid)
                 {
                     if (cellType == CellType.Item)
@@ -182,20 +185,10 @@ namespace GameSvr.Maps
             return true;
         }
 
-        //private bool GetCellInfo(int nX, int nY, ref MapCellInfo cellInfo)
-        //{
-        //    bool result;
-        //    if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
-        //    {
-        //        cellInfo = _cellArray[nX * Height + nY];
-        //        result = true;
-        //    }
-        //    else
-        //    {
-        //        result = false;
-        //    }
-        //    return result;
-        //}
+        public bool ValidCell(int nX, int nY)
+        {
+            return nX >= 0 && nX < Width && nY >= 0 && nY < Height;
+        }
 
         private bool GetCellInfo(int nX, int nY, ref MapCellInfo cellInfo)
         {
@@ -223,10 +216,7 @@ namespace GameSvr.Maps
                 if (cellInfo.Valid)
                 {
                     success = true;
-                    if (cellInfo.ObjList == null)
-                    {
-                        cellInfo.ObjList = new NativeList<CellObject>();
-                    }
+                    cellInfo.ObjList ??= new NativeList<CellObject>();
                     return ref cellInfo;
                 }
                 success = false;
@@ -235,16 +225,32 @@ namespace GameSvr.Maps
             success = false;
             return ref mapCell;
         }
+        
+        public ref MapCellInfo GetCellInfo(int nX, int nY, out bool success)
+        {
+            ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
+            if (cellInfo.Valid)
+            {
+                success = true;
+                cellInfo.ObjList ??= new NativeList<CellObject>();
+                return ref cellInfo;
+            }
+            success = false;
+            return ref cellInfo;
+        }
 
         public short MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
         {
+            if (!ValidCell(nX, nY))
+            {
+                return 0;
+            }
             bool moveSuccess = true;
             const string sExceptionMsg = "[Exception] TEnvirnoment::MoveToMovingObject";
             short result = 0;
             try
             {
-                MapCellInfo mapcell = default;
-                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess, ref mapcell);
+                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
                 if (!boFlag && cellSuccess)
                 {
                     if (cellInfo.Valid)
@@ -295,7 +301,7 @@ namespace GameSvr.Maps
                     else
                     {
                         CellObject moveObject = default;
-                        cellInfo = ref GetCellInfo(nCx, nCy, out cellSuccess, ref mapcell);
+                        cellInfo = ref GetCellInfo(nCx, nCy, out cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -314,7 +320,7 @@ namespace GameSvr.Maps
                                 }
                             }
                         }
-                        cellInfo = ref GetCellInfo(nX, nY, out cellSuccess, ref mapcell);
+                        cellInfo = ref GetCellInfo(nX, nY, out cellSuccess);
                         if (cellSuccess)
                         {
                             if (cellInfo.ObjList == null)
@@ -558,8 +564,7 @@ namespace GameSvr.Maps
         {
             const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
             int result = -1;
-            MapCellInfo mapcell = default;
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess, ref mapcell);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 try
@@ -742,8 +747,7 @@ namespace GameSvr.Maps
             const string sExceptionMsg = "[Exception] TEnvirnoment::VerifyMapTime";
             try
             {
-                MapCellInfo mapcell = default;
-                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess, ref mapcell);
+                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)

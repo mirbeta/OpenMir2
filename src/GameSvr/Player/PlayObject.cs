@@ -996,8 +996,7 @@ namespace GameSvr.Player
             {
                 for (int cY = nY - 1; cY <= nY + 1; cY++)
                 {
-                    MapCellInfo mapCell = default;
-                    MapCellInfo cellInfo = Envir.GetCellInfo(cX, cY, out bool cellSuccess, ref mapCell);
+                    MapCellInfo cellInfo = Envir.GetCellInfo(cX, cY, out bool cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (int i = 0; i < cellInfo.ObjList.Count; i++)

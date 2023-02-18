@@ -173,8 +173,7 @@ namespace GameSvr.Actor
                 {
                     for (short n1C = nStartY; n1C <= nEndY; n1C++)
                     {
-                        MapCellInfo mapCell = default;
-                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(n18, n1C, out bool cellSuccess, ref mapCell);
+                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(n18, n1C, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             n24 = 1;
@@ -279,8 +278,7 @@ namespace GameSvr.Actor
             {
                 for (short n1C = nStartY; n1C <= nEndY; n1C++)
                 {
-                    MapCellInfo mapCell = default;
-                    ref MapCellInfo cellInfo = ref Envir.GetCellInfo(n18, n1C, out bool cellSuccess, ref mapCell);
+                    ref MapCellInfo cellInfo = ref Envir.GetCellInfo(n18, n1C, out bool cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         try

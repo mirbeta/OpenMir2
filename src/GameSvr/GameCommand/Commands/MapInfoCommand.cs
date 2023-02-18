@@ -21,10 +21,9 @@ namespace GameSvr.GameCommand.Commands
             if (!string.IsNullOrEmpty(sMap) && nX >= 0 && nY >= 0)
             {
                 Envirnoment map = M2Share.MapMgr.FindMap(sMap);
-                if (map != null)
+                if (map != null && map.IsValidCell(nX, nY))
                 {
-                    MapCellInfo mapCell = default;
-                    MapCellInfo cellInfo = map.GetCellInfo(nX, nY, out bool cellSuccess, ref mapCell);
+                    MapCellInfo cellInfo = map.GetCellInfo(nX, nY, out bool cellSuccess);
                     if (cellSuccess)
                     {
                         playObject.SysMsg("标志: " + cellInfo.Attribute, MsgColor.Green, MsgType.Hint);

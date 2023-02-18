@@ -2085,8 +2085,7 @@ namespace GameSvr.Actor
                 {
                     for (int y = nStartY; y <= nEndY; y++)
                     {
-                        MapCellInfo mapCell = default;
-                        MapCellInfo cellInfo = envir.GetCellInfo(x, y, out bool cellSuccess, ref mapCell);
+                        MapCellInfo cellInfo = envir.GetCellInfo(x, y, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -2159,8 +2158,11 @@ namespace GameSvr.Actor
                     {
                         for (short nCy = nLy; nCy <= nHy; nCy++)
                         {
-                            MapCellInfo mapCell = default;
-                            ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nCx, nCy, out bool cellSuccess, ref mapCell);
+                            if (!Envir.ValidCell(nCx, nCy))
+                            {
+                                continue;
+                            }
+                            ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nCx, nCy, out bool cellSuccess);
                             if (cellSuccess)
                             {
                                 if (cellInfo.IsAvailable)
@@ -2366,8 +2368,11 @@ namespace GameSvr.Actor
             }
             try
             {
-                MapCellInfo mapCell = default;
-                ref MapCellInfo cellInfo = ref Envir.GetCellInfo(CurrX, CurrY, out bool cellSuccess,ref mapCell);
+                if (!Envir.ValidCell(CurrX, CurrY))
+                {
+                    return true;
+                }
+                ref MapCellInfo cellInfo = ref Envir.GetCellInfo(CurrX, CurrY, out bool cellSuccess);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -3276,8 +3281,7 @@ namespace GameSvr.Actor
             {
                 for (int cY = nStartY; cY <= nEndY; cY++)
                 {
-                    MapCellInfo mapCell = default;
-                    MapCellInfo cellInfo = Envir.GetCellInfo(nX, nY, out bool cellSuccess, ref mapCell);
+                    MapCellInfo cellInfo = Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (int i = 0; i < cellInfo.ObjList.Count; i++)

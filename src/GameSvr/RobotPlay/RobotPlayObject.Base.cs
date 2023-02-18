@@ -485,8 +485,7 @@ namespace GameSvr.RobotPlay
                 {
                     for (short nY = nStartY; nY <= nEndY; nY++)
                     {
-                        MapCellInfo mapCell = default;
-                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess, ref mapCell);
+                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)

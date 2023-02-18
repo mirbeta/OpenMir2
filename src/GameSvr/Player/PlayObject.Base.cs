@@ -2857,8 +2857,7 @@ namespace GameSvr.Player
                 {
                     for (short nY = nStartY; nY <= nEndY; nY++)
                     {
-                        MapCellInfo mapCell = default;
-                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess, ref mapCell);
+                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -3500,8 +3499,7 @@ namespace GameSvr.Player
                         return false;
                     }
                 }
-                MapCellInfo mapCell = default;
-                envir.GetCellInfo(nDMapX, nDMapY, out bool cellSuccess, ref mapCell);
+                envir.GetCellInfo(nDMapX, nDMapY, out bool cellSuccess);
                 if (!cellSuccess)
                 {
                     return false;
