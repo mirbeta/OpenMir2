@@ -808,20 +808,19 @@ namespace GameSvr.Maps
                                 mapUnitInfo.btLight = binReader.ReadByte();
                                 if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
                                 {
-                                    _cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.HighWall };
+                                    //_cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.HighWall };
+                                    _cellArray[n24 + nH].Attribute = CellAttribute.HighWall;
                                     isInitialize = false;
                                 }
                                 if ((mapUnitInfo.wFrImg & 0x8000) != 0) // wFrImg High
                                 {
-                                    _cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.LowWall };
+                                    //_cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.LowWall };
+                                    _cellArray[n24 + nH].Attribute = CellAttribute.LowWall;
                                     isInitialize = false;
                                 }
                                 if (isInitialize)
                                 {
-                                    _cellArray[n24 + nH] = new MapCellInfo()
-                                    {
-                                        ObjList = new NativeList<CellObject>()
-                                    };
+                                    _cellArray[n24 + nH].ObjList = new NativeList<CellObject>();
                                 }
                                 if ((mapUnitInfo.btDoorIndex & 0x80) != 0)
                                 {
@@ -885,21 +884,17 @@ namespace GameSvr.Maps
                                 mapUnitInfo.btLight = binReader.ReadByte();
                                 if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
                                 {
-                                    _cellArray[n24 + nH] = MapCellInfo.HighWall;
+                                    _cellArray[n24 + nH].Attribute = CellAttribute.HighWall;
                                     isInitialize = false;
                                 }
                                 if ((mapUnitInfo.wFrImg & 0x8000) != 0)// wFrImg High
                                 {
-                                    _cellArray[n24 + nH] = MapCellInfo.LowWall;
+                                    _cellArray[n24 + nH].Attribute = CellAttribute.LowWall;
                                     isInitialize = false;
                                 }
                                 if (isInitialize)
                                 {
-                                    _cellArray[n24 + nH] = new MapCellInfo()
-                                    {
-                                        ObjList = new NativeList<CellObject>(),
-                                        Attribute = CellAttribute.Walk
-                                    };
+                                    _cellArray[n24 + nH].ObjList = new NativeList<CellObject>();
                                 }
                                 if ((mapUnitInfo.btDoorIndex & 0x80) != 0)
                                 {
