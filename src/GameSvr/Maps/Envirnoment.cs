@@ -682,11 +682,10 @@ namespace GameSvr.Maps
             const string sExceptionMsg = "[Exception] Envirnoment::AddToMapMineEvent ";
             try
             {
-                MapCellInfo cellInfo = default;
-                bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
-                if (cellSuccess && !cellInfo.Valid)
+                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+                if (cellSuccess && !cellInfo.Valid) //不动走动的地方才允许放矿
                 {
-                    bool isSpace = false;// 人物可以走到的地方才放上矿藏
+                    bool isSpace = false;// 人物可以走到的地方才放上矿
                     for (int x = nX - 1; x <= nX + 1; x++)
                     {
                         for (int y = nY - 1; y <= nY + 1; y++)

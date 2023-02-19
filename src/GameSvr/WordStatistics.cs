@@ -12,7 +12,6 @@ namespace GameSvr
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly string processName;
-
         private readonly PerformanceCounter MemoryCounter;
         private readonly PerformanceCounter CpuCounter;
         private readonly PerformanceCounter currentCpuCounter;
@@ -26,7 +25,6 @@ namespace GameSvr
                 MemoryCounter = new PerformanceCounter();
                 CpuCounter = new PerformanceCounter();
                 currentCpuCounter = new PerformanceCounter("Process", "% Processor Time", processName);
-                //currentRamCounter = new PerformanceCounter("Process", "Working Set", processName);
                 threadCounter = new PerformanceCounter("Process", "Thread Count", processName);
             }
             else
@@ -47,13 +45,13 @@ namespace GameSvr
             GetRunTime();
         }
 
-        public void GetRunTime()
+        private void GetRunTime()
         {
             var ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
             _logger.Debug($"服务器运行:[{ts.Days}天{ts.Hours}小时{ts.Minutes}分{ts.Seconds}秒]");
         }
 
-        public void ShowGCStatus()
+        private void ShowGCStatus()
         {
             _logger.Debug($"GC回收:[{GC.CollectionCount(0)}] 分配内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}]");
             GC.Collect(0, GCCollectionMode.Forced, false);
@@ -63,7 +61,7 @@ namespace GameSvr
         /// 获取CPU使用率
         /// </summary>
         /// <returns></returns>
-        public string GetProcessorData()
+        private string GetProcessorData()
         {
             var d = GetCounterValue(CpuCounter, "Processor", "% Processor Time", "_Total");
             return d.ToString("F") + "%";
@@ -73,7 +71,7 @@ namespace GameSvr
         /// 获取工作集内存大小
         /// </summary>
         /// <returns></returns>
-        public float GetWorkingSet()
+        private float GetWorkingSet()
         {
             return GetCounterValue(MemoryCounter, "Memory", "Working Set", processName);
         }
@@ -82,7 +80,7 @@ namespace GameSvr
         /// 获取虚拟内存使用率详情
         /// </summary>
         /// <returns></returns>
-        public string GetMemoryVData()
+        private string GetMemoryVData()
         {
             float d = GetCounterValue(MemoryCounter, "Memory", "% Committed Bytes In Use", null);
             var str = d.ToString("F") + "% (";
@@ -96,7 +94,7 @@ namespace GameSvr
         /// 获取虚拟内存使用率
         /// </summary>
         /// <returns></returns>
-        public float GetUsageVirtualMemory()
+        private float GetUsageVirtualMemory()
         {
             return GetCounterValue(MemoryCounter, "Memory", "% Committed Bytes In Use", null);
         }
@@ -105,7 +103,7 @@ namespace GameSvr
         /// 获取虚拟内存已用大小
         /// </summary>
         /// <returns></returns>
-        public float GetUsedVirtualMemory()
+        private float GetUsedVirtualMemory()
         {
             return GetCounterValue(MemoryCounter, "Memory", "Committed Bytes", null);
         }
@@ -114,7 +112,7 @@ namespace GameSvr
         /// 获取虚拟内存总大小
         /// </summary>
         /// <returns></returns>
-        public float GetTotalVirtualMemory()
+        private float GetTotalVirtualMemory()
         {
             return GetCounterValue(MemoryCounter, "Memory", "Commit Limit", null);
         }
@@ -123,7 +121,7 @@ namespace GameSvr
         /// 获取空闲的物理内存数，单位B
         /// </summary>
         /// <returns></returns>
-        public float GetFreePhysicalMemory()
+        private float GetFreePhysicalMemory()
         {
             return GetCounterValue(MemoryCounter, "Memory", "Available Bytes", null);
         }

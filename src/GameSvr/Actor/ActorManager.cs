@@ -14,10 +14,10 @@ namespace GameSvr.Actor
     public sealed class ActorMgr
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ConcurrentQueue<int> IdQueue = new ConcurrentQueue<int>();
+        private readonly ConcurrentQueue<int> GenerateQueue = new ConcurrentQueue<int>();
         private readonly StandardRandomizer standardRandomizer = new StandardRandomizer();
         private readonly Thread IdWorkThread;
-        private readonly IList<int> ActorIds = new Collection<int>();
+        private readonly IList<int> ActorIds = new List<int>(1000);
         /// <summary>
         /// 精灵列表
         /// </summary>
@@ -43,36 +43,33 @@ namespace GameSvr.Actor
         {
             while (true)
             {
-                if (IdQueue.Count < 20000)
+                if (GenerateQueue.Count < 20000)
                 {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
-                    HashSet<long> hashMap = new HashSet<long>();
-                    for (int i = 0; i < 50000; i++)
+                    for (int i = 0; i < 100000; i++)
                     {
                         int sequence = standardRandomizer.NextInteger();
-                        if (hashMap.Contains(sequence))
+                        if (_actorsMap.ContainsKey(sequence))
                         {
                             while (true)
                             {
                                 sequence = standardRandomizer.NextInteger();
-                                if (!hashMap.Contains(sequence))
+                                if (!_actorsMap.ContainsKey(sequence))
                                 {
                                     break;
                                 }
                             }
                         }
-                        hashMap.Add(sequence);
-
                         while (sequence < 0)
                         {
                             sequence = Environment.TickCount + HUtil32.Sequence();
                             if (sequence > 0) break;
                         }
-                        IdQueue.Enqueue(sequence);
+                        GenerateQueue.Enqueue(sequence);
                     }
                     sw.Stop();
-                    _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{IdQueue.Count}] 是否有重复:{IdQueue.Count != IdQueue.Distinct().Count()}");
+                    _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{GenerateQueue.Count}]");
                 }
                 Thread.Sleep(5000);
             }
@@ -80,7 +77,7 @@ namespace GameSvr.Actor
 
         public int Dequeue()
         {
-            return IdQueue.TryDequeue(out int sequence) ? sequence : HUtil32.Sequence();
+            return GenerateQueue.TryDequeue(out int sequence) ? sequence : HUtil32.Sequence();
         }
 
         public void Add(BaseObject actor)
