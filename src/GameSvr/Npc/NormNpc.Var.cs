@@ -1980,11 +1980,12 @@ namespace GameSvr.Npc
                     result = true;
                     return result;
                 case "$SERVERRUNTIME":
-                    nSecond = (HUtil32.GetTickCount() - M2Share.StartTick) / 1000;
+                    //nSecond = (HUtil32.GetTickCount() - M2Share.StartTick) / 1000;
                     //wHour = nSecond / 3600;
                     //wMinute = (nSecond / 60) % 60;
                     //wSecond = nSecond % 60;
                     //sValue = string.Format("%d:%d:%d", new short[] { wHour, wMinute, wSecond });
+                    sValue = DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime).ToString("YYYY-MM-DD HH:mm:ss");
                     nDataType = 0;
                     result = true;
                     return result;

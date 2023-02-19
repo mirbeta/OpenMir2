@@ -764,15 +764,15 @@ namespace SystemModule
             }
             return result;
         }
-
+        
         /// <summary>
         /// 获取大小的显示字符串
         /// </summary>
         /// <returns></returns>
-        public static string FormatBytesValue(long length)
+        public static string FormatBytesValue(double length)
         {
             int byteConversion = 1024;
-            double bytes = Convert.ToDouble(length);
+            double bytes = length;
             // 超过EB的单位已经没有实际转换意义了, 太大了, 忽略不用
             if (bytes >= Math.Pow(byteConversion, 6)) // EB
             {

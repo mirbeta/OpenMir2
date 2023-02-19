@@ -336,12 +336,12 @@ namespace GameSvr.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$MACRUNTIME>", sText);
                     return;
                 case "$SERVERRUNTIME":
-                    int nSecond = (HUtil32.GetTickCount() - M2Share.StartTick) / 1000;
-                    int wHour = nSecond / 3600;
-                    int wMinute = nSecond / 60 % 60;
-                    int wSecond = nSecond % 60;
-                    sText = Format("{0}:{1}:{2}", wHour, wMinute, wSecond);
-                    sMsg = ReplaceVariableText(sMsg, "<$SERVERRUNTIME>", sText);
+                    //int nSecond = (HUtil32.GetTickCount() - M2Share.StartTick) / 1000;
+                    //int wHour = nSecond / 3600;
+                    //int wMinute = nSecond / 60 % 60;
+                    //int wSecond = nSecond % 60;
+                    //sText = Format("{0}:{1}:{2}", wHour, wMinute, wSecond);
+                    sMsg = ReplaceVariableText(sMsg, "<$SERVERRUNTIME>", DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime).ToString("YYYY-MM-DD HH:mm:ss"));
                     return;
                 case "$DATETIME":
                     sText = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");

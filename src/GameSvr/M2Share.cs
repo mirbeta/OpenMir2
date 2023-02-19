@@ -39,10 +39,11 @@ namespace GameSvr
         /// <summary>
         /// 服务器启动时间
         /// </summary>
-        public static int StartTick = 0;
+        public static long StartTime = 0;
         public static int ShareFileNameNum = 0;
         public static int ServerTickDifference = 0;
         public static readonly ReaderWriterLockWrapper SyncLock = new ReaderWriterLockWrapper();
+        public static readonly WordStatistics Statistics;
         public static readonly ActorMgr ActorMgr = null;
         public static readonly ServerConf ServerConf;
         public static readonly GameSvrConf Config;
@@ -226,11 +227,13 @@ namespace GameSvr
             GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.GameSettingFileName));
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
+            Statistics = new WordStatistics();
             ActorMgr = new ActorMgr();
             LocalDb = new LocalDB();
             CommonDb = new CommonDB();
             FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();
+            StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
         public static bool LoadLineNotice(string FileName)

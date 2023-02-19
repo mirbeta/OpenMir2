@@ -1,7 +1,7 @@
-﻿using RedSharp.Sys.Interfaces.Shared;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using SystemModule.NativeList.Interfaces.Shared;
 
 namespace SystemModule.NativeList.Abstracts
 {

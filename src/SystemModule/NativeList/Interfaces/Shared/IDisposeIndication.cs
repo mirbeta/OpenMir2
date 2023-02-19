@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RedSharp.Sys.Interfaces.Shared
+﻿namespace SystemModule.NativeList.Interfaces.Shared
 {
     /// <summary>
     /// Special interface to mark that the object is already disposed.

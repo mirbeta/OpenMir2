@@ -2,6 +2,7 @@
 using GameSvr.Services;
 using NLog;
 using SystemModule.Data;
+using SystemModule.Enums;
 
 namespace GameSvr
 {

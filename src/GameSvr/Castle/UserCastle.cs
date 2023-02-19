@@ -6,6 +6,7 @@ using GameSvr.Player;
 using NLog;
 using SystemModule.Common;
 using SystemModule.Data;
+using SystemModule.Enums;
 
 namespace GameSvr.Castle
 {

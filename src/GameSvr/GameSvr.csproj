@@ -20,7 +20,7 @@
 	</ItemGroup>
 	
 	<PropertyGroup>
-		<ServerGarbageCollection>true</ServerGarbageCollection>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
 		<ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
 		<TieredCompilation>false</TieredCompilation>
 		<TieredCompilationQuickJit>false</TieredCompilationQuickJit>
@@ -76,6 +76,7 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
 		<PackageReference Include="MySqlConnector" Version="2.2.5" />
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
 		<PackageReference Include="Spectre.Console" Version="0.46.0" />
 		<PackageReference Include="NLog" Version="5.1.1" />

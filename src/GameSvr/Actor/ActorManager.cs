@@ -2,7 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using SystemModule.Enums;
+using SystemModule.Generation.Entities;
 
 namespace GameSvr.Actor
 {
@@ -13,7 +15,7 @@ namespace GameSvr.Actor
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConcurrentQueue<int> IdQueue = new ConcurrentQueue<int>();
-        private readonly IdWorker IdWorker = new IdWorker(1);
+        private readonly StandardRandomizer standardRandomizer = new StandardRandomizer();
         private readonly Thread IdWorkThread;
         private readonly IList<int> ActorIds = new Collection<int>();
         /// <summary>
@@ -24,9 +26,9 @@ namespace GameSvr.Actor
         /// 其他对象
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohterMap = new ConcurrentDictionary<int, object>();
-        private int MonsterDeathCount { get; set; }
-        private int MonsterDisposeCount { get; set; }
-        private int PlayerGhostCount { get; set; }
+        private static int MonsterDeathCount { get; set; }
+        private static int MonsterDisposeCount { get; set; }
+        private static int PlayerGhostCount { get; set; }
 
         public ActorMgr()
         {
@@ -48,12 +50,12 @@ namespace GameSvr.Actor
                     HashSet<long> hashMap = new HashSet<long>();
                     for (int i = 0; i < 50000; i++)
                     {
-                        int sequence = IdWorker.NextId();
+                        int sequence = standardRandomizer.NextInteger();
                         if (hashMap.Contains(sequence))
                         {
                             while (true)
                             {
-                                sequence = IdWorker.NextId();
+                                sequence = standardRandomizer.NextInteger();
                                 if (!hashMap.Contains(sequence))
                                 {
                                     break;
@@ -148,7 +150,8 @@ namespace GameSvr.Actor
                     //_logger.Debug($"清理死亡对象 名称:[{actor.ChrName}] 地图:{actor.MapName} 坐标:{actor.CurrX}:{actor.CurrY}");
                 }
             }
-            _logger.Debug($"当前总对象:[{_actorsMap.Count}] 累计角色死亡次数:[{PlayerGhostCount}] 累计怪物死亡次数:[{MonsterDeathCount}] 累计怪物释放次数:[{MonsterDisposeCount}]");
+            _logger.Debug($"总对象数:[{_actorsMap.Count}] 角色死亡数:[{PlayerGhostCount}] 怪物死亡数:[{MonsterDeathCount}] 怪物释放数:[{MonsterDisposeCount}]");
+            M2Share.Statistics.ShowServerState();
         }
     }
 }

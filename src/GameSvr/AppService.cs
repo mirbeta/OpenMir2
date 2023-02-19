@@ -2,6 +2,8 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using Spectre.Console;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -54,7 +56,7 @@ namespace GameSvr
                 command.Description = "查看游戏网关状况";
                 command.OnExecuteAsync(async (cancellationToken) =>
                 {
-                    await ShowGameStatus(cancellationToken);
+                    await ShowGateStatus(cancellationToken);
                 });
             });
             _application.Command("exit", command =>
@@ -270,7 +272,6 @@ namespace GameSvr
                 .SpinnerStyle(Style.Parse("green bold"))
                 .Start("Thinking...", async ctx =>
                 {
-                    // Omitted
                     while (await _timer.WaitForNextTickAsync(cancellationToken))
                     {
                         int monsterCount = 0;
@@ -279,12 +280,13 @@ namespace GameSvr
                             monsterCount += M2Share.WorldEngine.MobThreads[i].MonsterCount;
                         }
                         AnsiConsole.MarkupLine($"Monsters:{monsterCount}");
+                        M2Share.Statistics.ShowServerState();
                         ctx.Refresh();
                     }
                 });
         }
 
-        private static Task ShowGameStatus(CancellationToken cancellationToken)
+        private static Task ShowGateStatus(CancellationToken cancellationToken)
         {
             //GateShare.ShowLog = false;
             //_timer = new PeriodicTimer(TimeSpan.FromSeconds(2));

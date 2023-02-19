@@ -1,6 +1,6 @@
-﻿using RedSharp.Sys.Interfaces.Shared;
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
+using SystemModule.NativeList.Interfaces.Shared;
 using SystemModule.NativeList.Utils;
 
 namespace SystemModule.NativeList.Helpers

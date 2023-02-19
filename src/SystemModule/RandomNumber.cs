@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SystemModule
 {
-    /// <summary>
+/// <summary>
     /// 生成随机数类
     /// </summary>
     public class RandomNumber

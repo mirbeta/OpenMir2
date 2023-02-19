@@ -3,7 +3,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Spectre.Console;
-using System.Text;
 using SystemModule.Hosts;
 
 namespace GameSvr
