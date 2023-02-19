@@ -14,8 +14,6 @@ namespace GameSvr
         private readonly string processName;
         private readonly PerformanceCounter MemoryCounter;
         private readonly PerformanceCounter CpuCounter;
-        private readonly PerformanceCounter currentCpuCounter;
-        private readonly PerformanceCounter threadCounter;
 
         public WordStatistics()
         {
@@ -24,8 +22,6 @@ namespace GameSvr
                 processName = Process.GetCurrentProcess().ProcessName;
                 MemoryCounter = new PerformanceCounter();
                 CpuCounter = new PerformanceCounter();
-                currentCpuCounter = new PerformanceCounter("Process", "% Processor Time", processName);
-                threadCounter = new PerformanceCounter("Process", "Thread Count", processName);
             }
             else
             {
@@ -37,9 +33,9 @@ namespace GameSvr
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                _logger.Debug($"CPU:[{currentCpuCounter.NextValue():F}%] 空闲内存:[{HUtil32.FormatBytesValue(GetFreePhysicalMemory())}] 内存使用率:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
-                _logger.Debug($"虚拟内存:[{GetMemoryVData()}] 虚拟内存大小:[{HUtil32.FormatBytesValue(GetTotalVirtualMemory())}] 虚拟内存使用:[{HUtil32.FormatBytesValue(GetUsageVirtualMemory())}%]");
-                _logger.Debug($"线程数:[{threadCounter.NextValue()}]");
+                _logger.Debug($"CPU:[{GetProcessorData()}] 使用内存率:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] 空闲内存:[{HUtil32.FormatBytesValue(GetFreePhysicalMemory())}]  ");
+                _logger.Debug($"虚拟内存信息:[{GetMemoryVData()}] 虚拟内存大小:[{HUtil32.FormatBytesValue(GetTotalVirtualMemory())}] 虚拟内存使用:[{HUtil32.FormatBytesValue(GetUsageVirtualMemory())}%]");
+                _logger.Debug($"线程数:[{GetThreadCount()}]");
             }
             ShowGCStatus();
             GetRunTime();
@@ -63,8 +59,17 @@ namespace GameSvr
         /// <returns></returns>
         private string GetProcessorData()
         {
-            var d = GetCounterValue(CpuCounter, "Processor", "% Processor Time", "_Total");
+            var d = GetCounterValue(CpuCounter, "Processor", "% Processor Time", processName);
             return d.ToString("F") + "%";
+        }
+        
+        /// <summary>
+        /// 获取当前程序线程数
+        /// </summary>
+        /// <returns></returns>
+        private float GetThreadCount()
+        {
+            return GetCounterValue(CpuCounter, "Process", "Thread Count", processName);
         }
 
         /// <summary>
