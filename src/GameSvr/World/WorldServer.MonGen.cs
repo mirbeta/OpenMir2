@@ -22,7 +22,7 @@ namespace GameSvr.World
         /// </summary>
         public readonly IList<MonGenInfo> MonGenList;
         /// <summary>
-        /// 怪物对应线程
+        /// 怪物线程索引Map
         /// </summary>
         private readonly Dictionary<string, int> MonsterThreadMap;
 
@@ -32,7 +32,7 @@ namespace GameSvr.World
 
         public void InitializeMonster()
         {
-            Dictionary<string, IList<MonGenInfo>> monsterGenMap = new Dictionary<string, IList<MonGenInfo>>(StringComparer.OrdinalIgnoreCase); //临时存放怪物刷新映射,这样也能知道每一个怪要刷新几个和统计
+            Dictionary<string, IList<MonGenInfo>> monsterGenMap = new Dictionary<string, IList<MonGenInfo>>(StringComparer.OrdinalIgnoreCase); //临时存放怪物刷新映射,便于计算怪要创建几个和统计
 
             for (int i = 0; i < MonGenList.Count; i++)
             {

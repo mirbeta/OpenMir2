@@ -12,7 +12,6 @@ namespace GameSvr.Actor
         public virtual void Run()
         {
             const string sExceptionMsg0 = "[Exception] BaseObject::Run 0";
-            const string sExceptionMsg1 = "[Exception] BaseObject::Run 1";
             try
             {
                 ProcessMessage processMessage = default;
@@ -31,95 +30,87 @@ namespace GameSvr.Actor
                 WAbil.HP = WAbil.MaxHP;
                 WAbil.MP = WAbil.MaxMP;
             }
-            try
+            if (!Death)
             {
-                if (!Death)
+                var recoveryTick = (HUtil32.GetTickCount() - AutoRecoveryTick) / 20;
+                AutoRecoveryTick = HUtil32.GetTickCount();
+                HealthTick += recoveryTick;
+                SpellTick += recoveryTick;
+                ushort n18;
+                if ((WAbil.HP < WAbil.MaxHP) && (HealthTick >= M2Share.Config.HealthFillTime))
                 {
-                    int recoveryTick = (HUtil32.GetTickCount() - AutoRecoveryTick) / 20;
-                    AutoRecoveryTick = HUtil32.GetTickCount();
-                    HealthTick += recoveryTick;
-                    SpellTick += recoveryTick;
-                    ushort n18;
-                    if ((WAbil.HP < WAbil.MaxHP) && (HealthTick >= M2Share.Config.HealthFillTime))
+                    n18 = (ushort)((WAbil.MaxHP / 75) + 1);
+                    if ((WAbil.HP + n18) < WAbil.MaxHP)
                     {
-                        n18 = (ushort)((WAbil.MaxHP / 75) + 1);
-                        if ((WAbil.HP + n18) < WAbil.MaxHP)
-                        {
-                            WAbil.HP += n18;
-                        }
-                        else
-                        {
-                            WAbil.HP = WAbil.MaxHP;
-                        }
-                        HealthSpellChanged();
+                        WAbil.HP += n18;
                     }
-                    if ((WAbil.MP < WAbil.MaxMP) && (SpellTick >= M2Share.Config.SpellFillTime))
+                    else
                     {
-                        n18 = (ushort)((WAbil.MaxMP / 18) + 1);
-                        if ((WAbil.MP + n18) < WAbil.MaxMP)
+                        WAbil.HP = WAbil.MaxHP;
+                    }
+                    HealthSpellChanged();
+                }
+                if ((WAbil.MP < WAbil.MaxMP) && (SpellTick >= M2Share.Config.SpellFillTime))
+                {
+                    n18 = (ushort)((WAbil.MaxMP / 18) + 1);
+                    if ((WAbil.MP + n18) < WAbil.MaxMP)
+                    {
+                        WAbil.MP += n18;
+                    }
+                    else
+                    {
+                        WAbil.MP = WAbil.MaxMP;
+                    }
+                    HealthSpellChanged();
+                }
+                if (WAbil.HP == 0)
+                {
+                    if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !((PlayObject)LastHiter).UnRevival))
+                    {
+                        if (Race == ActorRace.Play && ((PlayObject)this).Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))
                         {
-                            WAbil.MP += n18;
+                            RevivalTick = HUtil32.GetTickCount();
+                            ItemDamageRevivalRing();
+                            WAbil.HP = WAbil.MaxHP;
+                            HealthSpellChanged();
+                            SysMsg(Settings.RevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
                         }
-                        else
-                        {
-                            WAbil.MP = WAbil.MaxMP;
-                        }
-                        HealthSpellChanged();
                     }
                     if (WAbil.HP == 0)
                     {
-                        if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !((PlayObject)LastHiter).UnRevival))
-                        {
-                            if (Race == ActorRace.Play && ((PlayObject)this).Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))
-                            {
-                                RevivalTick = HUtil32.GetTickCount();
-                                ItemDamageRevivalRing();
-                                WAbil.HP = WAbil.MaxHP;
-                                HealthSpellChanged();
-                                SysMsg(Settings.RevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
-                            }
-                        }
-                        if (WAbil.HP == 0)
-                        {
-                            Die();
-                        }
+                        Die();
                     }
-                    if (HealthTick >= M2Share.Config.HealthFillTime)
+                }
+                if (HealthTick >= M2Share.Config.HealthFillTime)
+                {
+                    HealthTick = 0;
+                }
+                if (SpellTick >= M2Share.Config.SpellFillTime)
+                {
+                    SpellTick = 0;
+                }
+            }
+            else
+            {
+                if (CanReAlive && MonGen != null)
+                {
+                    int makeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
+                    if (makeGhostTime > M2Share.Config.MakeGhostTime)
                     {
-                        HealthTick = 0;
+                        makeGhostTime = M2Share.Config.MakeGhostTime;
                     }
-                    if (SpellTick >= M2Share.Config.SpellFillTime)
+                    if (HUtil32.GetTickCount() - DeathTick > makeGhostTime)
                     {
-                        SpellTick = 0;
+                        MakeGhost();
                     }
                 }
                 else
                 {
-                    if (CanReAlive && MonGen != null)
+                    if ((HUtil32.GetTickCount() - DeathTick) > M2Share.Config.MakeGhostTime)// 3 * 60 * 1000
                     {
-                        int makeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
-                        if (makeGhostTime > M2Share.Config.MakeGhostTime)
-                        {
-                            makeGhostTime = M2Share.Config.MakeGhostTime;
-                        }
-                        if (HUtil32.GetTickCount() - DeathTick > makeGhostTime)
-                        {
-                            MakeGhost();
-                        }
-                    }
-                    else
-                    {
-                        if ((HUtil32.GetTickCount() - DeathTick) > M2Share.Config.MakeGhostTime)// 3 * 60 * 1000
-                        {
-                            MakeGhost();
-                        }
+                        MakeGhost();
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                M2Share.Logger.Error(sExceptionMsg1);
-                M2Share.Logger.Error(e.Message);
             }
             if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (IncHealing > 0)))
             {
@@ -216,7 +207,7 @@ namespace GameSvr.Actor
             {
                 HealthSpellChanged();
             }
-            // TBaseObject.Run 3 清理目标对象
+            // 清理目标对象
             if (TargetCret != null)//修复弓箭卫士在人物进入房间后再出来，还会攻击人物(人物的攻击目标没清除)
             {
                 if (((HUtil32.GetTickCount() - TargetFocusTick) > 30000) || TargetCret.Death || TargetCret.Ghost || (TargetCret.Envir != Envir) || (Math.Abs(TargetCret.CurrX - CurrX) > 15) || (Math.Abs(TargetCret.CurrY - CurrY) > 15))
