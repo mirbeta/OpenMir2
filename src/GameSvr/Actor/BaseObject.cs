@@ -343,10 +343,6 @@ namespace GameSvr.Actor
         /// </summary>
         public bool ObMode;
         /// <summary>
-        /// 复活戒指使用间隔计数
-        /// </summary>
-        private int RevivalTick = 0;
-        /// <summary>
         /// 死亡是不是掉装备
         /// </summary>
         public bool NoDropUseItem = false;
@@ -1239,7 +1235,7 @@ namespace GameSvr.Actor
         /// <summary>
         /// 减少复活戒指持久
         /// </summary>
-        private void ItemDamageRevivalRing()
+        internal void ItemDamageRevivalRing()
         {
             for (int i = 0; i < UseItems.Length; i++)
             {

@@ -257,6 +257,10 @@ namespace GameSvr.Player
         public byte ValType;
         public byte ValLabel;
         /// <summary>
+        /// 复活戒指使用间隔时间
+        /// </summary>
+        public int RevivalTick = 0;
+        /// <summary>
         /// 掉物品
         /// </summary>
         public bool NoDropItem = false;

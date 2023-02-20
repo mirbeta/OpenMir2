@@ -162,11 +162,7 @@ namespace GameSvr.Player
                 if (IsDelayCall && (HUtil32.GetTickCount() - DelayCallTick) > DelayCall)
                 {
                     IsDelayCall = false;
-                    NormNpc normNpc = WorldServer.FindMerchant<Merchant>(DelayCallNpc);
-                    if (normNpc == null)
-                    {
-                        normNpc = WorldServer.FindNpc<NormNpc>(DelayCallNpc);
-                    }
+                    NormNpc normNpc = WorldServer.FindMerchant<Merchant>(DelayCallNpc) ?? WorldServer.FindNpc<NormNpc>(DelayCallNpc);
                     if (normNpc != null)
                     {
                         normNpc.GotoLable(this, DelayCallLabel, false);
@@ -279,7 +275,7 @@ namespace GameSvr.Player
             {
                 M2Share.Logger.Error(sExceptionMsg1);
             }
-            ProcessMessage processMsg = default(ProcessMessage);
+            ProcessMessage processMsg = default;
             try
             {
                 GetMessageTick = HUtil32.GetTickCount();
@@ -790,6 +786,25 @@ namespace GameSvr.Player
                     GetExp(AutoGetExpPoint);
                 }
             }
+
+            if (!Death)
+            {
+                if (WAbil.HP == 0)
+                {
+                    if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !((PlayObject)LastHiter).UnRevival))
+                    {
+                        if (Race == ActorRace.Play && Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))
+                        {
+                            RevivalTick = HUtil32.GetTickCount();
+                            ItemDamageRevivalRing();
+                            WAbil.HP = WAbil.MaxHP;
+                            HealthSpellChanged();
+                            SysMsg(Settings.RevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
+                        }
+                    }
+                }
+            }
+
             base.Run();
         }
 

@@ -65,21 +65,7 @@ namespace GameSvr.Actor
                 }
                 if (WAbil.HP == 0)
                 {
-                    if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !((PlayObject)LastHiter).UnRevival))
-                    {
-                        if (Race == ActorRace.Play && ((PlayObject)this).Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))
-                        {
-                            RevivalTick = HUtil32.GetTickCount();
-                            ItemDamageRevivalRing();
-                            WAbil.HP = WAbil.MaxHP;
-                            HealthSpellChanged();
-                            SysMsg(Settings.RevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
-                        }
-                    }
-                    if (WAbil.HP == 0)
-                    {
-                        Die();
-                    }
+                    Die();
                 }
                 if (HealthTick >= M2Share.Config.HealthFillTime)
                 {
