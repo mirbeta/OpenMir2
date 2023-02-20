@@ -360,20 +360,20 @@ namespace GameSvr.Player
                 switch (btDir)
                 {
                     case Grobal2.DR_UP:
-                        if (CurrY > 1 && Envir.CanWalkEx(CurrX, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 2, true) > 0)
+                        if (CurrY > 1 && Envir.CanWalkEx(CurrX, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 2, true))
                         {
                             CurrY -= 2;
                         }
                         break;
                     case Grobal2.DR_UPRIGHT:
-                        if (CurrX < Envir.Width - 2 && CurrY > 1 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY - 2, true) > 0)
+                        if (CurrX < Envir.Width - 2 && CurrY > 1 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY - 2, true))
                         {
                             CurrX += 2;
                             CurrY -= 2;
                         }
                         break;
                     case Grobal2.DR_RIGHT:
-                        if (CurrX < Envir.Width - 2 && Envir.CanWalkEx(CurrX + 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY, true) > 0)
+                        if (CurrX < Envir.Width - 2 && Envir.CanWalkEx(CurrX + 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY, true))
                         {
                             CurrX += 2;
                         }
@@ -381,34 +381,34 @@ namespace GameSvr.Player
                     case Grobal2.DR_DOWNRIGHT:
                         if (CurrX < Envir.Width - 2 && CurrY < Envir.Height - 2 &&
                             Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) &&
-                            Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY + 2, true) > 0)
+                            Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY + 2, true))
                         {
                             CurrX += 2;
                             CurrY += 2;
                         }
                         break;
                     case Grobal2.DR_DOWN:
-                        if (CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 2, true) > 0)
+                        if (CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 2, true))
                         {
                             CurrY += 2;
                         }
                         break;
                     case Grobal2.DR_DOWNLEFT:
-                        if (CurrX > 1 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY + 2, true) > 0)
+                        if (CurrX > 1 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY + 2, true))
                         {
                             CurrX -= 2;
                             CurrY += 2;
                         }
                         break;
                     case Grobal2.DR_LEFT:
-                        if (CurrX > 1 && Envir.CanWalkEx(CurrX - 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY, true) > 0)
+                        if (CurrX > 1 && Envir.CanWalkEx(CurrX - 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY, true))
                         {
                             CurrX -= 2;
                         }
                         break;
                     case Grobal2.DR_UPLEFT:
                         if (CurrX > 1 && CurrY > 1 &&
-                            Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY - 2, true) > 0)
+                            Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY - 2, true))
                         {
                             CurrX -= 2;
                             CurrY -= 2;
@@ -450,14 +450,14 @@ namespace GameSvr.Player
                 {
                     case Grobal2.DR_UP:
                         if (CurrY > 2 && Envir.CanWalkEx(CurrX, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 2, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 3, canWalk) &&
-                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 3, true) > 0)
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 3, true))
                         {
                             CurrY -= 3;
                         }
                         break;
                     case Grobal2.DR_UPRIGHT:
                         if (CurrX < Envir.Width - 3 && CurrY > 2 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk) && Envir.CanWalkEx(CurrX + 3, CurrY - 3, canWalk) &&
-                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY - 3, true) > 0)
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY - 3, true))
                         {
                             CurrX += 3;
                             CurrY -= 3;
@@ -465,14 +465,14 @@ namespace GameSvr.Player
                         break;
                     case Grobal2.DR_RIGHT:
                         if (CurrX < Envir.Width - 3 && Envir.CanWalkEx(CurrX + 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 3, CurrY, canWalk) &&
-                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY, true) > 0)
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY, true))
                         {
                             CurrX += 3;
                         }
                         break;
                     case Grobal2.DR_DOWNRIGHT:
                         if (CurrX < Envir.Width - 3 && CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk) && Envir.CanWalkEx(CurrX + 3, CurrY + 3, canWalk) &&
-                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY + 3, true) > 0)
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY + 3, true))
                         {
                             CurrX += 3;
                             CurrY += 3;
@@ -480,14 +480,14 @@ namespace GameSvr.Player
                         break;
                     case Grobal2.DR_DOWN:
                         if (CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 2, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 3, canWalk) &&
-                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 3, true) > 0)
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 3, true))
                         {
                             CurrY += 3;
                         }
                         break;
                     case Grobal2.DR_DOWNLEFT:
                         if (CurrX > 2 && CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk) && Envir.CanWalkEx(CurrX - 3, CurrY + 3, canWalk) &&
-                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY + 3, true) > 0)
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY + 3, true))
                         {
                             CurrX -= 3;
                             CurrY += 3;
@@ -495,14 +495,14 @@ namespace GameSvr.Player
                         break;
                     case Grobal2.DR_LEFT:
                         if (CurrX > 2 && Envir.CanWalkEx(CurrX - 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 3, CurrY, canWalk) &&
-                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY, true) > 0)
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY, true))
                         {
                             CurrX -= 3;
                         }
                         break;
                     case Grobal2.DR_UPLEFT:
                         if (CurrX > 2 && CurrY > 2 && Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk) && Envir.CanWalkEx(CurrX - 3, CurrY - 3, canWalk) &&
-                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY - 3, true) > 0)
+                            Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY - 3, true))
                         {
                             CurrX -= 3;
                             CurrY -= 3;
@@ -1428,7 +1428,7 @@ namespace GameSvr.Player
                             break;
                         }
                         GetFrontPosition(ref nX, ref nY);
-                        if (Envir.MoveToMovingObject(CurrX, CurrY, this, nX, nY, false) > 0)
+                        if (Envir.MoveToMovingObject(CurrX, CurrY, this, nX, nY, false))
                         {
                             CurrX = nX;
                             CurrY = nY;
@@ -1446,7 +1446,7 @@ namespace GameSvr.Player
                 for (int i = 0; i < HUtil32._MAX(2, nMagicLevel + 1); i++)
                 {
                     GetFrontPosition(ref nX, ref nY);
-                    if (Envir.MoveToMovingObject(CurrX, CurrY, this, nX, nY, false) > 0)
+                    if (Envir.MoveToMovingObject(CurrX, CurrY, this, nX, nY, false))
                     {
                         CurrX = nX;
                         CurrY = nY;

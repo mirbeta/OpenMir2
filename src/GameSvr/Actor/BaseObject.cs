@@ -806,7 +806,7 @@ namespace GameSvr.Actor
                     }
                     if (walkSuccess)
                     {
-                        if (Envir.MoveToMovingObject(CurrX, CurrY, this, newX, newY, boFlag) > 0)
+                        if (Envir.MoveToMovingObject(CurrX, CurrY, this, newX, newY, boFlag))
                         {
                             CurrX = newX;
                             CurrY = newY;
@@ -1126,7 +1126,7 @@ namespace GameSvr.Actor
                 GetFrontPosition(ref nx, ref ny);
                 if (Envir.CanWalk(nx, ny, false))
                 {
-                    if (Envir.MoveToMovingObject(CurrX, CurrY, this, nx, ny, false) > 0)
+                    if (Envir.MoveToMovingObject(CurrX, CurrY, this, nx, ny, false))
                     {
                         CurrX = nx;
                         CurrY = ny;

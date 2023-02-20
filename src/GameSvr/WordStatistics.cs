@@ -1,6 +1,7 @@
 ﻿using NLog;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace GameSvr
 {
@@ -8,6 +9,7 @@ namespace GameSvr
     /// 统计系统运行状态 
     /// 仅支持Windows系统
     /// </summary>
+    //[SupportedOSPlatform("windows")]
     public class WordStatistics
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();

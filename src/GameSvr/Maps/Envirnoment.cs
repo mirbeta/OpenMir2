@@ -226,7 +226,7 @@ namespace GameSvr.Maps
             success = false;
             return ref mapCell;
         }
-        
+
         public ref MapCellInfo GetCellInfo(int nX, int nY, out bool success)
         {
             ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
@@ -239,15 +239,15 @@ namespace GameSvr.Maps
             return ref cellInfo;
         }
 
-        public short MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
+        public bool MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
         {
             if (!ValidCell(nX, nY))
             {
-                return 0;
+                return false;
             }
             bool moveSuccess = true;
             const string sExceptionMsg = "[Exception] TEnvirnoment::MoveToMovingObject";
-            short result = 0;
+            bool result = false;
             try
             {
                 ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
@@ -288,7 +288,7 @@ namespace GameSvr.Maps
                     }
                     else
                     {
-                        result = -1;
+                        result = false;
                         moveSuccess = false;
                     }
                 }
@@ -296,7 +296,7 @@ namespace GameSvr.Maps
                 {
                     if (!CellValid(nX, nY))
                     {
-                        result = -1;
+                        result = false;
                     }
                     else
                     {
@@ -341,7 +341,7 @@ namespace GameSvr.Maps
                             }
                             moveObject.AddTime = HUtil32.GetTickCount();
                             cellInfo.Add(moveObject, cert);
-                            result = 1;
+                            result = true;
                         }
                     }
                 }
@@ -655,14 +655,10 @@ namespace GameSvr.Maps
 
         public bool AddToMapItemEvent<T>(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent) where T : StoneMineEvent
         {
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
-                if (cellInfo.ObjList == null)
-                {
-                    cellInfo.Create();
-                }
+                cellInfo.ObjList ??= new NativeList<CellObject>();
                 CellObject cellObject = new CellObject();
                 cellObject.CellType = nType;
                 cellObject.CellObjId = stoneMineEvent.Id;
@@ -709,10 +705,7 @@ namespace GameSvr.Maps
                     }
                     if (isSpace)
                     {
-                        if (cellInfo.ObjList == null)
-                        {
-                            cellInfo.Create();
-                        }
+                        cellInfo.ObjList ??= new NativeList<CellObject>();
                         CellObject cellObject = new CellObject
                         {
                             CellType = cellType,
@@ -790,152 +783,73 @@ namespace GameSvr.Maps
                     bool isInitialize = true;
 
                     MapUnitInfo mapUnitInfo = new MapUnitInfo();
-                    if (Flag.Mine || Flag.boMINE2)
+                    for (int nW = 0; nW < Width; nW++)
                     {
-                        for (int nW = 0; nW < Width; nW++)
+                        n24 = nW * Height;
+                        for (int nH = 0; nH < Height; nH++)
                         {
-                            n24 = nW * Height;
-                            for (int nH = 0; nH < Height; nH++)
+                            mapUnitInfo.wBkImg = binReader.ReadUInt16();
+                            mapUnitInfo.wMidImg = binReader.ReadUInt16();
+                            mapUnitInfo.wFrImg = binReader.ReadUInt16();
+                            mapUnitInfo.btDoorIndex = binReader.ReadByte();
+                            mapUnitInfo.btDoorOffset = binReader.ReadByte();
+                            mapUnitInfo.btAniFrame = binReader.ReadByte();
+                            mapUnitInfo.btAniTick = binReader.ReadByte();
+                            mapUnitInfo.btArea = binReader.ReadByte();
+                            mapUnitInfo.btLight = binReader.ReadByte();
+                            if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
                             {
-                                mapUnitInfo.wBkImg = binReader.ReadUInt16();
-                                mapUnitInfo.wMidImg = binReader.ReadUInt16();
-                                mapUnitInfo.wFrImg = binReader.ReadUInt16();
-                                mapUnitInfo.btDoorIndex = binReader.ReadByte();
-                                mapUnitInfo.btDoorOffset = binReader.ReadByte();
-                                mapUnitInfo.btAniFrame = binReader.ReadByte();
-                                mapUnitInfo.btAniTick = binReader.ReadByte();
-                                mapUnitInfo.btArea = binReader.ReadByte();
-                                mapUnitInfo.btLight = binReader.ReadByte();
-                                if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
-                                {
-                                    //_cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.HighWall };
-                                    _cellArray[n24 + nH].Attribute = CellAttribute.HighWall;
-                                    isInitialize = false;
-                                }
-                                if ((mapUnitInfo.wFrImg & 0x8000) != 0) // wFrImg High
-                                {
-                                    //_cellArray[n24 + nH] = new MapCellInfo { Attribute = CellAttribute.LowWall };
-                                    _cellArray[n24 + nH].Attribute = CellAttribute.LowWall;
-                                    isInitialize = false;
-                                }
-                                if (isInitialize)
-                                {
-                                    _cellArray[n24 + nH].ObjList = new NativeList<CellObject>();
-                                }
-                                if ((mapUnitInfo.btDoorIndex & 0x80) != 0)
-                                {
-                                    point = mapUnitInfo.btDoorIndex & 0x7F;
-                                    if (point > 0)
-                                    {
-                                        door = new DoorInfo
-                                        {
-                                            nX = nW,
-                                            nY = nH,
-                                            n08 = point,
-                                            Status = null
-                                        };
-                                        for (int i = 0; i < DoorList.Count; i++)
-                                        {
-                                            if (Math.Abs(DoorList[i].nX - door.nX) <= 10)
-                                            {
-                                                if (Math.Abs(DoorList[i].nY - door.nY) <= 10)
-                                                {
-                                                    if (DoorList[i].n08 == point)
-                                                    {
-                                                        door.Status = DoorList[i].Status;
-                                                        door.Status.nRefCount++;
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (door.Status == null)
-                                        {
-                                            door.Status = new DoorStatus
-                                            {
-                                                Opened = false,
-                                                bo01 = false,
-                                                n04 = 0,
-                                                OpenTick = 0,
-                                                nRefCount = 1
-                                            };
-                                        }
-                                        DoorList.Add(door);
-                                    }
-                                }
+                                _cellArray[n24 + nH].Attribute = CellAttribute.HighWall;
+                                isInitialize = false;
                             }
-                        }
-                    }
-                    else
-                    {
-                        for (int nW = 0; nW < Width; nW++)
-                        {
-                            n24 = nW * Height;
-                            for (int nH = 0; nH < Height; nH++)
+                            if ((mapUnitInfo.wFrImg & 0x8000) != 0)// wFrImg High
                             {
-                                mapUnitInfo.wBkImg = binReader.ReadUInt16();
-                                mapUnitInfo.wMidImg = binReader.ReadUInt16();
-                                mapUnitInfo.wFrImg = binReader.ReadUInt16();
-                                mapUnitInfo.btDoorIndex = binReader.ReadByte();
-                                mapUnitInfo.btDoorOffset = binReader.ReadByte();
-                                mapUnitInfo.btAniFrame = binReader.ReadByte();
-                                mapUnitInfo.btAniTick = binReader.ReadByte();
-                                mapUnitInfo.btArea = binReader.ReadByte();
-                                mapUnitInfo.btLight = binReader.ReadByte();
-                                if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
+                                _cellArray[n24 + nH].Attribute = CellAttribute.LowWall;
+                                isInitialize = false;
+                            }
+                            if (isInitialize)
+                            {
+                                _cellArray[n24 + nH].ObjList = new NativeList<CellObject>();
+                            }
+                            if ((mapUnitInfo.btDoorIndex & 0x80) != 0)
+                            {
+                                point = mapUnitInfo.btDoorIndex & 0x7F;
+                                if (point > 0)
                                 {
-                                    _cellArray[n24 + nH].Attribute = CellAttribute.HighWall;
-                                    isInitialize = false;
-                                }
-                                if ((mapUnitInfo.wFrImg & 0x8000) != 0)// wFrImg High
-                                {
-                                    _cellArray[n24 + nH].Attribute = CellAttribute.LowWall;
-                                    isInitialize = false;
-                                }
-                                if (isInitialize)
-                                {
-                                    _cellArray[n24 + nH].ObjList = new NativeList<CellObject>();
-                                }
-                                if ((mapUnitInfo.btDoorIndex & 0x80) != 0)
-                                {
-                                    point = mapUnitInfo.btDoorIndex & 0x7F;
-                                    if (point > 0)
+                                    door = new DoorInfo
                                     {
-                                        door = new DoorInfo
+                                        nX = nW,
+                                        nY = nH,
+                                        n08 = point,
+                                        Status = null
+                                    };
+                                    for (int i = 0; i < DoorList.Count; i++)
+                                    {
+                                        if (Math.Abs(DoorList[i].nX - door.nX) <= 10)
                                         {
-                                            nX = nW,
-                                            nY = nH,
-                                            n08 = point,
-                                            Status = null
-                                        };
-                                        for (int i = 0; i < DoorList.Count; i++)
-                                        {
-                                            if (Math.Abs(DoorList[i].nX - door.nX) <= 10)
+                                            if (Math.Abs(DoorList[i].nY - door.nY) <= 10)
                                             {
-                                                if (Math.Abs(DoorList[i].nY - door.nY) <= 10)
+                                                if (DoorList[i].n08 == point)
                                                 {
-                                                    if (DoorList[i].n08 == point)
-                                                    {
-                                                        door.Status = DoorList[i].Status;
-                                                        door.Status.nRefCount++;
-                                                        break;
-                                                    }
+                                                    door.Status = DoorList[i].Status;
+                                                    door.Status.nRefCount++;
+                                                    break;
                                                 }
                                             }
                                         }
-                                        if (door.Status == null)
-                                        {
-                                            door.Status = new DoorStatus
-                                            {
-                                                Opened = false,
-                                                bo01 = false,
-                                                n04 = 0,
-                                                OpenTick = 0,
-                                                nRefCount = 1
-                                            };
-                                        }
-                                        DoorList.Add(door);
                                     }
+                                    if (door.Status == null)
+                                    {
+                                        door.Status = new DoorStatus
+                                        {
+                                            Opened = false,
+                                            bo01 = false,
+                                            n04 = 0,
+                                            OpenTick = 0,
+                                            nRefCount = 1
+                                        };
+                                    }
+                                    DoorList.Add(door);
                                 }
                             }
                         }
