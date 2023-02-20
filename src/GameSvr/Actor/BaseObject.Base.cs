@@ -11,19 +11,10 @@ namespace GameSvr.Actor
     {
         public virtual void Run()
         {
-            const string sExceptionMsg0 = "[Exception] BaseObject::Run 0";
-            try
+            ProcessMessage processMessage = default;
+            while (GetMessage(ref processMessage))
             {
-                ProcessMessage processMessage = default;
-                while (GetMessage(ref processMessage))
-                {
-                    Operate(processMessage);
-                }
-            }
-            catch (Exception e)
-            {
-                M2Share.Logger.Error(sExceptionMsg0);
-                M2Share.Logger.Error(e.StackTrace);
+                Operate(processMessage);
             }
             if (SuperMan)
             {
@@ -394,9 +385,6 @@ namespace GameSvr.Actor
                                 case PoisonState.MagDefenceUP:
                                     boNeedRecalc = true;
                                     SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case PoisonState.BubbleDefenceUP:
-                                    ((this as CharacterObject)).AbilMagBubbleDefence = false;
                                     break;
                                 case PoisonState.STATETRANSPARENT:
                                     HideMode = false;

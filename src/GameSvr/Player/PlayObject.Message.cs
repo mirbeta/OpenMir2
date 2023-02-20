@@ -82,6 +82,10 @@ namespace GameSvr.Player
                     }
                 }
                 bool boNeedRecalc = false;
+                if (StatusTimeArr[PoisonState.STATETRANSPARENT] == 0)
+                {
+                    AbilMagBubbleDefence = false;
+                }
                 for (int i = 0; i < ExtraAbil.Length; i++)
                 {
                     if (ExtraAbil[i] > 0)

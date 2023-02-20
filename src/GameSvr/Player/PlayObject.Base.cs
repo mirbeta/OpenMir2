@@ -1550,8 +1550,36 @@ namespace GameSvr.Player
             return true;
         }
 
+        internal void MakeWeaponUnlock()
+        {
+            if (UseItems[Grobal2.U_WEAPON] == null)
+            {
+                return;
+            }
+            if (UseItems[Grobal2.U_WEAPON].Index <= 0)
+            {
+                return;
+            }
+            if (UseItems[Grobal2.U_WEAPON].Desc[3] > 0)
+            {
+                UseItems[Grobal2.U_WEAPON].Desc[3] -= 1;
+                SysMsg(Settings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
+            }
+            else
+            {
+                if (UseItems[Grobal2.U_WEAPON].Desc[4] < 10)
+                {
+                    UseItems[Grobal2.U_WEAPON].Desc[4]++;
+                    SysMsg(Settings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
+                }
+            }
+            RecalcAbilitys();
+            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+        }
+        
         /// <summary>
-        /// 角色杀死怪物触发
+        /// 角色杀死目标触发
         /// </summary>
         internal void KillTargetTrigger(BaseObject killObject)
         {
@@ -1578,12 +1606,11 @@ namespace GameSvr.Player
                 if (GroupOwner != 0)
                 {
                     PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-
                     for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                     {
-                        PlayObject GroupHuman = groupOwnerPlay.GroupMembers[i];
+                        PlayObject groupHuman = groupOwnerPlay.GroupMembers[i];
                         bool tCheck;
-                        if (!GroupHuman.Death && Envir == GroupHuman.Envir && Math.Abs(CurrX - GroupHuman.CurrX) <= 12 && Math.Abs(CurrX - GroupHuman.CurrX) <= 12 && this == GroupHuman)
+                        if (!groupHuman.Death && Envir == groupHuman.Envir && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && this == groupHuman)
                         {
                             tCheck = false;
                         }
@@ -1591,10 +1618,10 @@ namespace GameSvr.Player
                         {
                             tCheck = true;
                         }
-                        QuestNPC = Envir.GetQuestNpc(GroupHuman, ChrName, "", tCheck);
+                        QuestNPC = Envir.GetQuestNpc(groupHuman, ChrName, "", tCheck);
                         if (QuestNPC != null)
                         {
-                            QuestNPC.Click(GroupHuman);
+                            QuestNPC.Click(groupHuman);
                         }
                     }
                 }
@@ -1652,20 +1679,20 @@ namespace GameSvr.Player
                             if (!IsGoodKilling(this))
                             {
                                 targetObject.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
-                                killObject.SysMsg(Settings.YouMurderedMsg, MsgColor.Red, MsgType.Hint);
-                                SysMsg(Format(Settings.YouKilledByMsg, killObject.ChrName), MsgColor.Red, MsgType.Hint);
+                                targetObject.SysMsg(Settings.YouMurderedMsg, MsgColor.Red, MsgType.Hint);
+                                SysMsg(Format(Settings.YouKilledByMsg, targetObject.ChrName), MsgColor.Red, MsgType.Hint);
                                 targetObject.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
                                 if (PvpLevel() < 1)
                                 {
                                     if (M2Share.RandomNumber.Random(5) == 0)
                                     {
-                                        killObject.MakeWeaponUnlock();
+                                        targetObject.MakeWeaponUnlock();
                                     }
                                 }
                             }
                             else
                             {
-                                killObject.SysMsg(Settings.YouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
+                                targetObject.SysMsg(Settings.YouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
                             }
                         }
                         if (killObject.Race == ActorRace.Play)// 检查攻击人是否用了着经验或等级装备
@@ -1753,11 +1780,11 @@ namespace GameSvr.Player
             bool result = base.IsProperTarget(baseObject);
             if (!result)
             {
-                if ((Race == ActorRace.Play) && (baseObject.Race == ActorRace.Play))
+                if (baseObject.Race == ActorRace.Play)
                 {
                     result = IsProtectTarget(baseObject);
                 }
-                if ((baseObject != null) && (Race == ActorRace.Play) && (baseObject.Master != null) && (baseObject.Race != ActorRace.Play))
+                if ((baseObject != null) && (baseObject.Master != null) && (baseObject.Race != ActorRace.Play))
                 {
                     if (baseObject.Master == this)
                     {
@@ -2755,7 +2782,6 @@ namespace GameSvr.Player
                 {
                     UseItems[Grobal2.U_DRESS].Dura = nDura;
                 }
-
                 if (nOldDura != HUtil32.Round(nDura / 1000))
                 {
                     SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
@@ -2801,7 +2827,6 @@ namespace GameSvr.Player
                 SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
             }
         }
-
 
         protected override void UpdateVisibleGay(BaseObject baseObject)
         {
