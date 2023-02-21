@@ -163,6 +163,10 @@ namespace GameSvr.Player
         protected bool UseThrusting;
         protected bool UseHalfMoon;
         /// <summary>
+        /// 魔法技能
+        /// </summary>
+        protected UserMagic[] MagicArr;
+        /// <summary>
         /// 攻杀剑法
         /// </summary>
         protected bool PowerHit;
@@ -1007,6 +1011,7 @@ namespace GameSvr.Player
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
+            MagicArr = new UserMagic[50];
             GroupMembers = new List<PlayObject>();
             RandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
@@ -5046,10 +5051,108 @@ namespace GameSvr.Player
             RecalcAbilitys();
             SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
         }
+        
+        public UserItem CheckItemCount(string sItemName, ref int nCount)
+        {
+            UserItem result = null;
+            nCount = 0;
+            for (var i = 0; i < UseItems.Length; i++)
+            {
+                if (UseItems[i] == null)
+                {
+                    continue;
+                }
+                var sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index);
+                if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    result = UseItems[i];
+                    nCount++;
+                }
+            }
+            return result;
+        }
+        
+        /// <summary>
+        /// 减少复活戒指持久
+        /// </summary>
+        internal void ItemDamageRevivalRing()
+        {
+            for (var i = 0; i < UseItems.Length; i++)
+            {
+                if (UseItems[i] != null && UseItems[i].Index > 0)
+                {
+                    var pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    if (pSItem != null)
+                    {
+                        if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount)))
+                        {
+                            var nDura = UseItems[i].Dura;
+                            var tDura = (ushort)HUtil32.Round(nDura / 1000.0);
+                            nDura -= 1000;
+                            if (nDura <= 0)
+                            {
+                                nDura = 0;
+                                UseItems[i].Dura = nDura;
+                                if (Race == ActorRace.Play)
+                                {
+                                    ((PlayObject)this).SendDelItems(UseItems[i]);
+                                }
+                                UseItems[i].Index = 0;
+                                RecalcAbilitys();
+                            }
+                            else
+                            {
+                                UseItems[i].Dura = nDura;
+                            }
+                            if (tDura != HUtil32.Round(nDura / 1000.0)) // 1.03
+                            {
+                                SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         private bool IsGoodKilling(BaseObject cert)
         {
             return ((PlayObject)cert).PvpFlag;
+        }
+        
+        internal UserMagic GetAttrackMagic(int magicId)
+        {
+            return MagicArr[magicId];
+        }
+        
+        internal byte GetMyLight()
+        {
+            byte currentLight = 0;
+            if (true)//BoHighLevelEffect
+            {
+                if (Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL)
+                {
+                    currentLight = 1;
+                }
+            }
+            for (byte i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
+            {
+                if (UseItems[i] == null)
+                {
+                    continue;
+                }
+                if ((UseItems[i].Index > 0) && (UseItems[i].Dura > 0))
+                {
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    if (stdItem != null)
+                    {
+                        if (currentLight < stdItem.Light)
+                        {
+                            currentLight = stdItem.Light;
+                        }
+                    }
+                }
+            }
+            return currentLight;
         }
     }
 }

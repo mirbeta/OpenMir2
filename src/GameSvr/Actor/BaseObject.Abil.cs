@@ -239,42 +239,5 @@ namespace GameSvr.Actor
             }
             //AccuracyPoint = 15;
         }
-
-        internal byte GetMyLight()
-        {
-            byte currentLight = 0;
-            if (Race == ActorRace.Play)
-            {
-                if (this is PlayObject)
-                {
-                    if (true)//BoHighLevelEffect
-                    {
-                        if (Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL)
-                        {
-                            currentLight = 1;
-                        }
-                    }
-                }
-                for (byte i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
-                {
-                    if (UseItems[i] == null)
-                    {
-                        continue;
-                    }
-                    if ((UseItems[i].Index > 0) && (UseItems[i].Dura > 0))
-                    {
-                        StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                        if (stdItem != null)
-                        {
-                            if (currentLight < stdItem.Light)
-                            {
-                                currentLight = stdItem.Light;
-                            }
-                        }
-                    }
-                }
-            }
-            return currentLight;
-        }
     }
 }

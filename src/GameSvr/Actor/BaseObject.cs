@@ -5,7 +5,6 @@ using GameSvr.Maps;
 using GameSvr.Monster;
 using GameSvr.Monster.Monsters;
 using GameSvr.Player;
-using System.Dynamic;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -410,10 +409,6 @@ namespace GameSvr.Actor
         /// 物品列表
         /// </summary>
         public IList<UserItem> ItemList;
-        /// <summary>
-        /// 身上物品
-        /// </summary>
-        public UserItem[] UseItems;
         public IList<MonsterSayMsg> SayMsgList;
         private int SendRefMsgTick;
         /// <summary>
@@ -432,7 +427,6 @@ namespace GameSvr.Actor
         /// 下次攻击时间
         /// </summary>
         public int NextHitTime;
-        protected UserMagic[] MagicArr;
         /// <summary>
         /// 是否刷新在地图上信息
         /// </summary>
@@ -521,9 +515,8 @@ namespace GameSvr.Actor
             VisibleActors = new List<VisibleBaseObject>();
             VisibleItems = new List<VisibleMapItem>();
             VisibleEvents = new List<EventInfo>();
-            ItemList = new List<UserItem>();
+            ItemList = new List<UserItem>(Grobal2.MaxBagItem);
             IsVisibleActive = false;
-            UseItems = new UserItem[13];
             Castle = null;
             Master = null;
             KillMonCount = 0;
@@ -583,7 +576,6 @@ namespace GameSvr.Actor
             FixStatus = -1;
             FastParalysis = false;
             NastyMode = false;
-            MagicArr = new UserMagic[50];
             M2Share.ActorMgr.Add(this);
         }
 
@@ -1199,49 +1191,7 @@ namespace GameSvr.Actor
             }
             HealthSpellChanged();
         }
-
-        /// <summary>
-        /// 减少复活戒指持久
-        /// </summary>
-        internal void ItemDamageRevivalRing()
-        {
-            for (var i = 0; i < UseItems.Length; i++)
-            {
-                if (UseItems[i] != null && UseItems[i].Index > 0)
-                {
-                    var pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                    if (pSItem != null)
-                    {
-                        if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount)))
-                        {
-                            var nDura = UseItems[i].Dura;
-                            var tDura = (ushort)HUtil32.Round(nDura / 1000.0);
-                            nDura -= 1000;
-                            if (nDura <= 0)
-                            {
-                                nDura = 0;
-                                UseItems[i].Dura = nDura;
-                                if (Race == ActorRace.Play)
-                                {
-                                    ((PlayObject)this).SendDelItems(UseItems[i]);
-                                }
-                                UseItems[i].Index = 0;
-                                RecalcAbilitys();
-                            }
-                            else
-                            {
-                                UseItems[i].Dura = nDura;
-                            }
-                            if (tDura != HUtil32.Round(nDura / 1000.0)) // 1.03
-                            {
-                                SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        
         public bool GetFrontPosition(ref short nX, ref short nY)
         {
             var envir = Envir;
@@ -3322,27 +3272,7 @@ namespace GameSvr.Actor
             SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
         }
-
-        public UserItem CheckItemCount(string sItemName, ref int nCount)
-        {
-            UserItem result = null;
-            nCount = 0;
-            for (var i = 0; i < UseItems.Length; i++)
-            {
-                if (UseItems[i] == null)
-                {
-                    continue;
-                }
-                var sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index);
-                if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    result = UseItems[i];
-                    nCount++;
-                }
-            }
-            return result;
-        }
-
+        
         public UserItem CheckItems(string sItemName)
         {
             for (var i = 0; i < ItemList.Count; i++)
@@ -3814,7 +3744,7 @@ namespace GameSvr.Actor
                     break;
             }
 
-            UseItems = new UserItem[13];
+            //UseItems = new UserItem[13];
             for (var i = 0; i < ItemList.Count; i++)
             {
                 ItemList[i] = null;

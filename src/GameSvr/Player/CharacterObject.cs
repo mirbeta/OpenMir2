@@ -2,11 +2,16 @@
 using GameSvr.Items;
 using SystemModule.Consts;
 using SystemModule.Enums;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Player
 {
     public class CharacterObject : AnimalObject
     {
+        /// <summary>
+        /// 身上物品
+        /// </summary>
+        public UserItem[] UseItems;
         /// <summary>
         /// 攻击状态
         /// </summary>
@@ -40,6 +45,7 @@ namespace GameSvr.Player
         {
             IncHpStoneTime = HUtil32.GetTickCount();
             IncMpStoneTime = HUtil32.GetTickCount();
+            UseItems = new UserItem[13];
         }
 
         /// <summary>

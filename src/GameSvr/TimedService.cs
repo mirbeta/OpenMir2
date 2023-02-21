@@ -58,7 +58,7 @@ namespace GameSvr
                 }
                 if ((currentTick - _saveIntervalTime) > 50 * 1000) //保存游戏变量等
                 {
-                    _mirApp.SaveItemNumber();
+                    ServerBase.SaveItemNumber();
                     _saveIntervalTime = HUtil32.GetTickCount();
                 }
                 if ((currentTick - _clearIntervalTime) > 600000) //定时清理游戏对象

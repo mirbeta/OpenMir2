@@ -351,14 +351,6 @@ namespace GameSvr.Robots
             return someDate.Add(new TimeSpan(i, 0, 0, 0));
         }
 
-        private void ProcessAutoRun()
-        {
-            for (int i = AutoRunList.Count - 1; i >= 0; i--)
-            {
-                AutoRun(AutoRunList[i]);
-            }
-        }
-
         public void ReloadScript()
         {
             ClearScript();
@@ -367,7 +359,10 @@ namespace GameSvr.Robots
 
         public override void Run()
         {
-            ProcessAutoRun();
+            for (int i = AutoRunList.Count - 1; i >= 0; i--)
+            {
+                AutoRun(AutoRunList[i]);
+            }
         }
 
         internal override void SendSocket(CommandPacket DefMsg, string sMsg)

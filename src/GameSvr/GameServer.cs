@@ -1,7 +1,6 @@
 ﻿using GameSvr.Planes;
 using GameSvr.Services;
 using NLog;
-using SystemModule.Data;
 using SystemModule.Enums;
 
 namespace GameSvr
@@ -65,7 +64,7 @@ namespace GameSvr
             }
         }
 
-        public void SaveItemNumber()
+        public static void SaveItemNumber()
         {
             ProcessGameNotice();
             M2Share.ServerConf.SaveVariable();

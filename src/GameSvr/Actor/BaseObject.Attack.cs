@@ -162,11 +162,6 @@ namespace GameSvr.Actor
             return result;
         }
 
-        internal UserMagic GetAttrackMagic(int magicId)
-        {
-            return MagicArr[magicId];
-        }
-
         protected void SendAttackMsg(int wIdent, byte btDir, short nX, short nY)
         {
             SendRefMsg(wIdent, btDir, nX, nY, 0, "");
