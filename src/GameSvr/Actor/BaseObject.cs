@@ -147,14 +147,9 @@ namespace GameSvr.Actor
         /// </summary>
         public BaseObject Master;
         /// <summary>
-        /// 是否属下(玩家召唤出来才为True)
+        /// 是否属于召唤怪物(宝宝)
         /// </summary>
         public bool IsSlave;
-        /// <summary>
-        /// 怪物叛变时间
-        /// </summary>
-        public int MasterRoyaltyTick;
-        public int MasterTick;
         /// <summary>
         /// 杀怪计数
         /// </summary>
@@ -379,7 +374,6 @@ namespace GameSvr.Actor
         public int LastHiterTick;
         public BaseObject ExpHitter;
         protected int ExpHitterTick;
-        protected int MapMoveTick;
         /// <summary>
         /// 中毒处理间隔时间
         /// </summary>
@@ -390,23 +384,32 @@ namespace GameSvr.Actor
         /// </summary>
         protected int CheckRoyaltyTick;
         /// <summary>
+        /// 怪物叛变时间
+        /// </summary>
+        public int MasterRoyaltyTick;
+        public int MasterTick;
+        /// <summary>
         /// 恢复血量和魔法间隔
         /// </summary>
         protected int AutoRecoveryTick;
+        /// <summary>
+        /// 消息列表
+        /// </summary>
         protected readonly PriorityQueue<SendMessage, int> MsgQueue;
+        /// <summary>
+        /// 可视范围内的人物列表
+        /// </summary>
         protected readonly IList<BaseObject> VisibleHumanList;
-        protected readonly IList<VisibleMapItem> VisibleItems;
-        protected readonly IList<EventInfo> VisibleEvents;
         /// <summary>
         /// 是否在可视范围内有人物,及宝宝
         /// </summary>
         public bool IsVisibleActive;
         /// <summary>
-        /// 可见精灵列表
+        /// 可视范围内的精灵列表
         /// </summary>
         public readonly IList<VisibleBaseObject> VisibleActors;
         /// <summary>
-        /// 物品列表
+        /// 玩家包裹物品列表或怪物物品掉落列表
         /// </summary>
         public IList<UserItem> ItemList;
         public IList<MonsterSayMsg> SayMsgList;
@@ -513,8 +516,6 @@ namespace GameSvr.Actor
             MsgQueue = new PriorityQueue<SendMessage, int>();
             VisibleHumanList = new List<BaseObject>();
             VisibleActors = new List<VisibleBaseObject>();
-            VisibleItems = new List<VisibleMapItem>();
-            VisibleEvents = new List<EventInfo>();
             ItemList = new List<UserItem>(Grobal2.MaxBagItem);
             IsVisibleActive = false;
             Castle = null;
@@ -556,7 +557,6 @@ namespace GameSvr.Actor
             VerifyTick = HUtil32.GetTickCount();
             CheckRoyaltyTick = HUtil32.GetTickCount();
             AutoRecoveryTick = HUtil32.GetTickCount();
-            MapMoveTick = HUtil32.GetTickCount();
             MasterTick = 0;
             WalkSpeed = 1400;
             NextHitTime = 2000;
@@ -1331,17 +1331,11 @@ namespace GameSvr.Actor
                     var moveSuccess = false;
                     Envir.DeleteFromMap(CurrX, CurrY, CellType, this);
                     VisibleHumanList.Clear();
-                    for (var i = 0; i < VisibleItems.Count; i++)
-                    {
-                        VisibleItems[i] = null;
-                    }
-                    VisibleItems.Clear();
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
                         VisibleActors[i] = null;
                     }
                     VisibleActors.Clear();
-                    VisibleEvents.Clear();
                     Envir = envir;
                     MapName = envir.MapName;
                     MapFileName = envir.MapFileName;
@@ -1360,7 +1354,6 @@ namespace GameSvr.Actor
                         {
                             SendRefMsg(Messages.RM_SPACEMOVE_SHOW, Direction, CurrX, CurrY, 0, "");
                         }
-                        MapMoveTick = HUtil32.GetTickCount();
                         SpaceMoved = true;
                         moveSuccess = true;
                     }
@@ -2806,15 +2799,11 @@ namespace GameSvr.Actor
             {
                 if (M2Share.StartPointList[i].MapName == envir.MapName)
                 {
-                    if (M2Share.StartPointList[i] != null)
+                    var nSafeX = M2Share.StartPointList[i].CurrX;
+                    var nSafeY = M2Share.StartPointList[i].CurrY;
+                    if ((Math.Abs(nX - nSafeX) <= M2Share.Config.SafeZoneSize) && (Math.Abs(nY - nSafeY) <= M2Share.Config.SafeZoneSize))
                     {
-                        var nSafeX = M2Share.StartPointList[i].CurrX;
-                        var nSafeY = M2Share.StartPointList[i].CurrY;
-                        if ((Math.Abs(nX - nSafeX) <= M2Share.Config.SafeZoneSize) &&
-                            (Math.Abs(nY - nSafeY) <= M2Share.Config.SafeZoneSize))
-                        {
-                            result = true;
-                        }
+                        result = true;
                     }
                 }
             }

@@ -70,59 +70,6 @@ namespace GameSvr.Actor
             VisibleActors.Add(visibleBaseObject);
         }
 
-        protected void UpdateVisibleItem(short wX, short wY, MapItem MapItem)
-        {
-            VisibleMapItem visibleMapItem;
-            bool boIsVisible = false;
-            for (int i = 0; i < VisibleItems.Count; i++)
-            {
-                visibleMapItem = VisibleItems[i];
-                if (visibleMapItem.MapItem == MapItem)
-                {
-                    visibleMapItem.VisibleFlag = VisibleFlag.Invisible;
-                    boIsVisible = true;
-                    break;
-                }
-            }
-            if (boIsVisible)
-            {
-                return;
-            }
-            visibleMapItem = new VisibleMapItem
-            {
-                VisibleFlag = VisibleFlag.Hidden,
-                nX = wX,
-                nY = wY,
-                MapItem = MapItem,
-                sName = MapItem.Name,
-                wLooks = MapItem.Looks
-            };
-            VisibleItems.Add(visibleMapItem);
-        }
-
-        protected void UpdateVisibleEvent(short wX, short wY, EventInfo MapEvent)
-        {
-            bool boIsVisible = false;
-            for (int i = 0; i < VisibleEvents.Count; i++)
-            {
-                EventInfo mapEvent = VisibleEvents[i];
-                if (mapEvent == MapEvent)
-                {
-                    mapEvent.VisibleFlag = VisibleFlag.Invisible;
-                    boIsVisible = true;
-                    break;
-                }
-            }
-            if (boIsVisible)
-            {
-                return;
-            }
-            MapEvent.VisibleFlag = VisibleFlag.Hidden;
-            MapEvent.nX = wX;
-            MapEvent.nY = wY;
-            VisibleEvents.Add(MapEvent);
-        }
-
         public bool IsVisibleHuman()
         {
             bool result = false;

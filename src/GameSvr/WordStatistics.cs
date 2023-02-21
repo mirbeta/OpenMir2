@@ -35,7 +35,7 @@ namespace GameSvr
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                _logger.Debug($"CPU:[{GetProcessorData()}] 使用内存率:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] 空闲内存:[{HUtil32.FormatBytesValue(GetFreePhysicalMemory())}]  ");
+                _logger.Debug($"CPU:[{GetCpuUsageForProcess()}] 使用内存率:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] 空闲内存:[{HUtil32.FormatBytesValue(GetFreePhysicalMemory())}]  ");
                 _logger.Debug($"虚拟内存信息:[{GetMemoryVData()}] 虚拟内存大小:[{HUtil32.FormatBytesValue(GetTotalVirtualMemory())}] 虚拟内存使用:[{HUtil32.FormatBytesValue(GetUsageVirtualMemory())}%]");
                 _logger.Debug($"线程数:[{GetThreadCount()}]");
             }
@@ -64,7 +64,20 @@ namespace GameSvr
             var d = GetCounterValue(CpuCounter, "Processor", "% Processor Time", processName);
             return d.ToString("F") + "%";
         }
-        
+
+        private static string GetCpuUsageForProcess()
+        {
+            var startTime = DateTime.UtcNow;
+            var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
+            Thread.Sleep(500);
+            var endTime = DateTime.UtcNow;
+            var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
+            var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
+            var totalMsPassed = (endTime - startTime).TotalMilliseconds;
+            var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
+            return (cpuUsageTotal * 100).ToString("F") + "%";
+        }
+
         /// <summary>
         /// 获取当前程序线程数
         /// </summary>

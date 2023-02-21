@@ -1797,9 +1797,16 @@ namespace GameSvr.Player
                     SendDefMessage(Messages.SM_FEATURECHANGED, processMsg.ActorId, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam, "");
                     break;
                 case Messages.RM_CLEAROBJECTS:
+                    VisibleEvents.Clear();
+                    for (var i = 0; i < VisibleItems.Count; i++)
+                    {
+                        VisibleItems[i] = null;
+                    }
+                    VisibleItems.Clear();
                     SendDefMessage(Messages.SM_CLEAROBJECTS, 0, 0, 0, 0, "");
                     break;
                 case Messages.RM_CHANGEMAP:
+                    MapMoveTick = HUtil32.GetTickCount();
                     SendDefMessage(Messages.SM_CHANGEMAP, ActorId, CurrX, CurrY, DayBright(), processMsg.Msg);
                     RefUserState();
                     SendMapDescription();

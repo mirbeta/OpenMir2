@@ -879,7 +879,7 @@ namespace GameSvr
             if (nIndex >= 0 && nIndex < StartPointList.Count)
             {
                 StartPoint startPoint = StartPointList[nIndex];
-                if (startPoint != null)
+                if (startPoint.Range > 0 && string.IsNullOrEmpty(startPoint.MapName))
                 {
                     nX = startPoint.CurrX;
                     nY = startPoint.CurrY;

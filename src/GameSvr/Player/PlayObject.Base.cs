@@ -197,6 +197,14 @@ namespace GameSvr.Player
         /// </summary>
         internal readonly IList<UserItem> StorageItemList;
         /// <summary>
+        /// 可见事件列表
+        /// </summary>
+        internal readonly IList<EventInfo> VisibleEvents;
+        /// <summary>
+        /// 可见物品列表
+        /// </summary>
+        protected readonly IList<VisibleMapItem> VisibleItems;
+        /// <summary>
         /// 禁止私聊人员列表
         /// </summary>
         public IList<string> LockWhisperList;
@@ -316,6 +324,10 @@ namespace GameSvr.Player
         /// 是否进入游戏完成
         /// </summary>
         public bool BoReadyRun;
+        /// <summary>
+        /// 移动间隔
+        /// </summary>
+        protected int MapMoveTick;
         /// <summary>
         /// 人物当前付费模式
         /// 1:试玩
@@ -1013,6 +1025,9 @@ namespace GameSvr.Player
             QuestFlag = new byte[128];
             MagicArr = new UserMagic[50];
             GroupMembers = new List<PlayObject>();
+            VisibleEvents = new List<EventInfo>();
+            VisibleItems = new List<VisibleMapItem>();
+            MapMoveTick = HUtil32.GetTickCount();
             RandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
 
@@ -3579,7 +3594,7 @@ namespace GameSvr.Player
                 SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, envir.MapFileName);
                 if (AddToMap())
                 {
-                    MapMoveTick = HUtil32.GetTickCount();
+                    //MapMoveTick = HUtil32.GetTickCount();
                     SpaceMoved = true;
                     result = true;
                 }
@@ -5153,6 +5168,59 @@ namespace GameSvr.Player
                 }
             }
             return currentLight;
+        }
+
+        protected void UpdateVisibleItem(short wX, short wY, MapItem MapItem)
+        {
+            VisibleMapItem visibleMapItem;
+            bool boIsVisible = false;
+            for (int i = 0; i < VisibleItems.Count; i++)
+            {
+                visibleMapItem = VisibleItems[i];
+                if (visibleMapItem.MapItem == MapItem)
+                {
+                    visibleMapItem.VisibleFlag = VisibleFlag.Invisible;
+                    boIsVisible = true;
+                    break;
+                }
+            }
+            if (boIsVisible)
+            {
+                return;
+            }
+            visibleMapItem = new VisibleMapItem
+            {
+                VisibleFlag = VisibleFlag.Hidden,
+                nX = wX,
+                nY = wY,
+                MapItem = MapItem,
+                sName = MapItem.Name,
+                wLooks = MapItem.Looks
+            };
+            VisibleItems.Add(visibleMapItem);
+        }
+        
+        protected void UpdateVisibleEvent(short wX, short wY, EventInfo MapEvent)
+        {
+            bool boIsVisible = false;
+            for (int i = 0; i < VisibleEvents.Count; i++)
+            {
+                EventInfo mapEvent = VisibleEvents[i];
+                if (mapEvent == MapEvent)
+                {
+                    mapEvent.VisibleFlag = VisibleFlag.Invisible;
+                    boIsVisible = true;
+                    break;
+                }
+            }
+            if (boIsVisible)
+            {
+                return;
+            }
+            MapEvent.VisibleFlag = VisibleFlag.Hidden;
+            MapEvent.nX = wX;
+            MapEvent.nY = wY;
+            VisibleEvents.Add(MapEvent);
         }
     }
 }

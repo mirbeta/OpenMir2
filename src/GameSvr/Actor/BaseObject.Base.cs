@@ -348,7 +348,7 @@ namespace GameSvr.Actor
                     }
                     if (MasterTick != 0)
                     {
-                        if ((HUtil32.GetTickCount() - MasterTick) > 12 * 60 * 60 * 1000)
+                        if ((HUtil32.GetTickCount() - MasterTick) > 12 * 60 * 60 * 1000) //超过叛变时间则死亡
                         {
                             WAbil.HP = 0;
                         }
