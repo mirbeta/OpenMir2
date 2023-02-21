@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace SystemModule.System
+namespace SystemModule.Base
 {
     static class CPUWin32LoadValue
     {
@@ -42,7 +42,7 @@ namespace SystemModule.System
 
         private static double QUERY_CPULOAD()
         {
-            if (!SystemEnvironment.IsWindows())
+            if (!ServerEnvironment.IsWindows())
             {
                 return 0;
             }

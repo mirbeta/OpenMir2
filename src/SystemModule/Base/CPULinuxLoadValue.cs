@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SystemModule.System
+namespace SystemModule.Base
 {
     static class CPULinuxLoadValue
     {
@@ -138,7 +138,7 @@ namespace SystemModule.System
             }
         }
 
-        public static bool GlobalMemoryStatus(ref SystemEnvironment.MemoryInfo mi)
+        public static bool GlobalMemoryStatus(ref ServerEnvironment.MemoryInfo mi)
         {
             string path = "/proc/meminfo";
             if (!File.Exists(path))

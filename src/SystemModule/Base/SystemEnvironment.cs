@@ -8,9 +8,9 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace SystemModule.System
+namespace SystemModule.Base
 {
-    internal class SystemEnvironment
+    public class ServerEnvironment
     {
         private static readonly Stopwatch _getMemoryStatusWath = new Stopwatch();
         private static MemoryInfo memoryInfo = new MemoryInfo();
@@ -23,12 +23,12 @@ namespace SystemModule.System
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GlobalMemoryStatusEx(ref MemoryInfo memory);
 
-        static SystemEnvironment()
+        static ServerEnvironment()
         {
 
         }
 
-        public unsafe static MemoryInfo GetMemoryStatus()
+        public static unsafe MemoryInfo GetMemoryStatus()
         {
             lock (_getMemoryStatusWath)
             {
@@ -183,6 +183,9 @@ namespace SystemModule.System
 
         public static long AvailablePhysicalMemory => GetMemoryStatus().AvailPhys;
 
+        /// <summary>
+        /// 获取物理内存已使用大小
+        /// </summary>
         public static long UsedPhysicalMemory
         {
             get
@@ -191,11 +194,19 @@ namespace SystemModule.System
                 return mi.TotalPhys - mi.AvailPhys;
             }
         }
+        
+        public static long UsedVirtualMemory
+        {
+            get
+            {
+                MemoryInfo mi = GetMemoryStatus();
+                return mi.TotalVirtual - mi.AvailVirtual;
+            }
+        }
 
         public static bool IsWindows()
         {
-            var platform = Environment.OSVersion.Platform;
-            return platform == PlatformID.Win32NT;
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
         public static long TotalPhysicalMemory => GetMemoryStatus().TotalPhys;
@@ -249,7 +260,7 @@ namespace SystemModule.System
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        internal struct MemoryInfo
+        public struct MemoryInfo
         {
             /// <summary>
             /// 当前结构体大小

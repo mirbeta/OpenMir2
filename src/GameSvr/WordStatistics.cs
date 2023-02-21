@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using SystemModule.Base;
 
 namespace GameSvr
 {
@@ -33,12 +34,11 @@ namespace GameSvr
 
         public void ShowServerState()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                _logger.Debug($"CPU:[{GetCpuUsageForProcess()}] 使用内存率:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] 空闲内存:[{HUtil32.FormatBytesValue(GetFreePhysicalMemory())}]  ");
-                _logger.Debug($"虚拟内存信息:[{GetMemoryVData()}] 虚拟内存大小:[{HUtil32.FormatBytesValue(GetTotalVirtualMemory())}] 虚拟内存使用:[{HUtil32.FormatBytesValue(GetUsageVirtualMemory())}%]");
-                _logger.Debug($"线程数:[{GetThreadCount()}]");
-            }
+            var memoryInfo = ServerEnvironment.GetMemoryStatus();
+            _logger.Debug($"物理内存:[{HUtil32.FormatBytesValue(memoryInfo.TotalPhys)}] 内存使用率:[{HUtil32.FormatBytesValue(memoryInfo.MemoryLoad)}] 空闲内存:[{HUtil32.FormatBytesValue(memoryInfo.AvailPhys)}]");
+            _logger.Debug($"虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.TotalVirtual)}] 虚拟内存使用率:[{HUtil32.FormatBytesValue(ServerEnvironment.UsedVirtualMemory)}%] 空闲虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.AvailVirtual)}]");
+            _logger.Debug($"使用内存:[{HUtil32.FormatBytesValue(ServerEnvironment.UsedPhysicalMemory)}] 工作内存:[{HUtil32.FormatBytesValue(ServerEnvironment.PrivateWorkingSet)}] GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
+            _logger.Debug($"网络流入:[{HUtil32.FormatBytesValue(ServerEnvironment.PerSecondBytesReceived)}] 网络流出:[{HUtil32.FormatBytesValue(ServerEnvironment.PerSecondBytesSent)}]");
             ShowGCStatus();
             GetRunTime();
         }
@@ -51,7 +51,7 @@ namespace GameSvr
 
         private void ShowGCStatus()
         {
-            _logger.Debug($"GC回收:[{GC.CollectionCount(0)}] 分配内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}]");
+            _logger.Debug($"GC回收:[{GC.CollectionCount(0)}]次 GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
             GC.Collect(0, GCCollectionMode.Forced, false);
         }
 
