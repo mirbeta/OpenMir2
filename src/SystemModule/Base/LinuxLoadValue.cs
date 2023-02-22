@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SystemModule.Base
 {
-    static class CPULinuxLoadValue
+    internal static class LinuxLoadValue
     {
         private static CPU_OCCUPY previous_cpu_occupy = null;
         private static readonly object syncobj = new object();

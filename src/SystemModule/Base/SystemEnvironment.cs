@@ -10,18 +10,6 @@ using System.Threading;
 
 namespace SystemModule.Base
 {
-    public static partial class Native
-    {
-        /// <summary>
-        /// 检索有关系统当前使用物理和虚拟内存的信息
-        /// </summary>
-        /// <param name="lpBuffer"></param>
-        /// <returns></returns>
-        [LibraryImport("Kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool GlobalMemoryStatusEx(ref ServerEnvironment.MemoryInfo lpBuffer);
-    }
-    
     public class ServerEnvironment
     {
         private static MemoryInfo memoryInfo = new MemoryInfo();
@@ -40,18 +28,18 @@ namespace SystemModule.Base
             memoryInfo.dwLength = (uint)sizeof(MemoryInfo);
             if (IsWindows())
             {
-                if (!Native.GlobalMemoryStatusEx(ref memoryInfo)) throw new Exception("无法获得内存信息");
+                if (!NativeMethods.GlobalMemoryStatusEx(ref memoryInfo)) throw new Exception("无法获得内存信息");
             }
             else
             {
-                CPULinuxLoadValue.GlobalMemoryStatus(ref memoryInfo);
+                LinuxLoadValue.GlobalMemoryStatus(ref memoryInfo);
             }
             return memoryInfo;
         }
 
         public static void GetCPULoad()
         {
-            CPULinuxLoadValue.Refresh();
+            LinuxLoadValue.Refresh();
         }
 
         public static void GetGetWorkInfo()
@@ -180,9 +168,9 @@ namespace SystemModule.Base
             {
                 if (IsWindows())
                 {
-                    return CPUWin32LoadValue.CPULOAD;
+                    return WindowsLoadValue.CPULOAD;
                 }
-                return CPULinuxLoadValue.CPULOAD;
+                return LinuxLoadValue.CPULOAD;
             }
         }
 
