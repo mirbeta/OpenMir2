@@ -183,17 +183,26 @@ namespace SystemModule.Base
         {
             get
             {
-                MemoryInfo mi = GetMemoryStatus();
-                return mi.ullTotalPhys - mi.ullAvailPhys;
+                return memoryInfo.ullTotalPhys - memoryInfo.ullAvailPhys;
             }
         }
         
+        /// <summary>
+        /// 获取虚拟内存已使用大小
+        /// </summary>
         public static ulong UsedVirtualMemory
         {
             get
             {
-                MemoryInfo mi = GetMemoryStatus();
-                return mi.ullTotalVirtual - mi.ullAvailVirtual;
+                return memoryInfo.ullTotalVirtual - memoryInfo.ullAvailVirtual;
+            }
+        }
+
+        public static ulong VirtualMemoryRate
+        {
+            get
+            {
+                return (memoryInfo.ullTotalVirtual - memoryInfo.ullAvailVirtual) * 100 / memoryInfo.ullTotalVirtual;
             }
         }
 

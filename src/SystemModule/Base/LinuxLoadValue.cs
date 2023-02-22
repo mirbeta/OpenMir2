@@ -185,7 +185,9 @@ namespace SystemModule.Base
             {
                 var counts = 0;
                 var line = string.Empty;
-                while (counts < 4 && !string.IsNullOrEmpty(line = sr.ReadLine()))
+                ulong memFree = 0;
+                ulong inactive = 0;
+                while (counts < 50 && !string.IsNullOrEmpty(line = sr.ReadLine()))
                 {
                     var value = AnalysisMeminfo(line, "MemTotal");
                     if (value != 0)
@@ -199,6 +201,20 @@ namespace SystemModule.Base
                     {
                         counts++;
                         mi.ullAvailPhys = value;
+                        continue;
+                    }
+                    value = AnalysisMeminfo(line, "MemFree");
+                    if (value != 0)
+                    {
+                        counts++;
+                        memFree = value;
+                        continue;
+                    }
+                    value = AnalysisMeminfo(line, "Inactive");
+                    if (value != 0)
+                    {
+                        counts++;
+                        inactive = value;
                         continue;
                     }
                     value = AnalysisMeminfo(line, "SwapTotal");
@@ -216,7 +232,8 @@ namespace SystemModule.Base
                         continue;
                     }
                 }
-                mi.dwMemoryLoad = (uint)((uint)(mi.ullTotalPhys - mi.ullAvailPhys) * 100 / mi.ullTotalPhys);
+                var memused = mi.ullTotalPhys - memFree - inactive;
+                mi.dwMemoryLoad = (uint)(memused * 100 / mi.ullTotalPhys);
                 return true;
             }
             catch (Exception)
