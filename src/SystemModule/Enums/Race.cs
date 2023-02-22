@@ -90,5 +90,6 @@ namespace SystemModule.Enums
         public const byte MonsterArcherguard = 112;
         public const byte MonsterElfmonster = 113;
         public const byte MonsterElfwarrior = 114;
+        public const byte RoBot = 115;
     }
 }

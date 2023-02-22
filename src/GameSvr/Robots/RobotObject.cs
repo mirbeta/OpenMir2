@@ -1,6 +1,7 @@
 ﻿using GameSvr.Player;
 using NLog;
 using SystemModule.Common;
+using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Robots
@@ -16,6 +17,7 @@ namespace GameSvr.Robots
         {
             AutoRunList = new List<AutoRunInfo>();
             this.SuperMan = true;
+            this.Race = ActorRace.RoBot;
         }
 
         ~RobotObject()
