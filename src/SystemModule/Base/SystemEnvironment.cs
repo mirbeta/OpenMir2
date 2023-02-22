@@ -10,18 +10,25 @@ using System.Threading;
 
 namespace SystemModule.Base
 {
+    public static partial class Native
+    {
+        /// <summary>
+        /// 检索有关系统当前使用物理和虚拟内存的信息
+        /// </summary>
+        /// <param name="lpBuffer"></param>
+        /// <returns></returns>
+        [LibraryImport("Kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static partial bool GlobalMemoryStatusEx(ref ServerEnvironment.MemoryInfo lpBuffer);
+    }
+    
     public class ServerEnvironment
     {
-        private static readonly Stopwatch _getMemoryStatusWath = new Stopwatch();
         private static MemoryInfo memoryInfo = new MemoryInfo();
         private static long g_llInOutNicBytesReceived = 0;
         private static long g_llInOutNicBytesSent = 0;
         private static NetworkInterface m_poInOutNetworkInterface = null;
         private static ConcurrentDictionary<int, Stopwatch> m_poStopWatchTable = new ConcurrentDictionary<int, Stopwatch>();
-
-        [DllImport("kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GlobalMemoryStatusEx(ref MemoryInfo memory);
 
         static ServerEnvironment()
         {
@@ -30,21 +37,14 @@ namespace SystemModule.Base
 
         public static unsafe MemoryInfo GetMemoryStatus()
         {
-            lock (_getMemoryStatusWath)
+            memoryInfo.dwLength = (uint)sizeof(MemoryInfo);
+            if (IsWindows())
             {
-                if (!_getMemoryStatusWath.IsRunning || _getMemoryStatusWath.ElapsedMilliseconds >= 500)
-                {
-                    _getMemoryStatusWath.Restart();
-                    memoryInfo.Length = (uint)sizeof(MemoryInfo);
-                    if (IsWindows())
-                    {
-                        GlobalMemoryStatusEx(ref memoryInfo);
-                    }
-                    else
-                    {
-                        CPULinuxLoadValue.GlobalMemoryStatus(ref memoryInfo);
-                    }
-                }
+                if (!Native.GlobalMemoryStatusEx(ref memoryInfo)) throw new Exception("无法获得内存信息");
+            }
+            else
+            {
+                CPULinuxLoadValue.GlobalMemoryStatus(ref memoryInfo);
             }
             return memoryInfo;
         }
@@ -186,26 +186,26 @@ namespace SystemModule.Base
             }
         }
 
-        public static long AvailablePhysicalMemory => GetMemoryStatus().AvailPhys;
+        public static ulong AvailablePhysicalMemory => GetMemoryStatus().ullAvailPhys;
 
         /// <summary>
         /// 获取物理内存已使用大小
         /// </summary>
-        public static long UsedPhysicalMemory
+        public static ulong UsedPhysicalMemory
         {
             get
             {
                 MemoryInfo mi = GetMemoryStatus();
-                return mi.TotalPhys - mi.AvailPhys;
+                return mi.ullTotalPhys - mi.ullAvailPhys;
             }
         }
         
-        public static long UsedVirtualMemory
+        public static ulong UsedVirtualMemory
         {
             get
             {
                 MemoryInfo mi = GetMemoryStatus();
-                return mi.TotalVirtual - mi.AvailVirtual;
+                return mi.ullTotalVirtual - mi.ullAvailVirtual;
             }
         }
 
@@ -214,7 +214,7 @@ namespace SystemModule.Base
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
-        public static long TotalPhysicalMemory => GetMemoryStatus().TotalPhys;
+        public static ulong TotalPhysicalMemory => GetMemoryStatus().ullTotalPhys;
 
         public static long PrivateWorkingSet => Environment.WorkingSet;
 
@@ -268,41 +268,42 @@ namespace SystemModule.Base
         public struct MemoryInfo
         {
             /// <summary>
-            /// 当前结构体大小
+            /// 结构的大小，以字节为单位，必须在调用 GlobalMemoryStatusEx 之前设置此成员，可以用 Init 方法提前处理
             /// </summary>
-            public uint Length;
+            /// <remarks>应当使用本对象提供的 Init ，而不是使用构造函数！</remarks>
+            internal uint dwLength;
             /// <summary>
-            /// 当前内存使用率
+            /// 一个介于 0 和 100 之间的数字，用于指定正在使用的物理内存的大致百分比（0 表示没有内存使用，100 表示内存已满）。
             /// </summary>
-            public uint MemoryLoad;
+            public uint dwMemoryLoad;
             /// <summary>
-            /// 总计物理内存大小
+            /// 实际物理内存量，以字节为单位
             /// </summary>
-            public long TotalPhys;
+            public ulong ullTotalPhys;
             /// <summary>
-            /// 可用物理内存大小
+            /// 当前可用的物理内存量，以字节为单位。这是可以立即重用而无需先将其内容写入磁盘的物理内存量。它是备用列表、空闲列表和零列表的大小之和
             /// </summary>
-            public long AvailPhys;
+            public ulong ullAvailPhys;
             /// <summary>
-            /// 总计交换文件大小
+            /// 系统或当前进程的当前已提交内存限制，以字节为单位，以较小者为准。要获得系统范围的承诺内存限制，请调用GetPerformanceInfo
             /// </summary>
-            public long TotalPageFile;
+            public ulong ullTotalPageFile;
             /// <summary>
-            /// 可用交互分区大小
+            /// 当前进程可以提交的最大内存量，以字节为单位。该值等于或小于系统范围的可用提交值。要计算整个系统的可承诺值，调用GetPerformanceInfo核减价值CommitTotal从价值CommitLimit
             /// </summary>
-            public long AvailPageFile;
+            public ulong ullAvailPageFile;
             /// <summary>
-            /// 总计虚拟内存大小
+            /// 调用进程的虚拟地址空间的用户模式部分的大小，以字节为单位。该值取决于进程类型、处理器类型和操作系统的配置。例如，对于 x86 处理器上的大多数 32 位进程，此值约为 2 GB，对于在启用4 GB 调整的系统上运行的具有大地址感知能力的 32 位进程约为 3 GB 。
             /// </summary>
-            public long TotalVirtual;
+            public ulong ullTotalVirtual;
             /// <summary>
-            /// 可用虚拟内存大小
+            /// 当前在调用进程的虚拟地址空间的用户模式部分中未保留和未提交的内存量，以字节为单位
             /// </summary>
-            public long AvailVirtual;
+            public ulong ullAvailVirtual;
             /// <summary>
-            /// 保存字段，始终为0
+            /// 预订的。该值始终为 0
             /// </summary>
-            public long AvailExtendedVirtual;
+            internal ulong ullAvailExtendedVirtual;
         }
     }
 }

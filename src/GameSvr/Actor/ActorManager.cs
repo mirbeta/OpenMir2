@@ -128,6 +128,7 @@ namespace GameSvr.Actor
                     {
                         PlayerCount++;
                         PlayerGhostCount++;
+                        _logger.Debug($"玩家死亡 {actor.ChrName}:{actor.MapName}:{actor.CurrX}:{actor.CurrY}");
                     }
                     else
                     {

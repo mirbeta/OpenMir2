@@ -129,7 +129,7 @@ namespace SystemModule.Base
             return occupy;
         }
 
-        private static long AnalysisMeminfo(string line,string key)
+        private static ulong AnalysisMeminfo(string line,string key)
         {
             var i = line.IndexOf(':');
             if (i < 0)
@@ -160,7 +160,7 @@ namespace SystemModule.Base
             {
                 return 0;
             }
-            long.TryParse(line, out var n);
+            ulong.TryParse(line, out var n);
             return n * 1024;
         }
 
@@ -191,32 +191,32 @@ namespace SystemModule.Base
                     if (value != 0)
                     {
                         counts++;
-                        mi.TotalPhys = value;
+                        mi.ullTotalPhys = value;
                         continue;
                     }
                     value = AnalysisMeminfo(line, "MemAvailable");
                     if (value != 0)
                     {
                         counts++;
-                        mi.AvailPhys = value;
+                        mi.ullAvailPhys = value;
                         continue;
                     }
                     value = AnalysisMeminfo(line, "SwapTotal");
                     if (value != 0)
                     {
                         counts++;
-                        mi.TotalVirtual = value;
+                        mi.ullTotalVirtual = value;
                         continue;
                     }
                     value = AnalysisMeminfo(line, "SwapFree");
                     if (value != 0)
                     {
                         counts++;
-                        mi.AvailVirtual = value;
+                        mi.ullAvailVirtual = value;
                         continue;
                     }
                 }
-                mi.MemoryLoad = (uint)((uint)(mi.TotalPhys - mi.AvailPhys) * 100 / mi.TotalPhys);
+                mi.dwMemoryLoad = (uint)((uint)(mi.ullTotalPhys - mi.ullAvailPhys) * 100 / mi.ullTotalPhys);
                 return true;
             }
             catch (Exception)
