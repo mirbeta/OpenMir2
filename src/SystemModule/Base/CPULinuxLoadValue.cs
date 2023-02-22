@@ -41,17 +41,14 @@ namespace SystemModule.Base
                 {
                     long od = previous_cpu_occupy.user + previous_cpu_occupy.nice + previous_cpu_occupy.system + previous_cpu_occupy.idle + previous_cpu_occupy.lowait + previous_cpu_occupy.irq + previous_cpu_occupy.softirq;//第一次(用户+优先级+系统+空闲)的时间再赋给od
                     long nd = current_cpu_occupy.user + current_cpu_occupy.nice + current_cpu_occupy.system + current_cpu_occupy.idle + current_cpu_occupy.lowait + current_cpu_occupy.irq + current_cpu_occupy.softirq;//第二次(用户+优先级+系统+空闲)的时间再赋给od
-
                     double sum = nd - od;
                     double idle = current_cpu_occupy.idle - previous_cpu_occupy.idle;
                     double cpu_use = idle / sum;
-
                     if (!a)
                     {
                         idle = current_cpu_occupy.user + current_cpu_occupy.system + current_cpu_occupy.nice - previous_cpu_occupy.user - previous_cpu_occupy.system - previous_cpu_occupy.nice;
                         cpu_use = idle / sum;
                     }
-
                     cpu_use = cpu_use * 100 / Environment.ProcessorCount;
                     return cpu_use;
                 }
@@ -98,7 +95,7 @@ namespace SystemModule.Base
 
         private static CPU_OCCUPY get_cpuoccupy()
         {
-            string path = "/proc/stat";
+            const string path = "/proc/stat";
             if (!File.Exists(path))
             {
                 return null;
@@ -107,40 +104,34 @@ namespace SystemModule.Base
             try
             {
                 stat = File.OpenRead(path);
-                if (stat == null)
-                {
-                    return null;
-                }
             }
             catch (Exception)
             {
                 return null;
             }
-            using (StreamReader sr = new StreamReader(stat))
+            using StreamReader sr = new StreamReader(stat);
+            CPU_OCCUPY occupy = new CPU_OCCUPY();
+            try
             {
-                CPU_OCCUPY occupy = new CPU_OCCUPY();
-                try
-                {
-                    occupy.name = ReadArgumentValue(sr);
-                    occupy.user = ReadArgumentValueInt64(sr);
-                    occupy.nice = ReadArgumentValueInt64(sr);
-                    occupy.system = ReadArgumentValueInt64(sr);
-                    occupy.idle = ReadArgumentValueInt64(sr);
-                    occupy.lowait = ReadArgumentValueInt64(sr);
-                    occupy.irq = ReadArgumentValueInt64(sr);
-                    occupy.softirq = ReadArgumentValueInt64(sr);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-                return occupy;
+                occupy.name = ReadArgumentValue(sr);
+                occupy.user = ReadArgumentValueInt64(sr);
+                occupy.nice = ReadArgumentValueInt64(sr);
+                occupy.system = ReadArgumentValueInt64(sr);
+                occupy.idle = ReadArgumentValueInt64(sr);
+                occupy.lowait = ReadArgumentValueInt64(sr);
+                occupy.irq = ReadArgumentValueInt64(sr);
+                occupy.softirq = ReadArgumentValueInt64(sr);
             }
+            catch (Exception)
+            {
+                return null;
+            }
+            return occupy;
         }
 
         public static bool GlobalMemoryStatus(ref ServerEnvironment.MemoryInfo mi)
         {
-            string path = "/proc/meminfo";
+            const string path = "/proc/meminfo";
             if (!File.Exists(path))
             {
                 return false;
@@ -149,23 +140,19 @@ namespace SystemModule.Base
             try
             {
                 stat = File.OpenRead(path);
-                if (stat == null)
-                {
-                    return false;
-                }
             }
             catch (Exception)
             {
                 return false;
             }
-            long? call(string line, string key)
+            long? Call(string line, string key)
             {
                 int i = line.IndexOf(':');
                 if (i < 0)
                 {
                     return null;
                 }
-                string lk = line.Substring(0, i);
+                var lk = line[..i];
                 if (string.IsNullOrEmpty(lk))
                 {
                     return null;
@@ -174,13 +161,13 @@ namespace SystemModule.Base
                 {
                     return null;
                 }
-                line = line.Substring(i + 1).TrimStart();
+                line = line[(i + 1)..].TrimStart();
                 if (string.IsNullOrEmpty(line))
                 {
                     return null;
                 }
                 string[] sp = line.Split(' ');
-                if (sp == null || sp.Length <= 0)
+                if (sp.Length <= 0)
                 {
                     return null;
                 }
@@ -192,35 +179,48 @@ namespace SystemModule.Base
                 long.TryParse(line, out long n);
                 return n * 1024;
             }
-            using (StreamReader sr = new StreamReader(stat))
+            using var sr = new StreamReader(stat);
+            try
             {
-                try
+                int counts = 0;
+                string line = string.Empty;
+                while (counts < 2 && !string.IsNullOrEmpty(line = sr.ReadLine()))
                 {
-                    int counts = 0;
-                    string line = string.Empty;
-                    while (counts < 2 && !string.IsNullOrEmpty(line = sr.ReadLine()))
+                    long? value = Call(line, "MemTotal");
+                    if (value != null)
                     {
-                        long? value = call(line, "MemTotal");
-                        if (value != null)
-                        {
-                            counts++;
-                            mi.TotalPhys = value.Value;
-                            continue;
-                        }
-                        value = call(line, "MemAvailable");
-                        if (value != null)
-                        {
-                            counts++;
-                            mi.AvailPhys = value.Value;
-                            continue;
-                        }
+                        counts++;
+                        mi.TotalPhys = value.Value;
+                        continue;
                     }
-                    return true;
+                    value = Call(line, "MemAvailable");
+                    if (value != null)
+                    {
+                        counts++;
+                        mi.AvailPhys = value.Value;
+                        continue;
+                    }
+                    value = Call(line, "SwapTotal");
+                    if (value != null)
+                    {
+                        counts++;
+                        mi.TotalVirtual = value.Value;
+                        continue;
+                    }
+                    value = Call(line, "SwapFree");
+                    if (value != null)
+                    {
+                        counts++;
+                        mi.AvailVirtual = value.Value;
+                        continue;
+                    }
                 }
-                catch (Exception)
-                {
-                    return false;
-                }
+                mi.MemoryLoad = (uint)((uint)(mi.TotalPhys - mi.AvailPhys) * 100 / mi.TotalPhys);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

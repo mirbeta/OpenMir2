@@ -49,6 +49,11 @@ namespace SystemModule.Base
             return memoryInfo;
         }
 
+        public static void GetCPULoad()
+        {
+            CPULinuxLoadValue.Refresh();
+        }
+
         public static void GetGetWorkInfo()
         {
             // 刷新当前出入流量网卡的信息

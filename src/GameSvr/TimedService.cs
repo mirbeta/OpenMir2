@@ -75,6 +75,7 @@ namespace GameSvr
                 if ((currentTick - _clearIntervalTime) > 600000) //定时清理游戏对象
                 {
                     M2Share.ActorMgr.ClearObject();
+                    M2Share.Statistics.ShowServerState();
                     _clearIntervalTime = HUtil32.GetTickCount();
                 }
                 if (currentTick - _scheduledSaveIntervalTime > 60 * 10000) //定时保存玩家数据

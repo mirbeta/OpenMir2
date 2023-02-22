@@ -387,10 +387,12 @@ namespace GameSvr.GameGate
 
         private void GateSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            int gateId = GameGateLinkMap[e.SocHandle];
-            M2Share.GateMgr.CloseGate(gateId, e.ConnectionId, e.RemoteIPaddr);
-            CurrentGateIdx--;
-            GameGateLinkMap.Remove(e.SocHandle);
+            if (GameGateLinkMap.TryGetValue(e.SocHandle, out var gateId))
+            {
+                M2Share.GateMgr.CloseGate(gateId, e.ConnectionId, e.RemoteIPaddr);
+                CurrentGateIdx--;
+                GameGateLinkMap.Remove(e.SocHandle);
+            }
         }
 
         private void GateSocketClientConnect(object sender, AsyncUserToken e)

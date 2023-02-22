@@ -34,6 +34,7 @@ namespace GameSvr
 
         public void ShowServerState()
         {
+            ServerEnvironment.GetCPULoad();
             var memoryInfo = ServerEnvironment.GetMemoryStatus();
             _logger.Debug($"物理内存:[{HUtil32.FormatBytesValue(memoryInfo.TotalPhys)}] 内存使用率:[{HUtil32.FormatBytesValue(memoryInfo.MemoryLoad)}] 空闲内存:[{HUtil32.FormatBytesValue(memoryInfo.AvailPhys)}]");
             _logger.Debug($"虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.TotalVirtual)}] 虚拟内存使用率:[{HUtil32.FormatBytesValue(ServerEnvironment.UsedVirtualMemory)}%] 空闲虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.AvailVirtual)}]");

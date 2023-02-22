@@ -1,8 +1,6 @@
 ﻿using NLog;
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using SystemModule.Enums;
 using SystemModule.Generation.Entities;
 
@@ -26,6 +24,8 @@ namespace GameSvr.Actor
         /// 其他对象
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohterMap = new ConcurrentDictionary<int, object>();
+        private static int PlayerCount { get; set; }
+        private static int MonsterCount { get; set; }
         private static int MonsterDeathCount { get; set; }
         private static int MonsterDisposeCount { get; set; }
         private static int PlayerGhostCount { get; set; }
@@ -47,7 +47,7 @@ namespace GameSvr.Actor
                 {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
-                    for (int i = 0; i < 100000; i++)
+                    for (var i = 0; i < 100000; i++)
                     {
                         int sequence = standardRandomizer.NextInteger();
                         if (_actorsMap.ContainsKey(sequence))
@@ -116,22 +116,36 @@ namespace GameSvr.Actor
         public void ClearObject()
         {
             ActorIds.Clear();
+            PlayerCount = 0;
+            MonsterCount = 0;
             using IEnumerator<KeyValuePair<int, ActorEntity>> actors = _actorsMap.GetEnumerator();
             while (actors.MoveNext())
             {
                 BaseObject actor = (BaseObject)actors.Current.Value;
-                if (actor.Death)
+                if (!actor.Death && !actor.Ghost)
+                {
+                    if (actor.Race == ActorRace.Play)
+                    {
+                        PlayerCount++;
+                        PlayerGhostCount++;
+                    }
+                    else
+                    {
+                        MonsterCount++;
+                    }
+                }
+                else if (actor.Race != ActorRace.Play && actor.Death || actor.Ghost)
                 {
                     MonsterDeathCount++;
                 }
                 if (!actor.Ghost || actor.GhostTick <= 0) continue;
-                if ((HUtil32.GetTickCount() - actor.GhostTick) <= 20000)
+                if ((HUtil32.GetTickCount() - actor.GhostTick) <= 20000) //死亡对象清理时间
                 {
-                    continue; //死亡对象清理时间
+                    continue; 
                 }
                 ActorIds.Add(actors.Current.Key);
             }
-            foreach (int actorId in ActorIds)
+            foreach (var actorId in ActorIds)
             {
                 if (_actorsMap.TryRemove(actorId, out ActorEntity actor))
                 {
@@ -139,16 +153,10 @@ namespace GameSvr.Actor
                     {
                         MonsterDisposeCount++;
                     }
-                    else
-                    {
-                        PlayerGhostCount++;
-                    }
                     actors.Dispose();
-                    //_logger.Debug($"清理死亡对象 名称:[{actor.ChrName}] 地图:{actor.MapName} 坐标:{actor.CurrX}:{actor.CurrY}");
                 }
             }
-            _logger.Debug($"总对象数:[{_actorsMap.Count}] 角色死亡数:[{PlayerGhostCount}] 怪物死亡数:[{MonsterDeathCount}] 怪物释放数:[{MonsterDisposeCount}]");
-            M2Share.Statistics.ShowServerState();
+            _logger.Debug($"对象数:[{_actorsMap.Count}] 玩家/怪物:[{PlayerCount}/{MonsterCount}] 死亡角色:[{PlayerGhostCount}] 死亡怪物:[{MonsterDeathCount}] 释放怪物:[{MonsterDisposeCount}]");
         }
     }
 }
