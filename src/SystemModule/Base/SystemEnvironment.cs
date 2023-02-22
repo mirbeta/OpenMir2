@@ -10,9 +10,9 @@ using System.Threading;
 
 namespace SystemModule.Base
 {
-    public class ServerEnvironment
+    public static class ServerEnvironment
     {
-        private static MemoryInfo memoryInfo = new MemoryInfo();
+        private static MemoryInfo memoryInfo = default;
         private static long g_llInOutNicBytesReceived = 0;
         private static long g_llInOutNicBytesSent = 0;
         private static NetworkInterface m_poInOutNetworkInterface = null;
@@ -174,7 +174,7 @@ namespace SystemModule.Base
             }
         }
 
-        public static ulong AvailablePhysicalMemory => GetMemoryStatus().ullAvailPhys;
+        public static ulong AvailablePhysicalMemory => memoryInfo.ullAvailPhys;
 
         /// <summary>
         /// 获取物理内存已使用大小
@@ -198,7 +198,10 @@ namespace SystemModule.Base
             }
         }
 
-        public static ulong VirtualMemoryRate
+        /// <summary>
+        /// 虚拟内存使用率
+        /// </summary>
+        public static ulong VirtualMemoryLoad
         {
             get
             {
@@ -211,7 +214,7 @@ namespace SystemModule.Base
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
-        public static ulong TotalPhysicalMemory => GetMemoryStatus().ullTotalPhys;
+        public static ulong TotalPhysicalMemory => memoryInfo.ullTotalPhys;
 
         public static long PrivateWorkingSet => Environment.WorkingSet;
 
