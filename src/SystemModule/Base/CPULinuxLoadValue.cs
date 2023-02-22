@@ -31,7 +31,7 @@ namespace SystemModule.Base
         {
             lock (syncobj)
             {
-                CPU_OCCUPY current_cpu_occupy = get_cpuoccupy();
+                var current_cpu_occupy = get_cpuoccupy();
                 if (current_cpu_occupy == null || previous_cpu_occupy == null)
                 {
                     previous_cpu_occupy = current_cpu_occupy;
@@ -39,11 +39,11 @@ namespace SystemModule.Base
                 }
                 try
                 {
-                    long od = previous_cpu_occupy.user + previous_cpu_occupy.nice + previous_cpu_occupy.system + previous_cpu_occupy.idle + previous_cpu_occupy.lowait + previous_cpu_occupy.irq + previous_cpu_occupy.softirq;//第一次(用户+优先级+系统+空闲)的时间再赋给od
-                    long nd = current_cpu_occupy.user + current_cpu_occupy.nice + current_cpu_occupy.system + current_cpu_occupy.idle + current_cpu_occupy.lowait + current_cpu_occupy.irq + current_cpu_occupy.softirq;//第二次(用户+优先级+系统+空闲)的时间再赋给od
+                    var od = previous_cpu_occupy.user + previous_cpu_occupy.nice + previous_cpu_occupy.system + previous_cpu_occupy.idle + previous_cpu_occupy.lowait + previous_cpu_occupy.irq + previous_cpu_occupy.softirq;//第一次(用户+优先级+系统+空闲)的时间再赋给od
+                    var nd = current_cpu_occupy.user + current_cpu_occupy.nice + current_cpu_occupy.system + current_cpu_occupy.idle + current_cpu_occupy.lowait + current_cpu_occupy.irq + current_cpu_occupy.softirq;//第二次(用户+优先级+系统+空闲)的时间再赋给od
                     double sum = nd - od;
                     double idle = current_cpu_occupy.idle - previous_cpu_occupy.idle;
-                    double cpu_use = idle / sum;
+                    var cpu_use = idle / sum;
                     if (!a)
                     {
                         idle = current_cpu_occupy.user + current_cpu_occupy.system + current_cpu_occupy.nice - previous_cpu_occupy.user - previous_cpu_occupy.system - previous_cpu_occupy.nice;
@@ -66,7 +66,7 @@ namespace SystemModule.Base
             {
                 while (!sr.EndOfStream)
                 {
-                    char ch = (char)sr.Read();
+                    var ch = (char)sr.Read();
                     if (ch == ' ')
                     {
                         if (values == null)
@@ -83,7 +83,7 @@ namespace SystemModule.Base
 
         private static long ReadArgumentValueInt64(StreamReader sr)
         {
-            string s = ReadArgumentValue(sr);
+            var s = ReadArgumentValue(sr);
             if (string.IsNullOrEmpty(s))
             {
                 return 0;
@@ -109,8 +109,8 @@ namespace SystemModule.Base
             {
                 return null;
             }
-            using StreamReader sr = new StreamReader(stat);
-            CPU_OCCUPY occupy = new CPU_OCCUPY();
+            using var sr = new StreamReader(stat);
+            var occupy = new CPU_OCCUPY();
             try
             {
                 occupy.name = ReadArgumentValue(sr);
@@ -129,6 +129,41 @@ namespace SystemModule.Base
             return occupy;
         }
 
+        private static long AnalysisMeminfo(string line,string key)
+        {
+            var i = line.IndexOf(':');
+            if (i < 0)
+            {
+                return 0;
+            }
+            var lk = line[..i];
+            if (string.IsNullOrEmpty(lk))
+            {
+                return 0;
+            }
+            if (lk != key)
+            {
+                return 0;
+            }
+            line = line[(i + 1)..].TrimStart();
+            if (string.IsNullOrEmpty(line))
+            {
+                return 0;
+            }
+            var sp = line.Split(' ');
+            if (sp.Length <= 0)
+            {
+                return 0;
+            }
+            line = sp[0];
+            if (string.IsNullOrEmpty(line))
+            {
+                return 0;
+            }
+            long.TryParse(line, out var n);
+            return n * 1024;
+        }
+
         public static bool GlobalMemoryStatus(ref ServerEnvironment.MemoryInfo mi)
         {
             const string path = "/proc/meminfo";
@@ -145,73 +180,39 @@ namespace SystemModule.Base
             {
                 return false;
             }
-            long? Call(string line, string key)
-            {
-                int i = line.IndexOf(':');
-                if (i < 0)
-                {
-                    return null;
-                }
-                var lk = line[..i];
-                if (string.IsNullOrEmpty(lk))
-                {
-                    return null;
-                }
-                if (lk != key)
-                {
-                    return null;
-                }
-                line = line[(i + 1)..].TrimStart();
-                if (string.IsNullOrEmpty(line))
-                {
-                    return null;
-                }
-                string[] sp = line.Split(' ');
-                if (sp.Length <= 0)
-                {
-                    return null;
-                }
-                line = sp[0];
-                if (string.IsNullOrEmpty(line))
-                {
-                    return null;
-                }
-                long.TryParse(line, out long n);
-                return n * 1024;
-            }
             using var sr = new StreamReader(stat);
             try
             {
-                int counts = 0;
-                string line = string.Empty;
-                while (counts < 2 && !string.IsNullOrEmpty(line = sr.ReadLine()))
+                var counts = 0;
+                var line = string.Empty;
+                while (counts < 4 && !string.IsNullOrEmpty(line = sr.ReadLine()))
                 {
-                    long? value = Call(line, "MemTotal");
-                    if (value != null)
+                    var value = AnalysisMeminfo(line, "MemTotal");
+                    if (value != 0)
                     {
                         counts++;
-                        mi.TotalPhys = value.Value;
+                        mi.TotalPhys = value;
                         continue;
                     }
-                    value = Call(line, "MemAvailable");
-                    if (value != null)
+                    value = AnalysisMeminfo(line, "MemAvailable");
+                    if (value != 0)
                     {
                         counts++;
-                        mi.AvailPhys = value.Value;
+                        mi.AvailPhys = value;
                         continue;
                     }
-                    value = Call(line, "SwapTotal");
-                    if (value != null)
+                    value = AnalysisMeminfo(line, "SwapTotal");
+                    if (value != 0)
                     {
                         counts++;
-                        mi.TotalVirtual = value.Value;
+                        mi.TotalVirtual = value;
                         continue;
                     }
-                    value = Call(line, "SwapFree");
-                    if (value != null)
+                    value = AnalysisMeminfo(line, "SwapFree");
+                    if (value != 0)
                     {
                         counts++;
-                        mi.AvailVirtual = value.Value;
+                        mi.AvailVirtual = value;
                         continue;
                     }
                 }
