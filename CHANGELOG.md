@@ -1,108 +1,103 @@
-## <small>1.1.4 (2022-11-24)</small>
+# Changelog
 
-* refactor: 删除未使用的加密方法 ([aed0cf1](http://10.10.0.202/mir2/OpenMir2/commits/aed0cf1))
-* perf: 使用性能更快更高效的序列化组件 ([555f4b6](http://10.10.0.202/mir2/OpenMir2/commits/555f4b6))
-* perf: 使用性能更快更高效的序列化组件 ([d8289b5](http://10.10.0.202/mir2/OpenMir2/commits/d8289b5))
-* perf: 优化封包处理，减少不必要的分配 ([b7c39d5](http://10.10.0.202/mir2/OpenMir2/commits/b7c39d5))
-* perf: 优化GameGate封包部分处理代码，减少不必要的分配 ([1ce83ff](http://10.10.0.202/mir2/OpenMir2/commits/1ce83ff))
-* perf: loginGate封包优化处理 ([67aec9f](http://10.10.0.202/mir2/OpenMir2/commits/67aec9f))
-* test: 测试 ([fbabaad](http://10.10.0.202/mir2/OpenMir2/commits/fbabaad))
-* test: memoryPack测试 ([f33d031](http://10.10.0.202/mir2/OpenMir2/commits/f33d031))
-* chore(release): 1.1.4 ([0bee149](http://10.10.0.202/mir2/OpenMir2/commits/0bee149))
-* fix: 修复编译启动报错 ([13a37eb](http://10.10.0.202/mir2/OpenMir2/commits/13a37eb))
-* fix: 修复封包无法解析问题 ([8bd7064](http://10.10.0.202/mir2/OpenMir2/commits/8bd7064))
-* fix: 修复替换MemoryPack后封包处理问题 ([9f9911c](http://10.10.0.202/mir2/OpenMir2/commits/9f9911c))
-* build: 修复BotSvr编译问题 ([74850aa](http://10.10.0.202/mir2/OpenMir2/commits/74850aa))
-* style: 代码清理 ([fdd5058](http://10.10.0.202/mir2/OpenMir2/commits/fdd5058))
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [1.2.0](http://10.10.0.202/mir2/OpenMir2/compare/v1.1.4...v1.2.0) (2023-02-22)
 
 
+### Features
 
-## <small>1.1.3 (2022-11-14)</small>
-
-* refactor: 调整和重构账号中心和游戏引擎的账号付费模式 ([9f74ad6](http://10.10.0.202/mir2/OpenMir2/commits/9f74ad6))
-* refactor: 清理无效命名空间 ([0f807fd](http://10.10.0.202/mir2/OpenMir2/commits/0f807fd))
-* refactor: 重构部分代码，修复部分警告信息 ([d31a11b](http://10.10.0.202/mir2/OpenMir2/commits/d31a11b))
-* refactor: 重构DBSvr封包处理，优化处理效率 ([16ca749](http://10.10.0.202/mir2/OpenMir2/commits/16ca749))
-* refactor: gameGate测试 ([ca74a0c](http://10.10.0.202/mir2/OpenMir2/commits/ca74a0c))
-* refactor: gameGate增加累计发送和累计接收 ([d309950](http://10.10.0.202/mir2/OpenMir2/commits/d309950))
-* refactor: serviceHost增加关闭延时 ([ddbfc01](http://10.10.0.202/mir2/OpenMir2/commits/ddbfc01))
-* perf: 优化封包处理提升处理性能和效率 ([ca56b82](http://10.10.0.202/mir2/OpenMir2/commits/ca56b82))
-* perf: 优化DBSvr、GameSvr读取和保存玩家数据性能 ([cd67775](http://10.10.0.202/mir2/OpenMir2/commits/cd67775))
-* test: 测试GameSvr处理人物读取保存数据 ([a80d20e](http://10.10.0.202/mir2/OpenMir2/commits/a80d20e))
-* test: dBSvr、GameSvr读取玩家数据测试 ([27c936d](http://10.10.0.202/mir2/OpenMir2/commits/27c936d))
-* test: gameGate测试 ([8795352](http://10.10.0.202/mir2/OpenMir2/commits/8795352))
-* test: gameSvr测试 ([b006019](http://10.10.0.202/mir2/OpenMir2/commits/b006019))
-* test(g): gameGate测试 ([66ffdfb](http://10.10.0.202/mir2/OpenMir2/commits/66ffdfb))
-* test: loginSvr测试 ([d459a77](http://10.10.0.202/mir2/OpenMir2/commits/d459a77))
-* test: loginSvr测试 ([99a16dd](http://10.10.0.202/mir2/OpenMir2/commits/99a16dd))
-* test: makePlayer测试 ([5a09f7a](http://10.10.0.202/mir2/OpenMir2/commits/5a09f7a))
-* chore(release): 1.1.3 ([7ac2a0d](http://10.10.0.202/mir2/OpenMir2/commits/7ac2a0d))
-* fix: 尝试修复GameGate客户端断开链接可能导致空指针的问题 ([a7855a9](http://10.10.0.202/mir2/OpenMir2/commits/a7855a9))
-* fix: 尝试Socket问题 ([f18760f](http://10.10.0.202/mir2/OpenMir2/commits/f18760f))
-* fix: 修复无法进入游戏的问题 ([2c122a2](http://10.10.0.202/mir2/OpenMir2/commits/2c122a2))
-* fix: 修复重构LoginSvr代码带来的账号注册登陆问题 ([03cc58a](http://10.10.0.202/mir2/OpenMir2/commits/03cc58a))
-* fix: 修复DBSvr编译问题 ([f475f42](http://10.10.0.202/mir2/OpenMir2/commits/f475f42))
-* fix: 修复LoginSvr账号封包重复处理问题 ([fb1bf9c](http://10.10.0.202/mir2/OpenMir2/commits/fb1bf9c))
-* style: 代码清理 ([299b01a](http://10.10.0.202/mir2/OpenMir2/commits/299b01a))
-* style: 代码清理 ([5e8ca25](http://10.10.0.202/mir2/OpenMir2/commits/5e8ca25))
-* style: 调整部分包名 ([7a92f32](http://10.10.0.202/mir2/OpenMir2/commits/7a92f32))
-* style: 升级Nuget包 ([ee2dc26](http://10.10.0.202/mir2/OpenMir2/commits/ee2dc26))
-* style: gameGate测试 ([7afd366](http://10.10.0.202/mir2/OpenMir2/commits/7afd366))
-* style: loginGate Task ([3bec89b](http://10.10.0.202/mir2/OpenMir2/commits/3bec89b))
-* style: selGate Task ([367e76c](http://10.10.0.202/mir2/OpenMir2/commits/367e76c))
-* docs: update changelog-option.hs ([41faa3d](http://10.10.0.202/mir2/OpenMir2/commits/41faa3d))
-* docs: update changelog-option.js ([530af05](http://10.10.0.202/mir2/OpenMir2/commits/530af05))
+* 增加MapSvr作为试验性测试工程 ([a53f367](http://10.10.0.202/mir2/OpenMir2/commit/a53f367c733650ac498edc803e26f15dfcf2de2d))
+* 账号游戏时间 ([2bbed52](http://10.10.0.202/mir2/OpenMir2/commit/2bbed528e192a8848eb64d5bf015204b6be224dc))
 
 
+### Bug Fixes
 
-## <small>1.1.3-alpha.1 (2022-11-05)</small>
-
-* refactor: gameGate消息处理线程优化 ([8aeebfc](http://10.10.0.202/mir2/OpenMir2/commits/8aeebfc))
-* chore(release): 1.1.3-alpha.1 ([dcb34da](http://10.10.0.202/mir2/OpenMir2/commits/dcb34da))
-
-
-
-## <small>1.1.3-alpha.0 (2022-11-05)</small>
-
-* refactor: dBSvr测试 ([8d30a64](http://10.10.0.202/mir2/OpenMir2/commits/8d30a64))
-* refactor: dBSvr调整和清理 ([12facbe](http://10.10.0.202/mir2/OpenMir2/commits/12facbe))
-* refactor: gameGate封包发送队列 ([69be8ea](http://10.10.0.202/mir2/OpenMir2/commits/69be8ea))
-* test: gameGate测试 ([3acde3a](http://10.10.0.202/mir2/OpenMir2/commits/3acde3a))
-* test: loginGate测试 ([17223b9](http://10.10.0.202/mir2/OpenMir2/commits/17223b9))
-* chore(release): 1.1.3-alpha.0 ([3414687](http://10.10.0.202/mir2/OpenMir2/commits/3414687))
-* fix: 修复LoginGate配置文件读取和保存问题 ([a646d3a](http://10.10.0.202/mir2/OpenMir2/commits/a646d3a))
-* style: 删除ClientSocket不必要的字段 ([7d172cf](http://10.10.0.202/mir2/OpenMir2/commits/7d172cf))
-* style: dBSvr测试 ([a1fb9b5](http://10.10.0.202/mir2/OpenMir2/commits/a1fb9b5))
-
-
-
-## <small>1.1.2 (2022-11-05)</small>
-
-* chore(release): 1.1.2 ([369ffa8](http://10.10.0.202/mir2/OpenMir2/commits/369ffa8))
-
-
-
-## <small>1.1.1 (2022-11-05)</small>
-
-* chore(release): 1.1.1 ([b5f28f7](http://10.10.0.202/mir2/OpenMir2/commits/b5f28f7))
-
-
-
-## <small>1.1.1-alpha.1 (2022-11-05)</small>
-
-* refactor: gameGate调整和优化 ([5e2d5e4](http://10.10.0.202/mir2/OpenMir2/commits/5e2d5e4))
-* chore(release): 1.1.1-alpha.1 ([817c8b8](http://10.10.0.202/mir2/OpenMir2/commits/817c8b8))
-* docs: update package.json ([e0886f4](http://10.10.0.202/mir2/OpenMir2/commits/e0886f4))
-* docs: update package.json ([dbad2bb](http://10.10.0.202/mir2/OpenMir2/commits/dbad2bb))
-* docs: update package.json ([9a45a23](http://10.10.0.202/mir2/OpenMir2/commits/9a45a23))
-
-
-
-## <small>1.1.1-alpha.0 (2022-11-05)</small>
-
-* chore(release): 1.1.1-alpha.0 ([1d470f5](http://10.10.0.202/mir2/OpenMir2/commits/1d470f5))
-
-
+* 测试GameSvr地图移动对象失败问题 ([b9fb425](http://10.10.0.202/mir2/OpenMir2/commit/b9fb4254b09f83411ddc9b1df94c6db7167bc85e))
+* 尝试修复GameGate客户端断开链接可能导致空指针的问题 ([3e2f9f0](http://10.10.0.202/mir2/OpenMir2/commit/3e2f9f0c96684eebc648e4e857ec6aa4c8175c7e))
+* 尝试修复SocketServer类发送池过小 ([1870887](http://10.10.0.202/mir2/OpenMir2/commit/1870887b2c1f474e8c62cf59e494b0db09f704b2))
+* 尝试Socket问题 ([78734f1](http://10.10.0.202/mir2/OpenMir2/commit/78734f1b307c0c25699d2f61201a0eccc267ce2a))
+* 地图场景内存共享池测试 ([322b0b3](http://10.10.0.202/mir2/OpenMir2/commit/322b0b3dbf63900ddedd446200f9f6358ce0fccc))
+* 简单的清理和修复测试 ([81b8749](http://10.10.0.202/mir2/OpenMir2/commit/81b8749118d1ccc3c2639d8fa67885a4e6489a75))
+* 简单的清理和优化 ([55060de](http://10.10.0.202/mir2/OpenMir2/commit/55060de8f0ffd3e46aec66d769111b0036d1239c))
+* 解决合并冲突,移动地图矿物线程位置 ([ed64e84](http://10.10.0.202/mir2/OpenMir2/commit/ed64e84452e8e485977e7d78335539fd225cbba2))
+* 清理和调整GameSvr方法 ([69fbf59](http://10.10.0.202/mir2/OpenMir2/commit/69fbf59806a487a6440390880df6882674c30ba6))
+* 网关消息处理丢弃异常数据 ([d3e4f8d](http://10.10.0.202/mir2/OpenMir2/commit/d3e4f8dd6a907ecbca2dc289fac68074707b1b3e))
+* 修复编译启动报错 ([98d4d78](http://10.10.0.202/mir2/OpenMir2/commit/98d4d780b594ffd8c009452b1399e6c1c437eeb1))
+* 修复仓库没有存储物品时取回物品看不到物品列表 ([08be825](http://10.10.0.202/mir2/OpenMir2/commit/08be82576ca0759f17b9490c11dbbf503025b1e8))
+* 修复仓库物品存储后无法取出的问题 ([924a841](http://10.10.0.202/mir2/OpenMir2/commit/924a8418ee3adf9ac33b1a041e9266d2e1fe3b63))
+* 修复封包处理错误无法进入游戏的问题 ([022f3a4](http://10.10.0.202/mir2/OpenMir2/commit/022f3a4ff76bf207c9dc8fa50f28583c241a6015))
+* 修复封包无法解析问题 ([3b5f9d7](http://10.10.0.202/mir2/OpenMir2/commit/3b5f9d70b10d73cf61cf34d9e4a80ea1f7233e31))
+* 修复怪物掉落物品时可能触发错误 ([c3dc81b](http://10.10.0.202/mir2/OpenMir2/commit/c3dc81be38f871ebb6ec4819d38bd8f7f9319803))
+* 修复怪物刷新数量与配置文件不一致 ([eb95e44](http://10.10.0.202/mir2/OpenMir2/commit/eb95e44a2847bf373f306650469cfe1b04336de0))
+* 修复怪物自身视野失效问题 ([18e93bd](http://10.10.0.202/mir2/OpenMir2/commit/18e93bdc2d88e0784d8ffb0774d2f361d8237099))
+* 修复和调整GameGate大数据封包缓冲区大小 ([59876d4](http://10.10.0.202/mir2/OpenMir2/commit/59876d4f6c1bfe0a45db5c17570fb02fa0edf774))
+* 修复和优化玩家小退之后无法再次进入游戏问题 ([390c16c](http://10.10.0.202/mir2/OpenMir2/commit/390c16cb9d248c978ecb97dd12c7fe74708211d4))
+* 修复和优化GameSvr网关消息处理 ([4c49638](http://10.10.0.202/mir2/OpenMir2/commit/4c496389e5a6846330ffe46eb1a3affacedfa78a))
+* 修复脚本命令解析 ([f026d97](http://10.10.0.202/mir2/OpenMir2/commit/f026d9798844ce8aea8d0a45de16865b2cb451dd))
+* 修复名字自动变色数组越界问题 ([0943439](http://10.10.0.202/mir2/OpenMir2/commit/0943439d682b1e15adf2147fe2247a89b84757d0))
+* 修复启动GameSvr读取配置文件路径问题 ([6f15749](http://10.10.0.202/mir2/OpenMir2/commit/6f15749a8c9d964dc595252ef821d52c956cfd90))
+* 修复沙巴克武器升级取回武器失败 ([ca5936b](http://10.10.0.202/mir2/OpenMir2/commit/ca5936bfced1b8f8365bee92a5396729ea6e32c4))
+* 修复守卫和护卫类型怪攻击问题 ([b9c8246](http://10.10.0.202/mir2/OpenMir2/commit/b9c824651232f2a33ab239a94fe762dbb3966c75))
+* 修复属下视觉攻击问题 ([1099800](http://10.10.0.202/mir2/OpenMir2/commit/1099800d6a8f2357b03fd1f1675870ac1b8dd637))
+* 修复替换MemoryPack后封包处理问题 ([40b5254](http://10.10.0.202/mir2/OpenMir2/commit/40b5254a162c9a02396904df2bb08270b556049a))
+* 修复玩家属下会攻击玩家 ([6e8ae66](http://10.10.0.202/mir2/OpenMir2/commit/6e8ae66652e36637a561416d1167f62d080a06c8))
+* 修复玩家下属杀死怪物掉落物品后玩家无法拾取 ([fcc9dd5](http://10.10.0.202/mir2/OpenMir2/commit/fcc9dd50c161c4404b15ab45de3399d12d5b6810))
+* 修复无法进入游戏的问题 ([86118c5](http://10.10.0.202/mir2/OpenMir2/commit/86118c583dcc6442823be24bcd87f765eec4b87f))
+* 修复武器过期数据清理时间 ([6803dc1](http://10.10.0.202/mir2/OpenMir2/commit/6803dc16722febec35f0cdb5b18b73cf19e5dfb3))
+* 修复物品属性值被错误的写入 ([797bd7b](http://10.10.0.202/mir2/OpenMir2/commit/797bd7bb589535022383d98dfc75046b68bfb632))
+* 修复物品唯一ID重启后会重复的问题 ([0e6d56c](http://10.10.0.202/mir2/OpenMir2/commit/0e6d56cc5fbee6af790b0896519663d50e941465))
+* 修复游戏脚本获取脚本变量的错误循环 ([877ec5b](http://10.10.0.202/mir2/OpenMir2/commit/877ec5b1af4fcba96a8c5e04c8e405fa5fc959f0))
+* 修复游戏脚本命令时间类型显示错误 ([11950c6](http://10.10.0.202/mir2/OpenMir2/commit/11950c6f001795740683074286c6d113c2a4d446))
+* 修复账号会话无法登出 ([50352ca](http://10.10.0.202/mir2/OpenMir2/commit/50352ca35054c21e1481249134a7e818d962d04d))
+* 修复重构LoginSvr代码带来的账号注册登陆问题 ([295640a](http://10.10.0.202/mir2/OpenMir2/commit/295640a16df9e52bf8e4ff37ba02c2884c2251af))
+* 修复DBSvr编译问题 ([20f5eaa](http://10.10.0.202/mir2/OpenMir2/commit/20f5eaa61ce2c0e7902529a4f8adcd2df518cdca))
+* 修复DBSvr无法保存玩家技能 ([334755f](http://10.10.0.202/mir2/OpenMir2/commit/334755f29b6950f80d488c4a49230926dd82beb2))
+* 修复DBSvr意外关闭GameSvr断开链接报错问题 ([8208f46](http://10.10.0.202/mir2/OpenMir2/commit/8208f466cd655d07dd4b0092a332a57d4bd15240))
+* 修复GameGate会话封包处理异常问题 ([45d961e](http://10.10.0.202/mir2/OpenMir2/commit/45d961eacfa05cd72f7e40d94a4e6c3720489f5b))
+* 修复GameSve网关清理信息发送 ([410a4f2](http://10.10.0.202/mir2/OpenMir2/commit/410a4f27b0c0eef6277a962649bdb1dd68357c78))
+* 修复GameSvr地图对象无法移动 ([869732a](http://10.10.0.202/mir2/OpenMir2/commit/869732a3a8735743e251380d290fa99d10a8ebce))
+* 修复GameSvr地图优化导致对象闪烁消失问题 ([ffd11a8](http://10.10.0.202/mir2/OpenMir2/commit/ffd11a8463f365cc3a4d47910dfd733419e1306f))
+* 修复GameSvr怪物秒人和恢复使用优先队列 ([fd22bc8](http://10.10.0.202/mir2/OpenMir2/commit/fd22bc865cda73e2ceedfb5aab171292909a071e))
+* 修复GameSvr怪物死亡触发判断 ([d1a62a9](http://10.10.0.202/mir2/OpenMir2/commit/d1a62a953740ae43d1d7112a06c700349ae30bb2))
+* 修复GameSvr获取目标名字颜色错误 ([2ab2735](http://10.10.0.202/mir2/OpenMir2/commit/2ab2735345eb5ed52c3cf35346c4660f38d3945d))
+* 修复GameSvr机器人脚本AutoBot执行时间错误以及优化内存 ([c9b4594](http://10.10.0.202/mir2/OpenMir2/commit/c9b4594a24a3b321c59e762b44337e434d4c4966))
+* 修复GameSvr计算攻击点数幸运值不起作用 ([8143c6d](http://10.10.0.202/mir2/OpenMir2/commit/8143c6db6739ac503e2cfd3a73583290a59d87be))
+* 修复GameSvr使用Ctrl+c退出程序报错 ([d52f348](http://10.10.0.202/mir2/OpenMir2/commit/d52f3484e6f9bf1fb1a5db38fa6302a76a81d9b9))
+* 修复GameSvr移动地图对象CPU使用率过高 ([e7b5b5f](http://10.10.0.202/mir2/OpenMir2/commit/e7b5b5fd801ccccf97761c420c14a559cba31b6d))
+* 修复GameSvr游戏命令重复注册问题 ([074e4a2](http://10.10.0.202/mir2/OpenMir2/commit/074e4a2f523dc4a322c3487fd99dde544db3c156))
+* 修复Linux运行GameSvr获取内存和虚拟内存统计数据错误 ([3014ea6](http://10.10.0.202/mir2/OpenMir2/commit/3014ea612ee4b7b4ac876ed3eac13d0214b25708))
+* 修复LoginGate和LoginSvr之间的心跳和链接问题 ([bf5041a](http://10.10.0.202/mir2/OpenMir2/commit/bf5041ac7262cb201c44b263ff58764e6840fcba))
+* 修复LoginGate配置文件读取和保存问题 ([043eacc](http://10.10.0.202/mir2/OpenMir2/commit/043eaccb24a7a7d07c5cc783ee3f403d8a42c5ac))
+* 修复LoginSvr游戏账号时间 ([a7cc19c](http://10.10.0.202/mir2/OpenMir2/commit/a7cc19c3022c3aa52380e09265285f5bd20b0c1a))
+* 修复LoginSvr账号封包重复处理问题 ([bff3f77](http://10.10.0.202/mir2/OpenMir2/commit/bff3f77a4decfdb84043f1c2b63082f529069e62))
+* 修复LoginSvr账号更新问题 ([5714623](http://10.10.0.202/mir2/OpenMir2/commit/571462368c9986e384cacd9a8bd68a6ae7bd521e))
+* 一点清理 ([da0232e](http://10.10.0.202/mir2/OpenMir2/commit/da0232ed53d423f6553542d74523634465ec5916))
+* 优化脚本命令字符串比较方法 ([b9bc33f](http://10.10.0.202/mir2/OpenMir2/commit/b9bc33f484b001728059a38a7f33556388b3f699))
+* 优化GameSvr.Die方法 ([4066adb](http://10.10.0.202/mir2/OpenMir2/commit/4066adb8b36e5b730ddbf35b42c246b6b4c0a19f))
+* fix typo ([4ded114](http://10.10.0.202/mir2/OpenMir2/commit/4ded1144946e93a7f02e58131bd3be970c002c02))
+* fix typo ([8dc75f5](http://10.10.0.202/mir2/OpenMir2/commit/8dc75f5372741f6090268b7aa44377dc26ca0c70))
+* fix typo ([5aba5b7](http://10.10.0.202/mir2/OpenMir2/commit/5aba5b783a5d950a29e2bde8f9aa2a8feff4f9f6))
+* fix typo ([860d76d](http://10.10.0.202/mir2/OpenMir2/commit/860d76d859acb229c44c40f8d1e6af73531eb3b6))
+* fix typo ([8c8b44e](http://10.10.0.202/mir2/OpenMir2/commit/8c8b44e528447103895d5af4b524ae285abf6c4d))
+* fix typo ([f5e1cfe](http://10.10.0.202/mir2/OpenMir2/commit/f5e1cfe13745a2e19218b2aa97818e2bcd745eb3))
+* fix typo ([b92da28](http://10.10.0.202/mir2/OpenMir2/commit/b92da284d683e5ff0ae5f1b1e5aede2b65156514))
+* fix typo ([3b1c768](http://10.10.0.202/mir2/OpenMir2/commit/3b1c7680863e81869a47053060eec40ebebee12b))
+* fix typo ([966a957](http://10.10.0.202/mir2/OpenMir2/commit/966a957851f989f49635185795a412508815b0e9))
+* fix typo ([995ddeb](http://10.10.0.202/mir2/OpenMir2/commit/995ddeb584ad4862ba87fcbe3efb9969b9ad6d46))
+* fix typo ([293c5b9](http://10.10.0.202/mir2/OpenMir2/commit/293c5b9eb9a416122c43289ed7ede0dc2bf3e1eb))
+* fix typo ([1cb64e2](http://10.10.0.202/mir2/OpenMir2/commit/1cb64e29411323987aea0ce71f4fe875f7a056d0))
+* fix typo ([9bdfea7](http://10.10.0.202/mir2/OpenMir2/commit/9bdfea7a08d4bb334258e270fb31334c768c0406))
+* fix typo ([83f59c6](http://10.10.0.202/mir2/OpenMir2/commit/83f59c6c01e095bf2294e08c72c1dde134cb1502))
+* fix typo ([b010885](http://10.10.0.202/mir2/OpenMir2/commit/b0108853ae51967182553a716f6b174ef51959b5))
+* fix typo ([7ece227](http://10.10.0.202/mir2/OpenMir2/commit/7ece2273d475c11a88b5683f4dc8fda66ec54512))
+* fix typo ([7fb7afa](http://10.10.0.202/mir2/OpenMir2/commit/7fb7afae49c7960986d0e84f3719fa546f2c3c97))
+* fix typo & 修复系统状态时间统计延时 ([80f8a13](http://10.10.0.202/mir2/OpenMir2/commit/80f8a13340d565b4886c677202a6e2486e82f9ec))
+* gameSvr测试，存在地图对象无法移动问题 ([8940925](http://10.10.0.202/mir2/OpenMir2/commit/8940925b85e1229ce2cea4eb20e0a050e1ea6c1b))
+* gameSvr地图内存测试 ([af75192](http://10.10.0.202/mir2/OpenMir2/commit/af751923a6f5e44f5eada04e19b7931a5d1c7edc))
+* gameSvr系统状态统计测试 ([ca91aa8](http://10.10.0.202/mir2/OpenMir2/commit/ca91aa898cd81d93db0843de8e7d7c80c3a580af))
+* gameSvr移动复活戒指代码到玩家类 ([91a215e](http://10.10.0.202/mir2/OpenMir2/commit/91a215e419399bb67b1c73fec1b45ce2987cbce7))
+* gameSvr优化和修复 ([4fa7a54](http://10.10.0.202/mir2/OpenMir2/commit/4fa7a54c13b7240a57eb0bc6729dd5681a610d0d))
 
 ## 1.1.0 (2022-11-05)
 
@@ -1177,6 +1172,3 @@
 * update README.md. ([5b10df0](http://10.10.0.202/mir2/OpenMir2/commits/5b10df0))
 * First commit ([b370040](http://10.10.0.202/mir2/OpenMir2/commits/b370040))
 * Initial commit ([9f9178c](http://10.10.0.202/mir2/OpenMir2/commits/9f9178c))
-
-
-
