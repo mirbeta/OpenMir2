@@ -32,7 +32,7 @@ namespace GameSvr
             }
         }
 
-        public void ShowServerState()
+        public void ShowServerStatus()
         {
             var memoryInfo = ServerEnvironment.GetMemoryStatus();
             _logger.Debug($"物理内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPhys)}] 内存使用率:[{memoryInfo.dwMemoryLoad}%] 空闲内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailPhys)}]");
