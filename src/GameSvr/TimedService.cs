@@ -1,14 +1,13 @@
 using GameSvr.Planes;
 using GameSvr.Services;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using NLog;
 
 namespace GameSvr
 {
     public class TimedService : BackgroundService
     {
-        private readonly ILogger<TimedService> _logger;
-        private readonly GameApp _mirApp;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private PeriodicTimer _timer;
         private int _checkIntervalTime;
         private int _saveIntervalTime;
@@ -19,15 +18,13 @@ namespace GameSvr
         /// </summary>
         private bool _scheduledSaveData;
 
-        public TimedService(ILogger<TimedService> logger, GameApp mirApp)
+        public TimedService()
         {
-            _logger = logger;
-            _mirApp = mirApp;
+            _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
             int currentTick = HUtil32.GetTickCount();
             _checkIntervalTime = currentTick;
             _saveIntervalTime = currentTick;
@@ -38,10 +35,24 @@ namespace GameSvr
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (await _timer.WaitForNextTickAsync(stoppingToken))
+            try
             {
-                ServerRunTimer();
+                while (await _timer.WaitForNextTickAsync(stoppingToken))
+                {
+                    ServerRunTimer();
+                }
             }
+            catch (OperationCanceledException e)
+            {
+                _logger.Debug("TimedService is stopping.");
+            }
+        }
+
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.Info("后台服务停止");
+            _timer.Dispose();
+            return base.StopAsync(cancellationToken);
         }
 
         private void ServerRunTimer()
@@ -80,7 +91,7 @@ namespace GameSvr
             {
                 return;
             }
-            _logger.LogDebug("定时保存角色数据");
+            _logger.Debug("定时保存角色数据");
             if (M2Share.WorldEngine.PlayObjectCount > 0)
             {
                 _scheduledSaveData = true;
@@ -94,7 +105,7 @@ namespace GameSvr
                 }
                 _scheduledSaveData = false;
             }
-            _logger.LogDebug("定时保存角色数据完毕.");
+            _logger.Debug("定时保存角色数据完毕.");
         }
     }
 }

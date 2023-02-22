@@ -45,14 +45,13 @@ namespace GameSvr
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            await Builder.RunConsoleAsync(cancellationToken);
-            //await ProcessLoopAsync();
-            //Stop();
+            await Builder.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            Host.StopAsync(cancellationToken);
+            return Task.CompletedTask;
         }
 
         private static void Stop()

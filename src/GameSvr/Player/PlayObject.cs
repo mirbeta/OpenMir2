@@ -3566,7 +3566,7 @@ namespace GameSvr.Player
         /// <summary>
         /// 转移到指定位面服务器
         /// </summary>
-        public void ChangePlanesServer(string serveraddr, int gamePort)
+        public void TransferPlanesServer(string serveraddr, int gamePort)
         {
             SendMsg(this, Messages.RM_RECONNECTION, 0, 0, 0, 0, serveraddr + '/' + gamePort);
         }
