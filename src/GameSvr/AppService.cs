@@ -284,7 +284,7 @@ namespace GameSvr
                             monsterCount += M2Share.WorldEngine.MobThreads[i].MonsterCount;
                         }
                         AnsiConsole.MarkupLine($"Monsters:{monsterCount}");
-                        M2Share.Statistics.ShowServerState();
+                        M2Share.Statistics.ShowServerStatus();
                         ctx.Refresh();
                     }
                 });

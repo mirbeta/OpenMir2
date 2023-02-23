@@ -8,7 +8,7 @@ namespace GameSvr
     public class TimedService : BackgroundService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private PeriodicTimer _timer;
+        private readonly PeriodicTimer _timer;
         private int _checkIntervalTime;
         private int _saveIntervalTime;
         private int _clearIntervalTime;
@@ -59,29 +59,29 @@ namespace GameSvr
         {
             if (M2Share.StartReady)
             {
-                int currentTick = HUtil32.GetTickCount();
+                var currentTick = HUtil32.GetTickCount();
                 if ((currentTick - _checkIntervalTime) > 10 * 1000) //10s一次检查链接
                 {
+                    _checkIntervalTime = HUtil32.GetTickCount();
                     M2Share.DataServer.CheckConnected();
                     IdSrvClient.Instance.CheckConnected();
                     PlanesClient.Instance.CheckConnected();
-                    _checkIntervalTime = HUtil32.GetTickCount();
                 }
                 if ((currentTick - _saveIntervalTime) > 50 * 1000) //保存游戏变量等
                 {
-                    ServerBase.SaveItemNumber();
                     _saveIntervalTime = HUtil32.GetTickCount();
+                    ServerBase.SaveItemNumber();
                 }
-                if ((currentTick - _clearIntervalTime) > 600000) //定时清理游戏对象
+                if ((currentTick - _clearIntervalTime) > 60 * 10000) //定时清理游戏对象
                 {
-                    M2Share.ActorMgr.ClearObject();
-                    M2Share.Statistics.ShowServerState();
                     _clearIntervalTime = HUtil32.GetTickCount();
+                    M2Share.ActorMgr.ClearObject();
+                    M2Share.Statistics.ShowServerStatus();
                 }
                 if (currentTick - _scheduledSaveIntervalTime > 60 * 10000) //定时保存玩家数据
                 {
-                    TimingSaveData();
                     _scheduledSaveIntervalTime = HUtil32.GetTickCount();
+                    TimingSaveData();
                 }
             }
         }
