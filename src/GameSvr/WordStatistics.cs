@@ -1,7 +1,6 @@
 ﻿using NLog;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using SystemModule.Base;
 
 namespace GameSvr
@@ -25,10 +24,6 @@ namespace GameSvr
                 processName = Process.GetCurrentProcess().ProcessName;
                 MemoryCounter = new PerformanceCounter();
                 CpuCounter = new PerformanceCounter();
-            }
-            else
-            {
-                _logger.Warn("当前运行环境非Windows环境,系统统计信息受限.");
             }
         }
 

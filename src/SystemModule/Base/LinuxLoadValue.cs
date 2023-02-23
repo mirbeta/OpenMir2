@@ -164,12 +164,12 @@ namespace SystemModule.Base
             return n * 1024;
         }
 
-        public static bool GlobalMemoryStatus(ref ServerEnvironment.MemoryInfo mi)
+        public static void GlobalMemoryStatus(ref ServerEnvironment.MemoryInfo mi)
         {
             const string path = "/proc/meminfo";
             if (!File.Exists(path))
             {
-                return false;
+                return;
             }
             FileStream stat = null;
             try
@@ -178,67 +178,59 @@ namespace SystemModule.Base
             }
             catch (Exception)
             {
-                return false;
+                return;
             }
             using var sr = new StreamReader(stat);
             try
             {
-                var counts = 0;
-                var line = string.Empty;
+                string line;
                 ulong memFree = 0;
                 ulong inactive = 0;
-                while (counts < 50 && !string.IsNullOrEmpty(line = sr.ReadLine()))
+                while (!string.IsNullOrEmpty(line = sr.ReadLine()))
                 {
                     var value = AnalysisMeminfo(line, "MemTotal");
                     if (value != 0)
                     {
-                        counts++;
                         mi.ullTotalPhys = value;
                         continue;
                     }
                     value = AnalysisMeminfo(line, "MemAvailable");
                     if (value != 0)
                     {
-                        counts++;
                         mi.ullAvailPhys = value;
                         continue;
                     }
                     value = AnalysisMeminfo(line, "MemFree");
                     if (value != 0)
                     {
-                        counts++;
                         memFree = value;
                         continue;
                     }
                     value = AnalysisMeminfo(line, "Inactive");
                     if (value != 0)
                     {
-                        counts++;
                         inactive = value;
                         continue;
                     }
                     value = AnalysisMeminfo(line, "SwapTotal");
                     if (value != 0)
                     {
-                        counts++;
                         mi.ullTotalVirtual = value;
                         continue;
                     }
                     value = AnalysisMeminfo(line, "SwapFree");
                     if (value != 0)
                     {
-                        counts++;
                         mi.ullAvailVirtual = value;
                         continue;
                     }
                 }
-                var memused = mi.ullTotalPhys - memFree - inactive;
-                mi.dwMemoryLoad = (uint)(memused * 100 / mi.ullTotalPhys);
-                return true;
+                var memUsed = mi.ullTotalPhys - memFree - inactive;
+                mi.dwMemoryLoad = (uint)(memUsed * 100 / mi.ullTotalPhys);
             }
             catch (Exception)
             {
-                return false;
+                throw new Exception("无法获得内存信息");
             }
         }
     }

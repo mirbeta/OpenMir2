@@ -74,7 +74,7 @@ namespace SystemModule.Base
             } while (false);
         }
 
-        public unsafe static bool Equals(IPAddress x, IPAddress y)
+        private static unsafe bool Equals(IPAddress x, IPAddress y)
         {
             if (x == null && y == null)
                 return true;
@@ -162,52 +162,24 @@ namespace SystemModule.Base
 
         public static long PerSecondBytesReceived { get; set; }
 
-        public static double CPULOAD
-        {
-            get
-            {
-                if (IsWindows())
-                {
-                    return WindowsLoadValue.CPULOAD;
-                }
-                return LinuxLoadValue.CPULOAD;
-            }
-        }
+        public static double CPULOAD => IsWindows() ? WindowsLoadValue.CPULOAD : LinuxLoadValue.CPULOAD;
 
         public static ulong AvailablePhysicalMemory => memoryInfo.ullAvailPhys;
 
         /// <summary>
         /// 获取物理内存已使用大小
         /// </summary>
-        public static ulong UsedPhysicalMemory
-        {
-            get
-            {
-                return memoryInfo.ullTotalPhys - memoryInfo.ullAvailPhys;
-            }
-        }
-        
+        public static ulong UsedPhysicalMemory => memoryInfo.ullTotalPhys - memoryInfo.ullAvailPhys;
+
         /// <summary>
         /// 获取虚拟内存已使用大小
         /// </summary>
-        public static ulong UsedVirtualMemory
-        {
-            get
-            {
-                return memoryInfo.ullTotalVirtual - memoryInfo.ullAvailVirtual;
-            }
-        }
+        public static ulong UsedVirtualMemory => memoryInfo.ullTotalVirtual - memoryInfo.ullAvailVirtual;
 
         /// <summary>
         /// 虚拟内存使用率
         /// </summary>
-        public static ulong VirtualMemoryLoad
-        {
-            get
-            {
-                return (memoryInfo.ullTotalVirtual - memoryInfo.ullAvailVirtual) * 100 / memoryInfo.ullTotalVirtual;
-            }
-        }
+        public static ulong VirtualMemoryLoad => (memoryInfo.ullTotalVirtual - memoryInfo.ullAvailVirtual) * 100 / memoryInfo.ullTotalVirtual;
 
         public static bool IsWindows()
         {
