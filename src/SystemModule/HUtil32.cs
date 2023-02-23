@@ -1,12 +1,13 @@
 using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
 namespace SystemModule
 {
-    public class HUtil32
+    public partial class HUtil32
     {
         public const char Backslash = '/';
         public static readonly char[] Separator = { ' ', ',', '\t' };
@@ -46,22 +47,22 @@ namespace SystemModule
         
         public static int MakeLong(short lowPart, short highPart)
         {
-            return (ushort)lowPart | (highPart << 16);
+            return (ushort)lowPart | highPart << 16;
         }
 
         public static int MakeLong(ushort lowPart, ushort highPart)
         {
-            return lowPart | (highPart << 16);
+            return lowPart | highPart << 16;
         }
 
         public static ushort MakeWord(byte low, byte high)
         {
-            return (ushort)((high << 8) | low);
+            return (ushort)(high << 8 | low);
         }
 
         public static ushort MakeWord(ushort bLow, ushort bHigh)
         {
-            return (ushort)(bLow | (bHigh << 8));
+            return (ushort)(bLow | bHigh << 8);
         }
 
         public static ushort HiWord(ushort dword)
@@ -121,7 +122,7 @@ namespace SystemModule
 
         public static bool IsVarNumber(string str)
         {
-            return (CompareLStr(str, "HUMAN", 5)) || (CompareLStr(str, "GUILD", 5)) || (CompareLStr(str, "GLOBAL", 6));
+            return CompareLStr(str, "HUMAN", 5) || CompareLStr(str, "GUILD", 5) || CompareLStr(str, "GLOBAL", 6);
         }
 
         public static int Round(object r)
@@ -218,7 +219,7 @@ namespace SystemModule
 
         public static DateTime DoubleToDateTime(double xd)
         {
-            return (new DateTime(1899, 12, 30)).AddDays(xd);
+            return new DateTime(1899, 12, 30).AddDays(xd);
         }
 
         public static double DateTimeToDouble(DateTime dt)
@@ -376,21 +377,7 @@ namespace SystemModule
 
         public static DateTime StrToDate(string str)
         {
-            if (string.IsNullOrEmpty(str))
-            {
-                return DateTime.Today;
-            }
-            return Convert.ToDateTime(str);
-        }
-
-        public static DateTime Str_ToTime(string str)
-        {
-            DateTime result;
-            if (str.Trim() == "")
-                result = DateTime.Now;
-            else
-                result = Convert.ToDateTime(str);
-            return result;
+            return string.IsNullOrEmpty(str) ? DateTime.Today : Convert.ToDateTime(str);
         }
 
         public static string GetValidStr3(string source, ref string dest, char divider)
@@ -478,16 +465,7 @@ namespace SystemModule
 
         public static bool IsStringNumber(string str)
         {
-            var result = true;
-            for (var i = 0; i < str.Length - 1; i++)
-            {
-                if ((byte)str[i] < (byte)'0' || (byte)str[i] > (byte)'9')
-                {
-                    result = false;
-                    break;
-                }
-            }
-            return result;
+            return string.IsNullOrEmpty(str) || ValidationNumber().IsMatch(str);
         }
 
         /// <summary>
@@ -771,34 +749,33 @@ namespace SystemModule
         /// <returns></returns>
         public static string FormatBytesValue(double length)
         {
-            int byteConversion = 1024;
-            double bytes = length;
+            const int byteConversion = 1024;
             // 超过EB的单位已经没有实际转换意义了, 太大了, 忽略不用
-            if (bytes >= Math.Pow(byteConversion, 6)) // EB
+            if (length >= Math.Pow(byteConversion, 6)) // EB
             {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 6), 2), " EB");
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 6), 2), " EB");
             }
-            if (bytes >= Math.Pow(byteConversion, 5)) // PB
+            if (length >= Math.Pow(byteConversion, 5)) // PB
             {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 5), 2), " PB");
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 5), 2), " PB");
             }
-            if (bytes >= Math.Pow(byteConversion, 4)) // TB
+            if (length >= Math.Pow(byteConversion, 4)) // TB
             {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 4), 2), " TB");
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 4), 2), " TB");
             }
-            if (bytes >= Math.Pow(byteConversion, 3)) // GB
+            if (length >= Math.Pow(byteConversion, 3)) // GB
             {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 3), 2), " GB");
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 3), 2), " GB");
             }
-            if (bytes >= Math.Pow(byteConversion, 2)) // MB
+            if (length >= Math.Pow(byteConversion, 2)) // MB
             {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 2), 2), " MB");
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 2), 2), " MB");
             }
-            if (bytes >= byteConversion) // KB
+            if (length >= byteConversion) // KB
             {
-                return string.Concat(Math.Round(bytes / byteConversion, 2), " KB");
+                return string.Concat(Math.Round(length / byteConversion, 2), " KB");
             }
-            return string.Concat(bytes, " Bytes");// Bytes
+            return string.Concat(length, " Bytes");// Bytes
         }
 
         /// <summary>
@@ -819,5 +796,11 @@ namespace SystemModule
                    | long.Parse(items[2]) << 8
                    | long.Parse(items[3]);
         }
+
+        [GeneratedRegex("^[+-]?\\d*[.]?\\d*$")]
+        private static partial Regex ValidationNumber();
+
+        [GeneratedRegex(@"^[+-]?\d*$")]
+        private static partial Regex IntRegex();
     }
 }
