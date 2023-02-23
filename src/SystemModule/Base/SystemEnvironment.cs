@@ -162,7 +162,7 @@ namespace SystemModule.Base
 
         public static long PerSecondBytesReceived { get; set; }
 
-        public static double CPULOAD => IsWindows() ? WindowsLoadValue.CPULOAD : LinuxLoadValue.CPULOAD;
+        public static double CpuLoad => IsWindows() ? WindowsLoadValue.CPULOAD : LinuxLoadValue.CPULOAD;
 
         public static ulong AvailablePhysicalMemory => memoryInfo.ullAvailPhys;
 
@@ -218,7 +218,7 @@ namespace SystemModule.Base
             {
                 return 0;
             }
-            double dblUseLoad = CPULOAD;
+            double dblUseLoad = CpuLoad;
             if (dblUseLoad < MAX_USE_LOAD) // 控制CPU利用率
             {
                 return 0;
