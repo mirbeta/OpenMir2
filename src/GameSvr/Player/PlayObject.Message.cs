@@ -2013,7 +2013,7 @@ namespace GameSvr.Player
                     showmessage.Status = baseObject.CharStatus;
                     sendMsg = EDCode.EncodePacket(showmessage);
                     nObjCount = GetChrColor(baseObject);
-                    if (processMsg.Msg != "")
+                    if (!string.IsNullOrEmpty(processMsg.Msg))
                     {
                         sendMsg = sendMsg + EDCode.EncodeString(processMsg.Msg + '/' + nObjCount);
                     }

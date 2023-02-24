@@ -803,7 +803,7 @@ namespace GameSvr.Npc
                             if (!Castle.UnderWar)
                             {
                                 sText = Castle.GetWarDate();
-                                if (sText != "")
+                                if (!string.IsNullOrEmpty(sText))
                                 {
                                     sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARDATE>", sText);
                                 }
@@ -829,7 +829,7 @@ namespace GameSvr.Npc
                         {
                             sText = "????";
                         }
-                        if (sText != "")
+                        if (!string.IsNullOrEmpty(sText))
                         {
                             sMsg = ReplaceVariableText(sMsg, "<$LISTOFWAR>", sText);
                         }
@@ -1654,7 +1654,7 @@ namespace GameSvr.Npc
                     }
                     else
                     {
-                        if (PlayObject.ScriptCurrLable != "")
+                        if (!string.IsNullOrEmpty(PlayObject.ScriptCurrLable))
                         {
                             PlayObject.ScriptCurrLable = "";
                         }

@@ -169,7 +169,7 @@ namespace GameSvr.RobotPlay
             string sFileName = GetRandomConfigFileName(ChrName, 0);
             if (sFileName == "" || !File.Exists(sFileName))
             {
-                if (m_sConfigFileName != "" && File.Exists(m_sConfigFileName))
+                if (!string.IsNullOrEmpty(m_sConfigFileName) && File.Exists(m_sConfigFileName))
                 {
                     sFileName = m_sConfigFileName;
                 }
@@ -204,7 +204,7 @@ namespace GameSvr.RobotPlay
             switch (nType)
             {
                 case 0:
-                    if (m_sConfigListFileName != "" && File.Exists(m_sConfigListFileName))
+                    if (!string.IsNullOrEmpty(m_sConfigListFileName) && File.Exists(m_sConfigListFileName))
                     {
                         LoadList = new StringList();
                         LoadList.LoadFromFile(m_sConfigListFileName);
@@ -232,7 +232,7 @@ namespace GameSvr.RobotPlay
                     }
                     break;
                 case 1:
-                    if (m_sHeroConfigListFileName != "" && File.Exists(m_sHeroConfigListFileName))
+                    if (!string.IsNullOrEmpty(m_sHeroConfigListFileName) && File.Exists(m_sHeroConfigListFileName))
                     {
                         LoadList = new StringList();
                         LoadList.LoadFromFile(m_sHeroConfigListFileName);
@@ -240,7 +240,7 @@ namespace GameSvr.RobotPlay
                         if (nIndex >= 0 && nIndex < LoadList.Count)
                         {
                             Str = LoadList[nIndex];
-                            if (Str != "")
+                            if (!string.IsNullOrEmpty(Str))
                             {
                                 if (Str[1] == '\\')
                                 {

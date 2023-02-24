@@ -270,7 +270,7 @@ namespace GameSvr.Guild
                         NoticeList.Add(s18);
                         break;
                     case 2:
-                        while (s18 != "")
+                        while (!string.IsNullOrEmpty(s18))
                         {
                             s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
                             if (s1C == "")
@@ -293,7 +293,7 @@ namespace GameSvr.Guild
                         }
                         break;
                     case 3:
-                        while (s18 != "")
+                        while (!string.IsNullOrEmpty(s18))
                         {
                             s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
                             s18 = HUtil32.GetValidStr3(s18, ref s20, new[] { ' ', ',' });
@@ -309,7 +309,7 @@ namespace GameSvr.Guild
                         }
                         break;
                     case 4:
-                        if (n2C > 0 && s24 != "")
+                        if (n2C > 0 && !string.IsNullOrEmpty(s24))
                         {
                             if (s24.Length > 30)
                             {
@@ -325,7 +325,7 @@ namespace GameSvr.Guild
                                 };
                                 m_RankList.Add(GuildRank);
                             }
-                            while (s18 != "")
+                            while (!string.IsNullOrEmpty(s18))
                             {
                                 s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
                                 if (string.IsNullOrEmpty(s1C))
@@ -774,7 +774,7 @@ namespace GameSvr.Guild
                         break;
                     }
                     sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sMemberName, new[] { ' ', ',' });
-                    if (sMemberName != "")
+                    if (!string.IsNullOrEmpty(sMemberName))
                     {
                         GuildRank.MemberList.Add(new GuildMember()
                         {
@@ -833,7 +833,7 @@ namespace GameSvr.Guild
                 GuildRank = GuildRankList[0];
                 if (GuildRank.nRankNo == 1)
                 {
-                    if (GuildRank.sRankName != "")
+                    if (!string.IsNullOrEmpty(GuildRank.sRankName))
                     {
                         result = 0;
                     }

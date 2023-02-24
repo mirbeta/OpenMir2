@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
             int nPoint = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
             char Ctr = '1';
             int nCreditPoint;
-            if (sCtr != "")
+            if (!string.IsNullOrEmpty(sCtr))
             {
                 Ctr = sCtr[0];
             }

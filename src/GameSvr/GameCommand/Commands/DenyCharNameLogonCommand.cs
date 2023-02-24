@@ -26,7 +26,7 @@ namespace GameSvr.GameCommand.Commands
             }
             try
             {
-                if (sFixDeny != "" && sFixDeny[0] == '1')
+                if (!string.IsNullOrEmpty(sFixDeny) && sFixDeny[0] == '1')
                 {
                     //Settings.g_DenyChrNameList.Add(sChrName, ((1) as Object));
                     M2Share.SaveDenyChrNameList();

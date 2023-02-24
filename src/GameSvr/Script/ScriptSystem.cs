@@ -154,7 +154,7 @@ namespace GameSvr.Script
             for (int i = 0; i < LoadList.Count; i++)
             {
                 string sDefName = LoadList[i].Trim();
-                if (sDefName != "" && sDefName[0] == '#')
+                if (!string.IsNullOrEmpty(sDefName) && sDefName[0] == '#')
                 {
                     if (HUtil32.CompareLStr(sDefName, "#SETHOME"))
                     {
@@ -1315,27 +1315,27 @@ namespace GameSvr.Script
             if (nCMDCode > 0)
             {
                 QuestActionInfo.nCmdCode = nCMDCode;
-                if (sParam1 != "" && sParam1[0] == '\"')
+                if (!string.IsNullOrEmpty(sParam1) && sParam1[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam1, "\"", "\"", ref sParam1);
                 }
-                if (sParam2 != "" && sParam2[0] == '\"')
+                if (!string.IsNullOrEmpty(sParam2) && sParam2[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam2, "\"", "\"", ref sParam2);
                 }
-                if (sParam3 != "" && sParam3[0] == '\"')
+                if (!string.IsNullOrEmpty(sParam3) && sParam3[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam3, "\"", "\"", ref sParam3);
                 }
-                if (sParam4 != "" && sParam4[0] == '\"')
+                if (!string.IsNullOrEmpty(sParam4) && sParam4[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam4, "\"", "\"", ref sParam4);
                 }
-                if (sParam5 != "" && sParam5[0] == '\"')
+                if (!string.IsNullOrEmpty(sParam5) && sParam5[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam5, "\"", "\"", ref sParam5);
                 }
-                if (sParam6 != "" && sParam6[0] == '\"')
+                if (!string.IsNullOrEmpty(sParam6) && sParam6[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam6, "\"", "\"", ref sParam6);
                 }
@@ -1519,9 +1519,9 @@ namespace GameSvr.Script
                         if (line.StartsWith("(")) // 增加处理NPC可执行命令设置
                         {
                             HUtil32.ArrestStringEx(line, "(", ")", ref line);
-                            if (line != "")
+                            if (!string.IsNullOrEmpty(line))
                             {
-                                while (line != "")
+                                while (!string.IsNullOrEmpty(line))
                                 {
                                     line = HUtil32.GetValidStr3(line, ref command, HUtil32.Separator);
                                     if (command.Equals(ScriptConst.sBUY, StringComparison.OrdinalIgnoreCase))
@@ -1685,7 +1685,7 @@ namespace GameSvr.Script
                         {
                             if (line.Equals("#IF", StringComparison.OrdinalIgnoreCase))
                             {
-                                if (SayingProcedure.ConditionList.Count > 0 || SayingProcedure.sSayMsg != "")
+                                if (SayingProcedure.ConditionList.Count > 0 || !string.IsNullOrEmpty(SayingProcedure.sSayMsg))
                                 {
                                     SayingProcedure = new SayingProcedure();
                                     SayingRecord.ProcedureList.Add(SayingProcedure);
@@ -2319,7 +2319,7 @@ namespace GameSvr.Script
                     break;
                 }
                 tempstr = HUtil32.ArrestStringEx(tempstr, "<", ">", ref s10);
-                if (s10 != "")
+                if (!string.IsNullOrEmpty(s10))
                 {
                     if (s10.IndexOf("/", StringComparison.OrdinalIgnoreCase) > 0)
                     {
@@ -3082,7 +3082,7 @@ namespace GameSvr.Script
             else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_TEAM))
             {
                 s14 = sLabel2.Substring(ScriptConst.sVAR_TEAM.Length + 1 - 1, 1);
-                if (s14 != "")
+                if (!string.IsNullOrEmpty(s14))
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptConst.tVAR_TEAM, s14));
                 }
@@ -3094,7 +3094,7 @@ namespace GameSvr.Script
             else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_HUMAN))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
-                if (s14 != "")
+                if (!string.IsNullOrEmpty(s14))
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptConst.tVAR_HUMAN, s14));
                 }
@@ -3106,7 +3106,7 @@ namespace GameSvr.Script
             else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_GUILD))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
-                if (s14 != "")
+                if (!string.IsNullOrEmpty(s14))
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptConst.tVAR_GUILD, s14));
                 }
@@ -3118,7 +3118,7 @@ namespace GameSvr.Script
             else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_GLOBAL))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
-                if (s14 != "")
+                if (!string.IsNullOrEmpty(s14))
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptConst.tVAR_GLOBAL, s14));
                 }
@@ -3131,7 +3131,7 @@ namespace GameSvr.Script
             {
                 //'欢迎使用个人银行储蓄，目前完全免费，请多利用。\ \<您的个人银行存款有/@-1>：<$46><｜/@-2><$125/G18>\ \<您的包裹里以携带有/AUTOCOLOR=249>：<$GOLDCOUNT><｜/@-2><$GOLDCOUNTX>\ \ \<存入金币/@@InPutInteger1>      <取出金币/@@InPutInteger2>      <返 回/@Main>'
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
-                if (s14 != "")
+                if (!string.IsNullOrEmpty(s14))
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptConst.tVAR_STR, s14));
                 }
@@ -3143,7 +3143,7 @@ namespace GameSvr.Script
             else if (HUtil32.CompareLStr(sLabel2, ScriptConst.sVAR_MISSIONARITHMOMETER))
             {
                 HUtil32.ArrestStringEx(sLabel, "(", ")", ref s14);
-                if (s14 != "")
+                if (!string.IsNullOrEmpty(s14))
                 {
                     sMsg = sMsg.Replace("<" + sLabel + ">", string.Format(ScriptConst.tVAR_MISSIONARITHMOMETER, s14));
                 }

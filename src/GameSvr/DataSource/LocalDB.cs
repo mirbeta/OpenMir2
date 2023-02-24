@@ -43,7 +43,7 @@ namespace GameSvr.DataSource
             {
                 string sLineText = LoadList[i];
                 int nLv = -1;
-                if (sLineText != "" && sLineText[0] != ';')
+                if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                 {
                     if (sLineText[0] == '*')
                     {
@@ -857,7 +857,7 @@ namespace GameSvr.DataSource
                         sLine = HUtil32.GetValidStr3(sLine, ref type, TextSpitConst);
                         sLine = HUtil32.GetValidStr3(sLine, ref zone, TextSpitConst);
                         sLine = HUtil32.GetValidStr3(sLine, ref fire, TextSpitConst);
-                        if (!string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(cX) && cY != "")
+                        if (!string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(cX) && !string.IsNullOrEmpty(cY))
                         {
                             StartPoint startPoint = new StartPoint
                             {
@@ -1034,7 +1034,7 @@ namespace GameSvr.DataSource
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sX, TextSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sY, TextSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sChrName, TextSpitConst);
-                    if (sChrName != "" && sChrName[0] == '\"')
+                    if (!string.IsNullOrEmpty(sChrName) && sChrName[0] == '\"')
                     {
                         HUtil32.ArrestStringEx(sChrName, "\"", "\"", ref sChrName);
                     }

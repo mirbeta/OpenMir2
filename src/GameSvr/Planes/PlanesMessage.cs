@@ -275,7 +275,7 @@ namespace GameSvr.Planes
             string gname = string.Empty;
             string Str = Body;
             Str = HUtil32.GetValidStr3(Str, ref gname, HUtil32.Backslash);
-            if (gname != "")
+            if (!string.IsNullOrEmpty(gname))
             {
                 GuildInfo g = M2Share.GuildMgr.FindGuild(gname);
                 if (g != null)
@@ -302,7 +302,7 @@ namespace GameSvr.Planes
                 Str = HUtil32.GetValidStr3(Str, ref warguildname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref StartTime, HUtil32.Backslash);
                 remaintime = Str;
-                if (gname != "" && warguildname != "")
+                if (!string.IsNullOrEmpty(gname) && !string.IsNullOrEmpty(warguildname))
                 {
                     g = M2Share.GuildMgr.FindGuild(gname);
                     WarGuild = M2Share.GuildMgr.FindGuild(warguildname);
@@ -355,7 +355,7 @@ namespace GameSvr.Planes
             string Str = Body;
             Str = HUtil32.GetValidStr3(Str, ref whostr, HUtil32.Backslash);
             Str = HUtil32.GetValidStr3(Str, ref minstr, HUtil32.Backslash);
-            if (whostr != "")
+            if (!string.IsNullOrEmpty(whostr))
             {
                 //PlayObject.CmdShutup(Settings.g_GameCommand.SHUTUP, whostr, minstr);
                 CommandMgr.Execute("Shutup", PlayObject);
@@ -365,7 +365,7 @@ namespace GameSvr.Planes
         private static void MsgGetChatProhibitionCancel(int sNum, string Body)
         {
             string whostr = Body;
-            if (whostr != "")
+            if (!string.IsNullOrEmpty(whostr))
             {
                 //PlayObject.CmdShutup(Settings.g_GameCommand.SHUTUP, whostr, "");
             }

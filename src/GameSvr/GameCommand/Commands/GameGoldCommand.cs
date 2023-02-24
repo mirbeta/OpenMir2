@@ -22,7 +22,7 @@ namespace GameSvr.GameCommand.Commands
             string sCtr = @Params.Length > 1 ? @Params[1] : "";
             int nGold = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
             char Ctr = '1';
-            if (sCtr != "")
+            if (!string.IsNullOrEmpty(sCtr))
             {
                 Ctr = sCtr[0];
             }

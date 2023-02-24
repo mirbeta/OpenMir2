@@ -109,12 +109,12 @@ namespace GameSvr.Npc
                                         stdItem80.GetUpgradeStdItem(dealOffInfo.UseItems[j], ref sClientDealOffInfo.UseItems[j]);
                                         //sClientDealOffInfo.UseItems[j].S = StdItem80;
                                         // 取自定义物品名称
-                                        sUserItemName = "";
+                                        sUserItemName = string.Empty;
                                         if (dealOffInfo.UseItems[j].Desc[13] == 1)
                                         {
                                             sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(dealOffInfo.UseItems[j].MakeIndex, dealOffInfo.UseItems[j].Index);
                                         }
-                                        if (sUserItemName != "")
+                                        if (!string.IsNullOrEmpty(sUserItemName))
                                         {
                                             sClientDealOffInfo.UseItems[j].Item.Name = sUserItemName;
                                         }
@@ -222,12 +222,12 @@ namespace GameSvr.Npc
                                         //sClientDealOffInfo.UseItems[K].S = StdItem80;
                                         sClientDealOffInfo.UseItems[k] = new ClientItem();
                                         //StdItem80.GetStandardItem(ref sClientDealOffInfo.UseItems[k].Item);
-                                        sUserItemName = "";
+                                        sUserItemName = string.Empty;
                                         if (dealOffInfo.UseItems[k].Desc[13] == 1)
                                         {
                                             sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(dealOffInfo.UseItems[k].MakeIndex, dealOffInfo.UseItems[k].Index);
                                         }
-                                        if (sUserItemName != "")
+                                        if (!string.IsNullOrEmpty(sUserItemName))
                                         {
                                             sClientDealOffInfo.UseItems[k].Item.Name = sUserItemName;
                                         }
@@ -590,7 +590,7 @@ namespace GameSvr.Npc
         private void ActionOfChangeHairStyle(PlayObject playObject, QuestActionInfo questActionInfo)
         {
             int nHair = HUtil32.StrToInt(questActionInfo.sParam1, -1);
-            if (questActionInfo.sParam1 != "" && nHair >= 0)
+            if ((!string.IsNullOrEmpty(questActionInfo.sParam1)) && nHair >= 0)
             {
                 playObject.Hair = (byte)nHair;
                 playObject.FeatureChanged();
@@ -936,7 +936,7 @@ namespace GameSvr.Npc
         private void ActionOfMarry(PlayObject playObject, QuestActionInfo questActionInfo)
         {
             string sSayMsg;
-            if (playObject.DearName != "")
+            if (!string.IsNullOrEmpty(playObject.DearName))
             {
                 return;
             }
@@ -1055,7 +1055,7 @@ namespace GameSvr.Npc
 
         private void ActionOfMaster(PlayObject playObject, QuestActionInfo questActionInfo)
         {
-            if (playObject.MasterName != "")
+            if (!string.IsNullOrEmpty(playObject.MasterName))
             {
                 return;
             }
@@ -1143,7 +1143,7 @@ namespace GameSvr.Npc
 
         private void ActionOfMission(PlayObject playObject, QuestActionInfo questActionInfo)
         {
-            if (questActionInfo.sParam1 != "" && questActionInfo.nParam2 > 0 && questActionInfo.nParam3 > 0)
+            if (!string.IsNullOrEmpty(questActionInfo.sParam1) && questActionInfo.nParam2 > 0 && questActionInfo.nParam3 > 0)
             {
                 M2Share.MissionMap = questActionInfo.sParam1;
                 M2Share.MissionX = (short)questActionInfo.nParam2;
@@ -2164,7 +2164,7 @@ namespace GameSvr.Npc
             }
             if (string.Compare(sMapMode, "SAFE", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.SafeArea = true;
                 }
@@ -2175,7 +2175,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "DARK", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boDarkness = true;
                 }
@@ -2186,7 +2186,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "FIGHT", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.FightZone = true;
                 }
@@ -2197,7 +2197,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "FIGHT3", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.Fight3Zone = true;
                 }
@@ -2208,7 +2208,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "DAY", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.DayLight = true;
                 }
@@ -2219,7 +2219,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "QUIZ", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boQUIZ = true;
                 }
@@ -2230,7 +2230,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NORECONNECT", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boNORECONNECT = true;
                     envir.Flag.sNoReConnectMap = sParam1;
@@ -2242,7 +2242,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "MUSIC", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.Music = true;
                     envir.Flag.MusicId = HUtil32.StrToInt(sParam1, -1);
@@ -2254,7 +2254,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "EXPRATE", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boEXPRATE = true;
                     envir.Flag.ExpRate = HUtil32.StrToInt(sParam1, -1);
@@ -2266,7 +2266,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "PKWINLEVEL", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boPKWINLEVEL = true;
                     envir.Flag.nPKWINLEVEL = HUtil32.StrToInt(sParam1, -1);
@@ -2278,7 +2278,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "PKWINEXP", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boPKWINEXP = true;
                     envir.Flag.nPKWINEXP = HUtil32.StrToInt(sParam1, -1);
@@ -2290,7 +2290,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "PKLOSTLEVEL", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boPKLOSTLEVEL = true;
                     envir.Flag.nPKLOSTLEVEL = HUtil32.StrToInt(sParam1, -1);
@@ -2302,7 +2302,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "PKLOSTEXP", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boPKLOSTEXP = true;
                     envir.Flag.nPKLOSTEXP = HUtil32.StrToInt(sParam1, -1);
@@ -2314,7 +2314,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "DECHP", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "" && sParam2 != "")
+                if ((!string.IsNullOrEmpty(sParam1)) && (!string.IsNullOrEmpty(sParam2)))
                 {
                     envir.Flag.boDECHP = true;
                     envir.Flag.nDECHPTIME = HUtil32.StrToInt(sParam1, -1);
@@ -2327,7 +2327,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "DECGAMEGOLD", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "" && sParam2 != "")
+                if ((!string.IsNullOrEmpty(sParam1)) && (!string.IsNullOrEmpty(sParam2)))
                 {
                     envir.Flag.boDECGAMEGOLD = true;
                     envir.Flag.nDECGAMEGOLDTIME = HUtil32.StrToInt(sParam1, -1);
@@ -2340,7 +2340,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "RUNHUMAN", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.RunHuman = true;
                 }
@@ -2351,7 +2351,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "RUNMON", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.RunMon = true;
                 }
@@ -2362,7 +2362,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NEEDHOLE", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boNEEDHOLE = true;
                 }
@@ -2373,7 +2373,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NORECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.NoReCall = true;
                 }
@@ -2384,7 +2384,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NOGUILDRECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.NoGuildReCall = true;
                 }
@@ -2395,7 +2395,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NODEARRECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boNODEARRECALL = true;
                 }
@@ -2406,7 +2406,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NOMASTERRECALL", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.MasterReCall = true;
                 }
@@ -2417,7 +2417,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NORANDOMMOVE", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boNORANDOMMOVE = true;
                 }
@@ -2428,7 +2428,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NODRUG", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boNODRUG = true;
                 }
@@ -2439,7 +2439,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "MINE", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.Mine = true;
                 }
@@ -2450,7 +2450,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "MINE2", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boMINE2 = true;
                 }
@@ -2461,7 +2461,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NOTHROWITEM", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.NoThrowItem = true;
                 }
@@ -2472,7 +2472,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NODROPITEM", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.NoDropItem = true;
                 }
@@ -2483,7 +2483,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NOPOSITIONMOVE", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boNOPOSITIONMOVE = true;
                 }
@@ -2494,7 +2494,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NOHORSE", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.NoHorse = true;
                 }
@@ -2505,7 +2505,7 @@ namespace GameSvr.Npc
             }
             else if (string.Compare(sMapMode, "NOCHAT", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (sParam1 != "")
+                if(!string.IsNullOrEmpty(sParam1))
                 {
                     envir.Flag.boNOCHAT = true;
                 }
@@ -3111,7 +3111,7 @@ namespace GameSvr.Npc
             }
             if (mon != null)
             {
-                if (questActionInfo.sParam4 != "" && questActionInfo.sParam4[1] == '1')
+                if (!string.IsNullOrEmpty(questActionInfo.sParam4) && questActionInfo.sParam4[1] == '1')
                 {
                     mon.AutoChangeColor = true;
                 }
@@ -3453,11 +3453,11 @@ namespace GameSvr.Npc
                                 mapItem.UserItem = new UserItem(userItem);
                                 mapItem.Name = stdItem.Name;
                                 string nameCorlr = "@" + CustomItem.GetItemAddValuePointColor(userItem); // 取自定义物品名称
-                                string sUserItemName = "";
+                                string sUserItemName = string.Empty;
                                 if (userItem.Desc[13] == 1)
                                 {
                                     sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
-                                    if (sUserItemName != "")
+                                    if (!string.IsNullOrEmpty(sUserItemName))
                                     {
                                         mapItem.Name = sUserItemName;
                                     }

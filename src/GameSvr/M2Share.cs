@@ -1002,7 +1002,7 @@ namespace GameSvr
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
                     int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
-                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
+                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName)))
                     {
                         ItemBind ItemBind = new ItemBind
                         {
@@ -1067,7 +1067,7 @@ namespace GameSvr
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
                     int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
-                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
+                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName)))
                     {
                         ItemBind ItemBind = new ItemBind
                         {
@@ -1135,7 +1135,7 @@ namespace GameSvr
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
                     int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
-                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (sBindName != ""))
+                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName)))
                     {
                         ItemBind ItemBind = new ItemBind
                         {
@@ -1986,7 +1986,7 @@ namespace GameSvr
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, new[] { ' ', '/', ',', '\t' });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, new[] { ' ', '/', ',', '\t' });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new[] { ' ', '/', ',', '\t' });
-                        if (sStatus != "" && sRate != "" && sColor != "" && sMonName != "" && sSayMsg != "")
+                        if (!string.IsNullOrEmpty(sStatus) && !string.IsNullOrEmpty(sRate) && !string.IsNullOrEmpty(sColor) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sSayMsg))
                         {
                             int nStatus = HUtil32.StrToInt(sStatus, -1);
                             int nRate = HUtil32.StrToInt(sRate, -1);

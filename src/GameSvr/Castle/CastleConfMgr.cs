@@ -116,9 +116,9 @@ namespace GameSvr.Castle
             }
             if (!string.IsNullOrEmpty(sMapList))
                 WriteString("Defense", "CastleMapList", sMapList);
-            if (userCastle.MapName != "")
+            if (!string.IsNullOrEmpty(userCastle.MapName))
                 WriteString("Defense", "CastleMap", userCastle.MapName);
-            if (userCastle.HomeMap != "")
+            if (!string.IsNullOrEmpty(userCastle.HomeMap))
                 WriteString("Defense", "CastleHomeMap", userCastle.HomeMap);
             if (userCastle.HomeX != 0)
                 WriteInteger("Defense", "CastleHomeX", userCastle.HomeX);
@@ -128,9 +128,9 @@ namespace GameSvr.Castle
                 WriteInteger("Defense", "CastleWarRangeX", userCastle.WarRangeX);
             if (userCastle.WarRangeY != 0)
                 WriteInteger("Defense", "CastleWarRangeY", userCastle.WarRangeY);
-            if (userCastle.PalaceMap != "")
+            if (!string.IsNullOrEmpty(userCastle.PalaceMap))
                 WriteString("Defense", "CastlePlaceMap", userCastle.PalaceMap);
-            if (userCastle.SecretMap != "")
+            if (!string.IsNullOrEmpty(userCastle.SecretMap))
                 WriteString("Defense", "CastleSecretMap", userCastle.SecretMap);
             if (userCastle.PalaceDoorX != 0)
                 WriteInteger("Defense", "CastlePalaceDoorX", userCastle.PalaceDoorX);
@@ -140,7 +140,7 @@ namespace GameSvr.Castle
                 WriteInteger("Defense", "MainDoorX", userCastle.MainDoor.nX);
             if (userCastle.MainDoor.nY != 0)
                 WriteInteger("Defense", "MainDoorY", userCastle.MainDoor.nY);
-            if (userCastle.MainDoor.sName != "")
+            if (!string.IsNullOrEmpty(userCastle.MainDoor.sName))
                 WriteString("Defense", "MainDoorName", userCastle.MainDoor.sName);
             if (userCastle.MainDoor.BaseObject != null)
             {
@@ -155,7 +155,7 @@ namespace GameSvr.Castle
             {
                 WriteInteger("Defense", "LeftWallY", userCastle.LeftWall.nY);
             }
-            if (userCastle.LeftWall.sName != "")
+            if (!string.IsNullOrEmpty(userCastle.LeftWall.sName))
             {
                 WriteString("Defense", "LeftWallName", userCastle.LeftWall.sName);
             }
@@ -171,7 +171,7 @@ namespace GameSvr.Castle
             {
                 WriteInteger("Defense", "CenterWallY", userCastle.CenterWall.nY);
             }
-            if (userCastle.CenterWall.sName != "")
+            if (!string.IsNullOrEmpty(userCastle.CenterWall.sName))
             {
                 WriteString("Defense", "CenterWallName", userCastle.CenterWall.sName);
             }
@@ -218,7 +218,10 @@ namespace GameSvr.Castle
                 ArcherUnit objUnit = userCastle.Guards[i];
                 if (objUnit.nX != 0) WriteInteger("Defense", $"Guard_{i + 1}_X", objUnit.nX);
                 if (objUnit.nY != 0) WriteInteger("Defense", $"Guard_{i + 1}_Y", objUnit.nY);
-                if (objUnit.sName != "") WriteString("Defense", $"Guard_{i + 1}_Name", objUnit.sName);
+                if (!string.IsNullOrEmpty(objUnit.sName))
+                {
+                    WriteString("Defense", $"Guard_{i + 1}_Name", objUnit.sName);
+                }
                 if (objUnit.BaseObject != null)
                 {
                     WriteInteger("Defense", $"Guard_{i + 1}_HP", objUnit.BaseObject.WAbil.HP);

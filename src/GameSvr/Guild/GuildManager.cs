@@ -81,7 +81,7 @@ namespace GameSvr.Guild
                 for (int i = 0; i < LoadList.Count; i++)
                 {
                     string sGuildName = LoadList[i].Trim();
-                    if (sGuildName != "")
+                    if (!string.IsNullOrEmpty(sGuildName))
                     {
                         Guild = new GuildInfo(sGuildName);
                         GuildList.Add(Guild);

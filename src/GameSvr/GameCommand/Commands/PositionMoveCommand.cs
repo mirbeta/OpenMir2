@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands
                 string sX = @Params.Length > 1 ? @Params[1] : "";
                 string sY = @Params.Length > 2 ? @Params[2] : "";
                 Envirnoment Envir = null;
-                if (sMapName == "" || sX == "" || sY == "" || sMapName != "" && sMapName[0] == '?')
+                if (sMapName == "" || sX == "" || sY == "" || !string.IsNullOrEmpty(sMapName) && sMapName[0] == '?')
                 {
                     PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                     return;

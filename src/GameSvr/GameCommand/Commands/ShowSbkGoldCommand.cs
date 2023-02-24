@@ -20,12 +20,12 @@ namespace GameSvr.GameCommand.Commands
             string sCastleName = @Params.Length > 0 ? @Params[0] : "";
             string sCtr = @Params.Length > 1 ? @Params[1] : "";
             string sGold = @Params.Length > 2 ? @Params[2] : "";
-            if (sCastleName != "" && sCastleName[0] == '?')
+            if (!string.IsNullOrEmpty(sCastleName) && sCastleName[0] == '?')
             {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, ""), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (sCastleName == "")
+            if (string.IsNullOrEmpty(sCastleName))
             {
                 IList<string> List = new List<string>();
                 M2Share.CastleMgr.GetCastleGoldInfo(List);
@@ -33,7 +33,6 @@ namespace GameSvr.GameCommand.Commands
                 {
                     PlayObject.SysMsg(List[i], MsgColor.Green, MsgType.Hint);
                 }
-
                 return;
             }
             Castle.UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);

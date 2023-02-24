@@ -140,7 +140,7 @@ namespace GameSvr.Npc
                         else if (string.Compare(sLabel, ScriptConst.sCASTLENAME, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             sMsg = sMsg.Trim();
-                            if (sMsg != "")
+                            if (!string.IsNullOrEmpty(sMsg))
                             {
                                 Castle.sName = sMsg;
                                 Castle.Save();

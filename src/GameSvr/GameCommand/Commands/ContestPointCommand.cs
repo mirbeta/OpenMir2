@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             string sGuildName = @Params.Length > 0 ? @Params[0] : "";
-            if (sGuildName == "" || sGuildName != "" && sGuildName[0] == '?')
+            if (sGuildName == "" || !string.IsNullOrEmpty(sGuildName) && sGuildName[0] == '?')
             {
                 PlayObject.SysMsg("查看行会战的得分数。", MsgColor.Red, MsgType.Hint);
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

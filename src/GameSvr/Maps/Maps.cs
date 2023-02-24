@@ -49,7 +49,7 @@ namespace GameSvr.Maps
                     {
                         var sMapInfoFile = HUtil32.GetValidStr3(LoadList[count], ref sFlag, new[] { ' ', '\t' });
                         LoadList.RemoveAt(count);
-                        if (sMapInfoFile != "")
+                        if (!string.IsNullOrEmpty(sMapInfoFile))
                         {
                             LoadSubMapInfo(LoadList, sMapInfoFile);
                         }

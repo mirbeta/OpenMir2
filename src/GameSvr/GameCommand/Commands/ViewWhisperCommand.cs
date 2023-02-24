@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands
                 return;
             }
             string sChrName = @Params.Length > 0 ? @Params[0] : "";
-            if (sChrName == "" || sChrName != "" && sChrName[1] == '?')
+            if (string.IsNullOrEmpty(sChrName) || !string.IsNullOrEmpty(sChrName) && sChrName[1] == '?')
             {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;

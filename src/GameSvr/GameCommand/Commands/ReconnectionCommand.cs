@@ -23,7 +23,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            if (sIPaddr != "" && sIPaddr[0] == '?')
+            if (!string.IsNullOrEmpty(sIPaddr) && sIPaddr[0] == '?')
             {
                 PlayObject.SysMsg("此命令用于改变客户端连接网关的IP及端口。", MsgColor.Blue, MsgType.Hint);
                 return;
@@ -33,7 +33,7 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (sIPaddr != "" && sPort != "")
+            if (!string.IsNullOrEmpty(sIPaddr) && !string.IsNullOrEmpty(sPort))
             {
                 PlayObject.SendMsg(PlayObject, Messages.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
             }

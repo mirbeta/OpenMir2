@@ -828,7 +828,7 @@ namespace GameSvr.Npc
                     case ScriptConst.nCHECKBAGGAGE:
                         if (PlayObject.IsEnoughBag())
                         {
-                            if (QuestConditionInfo.sParam1 != "")
+                            if ((!string.IsNullOrEmpty(QuestConditionInfo.sParam1)))
                             {
                                 result = false;
                                 StdItem StdItem = M2Share.WorldEngine.GetStdItem(QuestConditionInfo.sParam1);

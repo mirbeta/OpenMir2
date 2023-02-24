@@ -29,7 +29,7 @@ namespace GameSvr.Player
                 }
                 if (!OffLineFlag && PlayObject.OffLineFlag)
                 {
-                    if (PlayObject.OffLineLeaveWord != "")
+                    if (!string.IsNullOrEmpty(PlayObject.OffLineLeaveWord))
                     {
                         PlayObject.Whisper(ChrName, PlayObject.OffLineLeaveWord);
                     }
@@ -376,31 +376,31 @@ namespace GameSvr.Player
                 }
                 sC = sData.AsSpan()[1..].ToString();
                 sC = HUtil32.GetValidStr3(sC, ref sCMD, new[] { ' ', ':', ',', '\t' });
-                if (sC != "")
+                if (!string.IsNullOrEmpty(sC))
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam1, new[] { ' ', ':', ',', '\t' });
                 }
-                if (sC != "")
+                if (!string.IsNullOrEmpty(sC))
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam2, new[] { ' ', ':', ',', '\t' });
                 }
-                if (sC != "")
+                if (!string.IsNullOrEmpty(sC))
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam3, new[] { ' ', ':', ',', '\t' });
                 }
-                if (sC != "")
+                if (!string.IsNullOrEmpty(sC))
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam4, new[] { ' ', ':', ',', '\t' });
                 }
-                if (sC != "")
+                if (!string.IsNullOrEmpty(sC))
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam5, new[] { ' ', ':', ',', '\t' });
                 }
-                if (sC != "")
+                if (!string.IsNullOrEmpty(sC))
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam6, new[] { ' ', ':', ',', '\t' });
                 }
-                if (sC != "")
+                if (!string.IsNullOrEmpty(sC))
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam7, new[] { ' ', ':', ',', '\t' });
                 }

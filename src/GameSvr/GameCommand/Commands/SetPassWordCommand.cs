@@ -77,7 +77,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.IsPasswordLocked = true;
                 return;
             }
-            if (playObject.StoragePwd != "")
+            if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
                 playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.IsCheckOldPwd = true;
@@ -110,7 +110,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.IsPasswordLocked = true;
                 return;
             }
-            if (playObject.StoragePwd != "")
+            if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
                 if (!playObject.IsUnLockStoragePwd)
                 {
@@ -150,7 +150,7 @@ namespace GameSvr.GameCommand.Commands
                 playObject.IsPasswordLocked = true;
                 return;
             }
-            if (playObject.StoragePwd != "")
+            if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
                 if (!playObject.IsUnLockPwd)
                 {
@@ -186,7 +186,7 @@ namespace GameSvr.GameCommand.Commands
             }
             if (!playObject.IsPasswordLocked)
             {
-                if (playObject.StoragePwd != "")
+                if (!string.IsNullOrEmpty(playObject.StoragePwd))
                 {
                     playObject.IsPasswordLocked = true;
                     playObject.IsCanGetBackItem = false;

@@ -46,7 +46,7 @@ namespace GameSvr.Conf
                 playObject.AttatckMode = (AttackMode)nAttatckMode;
             }
             sLineText = ReadWriteString("Info", "UseSkill", "");
-            if (sLineText != "")
+            if (!string.IsNullOrEmpty(sLineText))
             {
                 TempList = new List<string>();
                 try
@@ -81,7 +81,7 @@ namespace GameSvr.Conf
                 }
             }
             sLineText = ReadWriteString("Info", "InitItems", "");
-            if (sLineText != "")
+            if (!string.IsNullOrEmpty(sLineText))
             {
                 TempList = new List<string>();
                 try
@@ -126,7 +126,7 @@ namespace GameSvr.Conf
             for (int i = 0; i < 9; i++)
             {
                 sSayMsg = ReadWriteString("MonSay", i.ToString(), "");
-                if (sSayMsg != "")
+                if (!string.IsNullOrEmpty(sSayMsg))
                 {
                     playObject.m_AISayMsgList.Add(sSayMsg);
                 }

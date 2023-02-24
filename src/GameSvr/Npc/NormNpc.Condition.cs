@@ -1687,7 +1687,7 @@ namespace GameSvr.Npc
                 for (int i = 0; i < LoadList.Count; i++)
                 {
                     s18 = LoadList[i].Trim();
-                    if ((s18 != "") && (s18[1] != ';'))
+                    if ((!string.IsNullOrEmpty(s18)) && (s18[1] != ';'))
                     {
                         s18 = HUtil32.GetValidStr3(s18, ref Petname, HUtil32.Backslash);
                         s18 = HUtil32.GetValidStr3(s18, ref lvl, HUtil32.Backslash);
@@ -2731,11 +2731,11 @@ namespace GameSvr.Npc
             }
             if (HUtil32.IsVarNumber(sParam1))
             {
-                if ((sParam3 != "") && (M2Share.GetValNameNo(sParam3) >= 0))
+                if ((!string.IsNullOrEmpty(sParam3)) && (M2Share.GetValNameNo(sParam3) >= 0))
                 {
                     result = 0;
                 }
-                else if ((sParam3 != "") && HUtil32.IsStringNumber(sParam3))
+                else if ((!string.IsNullOrEmpty(sParam3)) && HUtil32.IsStringNumber(sParam3))
                 {
                     result = 1;
                 }
@@ -2743,15 +2743,15 @@ namespace GameSvr.Npc
             }
             if (M2Share.GetValNameNo(sParam1) >= 0)
             {
-                if ((sParam2 != "") && (M2Share.GetValNameNo(sParam2) >= 0))
+                if (((!string.IsNullOrEmpty(sParam2))) && (M2Share.GetValNameNo(sParam2) >= 0))
                 {
                     result = 2;
                 }
-                else if ((sParam2 != "") && HUtil32.IsVarNumber(sParam2) && (sParam3 != ""))
+                else if (((!string.IsNullOrEmpty(sParam2))) && HUtil32.IsVarNumber(sParam2) && (!string.IsNullOrEmpty(sParam3)))
                 {
                     result = 3;
                 }
-                else if ((sParam2 != "") && HUtil32.IsStringNumber(sParam2))
+                else if (((!string.IsNullOrEmpty(sParam2))) && HUtil32.IsStringNumber(sParam2))
                 {
                     result = 4;
                 }

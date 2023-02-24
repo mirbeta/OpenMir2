@@ -38,7 +38,7 @@ namespace GameSvr.GameCommand.Commands
                 else
                 {
                     m_PlayObject.MasterName = sMasterName;
-                    if (sIsMaster != "" && sIsMaster[0] == '1')
+                    if (!string.IsNullOrEmpty(sIsMaster) && sIsMaster[0] == '1')
                     {
                         m_PlayObject.IsMaster = true;
                     }

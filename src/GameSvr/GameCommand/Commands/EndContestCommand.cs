@@ -19,7 +19,7 @@ namespace GameSvr.GameCommand.Commands
             //bool bo19;
             //string s20;
             //TGUild Guild;
-            //if (((sParam1 != "") && (sParam1[0] == '?')))
+            //if (((if(!string.IsNullOrEmpty(sParam1))) && (sParam1[0] == '?')))
             //{
             //    PlayObject.SysMsg("结束行会争霸赛。", TMsgColor.c_Red, TMsgType.t_Hint);
             //    PlayObject.SysMsg(string.Format("命令格式: @{0}", this.Attributes.Name), TMsgColor.c_Red, TMsgType.t_Hint);

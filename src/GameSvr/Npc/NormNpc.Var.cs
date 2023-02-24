@@ -236,7 +236,7 @@ namespace GameSvr.Npc
                 case 7:
                     if (GetMovDataValNameValue(PlayObject, sParam1, ref sValue, ref nValue, ref nDataType))
                     {
-                        if ((sParam2 != "") && (sParam2[0] == '<') && (sParam2[1] == '$'))//  支持:MOV A14 <$USERALLNAME>\天下第一战士 的传值
+                        if ((!string.IsNullOrEmpty(sParam2)) && (sParam2[0] == '<') && (sParam2[1] == '$'))//  支持:MOV A14 <$USERALLNAME>\天下第一战士 的传值
                         {
                             GetMovDataHumanInfoValue(PlayObject, sParam2, ref sValue, ref nValue, ref nDataType);// 取人物信息
                             sValue = sValue + sParam2.Substring(sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) - 1, sParam2.Length - sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) + 1);
@@ -310,7 +310,7 @@ namespace GameSvr.Npc
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sINC);
                 return;
             }
-            if (sParam3 != "")
+            if (!string.IsNullOrEmpty(sParam3))
             {
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
@@ -445,7 +445,7 @@ namespace GameSvr.Npc
                 }
                 if (HUtil32.IsVarNumber(sParam1) && (!HUtil32.IsVarNumber(sParam2)))
                 {
-                    if ((sParam3 != "") && (!HUtil32.IsStringNumber(sParam3)))
+                    if ((!string.IsNullOrEmpty(sParam3)) && (!HUtil32.IsStringNumber(sParam3)))
                     {
                         n14 = M2Share.GetValNameNo(sParam3);
                         if (n14 >= 0)
@@ -545,7 +545,7 @@ namespace GameSvr.Npc
             }
             else
             {
-                if ((sParam2 != "") && (!HUtil32.IsStringNumber(sParam2)))
+                if (((!string.IsNullOrEmpty(sParam2))) && (!HUtil32.IsStringNumber(sParam2)))
                 {
                     // 获取第2个变量值
                     n14 = M2Share.GetValNameNo(sParam2);
@@ -756,7 +756,7 @@ namespace GameSvr.Npc
             }
             string s02;
             string s03;
-            if (sParam3 != "")
+            if (!string.IsNullOrEmpty(sParam3))
             {
                 bool boVarFound;
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
@@ -901,7 +901,7 @@ namespace GameSvr.Npc
                 }
                 if (HUtil32.IsVarNumber(sParam1) && (!HUtil32.IsVarNumber(sParam2)))
                 {
-                    if ((sParam3 != "") && (!HUtil32.IsStringNumber(sParam3)))
+                    if ((!string.IsNullOrEmpty(sParam3)) && (!HUtil32.IsStringNumber(sParam3)))
                     {
                         n14 = M2Share.GetValNameNo(sParam3);
                         if (n14 >= 0)
@@ -1004,7 +1004,7 @@ namespace GameSvr.Npc
             }
             else
             {
-                if ((sParam2 != "") && (!HUtil32.IsStringNumber(sParam2)))
+                if ((!string.IsNullOrEmpty(sParam2)) && (!HUtil32.IsStringNumber(sParam2)))
                 {
                     // 获取第2个变量值
                     n14 = M2Share.GetValNameNo(sParam2);
@@ -2010,7 +2010,7 @@ namespace GameSvr.Npc
                             if (!Castle.UnderWar)
                             {
                                 sValue = Castle.GetWarDate();
-                                if (sValue != "")
+                                if (!string.IsNullOrEmpty(sValue))
                                 {
                                     sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARDATE>", sValue);
                                 }
@@ -2820,15 +2820,15 @@ namespace GameSvr.Npc
             }
             if (HUtil32.IsVarNumber(sParam1))
             {
-                if ((sParam3 != "") && (sParam3[0] == '<') && (sParam3[^1] == '>'))
+                if ((!string.IsNullOrEmpty(sParam3)) && (sParam3[0] == '<') && (sParam3[^1] == '>'))
                 {
                     result = 0;
                 }
-                else if ((sParam3 != "") && (M2Share.GetValNameNo(sParam3) >= 0))
+                else if ((!string.IsNullOrEmpty(sParam3)) && (M2Share.GetValNameNo(sParam3) >= 0))
                 {
                     result = 1;
                 }
-                else if ((sParam3 != "") && HUtil32.IsStringNumber(sParam3))
+                else if ((!string.IsNullOrEmpty(sParam3)) && HUtil32.IsStringNumber(sParam3))
                 {
                     result = 2;
                 }
@@ -2841,15 +2841,15 @@ namespace GameSvr.Npc
             int n01 = M2Share.GetValNameNo(sParam1);
             if (n01 >= 0)
             {
-                if ((sParam2 != "") && (sParam2[0] == '<') && (sParam2[^1] == '>'))
+                if (((!string.IsNullOrEmpty(sParam2))) && (sParam2[0] == '<') && (sParam2[^1] == '>'))
                 {
                     result = 4;
                 }
-                else if ((sParam2 != "") && (M2Share.GetValNameNo(sParam2) >= 0))
+                else if (((!string.IsNullOrEmpty(sParam2))) && (M2Share.GetValNameNo(sParam2) >= 0))
                 {
                     result = 5;
                 }
-                else if ((sParam2 != "") && HUtil32.IsVarNumber(sParam2))
+                else if (((!string.IsNullOrEmpty(sParam2))) && HUtil32.IsVarNumber(sParam2))
                 {
                     result = 6;
                 }

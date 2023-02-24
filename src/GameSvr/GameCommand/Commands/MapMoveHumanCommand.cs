@@ -20,8 +20,7 @@ namespace GameSvr.GameCommand.Commands
             }
             string sSrcMap = @Params.Length > 0 ? @Params[0] : "";
             string sDenMap = @Params.Length > 1 ? @Params[1] : "";
-            PlayObject MoveHuman;
-            if (sDenMap == "" || sSrcMap == "" || sSrcMap != "" && sSrcMap[0] == '?')
+            if (sDenMap == "" || sSrcMap == "" || !string.IsNullOrEmpty(sSrcMap) && sSrcMap[0] == '?')
             {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
@@ -42,7 +41,7 @@ namespace GameSvr.GameCommand.Commands
             M2Share.WorldEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.Width / 2, SrcEnvir.Height / 2, 1000, HumanList);
             for (int i = 0; i < HumanList.Count; i++)
             {
-                MoveHuman = (PlayObject)HumanList[i];
+                var MoveHuman = (PlayObject)HumanList[i];
                 if (MoveHuman != PlayObject)
                 {
                     MoveHuman.MapRandomMove(sDenMap, 0);

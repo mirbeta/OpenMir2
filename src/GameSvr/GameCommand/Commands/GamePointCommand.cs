@@ -26,7 +26,7 @@ namespace GameSvr.GameCommand.Commands
             {
                 return;
             }
-            if (sCtr != "")
+            if (!string.IsNullOrEmpty(sCtr))
             {
                 Ctr = sCtr[0];
             }
