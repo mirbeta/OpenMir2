@@ -2965,7 +2965,7 @@ namespace GameSvr.Player
                                                 cellInfo.Clear();
                                                 break;
                                             }
-                                            MapItem mapItem = M2Share.ActorMgr.Get<MapItem>(cellObject.CellObjId);
+                                            MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                             UpdateVisibleItem(nX, nY, mapItem);
                                             if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
                                             {
@@ -2995,7 +2995,7 @@ namespace GameSvr.Player
                                         }
                                         if (cellObject.CellType == CellType.Event)
                                         {
-                                            EventInfo mapEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
+                                            EventInfo mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
                                             if (mapEvent.Visible)
                                             {
                                                 UpdateVisibleEvent(nX, nY, mapEvent);
@@ -3064,14 +3064,14 @@ namespace GameSvr.Player
                     VisibleMapItem visibleMapItem = VisibleItems[I];
                     if (visibleMapItem.VisibleFlag == 0)
                     {
-                        SendMsg(this, Messages.RM_ITEMHIDE, 0, visibleMapItem.MapItem.ActorId, visibleMapItem.nX, visibleMapItem.nY, "");
+                        SendMsg(this, Messages.RM_ITEMHIDE, 0, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, "");
                         VisibleItems.RemoveAt(I);
                         Dispose(visibleMapItem);
                         continue;
                     }
                     if (visibleMapItem.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        SendMsg(this, Messages.RM_ITEMSHOW, visibleMapItem.wLooks, visibleMapItem.MapItem.ActorId, visibleMapItem.nX, visibleMapItem.nY, visibleMapItem.sName);
+                        SendMsg(this, Messages.RM_ITEMSHOW, visibleMapItem.wLooks, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, visibleMapItem.sName);
                     }
                     I++;
                 }
@@ -3603,7 +3603,7 @@ namespace GameSvr.Player
                     Envir = oldEnvir;
                     CurrX = nOldX;
                     CurrY = nOldY;
-                    Envir.AddToMap(CurrX, CurrY, CellType, this);
+                    Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
                 }
                 OnEnvirnomentChanged();
                 // 复位泡点，及金币，时间

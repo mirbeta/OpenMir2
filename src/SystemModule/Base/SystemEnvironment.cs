@@ -162,7 +162,7 @@ namespace SystemModule.Base
 
         public static long PerSecondBytesReceived { get; set; }
 
-        public static double CpuLoad => IsWindows() ? WindowsLoadValue.CPULOAD : LinuxLoadValue.CPULOAD;
+        public static double CpuLoad => IsWindows() ? WindowsLoadValue.CPULOAD : LinuxLoadValue.CpuLoad;
 
         public static ulong AvailablePhysicalMemory => memoryInfo.ullAvailPhys;
 

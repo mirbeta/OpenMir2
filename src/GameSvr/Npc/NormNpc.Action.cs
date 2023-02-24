@@ -3413,7 +3413,7 @@ namespace GameSvr.Npc
                         mapItem.OfBaseObject = playObject.ActorId;
                         mapItem.CanPickUpTick = HUtil32.GetTickCount();
                         mapItem.DropBaseObject = playObject.ActorId;
-                        mapItemA = envir.AddToMap(dX, dY, CellType.Item, mapItem);
+                        mapItemA = (MapItem)envir.AddToMap(dX, dY, CellType.Item, mapItem.ItemId, mapItem);
                         if (mapItemA != null)
                         {
                             if (mapItemA != mapItem)
@@ -3421,7 +3421,7 @@ namespace GameSvr.Npc
                                 Dispose(mapItem);
                                 mapItem = mapItemA;
                             }
-                            SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dX, dY, mapItem.Name + "@0");
+                            SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dX, dY, mapItem.Name + "@0");
                         }
                         else
                         {
@@ -3474,7 +3474,7 @@ namespace GameSvr.Npc
                                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
                                 mapItem.DropBaseObject = playObject.ActorId;
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
-                                mapItemA = envir.AddToMap(dX, dY, CellType.Item, mapItem);
+                                mapItemA = (MapItem)envir.AddToMap(dX, dY, CellType.Item, mapItem.ItemId, mapItem);
                                 if (mapItemA != null)
                                 {
                                     if (mapItemA != mapItem)
@@ -3482,7 +3482,7 @@ namespace GameSvr.Npc
                                         Dispose(mapItem);
                                         mapItem = mapItemA;
                                     }
-                                    SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dX, dY, mapItem.Name + nameCorlr);
+                                    SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dX, dY, mapItem.Name + nameCorlr);
                                 }
                                 else
                                 {

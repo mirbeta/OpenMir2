@@ -71,11 +71,11 @@ namespace GameSvr.Player
             }
             if (mapItem.Name.Equals(Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase))
             {
-                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem) == 1)
+                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, null) == 1)
                 {
                     if (IncGold(mapItem.Count))
                     {
-                        SendRefMsg(Messages.RM_ITEMHIDE, 0, mapItem.ActorId, CurrX, CurrY, "");
+                        SendRefMsg(Messages.RM_ITEMHIDE, 0, mapItem.ItemId, CurrX, CurrY, "");
                         if (M2Share.GameLogGold)
                         {
                             M2Share.EventSource.AddEventLog(4, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName
@@ -86,20 +86,20 @@ namespace GameSvr.Player
                     }
                     else
                     {
-                        Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem);
+                        Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, mapItem);
                     }
                 }
                 return result;
             }
             if (IsEnoughBag())
             {
-                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem) == 1)
+                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, null) == 1)
                 {
                     UserItem userItem = mapItem.UserItem;
                     StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                     if (stdItem != null && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index)))
                     {
-                        SendMsg(this, Messages.RM_ITEMHIDE, 0, mapItem.ActorId, CurrX, CurrY, "");
+                        SendMsg(this, Messages.RM_ITEMHIDE, 0, mapItem.ItemId, CurrX, CurrY, "");
                         AddItemToBag(userItem);
                         if (!M2Share.IsCheapStuff(stdItem.StdMode))
                         {
@@ -119,7 +119,7 @@ namespace GameSvr.Player
                     else
                     {
                         Dispose(userItem);
-                        Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem);
+                        Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, mapItem);
                     }
                 }
             }
@@ -672,13 +672,10 @@ namespace GameSvr.Player
             {
                 if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (M2Share.StartPointList[i] != null)
-                    {
-                        HomeMap = M2Share.StartPointList[i].MapName;
-                        HomeX = M2Share.StartPointList[i].CurrX;
-                        HomeY = M2Share.StartPointList[i].CurrY;
-                        break;
-                    }
+                    HomeMap = M2Share.StartPointList[i].MapName;
+                    HomeX = M2Share.StartPointList[i].CurrX;
+                    HomeY = M2Share.StartPointList[i].CurrY;
+                    break;
                 }
             }
         }

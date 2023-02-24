@@ -17,7 +17,7 @@ namespace GameSvr.Player
             this.Envir = PlayObject.Envir;
             this.Gender = PlayObject.Gender;
             this.Hair = PlayObject.Hair;
-            this.Envir.AddToMap(this.CurrX, this.CurrY, CellType.Play, this);
+            this.Envir.AddToMap(this.CurrX, this.CurrY, CellType.Play, this.ActorId, this);
             this.SendRefMsg(Messages.RM_TURN, this.Direction, this.CurrX, this.CurrY, 0, this.ChrName);
         }
 

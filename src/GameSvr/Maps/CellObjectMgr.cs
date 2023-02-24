@@ -5,9 +5,9 @@ namespace GameSvr.Maps
     public class CellObjectMgr
     {
         //todo 从当前地图管理对象，而不是统一管理
-        private readonly ConcurrentDictionary<int, ActorEntity> _cellObject = new ConcurrentDictionary<int, ActorEntity>();
+        private readonly ConcurrentDictionary<int, object> _cellObject = new ConcurrentDictionary<int, object>();
 
-        public void Add(int cellId, ActorEntity cell)
+        public void Add(int cellId, object cell)
         {
             if (!_cellObject.TryAdd(cellId, cell))
             {
@@ -15,9 +15,9 @@ namespace GameSvr.Maps
             }
         }
 
-        public ActorEntity Get(int cellId)
+        public T Get<T>(int cellId)
         {
-            return _cellObject.TryGetValue(cellId, out ActorEntity cell) ? cell : null;
+            return _cellObject.TryGetValue(cellId, out object cell) ? (T)cell : default(T);
         }
 
         public void Remove(int cellId)
@@ -30,9 +30,9 @@ namespace GameSvr.Maps
 
         public void Dispose(int cellId)
         {
-            if (_cellObject.TryRemove(cellId, out ActorEntity cell))
+            if (_cellObject.TryRemove(cellId, out _))
             {
-                cell.Dispose();
+                //cell.Dispose();
             }
         }
     }

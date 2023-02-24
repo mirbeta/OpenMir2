@@ -681,10 +681,10 @@ namespace GameSvr.Actor
                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
                 mapItem.DropBaseObject = dropCreat;
                 GetDropPosition(CurrX, CurrY, nScatterRange, ref dx, ref dy);
-                var pr = Envir.AddToMap(dx, dy, CellType.Item, mapItem);
+                var pr = Envir.AddToMap(dx, dy, CellType.Item, mapItem.ItemId, mapItem);
                 if (pr == mapItem)
                 {
-                    SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, dx, dy, mapItem.Name);
+                    SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dx, dy, mapItem.Name);
                     int logcap;
                     if (boDieDrop)
                     {
@@ -813,10 +813,10 @@ namespace GameSvr.Actor
                     }
                     else
                     {
-                        Envir.DeleteFromMap(CurrX, CurrY, CellType, this);
+                        Envir.DeleteFromMap(CurrX, CurrY, CellType, this.ActorId, this);
                         CurrX = oldX;
                         CurrY = oldY;
-                        Envir.AddToMap(CurrX, CurrY, CellType, this);
+                        Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
                     }
                 }
             }
@@ -908,14 +908,14 @@ namespace GameSvr.Actor
                 DropBaseObject = dropGoldCreat
             };
             GetDropPosition(CurrX, CurrY, 3, ref nX, ref nY);
-            var mapItemA = Envir.AddToMap(nX, nY, CellType.Item, mapItem);
+            var mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.Item, mapItem.ItemId, mapItem);
             if (mapItemA != null)
             {
-                if (mapItemA.ActorId != mapItem.ActorId)
+                if (mapItemA.ItemId != mapItem.ItemId)
                 {
                     mapItem = mapItemA;
                 }
-                SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ActorId, nX, nY, mapItem.Name);
+                SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, nX, nY, mapItem.Name);
                 if (Race == ActorRace.Play)
                 {
                     if (boFalg)
@@ -1329,7 +1329,7 @@ namespace GameSvr.Actor
                     var nOldX = CurrX;
                     var nOldY = CurrY;
                     var moveSuccess = false;
-                    Envir.DeleteFromMap(CurrX, CurrY, CellType, this);
+                    Envir.DeleteFromMap(CurrX, CurrY, CellType, this.ActorId, this);
                     VisibleHumanList.Clear();
                     for (var i = 0; i < VisibleActors.Count; i++)
                     {
@@ -1343,7 +1343,7 @@ namespace GameSvr.Actor
                     CurrY = nY;
                     if (SpaceMoveGetRandXY(Envir, ref CurrX, ref CurrY))
                     {
-                        Envir.AddToMap(CurrX, CurrY, CellType, this);
+                        Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
                         SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                         SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
@@ -1362,7 +1362,7 @@ namespace GameSvr.Actor
                         Envir = oldEnvir;
                         CurrX = nOldX;
                         CurrY = nOldY;
-                        Envir.AddToMap(CurrX, CurrY, CellType, this);
+                        Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
                     }
                     OnEnvirnomentChanged();
                 }
@@ -1578,7 +1578,7 @@ namespace GameSvr.Actor
 
         internal bool AddToMap()
         {
-            var point = Envir.AddToMap(CurrX, CurrY, CellType, this);
+            var point = Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
             var result = point != null;
             if (!FixedHideMode)
             {
@@ -1677,17 +1677,14 @@ namespace GameSvr.Actor
             var result = false;
             for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (M2Share.StartPointList[i] != null)
+                if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
+                    var cX = M2Share.StartPointList[i].CurrX;
+                    var cY = M2Share.StartPointList[i].CurrY;
+                    if ((Math.Abs(CurrX - cX) <= 60) && (Math.Abs(CurrY - cY) <= 60))
                     {
-                        var cX = M2Share.StartPointList[i].CurrX;
-                        var cY = M2Share.StartPointList[i].CurrY;
-                        if ((Math.Abs(CurrX - cX) <= 60) && (Math.Abs(CurrY - cY) <= 60))
-                        {
-                            result = true;
-                            break;
-                        }
+                        result = true;
+                        break;
                     }
                 }
             }
@@ -2243,7 +2240,7 @@ namespace GameSvr.Actor
 
         protected void DisappearA()
         {
-            Envir.DeleteFromMap(CurrX, CurrY, CellType, this);
+            Envir.DeleteFromMap(CurrX, CurrY, CellType, this.ActorId, this);
             SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
         }
 
@@ -2292,18 +2289,18 @@ namespace GameSvr.Actor
                         switch (cellObject.CellType)
                         {
                             case CellType.Route:
-                                var gateObj = M2Share.ActorMgr.Get<GateObject>(cellObject.CellObjId);
-                                if (gateObj != null)
+                                GateObject mapRoute = M2Share.CellObjectMgr.Get<GateObject>(cellObject.CellObjId);
+                                if (mapRoute.Envir != null)
                                 {
                                     if (Race == ActorRace.Play)
                                     {
                                         if (Envir.ArroundDoorOpened(CurrX, CurrY))
                                         {
-                                            if ((!gateObj.Envir.Flag.boNEEDHOLE) || (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
+                                            if ((!mapRoute.Envir.Flag.boNEEDHOLE) || (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
                                             {
-                                                if (M2Share.ServerIndex == gateObj.Envir.ServerIndex)
+                                                if (M2Share.ServerIndex == mapRoute.Envir.ServerIndex)
                                                 {
-                                                    if (!((PlayObject)this).EnterAnotherMap(gateObj.Envir, gateObj.X, gateObj.Y))
+                                                    if (!((PlayObject)this).EnterAnotherMap(mapRoute.Envir, mapRoute.X, mapRoute.Y))
                                                     {
                                                         result = false;
                                                     }
@@ -2312,7 +2309,7 @@ namespace GameSvr.Actor
                                                 {
                                                     DisappearA();
                                                     SpaceMoved = true;
-                                                    ((PlayObject)this).ChangeSpaceMove(gateObj.Envir, gateObj.X, gateObj.Y);
+                                                    ((PlayObject)this).ChangeSpaceMove(mapRoute.Envir, mapRoute.X, mapRoute.Y);
                                                 }
                                             }
                                         }
@@ -2326,10 +2323,10 @@ namespace GameSvr.Actor
                             case CellType.Event:
                                 {
                                     EventInfo mapEvent = null;
-                                    var owinEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
+                                    EventInfo owinEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
                                     if (owinEvent.OwnBaseObject != null)
                                     {
-                                        mapEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
+                                        mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
                                     }
                                     if (mapEvent != null)
                                     {
@@ -2757,17 +2754,13 @@ namespace GameSvr.Actor
             }
             for (var i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (M2Share.StartPointList[i].MapName == Envir.MapName)
+                if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (M2Share.StartPointList[i] != null)
+                    var nSafeX = M2Share.StartPointList[i].CurrX;
+                    var nSafeY = M2Share.StartPointList[i].CurrY;
+                    if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.SafeZoneSize) && (Math.Abs(CurrY - nSafeY) <= M2Share.Config.SafeZoneSize))
                     {
-                        var nSafeX = M2Share.StartPointList[i].CurrX;
-                        var nSafeY = M2Share.StartPointList[i].CurrY;
-                        if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.SafeZoneSize) &&
-                            (Math.Abs(CurrY - nSafeY) <= M2Share.Config.SafeZoneSize))
-                        {
-                            result = true;
-                        }
+                        result = true;
                     }
                 }
             }
@@ -3820,7 +3813,7 @@ namespace GameSvr.Actor
                 {
                     CurrX = nX;
                     CurrY = nY;
-                    addObj = Envir.AddToMap(nX, nY, CellType, this);
+                    addObj = Envir.AddToMap(nX, nY, CellType, this.ActorId, this);
                     break;
                 }
                 nC++;
@@ -3833,7 +3826,7 @@ namespace GameSvr.Actor
             {
                 CurrX = nX2;
                 CurrY = nY2;
-                Envir.AddToMap(CurrX, CurrY, CellType, this);
+                Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
             }
             Abil.HP = Abil.MaxHP;
             Abil.MP = Abil.MaxMP;

@@ -12,8 +12,12 @@ namespace GameSvr.Maps
         public int n08;
     }
 
-    public class MapItem : ActorEntity
+    public class MapItem
     {
+        /// <summary>
+        /// 物品唯一ID
+        /// </summary>
+        public int ItemId;
         /// <summary>
         /// 物品名称
         /// </summary>
@@ -41,13 +45,19 @@ namespace GameSvr.Maps
         /// </summary>
         public int CanPickUpTick;
         public UserItem UserItem;
+
+        public MapItem()
+        {
+            this.ItemId = M2Share.ActorMgr.Dequeue();
+        }
     }
 
     /// <summary>
     /// 地图连接
     /// </summary>
-    public class GateObject : ActorEntity
+    public record struct GateObject
     {
+        public int RouteId;
         public Envirnoment Envir;
         public short X;
         public short Y;

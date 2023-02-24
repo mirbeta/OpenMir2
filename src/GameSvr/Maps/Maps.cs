@@ -432,6 +432,7 @@ namespace GameSvr.Maps
                         var mine = new StoneMineEvent(envir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap)
                         {
+                            M2Share.CellObjectMgr.Remove(mine.Id);
                             mine.Dispose();
                         }
                     }

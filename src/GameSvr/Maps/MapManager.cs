@@ -130,12 +130,13 @@ namespace GameSvr.Maps
             {
                 var gateObj = new GateObject
                 {
+                    RouteId = M2Share.ActorMgr.Dequeue(),
                     Flag = false,
                     Envir = dEnvir,
                     X = (short)nDMapX,
                     Y = (short)nDMapY
                 };
-                sEnvir.AddToMap(nSMapX, nSMapY, CellType.Route, gateObj);
+                sEnvir.AddToMap(nSMapX, nSMapY, CellType.Route, gateObj.RouteId, gateObj);
                 result = true;
             }
             return result;

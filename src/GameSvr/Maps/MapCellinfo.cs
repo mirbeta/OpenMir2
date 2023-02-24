@@ -28,7 +28,7 @@ namespace GameSvr.Maps
 
         public bool IsAvailable => ObjList?.Count > 0;
         
-        public void Add(CellObject cell, ActorEntity entityId)
+        public void Add(CellObject cell)
         {
             ObjList.Add(cell);
         }

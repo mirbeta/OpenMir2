@@ -774,7 +774,7 @@ namespace GameSvr.World
                     }
                     else
                     {
-                        outofrange = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.Monster, cert);
+                        outofrange = (BaseObject)cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.Monster, cert.ActorId, cert);
                         break;
                     }
                     n1C++;

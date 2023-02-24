@@ -539,7 +539,7 @@ namespace GameSvr.RobotPlay
                                                 {
                                                     if (cellObject.CellObjId > 0)
                                                     {
-                                                        M2Share.CellObjectMgr.Dispose(cellObject.CellObjId);
+                                                        M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
                                                     }
                                                     cellInfo.Remove(i);
                                                     if (cellInfo.Count <= 0)
@@ -549,7 +549,7 @@ namespace GameSvr.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                MapItem mapItem = M2Share.ActorMgr.Get<MapItem>(cellObject.CellObjId);
+                                                MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                                 UpdateVisibleItem(nX, nY, mapItem);
                                                 if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                 {
@@ -583,7 +583,7 @@ namespace GameSvr.RobotPlay
                                             {
                                                 if (cellObject.CellObjId < 0)
                                                 {
-                                                    mapEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
+                                                    mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
                                                     UpdateVisibleEvent(nX, nY, mapEvent);
                                                 }
                                             }

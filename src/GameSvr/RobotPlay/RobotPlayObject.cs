@@ -645,11 +645,11 @@ namespace GameSvr.RobotPlay
             }
             if (string.Compare(MapItem.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (Envir.DeleteFromMap(nX, nY, CellType.Item, MapItem) == 1)
+                if (Envir.DeleteFromMap(nX, nY, CellType.Item, MapItem.ItemId, null) == 1)
                 {
                     if (this.IncGold(MapItem.Count))
                     {
-                        SendRefMsg(Messages.RM_ITEMHIDE, 0, MapItem.ActorId, nX, nY, "");
+                        SendRefMsg(Messages.RM_ITEMHIDE, 0, MapItem.ItemId, nX, nY, "");
                         result = true;
                         GoldChanged();
                         SearchPickUpItem_SetHideItem(MapItem);
@@ -657,12 +657,12 @@ namespace GameSvr.RobotPlay
                     }
                     else
                     {
-                        Envir.AddToMap(nX, nY, CellType.Item, MapItem);
+                        Envir.AddToMap(nX, nY, CellType.Item, MapItem.ItemId, MapItem);
                     }
                 }
                 else
                 {
-                    Envir.AddToMap(nX, nY, CellType.Item, MapItem);
+                    Envir.AddToMap(nX, nY, CellType.Item, MapItem.ItemId, MapItem);
                 }
             }
             else
@@ -671,7 +671,7 @@ namespace GameSvr.RobotPlay
                 StdItem StdItem = M2Share.WorldEngine.GetStdItem(MapItem.UserItem.Index);
                 if (StdItem != null)
                 {
-                    if (Envir.DeleteFromMap(nX, nY, CellType.Item, MapItem) == 1)
+                    if (Envir.DeleteFromMap(nX, nY, CellType.Item, MapItem.ItemId, null) == 1)
                     {
                         UserItem = new UserItem();
                         UserItem = MapItem.UserItem;
@@ -686,7 +686,7 @@ namespace GameSvr.RobotPlay
                             //}
                             if (AddItemToBag(UserItem))
                             {
-                                SendRefMsg(Messages.RM_ITEMHIDE, 0, MapItem.ActorId, nX, nY, "");
+                                SendRefMsg(Messages.RM_ITEMHIDE, 0, MapItem.ItemId, nX, nY, "");
                                 this.SendAddItem(UserItem);
                                 Abil.Weight = RecalcBagWeight();
                                 result = true;
@@ -696,19 +696,19 @@ namespace GameSvr.RobotPlay
                             else
                             {
                                 Dispose(UserItem);
-                                Envir.AddToMap(nX, nY, CellType.Item, MapItem);
+                                Envir.AddToMap(nX, nY, CellType.Item, MapItem.ItemId, MapItem);
                             }
                         }
                         else
                         {
                             Dispose(UserItem);
-                            Envir.AddToMap(nX, nY, CellType.Item, MapItem);
+                            Envir.AddToMap(nX, nY, CellType.Item, MapItem.ItemId, MapItem);
                         }
                     }
                     else
                     {
                         Dispose(UserItem);
-                        Envir.AddToMap(nX, nY, CellType.Item, MapItem);
+                        Envir.AddToMap(nX, nY, CellType.Item, MapItem.ItemId, MapItem);
                     }
                 }
             }

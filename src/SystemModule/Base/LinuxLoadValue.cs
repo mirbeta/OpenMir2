@@ -5,56 +5,56 @@ namespace SystemModule.Base
 {
     internal static class LinuxLoadValue
     {
-        private static CPU_OCCUPY previous_cpu_occupy = null;
+        private static CpuRunInfo previousCpuOccupy = null;
         private static readonly object syncobj = new object();
 
-        private class CPU_OCCUPY
+        private class CpuRunInfo
         {
-            public string name;
-            public long user;
-            public long nice;
-            public long system;
-            public long idle;
-            public long lowait;
-            public long irq;
-            public long softirq;
+            public string Name;
+            public long User;
+            public long Nice;
+            public long System;
+            public long Idle;
+            public long Lowait;
+            public long Irq;
+            public long Softirq;
         }
 
-        public static double CPULOAD { get; private set; }
+        public static double CpuLoad { get; private set; }
 
         public static void Refresh()
         {
-            CPULOAD = QUERY_CPULOAD();
+            CpuLoad = QueryCpuLoad();
         }
 
-        private static double QUERY_CPULOAD(bool a = true)
+        private static double QueryCpuLoad(bool a = true)
         {
             lock (syncobj)
             {
-                var current_cpu_occupy = get_cpuoccupy();
-                if (current_cpu_occupy == null || previous_cpu_occupy == null)
+                var currentCpuOccupy = get_cpuoccupy();
+                if (currentCpuOccupy == null || previousCpuOccupy == null)
                 {
-                    previous_cpu_occupy = current_cpu_occupy;
+                    previousCpuOccupy = currentCpuOccupy;
                     return 0;
                 }
                 try
                 {
-                    var od = previous_cpu_occupy.user + previous_cpu_occupy.nice + previous_cpu_occupy.system + previous_cpu_occupy.idle + previous_cpu_occupy.lowait + previous_cpu_occupy.irq + previous_cpu_occupy.softirq;//第一次(用户+优先级+系统+空闲)的时间再赋给od
-                    var nd = current_cpu_occupy.user + current_cpu_occupy.nice + current_cpu_occupy.system + current_cpu_occupy.idle + current_cpu_occupy.lowait + current_cpu_occupy.irq + current_cpu_occupy.softirq;//第二次(用户+优先级+系统+空闲)的时间再赋给od
+                    var od = previousCpuOccupy.User + previousCpuOccupy.Nice + previousCpuOccupy.System + previousCpuOccupy.Idle + previousCpuOccupy.Lowait + previousCpuOccupy.Irq + previousCpuOccupy.Softirq;//第一次(用户+优先级+系统+空闲)的时间再赋给od
+                    var nd = currentCpuOccupy.User + currentCpuOccupy.Nice + currentCpuOccupy.System + currentCpuOccupy.Idle + currentCpuOccupy.Lowait + currentCpuOccupy.Irq + currentCpuOccupy.Softirq;//第二次(用户+优先级+系统+空闲)的时间再赋给od
                     double sum = nd - od;
-                    double idle = current_cpu_occupy.idle - previous_cpu_occupy.idle;
-                    var cpu_use = idle / sum;
+                    double idle = currentCpuOccupy.Idle - previousCpuOccupy.Idle;
+                    var cpuUse = idle / sum;
                     if (!a)
                     {
-                        idle = current_cpu_occupy.user + current_cpu_occupy.system + current_cpu_occupy.nice - previous_cpu_occupy.user - previous_cpu_occupy.system - previous_cpu_occupy.nice;
-                        cpu_use = idle / sum;
+                        idle = currentCpuOccupy.User + currentCpuOccupy.System + currentCpuOccupy.Nice - previousCpuOccupy.User - previousCpuOccupy.System - previousCpuOccupy.Nice;
+                        cpuUse = idle / sum;
                     }
-                    cpu_use = cpu_use * 100 / Environment.ProcessorCount;
-                    return cpu_use;
+                    cpuUse = cpuUse * 100 / Environment.ProcessorCount;
+                    return cpuUse;
                 }
                 finally
                 {
-                    previous_cpu_occupy = current_cpu_occupy;
+                    previousCpuOccupy = currentCpuOccupy;
                 }
             }
         }
@@ -88,12 +88,11 @@ namespace SystemModule.Base
             {
                 return 0;
             }
-            long r;
-            long.TryParse(s, out r);
+            long.TryParse(s, out var r);
             return r;
         }
 
-        private static CPU_OCCUPY get_cpuoccupy()
+        private static CpuRunInfo get_cpuoccupy()
         {
             const string path = "/proc/stat";
             if (!File.Exists(path))
@@ -110,17 +109,17 @@ namespace SystemModule.Base
                 return null;
             }
             using var sr = new StreamReader(stat);
-            var occupy = new CPU_OCCUPY();
+            var occupy = new CpuRunInfo();
             try
             {
-                occupy.name = ReadArgumentValue(sr);
-                occupy.user = ReadArgumentValueInt64(sr);
-                occupy.nice = ReadArgumentValueInt64(sr);
-                occupy.system = ReadArgumentValueInt64(sr);
-                occupy.idle = ReadArgumentValueInt64(sr);
-                occupy.lowait = ReadArgumentValueInt64(sr);
-                occupy.irq = ReadArgumentValueInt64(sr);
-                occupy.softirq = ReadArgumentValueInt64(sr);
+                occupy.Name = ReadArgumentValue(sr);
+                occupy.User = ReadArgumentValueInt64(sr);
+                occupy.Nice = ReadArgumentValueInt64(sr);
+                occupy.System = ReadArgumentValueInt64(sr);
+                occupy.Idle = ReadArgumentValueInt64(sr);
+                occupy.Lowait = ReadArgumentValueInt64(sr);
+                occupy.Irq = ReadArgumentValueInt64(sr);
+                occupy.Softirq = ReadArgumentValueInt64(sr);
             }
             catch (Exception)
             {

@@ -84,44 +84,44 @@ namespace GameSvr.Maps
         /// 添加对象到地图
         /// </summary>
         /// <returns></returns>
-        public T AddToMap<T>(int nX, int nY, CellType cellType, T mapObject) where T : ActorEntity
+        public object AddToMap(int nX, int nY, CellType cellType,int cellId, object mapObject)
         {
+            if (mapObject == null)
+            {
+                return null;
+            }
             if (!ValidCell(nX, nY))
             {
                 return null;
             }
             const string sExceptionMsg = "[Exception] Envirnoment::AddToMap";
-            if (mapObject.ActorId == 0)
-            {
-                return null;
-            }
-            T result = default;
+            object result = null;
             try
             {
-                bool addSuccess = false;
-                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
+                var addSuccess = false;
+                ref var cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
                 if (cellSuccess && cellInfo.Valid)
                 {
                     if (cellType == CellType.Item)
                     {
                         if (string.Compare((mapObject as MapItem).Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            for (var i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                CellObject cellObject = cellInfo.ObjList[i];
+                                var cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellType == CellType.Item)
                                 {
-                                    MapItem mapItem = M2Share.ActorMgr.Get<MapItem>(cellObject.CellObjId);
+                                    var mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                     if (mapItem.Name == Grobal2.StringGoldName)
                                     {
-                                        int nGoldCount = mapItem.Count + (mapObject as MapItem).Count;
+                                        var nGoldCount = mapItem.Count + (mapObject as MapItem).Count;
                                         if (nGoldCount <= 2000)
                                         {
                                             mapItem.Count = nGoldCount;
                                             mapItem.Looks = M2Share.GetGoldShape(nGoldCount);
                                             mapItem.AniCount = 0;
                                             mapItem.Reserved = 0;
-                                            result = mapItem as T;
+                                            result = mapItem;
                                             cellInfo.Update(i, ref cellObject);
                                             addSuccess = true;
                                         }
@@ -138,15 +138,15 @@ namespace GameSvr.Maps
                     if (!addSuccess)
                     {
                         cellInfo.ObjList ??= new NativeList<CellObject>();
-                        CellObject cellObject = new CellObject
+                        var cellObject = new CellObject
                         {
                             CellType = cellType,
-                            CellObjId = mapObject.ActorId,
+                            CellObjId = cellId,
                             AddTime = HUtil32.GetTickCount()
                         };
                         if (cellType is CellType.Play or CellType.Monster or CellType.Merchant)
                         {
-                            BaseObject baseObject = mapObject as BaseObject;
+                            var baseObject = mapObject as BaseObject;
                             if (!baseObject.AddToMaped)
                             {
                                 baseObject.DelFormMaped = false;
@@ -155,7 +155,11 @@ namespace GameSvr.Maps
                             }
                             cellObject.ActorObject = true;
                         }
-                        cellInfo.Add(cellObject, mapObject);
+                        cellInfo.Add(cellObject);
+                        if (cellObject.CellType == CellType.Door || cellObject.CellType == CellType.Event)
+                        {
+                            M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapObject);
+                        }
                         result = mapObject;
                     }
                 }
@@ -170,10 +174,10 @@ namespace GameSvr.Maps
 
         public void AddDoorToMap()
         {
-            for (int i = 0; i < DoorList.Count; i++)
+            for (var i = 0; i < DoorList.Count; i++)
             {
-                DoorInfo door = DoorList[i];
-                AddToMap(door.nX, door.nY, CellType.Door, door);
+                var door = DoorList[i];
+                AddToMap(door.nX, door.nY, CellType.Door, door.ActorId, door);
             }
         }
 
@@ -213,7 +217,7 @@ namespace GameSvr.Maps
         {
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
-                ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
+                ref var cellInfo = ref _cellArray[nX * Height + nY];
                 if (cellInfo.Valid)
                 {
                     success = true;
@@ -229,7 +233,7 @@ namespace GameSvr.Maps
 
         public ref MapCellInfo GetCellInfo(int nX, int nY, out bool success)
         {
-            ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
+            ref var cellInfo = ref _cellArray[nX * Height + nY];
             if (cellInfo.Valid)
             {
                 success = true;
@@ -245,24 +249,24 @@ namespace GameSvr.Maps
             {
                 return false;
             }
-            bool moveSuccess = true;
+            var moveSuccess = true;
             const string sExceptionMsg = "[Exception] TEnvirnoment::MoveToMovingObject";
-            bool result = false;
+            var result = false;
             try
             {
-                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
+                ref var cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
                 if (!boFlag && cellSuccess)
                 {
                     if (cellInfo.Valid)
                     {
                         if (cellInfo.IsAvailable)
                         {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            for (var i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                CellObject cellObject = cellInfo.ObjList[i];
+                                var cellObject = cellInfo.ObjList[i];
                                 if (cellObject.ActorObject)
                                 {
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
                                     {
                                         if (baseObject.CellType == CellType.CastleDoor)
@@ -304,7 +308,7 @@ namespace GameSvr.Maps
                         cellInfo = ref GetCellInfo(nCx, nCy, out cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            for (var i = 0; i < cellInfo.ObjList.Count; i++)
                             {
                                 moveObject = cellInfo.ObjList[i];
                                 if (moveObject.CellObjId == cert.ActorId && moveObject.ActorObject)
@@ -340,7 +344,7 @@ namespace GameSvr.Maps
                                 }
                             }
                             moveObject.AddTime = HUtil32.GetTickCount();
-                            cellInfo.Add(moveObject, cert);
+                            cellInfo.Add(moveObject);
                             result = true;
                         }
                     }
@@ -363,9 +367,9 @@ namespace GameSvr.Maps
         /// <returns> 返回值 True 为可以移动，False 为不可以移动</returns>
         public bool CanWalk(int nX, int nY, bool boFlag)
         {
-            bool result = false;
+            var result = false;
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.Valid)
             {
                 if (boFlag)
@@ -375,12 +379,12 @@ namespace GameSvr.Maps
                 result = true;
                 if (cellInfo.IsAvailable)
                 {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    for (var i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        CellObject cellObject = cellInfo.ObjList[i];
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 if (baseObject.CellType == CellType.CastleDoor)
@@ -422,19 +426,19 @@ namespace GameSvr.Maps
         /// <returns>返回值 True 为可以移动，False 为不可以移动</returns>
         public bool CanWalkOfItem(int nX, int nY, bool boFlag, bool boItem)
         {
-            bool result = true;
+            var result = true;
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.Valid)
             {
                 if (cellInfo.IsAvailable)
                 {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    for (var i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        CellObject cellObject = cellInfo.ObjList[i];
+                        var cellObject = cellInfo.ObjList[i];
                         if (!boFlag && cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 if (baseObject.CellType == CellType.CastleDoor)
@@ -468,23 +472,23 @@ namespace GameSvr.Maps
 
         public bool CanWalkEx(int nX, int nY, bool boFlag)
         {
-            bool result = false;
+            var result = false;
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.Valid)
             {
                 result = true;
                 if (!boFlag && cellInfo.IsAvailable)
                 {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    for (var i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        CellObject cellObject = cellInfo.ObjList[i];
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
-                                Castle.UserCastle castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
+                                var castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
                                 if (M2Share.Config.boWarDisHumRun && castle != null && castle.UnderWar)
                                 {
 
@@ -556,29 +560,29 @@ namespace GameSvr.Maps
         /// 从地图指定坐标上删除对象
         /// </summary>
         /// <returns></returns>
-        public int DeleteFromMap(int nX, int nY, CellType cellType, ActorEntity pRemoveObject)
+        public int DeleteFromMap(int nX, int nY, CellType cellType,int cellId, BaseObject pRemoveObject)
         {
             const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
-            int result = -1;
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            var result = -1;
+            ref var cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 try
                 {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    for (var i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        CellObject cellObject = cellInfo.ObjList[i];
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject.CellObjId > 0)
                         {
-                            if (cellObject.CellType == cellType && cellObject.CellObjId == pRemoveObject.ActorId)
+                            if (cellObject.CellType == cellType && cellObject.CellObjId == cellId)
                             {
                                 cellInfo.Remove(i);
                                 result = 1;
-                                if (cellObject.ActorObject && !((BaseObject)pRemoveObject).DelFormMaped)
+                                if (cellObject.ActorObject && pRemoveObject != null && !pRemoveObject.DelFormMaped)
                                 {
-                                    ((BaseObject)pRemoveObject).DelFormMaped = true;
-                                    ((BaseObject)pRemoveObject).AddToMaped = false;
-                                    DelObjectCount(((BaseObject)pRemoveObject));// 减地图人物怪物计数
+                                    pRemoveObject.DelFormMaped = true;
+                                    pRemoveObject.AddToMaped = false;
+                                    DelObjectCount(pRemoveObject);// 减地图人物怪物计数
                                 }
                                 if (cellInfo.Count > 0)
                                 {
@@ -615,27 +619,26 @@ namespace GameSvr.Maps
         public MapItem GetItem(int nX, int nY)
         {
             Bo2C = false;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 Bo2C = true;
                 if (cellInfo.IsAvailable)
                 {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    for (var i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        CellObject cellObject = cellInfo.ObjList[i];
+                        var cellObject = cellInfo.ObjList[i];
                         switch (cellObject.CellType)
                         {
                             case CellType.Item:
-                                return M2Share.ActorMgr.Get<MapItem>(cellObject.CellObjId);
+                                return M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                             case CellType.Route:
                                 Bo2C = false;
                                 break;
                             case CellType.Play:
                             case CellType.Monster:
                             case CellType.Merchant:
-                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (!baseObject.Death)
                                 {
                                     Bo2C = false;
@@ -655,15 +658,16 @@ namespace GameSvr.Maps
 
         public bool AddToMapItemEvent<T>(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent) where T : StoneMineEvent
         {
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref var cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 cellInfo.ObjList ??= new NativeList<CellObject>();
-                CellObject cellObject = new CellObject();
+                var cellObject = new CellObject();
                 cellObject.CellType = nType;
                 cellObject.CellObjId = stoneMineEvent.Id;
                 cellObject.AddTime = HUtil32.GetTickCount();
-                cellInfo.Add(cellObject, stoneMineEvent);
+                cellInfo.Add(cellObject);
+                M2Share.CellObjectMgr.Add(cellObject.CellObjId, stoneMineEvent);
                 return true;
             }
             return false;
@@ -678,13 +682,13 @@ namespace GameSvr.Maps
             const string sExceptionMsg = "[Exception] Envirnoment::AddToMapMineEvent ";
             try
             {
-                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+                ref var cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
                 if (cellSuccess && !cellInfo.Valid) //不动走动的地方才允许放矿
                 {
-                    bool isSpace = false;// 人物可以走到的地方才放上矿
-                    for (int x = nX - 1; x <= nX + 1; x++)
+                    var isSpace = false;// 人物可以走到的地方才放上矿
+                    for (var x = nX - 1; x <= nX + 1; x++)
                     {
-                        for (int y = nY - 1; y <= nY + 1; y++)
+                        for (var y = nY - 1; y <= nY + 1; y++)
                         {
                             if (GetCellInfo(x, y, ref cellInfo))
                             {
@@ -706,13 +710,14 @@ namespace GameSvr.Maps
                     if (isSpace)
                     {
                         cellInfo.ObjList ??= new NativeList<CellObject>();
-                        CellObject cellObject = new CellObject
+                        var cellObject = new CellObject
                         {
                             CellType = cellType,
                             CellObjId = stoneMineEvent.Id,
                             AddTime = HUtil32.GetTickCount()
                         };
-                        cellInfo.Add(cellObject, stoneMineEvent);
+                        cellInfo.Add(cellObject);
+                        M2Share.CellObjectMgr.Add(cellObject.CellObjId, stoneMineEvent);
                         return (T)stoneMineEvent;
                     }
                 }
@@ -729,16 +734,16 @@ namespace GameSvr.Maps
         /// </summary>
         public void VerifyMapTime(int nX, int nY, BaseObject baseObject)
         {
-            bool boVerify = false;
+            var boVerify = false;
             const string sExceptionMsg = "[Exception] TEnvirnoment::VerifyMapTime";
             try
             {
-                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+                ref var cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    for (var i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        CellObject cellObject = cellInfo.ObjList[i];
+                        var cellObject = cellInfo.ObjList[i];
                         if (cellObject.ActorObject && cellObject.CellObjId == baseObject.ActorId)
                         {
                             cellInfo.Update(i, ref cellObject);
@@ -749,7 +754,7 @@ namespace GameSvr.Maps
                 }
                 if (!boVerify)
                 {
-                    AddToMap(nX, nY, baseObject.CellType, baseObject);
+                    AddToMap(nX, nY, baseObject.CellType, baseObject.ActorId, baseObject);
                 }
             }
             catch
@@ -760,7 +765,7 @@ namespace GameSvr.Maps
 
         public bool LoadMapData(string sMapFile)
         {
-            bool result = false;
+            var result = false;
             int n24;
             int point;
             DoorInfo door;
@@ -768,25 +773,25 @@ namespace GameSvr.Maps
             {
                 if (File.Exists(sMapFile))
                 {
-                    using FileStream fileStream = new FileStream(sMapFile, FileMode.Open, FileAccess.Read);
+                    using var fileStream = new FileStream(sMapFile, FileMode.Open, FileAccess.Read);
                     if (fileStream.Length <= 52)
                     {
                         fileStream.Close();
                         fileStream.Dispose();
                         return false;
                     }
-                    using BinaryReader binReader = new BinaryReader(fileStream);
+                    using var binReader = new BinaryReader(fileStream);
                     Width = binReader.ReadInt16();
                     Height = binReader.ReadInt16();
                     Initialize(Width, Height);
                     fileStream.Position = 52;
-                    bool isInitialize = true;
+                    var isInitialize = true;
 
-                    MapUnitInfo mapUnitInfo = new MapUnitInfo();
-                    for (int nW = 0; nW < Width; nW++)
+                    var mapUnitInfo = new MapUnitInfo();
+                    for (var nW = 0; nW < Width; nW++)
                     {
                         n24 = nW * Height;
-                        for (int nH = 0; nH < Height; nH++)
+                        for (var nH = 0; nH < Height; nH++)
                         {
                             mapUnitInfo.wBkImg = binReader.ReadUInt16();
                             mapUnitInfo.wMidImg = binReader.ReadUInt16();
@@ -823,7 +828,7 @@ namespace GameSvr.Maps
                                         n08 = point,
                                         Status = null
                                     };
-                                    for (int i = 0; i < DoorList.Count; i++)
+                                    for (var i = 0; i < DoorList.Count; i++)
                                     {
                                         if (Math.Abs(DoorList[i].nX - door.nX) <= 10)
                                         {
@@ -862,24 +867,24 @@ namespace GameSvr.Maps
                     result = true;
                 }
 
-                string pointFileName = M2Share.GetEnvirFilePath("Point", $"{sMapFile}.txt");
+                var pointFileName = M2Share.GetEnvirFilePath("Point", $"{sMapFile}.txt");
                 if (File.Exists(pointFileName))
                 {
-                    StringList loadList = new StringList();
+                    var loadList = new StringList();
                     loadList.LoadFromFile(pointFileName);
-                    string sX = string.Empty;
-                    string sY = string.Empty;
-                    for (int i = 0; i < loadList.Count; i++)
+                    var sX = string.Empty;
+                    var sY = string.Empty;
+                    for (var i = 0; i < loadList.Count; i++)
                     {
-                        string line = loadList[i];
+                        var line = loadList[i];
                         if (string.IsNullOrEmpty(line) || line.StartsWith(";"))
                         {
                             continue;
                         }
                         line = HUtil32.GetValidStr3(line, ref sX, new[] { ',', '\t' });
                         line = HUtil32.GetValidStr3(line, ref sY, new[] { ',', '\t' });
-                        short nX = HUtil32.StrToInt16(sX, -1);
-                        short nY = HUtil32.StrToInt16(sY, -1);
+                        var nX = HUtil32.StrToInt16(sX, -1);
+                        var nY = HUtil32.StrToInt16(sY, -1);
                         if (nX >= 0 && nY >= 0 && nX < Width && nY < Height)
                         {
                             PointList.Add(new PointInfo(nX, nY));
@@ -900,9 +905,9 @@ namespace GameSvr.Maps
             {
                 if (_cellArray != null)
                 {
-                    for (int nW = 0; nW < Width; nW++)
+                    for (var nW = 0; nW < Width; nW++)
                     {
-                        for (int nH = 0; nH < Height; nH++)
+                        for (var nH = 0; nH < Height; nH++)
                         {
                             if (_cellArray[nW * Height + nH].ObjList != null)
                             {
@@ -926,7 +931,7 @@ namespace GameSvr.Maps
             {
                 return false;
             }
-            MapQuestInfo mapQuest = new MapQuestInfo
+            var mapQuest = new MapQuestInfo
             {
                 nFlag = nFlag
             };
@@ -950,7 +955,7 @@ namespace GameSvr.Maps
                 sQuest = "";
             }
             mapQuest.boGrouped = boGrouped;
-            Merchant mapMerchant = new Merchant
+            var mapMerchant = new Merchant
             {
                 MapName = "0",
                 CurrX = 0,
@@ -970,21 +975,21 @@ namespace GameSvr.Maps
 
         public int GetXyObjCount(int nX, int nY)
         {
-            int result = 0;
+            var result = 0;
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                for (var i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    CellObject cellObject = cellInfo.ObjList[i];
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId == 0)
                     {
                         continue;
                     }
                     if (cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                        var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject != null)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1081,17 +1086,17 @@ namespace GameSvr.Maps
 
         public bool CanSafeWalk(int nX, int nY)
         {
-            bool result = true;
+            var result = true;
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                for (var i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    CellObject cellObject = cellInfo.ObjList[i];
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        EventInfo owinEvent = M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId);
+                        var owinEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
                         if (owinEvent?.Damage > 0)
                         {
                             result = false;
@@ -1104,10 +1109,10 @@ namespace GameSvr.Maps
 
         public bool ArroundDoorOpened(int nX, int nY)
         {
-            bool result = true;
-            for (int i = 0; i < DoorList.Count; i++)
+            var result = true;
+            for (var i = 0; i < DoorList.Count; i++)
             {
-                DoorInfo door = DoorList[i];
+                var door = DoorList[i];
                 if (Math.Abs(door.nX - nX) <= 1 && Math.Abs(door.nY - nY) <= 1)
                 {
                     if (!door.Status.Opened)
@@ -1124,15 +1129,15 @@ namespace GameSvr.Maps
         {
             object result = null;
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                for (var i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    CellObject cellObject = cellInfo.ObjList[i];
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null && !baseObject.Ghost)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1160,15 +1165,15 @@ namespace GameSvr.Maps
 
         public Merchant GetQuestNpc(PlayObject baseObject, string sChrName, string itemName, bool boFlag)
         {
-            for (int i = 0; i < QuestList.Count; i++)
+            for (var i = 0; i < QuestList.Count; i++)
             {
-                MapQuestInfo mapQuestFlag = QuestList[i];
-                int nFlagValue = baseObject.GetQuestFalgStatus(mapQuestFlag.nFlag);
+                var mapQuestFlag = QuestList[i];
+                var nFlagValue = baseObject.GetQuestFalgStatus(mapQuestFlag.nFlag);
                 if (nFlagValue == mapQuestFlag.nValue)
                 {
                     if (boFlag == mapQuestFlag.boGrouped || !boFlag)
                     {
-                        bool bo1D = false;
+                        var bo1D = false;
                         if (!string.IsNullOrEmpty(mapQuestFlag.sMonName) && !string.IsNullOrEmpty(mapQuestFlag.sItemName))
                         {
                             if (mapQuestFlag.sMonName == sChrName && mapQuestFlag.sItemName == itemName)
@@ -1202,19 +1207,19 @@ namespace GameSvr.Maps
 
         public int GetItemEx(int nX, int nY, ref int nCount)
         {
-            int result = 0;
+            var result = 0;
             nCount = 0;
             Bo2C = false;
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.Valid)
             {
                 Bo2C = true;
                 if (cellInfo.IsAvailable)
                 {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    for (var i = 0; i < cellInfo.ObjList.Count; i++)
                     {
-                        CellObject cellObject = cellInfo.ObjList[i];
+                        var cellObject = cellInfo.ObjList[i];
                         switch (cellObject.CellType)
                         {
                             case CellType.Item:
@@ -1227,7 +1232,7 @@ namespace GameSvr.Maps
                             case CellType.Monster:
                             case CellType.Play:
                                 {
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (!baseObject.Death)
                                     {
                                         Bo2C = false;
@@ -1243,9 +1248,9 @@ namespace GameSvr.Maps
 
         public DoorInfo GetDoor(int nX, int nY)
         {
-            for (int i = 0; i < DoorList.Count; i++)
+            for (var i = 0; i < DoorList.Count; i++)
             {
-                DoorInfo door = DoorList[i];
+                var door = DoorList[i];
                 if (door.nX == nX && door.nY == nY)
                 {
                     return door;
@@ -1256,17 +1261,17 @@ namespace GameSvr.Maps
 
         public bool IsValidObject(int nX, int nY, int nRage, BaseObject baseObject)
         {
-            for (int nXx = nX - nRage; nXx <= nX + nRage; nXx++)
+            for (var nXx = nX - nRage; nXx <= nX + nRage; nXx++)
             {
-                for (int nYy = nY - nRage; nYy <= nY + nRage; nYy++)
+                for (var nYy = nY - nRage; nYy <= nY + nRage; nYy++)
                 {
                     MapCellInfo cellInfo = default;
-                    bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+                    var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                        for (var i = 0; i < cellInfo.ObjList.Count; i++)
                         {
-                            CellObject cellObject = cellInfo.ObjList[i];
+                            var cellObject = cellInfo.ObjList[i];
                             if (cellObject.CellObjId == baseObject.ActorId)
                             {
                                 return true;
@@ -1280,9 +1285,9 @@ namespace GameSvr.Maps
 
         public int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, IList<BaseObject> baseObjectList)
         {
-            for (int nXx = nX - nRage; nXx <= nX + nRage; nXx++)
+            for (var nXx = nX - nRage; nXx <= nX + nRage; nXx++)
             {
-                for (int nYy = nY - nRage; nYy <= nY + nRage; nYy++)
+                for (var nYy = nY - nRage; nYy <= nY + nRage; nYy++)
                 {
                     GetBaseObjects(nXx, nYy, boFlag, baseObjectList);
                 }
@@ -1296,10 +1301,10 @@ namespace GameSvr.Maps
             {
                 return false;
             }
-            int nStartX = nX - nRage;
-            int nEndX = nX + nRage;
-            int nStartY = nY - nRage;
-            int nEndY = nY + nRage;
+            var nStartX = nX - nRage;
+            var nEndX = nX + nRage;
+            var nStartY = nY - nRage;
+            var nEndY = nY + nRage;
             M2Share.Logger.Error("todo GetMapBaseObjects");
             return true;
         }
@@ -1315,15 +1320,15 @@ namespace GameSvr.Maps
         public int GetBaseObjects(int nX, int nY, bool boFlag, IList<BaseObject> baseObjectList)
         {
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                for (var i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    CellObject cellObject = cellInfo.ObjList[i];
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                        var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject != null)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1351,15 +1356,15 @@ namespace GameSvr.Maps
         {
             Bo2C = false;
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                for (var i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    CellObject cellObject = cellInfo.ObjList[i];
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        return M2Share.ActorMgr.Get<EventInfo>(cellObject.CellObjId); ;
+                        return M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId); ;
                     }
                 }
             }
@@ -1369,7 +1374,7 @@ namespace GameSvr.Maps
         public void SetMapXyFlag(int nX, int nY, bool boFlag)
         {
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess)
             {
                 cellInfo.SetAttribute(boFlag ? CellAttribute.Walk : CellAttribute.LowWall);
@@ -1380,10 +1385,10 @@ namespace GameSvr.Maps
         {
             int n18;
             int n1C;
-            bool result = true;
-            double r28 = (ndX - nsX) / 1.0e1;
-            double r30 = (ndY - ndX) / 1.0e1;
-            int n14 = 0;
+            var result = true;
+            var r28 = (ndX - nsX) / 1.0e1;
+            var r30 = (ndY - ndX) / 1.0e1;
+            var n14 = 0;
             while (true)
             {
                 n18 = HUtil32.Round(nsX + r28);
@@ -1408,17 +1413,17 @@ namespace GameSvr.Maps
         /// <returns></returns>
         public bool GetXyHuman(int nMapX, int nMapY)
         {
-            bool result = false;
+            var result = false;
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nMapX, nMapY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nMapX, nMapY, ref cellInfo);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                for (var i = 0; i < cellInfo.ObjList.Count; i++)
                 {
-                    CellObject cellObject = cellInfo.ObjList[i];
+                    var cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                        var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject.Race == ActorRace.Play)
                         {
                             result = true;
@@ -1433,7 +1438,7 @@ namespace GameSvr.Maps
         public bool IsValidCell(int nX, int nY)
         {
             MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.Attribute == CellAttribute.LowWall)
             {
                 return false;
@@ -1443,7 +1448,7 @@ namespace GameSvr.Maps
 
         public string GetEnvirInfo()
         {
-            StringBuilder messgae = new StringBuilder();
+            var messgae = new StringBuilder();
             messgae.AppendFormat("Map:{0}({1}) DAY:{2} DARK:{3} SAFE:{4} FIGHT:{5} FIGHT3:{6} QUIZ:{7} NORECONNECT:{8}({9}) MUSIC:{10}({11}) EXPRATE:{12}({13}) PKWINLEVEL:{14}({15}) PKLOSTLEVEL:{16}({17}) PKWINEXP:{18}({19}) ",
                 MapName, MapDesc, HUtil32.BoolToStr(Flag.DayLight), HUtil32.BoolToStr(Flag.boDarkness), HUtil32.BoolToStr(Flag.SafeArea), HUtil32.BoolToStr(Flag.FightZone),
                 HUtil32.BoolToStr(Flag.Fight3Zone), HUtil32.BoolToStr(Flag.boQUIZ), HUtil32.BoolToStr(Flag.boNORECONNECT), Flag.sNoReConnectMap, HUtil32.BoolToStr(Flag.Music), Flag.MusicId, HUtil32.BoolToStr(Flag.boEXPRATE),
