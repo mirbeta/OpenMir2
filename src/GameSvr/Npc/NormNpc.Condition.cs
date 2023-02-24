@@ -2173,7 +2173,7 @@ namespace GameSvr.Npc
             }
             if (PlayObject.MyGuild != null)
             {
-                if (string.Compare(PlayObject.MyGuild.sGuildName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(PlayObject.MyGuild.SGuildName, QuestConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = true;
                 }

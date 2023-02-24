@@ -1,6 +1,4 @@
-﻿using GameSvr.Guild;
-using GameSvr.Player;
-using SystemModule.Data;
+﻿using GameSvr.Player;
 using SystemModule.Enums;
 
 namespace GameSvr.GameCommand.Commands
@@ -29,7 +27,6 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg("本地图不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            GuildRank GuildRank;
             Castle.UserCastle m_Castle = M2Share.CastleMgr.InCastleWarArea(PlayObject);
             if (m_Castle != null && m_Castle.UnderWar)
             {
@@ -57,40 +54,39 @@ namespace GameSvr.GameCommand.Commands
                 PlayObject.SysMsg($"{PlayObject.GroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject;
-            for (int i = 0; i < PlayObject.MyGuild.m_RankList.Count; i++)
+            for (int i = 0; i < PlayObject.MyGuild.MRankList.Count; i++)
             {
-                GuildRank = PlayObject.MyGuild.m_RankList[i];
-                if (GuildRank == null)
+                var guildRank = PlayObject.MyGuild.MRankList[i];
+                if (guildRank == null)
                 {
                     continue;
                 }
-                for (int j = 0; j < GuildRank.MemberList.Count; j++)
+                for (int j = 0; j < guildRank.MemberList.Count; j++)
                 {
-                    m_PlayObject = M2Share.WorldEngine.GetPlayObject(GuildRank.MemberList[j].sMemberName);
-                    if (m_PlayObject != null)
+                    var memberObject = M2Share.WorldEngine.GetPlayObject(guildRank.MemberList[j].MemberName);
+                    if (memberObject != null)
                     {
-                        if (m_PlayObject == PlayObject)
+                        if (memberObject == PlayObject)
                         {
                             // Inc(nNoRecallCount);
                             continue;
                         }
-                        if (m_PlayObject.AllowGuildReCall)
+                        if (memberObject.AllowGuildReCall)
                         {
-                            if (m_PlayObject.Envir.Flag.NoReCall)
+                            if (memberObject.Envir.Flag.NoReCall)
                             {
-                                PlayObject.SysMsg($"{m_PlayObject.ChrName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
+                                PlayObject.SysMsg($"{memberObject.ChrName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
                             }
                             else
                             {
-                                PlayObject.RecallHuman(m_PlayObject.ChrName);
+                                PlayObject.RecallHuman(memberObject.ChrName);
                                 nRecallCount++;
                             }
                         }
                         else
                         {
                             nNoRecallCount++;
-                            PlayObject.SysMsg($"{m_PlayObject.ChrName} 不允许行会合一!!!", MsgColor.Red, MsgType.Hint);
+                            PlayObject.SysMsg($"{memberObject.ChrName} 不允许行会合一!!!", MsgColor.Red, MsgType.Hint);
                         }
                     }
                 }

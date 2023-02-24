@@ -1623,7 +1623,7 @@ namespace GameSvr.Player
         {
             if (MyGuild != null)
             {
-                SendDefMessage(Messages.SM_CHANGEGUILDNAME, 0, 0, 0, 0, MyGuild.sGuildName + '/' + GuildRankName);
+                SendDefMessage(Messages.SM_CHANGEGUILDNAME, 0, 0, 0, 0, MyGuild.SGuildName + '/' + GuildRankName);
             }
             else
             {
@@ -3530,8 +3530,8 @@ namespace GameSvr.Player
             }
             if (boReQuestOk)
             {
-                WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.sGuildName);
-                WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, guild.sGuildName);
+                WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.SGuildName);
+                WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, guild.SGuildName);
             }
         }
 

@@ -4,18 +4,18 @@ namespace GameSvr.Guild
 {
     public class GuildRank
     {
-        public short nRankNo;
-        public string sRankName;
+        public short RankNo;
+        public string RankName;
         public IList<GuildMember> MemberList;
     }
 
-    public class GuildMember
+    public record struct GuildMember
     {
-        public string sMemberName;
+        public string MemberName;
         public PlayObject PlayObject;
     }
 
-    public class WarGuild
+    public record struct WarGuild
     {
         public GuildInfo Guild;
         public int dwWarTick;

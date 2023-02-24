@@ -2118,7 +2118,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.MyGuild != null)
                         {
-                            sValue = PlayObject.MyGuild.sGuildName;
+                            sValue = PlayObject.MyGuild.SGuildName;
                         }
                         else
                         {

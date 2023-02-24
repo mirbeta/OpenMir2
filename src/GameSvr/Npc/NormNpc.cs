@@ -477,7 +477,7 @@ namespace GameSvr.Npc
                     {
                         if (PlayObject.MyGuild != null)
                         {
-                            sMsg = ReplaceVariableText(sMsg, "<$GUILDNAME>", PlayObject.MyGuild.sGuildName);
+                            sMsg = ReplaceVariableText(sMsg, "<$GUILDNAME>", PlayObject.MyGuild.SGuildName);
                         }
                         else
                         {
@@ -1381,7 +1381,7 @@ namespace GameSvr.Npc
             {
                 if (PlayObject.MyGuild != null)
                 {
-                    sMsg = ReplaceVariableText(sMsg, "<$GUILDNAME>", PlayObject.MyGuild.sGuildName);
+                    sMsg = ReplaceVariableText(sMsg, "<$GUILDNAME>", PlayObject.MyGuild.SGuildName);
                 }
                 else
                 {
@@ -1471,7 +1471,7 @@ namespace GameSvr.Npc
                 }
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
-                if (PlayObject.MyGuild.m_DynamicVarList.TryGetValue(s14, out DynamicVar))
+                if (PlayObject.MyGuild.MDynamicVarList.TryGetValue(s14, out DynamicVar))
                 {
                     if (string.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -1701,8 +1701,8 @@ namespace GameSvr.Npc
                 {
                     return null;
                 }
-                result = PlayObject.MyGuild.m_DynamicVarList;
-                sName = PlayObject.MyGuild.sGuildName;
+                result = PlayObject.MyGuild.MDynamicVarList;
+                sName = PlayObject.MyGuild.SGuildName;
             }
             else if (HUtil32.CompareLStr(sType, "GLOBAL", 6))
             {

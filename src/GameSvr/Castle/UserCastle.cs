@@ -534,7 +534,7 @@ namespace GameSvr.Castle
             const string sGetCastleMsg = "[{0} 已被 {1} 占领]";
             GuildInfo OldGuild = MasterGuild;
             MasterGuild = Guild;
-            OwnGuild = Guild.sGuildName;
+            OwnGuild = Guild.SGuildName;
             ChangeDate = DateTime.Now;
             SaveConfigFile();
             if (OldGuild != null)
@@ -930,7 +930,7 @@ namespace GameSvr.Castle
             if (InAttackerList(Guild)) return false;
             AttackerInfo AttackerInfo = new AttackerInfo();
             AttackerInfo.AttackDate = M2Share.AddDateTimeOfDay(DateTime.Now, M2Share.Config.StartCastleWarDays);
-            AttackerInfo.sGuildName = Guild.sGuildName;
+            AttackerInfo.sGuildName = Guild.SGuildName;
             AttackerInfo.Guild = Guild;
             AttackWarList.Add(AttackerInfo);
             SaveAttackSabukWall();

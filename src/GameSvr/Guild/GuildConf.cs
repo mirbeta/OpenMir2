@@ -15,21 +15,21 @@ namespace GameSvr.Guild
 
         public void LoadConfig(GuildInfo guild)
         {
-            guild.m_nBuildPoint = ReadWriteInteger("Guild", "BuildPoint", guild.m_nBuildPoint);
-            guild.m_nAurae = ReadWriteInteger("Guild", "Aurae", guild.m_nAurae);
-            guild.m_nStability = ReadWriteInteger("Guild", "Stability", guild.m_nStability);
-            guild.m_nFlourishing = ReadWriteInteger("Guild", "Flourishing", guild.m_nFlourishing);
-            guild.m_nChiefItemCount = ReadWriteInteger("Guild", "ChiefItemCount", guild.m_nChiefItemCount);
+            guild.MNBuildPoint = ReadWriteInteger("Guild", "BuildPoint", guild.MNBuildPoint);
+            guild.MNAurae = ReadWriteInteger("Guild", "Aurae", guild.MNAurae);
+            guild.MNStability = ReadWriteInteger("Guild", "Stability", guild.MNStability);
+            guild.MNFlourishing = ReadWriteInteger("Guild", "Flourishing", guild.MNFlourishing);
+            guild.MNChiefItemCount = ReadWriteInteger("Guild", "ChiefItemCount", guild.MNChiefItemCount);
         }
 
         public void SaveGuildConfig(GuildInfo guild)
         {
-            WriteString("Guild", "GuildName", guild.sGuildName);
-            WriteInteger("Guild", "BuildPoint", guild.m_nBuildPoint);
-            WriteInteger("Guild", "Aurae", guild.m_nAurae);
-            WriteInteger("Guild", "Stability", guild.m_nStability);
-            WriteInteger("Guild", "Flourishing", guild.m_nFlourishing);
-            WriteInteger("Guild", "ChiefItemCount", guild.m_nChiefItemCount);
+            WriteString("Guild", "GuildName", guild.SGuildName);
+            WriteInteger("Guild", "BuildPoint", guild.MNBuildPoint);
+            WriteInteger("Guild", "Aurae", guild.MNAurae);
+            WriteInteger("Guild", "Stability", guild.MNStability);
+            WriteInteger("Guild", "Flourishing", guild.MNFlourishing);
+            WriteInteger("Guild", "ChiefItemCount", guild.MNChiefItemCount);
         }
 
     }
