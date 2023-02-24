@@ -1,43 +1,34 @@
 ﻿using SystemModule.Common;
 
-namespace GameSvr.Conf
-{
-    public class ExpsConf : ConfigFile
-    {
-        public ExpsConf(string fileName) : base(fileName)
-        {
+namespace GameSvr.Conf {
+    public class ExpsConf : ConfigFile {
+        public ExpsConf(string fileName) : base(fileName) {
             Load();
         }
 
-        public void LoadConfig()
-        {
+        public void LoadConfig() {
             M2Share.Config.LimitExpLevel = ReadWriteInteger("Exp", "LimitExpLevel", M2Share.Config.LimitExpLevel);
             M2Share.Config.LimitExpValue = ReadWriteInteger("Exp", "LimitExpValue", M2Share.Config.LimitExpValue);
             M2Share.Config.KillMonExpMultiple = ReadWriteInteger("Exp", "KillMonExpMultiple", M2Share.Config.KillMonExpMultiple);
             M2Share.Config.HighLevelKillMonFixExp = ReadWriteBool("Exp", "HighLevelKillMonFixExp", M2Share.Config.HighLevelKillMonFixExp);
             M2Share.Config.HighLevelGroupFixExp = ReadWriteBool("Exp", "HighLevelGroupFixExp", M2Share.Config.HighLevelGroupFixExp);
 
-            for (int i = 0; i < M2Share.Config.NeedExps.Length; i++)
-            {
+            for (int i = 0; i < M2Share.Config.NeedExps.Length; i++) {
                 string LoadString = ReadWriteString("Exp", "Level" + i, "");
                 int LoadInteger = HUtil32.StrToInt(LoadString, 0);
-                if (LoadInteger == 0)
-                {
+                if (LoadInteger == 0) {
                     int oldNeedExp = M2Share.OldNeedExps[i];
-                    if (oldNeedExp <= 0)
-                    {
+                    if (oldNeedExp <= 0) {
                         oldNeedExp = ReadWriteInteger("Exp", "Level" + i, 0);
                         WriteString("Exp", "Level" + i, oldNeedExp);
                         M2Share.Config.NeedExps[i] = oldNeedExp;
                     }
-                    else
-                    {
+                    else {
                         WriteString("Exp", "Level" + i, oldNeedExp);
                         M2Share.Config.NeedExps[i] = oldNeedExp;
                     }
                 }
-                else
-                {
+                else {
                     M2Share.Config.NeedExps[i] = LoadInteger;
                 }
             }

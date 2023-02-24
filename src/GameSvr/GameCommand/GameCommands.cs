@@ -1,9 +1,7 @@
 using GameSvr.GameCommand.Commands;
 
-namespace GameSvr.GameCommand
-{
-    public class GameCommands
-    {
+namespace GameSvr.GameCommand {
+    public class GameCommands {
         public readonly GameCmd Testserverconfig;
         public readonly GameCmd Serverstatus;
         public readonly GameCmd Testgetbagitem;
@@ -358,8 +356,7 @@ namespace GameSvr.GameCommand
         [RegisterCommand(typeof(LockLoginCommand))]
         public readonly GameCmd LockLogon;
 
-        public GameCommands()
-        {
+        public GameCommands() {
             Data = new GameCmd { CmdName = "Data", PerMissionMin = 10, PerMissionMax = 10 };
             PrvMsg = new GameCmd { CmdName = "PrvMsg", PerMissionMin = 10, PerMissionMax = 10 };
             AllowMsg = new GameCmd { CmdName = "AllowMsg", PerMissionMin = 10, PerMissionMax = 10 };
@@ -556,8 +553,7 @@ namespace GameSvr.GameCommand
         }
     }
 
-    public class GameCmd
-    {
+    public class GameCmd {
         /// <summary>
         /// 命令名称
         /// </summary>
@@ -571,13 +567,11 @@ namespace GameSvr.GameCommand
         /// </summary>
         public byte PerMissionMax { get; set; }
 
-        public GameCmd()
-        {
-            
+        public GameCmd() {
+
         }
 
-        public GameCmd(string cmdName, byte perMissionMin, byte perMissionMax)
-        {
+        public GameCmd(string cmdName, byte perMissionMin, byte perMissionMax) {
             CmdName = cmdName;
             PerMissionMin = perMissionMin;
             PerMissionMax = perMissionMax;

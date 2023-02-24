@@ -1,20 +1,15 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 重新读取所有行会
     /// </summary>
     [Command("ReloadAllGuild", "重新读取所有行会", 10)]
-    public class ReloadAllGuildCommand : GameCommand
-    {
+    public class ReloadAllGuildCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject)
-        {
-            if (M2Share.ServerIndex != 0)
-            {
+        public void Execute(PlayObject PlayObject) {
+            if (M2Share.ServerIndex != 0) {
                 PlayObject.SysMsg(CommandHelp.GameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }

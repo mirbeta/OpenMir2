@@ -1,13 +1,10 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("SbkDoorControl", "", 10)]
-    public class SbkDoorControlCommand : GameCommand
-    {
+    public class SbkDoorControlCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject)
-        {
+        public void Execute(PlayObject PlayObject) {
         }
     }
 }

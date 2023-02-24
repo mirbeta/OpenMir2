@@ -1,16 +1,13 @@
 ﻿using SystemModule.Enums;
 
-namespace GameSvr.Monster.Monsters
-{
+namespace GameSvr.Monster.Monsters {
     /// <summary>
     /// 神兽普通跟随形态
     /// </summary>
-    public class ElfMonster : MonsterObject
-    {
+    public class ElfMonster : MonsterObject {
         public bool BoIsFirst;
 
-        public ElfMonster() : base()
-        {
+        public ElfMonster() : base() {
             ViewRange = 6;
             FixedHideMode = true;
             NoAttackMode = true;
@@ -18,60 +15,47 @@ namespace GameSvr.Monster.Monsters
             Race = ActorRace.ElfMonster;
         }
 
-        public void AppearNow()
-        {
+        public void AppearNow() {
             FixedHideMode = false;
             RecalcAbilitys();
             WalkTick = WalkTick + 800;
         }
 
-        public override void RecalcAbilitys()
-        {
+        public override void RecalcAbilitys() {
             base.RecalcAbilitys();
             ResetElfMon();
         }
 
-        private void ResetElfMon()
-        {
+        private void ResetElfMon() {
             WalkSpeed = 500 - SlaveMakeLevel * 50;
             WalkTick = HUtil32.GetTickCount() + 2000;
         }
 
-        public override void Run()
-        {
+        public override void Run() {
             bool boChangeFace = false;
-            if (BoIsFirst)
-            {
+            if (BoIsFirst) {
                 BoIsFirst = false;
                 FixedHideMode = false;
                 SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
                 ResetElfMon();
             }
-            if (Death)
-            {
-                if ((HUtil32.GetTickCount() - DeathTick) > (2 * 1000))
-                {
+            if (Death) {
+                if ((HUtil32.GetTickCount() - DeathTick) > (2 * 1000)) {
                     MakeGhost();
                 }
             }
-            else
-            {
-                if (TargetCret != null)
-                {
+            else {
+                if (TargetCret != null) {
                     boChangeFace = true;
                 }
-                if (Master != null && (Master.TargetCret != null || Master.LastHiter != null))
-                {
+                if (Master != null && (Master.TargetCret != null || Master.LastHiter != null)) {
                     boChangeFace = true;
                 }
-                if (boChangeFace)
-                {
+                if (boChangeFace) {
                     Actor.BaseObject elfMon = MakeClone(M2Share.Config.Dragon1, this);
-                    if (elfMon != null)
-                    {
+                    if (elfMon != null) {
                         elfMon.AutoChangeColor = AutoChangeColor;
-                        if (elfMon is ElfWarriorMonster monster)
-                        {
+                        if (elfMon is ElfWarriorMonster monster) {
                             monster.AppearNow();
                         }
                         Master = null;

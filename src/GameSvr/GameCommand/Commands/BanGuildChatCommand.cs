@@ -1,22 +1,16 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("Banguildchat", "", "", 0)]
-    public class BanGuildChatCommand : GameCommand
-    {
+    public class BanGuildChatCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
-        {
+        public void Execute(PlayObject playObject) {
             playObject.BanGuildChat = !playObject.BanGuildChat;
-            if (playObject.BanGuildChat)
-            {
+            if (playObject.BanGuildChat) {
                 playObject.SysMsg(CommandHelp.EnableGuildChat, MsgColor.Green, MsgType.Hint);
             }
-            else
-            {
+            else {
                 playObject.SysMsg(CommandHelp.DisableGuildChat, MsgColor.Green, MsgType.Hint);
             }
         }

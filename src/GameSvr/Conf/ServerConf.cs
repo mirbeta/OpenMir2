@@ -1,16 +1,12 @@
 ﻿using SystemModule.Common;
 
-namespace GameSvr.Conf
-{
-    public class ServerConf : ConfigFile
-    {
-        public ServerConf(string fileName) : base(fileName)
-        {
+namespace GameSvr.Conf {
+    public class ServerConf : ConfigFile {
+        public ServerConf(string fileName) : base(fileName) {
             Load();
         }
 
-        public void LoadConfig()
-        {
+        public void LoadConfig() {
             M2Share.Config.ConnctionString = ReadWriteString("DataBase", "ConnctionString", M2Share.Config.ConnctionString);
             M2Share.Config.sDBType = ReadWriteString("DataBase", "DbType", M2Share.Config.sDBType);
             M2Share.ServerIndex = ReadWriteByte("Server", "ServerIndex", M2Share.ServerIndex);
@@ -66,7 +62,7 @@ namespace GameSvr.Conf
             M2Share.Config.EnvirDir = ReadWriteString("Share", "EnvirDir", M2Share.Config.EnvirDir);
             M2Share.Config.MapDir = ReadWriteString("Share", "MapDir", M2Share.Config.MapDir);
             M2Share.Config.NoticeDir = ReadWriteString("Share", "NoticeDir", M2Share.Config.NoticeDir);
-            
+
             // 名称设置
             M2Share.Config.HealSkill = ReadWriteString("Names", "HealSkill", M2Share.Config.HealSkill);
             M2Share.Config.FireBallSkill = ReadWriteString("Names", "FireBallSkill", M2Share.Config.FireBallSkill);
@@ -99,7 +95,7 @@ namespace GameSvr.Conf
             M2Share.Config.GameGoldName = ReadWriteString("Names", "GameGold", M2Share.Config.GameGoldName);
             M2Share.Config.GamePointName = ReadWriteString("Names", "GamePoint", M2Share.Config.GamePointName);
             M2Share.Config.PayMentPointName = ReadWriteString("Names", "PayMentPointName", M2Share.Config.PayMentPointName);
-            
+
             // 游戏设置
             M2Share.Config.ItemNumber = ReadWriteInteger("Setup", "ItemNumber", M2Share.Config.ItemNumber);
             M2Share.Config.ItemNumber += M2Share.RandomNumber.Random(10000);
@@ -109,16 +105,13 @@ namespace GameSvr.Conf
             M2Share.Config.ClientFile3 = ReadWriteString("Setup", "ClientFile3", M2Share.Config.ClientFile3);
             M2Share.Config.MonUpLvNeedKillBase = ReadWriteInteger("Setup", "MonUpLvNeedKillBase", M2Share.Config.MonUpLvNeedKillBase);
             M2Share.Config.MonUpLvRate = ReadWriteInteger("Setup", "MonUpLvRate", M2Share.Config.MonUpLvRate);
-            for (int i = 0; i < M2Share.Config.MonUpLvNeedKillCount.Length; i++)
-            {
+            for (int i = 0; i < M2Share.Config.MonUpLvNeedKillCount.Length; i++) {
                 M2Share.Config.MonUpLvNeedKillCount[i] = ReadWriteInteger("Setup", "MonUpLvNeedKillCount" + i, M2Share.Config.MonUpLvNeedKillCount[i]);
             }
-            for (int i = 0; i < M2Share.Config.SlaveColor.Length; i++)
-            {
+            for (int i = 0; i < M2Share.Config.SlaveColor.Length; i++) {
                 M2Share.Config.SlaveColor[i] = ReadWriteByte("Setup", "SlaveColor" + i, M2Share.Config.SlaveColor[i]);
             }
-            for (int i = 0; i < M2Share.Config.ReNewNameColor.Length; i++)
-            {
+            for (int i = 0; i < M2Share.Config.ReNewNameColor.Length; i++) {
                 M2Share.Config.ReNewNameColor[i] = ReadWriteByte("Setup", "ReNewNameColor" + i, M2Share.Config.ReNewNameColor[i]);
             }
             M2Share.Config.HomeMap = ReadWriteString("Setup", "HomeMap", M2Share.Config.HomeMap);
@@ -281,16 +274,14 @@ namespace GameSvr.Conf
             M2Share.Config.boWarDisHumRun = ReadWriteBool("Setup", "WarDisableHumanRun", M2Share.Config.boWarDisHumRun);
             M2Share.Config.boGMRunAll = ReadWriteBool("Setup", "GMRunAll", M2Share.Config.boGMRunAll);
             M2Share.Config.SkeletonCount = ReadWriteInteger("Setup", "SkeletonCount", M2Share.Config.SkeletonCount);
-            for (int i = 0; i < M2Share.Config.SkeletonArray.Length; i++)
-            {
+            for (int i = 0; i < M2Share.Config.SkeletonArray.Length; i++) {
                 M2Share.Config.SkeletonArray[i].nHumLevel = ReadWriteInteger("Setup", "SkeletonHumLevel" + i, M2Share.Config.SkeletonArray[i].nHumLevel);
                 M2Share.Config.SkeletonArray[i].sMonName = ReadWriteString("Names", "Skeleton" + i, M2Share.Config.SkeletonArray[i].sMonName);
                 M2Share.Config.SkeletonArray[i].nCount = ReadWriteInteger("Setup", "SkeletonCount" + i, M2Share.Config.SkeletonArray[i].nCount);
                 M2Share.Config.SkeletonArray[i].nLevel = ReadWriteInteger("Setup", "SkeletonLevel" + i, M2Share.Config.SkeletonArray[i].nLevel);
             }
             M2Share.Config.DragonCount = ReadWriteInteger("Setup", "DragonCount", M2Share.Config.DragonCount);
-            for (int i = 0; i < M2Share.Config.DragonArray.Length; i++)
-            {
+            for (int i = 0; i < M2Share.Config.DragonArray.Length; i++) {
                 M2Share.Config.DragonArray[i].nHumLevel = ReadWriteInteger("Setup", "DragonHumLevel" + i, M2Share.Config.DragonArray[i].nHumLevel);
                 M2Share.Config.DragonArray[i].sMonName = ReadWriteString("Names", "Dragon" + i, M2Share.Config.DragonArray[i].sMonName);
                 M2Share.Config.DragonArray[i].nCount = ReadWriteInteger("Setup", "DragonCount" + i, M2Share.Config.DragonArray[i].nCount);
@@ -656,8 +647,7 @@ namespace GameSvr.Conf
         /// <summary>
         /// 保存游戏变量和彩票中奖数据
         /// </summary>
-        public void SaveVariable()
-        {
+        public void SaveVariable() {
             WriteInteger("Setup", "ItemNumber", M2Share.Config.ItemNumber);
             WriteInteger("Setup", "ItemNumberEx", M2Share.Config.ItemNumberEx);
             WriteInteger("Setup", "WinLotteryCount", M2Share.Config.WinLotteryCount);

@@ -1,10 +1,8 @@
 ﻿using GameSvr.Actor;
 using GameSvr.Guild;
 
-namespace GameSvr.Castle
-{
-    public class CastleConst
-    {
+namespace GameSvr.Castle {
+    public class CastleConst {
         /// <summary>
         /// 最大守卫次数
         /// </summary>
@@ -35,8 +33,7 @@ namespace GameSvr.Castle
         }
     }
 
-    public struct DefenseUnit
-    {
+    public struct DefenseUnit {
         public int nMainDoorX;
         public int nMainDoorY;
         public string sMainDoorName;
@@ -52,8 +49,7 @@ namespace GameSvr.Castle
     /// <summary>
     /// 守卫
     /// </summary>
-    public struct ArcherUnit
-    {
+    public struct ArcherUnit {
         public short nX;
         public short nY;
         public string sName;

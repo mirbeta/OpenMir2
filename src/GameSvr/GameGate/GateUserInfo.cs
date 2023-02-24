@@ -3,10 +3,8 @@ using GameSvr.Services;
 using GameSvr.World;
 using SystemModule.Data;
 
-namespace GameSvr.GameGate
-{
-    public class GateUserInfo
-    {
+namespace GameSvr.GameGate {
+    public class GateUserInfo {
         /// <summary>
         /// 人物对象
         /// </summary>

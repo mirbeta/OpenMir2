@@ -1,22 +1,16 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("Letguild", "加入公会", "", 0)]
-    public class LetGuildCommand : GameCommand
-    {
+    public class LetGuildCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
-        {
+        public void Execute(PlayObject playObject) {
             playObject.AllowGuild = !playObject.AllowGuild;
-            if (playObject.AllowGuild)
-            {
+            if (playObject.AllowGuild) {
                 playObject.SysMsg(CommandHelp.EnableJoinGuild, MsgColor.Green, MsgType.Hint);
             }
-            else
-            {
+            else {
                 playObject.SysMsg(CommandHelp.DisableJoinGuild, MsgColor.Green, MsgType.Hint);
             }
             return;

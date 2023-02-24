@@ -1,7 +1,5 @@
-﻿namespace GameSvr.Robots
-{
-    public class AutoRunInfo
-    {
+﻿namespace GameSvr.Robots {
+    public class AutoRunInfo {
         /// <summary>
         /// 上一次运行时间记录
         /// </summary>

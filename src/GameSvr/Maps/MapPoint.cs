@@ -1,39 +1,28 @@
-namespace GameSvr.Maps
-{
-    public class MapPoint
-    {
-        public int X
-        {
-            get
-            {
+namespace GameSvr.Maps {
+    public class MapPoint {
+        public int X {
+            get {
                 return nX;
             }
-            set
-            {
+            set {
                 nX = value;
             }
         }
 
-        public int Y
-        {
-            get
-            {
+        public int Y {
+            get {
                 return nY;
             }
-            set
-            {
+            set {
                 nY = value;
             }
         }
 
-        public bool Through
-        {
-            get
-            {
+        public bool Through {
+            get {
                 return FThrough;
             }
-            set
-            {
+            set {
                 FThrough = value;
             }
         }
@@ -42,8 +31,7 @@ namespace GameSvr.Maps
         private int nY;
         private bool FThrough;
 
-        public MapPoint(int nX, int nY)
-        {
+        public MapPoint(int nX, int nY) {
             this.nX = nX;
             this.nY = nY;
             FThrough = false;

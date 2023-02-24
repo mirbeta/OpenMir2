@@ -1,28 +1,21 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 查看禁言列表中的内容(支持权限分配)
     /// </summary>
     [Command("ShutupList", "查看禁言列表中的内容", 10)]
-    public class ShutupListCommand : GameCommand
-    {
+    public class ShutupListCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject)
-        {
+        public void Execute(PlayObject PlayObject) {
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
-            try
-            {
+            try {
                 int nCount = M2Share.DenySayMsgList.Count;
-                if (M2Share.DenySayMsgList.Count <= 0)
-                {
+                if (M2Share.DenySayMsgList.Count <= 0) {
                     PlayObject.SysMsg(CommandHelp.GameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);
                 }
-                if (nCount > 0)
-                {
+                if (nCount > 0) {
                     //foreach (var item in Settings.g_DenySayMsgList)
                     //{
                     //    PlayObject.SysMsg(Settings.g_DenySayMsgList[item.Key] + ' ' + (((Settings.g_DenySayMsgList[item.Key]) - HUtil32.GetTickCount()) / 60000).ToString()
@@ -35,8 +28,7 @@ namespace GameSvr.GameCommand.Commands
                     //}
                 }
             }
-            finally
-            {
+            finally {
                 HUtil32.LeaveCriticalSection(M2Share.DenySayMsgList);
             }
         }

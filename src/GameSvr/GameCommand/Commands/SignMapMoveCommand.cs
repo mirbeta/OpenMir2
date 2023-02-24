@@ -1,16 +1,13 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 回到上次死亡地点
     /// </summary>
     [Command("SignMapMove", "回到上次死亡地点", 10)]
-    public class SignMapMoveCommand : GameCommand
-    {
+    public class SignMapMoveCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject)
-        {
+        public void Execute(PlayObject PlayObject) {
             //try
             //{
             //    Envirnoment Envir = null;

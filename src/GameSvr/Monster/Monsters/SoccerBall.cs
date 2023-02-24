@@ -1,32 +1,24 @@
 using GameSvr.Actor;
 
-namespace GameSvr.Monster.Monsters
-{
-    public class SoccerBall : AnimalObject
-    {
+namespace GameSvr.Monster.Monsters {
+    public class SoccerBall : AnimalObject {
         public int N550;
 
-        public SoccerBall() : base()
-        {
+        public SoccerBall() : base() {
             Animal = false;
             SuperMan = true;
             N550 = 0;
             TargetX = -1;
         }
 
-        public override void Run()
-        {
+        public override void Run() {
             short n08 = 0;
             short n0C = 0;
             bool bo0D = false;
-            if (N550 > 0)
-            {
-                if (Envir.GetNextPosition(CurrX, CurrY, Direction, 1, ref n08, ref n0C))
-                {
-                    if (Envir.CanWalk(n08, n0C, bo0D))
-                    {
-                        switch (Direction)
-                        {
+            if (N550 > 0) {
+                if (Envir.GetNextPosition(CurrX, CurrY, Direction, 1, ref n08, ref n0C)) {
+                    if (Envir.CanWalk(n08, n0C, bo0D)) {
+                        switch (Direction) {
                             case 0:
                                 Direction = 4;
                                 break;
@@ -56,25 +48,20 @@ namespace GameSvr.Monster.Monsters
                     }
                 }
             }
-            else
-            {
+            else {
                 TargetX = -1;
             }
-            if (TargetX != -1)
-            {
+            if (TargetX != -1) {
                 GotoTargetXy();
-                if (TargetX == CurrX && TargetY == CurrY)
-                {
+                if (TargetX == CurrX && TargetY == CurrY) {
                     N550 = 0;
                 }
             }
             base.Run();
         }
 
-        public override void Struck(BaseObject hiter)
-        {
-            if (hiter == null)
-            {
+        public override void Struck(BaseObject hiter) {
+            if (hiter == null) {
                 return;
             }
             Direction = hiter.Direction;

@@ -1,16 +1,13 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 查看行会争霸赛结果
     /// </summary>
     [Command("Announcement", "查看行会争霸赛结果", 10)]
-    public class AnnouncementCommand : GameCommand
-    {
+    public class AnnouncementCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
             //string sGuildName = @Params.Length > 0 ? @Params[0] : "";
             //TGUild Guild;
             //string sHumanName;

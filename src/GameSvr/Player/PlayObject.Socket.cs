@@ -1,20 +1,16 @@
 ﻿using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.Player
-{
-    public partial class PlayObject
-    {
+namespace GameSvr.Player {
+    public partial class PlayObject {
         private const byte HeaderLen = 32;
 
-        private ServerMessage messageHead = new ServerMessage
-        {
+        private ServerMessage messageHead = new ServerMessage {
             PacketCode = Grobal2.RunGateCode,
             Ident = Grobal2.GM_DATA
         };
 
-        internal void SetSocket()
-        {
+        internal void SetSocket() {
             messageHead.Socket = SocketId;
             messageHead.SessionId = SocketIdx;
         }
@@ -23,10 +19,8 @@ namespace GameSvr.Player
         /// 动作消息 走路、跑步、战士攻击等
         /// </summary>
         /// <param name="sMsg"></param>
-        private void SendSocket(string sMsg)
-        {
-            if (OffLineFlag)
-            {
+        private void SendSocket(string sMsg) {
+            if (OffLineFlag) {
                 return;
             }
             if (string.IsNullOrEmpty(sMsg))
@@ -44,10 +38,8 @@ namespace GameSvr.Player
         /// 发送普通命令消息（如：玩家升级、攻击目标等）
         /// </summary>
         /// <param name="defMsg"></param>
-        private void SendSocket(CommandPacket defMsg)
-        {
-            if (OffLineFlag && defMsg.Ident != Messages.SM_OUTOFCONNECTION)
-            {
+        private void SendSocket(CommandPacket defMsg) {
+            if (OffLineFlag && defMsg.Ident != Messages.SM_OUTOFCONNECTION) {
                 return;
             }
             messageHead.PackLength = CommandPacket.Size;
@@ -58,14 +50,11 @@ namespace GameSvr.Player
             //Console.WriteLine($"发送命令消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 
-        internal virtual void SendSocket(CommandPacket defMsg, string sMsg)
-        {
-            if (OffLineFlag && defMsg.Ident != Messages.SM_OUTOFCONNECTION)
-            {
+        internal virtual void SendSocket(CommandPacket defMsg, string sMsg) {
+            if (OffLineFlag && defMsg.Ident != Messages.SM_OUTOFCONNECTION) {
                 return;
             }
-            if (string.IsNullOrEmpty(sMsg))
-            {
+            if (string.IsNullOrEmpty(sMsg)) {
                 return;
             }
             byte[] bMsg = HUtil32.GetBytes(sMsg);
@@ -78,15 +67,12 @@ namespace GameSvr.Player
             //Console.WriteLine($"发送文字消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 
-        public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)
-        {
+        public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg) {
             ClientMsg = Grobal2.MakeDefaultMsg(wIdent, nRecog, nParam, nTag, nSeries);
-            if (!string.IsNullOrEmpty(sMsg))
-            {
+            if (!string.IsNullOrEmpty(sMsg)) {
                 SendSocket(ClientMsg, EDCode.EncodeString(sMsg));
             }
-            else
-            {
+            else {
                 SendSocket(ClientMsg);
             }
         }

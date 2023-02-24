@@ -1,7 +1,5 @@
-﻿namespace GameSvr.World
-{
-    public class MonsterThread
-    {
+﻿namespace GameSvr.World {
+    public class MonsterThread {
         /// <summary>
         /// 线程ID
         /// </summary>
@@ -36,8 +34,7 @@
         /// </summary>
         public int MonsterCount;
 
-        public MonsterThread()
-        {
+        public MonsterThread() {
             RegenMonstersTick = HUtil32.GetTickCount();
         }
     }

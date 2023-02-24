@@ -1,25 +1,18 @@
-﻿namespace GameSvr.Monster.Monsters
-{
-    public class MagCowMonster : AtMonster
-    {
-        public MagCowMonster() : base()
-        {
+﻿namespace GameSvr.Monster.Monsters {
+    public class MagCowMonster : AtMonster {
+        public MagCowMonster() : base() {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
-        private void MagicAttack(byte btDir)
-        {
+        private void MagicAttack(byte btDir) {
             Direction = btDir;
             int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
-            if (nPower > 0)
-            {
+            if (nPower > 0) {
                 SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 Actor.BaseObject baseObject = GetPoseCreate();
-                if (baseObject != null && IsProperTarget(baseObject) && AntiMagic >= 0)
-                {
+                if (baseObject != null && IsProperTarget(baseObject) && AntiMagic >= 0) {
                     nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);
-                    if (nPower > 0)
-                    {
+                    if (nPower > 0) {
                         baseObject.StruckDamage((ushort)nPower);
                         baseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
                     }
@@ -27,18 +20,14 @@
             }
         }
 
-        protected override bool AttackTarget()
-        {
+        protected override bool AttackTarget() {
             bool result = false;
             byte btDir = 0;
-            if (TargetCret == null)
-            {
+            if (TargetCret == null) {
                 return false;
             }
-            if (GetAttackDir(TargetCret, ref btDir))
-            {
-                if (HUtil32.GetTickCount() - AttackTick > NextHitTime)
-                {
+            if (GetAttackDir(TargetCret, ref btDir)) {
+                if (HUtil32.GetTickCount() - AttackTick > NextHitTime) {
                     AttackTick = HUtil32.GetTickCount();
                     TargetFocusTick = HUtil32.GetTickCount();
                     MagicAttack(btDir);
@@ -46,14 +35,11 @@
                 }
                 result = true;
             }
-            else
-            {
-                if (TargetCret.Envir == Envir)
-                {
+            else {
+                if (TargetCret.Envir == Envir) {
                     SetTargetXy(TargetCret.CurrX, TargetCret.CurrY);
                 }
-                else
-                {
+                else {
                     DelTargetCreat();
                 }
             }

@@ -1,12 +1,9 @@
 ﻿using GameSvr.Player;
 using System.Reflection;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand
-{
-    public class GameCommand
-    {
+namespace GameSvr.GameCommand {
+    public class GameCommand {
         public CommandAttribute Command { get; private set; }
 
         private MethodInfo CommandMethod { get; set; }
@@ -16,8 +13,7 @@ namespace GameSvr.GameCommand
         /// <summary>
         /// 注册命令
         /// </summary>
-        public void Register(CommandAttribute attributes, MethodInfo method)
-        {
+        public void Register(CommandAttribute attributes, MethodInfo method) {
             this.Command = attributes;
             this.CommandMethod = method;
             this.MethodParameterCount = method.GetParameters().Length;
@@ -27,10 +23,8 @@ namespace GameSvr.GameCommand
         /// 处理命令
         /// </summary>
         /// <returns></returns>
-        public virtual string Handle(string parameters, PlayObject playObject = null)
-        {
-            if (playObject != null)
-            {
+        public virtual string Handle(string parameters, PlayObject playObject = null) {
+            if (playObject != null) {
 #if DEBUG
                 playObject.Permission = 10;
                 playObject.SysMsg("当前运行调试模式,权限等级：10", MsgColor.Red, MsgType.Hint);
@@ -40,10 +34,8 @@ namespace GameSvr.GameCommand
                     return CommandHelp.GameCommandPermissionTooLow;
                 }
             }
-            switch (MethodParameterCount)
-            {
-                case 2:
-                    {
+            switch (MethodParameterCount) {
+                case 2: {
                         string[] @params = parameters.Split(' ');
                         return (string)CommandMethod.Invoke(this, new object[] { @params, playObject });
                     }
@@ -61,8 +53,7 @@ namespace GameSvr.GameCommand
         /// <param name="PlayObject"></param>
         /// <returns></returns>
         [ExecuteCommand]
-        public virtual string Fallback(string[] @params = null, PlayObject PlayObject = null)
-        {
+        public virtual string Fallback(string[] @params = null, PlayObject PlayObject = null) {
             return string.Empty;
         }
     }

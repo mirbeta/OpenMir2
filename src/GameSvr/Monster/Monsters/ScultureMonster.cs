@@ -1,63 +1,47 @@
 ﻿using GameSvr.Actor;
 using SystemModule.Consts;
 
-namespace GameSvr.Monster.Monsters
-{
-    public class ScultureMonster : MonsterObject
-    {
-        public ScultureMonster() : base()
-        {
+namespace GameSvr.Monster.Monsters {
+    public class ScultureMonster : MonsterObject {
+        public ScultureMonster() : base() {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 7;
             StoneMode = true;
             CharStatusEx = PoisonState.STONEMODE;
         }
 
-        private void MeltStone()
-        {
+        private void MeltStone() {
             CharStatusEx = 0;
             CharStatus = GetCharStatus();
             SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             StoneMode = false;
         }
 
-        private void MeltStoneAll()
-        {
+        private void MeltStoneAll() {
             MeltStone();
             IList<BaseObject> list10 = new List<BaseObject>();
             GetMapBaseObjects(Envir, CurrX, CurrY, 7, list10);
-            for (int i = 0; i < list10.Count; i++)
-            {
+            for (int i = 0; i < list10.Count; i++) {
                 BaseObject baseObject = list10[i];
-                if (baseObject.StoneMode)
-                {
-                    if (baseObject is ScultureMonster)
-                    {
+                if (baseObject.StoneMode) {
+                    if (baseObject is ScultureMonster) {
                         ((ScultureMonster)baseObject).MeltStone();
                     }
                 }
             }
         }
 
-        public override void Run()
-        {
-            if (CanMove() && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
-            {
-                if (StoneMode)
-                {
-                    for (int i = 0; i < VisibleActors.Count; i++)
-                    {
+        public override void Run() {
+            if (CanMove() && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed) {
+                if (StoneMode) {
+                    for (int i = 0; i < VisibleActors.Count; i++) {
                         BaseObject baseObject = VisibleActors[i].BaseObject;
-                        if (baseObject.Death)
-                        {
+                        if (baseObject.Death) {
                             continue;
                         }
-                        if (IsProperTarget(baseObject))
-                        {
-                            if (!baseObject.HideMode || CoolEye)
-                            {
-                                if (Math.Abs(CurrX - baseObject.CurrX) <= 2 && Math.Abs(CurrY - baseObject.CurrY) <= 2)
-                                {
+                        if (IsProperTarget(baseObject)) {
+                            if (!baseObject.HideMode || CoolEye) {
+                                if (Math.Abs(CurrX - baseObject.CurrX) <= 2 && Math.Abs(CurrY - baseObject.CurrY) <= 2) {
                                     MeltStoneAll();
                                     break;
                                 }
@@ -65,10 +49,8 @@ namespace GameSvr.Monster.Monsters
                         }
                     }
                 }
-                else
-                {
-                    if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
-                    {
+                else {
+                    if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null) {
                         SearchEnemyTick = HUtil32.GetTickCount();
                         SearchTarget();
                     }

@@ -1,18 +1,14 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 解除指定玩家物品绑定属性
     /// </summary>
     [Command("UnBindUseItem", "解除指定玩家物品绑定属性", 10)]
-    public class UnBindUseItemCommand : GameCommand
-    {
+    public class UnBindUseItemCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (@Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (@Params == null) {
                 return;
             }
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";

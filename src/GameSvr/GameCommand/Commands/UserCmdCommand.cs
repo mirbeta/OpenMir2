@@ -1,16 +1,13 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 自定义命令
     /// </summary>
     [Command("UserCmd", "自定义命令", 10)]
-    public class UserCmdCommand : GameCommand
-    {
+    public class UserCmdCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
             // string sLable = @Params.Length > 0 ? @Params[0] : "";
             // byte Flag = 0;
             // if (PlayObject.m_nUserCmdNPC == M2Share.g_FunctionNPC)

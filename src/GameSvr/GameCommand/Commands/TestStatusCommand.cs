@@ -1,23 +1,17 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("TestStatus", "", 10)]
-    public class TestStatusCommand : GameCommand
-    {
+    public class TestStatusCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (@Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (@Params == null) {
                 return;
             }
             int nType = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
             int nTime = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
-            if (PlayObject.Permission < 6)
-            {
+            if (PlayObject.Permission < 6) {
                 return;
             }
 

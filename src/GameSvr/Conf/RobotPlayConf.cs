@@ -6,21 +6,17 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.Conf
-{
-    public class RobotPlayConf : ConfigFile
-    {
+namespace GameSvr.Conf {
+    public class RobotPlayConf : ConfigFile {
         private readonly string m_sFilePath = string.Empty;
         private readonly string m_sConfigListFileName = string.Empty;
         private readonly string m_sHeroConfigListFileName = string.Empty;
 
-        public RobotPlayConf(string fileName) : base(fileName)
-        {
+        public RobotPlayConf(string fileName) : base(fileName) {
             Load();
         }
 
-        public void LoadConfig(RobotPlayObject playObject)
-        {
+        public void LoadConfig(RobotPlayObject playObject) {
             byte nAttatckMode;
             string sLineText;
             string sMagicName;
@@ -41,28 +37,21 @@ namespace GameSvr.Conf
             playObject.Abil.MaxExp = BaseObject.GetLevelExp(playObject.Abil.Level);
             playObject.m_boProtectStatus = ReadWriteBool("Info", "ProtectStatus", false);// 是否守护模式
             nAttatckMode = (byte)ReadWriteInteger("Info", "AttatckMode", 6);// 攻击模式
-            if (nAttatckMode >= 0 && nAttatckMode <= 6)
-            {
+            if (nAttatckMode >= 0 && nAttatckMode <= 6) {
                 playObject.AttatckMode = (AttackMode)nAttatckMode;
             }
             sLineText = ReadWriteString("Info", "UseSkill", "");
-            if (!string.IsNullOrEmpty(sLineText))
-            {
+            if (!string.IsNullOrEmpty(sLineText)) {
                 TempList = new List<string>();
-                try
-                {
+                try {
                     //HUtil32.ArrestStringEx(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
                     TempList = sLineText.Split(",").ToList();
-                    for (int i = 0; i < TempList.Count; i++)
-                    {
+                    for (int i = 0; i < TempList.Count; i++) {
                         sMagicName = TempList[i].Trim();
-                        if (playObject.FindMagic(sMagicName) == null)
-                        {
+                        if (playObject.FindMagic(sMagicName) == null) {
                             Magic = M2Share.WorldEngine.FindMagic(sMagicName);
-                            if (Magic != null)
-                            {
-                                if (Magic.Job == 99 || Magic.Job == (byte)playObject.Job)
-                                {
+                            if (Magic != null) {
+                                if (Magic.Job == 99 || Magic.Job == (byte)playObject.Job) {
                                     UserMagic = new UserMagic();
                                     UserMagic.Magic = Magic;
                                     UserMagic.MagIdx = Magic.MagicId;
@@ -75,63 +64,49 @@ namespace GameSvr.Conf
                         }
                     }
                 }
-                finally
-                {
+                finally {
                     //TempList.Free;
                 }
             }
             sLineText = ReadWriteString("Info", "InitItems", "");
-            if (!string.IsNullOrEmpty(sLineText))
-            {
+            if (!string.IsNullOrEmpty(sLineText)) {
                 TempList = new List<string>();
-                try
-                {
+                try {
                     //ExtractStrings(new char[] { '|', '\\', '/', ',' }, new object[] { }, sLineText, TempList);
                     TempList = sLineText.Split(",").ToList();
-                    for (int i = 0; i < TempList.Count; i++)
-                    {
+                    for (int i = 0; i < TempList.Count; i++) {
                         sItemName = TempList[i].Trim();
                         StdItem = M2Share.WorldEngine.GetStdItem(sItemName);
-                        if (StdItem != null)
-                        {
+                        if (StdItem != null) {
                             UserItem = new UserItem();
-                            if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
-                            {
-                                if (M2Share.StdModeMap.Contains(StdItem.StdMode))
-                                {
-                                    if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
-                                    {
+                            if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem)) {
+                                if (M2Share.StdModeMap.Contains(StdItem.StdMode)) {
+                                    if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132) {
                                         //M2Share.WorldEngine.GetUnknowItemValue(UserItem);
                                     }
                                 }
-                                if (!playObject.AddItemToBag(UserItem))
-                                {
+                                if (!playObject.AddItemToBag(UserItem)) {
                                     UserItem = null;
                                     break;
                                 }
                                 playObject.m_BagItemNames.Add(StdItem.Name);
                             }
-                            else
-                            {
+                            else {
                                 UserItem = null;
                             }
                         }
                     }
                 }
-                finally
-                {
+                finally {
                     //TempList.Free;
                 }
             }
-            for (int i = 0; i < 9; i++)
-            {
+            for (int i = 0; i < 9; i++) {
                 sSayMsg = ReadWriteString("MonSay", i.ToString(), "");
-                if (!string.IsNullOrEmpty(sSayMsg))
-                {
+                if (!string.IsNullOrEmpty(sSayMsg)) {
                     playObject.m_AISayMsgList.Add(sSayMsg);
                 }
-                else
-                {
+                else {
                     break;
                 }
             }
@@ -144,20 +119,14 @@ namespace GameSvr.Conf
             playObject.m_UseItemNames[Grobal2.U_ARMRINGR] = ReadWriteString("UseItems", "UseItems6", ""); // '右手镯';
             playObject.m_UseItemNames[Grobal2.U_RINGL] = ReadWriteString("UseItems", "UseItems7", ""); // '左戒指';
             playObject.m_UseItemNames[Grobal2.U_RINGR] = ReadWriteString("UseItems", "UseItems8", ""); // '右戒指';
-            for (byte i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++)
-            {
-                if (!string.IsNullOrEmpty(playObject.m_UseItemNames[i]))
-                {
+            for (byte i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++) {
+                if (!string.IsNullOrEmpty(playObject.m_UseItemNames[i])) {
                     StdItem = M2Share.WorldEngine.GetStdItem(playObject.m_UseItemNames[i]);
-                    if (StdItem != null)
-                    {
+                    if (StdItem != null) {
                         UserItem = new UserItem();
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(playObject.m_UseItemNames[i], ref UserItem))
-                        {
-                            if (M2Share.StdModeMap.Contains(StdItem.StdMode))
-                            {
-                                if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132)
-                                {
+                        if (M2Share.WorldEngine.CopyToUserItemFromName(playObject.m_UseItemNames[i], ref UserItem)) {
+                            if (M2Share.StdModeMap.Contains(StdItem.StdMode)) {
+                                if (StdItem.Shape == 130 || StdItem.Shape == 131 || StdItem.Shape == 132) {
                                     //M2Share.WorldEngine.GetUnknowItemValue(UserItem);
                                 }
                             }

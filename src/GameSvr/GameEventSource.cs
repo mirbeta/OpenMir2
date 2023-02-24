@@ -1,24 +1,19 @@
 using System.Diagnostics.Tracing;
 
-namespace GameSvr
-{
+namespace GameSvr {
     [EventSource(Name = "UserLogProvider")]
-    public class GameEventSource : EventSource
-    {
-        public void AddEventLog(int eventType, string meesage)
-        {
+    public class GameEventSource : EventSource {
+        public void AddEventLog(int eventType, string meesage) {
             //todo eventType需整理归类
             WriteEvent(eventType, meesage);
         }
 
-        public void AddEventLog(GameEventLogType eventType, string meesage)
-        {
+        public void AddEventLog(GameEventLogType eventType, string meesage) {
             WriteEvent((int)eventType, meesage);
         }
     }
 
-    public enum GameEventLogType : int
-    {
+    public enum GameEventLogType : int {
         /// <summary>
         /// 取回物品
         /// </summary>

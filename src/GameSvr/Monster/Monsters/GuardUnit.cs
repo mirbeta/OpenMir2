@@ -2,117 +2,88 @@
 using GameSvr.Player;
 using SystemModule.Enums;
 
-namespace GameSvr.Monster.Monsters
-{
+namespace GameSvr.Monster.Monsters {
     /// <summary>
     /// 守卫类
     /// </summary>
-    public class GuardUnit : AnimalObject
-    {
+    public class GuardUnit : AnimalObject {
         public sbyte GuardDirection;
         public bool BoCrimeforCastle;
         public int CrimeforCastleTime = 0;
 
-        public GuardUnit()
-        {
+        public GuardUnit() {
             Race = ActorRace.Guard;
         }
 
-        public override void Struck(BaseObject hiter)
-        {
+        public override void Struck(BaseObject hiter) {
             base.Struck(hiter);
-            if (Castle != null)
-            {
+            if (Castle != null) {
                 BoCrimeforCastle = true;
                 CrimeforCastleTime = HUtil32.GetTickCount();
             }
         }
 
-        public override bool IsProperTarget(BaseObject baseObject)
-        {
+        public override bool IsProperTarget(BaseObject baseObject) {
             bool result = false;
-            if (Castle != null)
-            {
-                if (LastHiter == baseObject)
-                {
+            if (Castle != null) {
+                if (LastHiter == baseObject) {
                     result = true;
                 }
-                if (Castle.UnderWar)
-                {
+                if (Castle.UnderWar) {
                     result = true;
                 }
-                if (baseObject.Race == ActorRace.Guard)
-                {
+                if (baseObject.Race == ActorRace.Guard) {
                     GuardUnit guardObject = (GuardUnit)baseObject;
-                    if (guardObject.BoCrimeforCastle)
-                    {
-                        if ((HUtil32.GetTickCount() - guardObject.CrimeforCastleTime) < (2 * 60 * 1000))
-                        {
+                    if (guardObject.BoCrimeforCastle) {
+                        if ((HUtil32.GetTickCount() - guardObject.CrimeforCastleTime) < (2 * 60 * 1000)) {
                             result = true;
                         }
-                        else
-                        {
+                        else {
                             guardObject.BoCrimeforCastle = false;
                         }
-                        if (guardObject.Castle != null)
-                        {
+                        if (guardObject.Castle != null) {
                             guardObject.BoCrimeforCastle = false;
                             result = false;
                         }
                     }
                 }
-                if (Castle.MasterGuild != null)
-                {
-                    if (baseObject.Master == null)
-                    {
-                        if (baseObject.Race == ActorRace.Play)
-                        {
-                            if (Castle.MasterGuild == ((PlayObject)baseObject).MyGuild || Castle.MasterGuild.IsAllyGuild(((PlayObject)baseObject).MyGuild))
-                            {
-                                if (LastHiter != baseObject)
-                                {
+                if (Castle.MasterGuild != null) {
+                    if (baseObject.Master == null) {
+                        if (baseObject.Race == ActorRace.Play) {
+                            if (Castle.MasterGuild == ((PlayObject)baseObject).MyGuild || Castle.MasterGuild.IsAllyGuild(((PlayObject)baseObject).MyGuild)) {
+                                if (LastHiter != baseObject) {
                                     result = false;
                                 }
                             }
                         }
                     }
-                    else
-                    {
-                        if (baseObject.Master.Race == ActorRace.Play)
-                        {
-                            if (Castle.MasterGuild == ((PlayObject)baseObject.Master).MyGuild || Castle.MasterGuild.IsAllyGuild(((PlayObject)baseObject.Master).MyGuild))
-                            {
-                                if (LastHiter != baseObject.Master && LastHiter != baseObject)
-                                {
+                    else {
+                        if (baseObject.Master.Race == ActorRace.Play) {
+                            if (Castle.MasterGuild == ((PlayObject)baseObject.Master).MyGuild || Castle.MasterGuild.IsAllyGuild(((PlayObject)baseObject.Master).MyGuild)) {
+                                if (LastHiter != baseObject.Master && LastHiter != baseObject) {
                                     result = false;
                                 }
                             }
                         }
                     }
                 }
-                if (baseObject.AdminMode || baseObject.StoneMode || baseObject.Race >= ActorRace.NPC && baseObject.Race < ActorRace.Animal || baseObject == this || baseObject.Castle == Castle)
-                {
+                if (baseObject.AdminMode || baseObject.StoneMode || baseObject.Race >= ActorRace.NPC && baseObject.Race < ActorRace.Animal || baseObject == this || baseObject.Castle == Castle) {
                     result = false;
                 }
                 return result;
             }
-            if (LastHiter == baseObject)
-            {
+            if (LastHiter == baseObject) {
                 return true;
             }
-            if (baseObject.TargetCret != null && baseObject.TargetCret.Race == 112)
-            {
+            if (baseObject.TargetCret != null && baseObject.TargetCret.Race == 112) {
                 return true;
             }
-            if (baseObject.Race == ActorRace.Play)
-            {
-                if (((PlayObject)baseObject).PvpLevel() >= 2)
-                {
+            if (baseObject.Race == ActorRace.Play) {
+                if (((PlayObject)baseObject).PvpLevel() >= 2) {
                     return true;
                 }
             }
-            if (baseObject.AdminMode || baseObject.StoneMode || baseObject == this)
-            {
+            if (baseObject.AdminMode || baseObject.StoneMode || baseObject == this) {
                 return false;
             }
             return result;

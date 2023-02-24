@@ -2,24 +2,20 @@
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.Maps
-{
-    public class DoorInfo
-    {
+namespace GameSvr.Maps {
+    public class DoorInfo {
         public int DoorId;
         public int nX;
         public int nY;
         public DoorStatus Status;
         public int n08;
 
-        public DoorInfo()
-        {
+        public DoorInfo() {
             DoorId = M2Share.ActorMgr.Dequeue();
         }
     }
 
-    public class MapItem
-    {
+    public class MapItem {
         /// <summary>
         /// 物品唯一ID
         /// </summary>
@@ -52,8 +48,7 @@ namespace GameSvr.Maps
         public int CanPickUpTick;
         public UserItem UserItem;
 
-        public MapItem()
-        {
+        public MapItem() {
             this.ItemId = M2Share.ActorMgr.Dequeue();
         }
     }
@@ -61,8 +56,7 @@ namespace GameSvr.Maps
     /// <summary>
     /// 地图连接
     /// </summary>
-    public record struct GateObject
-    {
+    public record struct GateObject {
         public int RouteId;
         public Envirnoment Envir;
         public short X;
@@ -73,8 +67,7 @@ namespace GameSvr.Maps
     /// <summary>
     /// 地图物品
     /// </summary>
-    public class VisibleMapItem
-    {
+    public class VisibleMapItem {
         public int nX;
         public int nY;
         public MapItem MapItem;
@@ -86,16 +79,14 @@ namespace GameSvr.Maps
     /// <summary>
     /// 地图对象类型
     /// </summary>
-    public enum CellObjectType : byte
-    {
+    public enum CellObjectType : byte {
         /// <summary>
         /// 可以移动的对象
         /// </summary>
         MoveObject = 0
     }
 
-    public enum CellType : byte
-    {
+    public enum CellType : byte {
         /// <summary>
         /// 事件
         /// 挖坑 烟花 等
@@ -143,8 +134,7 @@ namespace GameSvr.Maps
         CastleDoor = 11
     }
 
-    public enum CellAttribute : byte
-    {
+    public enum CellAttribute : byte {
         /// <summary>
         /// 可以走动
         /// </summary>
@@ -156,27 +146,23 @@ namespace GameSvr.Maps
         LowWall = 2
     }
 
-    public class PointInfo
-    {
+    public class PointInfo {
         public short nX;
         public short nY;
 
-        public PointInfo(short x, short y)
-        {
+        public PointInfo(short x, short y) {
             nX = x;
             nY = y;
         }
     }
 
-    public class TRect
-    {
+    public class TRect {
         public int Left;
         public int Top;
         public int Right;
         public int Bottom;
 
-        public TRect(int left, int top, int right, int bottom)
-        {
+        public TRect(int left, int top, int right, int bottom) {
             Left = left;
             Top = top;
             Right = right;

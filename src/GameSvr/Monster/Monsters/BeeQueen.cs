@@ -1,14 +1,11 @@
 ﻿using GameSvr.Actor;
 using SystemModule.Data;
 
-namespace GameSvr.Monster.Monsters
-{
-    public class BeeQueen : AnimalObject
-    {
+namespace GameSvr.Monster.Monsters {
+    public class BeeQueen : AnimalObject {
         private readonly IList<BaseObject> BeeList;
 
-        public BeeQueen() : base()
-        {
+        public BeeQueen() : base() {
             ViewRange = 9;
             RunTime = 250;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
@@ -17,23 +14,18 @@ namespace GameSvr.Monster.Monsters
             BeeList = new List<BaseObject>();
         }
 
-        private void MakeChildBee()
-        {
-            if (BeeList.Count >= 15)
-            {
+        private void MakeChildBee() {
+            if (BeeList.Count >= 15) {
                 return;
             }
             SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
             SendDelayMsg(this, Messages.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
         }
 
-        protected override bool Operate(ProcessMessage processMsg)
-        {
-            if (processMsg.wIdent == Messages.RM_ZEN_BEE)
-            {
+        protected override bool Operate(ProcessMessage processMsg) {
+            if (processMsg.wIdent == Messages.RM_ZEN_BEE) {
                 BaseObject bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, M2Share.Config.Bee);
-                if (bb != null)
-                {
+                if (bb != null) {
                     bb.SetTargetCreat(TargetCret);
                     BeeList.Add(bb);
                 }
@@ -41,27 +33,20 @@ namespace GameSvr.Monster.Monsters
             return base.Operate(processMsg);
         }
 
-        public override void Run()
-        {
-            if (CanMove())
-            {
-                if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
-                {
+        public override void Run() {
+            if (CanMove()) {
+                if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed) {
                     WalkTick = HUtil32.GetTickCount();
-                    if ((HUtil32.GetTickCount() - AttackTick) >= NextHitTime)
-                    {
+                    if ((HUtil32.GetTickCount() - AttackTick) >= NextHitTime) {
                         AttackTick = HUtil32.GetTickCount();
                         SearchTarget();
-                        if (TargetCret != null)
-                        {
+                        if (TargetCret != null) {
                             MakeChildBee();
                         }
                     }
-                    for (int i = BeeList.Count - 1; i >= 0; i--)
-                    {
+                    for (int i = BeeList.Count - 1; i >= 0; i--) {
                         BaseObject bb = BeeList[i];
-                        if (bb.Death || bb.Ghost)
-                        {
+                        if (bb.Death || bb.Ghost) {
                             BeeList.RemoveAt(i);
                         }
                     }

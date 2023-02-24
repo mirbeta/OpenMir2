@@ -1,20 +1,15 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 重新加载管理员列表
     /// </summary>
     [Command("LoadAdmin", "重新加载管理员列表", 10)]
-    public class LoadAdminCommand : GameCommand
-    {
+    public class LoadAdminCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject)
-        {
-            if (PlayObject.Permission < 6)
-            {
+        public void Execute(PlayObject PlayObject) {
+            if (PlayObject.Permission < 6) {
                 return;
             }
             //LocalDB.GetInstance().LoadAdminList();

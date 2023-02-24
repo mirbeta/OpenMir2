@@ -2,15 +2,12 @@
 using GameSvr.Event;
 using SystemModule.Consts;
 
-namespace GameSvr.Monster.Monsters
-{
-    public class ScultureKingMonster : MonsterObject
-    {
+namespace GameSvr.Monster.Monsters {
+    public class ScultureKingMonster : MonsterObject {
         private int _mNDangerLevel;
         private readonly IList<BaseObject> _mSlaveObjectList;
 
-        public ScultureKingMonster() : base()
-        {
+        public ScultureKingMonster() : base() {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             StoneMode = true;
@@ -20,8 +17,7 @@ namespace GameSvr.Monster.Monsters
             _mSlaveObjectList = new List<BaseObject>();
         }
 
-        private void MeltStone()
-        {
+        private void MeltStone() {
             CharStatusEx = 0;
             CharStatus = GetCharStatus();
             SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
@@ -30,52 +26,39 @@ namespace GameSvr.Monster.Monsters
             M2Share.EventMgr.AddEvent(stoneEvent);
         }
 
-        private void CallSlave()
-        {
+        private void CallSlave() {
             short nX = 0;
             short nY = 0;
             int nCount = M2Share.RandomNumber.Random(6) + 6;
             GetFrontPosition(ref nX, ref nY);
-            for (int i = 0; i < nCount; i++)
-            {
-                if (_mSlaveObjectList.Count >= 30)
-                {
+            for (int i = 0; i < nCount; i++) {
+                if (_mSlaveObjectList.Count >= 30) {
                     break;
                 }
                 BaseObject baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, nX, nY, M2Share.Config.Zuma[M2Share.RandomNumber.Random(4)]);
-                if (baseObject != null)
-                {
+                if (baseObject != null) {
                     _mSlaveObjectList.Add(baseObject);
                 }
             }
         }
 
-        protected override void Attack(BaseObject targetBaseObject, byte nDir)
-        {
+        protected override void Attack(BaseObject targetBaseObject, byte nDir) {
             ushort nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
             HitMagAttackTarget(targetBaseObject, 0, nPower, true);
         }
 
-        public override void Run()
-        {
-            if (CanMove() && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
-            {
+        public override void Run() {
+            if (CanMove() && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed) {
                 BaseObject baseObject;
-                if (StoneMode)
-                {
-                    for (int i = 0; i < VisibleActors.Count; i++)
-                    {
+                if (StoneMode) {
+                    for (int i = 0; i < VisibleActors.Count; i++) {
                         baseObject = VisibleActors[i].BaseObject;
-                        if (baseObject.Death)
-                        {
+                        if (baseObject.Death) {
                             continue;
                         }
-                        if (IsProperTarget(baseObject))
-                        {
-                            if (!baseObject.HideMode || CoolEye)
-                            {
-                                if (Math.Abs(CurrX - baseObject.CurrX) <= 2 && Math.Abs(CurrY - baseObject.CurrY) <= 2)
-                                {
+                        if (IsProperTarget(baseObject)) {
+                            if (!baseObject.HideMode || CoolEye) {
+                                if (Math.Abs(CurrX - baseObject.CurrX) <= 2 && Math.Abs(CurrY - baseObject.CurrY) <= 2) {
                                     MeltStone();
                                     break;
                                 }
@@ -83,28 +66,22 @@ namespace GameSvr.Monster.Monsters
                         }
                     }
                 }
-                else
-                {
-                    if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
-                    {
+                else {
+                    if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null) {
                         SearchEnemyTick = HUtil32.GetTickCount();
                         SearchTarget();
-                        if (_mNDangerLevel > WAbil.HP / WAbil.MaxHP * 5 && _mNDangerLevel > 0)
-                        {
+                        if (_mNDangerLevel > WAbil.HP / WAbil.MaxHP * 5 && _mNDangerLevel > 0) {
                             _mNDangerLevel -= 1;
                             CallSlave();
                         }
-                        if (WAbil.HP == WAbil.MaxHP)
-                        {
+                        if (WAbil.HP == WAbil.MaxHP) {
                             _mNDangerLevel = 5;
                         }
                     }
                 }
-                for (int i = _mSlaveObjectList.Count - 1; i >= 0; i--)
-                {
+                for (int i = _mSlaveObjectList.Count - 1; i >= 0; i--) {
                     baseObject = _mSlaveObjectList[i];
-                    if (baseObject.Death || baseObject.Ghost)
-                    {
+                    if (baseObject.Death || baseObject.Ghost) {
                         _mSlaveObjectList.RemoveAt(i);
                     }
                 }

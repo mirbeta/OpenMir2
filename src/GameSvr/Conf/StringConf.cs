@@ -1,17 +1,13 @@
 ﻿using GameSvr.GameCommand;
 using SystemModule.Common;
 
-namespace GameSvr.Conf
-{
-    public class StringConf : ConfigFile
-    {
-        public StringConf(string fileName) : base(fileName)
-        {
+namespace GameSvr.Conf {
+    public class StringConf : ConfigFile {
+        public StringConf(string fileName) : base(fileName) {
             Load();
         }
 
-        public void LoadString()
-        {
+        public void LoadString() {
             M2Share.Config.ServerIPaddr = ReadWriteString("Server", "ServerIP", M2Share.Config.ServerIPaddr);
             M2Share.Config.sWebSite = ReadWriteString("Server", "WebSite", M2Share.Config.sWebSite);
             M2Share.Config.sBbsSite = ReadWriteString("Server", "BbsSite", M2Share.Config.sBbsSite);
@@ -251,7 +247,7 @@ namespace GameSvr.Conf
             Settings.ChangeMemberLevelMsg = ReadWriteString("String", "ChangeMemberLevelMsg", Settings.ChangeMemberLevelMsg);
             Settings.ChangeMemberTypeMsg = ReadWriteString("String", "ChangeMemberTypeMsg", Settings.ChangeMemberTypeMsg);
             Settings.ScriptChangeHumanHPMsg = ReadWriteString("String", "ScriptChangeHumanHPMsg", Settings.ScriptChangeHumanHPMsg);
-            Settings.ScriptChangeHumanMPMsg = ReadWriteString("String", "ScriptChangeHumanMPMsg",  Settings.ScriptChangeHumanMPMsg);
+            Settings.ScriptChangeHumanMPMsg = ReadWriteString("String", "ScriptChangeHumanMPMsg", Settings.ScriptChangeHumanMPMsg);
             Settings.DisableSayMsg = ReadWriteString("String", "YouCanotDisableSayMsg", Settings.DisableSayMsg);
             Settings.OnlineCountMsg = ReadWriteString("String", "OnlineCountMsg", Settings.OnlineCountMsg);
             Settings.TotalOnlineCountMsg = ReadWriteString("String", "TotalOnlineCountMsg", Settings.TotalOnlineCountMsg);
@@ -262,7 +258,7 @@ namespace GameSvr.Conf
             Settings.YouMurderedMsg = ReadWriteString("String", "YouMurderedMsg", Settings.YouMurderedMsg);
             Settings.YouKilledByMsg = ReadWriteString("String", "YouKilledByMsg", Settings.YouKilledByMsg);
             Settings.YouprotectedByLawOfDefense = ReadWriteString("String", "YouprotectedByLawOfDefense", Settings.YouprotectedByLawOfDefense);
-            
+
             CommandHelp.EnableDearRecall = ReadWriteString("String", "EnableDearRecall", CommandHelp.EnableDearRecall);
             CommandHelp.DisableDearRecall = ReadWriteString("String", "DisableDearRecall", CommandHelp.DisableDearRecall);
             CommandHelp.EnableMasterRecall = ReadWriteString("String", "EnableMasterRecall", CommandHelp.EnableMasterRecall);

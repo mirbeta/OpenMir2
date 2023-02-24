@@ -1,26 +1,21 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 设置地图模式
     /// </summary>
     [Command("SetMapMode", "设置地图模式", 10)]
-    public class SetMapModeCommamd : GameCommand
-    {
+    public class SetMapModeCommamd : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (@Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (@Params == null) {
                 return;
             }
             string sMapName = @Params.Length > 0 ? @Params[0] : "";
             string sMapMode = @Params.Length > 1 ? @Params[1] : "";
             string sParam1 = @Params.Length > 2 ? @Params[2] : "";
             string sParam2 = @Params.Length > 3 ? @Params[3] : "";
-            if (PlayObject.Permission < 6)
-            {
+            if (PlayObject.Permission < 6) {
                 return;
             }
 

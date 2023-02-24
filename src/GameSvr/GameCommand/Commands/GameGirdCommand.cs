@@ -1,16 +1,13 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 此命令用于允许或禁止编组传送功能
     /// </summary>
     [Command("GameGird", "调整指定玩家灵符", 10)]
-    public class GameGirdCommand : GameCommand
-    {
+    public class GameGirdCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
             //string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             //string sCtr = @Params.Length > 1 ? @Params[1] : "";
             //int nGameGird = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;

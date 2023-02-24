@@ -1,15 +1,11 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("TestGetBagItems", "", 10)]
-    public class TestGetBagItemsCommand : GameCommand
-    {
+    public class TestGetBagItemsCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject)
-        {
+        public void Execute(PlayObject PlayObject) {
             byte btDc = 0;
             byte btSc = 0;
             byte btMc = 0;

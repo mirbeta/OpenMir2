@@ -1,16 +1,13 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 结束行会争霸赛
     /// </summary>
     [Command("EndContest", "结束行会争霸赛", 10)]
-    public class EndContestCommand : GameCommand
-    {
+    public class EndContestCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
             //string sParam1 = @Params.Length > 0 ? @Params[0] : "";
             //List<TPlayObject> List10;
             //ArrayList List14;

@@ -1,22 +1,16 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("Letshout", "", "", 0)]
-    public class LetShoutCommand : GameCommand
-    {
+    public class LetShoutCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
-        {
+        public void Execute(PlayObject playObject) {
             playObject.BanShout = !playObject.BanShout;
-            if (playObject.BanShout)
-            {
+            if (playObject.BanShout) {
                 playObject.SysMsg(CommandHelp.EnableShoutMsg, MsgColor.Green, MsgType.Hint);
             }
-            else
-            {
+            else {
                 playObject.SysMsg(CommandHelp.DisableShoutMsg, MsgColor.Green, MsgType.Hint);
             }
         }

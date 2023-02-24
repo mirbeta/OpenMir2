@@ -1,7 +1,5 @@
-﻿namespace GameSvr
-{
-    public class Settings
-    {
+﻿namespace GameSvr {
+    public class Settings {
         public const string sSTATUS_FAIL = "+FL/{0}";
         public const string sSTATUS_GOOD = "+GD/{0}";
         public const byte MAXUPLEVEL = byte.MaxValue;

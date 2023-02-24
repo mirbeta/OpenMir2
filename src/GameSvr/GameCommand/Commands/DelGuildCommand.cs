@@ -1,39 +1,30 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 删除指定行会名称
     /// </summary>
     [Command("DelGuild", "删除指定行会名称", help: "行会名称", 10)]
-    public class DelGuildCommand : GameCommand
-    {
+    public class DelGuildCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (@Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (@Params == null) {
                 return;
             }
             string sGuildName = @Params.Length > 0 ? @Params[0] : "";
-            if (M2Share.ServerIndex != 0)
-            {
+            if (M2Share.ServerIndex != 0) {
                 PlayObject.SysMsg("只能在主服务器上才可以使用此命令删除行会!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (sGuildName == "")
-            {
+            if (sGuildName == "") {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.GuildMgr.DelGuild(sGuildName))
-            {
+            if (M2Share.GuildMgr.DelGuild(sGuildName)) {
                 World.WorldServer.SendServerGroupMsg(Messages.SS_206, M2Share.ServerIndex, sGuildName);
             }
-            else
-            {
+            else {
                 PlayObject.SysMsg("没找到" + sGuildName + "这个行会!!!", MsgColor.Red, MsgType.Hint);
             }
         }

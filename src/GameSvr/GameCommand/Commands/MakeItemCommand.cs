@@ -1,35 +1,28 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)
     /// 要求权限默认等级：10
     /// </summary>
     [Command("Make", desc: "制造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)", help: CommandHelp.GamecommandMakeHelpMsg, minUserLevel: 10)]
-    public class MakeItemCommond : GameCommand
-    {
+    public class MakeItemCommond : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] Params, PlayObject PlayObject)
-        {
+        public void Execute(string[] Params, PlayObject PlayObject) {
             if (Params == null) return;
             string sItemName = Params.Length > 0 ? Params[0] : ""; //物品名称
             int nCount = Params.Length > 1 ? Convert.ToInt32(Params[1]) : 1; //数量
             string sParam = Params.Length > 2 ? Params[2] : ""; //可选参数（持久力）
-            if (string.IsNullOrEmpty(sItemName))
-            {
+            if (string.IsNullOrEmpty(sItemName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nCount <= 0) nCount = 1;
             if (nCount > 10) nCount = 10;
-            if (PlayObject.Permission < Command.PermissionMax)
-            {
-                if (!M2Share.CanMakeItem(sItemName))
-                {
+            if (PlayObject.Permission < Command.PermissionMax) {
+                if (!M2Share.CanMakeItem(sItemName)) {
                     PlayObject.SysMsg(CommandHelp.GamecommandMakeItemNameOrPerMissionNot, MsgColor.Red, MsgType.Hint);
                     return;
                 }
@@ -38,40 +31,32 @@ namespace GameSvr.GameCommand.Commands
                     PlayObject.SysMsg(CommandHelp.GamecommandMakeInCastleWarRange, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (!PlayObject.InSafeZone())
-                {
+                if (!PlayObject.InSafeZone()) {
                     PlayObject.SysMsg(CommandHelp.GamecommandMakeInSafeZoneRange, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 nCount = 1;
             }
-            for (int i = 0; i < nCount; i++)
-            {
+            for (int i = 0; i < nCount; i++) {
                 if (PlayObject.ItemList.Count >= Grobal2.MaxBagItem) return;
                 UserItem UserItem = null;
-                if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
-                {
+                if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem)) {
                     Items.StdItem stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                    if (stdItem.Price >= 15000 && !M2Share.Config.TestServer && PlayObject.Permission < 5)
-                    {
+                    if (stdItem.Price >= 15000 && !M2Share.Config.TestServer && PlayObject.Permission < 5) {
                         return;
                     }
-                    if (M2Share.RandomNumber.Random(M2Share.Config.MakeRandomAddValue) == 0)
-                    {
+                    if (M2Share.RandomNumber.Random(M2Share.Config.MakeRandomAddValue) == 0) {
                         stdItem.RandomUpgradeItem(UserItem);
                     }
-                    if (PlayObject.Permission >= Command.PermissionMax)
-                    {
+                    if (PlayObject.Permission >= Command.PermissionMax) {
                         UserItem.MakeIndex = M2Share.GetItemNumberEx(); // 制造的物品另行取得物品ID
                     }
                     PlayObject.ItemList.Add(UserItem);
                     PlayObject.SendAddItem(UserItem);
-                    if (PlayObject.Permission >= 6)
-                    {
+                    if (PlayObject.Permission >= 6) {
                         M2Share.Logger.Warn("[制造物品] " + PlayObject.ChrName + " " + sItemName + "(" + UserItem.MakeIndex + ")");
                     }
-                    if (stdItem.NeedIdentify == 1)
-                    {
+                    if (stdItem.NeedIdentify == 1) {
                         M2Share.EventSource.AddEventLog(5, PlayObject.MapName + "\09" + PlayObject.CurrX +
                            "\09" + PlayObject.CurrY + "\09" + PlayObject.ChrName + "\09" + stdItem.Name + "\09" + UserItem.MakeIndex + "\09" + "(" +
                            HUtil32.LoByte(stdItem.DC) + "/" + HUtil32.HiByte(stdItem.DC) + ")" + "(" + HUtil32.LoByte(stdItem.MC) + "/" + HUtil32.HiByte(stdItem.MC) + ")" + "(" +
@@ -81,8 +66,7 @@ namespace GameSvr.GameCommand.Commands
                            + "/" + UserItem.Desc[7] + "/" + UserItem.Desc[8] + "/" + UserItem.Desc[14] + "\09" + PlayObject.ChrName);
                     }
                 }
-                else
-                {
+                else {
                     UserItem = null;
                     PlayObject.SysMsg(string.Format(CommandHelp.GamecommandMakeItemNameNotFound, sItemName), MsgColor.Red, MsgType.Hint);
                     break;

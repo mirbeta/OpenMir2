@@ -1,23 +1,19 @@
 ﻿using GameSvr.GameCommand;
 using SystemModule.Common;
 
-namespace GameSvr.Conf
-{
-    public class GameCmdConf : ConfigFile
-    {
-        public GameCmdConf(string fileName) : base(fileName)
-        {
+namespace GameSvr.Conf {
+    public class GameCmdConf : ConfigFile {
+        public GameCmdConf(string fileName) : base(fileName) {
             Load();
         }
 
         /// <summary>
         /// 读取自定义命令配置
         /// </summary>
-        public void LoadConfig()
-        {
+        public void LoadConfig() {
             GameCommands gameCommands = CommandMgr.GameCommands;
             gameCommands.Data.CmdName = ReadWriteString("Command", "Date", gameCommands.Data.CmdName);
-            gameCommands.Data.PerMissionMin=ReadWriteByte("Permission", "Date", gameCommands.Data.PerMissionMin);
+            gameCommands.Data.PerMissionMin = ReadWriteByte("Permission", "Date", gameCommands.Data.PerMissionMin);
             gameCommands.PrvMsg.CmdName = ReadWriteString("Command", "PrvMsg", gameCommands.PrvMsg.CmdName);
             gameCommands.PrvMsg.PerMissionMin = ReadWriteByte("Permission", "PrvMsg", gameCommands.PrvMsg.PerMissionMin);
             gameCommands.AllowMsg.CmdName = ReadWriteString("Command", "AllowMsg", gameCommands.AllowMsg.CmdName);
@@ -100,7 +96,7 @@ namespace GameSvr.Conf
             gameCommands.Level.PerMissionMin = ReadWriteByte("Permission", "Level", gameCommands.Level.PerMissionMin);
             gameCommands.SabukWallGold.CmdName = ReadWriteString("Command", "SabukWallGold", gameCommands.SabukWallGold.CmdName);
             gameCommands.SabukWallGold.PerMissionMin = ReadWriteByte("Permission", "SabukWallGold", gameCommands.SabukWallGold.PerMissionMin);
-            gameCommands.Recall.CmdName = ReadWriteString("Command", "Recall",  gameCommands.Recall.CmdName);
+            gameCommands.Recall.CmdName = ReadWriteString("Command", "Recall", gameCommands.Recall.CmdName);
             gameCommands.Recall.PerMissionMin = ReadWriteByte("Permission", "Recall", gameCommands.Recall.PerMissionMin);
             gameCommands.Regoto.CmdName = ReadWriteString("Command", "ReGoto", gameCommands.Regoto.CmdName);
             gameCommands.Regoto.PerMissionMin = ReadWriteByte("Permission", "ReGoto", gameCommands.Regoto.PerMissionMin);
@@ -111,7 +107,7 @@ namespace GameSvr.Conf
             gameCommands.ShowUnit.CmdName = ReadWriteString("Command", "ShowUnit", gameCommands.ShowUnit.CmdName);
             gameCommands.ShowUnit.PerMissionMin = ReadWriteByte("Permission", "ShowUnit", gameCommands.ShowUnit.PerMissionMin);
             gameCommands.Attack.CmdName = ReadWriteString("Command", "Attack", gameCommands.Attack.CmdName);
-            gameCommands.Attack.PerMissionMin = ReadWriteByte("Permission", "Attack", gameCommands.Attack.PerMissionMin); 
+            gameCommands.Attack.PerMissionMin = ReadWriteByte("Permission", "Attack", gameCommands.Attack.PerMissionMin);
             gameCommands.Mob.CmdName = ReadWriteString("Command", "Mob", gameCommands.Mob.CmdName);
             gameCommands.Mob.PerMissionMin = ReadWriteByte("Permission", "Mob", gameCommands.Mob.PerMissionMin);
             gameCommands.MobNpc.CmdName = ReadWriteString("Command", "MobNpc", gameCommands.MobNpc.CmdName);
@@ -128,11 +124,11 @@ namespace GameSvr.Conf
             gameCommands.LotteryTicket.PerMissionMin = ReadWriteByte("Permission", "LotteryTicket", gameCommands.LotteryTicket.PerMissionMin);
             gameCommands.ReloadGuild.CmdName = ReadWriteString("Command", "ReloadGuild", gameCommands.ReloadGuild.CmdName);
             gameCommands.ReloadGuild.PerMissionMin = ReadWriteByte("Permission", "ReloadGuild", gameCommands.ReloadGuild.PerMissionMin);
-            gameCommands.ReloadLineNotice.CmdName = ReadWriteString("Command", "ReloadLineNotice",  gameCommands.ReloadLineNotice.CmdName);
+            gameCommands.ReloadLineNotice.CmdName = ReadWriteString("Command", "ReloadLineNotice", gameCommands.ReloadLineNotice.CmdName);
             gameCommands.ReloadLineNotice.PerMissionMin = ReadWriteByte("Permission", "ReloadLineNotice", gameCommands.ReloadLineNotice.PerMissionMin);
             gameCommands.ReloadAbuse.CmdName = ReadWriteString("Command", "ReloadAbuse", gameCommands.ReloadAbuse.CmdName);
             gameCommands.ReloadAbuse.PerMissionMin = ReadWriteByte("Permission", "ReloadAbuse", gameCommands.ReloadAbuse.PerMissionMin);
-            gameCommands.BackStep.CmdName = ReadWriteString("Command", "BackStep",  gameCommands.BackStep.CmdName);
+            gameCommands.BackStep.CmdName = ReadWriteString("Command", "BackStep", gameCommands.BackStep.CmdName);
             gameCommands.BackStep.PerMissionMin = ReadWriteByte("Permission", "BackStep", gameCommands.BackStep.PerMissionMin);
             gameCommands.Ball.CmdName = ReadWriteString("Command", "Ball", gameCommands.Ball.CmdName);
             gameCommands.Ball.PerMissionMin = ReadWriteByte("Permission", "Ball", gameCommands.Ball.PerMissionMin);
@@ -145,7 +141,7 @@ namespace GameSvr.Conf
             gameCommands.ChangeLuck.CmdName = ReadWriteString("Command", "ChangeLuck", gameCommands.ChangeLuck.CmdName);
             gameCommands.ChangeLuck.PerMissionMin = ReadWriteByte("Permission", "ChangeLuck", gameCommands.ChangeLuck.PerMissionMin);
             gameCommands.Hunger.CmdName = ReadWriteString("Command", "Hunger", gameCommands.Hunger.CmdName);
-            gameCommands.Hunger.PerMissionMin = ReadWriteByte("Permission", "Hunger", gameCommands.Hunger.PerMissionMin);   
+            gameCommands.Hunger.PerMissionMin = ReadWriteByte("Permission", "Hunger", gameCommands.Hunger.PerMissionMin);
             gameCommands.Hair.CmdName = ReadWriteString("Command", "Hair", gameCommands.Hair.CmdName);
             gameCommands.Hair.PerMissionMin = ReadWriteByte("Permission", "Hair", gameCommands.Hair.PerMissionMin);
             gameCommands.Training.CmdName = ReadWriteString("Command", "Training", gameCommands.Training.CmdName);
@@ -187,7 +183,7 @@ namespace GameSvr.Conf
             gameCommands.ContestPoint.CmdName = ReadWriteString("Command", "ContestPoint", gameCommands.ContestPoint.CmdName);
             gameCommands.ContestPoint.PerMissionMin = ReadWriteByte("Permission", "ContestPoint", gameCommands.ContestPoint.PerMissionMin);
             gameCommands.StartContest.CmdName = ReadWriteString("Command", "StartContest", gameCommands.StartContest.CmdName);
-            gameCommands.StartContest.PerMissionMin = ReadWriteByte("Permission", "StartContest", gameCommands.StartContest.PerMissionMin); 
+            gameCommands.StartContest.PerMissionMin = ReadWriteByte("Permission", "StartContest", gameCommands.StartContest.PerMissionMin);
             gameCommands.EndContest.CmdName = ReadWriteString("Command", "EndContest", gameCommands.EndContest.CmdName);
             gameCommands.EndContest.PerMissionMin = ReadWriteByte("Permission", "EndContest", gameCommands.EndContest.PerMissionMin);
             gameCommands.Announcement.CmdName = ReadWriteString("Command", "Announcement", gameCommands.Announcement.CmdName);
@@ -243,7 +239,7 @@ namespace GameSvr.Conf
             gameCommands.RefineWeapon.PerMissionMin = ReadWriteByte("Permission", "RefineWeapon", gameCommands.RefineWeapon.PerMissionMin);
             gameCommands.ReloadAdmin.CmdName = ReadWriteString("Command", "ReloadAdmin", gameCommands.ReloadAdmin.CmdName);
             gameCommands.ReloadAdmin.PerMissionMin = ReadWriteByte("Permission", "ReloadAdmin", gameCommands.ReloadAdmin.PerMissionMin);
-            gameCommands.ReloadNpc.CmdName = ReadWriteString("Command", "ReloadNpc", gameCommands.ReloadNpc.CmdName);              
+            gameCommands.ReloadNpc.CmdName = ReadWriteString("Command", "ReloadNpc", gameCommands.ReloadNpc.CmdName);
             gameCommands.ReloadNpc.PerMissionMin = ReadWriteByte("Permission", "ReloadNpc", gameCommands.ReloadNpc.PerMissionMin);
             gameCommands.ReloadManage.CmdName = ReadWriteString("Command", "ReloadManage", gameCommands.ReloadManage.CmdName);
             gameCommands.ReloadManage.PerMissionMin = ReadWriteByte("Permission", "ReloadManage", gameCommands.ReloadManage.PerMissionMin);

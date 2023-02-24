@@ -1,18 +1,14 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 播放特效
     /// </summary>
     [Command("ShowEffect", "播放特效", 10)]
-    public class ShowEffectCommand : GameCommand
-    {
+    public class ShowEffectCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (@Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (@Params == null) {
                 return;
             }
             string sEffect = @Params.Length > 0 ? @Params[0] : "";

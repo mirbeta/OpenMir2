@@ -3,189 +3,150 @@ using System.Collections;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.RobotPlay
-{
-    public partial class RobotPlayObject
-    {
-        public MapWalkXY ActThink_FindGoodPathA(MapWalkXY[] WalkStep, int nRange, int nType)
-        {
+namespace GameSvr.RobotPlay {
+    public partial class RobotPlayObject {
+        public MapWalkXY ActThink_FindGoodPathA(MapWalkXY[] WalkStep, int nRange, int nType) {
             MapWalkXY result = null;
             int n10 = int.MaxValue;
             int nMastrRange;
             int nMonCount;
             MapWalkXY MapWalkXY = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (WalkStep[i].nWalkStep > 0 && Math.Abs(WalkStep[i].nX - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].nY - TargetCret.CurrY) >= nRange)
-                {
-                    if (WalkStep[i].nMonCount < n10)
-                    {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (WalkStep[i].nWalkStep > 0 && Math.Abs(WalkStep[i].nX - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].nY - TargetCret.CurrY) >= nRange) {
+                    if (WalkStep[i].nMonCount < n10) {
                         n10 = WalkStep[i].nMonCount;
                         MapWalkXY = WalkStep[i];
                     }
                 }
             }
-            if (MapWalkXY != null && Master != null)
-            {
+            if (MapWalkXY != null && Master != null) {
                 nMonCount = MapWalkXY.nMonCount;
                 nMastrRange = MapWalkXY.nMastrRange;
                 n10 = int.MaxValue;
                 MapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
-                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-                {
-                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount && Math.Abs(WalkStep[i].nX - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].nY - TargetCret.CurrY) >= nRange)
-                    {
-                        if (WalkStep[i].nMastrRange < n10 && WalkStep[i].nMastrRange < nMastrRange)
-                        {
+                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount && Math.Abs(WalkStep[i].nX - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].nY - TargetCret.CurrY) >= nRange) {
+                        if (WalkStep[i].nMastrRange < n10 && WalkStep[i].nMastrRange < nMastrRange) {
                             n10 = WalkStep[i].nMastrRange;
                             MapWalkXY = WalkStep[i];
                         }
                     }
                 }
-                if (MapWalkXY == null)
-                {
+                if (MapWalkXY == null) {
                     MapWalkXY = MapWalkXYA;
                 }
             }
-            if (MapWalkXY != null)
-            {
+            if (MapWalkXY != null) {
                 result = MapWalkXY;
             }
             return result;
         }
 
-        public MapWalkXY ActThink_FindGoodPathB(MapWalkXY[] WalkStep, int nType)
-        {
+        public MapWalkXY ActThink_FindGoodPathB(MapWalkXY[] WalkStep, int nType) {
             MapWalkXY result = null;
             int nMastrRange;
             int nMonCount;
             MapWalkXY MapWalkXY = null;
             int n10 = int.MaxValue;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (WalkStep[i].nWalkStep > 0)
-                {
-                    if (WalkStep[i].nMonCount < n10)
-                    {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (WalkStep[i].nWalkStep > 0) {
+                    if (WalkStep[i].nMonCount < n10) {
                         n10 = WalkStep[i].nMonCount;
                         MapWalkXY = WalkStep[i];
                     }
                 }
             }
-            if (MapWalkXY != null && Master != null)
-            {
+            if (MapWalkXY != null && Master != null) {
                 nMonCount = MapWalkXY.nMonCount;
                 nMastrRange = MapWalkXY.nMastrRange;
                 n10 = int.MaxValue;
                 MapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
-                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-                {
-                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount)
-                    {
-                        if (WalkStep[i].nMastrRange < n10 && WalkStep[i].nMastrRange < nMastrRange)
-                        {
+                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount) {
+                        if (WalkStep[i].nMastrRange < n10 && WalkStep[i].nMastrRange < nMastrRange) {
                             n10 = WalkStep[i].nMastrRange;
                             MapWalkXY = WalkStep[i];
                         }
                     }
                 }
-                if (MapWalkXY == null)
-                {
+                if (MapWalkXY == null) {
                     MapWalkXY = MapWalkXYA;
                 }
             }
-            if (MapWalkXY != null)
-            {
+            if (MapWalkXY != null) {
                 result = MapWalkXY;
             }
             return result;
         }
 
-        public MapWalkXY ActThink_FindMinRange(MapWalkXY[] WalkStep)
-        {
+        public MapWalkXY ActThink_FindMinRange(MapWalkXY[] WalkStep) {
             MapWalkXY result = null;
             int n10 = int.MaxValue;
             int n1C;
             int nMonCount;
             MapWalkXY MapWalkXY = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (WalkStep[i].nWalkStep > 0)
-                {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (WalkStep[i].nWalkStep > 0) {
                     n1C = Math.Abs(WalkStep[i].nX - TargetCret.CurrX) + Math.Abs(WalkStep[i].nY - TargetCret.CurrY);
-                    if (n1C < n10)
-                    {
+                    if (n1C < n10) {
                         n10 = n1C;
                         MapWalkXY = WalkStep[i];
                     }
                 }
             }
-            if (MapWalkXY != null)
-            {
+            if (MapWalkXY != null) {
                 nMonCount = MapWalkXY.nMonCount;
                 MapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
-                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-                {
-                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount)
-                    {
+                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                    if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount) {
                         n1C = Math.Abs(WalkStep[i].nX - TargetCret.CurrX) + Math.Abs(WalkStep[i].nY - TargetCret.CurrY);
-                        if (n1C <= n10)
-                        {
+                        if (n1C <= n10) {
                             n10 = n1C;
                             MapWalkXY = WalkStep[i];
                         }
                     }
                 }
-                if (MapWalkXY == null)
-                {
+                if (MapWalkXY == null) {
                     MapWalkXY = MapWalkXYA;
                 }
             }
-            if (MapWalkXY != null)
-            {
+            if (MapWalkXY != null) {
                 result = MapWalkXY;
             }
             return result;
         }
 
-        public bool ActThink_CanWalkNextPosition(short nX, short nY, int nRange, byte btDir, bool boFlag)
-        {
+        public bool ActThink_CanWalkNextPosition(short nX, short nY, int nRange, byte btDir, bool boFlag) {
             // 检测下一步在不在攻击位
             short nCurrX = 0;
             short nCurrY = 0;
             bool result = false;
-            if (Envir.GetNextPosition(nX, nY, btDir, 1, ref nCurrX, ref nCurrY) && CanMove(nX, nY, nCurrX, nCurrY, false) && !boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
-            {
+            if (Envir.GetNextPosition(nX, nY, btDir, 1, ref nCurrX, ref nCurrY) && CanMove(nX, nY, nCurrX, nCurrY, false) && !boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) {
                 result = true;
                 return result;
             }
-            if (Envir.GetNextPosition(nX, nY, btDir, 2, ref nCurrX, ref nCurrY) && CanMove(nX, nY, nCurrX, nCurrY, false) && !boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
-            {
+            if (Envir.GetNextPosition(nX, nY, btDir, 2, ref nCurrX, ref nCurrY) && CanMove(nX, nY, nCurrX, nCurrY, false) && !boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) {
                 result = true;
                 return result;
             }
             return result;
         }
 
-        public bool ActThink_FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag)
-        {
+        public bool ActThink_FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag) {
             bool result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
-                {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
-                    {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
@@ -199,19 +160,15 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public bool ActThink__FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag)
-        {
+        public bool ActThink__FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag) {
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
             bool result = false;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
-                {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
-                    {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag)) {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
@@ -225,19 +182,15 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        private bool ActThink_FindPosOfTarget(MapWalkXY[] WalkStep, short nTargetX, short nTargetY, int nRange, bool boFlag)
-        {
+        private bool ActThink_FindPosOfTarget(MapWalkXY[] WalkStep, short nTargetX, short nTargetY, int nRange, bool boFlag) {
             bool result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (Envir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && Envir.CanWalkEx(nCurrX, nCurrY, false))
-                {
-                    if ((!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) && IsGotoXY(CurrX, CurrY, nCurrX, nCurrY))
-                    {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (Envir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && Envir.CanWalkEx(nCurrX, nCurrY, false)) {
+                    if ((!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) && IsGotoXY(CurrX, CurrY, nCurrX, nCurrY)) {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
@@ -251,19 +204,15 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public bool ActThink_FindPos(MapWalkXY[] WalkStep, int nRange, bool boFlag)
-        {
+        public bool ActThink_FindPos(MapWalkXY[] WalkStep, int nRange, bool boFlag) {
             bool result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
-                {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
-                    {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
@@ -274,17 +223,13 @@ namespace GameSvr.RobotPlay
                     }
                 }
             }
-            if (result)
-            {
+            if (result) {
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
-                {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
-                    {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
@@ -298,19 +243,15 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public bool ActThink__FindPos(MapWalkXY[] WalkStep, int nRange, bool boFlag)
-        {
+        public bool ActThink__FindPos(MapWalkXY[] WalkStep, int nRange, bool boFlag) {
             bool result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
-                {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
-                    {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag)) {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
@@ -321,17 +262,13 @@ namespace GameSvr.RobotPlay
                     }
                 }
             }
-            if (result)
-            {
+            if (result) {
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++)
-            {
-                if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
-                {
-                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
-                    {
+            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
+                    if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag)) {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
@@ -345,41 +282,31 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public bool ActThink_WalkToRightPos(int wMagicID)
-        {
+        public bool ActThink_WalkToRightPos(int wMagicID) {
             bool boFlag;
             int nRange;
             MapWalkXY[] WalkStep = null;
             MapWalkXY MapWalkXY;
             bool result = false;
-            try
-            {
+            try {
                 boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || Job == 0;
-                if (Job == 0 || wMagicID <= 0)
-                {
+                if (Job == 0 || wMagicID <= 0) {
                     nRange = 1;
-                    if (wMagicID == 43)
-                    {
+                    if (wMagicID == 43) {
                         nRange = 4;
                     }
-                    if (wMagicID == 12)
-                    {
+                    if (wMagicID == 12) {
                         nRange = 2;
                     }
-                    if (new ArrayList(new[] { 60, 61, 62 }).Contains(wMagicID))
-                    {
+                    if (new ArrayList(new[] { 60, 61, 62 }).Contains(wMagicID)) {
                         nRange = 6;
                     }
-                    for (int i = nRange; i >= 1; i--)
-                    {
-                        if (ActThink_FindPosOfTarget(WalkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
-                        {
+                    for (int i = nRange; i >= 1; i--) {
+                        if (ActThink_FindPosOfTarget(WalkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag)) {
                             MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
-                            if (MapWalkXY.nWalkStep > 0)
-                            {
+                            if (MapWalkXY.nWalkStep > 0) {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
-                                if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                                {
+                                if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
                                     m_RunPos.btDirection = 0;
                                     result = true;
                                     return result;
@@ -387,23 +314,17 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    for (int i = 2; i >= 1; i--)
-                    {
-                        if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
-                        {
-                            if (Master != null)
-                            {
+                    for (int i = 2; i >= 1; i--) {
+                        if (ActThink_FindPosOfSelf(WalkStep, i, boFlag)) {
+                            if (Master != null) {
                                 MapWalkXY = ActThink_FindGoodPathB(WalkStep, 1);
                             }
-                            else
-                            {
+                            else {
                                 MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                             }
-                            if (MapWalkXY.nWalkStep > 0)
-                            {
+                            if (MapWalkXY.nWalkStep > 0) {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
-                                if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                                {
+                                if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
                                     m_RunPos.btDirection = 0;
                                     result = true;
                                     return result;
@@ -412,26 +333,19 @@ namespace GameSvr.RobotPlay
                         }
                     }
                 }
-                else
-                {
-                    if (wMagicID > 0)
-                    {
+                else {
+                    if (wMagicID > 0) {
                         nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
                     }
-                    else
-                    {
+                    else {
                         nRange = 1;
                     }
                     boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
-                    for (int i = 2; i >= 1; i--)
-                    {
-                        if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
-                        {
+                    for (int i = 2; i >= 1; i--) {
+                        if (ActThink_FindPosOfSelf(WalkStep, i, boFlag)) {
                             MapWalkXY = ActThink_FindGoodPathA(WalkStep, nRange, 0);
-                            if (MapWalkXY.nWalkStep > 0)
-                            {
-                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                                {
+                            if (MapWalkXY.nWalkStep > 0) {
+                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
                                     m_RunPos.btDirection = 0;
                                     result = true;
                                     return result;
@@ -439,15 +353,11 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    for (int i = 2; i >= 1; i--)
-                    {
-                        if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
-                        {
+                    for (int i = 2; i >= 1; i--) {
+                        if (ActThink__FindPosOfSelf(WalkStep, i, boFlag)) {
                             MapWalkXY = ActThink_FindMinRange(WalkStep);
-                            if (MapWalkXY.nWalkStep > 0)
-                            {
-                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                                {
+                            if (MapWalkXY.nWalkStep > 0) {
+                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
                                     m_RunPos.btDirection = 0;
                                     result = true;
                                     return result;
@@ -455,15 +365,11 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    for (int i = nRange; i >= 1; i--)
-                    {
-                        if (ActThink_FindPosOfTarget(WalkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
-                        {
+                    for (int i = nRange; i >= 1; i--) {
+                        if (ActThink_FindPosOfTarget(WalkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag)) {
                             MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
-                            if (MapWalkXY.nWalkStep > 0)
-                            {
-                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                                {
+                            if (MapWalkXY.nWalkStep > 0) {
+                                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
                                     m_RunPos.btDirection = 0;
                                     result = true;
                                     return result;
@@ -473,15 +379,13 @@ namespace GameSvr.RobotPlay
                     }
                 }
             }
-            catch
-            {
+            catch {
                 M2Share.Logger.Error("WalkToRightPos:" + ChrName);
             }
             return result;
         }
 
-        public bool ActThink_AvoidTarget(short wMagicID)
-        {
+        public bool ActThink_AvoidTarget(short wMagicID) {
             short nX = 0;
             short nY = 0;
             bool boFlag;
@@ -491,23 +395,16 @@ namespace GameSvr.RobotPlay
             boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
             MapWalkXY MapWalkXY;
-            for (int i = nRange; i >= 1; i--)
-            {
-                if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
-                {
+            for (int i = nRange; i >= 1; i--) {
+                if (ActThink_FindPosOfSelf(WalkStep, i, boFlag)) {
                     MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
-                    if (MapWalkXY.nWalkStep > 0)
-                    {
+                    if (MapWalkXY.nWalkStep > 0) {
                         btDir = M2Share.GetNextDirection(CurrX, CurrY, MapWalkXY.nX, MapWalkXY.nY);
-                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                        {
-                            if (Race != 108)
-                            {
-                                for (int j = nRange; j >= 1; j--)
-                                {
+                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
+                            if (Race != 108) {
+                                for (int j = nRange; j >= 1; j--) {
                                     // 再跑1次
-                                    if (Envir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount)
-                                    {
+                                    if (Envir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount) {
                                         GotoNextOne(nX, nY, Race != 108);
                                         break;
                                     }
@@ -520,21 +417,15 @@ namespace GameSvr.RobotPlay
                     }
                 }
             }
-            for (int i = nRange; i >= 1; i--)
-            {
-                if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
-                {
+            for (int i = nRange; i >= 1; i--) {
+                if (ActThink__FindPosOfSelf(WalkStep, i, boFlag)) {
                     MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
-                    if (MapWalkXY.nWalkStep > 0)
-                    {
+                    if (MapWalkXY.nWalkStep > 0) {
                         btDir = M2Share.GetNextDirection(CurrX, CurrY, MapWalkXY.nX, MapWalkXY.nY);
-                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                        {
-                            for (int j = nRange; j >= 1; j--)
-                            {
+                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
+                            for (int j = nRange; j >= 1; j--) {
                                 // 再跑1次
-                                if (Envir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount)
-                                {
+                                if (Envir.GetNextPosition(MapWalkXY.nX, MapWalkXY.nY, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.nMonCount) {
                                     MapWalkXY.nX = nX;
                                     MapWalkXY.nY = nY;
                                     GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108);
@@ -551,22 +442,17 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public bool ActThink_FollowTarget(short wMagicID)
-        {
+        public bool ActThink_FollowTarget(short wMagicID) {
             int nRange = 2;
             MapWalkXY[] WalkStep = null;
             MapWalkXY MapWalkXY;
             bool result = false;
             bool boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
-            for (int i = nRange; i >= 1; i--)
-            {
-                if (ActThink_FindPosOfSelf(WalkStep, i, boFlag))
-                {
+            for (int i = nRange; i >= 1; i--) {
+                if (ActThink_FindPosOfSelf(WalkStep, i, boFlag)) {
                     MapWalkXY = ActThink_FindMinRange(WalkStep);
-                    if (MapWalkXY.nWalkStep > 0)
-                    {
-                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                        {
+                    if (MapWalkXY.nWalkStep > 0) {
+                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
                             m_RunPos.btDirection = 0;
                             result = true;
                             return result;
@@ -574,15 +460,11 @@ namespace GameSvr.RobotPlay
                     }
                 }
             }
-            for (int i = nRange; i >= 1; i--)
-            {
-                if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
-                {
+            for (int i = nRange; i >= 1; i--) {
+                if (ActThink__FindPosOfSelf(WalkStep, i, boFlag)) {
                     MapWalkXY = ActThink_FindMinRange(WalkStep);
-                    if (MapWalkXY.nWalkStep > 0)
-                    {
-                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                        {
+                    if (MapWalkXY.nWalkStep > 0) {
+                        if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
                             m_RunPos.btDirection = 0;
                             result = true;
                             return result;
@@ -593,23 +475,18 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public bool ActThink_MotaeboPos(short wMagicID)
-        {
+        public bool ActThink_MotaeboPos(short wMagicID) {
             bool result = false;
             short nTargetX = 0;
             short nTargetY = 0;
             byte btNewDir;
-            if (TargetCret == null || Master == null)
-            {
+            if (TargetCret == null || Master == null) {
                 return result;
             }
-            if (GetPoseCreate() == TargetCret || TargetCret.GetPoseCreate() == this)
-            {
+            if (GetPoseCreate() == TargetCret || TargetCret.GetPoseCreate() == this) {
                 btNewDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
-                if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, btNewDir, 1, ref nTargetX, ref nTargetY))
-                {
-                    if (Envir.CanWalk(nTargetX, nTargetY, true))
-                    {
+                if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, btNewDir, 1, ref nTargetX, ref nTargetY)) {
+                    if (Envir.CanWalk(nTargetX, nTargetY, true)) {
                         result = true;
                         return result;
                     }
@@ -619,14 +496,12 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public MapWalkXY ActThink_FindPosOfDir(byte nDir, int nRange, bool boFlag)
-        {
+        public MapWalkXY ActThink_FindPosOfDir(byte nDir, int nRange, bool boFlag) {
             MapWalkXY result = null;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false) && (boFlag && CanLineAttack(nCurrX, nCurrY) || !boFlag) && IsGotoXY(CurrX, CurrY, nCurrX, nCurrY))
-            {
+            if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false) && (boFlag && CanLineAttack(nCurrX, nCurrY) || !boFlag) && IsGotoXY(CurrX, CurrY, nCurrX, nCurrY)) {
                 result = new MapWalkXY();
                 result.nWalkStep = nRange;
                 result.nX = nCurrX;
@@ -638,13 +513,10 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public static byte ActThink_RunPosAttack_GetNextRunPos(byte btDir, bool boTurn)
-        {
+        public static byte ActThink_RunPosAttack_GetNextRunPos(byte btDir, bool boTurn) {
             byte result = 0;
-            if (boTurn)
-            {
-                switch (btDir)
-                {
+            if (boTurn) {
+                switch (btDir) {
                     case Grobal2.DR_UP:
                         result = Grobal2.DR_RIGHT;
                         break;
@@ -671,10 +543,8 @@ namespace GameSvr.RobotPlay
                         break;
                 }
             }
-            else
-            {
-                switch (btDir)
-                {
+            else {
+                switch (btDir) {
                     case Grobal2.DR_UP:
                         result = Grobal2.DR_LEFT;
                         break;
@@ -704,8 +574,7 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public bool ActThink_RunPosAttack(int wMagicID)
-        {
+        public bool ActThink_RunPosAttack(int wMagicID) {
             MapWalkXY[] WalkStep = new MapWalkXY[2];
             MapWalkXY MapWalkXY;
             int nRange;
@@ -716,26 +585,21 @@ namespace GameSvr.RobotPlay
             byte btNewDir1 = ActThink_RunPosAttack_GetNextRunPos(btDir, true);
             byte btNewDir2 = ActThink_RunPosAttack_GetNextRunPos(btDir, false);
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 2, 0);
-            if (Job == 0)
-            {
+            if (Job == 0) {
                 nRange = 1;
-                if (wMagicID == 43)
-                {
+                if (wMagicID == 43) {
                     nRange = 2;
                 }
-                if (wMagicID == 12)
-                {
+                if (wMagicID == 12) {
                     nRange = 2;
                 }
-                if (new ArrayList(new[] { 60, 61, 62 }).Contains(wMagicID))
-                {
+                if (new ArrayList(new[] { 60, 61, 62 }).Contains(wMagicID)) {
                     nRange = 6;
                 }
                 WalkStep[0] = ActThink_FindPosOfDir(btNewDir1, nRange, true);
                 WalkStep[1] = ActThink_FindPosOfDir(btNewDir2, nRange, true);
             }
-            else
-            {
+            else {
                 nRange = 2;
                 boFlag = false;
                 WalkStep[0] = ActThink_FindPosOfDir(btNewDir1, nRange, boFlag);
@@ -743,103 +607,79 @@ namespace GameSvr.RobotPlay
             }
             nNearTargetCount = GetNearTargetCount(CurrX, CurrY);
             MapWalkXY = null;
-            if (WalkStep[0].nWalkStep > 0 && WalkStep[1].nWalkStep > 0)
-            {
-                if (m_RunPos.btDirection > 0)
-                {
+            if (WalkStep[0].nWalkStep > 0 && WalkStep[1].nWalkStep > 0) {
+                if (m_RunPos.btDirection > 0) {
                     MapWalkXY = WalkStep[1];
                 }
-                else
-                {
+                else {
                     MapWalkXY = WalkStep[0];
                 }
-                if (nNearTargetCount < WalkStep[0].nMonCount && nNearTargetCount < WalkStep[1].nMonCount)
-                {
+                if (nNearTargetCount < WalkStep[0].nMonCount && nNearTargetCount < WalkStep[1].nMonCount) {
                     MapWalkXY = null;
                 }
-                else if (m_RunPos.btDirection > 0 && nNearTargetCount < WalkStep[1].nMonCount)
-                {
+                else if (m_RunPos.btDirection > 0 && nNearTargetCount < WalkStep[1].nMonCount) {
                     MapWalkXY = null;
                 }
-                else if (m_RunPos.btDirection <= 0 && nNearTargetCount < WalkStep[0].nMonCount)
-                {
+                else if (m_RunPos.btDirection <= 0 && nNearTargetCount < WalkStep[0].nMonCount) {
                     MapWalkXY = null;
                 }
-                if (nNearTargetCount > 0 && MapWalkXY != null && MapWalkXY.nMonCount > nNearTargetCount)
-                {
+                if (nNearTargetCount > 0 && MapWalkXY != null && MapWalkXY.nMonCount > nNearTargetCount) {
                     MapWalkXY = null;
                 }
             }
-            else if (WalkStep[0].nWalkStep > 0)
-            {
+            else if (WalkStep[0].nWalkStep > 0) {
                 MapWalkXY = WalkStep[0];
-                if (nNearTargetCount < WalkStep[0].nMonCount)
-                {
+                if (nNearTargetCount < WalkStep[0].nMonCount) {
                     MapWalkXY = null;
                 }
                 m_RunPos.btDirection = 0;
             }
-            else if (WalkStep[1].nWalkStep > 0)
-            {
+            else if (WalkStep[1].nWalkStep > 0) {
                 MapWalkXY = WalkStep[1];
-                if (nNearTargetCount < WalkStep[1].nMonCount)
-                {
+                if (nNearTargetCount < WalkStep[1].nMonCount) {
                     MapWalkXY = null;
                 }
                 m_RunPos.btDirection = 1;
             }
-            if (MapWalkXY != null)
-            {
-                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108))
-                {
+            if (MapWalkXY != null) {
+                if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
                     result = true;
                 }
             }
-            if (!result)
-            {
+            if (!result) {
                 m_RunPos.nAttackCount = 0;
             }
             return result;
         }
 
-        private bool ActThink(short wMagicID)
-        {
+        private bool ActThink(short wMagicID) {
             bool result = false;
             int nCode = 0;
             int nThinkCount = 0;
-            try
-            {
-                while (true)
-                {
-                    if (TargetCret == null || wMagicID > 255)
-                    {
+            try {
+                while (true) {
+                    if (TargetCret == null || wMagicID > 255) {
                         break;
                     }
                     nThinkCount = nThinkCount + 1;
                     nCode = DoThink(wMagicID);
-                    switch (Job)
-                    {
+                    switch (Job) {
                         case 0:
-                            switch (nCode)
-                            {
+                            switch (nCode) {
                                 case 2:
-                                    if (ActThink_WalkToRightPos(wMagicID))
-                                    {
+                                    if (ActThink_WalkToRightPos(wMagicID)) {
                                         result = true;
                                     }
-                                    else
-                                    {
+                                    else {
                                         DelTargetCreat();
-                                        if (nThinkCount < 2)
-                                        {
+                                        if (nThinkCount < 2) {
                                             SearchTarget();
                                             continue;
                                         }
                                     }
                                     break;
                                 case 5:
-                                    if (ActThink_RunPosAttack(wMagicID))
-                                    {
+                                    if (ActThink_RunPosAttack(wMagicID)) {
                                         result = true;
                                     }
 
@@ -848,21 +688,17 @@ namespace GameSvr.RobotPlay
                             break;
                         case PlayJob.Wizard:
                         case PlayJob.Taoist:
-                            switch (nCode)
-                            {
+                            switch (nCode) {
                                 case 1:
                                     result = ActThink_AvoidTarget(wMagicID);
                                     break;
                                 case 2:
-                                    if (ActThink_FollowTarget(wMagicID))
-                                    {
+                                    if (ActThink_FollowTarget(wMagicID)) {
                                         result = true;
                                     }
-                                    else
-                                    {
+                                    else {
                                         DelTargetCreat();
-                                        if (nThinkCount < 2)
-                                        {
+                                        if (nThinkCount < 2) {
                                             SearchTarget();
                                             continue;
                                         }
@@ -870,15 +706,12 @@ namespace GameSvr.RobotPlay
                                     break;
                                 case 3:
                                 case 4:
-                                    if (ActThink_WalkToRightPos(wMagicID))
-                                    {
+                                    if (ActThink_WalkToRightPos(wMagicID)) {
                                         result = true;
                                     }
-                                    else
-                                    {
+                                    else {
                                         DelTargetCreat();
-                                        if (nThinkCount < 2)
-                                        {
+                                        if (nThinkCount < 2) {
                                             SearchTarget();
                                             continue;
                                         }
@@ -894,8 +727,7 @@ namespace GameSvr.RobotPlay
                     break;
                 }
             }
-            catch
-            {
+            catch {
                 M2Share.Logger.Error(Format("RobotPlayObject::ActThink Name:{0} Code:{1} ", new object[] { ChrName, nCode }));
             }
             return result;

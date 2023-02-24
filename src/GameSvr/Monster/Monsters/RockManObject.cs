@@ -1,14 +1,10 @@
-﻿namespace GameSvr.Monster.Monsters
-{
-    public class RockManObject : AtMonster
-    {
-        public RockManObject() : base()
-        {
+﻿namespace GameSvr.Monster.Monsters {
+    public class RockManObject : AtMonster {
+        public RockManObject() : base() {
             HideMode = true;
         }
 
-        public override void Run()
-        {
+        public override void Run() {
             base.Run();
         }
     }

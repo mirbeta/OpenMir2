@@ -1,19 +1,14 @@
 ﻿using SystemModule.Common;
 
-namespace GameSvr.Conf
-{
-    public class GameSettingConf : ConfigFile
-    {
-        public GameSettingConf(string fileName) : base(fileName)
-        {
+namespace GameSvr.Conf {
+    public class GameSettingConf : ConfigFile {
+        public GameSettingConf(string fileName) : base(fileName) {
             Load();
         }
 
-        public void LoadConfig()
-        {
+        public void LoadConfig() {
             int nInteger = ReadWriteInteger("Config", "WhisperRecord", -1);  //游戏私聊
-            if (nInteger <= -1)
-            {
+            if (nInteger <= -1) {
                 WriteBool("Config", "WhisperRecord", M2Share.Config.ClientConf.boWhisperRecord);
             }
 
@@ -61,8 +56,7 @@ namespace GameSvr.Conf
 
 
             string sString = ReadWriteString("Config", "BadManHomeMap", "");
-            if (string.IsNullOrEmpty(sString))
-            {
+            if (string.IsNullOrEmpty(sString)) {
                 WriteString("Config", "BadManHomeMap", "3");
             }
             nInteger = ReadWriteInteger("Config", "BadManStartX", -1);
@@ -71,8 +65,7 @@ namespace GameSvr.Conf
             if (nInteger <= -1) WriteInteger("Config", "BadManStartY", Settings.BADMANSTARTY);
 
             sString = ReadWriteString("Config", "RECHARGINGMAP", ""); //充值地图
-            if (string.IsNullOrEmpty(sString))
-            {
+            if (string.IsNullOrEmpty(sString)) {
                 WriteString("Config", "RECHARGINGMAP", "kaiqu");
             }
 

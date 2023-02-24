@@ -9,35 +9,27 @@ using SystemModule.Enums;
 using SystemModule.Extensions;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.DataSource
-{
-    public class CommonDB
-    {
+namespace GameSvr.DataSource {
+    public class CommonDB {
         private IDbConnection _dbConnection;
 
-        public int LoadItemsDB()
-        {
+        public int LoadItemsDB() {
             int result = -1;
             int Idx;
             StdItem Item;
             const string sSQLString = "SELECT * FROM stditems";
-            try
-            {
+            try {
                 HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
-                for (int i = 0; i < M2Share.WorldEngine.StdItemList.Count; i++)
-                {
+                for (int i = 0; i < M2Share.WorldEngine.StdItemList.Count; i++) {
                     M2Share.WorldEngine.StdItemList[i] = null;
                 }
                 M2Share.WorldEngine.StdItemList.Clear();
                 result = -1;
-                if (!Open())
-                {
+                if (!Open()) {
                     return result;
                 }
-                using (IDataReader dr = Query(sSQLString))
-                {
-                    while (dr.Read())
-                    {
+                using (IDataReader dr = Query(sSQLString)) {
+                    while (dr.Read()) {
                         Item = new StdItem();
                         Idx = dr.GetInt32("ID");
                         Item.Name = dr.GetString("NAME");
@@ -83,13 +75,11 @@ namespace GameSvr.DataSource
                         Item.ItemType = dr.GetByte("ITEMTYPE");
                         Item.ItemSet = dr.GetUInt16("ITEMSET");
                         Item.Reference = dr.GetString("REFERENCE");
-                        if (M2Share.WorldEngine.StdItemList.Count <= Idx)
-                        {
+                        if (M2Share.WorldEngine.StdItemList.Count <= Idx) {
                             M2Share.WorldEngine.StdItemList.Add(Item);
                             result = 1;
                         }
-                        else
-                        {
+                        else {
                             M2Share.Logger.Error($"加载物品(Idx:{Idx} Name:{Item.Name})数据失败!!!");
                             result = -100;
                             return result;
@@ -101,38 +91,30 @@ namespace GameSvr.DataSource
                 M2Share.GameLogGameGold = M2Share.GetGameLogItemNameList(M2Share.Config.GameGoldName) == 1;
                 M2Share.GameLogGamePoint = M2Share.GetGameLogItemNameList(M2Share.Config.GamePointName) == 1;
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 M2Share.Logger.Error(ex.StackTrace);
                 return result;
             }
-            finally
-            {
+            finally {
                 Close();
                 HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
             }
             return result;
         }
 
-        public int LoadMagicDB()
-        {
+        public int LoadMagicDB() {
             MagicInfo Magic;
             const string sSQLString = "select * from magics";
             int result = -1;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
-            try
-            {
+            try {
                 M2Share.WorldEngine.SwitchMagicList();
-                if (!Open())
-                {
+                if (!Open()) {
                     return result;
                 }
-                using (IDataReader dr = Query(sSQLString))
-                {
-                    while (dr.Read())
-                    {
-                        Magic = new MagicInfo
-                        {
+                using (IDataReader dr = Query(sSQLString)) {
+                    while (dr.Read()) {
+                        Magic = new MagicInfo {
                             MagicId = dr.GetUInt16("MagId"),
                             MagicName = dr.GetString("MagName"),
                             EffectType = (byte)dr.GetInt32("EffectType"),
@@ -156,49 +138,39 @@ namespace GameSvr.DataSource
                         Magic.DefPower = (byte)dr.GetInt32("DefPower");
                         Magic.DefMaxPower = (byte)dr.GetInt32("DefMaxPower");
                         Magic.Desc = dr.GetString("Descr");
-                        if (Magic.MagicId > 0)
-                        {
+                        if (Magic.MagicId > 0) {
                             M2Share.WorldEngine.MagicList.Add(Magic);
                         }
-                        else
-                        {
+                        else {
                             Magic = null;
                         }
                         result = 1;
                     }
                 }
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 M2Share.Logger.Error(ex.StackTrace);
             }
-            finally
-            {
+            finally {
                 Close();
                 HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
             }
             return result;
         }
 
-        public int LoadMonsterDB()
-        {
+        public int LoadMonsterDB() {
             int result = 0;
             MonsterInfo Monster;
             const string sSQLString = "select * from monsters";
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
-            try
-            {
+            try {
                 M2Share.WorldEngine.MonsterList.Clear();
-                if (!Open())
-                {
+                if (!Open()) {
                     return result;
                 }
-                using (IDataReader dr = Query(sSQLString))
-                {
-                    while (dr.Read())
-                    {
-                        Monster = new MonsterInfo
-                        {
+                using (IDataReader dr = Query(sSQLString)) {
+                    while (dr.Read()) {
+                        Monster = new MonsterInfo {
                             ItemList = new List<MonsterDropItem>(),
                             Name = dr.GetString("NAME").Trim(),
                             Race = (byte)dr.GetInt32("Race"),
@@ -210,13 +182,11 @@ namespace GameSvr.DataSource
                             Exp = dr.GetInt32("Exp")
                         };
                         // 城门或城墙的状态跟HP值有关，如果HP异常，将导致城墙显示不了
-                        if (Monster.Race == ActorRace.SabukWall || Monster.Race == ActorRace.SabukDoor)
-                        {
+                        if (Monster.Race == ActorRace.SabukWall || Monster.Race == ActorRace.SabukDoor) {
                             // 如果为城墙或城门由HP不加倍
                             Monster.HP = dr.GetUInt16("HP");
                         }
-                        else
-                        {
+                        else {
                             Monster.HP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.Config.MonsterPowerRate / 10));
                         }
                         Monster.MP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.Config.MonsterPowerRate / 10));
@@ -232,18 +202,15 @@ namespace GameSvr.DataSource
                         Monster.WalkStep = (ushort)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
                         Monster.WalkWait = (ushort)dr.GetInt32("WalkWait");
                         Monster.AttackSpeed = (ushort)dr.GetInt32("ATTACK_SPD");
-                        if (Monster.WalkSpeed < 200)
-                        {
+                        if (Monster.WalkSpeed < 200) {
                             Monster.WalkSpeed = 200;
                         }
-                        if (Monster.AttackSpeed < 200)
-                        {
+                        if (Monster.AttackSpeed < 200) {
                             Monster.AttackSpeed = 200;
                         }
                         Monster.ItemList = null;
                         M2Share.LocalDb.LoadMonitems(Monster.Name, ref Monster.ItemList);
-                        if (M2Share.WorldEngine.MonsterList.ContainsKey(Monster.Name))
-                        {
+                        if (M2Share.WorldEngine.MonsterList.ContainsKey(Monster.Name)) {
                             M2Share.Logger.Error($"怪物名称[{Monster.Name}]重复,请确认数据是否正常.");
                             continue;
                         }
@@ -252,8 +219,7 @@ namespace GameSvr.DataSource
                     }
                 }
             }
-            finally
-            {
+            finally {
                 Close();
                 HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
             }
@@ -263,29 +229,23 @@ namespace GameSvr.DataSource
         /// <summary>
         /// 加载寄售系统数据
         /// </summary>
-        public void LoadSellOffItemList()
-        {
-            if (!Open())
-            {
+        public void LoadSellOffItemList() {
+            if (!Open()) {
                 M2Share.Logger.Error("读取物品寄售列表失败.");
                 return;
             }
-            try
-            {
+            try {
                 DealOffInfo DealOffInfo;
                 const string sSQLString = "select * from goldsales";
-                using (IDataReader dr = Query(sSQLString))
-                {
-                    while (dr.Read())
-                    {
+                using (IDataReader dr = Query(sSQLString)) {
+                    while (dr.Read()) {
                         string sDealChrName = dr.GetString("DealChrName");
                         string sBuyChrName = dr.GetString("BuyChrName");
                         DateTime dSellDateTime = dr.GetDateTime("SellDateTime");
                         byte nState = dr.GetByte("State");
                         short nSellGold = dr.GetInt16("SellGold");
                         string sUseItems = dr.GetString("UseItems");
-                        if ((!string.IsNullOrEmpty(sDealChrName)) && (!string.IsNullOrEmpty(sBuyChrName)) && (nState < 4))
-                        {
+                        if ((!string.IsNullOrEmpty(sDealChrName)) && (!string.IsNullOrEmpty(sBuyChrName)) && (nState < 4)) {
                             DealOffInfo = new DealOffInfo();
                             DealOffInfo.sDealChrName = sDealChrName;
                             DealOffInfo.sBuyChrName = sBuyChrName;
@@ -298,12 +258,10 @@ namespace GameSvr.DataSource
                     }
                 }
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 throw;
             }
-            finally
-            {
+            finally {
                 Close();
             }
         }
@@ -313,25 +271,19 @@ namespace GameSvr.DataSource
         /// <summary>
         /// 保存寄售系统数据
         /// </summary>
-        public void SaveSellOffItemList()
-        {
-            if (!Open())
-            {
+        public void SaveSellOffItemList() {
+            if (!Open()) {
                 M2Share.Logger.Error("保存物品寄售数据失败.");
                 return;
             }
             DealOffInfo DealOffInfo;
             const string sSQLString = "delete from goldsales";
-            try
-            {
-                if (M2Share.SellOffItemList.Count > 0)
-                {
+            try {
+                if (M2Share.SellOffItemList.Count > 0) {
                     Execute(sSQLString);
-                    for (int i = 0; i < M2Share.SellOffItemList.Count; i++)
-                    {
+                    for (int i = 0; i < M2Share.SellOffItemList.Count; i++) {
                         DealOffInfo = M2Share.SellOffItemList[i];
-                        if (DealOffInfo != null)
-                        {
+                        if (DealOffInfo != null) {
                             MySqlCommand command = new MySqlCommand();
                             command.Connection = (MySqlConnection)_dbConnection;
                             command.CommandText = SaveSellItemSql;
@@ -346,73 +298,60 @@ namespace GameSvr.DataSource
                     }
                 }
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 throw;
             }
-            finally
-            {
+            finally {
                 Close();
             }
         }
 
-        public static int LoadUpgradeWeaponRecord(string sNPCName, IList<WeaponUpgradeInfo> DataList)
-        {
+        public static int LoadUpgradeWeaponRecord(string sNPCName, IList<WeaponUpgradeInfo> DataList) {
             //todo 加载武器升级数据
             return -1;
         }
 
-        public static int SaveUpgradeWeaponRecord(string sNPCName, IList<WeaponUpgradeInfo> DataList)
-        {
+        public static int SaveUpgradeWeaponRecord(string sNPCName, IList<WeaponUpgradeInfo> DataList) {
             //todo 保存武器升级数据
             return -1;
         }
 
-        private IDataReader Query(string sSQLString)
-        {
+        private IDataReader Query(string sSQLString) {
             MySqlCommand command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
             command.CommandText = sSQLString;
             return command.ExecuteReader();
         }
 
-        private int Execute(string sSQLString)
-        {
+        private int Execute(string sSQLString) {
             MySqlCommand command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
             command.CommandText = sSQLString;
             return command.ExecuteNonQuery();
         }
 
-        private bool Open()
-        {
-            if (_dbConnection == null)
-            {
-                try
-                {
+        private bool Open() {
+            if (_dbConnection == null) {
+                try {
                     _dbConnection = new MySqlConnection(M2Share.Config.ConnctionString);
                     _dbConnection.Open();
                     return true;
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     Console.WriteLine(M2Share.Config.ConnctionString);
                     M2Share.Logger.Error(e.StackTrace);
                     return false;
                 }
             }
-            else if (_dbConnection.State == ConnectionState.Closed)
-            {
+            else if (_dbConnection.State == ConnectionState.Closed) {
                 _dbConnection = new MySqlConnection(M2Share.Config.ConnctionString);
                 _dbConnection.Open();
             }
             return true;
         }
 
-        private void Close()
-        {
-            if (_dbConnection != null)
-            {
+        private void Close() {
+            if (_dbConnection != null) {
                 _dbConnection.Close();
                 _dbConnection.Dispose();
             }

@@ -19,14 +19,11 @@ using System.Collections.Concurrent;
 using SystemModule.Common;
 using SystemModule.Data;
 
-namespace GameSvr
-{
-    public class GameApp : ServerBase
-    {
+namespace GameSvr {
+    public class GameApp : ServerBase {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public GameApp()
-        {
+        public GameApp() {
             M2Share.SockCountMax = 0;
             M2Share.HumCountMax = 0;
             M2Share.UsrRotCountMin = 0;
@@ -105,8 +102,7 @@ namespace GameSvr
             M2Share.SellOffItemList = new List<DealOffInfo>();
         }
 
-        public void Initialize()
-        {
+        public void Initialize() {
             _logger.Info("读取游戏引擎数据配置文件...");
             M2Share.LoadConfig();
             LoadServerTable();
@@ -120,44 +116,38 @@ namespace GameSvr
             M2Share.LoadNoClearMonList();
             _logger.Info("正在加载物品数据库...");
             int nCode = M2Share.CommonDb.LoadItemsDB();
-            if (nCode < 0)
-            {
+            if (nCode < 0) {
                 _logger.Info("物品数据库加载失败!!!" + "Code: " + nCode);
                 return;
             }
             _logger.Info($"物品数据库加载成功...[{M2Share.WorldEngine.StdItemList.Count}]");
             nCode = Map.LoadMinMap();
-            if (nCode < 0)
-            {
+            if (nCode < 0) {
                 _logger.Info("小地图数据加载失败!!!" + "Code: " + nCode);
                 return;
             }
             nCode = Map.LoadMapInfo();
-            if (nCode < 0)
-            {
+            if (nCode < 0) {
                 _logger.Info("地图数据加载失败!!!" + "Code: " + nCode);
                 return;
             }
             _logger.Info("正在加载怪物数据库...");
             nCode = M2Share.CommonDb.LoadMonsterDB();
-            if (nCode < 0)
-            {
+            if (nCode < 0) {
                 _logger.Info("加载怪物数据库失败!!!" + "Code: " + nCode);
                 return;
             }
             _logger.Info($"加载怪物数据库成功...[{M2Share.WorldEngine.MonsterList.Count}]");
             _logger.Info("正在加载技能数据库...");
             nCode = M2Share.CommonDb.LoadMagicDB();
-            if (nCode < 0)
-            {
+            if (nCode < 0) {
                 _logger.Info("加载技能数据库失败!!!" + "Code: " + nCode);
                 return;
             }
             _logger.Info($"加载技能数据库成功...[{M2Share.WorldEngine.MagicList.Count}]");
             _logger.Info("正在加载怪物刷新配置信息...");
             nCode = M2Share.LocalDb.LoadMonGen(out int mongenCount);
-            if (nCode < 0)
-            {
+            if (nCode < 0) {
                 _logger.Info("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
                 return;
             }
@@ -183,8 +173,7 @@ namespace GameSvr
             M2Share.LoadUnForceMasterList();
             _logger.Info("正在加载捆装物品信息...");
             nCode = M2Share.LocalDb.LoadUnbindList();
-            if (nCode < 0)
-            {
+            if (nCode < 0) {
                 _logger.Info("加载捆装物品信息失败!!!" + "Code: " + nCode);
                 return;
             }
@@ -193,27 +182,23 @@ namespace GameSvr
             M2Share.CommonDb.LoadSellOffItemList();
             _logger.Info("正在加载任务地图信息...");
             nCode = M2Share.LocalDb.LoadMapQuest();
-            if (nCode < 0)
-            {
+            if (nCode < 0) {
                 _logger.Info("加载任务地图信息失败!!!");
                 return;
             }
             _logger.Info("加载任务地图信息成功...");
             _logger.Info("正在加载任务说明信息...");
             nCode = M2Share.LocalDb.LoadQuestDiary();
-            if (nCode < 0)
-            {
+            if (nCode < 0) {
                 _logger.Info("加载任务说明信息失败!!!");
                 return;
             }
             _logger.Info("加载任务说明信息成功...");
-            if (LoadAbuseInformation(".\\!abuse.txt"))
-            {
+            if (LoadAbuseInformation(".\\!abuse.txt")) {
                 _logger.Info("加载文字过滤信息成功...");
             }
             _logger.Info("正在加载公告提示信息...");
-            if (!M2Share.LoadLineNotice(M2Share.GetNoticeFilePath("LineNotice.txt")))
-            {
+            if (!M2Share.LoadLineNotice(M2Share.GetNoticeFilePath("LineNotice.txt"))) {
                 _logger.Info("加载公告提示信息失败!!!");
             }
             _logger.Info("加载公告提示信息成功...");
@@ -221,10 +206,8 @@ namespace GameSvr
             _logger.Info("管理员列表加载成功...");
         }
 
-        public void StartServer(CancellationToken stoppingToken)
-        {
-            try
-            {
+        public void StartServer(CancellationToken stoppingToken) {
+            try {
                 M2Share.MapMgr.LoadMapDoor();
                 M2Share.LocalDb.LoadMerchant();
                 _logger.Info("交易NPC列表加载成功...");
@@ -239,19 +222,16 @@ namespace GameSvr
                 _logger.Info("安全区光圈初始化成功...");
                 M2Share.FrontEngine.Start(stoppingToken);
                 M2Share.WorldEngine.InitializationMonsterThread();
-                if (!M2Share.Config.VentureServer)
-                {
+                if (!M2Share.Config.VentureServer) {
                     LocalDB.LoadGuardList();
                     _logger.Info("守卫列表加载成功...");
                 }
                 _logger.Info("游戏处理引擎初始化成功...");
-                if (M2Share.ServerIndex == 0)
-                {
+                if (M2Share.ServerIndex == 0) {
                     PlanesServer.Instance.StartSnapsServer();
                     _logger.Debug("当前服务运行主节点模式...");
                 }
-                else
-                {
+                else {
                     PlanesClient.Instance.ConnectMsgServer();
                     _logger.Info($"当前运行从节点模式...[{M2Share.Config.MsgSrvAddr}:{M2Share.Config.MsgSrvPort}]");
                 }
@@ -263,45 +243,37 @@ namespace GameSvr
                 Map.StartMakeStoneThread();
                 M2Share.StartReady = true;
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 _logger.Error(ex.StackTrace);
             }
         }
 
-        private static void LoadServerTable()
-        {
+        private static void LoadServerTable() {
             int nRouteIdx = 0;
             string sIdx = string.Empty;
             string sSelGateIPaddr = string.Empty;
             string sGameGateIPaddr = string.Empty;
             string sGameGatePort = string.Empty;
             string sFileName = Path.Combine(M2Share.BasePath, M2Share.Config.BaseDir, "!servertable.txt");
-            if (File.Exists(sFileName))
-            {
+            if (File.Exists(sFileName)) {
                 StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
-                for (int i = 0; i < loadList.Count; i++)
-                {
+                for (int i = 0; i < loadList.Count; i++) {
                     string sLineText = loadList[i];
-                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
-                    {
+                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';') {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIdx, new[] { " ", "\09" });
                         string sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
-                        if (string.IsNullOrEmpty(sIdx) || string.IsNullOrEmpty(sGameGate) || string.IsNullOrEmpty(sSelGateIPaddr))
-                        {
+                        if (string.IsNullOrEmpty(sIdx) || string.IsNullOrEmpty(sGameGate) || string.IsNullOrEmpty(sSelGateIPaddr)) {
                             continue;
                         }
-                        if (M2Share.ServerTableList[nRouteIdx] == null)
-                        {
+                        if (M2Share.ServerTableList[nRouteIdx] == null) {
                             M2Share.ServerTableList[nRouteIdx] = new TRouteInfo();
                         }
                         M2Share.ServerTableList[nRouteIdx].GateCount = 0;
                         M2Share.ServerTableList[nRouteIdx].ServerIdx = HUtil32.StrToInt(sIdx, 0);
                         M2Share.ServerTableList[nRouteIdx].SelGateIP = sSelGateIPaddr.Trim();
                         int nGateIdx = 0;
-                        while (!string.IsNullOrEmpty(sGameGate))
-                        {
+                        while (!string.IsNullOrEmpty(sGameGate)) {
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
                             M2Share.ServerTableList[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
@@ -310,8 +282,7 @@ namespace GameSvr
                         }
                         M2Share.ServerTableList[nRouteIdx].GateCount = nGateIdx;
                         nRouteIdx++;
-                        if (nRouteIdx > M2Share.ServerTableList.Length)
-                        {
+                        if (nRouteIdx > M2Share.ServerTableList.Length) {
                             break;
                         }
                     }
@@ -324,23 +295,18 @@ namespace GameSvr
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private static bool LoadAbuseInformation(string fileName)
-        {
+        private static bool LoadAbuseInformation(string fileName) {
             int lineCount = 0;
             bool result = false;
-            if (File.Exists(fileName))
-            {
+            if (File.Exists(fileName)) {
                 M2Share.AbuseTextList.Clear();
                 M2Share.AbuseTextList.LoadFromFile(fileName);
-                while (true)
-                {
-                    if (M2Share.AbuseTextList.Count <= lineCount)
-                    {
+                while (true) {
+                    if (M2Share.AbuseTextList.Count <= lineCount) {
                         break;
                     }
                     string sText = M2Share.AbuseTextList[lineCount].Trim();
-                    if (string.IsNullOrEmpty(sText))
-                    {
+                    if (string.IsNullOrEmpty(sText)) {
                         M2Share.AbuseTextList.RemoveAt(lineCount);
                         continue;
                     }

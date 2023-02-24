@@ -1,29 +1,22 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("ShutupRelease", "恢复禁言", CommandHelp.GameCommandShutupReleaseHelpMsg, 10)]
-    public class ShutupReleaseCommand : GameCommand
-    {
+    public class ShutupReleaseCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject)
-        {
-            if (@params == null)
-            {
+        public void Execute(string[] @params, PlayObject PlayObject) {
+            if (@params == null) {
                 return;
             }
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             bool boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
-            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName))
-            {
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
-            try
-            {
+            try {
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
                 //    Settings.g_DenySayMsgList.Remove(sHumanName);
@@ -41,8 +34,7 @@ namespace GameSvr.GameCommand.Commands
                 //        TMsgColor.c_Green, TMsgType.t_Hint);
                 //}
             }
-            finally
-            {
+            finally {
                 HUtil32.LeaveCriticalSection(M2Share.DenySayMsgList);
             }
         }

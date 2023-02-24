@@ -1,9 +1,7 @@
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.Items
-{
-    public class StdItemAttrConst
-    {
+namespace GameSvr.Items {
+    public class StdItemAttrConst {
         public const byte AC = 0;
         public const byte MAC = 1;
         public const byte DC = 2;
@@ -11,8 +9,7 @@ namespace GameSvr.Items
         public const byte SC = 3;
     }
 
-    public class StdItem
-    {
+    public class StdItem {
         public string Name;
         public byte StdMode;
         public byte Shape;
@@ -60,39 +57,30 @@ namespace GameSvr.Items
         public ushort ItemSet;
         public string Reference;
 
-        private static int GetUpgrade(int count, int ran)
-        {
+        private static int GetUpgrade(int count, int ran) {
             int result = 0;
-            for (int i = 0; i < count; i++)
-            {
-                if (M2Share.RandomNumber.Random(ran) == 0)
-                {
+            for (int i = 0; i < count; i++) {
+                if (M2Share.RandomNumber.Random(ran) == 0) {
                     result = result + 1;
                 }
-                else
-                {
+                else {
                     break;
                 }
             }
             return result;
         }
 
-        public static int GetUpgrade2(int x, int a)
-        {
+        public static int GetUpgrade2(int x, int a) {
             int iProb;
             int result = 0;
-            for (int i = x; i >= 1; i--)
-            {
-                if (i > x / 2)
-                {
+            for (int i = x; i >= 1; i--) {
+                if (i > x / 2) {
                     iProb = Convert.ToInt32(Math.Sqrt(Math.Pow(a, 2.0) - Math.Pow(i, 2.0)) / (a * i + Math.Pow(i, 2.0)) * 100);
                 }
-                else
-                {
+                else {
                     iProb = Convert.ToInt32(Math.Sqrt(1 - Math.Pow(i, 2.0) / Math.Pow(a, 2.0)) * 100 / Math.Sqrt(i));
                 }
-                if (M2Share.RandomNumber.Random(100) < iProb)
-                {
+                if (M2Share.RandomNumber.Random(100) < iProb) {
                     result = i / 3;
                     break;
                 }
@@ -100,366 +88,295 @@ namespace GameSvr.Items
             return result;
         }
 
-        private void UpgradeRandomWeapon(UserItem pu)
-        {
+        private void UpgradeRandomWeapon(UserItem pu) {
             int up = GetUpgrade(12, 15);
-            if (M2Share.RandomNumber.Random(15) == 0)
-            {
+            if (M2Share.RandomNumber.Random(15) == 0) {
                 pu.Desc[0] = (byte)(1 + up);//DC
             }
             up = GetUpgrade(12, 15);
-            if (M2Share.RandomNumber.Random(20) == 0)
-            {
+            if (M2Share.RandomNumber.Random(20) == 0) {
                 int incp = (1 + up) / 3;
-                if (incp > 0)
-                {
-                    if (M2Share.RandomNumber.Random(3) != 0)
-                    {
+                if (incp > 0) {
+                    if (M2Share.RandomNumber.Random(3) != 0) {
                         pu.Desc[6] = (byte)incp;
                     }
-                    else
-                    {
+                    else {
                         pu.Desc[6] = (byte)(10 + incp);
                     }
                 }
             }
             up = GetUpgrade(12, 15);
-            if (M2Share.RandomNumber.Random(15) == 0)
-            {
+            if (M2Share.RandomNumber.Random(15) == 0) {
                 pu.Desc[1] = (byte)(1 + up);//MC
             }
             up = GetUpgrade(12, 15);
-            if (M2Share.RandomNumber.Random(15) == 0)
-            {
+            if (M2Share.RandomNumber.Random(15) == 0) {
                 pu.Desc[2] = (byte)(1 + up);//SC
             }
             up = GetUpgrade(12, 15);
-            if (M2Share.RandomNumber.Random(24) == 0)
-            {
+            if (M2Share.RandomNumber.Random(24) == 0) {
                 pu.Desc[5] = (byte)(1 + up / 2);
             }
             up = GetUpgrade(12, 12);
-            if (M2Share.RandomNumber.Random(3) < 2)
-            {
+            if (M2Share.RandomNumber.Random(3) < 2) {
                 int n = (1 + up) * 2000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
             up = GetUpgrade(12, 15);
-            if (M2Share.RandomNumber.Random(10) == 0)
-            {
+            if (M2Share.RandomNumber.Random(10) == 0) {
                 pu.Desc[7] = (byte)(1 + up / 2);
             }
         }
 
-        private void UpgradeRandomDress(UserItem pu)
-        {
+        private void UpgradeRandomDress(UserItem pu) {
             int up = GetUpgrade(6, 15);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[0] = (byte)(1 + up);// AC
             }
             up = GetUpgrade(6, 15);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[1] = (byte)(1 + up); // MAC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(40) == 0)
-            {
+            if (M2Share.RandomNumber.Random(40) == 0) {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(40) == 0)
-            {
+            if (M2Share.RandomNumber.Random(40) == 0) {
                 pu.Desc[3] = (byte)(1 + up); // MC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(40) == 0)
-            {
+            if (M2Share.RandomNumber.Random(40) == 0) {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 10);
-            if (M2Share.RandomNumber.Random(8) < 6)
-            {
+            if (M2Share.RandomNumber.Random(8) < 6) {
                 int n = (1 + up) * 2000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
-        private void UpgradeRandomNecklace(UserItem pu)
-        {
+        private void UpgradeRandomNecklace(UserItem pu) {
             int up = GetUpgrade(6, 30);
-            if (M2Share.RandomNumber.Random(60) == 0)
-            {
+            if (M2Share.RandomNumber.Random(60) == 0) {
                 pu.Desc[0] = (byte)(1 + up);// AC(HIT)
             }
             up = GetUpgrade(6, 30);
-            if (M2Share.RandomNumber.Random(60) == 0)
-            {
+            if (M2Share.RandomNumber.Random(60) == 0) {
                 pu.Desc[1] = (byte)(1 + up);// MAC(SPEED)
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 12);
-            if (M2Share.RandomNumber.Random(20) < 15)
-            {
+            if (M2Share.RandomNumber.Random(20) < 15) {
                 int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
-        private void UpgradeRandomBarcelet(UserItem pu)
-        {
+        private void UpgradeRandomBarcelet(UserItem pu) {
             int up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(20) == 0)
-            {
+            if (M2Share.RandomNumber.Random(20) == 0) {
                 pu.Desc[0] = (byte)(1 + up);// AC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(20) == 0)
-            {
+            if (M2Share.RandomNumber.Random(20) == 0) {
                 pu.Desc[1] = (byte)(1 + up);// MAC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 12);
-            if (M2Share.RandomNumber.Random(20) < 15)
-            {
+            if (M2Share.RandomNumber.Random(20) < 15) {
                 int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
-        private void UpgradeRandomNecklace19(UserItem pu)
-        {
+        private void UpgradeRandomNecklace19(UserItem pu) {
             int up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(40) == 0)
-            {
+            if (M2Share.RandomNumber.Random(40) == 0) {
                 pu.Desc[0] = (byte)(1 + up);
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(40) == 0)
-            {
+            if (M2Share.RandomNumber.Random(40) == 0) {
                 pu.Desc[1] = (byte)(1 + up);
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[2] = (byte)(1 + up); // DC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 10);
-            if (M2Share.RandomNumber.Random(4) < 3)
-            {
+            if (M2Share.RandomNumber.Random(4) < 3) {
                 int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
-        private void UpgradeRandomRings(UserItem pu)
-        {
+        private void UpgradeRandomRings(UserItem pu) {
             int up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[2] = (byte)(1 + up); // DC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 12);
-            if (M2Share.RandomNumber.Random(4) < 3)
-            {
+            if (M2Share.RandomNumber.Random(4) < 3) {
                 int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
-        private void UpgradeRandomRings23(UserItem pu)
-        {
+        private void UpgradeRandomRings23(UserItem pu) {
             int up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(40) == 0)
-            {
+            if (M2Share.RandomNumber.Random(40) == 0) {
                 pu.Desc[0] = (byte)(1 + up);
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(40) == 0)
-            {
+            if (M2Share.RandomNumber.Random(40) == 0) {
                 pu.Desc[1] = (byte)(1 + up);
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[4] = (byte)(1 + up); // SC
             }
             up = GetUpgrade(6, 12);
-            if (M2Share.RandomNumber.Random(4) < 3)
-            {
+            if (M2Share.RandomNumber.Random(4) < 3) {
                 int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
-        private void UpgradeRandomHelmet(UserItem pu)
-        {
+        private void UpgradeRandomHelmet(UserItem pu) {
             int up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(40) == 0)
-            {
+            if (M2Share.RandomNumber.Random(40) == 0) {
                 pu.Desc[0] = (byte)(1 + up);// AC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[1] = (byte)(1 + up);// MAC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[2] = (byte)(1 + up);// DC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[3] = (byte)(1 + up);// MC
             }
             up = GetUpgrade(6, 20);
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[4] = (byte)(1 + up);// SC
             }
             up = GetUpgrade(6, 12);
-            if (M2Share.RandomNumber.Random(4) < 3)
-            {
+            if (M2Share.RandomNumber.Random(4) < 3) {
                 int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
         }
 
-        private void RandomSetUnknownHelmet(UserItem pu)
-        {
+        private void RandomSetUnknownHelmet(UserItem pu) {
             int up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[0] = (byte)up;// AC
             }
             int sum = up;
             up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[1] = (byte)up;// MAC
             }
             sum = sum + up;
             up = GetUpgrade(3, 15) + GetUpgrade(3, 30);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[2] = (byte)up;// DC
             }
             sum = sum + up;
             up = GetUpgrade(3, 15) + GetUpgrade(3, 30);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[3] = (byte)up;// MC
             }
             sum = sum + up;
             up = GetUpgrade(3, 15) + GetUpgrade(3, 30);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[4] = (byte)up;// SC
             }
             sum = sum + up;
             up = GetUpgrade(6, 30);
-            if (up > 0)
-            {
+            if (up > 0) {
                 int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[7] = 1;
             }
             pu.Desc[8] = 1;
-            if (sum >= 3)
-            {
-                if (pu.Desc[0] >= 5)
-                {
+            if (sum >= 3) {
+                if (pu.Desc[0] >= 5) {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(25 + pu.Desc[0] * 3);
                     return;
                 }
-                if (pu.Desc[2] >= 2)
-                {
+                if (pu.Desc[2] >= 2) {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(35 + pu.Desc[2] * 4);
                     return;
                 }
-                if (pu.Desc[3] >= 2)
-                {
+                if (pu.Desc[3] >= 2) {
                     pu.Desc[5] = 2;
                     pu.Desc[6] = (byte)(18 + pu.Desc[3] * 2);
                     return;
                 }
-                if (pu.Desc[4] >= 2)
-                {
+                if (pu.Desc[4] >= 2) {
                     pu.Desc[5] = 3;
                     pu.Desc[6] = (byte)(18 + pu.Desc[4] * 2);
                     return;
@@ -468,54 +385,44 @@ namespace GameSvr.Items
             }
         }
 
-        private void RandomSetUnknownRing(UserItem pu)
-        {
+        private void RandomSetUnknownRing(UserItem pu) {
             int up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[2] = (byte)up;// DC
             }
             int sum = up;
             up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[3] = (byte)up;// MC
             }
             sum = sum + up;
             up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[4] = (byte)up;// SC
             }
             sum = sum + up;
             up = GetUpgrade(6, 30);
-            if (up > 0)
-            {
+            if (up > 0) {
                 int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[7] = 1;
             }
             pu.Desc[8] = 1;
-            if (sum >= 3)
-            {
-                if (pu.Desc[2] >= 3)
-                {
+            if (sum >= 3) {
+                if (pu.Desc[2] >= 3) {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(25 + pu.Desc[2] * 3);
                     return;
                 }
-                if (pu.Desc[3] >= 3)
-                {
+                if (pu.Desc[3] >= 3) {
                     pu.Desc[5] = 2;
                     pu.Desc[6] = (byte)(18 + pu.Desc[3] * 2);
                     return;
                 }
-                if (pu.Desc[4] >= 3)
-                {
+                if (pu.Desc[4] >= 3) {
                     pu.Desc[5] = 3;
                     pu.Desc[6] = (byte)(18 + pu.Desc[4] * 2);
                     return;
@@ -524,72 +431,59 @@ namespace GameSvr.Items
             }
         }
 
-        private void RandomSetUnknownBracelet(UserItem pu)
-        {
+        private void RandomSetUnknownBracelet(UserItem pu) {
             int up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[0] = (byte)up; // AC
             }
             int sum = up;
             up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[1] = (byte)up;// MAC
             }
             sum = sum + up;
             up = GetUpgrade(3, 15) + GetUpgrade(5, 30);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[2] = (byte)up;// DC
             }
             sum = sum + up;
             up = GetUpgrade(3, 15) + GetUpgrade(5, 30);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[3] = (byte)up;// MC
             }
             sum = sum + up;
             up = GetUpgrade(3, 15) + GetUpgrade(5, 30);
-            if (up > 0)
-            {
+            if (up > 0) {
                 pu.Desc[4] = (byte)up;// SC
             }
             sum = sum + up;
             up = GetUpgrade(6, 30);
-            if (up > 0)
-            {
+            if (up > 0) {
                 int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
-            if (M2Share.RandomNumber.Random(30) == 0)
-            {
+            if (M2Share.RandomNumber.Random(30) == 0) {
                 pu.Desc[7] = 1;
             }
             pu.Desc[8] = 1;
-            if (sum >= 2)
-            {
-                if (pu.Desc[0] >= 3)
-                {
+            if (sum >= 2) {
+                if (pu.Desc[0] >= 3) {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(25 + pu.Desc[0] * 3);
                     return;
                 }
-                if (pu.Desc[2] >= 2)
-                {
+                if (pu.Desc[2] >= 2) {
                     pu.Desc[5] = 1;
                     pu.Desc[6] = (byte)(30 + pu.Desc[2] * 3);
                     return;
                 }
-                if (pu.Desc[3] >= 2)
-                {
+                if (pu.Desc[3] >= 2) {
                     pu.Desc[5] = 2;
                     pu.Desc[6] = (byte)(20 + pu.Desc[3] * 2);
                     return;
                 }
-                if (pu.Desc[4] >= 2)
-                {
+                if (pu.Desc[4] >= 2) {
                     pu.Desc[5] = 3;
                     pu.Desc[6] = (byte)(20 + pu.Desc[4] * 2);
                     return;
@@ -598,10 +492,8 @@ namespace GameSvr.Items
             }
         }
 
-        private void CopyItemToClientItem(ref ClientItem clientStdItem)
-        {
-            if (clientStdItem == null)
-            {
+        private void CopyItemToClientItem(ref ClientItem clientStdItem) {
+            if (clientStdItem == null) {
                 clientStdItem = new ClientItem();
             }
             clientStdItem.Item.Name = Name;
@@ -649,12 +541,10 @@ namespace GameSvr.Items
             clientStdItem.Item.Reference = Reference;
         }
 
-        public int GetUpgradeStdItem(UserItem userItem, ref ClientItem clientItem)
-        {
+        public int GetUpgradeStdItem(UserItem userItem, ref ClientItem clientItem) {
             CopyItemToClientItem(ref clientItem);
             int UCount = 0;
-            switch (StdMode)
-            {
+            switch (StdMode) {
                 case 5:
                 case 6:
                     clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[0]));
@@ -663,57 +553,44 @@ namespace GameSvr.Items
                     clientItem.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AC) + userItem.Desc[3]), (ushort)(HUtil32.HiByte(AC) + userItem.Desc[5]));
                     clientItem.Item.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(MAC) + userItem.Desc[4]), HUtil32.HiByte(MAC));
                     clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), GetAttackSpeed(HUtil32.HiByte(MAC), userItem.Desc[6]));
-                    if (userItem.Desc[7] >= 1 && userItem.Desc[7] <= 10)
-                    {
-                        if (clientItem.Item.SpecialPwr >= 0)
-                        {
+                    if (userItem.Desc[7] >= 1 && userItem.Desc[7] <= 10) {
+                        if (clientItem.Item.SpecialPwr >= 0) {
                             clientItem.Item.SpecialPwr = (sbyte)userItem.Desc[7];
                         }
                     }
-                    if (userItem.Desc[10] != 0)
-                    {
+                    if (userItem.Desc[10] != 0) {
                         clientItem.Item.ItemDesc = (byte)(ItemDesc | 0x01);
                     }
                     clientItem.Item.Slowdown = (byte)(Slowdown + userItem.Desc[12]);
                     clientItem.Item.Tox = (byte)(Tox + userItem.Desc[13]);
-                    if (userItem.Desc[0] > 0)
-                    {
+                    if (userItem.Desc[0] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[1] > 0)
-                    {
+                    if (userItem.Desc[1] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[2] > 0)
-                    {
+                    if (userItem.Desc[2] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[3] > 0)
-                    {
+                    if (userItem.Desc[3] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[4] > 0)
-                    {
+                    if (userItem.Desc[4] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[5] > 0)
-                    {
+                    if (userItem.Desc[5] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[6] > 0)
-                    {
+                    if (userItem.Desc[6] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[7] > 0)
-                    {
+                    if (userItem.Desc[7] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[12] > 0)
-                    {
+                    if (userItem.Desc[12] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[13] > 0)
-                    {
+                    if (userItem.Desc[13] > 0) {
                         UCount++;
                     }
                     break;
@@ -727,36 +604,28 @@ namespace GameSvr.Items
                     clientItem.Item.Agility = (byte)(Agility + userItem.Desc[11]);
                     clientItem.Item.MgAvoid = (byte)(MgAvoid + userItem.Desc[12]);
                     clientItem.Item.ToxAvoid = (byte)(ToxAvoid + userItem.Desc[13]);
-                    if (userItem.Desc[0] > 0)
-                    {
+                    if (userItem.Desc[0] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[1] > 0)
-                    {
+                    if (userItem.Desc[1] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[2] > 0)
-                    {
+                    if (userItem.Desc[2] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[3] > 0)
-                    {
+                    if (userItem.Desc[3] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[4] > 0)
-                    {
+                    if (userItem.Desc[4] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[11] > 0)
-                    {
+                    if (userItem.Desc[11] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[12] > 0)
-                    {
+                    if (userItem.Desc[12] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[13] > 0)
-                    {
+                    if (userItem.Desc[13] > 0) {
                         UCount++;
                     }
                     break;
@@ -769,44 +638,34 @@ namespace GameSvr.Items
                     clientItem.Item.Accurate = (byte)(Accurate + userItem.Desc[11]);
                     clientItem.Item.MgAvoid = (byte)(MgAvoid + userItem.Desc[12]);
                     clientItem.Item.ToxAvoid = (byte)(ToxAvoid + userItem.Desc[13]);
-                    if (userItem.Desc[5] > 0)
-                    {
+                    if (userItem.Desc[5] > 0) {
                         clientItem.Item.Need = userItem.Desc[5];
                     }
-                    if (userItem.Desc[6] > 0)
-                    {
+                    if (userItem.Desc[6] > 0) {
                         clientItem.Item.NeedLevel = userItem.Desc[6];
                     }
-                    if (userItem.Desc[0] > 0)
-                    {
+                    if (userItem.Desc[0] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[1] > 0)
-                    {
+                    if (userItem.Desc[1] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[2] > 0)
-                    {
+                    if (userItem.Desc[2] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[3] > 0)
-                    {
+                    if (userItem.Desc[3] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[4] > 0)
-                    {
+                    if (userItem.Desc[4] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[11] > 0)
-                    {
+                    if (userItem.Desc[11] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[12] > 0)
-                    {
+                    if (userItem.Desc[12] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[13] > 0)
-                    {
+                    if (userItem.Desc[13] > 0) {
                         UCount++;
                     }
                     break;
@@ -821,61 +680,47 @@ namespace GameSvr.Items
                     clientItem.Item.AtkSpd = (byte)(AtkSpd + userItem.Desc[9]);
                     clientItem.Item.Slowdown = (byte)(Slowdown + userItem.Desc[12]);
                     clientItem.Item.Tox = (byte)(Tox + userItem.Desc[13]);
-                    if (StdMode == 19)
-                    {
+                    if (StdMode == 19) {
                         clientItem.Item.Accurate = (byte)(Accurate + userItem.Desc[11]);
                     }
-                    else if (StdMode == 20)
-                    {
+                    else if (StdMode == 20) {
                         clientItem.Item.MgAvoid = (byte)(MgAvoid + userItem.Desc[11]);
                     }
-                    else if (StdMode == 21)
-                    {
+                    else if (StdMode == 21) {
                         clientItem.Item.Accurate = (byte)(Accurate + userItem.Desc[11]);
                         clientItem.Item.MgAvoid = (byte)(MgAvoid + userItem.Desc[7]);
                     }
-                    if (userItem.Desc[5] > 0)
-                    {
+                    if (userItem.Desc[5] > 0) {
                         clientItem.Item.Need = userItem.Desc[5];
                     }
-                    if (userItem.Desc[6] > 0)
-                    {
+                    if (userItem.Desc[6] > 0) {
                         clientItem.Item.NeedLevel = userItem.Desc[6];
                     }
-                    if (userItem.Desc[0] > 0)
-                    {
+                    if (userItem.Desc[0] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[1] > 0)
-                    {
+                    if (userItem.Desc[1] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[2] > 0)
-                    {
+                    if (userItem.Desc[2] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[3] > 0)
-                    {
+                    if (userItem.Desc[3] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[4] > 0)
-                    {
+                    if (userItem.Desc[4] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[9] > 0)
-                    {
+                    if (userItem.Desc[9] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[11] > 0)
-                    {
+                    if (userItem.Desc[11] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[12] > 0)
-                    {
+                    if (userItem.Desc[12] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[13] > 0)
-                    {
+                    if (userItem.Desc[13] > 0) {
                         UCount++;
                     }
                     break;
@@ -889,44 +734,34 @@ namespace GameSvr.Items
                     clientItem.Item.AtkSpd = (byte)(AtkSpd + userItem.Desc[9]);
                     clientItem.Item.Slowdown = (byte)(Slowdown + userItem.Desc[12]);
                     clientItem.Item.Tox = (byte)(Tox + userItem.Desc[13]);
-                    if (userItem.Desc[5] > 0)
-                    {
+                    if (userItem.Desc[5] > 0) {
                         clientItem.Item.Need = userItem.Desc[5];
                     }
-                    if (userItem.Desc[6] > 0)
-                    {
+                    if (userItem.Desc[6] > 0) {
                         clientItem.Item.NeedLevel = userItem.Desc[6];
                     }
-                    if (userItem.Desc[0] > 0)
-                    {
+                    if (userItem.Desc[0] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[1] > 0)
-                    {
+                    if (userItem.Desc[1] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[2] > 0)
-                    {
+                    if (userItem.Desc[2] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[3] > 0)
-                    {
+                    if (userItem.Desc[3] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[4] > 0)
-                    {
+                    if (userItem.Desc[4] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[9] > 0)
-                    {
+                    if (userItem.Desc[9] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[12] > 0)
-                    {
+                    if (userItem.Desc[12] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[13] > 0)
-                    {
+                    if (userItem.Desc[13] > 0) {
                         UCount++;
                     }
                     break;
@@ -936,32 +771,25 @@ namespace GameSvr.Items
                     clientItem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(DC) + userItem.Desc[2]));
                     clientItem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MC) + userItem.Desc[3]));
                     clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
-                    if (userItem.Desc[5] > 0)
-                    {
+                    if (userItem.Desc[5] > 0) {
                         clientItem.Item.Need = userItem.Desc[5];
                     }
-                    if (userItem.Desc[6] > 0)
-                    {
+                    if (userItem.Desc[6] > 0) {
                         clientItem.Item.NeedLevel = userItem.Desc[6];
                     }
-                    if (userItem.Desc[0] > 0)
-                    {
+                    if (userItem.Desc[0] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[1] > 0)
-                    {
+                    if (userItem.Desc[1] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[2] > 0)
-                    {
+                    if (userItem.Desc[2] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[3] > 0)
-                    {
+                    if (userItem.Desc[3] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[4] > 0)
-                    {
+                    if (userItem.Desc[4] > 0) {
                         UCount++;
                     }
                     break;
@@ -973,41 +801,32 @@ namespace GameSvr.Items
                     clientItem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(SC) + userItem.Desc[4]));
                     clientItem.Item.Accurate = (byte)(Accurate + userItem.Desc[11]);
                     clientItem.Item.Agility = (byte)(Agility + userItem.Desc[12]);
-                    if (userItem.Desc[5] > 0)
-                    {
+                    if (userItem.Desc[5] > 0) {
                         // 鞘夸(肪,颇鲍,付过,档仿)
                         clientItem.Item.Need = userItem.Desc[5];
                     }
-                    if (userItem.Desc[6] > 0)
-                    {
+                    if (userItem.Desc[6] > 0) {
                         clientItem.Item.NeedLevel = userItem.Desc[6];
                     }
-                    if (userItem.Desc[0] > 0)
-                    {
+                    if (userItem.Desc[0] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[1] > 0)
-                    {
+                    if (userItem.Desc[1] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[2] > 0)
-                    {
+                    if (userItem.Desc[2] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[3] > 0)
-                    {
+                    if (userItem.Desc[3] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[4] > 0)
-                    {
+                    if (userItem.Desc[4] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[11] > 0)
-                    {
+                    if (userItem.Desc[11] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[12] > 0)
-                    {
+                    if (userItem.Desc[12] > 0) {
                         UCount++;
                     }
                     break;
@@ -1015,16 +834,13 @@ namespace GameSvr.Items
                     clientItem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AC) + userItem.Desc[0]));
                     clientItem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(MAC) + userItem.Desc[1]));
                     clientItem.Item.Agility = (byte)(Agility + userItem.Desc[3]);
-                    if (userItem.Desc[0] > 0)
-                    {
+                    if (userItem.Desc[0] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[1] > 0)
-                    {
+                    if (userItem.Desc[1] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[3] > 0)
-                    {
+                    if (userItem.Desc[3] > 0) {
                         UCount++;
                     }
                     break;
@@ -1034,24 +850,19 @@ namespace GameSvr.Items
                     clientItem.Item.Accurate = (byte)(Accurate + userItem.Desc[2]);
                     clientItem.Item.Agility = (byte)(Agility + userItem.Desc[3]);
                     clientItem.Item.ToxAvoid = (byte)(ToxAvoid + userItem.Desc[13]);
-                    if (userItem.Desc[0] > 0)
-                    {
+                    if (userItem.Desc[0] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[1] > 0)
-                    {
+                    if (userItem.Desc[1] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[2] > 0)
-                    {
+                    if (userItem.Desc[2] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[3] > 0)
-                    {
+                    if (userItem.Desc[3] > 0) {
                         UCount++;
                     }
-                    if (userItem.Desc[13] > 0)
-                    {
+                    if (userItem.Desc[13] > 0) {
                         UCount++;
                     }
                     break;
@@ -1059,53 +870,42 @@ namespace GameSvr.Items
             return UCount;
         }
 
-        public static int RealAttackSpeed(short wAtkSpd)
-        {
+        public static int RealAttackSpeed(short wAtkSpd) {
             int result;
-            if (wAtkSpd <= 10)
-            {
+            if (wAtkSpd <= 10) {
                 result = -wAtkSpd;
             }
-            else
-            {
+            else {
                 result = wAtkSpd - 10;
             }
             return result;
         }
 
-        private static short NaturalAttackSpeed(int iAtkSpd)
-        {
+        private static short NaturalAttackSpeed(int iAtkSpd) {
             short result;
-            if (iAtkSpd <= 0)
-            {
+            if (iAtkSpd <= 0) {
                 result = (short)-iAtkSpd;
             }
-            else
-            {
+            else {
                 result = (short)(iAtkSpd + 10);
             }
             return result;
         }
 
-        private byte GetAttackSpeed(byte bStdAtkSpd, byte bUserAtkSpd)
-        {
+        private byte GetAttackSpeed(byte bStdAtkSpd, byte bUserAtkSpd) {
             int iTemp = RealAttackSpeed(bStdAtkSpd) + RealAttackSpeed(bUserAtkSpd);
             return (byte)NaturalAttackSpeed(iTemp);
         }
 
-        public byte UpgradeAttackSpeed(byte bUserAtkSpd, int iUpValue)
-        {
+        public byte UpgradeAttackSpeed(byte bUserAtkSpd, int iUpValue) {
             int iTemp = RealAttackSpeed(bUserAtkSpd) + iUpValue;
             return (byte)NaturalAttackSpeed(iTemp);
         }
 
-        public void RandomUpgradeItem(UserItem pu)
-        {
+        public void RandomUpgradeItem(UserItem pu) {
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(pu.Index);
-            if (stdItem != null)
-            {
-                switch (stdItem.StdMode)
-                {
+            if (stdItem != null) {
+                switch (stdItem.StdMode) {
                     case 5:
                     case 6:
                         UpgradeRandomWeapon(pu);
@@ -1138,13 +938,10 @@ namespace GameSvr.Items
             }
         }
 
-        public void RandomSetUnknownItem(UserItem pu)
-        {
+        public void RandomSetUnknownItem(UserItem pu) {
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(pu.Index);
-            if (stdItem != null)
-            {
-                switch (stdItem.StdMode)
-                {
+            if (stdItem != null) {
+                switch (stdItem.StdMode) {
                     case 15:
                         RandomSetUnknownHelmet(pu);
                         break;

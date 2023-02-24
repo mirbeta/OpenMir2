@@ -2,32 +2,25 @@ using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.Items
-{
-    public class CustomItem
-    {
+namespace GameSvr.Items {
+    public class CustomItem {
         private IList<ItemName> ItemNameList;
 
-        public CustomItem()
-        {
+        public CustomItem() {
             ItemNameList = new List<ItemName>();
         }
 
-        ~CustomItem()
-        {
-            for (int i = 0; i < ItemNameList.Count; i++)
-            {
+        ~CustomItem() {
+            for (int i = 0; i < ItemNameList.Count; i++) {
                 ItemNameList[i] = null;
             }
             ItemNameList = null;
         }
 
-        public string GetCustomItemName(int nMakeIndex, int nItemIndex)
-        {
+        public string GetCustomItemName(int nMakeIndex, int nItemIndex) {
             string result = string.Empty;
             ItemName itemName;
-            for (int i = ItemNameList.Count - 1; i >= 0; i--)
-            {
+            for (int i = ItemNameList.Count - 1; i >= 0; i--) {
                 itemName = ItemNameList[i];
                 if (itemName.nMakeIndex != nMakeIndex || itemName.nItemIndex != nItemIndex) continue;
                 result = itemName.sItemName;
@@ -36,14 +29,11 @@ namespace GameSvr.Items
             return result;
         }
 
-        public bool AddCustomItemName(int nMakeIndex, int nItemIndex, string sItemName)
-        {
+        public bool AddCustomItemName(int nMakeIndex, int nItemIndex, string sItemName) {
             ItemName itemName;
-            for (int i = ItemNameList.Count - 1; i >= 0; i--)
-            {
+            for (int i = ItemNameList.Count - 1; i >= 0; i--) {
                 itemName = ItemNameList[i];
-                if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex)
-                {
+                if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex) {
                     return false;
                 }
             }
@@ -55,13 +45,10 @@ namespace GameSvr.Items
             return true;
         }
 
-        public void DelCustomItemName(int nMakeIndex, int nItemIndex)
-        {
-            for (int i = 0; i < ItemNameList.Count; i++)
-            {
+        public void DelCustomItemName(int nMakeIndex, int nItemIndex) {
+            for (int i = 0; i < ItemNameList.Count; i++) {
                 ItemName itemName = ItemNameList[i];
-                if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex)
-                {
+                if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex) {
                     ItemNameList.RemoveAt(i);
                     return;
                 }
@@ -71,19 +58,16 @@ namespace GameSvr.Items
         /// <summary>
         /// 读取自定义物品名称
         /// </summary>
-        public void LoadCustomItemName()
-        {
+        public void LoadCustomItemName() {
             string sMakeIndex = string.Empty;
             string sItemIndex = string.Empty;
             string sItemName = string.Empty;
             string sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
             using StringList loadList = new StringList();
-            if (File.Exists(sFileName))
-            {
+            if (File.Exists(sFileName)) {
                 ItemNameList.Clear();
                 loadList.LoadFromFile(sFileName);
-                for (int i = 0; i < loadList.Count; i++)
-                {
+                for (int i = 0; i < loadList.Count; i++) {
                     string sLineText = loadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', '\t' });
@@ -98,8 +82,7 @@ namespace GameSvr.Items
                     ItemNameList.Add(itemName);
                 }
             }
-            else
-            {
+            else {
                 loadList.SaveToFile(sFileName);
             }
         }
@@ -109,15 +92,12 @@ namespace GameSvr.Items
         /// </summary>
         /// <param name="userItem"></param>
         /// <returns></returns>
-        public static string GetItemName(UserItem userItem)
-        {
+        public static string GetItemName(UserItem userItem) {
             string result = string.Empty;
-            if (userItem.Desc[13] == 1)
-            {
+            if (userItem.Desc[13] == 1) {
                 result = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
             }
-            if (string.IsNullOrEmpty(result))
-            {
+            if (string.IsNullOrEmpty(result)) {
                 result = M2Share.WorldEngine.GetStdItemName(userItem.Index);
             }
             return result;
@@ -126,12 +106,10 @@ namespace GameSvr.Items
         /// <summary>
         /// 保存自定义物品名称
         /// </summary>
-        public void SaveCustomItemName()
-        {
+        public void SaveCustomItemName() {
             string sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
             StringList saveList = new StringList();
-            for (int i = ItemNameList.Count - 1; i >= 0; i--)
-            {
+            for (int i = ItemNameList.Count - 1; i >= 0; i--) {
                 ItemName itemName = ItemNameList[i];
                 saveList.Add(itemName.nMakeIndex + "\t" + itemName.nItemIndex + "\t" + itemName.sItemName);
             }
@@ -143,8 +121,7 @@ namespace GameSvr.Items
         /// </summary>
         /// <param name="UserItem"></param>
         /// <returns></returns>
-        public static int GetItemAddValuePointColor(UserItem UserItem)
-        {
+        public static int GetItemAddValuePointColor(UserItem UserItem) {
             int result = 0;
             // if (Settings.g_Config.boRandomnameColor)
             // {

@@ -1,12 +1,9 @@
-namespace GameSvr.Monster.Monsters
-{
+namespace GameSvr.Monster.Monsters {
     /// <summary>
     /// 射手类怪
     /// </summary>
-    public class ArcherMonster : DualAxeMonster
-    {
-        public ArcherMonster() : base()
-        {
+    public class ArcherMonster : DualAxeMonster {
+        public ArcherMonster() : base() {
             AttackMax = 6;
         }
     }

@@ -1,34 +1,26 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 开始工程战役
     /// </summary>
     [Command("ForcedWallconquestWar", "开始攻城战役", "城堡名称", 10)]
-    public class ForcedWallconquestWarCommand : GameCommand
-    {
+    public class ForcedWallconquestWarCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (Params == null) {
                 return;
             }
             string sCastleName = @Params.Length > 0 ? @Params[0] : "";
-            if (sCastleName == "")
-            {
+            if (sCastleName == "") {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             Castle.UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);
-            if (Castle != null)
-            {
+            if (Castle != null) {
                 Castle.UnderWar = !Castle.UnderWar;
-                if (Castle.UnderWar)
-                {
+                if (Castle.UnderWar) {
                     Castle.ShowOverMsg = false;
                     Castle.WarDate = DateTime.Now;
                     Castle.StartCastleWarTick = HUtil32.GetTickCount();
@@ -39,13 +31,11 @@ namespace GameSvr.GameCommand.Commands
                     World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
                     Castle.MainDoorControl(true);
                 }
-                else
-                {
+                else {
                     Castle.StopWallconquestWar();
                 }
             }
-            else
-            {
+            else {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
             }
         }

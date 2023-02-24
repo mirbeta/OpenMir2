@@ -8,14 +8,12 @@ using System.Text;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.Npc
-{
+namespace GameSvr.Npc {
     /// <summary>
     /// 管理类NPC
     /// 如 月老
     /// </summary>
-    public partial class NormNpc : AnimalObject
-    {
+    public partial class NormNpc : AnimalObject {
         /// <summary>
         /// 用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)
         /// </summary>
@@ -35,8 +33,7 @@ namespace GameSvr.Npc
         private IList<ScriptParams> BatchParamsList;
         public int ProcessRefillIndex;
 
-        public NormNpc() : base()
-        {
+        public NormNpc() : base() {
             SuperMan = true;
             Race = ActorRace.NPC;
             Light = 2;
@@ -50,26 +47,22 @@ namespace GameSvr.Npc
             CellType = CellType.Merchant;
         }
 
-        ~NormNpc()
-        {
+        ~NormNpc() {
             ClearScript();
         }
 
-        public virtual void ClearScript()
-        {
+        public virtual void ClearScript() {
             m_ScriptList.Clear();
         }
 
-        public virtual void Click(PlayObject PlayObject)
-        {
+        public virtual void Click(PlayObject PlayObject) {
             PlayObject.ScriptGotoCount = 0;
             PlayObject.ScriptGoBackLable = "";
             PlayObject.ScriptCurrLable = "";
             GotoLable(PlayObject, "@main", false);
         }
 
-        private void ExeAction(PlayObject PlayObject, string sParam1, string sParam2, string sParam3, int nParam1, int nParam2, int nParam3)
-        {
+        private void ExeAction(PlayObject PlayObject, string sParam1, string sParam2, string sParam3, int nParam1, int nParam2, int nParam3) {
             int nInt1;
             int dwInt;
             // ================================================
@@ -78,38 +71,29 @@ namespace GameSvr.Npc
             // EXEACTION CHANGEEXP 1 经验数  增加指定经验
             // EXEACTION CHANGEEXP 2 经验数  减少指定经验
             // ================================================
-            if (string.Compare(sParam1, "CHANGEEXP", StringComparison.OrdinalIgnoreCase) == 0)
-            {
+            if (string.Compare(sParam1, "CHANGEEXP", StringComparison.OrdinalIgnoreCase) == 0) {
                 nInt1 = HUtil32.StrToInt(sParam2, -1);
-                switch (nInt1)
-                {
+                switch (nInt1) {
                     case 0:
-                        if (nParam3 >= 0)
-                        {
+                        if (nParam3 >= 0) {
                             PlayObject.Abil.Exp = nParam3;
                             PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         }
                         break;
                     case 1:
-                        if (PlayObject.Abil.Exp >= nParam3)
-                        {
-                            if (PlayObject.Abil.Exp - nParam3 > int.MaxValue - PlayObject.Abil.Exp)
-                            {
+                        if (PlayObject.Abil.Exp >= nParam3) {
+                            if (PlayObject.Abil.Exp - nParam3 > int.MaxValue - PlayObject.Abil.Exp) {
                                 dwInt = int.MaxValue - PlayObject.Abil.Exp;
                             }
-                            else
-                            {
+                            else {
                                 dwInt = nParam3;
                             }
                         }
-                        else
-                        {
-                            if (nParam3 - PlayObject.Abil.Exp > int.MaxValue - nParam3)
-                            {
+                        else {
+                            if (nParam3 - PlayObject.Abil.Exp > int.MaxValue - nParam3) {
                                 dwInt = int.MaxValue - nParam3;
                             }
-                            else
-                            {
+                            else {
                                 dwInt = nParam3;
                             }
                         }
@@ -117,12 +101,10 @@ namespace GameSvr.Npc
                         PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         break;
                     case 2:
-                        if (PlayObject.Abil.Exp > nParam3)
-                        {
+                        if (PlayObject.Abil.Exp > nParam3) {
                             PlayObject.Abil.Exp -= nParam3;
                         }
-                        else
-                        {
+                        else {
                             PlayObject.Abil.Exp = 0;
                         }
                         PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
@@ -137,38 +119,29 @@ namespace GameSvr.Npc
             // EXEACTION CHANGELEVEL 1 等级数  增加指定等级
             // EXEACTION CHANGELEVEL 2 等级数  减少指定等级
             // ================================================
-            if (string.Compare(sParam1, "CHANGELEVEL", StringComparison.OrdinalIgnoreCase) == 0)
-            {
+            if (string.Compare(sParam1, "CHANGELEVEL", StringComparison.OrdinalIgnoreCase) == 0) {
                 nInt1 = HUtil32.StrToInt(sParam2, -1);
-                switch (nInt1)
-                {
+                switch (nInt1) {
                     case 0:
-                        if (nParam3 >= 0)
-                        {
+                        if (nParam3 >= 0) {
                             PlayObject.Abil.Level = (byte)nParam3;
                             PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         }
                         break;
                     case 1:
-                        if (PlayObject.Abil.Level >= nParam3)
-                        {
-                            if (PlayObject.Abil.Level - nParam3 > byte.MaxValue - PlayObject.Abil.Level)
-                            {
+                        if (PlayObject.Abil.Level >= nParam3) {
+                            if (PlayObject.Abil.Level - nParam3 > byte.MaxValue - PlayObject.Abil.Level) {
                                 dwInt = byte.MaxValue - PlayObject.Abil.Level;
                             }
-                            else
-                            {
+                            else {
                                 dwInt = nParam3;
                             }
                         }
-                        else
-                        {
-                            if (nParam3 - PlayObject.Abil.Level > byte.MaxValue - nParam3)
-                            {
+                        else {
+                            if (nParam3 - PlayObject.Abil.Level > byte.MaxValue - nParam3) {
                                 dwInt = byte.MaxValue - nParam3;
                             }
-                            else
-                            {
+                            else {
                                 dwInt = nParam3;
                             }
                         }
@@ -176,12 +149,10 @@ namespace GameSvr.Npc
                         PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
                         break;
                     case 2:
-                        if (PlayObject.Abil.Level > nParam3)
-                        {
+                        if (PlayObject.Abil.Level > nParam3) {
                             PlayObject.Abil.Level -= (byte)nParam3;
                         }
-                        else
-                        {
+                        else {
                             PlayObject.Abil.Level = 0;
                         }
                         PlayObject.HasLevelUp(PlayObject.Abil.Level - 1);
@@ -197,11 +168,9 @@ namespace GameSvr.Npc
             // EXEACTION KILL 2 人物死亡,显示凶手信息为NPC
             // EXEACTION KILL 3 人物死亡不掉物品,显示凶手信息为NPC
             // ================================================
-            if (string.Compare(sParam1, "KILL", StringComparison.OrdinalIgnoreCase) == 0)
-            {
+            if (string.Compare(sParam1, "KILL", StringComparison.OrdinalIgnoreCase) == 0) {
                 nInt1 = HUtil32.StrToInt(sParam2, -1);
-                switch (nInt1)
-                {
+                switch (nInt1) {
                     case 1:
                         PlayObject.NoItem = true;
                         PlayObject.Die();
@@ -225,34 +194,27 @@ namespace GameSvr.Npc
             // 踢人物下线
             // EXEACTION KICK
             // ================================================
-            if (string.Compare(sParam1, "KICK", StringComparison.OrdinalIgnoreCase) == 0)
-            {
+            if (string.Compare(sParam1, "KICK", StringComparison.OrdinalIgnoreCase) == 0) {
                 PlayObject.BoKickFlag = true;
                 return;
             }
         }
 
-        public string GetLineVariableText(PlayObject PlayObject, string sMsg)
-        {
+        public string GetLineVariableText(PlayObject PlayObject, string sMsg) {
             int nCount = 0;
             string sVariable = string.Empty;
-            while (true)
-            {
-                if (sMsg.IndexOf('>', StringComparison.Ordinal) < 1)
-                {
+            while (true) {
+                if (sMsg.IndexOf('>', StringComparison.Ordinal) < 1) {
                     break;
                 }
                 HUtil32.ArrestStringEx(sMsg, "<", ">", ref sVariable);
-                if (!string.IsNullOrEmpty(sVariable))
-                {
-                    if (sVariable[0] == '$')
-                    {
+                if (!string.IsNullOrEmpty(sVariable)) {
+                    if (sVariable[0] == '$') {
                         GetVariableText(PlayObject, sVariable, ref sMsg);
                     }
                 }
                 nCount++;
-                if (nCount >= 101)
-                {
+                if (nCount >= 101) {
                     break;
                 }
             }
@@ -262,14 +224,12 @@ namespace GameSvr.Npc
         /// <summary>
         /// 获取全局变量信息
         /// </summary>
-        protected virtual void GetVariableText(PlayObject PlayObject, string sVariable, ref string sMsg)
-        {
+        protected virtual void GetVariableText(PlayObject PlayObject, string sVariable, ref string sMsg) {
             string s14 = string.Empty;
             DynamicVar DynamicVar;
             bool boFoundVar;
             string sText;
-            switch (sVariable)
-            {
+            switch (sVariable) {
                 case "$SERVERNAME":
                     sMsg = ReplaceVariableText(sMsg, "<$SERVERNAME>", M2Share.Config.ServerName);
                     return;
@@ -347,79 +307,61 @@ namespace GameSvr.Npc
                     sText = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     sMsg = ReplaceVariableText(sMsg, "<$DATETIME>", sText);
                     return;
-                case "$HIGHLEVELINFO":
-                    {
-                        if (M2Share.HighLevelHuman != 0)
-                        {
+                case "$HIGHLEVELINFO": {
+                        if (M2Share.HighLevelHuman != 0) {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman)).GetMyInfo();
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHLEVELINFO>", sText);
                         return;
                     }
-                case "$HIGHPKINFO":
-                    {
-                        if (M2Share.HighPKPointHuman != 0)
-                        {
+                case "$HIGHPKINFO": {
+                        if (M2Share.HighPKPointHuman != 0) {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighPKPointHuman)).GetMyInfo();
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHPKINFO>", sText);
                         return;
                     }
-                case "$HIGHDCINFO":
-                    {
-                        if (M2Share.HighDCHuman != 0)
-                        {
+                case "$HIGHDCINFO": {
+                        if (M2Share.HighDCHuman != 0) {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighDCHuman)).GetMyInfo();
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHDCINFO>", sText);
                         return;
                     }
-                case "$HIGHMCINFO":
-                    {
-                        if (M2Share.HighMCHuman != 0)
-                        {
+                case "$HIGHMCINFO": {
+                        if (M2Share.HighMCHuman != 0) {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighMCHuman)).GetMyInfo();
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHMCINFO>", sText);
                         return;
                     }
-                case "$HIGHSCINFO":
-                    {
-                        if (M2Share.HighSCHuman != 0)
-                        {
+                case "$HIGHSCINFO": {
+                        if (M2Share.HighSCHuman != 0) {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighSCHuman)).GetMyInfo();
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHSCINFO>", sText);
                         return;
                     }
-                case "$HIGHONLINEINFO":
-                    {
-                        if (M2Share.HighOnlineHuman != 0)
-                        {
+                case "$HIGHONLINEINFO": {
+                        if (M2Share.HighOnlineHuman != 0) {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighOnlineHuman)).GetMyInfo();
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHONLINEINFO>", sText);
@@ -435,17 +377,13 @@ namespace GameSvr.Npc
                 case "$HUMANSHOWNAME":
                     sMsg = ReplaceVariableText(sMsg, "<$HUMANSHOWNAME>", PlayObject.GetShowName());
                     return;
-                case "$MONKILLER":
-                    {
-                        if (PlayObject.LastHiter != null)
-                        {
-                            if (PlayObject.LastHiter.Race != ActorRace.Play)
-                            {
+                case "$MONKILLER": {
+                        if (PlayObject.LastHiter != null) {
+                            if (PlayObject.LastHiter.Race != ActorRace.Play) {
                                 sMsg = ReplaceVariableText(sMsg, "<$MONKILLER>", PlayObject.LastHiter.ChrName);
                             }
                         }
-                        else
-                        {
+                        else {
                             sMsg = ReplaceVariableText(sMsg, "<$MONKILLER>", "未知");
                         }
                         return;
@@ -455,17 +393,13 @@ namespace GameSvr.Npc
                         sMsg = ReplaceVariableText(sMsg, "<$QUERYYBDEALLOG>", PlayObject.SelectSellDate());
                         return;
                     }
-                case "$KILLER":
-                    {
-                        if (PlayObject.LastHiter != null)
-                        {
-                            if (PlayObject.LastHiter.Race == ActorRace.Play)
-                            {
+                case "$KILLER": {
+                        if (PlayObject.LastHiter != null) {
+                            if (PlayObject.LastHiter.Race == ActorRace.Play) {
                                 sMsg = ReplaceVariableText(sMsg, "<$KILLER>", PlayObject.LastHiter.ChrName);
                             }
                         }
-                        else
-                        {
+                        else {
                             sMsg = ReplaceVariableText(sMsg, "<$KILLER>", "未知");
                         }
                         return;
@@ -473,14 +407,11 @@ namespace GameSvr.Npc
                 case "$USERNAME":
                     sMsg = ReplaceVariableText(sMsg, "<$USERNAME>", PlayObject.ChrName);
                     return;
-                case "$GUILDNAME":
-                    {
-                        if (PlayObject.MyGuild != null)
-                        {
+                case "$GUILDNAME": {
+                        if (PlayObject.MyGuild != null) {
                             sMsg = ReplaceVariableText(sMsg, "<$GUILDNAME>", PlayObject.MyGuild.GuildName);
                         }
-                        else
-                        {
+                        else {
                             sMsg = "无";
                         }
                         return;
@@ -672,53 +603,41 @@ namespace GameSvr.Npc
                     sText = PlayObject.LoginIpLocal;
                     sMsg = ReplaceVariableText(sMsg, "<$IPLOCAL>", sText);
                     return;
-                case "$GUILDBUILDPOINT":
-                    {
-                        if (PlayObject.MyGuild == null)
-                        {
+                case "$GUILDBUILDPOINT": {
+                        if (PlayObject.MyGuild == null) {
                             sText = "无";
                         }
-                        else
-                        {
+                        else {
                             sText = PlayObject.MyGuild.BuildPoint.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDBUILDPOINT>", sText);
                         return;
                     }
-                case "$GUILDAURAEPOINT":
-                    {
-                        if (PlayObject.MyGuild == null)
-                        {
+                case "$GUILDAURAEPOINT": {
+                        if (PlayObject.MyGuild == null) {
                             sText = "无";
                         }
-                        else
-                        {
+                        else {
                             sText = PlayObject.MyGuild.Aurae.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDAURAEPOINT>", sText);
                         return;
                     }
-                case "$GUILDSTABILITYPOINT":
-                    {
-                        if (PlayObject.MyGuild == null)
-                        {
+                case "$GUILDSTABILITYPOINT": {
+                        if (PlayObject.MyGuild == null) {
                             sText = "无";
                         }
-                        else
-                        {
+                        else {
                             sText = PlayObject.MyGuild.Stability.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDSTABILITYPOINT>", sText);
                         return;
                     }
-                case "$GUILDFLOURISHPOINT":
-                    {
-                        if (PlayObject.MyGuild == null)
-                        {
+                case "$GUILDFLOURISHPOINT": {
+                        if (PlayObject.MyGuild == null) {
                             sText = "无";
                         }
-                        else
-                        {
+                        else {
                             sText = PlayObject.MyGuild.Flourishing.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDFLOURISHPOINT>", sText);
@@ -736,51 +655,39 @@ namespace GameSvr.Npc
                     sText = M2Share.Config.WomaHorn;
                     sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", sText);
                     return;
-                case "$OWNERGUILD":
-                    {
-                        if (Castle != null)
-                        {
+                case "$OWNERGUILD": {
+                        if (Castle != null) {
                             sText = Castle.OwnGuild;
-                            if (sText == "")
-                            {
+                            if (sText == "") {
                                 sText = "游戏管理";
                             }
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$OWNERGUILD>", sText);
                         return;
                     }
-                case "$CASTLENAME":
-                    {
-                        if (Castle != null)
-                        {
+                case "$CASTLENAME": {
+                        if (Castle != null) {
                             sText = Castle.sName;
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$CASTLENAME>", sText);
                         return;
                     }
-                case "$LORD":
-                    {
-                        if (Castle != null)
-                        {
-                            if (Castle.MasterGuild != null)
-                            {
+                case "$LORD": {
+                        if (Castle != null) {
+                            if (Castle.MasterGuild != null) {
                                 sText = Castle.MasterGuild.GetChiefName();
                             }
-                            else
-                            {
+                            else {
                                 sText = "管理员";
                             }
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$LORD>", sText);
@@ -792,87 +699,66 @@ namespace GameSvr.Npc
                 case "$BUILDGUILDFEE":
                     sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.Config.BuildGuildPrice.ToString());
                     return;
-                case "$CASTLEWARDATE":
-                    {
-                        if (Castle == null)
-                        {
+                case "$CASTLEWARDATE": {
+                        if (Castle == null) {
                             Castle = M2Share.CastleMgr.GetCastle(0);
                         }
-                        if (Castle != null)
-                        {
-                            if (!Castle.UnderWar)
-                            {
+                        if (Castle != null) {
+                            if (!Castle.UnderWar) {
                                 sText = Castle.GetWarDate();
-                                if (!string.IsNullOrEmpty(sText))
-                                {
+                                if (!string.IsNullOrEmpty(sText)) {
                                     sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARDATE>", sText);
                                 }
-                                else
-                                {
+                                else {
                                     sMsg = "暂时没有行会攻城 .\\ \\<返回/@main>";
                                 }
                             }
-                            else
-                            {
+                            else {
                                 sMsg = "正在攻城当中.\\ \\<返回/@main>";
                             }
                         }
                         return;
                     }
-                case "$LISTOFWAR":
-                    {
-                        if (Castle != null)
-                        {
+                case "$LISTOFWAR": {
+                        if (Castle != null) {
                             sText = Castle.GetAttackWarList();
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
-                        if (!string.IsNullOrEmpty(sText))
-                        {
+                        if (!string.IsNullOrEmpty(sText)) {
                             sMsg = ReplaceVariableText(sMsg, "<$LISTOFWAR>", sText);
                         }
-                        else
-                        {
+                        else {
                             sMsg = "暂时没有行会攻城 .\\ \\<返回/@main>";
                         }
                         return;
                     }
-                case "$CASTLECHANGEDATE":
-                    {
-                        if (Castle != null)
-                        {
+                case "$CASTLECHANGEDATE": {
+                        if (Castle != null) {
                             sText = Castle.ChangeDate.ToString("yyyy-MM-dd HH:mm:ss");
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$CASTLECHANGEDATE>", sText);
                         return;
                     }
-                case "$CASTLEWARLASTDATE":
-                    {
-                        if (Castle != null)
-                        {
+                case "$CASTLEWARLASTDATE": {
+                        if (Castle != null) {
                             sText = Castle.WarDate.ToString("yyyy-MM-dd HH:mm:ss");
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARLASTDATE>", sText);
                         return;
                     }
-                case "$CASTLEGETDAYS":
-                    {
-                        if (Castle != null)
-                        {
+                case "$CASTLEGETDAYS": {
+                        if (Castle != null) {
                             sText = HUtil32.GetDayCount(DateTime.Now, Castle.ChangeDate).ToString();
                         }
-                        else
-                        {
+                        else {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$CASTLEGETDAYS>", sText);
@@ -975,24 +861,20 @@ namespace GameSvr.Npc
                     }
                 case "$BSNAME":// 上次攻击我的名称
                     {
-                        if (PlayObject.LastHiter != null)
-                        {
+                        if (PlayObject.LastHiter != null) {
                             sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", PlayObject.LastHiter.ChrName);
                         }
-                        else
-                        {
+                        else {
                             sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", "");
                         }
                         return;
                     }
                 case "$TARGETNAME":// 正在攻击的人物或怪物名称
                     {
-                        if (PlayObject.TargetCret != null)
-                        {
+                        if (PlayObject.TargetCret != null) {
                             sText = PlayObject.TargetCret.ChrName;
                         }
-                        else
-                        {
+                        else {
                             sText = "";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$TARGETNAME>", sText);
@@ -1072,8 +954,7 @@ namespace GameSvr.Npc
                 {
                     MapName = M2Share.ManageNPC.GetLineVariableText(PlayObject, "<" + MapName + ">"); // 替换变量
                 }
-                if (MonsterName.StartsWith("$"))
-                {
+                if (MonsterName.StartsWith("$")) {
                     MonsterName = M2Share.ManageNPC.GetLineVariableText(PlayObject, "<" + MonsterName + ">"); // 替换变量
                 }
                 MonGenInfo MonGen;
@@ -1082,42 +963,31 @@ namespace GameSvr.Npc
                 {
                     if (string.Compare(MonsterName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部名字的怪物
                     {
-                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
-                        {
-                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
-                            {
+                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
+                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++) {
                                 MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
-                                if (MonGen == null)
-                                {
+                                if (MonGen == null) {
                                     continue;
                                 }
-                                for (int k = 0; k < MonGen.CertList.Count; k++)
-                                {
+                                for (int k = 0; k < MonGen.CertList.Count; k++) {
                                     BaseObject = MonGen.CertList[k];
-                                    if (BaseObject.Master == null && !BaseObject.Death && !BaseObject.Ghost)
-                                    {
+                                    if (BaseObject.Master == null && !BaseObject.Death && !BaseObject.Ghost) {
                                         MonGenCount++;
                                     }
                                 }
                             }
                         }
                     }
-                    else
-                    {
-                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
-                        {
-                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
-                            {
+                    else {
+                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
+                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++) {
                                 MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
-                                if (MonGen == null)
-                                {
+                                if (MonGen == null) {
                                     continue;
                                 }
-                                for (int k = 0; k < MonGen.CertList.Count; k++)
-                                {
+                                for (int k = 0; k < MonGen.CertList.Count; k++) {
                                     BaseObject = MonGen.CertList[k];
-                                    if (BaseObject.Master == null && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
-                                    {
+                                    if (BaseObject.Master == null && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost) {
                                         MonGenCount++;
                                     }
                                 }
@@ -1125,50 +995,37 @@ namespace GameSvr.Npc
                         }
                     }
                 }
-                else
-                {
+                else {
                     // 如果不是全部地图
                     Envirnoment Envir = M2Share.MapMgr.FindMap(MapName);
-                    if (Envir != null)
-                    {
+                    if (Envir != null) {
                         if (string.Compare(MonsterName, "ALL", StringComparison.CurrentCulture) == 0)// 如果是全部名字的怪物
                         {
-                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
-                            {
-                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
-                                {
+                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
+                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++) {
                                     MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
-                                    if (MonGen == null)
-                                    {
+                                    if (MonGen == null) {
                                         continue;
                                     }
-                                    for (int k = 0; k < MonGen.CertList.Count; k++)
-                                    {
+                                    for (int k = 0; k < MonGen.CertList.Count; k++) {
                                         BaseObject = MonGen.CertList[k];
-                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && !BaseObject.Death && !BaseObject.Ghost)
-                                        {
+                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && !BaseObject.Death && !BaseObject.Ghost) {
                                             MonGenCount++;
                                         }
                                     }
                                 }
                             }
                         }
-                        else
-                        {
-                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
-                            {
-                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
-                                {
+                        else {
+                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
+                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++) {
                                     MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
-                                    if (MonGen == null)
-                                    {
+                                    if (MonGen == null) {
                                         continue;
                                     }
-                                    for (int k = 0; k < MonGen.CertList.Count; k++)
-                                    {
+                                    for (int k = 0; k < MonGen.CertList.Count; k++) {
                                         BaseObject = MonGen.CertList[k];
-                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
-                                        {
+                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost) {
                                             MonGenCount++;
                                         }
                                     }
@@ -1316,12 +1173,10 @@ namespace GameSvr.Npc
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 int n18 = HUtil32.StrToInt(s14, -1);
-                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
-                {
+                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0) {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.UseItems[n18].MakeIndex.ToString());
                 }
-                else
-                {
+                else {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", "0");
                 }
                 return;
@@ -1330,20 +1185,17 @@ namespace GameSvr.Npc
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 int n18 = HUtil32.StrToInt(s14, -1);
-                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
-                {
+                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0) {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[n18].Index));
                 }
-                else
-                {
+                else {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", "无");
                 }
                 return;
             }
             if (sVariable == "$ATTACKMODE")// 显示用户当前的攻击模式
             {
-                switch (PlayObject.AttatckMode)
-                {
+                switch (PlayObject.AttatckMode) {
                     case AttackMode.HAM_ALL: // [攻击模式: 全体攻击]
                         sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "0");
                         break;
@@ -1377,14 +1229,11 @@ namespace GameSvr.Npc
                 sMsg = ReplaceVariableText(sMsg, "<$QUERYYBDEALLOG>", PlayObject.SelectSellDate());
                 return;
             }
-            if (sVariable == "$GUILDNAME")
-            {
-                if (PlayObject.MyGuild != null)
-                {
+            if (sVariable == "$GUILDNAME") {
+                if (PlayObject.MyGuild != null) {
                     sMsg = ReplaceVariableText(sMsg, "<$GUILDNAME>", PlayObject.MyGuild.GuildName);
                 }
-                else
-                {
+                else {
                     sMsg = "无";
                 }
                 return;
@@ -1439,14 +1288,11 @@ namespace GameSvr.Npc
                 sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.Config.BuildGuildPrice.ToString());
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$HUMAN("))
-            {
+            if (HUtil32.CompareLStr(sVariable, "$HUMAN(")) {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
-                if (PlayObject.DynamicVarMap.TryGetValue(s14, out DynamicVar))
-                {
-                    switch (DynamicVar.VarType)
-                    {
+                if (PlayObject.DynamicVarMap.TryGetValue(s14, out DynamicVar)) {
+                    switch (DynamicVar.VarType) {
                         case VarType.Integer:
                             sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                             boFoundVar = true;
@@ -1457,26 +1303,20 @@ namespace GameSvr.Npc
                             break;
                     }
                 }
-                if (!boFoundVar)
-                {
+                if (!boFoundVar) {
                     sMsg = "??";
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$GUILD("))
-            {
-                if (PlayObject.MyGuild == null)
-                {
+            if (HUtil32.CompareLStr(sVariable, "$GUILD(")) {
+                if (PlayObject.MyGuild == null) {
                     return;
                 }
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
-                if (PlayObject.MyGuild.DynamicVarList.TryGetValue(s14, out DynamicVar))
-                {
-                    if (string.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        switch (DynamicVar.VarType)
-                        {
+                if (PlayObject.MyGuild.DynamicVarList.TryGetValue(s14, out DynamicVar)) {
+                    if (string.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0) {
+                        switch (DynamicVar.VarType) {
                             case VarType.Integer:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                                 boFoundVar = true;
@@ -1488,20 +1328,16 @@ namespace GameSvr.Npc
                         }
                     }
                 }
-                if (!boFoundVar)
-                {
+                if (!boFoundVar) {
                     sMsg = "??";
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$GLOBAL("))
-            {
+            if (HUtil32.CompareLStr(sVariable, "$GLOBAL(")) {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
-                if (M2Share.DynamicVarList.TryGetValue(s14, out DynamicVar))
-                {
-                    switch (DynamicVar.VarType)
-                    {
+                if (M2Share.DynamicVarList.TryGetValue(s14, out DynamicVar)) {
+                    switch (DynamicVar.VarType) {
                         case VarType.Integer:
                             sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                             boFoundVar = true;
@@ -1512,56 +1348,43 @@ namespace GameSvr.Npc
                             break;
                     }
                 }
-                if (!boFoundVar)
-                {
+                if (!boFoundVar) {
                     sMsg = "??";
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$STR("))
-            {
+            if (HUtil32.CompareLStr(sVariable, "$STR(")) {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 int nVarValue = M2Share.GetValNameNo(s14);
-                if (nVarValue >= 0)
-                {
-                    if (HUtil32.RangeInDefined(nVarValue, 0, 99))
-                    {
+                if (nVarValue >= 0) {
+                    if (HUtil32.RangeInDefined(nVarValue, 0, 99)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MNVal[nVarValue].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 100, 199))
-                    {
+                    else if (HUtil32.RangeInDefined(nVarValue, 100, 199)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobalVal[nVarValue - 100].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 200, 299))
-                    {
+                    else if (HUtil32.RangeInDefined(nVarValue, 200, 299)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MDyVal[nVarValue - 200].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 300, 399))
-                    {
+                    else if (HUtil32.RangeInDefined(nVarValue, 300, 399)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MNMval[nVarValue - 300].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 400, 499))
-                    {
+                    else if (HUtil32.RangeInDefined(nVarValue, 400, 499)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobaDyMval[nVarValue - 400].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 500, 599))
-                    {
+                    else if (HUtil32.RangeInDefined(nVarValue, 500, 599)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MNInteger[nVarValue - 500].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 600, 699))
-                    {
+                    else if (HUtil32.RangeInDefined(nVarValue, 600, 699)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MSString[nVarValue - 600]);
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 700, 799))
-                    {
+                    else if (HUtil32.RangeInDefined(nVarValue, 700, 799)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobalAVal[nVarValue - 700]);
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 800, 1199))
-                    {
+                    else if (HUtil32.RangeInDefined(nVarValue, 800, 1199)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobalVal[nVarValue - 700].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 1200, 1599))
-                    {
+                    else if (HUtil32.RangeInDefined(nVarValue, 1200, 1599)) {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobalAVal[nVarValue - 1100]);
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 1600, 1699)) //个人服务器字符串变量E
@@ -1576,28 +1399,23 @@ namespace GameSvr.Npc
             }
         }
 
-        public void LoadNPCScript()
-        {
-            if (IsQuest)
-            {
+        public void LoadNPCScript() {
+            if (IsQuest) {
                 m_sPath = ScriptConst.sNpc_def;
                 string sScriptName = ChrName + '-' + MapName;
                 M2Share.ScriptSystem.LoadScript(this, FilePath, sScriptName);
             }
-            else
-            {
+            else {
                 m_sPath = FilePath;
                 M2Share.ScriptSystem.LoadScript(this, FilePath, ChrName);
             }
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg)
-        {
+        protected override bool Operate(ProcessMessage ProcessMsg) {
             return base.Operate(ProcessMsg);
         }
 
-        public override void Run()
-        {
+        public override void Run() {
             if (Master != null)// 不允许召唤为宝宝
             {
                 Master = null;
@@ -1605,29 +1423,24 @@ namespace GameSvr.Npc
             base.Run();
         }
 
-        private void ScriptActionError(PlayObject PlayObject, string sErrMsg, QuestActionInfo QuestActionInfo, string sCmd)
-        {
+        private void ScriptActionError(PlayObject PlayObject, string sErrMsg, QuestActionInfo QuestActionInfo, string sCmd) {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             string sMsg = Format(sOutMessage, sErrMsg, sCmd, ChrName, MapName, CurrX, CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             M2Share.Logger.Error(sMsg);
         }
 
-        private void ScriptConditionError(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo, string sCmd)
-        {
+        private void ScriptConditionError(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo, string sCmd) {
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + ChrName + " 地图:" + MapName + " 座标:" + CurrX + ':' + CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
             M2Share.Logger.Error("[脚本参数不正确] " + sMsg);
         }
 
-        protected void SendMsgToUser(PlayObject PlayObject, string sMsg)
-        {
+        protected void SendMsgToUser(PlayObject PlayObject, string sMsg) {
             PlayObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
         }
 
-        protected static string ReplaceVariableText(string sMsg, string sStr, string sText)
-        {
+        protected static string ReplaceVariableText(string sMsg, string sStr, string sText) {
             int n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
-            if (n10 > -1)
-            {
+            if (n10 > -1) {
                 ReadOnlySpan<char> s18 = sMsg.AsSpan()[(sStr.Length + n10)..sMsg.Length];
                 StringBuilder builder = new StringBuilder();
                 builder.Append(sMsg[..n10]);
@@ -1638,28 +1451,22 @@ namespace GameSvr.Npc
             return sMsg;
         }
 
-        public virtual void UserSelect(PlayObject PlayObject, string sData)
-        {
+        public virtual void UserSelect(PlayObject PlayObject, string sData) {
             string sLabel = string.Empty;
             PlayObject.ScriptGotoCount = 0;
             if (!string.IsNullOrEmpty(sData) && sData[0] == '@')// 处理脚本命令 @back 返回上级标签内容
             {
                 HUtil32.GetValidStr3(sData, ref sLabel, '\r');
-                if (PlayObject.ScriptCurrLable != sLabel)
-                {
-                    if (sLabel != ScriptConst.sBACK)
-                    {
+                if (PlayObject.ScriptCurrLable != sLabel) {
+                    if (sLabel != ScriptConst.sBACK) {
                         PlayObject.ScriptGoBackLable = PlayObject.ScriptCurrLable;
                         PlayObject.ScriptCurrLable = sLabel;
                     }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(PlayObject.ScriptCurrLable))
-                        {
+                    else {
+                        if (!string.IsNullOrEmpty(PlayObject.ScriptCurrLable)) {
                             PlayObject.ScriptCurrLable = "";
                         }
-                        else
-                        {
+                        else {
                             PlayObject.ScriptGoBackLable = "";
                         }
                     }
@@ -1667,123 +1474,98 @@ namespace GameSvr.Npc
             }
         }
 
-        protected virtual void SendCustemMsg(PlayObject PlayObject, string sMsg)
-        {
-            if (!M2Share.Config.SendCustemMsg)
-            {
+        protected virtual void SendCustemMsg(PlayObject PlayObject, string sMsg) {
+            if (!M2Share.Config.SendCustemMsg) {
                 PlayObject.SysMsg(Settings.SendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.BoSendMsgFlag)
-            {
+            if (PlayObject.BoSendMsgFlag) {
                 PlayObject.BoSendMsgFlag = false;
                 M2Share.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Cust);
             }
         }
 
-        public override void Initialize()
-        {
+        public override void Initialize() {
             base.Initialize();
             Castle = M2Share.CastleMgr.InCastleWarArea(this);
         }
 
-        private static Dictionary<string, DynamicVar> GetDynamicVarMap(PlayObject PlayObject, string sType, ref string sName)
-        {
+        private static Dictionary<string, DynamicVar> GetDynamicVarMap(PlayObject PlayObject, string sType, ref string sName) {
             Dictionary<string, DynamicVar> result = null;
-            if (HUtil32.CompareLStr(sType, "HUMAN", 5))
-            {
+            if (HUtil32.CompareLStr(sType, "HUMAN", 5)) {
                 result = PlayObject.DynamicVarMap;
                 sName = PlayObject.ChrName;
             }
-            else if (HUtil32.CompareLStr(sType, "GUILD", 5))
-            {
-                if (PlayObject.MyGuild == null)
-                {
+            else if (HUtil32.CompareLStr(sType, "GUILD", 5)) {
+                if (PlayObject.MyGuild == null) {
                     return null;
                 }
                 result = PlayObject.MyGuild.DynamicVarList;
                 sName = PlayObject.MyGuild.GuildName;
             }
-            else if (HUtil32.CompareLStr(sType, "GLOBAL", 6))
-            {
+            else if (HUtil32.CompareLStr(sType, "GLOBAL", 6)) {
                 result = M2Share.DynamicVarList;
                 sName = "GLOBAL";
             }
-            else if (HUtil32.CompareLStr(sType, "Account", 7))
-            {
+            else if (HUtil32.CompareLStr(sType, "Account", 7)) {
                 result = PlayObject.DynamicVarMap;
                 sName = PlayObject.UserAccount;
             }
             return result;
         }
 
-        private static bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue)
-        {
+        private static bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue) {
             bool result = false;
-            if (string.IsNullOrEmpty(sMsg))
-            {
+            if (string.IsNullOrEmpty(sMsg)) {
                 return false;
             }
             int n01 = M2Share.GetValNameNo(sMsg);
-            if (n01 >= 0)
-            {
-                if (HUtil32.RangeInDefined(n01, 0, 99))
-                {
+            if (n01 >= 0) {
+                if (HUtil32.RangeInDefined(n01, 0, 99)) {
                     nValue = PlayObject.MNVal[n01];
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 100, 199))
-                {
+                else if (HUtil32.RangeInDefined(n01, 100, 199)) {
                     nValue = M2Share.Config.GlobalVal[n01 - 100];
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 200, 299))
-                {
+                else if (HUtil32.RangeInDefined(n01, 200, 299)) {
                     nValue = PlayObject.MDyVal[n01 - 200];
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 300, 399))
-                {
+                else if (HUtil32.RangeInDefined(n01, 300, 399)) {
                     nValue = PlayObject.MNMval[n01 - 300];
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 400, 499))
-                {
+                else if (HUtil32.RangeInDefined(n01, 400, 499)) {
                     nValue = M2Share.Config.GlobaDyMval[n01 - 400];
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 500, 599))
-                {
+                else if (HUtil32.RangeInDefined(n01, 500, 599)) {
                     nValue = PlayObject.MNInteger[n01 - 500];
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 600, 699))
-                {
+                else if (HUtil32.RangeInDefined(n01, 600, 699)) {
                     nValue = HUtil32.StrToInt(PlayObject.MSString[n01 - 600], 0);
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 700, 799))
-                {
+                else if (HUtil32.RangeInDefined(n01, 700, 799)) {
                     nValue = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n01 - 700], 0);
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 800, 1199))
-                {
+                else if (HUtil32.RangeInDefined(n01, 800, 1199)) {
                     nValue = M2Share.Config.GlobalVal[n01 - 700];
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 1200, 1599))
-                {
+                else if (HUtil32.RangeInDefined(n01, 1200, 1599)) {
                     nValue = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n01 - 1100], 0);
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 1600, 1699))
-                {
+                else if (HUtil32.RangeInDefined(n01, 1600, 1699)) {
                     nValue = HUtil32.StrToInt(PlayObject.MServerStrVal[n01 - 1600], 0);
                     result = true;
                 }
-                else if (HUtil32.RangeInDefined(n01, 1700, 1799))
-                {
+                else if (HUtil32.RangeInDefined(n01, 1700, 1799)) {
                     nValue = PlayObject.MServerIntVal[n01 - 1700];
                     result = true;
                 }
@@ -1791,142 +1573,112 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private static bool GetValValue(PlayObject PlayObject, string sMsg, ref string sValue)
-        {
+        private static bool GetValValue(PlayObject PlayObject, string sMsg, ref string sValue) {
             bool result = false;
             int n01;
-            try
-            {
-                if (sMsg == "")
-                {
+            try {
+                if (sMsg == "") {
                     return result;
                 }
                 n01 = M2Share.GetValNameNo(sMsg);
-                if (n01 >= 0)
-                {
-                    if (HUtil32.RangeInDefined(n01, 600, 699))
-                    {
+                if (n01 >= 0) {
+                    if (HUtil32.RangeInDefined(n01, 600, 699)) {
                         sValue = PlayObject.MSString[n01 - 600];
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 700, 799))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 700, 799)) {
                         sValue = M2Share.Config.GlobalAVal[n01 - 700];
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 1200, 1599))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 1200, 1599)) {
                         sValue = M2Share.Config.GlobalAVal[n01 - 1100];// A变量(100-499)
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 1600, 1699))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 1600, 1699)) {
                         sValue = PlayObject.MServerStrVal[n01 - 1600];
                         result = true;
                     }
                 }
             }
-            catch
-            {
+            catch {
                 M2Share.Logger.Error("{异常} TNormNpc.GetValValue2");
             }
             return result;
         }
 
-        private static bool SetValValue(PlayObject PlayObject, string sMsg, int nValue)
-        {
+        private static bool SetValValue(PlayObject PlayObject, string sMsg, int nValue) {
             bool result = false;
             int n01;
-            try
-            {
-                if (sMsg == "")
-                {
+            try {
+                if (sMsg == "") {
                     return result;
                 }
                 n01 = M2Share.GetValNameNo(sMsg);
-                if (n01 >= 0)
-                {
-                    if (HUtil32.RangeInDefined(n01, 0, 99))
-                    {
+                if (n01 >= 0) {
+                    if (HUtil32.RangeInDefined(n01, 0, 99)) {
                         PlayObject.MNVal[n01] = nValue;
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 100, 199))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 100, 199)) {
                         M2Share.Config.GlobalVal[n01 - 100] = nValue;
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 200, 299))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 200, 299)) {
                         PlayObject.MDyVal[n01 - 200] = nValue;
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 300, 399))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 300, 399)) {
                         PlayObject.MNMval[n01 - 300] = nValue;
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 400, 499))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 400, 499)) {
                         M2Share.Config.GlobaDyMval[n01 - 400] = nValue;
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 500, 599))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 500, 599)) {
                         PlayObject.MNInteger[n01 - 500] = nValue;
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 800, 1199))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 800, 1199)) {
                         M2Share.Config.GlobalVal[n01 - 700] = nValue;//G变量
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 1700, 1799))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 1700, 1799)) {
                         PlayObject.MServerIntVal[n01 - 1700] = nValue;
                         result = true;
                     }
                 }
             }
-            catch
-            {
+            catch {
                 M2Share.Logger.Error("{异常} TNormNpc.SetValValue1");
             }
             return result;
         }
 
-        private static bool SetValValue(PlayObject PlayObject, string sMsg, string sValue)
-        {
+        private static bool SetValValue(PlayObject PlayObject, string sMsg, string sValue) {
             bool result = false;
             int n01;
-            try
-            {
-                if (sMsg == "")
-                {
+            try {
+                if (sMsg == "") {
                     return result;
                 }
                 n01 = M2Share.GetValNameNo(sMsg);
-                if (n01 >= 0)
-                {
-                    if (HUtil32.RangeInDefined(n01, 600, 699))
-                    {
+                if (n01 >= 0) {
+                    if (HUtil32.RangeInDefined(n01, 600, 699)) {
                         PlayObject.MSString[n01 - 600] = sValue;
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 700, 799))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 700, 799)) {
                         M2Share.Config.GlobalAVal[n01 - 700] = sValue;
                         result = true;
                     }
-                    else if (HUtil32.RangeInDefined(n01, 1200, 1599))
-                    {
+                    else if (HUtil32.RangeInDefined(n01, 1200, 1599)) {
                         M2Share.Config.GlobalAVal[n01 - 1100] = sValue;// A变量(100-499)
                         result = true;
                     }
                 }
             }
-            catch
-            {
+            catch {
                 M2Share.Logger.Error("{异常} TNormNpc.SetValValue2");
             }
             return result;

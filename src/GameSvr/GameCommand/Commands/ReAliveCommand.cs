@@ -1,31 +1,24 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 复活指定玩家
     /// </summary>
     [Command("ReAlive", "复活指定玩家", CommandHelp.GameCommandPrvMsgHelpMsg, 10)]
-    public class ReAliveCommand : GameCommand
-    {
+    public class ReAliveCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject)
-        {
-            if (@params == null)
-            {
+        public void Execute(string[] @params, PlayObject PlayObject) {
+            if (@params == null) {
                 return;
             }
             string sHumanName = @params.Length > 0 ? @params[0] : "";
-            if (string.IsNullOrEmpty(sHumanName))
-            {
+            if (string.IsNullOrEmpty(sHumanName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject == null)
-            {
+            if (m_PlayObject == null) {
                 PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }

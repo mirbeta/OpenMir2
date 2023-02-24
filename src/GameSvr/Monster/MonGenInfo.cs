@@ -1,13 +1,11 @@
 using GameSvr.Actor;
 using GameSvr.Maps;
 
-namespace GameSvr.Monster
-{
+namespace GameSvr.Monster {
     /// <summary>
     /// 怪物刷新信息
     /// </summary>
-    public class MonGenInfo
-    {
+    public class MonGenInfo {
         public string MapName;
         public int X;
         public int Y;
@@ -52,25 +50,21 @@ namespace GameSvr.Monster
         /// </summary>
         /// <param name="baseObject"></param>
         /// <returns></returns>
-        public bool TryAdd(BaseObject baseObject)
-        {
-            if (CertList.Count > MonGenConst.ThreadMonLimit)
-            {
+        public bool TryAdd(BaseObject baseObject) {
+            if (CertList.Count > MonGenConst.ThreadMonLimit) {
                 return false;
             }
             CertList.Add(baseObject);
             return true;
         }
 
-        public MonGenInfo Clone()
-        {
+        public MonGenInfo Clone() {
             return (MonGenInfo)this.MemberwiseClone();
         }
 
     }
 
-    public class MonGenConst
-    {
+    public class MonGenConst {
         public const int ThreadMonLimit = 40000;
     }
 }

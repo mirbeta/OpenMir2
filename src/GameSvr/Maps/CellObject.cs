@@ -1,10 +1,8 @@
-﻿namespace GameSvr.Maps
-{
+﻿namespace GameSvr.Maps {
     /// <summary>
     /// 地图上的对象
     /// </summary>
-    public record struct CellObject
-    {
+    public record struct CellObject {
         /// <summary>
         /// 唯一ID
         /// </summary>

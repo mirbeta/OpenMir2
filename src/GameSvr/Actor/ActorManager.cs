@@ -4,13 +4,11 @@ using System.Diagnostics;
 using SystemModule.Enums;
 using SystemModule.Generation.Entities;
 
-namespace GameSvr.Actor
-{
+namespace GameSvr.Actor {
     /// <summary>
     /// 精灵管理
     /// </summary>
-    public sealed class ActorMgr
-    {
+    public sealed class ActorMgr {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConcurrentQueue<int> GenerateQueue = new ConcurrentQueue<int>();
         private readonly StandardRandomizer standardRandomizer = new StandardRandomizer();
@@ -30,39 +28,29 @@ namespace GameSvr.Actor
         private static int MonsterDisposeCount { get; set; }
         private static int PlayerGhostCount { get; set; }
 
-        public ActorMgr()
-        {
-            IdWorkThread = new Thread(GenerateIdThread)
-            {
+        public ActorMgr() {
+            IdWorkThread = new Thread(GenerateIdThread) {
                 IsBackground = true
             };
             IdWorkThread.Start();
         }
 
-        private void GenerateIdThread(object obj)
-        {
-            while (true)
-            {
-                if (GenerateQueue.Count < 20000)
-                {
+        private void GenerateIdThread(object obj) {
+            while (true) {
+                if (GenerateQueue.Count < 20000) {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
-                    for (var i = 0; i < 100000; i++)
-                    {
+                    for (int i = 0; i < 100000; i++) {
                         int sequence = standardRandomizer.NextInteger();
-                        if (_actorsMap.ContainsKey(sequence))
-                        {
-                            while (true)
-                            {
+                        if (_actorsMap.ContainsKey(sequence)) {
+                            while (true) {
                                 sequence = standardRandomizer.NextInteger();
-                                if (!_actorsMap.ContainsKey(sequence))
-                                {
+                                if (!_actorsMap.ContainsKey(sequence)) {
                                     break;
                                 }
                             }
                         }
-                        while (sequence < 0)
-                        {
+                        while (sequence < 0) {
                             sequence = Environment.TickCount + HUtil32.Sequence();
                             if (sequence > 0) break;
                         }
@@ -75,82 +63,66 @@ namespace GameSvr.Actor
             }
         }
 
-        public int Dequeue()
-        {
+        public int Dequeue() {
             return GenerateQueue.TryDequeue(out int sequence) ? sequence : HUtil32.Sequence();
         }
 
-        public void Add(BaseObject actor)
-        {
+        public void Add(BaseObject actor) {
             _actorsMap.TryAdd(actor.ActorId, actor);
         }
 
-        public BaseObject Get(int actorId)
-        {
+        public BaseObject Get(int actorId) {
             return _actorsMap.TryGetValue(actorId, out ActorEntity actor) ? (BaseObject)actor : null;
         }
 
-        public T Get<T>(int actorId) where T : ActorEntity
-        {
+        public T Get<T>(int actorId) where T : ActorEntity {
             return _actorsMap.TryGetValue(actorId, out ActorEntity actor) ? (T)actor : default;
         }
 
-        public void AddOhter(int objectId, object obj)
-        {
+        public void AddOhter(int objectId, object obj) {
             _ohterMap.TryAdd(objectId, obj);
         }
 
-        public object GetOhter(int objectId)
-        {
+        public object GetOhter(int objectId) {
             return _ohterMap.TryGetValue(objectId, out object obj) ? obj : null;
         }
 
-        public void RevomeOhter(int actorId)
-        {
+        public void RevomeOhter(int actorId) {
             _ohterMap.TryRemove(actorId, out object actor);
         }
 
         /// <summary>
         /// 清理
         /// </summary>
-        public void ClearObject()
-        {
+        public void ClearObject() {
             ActorIds.Clear();
             PlayerCount = 0;
             MonsterCount = 0;
             using IEnumerator<KeyValuePair<int, ActorEntity>> actors = _actorsMap.GetEnumerator();
-            while (actors.MoveNext())
-            {
+            while (actors.MoveNext()) {
                 BaseObject actor = (BaseObject)actors.Current.Value;
-                if (!actor.Death && !actor.Ghost)
-                {
-                    if (actor.Race == ActorRace.Play)
-                    {
+                if (!actor.Death && !actor.Ghost) {
+                    if (actor.Race == ActorRace.Play) {
                         PlayerCount++;
                         PlayerGhostCount++;
                     }
-                    else
-                    {
+                    else {
                         MonsterCount++;
                     }
                 }
-                else if (actor.Race != ActorRace.Play && actor.Death || actor.Ghost)
-                {
+                else if (actor.Race != ActorRace.Play && actor.Death || actor.Ghost) {
                     MonsterDeathCount++;
                 }
                 if (!actor.Ghost || actor.GhostTick <= 0) continue;
                 if ((HUtil32.GetTickCount() - actor.GhostTick) <= 20000) //死亡对象清理时间
                 {
-                    continue; 
+                    continue;
                 }
                 ActorIds.Add(actors.Current.Key);
             }
-            foreach (var actorId in ActorIds)
-            {
-                if (_actorsMap.TryRemove(actorId, out ActorEntity actor))
-                {
-                    if (((BaseObject)actor).Race != ActorRace.Play)
-                    {
+            foreach (int actorId in ActorIds) {
+                if (_actorsMap.TryRemove(actorId, out ActorEntity actor)) {
+                    if (((BaseObject)actor).Race != ActorRace.Play) {
                         MonsterDisposeCount++;
                     }
                     actors.Dispose();

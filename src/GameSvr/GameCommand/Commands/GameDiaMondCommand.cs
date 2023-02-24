@@ -1,13 +1,10 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("GameDiaMond", "调整玩家金刚石", 10)]
-    public class GameDiaMondCommand : GameCommand
-    {
+    public class GameDiaMondCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";
             //int nGameDiaMond = @Params.Length > 2 ? Convert.ToInt32(@Params[3]) : 0;

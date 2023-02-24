@@ -1,15 +1,11 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("ClearItemMap", "清除指定地图范围物品", "地图编号", 10)]
-    public class ClearItemMapCommand : GameCommand
-    {
+    public class ClearItemMapCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (@Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (@Params == null) {
                 return;
             }
             string sMap = @Params.Length > 0 ? @Params[0] : "";
@@ -17,13 +13,11 @@ namespace GameSvr.GameCommand.Commands
             int nX = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
             int nY = @Params.Length > 3 ? Convert.ToInt32(@Params[3]) : 0;
             int nRange = @Params.Length > 4 ? Convert.ToInt32(@Params[4]) : 0;
-            if (sMap == "" || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?')
-            {
+            if (sMap == "" || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?') {
                 //PlayObject.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandCLEARITEMMAPHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;
             }
-            if (sItemName == "ALL")
-            {
+            if (sItemName == "ALL") {
             }
             // TMapItem MapItem = null;
             // var ItemList = new List<TMapItem>();

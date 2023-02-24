@@ -1,36 +1,25 @@
 ﻿using GameSvr.Event;
 
-namespace GameSvr.Monster.Monsters
-{
-    public class DigOutZombi : MonsterObject
-    {
-        public DigOutZombi() : base()
-        {
+namespace GameSvr.Monster.Monsters {
+    public class DigOutZombi : MonsterObject {
+        public DigOutZombi() : base() {
             ViewRange = 7;
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = HUtil32.GetTickCount();
             FixedHideMode = true;
         }
 
-        public override void Run()
-        {
-            if (CanMove() && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
-            {
-                if (FixedHideMode)
-                {
-                    for (int i = 0; i < VisibleActors.Count; i++)
-                    {
+        public override void Run() {
+            if (CanMove() && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed) {
+                if (FixedHideMode) {
+                    for (int i = 0; i < VisibleActors.Count; i++) {
                         Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
-                        if (baseObject.Death)
-                        {
+                        if (baseObject.Death) {
                             continue;
                         }
-                        if (IsProperTarget(baseObject))
-                        {
-                            if (!baseObject.HideMode || CoolEye)
-                            {
-                                if (Math.Abs(CurrX - baseObject.CurrX) <= 3 && Math.Abs(CurrY - baseObject.CurrY) <= 3)
-                                {
+                        if (IsProperTarget(baseObject)) {
+                            if (!baseObject.HideMode || CoolEye) {
+                                if (Math.Abs(CurrX - baseObject.CurrX) <= 3 && Math.Abs(CurrY - baseObject.CurrY) <= 3) {
                                     Turned();
                                     WalkTick = HUtil32.GetTickCount() + 1000;
                                     break;
@@ -39,10 +28,8 @@ namespace GameSvr.Monster.Monsters
                         }
                     }
                 }
-                else
-                {
-                    if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null)
-                    {
+                else {
+                    if ((HUtil32.GetTickCount() - SearchEnemyTick) > 8000 || (HUtil32.GetTickCount() - SearchEnemyTick) > 1000 && TargetCret == null) {
                         SearchEnemyTick = HUtil32.GetTickCount();
                         SearchTarget();
                     }
@@ -51,8 +38,7 @@ namespace GameSvr.Monster.Monsters
             base.Run();
         }
 
-        private void Turned()
-        {
+        private void Turned() {
             EventInfo digEvent = new EventInfo(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI, 5 * 60 * 1000, true);
             M2Share.EventMgr.AddEvent(digEvent);
             FixedHideMode = false;

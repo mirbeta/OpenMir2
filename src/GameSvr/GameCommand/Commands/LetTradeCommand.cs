@@ -1,22 +1,16 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("Lettrade", "", "", 0)]
-    public class LetTradeCommand : GameCommand
-    {
+    public class LetTradeCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
-        {
+        public void Execute(PlayObject playObject) {
             playObject.AllowDeal = !playObject.AllowDeal;
-            if (playObject.AllowDeal)
-            {
+            if (playObject.AllowDeal) {
                 playObject.SysMsg(CommandHelp.EnableDealMsg, MsgColor.Green, MsgType.Hint);
             }
-            else
-            {
+            else {
                 playObject.SysMsg(CommandHelp.DisableDealMsg, MsgColor.Green, MsgType.Hint);
             }
         }

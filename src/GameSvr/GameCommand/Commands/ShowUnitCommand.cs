@@ -1,12 +1,9 @@
-﻿namespace GameSvr.GameCommand.Commands
-{
+﻿namespace GameSvr.GameCommand.Commands {
 
     [Command("ShowUnit", "", "", 10)]
-    public class ShowUnitCommand : GameCommand
-    {
+    public class ShowUnitCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute()
-        {
+        public void Execute() {
 
         }
     }

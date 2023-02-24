@@ -1,31 +1,24 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 此命令用于开始祈祷生效宝宝叛变
     /// </summary>
     [Command("SpirtStart", "此命令用于开始祈祷生效宝宝叛变", 10)]
-    public class SpirtStartCommand : GameCommand
-    {
+    public class SpirtStartCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (@Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (@Params == null) {
                 return;
             }
             string sParam1 = @Params.Length > 0 ? @Params[0] : "";
             int nTime = HUtil32.StrToInt(sParam1, -1);
             int dwTime;
-            if (nTime > 0)
-            {
+            if (nTime > 0) {
                 dwTime = nTime * 1000;
             }
-            else
-            {
+            else {
                 dwTime = M2Share.Config.SpiritMutinyTime;
             }
             M2Share.SpiritMutinyTick = HUtil32.GetTickCount() + dwTime;

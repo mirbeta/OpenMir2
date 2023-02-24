@@ -1,43 +1,32 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 调整当前玩家攻击模式
     /// </summary>
     [Command("AttackMode", "调整当前玩家攻击模式", 0)]
-    public class ChangeAttackModeCommand : GameCommand
-    {
+    public class ChangeAttackModeCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject)
-        {
-            if (PlayObject.AttatckMode >= AttackMode.HAM_PKATTACK)
-            {
+        public void Execute(PlayObject PlayObject) {
+            if (PlayObject.AttatckMode >= AttackMode.HAM_PKATTACK) {
                 PlayObject.AttatckMode = 0;
             }
-            else
-            {
-                if (PlayObject.AttatckMode < AttackMode.HAM_PKATTACK)
-                {
+            else {
+                if (PlayObject.AttatckMode < AttackMode.HAM_PKATTACK) {
                     PlayObject.AttatckMode++;
                 }
-                else
-                {
+                else {
                     PlayObject.AttatckMode = AttackMode.HAM_ALL;
                 }
             }
-            if (PlayObject.AttatckMode < AttackMode.HAM_PKATTACK)
-            {
+            if (PlayObject.AttatckMode < AttackMode.HAM_PKATTACK) {
                 PlayObject.AttatckMode++;
             }
-            else
-            {
+            else {
                 PlayObject.AttatckMode = AttackMode.HAM_ALL;
             }
-            switch (PlayObject.AttatckMode)
-            {
+            switch (PlayObject.AttatckMode) {
                 case AttackMode.HAM_ALL:// [攻击模式: 全体攻击]
                     PlayObject.SysMsg(Settings.AttackModeOfAll, MsgColor.Green, MsgType.Hint);
                     break;

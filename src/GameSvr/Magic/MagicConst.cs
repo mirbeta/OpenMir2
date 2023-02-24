@@ -1,7 +1,5 @@
-﻿namespace GameSvr.Magic
-{
-    public class MagicConst
-    {
+﻿namespace GameSvr.Magic {
+    public class MagicConst {
         /// <summary>
         /// 火球术
         /// </summary>

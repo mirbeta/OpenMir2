@@ -1,26 +1,20 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 设置怪物集中目标
     /// </summary>
     [Command("Mission", "设置怪物集中目标", " X Y", 10)]
-    public class MissionCommand : GameCommand
-    {
+    public class MissionCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (@Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (@Params == null) {
                 return;
             }
             string sX = @Params.Length > 0 ? @Params[0] : "";
             string sY = @Params.Length > 1 ? @Params[1] : "";
-            if (sX == "" || sY == "")
-            {
+            if (sX == "" || sY == "") {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

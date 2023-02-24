@@ -5,18 +5,13 @@ using GameSvr.Maps;
 using GameSvr.Player;
 using GameSvr.Script;
 using SystemModule.Common;
-using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.Npc
-{
-    public partial class NormNpc
-    {
-        private void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp, string sMsg)
-        {
-            if (PlayObject.LastNpc != this.ActorId)
-            {
+namespace GameSvr.Npc {
+    public partial class NormNpc {
+        private void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp, string sMsg) {
+            if (PlayObject.LastNpc != this.ActorId) {
                 PlayObject.LastNpc = 0;
                 PlayObject.MScript = null;
             }
@@ -24,13 +19,10 @@ namespace GameSvr.Npc
             SayingRecord SayingRecord;
             UserItem UserItem = null;
             string sC = string.Empty;
-            if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                for (int i = 0; i < m_ScriptList.Count; i++)
-                {
+            if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0) {
+                for (int i = 0; i < m_ScriptList.Count; i++) {
                     TScript Script3C = m_ScriptList[i];
-                    if (Script3C.RecordList.TryGetValue(sLabel, out SayingRecord))
-                    {
+                    if (Script3C.RecordList.TryGetValue(sLabel, out SayingRecord)) {
                         Script = Script3C;
                         PlayObject.MScript = Script;
                         PlayObject.LastNpc = this.ActorId;
@@ -38,24 +30,17 @@ namespace GameSvr.Npc
                     }
                 }
             }
-            if (Script == null)
-            {
-                if (PlayObject.MScript != null)
-                {
-                    for (int i = m_ScriptList.Count - 1; i >= 0; i--)
-                    {
-                        if (m_ScriptList[i] == PlayObject.MScript)
-                        {
+            if (Script == null) {
+                if (PlayObject.MScript != null) {
+                    for (int i = m_ScriptList.Count - 1; i >= 0; i--) {
+                        if (m_ScriptList[i] == PlayObject.MScript) {
                             Script = m_ScriptList[i];
                         }
                     }
                 }
-                if (Script == null)
-                {
-                    for (int i = m_ScriptList.Count - 1; i >= 0; i--)
-                    {
-                        if (CheckGotoLableQuestStatus(PlayObject, m_ScriptList[i]))
-                        {
+                if (Script == null) {
+                    for (int i = m_ScriptList.Count - 1; i >= 0; i--) {
+                        if (CheckGotoLableQuestStatus(PlayObject, m_ScriptList[i])) {
                             Script = m_ScriptList[i];
                             PlayObject.MScript = Script;
                             PlayObject.LastNpc = this.ActorId;
@@ -64,299 +49,231 @@ namespace GameSvr.Npc
                 }
             }
             // 跳转到指定示签，执行
-            if (Script != null)
-            {
-                if (Script.RecordList.TryGetValue(sLabel, out SayingRecord))
-                {
-                    if (boExtJmp && SayingRecord.boExtJmp == false)
-                    {
+            if (Script != null) {
+                if (Script.RecordList.TryGetValue(sLabel, out SayingRecord)) {
+                    if (boExtJmp && SayingRecord.boExtJmp == false) {
                         return;
                     }
                     string sSendMsg = string.Empty;
-                    for (int i = 0; i < SayingRecord.ProcedureList.Count; i++)
-                    {
+                    for (int i = 0; i < SayingRecord.ProcedureList.Count; i++) {
                         SayingProcedure sayingProcedure = SayingRecord.ProcedureList[i];
                         bool bo11 = false;
-                        if (GotoLableQuestCheckCondition(PlayObject, sayingProcedure.ConditionList, ref sC, ref UserItem))
-                        {
+                        if (GotoLableQuestCheckCondition(PlayObject, sayingProcedure.ConditionList, ref sC, ref UserItem)) {
                             sSendMsg = sSendMsg + sayingProcedure.sSayMsg;
-                            if (!GotoLableQuestActionProcess(PlayObject, sayingProcedure.ActionList, ref sC, ref UserItem, ref bo11))
-                            {
+                            if (!GotoLableQuestActionProcess(PlayObject, sayingProcedure.ActionList, ref sC, ref UserItem, ref bo11)) {
                                 break;
                             }
-                            if (bo11)
-                            {
+                            if (bo11) {
                                 GotoLableSendMerChantSayMsg(PlayObject, sSendMsg, true);
                             }
                         }
-                        else
-                        {
+                        else {
                             sSendMsg = sSendMsg + sayingProcedure.sElseSayMsg;
-                            if (!GotoLableQuestActionProcess(PlayObject, sayingProcedure.ElseActionList, ref sC, ref UserItem, ref bo11))
-                            {
+                            if (!GotoLableQuestActionProcess(PlayObject, sayingProcedure.ElseActionList, ref sC, ref UserItem, ref bo11)) {
                                 break;
                             }
-                            if (bo11)
-                            {
+                            if (bo11) {
                                 GotoLableSendMerChantSayMsg(PlayObject, sSendMsg, true);
                             }
                         }
                     }
-                    if (!string.IsNullOrEmpty(sSendMsg))
-                    {
+                    if (!string.IsNullOrEmpty(sSendMsg)) {
                         GotoLableSendMerChantSayMsg(PlayObject, sSendMsg, false);
                     }
                 }
             }
         }
 
-        public void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp)
-        {
+        public void GotoLable(PlayObject PlayObject, string sLabel, bool boExtJmp) {
             GotoLable(PlayObject, sLabel, boExtJmp, string.Empty);
         }
 
-        private static bool CheckGotoLableQuestStatus(PlayObject PlayObject, TScript ScriptInfo)
-        {
+        private static bool CheckGotoLableQuestStatus(PlayObject PlayObject, TScript ScriptInfo) {
             bool result = true;
-            if (!ScriptInfo.boQuest)
-            {
+            if (!ScriptInfo.boQuest) {
                 return result;
             }
             int nIndex = 0;
-            while (true)
-            {
-                if ((ScriptInfo.QuestInfo[nIndex].nRandRage > 0) && (M2Share.RandomNumber.Random(ScriptInfo.QuestInfo[nIndex].nRandRage) != 0))
-                {
+            while (true) {
+                if ((ScriptInfo.QuestInfo[nIndex].nRandRage > 0) && (M2Share.RandomNumber.Random(ScriptInfo.QuestInfo[nIndex].nRandRage) != 0)) {
                     result = false;
                     break;
                 }
-                if (PlayObject.GetQuestFalgStatus(ScriptInfo.QuestInfo[nIndex].wFlag) != ScriptInfo.QuestInfo[nIndex].btValue)
-                {
+                if (PlayObject.GetQuestFalgStatus(ScriptInfo.QuestInfo[nIndex].wFlag) != ScriptInfo.QuestInfo[nIndex].btValue) {
                     result = false;
                     break;
                 }
                 nIndex++;
-                if (nIndex >= 10)
-                {
+                if (nIndex >= 10) {
                     break;
                 }
             }
             return result;
         }
 
-        private static UserItem CheckGotoLableItemW(PlayObject PlayObject, string sItemType, int nParam)
-        {
+        private static UserItem CheckGotoLableItemW(PlayObject PlayObject, string sItemType, int nParam) {
             UserItem result = null;
             int nCount = 0;
-            if (HUtil32.CompareLStr(sItemType, "[NECKLACE]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_NECKLACE].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemType, "[NECKLACE]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_NECKLACE].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_NECKLACE];
                 }
                 return result;
             }
-            if (HUtil32.CompareLStr(sItemType, "[RING]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_RINGL].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemType, "[RING]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_RINGL].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_RINGL];
                 }
-                if (PlayObject.UseItems[Grobal2.U_RINGR].Index > 0)
-                {
+                if (PlayObject.UseItems[Grobal2.U_RINGR].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_RINGR];
                 }
                 return result;
             }
-            if (HUtil32.CompareLStr(sItemType, "[ARMRING]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_ARMRINGL].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemType, "[ARMRING]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_ARMRINGL].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_ARMRINGL];
                 }
-                if (PlayObject.UseItems[Grobal2.U_ARMRINGR].Index > 0)
-                {
+                if (PlayObject.UseItems[Grobal2.U_ARMRINGR].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_ARMRINGR];
                 }
                 return result;
             }
-            if (HUtil32.CompareLStr(sItemType, "[WEAPON]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_WEAPON].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemType, "[WEAPON]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_WEAPON].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_WEAPON];
                 }
                 return result;
             }
-            if (HUtil32.CompareLStr(sItemType, "[HELMET]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_HELMET].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemType, "[HELMET]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_HELMET].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_HELMET];
                 }
                 return result;
             }
-            if (HUtil32.CompareLStr(sItemType, "[BUJUK]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_BUJUK].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemType, "[BUJUK]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_BUJUK].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_BUJUK];
                 }
                 return result;
             }
-            if (HUtil32.CompareLStr(sItemType, "[BELT]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_BELT].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemType, "[BELT]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_BELT].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_BELT];
                 }
                 return result;
             }
-            if (HUtil32.CompareLStr(sItemType, "[BOOTS]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_BOOTS].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemType, "[BOOTS]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_BOOTS].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_BOOTS];
                 }
                 return result;
             }
-            if (HUtil32.CompareLStr(sItemType, "[CHARM]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_CHARM].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemType, "[CHARM]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_CHARM].Index > 0) {
                     result = PlayObject.UseItems[Grobal2.U_CHARM];
                 }
                 return result;
             }
             result = PlayObject.CheckItemCount(sItemType, ref nCount);
-            if (nCount < nParam)
-            {
+            if (nCount < nParam) {
                 result = null;
             }
             return result;
         }
 
-        private static bool CheckGotoLableStringList(string sHumName, string sListFileName)
-        {
+        private static bool CheckGotoLableStringList(string sHumName, string sListFileName) {
             bool result = false;
             sListFileName = M2Share.GetEnvirFilePath(sListFileName);
-            if (File.Exists(sListFileName))
-            {
+            if (File.Exists(sListFileName)) {
                 using StringList LoadList = new StringList();
-                try
-                {
+                try {
                     LoadList.LoadFromFile(sListFileName);
                 }
-                catch
-                {
+                catch {
                     M2Share.Logger.Error("loading fail.... => " + sListFileName);
                 }
-                for (int i = 0; i < LoadList.Count; i++)
-                {
-                    if (string.Compare(LoadList[i].Trim(), sHumName, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
+                for (int i = 0; i < LoadList.Count; i++) {
+                    if (string.Compare(LoadList[i].Trim(), sHumName, StringComparison.OrdinalIgnoreCase) == 0) {
                         result = true;
                         break;
                     }
                 }
             }
-            else
-            {
+            else {
                 M2Share.Logger.Error("file not found => " + sListFileName);
             }
             return result;
         }
 
-        private static void GotoLable_QuestCheckCondition_SetVal(PlayObject PlayObject, string sIndex, int nCount)
-        {
+        private static void GotoLable_QuestCheckCondition_SetVal(PlayObject PlayObject, string sIndex, int nCount) {
             int n14 = M2Share.GetValNameNo(sIndex);
-            if (n14 >= 0)
-            {
-                if (HUtil32.RangeInDefined(n14, 0, 99))
-                {
+            if (n14 >= 0) {
+                if (HUtil32.RangeInDefined(n14, 0, 99)) {
                     PlayObject.MNVal[n14] = nCount;
                 }
-                else if (HUtil32.RangeInDefined(n14, 100, 119))
-                {
+                else if (HUtil32.RangeInDefined(n14, 100, 119)) {
                     M2Share.Config.GlobalVal[n14 - 100] = nCount;
                 }
-                else if (HUtil32.RangeInDefined(n14, 200, 299))
-                {
+                else if (HUtil32.RangeInDefined(n14, 200, 299)) {
                     PlayObject.MDyVal[n14 - 200] = nCount;
                 }
-                else if (HUtil32.RangeInDefined(n14, 300, 399))
-                {
+                else if (HUtil32.RangeInDefined(n14, 300, 399)) {
                     PlayObject.MNMval[n14 - 300] = nCount;
                 }
-                else if (HUtil32.RangeInDefined(n14, 400, 499))
-                {
+                else if (HUtil32.RangeInDefined(n14, 400, 499)) {
                     M2Share.Config.GlobaDyMval[n14 - 400] = (short)nCount;
                 }
-                else if (HUtil32.RangeInDefined(n14, 500, 599))
-                {
+                else if (HUtil32.RangeInDefined(n14, 500, 599)) {
                     PlayObject.MNSval[n14 - 600] = nCount.ToString();
                 }
             }
         }
 
-        private static bool GotoLable_QuestCheckCondition_CheckDieMon(PlayObject PlayObject, string MonName)
-        {
+        private static bool GotoLable_QuestCheckCondition_CheckDieMon(PlayObject PlayObject, string MonName) {
             bool result = string.IsNullOrEmpty(MonName);
-            if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.ChrName == MonName))
-            {
+            if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.ChrName == MonName)) {
                 result = true;
             }
             return result;
         }
 
-        private static bool GotoLable_QuestCheckCondition_CheckKillMon(PlayObject PlayObject, string MonName)
-        {
+        private static bool GotoLable_QuestCheckCondition_CheckKillMon(PlayObject PlayObject, string MonName) {
             bool result = string.IsNullOrEmpty(MonName);
-            if ((PlayObject.TargetCret != null) && (PlayObject.TargetCret.ChrName == MonName))
-            {
+            if ((PlayObject.TargetCret != null) && (PlayObject.TargetCret.ChrName == MonName)) {
                 result = true;
             }
             return result;
         }
 
-        public static bool GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject PlayObject, string sNumber)
-        {
+        public static bool GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject PlayObject, string sNumber) {
             return PlayObject.RandomNo == sNumber;
         }
 
-        private bool GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject PlayObject, string ChrName, string sListFileName, string sDay, string param1, string param2)
-        {
+        private bool GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject PlayObject, string ChrName, string sListFileName, string sDay, string param1, string param2) {
             string Name = string.Empty;
             bool result = false;
             sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             using StringList LoadList = new StringList();
-            try
-            {
-                if (File.Exists(sListFileName))
-                {
-                    try
-                    {
+            try {
+                if (File.Exists(sListFileName)) {
+                    try {
                         LoadList.LoadFromFile(sListFileName);
                     }
-                    catch
-                    {
+                    catch {
                         M2Share.Logger.Error("loading fail.... => " + sListFileName);
                     }
                 }
                 int nDay = HUtil32.StrToInt(sDay, 0);
-                for (int i = 0; i < LoadList.Count; i++)
-                {
+                for (int i = 0; i < LoadList.Count; i++) {
                     string sText = LoadList[i].Trim();
                     sText = HUtil32.GetValidStrCap(sText, ref Name, new[] { ' ', '\t' });
                     Name = Name.Trim();
-                    if (ChrName == Name)
-                    {
+                    if (ChrName == Name) {
                         string ssDay = sText.Trim();
                         DateTime nnday = HUtil32.StrToDate(ssDay);
                         int UseDay = HUtil32.Round(DateTime.Today.ToOADate() - nnday.ToOADate());
                         int LastDay = nDay - UseDay;
-                        if (LastDay < 0)
-                        {
+                        if (LastDay < 0) {
                             result = true;
                             LastDay = 0;
                         }
@@ -366,123 +283,96 @@ namespace GameSvr.Npc
                     }
                 }
             }
-            finally
-            {
+            finally {
                 //LoadList.Free;
             }
             return result;
         }
 
-        private bool GotoLableQuestCheckCondition(PlayObject PlayObject, IList<QuestConditionInfo> ConditionList, ref string sC, ref UserItem UserItem)
-        {
+        private bool GotoLableQuestCheckCondition(PlayObject PlayObject, IList<QuestConditionInfo> ConditionList, ref string sC, ref UserItem UserItem) {
             bool result = true;
             int n1C = 0;
             int nMaxDura = 0;
             int nDura = 0;
-            for (int i = 0; i < ConditionList.Count; i++)
-            {
+            for (int i = 0; i < ConditionList.Count; i++) {
                 QuestConditionInfo QuestConditionInfo = ConditionList[i];
-                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam1))
-                {
-                    if (QuestConditionInfo.sParam1[0] == '$')
-                    {
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam1)) {
+                    if (QuestConditionInfo.sParam1[0] == '$') {
                         string s50 = QuestConditionInfo.sParam1;
                         QuestConditionInfo.sParam1 = '<' + QuestConditionInfo.sParam1 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam1);
                     }
-                    else if (QuestConditionInfo.sParam1.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
+                    else if (QuestConditionInfo.sParam1.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1) {
                         QuestConditionInfo.sParam1 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam1);
                     }
                 }
-                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam2))
-                {
-                    if (QuestConditionInfo.sParam2[0] == '$')
-                    {
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam2)) {
+                    if (QuestConditionInfo.sParam2[0] == '$') {
                         string s50 = QuestConditionInfo.sParam2;
                         QuestConditionInfo.sParam2 = '<' + QuestConditionInfo.sParam2 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam2);
                     }
-                    else if (QuestConditionInfo.sParam2.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
+                    else if (QuestConditionInfo.sParam2.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1) {
                         QuestConditionInfo.sParam2 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam2);
                     }
                 }
-                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam3))
-                {
-                    if (QuestConditionInfo.sParam3[0] == '$')
-                    {
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam3)) {
+                    if (QuestConditionInfo.sParam3[0] == '$') {
                         string s50 = QuestConditionInfo.sParam3;
                         QuestConditionInfo.sParam3 = '<' + QuestConditionInfo.sParam3 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam3);
                     }
-                    else if (QuestConditionInfo.sParam3.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
+                    else if (QuestConditionInfo.sParam3.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1) {
                         QuestConditionInfo.sParam3 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam3);
                     }
                 }
-                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam4))
-                {
-                    if (QuestConditionInfo.sParam4[0] == '$')
-                    {
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam4)) {
+                    if (QuestConditionInfo.sParam4[0] == '$') {
                         string s50 = QuestConditionInfo.sParam4;
                         QuestConditionInfo.sParam4 = '<' + QuestConditionInfo.sParam4 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam4);
                     }
-                    else if (QuestConditionInfo.sParam4.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
+                    else if (QuestConditionInfo.sParam4.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1) {
                         QuestConditionInfo.sParam4 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam4);
                     }
                 }
-                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam5))
-                {
-                    if (QuestConditionInfo.sParam5[0] == '$')
-                    {
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam5)) {
+                    if (QuestConditionInfo.sParam5[0] == '$') {
                         string s50 = QuestConditionInfo.sParam5;
                         QuestConditionInfo.sParam5 = '<' + QuestConditionInfo.sParam5 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam5);
                     }
-                    else if (QuestConditionInfo.sParam5.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
+                    else if (QuestConditionInfo.sParam5.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1) {
                         QuestConditionInfo.sParam5 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam5);
                     }
                 }
-                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam6))
-                {
-                    if (QuestConditionInfo.sParam6[0] == '$')
-                    {
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sParam6)) {
+                    if (QuestConditionInfo.sParam6[0] == '$') {
                         string s50 = QuestConditionInfo.sParam6;
                         QuestConditionInfo.sParam6 = '<' + QuestConditionInfo.sParam6 + '>';
                         GetVariableText(PlayObject, s50, ref QuestConditionInfo.sParam6);
                     }
-                    else if (QuestConditionInfo.sParam6.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
-                    {
+                    else if (QuestConditionInfo.sParam6.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1) {
                         QuestConditionInfo.sParam6 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam6);
                     }
                 }
 
                 //参数变量解释以主执行人物为依据
-                if (!string.IsNullOrEmpty(QuestConditionInfo.sOpName))
-                {
-                    if (QuestConditionInfo.sOpName.Length > 2)
-                    {
-                        if (QuestConditionInfo.sOpName[1] == '$')
-                        {
+                if (!string.IsNullOrEmpty(QuestConditionInfo.sOpName)) {
+                    if (QuestConditionInfo.sOpName.Length > 2) {
+                        if (QuestConditionInfo.sOpName[1] == '$') {
                             string s50 = QuestConditionInfo.sOpName;
                             QuestConditionInfo.sOpName = '<' + QuestConditionInfo.sOpName + '>';
                             GetVariableText(PlayObject, s50, ref QuestConditionInfo.sOpName);
                         }
-                        else if (QuestConditionInfo.sOpName.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1)
-                        {
+                        else if (QuestConditionInfo.sOpName.IndexOf(">", StringComparison.OrdinalIgnoreCase) > -1) {
                             QuestConditionInfo.sOpName = GetLineVariableText(PlayObject, QuestConditionInfo.sOpName);
                         }
                     }
                     PlayObject Human = M2Share.WorldEngine.GetPlayObject(QuestConditionInfo.sOpName);
-                    if (Human != null)
-                    {
+                    if (Human != null) {
                         PlayObject = Human;
-                        if (!string.IsNullOrEmpty(QuestConditionInfo.sOpHName) && string.Compare(QuestConditionInfo.sOpHName, "H", StringComparison.OrdinalIgnoreCase) == 0)
-                        {
+                        if (!string.IsNullOrEmpty(QuestConditionInfo.sOpHName) && string.Compare(QuestConditionInfo.sOpHName, "H", StringComparison.OrdinalIgnoreCase) == 0) {
                             //todo 英雄
                         }
                     }
@@ -508,8 +398,7 @@ namespace GameSvr.Npc
                 int Min;
                 int Sec;
                 int MSec;
-                switch (QuestConditionInfo.CmdCode)
-                {
+                switch (QuestConditionInfo.CmdCode) {
                     case ScriptConst.nCHECKUSERDATE:
                         result = GotoLable_QuestCheckCondition_CheckUserDateType(PlayObject, PlayObject.ChrName, m_sPath + QuestConditionInfo.sParam1, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5);
                         break;
@@ -527,69 +416,52 @@ namespace GameSvr.Npc
                         n14 = HUtil32.StrToInt(QuestConditionInfo.sParam1, 0);
                         n18 = HUtil32.StrToInt(QuestConditionInfo.sParam2, 0);
                         n10 = PlayObject.GetQuestFalgStatus(n14);
-                        if (n10 == 0)
-                        {
-                            if (n18 != 0)
-                            {
+                        if (n10 == 0) {
+                            if (n18 != 0) {
                                 result = false;
                             }
                         }
-                        else
-                        {
-                            if (n18 == 0)
-                            {
+                        else {
+                            if (n18 == 0) {
                                 result = false;
                             }
                         }
                         break;
                     case ScriptConst.nRANDOM:
-                        if (M2Share.RandomNumber.Random(QuestConditionInfo.nParam1) != 0)
-                        {
+                        if (M2Share.RandomNumber.Random(QuestConditionInfo.nParam1) != 0) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nGENDER:
-                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            if (PlayObject.Gender != PlayGender.Man)
-                            {
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sMAN, StringComparison.OrdinalIgnoreCase) == 0) {
+                            if (PlayObject.Gender != PlayGender.Man) {
                                 result = false;
                             }
                         }
-                        else
-                        {
-                            if (PlayObject.Gender != PlayGender.WoMan)
-                            {
+                        else {
+                            if (PlayObject.Gender != PlayGender.WoMan) {
                                 result = false;
                             }
                         }
                         break;
                     case ScriptConst.nDAYTIME:
-                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            if (M2Share.GameTime != 0)
-                            {
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0) {
+                            if (M2Share.GameTime != 0) {
                                 result = false;
                             }
                         }
-                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            if (M2Share.GameTime != 1)
-                            {
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sDAY, StringComparison.OrdinalIgnoreCase) == 0) {
+                            if (M2Share.GameTime != 1) {
                                 result = false;
                             }
                         }
-                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            if (M2Share.GameTime != 2)
-                            {
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0) {
+                            if (M2Share.GameTime != 2) {
                                 result = false;
                             }
                         }
-                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            if (M2Share.GameTime != 3)
-                            {
+                        if (string.Compare(QuestConditionInfo.sParam1, ScriptConst.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0) {
+                            if (M2Share.GameTime != 3) {
                                 result = false;
                             }
                         }
@@ -598,17 +470,13 @@ namespace GameSvr.Npc
                         n14 = HUtil32.StrToInt(QuestConditionInfo.sParam1, 0);
                         n18 = HUtil32.StrToInt(QuestConditionInfo.sParam2, 0);
                         n10 = PlayObject.GetQuestUnitOpenStatus(n14);
-                        if (n10 == 0)
-                        {
-                            if (n18 != 0)
-                            {
+                        if (n10 == 0) {
+                            if (n18 != 0) {
                                 result = false;
                             }
                         }
-                        else
-                        {
-                            if (n18 == 0)
-                            {
+                        else {
+                            if (n18 == 0) {
                                 result = false;
                             }
                         }
@@ -617,53 +485,41 @@ namespace GameSvr.Npc
                         n14 = HUtil32.StrToInt(QuestConditionInfo.sParam1, 0);
                         n18 = HUtil32.StrToInt(QuestConditionInfo.sParam2, 0);
                         n10 = PlayObject.GetQuestUnitStatus(n14);
-                        if (n10 == 0)
-                        {
-                            if (n18 != 0)
-                            {
+                        if (n10 == 0) {
+                            if (n18 != 0) {
                                 result = false;
                             }
                         }
-                        else
-                        {
-                            if (n18 == 0)
-                            {
+                        else {
+                            if (n18 == 0) {
                                 result = false;
                             }
                         }
                         break;
                     case ScriptConst.nCHECKLEVEL:
-                        if (PlayObject.Abil.Level < QuestConditionInfo.nParam1)
-                        {
+                        if (PlayObject.Abil.Level < QuestConditionInfo.nParam1) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKJOB:
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWarrior))
-                        {
-                            if (PlayObject.Job != PlayJob.Warrior)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWarrior)) {
+                            if (PlayObject.Job != PlayJob.Warrior) {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWizard))
-                        {
-                            if (PlayObject.Job != PlayJob.Wizard)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWizard)) {
+                            if (PlayObject.Job != PlayJob.Wizard) {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTaos))
-                        {
-                            if (PlayObject.Job != PlayJob.Taoist)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTaos)) {
+                            if (PlayObject.Job != PlayJob.Taoist) {
                                 result = false;
                             }
                         }
                         break;
                     case ScriptConst.nCHECKBBCOUNT:
-                        if (PlayObject.SlaveList.Count < QuestConditionInfo.nParam1)
-                        {
+                        if (PlayObject.SlaveList.Count < QuestConditionInfo.nParam1) {
                             result = false;
                         }
                         break;
@@ -671,148 +527,118 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nCHECKITEM:
                         UserItem = PlayObject.QuestCheckItem(QuestConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
-                        if (n1C < QuestConditionInfo.nParam2)
-                        {
+                        if (n1C < QuestConditionInfo.nParam2) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKITEMW:
                         UserItem = CheckGotoLableItemW(PlayObject, QuestConditionInfo.sParam1, QuestConditionInfo.nParam2);
-                        if (UserItem == null)
-                        {
+                        if (UserItem == null) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKGOLD:
-                        if (PlayObject.Gold < QuestConditionInfo.nParam1)
-                        {
+                        if (PlayObject.Gold < QuestConditionInfo.nParam1) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nISTAKEITEM:
-                        if (sC != QuestConditionInfo.sParam1)
-                        {
+                        if (sC != QuestConditionInfo.sParam1) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKDURA:
                         UserItem = PlayObject.QuestCheckItem(QuestConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
-                        if (HUtil32.Round(nDura / 1000) < QuestConditionInfo.nParam2)
-                        {
+                        if (HUtil32.Round(nDura / 1000) < QuestConditionInfo.nParam2) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKDURAEVA:
                         UserItem = PlayObject.QuestCheckItem(QuestConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
-                        if (n1C > 0)
-                        {
-                            if (HUtil32.Round(nMaxDura / n1C / 1000) < QuestConditionInfo.nParam2)
-                            {
+                        if (n1C > 0) {
+                            if (HUtil32.Round(nMaxDura / n1C / 1000) < QuestConditionInfo.nParam2) {
                                 result = false;
                             }
                         }
-                        else
-                        {
+                        else {
                             result = false;
                         }
                         break;
                     case ScriptConst.nDAYOFWEEK:
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sSUN))
-                        {
-                            if ((int)DateTime.Now.DayOfWeek != 1)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sSUN)) {
+                            if ((int)DateTime.Now.DayOfWeek != 1) {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sMON))
-                        {
-                            if ((int)DateTime.Now.DayOfWeek != 2)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sMON)) {
+                            if ((int)DateTime.Now.DayOfWeek != 2) {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTUE))
-                        {
-                            if ((int)DateTime.Now.DayOfWeek != 3)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTUE)) {
+                            if ((int)DateTime.Now.DayOfWeek != 3) {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWED))
-                        {
-                            if ((int)DateTime.Now.DayOfWeek != 4)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sWED)) {
+                            if ((int)DateTime.Now.DayOfWeek != 4) {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTHU))
-                        {
-                            if ((int)DateTime.Now.DayOfWeek != 5)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sTHU)) {
+                            if ((int)DateTime.Now.DayOfWeek != 5) {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sFRI))
-                        {
-                            if ((int)DateTime.Now.DayOfWeek != 6)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sFRI)) {
+                            if ((int)DateTime.Now.DayOfWeek != 6) {
                                 result = false;
                             }
                         }
-                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sSAT))
-                        {
-                            if ((int)DateTime.Now.DayOfWeek != 7)
-                            {
+                        if (HUtil32.CompareLStr(QuestConditionInfo.sParam1, ScriptConst.sSAT)) {
+                            if ((int)DateTime.Now.DayOfWeek != 7) {
                                 result = false;
                             }
                         }
                         break;
                     case ScriptConst.nHOUR:
-                        if ((QuestConditionInfo.nParam1 != 0) && (QuestConditionInfo.nParam2 == 0))
-                        {
+                        if ((QuestConditionInfo.nParam1 != 0) && (QuestConditionInfo.nParam2 == 0)) {
                             QuestConditionInfo.nParam2 = QuestConditionInfo.nParam1;
                         }
                         Hour = DateTime.Now.Hour;
                         Min = DateTime.Now.Minute;
                         Sec = DateTime.Now.Second;
                         MSec = DateTime.Now.Millisecond;
-                        if ((Hour < QuestConditionInfo.nParam1) || (Hour > QuestConditionInfo.nParam2))
-                        {
+                        if ((Hour < QuestConditionInfo.nParam1) || (Hour > QuestConditionInfo.nParam2)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nMIN:
-                        if ((QuestConditionInfo.nParam1 != 0) && (QuestConditionInfo.nParam2 == 0))
-                        {
+                        if ((QuestConditionInfo.nParam1 != 0) && (QuestConditionInfo.nParam2 == 0)) {
                             QuestConditionInfo.nParam2 = QuestConditionInfo.nParam1;
                         }
                         Hour = DateTime.Now.Hour;
                         Min = DateTime.Now.Minute;
                         Sec = DateTime.Now.Second;
                         MSec = DateTime.Now.Millisecond;
-                        if ((Min < QuestConditionInfo.nParam1) || (Min > QuestConditionInfo.nParam2))
-                        {
+                        if ((Min < QuestConditionInfo.nParam1) || (Min > QuestConditionInfo.nParam2)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKPKPOINT:
-                        if (PlayObject.PvpLevel() < QuestConditionInfo.nParam1)
-                        {
+                        if (PlayObject.PvpLevel() < QuestConditionInfo.nParam1) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKLUCKYPOINT:
-                        if (PlayObject.BodyLuckLevel < QuestConditionInfo.nParam1)
-                        {
+                        if (PlayObject.BodyLuckLevel < QuestConditionInfo.nParam1) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKMONMAP:
                         Envirnoment Envir = M2Share.MapMgr.FindMap(QuestConditionInfo.sParam1);
-                        if (Envir != null)
-                        {
-                            if (M2Share.WorldEngine.GetMapMonster(Envir, null) < QuestConditionInfo.nParam2)
-                            {
+                        if (Envir != null) {
+                            if (M2Share.WorldEngine.GetMapMonster(Envir, null) < QuestConditionInfo.nParam2) {
                                 result = false;
                             }
                         }
@@ -820,47 +646,38 @@ namespace GameSvr.Npc
                     case ScriptConst.nCHECKMONAREA:
                         break;
                     case ScriptConst.nCHECKHUM:
-                        if (M2Share.WorldEngine.GetMapHuman(QuestConditionInfo.sParam1) < QuestConditionInfo.nParam2)
-                        {
+                        if (M2Share.WorldEngine.GetMapHuman(QuestConditionInfo.sParam1) < QuestConditionInfo.nParam2) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKBAGGAGE:
-                        if (PlayObject.IsEnoughBag())
-                        {
-                            if ((!string.IsNullOrEmpty(QuestConditionInfo.sParam1)))
-                            {
+                        if (PlayObject.IsEnoughBag()) {
+                            if ((!string.IsNullOrEmpty(QuestConditionInfo.sParam1))) {
                                 result = false;
                                 StdItem StdItem = M2Share.WorldEngine.GetStdItem(QuestConditionInfo.sParam1);
-                                if (StdItem != null)
-                                {
-                                    if (PlayObject.IsAddWeightAvailable(StdItem.Weight))
-                                    {
+                                if (StdItem != null) {
+                                    if (PlayObject.IsAddWeightAvailable(StdItem.Weight)) {
                                         result = true;
                                     }
                                 }
                             }
                         }
-                        else
-                        {
+                        else {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKNAMELIST:
-                        if (!CheckGotoLableStringList(PlayObject.ChrName, m_sPath + QuestConditionInfo.sParam1))
-                        {
+                        if (!CheckGotoLableStringList(PlayObject.ChrName, m_sPath + QuestConditionInfo.sParam1)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKACCOUNTLIST:
-                        if (!CheckGotoLableStringList(PlayObject.UserAccount, m_sPath + QuestConditionInfo.sParam1))
-                        {
+                        if (!CheckGotoLableStringList(PlayObject.UserAccount, m_sPath + QuestConditionInfo.sParam1)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKIPLIST:
-                        if (!CheckGotoLableStringList(PlayObject.LoginIpAddr, m_sPath + QuestConditionInfo.sParam1))
-                        {
+                        if (!CheckGotoLableStringList(PlayObject.LoginIpAddr, m_sPath + QuestConditionInfo.sParam1)) {
                             result = false;
                         }
                         break;
@@ -874,514 +691,427 @@ namespace GameSvr.Npc
                         result = Smalldata(PlayObject, QuestConditionInfo);
                         break;
                     case ScriptConst.nSC_ISSYSOP:
-                        if (!(PlayObject.Permission >= 4))
-                        {
+                        if (!(PlayObject.Permission >= 4)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISADMIN:
-                        if (!(PlayObject.Permission >= 6))
-                        {
+                        if (!(PlayObject.Permission >= 6)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKGROUPCOUNT:
-                        if (!ConditionOfCheckGroupCount(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckGroupCount(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKPOSEDIR:
-                        if (!ConditionOfCheckPoseDir(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckPoseDir(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKPOSELEVEL:
-                        if (!ConditionOfCheckPoseLevel(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckPoseLevel(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKPOSEGENDER:
-                        if (!ConditionOfCheckPoseGender(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckPoseGender(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKLEVELEX:
-                        if (!ConditionOfCheckLevelEx(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckLevelEx(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKBONUSPOINT:
-                        if (!ConditionOfCheckBonusPoint(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckBonusPoint(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMARRY:
-                        if (!ConditionOfCheckMarry(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMarry(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKPOSEMARRY:
-                        if (!ConditionOfCheckPoseMarry(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckPoseMarry(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMARRYCOUNT:
-                        if (!ConditionOfCheckMarryCount(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMarryCount(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMASTER:
-                        if (!ConditionOfCheckMaster(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMaster(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_HAVEMASTER:
-                        if (!ConditionOfHaveMaster(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfHaveMaster(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKPOSEMASTER:
-                        if (!ConditionOfCheckPoseMaster(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckPoseMaster(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_POSEHAVEMASTER:
-                        if (!ConditionOfPoseHaveMaster(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfPoseHaveMaster(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKISMASTER:
-                        if (!ConditionOfCheckIsMaster(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckIsMaster(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_HASGUILD:
-                        if (!ConditionOfCheckHaveGuild(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckHaveGuild(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISGUILDMASTER:
-                        if (!ConditionOfCheckIsGuildMaster(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckIsGuildMaster(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKCASTLEMASTER:
-                        if (!ConditionOfCheckIsCastleMaster(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckIsCastleMaster(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISCASTLEGUILD:
-                        if (!ConditionOfCheckIsCastleaGuild(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckIsCastleaGuild(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISATTACKGUILD:
-                        if (!ConditionOfCheckIsAttackGuild(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckIsAttackGuild(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISDEFENSEGUILD:
-                        if (!ConditionOfCheckIsDefenseGuild(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckIsDefenseGuild(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKCASTLEDOOR:
-                        if (!ConditionOfCheckCastleDoorStatus(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckCastleDoorStatus(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISATTACKALLYGUILD:
-                        if (!ConditionOfCheckIsAttackAllyGuild(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckIsAttackAllyGuild(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISDEFENSEALLYGUILD:
-                        if (!ConditionOfCheckIsDefenseAllyGuild(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckIsDefenseAllyGuild(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKPOSEISMASTER:
-                        if (!ConditionOfCheckPoseIsMaster(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckPoseIsMaster(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKNAMEIPLIST:
-                        if (!ConditionOfCheckNameIPList(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckNameIPList(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKACCOUNTIPLIST:
-                        if (!ConditionOfCheckAccountIPList(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckAccountIPList(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKSLAVECOUNT:
-                        if (!ConditionOfCheckSlaveCount(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckSlaveCount(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISNEWHUMAN:
-                        if (!PlayObject.IsNewHuman)
-                        {
+                        if (!PlayObject.IsNewHuman) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMEMBERTYPE:
-                        if (!ConditionOfCheckMemberType(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMemberType(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMEMBERLEVEL:
-                        if (!ConditionOfCheckMemBerLevel(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMemBerLevel(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKGAMEGOLD:
-                        if (!ConditionOfCheckGameGold(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckGameGold(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKGAMEPOINT:
-                        if (!ConditionOfCheckGamePoint(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckGamePoint(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKNAMELISTPOSITION:
-                        if (!ConditionOfCheckNameListPostion(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckNameListPostion(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKGUILDLIST:
-                        if (PlayObject.MyGuild != null)
-                        {
-                            if (!CheckGotoLableStringList(PlayObject.MyGuild.GuildName, m_sPath + QuestConditionInfo.sParam1))
-                            {
+                        if (PlayObject.MyGuild != null) {
+                            if (!CheckGotoLableStringList(PlayObject.MyGuild.GuildName, m_sPath + QuestConditionInfo.sParam1)) {
                                 result = false;
                             }
                         }
-                        else
-                        {
+                        else {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKRENEWLEVEL:
-                        if (!ConditionOfCheckReNewLevel(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckReNewLevel(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKSLAVELEVEL:
-                        if (!ConditionOfCheckSlaveLevel(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckSlaveLevel(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKSLAVENAME:
-                        if (!ConditionOfCheckSlaveName(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckSlaveName(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKCREDITPOINT:
-                        if (!ConditionOfCheckCreditPoint(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckCreditPoint(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKOFGUILD:
-                        if (!ConditionOfCheckOfGuild(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckOfGuild(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKPAYMENT:
-                        if (!ConditionOfCheckPayMent(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckPayMent(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKUSEITEM:
-                        if (!ConditionOfCheckUseItem(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckUseItem(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKBAGSIZE:
-                        if (!ConditionOfCheckBagSize(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckBagSize(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKLISTCOUNT:
-                        if (!ConditionOfCheckListCount(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckListCount(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKDC:
-                        if (!ConditionOfCheckDC(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckDC(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMC:
-                        if (!ConditionOfCheckMC(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMC(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKSC:
-                        if (!ConditionOfCheckSC(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckSC(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKHP:
-                        if (!ConditionOfCheckHP(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckHP(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMP:
-                        if (!ConditionOfCheckMP(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMP(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKITEMTYPE:
-                        if (!ConditionOfCheckItemType(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckItemType(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKEXP:
-                        if (!ConditionOfCheckExp(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckExp(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKCASTLEGOLD:
-                        if (!ConditionOfCheckCastleGold(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckCastleGold(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_PASSWORDERRORCOUNT:
-                        if (!ConditionOfCheckPasswordErrorCount(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckPasswordErrorCount(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISLOCKPASSWORD:
-                        if (!ConditionOfIsLockPassword(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfIsLockPassword(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISLOCKSTORAGE:
-                        if (!ConditionOfIsLockStorage(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfIsLockStorage(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKBUILDPOINT:
-                        if (!ConditionOfCheckGuildBuildPoint(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckGuildBuildPoint(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKAURAEPOINT:
-                        if (!ConditionOfCheckGuildAuraePoint(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckGuildAuraePoint(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKSTABILITYPOINT:
-                        if (!ConditionOfCheckStabilityPoint(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckStabilityPoint(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKFLOURISHPOINT:
-                        if (!ConditionOfCheckFlourishPoint(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckFlourishPoint(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKCONTRIBUTION:
-                        if (!ConditionOfCheckContribution(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckContribution(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKRANGEMONCOUNT:
-                        if (!ConditionOfCheckRangeMonCount(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckRangeMonCount(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKITEMADDVALUE:
-                        if (!ConditionOfCheckItemAddValue(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckItemAddValue(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKINMAPRANGE:
-                        if (!ConditionOfCheckInMapRange(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckInMapRange(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CASTLECHANGEDAY:
-                        if (!ConditionOfCheckCastleChageDay(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckCastleChageDay(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CASTLEWARDAY:
-                        if (!ConditionOfCheckCastleWarDay(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckCastleWarDay(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ONLINELONGMIN:
-                        if (!ConditionOfCheckOnlineLongMin(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckOnlineLongMin(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKGUILDCHIEFITEMCOUNT:
-                        if (!ConditionOfCheckChiefItemCount(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckChiefItemCount(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKNAMEDATELIST:
-                        if (!ConditionOfCheckNameDateList(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckNameDateList(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMAPHUMANCOUNT:
-                        if (!ConditionOfCheckMapHumanCount(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMapHumanCount(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMAPMONCOUNT:
-                        if (!ConditionOfCheckMapMonCount(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMapMonCount(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKVAR:
-                        if (!ConditionOfCheckVar(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckVar(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKSERVERNAME:
-                        if (!ConditionOfCheckServerName(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckServerName(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKISONMAP:
-                        if (!ConditionOfCheckIsOnMap(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckIsOnMap(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_KILLBYHUM:
-                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race != ActorRace.Play))
-                        {
+                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race != ActorRace.Play)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_KILLBYMON:
-                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race == ActorRace.Play))
-                        {
+                        if ((PlayObject.LastHiter != null) && (PlayObject.LastHiter.Race == ActorRace.Play)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKINSAFEZONE:
-                        if (!PlayObject.InSafeZone())
-                        {
+                        if (!PlayObject.InSafeZone()) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMAP:
-                        if (!ConditionOfCheckMap(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMap(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKPOS:
-                        if (!ConditionOfCheckPos(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckPos(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_REVIVESLAVE:
-                        if (!ConditionOfReviveSlave(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfReviveSlave(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKMAGICLVL:
-                        if (!ConditionOfCheckMagicLvl(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckMagicLvl(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_CHECKGROUPCLASS:
-                        if (!ConditionOfCheckGroupClass(PlayObject, QuestConditionInfo))
-                        {
+                        if (!ConditionOfCheckGroupClass(PlayObject, QuestConditionInfo)) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nSC_ISGROUPMASTER:
-                        if (PlayObject.GroupOwner != 0)
-                        {
-                            if (PlayObject.GroupOwner != PlayObject.ActorId)
-                            {
+                        if (PlayObject.GroupOwner != 0) {
+                            if (PlayObject.GroupOwner != PlayObject.ActorId) {
                                 result = false;
                             }
                         }
-                        else
-                        {
+                        else {
                             result = false;
                         }
                         break;
@@ -1390,44 +1120,36 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nSCHECKDEATHPLAYMON:
                         string s01 = string.Empty;
-                        if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref s01))
-                        {
+                        if (!GetValValue(PlayObject, QuestConditionInfo.sParam1, ref s01)) {
                             s01 = GetLineVariableText(PlayObject, QuestConditionInfo.sParam1);
                         }
                         result = CheckKillMon2(PlayObject, s01);
                         break;
                 }
-                if (!result)
-                {
+                if (!result) {
                     break;
                 }
             }
             return result;
         }
 
-        private static bool CheckKillMon2(PlayObject PlayObject, string sMonName)
-        {
+        private static bool CheckKillMon2(PlayObject PlayObject, string sMonName) {
             return true;
         }
 
-        private bool GotoLable_JmpToLable(PlayObject PlayObject, string sLabel)
-        {
+        private bool GotoLable_JmpToLable(PlayObject PlayObject, string sLabel) {
             PlayObject.ScriptGotoCount++;
-            if (PlayObject.ScriptGotoCount > M2Share.Config.ScriptGotoCountLimit)
-            {
+            if (PlayObject.ScriptGotoCount > M2Share.Config.ScriptGotoCountLimit) {
                 return false;
             }
             GotoLable(PlayObject, sLabel, false);
             return true;
         }
 
-        private void GotoLable_GoToQuest(PlayObject PlayObject, int nQuest)
-        {
-            for (int i = 0; i < m_ScriptList.Count; i++)
-            {
+        private void GotoLable_GoToQuest(PlayObject PlayObject, int nQuest) {
+            for (int i = 0; i < m_ScriptList.Count; i++) {
                 TScript Script = m_ScriptList[i];
-                if (Script.nQuest == nQuest)
-                {
+                if (Script.nQuest == nQuest) {
                     PlayObject.MScript = Script;
                     PlayObject.LastNpc = this.ActorId;
                     GotoLable(PlayObject, ScriptConst.sMAIN, false);
@@ -1436,155 +1158,124 @@ namespace GameSvr.Npc
             }
         }
 
-        private static void GotoLable_AddUseDateList(string sHumName, string sListFileName)
-        {
+        private static void GotoLable_AddUseDateList(string sHumName, string sListFileName) {
             string s10 = string.Empty;
             string sText;
             bool bo15;
             sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             using StringList LoadList = new StringList();
-            if (File.Exists(sListFileName))
-            {
+            if (File.Exists(sListFileName)) {
                 LoadList.LoadFromFile(sListFileName);
             }
             bo15 = false;
-            for (int i = 0; i < LoadList.Count; i++)
-            {
+            for (int i = 0; i < LoadList.Count; i++) {
                 sText = LoadList[i].Trim();
                 sText = HUtil32.GetValidStrCap(sText, ref s10, new[] { ' ', '\t' });
-                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
-                {
+                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0) {
                     bo15 = true;
                     break;
                 }
             }
-            if (!bo15)
-            {
+            if (!bo15) {
                 s10 = string.Format("{0}    {1}", new object[] { sHumName, DateTime.Today });
                 LoadList.Add(s10);
-                try
-                {
+                try {
                     LoadList.SaveToFile(sListFileName);
                 }
-                catch
-                {
+                catch {
                     M2Share.Logger.Error("saving fail.... => " + sListFileName);
                 }
             }
         }
 
-        private static void GotoLable_AddList(string sHumName, string sListFileName)
-        {
-            sListFileName = M2Share.GetEnvirFilePath( sListFileName);
+        private static void GotoLable_AddList(string sHumName, string sListFileName) {
+            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             using StringList LoadList = new StringList();
-            if (File.Exists(sListFileName))
-            {
+            if (File.Exists(sListFileName)) {
                 LoadList.LoadFromFile(sListFileName);
             }
             bool bo15 = false;
-            for (int i = 0; i < LoadList.Count; i++)
-            {
+            for (int i = 0; i < LoadList.Count; i++) {
                 string s10 = LoadList[i].Trim();
-                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
-                {
+                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0) {
                     bo15 = true;
                     break;
                 }
             }
-            if (!bo15)
-            {
+            if (!bo15) {
                 LoadList.Add(sHumName);
-                try
-                {
+                try {
                     LoadList.SaveToFile(sListFileName);
                 }
-                catch
-                {
+                catch {
                     M2Share.Logger.Error("saving fail.... => " + sListFileName);
                 }
             }
         }
 
-        private static void GotoLable_DELUseDateList(string sHumName, string sListFileName)
-        {
+        private static void GotoLable_DELUseDateList(string sHumName, string sListFileName) {
             string s10 = string.Empty;
             string sText;
-            sListFileName = M2Share.GetEnvirFilePath( sListFileName);
+            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             using StringList LoadList = new StringList();
-            if (File.Exists(sListFileName))
-            {
+            if (File.Exists(sListFileName)) {
                 LoadList.LoadFromFile(sListFileName);
             }
             bool bo15 = false;
-            for (int i = 0; i < LoadList.Count; i++)
-            {
+            for (int i = 0; i < LoadList.Count; i++) {
                 sText = LoadList[i].Trim();
                 sText = HUtil32.GetValidStrCap(sText, ref s10, new[] { ' ', '\t' });
-                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
-                {
+                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0) {
                     bo15 = true;
                     LoadList.RemoveAt(i);
                     break;
                 }
             }
-            if (bo15)
-            {
+            if (bo15) {
                 LoadList.SaveToFile(sListFileName);
             }
         }
 
-        private static void GotoLable_DelList(string sHumName, string sListFileName)
-        {
+        private static void GotoLable_DelList(string sHumName, string sListFileName) {
             bool bo15;
-            sListFileName = M2Share.GetEnvirFilePath( sListFileName);
+            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             using StringList LoadList = new StringList();
-            if (File.Exists(sListFileName))
-            {
+            if (File.Exists(sListFileName)) {
                 LoadList.LoadFromFile(sListFileName);
             }
             bo15 = false;
-            for (int i = 0; i < LoadList.Count; i++)
-            {
+            for (int i = 0; i < LoadList.Count; i++) {
                 string s10 = LoadList[i].Trim();
-                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0)
-                {
+                if (string.Compare(sHumName, s10, StringComparison.OrdinalIgnoreCase) == 0) {
                     LoadList.RemoveAt(i);
                     bo15 = true;
                     break;
                 }
             }
-            if (bo15)
-            {
+            if (bo15) {
                 LoadList.SaveToFile(sListFileName);
             }
         }
 
-        private void GotoLable_TakeItem(PlayObject PlayObject, string sItemName, int nItemCount, ref string sC)
-        {
+        private void GotoLable_TakeItem(PlayObject PlayObject, string sItemName, int nItemCount, ref string sC) {
             UserItem UserItem;
             StdItem StdItem;
-            if (string.Compare(sItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
-            {
+            if (string.Compare(sItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0) {
                 PlayObject.DecGold(nItemCount);
                 PlayObject.GoldChanged();
-                if (M2Share.GameLogGold)
-                {
+                if (M2Share.GameLogGold) {
                     M2Share.EventSource.AddEventLog(10, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
                 }
                 return;
             }
-            for (int i = PlayObject.ItemList.Count - 1; i >= 0; i--)
-            {
-                if (nItemCount <= 0)
-                {
+            for (int i = PlayObject.ItemList.Count - 1; i >= 0; i--) {
+                if (nItemCount <= 0) {
                     break;
                 }
                 UserItem = PlayObject.ItemList[i];
-                if (string.Compare(M2Share.WorldEngine.GetStdItemName(UserItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
-                {
+                if (string.Compare(M2Share.WorldEngine.GetStdItemName(UserItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0) {
                     StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                    if (StdItem.NeedIdentify == 1)
-                    {
+                    if (StdItem.NeedIdentify == 1) {
                         M2Share.EventSource.AddEventLog(10, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                     }
                     PlayObject.SendDelItems(UserItem);
@@ -1596,54 +1287,41 @@ namespace GameSvr.Npc
             }
         }
 
-        public void GotoLable_GiveItem(PlayObject PlayObject, string sItemName, int nItemCount)
-        {
+        public void GotoLable_GiveItem(PlayObject PlayObject, string sItemName, int nItemCount) {
             UserItem UserItem;
             StdItem StdItem;
-            if (string.Compare(sItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
-            {
+            if (string.Compare(sItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0) {
                 PlayObject.IncGold(nItemCount);
                 PlayObject.GoldChanged();
-                if (M2Share.GameLogGold)
-                {
+                if (M2Share.GameLogGold) {
                     M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
                 }
                 return;
             }
-            if (M2Share.WorldEngine.GetStdItemIdx(sItemName) > 0)
-            {
-                if (!(nItemCount >= 1 && nItemCount <= 50))
-                {
+            if (M2Share.WorldEngine.GetStdItemIdx(sItemName) > 0) {
+                if (!(nItemCount >= 1 && nItemCount <= 50)) {
                     nItemCount = 1;
                 }
-                for (int i = 0; i < nItemCount; i++)
-                {
-                    if (PlayObject.IsEnoughBag())
-                    {
+                for (int i = 0; i < nItemCount; i++) {
+                    if (PlayObject.IsEnoughBag()) {
                         UserItem = new UserItem();
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
-                        {
+                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem)) {
                             PlayObject.ItemList.Add(UserItem);
                             PlayObject.SendAddItem(UserItem);
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                            if (StdItem.NeedIdentify == 1)
-                            {
+                            if (StdItem.NeedIdentify == 1) {
                                 M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                             }
                         }
-                        else
-                        {
+                        else {
                             Dispose(UserItem);
                         }
                     }
-                    else
-                    {
+                    else {
                         UserItem = new UserItem();
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem))
-                        {
+                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem)) {
                             StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                            if (StdItem.NeedIdentify == 1)
-                            {
+                            if (StdItem.NeedIdentify == 1) {
                                 M2Share.EventSource.AddEventLog(9, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + sItemName + "\t" + UserItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                             }
                             PlayObject.DropItemDown(UserItem, 3, false, PlayObject.ActorId, 0);
@@ -1654,134 +1332,107 @@ namespace GameSvr.Npc
             }
         }
 
-        private static void GotoLable_TakeWItem(PlayObject PlayObject, string sItemName, int nItemCount)
-        {
+        private static void GotoLable_TakeWItem(PlayObject PlayObject, string sItemName, int nItemCount) {
             string sC;
-            if (HUtil32.CompareLStr(sItemName, "[NECKLACE]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_NECKLACE].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[NECKLACE]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_NECKLACE].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_NECKLACE]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].Index);
                     PlayObject.UseItems[Grobal2.U_NECKLACE].Index = 0;
                     return;
                 }
             }
-            if (HUtil32.CompareLStr(sItemName, "[RING]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_RINGL].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[RING]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_RINGL].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_RINGL]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].Index);
                     PlayObject.UseItems[Grobal2.U_RINGL].Index = 0;
                     return;
                 }
-                if (PlayObject.UseItems[Grobal2.U_RINGR].Index > 0)
-                {
+                if (PlayObject.UseItems[Grobal2.U_RINGR].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_RINGR]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].Index);
                     PlayObject.UseItems[Grobal2.U_RINGR].Index = 0;
                     return;
                 }
             }
-            if (HUtil32.CompareLStr(sItemName, "[ARMRING]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_ARMRINGL].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[ARMRING]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_ARMRINGL].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_ARMRINGL]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].Index);
                     PlayObject.UseItems[Grobal2.U_ARMRINGL].Index = 0;
                     return;
                 }
-                if (PlayObject.UseItems[Grobal2.U_ARMRINGR].Index > 0)
-                {
+                if (PlayObject.UseItems[Grobal2.U_ARMRINGR].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_ARMRINGR]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].Index);
                     PlayObject.UseItems[Grobal2.U_ARMRINGR].Index = 0;
                     return;
                 }
             }
-            if (HUtil32.CompareLStr(sItemName, "[WEAPON]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_WEAPON].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[WEAPON]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_WEAPON].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_WEAPON]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].Index);
                     PlayObject.UseItems[Grobal2.U_WEAPON].Index = 0;
                     return;
                 }
             }
-            if (HUtil32.CompareLStr(sItemName, "[HELMET]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_HELMET].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[HELMET]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_HELMET].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_HELMET]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].Index);
                     PlayObject.UseItems[Grobal2.U_HELMET].Index = 0;
                     return;
                 }
             }
-            if (HUtil32.CompareLStr(sItemName, "[DRESS]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_DRESS].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[DRESS]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_DRESS].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_DRESS]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].Index);
                     PlayObject.UseItems[Grobal2.U_DRESS].Index = 0;
                     return;
                 }
             }
-            if (HUtil32.CompareLStr(sItemName, "[U_BUJUK]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_BUJUK].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[U_BUJUK]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_BUJUK].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_BUJUK]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].Index);
                     PlayObject.UseItems[Grobal2.U_BUJUK].Index = 0;
                     return;
                 }
             }
-            if (HUtil32.CompareLStr(sItemName, "[U_BELT]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_BELT].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[U_BELT]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_BELT].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_BELT]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].Index);
                     PlayObject.UseItems[Grobal2.U_BELT].Index = 0;
                     return;
                 }
             }
-            if (HUtil32.CompareLStr(sItemName, "[U_BOOTS]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_BOOTS].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[U_BOOTS]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_BOOTS].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_BOOTS]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].Index);
                     PlayObject.UseItems[Grobal2.U_BOOTS].Index = 0;
                     return;
                 }
             }
-            if (HUtil32.CompareLStr(sItemName, "[U_CHARM]", 4))
-            {
-                if (PlayObject.UseItems[Grobal2.U_CHARM].Index > 0)
-                {
+            if (HUtil32.CompareLStr(sItemName, "[U_CHARM]", 4)) {
+                if (PlayObject.UseItems[Grobal2.U_CHARM].Index > 0) {
                     PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_CHARM]);
                     sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].Index);
                     PlayObject.UseItems[Grobal2.U_CHARM].Index = 0;
                     return;
                 }
             }
-            for (int i = 0; i < PlayObject.UseItems.Length; i++)
-            {
-                if (nItemCount <= 0)
-                {
+            for (int i = 0; i < PlayObject.UseItems.Length; i++) {
+                if (nItemCount <= 0) {
                     return;
                 }
-                if (PlayObject.UseItems[i].Index > 0)
-                {
+                if (PlayObject.UseItems[i].Index > 0) {
                     string sName = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[i].Index);
-                    if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
+                    if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0) {
                         PlayObject.SendDelItems(PlayObject.UseItems[i]);
                         PlayObject.UseItems[i].Index = 0;
                         nItemCount -= 1;
@@ -1790,8 +1441,7 @@ namespace GameSvr.Npc
             }
         }
 
-        private bool GotoLableQuestActionProcess(PlayObject PlayObject, IList<QuestActionInfo> ActionList, ref string sC, ref UserItem UserItem, ref bool bo11)
-        {
+        private bool GotoLableQuestActionProcess(PlayObject PlayObject, IList<QuestActionInfo> ActionList, ref string sC, ref UserItem UserItem, ref bool bo11) {
             bool result = true;
             int n28;
             int n2C;
@@ -1807,11 +1457,9 @@ namespace GameSvr.Npc
             int n3C = 0;
             int n40 = 0;
             string s50;
-            for (int i = 0; i < ActionList.Count; i++)
-            {
+            for (int i = 0; i < ActionList.Count; i++) {
                 QuestActionInfo QuestActionInfo = ActionList[i];
-                switch (QuestActionInfo.nCmdCode)
-                {
+                switch (QuestActionInfo.nCmdCode) {
                     case ScriptConst.nSET:
                         n28 = HUtil32.StrToInt(QuestActionInfo.sParam1, 0);
                         n2C = HUtil32.StrToInt(QuestActionInfo.sParam2, 0);
@@ -1830,8 +1478,7 @@ namespace GameSvr.Npc
                         PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                         break;
                     case ScriptConst.nRESET:
-                        for (int k = 0; k < QuestActionInfo.nParam2; k++)
-                        {
+                        for (int k = 0; k < QuestActionInfo.nParam2; k++) {
                             PlayObject.SetQuestFlagStatus(QuestActionInfo.nParam1 + k, 0);
                         }
                         break;
@@ -1846,8 +1493,7 @@ namespace GameSvr.Npc
                         PlayObject.SetQuestUnitStatus(n28, n2C);
                         break;
                     case ScriptConst.nRESETUNIT:
-                        for (int k = 0; k < QuestActionInfo.nParam2; k++)
-                        {
+                        for (int k = 0; k < QuestActionInfo.nParam2; k++) {
                             PlayObject.SetQuestUnitStatus(QuestActionInfo.nParam1 + k, 0);
                         }
                         break;
@@ -1893,18 +1539,15 @@ namespace GameSvr.Npc
                         bo11 = true;
                         break;
                     case ScriptConst.nTAKECHECKITEM:
-                        if (UserItem != null)
-                        {
+                        if (UserItem != null) {
                             PlayObject.QuestTakeCheckItem(UserItem);
                         }
-                        else
-                        {
+                        else {
                             ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sTAKECHECKITEM);
                         }
                         break;
                     case ScriptConst.nMONGEN:
-                        for (int k = 0; k < QuestActionInfo.nParam2; k++)
-                        {
+                        for (int k = 0; k < QuestActionInfo.nParam2; k++) {
                             n20X = M2Share.RandomNumber.Random(QuestActionInfo.nParam3 * 2 + 1) + (n38 - QuestActionInfo.nParam3);
                             n24Y = M2Share.RandomNumber.Random(QuestActionInfo.nParam3 * 2 + 1) + (n3C - QuestActionInfo.nParam3);
                             M2Share.WorldEngine.RegenMonsterByName(s44, (short)n20X, (short)n24Y, QuestActionInfo.sParam1);
@@ -1913,8 +1556,7 @@ namespace GameSvr.Npc
                     case ScriptConst.nMONCLEAR:
                         List58 = new List<BaseObject>();
                         M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(QuestActionInfo.sParam1), List58);
-                        for (int k = 0; k < List58.Count; k++)
-                        {
+                        for (int k = 0; k < List58.Count; k++) {
                             List58[k].NoItem = true;
                             List58[k].WAbil.HP = 0;
                             List58[k].MakeGhost();
@@ -1946,8 +1588,7 @@ namespace GameSvr.Npc
                         PlayObject.IsTimeRecall = false;
                         break;
                     case ScriptConst.nCHANGEMODE:
-                        switch (QuestActionInfo.nParam1)
-                        {
+                        switch (QuestActionInfo.nParam1) {
                             case 1:
                                 CommandMgr.Execute("ChangeAdminMode", PlayObject);
                                 break;
@@ -1963,31 +1604,23 @@ namespace GameSvr.Npc
                         }
                         break;
                     case ScriptConst.nPKPOINT:
-                        if (QuestActionInfo.nParam1 == 0)
-                        {
+                        if (QuestActionInfo.nParam1 == 0) {
                             PlayObject.PkPoint = 0;
                         }
-                        else
-                        {
-                            if (QuestActionInfo.nParam1 < 0)
-                            {
-                                if ((PlayObject.PkPoint + QuestActionInfo.nParam1) >= 0)
-                                {
+                        else {
+                            if (QuestActionInfo.nParam1 < 0) {
+                                if ((PlayObject.PkPoint + QuestActionInfo.nParam1) >= 0) {
                                     PlayObject.PkPoint += QuestActionInfo.nParam1;
                                 }
-                                else
-                                {
+                                else {
                                     PlayObject.PkPoint = 0;
                                 }
                             }
-                            else
-                            {
-                                if ((PlayObject.PkPoint + QuestActionInfo.nParam1) > 10000)
-                                {
+                            else {
+                                if ((PlayObject.PkPoint + QuestActionInfo.nParam1) > 10000) {
                                     PlayObject.PkPoint = 10000;
                                 }
-                                else
-                                {
+                                else {
                                     PlayObject.PkPoint += QuestActionInfo.nParam1;
                                 }
                             }
@@ -2011,51 +1644,42 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nEXCHANGEMAP:
                         Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
-                        if (Envir != null)
-                        {
+                        if (Envir != null) {
                             List58 = new List<BaseObject>();
                             M2Share.WorldEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
-                            if (List58.Count > 0)
-                            {
+                            if (List58.Count > 0) {
                                 User = (PlayObject)List58[0];
                                 User.MapRandomMove(MapName, 0);
                             }
                             PlayObject.MapRandomMove(QuestActionInfo.sParam1, 0);
                         }
-                        else
-                        {
+                        else {
                             ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sEXCHANGEMAP);
                         }
                         break;
                     case ScriptConst.nRECALLMAP:
                         Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
-                        if (Envir != null)
-                        {
+                        if (Envir != null) {
                             List58 = new List<BaseObject>();
                             M2Share.WorldEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
-                            for (int k = 0; k < List58.Count; k++)
-                            {
+                            for (int k = 0; k < List58.Count; k++) {
                                 User = (PlayObject)List58[k];
                                 User.MapRandomMove(MapName, 0);
-                                if (k > 20)
-                                {
+                                if (k > 20) {
                                     break;
                                 }
                             }
                             //List58.Free;
                         }
-                        else
-                        {
+                        else {
                             ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sRECALLMAP);
                         }
                         break;
                     case ScriptConst.nADDBATCH:
-                        if (BatchParamsList == null)
-                        {
+                        if (BatchParamsList == null) {
                             BatchParamsList = new List<ScriptParams>();
                         }
-                        BatchParamsList.Add(new ScriptParams()
-                        {
+                        BatchParamsList.Add(new ScriptParams() {
                             sParams = QuestActionInfo.sParam1,
                             nParams = n18
                         });
@@ -2065,8 +1689,7 @@ namespace GameSvr.Npc
                         break;
                     case ScriptConst.nBATCHMOVE:
                         int n20 = 0;
-                        for (int k = 0; k < BatchParamsList.Count; k++)
-                        {
+                        for (int k = 0; k < BatchParamsList.Count; k++) {
                             ScriptParams batchParam = BatchParamsList[k];
                             PlayObject.SendDelayMsg(ActorId, Messages.RM_RANDOMSPACEMOVE, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
                             n20 += batchParam.nParams;
@@ -2090,14 +1713,12 @@ namespace GameSvr.Npc
                         GotoLable_DELUseDateList(PlayObject.ChrName, m_sPath + QuestActionInfo.sParam1);
                         break;
                     case ScriptConst.nADDGUILDLIST:
-                        if (PlayObject.MyGuild != null)
-                        {
+                        if (PlayObject.MyGuild != null) {
                             GotoLable_AddList(PlayObject.MyGuild.GuildName, m_sPath + QuestActionInfo.sParam1);
                         }
                         break;
                     case ScriptConst.nDELGUILDLIST:
-                        if (PlayObject.MyGuild != null)
-                        {
+                        if (PlayObject.MyGuild != null) {
                             GotoLable_DelList(PlayObject.MyGuild.GuildName, m_sPath + QuestActionInfo.sParam1);
                         }
                         break;
@@ -2124,8 +1745,7 @@ namespace GameSvr.Npc
                         PlayObject.MScript = null;
                         break;
                     case ScriptConst.nGOTO:
-                        if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1))
-                        {
+                        if (!GotoLable_JmpToLable(PlayObject, QuestActionInfo.sParam1)) {
                             // ScriptActionError(PlayObject,'',QuestActionInfo,sGOTO);
                             M2Share.Logger.Error("[脚本死循环] NPC:" + ChrName + " 位置:" + MapName + '(' + CurrX + ':' + CurrY + ')' + " 命令:" + ScriptConst.sGOTO + ' ' + QuestActionInfo.sParam1);
                             result = false;
@@ -2395,22 +2015,18 @@ namespace GameSvr.Npc
                         ActionOfRepairAllItem(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_QUERYBAGITEMS:// 刷新包裹
-                        if ((HUtil32.GetTickCount() - PlayObject.QueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
-                        {
+                        if ((HUtil32.GetTickCount() - PlayObject.QueryBagItemsTick) > M2Share.Config.QueryBagItemsTick) {
                             PlayObject.QueryBagItemsTick = HUtil32.GetTickCount();
                             PlayObject.ClientQueryBagItems();
                         }
-                        else
-                        {
+                        else {
                             PlayObject.SysMsg(Settings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                         }
                         break;
                     case ScriptConst.nSC_SETRANDOMNO:
-                        while (true)
-                        {
+                        while (true) {
                             n2C = M2Share.RandomNumber.Random(999999);
-                            if ((n2C >= 1000) && (n2C.ToString() != PlayObject.RandomNo))
-                            {
+                            if ((n2C >= 1000) && (n2C.ToString() != PlayObject.RandomNo)) {
                                 PlayObject.RandomNo = n2C.ToString();
                                 break;
                             }
@@ -2428,18 +2044,15 @@ namespace GameSvr.Npc
                     case ScriptConst.nDELAYGOTO:
                         PlayObject.IsTimeGoto = true;
                         int m_DelayGoto = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam1), 0);//变量操作
-                        if (m_DelayGoto == 0)
-                        {
+                        if (m_DelayGoto == 0) {
                             int delayCount = 0;
                             GetValValue(PlayObject, QuestActionInfo.sParam1, ref delayCount);
                             m_DelayGoto = delayCount;
                         }
-                        if (m_DelayGoto > 0)
-                        {
+                        if (m_DelayGoto > 0) {
                             PlayObject.TimeGotoTick = HUtil32.GetTickCount() + m_DelayGoto;
                         }
-                        else
-                        {
+                        else {
                             PlayObject.TimeGotoTick = HUtil32.GetTickCount() + QuestActionInfo.nParam1;//毫秒
                         }
                         PlayObject.TimeGotoLable = QuestActionInfo.sParam2;
@@ -2473,13 +2086,11 @@ namespace GameSvr.Npc
             return result;
         }
 
-        private static void ActionOfUpgradeDlgItem(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
-        {
+        private static void ActionOfUpgradeDlgItem(PlayObject PlayObject, QuestActionInfo QuestActionInfo) {
 
         }
 
-        private void ActionOfQueryItemDlg(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
-        {
+        private void ActionOfQueryItemDlg(PlayObject PlayObject, QuestActionInfo QuestActionInfo) {
             PlayObject.TakeDlgItem = QuestActionInfo.nParam3 != 0;
             PlayObject.GotoNpcLabel = QuestActionInfo.sParam2;
             string sHint = QuestActionInfo.sParam1;
@@ -2487,43 +2098,34 @@ namespace GameSvr.Npc
             PlayObject.SendDefMessage(Messages.SM_QUERYITEMDLG, ActorId, 0, 0, 0, sHint);
         }
 
-        private void ActionOfKillSlaveName(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
-        {
+        private void ActionOfKillSlaveName(PlayObject PlayObject, QuestActionInfo QuestActionInfo) {
             string sSlaveName = QuestActionInfo.sParam1;
-            if (string.IsNullOrEmpty(sSlaveName))
-            {
+            if (string.IsNullOrEmpty(sSlaveName)) {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sSC_KILLSLAVENAME);
                 return;
             }
-            if (sSlaveName.Equals("*") || string.Compare(sSlaveName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                for (int i = 0; i < PlayObject.SlaveList.Count; i++)
-                {
+            if (sSlaveName.Equals("*") || string.Compare(sSlaveName, "ALL", StringComparison.OrdinalIgnoreCase) == 0) {
+                for (int i = 0; i < PlayObject.SlaveList.Count; i++) {
                     PlayObject.SlaveList[i].WAbil.HP = 0;
                 }
                 return;
             }
-            for (int i = 0; i < PlayObject.SlaveList.Count; i++)
-            {
+            for (int i = 0; i < PlayObject.SlaveList.Count; i++) {
                 BaseObject BaseObject = PlayObject.SlaveList[i];
-                if (!Death && (string.Compare(sSlaveName, BaseObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0))
-                {
+                if (!Death && (string.Compare(sSlaveName, BaseObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0)) {
                     BaseObject.WAbil.HP = 0;
                 }
             }
         }
 
-        private static void ActionOfQueryValue(PlayObject PlayObject, QuestActionInfo QuestActionInfo)
-        {
+        private static void ActionOfQueryValue(PlayObject PlayObject, QuestActionInfo QuestActionInfo) {
             int btStrLabel = QuestActionInfo.nParam1;
-            if (btStrLabel < 100)
-            {
+            if (btStrLabel < 100) {
                 btStrLabel = 0;
             }
             PlayObject.ValLabel = (byte)btStrLabel;
             byte btType = (byte)QuestActionInfo.nParam2;
-            if (btType > 3)
-            {
+            if (btType > 3) {
                 btType = 0;
             }
             PlayObject.ValType = btType;
@@ -2531,31 +2133,25 @@ namespace GameSvr.Npc
             PlayObject.GotoNpcLabel = QuestActionInfo.sParam4;
             string sHint = QuestActionInfo.sParam5;
             PlayObject.ValNpcType = 0;
-            if (string.Compare(QuestActionInfo.sParam6, "QF", StringComparison.OrdinalIgnoreCase) == 0)
-            {
+            if (string.Compare(QuestActionInfo.sParam6, "QF", StringComparison.OrdinalIgnoreCase) == 0) {
                 PlayObject.ValNpcType = 1;
             }
-            else if (string.Compare(QuestActionInfo.sParam6, "QM", StringComparison.OrdinalIgnoreCase) == 0)
-            {
+            else if (string.Compare(QuestActionInfo.sParam6, "QM", StringComparison.OrdinalIgnoreCase) == 0) {
                 PlayObject.ValNpcType = 2;
             }
-            if (string.IsNullOrEmpty(sHint))
-            {
+            if (string.IsNullOrEmpty(sHint)) {
                 sHint = "请输入：";
             }
             PlayObject.SendDefMessage(Messages.SM_QUERYVALUE, 0, HUtil32.MakeWord(btType, (ushort)btLen), 0, 0, sHint);
         }
 
-        private void GotoLableSendMerChantSayMsg(PlayObject PlayObject, string sMsg, bool boFlag)
-        {
+        private void GotoLableSendMerChantSayMsg(PlayObject PlayObject, string sMsg, bool boFlag) {
             sMsg = GetLineVariableText(PlayObject, sMsg);
             PlayObject.GetScriptLabel(sMsg);
-            if (boFlag)
-            {
+            if (boFlag) {
                 PlayObject.SendPriorityMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg, MessagePriority.High);
             }
-            else
-            {
+            else {
                 PlayObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
             }
         }

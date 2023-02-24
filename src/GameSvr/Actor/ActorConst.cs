@@ -1,7 +1,5 @@
-namespace GameSvr.Actor
-{
-    public record struct SendMessage
-    {
+namespace GameSvr.Actor {
+    public record struct SendMessage {
         public int wIdent;
         public int wParam;
         public int nParam1;
@@ -22,14 +20,12 @@ namespace GameSvr.Actor
     /// <summary>
     /// 可见的精灵
     /// </summary>
-    public class VisibleBaseObject
-    {
+    public class VisibleBaseObject {
         public BaseObject BaseObject;
         public VisibleFlag VisibleFlag;
     }
 
-    public enum VisibleFlag : byte
-    {
+    public enum VisibleFlag : byte {
         /// <summary>
         /// 可见
         /// </summary>
@@ -44,14 +40,12 @@ namespace GameSvr.Actor
         Hidden = 2
     }
 
-    public enum PlayGender : byte
-    {
+    public enum PlayGender : byte {
         Man = 0,
         WoMan = 1
     }
 
-    public class DragonConst
-    {
+    public class DragonConst {
         public const int DRAGON_RING_SHAPE = 198;
         public const int DRAGON_BRACELET_SHAPE = 199;
         public const int DRAGON_NECKLACE_SHAPE = 200;
@@ -62,8 +56,7 @@ namespace GameSvr.Actor
         public const int DRAGON_BELT_SHAPE = 204;
     }
 
-    public class ShapeConst
-    {
+    public class ShapeConst {
         public const byte LOLLIPOP_SHAPE = 1;
         public const byte GOLDMEDAL_SHAPE = 2;
         public const byte SILVERMEDAL_SHAPE = 3;
@@ -71,8 +64,7 @@ namespace GameSvr.Actor
         public const byte SHAPE_OF_LUCKYLADLE = 5;
     }
 
-    public class AbilConst
-    {
+    public class AbilConst {
         public const byte EABIL_DCUP = 0;
         public const byte EABIL_MCUP = 1;
         public const byte EABIL_SCUP = 2;
@@ -82,8 +74,7 @@ namespace GameSvr.Actor
         public const byte EABIL_PWRRATE = 6;
     }
 
-    public class EfftypeConst
-    {
+    public class EfftypeConst {
         public const byte EFFTYPE_TWOHAND_WEHIGHT_ADD = 1;
         public const byte EFFTYPE_EQUIP_WHEIGHT_ADD = 2;
         public const byte EFFTYPE_LUCK_ADD = 3;
@@ -93,8 +84,7 @@ namespace GameSvr.Actor
         public const byte EFFECTIVE_HIGHLEVEL = 50;
     }
 
-    public class ItemShapeConst
-    {
+    public class ItemShapeConst {
         public const int SHAPE_OF_LUCKYLADLE = 5;
         /// <summary>
         /// 隐身属性

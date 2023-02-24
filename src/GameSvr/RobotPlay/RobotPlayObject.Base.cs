@@ -8,12 +8,9 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.RobotPlay
-{
-    public partial class RobotPlayObject
-    {
-        public override void Run()
-        {
+namespace GameSvr.RobotPlay {
+    public partial class RobotPlayObject {
+        public override void Run() {
             int nWhere;
             int nPercent;
             int nValue;
@@ -21,22 +18,16 @@ namespace GameSvr.RobotPlay
             UserItem userItem;
             bool boRecalcAbilitys;
             bool boFind = false;
-            try
-            {
-                if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
-                {
-                    if (HUtil32.GetTickCount() - WalkTick > WalkSpeed)
-                    {
+            try {
+                if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0) {
+                    if (HUtil32.GetTickCount() - WalkTick > WalkSpeed) {
                         WalkTick = HUtil32.GetTickCount();
-                        if (TargetCret != null)
-                        {
-                            if (TargetCret.Death || TargetCret.Ghost || TargetCret.InSafeZone() || TargetCret.Envir != Envir || Math.Abs(CurrX - TargetCret.CurrX) > 11 || Math.Abs(CurrY - TargetCret.CurrY) > 11)
-                            {
+                        if (TargetCret != null) {
+                            if (TargetCret.Death || TargetCret.Ghost || TargetCret.InSafeZone() || TargetCret.Envir != Envir || Math.Abs(CurrX - TargetCret.CurrX) > 11 || Math.Abs(CurrY - TargetCret.CurrY) > 11) {
                                 DelTargetCreat();
                             }
                         }
-                        if (!m_boAIStart)
-                        {
+                        if (!m_boAIStart) {
                             DelTargetCreat();
                         }
                         SearchTarget();
@@ -44,8 +35,7 @@ namespace GameSvr.RobotPlay
                         {
                             DelTargetCreat();
                         }
-                        if (Thinking())
-                        {
+                        if (Thinking()) {
                             base.Run();
                             return;
                         }
@@ -56,20 +46,17 @@ namespace GameSvr.RobotPlay
                                 m_nProtectTargetX = CurrX;// 守护坐标
                                 m_nProtectTargetY = CurrY;// 守护坐标
                             }
-                            if (!m_boProtectOK && m_ManagedEnvir != null && TargetCret == null)
-                            {
+                            if (!m_boProtectOK && m_ManagedEnvir != null && TargetCret == null) {
                                 GotoProtect();
                                 m_nGotoProtectXYCount++;
-                                if (Math.Abs(CurrX - m_nProtectTargetX) <= 3 && Math.Abs(CurrY - m_nProtectTargetY) <= 3)
-                                {
+                                if (Math.Abs(CurrX - m_nProtectTargetX) <= 3 && Math.Abs(CurrY - m_nProtectTargetY) <= 3) {
                                     Direction = (byte)M2Share.RandomNumber.Random(8);
                                     m_boProtectOK = true;
                                     m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
                                 }
                                 if (m_nGotoProtectXYCount > 20 && !m_boProtectOK)// 20次还没有走到守护坐标，则飞回坐标上
                                 {
-                                    if (Math.Abs(CurrX - m_nProtectTargetX) > 13 || Math.Abs(CurrY - m_nProtectTargetY) > 13)
-                                    {
+                                    if (Math.Abs(CurrX - m_nProtectTargetX) > 13 || Math.Abs(CurrY - m_nProtectTargetY) > 13) {
                                         SpaceMove(m_ManagedEnvir.MapName, m_nProtectTargetX, m_nProtectTargetY, 1);
                                         Direction = (byte)M2Share.RandomNumber.Random(8);
                                         m_boProtectOK = true;
@@ -80,8 +67,7 @@ namespace GameSvr.RobotPlay
                                 return;
                             }
                         }
-                        if (TargetCret != null)
-                        {
+                        if (TargetCret != null) {
                             if (AttackTarget())// 攻击
                             {
                                 base.Run();
@@ -94,33 +80,26 @@ namespace GameSvr.RobotPlay
                                 base.Run();
                                 return;
                             }
-                            else
-                            {
+                            else {
                                 if (IsNeedGotoXY())// 是否走向目标
                                 {
                                     ActionTick = HUtil32.GetTickCount();
                                     TargetX = TargetCret.CurrX;
                                     TargetY = TargetCret.CurrY;
-                                    if (AllowUseMagic(12) && Job == 0)
-                                    {
+                                    if (AllowUseMagic(12) && Job == 0) {
                                         GetGotoXY(TargetCret, 2);
                                     }
-                                    if (Job > 0)
-                                    {
-                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != ActorRace.Play)
-                                        {
+                                    if (Job > 0) {
+                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != ActorRace.Play) {
                                             // 道法22前是否物理攻击
-                                            if (Master != null)
-                                            {
-                                                if (Math.Abs(Master.CurrX - CurrX) > 6 || Math.Abs(Master.CurrY - CurrY) > 6)
-                                                {
+                                            if (Master != null) {
+                                                if (Math.Abs(Master.CurrX - CurrX) > 6 || Math.Abs(Master.CurrY - CurrY) > 6) {
                                                     base.Run();
                                                     return;
                                                 }
                                             }
                                         }
-                                        else
-                                        {
+                                        else {
                                             GetGotoXY(TargetCret, 3); // 道法只走向目标3格范围
                                         }
                                     }
@@ -131,10 +110,8 @@ namespace GameSvr.RobotPlay
                             }
                         }
 
-                        if (IsRobot && !Ghost && !Death)
-                        {
-                            if (M2Share.Config.boHPAutoMoveMap)
-                            {
+                        if (IsRobot && !Ghost && !Death) {
+                            if (M2Share.Config.boHPAutoMoveMap) {
                                 if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
                                     m_dwHPToMapHomeTick = HUtil32.GetTickCount();
@@ -146,37 +123,27 @@ namespace GameSvr.RobotPlay
                                         m_boProtectOK = true;
                                         m_nGotoProtectXYCount = 0; // 是向守护坐标的累计数 20090203
                                     }
-                                    else
-                                    {
+                                    else {
                                         MoveToHome(); // 不是守护状态，直接回城
                                     }
                                 }
                             }
-                            if (M2Share.Config.boAutoRepairItem)
-                            {
-                                if (HUtil32.GetTickCount() - m_dwAutoRepairItemTick > 15000)
-                                {
+                            if (M2Share.Config.boAutoRepairItem) {
+                                if (HUtil32.GetTickCount() - m_dwAutoRepairItemTick > 15000) {
                                     m_dwAutoRepairItemTick = HUtil32.GetTickCount();
                                     boRecalcAbilitys = false;
-                                    for (nWhere = 0; nWhere < m_UseItemNames.Length; nWhere++)
-                                    {
-                                        if (string.IsNullOrEmpty(m_UseItemNames[nWhere]))
-                                        {
+                                    for (nWhere = 0; nWhere < m_UseItemNames.Length; nWhere++) {
+                                        if (string.IsNullOrEmpty(m_UseItemNames[nWhere])) {
                                             continue;
                                         }
-                                        if (UseItems[nWhere].Index <= 0)
-                                        {
+                                        if (UseItems[nWhere].Index <= 0) {
                                             stdItem = M2Share.WorldEngine.GetStdItem(m_UseItemNames[nWhere]);
-                                            if (stdItem != null)
-                                            {
+                                            if (stdItem != null) {
                                                 userItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref userItem))
-                                                {
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref userItem)) {
                                                     boRecalcAbilitys = true;
-                                                    if (M2Share.StdModeMap.Contains(stdItem.StdMode))
-                                                    {
-                                                        if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
-                                                        {
+                                                    if (M2Share.StdModeMap.Contains(stdItem.StdMode)) {
+                                                        if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132) {
                                                             //M2Share.WorldEngine.GetUnknowItemValue(UserItem);
                                                         }
                                                     }
@@ -186,54 +153,40 @@ namespace GameSvr.RobotPlay
                                             }
                                         }
                                     }
-                                    if (m_BagItemNames.Count > 0)
-                                    {
-                                        for (int i = 0; i < m_BagItemNames.Count; i++)
-                                        {
-                                            for (int j = 0; j < ItemList.Count; j++)
-                                            {
+                                    if (m_BagItemNames.Count > 0) {
+                                        for (int i = 0; i < m_BagItemNames.Count; i++) {
+                                            for (int j = 0; j < ItemList.Count; j++) {
                                                 userItem = ItemList[j];
-                                                if (userItem != null)
-                                                {
+                                                if (userItem != null) {
                                                     stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
-                                                    if (stdItem != null)
-                                                    {
+                                                    if (stdItem != null) {
                                                         boFind = false;
-                                                        if (string.Compare(stdItem.Name, m_BagItemNames[i], StringComparison.OrdinalIgnoreCase) == 0)
-                                                        {
+                                                        if (string.Compare(stdItem.Name, m_BagItemNames[i], StringComparison.OrdinalIgnoreCase) == 0) {
                                                             boFind = true;
                                                             break;
                                                         }
                                                     }
                                                 }
                                             }
-                                            if (!boFind)
-                                            {
+                                            if (!boFind) {
                                                 userItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_BagItemNames[i], ref userItem))
-                                                {
-                                                    if (!AddItemToBag(userItem))
-                                                    {
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_BagItemNames[i], ref userItem)) {
+                                                    if (!AddItemToBag(userItem)) {
                                                         Dispose(userItem);
                                                         break;
                                                     }
                                                 }
-                                                else
-                                                {
+                                                else {
                                                     Dispose(userItem);
                                                 }
                                             }
                                         }
                                     }
-                                    for (nWhere = 0; nWhere <= UseItems.Length; nWhere++)
-                                    {
-                                        if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
-                                        {
+                                    for (nWhere = 0; nWhere <= UseItems.Length; nWhere++) {
+                                        if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0) {
                                             stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nWhere].Index);
-                                            if (stdItem != null)
-                                            {
-                                                if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && stdItem.StdMode != 43)
-                                                {
+                                            if (stdItem != null) {
+                                                if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && stdItem.StdMode != 43) {
                                                     /*if (PlugOfCheckCanItem(3, StdItem.Name, false, 0, 0))
                                                     {
                                                         continue;
@@ -243,40 +196,32 @@ namespace GameSvr.RobotPlay
                                             }
                                         }
                                     }
-                                    if (boRecalcAbilitys)
-                                    {
+                                    if (boRecalcAbilitys) {
                                         RecalcAbilitys();
                                     }
                                 }
                             }
                             if (M2Share.Config.boRenewHealth) // 自动增加HP MP
                             {
-                                if (HUtil32.GetTickCount() - m_dwAutoAddHealthTick > 5000)
-                                {
+                                if (HUtil32.GetTickCount() - m_dwAutoAddHealthTick > 5000) {
                                     m_dwAutoAddHealthTick = HUtil32.GetTickCount();
                                     nPercent = WAbil.HP * 100 / WAbil.MaxHP;
                                     nValue = WAbil.MaxHP / 10;
-                                    if (nPercent < M2Share.Config.nRenewPercent)
-                                    {
-                                        if (WAbil.HP + nValue >= WAbil.MaxHP)
-                                        {
+                                    if (nPercent < M2Share.Config.nRenewPercent) {
+                                        if (WAbil.HP + nValue >= WAbil.MaxHP) {
                                             WAbil.HP = WAbil.MaxHP;
                                         }
-                                        else
-                                        {
+                                        else {
                                             WAbil.HP += (ushort)nValue;
                                         }
                                     }
                                     nValue = WAbil.MaxMP / 10;
                                     nPercent = WAbil.MP * 100 / WAbil.MaxMP;
-                                    if (nPercent < M2Share.Config.nRenewPercent)
-                                    {
-                                        if (WAbil.MP + nValue >= WAbil.MaxMP)
-                                        {
+                                    if (nPercent < M2Share.Config.nRenewPercent) {
+                                        if (WAbil.MP + nValue >= WAbil.MaxMP) {
                                             WAbil.MP = WAbil.MaxMP;
                                         }
-                                        else
-                                        {
+                                        else {
                                             WAbil.MP += (ushort)nValue;
                                         }
                                     }
@@ -285,23 +230,18 @@ namespace GameSvr.RobotPlay
                         }
                     }
 
-                    if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
-                    {
+                    if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0) {
                         if (m_boProtectStatus && TargetCret == null)// 守护状态
                         {
-                            if (Math.Abs(CurrX - m_nProtectTargetX) > 50 || Math.Abs(CurrY - m_nProtectTargetY) > 50)
-                            {
+                            if (Math.Abs(CurrX - m_nProtectTargetX) > 50 || Math.Abs(CurrY - m_nProtectTargetY) > 50) {
                                 m_boProtectOK = false;
                             }
                         }
-                        if (TargetCret == null)
-                        {
-                            if (Master != null)
-                            {
+                        if (TargetCret == null) {
+                            if (Master != null) {
                                 FollowMaster();
                             }
-                            else
-                            {
+                            else {
                                 Wondering();
                             }
                         }
@@ -310,35 +250,27 @@ namespace GameSvr.RobotPlay
                     LifeStone();
                 }
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 M2Share.Logger.Error(ex.StackTrace);
             }
             base.Run();
         }
 
-        protected override bool IsProtectTarget(BaseObject baseObject)
-        {
+        protected override bool IsProtectTarget(BaseObject baseObject) {
             return base.IsProtectTarget(baseObject);
         }
 
-        protected override bool IsAttackTarget(BaseObject baseObject)
-        {
+        protected override bool IsAttackTarget(BaseObject baseObject) {
             return base.IsAttackTarget(baseObject);
         }
 
-        public override bool IsProperTarget(BaseObject baseObject)
-        {
+        public override bool IsProperTarget(BaseObject baseObject) {
             bool result = false;
-            if (baseObject != null)
-            {
-                if (base.IsProperTarget(baseObject))
-                {
+            if (baseObject != null) {
+                if (base.IsProperTarget(baseObject)) {
                     result = true;
-                    if (baseObject.Master != null)
-                    {
-                        if (baseObject.Master == this || baseObject.Master.IsRobot && !InGuildWarArea)
-                        {
+                    if (baseObject.Master != null) {
+                        if (baseObject.Master == this || baseObject.Master.IsRobot && !InGuildWarArea) {
                             result = false;
                         }
                     }
@@ -346,12 +278,10 @@ namespace GameSvr.RobotPlay
                     {
                         result = false;
                     }
-                    switch (baseObject.Race)
-                    {
+                    switch (baseObject.Race) {
                         case ActorRace.ArcherGuard:
                         case ActorRace.Exercise:// 不主动攻击练功师 弓箭手
-                            if (baseObject.TargetCret != this)
-                            {
+                            if (baseObject.TargetCret != this) {
                                 result = false;
                             }
                             break;
@@ -367,44 +297,32 @@ namespace GameSvr.RobotPlay
                             break;
                     }
                 }
-                else
-                {
+                else {
                     if (AttatckMode == AttackMode.HAM_PKATTACK)// 红名模式，除红名目标外，受人攻击时才还击
                     {
-                        if (baseObject.Race == ActorRace.Play)
-                        {
+                        if (baseObject.Race == ActorRace.Play) {
                             byte targetPvpLevel = ((PlayObject)baseObject).PvpLevel();
-                            if (PvpLevel() >= 2)
-                            {
+                            if (PvpLevel() >= 2) {
                                 result = targetPvpLevel < 2;
                             }
-                            else
-                            {
+                            else {
                                 result = targetPvpLevel >= 2;
                             }
                         }
-                        if (IsRobot && !result)
-                        {
-                            if (baseObject.Race == ActorRace.Play || baseObject.Master != null)
-                            {
-                                if (baseObject.TargetCret != null)
-                                {
-                                    if (baseObject.TargetCret == this)
-                                    {
+                        if (IsRobot && !result) {
+                            if (baseObject.Race == ActorRace.Play || baseObject.Master != null) {
+                                if (baseObject.TargetCret != null) {
+                                    if (baseObject.TargetCret == this) {
                                         result = true;
                                     }
                                 }
-                                if (baseObject.LastHiter != null)
-                                {
-                                    if (baseObject.LastHiter == this)
-                                    {
+                                if (baseObject.LastHiter != null) {
+                                    if (baseObject.LastHiter == this) {
                                         result = true;
                                     }
                                 }
-                                if (baseObject.ExpHitter != null)
-                                {
-                                    if (baseObject.LastHiter == this)
-                                    {
+                                if (baseObject.ExpHitter != null) {
+                                    if (baseObject.LastHiter == this) {
                                         result = true;
                                     }
                                 }
@@ -412,25 +330,21 @@ namespace GameSvr.RobotPlay
                         }
                         if (baseObject.Race == ActorRace.Play || baseObject.Master != null)// 安全区不能打人物和英雄
                         {
-                            if (baseObject.InSafeZone() || InSafeZone())
-                            {
+                            if (baseObject.InSafeZone() || InSafeZone()) {
                                 result = false;
                             }
                         }
-                        if (baseObject.Master == this)
-                        {
+                        if (baseObject.Master == this) {
                             result = false;
                         }
                         if (baseObject.IsRobot && (!InGuildWarArea || ((PlayObject)baseObject).PvpLevel() < 2)) // 假人不攻击假人,行会战除外
                         {
                             result = false;
                         }
-                        switch (baseObject.Race)
-                        {
+                        switch (baseObject.Race) {
                             case ActorRace.ArcherGuard:
                             case ActorRace.Exercise:// 不主动攻击练功师 弓箭手
-                                if (baseObject.TargetCret != this)
-                                {
+                                if (baseObject.TargetCret != this) {
                                     result = false;
                                 }
                                 break;
@@ -451,99 +365,74 @@ namespace GameSvr.RobotPlay
             return result;
         }
 
-        public override bool IsProperFriend(BaseObject baseObject)
-        {
+        public override bool IsProperFriend(BaseObject baseObject) {
             return base.IsProperFriend(baseObject);
         }
 
-        public override void SearchViewRange()
-        {
-            int nIdx;
+        public override void SearchViewRange() {
             BaseObject baseObject;
             EventInfo mapEvent;
             VisibleFlag nVisibleFlag;
             const string sExceptionMsg = "RobotPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
-            if (Ghost)
-            {
+            if (Ghost) {
                 return;
             }
-            if (VisibleItems.Count > 0)
-            {
-                for (int i = 0; i < VisibleItems.Count; i++)
-                {
+            if (VisibleItems.Count > 0) {
+                for (int i = 0; i < VisibleItems.Count; i++) {
                     VisibleItems[i].VisibleFlag = 0;
                 }
             }
-            try
-            {
+            try {
                 short nStartX = (short)(CurrX - ViewRange);
                 short nEndX = (short)(CurrX + ViewRange);
                 short nStartY = (short)(CurrY - ViewRange);
                 short nEndY = (short)(CurrY + ViewRange);
                 int dwRunTick = HUtil32.GetTickCount();
-                for (short nX = nStartX; nX <= nEndX; nX++)
-                {
-                    for (short nY = nStartY; nY <= nEndY; nY++)
-                    {
+                for (short nX = nStartX; nX <= nEndX; nX++) {
+                    for (short nY = nStartY; nY <= nEndY; nY++) {
                         ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
-                        if (cellSuccess && cellInfo.IsAvailable)
-                        {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
-                            {
+                        if (cellSuccess && cellInfo.IsAvailable) {
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                                 CellObject cellObject = cellInfo.ObjList[i];
-                                if (HUtil32.GetTickCount() - dwRunTick > 500)
-                                {
+                                if (HUtil32.GetTickCount() - dwRunTick > 500) {
                                     break;
                                 }
-                                if (cellInfo.IsAvailable && cellInfo.Count <= 0)
-                                {
+                                if (cellInfo.IsAvailable && cellInfo.Count <= 0) {
                                     cellInfo.Clear();
                                     break;
                                 }
-                                if (cellInfo.ObjList == null)
-                                {
+                                if (cellInfo.ObjList == null) {
                                     break;
                                 }
-                                if (cellObject.CellObjId > 0)
-                                {
-                                    switch (cellObject.CellType)
-                                    {
+                                if (cellObject.CellObjId > 0) {
+                                    switch (cellObject.CellType) {
                                         case CellType.Play:
                                         case CellType.Monster:
-                                            if (HUtil32.GetTickCount() - cellObject.AddTime >= 60000)
-                                            {
+                                            if (HUtil32.GetTickCount() - cellObject.AddTime >= 60000) {
                                                 cellInfo.Remove(i);
-                                                if (cellInfo.Count <= 0)
-                                                {
+                                                if (cellInfo.Count <= 0) {
                                                     cellInfo.Clear();
                                                     break;
                                                 }
                                                 continue;
                                             }
                                             baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                                            if (baseObject != null)
-                                            {
-                                                if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
-                                                {
-                                                    if (Race < ActorRace.Animal || Master != null || CrazyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play)
-                                                    {
+                                            if (baseObject != null) {
+                                                if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode) {
+                                                    if (Race < ActorRace.Animal || Master != null || CrazyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play) {
                                                         UpdateVisibleGay(baseObject);
                                                     }
                                                 }
                                             }
                                             break;
                                         case CellType.Item:
-                                            if (Race == ActorRace.Play)
-                                            {
-                                                if (HUtil32.GetTickCount() - cellObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
-                                                {
-                                                    if (cellObject.CellObjId > 0)
-                                                    {
+                                            if (Race == ActorRace.Play) {
+                                                if (HUtil32.GetTickCount() - cellObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime) {
+                                                    if (cellObject.CellObjId > 0) {
                                                         M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
                                                     }
                                                     cellInfo.Remove(i);
-                                                    if (cellInfo.Count <= 0)
-                                                    {
+                                                    if (cellInfo.Count <= 0) {
                                                         cellInfo.Clear();
                                                         break;
                                                     }
@@ -551,26 +440,19 @@ namespace GameSvr.RobotPlay
                                                 }
                                                 MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                                 UpdateVisibleItem(nX, nY, mapItem);
-                                                if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
-                                                {
-                                                    if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)
-                                                    {
+                                                if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0) {
+                                                    if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime) {
                                                         mapItem.OfBaseObject = 0;
                                                         mapItem.DropBaseObject = 0;
                                                     }
-                                                    else
-                                                    {
-                                                        if (mapItem.OfBaseObject > 0)
-                                                        {
-                                                            if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
-                                                            {
+                                                    else {
+                                                        if (mapItem.OfBaseObject > 0) {
+                                                            if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost) {
                                                                 mapItem.OfBaseObject = 0;
                                                             }
                                                         }
-                                                        if (mapItem.DropBaseObject > 0)
-                                                        {
-                                                            if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
-                                                            {
+                                                        if (mapItem.DropBaseObject > 0) {
+                                                            if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost) {
                                                                 mapItem.DropBaseObject = 0;
                                                             }
                                                         }
@@ -579,10 +461,8 @@ namespace GameSvr.RobotPlay
                                             }
                                             break;
                                         case CellType.Event:
-                                            if (Race == ActorRace.Play)
-                                            {
-                                                if (cellObject.CellObjId < 0)
-                                                {
+                                            if (Race == ActorRace.Play) {
+                                                if (cellObject.CellObjId < 0) {
                                                     mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
                                                     UpdateVisibleEvent(nX, nY, mapEvent);
                                                 }
@@ -595,80 +475,59 @@ namespace GameSvr.RobotPlay
                     }
                 }
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 M2Share.Logger.Error(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
                 KickException();
             }
-            try
-            {
+            try {
                 int n18 = 0;
-                while (true)
-                {
-                    try
-                    {
-                        if (VisibleActors.Count <= n18)
-                        {
+                while (true) {
+                    try {
+                        if (VisibleActors.Count <= n18) {
                             break;
                         }
                         VisibleBaseObject visibleBaseObject;
-                        try
-                        {
+                        try {
                             visibleBaseObject = VisibleActors[n18];
                             nVisibleFlag = visibleBaseObject.VisibleFlag;
                         }
-                        catch
-                        {
+                        catch {
                             VisibleActors.RemoveAt(n18);
-                            if (VisibleActors.Count > 0)
-                            {
+                            if (VisibleActors.Count > 0) {
                                 continue;
                             }
                             break;
                         }
-                        switch (visibleBaseObject.VisibleFlag)
-                        {
+                        switch (visibleBaseObject.VisibleFlag) {
                             case VisibleFlag.Visible:
-                                if (Race == ActorRace.Play)
-                                {
+                                if (Race == ActorRace.Play) {
                                     baseObject = visibleBaseObject.BaseObject;
-                                    if (baseObject != null)
-                                    {
-                                        if (!baseObject.FixedHideMode && !baseObject.Ghost)
-                                        {
+                                    if (baseObject != null) {
+                                        if (!baseObject.FixedHideMode && !baseObject.Ghost) {
                                             SendMsg(baseObject, Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
                                         }
                                     }
                                 }
                                 VisibleActors.RemoveAt(n18);
-                                if (visibleBaseObject != null)
-                                {
+                                if (visibleBaseObject != null) {
                                     Dispose(visibleBaseObject);
                                 }
                                 continue;
                             case VisibleFlag.Hidden:
-                                if (Race == ActorRace.Play)
-                                {
+                                if (Race == ActorRace.Play) {
                                     baseObject = visibleBaseObject.BaseObject;
-                                    if (baseObject != null)
-                                    {
-                                        if (baseObject != this && !baseObject.Ghost && !Ghost)
-                                        {
-                                            if (baseObject.Death)
-                                            {
-                                                if (baseObject.Skeleton)
-                                                {
+                                    if (baseObject != null) {
+                                        if (baseObject != this && !baseObject.Ghost && !Ghost) {
+                                            if (baseObject.Death) {
+                                                if (baseObject.Skeleton) {
                                                     SendMsg(baseObject, Messages.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                                                 }
-                                                else
-                                                {
+                                                else {
                                                     SendMsg(baseObject, Messages.RM_DEATH, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                                                 }
                                             }
-                                            else
-                                            {
-                                                if (baseObject != null)
-                                                {
+                                            else {
+                                                if (baseObject != null) {
                                                     SendMsg(baseObject, Messages.RM_TURN, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, baseObject.GetShowName());
                                                 }
                                             }
@@ -682,94 +541,73 @@ namespace GameSvr.RobotPlay
                                 break;
                         }
                     }
-                    catch
-                    {
+                    catch {
                         break;
                     }
                     n18++;
                 }
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 M2Share.Logger.Error(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
                 KickException();
             }
-            try
-            {
+            try {
                 int position = 0;
-                while (true)
-                {
-                    try
-                    {
-                        if (VisibleItems.Count <= position)
-                        {
+                while (true) {
+                    try {
+                        if (VisibleItems.Count <= position) {
                             break;
                         }
 
                         VisibleMapItem visibleMapItem;
-                        try
-                        {
+                        try {
                             visibleMapItem = VisibleItems[position];
                             nVisibleFlag = visibleMapItem.VisibleFlag;
                         }
-                        catch
-                        {
+                        catch {
                             VisibleItems.RemoveAt(position);
-                            if (VisibleItems.Count > 0)
-                            {
+                            if (VisibleItems.Count > 0) {
                                 continue;
                             }
                             break;
                         }
-                        if (visibleMapItem.VisibleFlag == 0)
-                        {
+                        if (visibleMapItem.VisibleFlag == 0) {
                             VisibleItems.RemoveAt(position);
                             visibleMapItem = null;
-                            if (VisibleItems.Count > 0)
-                            {
+                            if (VisibleItems.Count > 0) {
                                 continue;
                             }
                             break;
                         }
                     }
-                    catch
-                    {
+                    catch {
                         break;
                     }
                     position++;
                 }
                 position = 0;
-                while (true)
-                {
-                    try
-                    {
-                        if (VisibleEvents.Count <= position)
-                        {
+                while (true) {
+                    try {
+                        if (VisibleEvents.Count <= position) {
                             break;
                         }
-                        try
-                        {
+                        try {
                             mapEvent = VisibleEvents[position];
                             nVisibleFlag = mapEvent.VisibleFlag;
                         }
-                        catch
-                        {
+                        catch {
                             VisibleEvents.RemoveAt(position);
-                            if (VisibleEvents.Count > 0)
-                            {
+                            if (VisibleEvents.Count > 0) {
                                 continue;
                             }
                             break;
                         }
-                        if (mapEvent != null)
-                        {
-                            switch (mapEvent.VisibleFlag)
-                            {
+                        if (mapEvent != null) {
+                            switch (mapEvent.VisibleFlag) {
                                 case VisibleFlag.Visible:
                                     SendMsg(this, Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
                                     VisibleEvents.RemoveAt(position);
-                                    if (VisibleEvents.Count > 0)
-                                    {
+                                    if (VisibleEvents.Count > 0) {
                                         continue;
                                     }
                                     break;
@@ -783,65 +621,48 @@ namespace GameSvr.RobotPlay
                             }
                         }
                     }
-                    catch
-                    {
+                    catch {
                         break;
                     }
                     position++;
                 }
             }
-            catch
-            {
+            catch {
                 M2Share.Logger.Error(ChrName + ',' + MapName + ',' + CurrX + ',' + CurrY + ',' + " SearchViewRange");
                 KickException();
             }
         }
 
-        public override void Struck(BaseObject hiter)
-        {
+        public override void Struck(BaseObject hiter) {
             StruckTick = HUtil32.GetTickCount();
-            if (hiter != null)
-            {
-                if (TargetCret == null && IsProperTarget(hiter))
-                {
+            if (hiter != null) {
+                if (TargetCret == null && IsProperTarget(hiter)) {
                     SetTargetCreat(hiter);
                 }
-                else
-                {
-                    if (hiter.Race == ActorRace.Play || hiter.Master != null && hiter.GetMaster().Race == ActorRace.Play)
-                    {
-                        if (TargetCret != null && (TargetCret.Race == ActorRace.Play || TargetCret.Master != null && TargetCret.GetMaster().Race == ActorRace.Play))
-                        {
-                            if (Struck_MINXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
-                            {
+                else {
+                    if (hiter.Race == ActorRace.Play || hiter.Master != null && hiter.GetMaster().Race == ActorRace.Play) {
+                        if (TargetCret != null && (TargetCret.Race == ActorRace.Play || TargetCret.Master != null && TargetCret.GetMaster().Race == ActorRace.Play)) {
+                            if (Struck_MINXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0) {
                                 SetTargetCreat(hiter);
                             }
                         }
-                        else
-                        {
+                        else {
                             SetTargetCreat(hiter);
                         }
                     }
-                    else
-                    {
-                        if (TargetCret != null && Struck_MINXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
-                        {
-                            if (Job > 0 || TargetCret != null && (HUtil32.GetTickCount() - TargetFocusTick) > 1000 * 3)
-                            {
-                                if (IsProperTarget(hiter))
-                                {
+                    else {
+                        if (TargetCret != null && Struck_MINXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0) {
+                            if (Job > 0 || TargetCret != null && (HUtil32.GetTickCount() - TargetFocusTick) > 1000 * 3) {
+                                if (IsProperTarget(hiter)) {
                                     SetTargetCreat(hiter);
                                 }
                             }
                         }
                     }
                 }
-                if (hiter.Race == ActorRace.Play && !hiter.IsRobot && TargetCret == hiter)
-                {
-                    if (M2Share.RandomNumber.Random(8) == 0 && m_AISayMsgList.Count > 0)
-                    {
-                        if (HUtil32.GetTickCount() >= DisableSayMsgTick)
-                        {
+                if (hiter.Race == ActorRace.Play && !hiter.IsRobot && TargetCret == hiter) {
+                    if (M2Share.RandomNumber.Random(8) == 0 && m_AISayMsgList.Count > 0) {
+                        if (HUtil32.GetTickCount() >= DisableSayMsgTick) {
                             DisableSayMsg = false;
                         }
                         bool boDisableSayMsg = DisableSayMsg;
@@ -851,75 +672,57 @@ namespace GameSvr.RobotPlay
                         //    boDisableSayMsg = true;
                         //}
                         //g_DenySayMsgList.UnLock;
-                        if (!boDisableSayMsg)
-                        {
+                        if (!boDisableSayMsg) {
                             SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + m_AISayMsgList[M2Share.RandomNumber.Random(m_AISayMsgList.Count)]);
                         }
                     }
                 }
             }
-            if (Animal)
-            {
+            if (Animal) {
                 MeatQuality = (ushort)(MeatQuality - M2Share.RandomNumber.Random(300));
-                if (MeatQuality < 0)
-                {
+                if (MeatQuality < 0) {
                     MeatQuality = 0;
                 }
             }
             AttackTick = (ushort)(AttackTick + (150 - HUtil32._MIN(130, Abil.Level * 4)));
         }
 
-        protected override void SearchTarget()
-        {
-            if ((TargetCret == null || HUtil32.GetTickCount() - m_dwSearchTargetTick > 1000) && m_boAIStart)
-            {
+        protected override void SearchTarget() {
+            if ((TargetCret == null || HUtil32.GetTickCount() - m_dwSearchTargetTick > 1000) && m_boAIStart) {
                 m_dwSearchTargetTick = HUtil32.GetTickCount();
-                if (TargetCret == null || !(TargetCret != null && TargetCret.Race == ActorRace.Play) || TargetCret.Master != null && TargetCret.Master.Race == ActorRace.Play || (HUtil32.GetTickCount() - StruckTick) > 15000)
-                {
+                if (TargetCret == null || !(TargetCret != null && TargetCret.Race == ActorRace.Play) || TargetCret.Master != null && TargetCret.Master.Race == ActorRace.Play || (HUtil32.GetTickCount() - StruckTick) > 15000) {
                     base.SearchTarget();
                 }
             }
         }
 
-        public override void Die()
-        {
-            if (m_boAIStart)
-            {
+        public override void Die() {
+            if (m_boAIStart) {
                 m_boAIStart = false;
             }
             base.Die();
         }
 
-        internal override void DropUseItems(int baseObject)
-        {
+        internal override void DropUseItems(int baseObject) {
             const byte maxUseItem = 8;
-            if (NoDropUseItem)
-            {
+            if (NoDropUseItem) {
                 return;
             }
             IList<DeleteItem> dropItemList = new List<DeleteItem>();
             int nRate = PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
             int nC = 0;
-            while (true)
-            {
-                if (M2Share.RandomNumber.Random(nRate) == 0)
-                {
-                    if (UseItems[nC] == null)
-                    {
+            while (true) {
+                if (M2Share.RandomNumber.Random(nRate) == 0) {
+                    if (UseItems[nC] == null) {
                         nC++;
                         continue;
                     }
-                    if (DropItemDown(UseItems[nC], 2, true, baseObject, this.ActorId))
-                    {
+                    if (DropItemDown(UseItems[nC], 2, true, baseObject, this.ActorId)) {
                         StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
-                        if (stdItem != null)
-                        {
-                            if ((stdItem.ItemDesc & 10) == 0)
-                            {
-                                if (Race == ActorRace.Play)
-                                {
-                                    dropItemList.Add(new DeleteItem()
-                                    {
+                        if (stdItem != null) {
+                            if ((stdItem.ItemDesc & 10) == 0) {
+                                if (Race == ActorRace.Play) {
+                                    dropItemList.Add(new DeleteItem() {
                                         ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].Index),
                                         MakeIndex = UseItems[nC].MakeIndex
                                     });
@@ -930,13 +733,11 @@ namespace GameSvr.RobotPlay
                     }
                 }
                 nC++;
-                if (nC >= maxUseItem)
-                {
+                if (nC >= maxUseItem) {
                     break;
                 }
             }
-            if (dropItemList.Count > 0)
-            {
+            if (dropItemList.Count > 0) {
                 int objectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(objectId, dropItemList);
                 SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");

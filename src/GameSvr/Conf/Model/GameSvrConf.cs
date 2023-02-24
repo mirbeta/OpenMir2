@@ -1,10 +1,8 @@
 ﻿using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.Conf.Model
-{
-    public class GameSvrConf
-    {
+namespace GameSvr.Conf.Model {
+    public class GameSvrConf {
         public string sDBType;
         public string ConnctionString;
         public string ServerName;
@@ -1027,8 +1025,7 @@ namespace GameSvr.Conf.Model
         /// </summary>
         public byte ItemSpeed;
 
-        public GameSvrConf()
-        {
+        public GameSvrConf() {
             ServerName = "SKY引擎";
             ServerIPaddr = "127.0.0.1";
             sWebSite = "http=//www.jsym2.com";
@@ -1654,8 +1651,7 @@ namespace GameSvr.Conf.Model
             MPStoneAddRate = 10; //魔血石
             HPStoneDecDura = 1000; //气血石
             MPStoneDecDura = 1000; //魔血石
-            ClientConf = new ClientConf()
-            {
+            ClientConf = new ClientConf() {
                 boGameAssist = true,
                 boWhisperRecord = true,
                 boMaketSystem = true,

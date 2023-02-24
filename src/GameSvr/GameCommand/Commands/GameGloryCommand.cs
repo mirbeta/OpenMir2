@@ -1,13 +1,10 @@
 ﻿using GameSvr.Player;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     [Command("GameGlory", "调整玩家灵符", 10)]
-    public class GameGloryCommand : GameCommand
-    {
+    public class GameGloryCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";
             //int nGameGlory = @Params.Length > 2 ? Convert.ToInt32(@Params[3]) : 0;

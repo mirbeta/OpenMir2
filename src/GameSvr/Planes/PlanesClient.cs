@@ -4,13 +4,11 @@ using System.Net.Sockets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
-namespace GameSvr.Planes
-{
+namespace GameSvr.Planes {
     /// <summary>
     /// 位面服务器
     /// </summary>
-    public class PlanesClient
-    {
+    public class PlanesClient {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private string sRecvMsg = string.Empty;
         private readonly ScoketClient _msgClient;
@@ -18,20 +16,16 @@ namespace GameSvr.Planes
 
         private static PlanesClient instance;
 
-        public static PlanesClient Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
+        public static PlanesClient Instance {
+            get {
+                if (instance == null) {
                     instance = new PlanesClient();
                 }
                 return instance;
             }
         }
 
-        private PlanesClient()
-        {
+        private PlanesClient() {
             _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.MsgSrvAddr), M2Share.Config.MsgSrvPort));
             _msgClient.OnConnected += MsgClientConnect;
             _msgClient.OnReceivedData += MsgClientRead;
@@ -40,96 +34,77 @@ namespace GameSvr.Planes
             _groupMessageHandle = new PlanesMessage();
         }
 
-        public void ConnectMsgServer()
-        {
+        public void ConnectMsgServer() {
             _msgClient.Connect();
         }
 
-        public void Run()
-        {
-            if (_msgClient.IsConnected)
-            {
+        public void Run() {
+            if (_msgClient.IsConnected) {
                 DecodeSocStr();
             }
         }
 
-        public void CheckConnected()
-        {
-            if (M2Share.Config.nServerNumber > 0)
-            {
-                if (_msgClient.IsConnected)
-                {
+        public void CheckConnected() {
+            if (M2Share.Config.nServerNumber > 0) {
+                if (_msgClient.IsConnected) {
                     return;
                 }
                 _msgClient.Connect();
             }
         }
 
-        private bool IsConnect()
-        {
+        private bool IsConnect() {
             return _msgClient.IsConnected;
         }
 
-        private void DecodeSocStr()
-        {
+        private void DecodeSocStr() {
             string Str = string.Empty;
             string sNumStr = string.Empty;
             string Head = string.Empty;
             int Ident;
             int sNum;
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::DecodeSocStr";
-            if (sRecvMsg.IndexOf(')') <= 0)
-            {
+            if (sRecvMsg.IndexOf(')') <= 0) {
                 return;
             }
-            try
-            {
+            try {
                 string BufStr = sRecvMsg;
                 sRecvMsg = string.Empty;
-                while (BufStr.IndexOf(')') > -1)
-                {
+                while (BufStr.IndexOf(')') > -1) {
                     BufStr = HUtil32.ArrestStringEx(BufStr, "(", ")", ref Str);
-                    if (!string.IsNullOrEmpty(Str))
-                    {
+                    if (!string.IsNullOrEmpty(Str)) {
                         string Body = HUtil32.GetValidStr3(Str, ref Head, HUtil32.Backslash);
                         Body = HUtil32.GetValidStr3(Body, ref sNumStr, HUtil32.Backslash);
                         Ident = HUtil32.StrToInt(Head, 0);
                         sNum = HUtil32.StrToInt(sNumStr, -1);
                         _groupMessageHandle.ProcessData(Ident, sNum, Body);
                     }
-                    else
-                    {
+                    else {
                         break;
                     }
                 }
                 sRecvMsg = BufStr + sRecvMsg;
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 _logger.Error(sExceptionMsg);
                 _logger.Error(ex.StackTrace);
             }
         }
 
-        public void SendSocket(string sMsg)
-        {
-            if (IsConnect())
-            {
+        public void SendSocket(string sMsg) {
+            if (IsConnect()) {
                 byte[] buff = HUtil32.GetBytes("(" + sMsg + ")");
                 _msgClient.Send(buff);
             }
         }
 
-        private void MsgClientConnect(object sender, DSCClientConnectedEventArgs e)
-        {
+        private void MsgClientConnect(object sender, DSCClientConnectedEventArgs e) {
             _logger.Info("连接主服务器(" + e.RemoteEndPoint + ")成功...");
             //todo 链接主服务器成功后需要发消息链接主服务器告知主服务器当前服务器IP和端口，保持登录数据同步
         }
 
-        private void MsgClientError(object sender, DSCClientErrorEventArgs e)
-        {
-            switch (e.ErrorCode)
-            {
+        private void MsgClientError(object sender, DSCClientErrorEventArgs e) {
+            switch (e.ErrorCode) {
                 case SocketError.ConnectionRefused:
                     _logger.Error("主游戏引擎[" + _msgClient.RemoteEndPoint + "]拒绝链接...");
                     break;
@@ -142,8 +117,7 @@ namespace GameSvr.Planes
             }
         }
 
-        private void MsgClientDisconnected(object sender, DSCClientConnectedEventArgs e)
-        {
+        private void MsgClientDisconnected(object sender, DSCClientConnectedEventArgs e) {
             _logger.Error("节点服务器(" + e.RemoteEndPoint + ")断开连接...");
         }
 
@@ -152,8 +126,7 @@ namespace GameSvr.Planes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MsgClientRead(object sender, DSCClientDataInEventArgs e)
-        {
+        private void MsgClientRead(object sender, DSCClientDataInEventArgs e) {
             sRecvMsg += HUtil32.GetString(e.Buff.ToArray(), 0, e.BuffLen);
         }
     }

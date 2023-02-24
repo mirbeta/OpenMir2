@@ -1,32 +1,24 @@
 ﻿using GameSvr.Player;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSvr.GameCommand.Commands
-{
+namespace GameSvr.GameCommand.Commands {
     /// <summary>
     /// 拒绝发言
     /// </summary>
     [Command("PrvMsg", "拒绝发言", CommandHelp.GameCommandPrvMsgHelpMsg, 10)]
-    public class PrvMsgCommand : GameCommand
-    {
+    public class PrvMsgCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
-        {
-            if (@Params == null)
-            {
+        public void Execute(string[] @Params, PlayObject PlayObject) {
+            if (@Params == null) {
                 return;
             }
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
-            {
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = PlayObject.LockWhisperList.Count - 1; i >= 0; i--)
-            {
-                if (PlayObject.LockWhisperList.Count <= 0)
-                {
+            for (int i = PlayObject.LockWhisperList.Count - 1; i >= 0; i--) {
+                if (PlayObject.LockWhisperList.Count <= 0) {
                     break;
                 }
                 //if ((PlayObject.m_BlockWhisperList[i]).CompareTo((sHumanName)) == 0)
