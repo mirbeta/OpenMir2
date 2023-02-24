@@ -177,7 +177,7 @@ namespace GameSvr.Maps
             for (var i = 0; i < DoorList.Count; i++)
             {
                 var door = DoorList[i];
-                AddToMap(door.nX, door.nY, CellType.Door, door.ActorId, door);
+                AddToMap(door.nX, door.nY, CellType.Door, door.DoorId, door);
             }
         }
 

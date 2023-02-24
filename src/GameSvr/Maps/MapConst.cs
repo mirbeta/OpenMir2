@@ -4,12 +4,18 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSvr.Maps
 {
-    public class DoorInfo : ActorEntity
+    public class DoorInfo
     {
+        public int DoorId;
         public int nX;
         public int nY;
         public DoorStatus Status;
         public int n08;
+
+        public DoorInfo()
+        {
+            DoorId = M2Share.ActorMgr.Dequeue();
+        }
     }
 
     public class MapItem
