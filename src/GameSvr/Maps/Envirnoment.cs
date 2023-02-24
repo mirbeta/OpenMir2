@@ -104,7 +104,7 @@ namespace GameSvr.Maps
                 {
                     if (cellType == CellType.Item)
                     {
-                        if (string.Compare((mapObject as MapItem).Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare((mapObject as MapItem)?.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             for (var i = 0; i < cellInfo.ObjList.Count; i++)
                             {
@@ -112,9 +112,9 @@ namespace GameSvr.Maps
                                 if (cellObject.CellType == CellType.Item)
                                 {
                                     var mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
-                                    if (mapItem.Name == Grobal2.StringGoldName)
+                                    if (string.Compare(mapItem.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
                                     {
-                                        var nGoldCount = mapItem.Count + (mapObject as MapItem).Count;
+                                        var nGoldCount = mapItem.Count + ((MapItem)mapObject).Count;
                                         if (nGoldCount <= 2000)
                                         {
                                             mapItem.Count = nGoldCount;
@@ -656,7 +656,7 @@ namespace GameSvr.Maps
             return QuestList.Any();
         }
 
-        public bool AddToMapItemEvent<T>(int nX, int nY, CellType nType, StoneMineEvent stoneMineEvent) where T : StoneMineEvent
+        public bool AddToMapItemEvent<T>(int nX, int nY, CellType nType, T stoneMineEvent) where T : StoneMineEvent
         {
             ref var cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid)
@@ -677,7 +677,7 @@ namespace GameSvr.Maps
         /// 添加矿石到地图上
         /// </summary>
         /// <returns></returns>
-        public T AddToMapMineEvent<T>(int nX, int nY, CellType cellType, StoneMineEvent stoneMineEvent) where T : StoneMineEvent
+        public bool AddToMapMineEvent<T>(int nX, int nY, CellType cellType, T stoneMineEvent) where T : StoneMineEvent
         {
             const string sExceptionMsg = "[Exception] Envirnoment::AddToMapMineEvent ";
             try
@@ -718,7 +718,7 @@ namespace GameSvr.Maps
                         };
                         cellInfo.Add(cellObject);
                         M2Share.CellObjectMgr.Add(cellObject.CellObjId, stoneMineEvent);
-                        return (T)stoneMineEvent;
+                        return true;
                     }
                 }
             }
@@ -726,7 +726,7 @@ namespace GameSvr.Maps
             {
                 M2Share.Logger.Error(sExceptionMsg);
             }
-            return null;
+            return false;
         }
 
         /// <summary>
@@ -1125,9 +1125,9 @@ namespace GameSvr.Maps
             return result;
         }
 
-        public object GetMovingObject(short nX, short nY, bool boFlag)
+        public BaseObject GetMovingObject(short nX, short nY, bool boFlag)
         {
-            object result = null;
+            BaseObject result = null;
             MapCellInfo cellInfo = default;
             var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.IsAvailable)

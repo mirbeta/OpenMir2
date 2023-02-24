@@ -55,7 +55,7 @@ namespace GameSvr.Monster.Monsters
                     {
                         short nX = (short)(CurrX - 2 + k);
                         short nY = (short)(CurrY - 2 + i);
-                        BaseObject baseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                        BaseObject baseObject = Envir.GetMovingObject(nX, nY, true);
                         if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                         {
                             nDamage = baseObject.GetHitStruckDamage(this, nDamage);

@@ -1371,7 +1371,7 @@ namespace GameSvr.RobotPlay
             {
                 if (Envir.GetNextPosition(nCurrX, nCurrY, nDir, 1, ref nCurrX, ref nCurrY))
                 {
-                    BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nCurrX, nCurrY, true);
+                    BaseObject BaseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
                     if (BaseObject != null && !BaseObject.Death && !BaseObject.Ghost && (!BaseObject.HideMode || CoolEye) && IsProperTarget(BaseObject))
                     {
                         result++;
@@ -1391,7 +1391,7 @@ namespace GameSvr.RobotPlay
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))
                 {
-                    BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                    BaseObject = Envir.GetMovingObject(nX, nY, true);
                     if (BaseObject != null && !BaseObject.Death && !BaseObject.Ghost && IsProperTarget(BaseObject))
                     {
                         result++;
@@ -1406,7 +1406,7 @@ namespace GameSvr.RobotPlay
             int result = 0;
             short nX = 0;
             short nY = 0;
-            BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nCurrX, nCurrY, true);
+            BaseObject BaseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
             if (BaseObject != null && !BaseObject.Death && !BaseObject.Ghost && IsProperTarget(BaseObject))
             {
                 result++;
@@ -1415,7 +1415,7 @@ namespace GameSvr.RobotPlay
             {
                 if (Envir.GetNextPosition(nCurrX, nCurrY, (byte)i, 1, ref nX, ref nY))
                 {
-                    BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                    BaseObject = Envir.GetMovingObject(nX, nY, true);
                     if (BaseObject != null && !BaseObject.Death && !BaseObject.Ghost && IsProperTarget(BaseObject))
                     {
                         result++;
@@ -4141,7 +4141,7 @@ namespace GameSvr.RobotPlay
                     }
                     if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))
                     {
-                        BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                        BaseObject = Envir.GetMovingObject(nX, nY, true);
                         if (BaseObject != null)
                         {
                             if (!BaseObject.Death)

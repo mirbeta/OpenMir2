@@ -1412,7 +1412,7 @@ namespace GameSvr.Player
                         {
                             if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
                             {
-                                BaseObject baseObject30 = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                                BaseObject baseObject30 = Envir.GetMovingObject(nX, nY, true);
                                 if (baseObject30 != null && DoMotaeboCanMotaebo(baseObject30, nMagicLevel))
                                 {
                                     baseObject30.CharPushed(Direction, 1);

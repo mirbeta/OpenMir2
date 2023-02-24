@@ -90,7 +90,7 @@ namespace GameSvr.Actor
             nSecPwr = HUtil32.Round(nSecPwr * M2Share.Config.SwordLongPowerRate / 100);
             if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
             {
-                BaseObject baseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                BaseObject baseObject = Envir.GetMovingObject(nX, nY, true);
                 if (baseObject != null)
                 {
                     if ((nSecPwr > 0) && IsProperTarget(baseObject))
@@ -119,7 +119,7 @@ namespace GameSvr.Actor
                 byte nDir = (byte)((Direction + M2Share.Config.WideAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
-                    BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                    BaseObject BaseObject = Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
                     {
                         result = AttackDirect(BaseObject, nSecPwr);
@@ -146,7 +146,7 @@ namespace GameSvr.Actor
                 byte nDir = (byte)((Direction + M2Share.Config.CrsAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
-                    BaseObject BaseObject = (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                    BaseObject BaseObject = Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (BaseObject != null) && IsProperTarget(BaseObject))
                     {
                         result = AttackDirect(BaseObject, nSecPwr);

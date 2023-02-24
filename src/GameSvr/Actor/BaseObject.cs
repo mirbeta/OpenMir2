@@ -1116,7 +1116,7 @@ namespace GameSvr.Actor
             var tcount = 0;
             for (var i = 0; i < 12; i++)
             {
-                var baseObject = (BaseObject)Envir.GetMovingObject(sx, sy, true);
+                var baseObject = Envir.GetMovingObject(sx, sy, true);
                 if (baseObject != null)
                 {
                     if (IsProperTarget(baseObject))
@@ -1463,7 +1463,7 @@ namespace GameSvr.Actor
             short nY = 0;
             if (GetFrontPosition(ref nX, ref nY))
             {
-                return (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                return Envir.GetMovingObject(nX, nY, true);
             }
             return null;
         }
@@ -1528,7 +1528,7 @@ namespace GameSvr.Actor
             btDir = M2Share.GetNextDirection(CurrX, CurrY, baseObject.CurrX, baseObject.CurrY);
             if (Envir.GetNextPosition(CurrX, CurrY, btDir, nRange, ref nX, ref nY))
             {
-                return baseObject == (BaseObject)Envir.GetMovingObject(nX, nY, true);
+                return baseObject == Envir.GetMovingObject(nX, nY, true);
             }
             return false;
         }

@@ -7,7 +7,7 @@ namespace GameSvr.Event.Events
     /// </summary>
     public class StoneMineEvent : EventInfo
     {
-        private readonly int _addStoneCount;
+        private readonly int AddStoneCount;
         public int MineCount;
         public int AddStoneMineTick;
         public bool AddToMap;
@@ -17,39 +17,39 @@ namespace GameSvr.Event.Events
             AddToMap = true;
             if (nType is 55 or 56 or 57)
             {
-                if (!Envir.AddToMapItemEvent<StoneMineEvent>(nX, nY, CellType.Event, this))
-                {
-                    AddToMap = false;
-                }
-                else
+                if (Envir.AddToMapItemEvent(nX, nY, CellType.Event, this))
                 {
                     Visible = false;
                     MineCount = M2Share.RandomNumber.Random(2000) + 300;
                     AddStoneMineTick = HUtil32.GetTickCount();
                     Active = false;
-                    _addStoneCount = M2Share.RandomNumber.Random(800) + 100;
+                    AddStoneCount = M2Share.RandomNumber.Random(800) + 100;
+                }
+                else
+                {
+                    AddToMap = false;
                 }
             }
             else
             {
-                if (Envir.AddToMapMineEvent<StoneMineEvent>(nX, nY, CellType.Event, this) == null)
-                {
-                    AddToMap = false;
-                }
-                else
+                if (Envir.AddToMapMineEvent(nX, nY, CellType.Event, this))
                 {
                     Visible = false;
                     MineCount = M2Share.RandomNumber.Random(200) + 1;
                     AddStoneMineTick = HUtil32.GetTickCount();
                     Active = false;
-                    _addStoneCount = M2Share.RandomNumber.Random(80) + 1;
+                    AddStoneCount = M2Share.RandomNumber.Random(80) + 1;
+                }
+                else
+                {
+                    AddToMap = false;
                 }
             }
         }
 
         public void AddStoneMine()
         {
-            MineCount = _addStoneCount;
+            MineCount = AddStoneCount;
             AddStoneMineTick = HUtil32.GetTickCount();
         }
     }
