@@ -1368,7 +1368,7 @@ namespace GameSvr.Script {
                 int nQuestIdx = 0;
                 for (int i = 0; i < LoadList.Count; i++) {
                     string line = LoadList[i].Trim();
-                    if (line == "" || line[0] == ';' || line[0] == '/') {
+                    if (string.IsNullOrEmpty(line) || line[0] == ';' || line[0] == '/') {
                         continue;
                     }
                     if (scriptType == 0 && boFlag) {
@@ -1524,63 +1524,71 @@ namespace GameSvr.Script {
                         continue;
                     }
                     if (Script != null && !string.IsNullOrEmpty(SayingRecord.sLabel)) {
-                        if (scriptType >= 10 && scriptType < 20 && line[0] == '#') {
-                            if (line.Equals("#IF", StringComparison.OrdinalIgnoreCase)) {
-                                if (SayingProcedure.ConditionList.Count > 0 || !string.IsNullOrEmpty(SayingProcedure.sSayMsg)) {
-                                    SayingProcedure = new SayingProcedure();
-                                    SayingRecord.ProcedureList.Add(SayingProcedure);
+                        switch (scriptType) {
+                            case >= 10 and < 20 when line[0] == '#': {
+                                    if (line.Equals("#IF", StringComparison.OrdinalIgnoreCase)) {
+                                        if (SayingProcedure.ConditionList.Count > 0 || !string.IsNullOrEmpty(SayingProcedure.sSayMsg)) {
+                                            SayingProcedure = new SayingProcedure();
+                                            SayingRecord.ProcedureList.Add(SayingProcedure);
+                                        }
+                                        scriptType = 11;
+                                    }
+                                    if (line.Equals("#ACT", StringComparison.OrdinalIgnoreCase)) {
+                                        scriptType = 12;
+                                    }
+                                    if (line.Equals("#SAY", StringComparison.OrdinalIgnoreCase)) {
+                                        scriptType = 10;
+                                    }
+                                    if (line.Equals("#ELSEACT", StringComparison.OrdinalIgnoreCase)) {
+                                        scriptType = 13;
+                                    }
+                                    if (line.Equals("#ELSESAY", StringComparison.OrdinalIgnoreCase)) {
+                                        scriptType = 14;
+                                    }
+                                    continue;
                                 }
-                                scriptType = 11;
-                            }
-                            if (line.Equals("#ACT", StringComparison.OrdinalIgnoreCase)) {
-                                scriptType = 12;
-                            }
-                            if (line.Equals("#SAY", StringComparison.OrdinalIgnoreCase)) {
-                                scriptType = 10;
-                            }
-                            if (line.Equals("#ELSEACT", StringComparison.OrdinalIgnoreCase)) {
-                                scriptType = 13;
-                            }
-                            if (line.Equals("#ELSESAY", StringComparison.OrdinalIgnoreCase)) {
-                                scriptType = 14;
-                            }
-                            continue;
+                            case 10:
+                                SayingProcedure.sSayMsg += line;
+                                break;
+                            case 11: {
+                                    QuestConditionInfo questConditionInfo = new QuestConditionInfo();
+                                    if (LoadScriptFileQuestCondition(line.Trim(), questConditionInfo)) {
+                                        SayingProcedure.ConditionList.Add(questConditionInfo);
+                                    }
+                                    else {
+                                        _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
+                                    }
+                                    break;
+                                }
+                            case 12: {
+                                    QuestActionInfo = new QuestActionInfo();
+                                    if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo)) {
+                                        SayingProcedure.ActionList.Add(QuestActionInfo);
+                                    }
+                                    else {
+                                        QuestActionInfo = default;
+                                        _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
+                                    }
+
+                                    break;
+                                }
+                            case 13: {
+                                    QuestActionInfo = new QuestActionInfo();
+                                    if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo)) {
+                                        SayingProcedure.ElseActionList.Add(QuestActionInfo);
+                                    }
+                                    else {
+                                        QuestActionInfo = default;
+                                        _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
+                                    }
+
+                                    break;
+                                }
+                            case 14:
+                                SayingProcedure.sElseSayMsg = SayingProcedure.sElseSayMsg + line;
+                                break;
                         }
-                        if (scriptType == 10 && !string.IsNullOrEmpty(SayingProcedure.sSayMsg)) {
-                            SayingProcedure.sSayMsg += line;
-                        }
-                        if (scriptType == 11) {
-                            QuestConditionInfo questConditionInfo = new QuestConditionInfo();
-                            if (LoadScriptFileQuestCondition(line.Trim(), questConditionInfo)) {
-                                SayingProcedure.ConditionList.Add(questConditionInfo);
-                            }
-                            else {
-                                _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
-                            }
-                        }
-                        if (scriptType == 12) {
-                            QuestActionInfo = new QuestActionInfo();
-                            if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo)) {
-                                SayingProcedure.ActionList.Add(QuestActionInfo);
-                            }
-                            else {
-                                QuestActionInfo = default;
-                                _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
-                            }
-                        }
-                        if (scriptType == 13) {
-                            QuestActionInfo = new QuestActionInfo();
-                            if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo)) {
-                                SayingProcedure.ElseActionList.Add(QuestActionInfo);
-                            }
-                            else {
-                                QuestActionInfo = default;
-                                _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
-                            }
-                        }
-                        if (scriptType == 14) {
-                            SayingProcedure.sElseSayMsg = SayingProcedure.sElseSayMsg + line;
-                        }
+                        Script.RecordList[SayingRecord.sLabel] = SayingRecord;
                     }
                     if (scriptType == 20 && boFlag) {
                         string sItemName = string.Empty;
