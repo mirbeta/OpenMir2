@@ -8,62 +8,54 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace SystemModule.Base
-{
-    public static class ServerEnvironment
-    {
+namespace SystemModule.Base {
+    public static class ServerEnvironment {
         private static MemoryInfo memoryInfo = default;
         private static long g_llInOutNicBytesReceived = 0;
         private static long g_llInOutNicBytesSent = 0;
         private static NetworkInterface m_poInOutNetworkInterface = null;
         private static ConcurrentDictionary<int, Stopwatch> m_poStopWatchTable = new ConcurrentDictionary<int, Stopwatch>();
 
-        static ServerEnvironment()
-        {
+        static ServerEnvironment() {
 
         }
 
-        public static unsafe MemoryInfo GetMemoryStatus()
-        {
-            memoryInfo.dwLength = (uint)sizeof(MemoryInfo);
-            if (IsWindows())
-            {
+        public static unsafe MemoryInfo GetMemoryStatus() {
+            memoryInfo.Refresh();
+            if (IsWindows()) {
                 if (!NativeMethods.GlobalMemoryStatusEx(ref memoryInfo)) throw new Exception("无法获得内存信息");
             }
-            else
-            {
+            else {
                 LinuxLoadValue.GlobalMemoryStatus(ref memoryInfo);
             }
             return memoryInfo;
         }
 
-        public static void GetCPULoad()
-        {
-            LinuxLoadValue.Refresh();
+        public static void GetCPULoad() {
+            if (IsWindows()) {
+                WindowsLoadValue.Refresh();
+            }
+            else {
+                LinuxLoadValue.Refresh();
+            }
         }
 
-        public static void GetGetWorkInfo()
-        {
+        public static void GetGetWorkInfo() {
             // 刷新当前出入流量网卡的信息
-            do
-            {
+            do {
                 NetworkInterface poInOutNetworkInterface = QUERY_INOUT_NETWORK_INTERFACE();
-                if (m_poInOutNetworkInterface == null || m_poInOutNetworkInterface.Name != poInOutNetworkInterface?.Name)
-                {
+                if (m_poInOutNetworkInterface == null || m_poInOutNetworkInterface.Name != poInOutNetworkInterface?.Name) {
                     IPInterfaceStatistics poIPInterfaceStatistics = poInOutNetworkInterface?.GetIPStatistics();
-                    if (poIPInterfaceStatistics != null)
-                    {
+                    if (poIPInterfaceStatistics != null) {
                         g_llInOutNicBytesReceived = poIPInterfaceStatistics.BytesReceived;
                         g_llInOutNicBytesSent = poIPInterfaceStatistics.BytesSent;
                     }
                     PerSecondBytesSent = 0;
                     PerSecondBytesReceived = 0;
                 }
-                else
-                {
+                else {
                     IPInterfaceStatistics poIPInterfaceStatistics = poInOutNetworkInterface.GetIPStatistics();
-                    if (poIPInterfaceStatistics != null)
-                    {
+                    if (poIPInterfaceStatistics != null) {
                         PerSecondBytesSent = poIPInterfaceStatistics.BytesReceived - g_llInOutNicBytesReceived;
                         PerSecondBytesReceived = poIPInterfaceStatistics.BytesSent - g_llInOutNicBytesSent;
                         g_llInOutNicBytesReceived = poIPInterfaceStatistics.BytesReceived;
@@ -74,8 +66,7 @@ namespace SystemModule.Base
             } while (false);
         }
 
-        private static unsafe bool Equals(IPAddress x, IPAddress y)
-        {
+        private static unsafe bool Equals(IPAddress x, IPAddress y) {
             if (x == null && y == null)
                 return true;
             if (x.AddressFamily != y.AddressFamily)
@@ -86,10 +77,8 @@ namespace SystemModule.Base
             if (bx.Length != by.Length)
                 return false;
 
-            fixed (byte* pinnedX = bx)
-            {
-                fixed (byte* pinnedY = by)
-                {
+            fixed (byte* pinnedX = bx) {
+                fixed (byte* pinnedY = by) {
                     if (bx.Length == 4)
                         return *(uint*)pinnedX == *(uint*)pinnedY; // 32bit
                     else if (bx.Length == 8)
@@ -100,8 +89,7 @@ namespace SystemModule.Base
                         return *(ushort*)pinnedX == *(ushort*)pinnedY; // 16bit
                     else if (bx.Length == 1)
                         return *pinnedX == *pinnedY;
-                    else
-                    {
+                    else {
                         for (int i = 0; i < bx.Length; ++i)
                             if (pinnedX[i] != pinnedY[i])
                                 return false;
@@ -111,10 +99,8 @@ namespace SystemModule.Base
             }
         }
 
-        private static NetworkInterface QUERY_INOUT_NETWORK_INTERFACE()
-        {
-            return NetworkInterface.GetAllNetworkInterfaces().FirstOrDefault(ni =>
-            {
+        private static NetworkInterface QUERY_INOUT_NETWORK_INTERFACE() {
+            return NetworkInterface.GetAllNetworkInterfaces().FirstOrDefault(ni => {
                 if (ni.NetworkInterfaceType != NetworkInterfaceType.Ethernet &&
                     ni.NetworkInterfaceType != NetworkInterfaceType.Wireless80211 &&
                     ni.NetworkInterfaceType != NetworkInterfaceType.Ppp) // PPPOE宽带拨号
@@ -122,35 +108,28 @@ namespace SystemModule.Base
                     return false;
                 }
 
-                if (ni.OperationalStatus != OperationalStatus.Up)
-                {
+                if (ni.OperationalStatus != OperationalStatus.Up) {
                     return false;
                 }
 
-                foreach (var addressInfo in ni.GetIPProperties().UnicastAddresses)
-                {
-                    if (addressInfo.Address.AddressFamily != AddressFamily.InterNetwork)
-                    {
+                foreach (var addressInfo in ni.GetIPProperties().UnicastAddresses) {
+                    if (addressInfo.Address.AddressFamily != AddressFamily.InterNetwork) {
                         continue;
                     }
 
                     if (Equals(addressInfo.Address, IPAddress.Any)
                         || Equals(addressInfo.Address, IPAddress.None)
                         || Equals(addressInfo.Address, IPAddress.Broadcast)
-                        || Equals(addressInfo.Address, IPAddress.Loopback))
-                    {
+                        || Equals(addressInfo.Address, IPAddress.Loopback)) {
                         continue;
                     }
 
-                    if (IsWindows())
-                    {
-                        if (addressInfo.DuplicateAddressDetectionState == DuplicateAddressDetectionState.Preferred)
-                        {
+                    if (IsWindows()) {
+                        if (addressInfo.DuplicateAddressDetectionState == DuplicateAddressDetectionState.Preferred) {
                             return true;
                         }
                     }
-                    else
-                    {
+                    else {
                         return true;
                     }
                 }
@@ -181,8 +160,7 @@ namespace SystemModule.Base
         /// </summary>
         public static ulong VirtualMemoryLoad => (memoryInfo.ullTotalVirtual - memoryInfo.ullAvailVirtual) * 100 / memoryInfo.ullTotalVirtual;
 
-        public static bool IsWindows()
-        {
+        public static bool IsWindows() {
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
@@ -194,28 +172,23 @@ namespace SystemModule.Base
 
         public static NetworkInterface GetInOutNetworkInterface() => m_poInOutNetworkInterface;
 
-        public static int ClockSleepTime(int maxConcurrent)
-        {
+        public static int ClockSleepTime(int maxConcurrent) {
             int intManagedThreadId = Thread.CurrentThread.ManagedThreadId;
-            lock (m_poStopWatchTable)
-            {
-                if (!m_poStopWatchTable.TryGetValue(intManagedThreadId, out Stopwatch poStopWatch) || poStopWatch == null)
-                {
+            lock (m_poStopWatchTable) {
+                if (!m_poStopWatchTable.TryGetValue(intManagedThreadId, out Stopwatch poStopWatch) || poStopWatch == null) {
                     poStopWatch = new Stopwatch();
                     poStopWatch.Start();
                     m_poStopWatchTable[intManagedThreadId] = poStopWatch;
                 }
                 long llElapsedWatchTicks = poStopWatch.ElapsedTicks;
                 double dblTotalMilliseconds = llElapsedWatchTicks / 10000.00;
-                if (dblTotalMilliseconds < 1)
-                {
+                if (dblTotalMilliseconds < 1) {
                     return 0;
                 }
                 poStopWatch.Restart();
             }
             const double MAX_USE_LOAD = 100;
-            if (maxConcurrent <= 0)
-            {
+            if (maxConcurrent <= 0) {
                 return 0;
             }
             double dblUseLoad = CpuLoad;
@@ -223,22 +196,19 @@ namespace SystemModule.Base
             {
                 return 0;
             }
-            else
-            {
+            else {
                 double dblAviLoad = unchecked(dblUseLoad - MAX_USE_LOAD);
                 double dblSleepTime = unchecked(dblAviLoad / maxConcurrent);
                 dblSleepTime = Math.Ceiling(dblSleepTime);
-                if (dblSleepTime < 1)
-                {
+                if (dblSleepTime < 1) {
                     dblSleepTime = 1;
                 }
                 return unchecked((int)dblSleepTime);
             }
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct MemoryInfo
-        {
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MemoryInfo {
             /// <summary>
             /// 结构的大小，以字节为单位，必须在调用 GlobalMemoryStatusEx 之前设置此成员，可以用 Init 方法提前处理
             /// </summary>
@@ -276,6 +246,10 @@ namespace SystemModule.Base
             /// 预订的。该值始终为 0
             /// </summary>
             internal ulong ullAvailExtendedVirtual;
+
+            internal void Refresh() {
+                dwLength = checked((uint)Marshal.SizeOf(typeof(MemoryInfo)));
+            }
         }
     }
 }
