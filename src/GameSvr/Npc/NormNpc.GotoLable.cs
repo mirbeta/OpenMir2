@@ -1086,7 +1086,7 @@ namespace GameSvr.Npc
                     case ScriptConst.nSC_CHECKGUILDLIST:
                         if (PlayObject.MyGuild != null)
                         {
-                            if (!CheckGotoLableStringList(PlayObject.MyGuild.SGuildName, m_sPath + QuestConditionInfo.sParam1))
+                            if (!CheckGotoLableStringList(PlayObject.MyGuild.GuildName, m_sPath + QuestConditionInfo.sParam1))
                             {
                                 result = false;
                             }
@@ -2092,13 +2092,13 @@ namespace GameSvr.Npc
                     case ScriptConst.nADDGUILDLIST:
                         if (PlayObject.MyGuild != null)
                         {
-                            GotoLable_AddList(PlayObject.MyGuild.SGuildName, m_sPath + QuestActionInfo.sParam1);
+                            GotoLable_AddList(PlayObject.MyGuild.GuildName, m_sPath + QuestActionInfo.sParam1);
                         }
                         break;
                     case ScriptConst.nDELGUILDLIST:
                         if (PlayObject.MyGuild != null)
                         {
-                            GotoLable_DelList(PlayObject.MyGuild.SGuildName, m_sPath + QuestActionInfo.sParam1);
+                            GotoLable_DelList(PlayObject.MyGuild.GuildName, m_sPath + QuestActionInfo.sParam1);
                         }
                         break;
                     case ScriptConst.nSC_LINEMSG:

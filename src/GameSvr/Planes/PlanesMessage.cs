@@ -323,7 +323,7 @@ namespace GameSvr.Planes
                                     pgw.Guild = WarGuild;
                                     pgw.dwWarTick = Convert.ToInt32(StartTime) - M2Share.ServerTickDifference;
                                     pgw.dwWarTime = Convert.ToInt32(remaintime);
-                                    M2Share.Logger.Info("[行会战] " + g.SGuildName + "<->" + WarGuild.SGuildName + ", 开战: " + StartTime + ", 持久: " + remaintime + ", 现在: " + pgw.dwWarTick + ", 时差: " + M2Share.ServerTickDifference);
+                                    M2Share.Logger.Info("[行会战] " + g.GuildName + "<->" + WarGuild.GuildName + ", 开战: " + StartTime + ", 持久: " + remaintime + ", 现在: " + pgw.dwWarTick + ", 时差: " + M2Share.ServerTickDifference);
                                     break;
                                 }
                             }
@@ -338,7 +338,7 @@ namespace GameSvr.Planes
                                 pgw.dwWarTime = int.Parse(remaintime);
                                 g.GuildWarList.Add(pgw);
                             }
-                            M2Share.Logger.Info("[行会战] " + g.SGuildName + "<->" + WarGuild.SGuildName + ", 开战: " + StartTime + ", 持久: " + remaintime + ", 现在: " + (Convert.ToUInt32(StartTime) - M2Share.ServerTickDifference) + ", 时差: " + M2Share.ServerTickDifference);
+                            M2Share.Logger.Info("[行会战] " + g.GuildName + "<->" + WarGuild.GuildName + ", 开战: " + StartTime + ", 持久: " + remaintime + ", 现在: " + (Convert.ToUInt32(StartTime) - M2Share.ServerTickDifference) + ", 时差: " + M2Share.ServerTickDifference);
                         }
                         g.RefMemberName();
                         g.UpdateGuildFile();

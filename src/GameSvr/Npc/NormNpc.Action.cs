@@ -919,7 +919,7 @@ namespace GameSvr.Npc
                     if (playObject.MyGuild != null)
                     {
                         playObject.MyGuild.SendGuildMsg(sMsg);
-                        World.WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, playObject.MyGuild.SGuildName + "/" + playObject.ChrName + "/" + sMsg);
+                        World.WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, playObject.MyGuild.GuildName + "/" + playObject.ChrName + "/" + sMsg);
                     }
                     break;
                 default:

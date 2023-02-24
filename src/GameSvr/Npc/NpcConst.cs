@@ -1,12 +1,10 @@
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSvr.Npc
-{
+namespace GameSvr.Npc {
     /// <summary>
     /// 沙巴克武器升级信息
     /// </summary>
-    public class WeaponUpgradeInfo
-    {
+    public record struct WeaponUpgradeInfo {
         public string UserName;
         public UserItem UserItem;
         public byte Dc;
@@ -19,22 +17,19 @@ namespace GameSvr.Npc
         public int n3C;
     }
 
-    public struct ItemPrice
-    {
+    public struct ItemPrice {
         public ushort wIndex;
         public double nPrice;
     }
 
-    public struct Goods
-    {
+    public struct Goods {
         public string ItemName;
         public int Count;
         public int RefillTime;
         public int RefillTick;
     }
 
-    public class QuestActionInfo
-    {
+    public struct QuestActionInfo {
         public int nCmdCode;
         public string sParam1;
         public int nParam1;
@@ -52,8 +47,7 @@ namespace GameSvr.Npc
         public string sOpHName;
     }
 
-    public class QuestConditionInfo
-    {
+    public struct QuestConditionInfo {
         public int CmdCode;
         public string sParam1;
         public int nParam1;
@@ -71,8 +65,7 @@ namespace GameSvr.Npc
         public string sOpHName;
     }
 
-    public class SayingProcedure
-    {
+    public struct SayingProcedure {
         public IList<QuestConditionInfo> ConditionList;
         public IList<QuestActionInfo> ActionList;
         public string sSayMsg;
@@ -83,8 +76,7 @@ namespace GameSvr.Npc
         public IList<string> ElseSayOldLabelList;
         public IList<string> ElseSayNewLabelList;
 
-        public SayingProcedure()
-        {
+        public SayingProcedure() {
             ConditionList = new List<QuestConditionInfo>();
             ActionList = new List<QuestActionInfo>();
             SayOldLabelList = new List<string>();
@@ -95,17 +87,14 @@ namespace GameSvr.Npc
         }
     }
 
-    public class SayingRecord
-    {
+    public struct SayingRecord {
         public string sLabel;
         public IList<SayingProcedure> ProcedureList;
         public bool boExtJmp;
     }
 
-    public class ScriptParams
-    {
+    public struct ScriptParams {
         public string sParams;
         public int nParams;
     }
 }
-

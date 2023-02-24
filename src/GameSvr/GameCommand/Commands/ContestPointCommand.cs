@@ -27,7 +27,7 @@ namespace GameSvr.GameCommand.Commands
             Guild.GuildInfo Guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (Guild != null)
             {
-                PlayObject.SysMsg($"{sGuildName} 的得分为: {Guild.NContestPoint}", MsgColor.Green, MsgType.Hint);
+                PlayObject.SysMsg($"{sGuildName} 的得分为: {Guild.ContestPoint}", MsgColor.Green, MsgType.Hint);
             }
             else
             {

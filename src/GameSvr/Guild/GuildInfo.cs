@@ -17,38 +17,38 @@ namespace GameSvr.Guild
 
         public int BuildPoint
         {
-            get => MNBuildPoint;
+            get => buildPoint;
             set => SetBuildPoint(value);
         }
 
         public int Aurae
         {
-            get => MNAurae;
+            get => aurae;
             set => SetAuraePoint(value);
         }
 
         public int Stability
         {
-            get => MNStability;
+            get => stability;
             set => SetStabilityPoint(value);
         }
 
         public int Flourishing
         {
-            get => MNFlourishing;
+            get => flourishing;
             set => SetFlourishPoint(value);
         }
 
         public int ChiefItemCount
         {
-            get => MNChiefItemCount;
+            get => chiefItemCount;
             set => SetChiefItemCount(value);
         }
 
         /// <summary>
         /// 行会名称
         /// </summary>
-        public string SGuildName;
+        public string GuildName;
         /// <summary>
         /// 行会公告
         /// </summary>
@@ -59,30 +59,36 @@ namespace GameSvr.Guild
         /// 职位列表
         /// </summary>
         public IList<GuildRank> MRankList;
-        public int NContestPoint;
+        public int ContestPoint;
         public bool BoTeamFight;
         public ArrayList TeamFightDeadList;
-        public bool MBoEnableAuthAlly;
+        /// <summary>
+        /// 是否允许行会联盟
+        /// </summary>
+        public bool EnableAuthAlly;
         public int DwSaveTick;
         public bool BoChanged;
-        public Dictionary<string, DynamicVar> MDynamicVarList;
+        /// <summary>
+        /// 行会变量
+        /// </summary>
+        public Dictionary<string, DynamicVar> DynamicVarList;
         /// <summary>
         /// 建筑度
         /// </summary>
-        public int MNBuildPoint;
+        private int buildPoint;
         /// <summary>
         /// 人气度
         /// </summary>        
-        public int MNAurae;
+        private int aurae;
         /// <summary>
         /// 安定度
         /// </summary>        
-        public int MNStability;
+        private int stability;
         /// <summary>
         /// 繁荣度
         /// </summary>        
-        public int MNFlourishing;
-        public int MNChiefItemCount;
+        private int flourishing;
+        private int chiefItemCount;
         private readonly GuildConf _guildConf;
 
         private void ClearRank()
@@ -96,7 +102,7 @@ namespace GameSvr.Guild
 
         public GuildInfo(string sName)
         {
-            SGuildName = sName;
+            GuildName = sName;
             NoticeList = new ArrayList();
             GuildWarList = new List<WarGuild>();
             GuildAllList = new List<GuildInfo>();
@@ -104,15 +110,15 @@ namespace GameSvr.Guild
             TeamFightDeadList = new ArrayList();
             DwSaveTick = 0;
             BoChanged = false;
-            NContestPoint = 0;
+            ContestPoint = 0;
             BoTeamFight = false;
-            MBoEnableAuthAlly = false;
-            MNBuildPoint = 0;
-            MNAurae = 0;
-            MNStability = 0;
-            MNFlourishing = 0;
-            MNChiefItemCount = 0;
-            MDynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
+            EnableAuthAlly = false;
+            buildPoint = 0;
+            aurae = 0;
+            stability = 0;
+            flourishing = 0;
+            chiefItemCount = 0;
+            DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             var sFileName = Path.Combine(M2Share.Config.GuildDir, string.Concat(sName + ".ini"));
             _guildConf = new GuildConf(sName, sFileName);
         }
@@ -154,13 +160,12 @@ namespace GameSvr.Guild
         public bool IsMember(string sName)
         {
             var result = false;
-            GuildRank guildRank;
             for (var i = 0; i < MRankList.Count; i++)
             {
-                guildRank = MRankList[i];
+                GuildRank guildRank = MRankList[i];
                 for (var j = 0; j < guildRank.MemberList.Count; j++)
                 {
-                    if (guildRank.MemberList[j] == null)
+                    if (string.IsNullOrEmpty(guildRank.MemberList[j].MemberName))
                     {
                         continue;
                     }
@@ -190,7 +195,7 @@ namespace GameSvr.Guild
 
         public bool LoadGuild()
         {
-            var sFileName = SGuildName + ".txt";
+            var sFileName = GuildName + ".txt";
             var result = LoadGuildFile(sFileName);
             LoadGuildConfig();
             return result;
@@ -371,12 +376,12 @@ namespace GameSvr.Guild
         {
             if (M2Share.ServerIndex == 0)
             {
-                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, string.Concat(SGuildName, ".txt")));
+                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, string.Concat(GuildName, ".txt")));
                 SaveGuildConfig();
             }
             else
             {
-                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, SGuildName, ".", M2Share.ServerIndex.ToString()));
+                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, GuildName, ".", M2Share.ServerIndex.ToString()));
             }
         }
 
@@ -403,7 +408,7 @@ namespace GameSvr.Guild
                 {
                     continue;
                 }
-                saveList.Add("+" + GuildWarList[i].Guild.SGuildName + ' ' + n14);
+                saveList.Add("+" + GuildWarList[i].Guild.GuildName + ' ' + n14);
             }
             saveList.Add(" ");
             saveList.Add(M2Share.Config.GuildAll);
@@ -459,7 +464,7 @@ namespace GameSvr.Guild
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error("[Exceptiion] TGuild.SendGuildMsg GuildName = " + SGuildName + " Msg = " + sMsg);
+                M2Share.Logger.Error("[Exceptiion] TGuild.SendGuildMsg GuildName = " + GuildName + " Msg = " + sMsg);
                 M2Share.Logger.Error(e.Message);
             }
         }
@@ -571,7 +576,7 @@ namespace GameSvr.Guild
             {
                 return;
             }
-            NContestPoint += nPoint;
+            ContestPoint += nPoint;
             //for (var i = 0; i < TeamFightDeadList.Count; i ++ )
             //{
             //    if (TeamFightDeadList[i] == sName)
@@ -595,7 +600,7 @@ namespace GameSvr.Guild
             GuildRank guildRank;
             if (M2Share.ServerIndex == 0)
             {
-                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, SGuildName, '.' + HUtil32.GetTickCount() + ".bak"));
+                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, GuildName, '.' + HUtil32.GetTickCount() + ".bak"));
             }
             for (var i = 0; i < MRankList.Count; i++)
             {
@@ -1031,7 +1036,7 @@ namespace GameSvr.Guild
                             warGuild = GuildWarList[i];
                             warGuild.dwWarTick = HUtil32.GetTickCount();
                             warGuild.dwWarTime = M2Share.Config.GuildWarTime;// 10800000
-                            SendGuildMsg("***" + guild.SGuildName + "行会战争将持续三个小时。");
+                            SendGuildMsg("***" + guild.GuildName + "行会战争将持续三个小时。");
                             break;
                         }
                     }
@@ -1044,7 +1049,7 @@ namespace GameSvr.Guild
                             dwWarTime = M2Share.Config.GuildWarTime// 10800000
                         };
                         GuildWarList.Add(warGuild);
-                        SendGuildMsg("***" + guild.SGuildName + "行会战争开始(三个小时)");
+                        SendGuildMsg("***" + guild.GuildName + "行会战争开始(三个小时)");
                     }
                     result = warGuild;
                 }
@@ -1056,7 +1061,7 @@ namespace GameSvr.Guild
 
         public void EndGuildWar(GuildInfo guild)
         {
-            SendGuildMsg("***" + guild.SGuildName + "行会战争结束");
+            SendGuildMsg("***" + guild.GuildName + "行会战争结束");
         }
 
         private int GetMemberCount()
@@ -1071,7 +1076,7 @@ namespace GameSvr.Guild
 
         public void StartTeamFight()
         {
-            NContestPoint = 0;
+            ContestPoint = 0;
             BoTeamFight = true;
             TeamFightDeadList.Clear();
         }
@@ -1088,31 +1093,31 @@ namespace GameSvr.Guild
 
         private void SetAuraePoint(int nPoint)
         {
-            MNAurae = nPoint;
+            aurae = nPoint;
             BoChanged = true;
         }
 
         private void SetBuildPoint(int nPoint)
         {
-            MNBuildPoint = nPoint;
+            buildPoint = nPoint;
             BoChanged = true;
         }
 
         private void SetFlourishPoint(int nPoint)
         {
-            MNFlourishing = nPoint;
+            flourishing = nPoint;
             BoChanged = true;
         }
 
         private void SetStabilityPoint(int nPoint)
         {
-            MNStability = nPoint;
+            stability = nPoint;
             BoChanged = true;
         }
 
         private void SetChiefItemCount(int nPoint)
         {
-            MNChiefItemCount = nPoint;
+            chiefItemCount = nPoint;
             BoChanged = true;
         }
 

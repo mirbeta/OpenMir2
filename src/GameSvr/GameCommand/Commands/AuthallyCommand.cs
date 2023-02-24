@@ -12,8 +12,8 @@ namespace GameSvr.GameCommand.Commands
         {
             if (playObject.IsGuildMaster())
             {
-                playObject.MyGuild.MBoEnableAuthAlly = !playObject.MyGuild.MBoEnableAuthAlly;
-                if (playObject.MyGuild.MBoEnableAuthAlly)
+                playObject.MyGuild.EnableAuthAlly = !playObject.MyGuild.EnableAuthAlly;
+                if (playObject.MyGuild.EnableAuthAlly)
                 {
                     playObject.SysMsg(CommandHelp.EnableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
                 }

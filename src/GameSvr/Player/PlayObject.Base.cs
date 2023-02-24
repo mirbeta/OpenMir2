@@ -3123,7 +3123,7 @@ namespace GameSvr.Player
                     if (castle != null)
                     {
                         sGuildName = Settings.CastleGuildName.Replace("%castlename", castle.sName);
-                        sGuildName = sGuildName.Replace("%guildname", MyGuild.SGuildName);
+                        sGuildName = sGuildName.Replace("%guildname", MyGuild.GuildName);
                         sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                     }
                     else
@@ -3131,7 +3131,7 @@ namespace GameSvr.Player
                         castle = M2Share.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
                         if (M2Share.Config.ShowGuildName || castle != null && castle.UnderWar || InGuildWarArea)
                         {
-                            sGuildName = Settings.NoCastleGuildName.Replace("%guildname", MyGuild.SGuildName);
+                            sGuildName = Settings.NoCastleGuildName.Replace("%guildname", MyGuild.GuildName);
                             sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                         }
                     }

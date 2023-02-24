@@ -28,7 +28,7 @@ namespace GameSvr.Guild
             for (int i = 0; i < GuildList.Count; i++)
             {
                 GuildInfo Guild = GuildList[i];
-                if (string.Compare(Guild.SGuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(Guild.GuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (Guild.MRankList.Count > 1)
                     {
@@ -62,7 +62,7 @@ namespace GameSvr.Guild
         {
             for (int i = 0; i < GuildList.Count; i++)
             {
-                if (GuildList[i].SGuildName == sGuildName)
+                if (GuildList[i].GuildName == sGuildName)
                 {
                     return GuildList[i];
                 }
@@ -92,7 +92,7 @@ namespace GameSvr.Guild
                     Guild = GuildList[i];
                     if (!Guild.LoadGuild())
                     {
-                        _logger.Warn(Guild.SGuildName + " 读取出错!!!");
+                        _logger.Warn(Guild.GuildName + " 读取出错!!!");
                         GuildList.RemoveAt(i);
                         SaveGuildList();
                     }
@@ -126,7 +126,7 @@ namespace GameSvr.Guild
             StringList SaveList = new StringList();
             for (int i = 0; i < GuildList.Count; i++)
             {
-                SaveList.Add(GuildList[i].SGuildName);
+                SaveList.Add(GuildList[i].GuildName);
             }
             try
             {

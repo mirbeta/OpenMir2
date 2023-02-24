@@ -69,7 +69,7 @@ namespace GameSvr.GameCommand.Commands
                         Guild.AddTeamFightMember(m_PlayObject.ChrName);
                     }
                 }
-                s20 = s20 + Guild.SGuildName + ' ';
+                s20 = s20 + Guild.GuildName + ' ';
             }
             M2Share.WorldEngine.CryCry(Messages.RM_CRY, PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, " -参加的门派:" + s20);
         }

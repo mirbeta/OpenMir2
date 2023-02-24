@@ -253,7 +253,7 @@ namespace GameSvr.Player
                                     if (castle.CanGetCastle(MyGuild))
                                     {
                                         castle.GetCastle(MyGuild);
-                                        WorldServer.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, MyGuild.SGuildName);
+                                        WorldServer.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, MyGuild.GuildName);
                                         if (castle.InPalaceGuildCount() <= 1)
                                         {
                                             castle.StopWallconquestWar();
@@ -309,7 +309,7 @@ namespace GameSvr.Player
                         if (MyGuild != null)
                         {
                             MyGuild.SendGuildMsg(ChrName + " 已经退出游戏.");
-                            WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.SGuildName + '/' + "" + '/' + ChrName + " has exited the game.");
+                            WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + "" + '/' + ChrName + " has exited the game.");
                         }
                         IdSrvClient.Instance.SendHumanLogOutMsg(UserAccount, SessionId);
                     }
@@ -465,7 +465,7 @@ namespace GameSvr.Player
                     if (lastHiterPlay.MyGuild != null && MyGuild != null)
                     {
                         lastHiterPlay.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
-                        string tStr = lastHiterPlay.MyGuild.SGuildName + ':' + lastHiterPlay.MyGuild.NContestPoint + "  " + MyGuild.SGuildName + ':' + MyGuild.NContestPoint;
+                        string tStr = lastHiterPlay.MyGuild.GuildName + ':' + lastHiterPlay.MyGuild.ContestPoint + "  " + MyGuild.GuildName + ':' + MyGuild.ContestPoint;
                         M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
                     }
                 }

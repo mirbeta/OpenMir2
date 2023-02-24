@@ -173,7 +173,7 @@ namespace GameSvr.Player
                                         case '~' when MyGuild != null://发送行会消息
                                             sText = sData.AsSpan()[2..].ToString();
                                             MyGuild.SendGuildMsg(ChrName + ": " + sText);
-                                            World.WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.SGuildName + '/' + ChrName + '/' + sText);
+                                            World.WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + ChrName + '/' + sText);
                                             return;
                                     }
                                 }

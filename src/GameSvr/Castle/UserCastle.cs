@@ -297,7 +297,7 @@ namespace GameSvr.Castle
             loadList.LoadFromFile(sFileName);
             for (int i = 0; i < AttackWarList.Count; i++)
             {
-                AttackWarList[i] = null;
+                AttackWarList[i] = default;
             }
             AttackWarList.Clear();
             for (int i = 0; i < loadList.Count; i++)
@@ -380,7 +380,6 @@ namespace GameSvr.Castle
                                 WarDate = DateTime.Now;
                                 StartCastleWarTick = HUtil32.GetTickCount();
                                 AttackGuildList.Add(attackerInfo.Guild);
-                                attackerInfo = null;
                                 AttackWarList.RemoveAt(i);
                             }
                         }
@@ -534,7 +533,7 @@ namespace GameSvr.Castle
             const string sGetCastleMsg = "[{0} 已被 {1} 占领]";
             GuildInfo OldGuild = MasterGuild;
             MasterGuild = Guild;
-            OwnGuild = Guild.SGuildName;
+            OwnGuild = Guild.GuildName;
             ChangeDate = DateTime.Now;
             SaveConfigFile();
             if (OldGuild != null)
@@ -930,11 +929,12 @@ namespace GameSvr.Castle
             if (InAttackerList(Guild)) return false;
             AttackerInfo AttackerInfo = new AttackerInfo();
             AttackerInfo.AttackDate = M2Share.AddDateTimeOfDay(DateTime.Now, M2Share.Config.StartCastleWarDays);
-            AttackerInfo.sGuildName = Guild.SGuildName;
+            AttackerInfo.sGuildName = Guild.GuildName;
             AttackerInfo.Guild = Guild;
             AttackWarList.Add(AttackerInfo);
             SaveAttackSabukWall();
             World.WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
+            AttackerInfo.Dispose();
             return true;
         }
 

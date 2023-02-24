@@ -1395,12 +1395,12 @@ namespace GameSvr.Script
             string s44 = string.Empty;
             StringList LoadList;
             IList<TDefineInfo> DefineList;
-            QuestActionInfo QuestActionInfo = null;
+            QuestActionInfo QuestActionInfo = default;
             string slabName = string.Empty;
             bool bo8D = false;
             TScript Script = null;
-            SayingRecord SayingRecord = null;
-            SayingProcedure SayingProcedure = null;
+            SayingRecord SayingRecord = default;
+            SayingProcedure SayingProcedure = default;
             int scriptType = 0;
             int n70 = 0;
             string sScritpFileName = M2Share.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
@@ -1679,7 +1679,7 @@ namespace GameSvr.Script
                         ScriptNameList.Add(SayingRecord.sLabel);
                         continue;
                     }
-                    if (Script != null && SayingRecord != null)
+                    if (Script != null && !string.IsNullOrEmpty(SayingRecord.sLabel))
                     {
                         if (scriptType >= 10 && scriptType < 20 && line[0] == '#')
                         {
@@ -1710,7 +1710,7 @@ namespace GameSvr.Script
                             }
                             continue;
                         }
-                        if (scriptType == 10 && SayingProcedure != null)
+                        if (scriptType == 10 && !string.IsNullOrEmpty(SayingProcedure.sSayMsg))
                         {
                             SayingProcedure.sSayMsg += line;
                         }
@@ -1735,7 +1735,7 @@ namespace GameSvr.Script
                             }
                             else
                             {
-                                QuestActionInfo = null;
+                                QuestActionInfo = default;
                                 _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }
@@ -1748,7 +1748,7 @@ namespace GameSvr.Script
                             }
                             else
                             {
-                                QuestActionInfo = null;
+                                QuestActionInfo = default;
                                 _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                             }
                         }

@@ -75,7 +75,7 @@ namespace GameSvr.Player
             userState.NameColor = GetChrColor(playObject);
             if (playObject.MyGuild != null)
             {
-                userState.GuildName = playObject.MyGuild.SGuildName;
+                userState.GuildName = playObject.MyGuild.GuildName;
             }
             userState.GuildRankName = playObject.GuildRankName;
             for (int i = 0; i < playObject.UseItems.Length; i++)
@@ -1234,7 +1234,7 @@ namespace GameSvr.Player
             string sC;
             if (MyGuild != null)
             {
-                sC = MyGuild.SGuildName + '\r' + ' ' + '\r';
+                sC = MyGuild.GuildName + '\r' + ' ' + '\r';
                 if (GuildRankNo == 1)
                 {
                     sC = sC + '1' + '\r';
@@ -1325,11 +1325,11 @@ namespace GameSvr.Player
                                 if (playObject.MyGuild == null && MyGuild.MRankList.Count < 400)
                                 {
                                     MyGuild.AddMember(playObject);
-                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.SGuildName);
+                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
                                     playObject.MyGuild = MyGuild;
                                     playObject.GuildRankName = MyGuild.GetRankName(playObject, ref playObject.GuildRankNo);
                                     playObject.RefShowName();
-                                    playObject.SysMsg("你已加入行会: " + MyGuild.SGuildName + " 当前封号为: " + playObject.GuildRankName, MsgColor.Green, MsgType.Hint);
+                                    playObject.SysMsg("你已加入行会: " + MyGuild.GuildName + " 当前封号为: " + playObject.GuildRankName, MsgColor.Green, MsgType.Hint);
                                     nC = 0;
                                 }
                                 else
@@ -1386,7 +1386,7 @@ namespace GameSvr.Player
                                 playObject.RefRankInfo(0, "");
                                 playObject.RefShowName();
                             }
-                            WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.SGuildName);
+                            WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
                             nC = 0;
                         }
                         else
@@ -1397,7 +1397,7 @@ namespace GameSvr.Player
                     else
                     {
                         nC = 3;
-                        string s14 = MyGuild.SGuildName;
+                        string s14 = MyGuild.GuildName;
                         if (MyGuild.CancelGuld(sHumName))
                         {
                             M2Share.GuildMgr.DelGuild(s14);
@@ -1439,7 +1439,7 @@ namespace GameSvr.Player
                 MyGuild.NoticeList.Add(sC);
             }
             MyGuild.SaveGuildInfoFile();
-            WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.SGuildName);
+            WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
             ClientOpenGuildDlg();
         }
 
@@ -1452,7 +1452,7 @@ namespace GameSvr.Player
             int nC = MyGuild.UpdateRank(sRankInfo);
             if (nC == 0)
             {
-                WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.SGuildName);
+                WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
                 ClientGuildMemberList();
             }
             else
@@ -1476,7 +1476,7 @@ namespace GameSvr.Player
                     PlayObject posePlay = poseObject as PlayObject;
                     if (posePlay.MyGuild != null && posePlay.GetPoseCreate() == this)
                     {
-                        if (posePlay.MyGuild.MBoEnableAuthAlly)
+                        if (posePlay.MyGuild.EnableAuthAlly)
                         {
                             if (posePlay.IsGuildMaster() && IsGuildMaster())
                             {
@@ -1484,12 +1484,12 @@ namespace GameSvr.Player
                                 {
                                     MyGuild.AllyGuild(posePlay.MyGuild);
                                     posePlay.MyGuild.AllyGuild(MyGuild);
-                                    MyGuild.SendGuildMsg(posePlay.MyGuild.SGuildName + "行会已经和您的行会联盟成功。");
-                                    posePlay.MyGuild.SendGuildMsg(MyGuild.SGuildName + "行会已经和您的行会联盟成功。");
+                                    MyGuild.SendGuildMsg(posePlay.MyGuild.GuildName + "行会已经和您的行会联盟成功。");
+                                    posePlay.MyGuild.SendGuildMsg(MyGuild.GuildName + "行会已经和您的行会联盟成功。");
                                     MyGuild.RefMemberName();
                                     posePlay.MyGuild.RefMemberName();
-                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.SGuildName);
-                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, posePlay.MyGuild.SGuildName);
+                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
+                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, posePlay.MyGuild.GuildName);
                                     n8 = 0;
                                 }
                                 else
@@ -1538,12 +1538,12 @@ namespace GameSvr.Player
                 {
                     MyGuild.DelAllyGuild(guild);
                     guild.DelAllyGuild(MyGuild);
-                    MyGuild.SendGuildMsg(guild.SGuildName + " 行会与您的行会解除联盟成功!!!");
-                    guild.SendGuildMsg(MyGuild.SGuildName + " 行会解除了与您行会的联盟!!!");
+                    MyGuild.SendGuildMsg(guild.GuildName + " 行会与您的行会解除联盟成功!!!");
+                    guild.SendGuildMsg(MyGuild.GuildName + " 行会解除了与您行会的联盟!!!");
                     MyGuild.RefMemberName();
                     guild.RefMemberName();
-                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.SGuildName);
-                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, guild.SGuildName);
+                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
+                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, guild.GuildName);
                     n10 = 0;
                 }
                 else
