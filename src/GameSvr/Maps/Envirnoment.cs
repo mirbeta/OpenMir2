@@ -1128,8 +1128,7 @@ namespace GameSvr.Maps
         public BaseObject GetMovingObject(short nX, short nY, bool boFlag)
         {
             BaseObject result = null;
-            MapCellInfo cellInfo = default;
-            var cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            var cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (var i = 0; i < cellInfo.ObjList.Count; i++)
