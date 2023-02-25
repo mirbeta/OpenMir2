@@ -68,22 +68,14 @@ namespace GameSvr.Npc {
     public class SayingProcedure {
         public IList<QuestConditionInfo> ConditionList;
         public IList<QuestActionInfo> ActionList;
-        public string sSayMsg;
-        public IList<string> SayOldLabelList;
-        public IList<string> SayNewLabelList;
         public IList<QuestActionInfo> ElseActionList;
+        public string sSayMsg;
         public string sElseSayMsg;
-        public IList<string> ElseSayOldLabelList;
-        public IList<string> ElseSayNewLabelList;
 
         public SayingProcedure() {
             ConditionList = new List<QuestConditionInfo>();
             ActionList = new List<QuestActionInfo>();
-            SayOldLabelList = new List<string>();
-            SayNewLabelList = new List<string>();
             ElseActionList = new List<QuestActionInfo>();
-            ElseSayOldLabelList = new List<string>();
-            ElseSayNewLabelList = new List<string>();
         }
     }
 
