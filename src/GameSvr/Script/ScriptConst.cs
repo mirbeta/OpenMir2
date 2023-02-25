@@ -182,7 +182,7 @@
         public const int nCHECKACCOUNTLIST = 135;
         public const string sCHECKIPLIST = "CHECKIPLIST";
         public const int nCHECKIPLIST = 136;
-        public const string sSC_CHECKCREDITPOINT = "CHECKCREDITPOINT";
+        public const string sSC_CHECKCREDITPOINT = "CHECKCREDITPOINT"; 
         public const int nSC_CHECKCREDITPOINT = 137;
         public const string sSC_CHECKPOSEDIR = "CHECKPOSEDIR";
         public const int nSC_CHECKPOSEDIR = 138;
