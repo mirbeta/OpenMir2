@@ -1,12 +1,11 @@
-﻿using GameSvr.DataSource;
-using GameSvr.Npc;
+﻿using GameSvr.Npc;
 using NLog;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using SystemModule.Common;
 
 namespace GameSvr.Script {
-    public class ScriptSystem {
+    public partial class ScriptSystem {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, string> sCallScriptDict = new Dictionary<string, string>();
         private readonly char[] TextSpitConst = new[] { ' ', '\t' };
@@ -52,8 +51,7 @@ namespace GameSvr.Script {
         }
 
         private static int GetScriptCallCount(string sText) {
-            var match = Regex.Matches(sText, "#CALL", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.RightToLeft);
-            return match.Count;
+            return RegexCallCount().Matches(sText).Count;
         }
 
         private static string GetCallScriptPath(string path) {
@@ -77,7 +75,6 @@ namespace GameSvr.Script {
             }
             return sCallScriptFile;
         }
-
 
         private void LoadCallScript(ref StringList LoadList, ref bool success) {
             var sLable = string.Empty;
@@ -121,16 +118,16 @@ namespace GameSvr.Script {
             var s20 = string.Empty;
             var s24 = string.Empty;
             for (var i = 0; i < LoadList.Count; i++) {
-                var sDefName = LoadList[i].Trim();
-                if (!string.IsNullOrEmpty(sDefName) && sDefName[0] == '#') {
-                    if (HUtil32.CompareLStr(sDefName, "#SETHOME")) {
-                        result = HUtil32.GetValidStr3(sDefName, ref s1C, TextSpitConst).Trim();
+                var line = LoadList[i].Trim();
+                if (!string.IsNullOrEmpty(line) && line[0] == '#') {
+                    if (HUtil32.CompareLStr(line, "#SETHOME")) {
+                        result = HUtil32.GetValidStr3(line, ref s1C, TextSpitConst).Trim();
                         LoadList[i] = "";
                     }
-                    if (HUtil32.CompareLStr(sDefName, "#DEFINE")) {
-                        sDefName = HUtil32.GetValidStr3(sDefName, ref s1C, TextSpitConst);
-                        sDefName = HUtil32.GetValidStr3(sDefName, ref s20, TextSpitConst);
-                        sDefName = HUtil32.GetValidStr3(sDefName, ref s24, TextSpitConst);
+                    if (HUtil32.CompareLStr(line, "#DEFINE")) {
+                        line = HUtil32.GetValidStr3(line, ref s1C, TextSpitConst);
+                        line = HUtil32.GetValidStr3(line, ref s20, TextSpitConst);
+                        line = HUtil32.GetValidStr3(line, ref s24, TextSpitConst);
                         var DefineInfo = new DefineInfo {
                             Name = s20.ToUpper(),
                             Text = s24
@@ -138,8 +135,8 @@ namespace GameSvr.Script {
                         List.Add(DefineInfo);
                         LoadList[i] = "";
                     }
-                    if (HUtil32.CompareLStr(sDefName, "#INCLUDE")) {
-                        var s28 = HUtil32.GetValidStr3(sDefName, ref s1C, TextSpitConst).Trim();
+                    if (HUtil32.CompareLStr(line, "#INCLUDE")) {
+                        var s28 = HUtil32.GetValidStr3(line, ref s1C, TextSpitConst).Trim();
                         s28 = M2Share.GetEnvirFilePath("Defines", s28);
                         if (File.Exists(s28)) {
                             var LoadStrList = new StringList();
@@ -167,7 +164,7 @@ namespace GameSvr.Script {
             return scriptInfo;
         }
 
-        private bool LoadScriptFileQuestCondition(string sText, QuestConditionInfo QuestConditionInfo) {
+        private bool LoadScriptFileQuestCondition(string sText, ref QuestConditionInfo QuestConditionInfo) {
             var result = false;
             var sCmd = string.Empty;
             var sParam1 = string.Empty;
@@ -661,7 +658,7 @@ namespace GameSvr.Script {
             return result;
         }
 
-        private bool LoadScriptFileQuestAction(string sText, QuestActionInfo QuestActionInfo) {
+        private bool LoadScriptFileQuestAction(string sText, ref QuestActionInfo QuestActionInfo) {
             var sCmd = string.Empty;
             var sParam1 = string.Empty;
             var sParam2 = string.Empty;
@@ -1287,17 +1284,16 @@ namespace GameSvr.Script {
         /// <returns></returns>
         public int LoadScriptFile(NormNpc NPC, string sPatch, string sScritpName, bool boFlag) {
             var command = string.Empty;
-            var s3C = string.Empty;
-            var s40 = string.Empty;
+            var questName = string.Empty;
             var s44 = string.Empty;
-            StringList LoadList;
-            IList<DefineInfo> DefineList;
-            QuestActionInfo QuestActionInfo = default;
             var slabName = string.Empty;
             var bo8D = false;
+            StringList LoadList;
+            IList<DefineInfo> DefineList;
             ScriptInfo Script = null;
-            SayingRecord SayingRecord = default;
-            SayingProcedure SayingProcedure = default;
+            QuestActionInfo QuestActionInfo = default;
+            SayingRecord SayingRecord = null;
+            SayingProcedure SayingProcedure = null;
             var scriptType = 0;
             var questCount = 0;
             var sScritpFileName = M2Share.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
@@ -1316,16 +1312,13 @@ namespace GameSvr.Script {
                 var GotoList = new List<QuestActionInfo>();
                 var DelayGotoList = new List<QuestActionInfo>();
                 var PlayDiceList = new List<QuestActionInfo>();
-                var s54 = LoadScriptDefineInfo(LoadList, DefineList);
-                var DefineInfo = new DefineInfo
+                var defline = LoadScriptDefineInfo(LoadList, DefineList);
+                var DefineInfo = new DefineInfo { Name = "@HOME" };
+                if (string.IsNullOrEmpty(defline))
                 {
-                    Name = "@HOME"
-                };
-                if (string.IsNullOrEmpty(s54))
-                {
-                    s54 = "@main";
+                    defline = "@main";
                 }
-                DefineInfo.Text = s54;
+                DefineInfo.Text = defline;
                 DefineList.Add(DefineInfo);
                 int n24;
                 // 常量处理
@@ -1501,9 +1494,9 @@ namespace GameSvr.Script {
                     {
                         if (HUtil32.CompareLStr(line, "{Quest"))
                         {
-                            s38 = HUtil32.GetValidStr3(line, ref s3C, new[] { ' ', '}', '\t' });
-                            HUtil32.GetValidStr3(s38, ref s3C, new[] { ' ', '}', '\t' });
-                            questCount = HUtil32.StrToInt(s3C, 0);
+                            s38 = HUtil32.GetValidStr3(line, ref questName, new[] { ' ', '}', '\t' });
+                            HUtil32.GetValidStr3(s38, ref questName, new[] { ' ', '}', '\t' });
+                            questCount = HUtil32.StrToInt(questName, 0);
                             Script = LoadMakeNewScript(NPC);
                             Script.QuestCount = questCount;
                             questCount++;
@@ -1515,12 +1508,13 @@ namespace GameSvr.Script {
                     }
                     if (scriptType == 1 && Script != null && line.StartsWith("#"))
                     {
-                        s38 = HUtil32.GetValidStr3(line, ref s3C, new[] { '=', ' ', '\t' });
+                        s38 = HUtil32.GetValidStr3(line, ref questName, new[] { '=', ' ', '\t' });
                         Script.IsQuest = true;
                         if (HUtil32.CompareLStr(line, "#IF"))
                         {
-                            HUtil32.ArrestStringEx(line, "[", "]", ref s40);
-                            Script.QuestInfo[nQuestIdx].wFlag = HUtil32.StrToInt16(s40, 0);
+                            var questFlag = string.Empty;
+                            HUtil32.ArrestStringEx(line, "[", "]", ref questFlag);
+                            Script.QuestInfo[nQuestIdx].wFlag = HUtil32.StrToInt16(questFlag, 0);
                             HUtil32.GetValidStr3(s38, ref s44, new[] { '=', ' ', '\t' });
                             n24 = HUtil32.StrToInt(s44, 0);
                             if (n24 != 0)
@@ -1551,11 +1545,7 @@ namespace GameSvr.Script {
                             continue;
                         }
                         line = HUtil32.ArrestStringEx(line, "[", "]", ref slabName);
-                        SayingRecord = new SayingRecord
-                        {
-                            ProcedureList = new List<SayingProcedure>(),
-                            sLabel = slabName
-                        };
+                        SayingRecord = new SayingRecord { sLabel = slabName };
                         line = HUtil32.GetValidStrCap(line, ref slabName, TextSpitConst);
                         if (slabName.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
                         {
@@ -1618,7 +1608,7 @@ namespace GameSvr.Script {
                             case 11:
                                 {
                                     var questConditionInfo = new QuestConditionInfo();
-                                    if (LoadScriptFileQuestCondition(line.Trim(), questConditionInfo))
+                                    if (LoadScriptFileQuestCondition(line.Trim(), ref questConditionInfo))
                                     {
                                         SayingProcedure.ConditionList.Add(questConditionInfo);
                                     }
@@ -1631,7 +1621,7 @@ namespace GameSvr.Script {
                             case 12:
                                 {
                                     QuestActionInfo = new QuestActionInfo();
-                                    if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo))
+                                    if (LoadScriptFileQuestAction(line.Trim(), ref QuestActionInfo))
                                     {
                                         SayingProcedure.ActionList.Add(QuestActionInfo);
                                     }
@@ -1644,7 +1634,7 @@ namespace GameSvr.Script {
                             case 13:
                                 {
                                     QuestActionInfo = new QuestActionInfo();
-                                    if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo))
+                                    if (LoadScriptFileQuestAction(line.Trim(), ref QuestActionInfo))
                                     {
                                         SayingProcedure.ElseActionList.Add(QuestActionInfo);
                                     }
@@ -2848,5 +2838,8 @@ namespace GameSvr.Script {
                 sMsg = sMsg.Replace("<" + sLabel + ">", "????");
             }
         }
+
+        [GeneratedRegex("#CALL", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.RightToLeft, "zh-CN")]
+        private static partial Regex RegexCallCount();
     }
 }
