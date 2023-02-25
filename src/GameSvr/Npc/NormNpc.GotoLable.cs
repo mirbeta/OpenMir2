@@ -523,8 +523,6 @@ namespace GameSvr.Npc {
                             result = false;
                         }
                         break;
-                    case ScriptConst.nCHECKCREDITPOINT:
-                        break;
                     case ScriptConst.nCHECKITEM:
                         UserItem = PlayObject.QuestCheckItem(QuestConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
                         if (n1C < QuestConditionInfo.nParam2) {

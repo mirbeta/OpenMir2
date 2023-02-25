@@ -437,12 +437,6 @@ namespace GameSvr.Script {
                 case ScriptConst.sSC_CHECKDLGITEMNAME:
                     nCMDCode = ScriptConst.nSC_CHECKDLGITEMNAME;
                     goto L001;
-            }
-
-            switch (sCmd) {
-                case ScriptConst.sCHECKCREDITPOINT:
-                    nCMDCode = ScriptConst.nCHECKCREDITPOINT;
-                    goto L001;
                 case ScriptConst.sDAYTIME:
                     nCMDCode = ScriptConst.nDAYTIME;
                     goto L001;
@@ -1173,7 +1167,6 @@ namespace GameSvr.Script {
                 case ScriptConst.sSC_CHECKISONMAP:
                     nCMDCode = ScriptConst.nSC_CHECKISONMAP;
                     goto L001;
-                // 检测是否安全区
                 case ScriptConst.sSC_CHECKINSAFEZONE:
                     nCMDCode = ScriptConst.nSC_CHECKINSAFEZONE;
                     goto L001;

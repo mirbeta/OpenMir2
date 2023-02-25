@@ -182,8 +182,8 @@
         public const int nCHECKACCOUNTLIST = 135;
         public const string sCHECKIPLIST = "CHECKIPLIST";
         public const int nCHECKIPLIST = 136;
-        public const string sCHECKCREDITPOINT = "CHECKCREDITPOINT";
-        public const int nCHECKCREDITPOINT = 137;
+        public const string sSC_CHECKCREDITPOINT = "CHECKCREDITPOINT";
+        public const int nSC_CHECKCREDITPOINT = 137;
         public const string sSC_CHECKPOSEDIR = "CHECKPOSEDIR";
         public const int nSC_CHECKPOSEDIR = 138;
         public const string sSC_CHECKPOSELEVEL = "CHECKPOSELEVEL";
@@ -240,8 +240,6 @@
         public const int nSC_CHECKSLAVELEVEL = 164;
         public const string sSC_CHECKSLAVENAME = "CHECKSLAVENAME";
         public const int nSC_CHECKSLAVENAME = 165;
-        public const string sSC_CHECKCREDITPOINT = "CHECKCREDITPOINT";
-        public const int nSC_CHECKCREDITPOINT = 166;
         public const string sSC_CHECKOFGUILD = "CHECKOFGUILD";
         public const int nSC_CHECKOFGUILD = 167;
         public const string sSC_CHECKPAYMENT = "CHECKPAYMENT";
@@ -337,8 +335,10 @@
         public const string sSC_KILLBYMON = "KILLBYMON";
         // 是否被怪杀
         public const int nSC_KILLBYMON = 215;
+        /// <summary>
+        /// 检测人物是否在安全区
+        /// </summary>
         public const string sSC_CHECKINSAFEZONE = "INSAFEZONE";
-        // 检测人物是否在安全区
         public const int nSC_CHECKINSAFEZONE = 216;
         public const string sSC_ISGROUPMASTER = "ISGROUPMASTER";
         // 检测是否组长
