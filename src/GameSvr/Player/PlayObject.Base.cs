@@ -521,7 +521,7 @@ namespace GameSvr.Player {
         public bool IsDelayCall;
         public int DelayCallNpc;
         public string DelayCallLabel = string.Empty;
-        public TScript MScript;
+        public ScriptInfo MScript;
         public int LastNpc = 0;
         /// <summary>
         /// 职业属性点

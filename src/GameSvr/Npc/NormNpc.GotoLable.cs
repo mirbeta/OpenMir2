@@ -15,13 +15,13 @@ namespace GameSvr.Npc {
                 PlayObject.LastNpc = 0;
                 PlayObject.MScript = null;
             }
-            TScript Script = null;
+            ScriptInfo Script = null;
             SayingRecord SayingRecord;
             UserItem UserItem = null;
             string sC = string.Empty;
             if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0) {
                 for (int i = 0; i < m_ScriptList.Count; i++) {
-                    TScript Script3C = m_ScriptList[i];
+                    ScriptInfo Script3C = m_ScriptList[i];
                     if (Script3C.RecordList.TryGetValue(sLabel, out SayingRecord)) {
                         Script = Script3C;
                         PlayObject.MScript = Script;
@@ -88,9 +88,9 @@ namespace GameSvr.Npc {
             GotoLable(PlayObject, sLabel, boExtJmp, string.Empty);
         }
 
-        private static bool CheckGotoLableQuestStatus(PlayObject PlayObject, TScript ScriptInfo) {
+        private static bool CheckGotoLableQuestStatus(PlayObject PlayObject, ScriptInfo ScriptInfo) {
             bool result = true;
-            if (!ScriptInfo.boQuest) {
+            if (!ScriptInfo.IsQuest) {
                 return result;
             }
             int nIndex = 0;
@@ -1148,8 +1148,8 @@ namespace GameSvr.Npc {
 
         private void GotoLable_GoToQuest(PlayObject PlayObject, int nQuest) {
             for (int i = 0; i < m_ScriptList.Count; i++) {
-                TScript Script = m_ScriptList[i];
-                if (Script.nQuest == nQuest) {
+                ScriptInfo Script = m_ScriptList[i];
+                if (Script.QuestCount == nQuest) {
                     PlayObject.MScript = Script;
                     PlayObject.LastNpc = this.ActorId;
                     GotoLable(PlayObject, ScriptConst.sMAIN, false);

@@ -7,17 +7,6 @@ using SystemModule.Common;
 using SystemModule.Data;
 
 namespace GameSvr.DataSource {
-    public class TDefineInfo {
-        public string sName;
-        public string sText;
-    }
-
-    public class TQDDinfo {
-        public int n00;
-        public string s04;
-        public ArrayList sList;
-    }
-
     public class LocalDB {
         private readonly char[] TextSpitConst = { ' ', '\t' };
         private readonly char[] MonsterSpitConst = { ' ', '/', '\t' };

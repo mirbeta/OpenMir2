@@ -19,7 +19,7 @@ namespace GameSvr.Npc {
         /// </summary>
         public short NpcFlag = 0;
         public int[] FGotoLable;
-        public IList<TScript> m_ScriptList;
+        public IList<ScriptInfo> m_ScriptList;
         public string FilePath;
         /// <summary>
         /// 此NPC是否是隐藏的，不显示在地图中
@@ -38,7 +38,7 @@ namespace GameSvr.Npc {
             Race = ActorRace.NPC;
             Light = 2;
             AntiPoison = 99;
-            m_ScriptList = new List<TScript>();
+            m_ScriptList = new List<ScriptInfo>();
             StickMode = true;
             FilePath = "";
             IsHide = false;
