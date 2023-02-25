@@ -1299,14 +1299,16 @@ namespace GameSvr.Script {
             SayingRecord SayingRecord = default;
             SayingProcedure SayingProcedure = default;
             var scriptType = 0;
-            var n70 = 0;
+            var questCount = 0;
             var sScritpFileName = M2Share.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
-            if (File.Exists(sScritpFileName)) {
+            if (File.Exists(sScritpFileName))
+            {
                 sCallScriptDict.Clear();
                 LoadList = new StringList();
                 LoadList.LoadFromFile(sScritpFileName);
                 var success = false;
-                while (!success) {
+                while (!success)
+                {
                     LoadCallScript(ref LoadList, ref success);
                 }
                 DefineList = new List<DefineInfo>();
@@ -1315,44 +1317,56 @@ namespace GameSvr.Script {
                 var DelayGotoList = new List<QuestActionInfo>();
                 var PlayDiceList = new List<QuestActionInfo>();
                 var s54 = LoadScriptDefineInfo(LoadList, DefineList);
-                var DefineInfo = new DefineInfo {
+                var DefineInfo = new DefineInfo
+                {
                     Name = "@HOME"
                 };
-                if (string.IsNullOrEmpty(s54)) {
+                if (string.IsNullOrEmpty(s54))
+                {
                     s54 = "@main";
                 }
                 DefineInfo.Text = s54;
                 DefineList.Add(DefineInfo);
                 int n24;
                 // 常量处理
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     var line = LoadList[i].Trim();
-                    if (!string.IsNullOrEmpty(line)) {
-                        if (line[0] == '[') {
+                    if (!string.IsNullOrEmpty(line))
+                    {
+                        if (line[0] == '[')
+                        {
                             bo8D = false;
                         }
-                        else {
-                            if (line[0] == '#' && (HUtil32.CompareLStr(line, "#IF") || HUtil32.CompareLStr(line, "#ACT") || HUtil32.CompareLStr(line, "#ELSEACT"))) {
+                        else
+                        {
+                            if (line[0] == '#' && (HUtil32.CompareLStr(line, "#IF") || HUtil32.CompareLStr(line, "#ACT") || HUtil32.CompareLStr(line, "#ELSEACT")))
+                            {
                                 bo8D = true;
                             }
-                            else {
-                                if (bo8D) {
+                            else
+                            {
+                                if (bo8D)
+                                {
                                     // 将Define 好的常量换成指定值
-                                    for (var n20 = 0; n20 < DefineList.Count; n20++) {
+                                    for (var n20 = 0; n20 < DefineList.Count; n20++)
+                                    {
                                         DefineInfo = DefineList[n20];
                                         var n1C = 0;
-                                        while (true) {
+                                        while (true)
+                                        {
                                             n24 = line.ToUpper().IndexOf(DefineInfo.Name, StringComparison.OrdinalIgnoreCase);
-                                            if (n24 <= 0) {
+                                            if (n24 <= 0)
+                                            {
                                                 break;
                                             }
-
                                             var s58 = line[..n24];
                                             var s5C = line[(DefineInfo.Name.Length + n24)..];
                                             line = s58 + DefineInfo.Text + s5C;
                                             LoadList[i] = line;
                                             n1C++;
-                                            if (n1C >= 10) {
+                                            if (n1C >= 10)
+                                            {
                                                 break;
                                             }
                                         }
@@ -1363,94 +1377,116 @@ namespace GameSvr.Script {
                     }
                 }
                 // 释放常量定义内容
-                for (var i = 0; i < DefineList.Count; i++) {
+                for (var i = 0; i < DefineList.Count; i++)
+                {
                     DefineList[i] = null;
                 }
                 DefineList.Clear();
                 var nQuestIdx = 0;
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     var line = LoadList[i].Trim();
-                    if (string.IsNullOrEmpty(line) || line[0] == ';' || line[0] == '/') {
+                    if (string.IsNullOrEmpty(line) || line[0] == ';' || line[0] == '/')
+                    {
                         continue;
                     }
-                    if (scriptType == 0 && boFlag) {
-                        if (line.StartsWith("%")) // 物品价格倍率
+                    if (scriptType == 0 && boFlag)
+                    {
+                        if (line.StartsWith("%"))// 物品价格倍率
                         {
                             line = line[1..];
                             var nPriceRate = HUtil32.StrToInt(line, -1);
-                            if (nPriceRate >= 55) {
+                            if (nPriceRate >= 55)
+                            {
                                 ((Merchant)NPC).PriceRate = nPriceRate;
                             }
                             continue;
                         }
-                        if (line.StartsWith("+")) // 物品交易类型
+                        if (line.StartsWith("+"))// 物品交易类型
                         {
                             line = line[1..];
                             var nItemType = HUtil32.StrToInt(line, -1);
-                            if (nItemType >= 0) {
+                            if (nItemType >= 0)
+                            {
                                 ((Merchant)NPC).ItemTypeList.Add(nItemType);
                             }
                             continue;
                         }
-                        if (line.StartsWith("(")) // 增加处理NPC可执行命令设置
+                        if (line.StartsWith("("))// 增加处理NPC可执行命令设置
                         {
                             HUtil32.ArrestStringEx(line, "(", ")", ref line);
-                            if (!string.IsNullOrEmpty(line)) {
-                                while (!string.IsNullOrEmpty(line)) {
+                            if (!string.IsNullOrEmpty(line))
+                            {
+                                while (!string.IsNullOrEmpty(line))
+                                {
                                     line = HUtil32.GetValidStr3(line, ref command, HUtil32.Separator);
-                                    if (command.Equals(ScriptConst.sBUY, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sBUY, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsBuy = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sSELL, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sSELL, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsSell = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsMakeDrug = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sPRICES, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sPRICES, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsPrices = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sSTORAGE, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sSTORAGE, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsStorage = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sGETBACK, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sGETBACK, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsGetback = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsUpgradenow = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsGetBackupgnow = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sREPAIR, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sREPAIR, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsRepair = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsSupRepair = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsSendMsg = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sUSEITEMNAME, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sUSEITEMNAME, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsUseItemName = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
+                                    {
                                         ((Merchant)NPC).IsOffLineMsg = true;
                                         continue;
                                     }
-                                    if (string.Compare(command, ScriptConst.sybdeal, StringComparison.OrdinalIgnoreCase) == 0) {
+                                    if (string.Compare(command, ScriptConst.sybdeal, StringComparison.OrdinalIgnoreCase) == 0)
+                                    {
                                         ((Merchant)NPC).IsYBDeal = true;
                                         continue;
                                     }
@@ -1461,90 +1497,117 @@ namespace GameSvr.Script {
                         // 增加处理NPC可执行命令设置
                     }
                     string s38;
-                    if (line.StartsWith("{")) {
-                        if (HUtil32.CompareLStr(line, "{Quest")) {
+                    if (line.StartsWith("{"))
+                    {
+                        if (HUtil32.CompareLStr(line, "{Quest"))
+                        {
                             s38 = HUtil32.GetValidStr3(line, ref s3C, new[] { ' ', '}', '\t' });
                             HUtil32.GetValidStr3(s38, ref s3C, new[] { ' ', '}', '\t' });
-                            n70 = HUtil32.StrToInt(s3C, 0);
+                            questCount = HUtil32.StrToInt(s3C, 0);
                             Script = LoadMakeNewScript(NPC);
-                            Script.QuestCount = n70;
-                            n70++;
+                            Script.QuestCount = questCount;
+                            questCount++;
                         }
-                        if (HUtil32.CompareLStr(line, "{~Quest")) {
+                        if (HUtil32.CompareLStr(line, "{~Quest"))
+                        {
                             continue;
                         }
                     }
-                    if (scriptType == 1 && Script != null && line.StartsWith("#")) {
+                    if (scriptType == 1 && Script != null && line.StartsWith("#"))
+                    {
                         s38 = HUtil32.GetValidStr3(line, ref s3C, new[] { '=', ' ', '\t' });
                         Script.IsQuest = true;
-                        if (HUtil32.CompareLStr(line, "#IF")) {
+                        if (HUtil32.CompareLStr(line, "#IF"))
+                        {
                             HUtil32.ArrestStringEx(line, "[", "]", ref s40);
                             Script.QuestInfo[nQuestIdx].wFlag = HUtil32.StrToInt16(s40, 0);
                             HUtil32.GetValidStr3(s38, ref s44, new[] { '=', ' ', '\t' });
                             n24 = HUtil32.StrToInt(s44, 0);
-                            if (n24 != 0) {
+                            if (n24 != 0)
+                            {
                                 n24 = 1;
                             }
                             Script.QuestInfo[nQuestIdx].btValue = (byte)n24;
                         }
-                        if (HUtil32.CompareLStr(line, "#RAND")) {
+                        if (HUtil32.CompareLStr(line, "#RAND"))
+                        {
                             Script.QuestInfo[nQuestIdx].nRandRage = HUtil32.StrToInt(s44, 0);
                         }
                         continue;
                     }
-                    if (line.StartsWith("[")) {
+                    if (line.StartsWith("["))
+                    {
                         scriptType = 10;
-                        if (Script == null) {
+                        if (Script == null)
+                        {
                             Script = LoadMakeNewScript(NPC);
-                            Script.QuestCount = n70;
+                            Script.QuestCount = questCount;
                         }
-                        if (line.Equals("[goods]", StringComparison.OrdinalIgnoreCase)) {
+                        if (line.Equals("[goods]", StringComparison.OrdinalIgnoreCase))
+                        {
                             scriptType = 20;
                             NPC.ProcessRefillIndex = M2Share.CurrentMerchantIndex;
                             M2Share.CurrentMerchantIndex++;
                             continue;
                         }
                         line = HUtil32.ArrestStringEx(line, "[", "]", ref slabName);
-                        SayingRecord = new SayingRecord {
+                        SayingRecord = new SayingRecord
+                        {
                             ProcedureList = new List<SayingProcedure>(),
                             sLabel = slabName
                         };
                         line = HUtil32.GetValidStrCap(line, ref slabName, TextSpitConst);
-                        if (slabName.Equals("TRUE", StringComparison.OrdinalIgnoreCase)) {
+                        if (slabName.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
+                        {
                             SayingRecord.boExtJmp = true;
                         }
-                        else {
+                        else
+                        {
                             SayingRecord.boExtJmp = false;
                         }
                         SayingProcedure = new SayingProcedure();
                         SayingRecord.ProcedureList.Add(SayingProcedure);
-                        if (Script.RecordList.ContainsKey(SayingRecord.sLabel)) {
+                        if (Script.RecordList.ContainsKey(SayingRecord.sLabel))
+                        {
                             SayingRecord.sLabel += M2Share.RandomNumber.GetRandomNumber(1, 200);
                         }
                         Script.RecordList.Add(SayingRecord.sLabel, SayingRecord);
                         ScriptNameList.Add(SayingRecord.sLabel);
                         continue;
                     }
-                    if (Script != null && !string.IsNullOrEmpty(SayingRecord.sLabel)) {
-                        switch (scriptType) {
-                            case >= 10 and < 20 when line[0] == '#': {
-                                    if (line.Equals("#IF", StringComparison.OrdinalIgnoreCase)) {
-                                        if (SayingProcedure.ConditionList.Count > 0 || !string.IsNullOrEmpty(SayingProcedure.sSayMsg)) {
+                    if (Script != null && SayingRecord != null)
+                    {
+                        switch (scriptType)
+                        {
+                            case >= 10 and < 20 when line[0] == '#':
+                                {
+                                    if (line.Equals("#IF", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        if (SayingProcedure.ConditionList.Count > 0 || !string.IsNullOrEmpty(SayingProcedure.sSayMsg))
+                                        {
                                             SayingProcedure = new SayingProcedure();
                                             SayingRecord.ProcedureList.Add(SayingProcedure);
                                         }
                                         scriptType = 11;
+                                        continue;
                                     }
-                                    if (line.Equals("#ACT", StringComparison.OrdinalIgnoreCase)) {
+                                    if (line.Equals("#ACT", StringComparison.OrdinalIgnoreCase))
+                                    {
                                         scriptType = 12;
+                                        continue;
                                     }
-                                    if (line.Equals("#SAY", StringComparison.OrdinalIgnoreCase)) {
+                                    if (line.Equals("#SAY", StringComparison.OrdinalIgnoreCase))
+                                    {
                                         scriptType = 10;
+                                        continue;
                                     }
-                                    if (line.Equals("#ELSEACT", StringComparison.OrdinalIgnoreCase)) {
+                                    if (line.Equals("#ELSEACT", StringComparison.OrdinalIgnoreCase))
+                                    {
                                         scriptType = 13;
+                                        continue;
                                     }
-                                    if (line.Equals("#ELSESAY", StringComparison.OrdinalIgnoreCase)) {
+                                    if (line.Equals("#ELSESAY", StringComparison.OrdinalIgnoreCase))
+                                    {
                                         scriptType = 14;
                                     }
                                     continue;
@@ -1552,32 +1615,41 @@ namespace GameSvr.Script {
                             case 10:
                                 SayingProcedure.sSayMsg += line;
                                 break;
-                            case 11: {
+                            case 11:
+                                {
                                     var questConditionInfo = new QuestConditionInfo();
-                                    if (LoadScriptFileQuestCondition(line.Trim(), questConditionInfo)) {
+                                    if (LoadScriptFileQuestCondition(line.Trim(), questConditionInfo))
+                                    {
                                         SayingProcedure.ConditionList.Add(questConditionInfo);
                                     }
-                                    else {
+                                    else
+                                    {
                                         _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                                     }
                                     break;
                                 }
-                            case 12: {
+                            case 12:
+                                {
                                     QuestActionInfo = new QuestActionInfo();
-                                    if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo)) {
+                                    if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo))
+                                    {
                                         SayingProcedure.ActionList.Add(QuestActionInfo);
                                     }
-                                    else {
+                                    else
+                                    {
                                         _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                                     }
                                     break;
                                 }
-                            case 13: {
+                            case 13:
+                                {
                                     QuestActionInfo = new QuestActionInfo();
-                                    if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo)) {
+                                    if (LoadScriptFileQuestAction(line.Trim(), QuestActionInfo))
+                                    {
                                         SayingProcedure.ElseActionList.Add(QuestActionInfo);
                                     }
-                                    else {
+                                    else
+                                    {
                                         _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                                     }
                                     break;
@@ -1587,30 +1659,35 @@ namespace GameSvr.Script {
                                 break;
                         }
                     }
-                    if (scriptType == 20 && boFlag) {
+                    if (scriptType == 20 && boFlag)
+                    {
                         var sItemName = string.Empty;
                         var sItemCount = string.Empty;
                         var sItemRefillTime = string.Empty;
                         line = HUtil32.GetValidStrCap(line, ref sItemName, TextSpitConst);
                         line = HUtil32.GetValidStrCap(line, ref sItemCount, TextSpitConst);
                         line = HUtil32.GetValidStrCap(line, ref sItemRefillTime, TextSpitConst);
-                        if (!string.IsNullOrEmpty(sItemName) && !string.IsNullOrEmpty(sItemRefillTime)) {
-                            if (sItemName[0] == '\"') {
+                        if (!string.IsNullOrEmpty(sItemName) && !string.IsNullOrEmpty(sItemRefillTime))
+                        {
+                            if (sItemName[0] == '\"')
+                            {
                                 HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                             }
-                            var goods = new Goods {
+                            var goods = new Goods
+                            {
                                 ItemName = sItemName,
                                 Count = HUtil32.StrToInt(sItemCount, 0),
                                 RefillTime = HUtil32.StrToInt(sItemRefillTime, 0),
                                 RefillTick = 0
                             };
-                            if (M2Share.CanSellItem(sItemName)) {
+                            if (M2Share.CanSellItem(sItemName))
+                            {
                                 ((Merchant)NPC).RefillGoodsList.Add(goods);
                             }
                         }
                     }
                 }
-                LoadList = null;
+                LoadList.Dispose();
                 InitializeLabel(NPC, QuestActionInfo, ScriptNameList, PlayDiceList, GotoList, DelayGotoList);
             }
             else {
