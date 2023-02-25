@@ -1568,7 +1568,6 @@ namespace GameSvr.Script {
                                         SayingProcedure.ActionList.Add(QuestActionInfo);
                                     }
                                     else {
-                                        QuestActionInfo = default;
                                         _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                                     }
                                     break;
@@ -1579,7 +1578,6 @@ namespace GameSvr.Script {
                                         SayingProcedure.ElseActionList.Add(QuestActionInfo);
                                     }
                                     else {
-                                        QuestActionInfo = default;
                                         _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                                     }
                                     break;
