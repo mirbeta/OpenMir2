@@ -1319,7 +1319,7 @@ namespace GameSvr {
                 LoadList.LoadFromFile(sFileName);
                 for (int i = 0; i < LoadList.Count; i++) {
                     string sLineText = LoadList[i].Trim();
-                    if ((sLineText == "") || (sLineText[0] == ';')) {
+                    if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';')) {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
@@ -1814,7 +1814,7 @@ namespace GameSvr {
         // * 号为通配符
         public static bool CompareIPaddr(string sIPaddr, string dIPaddr) {
             bool result;
-            if (sIPaddr == "" || dIPaddr == "") {
+            if (string.IsNullOrEmpty(sIPaddr) || string.IsNullOrEmpty(dIPaddr)) {
                 return false;
             }
             if (dIPaddr[1] == '*') {

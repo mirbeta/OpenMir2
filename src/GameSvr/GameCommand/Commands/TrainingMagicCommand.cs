@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands {
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             string sSkillName = @Params.Length > 1 ? @Params[1] : "";
             int nLevel = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
-            if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3)) {
+            if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sSkillName) || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

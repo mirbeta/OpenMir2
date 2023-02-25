@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands {
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.StoragePwd == "") {
+            if (string.IsNullOrEmpty(playObject.StoragePwd)) {
                 playObject.SendMsg(playObject, Messages.RM_PASSWORD, 0, 0, 0, 0, "");
                 playObject.IsSetStoragePwd = true;
                 playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);

@@ -15,7 +15,7 @@ namespace GameSvr.GameCommand.Commands {
             }
             string sSrcMap = @Params.Length > 0 ? @Params[0] : "";
             string sDenMap = @Params.Length > 1 ? @Params[1] : "";
-            if (sDenMap == "" || sSrcMap == "" || !string.IsNullOrEmpty(sSrcMap) && sSrcMap[0] == '?') {
+            if (string.IsNullOrEmpty(sDenMap) || string.IsNullOrEmpty(sSrcMap) || !string.IsNullOrEmpty(sSrcMap) && sSrcMap[0] == '?') {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

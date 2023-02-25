@@ -873,7 +873,7 @@ namespace GameSvr.World {
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx) {
                 result = StdItemList[nItemIdx];
-                if (result.Name == "") result = null;
+                if (string.IsNullOrEmpty(result.Name)) result = null;
             }
             return result;
         }

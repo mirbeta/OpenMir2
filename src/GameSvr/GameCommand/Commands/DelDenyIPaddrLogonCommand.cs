@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands {
                 return;
             }
             string sIPaddr = @Params.Length > 0 ? @Params[0] : "";
-            if (sIPaddr == "") {
+            if (string.IsNullOrEmpty(sIPaddr)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

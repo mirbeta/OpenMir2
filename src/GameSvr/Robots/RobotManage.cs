@@ -25,10 +25,10 @@ namespace GameSvr.Robots {
             LoadList.LoadFromFile(sFileName);
             for (int i = 0; i < LoadList.Count; i++) {
                 string sLineText = LoadList[i];
-                if (sLineText == "" || sLineText[0] == ';') continue;
+                if (string.IsNullOrEmpty(sLineText) || sLineText[0] == ';') continue;
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sRobotName, new[] { ' ', '/', '\t' });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sScriptFileName, new[] { ' ', '/', '\t' });
-                if (sRobotName == "" || sScriptFileName == "") continue;
+                if (string.IsNullOrEmpty(sRobotName) || string.IsNullOrEmpty(sScriptFileName)) continue;
                 RobotObject RobotHuman = new RobotObject();
                 RobotHuman.ChrName = sRobotName;
                 RobotHuman.ScriptFileName = sScriptFileName;

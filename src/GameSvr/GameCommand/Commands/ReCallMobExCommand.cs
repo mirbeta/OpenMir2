@@ -16,7 +16,7 @@ namespace GameSvr.GameCommand.Commands {
             int nNameColor = @Params.Length > 0 ? Convert.ToInt32(@Params[1]) : 0;
             short nX = @Params.Length > 0 ? Convert.ToInt16(@Params[2]) : (short)0;
             short nY = @Params.Length > 0 ? Convert.ToInt16(@Params[3]) : (short)0;
-            if (sMonName == "" || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?') {
+            if (string.IsNullOrEmpty(sMonName) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?') {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

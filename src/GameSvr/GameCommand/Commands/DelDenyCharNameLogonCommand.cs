@@ -10,7 +10,7 @@ namespace GameSvr.GameCommand.Commands {
                 return;
             }
             string sChrName = @Params.Length > 0 ? @Params[0] : "";
-            if (sChrName == "") {
+            if (string.IsNullOrEmpty(sChrName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

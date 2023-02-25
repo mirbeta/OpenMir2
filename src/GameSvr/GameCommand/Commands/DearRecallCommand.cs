@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands {
     public class DearRecallCommond : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject PlayObject) {
-            if (PlayObject.DearName == "") {
+            if (string.IsNullOrEmpty(PlayObject.DearName)) {
                 PlayObject.SysMsg("你没有结婚!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }

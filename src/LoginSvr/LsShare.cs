@@ -87,7 +87,7 @@ namespace LoginSvr
                 while (true)
                 {
                     s10 = Config.GateRoute[i].Gate[n8].sIPaddr;
-                    if (s10 == "")
+                    if (string.IsNullOrEmpty(s10))
                     {
                         break;
                     }

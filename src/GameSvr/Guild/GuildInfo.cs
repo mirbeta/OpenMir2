@@ -206,7 +206,8 @@ namespace GameSvr.Guild {
             loadList.LoadFromFile(sFileName);
             for (int i = 0; i < loadList.Count; i++) {
                 string s18 = loadList[i];
-                if (s18 == "" || s18[0] == ';') {
+                if (string.IsNullOrEmpty(s18) || s18[0] == ';')
+                {
                     continue;
                 }
                 if (s18[0] != '+') {
@@ -239,7 +240,7 @@ namespace GameSvr.Guild {
                     case 2:
                         while (!string.IsNullOrEmpty(s18)) {
                             s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
-                            if (s1C == "") {
+                            if (string.IsNullOrEmpty(s1C)) {
                                 break;
                             }
                             guildWar = new WarGuild {
@@ -258,7 +259,7 @@ namespace GameSvr.Guild {
                         while (!string.IsNullOrEmpty(s18)) {
                             s18 = HUtil32.GetValidStr3(s18, ref s1C, new[] { ' ', ',' });
                             s18 = HUtil32.GetValidStr3(s18, ref s20, new[] { ' ', ',' });
-                            if (s1C == "") {
+                            if (string.IsNullOrEmpty(s1C)) {
                                 break;
                             }
                             guild = M2Share.GuildMgr.FindGuild(s1C);

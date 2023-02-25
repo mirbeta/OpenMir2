@@ -33,7 +33,7 @@ namespace DBSvr
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     var sLineText = LoadList[i];
-                    if ((sLineText == "") || (sLineText[0] == ';'))
+                    if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';'))
                     {
                         continue;
                     }

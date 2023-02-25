@@ -93,7 +93,7 @@ namespace GameSvr.Npc {
                     if (Castle.IsMasterGuild(PlayObject.MyGuild) && PlayObject.IsGuildMaster()) {
                         bool boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                         if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0) {
-                            if (sMsg == "") {
+                            if (string.IsNullOrEmpty(sMsg)) {
                                 return;
                             }
                         }
@@ -201,7 +201,7 @@ namespace GameSvr.Npc {
                             PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
-                            if (PlayObject.ScriptGoBackLable == "") {
+                            if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable)) {
                                 PlayObject.ScriptGoBackLable = ScriptConst.sMAIN;
                             }
                             GotoLable(PlayObject, PlayObject.ScriptGoBackLable, false);

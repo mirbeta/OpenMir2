@@ -24,7 +24,7 @@ namespace GameSvr.GameCommand.Commands {
             nCount = HUtil32._MIN(500, HUtil32.StrToInt(sCount, 0));
             nX = HUtil32.StrToInt16(sX, 0);
             nY = HUtil32.StrToInt16(sY, 0);
-            if (nX <= 0 || nY <= 0 || sMonName == "" || nCount <= 0) {
+            if (nX <= 0 || nY <= 0 || string.IsNullOrEmpty(sMonName) || nCount <= 0) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

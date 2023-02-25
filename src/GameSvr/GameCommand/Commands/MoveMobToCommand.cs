@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands {
             short OnX = @Params[5] == null ? (short)0 : Convert.ToInt16(@Params[5]);
             short OnY = @Params[6] == null ? (short)0 : Convert.ToInt16(@Params[6]);
             BaseObject MoveMon;
-            if (sMonName == "" || OleMap == "" || NewMap == "" || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?') {
+            if (string.IsNullOrEmpty(sMonName) || string.IsNullOrEmpty(OleMap) || string.IsNullOrEmpty(NewMap) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?') {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

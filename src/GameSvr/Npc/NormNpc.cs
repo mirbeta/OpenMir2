@@ -656,7 +656,7 @@ namespace GameSvr.Npc {
                 case "$OWNERGUILD": {
                         if (Castle != null) {
                             sText = Castle.OwnGuild;
-                            if (sText == "") {
+                            if (string.IsNullOrEmpty(sText)) {
                                 sText = "游戏管理";
                             }
                         }
@@ -1575,7 +1575,7 @@ namespace GameSvr.Npc {
             bool result = false;
             int n01;
             try {
-                if (sMsg == "") {
+                if (string.IsNullOrEmpty(sMsg)) {
                     return result;
                 }
                 n01 = M2Share.GetValNameNo(sMsg);
@@ -1608,7 +1608,7 @@ namespace GameSvr.Npc {
             bool result = false;
             int n01;
             try {
-                if (sMsg == "") {
+                if (string.IsNullOrEmpty(sMsg)) {
                     return result;
                 }
                 n01 = M2Share.GetValNameNo(sMsg);
@@ -1657,7 +1657,7 @@ namespace GameSvr.Npc {
             bool result = false;
             int n01;
             try {
-                if (sMsg == "") {
+                if (string.IsNullOrEmpty(sMsg)) {
                     return result;
                 }
                 n01 = M2Share.GetValNameNo(sMsg);

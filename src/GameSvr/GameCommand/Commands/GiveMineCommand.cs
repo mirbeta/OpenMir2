@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands {
                 PlayObject.SysMsg(CommandHelp.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (sMineName == "" || !string.IsNullOrEmpty(sMineName) && sMineName[0] == '?' || nMineCount <= 0) {
+            if (string.IsNullOrEmpty(sMineName) || !string.IsNullOrEmpty(sMineName) && sMineName[0] == '?' || nMineCount <= 0) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

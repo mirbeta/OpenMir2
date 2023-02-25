@@ -9,7 +9,7 @@ namespace GameSvr.GameCommand.Commands {
     public class SearchMasterCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject PlayObject) {
-            if (PlayObject.MasterName == "") {
+            if (string.IsNullOrEmpty(PlayObject.MasterName)) {
                 PlayObject.SysMsg(Settings.YouAreNotMasterMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }

@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands {
             string sSkillName = @Params.Length > 1 ? @Params[1] : "";
             int nLevel = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
             UserMagic UserMagic;
-            if (string.IsNullOrEmpty(sHumanName) || sSkillName == "" || nLevel <= 0) {
+            if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sSkillName) || nLevel <= 0) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

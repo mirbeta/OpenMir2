@@ -113,7 +113,7 @@ namespace GameSvr.Npc {
             else {
                 sParam3 = QuestActionInfo.sParam3;
             }
-            if (sParam1 == "") {
+            if (string.IsNullOrEmpty(sParam1)) {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sMOV);
                 return;
             }
@@ -238,7 +238,7 @@ namespace GameSvr.Npc {
             else {
                 sParam3 = QuestActionInfo.sParam3;
             }
-            if ((sParam1 == "") || (sParam2 == "")) {
+            if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2))) {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sINC);
                 return;
             }
@@ -583,7 +583,7 @@ namespace GameSvr.Npc {
             else {
                 sParam3 = QuestActionInfo.sParam3;
             }
-            if ((sParam1 == "") || (sParam2 == "")) {
+            if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2))) {
                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sDEC);
                 return;
             }
@@ -1458,13 +1458,13 @@ namespace GameSvr.Npc {
             nValue = -1;
             nDataType = -1;
             bool result = false;
-            if (sVariable == "") {
-                return result;
+            if (string.IsNullOrEmpty(sVariable)) {
+                return false;
             }
             string sMsg = sVariable;
             HUtil32.ArrestStringEx(sMsg, "<", ">", ref s10);
-            if (s10 == "") {
-                return result;
+            if (string.IsNullOrEmpty(s10)) {
+                return false;
             }
             sVariable = s10;
             //全局信息

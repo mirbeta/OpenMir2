@@ -292,7 +292,7 @@ namespace SystemModule.Common
                 return null;
             }
             s = s.Trim();
-            if (!(s == ""))
+            if (!(string.IsNullOrEmpty(s)))
             {
                 str = str + s;
             }

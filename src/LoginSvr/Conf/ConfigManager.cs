@@ -59,7 +59,7 @@ namespace LoginSvr.Conf
         {
             string result;
             string sString = ReadWriteString(sSection, sIdent, "");
-            if (sString == "")
+            if (string.IsNullOrEmpty(sString))
             {
                 WriteString(sSection, sIdent, sDefault);
                 result = sDefault;

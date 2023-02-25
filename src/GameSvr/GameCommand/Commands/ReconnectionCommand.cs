@@ -21,7 +21,7 @@ namespace GameSvr.GameCommand.Commands {
                 PlayObject.SysMsg("此命令用于改变客户端连接网关的IP及端口。", MsgColor.Blue, MsgType.Hint);
                 return;
             }
-            if (sIPaddr == "" || sPort == "") {
+            if (string.IsNullOrEmpty(sIPaddr) || string.IsNullOrEmpty(sPort)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

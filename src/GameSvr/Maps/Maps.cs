@@ -62,7 +62,7 @@ namespace GameSvr.Maps {
                         }
                         string s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, HUtil32.Separator).Trim();
                         byte nServerIndex = (byte)HUtil32.StrToInt(s4C, 0);
-                        if (sMapName == "") {
+                        if (string.IsNullOrEmpty(sMapName)) {
                             continue;
                         }
                         MapFlag.RequestLevel = 1;
@@ -72,7 +72,7 @@ namespace GameSvr.Maps {
                         MapFlag.MusicId = -1;
                         Merchant QuestNPC = null;
                         while (true) {
-                            if (sFlag == "") {
+                            if (string.IsNullOrEmpty(sFlag)) {
                                 break;
                             }
                             sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, HUtil32.Separator);
@@ -107,7 +107,7 @@ namespace GameSvr.Maps {
                                 MapFlag.boNORECONNECT = true;
                                 HUtil32.ArrestStringEx(sCommand, "(", ")", ref sReConnectMap);
                                 MapFlag.sNoReConnectMap = sReConnectMap;
-                                if (MapFlag.sNoReConnectMap == "") {
+                                if (string.IsNullOrEmpty(MapFlag.sNoReConnectMap)) {
                                 }
                                 continue;
                             }

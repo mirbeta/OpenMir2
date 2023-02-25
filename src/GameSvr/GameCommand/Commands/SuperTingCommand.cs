@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands {
             string sRange = @Params.Length > 1 ? @Params[1] : "";
             PlayObject MoveHuman;
             IList<BaseObject> HumanList;
-            if (sRange == "" || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
+            if (string.IsNullOrEmpty(sRange) || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

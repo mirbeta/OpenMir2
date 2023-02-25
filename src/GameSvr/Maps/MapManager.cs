@@ -60,7 +60,7 @@ namespace GameSvr.Maps {
             }
             else {
                 sTempName = HUtil32.ArrestStringEx(sTempName, "<", ">", ref sMapFileName);
-                if (sMapFileName == "") {
+                if (string.IsNullOrEmpty(sMapFileName)) {
                     sMapFileName = sMapName;
                 }
                 else {

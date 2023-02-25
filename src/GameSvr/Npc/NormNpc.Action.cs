@@ -786,7 +786,7 @@ namespace GameSvr.Npc {
                 GotoLable(playObject, "@MarryCheckDir", false);
                 return;
             }
-            if (questActionInfo.sParam1 == "") {
+            if (string.IsNullOrEmpty(questActionInfo.sParam1)) {
                 if (poseHuman.Race != ActorRace.Play) {
                     GotoLable(playObject, "@HumanTypeErr", false);
                     return;
@@ -885,7 +885,7 @@ namespace GameSvr.Npc {
                 GotoLable(playObject, "@MasterCheckDir", false);
                 return;
             }
-            if (questActionInfo.sParam1 == "") {
+            if ((string.IsNullOrEmpty(questActionInfo.sParam1))) {
                 if (poseHuman.Race != ActorRace.Play) {
                     GotoLable(playObject, "@HumanTypeErr", false);
                     return;
@@ -919,7 +919,7 @@ namespace GameSvr.Npc {
                             GotoLable(poseHuman, "@EndMaster", false);
                             playObject.IsStartMaster = false;
                             poseHuman.IsStartMaster = false;
-                            if (playObject.MasterName == "") {
+                            if (string.IsNullOrEmpty(playObject.MasterName)) {
                                 playObject.MasterName = poseHuman.ChrName;
                                 playObject.IsMaster = true;
                             }
@@ -966,7 +966,7 @@ namespace GameSvr.Npc {
             byte nType = (byte)HUtil32.StrToInt(questActionInfo.sParam4, -1);
             int nTime = HUtil32.StrToInt(questActionInfo.sParam5, -1);
             int nPoint = HUtil32.StrToInt(questActionInfo.sParam6, -1);
-            if (sMap == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0) {
+            if (string.IsNullOrEmpty(sMap) || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0) {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_MOBFIREBURN);
                 return;
             }
@@ -1190,7 +1190,7 @@ namespace GameSvr.Npc {
                 sFileName = sFileName[3..];
             }
             sFileName = M2Share.GetEnvirFilePath(sFileName);
-            if (sType == "" || sVarName == "" || !File.Exists(sFileName)) {
+            if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || !File.Exists(sFileName)) {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_SAVEVAR);
                 return;
             }
@@ -1243,7 +1243,7 @@ namespace GameSvr.Npc {
             string sMethod = questActionInfo.sParam3;//操作符 +-*/=
             string sVarValue = questActionInfo.sParam4;//变量
             int nVarValue = HUtil32.StrToInt(questActionInfo.sParam4, 0);
-            if (sType == "" || sVarName == "" || sMethod == "") {
+            if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || string.IsNullOrEmpty(sMethod)) {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_CALCVAR);
                 return;
             }
@@ -1526,7 +1526,7 @@ namespace GameSvr.Npc {
             if (string.Compare(questActionInfo.sParam1, "String", StringComparison.OrdinalIgnoreCase) == 0) {
                 varType = VarType.String;
             }
-            if (sType == "" || sVarName == "" || varType == VarType.None) {
+            if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || varType == VarType.None) {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_VAR);
                 return;
             }
@@ -1536,7 +1536,7 @@ namespace GameSvr.Npc {
             if (string.Compare(questActionInfo.sParam1, "String", StringComparison.OrdinalIgnoreCase) == 0) {
                 varType = VarType.String;
             }
-            if (sType == "" || sVarName == "" || varType == VarType.None) {
+            if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || varType == VarType.None) {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_VAR);
                 return;
             }
@@ -1588,7 +1588,7 @@ namespace GameSvr.Npc {
                 sFileName = sFileName[3..];
             }
             sFileName = M2Share.GetEnvirFilePath(sFileName);
-            if (sType == "" || sVarName == "" || !File.Exists(sFileName)) {
+            if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || !File.Exists(sFileName)) {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_LOADVAR);
                 return;
             }
@@ -1707,7 +1707,7 @@ namespace GameSvr.Npc {
 
         private void ActionOfUnMaster(PlayObject playObject, QuestActionInfo questActionInfo) {
             string sMsg;
-            if (playObject.MasterName == "") {
+            if (string.IsNullOrEmpty(playObject.MasterName)) {
                 GotoLable(playObject, "@ExeMasterFail", false);
                 return;
             }
@@ -1716,7 +1716,7 @@ namespace GameSvr.Npc {
                 GotoLable(playObject, "@UnMasterCheckDir", false);
             }
             if (poseHuman != null) {
-                if (questActionInfo.sParam1 == "") {
+                if ((string.IsNullOrEmpty(questActionInfo.sParam1))) {
                     if (poseHuman.Race != ActorRace.Play) {
                         GotoLable(playObject, "@UnMasterTypeErr", false);
                         return;
@@ -1740,7 +1740,7 @@ namespace GameSvr.Npc {
             }
             // sREQUESTUNMARRY
             if (string.Compare(questActionInfo.sParam1, "REQUESTUNMASTER", StringComparison.OrdinalIgnoreCase) == 0) {
-                if (questActionInfo.sParam2 == "") {
+                if (string.IsNullOrEmpty(questActionInfo.sParam2)) {
                     if (poseHuman != null) {
                         playObject.IsStartUnMaster = true;
                         if (playObject.IsStartUnMaster && poseHuman.IsStartUnMaster) {
@@ -1791,7 +1791,7 @@ namespace GameSvr.Npc {
             string sParam1 = questActionInfo.sParam3;
             string sParam2 = questActionInfo.sParam4;
             Envirnoment envir = M2Share.MapMgr.FindMap(sMapName);
-            if (envir == null || sMapMode == "") {
+            if (envir == null || string.IsNullOrEmpty(sMapMode)) {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_SETMAPMODE);
                 return;
             }
@@ -2615,7 +2615,7 @@ namespace GameSvr.Npc {
             string sMonName = questActionInfo.sParam4;
             int nRange = questActionInfo.nParam5;
             int nCount = questActionInfo.nParam6;
-            if (sMapName == "" || nMapX <= 0 || nMapY <= 0 || sMapName == "" || nRange <= 0 || nCount <= 0) {
+            if (string.IsNullOrEmpty(sMapName) || nMapX <= 0 || nMapY <= 0 || string.IsNullOrEmpty(sMapName) || nRange <= 0 || nCount <= 0) {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_MONGENEX);
                 return;
             }
@@ -2632,7 +2632,7 @@ namespace GameSvr.Npc {
             short nX = 0;
             short nY = 0;
             string sMonName = questActionInfo.sParam1;
-            if (sMonName == "") {
+            if (string.IsNullOrEmpty(sMonName)) {
                 ScriptActionError(playObject, "", questActionInfo, ScriptConst.sSC_OPENMAGICBOX);
                 return;
             }
@@ -2769,7 +2769,7 @@ namespace GameSvr.Npc {
                 if (!GetValValue(playObject, questActionInfo.sParam6, ref nCount)) {
                     nCount = HUtil32.StrToInt(GetLineVariableText(playObject, questActionInfo.sParam6), -1);
                 }
-                if (sMap == "" || nX < 0 || nY < 0 || nRange < 0 || string.IsNullOrEmpty(sItemName) || nCount <= 0) {
+                if (string.IsNullOrEmpty(sMap) || nX < 0 || nY < 0 || nRange < 0 || string.IsNullOrEmpty(sItemName) || nCount <= 0) {
                     ScriptActionError(playObject, "", questActionInfo, ScriptConst.sTHROWITEM);
                     return;
                 }

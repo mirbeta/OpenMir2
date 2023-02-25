@@ -14,7 +14,7 @@ namespace GameSvr.GameCommand.Commands {
             }
             string sIPaddr = @Params.Length > 0 ? @Params[0] : "";
             string sFixDeny = @Params.Length > 1 ? @Params[3] : "";
-            if (sIPaddr == "") {
+            if (string.IsNullOrEmpty(sIPaddr)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

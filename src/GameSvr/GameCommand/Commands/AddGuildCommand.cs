@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands {
                 PlayObject.SysMsg("这个命令只能使用在主服务器上", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (string.IsNullOrEmpty(sGuildName) || sGuildChief == "") {
+            if (string.IsNullOrEmpty(sGuildName) || string.IsNullOrEmpty(sGuildChief)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

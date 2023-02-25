@@ -14,7 +14,7 @@ namespace GameSvr.GameCommand.Commands {
             }
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             string sJobName = @params.Length > 1 ? @params[1] : "";
-            if (string.IsNullOrEmpty(sHumanName) || sJobName == "") {
+            if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sJobName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

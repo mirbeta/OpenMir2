@@ -15,7 +15,7 @@ namespace GameSvr.GameCommand.Commands {
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             string sMasterName = @Params.Length > 1 ? @Params[1] : "";
             string sIsMaster = @Params.Length > 2 ? @Params[2] : "";
-            if (string.IsNullOrEmpty(sHumanName) || sMasterName == "") {
+            if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sMasterName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

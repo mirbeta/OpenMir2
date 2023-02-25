@@ -14,7 +14,7 @@ namespace GameSvr.GameCommand.Commands {
             }
             string sHumName = @params.Length > 0 ? @params[0] : ""; //玩家名称
             int nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0; //数量
-            if (sHumName == "" || nPoint <= 0) {
+            if (string.IsNullOrEmpty(sHumName) || nPoint <= 0) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

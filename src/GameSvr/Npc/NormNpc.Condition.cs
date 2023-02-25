@@ -717,7 +717,7 @@ namespace GameSvr.Npc {
 
         private bool ConditionOfIsHigh(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo) {
             bool result = false;
-            if (QuestConditionInfo.sParam1 == "") {
+            if (string.IsNullOrEmpty(QuestConditionInfo.sParam1)) {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISHIGH);
                 return false;
             }
@@ -754,7 +754,7 @@ namespace GameSvr.Npc {
             int nX = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             int nY = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
             int nRange = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
-            if ((sMapName == "") || (nX < 0) || (nY < 0) || (nRange < 0)) {
+            if ((string.IsNullOrEmpty(sMapName)) || (nX < 0) || (nY < 0) || (nRange < 0)) {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKINMAPRANGE);
                 return false;
             }
@@ -1618,7 +1618,7 @@ namespace GameSvr.Npc {
             string sMethod = QuestConditionInfo.sParam3;
             int nVarValue = HUtil32.StrToInt(QuestConditionInfo.sParam4, 0);
             string sVarValue = QuestConditionInfo.sParam4;
-            if ((sType == "") || (sVarName == "") || (sMethod == "")) {
+            if ((string.IsNullOrEmpty(sType)) || (string.IsNullOrEmpty(sVarName)) || (string.IsNullOrEmpty(sMethod))) {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKVAR);
                 return result;
             }
@@ -1781,7 +1781,7 @@ namespace GameSvr.Npc {
 
         private bool ConditionOfCheckOfGuild(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo) {
             bool result = false;
-            if (QuestConditionInfo.sParam1 == "") {
+            if (string.IsNullOrEmpty(QuestConditionInfo.sParam1)) {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKOFGUILD);
                 return result;
             }
@@ -1885,7 +1885,7 @@ namespace GameSvr.Npc {
             BaseObject BaseObject;
             bool result = false;
             string sSlaveName = QuestConditionInfo.sParam1;
-            if (sSlaveName == "") {
+            if (string.IsNullOrEmpty(sSlaveName)) {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKSLAVENAME);
                 return result;
             }

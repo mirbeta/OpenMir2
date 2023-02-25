@@ -112,40 +112,39 @@ namespace GameSvr.DataSource {
                 if (!Open()) {
                     return result;
                 }
-                using (IDataReader dr = Query(sSQLString)) {
-                    while (dr.Read()) {
-                        Magic = new MagicInfo {
-                            MagicId = dr.GetUInt16("MagId"),
-                            MagicName = dr.GetString("MagName"),
-                            EffectType = (byte)dr.GetInt32("EffectType"),
-                            Effect = (byte)dr.GetInt32("Effect"),
-                            Spell = dr.GetUInt16("Spell"),
-                            Power = dr.GetUInt16("Power"),
-                            MaxPower = dr.GetUInt16("MaxPower"),
-                            Job = (byte)dr.GetInt32("Job")
-                        };
-                        Magic.TrainLevel[0] = (byte)dr.GetInt32("NeedL1");
-                        Magic.TrainLevel[1] = (byte)dr.GetInt32("NeedL2");
-                        Magic.TrainLevel[2] = (byte)dr.GetInt32("NeedL3");
-                        Magic.TrainLevel[3] = (byte)dr.GetInt32("NeedL3");
-                        Magic.MaxTrain[0] = dr.GetInt32("L1Train");
-                        Magic.MaxTrain[1] = dr.GetInt32("L2Train");
-                        Magic.MaxTrain[2] = dr.GetInt32("L3Train");
-                        Magic.MaxTrain[3] = Magic.MaxTrain[2];
-                        Magic.TrainLv = 3;
-                        Magic.DelayTime = dr.GetInt32("Delay");
-                        Magic.DefSpell = (byte)dr.GetInt32("DefSpell");
-                        Magic.DefPower = (byte)dr.GetInt32("DefPower");
-                        Magic.DefMaxPower = (byte)dr.GetInt32("DefMaxPower");
-                        Magic.Desc = dr.GetString("Descr");
-                        if (Magic.MagicId > 0) {
-                            M2Share.WorldEngine.MagicList.Add(Magic);
-                        }
-                        else {
-                            Magic = null;
-                        }
-                        result = 1;
+                using IDataReader dr = Query(sSQLString);
+                while (dr.Read()) {
+                    Magic = new MagicInfo {
+                        MagicId = dr.GetUInt16("MagId"),
+                        MagicName = dr.GetString("MagName"),
+                        EffectType = (byte)dr.GetInt32("EffectType"),
+                        Effect = (byte)dr.GetInt32("Effect"),
+                        Spell = dr.GetUInt16("Spell"),
+                        Power = dr.GetUInt16("Power"),
+                        MaxPower = dr.GetUInt16("MaxPower"),
+                        Job = (byte)dr.GetInt32("Job")
+                    };
+                    Magic.TrainLevel[0] = (byte)dr.GetInt32("NeedL1");
+                    Magic.TrainLevel[1] = (byte)dr.GetInt32("NeedL2");
+                    Magic.TrainLevel[2] = (byte)dr.GetInt32("NeedL3");
+                    Magic.TrainLevel[3] = (byte)dr.GetInt32("NeedL3");
+                    Magic.MaxTrain[0] = dr.GetInt32("L1Train");
+                    Magic.MaxTrain[1] = dr.GetInt32("L2Train");
+                    Magic.MaxTrain[2] = dr.GetInt32("L3Train");
+                    Magic.MaxTrain[3] = Magic.MaxTrain[2];
+                    Magic.TrainLv = 3;
+                    Magic.DelayTime = dr.GetInt32("Delay");
+                    Magic.DefSpell = (byte)dr.GetInt32("DefSpell");
+                    Magic.DefPower = (byte)dr.GetInt32("DefPower");
+                    Magic.DefMaxPower = (byte)dr.GetInt32("DefMaxPower");
+                    Magic.Desc = dr.GetString("Descr");
+                    if (Magic.MagicId > 0) {
+                        M2Share.WorldEngine.MagicList.Add(Magic);
                     }
+                    else {
+                        Magic = null;
+                    }
+                    result = 1;
                 }
             }
             catch (Exception ex) {
@@ -168,55 +167,54 @@ namespace GameSvr.DataSource {
                 if (!Open()) {
                     return result;
                 }
-                using (IDataReader dr = Query(sSQLString)) {
-                    while (dr.Read()) {
-                        Monster = new MonsterInfo {
-                            ItemList = new List<MonsterDropItem>(),
-                            Name = dr.GetString("NAME").Trim(),
-                            Race = (byte)dr.GetInt32("Race"),
-                            RaceImg = (byte)dr.GetInt32("RaceImg"),
-                            Appr = dr.GetUInt16("Appr"),
-                            Level = dr.GetByte("Lvl"),
-                            btLifeAttrib = (byte)dr.GetInt32("Undead"),
-                            CoolEye = dr.GetByte("CoolEye"),
-                            Exp = dr.GetInt32("Exp")
-                        };
-                        // 城门或城墙的状态跟HP值有关，如果HP异常，将导致城墙显示不了
-                        if (Monster.Race == ActorRace.SabukWall || Monster.Race == ActorRace.SabukDoor) {
-                            // 如果为城墙或城门由HP不加倍
-                            Monster.HP = dr.GetUInt16("HP");
-                        }
-                        else {
-                            Monster.HP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.Config.MonsterPowerRate / 10));
-                        }
-                        Monster.MP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.AC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.MAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.DC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.MaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.MonsterPowerRate / 10));
-                        Monster.Speed = dr.GetByte("SPEED");
-                        Monster.HitPoint = dr.GetByte("HIT");
-                        Monster.WalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
-                        Monster.WalkStep = (ushort)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
-                        Monster.WalkWait = (ushort)dr.GetInt32("WalkWait");
-                        Monster.AttackSpeed = (ushort)dr.GetInt32("ATTACK_SPD");
-                        if (Monster.WalkSpeed < 200) {
-                            Monster.WalkSpeed = 200;
-                        }
-                        if (Monster.AttackSpeed < 200) {
-                            Monster.AttackSpeed = 200;
-                        }
-                        Monster.ItemList = null;
-                        M2Share.LocalDb.LoadMonitems(Monster.Name, ref Monster.ItemList);
-                        if (M2Share.WorldEngine.MonsterList.ContainsKey(Monster.Name)) {
-                            M2Share.Logger.Error($"怪物名称[{Monster.Name}]重复,请确认数据是否正常.");
-                            continue;
-                        }
-                        M2Share.WorldEngine.MonsterList.Add(Monster.Name, Monster);
-                        result = 1;
+                using IDataReader dr = Query(sSQLString);
+                while (dr.Read()) {
+                    Monster = new MonsterInfo {
+                        ItemList = new List<MonsterDropItem>(),
+                        Name = dr.GetString("NAME").Trim(),
+                        Race = (byte)dr.GetInt32("Race"),
+                        RaceImg = (byte)dr.GetInt32("RaceImg"),
+                        Appr = dr.GetUInt16("Appr"),
+                        Level = dr.GetByte("Lvl"),
+                        btLifeAttrib = (byte)dr.GetInt32("Undead"),
+                        CoolEye = dr.GetByte("CoolEye"),
+                        Exp = dr.GetInt32("Exp")
+                    };
+                    // 城门或城墙的状态跟HP值有关，如果HP异常，将导致城墙显示不了
+                    if (Monster.Race == ActorRace.SabukWall || Monster.Race == ActorRace.SabukDoor) {
+                        // 如果为城墙或城门由HP不加倍
+                        Monster.HP = dr.GetUInt16("HP");
                     }
+                    else {
+                        Monster.HP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.Config.MonsterPowerRate / 10));
+                    }
+                    Monster.MP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.Config.MonsterPowerRate / 10));
+                    Monster.AC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.MonsterPowerRate / 10));
+                    Monster.MAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.MonsterPowerRate / 10));
+                    Monster.DC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.MonsterPowerRate / 10));
+                    Monster.MaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.Config.MonsterPowerRate / 10));
+                    Monster.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.MonsterPowerRate / 10));
+                    Monster.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.MonsterPowerRate / 10));
+                    Monster.Speed = dr.GetByte("SPEED");
+                    Monster.HitPoint = dr.GetByte("HIT");
+                    Monster.WalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
+                    Monster.WalkStep = (ushort)HUtil32._MAX(1, dr.GetInt32("WalkStep"));
+                    Monster.WalkWait = (ushort)dr.GetInt32("WalkWait");
+                    Monster.AttackSpeed = (ushort)dr.GetInt32("ATTACK_SPD");
+                    if (Monster.WalkSpeed < 200) {
+                        Monster.WalkSpeed = 200;
+                    }
+                    if (Monster.AttackSpeed < 200) {
+                        Monster.AttackSpeed = 200;
+                    }
+                    Monster.ItemList = null;
+                    M2Share.LocalDb.LoadMonitems(Monster.Name, ref Monster.ItemList);
+                    if (M2Share.WorldEngine.MonsterList.ContainsKey(Monster.Name)) {
+                        M2Share.Logger.Error($"怪物名称[{Monster.Name}]重复,请确认数据是否正常.");
+                        continue;
+                    }
+                    M2Share.WorldEngine.MonsterList.Add(Monster.Name, Monster);
+                    result = 1;
                 }
             }
             finally {
@@ -237,24 +235,23 @@ namespace GameSvr.DataSource {
             try {
                 DealOffInfo DealOffInfo;
                 const string sSQLString = "select * from goldsales";
-                using (IDataReader dr = Query(sSQLString)) {
-                    while (dr.Read()) {
-                        string sDealChrName = dr.GetString("DealChrName");
-                        string sBuyChrName = dr.GetString("BuyChrName");
-                        DateTime dSellDateTime = dr.GetDateTime("SellDateTime");
-                        byte nState = dr.GetByte("State");
-                        short nSellGold = dr.GetInt16("SellGold");
-                        string sUseItems = dr.GetString("UseItems");
-                        if ((!string.IsNullOrEmpty(sDealChrName)) && (!string.IsNullOrEmpty(sBuyChrName)) && (nState < 4)) {
-                            DealOffInfo = new DealOffInfo();
-                            DealOffInfo.sDealChrName = sDealChrName;
-                            DealOffInfo.sBuyChrName = sBuyChrName;
-                            DealOffInfo.dSellDateTime = dSellDateTime;
-                            DealOffInfo.nSellGold = nSellGold;
-                            DealOffInfo.UseItems = JsonSerializer.Deserialize<UserItem[]>(sUseItems);
-                            DealOffInfo.Flag = nState;
-                            M2Share.SellOffItemList.Add(DealOffInfo);
-                        }
+                using IDataReader dr = Query(sSQLString);
+                while (dr.Read()) {
+                    string sDealChrName = dr.GetString("DealChrName");
+                    string sBuyChrName = dr.GetString("BuyChrName");
+                    DateTime dSellDateTime = dr.GetDateTime("SellDateTime");
+                    byte nState = dr.GetByte("State");
+                    short nSellGold = dr.GetInt16("SellGold");
+                    string sUseItems = dr.GetString("UseItems");
+                    if ((!string.IsNullOrEmpty(sDealChrName)) && (!string.IsNullOrEmpty(sBuyChrName)) && (nState < 4)) {
+                        DealOffInfo = new DealOffInfo();
+                        DealOffInfo.sDealChrName = sDealChrName;
+                        DealOffInfo.sBuyChrName = sBuyChrName;
+                        DealOffInfo.dSellDateTime = dSellDateTime;
+                        DealOffInfo.nSellGold = nSellGold;
+                        DealOffInfo.UseItems = JsonSerializer.Deserialize<UserItem[]>(sUseItems);
+                        DealOffInfo.Flag = nState;
+                        M2Share.SellOffItemList.Add(DealOffInfo);
                     }
                 }
             }

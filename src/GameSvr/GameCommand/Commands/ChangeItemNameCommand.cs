@@ -15,7 +15,7 @@ namespace GameSvr.GameCommand.Commands {
             string sMakeIndex = @params.Length > 0 ? @params[0] : "";
             string sItemIndex = @params.Length > 1 ? @params[1] : "";
             string sItemName = @params.Length > 2 ? @params[2] : "";
-            if (sMakeIndex == "" || sItemIndex == "" || string.IsNullOrEmpty(sItemName)) {
+            if (string.IsNullOrEmpty(sMakeIndex) || string.IsNullOrEmpty(sItemIndex) || string.IsNullOrEmpty(sItemName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

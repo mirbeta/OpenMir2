@@ -19,7 +19,7 @@ namespace GameSvr.GameCommand.Commands {
                 return;
             }
 
-            //if ((sMapName == "") || (sMapMode == ""))
+            //if ((string.IsNullOrEmpty(sMapName)) || (string.IsNullOrEmpty(sMapMode)))
             //{
             //    if (Settings.g_Config.boGMShowFailMsg)
             //    {

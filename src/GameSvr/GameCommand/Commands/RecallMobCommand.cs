@@ -24,7 +24,8 @@ namespace GameSvr.GameCommand.Commands {
             short nX = 0;
             short nY = 0;
             BaseObject mon;
-            if (sMonName == "" || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?') {
+            if (string.IsNullOrEmpty(sMonName) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?')
+            {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

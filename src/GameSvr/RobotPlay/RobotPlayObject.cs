@@ -164,7 +164,7 @@ namespace GameSvr.RobotPlay {
             m_RunPos = new TRunPos();
             m_Path = new PointInfo[0];
             string sFileName = GetRandomConfigFileName(ChrName, 0);
-            if (sFileName == "" || !File.Exists(sFileName)) {
+            if (string.IsNullOrEmpty(sFileName) || !File.Exists(sFileName)) {
                 if (!string.IsNullOrEmpty(m_sConfigFileName) && File.Exists(m_sConfigFileName)) {
                     sFileName = m_sConfigFileName;
                 }

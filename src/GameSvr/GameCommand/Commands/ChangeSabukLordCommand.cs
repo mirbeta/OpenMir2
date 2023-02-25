@@ -15,7 +15,7 @@ namespace GameSvr.GameCommand.Commands {
             string sCastleName = @Params.Length > 0 ? @Params[0] : "";
             string sGuildName = @Params.Length > 1 ? @Params[1] : "";
             bool boFlag = @Params.Length > 2 && bool.Parse(@Params[2]);
-            if (sCastleName == "" || sGuildName == "") {
+            if (string.IsNullOrEmpty(sCastleName) || string.IsNullOrEmpty(sGuildName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

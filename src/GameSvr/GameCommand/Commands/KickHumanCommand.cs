@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands {
                 return;
             }
             string sHumName = @params.Length > 0 ? @params[0] : "";
-            if (sHumName == "") {
+            if (string.IsNullOrEmpty(sHumName)) {
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);

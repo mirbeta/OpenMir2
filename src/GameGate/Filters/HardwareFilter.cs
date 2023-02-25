@@ -71,7 +71,7 @@ namespace GameGate.Filters
             ls.LoadFromFile(_configManager.GateConfig.BlockHWIDFileName);
             for (var i = 0; i < ls.Count; i++)
             {
-                if (ls[i] == "" || ls[i][0] == ';' || ls[i].Length != 32)
+                if (string.IsNullOrEmpty(ls[i]) || ls[i][0] == ';' || ls[i].Length != 32)
                 {
                     continue;
                 }

@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands {
                 PlayObject.SysMsg("只能在主服务器上才可以使用此命令删除行会!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (sGuildName == "") {
+            if (string.IsNullOrEmpty(sGuildName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

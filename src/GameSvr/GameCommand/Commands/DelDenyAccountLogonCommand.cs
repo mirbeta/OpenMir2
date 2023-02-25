@@ -11,7 +11,7 @@ namespace GameSvr.GameCommand.Commands {
             }
             string sAccount = @Params.Length > 0 ? @Params[0] : "";
             string sFixDeny = @Params.Length > 1 ? @Params[1] : "";
-            if (sAccount == "") {
+            if (string.IsNullOrEmpty(sAccount)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

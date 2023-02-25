@@ -60,7 +60,7 @@ namespace GameSvr.DataSource {
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new[] { "/", "\\", " ", "\t" });
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sChrName, new[] { "/", "\\", " ", "\t" });
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sIPaddr, new[] { "/", "\\", " ", "\t" });
-                        if (string.IsNullOrEmpty(sChrName) || sIPaddr == "") {
+                        if (string.IsNullOrEmpty(sChrName) || string.IsNullOrEmpty(sIPaddr)) {
                             continue;
                         }
                         AdminInfo AdminInfo = new AdminInfo {

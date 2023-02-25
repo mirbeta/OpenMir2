@@ -71,7 +71,7 @@ namespace GameSvr.Npc {
                         PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                     }
                     else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
-                        if (PlayObject.ScriptGoBackLable == "") {
+                        if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable)) {
                             PlayObject.ScriptGoBackLable = ScriptConst.sMAIN;
                         }
                         GotoLable(PlayObject, PlayObject.ScriptGoBackLable, false);

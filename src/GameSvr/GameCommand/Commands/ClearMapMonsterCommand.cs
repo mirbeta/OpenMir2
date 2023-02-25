@@ -17,7 +17,7 @@ namespace GameSvr.GameCommand.Commands {
             string sMapName = @Params.Length > 0 ? @Params[0] : "";
             string sMonName = @Params.Length > 1 ? @Params[1] : "";
             string sItems = @Params.Length > 2 ? @Params[2] : "";
-            if (sMapName == "" || sMonName == "" || sItems == "") {
+            if (string.IsNullOrEmpty(sMapName) || string.IsNullOrEmpty(sMonName) || string.IsNullOrEmpty(sItems)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

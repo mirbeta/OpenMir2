@@ -20,7 +20,7 @@ namespace GameSvr.GameCommand.Commands {
             string sType = @Params.Length > 3 ? @Params[3] : "";//光环效果
             string sTime = @Params.Length > 4 ? @Params[4] : "";//持续时间
             string sPoint = @Params.Length > 5 ? @Params[5] : "";//未知
-            if (sMAP == "" || sMAP != "" && sMAP[1] == '?') {
+            if (string.IsNullOrEmpty(sMAP) || sMAP != "" && sMAP[1] == '?') {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
@@ -32,7 +32,7 @@ namespace GameSvr.GameCommand.Commands {
             if (nPoint < 0) {
                 nPoint = 1;
             }
-            if (sMAP == "" || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0) {
+            if (string.IsNullOrEmpty(sMAP ) || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0) {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMAP, sX, sY,
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;

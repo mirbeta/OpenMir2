@@ -14,7 +14,7 @@ namespace GameSvr.GameCommand.Commands {
             }
             string sHumName = @Params.Length > 0 ? @Params[0] : "";
             int nTotleUsePoint;
-            if (sHumName == "") {
+            if (string.IsNullOrEmpty(sHumName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

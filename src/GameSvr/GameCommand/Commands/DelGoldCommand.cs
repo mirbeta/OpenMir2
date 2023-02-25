@@ -14,11 +14,11 @@ namespace GameSvr.GameCommand.Commands {
             }
             string sHumName = @Params.Length > 0 ? @Params[0] : "";
             int nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
-            if (sHumName == "" || nCount <= 0) {
+            if (string.IsNullOrEmpty(sHumName) || nCount <= 0) {
                 return;
             }
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
-            if (sHumName == "" || nCount <= 0) {
+            if (string.IsNullOrEmpty(sHumName) || nCount <= 0) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

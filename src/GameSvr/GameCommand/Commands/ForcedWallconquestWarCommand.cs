@@ -13,7 +13,7 @@ namespace GameSvr.GameCommand.Commands {
                 return;
             }
             string sCastleName = @Params.Length > 0 ? @Params[0] : "";
-            if (sCastleName == "") {
+            if (string.IsNullOrEmpty(sCastleName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

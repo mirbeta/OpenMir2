@@ -14,7 +14,7 @@ namespace GameSvr.GameCommand.Commands {
             }
             string sX = @Params.Length > 0 ? @Params[0] : "";
             string sY = @Params.Length > 1 ? @Params[1] : "";
-            if (sX == "" || sY == "") {
+            if (string.IsNullOrEmpty(sX) || string.IsNullOrEmpty(sY)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }

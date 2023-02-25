@@ -14,7 +14,7 @@ namespace GameSvr.GameCommand.Commands {
             }
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             string sTime = @Params.Length > 1 ? @Params[1] : "";
-            if (sTime == "" || string.IsNullOrEmpty(sHumanName) ||
+            if (string.IsNullOrEmpty(sTime) || string.IsNullOrEmpty(sHumanName) ||
                 !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;

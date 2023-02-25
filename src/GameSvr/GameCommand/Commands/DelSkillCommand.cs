@@ -18,7 +18,7 @@ namespace GameSvr.GameCommand.Commands {
             string Herostr = @Params.Length > 2 ? @Params[2] : "";
             bool boDelAll;
             UserMagic UserMagic;
-            if (string.IsNullOrEmpty(sHumanName) || (sSkillName == "")) {
+            if (string.IsNullOrEmpty(sHumanName) || (string.IsNullOrEmpty(sSkillName))) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
