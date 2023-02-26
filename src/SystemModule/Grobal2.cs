@@ -115,16 +115,5 @@ namespace SystemModule {
         /// </summary>
         public const byte MaxBagItem = 46;
         public const byte LA_UNDEAD = 1;
-
-        public static CommandPacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series) {
-            var result = new CommandPacket {
-                Ident = (ushort)msg,
-                Param = (ushort)param,
-                Tag = (ushort)tag,
-                Series = (ushort)series,
-                Recog = Recog
-            };
-            return result;
-        }
     }
 }

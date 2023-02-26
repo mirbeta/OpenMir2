@@ -171,7 +171,7 @@ namespace MakePlayer.Cliens
 
         private void SendClientMessage(int nIdent, int nRecog, int nParam, int nTag, int nSeries)
         {
-            var DefMsg = Grobal2.MakeDefaultMsg(nIdent, nRecog, nParam, nTag, nSeries);
+            var DefMsg = Messages.MakeMessage(nIdent, nRecog, nParam, nTag, nSeries);
             SendSocket(EDCode.EncodeMessage(DefMsg));
         }
 
@@ -195,7 +195,7 @@ namespace MakePlayer.Cliens
             ua.MobilePhone = "";
             ua.Memo = "";
             ua.Memo2 = "";
-            var Msg = Grobal2.MakeDefaultMsg(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
+            var Msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
         }
 
@@ -229,7 +229,7 @@ namespace MakePlayer.Cliens
             MainOutMessage($"[{LoginAccount}] 选择人物：{sChrName}");
             ConnectionStep = TConnectionStep.cnsSelChr;
             ChrName = sChrName;
-            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_SELCHR, 0, 0, 0, 0);
+            var DefMsg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(LoginAccount + "/" + sChrName));
         }
 
@@ -237,7 +237,7 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{LoginAccount}] 开始登录");
             ConnectionStep = TConnectionStep.cnsLogin;
-            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
+            var DefMsg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sAccount + "/" + sPassword));
             m_boSendLogin = true;
         }
@@ -246,7 +246,7 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{LoginAccount}] 创建人物：{sChrName}");
             ConnectionStep = TConnectionStep.cnsNewChr;
-            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_NEWCHR, 0, 0, 0, 0);
+            var DefMsg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sAccount + "/" + sChrName + "/" + sHair + "/" + sJob + "/" + sSex));
         }
 
@@ -254,7 +254,7 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{LoginAccount}] 查询人物");
             ConnectionStep = TConnectionStep.cnsQueryChr;
-            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_QUERYCHR, 0, 0, 0, 0);
+            var DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(LoginAccount + "/" + Certification.ToString()));
         }
 
@@ -262,7 +262,7 @@ namespace MakePlayer.Cliens
         {
             MainOutMessage($"[{LoginAccount}] 选择服务器：{sServerName}");
             ConnectionStep = TConnectionStep.cnsSelServer;
-            var DefMsg = Grobal2.MakeDefaultMsg(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
+            var DefMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sServerName));
         }
 
@@ -323,7 +323,7 @@ namespace MakePlayer.Cliens
             SendClientMessage(Messages.CM_LOGINNOTICEOK, HUtil32.GetTickCount(), 0, 0, 0);
         }
 
-        private void ClientGetUserLogin(CommandPacket DefMsg, string sData)
+        private void ClientGetUserLogin(CommandMessage DefMsg, string sData)
         {
             m_boLogin = true;
             ConnectionStep = TConnectionStep.cnsPlay;
@@ -335,11 +335,11 @@ namespace MakePlayer.Cliens
         public void ClientLoginSay(string message)
         {
             m_dwSayTick = HUtil32.GetTickCount();
-            var Msg = Grobal2.MakeDefaultMsg(Messages.CM_SAY, 0, 0, 0, 0);
+            var Msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeString(message));
         }
 
-        private void ClientGetAbility(CommandPacket DefMsg, string sData)
+        private void ClientGetAbility(CommandMessage DefMsg, string sData)
         {
             m_nGold = DefMsg.Recog;
             m_btJob = (byte)DefMsg.Param;
@@ -348,12 +348,12 @@ namespace MakePlayer.Cliens
             m_Abil = ClientPacket.ToPacket<Ability>(buff);
         }
 
-        private void ClientGetWinExp(CommandPacket DefMsg)
+        private void ClientGetWinExp(CommandMessage DefMsg)
         {
             m_Abil.Exp = DefMsg.Recog;
         }
 
-        private void ClientGetLevelUp(CommandPacket DefMsg)
+        private void ClientGetLevelUp(CommandMessage DefMsg)
         {
             m_Abil.Level = (byte)HUtil32.MakeLong(DefMsg.Param, DefMsg.Tag);
         }
@@ -589,7 +589,7 @@ namespace MakePlayer.Cliens
             }
         }
 
-        private void ClientGetServerName(CommandPacket DefMsg, string sBody)
+        private void ClientGetServerName(CommandMessage DefMsg, string sBody)
         {
             var sServerName = string.Empty;
             var sServerStatus = string.Empty;

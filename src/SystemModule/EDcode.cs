@@ -6,28 +6,28 @@ namespace SystemModule
     public class EDCode
     {
         private const int BufferSize = 10000;
-
+        
         /// <summary>
         /// 解码客户端封包
         /// </summary>
-        public static CommandPacket DecodePacket(string str)
+        public static CommandMessage DecodePacket(string str)
         {
             if (str == null) throw new ArgumentNullException(nameof(str));
             var tempBuf = HUtil32.GetBytes(str);
             var buffLen = 0;
             var encBuf = EncryptUtil.Decode(tempBuf, str.Length, ref buffLen);
-            return SerializerUtil.Deserialize<CommandPacket>(encBuf);
+            return SerializerUtil.Deserialize<CommandMessage>(encBuf);
         }
 
         /// <summary>
         /// 解码客户端封包
         /// </summary>
-        public static CommandPacket DecodePacket(byte[] data)
+        public static CommandMessage DecodePacket(byte[] data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             var buffLen = 0;
             var encBuf = EncryptUtil.Decode(data, data.Length, ref buffLen);
-            return SerializerUtil.Deserialize<CommandPacket>(encBuf);
+            return SerializerUtil.Deserialize<CommandMessage>(encBuf);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace SystemModule
         /// 加密消息
         /// </summary>
         /// <returns></returns>
-        public static string EncodeMessage(CommandPacket packet)
+        public static string EncodeMessage(CommandMessage packet)
         {
             var packetData = SerializerUtil.Serialize(packet);
             if (packetData.Length <= 0)

@@ -29,7 +29,7 @@ namespace SystemModule.Packets
     public partial struct ClientOutMessage
     {
         public ServerMessage MessagePacket;
-        public CommandPacket CommandPacket;
+        public CommandMessage CommandPacket;
         public byte[] Data;
     }
 }

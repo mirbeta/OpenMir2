@@ -38,19 +38,19 @@ namespace GameSrv.Player {
         /// 发送普通命令消息（如：玩家升级、攻击目标等）
         /// </summary>
         /// <param name="defMsg"></param>
-        private void SendSocket(CommandPacket defMsg) {
+        private void SendSocket(CommandMessage defMsg) {
             if (OffLineFlag && defMsg.Ident != Messages.SM_OUTOFCONNECTION) {
                 return;
             }
-            messageHead.PackLength = CommandPacket.Size;
+            messageHead.PackLength = CommandMessage.Size;
             byte[] sendData = new byte[HeaderLen];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
-            MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandPacket.Size);
+            MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
             M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
             //Console.WriteLine($"发送命令消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 
-        internal virtual void SendSocket(CommandPacket defMsg, string sMsg) {
+        internal virtual void SendSocket(CommandMessage defMsg, string sMsg) {
             if (OffLineFlag && defMsg.Ident != Messages.SM_OUTOFCONNECTION) {
                 return;
             }
@@ -59,16 +59,16 @@ namespace GameSrv.Player {
             }
             byte[] bMsg = HUtil32.GetBytes(sMsg);
             byte[] sendData = new byte[HeaderLen + bMsg.Length];
-            messageHead.PackLength = bMsg.Length + CommandPacket.Size;
+            messageHead.PackLength = bMsg.Length + CommandMessage.Size;
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
-            MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandPacket.Size);
+            MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
             MemoryCopy.BlockCopy(bMsg, 0, sendData, HeaderLen, bMsg.Length);
             M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
             //Console.WriteLine($"发送文字消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg) {
-            ClientMsg = Grobal2.MakeDefaultMsg(wIdent, nRecog, nParam, nTag, nSeries);
+            ClientMsg = Messages.MakeMessage(wIdent, nRecog, nParam, nTag, nSeries);
             if (!string.IsNullOrEmpty(sMsg)) {
                 SendSocket(ClientMsg, EDCode.EncodeString(sMsg));
             }

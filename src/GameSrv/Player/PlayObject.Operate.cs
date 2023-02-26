@@ -15,7 +15,7 @@ namespace GameSrv.Player {
             BaseObject baseObject = M2Share.ActorMgr.Get(targetId);
             if (CretInNearXy(baseObject, x, y)) {
                 byte nameColor = GetChrColor(baseObject);
-                CommandPacket defMsg = Grobal2.MakeDefaultMsg(Messages.SM_USERNAME, baseObject.ActorId, nameColor, 0, 0);
+                CommandMessage defMsg = Messages.MakeMessage(Messages.SM_USERNAME, baseObject.ActorId, nameColor, 0, 0);
                 SendSocket(defMsg, EDCode.EncodeString(baseObject.GetShowName()));
             }
             else {
@@ -42,7 +42,7 @@ namespace GameSrv.Player {
                 }
             }
             if (!string.IsNullOrEmpty(sSendMsg)) {
-                ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_BAGITEMS, ActorId, 0, 0, ItemList.Count);
+                ClientMsg = Messages.MakeMessage(Messages.SM_BAGITEMS, ActorId, 0, 0, ItemList.Count);
                 SendSocket(ClientMsg, sSendMsg);
             }
         }
@@ -83,7 +83,7 @@ namespace GameSrv.Player {
                     userState.UseItems[i] = clientItem;
                 }
             }
-            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SENDUSERSTATE, 0, 0, 0, 0);
+            ClientMsg = Messages.MakeMessage(Messages.SM_SENDUSERSTATE, 0, 0, 0, 0);
             SendSocket(ClientMsg, EDCode.EncodeBuffer(userState));
         }
 
@@ -1016,7 +1016,7 @@ namespace GameSrv.Player {
                     }
                     sC = sC + MyGuild.GuildAllList[i] + '\r';
                 }
-                ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_OPENGUILDDLG, 0, 0, 0, 1);
+                ClientMsg = Messages.MakeMessage(Messages.SM_OPENGUILDDLG, 0, 0, 0, 1);
                 SendSocket(ClientMsg, EDCode.EncodeString(sC));
             }
             else {
@@ -1043,7 +1043,7 @@ namespace GameSrv.Player {
                     sSendMsg = sSendMsg + guildRank.MemberList[j].MemberName + '/';
                 }
             }
-            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
+            ClientMsg = Messages.MakeMessage(Messages.SM_SENDGUILDMEMBERLIST, 0, 0, 0, 1);
             SendSocket(ClientMsg, EDCode.EncodeString(sSendMsg));
         }
 

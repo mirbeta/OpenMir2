@@ -63,7 +63,7 @@ namespace SelGate
             var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             var nDeCodeLen = 0;
             var packBuff = EncryptUtil.DecodeSpan(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
-            var cltCmd = SerializerUtil.Deserialize<CommandPacket>(packBuff);
+            var cltCmd = SerializerUtil.Deserialize<CommandMessage>(packBuff);
             switch (cltCmd.Ident)
             {
                 case Messages.CM_QUERYCHR:
@@ -144,30 +144,30 @@ namespace SelGate
         private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg)
         {
             int iLen = 0;
-            CommandPacket Cmd;
+            CommandMessage Cmd;
             byte[] TempBuf = new byte[1048 - 1 + 1];
             byte[] SendBuf = new byte[1048 - 1 + 1];
             if ((_lastDbSvr == null) || !_lastDbSvr.IsConnected)
             {
                 return;
             }
-            Cmd = new CommandPacket();
+            Cmd = new CommandMessage();
             Cmd.Recog = nRecog;
             Cmd.Ident = wIdent;
             Cmd.Param = nParam;
             Cmd.Tag = nTag;
             Cmd.Series = nSeries;
             SendBuf[0] = (byte)'#';
-            Array.Copy(SerializerUtil.Serialize(Cmd), 0, TempBuf, 0, CommandPacket.Size);
+            Array.Copy(SerializerUtil.Serialize(Cmd), 0, TempBuf, 0, CommandMessage.Size);
             if (!string.IsNullOrEmpty(sMsg))
             {
                 var sBuff = HUtil32.GetBytes(sMsg);
                 Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
-                iLen = EncryptUtil.Encode(TempBuf, CommandPacket.Size + sMsg.Length, SendBuf);
+                iLen = EncryptUtil.Encode(TempBuf, CommandMessage.Size + sMsg.Length, SendBuf);
             }
             else
             {
-                iLen = EncryptUtil.Encode(TempBuf, CommandPacket.Size, SendBuf);
+                iLen = EncryptUtil.Encode(TempBuf, CommandMessage.Size, SendBuf);
             }
             SendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);

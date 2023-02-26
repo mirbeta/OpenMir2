@@ -16,7 +16,7 @@ namespace GameSrv.GameGate {
         private readonly GateSendQueue _sendQueue;
         private readonly object _runSocketSection;
         private readonly CancellationTokenSource _cancellation;
-        private CommandPacket _clientMesaagePacket;
+        private CommandMessage _clientMesaagePacket;
         /// <summary>
         /// 数据接收缓冲区
         /// </summary>
@@ -29,7 +29,7 @@ namespace GameSrv.GameGate {
             _runSocketSection = new object();
             _sendQueue = new GateSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
-            _clientMesaagePacket = new CommandPacket();
+            _clientMesaagePacket = new CommandMessage();
             ReceiveBuffer = new byte[4096];
             StartGateQueue();
         }

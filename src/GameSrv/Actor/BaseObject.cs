@@ -3244,7 +3244,7 @@ namespace GameSrv.Actor {
             //                    MessageBodyW.Tag2 = 0;
             //                    sSENDMSG = EDcode.EncodeBuffer(@MessageBodyW);
             //                }
-            //                ((TPlayObject)(this)).m_DefMsg = Grobal2.MakeDefaultMsg(Messages.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
+            //                ((TPlayObject)(this)).m_DefMsg = EDCode.MakeDefaultMsg(Messages.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
             //                ((TPlayObject)(this)).SendSocket(((TPlayObject)(this)).m_DefMsg, sSENDMSG);
             //                ((TPlayObject)(this)).protectedPowerPointChanged();
             //                SendUpdateMsg(this, Messages.RM_USERNAME, 0, 0, 0, 0, GetShowName());

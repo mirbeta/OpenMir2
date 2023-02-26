@@ -204,7 +204,7 @@ namespace GameSrv.GameGate {
 
         public static void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx) {
             //todo 
-            //var defMsg = Grobal2.MakeDefaultMsg(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            //var defMsg = EDCode.MakeDefaultMsg(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             //var msgHeader = new ServerMessagePacket();
             //msgHeader.PacketCode = Grobal2.RUNGATECODE;
             //msgHeader.Socket = nSocket;
@@ -259,7 +259,7 @@ namespace GameSrv.GameGate {
         }
 
         private static void SendGateTestMsg(int nIndex) {
-            CommandPacket defMsg = new CommandPacket();
+            CommandMessage defMsg = new CommandMessage();
             ServerMessage msgHdr = new ServerMessage {
                 PacketCode = Grobal2.RunGateCode,
                 Socket = 0,

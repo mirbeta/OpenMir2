@@ -310,7 +310,7 @@ namespace GameSrv.Robots {
             }
         }
 
-        internal override void SendSocket(CommandPacket DefMsg, string sMsg) {
+        internal override void SendSocket(CommandMessage DefMsg, string sMsg) {
 
         }
     }

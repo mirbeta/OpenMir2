@@ -1,4 +1,6 @@
-﻿namespace SystemModule
+﻿using SystemModule.Packets.ClientPackets;
+
+namespace SystemModule
 {
     public class Messages
     {
@@ -732,5 +734,16 @@
         public const int SM_SELLOFFBUY_OK = 23027;
         // 购买成功
         public const int RM_SELLOFFBUY_OK = 23028;
+
+        public static CommandMessage MakeMessage(int msg, int recog, int param, int tag, int series) {
+            var result = new CommandMessage {
+                Ident = (ushort)msg,
+                Param = (ushort)param,
+                Tag = (ushort)tag,
+                Series = (ushort)series,
+                Recog = recog
+            };
+            return result;
+        }
     }
 }

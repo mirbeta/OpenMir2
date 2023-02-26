@@ -192,7 +192,7 @@ namespace LoginGate.Services
             {
                 return;
             }
-            CommandPacket cmd = new CommandPacket();
+            CommandMessage cmd = new CommandMessage();
             cmd.Recog = nRecog;
             cmd.Ident = wIdent;
             cmd.Param = nParam;
@@ -203,14 +203,14 @@ namespace LoginGate.Services
             if (!string.IsNullOrEmpty(sMsg))
             {
                 byte[] sBuff = HUtil32.GetBytes(sMsg);
-                tempBuf = new byte[CommandPacket.Size + sBuff.Length];
+                tempBuf = new byte[CommandMessage.Size + sBuff.Length];
                 Array.Copy(sBuff, 0, tempBuf, 13, sBuff.Length);
-                iLen = EncryptUtil.Encode(tempBuf, CommandPacket.Size + sMsg.Length, sendBuf);
+                iLen = EncryptUtil.Encode(tempBuf, CommandMessage.Size + sMsg.Length, sendBuf);
             }
             else
             {
                 tempBuf = SerializerUtil.Serialize(cmd);
-                iLen = EncryptUtil.Encode(tempBuf, CommandPacket.Size, sendBuf, 1);
+                iLen = EncryptUtil.Encode(tempBuf, CommandMessage.Size, sendBuf, 1);
             }
             sendBuf[iLen + 1] = (byte)'!';
             _session.Socket.Send(sendBuf, iLen, SocketFlags.None);

@@ -6,7 +6,7 @@ namespace SystemModule.Packets.ClientPackets
     /// 客户端消息体
     /// </summary>
     [MemoryPackable]
-    public partial struct CommandPacket
+    public partial struct CommandMessage
     {
         [MemoryPackInclude]
         public int Recog;
@@ -57,15 +57,6 @@ namespace SystemModule.Packets.ClientPackets
         //    Direct = Series;
         //    WID = Series;
         //    IDHi = Series;
-        //}
-
-        //protected override void WritePacket(BinaryWriter writer)
-        //{
-        //    writer.Write(Recog);
-        //    writer.Write(Ident);
-        //    writer.Write(Param);
-        //    writer.Write(Tag);
-        //    writer.Write(Series);
         //}
     }
 }

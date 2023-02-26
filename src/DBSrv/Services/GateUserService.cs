@@ -646,12 +646,12 @@ namespace DBSrv.Services
                     }
                 }
                 chrList = null;
-                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Messages.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDCode.EncodeString(sSendMsg));
+                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Messages.MakeMessage(Messages.SM_QUERYCHR, nChrCount, 0, 1, 0)) + EDCode.EncodeString(sSendMsg));
                 result = true;
             }
             else
             {
-                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Messages.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
+                SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Messages.MakeMessage(Messages.SM_QUERYCHR_FAIL, nChrCount, 0, 1, 0)));
                 CloseUser(userInfo.SessionId, ref curGate);
             }
             return result;
@@ -662,7 +662,7 @@ namespace DBSrv.Services
         /// </summary>
         private void OutOfConnect(SessionUserInfo userInfo)
         {
-            var msg = Grobal2.MakeDefaultMsg(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            var msg = Messages.MakeMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
             var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
         }
@@ -685,7 +685,7 @@ namespace DBSrv.Services
         /// </summary>
         private void DeleteChr(string sData, ref SessionUserInfo userInfo)
         {
-            CommandPacket msg;
+            CommandMessage msg;
             var sChrName = EDCode.DeCodeString(sData);
             var boCheck = false;
             var nIndex = _playRecordStorage.Index(sChrName);
@@ -707,11 +707,11 @@ namespace DBSrv.Services
             }
             if (boCheck)
             {
-                msg = Grobal2.MakeDefaultMsg(Messages.SM_DELCHR_SUCCESS, 0, 0, 0, 0);
+                msg = Messages.MakeMessage(Messages.SM_DELCHR_SUCCESS, 0, 0, 0, 0);
             }
             else
             {
-                msg = Grobal2.MakeDefaultMsg(Messages.SM_DELCHR_FAIL, 0, 0, 0, 0);
+                msg = Messages.MakeMessage(Messages.SM_DELCHR_FAIL, 0, 0, 0, 0);
             }
             var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
@@ -727,7 +727,7 @@ namespace DBSrv.Services
             var sHair = string.Empty;
             var sJob = string.Empty;
             var sSex = string.Empty;
-            CommandPacket msg;
+            CommandMessage msg;
             var nCode = -1;
             var data = EDCode.DeCodeString(sData);
             data = HUtil32.GetValidStr3(data, ref sAccount, HUtil32.Backslash);
@@ -814,11 +814,11 @@ namespace DBSrv.Services
             }
             if (nCode == 1)
             {
-                msg = Grobal2.MakeDefaultMsg(Messages.SM_NEWCHR_SUCCESS, 0, 0, 0, 0);
+                msg = Messages.MakeMessage(Messages.SM_NEWCHR_SUCCESS, 0, 0, 0, 0);
             }
             else
             {
-                msg = Grobal2.MakeDefaultMsg(Messages.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
+                msg = Messages.MakeMessage(Messages.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
             }
             var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
@@ -880,7 +880,7 @@ namespace DBSrv.Services
             if (boDataOk)
             {
                 var nMapIndex = GetMapIndex(sCurMap);
-                var sDefMsg = EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Messages.SM_STARTPLAY, 0, 0, 0, 0));
+                var sDefMsg = EDCode.EncodeMessage(Messages.MakeMessage(Messages.SM_STARTPLAY, 0, 0, 0, 0));
                 var sRouteIp = GateRouteIp(curGate.RemoteEndPoint.GetIPAddress(), ref nRoutePort);
                 if (_conf.DynamicIpMode)// 使用动态IP
                 {
@@ -894,7 +894,7 @@ namespace DBSrv.Services
             }
             else
             {
-                SendUserSocket(curGate.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Grobal2.MakeDefaultMsg(Messages.SM_STARTFAIL, 0, 0, 0, 0)));
+                SendUserSocket(curGate.ConnectionId, userInfo.SessionId, EDCode.EncodeMessage(Messages.MakeMessage(Messages.SM_STARTFAIL, 0, 0, 0, 0)));
             }
             return result;
         }

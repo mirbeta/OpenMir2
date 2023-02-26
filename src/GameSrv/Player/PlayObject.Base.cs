@@ -142,7 +142,7 @@ namespace GameSrv.Player {
         /// 行会传送
         /// </summary>
         public bool GuildMove = false;
-        public CommandPacket ClientMsg;
+        public CommandMessage ClientMsg;
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
@@ -1091,7 +1091,7 @@ namespace GameSrv.Player {
         /// </summary>
         private void SendLogon() {
             MessageBodyWL messageBodyWl = default;
-            ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Dir, Light));
+            ClientMsg = Messages.MakeMessage(Messages.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Dir, Light));
             messageBodyWl.Param1 = GetFeatureToLong();
             messageBodyWl.Param2 = CharStatus;
             if (AllowGroup) {

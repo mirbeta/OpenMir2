@@ -137,7 +137,7 @@ namespace LoginSvr.Services
                     else
                     {
                         //todo Recog=99 暂未开放账号注册
-                        defMsg = Grobal2.MakeDefaultMsg(Messages.SM_NEWID_FAIL, 99, 0, 0, 0);
+                        defMsg = Messages.MakeMessage(Messages.SM_NEWID_FAIL, 99, 0, 0, 0);
                         SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
                     }
                     break;
@@ -238,10 +238,10 @@ namespace LoginSvr.Services
                     SessionKick(sLoginId);
                     nCode = -3;
                 }
-                CommandPacket defMsg;
+                CommandMessage defMsg;
                 if (boNeedUpdate)
                 {
-                    defMsg = Grobal2.MakeDefaultMsg(Messages.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
+                    defMsg = Messages.MakeMessage(Messages.SM_NEEDUPDATE_ACCOUNT, 0, 0, 0, 0);
                     SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeBuffer(userEntry));
                     userInfo.Account = sLoginId;
                     userInfo.SessionID = LsShare.GetSessionId();
@@ -270,13 +270,13 @@ namespace LoginSvr.Services
                         userInfo.PayCost = false;
                     }
                     var sServerName = GetServerListInfo();
-                    defMsg = Grobal2.MakeDefaultMsg(Messages.SM_PASSOK_SELECTSERVER, 0, 0, 0, _config.ServerNameList.Count);
+                    defMsg = Messages.MakeMessage(Messages.SM_PASSOK_SELECTSERVER, 0, 0, 0, _config.ServerNameList.Count);
                     SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sServerName));
                     SessionAdd(userInfo.Account, userInfo.UserIPaddr, userInfo.SessionID, userInfo.PayCost, accountRecord.PayModel > 0);
                 }
                 else
                 {
-                    defMsg = Grobal2.MakeDefaultMsg(Messages.SM_PASSWD_FAIL, nCode, 0, 0, 0);
+                    defMsg = Messages.MakeMessage(Messages.SM_PASSWD_FAIL, nCode, 0, 0, 0);
                     SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
                 }
             }
@@ -405,14 +405,14 @@ namespace LoginSvr.Services
                 {
                     _logger.LogWarning(string.Format(sAddNewuserFail, userAccount.UserEntry.Account, userAccount.UserEntryAdd.Quiz2));
                 }
-                CommandPacket defMsg;
+                CommandMessage defMsg;
                 if (nErrCode == 1)
                 {
-                    defMsg = Grobal2.MakeDefaultMsg(Messages.SM_NEWID_SUCCESS, 0, 0, 0, 0);
+                    defMsg = Messages.MakeMessage(Messages.SM_NEWID_SUCCESS, 0, 0, 0, 0);
                 }
                 else
                 {
-                    defMsg = Grobal2.MakeDefaultMsg(Messages.SM_NEWID_FAIL, nErrCode, 0, 0, 0);
+                    defMsg = Messages.MakeMessage(Messages.SM_NEWID_FAIL, nErrCode, 0, 0, 0);
                 }
                 SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
             }
@@ -471,14 +471,14 @@ namespace LoginSvr.Services
                     }
                 }
 
-                CommandPacket defMsg;
+                CommandMessage defMsg;
                 if (nCode == 1)
                 {
-                    defMsg = Grobal2.MakeDefaultMsg(Messages.SM_CHGPASSWD_SUCCESS, 0, 0, 0, 0);
+                    defMsg = Messages.MakeMessage(Messages.SM_CHGPASSWD_SUCCESS, 0, 0, 0, 0);
                 }
                 else
                 {
-                    defMsg = Grobal2.MakeDefaultMsg(Messages.SM_CHGPASSWD_FAIL, nCode, 0, 0, 0);
+                    defMsg = Messages.MakeMessage(Messages.SM_CHGPASSWD_FAIL, nCode, 0, 0, 0);
                 }
                 SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
             }
@@ -494,7 +494,7 @@ namespace LoginSvr.Services
         /// </summary>
         private void AccountSelectServer(UserInfo userInfo, string sData)
         {
-            CommandPacket defMsg;
+            CommandMessage defMsg;
             var sSelGateIp = string.Empty;
             var nSelGatePort = 0;
             const string sSelServerMsg = "Server: {0}/{1}-{2}:{3}";
@@ -518,11 +518,11 @@ namespace LoginSvr.Services
                         if (nPayMode > 0)
                         {
                             var playTimeSpan = DateTimeOffset.Now.AddSeconds(userInfo.Seconds) - DateTimeOffset.Now;
-                            defMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELECTSERVER_OK, (int)Math.Round(playTimeSpan.TotalSeconds, 1), 0, userInfo.PayMode, 0);
+                            defMsg = Messages.MakeMessage(Messages.SM_SELECTSERVER_OK, (int)Math.Round(playTimeSpan.TotalSeconds, 1), 0, userInfo.PayMode, 0);
                         }
                         else
                         {
-                            defMsg = Grobal2.MakeDefaultMsg(Messages.SM_SELECTSERVER_OK, userInfo.SessionID, 0, 0, 0);
+                            defMsg = Messages.MakeMessage(Messages.SM_SELECTSERVER_OK, userInfo.SessionID, 0, 0, 0);
                         }
                         SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sSelGateIp + "/" + nSelGatePort + "/" + userInfo.SessionID));
                     }
@@ -530,7 +530,7 @@ namespace LoginSvr.Services
                     {
                         userInfo.SelServer = false;
                         _sessionManager.Delete(userInfo.Account, userInfo.SessionID);
-                        defMsg = Grobal2.MakeDefaultMsg(Messages.SM_STARTFAIL, 0, 0, 0, 0);
+                        defMsg = Messages.MakeMessage(Messages.SM_STARTFAIL, 0, 0, 0, 0);
                         SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
                     }
                 }
@@ -542,7 +542,7 @@ namespace LoginSvr.Services
         /// </summary>
         private void AccountUpdateUserInfo(UserInfo userInfo, string sData)
         {
-            CommandPacket defMsg;
+            CommandMessage defMsg;
             try
             {
                 if (string.IsNullOrEmpty(sData))
@@ -582,11 +582,11 @@ namespace LoginSvr.Services
                 }
                 if (nCode == 1)
                 {
-                    defMsg = Grobal2.MakeDefaultMsg(Messages.SM_UPDATEID_SUCCESS, 0, 0, 0, 0);
+                    defMsg = Messages.MakeMessage(Messages.SM_UPDATEID_SUCCESS, 0, 0, 0, 0);
                 }
                 else
                 {
-                    defMsg = Grobal2.MakeDefaultMsg(Messages.SM_UPDATEID_FAIL, nCode, 0, 0, 0);
+                    defMsg = Messages.MakeMessage(Messages.SM_UPDATEID_FAIL, nCode, 0, 0, 0);
                 }
                 SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
             }
@@ -609,7 +609,7 @@ namespace LoginSvr.Services
             var sAnswer2 = string.Empty;
             var sPassword = string.Empty;
             var sBirthDay = string.Empty;
-            CommandPacket defMsg;
+            CommandMessage defMsg;
             AccountRecord accountRecord = null;
             var sMsg = EDCode.DeCodeString(sData);
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, "\09");
@@ -676,26 +676,26 @@ namespace LoginSvr.Services
             }
             if (nCode == 1)
             {
-                defMsg = Grobal2.MakeDefaultMsg(Messages.SM_GETBACKPASSWD_SUCCESS, 0, 0, 0, 0);
+                defMsg = Messages.MakeMessage(Messages.SM_GETBACKPASSWD_SUCCESS, 0, 0, 0, 0);
                 SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sPassword));
             }
             else
             {
-                defMsg = Grobal2.MakeDefaultMsg(Messages.SM_GETBACKPASSWD_FAIL, nCode, 0, 0, 0);
+                defMsg = Messages.MakeMessage(Messages.SM_GETBACKPASSWD_FAIL, nCode, 0, 0, 0);
                 SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
             }
         }
 
         private void AccountCheckProtocol(UserInfo userInfo, int nDate)
         {
-            CommandPacket defMsg;
+            CommandMessage defMsg;
             if (nDate < LsShare.VersionDate)
             {
-                defMsg = Grobal2.MakeDefaultMsg(Messages.SM_CERTIFICATION_FAIL, 0, 0, 0, 0);
+                defMsg = Messages.MakeMessage(Messages.SM_CERTIFICATION_FAIL, 0, 0, 0, 0);
             }
             else
             {
-                defMsg = Grobal2.MakeDefaultMsg(Messages.SM_CERTIFICATION_SUCCESS, 0, 0, 0, 0);
+                defMsg = Messages.MakeMessage(Messages.SM_CERTIFICATION_SUCCESS, 0, 0, 0, 0);
             }
             SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg));
         }

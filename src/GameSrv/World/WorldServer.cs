@@ -943,7 +943,7 @@ namespace GameSrv.World {
             return false;
         }
 
-        public static void ProcessUserMessage(PlayObject playObject, CommandPacket defMsg, string buff) {
+        public static void ProcessUserMessage(PlayObject playObject, CommandMessage defMsg, string buff) {
             string sMsg = string.Empty;
             if (playObject.OffLineFlag) return;
             if (!string.IsNullOrEmpty(buff)) sMsg = buff;
