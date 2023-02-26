@@ -691,12 +691,12 @@ namespace MakePlayer.Cliens
             {
                 return;
             }
-            if (sDataBlock.Length < Grobal2.DEFBLOCKSIZE)
+            if (sDataBlock.Length < Messages.DefBlockSize)
             {
                 return;
             }
-            var sDefMsg = sDataBlock.Substring(0, Grobal2.DEFBLOCKSIZE);
-            var sBody = sDataBlock.Substring(Grobal2.DEFBLOCKSIZE, sDataBlock.Length - Grobal2.DEFBLOCKSIZE);
+            var sDefMsg = sDataBlock.Substring(0, Messages.DefBlockSize);
+            var sBody = sDataBlock.Substring(Messages.DefBlockSize, sDataBlock.Length - Messages.DefBlockSize);
             var DefMsg = EDCode.DecodePacket(sDefMsg);
             switch (DefMsg.Ident)
             {

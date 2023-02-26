@@ -141,7 +141,7 @@ namespace DBSrv.Services
                             continue;
                         }
                         sData = sData.Substring(1, sData.Length - 1);
-                        if (sData.Length >= Grobal2.DEFBLOCKSIZE)
+                        if (sData.Length >= Messages.DefBlockSize)
                         {
                             DeCodeUserMsg(sData, gateInfo, ref userInfo);
                         }
@@ -509,8 +509,8 @@ namespace DBSrv.Services
 
         private void DeCodeUserMsg(string sData, SelGateInfo gateInfo, ref SessionUserInfo userInfo)
         {
-            var sDefMsg = sData.Substring(0, Grobal2.DEFBLOCKSIZE);
-            var sText = sData.Substring(Grobal2.DEFBLOCKSIZE, sData.Length - Grobal2.DEFBLOCKSIZE);
+            var sDefMsg = sData.Substring(0, Messages.DefBlockSize);
+            var sText = sData.Substring(Messages.DefBlockSize, sData.Length - Messages.DefBlockSize);
             var clientPacket = EDCode.DecodePacket(sDefMsg);
             switch (clientPacket.Ident)
             {

@@ -53,7 +53,6 @@ namespace SystemModule {
         public const byte GM_DATA = 5;
         public const byte GM_SERVERUSERINDEX = 6;
         public const byte GM_RECEIVE_OK = 7;
-        public const byte DEFBLOCKSIZE = 16;
         /// <summary>
         /// 最大包裹数
         /// </summary>

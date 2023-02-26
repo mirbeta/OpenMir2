@@ -68,7 +68,7 @@ namespace LoginSvr.Services
                         HUtil32.ArrestStringEx(message.Msg, "#", "!", ref sMsg);
                         if (string.IsNullOrEmpty(sMsg))
                             return;
-                        if (sMsg.Length < Grobal2.DEFBLOCKSIZE)
+                        if (sMsg.Length < Messages.DefBlockSize)
                             return;
                         sMsg = sMsg.AsSpan()[1..sMsg.Length].ToString();
 
@@ -98,8 +98,8 @@ namespace LoginSvr.Services
 
         private void ProcessUserMsg(LoginGateInfo gateInfo, UserInfo userInfo, string sMsg)
         {
-            var sDefMsg = sMsg[..Grobal2.DEFBLOCKSIZE];
-            var sData = sMsg.Substring(Grobal2.DEFBLOCKSIZE, sMsg.Length - Grobal2.DEFBLOCKSIZE);
+            var sDefMsg = sMsg[..Messages.DefBlockSize];
+            var sData = sMsg.Substring(Messages.DefBlockSize, sMsg.Length - Messages.DefBlockSize);
             var defMsg = EDCode.DecodePacket(sDefMsg);
             switch (defMsg.Ident)
             {

@@ -143,7 +143,7 @@ namespace DBSrv.Services
             int nQueryId = requestData.QueryId;
             var requestMessage = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
             var packetLen = requestData.Message.Length + requestData.Packet.Length + 6;
-            if (packetLen >= Grobal2.DEFBLOCKSIZE && nQueryId > 0 && requestData.Packet != null && requestData.Sgin != null)
+            if (packetLen >= Messages.DefBlockSize && nQueryId > 0 && requestData.Packet != null && requestData.Sgin != null)
             {
                 var sData = EDCode.DecodeBuff(requestData.Packet);
                 var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);

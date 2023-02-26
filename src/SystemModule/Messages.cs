@@ -2,8 +2,10 @@
 
 namespace SystemModule
 {
-    public class Messages
+    public static class Messages
     {
+        public const byte DefBlockSize = 16;
+
         //摆摊
         public const int CM_SENDSELL = 9050;
         public const int SM_SENDSELL = 9051;
