@@ -1,11 +1,11 @@
-using DBSrv.Services;
-using DBSrv.Storage;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DBSrv.Services;
+using DBSrv.Storage;
+using Microsoft.Extensions.Hosting;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Packets.ServerPackets;
@@ -76,7 +76,7 @@ namespace DBSrv
             IList<PlayerDataInfo> playList = _cacheStorage.QueryCacheData();
             if (playList.Any())
             {
-                _logger.LogInformation($"同步缓存数据[{playList.Count()}].");
+                _logger.LogInformation($"同步缓存数据[{playList.Count}].");
                 foreach (var play in playList)
                 {
                     if (_playDataStorage.Update(play.Header.Name, play))

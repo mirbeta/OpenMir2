@@ -1,4 +1,12 @@
-﻿using DBSrv.Conf;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using DBSrv.Conf;
 using DBSrv.Services;
 using DBSrv.Storage;
 using DBSrv.Storage.Impl;
@@ -8,14 +16,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Spectre.Console;
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Loader;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using SystemModule.Hosts;
 using SystemModule.Logger;
 
@@ -107,7 +107,7 @@ namespace DBSrv
             var storagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, storageFileName);
             if (!File.Exists(storagePath))
             {
-                throw new Exception($"请确认{storageFileName}文件是否存在.");
+                throw new Exception($"{storageFileName} 存储策略文件不存在,服务启动失败.");
             }
             var context = new AssemblyLoadContext(storagePath);
             context.Resolving += Context_Resolving;
