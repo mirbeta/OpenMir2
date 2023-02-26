@@ -35,9 +35,9 @@ namespace DBSrv.Storage.Impl
             }
         }
 
-        public IList<PlayerDataInfo> QueryCacheData()
+        public IEnumerator<PlayerDataInfo> QueryCacheData()
         {
-            return _cacheMap.Values.ToList();
+            return _cacheMap.Values.GetEnumerator();
         }
     }
 }

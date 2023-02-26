@@ -116,20 +116,29 @@ namespace DBSrv
             {
                 throw new Exception($"获取{storageName}数据存储实例失败，请确认文件是否正确.");
             }
-            var storageOption = new StorageOption()
+            var playDataStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.PlayDataStorage", true);
+            var playRecordStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.PlayRecordStorage", true);
+            if (playDataStorageType == null)
             {
-                ConnectionString = _config.ConnctionString
-            };
-            var playDataStorage = (IPlayDataStorage)Activator.CreateInstance(assembly.GetType($"DBSrv.Storage.{storageName}.PlayDataStorage", true, true), storageOption);
-            var playRecordStorage = (IPlayRecordStorage)Activator.CreateInstance(assembly.GetType($"DBSrv.Storage.{storageName}.PlayRecordStorage", true, true), storageOption);
-            if (playDataStorage != null)
-            {
-                services.AddSingleton(playDataStorage);
+                throw new ArgumentNullException(nameof(storageName), "获取数据存储实例失败，请确认文件是否正确或程序版本是否正确.");
             }
-            if (playRecordStorage != null)
+            if (playRecordStorageType == null)
             {
-                services.AddSingleton(playRecordStorage);
+                throw new ArgumentNullException(nameof(storageName), "获取数据索引存储实例失败，请确认文件是否正确或程序版本是否正确.");
             }
+            var storageOption = new StorageOption(_config.ConnctionString);
+            var playDataStorage = (IPlayDataStorage)Activator.CreateInstance(playDataStorageType, storageOption);
+            var playRecordStorage = (IPlayRecordStorage)Activator.CreateInstance(playRecordStorageType, storageOption);
+            if (playDataStorage == null)
+            {
+                throw new ArgumentNullException(nameof(storageName), "创建数据存储实例失败，请确认文件是否正确或程序版本是否正确.");
+            }
+            if (playRecordStorage == null)
+            {
+                throw new ArgumentNullException(nameof(storageName), "创建数据索引存储实例失败，请确认文件是否正确或程序版本是否正确.");
+            }
+            services.AddSingleton(playDataStorage);
+            services.AddSingleton(playRecordStorage);
         }
 
         /// <summary>

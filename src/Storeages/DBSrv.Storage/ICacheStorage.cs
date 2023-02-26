@@ -30,6 +30,6 @@ namespace DBSrv.Storage
         /// 从缓存取出所有角色数据
         /// </summary>
         /// <returns></returns>
-        IList<PlayerDataInfo> QueryCacheData();
+        IEnumerator<PlayerDataInfo> QueryCacheData();
     }
 }
