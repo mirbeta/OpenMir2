@@ -211,12 +211,10 @@ namespace SystemModule.Common
         public override string ToString()
         {
             var s = new StringBuilder(this.Count);
-
             for (var i = 0; i < this.Count; i++)
             {
-                s.Append(_mStrings[i] + "\r\n");
+                s.AppendLine(_mStrings[i]);
             }
-
             return s.ToString();
         }
         

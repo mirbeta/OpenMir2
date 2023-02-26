@@ -79,29 +79,36 @@ namespace GameSvr.Script {
             return sCallScriptFile;
         }
 
-        private void LoadCallScript(ref StringList LoadList, ref bool success) {
+        private void LoadCallScript(ref StringList LoadList, ref bool success)
+        {
             var sLable = string.Empty;
             var callList = new StringList(1024);
-            for (var i = 0; i < LoadList.Count; i++) {
+            for (var i = 0; i < LoadList.Count; i++)
+            {
                 var sLine = LoadList[i].Trim();
-                if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL")) {
+                if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL"))
+                {
                     sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
                     var sCallScriptFile = GetCallScriptPath(sLable.Trim());
                     var sLabName = sLine.Trim();
                     var sFileName = M2Share.GetEnvirFilePath("QuestDiary", sCallScriptFile);
-                    if (sCallScriptDict.ContainsKey(sFileName)) {
+                    if (sCallScriptDict.ContainsKey(sFileName))
+                    {
                         callList[i] = "#ACT";
                         callList.InsertText(i + 1, "goto " + sLabName);
                         break;
                     }
-                    if (LoadScriptCallScript(sFileName, sLabName, callList)) {
+                    if (LoadScriptCallScript(sFileName, sLabName, callList))
+                    {
                         //callList[i] = "#ACT";
                         //callList.InsertText(i + 1, "goto " + sLabName);
-                        if (!sCallScriptDict.ContainsKey(sLabName)) {
+                        if (!sCallScriptDict.ContainsKey(sLabName))
+                        {
                             sCallScriptDict.Add(sFileName, sLabName);
                         }
                     }
-                    else {
+                    else
+                    {
                         _logger.Error("script error, load fail: " + sCallScriptFile + sLabName);
                     }
                 }
@@ -112,10 +119,7 @@ namespace GameSvr.Script {
             }
             LoadList = callList;
             var callCount = GetScriptCallCount(LoadList.Text);
-            while (callCount <= 0) {
-                success = true;
-                break;
-            }
+            success = callCount <= 0;
         }
 
         private string LoadScriptDefineInfo(StringList LoadList, IList<DefineInfo> List) {
