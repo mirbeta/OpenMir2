@@ -1670,7 +1670,7 @@ namespace GameSvr.Script {
                         if (!string.IsNullOrEmpty(sItemName) && !string.IsNullOrEmpty(sItemRefillTime))
                         {
                             if (sItemName[0] == '\"')
-                            {
+                            { 
                                 HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                             }
                             var goods = new Goods
