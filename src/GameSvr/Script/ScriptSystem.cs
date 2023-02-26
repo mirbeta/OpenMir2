@@ -20,32 +20,35 @@ namespace GameSvr.Script {
         private static bool LoadScriptCallScript(string sFileName, string sLabel, StringList List) {
             var result = false;
             if (File.Exists(sFileName)) {
-                var LoadStrList = new StringList();
-                LoadStrList.LoadFromFile(sFileName);
+                var callStrList = new StringList();
+                callStrList.LoadFromFile(sFileName);
                 sLabel = '[' + sLabel + ']';
-                var bo1D = false;
-                for (var i = 0; i < LoadStrList.Count; i++) {
-                    var sLine = LoadStrList[i].Trim();
-                    if (!string.IsNullOrEmpty(sLine)) {
-                        if (!bo1D) {
-                            if (sLine[0] == '[' && string.Compare(sLine, sLabel, StringComparison.OrdinalIgnoreCase) == 0) {
-                                bo1D = true;
-                                List.Add(sLine);
+                var findLab = false;
+                for (var i = 0; i < callStrList.Count; i++) {
+                    var sLine = callStrList[i].Trim();
+                    if (!string.IsNullOrEmpty(sLine))
+                    {
+                        if (!findLab)
+                        {
+                            if (sLine[0] == '[' && string.Compare(sLine, sLabel, StringComparison.OrdinalIgnoreCase) == 0)
+                            {
+                                findLab = true;
+                                //List.Add(sLine);
+                                List.Add("#SAY");
                             }
                         }
-                        else {
-                            if (sLine[0] != '{') {
-                                if (sLine[0] == '}') {
-                                    result = true;
-                                    break;
-                                }
-                                else {
-                                    List.Add(sLine);
-                                }
+                        else if (sLine[0] != '{')
+                        {
+                            if (sLine[0] == '}')
+                            {
+                                result = true;
+                                break;
                             }
+                            List.Add(sLine);
                         }
                     }
                 }
+                callStrList.Dispose();
             }
             return result;
         }
@@ -78,10 +81,9 @@ namespace GameSvr.Script {
 
         private void LoadCallScript(ref StringList LoadList, ref bool success) {
             var sLable = string.Empty;
-            var callList = new StringList();
+            var callList = new StringList(1024);
             for (var i = 0; i < LoadList.Count; i++) {
                 var sLine = LoadList[i].Trim();
-                callList.AppendText(sLine);
                 if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL")) {
                     sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
                     var sCallScriptFile = GetCallScriptPath(sLable.Trim());
@@ -93,8 +95,8 @@ namespace GameSvr.Script {
                         break;
                     }
                     if (LoadScriptCallScript(sFileName, sLabName, callList)) {
-                        callList[i] = "#ACT";
-                        callList.InsertText(i + 1, "goto " + sLabName);
+                        //callList[i] = "#ACT";
+                        //callList.InsertText(i + 1, "goto " + sLabName);
                         if (!sCallScriptDict.ContainsKey(sLabName)) {
                             sCallScriptDict.Add(sFileName, sLabName);
                         }
@@ -102,6 +104,10 @@ namespace GameSvr.Script {
                     else {
                         _logger.Error("script error, load fail: " + sCallScriptFile + sLabName);
                     }
+                }
+                else
+                {
+                    callList.AppendText(sLine);
                 }
             }
             LoadList = callList;
@@ -1287,14 +1293,14 @@ namespace GameSvr.Script {
             var sScritpFileName = M2Share.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
             if (File.Exists(sScritpFileName)) {
                 sCallScriptDict.Clear();
-                StringList LoadList = new StringList();
-                LoadList.LoadFromFile(sScritpFileName);
+                var stringList = new StringList();
+                stringList.LoadFromFile(sScritpFileName);
                 var success = false;
                 while (!success) {
-                    LoadCallScript(ref LoadList, ref success);
+                    LoadCallScript(ref stringList, ref success);
                 }
                 IList<DefineInfo> DefineList = new List<DefineInfo>();
-                var defline = LoadScriptDefineInfo(LoadList, DefineList);
+                var defline = LoadScriptDefineInfo(stringList, DefineList);
                 var DefineInfo = new DefineInfo { Name = "@HOME" };
                 if (string.IsNullOrEmpty(defline)) {
                     defline = "@main";
@@ -1303,8 +1309,8 @@ namespace GameSvr.Script {
                 DefineList.Add(DefineInfo);
                 int n24;
                 // 常量处理
-                for (var i = 0; i < LoadList.Count; i++) {
-                    var line = LoadList[i].Trim();
+                for (var i = 0; i < stringList.Count; i++) {
+                    var line = stringList[i].Trim();
                     if (!string.IsNullOrEmpty(line)) {
                         if (line[0] == '[') {
                             boDefine = false;
@@ -1327,7 +1333,7 @@ namespace GameSvr.Script {
                                             var s58 = line[..n24];
                                             var s5C = line[(DefineInfo.Name.Length + n24)..];
                                             line = s58 + DefineInfo.Text + s5C;
-                                            LoadList[i] = line;
+                                            stringList[i] = line;
                                             n1C++;
                                             if (n1C >= 10) {
                                                 break;
@@ -1345,8 +1351,8 @@ namespace GameSvr.Script {
                 }
                 DefineList.Clear();
                 var nQuestIdx = 0;
-                for (var i = 0; i < LoadList.Count; i++) {
-                    var line = LoadList[i].Trim();
+                for (var i = 0; i < stringList.Count; i++) {
+                    var line = stringList[i].Trim();
                     if (string.IsNullOrEmpty(line) || line[0] == ';' || line[0] == '/') {
                         continue;
                     }
@@ -1588,7 +1594,7 @@ namespace GameSvr.Script {
                         }
                     }
                 }
-                LoadList.Dispose();
+                stringList.Dispose();
             }
             else {
                 _logger.Error("Script file not found: " + sScritpFileName);
