@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DBSrv.Storage
+namespace DBSrv.Storage.Impl
 {
     public class PlayQuickList
     {
