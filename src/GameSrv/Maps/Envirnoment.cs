@@ -827,45 +827,45 @@ namespace GameSrv.Maps {
             snx = sx;
             sny = sy;
             switch (ndir) {
-                case Grobal2.DR_UP:
+                case Direction.Up:
                     if (sny > nFlag - 1) {
                         sny -= (short)nFlag;
                     }
                     break;
-                case Grobal2.DR_DOWN:
+                case Direction.Down:
                     if (sny < Width - nFlag) {
                         sny += (short)nFlag;
                     }
                     break;
-                case Grobal2.DR_LEFT:
+                case Direction.Left:
                     if (snx > nFlag - 1) {
                         snx -= (short)nFlag;
                     }
                     break;
-                case Grobal2.DR_RIGHT:
+                case Direction.Right:
                     if (snx < Width - nFlag) {
                         snx += (short)nFlag;
                     }
                     break;
-                case Grobal2.DR_UPLEFT:
+                case Direction.UpLeft:
                     if (snx > nFlag - 1 && sny > nFlag - 1) {
                         snx -= (short)nFlag;
                         sny -= (short)nFlag;
                     }
                     break;
-                case Grobal2.DR_UPRIGHT:
+                case Direction.UpRight:
                     if (snx > nFlag - 1 && sny < Height - nFlag) {
                         snx += (short)nFlag;
                         sny -= (short)nFlag;
                     }
                     break;
-                case Grobal2.DR_DOWNLEFT:
+                case Direction.DownLeft:
                     if (snx < Width - nFlag && sny > nFlag - 1) {
                         snx -= (short)nFlag;
                         sny += (short)nFlag;
                     }
                     break;
-                case Grobal2.DR_DOWNRIGHT:
+                case Direction.DownRight:
                     if (snx < Width - nFlag && sny < Height - nFlag) {
                         snx += (short)nFlag;
                         sny += (short)nFlag;

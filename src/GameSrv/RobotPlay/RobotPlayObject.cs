@@ -156,7 +156,7 @@ namespace GameSrv.RobotPlay {
             m_nSelectMagic = 0;
             m_boIsUseMagic = false;// 是否能躲避
             m_boIsUseAttackMagic = false;
-            m_btLastDirection = Direction;
+            m_btLastDirection = Dir;
             m_dwAutoAvoidTick = HUtil32.GetTickCount();// 自动躲避间隔
             m_boIsNeedAvoid = false;// 是否需要躲避
             WalkTick = HUtil32.GetTickCount();
@@ -733,32 +733,32 @@ namespace GameSrv.RobotPlay {
                 {
                     n10 = nTargetX;
                     n14 = nTargetY;
-                    byte nDir = Grobal2.DR_DOWN;
+                    var nDir = Direction.Down;
                     if (n10 > CurrX) {
-                        nDir = Grobal2.DR_RIGHT;
+                        nDir = Direction.Right;
                         if (n14 > CurrY) {
-                            nDir = Grobal2.DR_DOWNRIGHT;
+                            nDir = Direction.DownRight;
                         }
                         if (n14 < CurrY) {
-                            nDir = Grobal2.DR_UPRIGHT;
+                            nDir = Direction.UpRight;
                         }
                     }
                     else {
                         if (n10 < CurrX) {
-                            nDir = Grobal2.DR_LEFT;
+                            nDir = Direction.Left;
                             if (n14 > CurrY) {
-                                nDir = Grobal2.DR_DOWNLEFT;
+                                nDir = Direction.DownLeft;
                             }
                             if (n14 < CurrY) {
-                                nDir = Grobal2.DR_UPLEFT;
+                                nDir = Direction.UpLeft;
                             }
                         }
                         else {
                             if (n14 > CurrY) {
-                                nDir = Grobal2.DR_DOWN;
+                                nDir = Direction.Down;
                             }
                             else if (n14 < CurrY) {
-                                nDir = Grobal2.DR_UP;
+                                nDir = Direction.Up;
                             }
                         }
                     }
@@ -771,7 +771,7 @@ namespace GameSrv.RobotPlay {
                     }
                     if (!result) {
                         n20 = M2Share.RandomNumber.Random(3);
-                        for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                        for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                             if (nOldX == CurrX && nOldY == CurrY) {
                                 if (n20 != 0) {
                                     nDir++;
@@ -780,10 +780,10 @@ namespace GameSrv.RobotPlay {
                                     nDir -= 1;
                                 }
                                 else {
-                                    nDir = Grobal2.DR_UPLEFT;
+                                    nDir = Direction.UpLeft;
                                 }
-                                if (nDir > Grobal2.DR_UPLEFT) {
-                                    nDir = Grobal2.DR_UP;
+                                if (nDir > Direction.UpLeft) {
+                                    nDir = Direction.Up;
                                 }
                                 WalkTo(nDir, false);
                                 if (nTargetX == CurrX && nTargetY == CurrY) {
@@ -810,32 +810,32 @@ namespace GameSrv.RobotPlay {
                 n10 = m_nProtectTargetX;
                 n14 = m_nProtectTargetY;
                 DwTick3F4 = HUtil32.GetTickCount();
-                nDir = Grobal2.DR_DOWN;
+                nDir = Direction.Down;
                 if (n10 > CurrX) {
-                    nDir = Grobal2.DR_RIGHT;
+                    nDir = Direction.Right;
                     if (n14 > CurrY) {
-                        nDir = Grobal2.DR_DOWNRIGHT;
+                        nDir = Direction.DownRight;
                     }
                     if (n14 < CurrY) {
-                        nDir = Grobal2.DR_UPRIGHT;
+                        nDir = Direction.UpRight;
                     }
                 }
                 else {
                     if (n10 < CurrX) {
-                        nDir = Grobal2.DR_LEFT;
+                        nDir = Direction.Left;
                         if (n14 > CurrY) {
-                            nDir = Grobal2.DR_DOWNLEFT;
+                            nDir = Direction.DownLeft;
                         }
                         if (n14 < CurrY) {
-                            nDir = Grobal2.DR_UPLEFT;
+                            nDir = Direction.UpLeft;
                         }
                     }
                     else {
                         if (n14 > CurrY) {
-                            nDir = Grobal2.DR_DOWN;
+                            nDir = Direction.Down;
                         }
                         else if (n14 < CurrY) {
-                            nDir = Grobal2.DR_UP;
+                            nDir = Direction.Up;
                         }
                     }
                 }
@@ -846,7 +846,7 @@ namespace GameSrv.RobotPlay {
                     if (!RobotRunTo(nDir, false, m_nProtectTargetX, m_nProtectTargetY)) {
                         WalkTo(nDir, false);
                         n20 = M2Share.RandomNumber.Random(3);
-                        for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                        for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                             if (nOldX == CurrX && nOldY == CurrY) {
                                 if (n20 != 0) {
                                     nDir++;
@@ -855,10 +855,10 @@ namespace GameSrv.RobotPlay {
                                     nDir -= 1;
                                 }
                                 else {
-                                    nDir = Grobal2.DR_UPLEFT;
+                                    nDir = Direction.UpLeft;
                                 }
-                                if (nDir > Grobal2.DR_UPLEFT) {
-                                    nDir = Grobal2.DR_UP;
+                                if (nDir > Direction.UpLeft) {
+                                    nDir = Direction.Up;
                                 }
                                 WalkTo(nDir, false);
                             }
@@ -869,7 +869,7 @@ namespace GameSrv.RobotPlay {
                     WalkTo(nDir, false);
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
                     n20 = M2Share.RandomNumber.Random(3);
-                    for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                    for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                         if (nOldX == CurrX && nOldY == CurrY) {
                             if (n20 != 0) {
                                 nDir++;
@@ -878,10 +878,10 @@ namespace GameSrv.RobotPlay {
                                 nDir -= 1;
                             }
                             else {
-                                nDir = Grobal2.DR_UPLEFT;
+                                nDir = Direction.UpLeft;
                             }
-                            if (nDir > Grobal2.DR_UPLEFT) {
-                                nDir = Grobal2.DR_UP;
+                            if (nDir > Direction.UpLeft) {
+                                nDir = Direction.Up;
                             }
                             WalkTo(nDir, false);
                         }
@@ -947,7 +947,7 @@ namespace GameSrv.RobotPlay {
                         TurnTo(M2Share.RandomNumber.RandomByte(8));
                     }
                     else {
-                        WalkTo(Direction, false);
+                        WalkTo(Dir, false);
                     }
                     m_Path = null;
                     m_nPostion = -1;
@@ -959,7 +959,7 @@ namespace GameSrv.RobotPlay {
                     TurnTo(M2Share.RandomNumber.RandomByte(8));
                 }
                 else {
-                    WalkTo(Direction, false);
+                    WalkTo(Dir, false);
                 }
                 m_Path = null;
                 m_nPostion = -1;
@@ -1212,14 +1212,14 @@ namespace GameSrv.RobotPlay {
             if (TargetCret == null && !Master.SlaveRelax) {
                 for (int i = 0; i < 2; i++) {
                     // 判断主人是否在英雄对面
-                    if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Direction, i, ref nX, ref nY)) {
+                    if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Dir, i, ref nX, ref nY)) {
                         if (CurrX == nX && CurrY == nY) {
                             if (Master.GetBackPosition(ref nX, ref nY) && GotoNext(nX, nY, true)) {
                                 return true;
                             }
                             for (int k = 0; k < 2; k++) {
                                 for (int j = 0; j < 7; j++) {
-                                    if (j != Master.Direction) {
+                                    if (j != Master.Dir) {
                                         if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, (byte)j, k, ref nX, ref nY) && GotoNext(nX, nY, true)) {
                                             return true;
                                         }
@@ -1246,7 +1246,7 @@ namespace GameSrv.RobotPlay {
                     }
                     for (int j = 0; j < 2; j++) {
                         for (int k = 0; k < 7; k++) {
-                            if (k != Master.Direction) {
+                            if (k != Master.Dir) {
                                 if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, (byte)k, j, ref nX, ref nY) && GotoNextOne(nX, nY, true)) {
                                     return true;
                                 }
@@ -1609,8 +1609,8 @@ namespace GameSrv.RobotPlay {
                     result = true;
                     if ((HUtil32.GetTickCount() - DoMotaeboTick) > 3000) {
                         DoMotaeboTick = HUtil32.GetTickCount();
-                        if (GetAttackDir(targetBaseObject, ref Direction)) {
-                            DoMotaebo(Direction, UserMagic.Level);
+                        if (GetAttackDir(targetBaseObject, ref Dir)) {
+                            DoMotaebo(Dir, UserMagic.Level);
                         }
                     }
                     break;
@@ -1619,7 +1619,7 @@ namespace GameSrv.RobotPlay {
                     break;
                 default:
                     n14 = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY);
-                    Direction = (byte)n14;
+                    Dir = (byte)n14;
                     BaseObject = null;
                     if (UserMagic.MagIdx >= 60 && UserMagic.MagIdx <= 65) {
                         if (CretInNearXy(targetBaseObject, nTargetX, nTargetY))// 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
@@ -1782,14 +1782,14 @@ namespace GameSrv.RobotPlay {
                 else {
                     switch (m_nSelectMagic) {
                         case MagicConst.SKILL_ERGUM:
-                            if (AllowUseMagic(12) && Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref TargetX, ref TargetY)) {
+                            if (AllowUseMagic(12) && Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref TargetX, ref TargetY)) {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2) {
                                     dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed); // 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime) {
                                         m_wHitMode = 4;
                                         TargetFocusTick = HUtil32.GetTickCount();
-                                        Direction = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
-                                        Attack(TargetCret, Direction);
+                                        Dir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                                        Attack(TargetCret, Dir);
                                         BreakHolySeizeMode();
                                         AttackTick = HUtil32.GetTickCount();
                                         return result;
@@ -1815,14 +1815,14 @@ namespace GameSrv.RobotPlay {
                             }
                             break;
                         case 43:
-                            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref TargetX, ref TargetY)) {
+                            if (Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY)) {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4) {
                                     dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed);// 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime) {
                                         m_wHitMode = 9;
                                         TargetFocusTick = HUtil32.GetTickCount();
-                                        Direction = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
-                                        Attack(TargetCret, Direction);
+                                        Dir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                                        Attack(TargetCret, Dir);
                                         BreakHolySeizeMode();
                                         AttackTick = HUtil32.GetTickCount();
                                         return result;
@@ -1842,15 +1842,15 @@ namespace GameSrv.RobotPlay {
                                 }
                             }
                             m_nSelectMagic = 0;
-                            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref TargetX, ref TargetY)) {
+                            if (Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref TargetX, ref TargetY)) {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2) {
                                     dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed);
                                     // 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime) {
                                         m_wHitMode = 9;
                                         TargetFocusTick = HUtil32.GetTickCount();
-                                        Direction = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
-                                        Attack(TargetCret, Direction);
+                                        Dir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                                        Attack(TargetCret, Dir);
                                         BreakHolySeizeMode();
                                         AttackTick = HUtil32.GetTickCount();
                                         return result;
@@ -2051,49 +2051,49 @@ namespace GameSrv.RobotPlay {
             try {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
-                Direction = btDir;
+                Dir = btDir;
                 bool canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll || M2Share.Config.boSafeAreaLimited && InSafeZone();
                 switch (btDir) {
-                    case Grobal2.DR_UP:
+                    case Direction.Up:
                         if (CurrY > 1 && Envir.CanWalkEx(CurrX, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 2, true)) {
                             CurrY -= 2;
                         }
                         break;
-                    case Grobal2.DR_UPRIGHT:
+                    case Direction.UpRight:
                         if (CurrX < Envir.Width - 2 && CurrY > 1 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY - 2, true)) {
                             CurrX += 2;
                             CurrY -= 2;
                         }
                         break;
-                    case Grobal2.DR_RIGHT:
+                    case Direction.Right:
                         if (CurrX < Envir.Width - 2 && Envir.CanWalkEx(CurrX + 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY, true)) {
                             CurrX += 2;
                         }
                         break;
-                    case Grobal2.DR_DOWNRIGHT:
+                    case Direction.DownRight:
                         if (CurrX < Envir.Width - 2 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY + 2, true)) {
                             CurrX += 2;
                             CurrY += 2;
                         }
                         break;
-                    case Grobal2.DR_DOWN:
+                    case Direction.Down:
                         if (CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 2, true)) {
                             CurrY += 2;
                         }
                         break;
-                    case Grobal2.DR_DOWNLEFT:
+                    case Direction.DownLeft:
                         if (CurrX > 1 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY + 2, true)) {
                             CurrX -= 2;
                             CurrY += 2;
                         }
 
                         break;
-                    case Grobal2.DR_LEFT:
+                    case Direction.Left:
                         if (CurrX > 1 && Envir.CanWalkEx(CurrX - 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY, true)) {
                             CurrX -= 2;
                         }
                         break;
-                    case Grobal2.DR_UPLEFT:
+                    case Direction.UpLeft:
                         if (CurrX > 1 && CurrY > 1 && Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY - 2, true)) {
                             CurrX -= 2;
                             CurrY -= 2;
@@ -2138,32 +2138,32 @@ namespace GameSrv.RobotPlay {
                 if (HUtil32.GetTickCount() - DwTick3F4 > WalkIntervalTime) {
                     n10 = nTargetX;
                     n14 = nTargetY;
-                    byte nDir = Grobal2.DR_DOWN;
+                    byte nDir = Direction.Down;
                     if (n10 > CurrX) {
-                        nDir = Grobal2.DR_RIGHT;
+                        nDir = Direction.Right;
                         if (n14 > CurrY) {
-                            nDir = Grobal2.DR_DOWNRIGHT;
+                            nDir = Direction.DownRight;
                         }
                         if (n14 < CurrY) {
-                            nDir = Grobal2.DR_UPRIGHT;
+                            nDir = Direction.UpRight;
                         }
                     }
                     else {
                         if (n10 < CurrX) {
-                            nDir = Grobal2.DR_LEFT;
+                            nDir = Direction.Left;
                             if (n14 > CurrY) {
-                                nDir = Grobal2.DR_DOWNLEFT;
+                                nDir = Direction.DownLeft;
                             }
                             if (n14 < CurrY) {
-                                nDir = Grobal2.DR_UPLEFT;
+                                nDir = Direction.UpLeft;
                             }
                         }
                         else {
                             if (n14 > CurrY) {
-                                nDir = Grobal2.DR_DOWN;
+                                nDir = Direction.Down;
                             }
                             else if (n14 < CurrY) {
-                                nDir = Grobal2.DR_UP;
+                                nDir = Direction.Up;
                             }
                         }
                     }
@@ -2176,7 +2176,7 @@ namespace GameSrv.RobotPlay {
                     }
                     if (!result) {
                         n20 = M2Share.RandomNumber.Random(3);
-                        for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                        for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                             if (nOldX == CurrX && nOldY == CurrY) {
                                 if (n20 != 0) {
                                     nDir++;
@@ -2185,10 +2185,10 @@ namespace GameSrv.RobotPlay {
                                     nDir -= 1;
                                 }
                                 else {
-                                    nDir = Grobal2.DR_UPLEFT;
+                                    nDir = Direction.UpLeft;
                                 }
-                                if (nDir > Grobal2.DR_UPLEFT) {
-                                    nDir = Grobal2.DR_UP;
+                                if (nDir > Direction.UpLeft) {
+                                    nDir = Direction.Up;
                                 }
                                 WalkTo(nDir, false);
                                 if (Math.Abs(nTargetX - CurrX) <= 1 && Math.Abs(nTargetY - CurrY) <= 1) {
@@ -2580,8 +2580,8 @@ namespace GameSrv.RobotPlay {
                         result = 45;// 英雄灭天火
                         return result;
                     }
-                    if (HUtil32.GetTickCount() - m_SkillUseTick[10] > 5000 && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref TargetX, ref TargetY)) {
-                        if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && GetDirBaseObjectsCount(Direction, 5) > 0 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)) {
+                    if (HUtil32.GetTickCount() - m_SkillUseTick[10] > 5000 && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY)) {
+                        if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && GetDirBaseObjectsCount(Dir, 5) > 0 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)) {
                             if (AllowUseMagic(10)) {
                                 m_SkillUseTick[10] = HUtil32.GetTickCount();
                                 result = 10;// 英雄疾光电影 
@@ -2593,7 +2593,7 @@ namespace GameSrv.RobotPlay {
                                 return result;
                             }
                         }
-                        else if (GetDirBaseObjectsCount(Direction, 5) > 1 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)) {
+                        else if (GetDirBaseObjectsCount(Dir, 5) > 1 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)) {
                             if (AllowUseMagic(10)) {
                                 m_SkillUseTick[10] = HUtil32.GetTickCount();
                                 result = 10;// 英雄疾光电影 
@@ -3082,11 +3082,11 @@ namespace GameSrv.RobotPlay {
                         result = 11;// 英雄雷电术
                         return result;
                     }
-                    if (AllowUseMagic(10) && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)) {
+                    if (AllowUseMagic(10) && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)) {
                         result = 10; // 英雄疾光电影
                         return result;
                     }
-                    if (AllowUseMagic(9) && Envir.GetNextPosition(CurrX, CurrY, Direction, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)) {
+                    if (AllowUseMagic(9) && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)) {
                         result = 9; // 地狱火
                         return result;
                     }
@@ -3395,7 +3395,7 @@ namespace GameSrv.RobotPlay {
                 for (int i = 0; i < VisibleActors.Count; i++) {
                     switch (nMode) {
                         case MagicConst.SKILL_BANWOL:
-                            n10 = (Direction + M2Share.Config.WideAttack[nC]) % 8;
+                            n10 = (Dir + M2Share.Config.WideAttack[nC]) % 8;
                             break;
                     }
                     if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY)) {

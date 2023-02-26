@@ -81,42 +81,42 @@ namespace GameSrv.RobotPlay {
                         if (!BaseObject.Death) {
                             if (IsProperTarget(BaseObject) && (!BaseObject.HideMode || CoolEye)) {
                                 switch (nDir) {
-                                    case Grobal2.DR_UP:
+                                    case Direction.Up:
                                         if (Math.Abs(nX - BaseObject.CurrX) <= nRange && BaseObject.CurrY - nY >= 0 && BaseObject.CurrY - nY <= nRange) {
                                             result++;
                                         }
                                         break;
-                                    case Grobal2.DR_UPRIGHT:
+                                    case Direction.UpRight:
                                         if (BaseObject.CurrX - nX >= 0 && BaseObject.CurrX - nX <= nRange && BaseObject.CurrY - nY >= 0 && BaseObject.CurrY - nY <= nRange) {
                                             result++;
                                         }
                                         break;
-                                    case Grobal2.DR_RIGHT:
+                                    case Direction.Right:
                                         if (BaseObject.CurrX - nX >= 0 && BaseObject.CurrX - nX <= nRange && Math.Abs(nY - BaseObject.CurrY) <= nRange) {
                                             result++;
                                         }
                                         break;
-                                    case Grobal2.DR_DOWNRIGHT:
+                                    case Direction.DownRight:
                                         if (BaseObject.CurrX - nX >= 0 && BaseObject.CurrX - nX <= nRange && nY - BaseObject.CurrY >= 0 && nY - BaseObject.CurrY <= nRange) {
                                             result++;
                                         }
                                         break;
-                                    case Grobal2.DR_DOWN:
+                                    case Direction.Down:
                                         if (Math.Abs(nX - BaseObject.CurrX) <= nRange && nY - BaseObject.CurrY >= 0 && nY - BaseObject.CurrY <= nRange) {
                                             result++;
                                         }
                                         break;
-                                    case Grobal2.DR_DOWNLEFT:
+                                    case Direction.DownLeft:
                                         if (nX - BaseObject.CurrX >= 0 && nX - BaseObject.CurrX <= nRange && nY - BaseObject.CurrY >= 0 && nY - BaseObject.CurrY <= nRange) {
                                             result++;
                                         }
                                         break;
-                                    case Grobal2.DR_LEFT:
+                                    case Direction.Left:
                                         if (nX - BaseObject.CurrX >= 0 && nX - BaseObject.CurrX <= nRange && Math.Abs(nY - BaseObject.CurrY) <= nRange) {
                                             result++;
                                         }
                                         break;
-                                    case Grobal2.DR_UPLEFT:
+                                    case Direction.UpLeft:
                                         if (nX - BaseObject.CurrX >= 0 && nX - BaseObject.CurrX <= nRange && BaseObject.CurrY - nY >= 0 && BaseObject.CurrY - nY <= nRange) {
                                             result++;
                                         }
@@ -139,32 +139,32 @@ namespace GameSrv.RobotPlay {
             int n14;
             n10 = TargetCret.CurrX;
             n14 = TargetCret.CurrY;
-            int result = Grobal2.DR_DOWN;
+            int result = Direction.Down;
             if (n10 > CurrX) {
-                result = Grobal2.DR_LEFT;
+                result = Direction.Left;
                 if (n14 > CurrY) {
-                    result = Grobal2.DR_DOWNLEFT;
+                    result = Direction.DownLeft;
                 }
                 if (n14 < CurrY) {
-                    result = Grobal2.DR_UPLEFT;
+                    result = Direction.UpLeft;
                 }
             }
             else {
                 if (n10 < CurrX) {
-                    result = Grobal2.DR_RIGHT;
+                    result = Direction.Right;
                     if (n14 > CurrY) {
-                        result = Grobal2.DR_DOWNRIGHT;
+                        result = Direction.DownRight;
                     }
                     if (n14 < CurrY) {
-                        result = Grobal2.DR_UPRIGHT;
+                        result = Direction.UpRight;
                     }
                 }
                 else {
                     if (n14 > CurrY) {
-                        result = Grobal2.DR_UP;
+                        result = Direction.Up;
                     }
                     else if (n14 < CurrY) {
-                        result = Grobal2.DR_DOWN;
+                        result = Direction.Down;
                     }
                 }
             }
@@ -174,32 +174,32 @@ namespace GameSrv.RobotPlay {
         public byte AutoAvoid_GetDirXY(int nTargetX, int nTargetY) {
             int n10 = nTargetX;
             int n14 = nTargetY;
-            byte result = Grobal2.DR_DOWN;
+            byte result = Direction.Down;
             if (n10 > CurrX) {
-                result = Grobal2.DR_RIGHT;
+                result = Direction.Right;
                 if (n14 > CurrY) {
-                    result = Grobal2.DR_DOWNRIGHT;
+                    result = Direction.DownRight;
                 }
                 if (n14 < CurrY) {
-                    result = Grobal2.DR_UPRIGHT;
+                    result = Direction.UpRight;
                 }
             }
             else {
                 if (n10 < CurrX) {
-                    result = Grobal2.DR_LEFT;
+                    result = Direction.Left;
                     if (n14 > CurrY) {
-                        result = Grobal2.DR_DOWNLEFT;
+                        result = Direction.DownLeft;
                     }
                     if (n14 < CurrY) {
-                        result = Grobal2.DR_UPLEFT;
+                        result = Direction.UpLeft;
                     }
                 }
                 else {
                     if (n14 > CurrY) {
-                        result = Grobal2.DR_DOWN;
+                        result = Direction.Down;
                     }
                     else if (n14 < CurrY) {
-                        result = Grobal2.DR_UP;
+                        result = Direction.Up;
                     }
                 }
             }
@@ -210,7 +210,7 @@ namespace GameSrv.RobotPlay {
             int n01 = 0;
             while (true) {
                 switch (nDir) {
-                    case Grobal2.DR_UP:
+                    case Direction.Up:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0) {
                             nTargetY -= 2;
                             break;
@@ -223,7 +223,7 @@ namespace GameSrv.RobotPlay {
                             n01 += 2;
                             continue;
                         }
-                    case Grobal2.DR_UPRIGHT:
+                    case Direction.UpRight:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0) {
                             nTargetX += 2;
                             nTargetY -= 2;
@@ -238,7 +238,7 @@ namespace GameSrv.RobotPlay {
                             n01 += 2;
                             continue;
                         }
-                    case Grobal2.DR_RIGHT:
+                    case Direction.Right:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0) {
                             nTargetX += 2;
                             break;
@@ -251,7 +251,7 @@ namespace GameSrv.RobotPlay {
                             n01 += 2;
                             continue;
                         }
-                    case Grobal2.DR_DOWNRIGHT:
+                    case Direction.DownRight:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0) {
                             nTargetX += 2;
                             nTargetY += 2;
@@ -266,7 +266,7 @@ namespace GameSrv.RobotPlay {
                             n01 += 2;
                             continue;
                         }
-                    case Grobal2.DR_DOWN:
+                    case Direction.Down:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0) {
                             nTargetY += 2;
                             break;
@@ -279,7 +279,7 @@ namespace GameSrv.RobotPlay {
                             n01 += 2;
                             continue;
                         }
-                    case Grobal2.DR_DOWNLEFT:
+                    case Direction.DownLeft:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0) {
                             nTargetX -= 2;
                             nTargetY += 2;
@@ -294,7 +294,7 @@ namespace GameSrv.RobotPlay {
                             n01 += 2;
                             continue;
                         }
-                    case Grobal2.DR_LEFT:
+                    case Direction.Left:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0) {
                             nTargetX -= 2;
                             break;
@@ -307,7 +307,7 @@ namespace GameSrv.RobotPlay {
                             n01 += 2;
                             continue;
                         }
-                    case Grobal2.DR_UPLEFT:
+                    case Direction.UpLeft:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0) {
                             nTargetX -= 2;
                             nTargetY -= 2;

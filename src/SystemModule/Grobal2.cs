@@ -1,9 +1,7 @@
 using SystemModule.Packets.ClientPackets;
 
-namespace SystemModule
-{
-    public class Grobal2
-    {
+namespace SystemModule {
+    public class Grobal2 {
         public const int CLIENT_VERSION_NUMBER = 120040918;
         public const uint RunGateCode = 0xAA55AA55 + 0x00450045;
         /// <summary>
@@ -39,7 +37,7 @@ namespace SystemModule
         /// 物品类型(物品属性读取)
         /// </summary>
         public const byte MAX_STATUS_ATTRIBUTE = 12;
-        
+
         public const byte ET_DIGOUTZOMBI = 1;
         public const byte ET_MINE = 2;
         public const byte ET_PILESTONES = 3;
@@ -57,15 +55,6 @@ namespace SystemModule
         public const byte GM_DATA = 5;
         public const byte GM_SERVERUSERINDEX = 6;
         public const byte GM_RECEIVE_OK = 7;
-        
-        public const byte DR_UP = 0;
-        public const byte DR_UPRIGHT = 1;
-        public const byte DR_RIGHT = 2;
-        public const byte DR_DOWNRIGHT = 3;
-        public const byte DR_DOWN = 4;
-        public const byte DR_DOWNLEFT = 5;
-        public const byte DR_LEFT = 6;
-        public const byte DR_UPLEFT = 7;
 
         /// <summary>
         /// 衣服
@@ -127,10 +116,8 @@ namespace SystemModule
         public const byte MaxBagItem = 46;
         public const byte LA_UNDEAD = 1;
 
-        public static CommandPacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series)
-        {
-            var result = new CommandPacket
-            {
+        public static CommandPacket MakeDefaultMsg(int msg, int Recog, int param, int tag, int series) {
+            var result = new CommandPacket {
                 Ident = (ushort)msg,
                 Param = (ushort)param,
                 Tag = (ushort)tag,

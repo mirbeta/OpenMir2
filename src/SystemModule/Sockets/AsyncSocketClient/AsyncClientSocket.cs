@@ -117,7 +117,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception(ex.Message);
             }
         }
 

@@ -27,7 +27,7 @@ namespace GameSrv.Actor {
         /// <summary>
         /// 所在方向
         /// </summary>
-        public byte Direction;
+        public byte Dir;
         /// <summary>
         /// 所在地图名称
         /// </summary>
@@ -465,7 +465,7 @@ namespace GameSrv.Actor {
             Death = false;
             DeathTick = 0;
             SendRefMsgTick = HUtil32.GetTickCount();
-            Direction = 4;
+            Dir = 4;
             Race = ActorRace.Animal;
             RaceImg = 0;
             Gold = 0;
@@ -703,39 +703,39 @@ namespace GameSrv.Actor {
             try {
                 short oldX = CurrX;
                 short oldY = CurrY;
-                Direction = btDir;
+                Dir = btDir;
                 short newX = 0;
                 short newY = 0;
                 switch (btDir) {
-                    case Grobal2.DR_UP:
+                    case Direction.Up:
                         newX = CurrX;
                         newY = (short)(CurrY - 1);
                         break;
-                    case Grobal2.DR_UPRIGHT:
+                    case Direction.UpRight:
                         newX = (short)(CurrX + 1);
                         newY = (short)(CurrY - 1);
                         break;
-                    case Grobal2.DR_RIGHT:
+                    case Direction.Right:
                         newX = (short)(CurrX + 1);
                         newY = CurrY;
                         break;
-                    case Grobal2.DR_DOWNRIGHT:
+                    case Direction.DownRight:
                         newX = (short)(CurrX + 1);
                         newY = (short)(CurrY + 1);
                         break;
-                    case Grobal2.DR_DOWN:
+                    case Direction.Down:
                         newX = CurrX;
                         newY = (short)(CurrY + 1);
                         break;
-                    case Grobal2.DR_DOWNLEFT:
+                    case Direction.DownLeft:
                         newX = (short)(CurrX - 1);
                         newY = (short)(CurrY + 1);
                         break;
-                    case Grobal2.DR_LEFT:
+                    case Direction.Left:
                         newX = (short)(CurrX - 1);
                         newY = CurrY;
                         break;
-                    case Grobal2.DR_UPLEFT:
+                    case Direction.UpLeft:
                         newX = (short)(CurrX - 1);
                         newY = (short)(CurrY - 1);
                         break;
@@ -746,7 +746,7 @@ namespace GameSrv.Actor {
                         walkSuccess = false;
                     }
                     if (Master != null) {
-                        Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Direction, 1, ref n20, ref n24);
+                        Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Dir, 1, ref n20, ref n24);
                         if (newX == n20 && newY == n24) {
                             walkSuccess = false;
                         }
@@ -946,29 +946,29 @@ namespace GameSrv.Actor {
         public static byte GetBackDir(int nDir) {
             byte result = 0;
             switch (nDir) {
-                case Grobal2.DR_UP:
-                    result = Grobal2.DR_DOWN;
+                case Direction.Up:
+                    result = Direction.Down;
                     break;
-                case Grobal2.DR_DOWN:
-                    result = Grobal2.DR_UP;
+                case Direction.Down:
+                    result = Direction.Up;
                     break;
-                case Grobal2.DR_LEFT:
-                    result = Grobal2.DR_RIGHT;
+                case Direction.Left:
+                    result = Direction.Right;
                     break;
-                case Grobal2.DR_RIGHT:
-                    result = Grobal2.DR_LEFT;
+                case Direction.Right:
+                    result = Direction.Left;
                     break;
-                case Grobal2.DR_UPLEFT:
-                    result = Grobal2.DR_DOWNRIGHT;
+                case Direction.UpLeft:
+                    result = Direction.DownRight;
                     break;
-                case Grobal2.DR_UPRIGHT:
-                    result = Grobal2.DR_DOWNLEFT;
+                case Direction.UpRight:
+                    result = Direction.DownLeft;
                     break;
-                case Grobal2.DR_DOWNLEFT:
-                    result = Grobal2.DR_UPRIGHT;
+                case Direction.DownLeft:
+                    result = Direction.UpRight;
                     break;
-                case Grobal2.DR_DOWNRIGHT:
-                    result = Grobal2.DR_UPLEFT;
+                case Direction.DownRight:
+                    result = Direction.UpLeft;
                     break;
             }
 
@@ -979,8 +979,8 @@ namespace GameSrv.Actor {
             short nx = 0;
             short ny = 0;
             int result = 0;
-            byte olddir = Direction;
-            Direction = nDir;
+            byte olddir = Dir;
+            Dir = nDir;
             byte nBackDir = GetBackDir(nDir);
             for (int i = 0; i < nPushCount; i++) {
                 GetFrontPosition(ref nx, ref ny);
@@ -1002,9 +1002,9 @@ namespace GameSrv.Actor {
                     break;
                 }
             }
-            Direction = nBackDir;
+            Dir = nBackDir;
             if (result == 0) {
-                Direction = olddir;
+                Dir = olddir;
             }
             return result;
         }
@@ -1076,46 +1076,46 @@ namespace GameSrv.Actor {
             Envirnoment envir = Envir;
             nX = CurrX;
             nY = CurrY;
-            switch (Direction) {
-                case Grobal2.DR_UP:
+            switch (Dir) {
+                case Direction.Up:
                     if (nY > 0) {
                         nY -= 1;
                     }
                     break;
-                case Grobal2.DR_UPRIGHT:
+                case Direction.UpRight:
                     if ((nX < (envir.Width - 1)) && (nY > 0)) {
                         nX++;
                         nY -= 1;
                     }
                     break;
-                case Grobal2.DR_RIGHT:
+                case Direction.Right:
                     if (nX < (envir.Width - 1)) {
                         nX++;
                     }
                     break;
-                case Grobal2.DR_DOWNRIGHT:
+                case Direction.DownRight:
                     if ((nX < (envir.Width - 1)) && (nY < (envir.Height - 1))) {
                         nX++;
                         nY++;
                     }
                     break;
-                case Grobal2.DR_DOWN:
+                case Direction.Down:
                     if (nY < (envir.Height - 1)) {
                         nY++;
                     }
                     break;
-                case Grobal2.DR_DOWNLEFT:
+                case Direction.DownLeft:
                     if ((nX > 0) && (nY < (envir.Height - 1))) {
                         nX -= 1;
                         nY++;
                     }
                     break;
-                case Grobal2.DR_LEFT:
+                case Direction.Left:
                     if (nX > 0) {
                         nX -= 1;
                     }
                     break;
-                case Grobal2.DR_UPLEFT:
+                case Direction.UpLeft:
                     if ((nX > 0) && (nY > 0)) {
                         nX -= 1;
                         nY -= 1;
@@ -1198,10 +1198,10 @@ namespace GameSrv.Actor {
                         SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                         SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1) {
-                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW2, Direction, CurrX, CurrY, 0, "");
+                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW2, Dir, CurrX, CurrY, 0, "");
                         }
                         else {
-                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW, Direction, CurrX, CurrY, 0, "");
+                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW, Dir, CurrX, CurrY, 0, "");
                         }
                         SpaceMoved = true;
                         moveSuccess = true;
@@ -1305,35 +1305,35 @@ namespace GameSrv.Actor {
                 ((CurrX != baseObject.CurrX) || (CurrY != baseObject.CurrY))) {
                 result = true;
                 if (((CurrX - 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY)) {
-                    btDir = Grobal2.DR_LEFT;
+                    btDir = Direction.Left;
                     return true;
                 }
                 if (((CurrX + 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY)) {
-                    btDir = Grobal2.DR_RIGHT;
+                    btDir = Direction.Right;
                     return true;
                 }
                 if ((CurrX == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY)) {
-                    btDir = Grobal2.DR_UP;
+                    btDir = Direction.Up;
                     return true;
                 }
                 if ((CurrX == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY)) {
-                    btDir = Grobal2.DR_DOWN;
+                    btDir = Direction.Down;
                     return true;
                 }
                 if (((CurrX - 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY)) {
-                    btDir = Grobal2.DR_UPLEFT;
+                    btDir = Direction.UpLeft;
                     return true;
                 }
                 if (((CurrX + 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY)) {
-                    btDir = Grobal2.DR_UPRIGHT;
+                    btDir = Direction.UpRight;
                     return true;
                 }
                 if (((CurrX - 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY)) {
-                    btDir = Grobal2.DR_DOWNLEFT;
+                    btDir = Direction.DownLeft;
                     return true;
                 }
                 if (((CurrX + 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY)) {
-                    btDir = Grobal2.DR_DOWNRIGHT;
+                    btDir = Direction.DownRight;
                     return true;
                 }
                 btDir = 0;
@@ -1390,7 +1390,7 @@ namespace GameSrv.Actor {
             object point = Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
             bool result = point != null;
             if (!FixedHideMode) {
-                SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_TURN, Dir, CurrX, CurrY, 0, "");
             }
             return result;
         }
@@ -2001,7 +2001,7 @@ namespace GameSrv.Actor {
                     }
                 }
                 if (result) {
-                    SendRefMsg(nIdent, Direction, CurrX, CurrY, 0, "");
+                    SendRefMsg(nIdent, Dir, CurrX, CurrY, 0, "");
                 }
             }
             catch (Exception e) {
@@ -2012,7 +2012,7 @@ namespace GameSrv.Actor {
         }
 
         protected void TurnTo(byte nDir) {
-            Direction = nDir;
+            Dir = nDir;
             SendRefMsg(Messages.RM_TURN, nDir, CurrX, CurrY, 0, "");
         }
 
@@ -2493,46 +2493,46 @@ namespace GameSrv.Actor {
             Envirnoment envir = Envir;
             nX = CurrX;
             nY = CurrY;
-            switch (Direction) {
-                case Grobal2.DR_UP:
+            switch (Dir) {
+                case Direction.Up:
                     if (nY < (envir.Height - 1)) {
                         nY++;
                     }
                     break;
-                case Grobal2.DR_DOWN:
+                case Direction.Down:
                     if (nY > 0) {
                         nY -= 1;
                     }
                     break;
-                case Grobal2.DR_LEFT:
+                case Direction.Left:
                     if (nX < (envir.Width - 1)) {
                         nX++;
                     }
                     break;
-                case Grobal2.DR_RIGHT:
+                case Direction.Right:
                     if (nX > 0) {
                         nX -= 1;
                     }
                     break;
-                case Grobal2.DR_UPLEFT:
+                case Direction.UpLeft:
                     if ((nX < (envir.Width - 1)) && (nY < (envir.Height - 1))) {
                         nX++;
                         nY++;
                     }
                     break;
-                case Grobal2.DR_UPRIGHT:
+                case Direction.UpRight:
                     if ((nX < (envir.Width - 1)) && (nY > 0)) {
                         nX -= 1;
                         nY++;
                     }
                     break;
-                case Grobal2.DR_DOWNLEFT:
+                case Direction.DownLeft:
                     if ((nX > 0) && (nY < (envir.Height - 1))) {
                         nX++;
                         nY -= 1;
                     }
                     break;
-                case Grobal2.DR_DOWNRIGHT:
+                case Direction.DownRight:
                     if ((nX > 0) && (nY > 0)) {
                         nX -= 1;
                         nY -= 1;
@@ -2801,48 +2801,48 @@ namespace GameSrv.Actor {
             byte btDir = M2Share.GetNextDirection(nCurrX, nCurrY, nX, nY);
             bool canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir) {
-                case Grobal2.DR_UP:
+                case Direction.Up:
                     if (nCurrY > 1) {
                         if ((Envir.CanWalkEx(nCurrX, nCurrY - 1, canWalk)) && (Envir.CanWalkEx(nCurrX, nCurrY - 2, canWalk))) {
                             return true;
                         }
                     }
                     break;
-                case Grobal2.DR_UPRIGHT:
+                case Direction.UpRight:
                     if (nCurrX < Envir.Width - 2 && nCurrY > 1) {
                         if ((Envir.CanWalkEx(nCurrX + 1, nCurrY - 1, canWalk)) && (Envir.CanWalkEx(nCurrX + 2, nCurrY - 2, canWalk))) {
                             return true;
                         }
                     }
                     break;
-                case Grobal2.DR_RIGHT:
+                case Direction.Right:
                     if (nCurrX < Envir.Width - 2) {
                         if (Envir.CanWalkEx(nCurrX + 1, nCurrY, canWalk) && (Envir.CanWalkEx(nCurrX + 2, nCurrY, canWalk))) {
                             return true;
                         }
                     }
                     break;
-                case Grobal2.DR_DOWNRIGHT:
+                case Direction.DownRight:
                     if ((nCurrX < Envir.Width - 2) && (nCurrY < Envir.Height - 2) && (Envir.CanWalkEx(nCurrX + 1, nCurrY + 1, canWalk) && (Envir.CanWalkEx(nCurrX + 2, nCurrY + 2, canWalk)))) {
                         return true;
                     }
                     break;
-                case Grobal2.DR_DOWN:
+                case Direction.Down:
                     if ((nCurrY < Envir.Height - 2) && (Envir.CanWalkEx(nCurrX, nCurrY + 1, canWalk && (Envir.CanWalkEx(nCurrX, nCurrY + 2, canWalk))))) {
                         return true;
                     }
                     break;
-                case Grobal2.DR_DOWNLEFT:
+                case Direction.DownLeft:
                     if ((nCurrX > 1) && (nCurrY < Envir.Height - 2) && (Envir.CanWalkEx(nCurrX - 1, nCurrY + 1, canWalk)) && (Envir.CanWalkEx(nCurrX - 2, nCurrY + 2, canWalk))) {
                         return true;
                     }
                     break;
-                case Grobal2.DR_LEFT:
+                case Direction.Left:
                     if ((nCurrX > 1) && (Envir.CanWalkEx(nCurrX - 1, nCurrY, canWalk)) && (Envir.CanWalkEx(nCurrX - 2, nCurrY, canWalk))) {
                         return true;
                     }
                     break;
-                case Grobal2.DR_UPLEFT:
+                case Direction.UpLeft:
                     if ((nCurrX > 1) && (nCurrY > 1) && (Envir.CanWalkEx(nCurrX - 1, nCurrY - 1, canWalk)) && (Envir.CanWalkEx(nCurrX - 2, nCurrY - 2, canWalk))) {
                         return true;
                     }
@@ -2855,49 +2855,49 @@ namespace GameSrv.Actor {
             byte btDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
             bool canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir) {
-                case Grobal2.DR_UP:
+                case Direction.Up:
                     if (CurrY > 1) {
                         if ((Envir.CanWalkEx(CurrX, CurrY - 1, canWalk)) && (Envir.CanWalkEx(CurrX, CurrY - 2, canWalk))) {
                             return true;
                         }
                     }
                     break;
-                case Grobal2.DR_UPRIGHT:
+                case Direction.UpRight:
                     if (CurrX < Envir.Width - 2 && CurrY > 1) {
                         if ((Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk)) && (Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk))) {
                             return true;
                         }
                     }
                     break;
-                case Grobal2.DR_RIGHT:
+                case Direction.Right:
                     if (CurrX < Envir.Width - 2) {
                         if (Envir.CanWalkEx(CurrX + 1, CurrY, canWalk && (Envir.CanWalkEx(CurrX + 2, CurrY, canWalk)))) {
                             return true;
                         }
                     }
                     break;
-                case Grobal2.DR_DOWNRIGHT:
+                case Direction.DownRight:
                     if ((CurrX < Envir.Width - 2) && (CurrY < Envir.Height - 2) && (Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) && (Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk)))) {
                         return true;
                     }
                     break;
-                case Grobal2.DR_DOWN:
+                case Direction.Down:
                     if ((CurrY < Envir.Height - 2)
                         && (Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && (Envir.CanWalkEx(CurrX, CurrY + 2, canWalk)))) {
                         return true;
                     }
                     break;
-                case Grobal2.DR_DOWNLEFT:
+                case Direction.DownLeft:
                     if ((CurrX > 1) && (CurrY < Envir.Height - 2) && (Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk)) && (Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk))) {
                         return true;
                     }
                     break;
-                case Grobal2.DR_LEFT:
+                case Direction.Left:
                     if ((CurrX > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY, canWalk)) && (Envir.CanWalkEx(CurrX - 2, CurrY, canWalk))) {
                         return true;
                     }
                     break;
-                case Grobal2.DR_UPLEFT:
+                case Direction.UpLeft:
                     if ((CurrX > 1) && (CurrY > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk)) && (Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk))) {
                         return true;
                     }
@@ -3209,7 +3209,7 @@ namespace GameSrv.Actor {
             RecalcAbilitys();
             Death = false;
             Invisible = false;
-            SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, GetFeatureToLong(), "");
+            SendRefMsg(Messages.RM_TURN, Dir, CurrX, CurrY, GetFeatureToLong(), "");
             MonsterSayMsg(null, MonStatus.MonGen);
             return true;
         }

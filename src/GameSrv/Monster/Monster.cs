@@ -33,7 +33,7 @@ namespace GameSrv.Monster {
                 ElfMon.TargetFocusTick = OldMon.TargetFocusTick;
                 ElfMon.LastHiter = OldMon.LastHiter;
                 ElfMon.LastHiterTick = OldMon.LastHiterTick;
-                ElfMon.Direction = OldMon.Direction;
+                ElfMon.Dir = OldMon.Dir;
                 ElfMon.IsSlave = true;
                 if (OldMon.Master != null) {
                     OldMon.Master.SlaveList.Add(ElfMon);

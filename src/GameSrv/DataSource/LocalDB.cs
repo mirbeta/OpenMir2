@@ -103,7 +103,7 @@ namespace GameSrv.DataSource {
                             if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction)) {
                                 BaseObject guard = M2Share.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
                                 if (guard != null) {
-                                    guard.Direction = (byte)HUtil32.StrToInt(direction, 0);
+                                    guard.Dir = (byte)HUtil32.StrToInt(direction, 0);
                                 }
                             }
                         }

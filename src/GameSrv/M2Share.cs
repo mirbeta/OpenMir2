@@ -307,7 +307,7 @@ namespace GameSrv {
         public static byte GetNextDirection(short sx, short sy, short dx, short dy) {
             short flagx;
             short flagy;
-            byte result = Grobal2.DR_DOWN;
+            byte result = Direction.Down;
             if (sx < dx) {
                 flagx = 1;
             }
@@ -337,28 +337,28 @@ namespace GameSrv {
                 }
             }
             if (flagx == 0 && flagy == -1) {
-                result = Grobal2.DR_UP;
+                result = Direction.Up;
             }
             if (flagx == 1 && flagy == -1) {
-                result = Grobal2.DR_UPRIGHT;
+                result = Direction.UpRight;
             }
             if (flagx == 1 && flagy == 0) {
-                result = Grobal2.DR_RIGHT;
+                result = Direction.Right;
             }
             if (flagx == 1 && flagy == 1) {
-                result = Grobal2.DR_DOWNRIGHT;
+                result = Direction.DownRight;
             }
             if (flagx == 0 && flagy == 1) {
-                result = Grobal2.DR_DOWN;
+                result = Direction.Down;
             }
             if (flagx == -1 && flagy == 1) {
-                result = Grobal2.DR_DOWNLEFT;
+                result = Direction.DownLeft;
             }
             if (flagx == -1 && flagy == 0) {
-                result = Grobal2.DR_LEFT;
+                result = Direction.Left;
             }
             if (flagx == -1 && flagy == -1) {
-                result = Grobal2.DR_UPLEFT;
+                result = Direction.UpLeft;
             }
             return result;
         }

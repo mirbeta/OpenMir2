@@ -18,7 +18,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             nType = HUtil32._MIN(nType, 8);
             if (nType == 0) {
-                PlayObject.CharPushed(Actor.BaseObject.GetBackDir(PlayObject.Direction), nCount);
+                PlayObject.CharPushed(Actor.BaseObject.GetBackDir(PlayObject.Dir), nCount);
             }
             else {
                 PlayObject.CharPushed(M2Share.RandomNumber.RandomByte((byte)nType), nCount);

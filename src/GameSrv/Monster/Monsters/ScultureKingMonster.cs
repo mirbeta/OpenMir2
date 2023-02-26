@@ -12,7 +12,7 @@ namespace GameSrv.Monster.Monsters {
             ViewRange = 8;
             StoneMode = true;
             CharStatusEx = PoisonState.STONEMODE;
-            Direction = 5;
+            Dir = 5;
             _mNDangerLevel = 5;
             _mSlaveObjectList = new List<BaseObject>();
         }
@@ -20,7 +20,7 @@ namespace GameSrv.Monster.Monsters {
         private void MeltStone() {
             CharStatusEx = 0;
             CharStatus = GetCharStatus();
-            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
             StoneMode = false;
             EventInfo stoneEvent = new EventInfo(Envir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
             M2Share.EventMgr.AddEvent(stoneEvent);

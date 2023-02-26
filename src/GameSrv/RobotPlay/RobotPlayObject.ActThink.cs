@@ -12,7 +12,7 @@ namespace GameSrv.RobotPlay {
             int nMonCount;
             MapWalkXY MapWalkXY = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (WalkStep[i].nWalkStep > 0 && Math.Abs(WalkStep[i].nX - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].nY - TargetCret.CurrY) >= nRange) {
                     if (WalkStep[i].nMonCount < n10) {
                         n10 = WalkStep[i].nMonCount;
@@ -26,7 +26,7 @@ namespace GameSrv.RobotPlay {
                 n10 = int.MaxValue;
                 MapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
-                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                     if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount && Math.Abs(WalkStep[i].nX - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].nY - TargetCret.CurrY) >= nRange) {
                         if (WalkStep[i].nMastrRange < n10 && WalkStep[i].nMastrRange < nMastrRange) {
                             n10 = WalkStep[i].nMastrRange;
@@ -51,7 +51,7 @@ namespace GameSrv.RobotPlay {
             MapWalkXY MapWalkXY = null;
             int n10 = int.MaxValue;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (WalkStep[i].nWalkStep > 0) {
                     if (WalkStep[i].nMonCount < n10) {
                         n10 = WalkStep[i].nMonCount;
@@ -65,7 +65,7 @@ namespace GameSrv.RobotPlay {
                 n10 = int.MaxValue;
                 MapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
-                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                     if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount) {
                         if (WalkStep[i].nMastrRange < n10 && WalkStep[i].nMastrRange < nMastrRange) {
                             n10 = WalkStep[i].nMastrRange;
@@ -90,7 +90,7 @@ namespace GameSrv.RobotPlay {
             int nMonCount;
             MapWalkXY MapWalkXY = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (WalkStep[i].nWalkStep > 0) {
                     n1C = Math.Abs(WalkStep[i].nX - TargetCret.CurrX) + Math.Abs(WalkStep[i].nY - TargetCret.CurrY);
                     if (n1C < n10) {
@@ -103,7 +103,7 @@ namespace GameSrv.RobotPlay {
                 nMonCount = MapWalkXY.nMonCount;
                 MapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
-                for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+                for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                     if (WalkStep[i].nWalkStep > 0 && WalkStep[i].nMonCount <= nMonCount) {
                         n1C = Math.Abs(WalkStep[i].nX - TargetCret.CurrX) + Math.Abs(WalkStep[i].nY - TargetCret.CurrY);
                         if (n1C <= n10) {
@@ -144,7 +144,7 @@ namespace GameSrv.RobotPlay {
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) {
                         WalkStep[i].nWalkStep = nRange;
@@ -165,8 +165,7 @@ namespace GameSrv.RobotPlay {
             short nCurrX = 0;
             short nCurrY = 0;
             bool result = false;
-            //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag)) {
                         WalkStep[i].nWalkStep = nRange;
@@ -188,7 +187,7 @@ namespace GameSrv.RobotPlay {
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (Envir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && Envir.CanWalkEx(nCurrX, nCurrY, false)) {
                     if ((!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) && IsGotoXY(CurrX, CurrY, nCurrX, nCurrY)) {
                         WalkStep[i].nWalkStep = nRange;
@@ -210,7 +209,7 @@ namespace GameSrv.RobotPlay {
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) {
                         WalkStep[i].nWalkStep = nRange;
@@ -227,7 +226,7 @@ namespace GameSrv.RobotPlay {
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) {
                         WalkStep[i].nWalkStep = nRange;
@@ -249,7 +248,7 @@ namespace GameSrv.RobotPlay {
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag)) {
                         WalkStep[i].nWalkStep = nRange;
@@ -266,7 +265,7 @@ namespace GameSrv.RobotPlay {
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Grobal2.DR_UP; i <= Grobal2.DR_UPLEFT; i++) {
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false)) {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || ActThink_CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag)) {
                         WalkStep[i].nWalkStep = nRange;
@@ -517,57 +516,57 @@ namespace GameSrv.RobotPlay {
             byte result = 0;
             if (boTurn) {
                 switch (btDir) {
-                    case Grobal2.DR_UP:
-                        result = Grobal2.DR_RIGHT;
+                    case Direction.Up:
+                        result = Direction.Right;
                         break;
-                    case Grobal2.DR_UPRIGHT:
-                        result = Grobal2.DR_DOWNRIGHT;
+                    case Direction.UpRight:
+                        result = Direction.DownRight;
                         break;
-                    case Grobal2.DR_RIGHT:
-                        result = Grobal2.DR_DOWN;
+                    case Direction.Right:
+                        result = Direction.Down;
                         break;
-                    case Grobal2.DR_DOWNRIGHT:
-                        result = Grobal2.DR_DOWNLEFT;
+                    case Direction.DownRight:
+                        result = Direction.DownLeft;
                         break;
-                    case Grobal2.DR_DOWN:
-                        result = Grobal2.DR_LEFT;
+                    case Direction.Down:
+                        result = Direction.Left;
                         break;
-                    case Grobal2.DR_DOWNLEFT:
-                        result = Grobal2.DR_UPLEFT;
+                    case Direction.DownLeft:
+                        result = Direction.UpLeft;
                         break;
-                    case Grobal2.DR_LEFT:
-                        result = Grobal2.DR_UP;
+                    case Direction.Left:
+                        result = Direction.Up;
                         break;
-                    case Grobal2.DR_UPLEFT:
-                        result = Grobal2.DR_UPRIGHT;
+                    case Direction.UpLeft:
+                        result = Direction.UpRight;
                         break;
                 }
             }
             else {
                 switch (btDir) {
-                    case Grobal2.DR_UP:
-                        result = Grobal2.DR_LEFT;
+                    case Direction.Up:
+                        result = Direction.Left;
                         break;
-                    case Grobal2.DR_UPRIGHT:
-                        result = Grobal2.DR_UPLEFT;
+                    case Direction.UpRight:
+                        result = Direction.UpLeft;
                         break;
-                    case Grobal2.DR_RIGHT:
-                        result = Grobal2.DR_UP;
+                    case Direction.Right:
+                        result = Direction.Up;
                         break;
-                    case Grobal2.DR_DOWNRIGHT:
-                        result = Grobal2.DR_UPRIGHT;
+                    case Direction.DownRight:
+                        result = Direction.UpRight;
                         break;
-                    case Grobal2.DR_DOWN:
-                        result = Grobal2.DR_RIGHT;
+                    case Direction.Down:
+                        result = Direction.Right;
                         break;
-                    case Grobal2.DR_DOWNLEFT:
-                        result = Grobal2.DR_DOWNRIGHT;
+                    case Direction.DownLeft:
+                        result = Direction.DownRight;
                         break;
-                    case Grobal2.DR_LEFT:
-                        result = Grobal2.DR_DOWN;
+                    case Direction.Left:
+                        result = Direction.Down;
                         break;
-                    case Grobal2.DR_UPLEFT:
-                        result = Grobal2.DR_DOWNLEFT;
+                    case Direction.UpLeft:
+                        result = Direction.DownLeft;
                         break;
                 }
             }

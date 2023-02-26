@@ -260,7 +260,7 @@ namespace GameSrv.Player {
                 }
             }
             if (nX == CurrX && nY == CurrY) {
-                Direction = (byte)nDir;
+                Dir = (byte)nDir;
                 if (Walk(Messages.RM_TURN)) {
                     TurnTick = HUtil32.GetTickCount();
                     return true;
@@ -587,7 +587,7 @@ namespace GameSrv.Player {
                             if (baseObject.Race >= ActorRace.Animal && baseObject.Race < ActorRace.Monster) {
                                 baseObject.Skeleton = true;
                                 ApplyMeatQuality();
-                                baseObject.SendRefMsg(Messages.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
+                                baseObject.SendRefMsg(Messages.RM_SKELETON, baseObject.Dir, baseObject.CurrX, baseObject.CurrY, 0, "");
                             }
                             if (!TakeBagItems(baseObject)) {
                                 SysMsg(Settings.YouFoundNothing, MsgColor.Red, MsgType.Hint);
@@ -597,9 +597,9 @@ namespace GameSrv.Player {
                         DeathTick = HUtil32.GetTickCount();
                     }
                 }
-                Direction = btDir;
+                Dir = btDir;
             }
-            SendRefMsg(Messages.RM_BUTCH, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_BUTCH, Dir, CurrX, CurrY, 0, "");
             return false;
         }
 

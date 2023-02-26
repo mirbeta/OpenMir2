@@ -1225,7 +1225,7 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.RM_MOVEFAIL:
-                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MOVEFAIL, ActorId, CurrX, CurrY, Direction);
+                    ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_MOVEFAIL, ActorId, CurrX, CurrY, Dir);
                     CharDesc movefailmessage = default;
                     movefailmessage.Feature = baseObject.GetFeatureToLong();
                     movefailmessage.Status = baseObject.CharStatus;
@@ -1635,7 +1635,7 @@ namespace GameSrv.Player {
                         lightingMessage.Param2 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
                         lightingMessage.Tag1 = processMsg.nParam3;
                         lightingMessage.Tag2 = processMsg.wParam;
-                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LIGHTING, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, baseObject.Direction);
+                        ClientMsg = Grobal2.MakeDefaultMsg(Messages.SM_LIGHTING, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, baseObject.Dir);
                         SendSocket(ClientMsg, EDCode.EncodePacket(lightingMessage));
                     }
                     break;

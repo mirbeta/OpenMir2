@@ -1255,7 +1255,7 @@ namespace GameSrv.World {
             playObject.MapName = humData.CurMap;
             playObject.CurrX = humData.CurX;
             playObject.CurrY = humData.CurY;
-            playObject.Direction = humData.Dir;
+            playObject.Dir = humData.Dir;
             playObject.Hair = humData.Hair;
             playObject.Gender = Enum.Parse<PlayGender>(humData.Sex.ToString());
             playObject.Job = (PlayJob)humData.Job;
@@ -1371,7 +1371,7 @@ namespace GameSrv.World {
             humanRcd.Data.CurMap = playObject.MapName;
             humanRcd.Data.CurX = playObject.CurrX;
             humanRcd.Data.CurY = playObject.CurrY;
-            humanRcd.Data.Dir = playObject.Direction;
+            humanRcd.Data.Dir = playObject.Dir;
             humanRcd.Data.Hair = playObject.Hair;
             humanRcd.Data.Sex = (byte)playObject.Gender;
             humanRcd.Data.Job = (byte)playObject.Job;
@@ -1833,7 +1833,7 @@ namespace GameSrv.World {
             cert.MapName = ai.sMapName;
             cert.CurrX = ai.nX;
             cert.CurrY = ai.nY;
-            cert.Direction = (byte)M2Share.RandomNumber.Random(8);
+            cert.Dir = (byte)M2Share.RandomNumber.Random(8);
             cert.ChrName = ai.sChrName;
             cert.WAbil = cert.Abil;
             if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) {

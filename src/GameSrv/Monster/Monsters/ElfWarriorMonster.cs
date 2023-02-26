@@ -12,7 +12,7 @@ namespace GameSrv.Monster.Monsters {
         public void AppearNow() {
             BoIsFirst = false;
             FixedHideMode = false;
-            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
             RecalcAbilitys();
             WalkTick = WalkTick + 800;
             DigDownTick = HUtil32.GetTickCount();
@@ -42,7 +42,7 @@ namespace GameSrv.Monster.Monsters {
             if (BoIsFirst) {
                 BoIsFirst = false;
                 FixedHideMode = false;
-                SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
                 ResetElfMon();
             }
             if (Death) {
@@ -64,7 +64,7 @@ namespace GameSrv.Monster.Monsters {
                             elfMon = MakeClone(elfName, this);
                         }
                         if (elfMon != null) {
-                            SendRefMsg(Messages.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
+                            SendRefMsg(Messages.RM_DIGDOWN, Dir, CurrX, CurrY, 0, "");
                             SendRefMsg(Messages.RM_CHANGEFACE, 0, ActorId, elfMon.ActorId, 0, "");
                             elfMon.AutoChangeColor = AutoChangeColor;
                             if (elfMon is ElfMonster monster) {

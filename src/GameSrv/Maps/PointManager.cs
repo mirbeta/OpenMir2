@@ -50,29 +50,29 @@ namespace GameSrv.Maps {
         public static byte GetNextDir(byte btDir) {
             byte result = 0;
             switch (btDir) {
-                case Grobal2.DR_UP:
-                    result = Grobal2.DR_UPRIGHT;
+                case Direction.Up:
+                    result = Direction.UpRight;
                     break;
-                case Grobal2.DR_UPRIGHT:
-                    result = Grobal2.DR_RIGHT;
+                case Direction.UpRight:
+                    result = Direction.Right;
                     break;
-                case Grobal2.DR_RIGHT:
-                    result = Grobal2.DR_DOWNRIGHT;
+                case Direction.Right:
+                    result = Direction.DownRight;
                     break;
-                case Grobal2.DR_DOWNRIGHT:
-                    result = Grobal2.DR_DOWN;
+                case Direction.DownRight:
+                    result = Direction.Down;
                     break;
-                case Grobal2.DR_DOWN:
-                    result = Grobal2.DR_DOWNLEFT;
+                case Direction.Down:
+                    result = Direction.DownLeft;
                     break;
-                case Grobal2.DR_DOWNLEFT:
-                    result = Grobal2.DR_LEFT;
+                case Direction.DownLeft:
+                    result = Direction.Left;
                     break;
-                case Grobal2.DR_LEFT:
-                    result = Grobal2.DR_UPLEFT;
+                case Direction.Left:
+                    result = Direction.UpLeft;
                     break;
-                case Grobal2.DR_UPLEFT:
-                    result = Grobal2.DR_UP;
+                case Direction.UpLeft:
+                    result = Direction.Up;
                     break;
             }
             return result;
@@ -92,10 +92,10 @@ namespace GameSrv.Maps {
             if (FPathType == FindPathType.t_Dynamic) {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
-                if (FBaseObject.Direction > 8) {
-                    FBaseObject.Direction = 4;
+                if (FBaseObject.Dir > 8) {
+                    FBaseObject.Dir = 4;
                 }
-                m_btDirection = FBaseObject.Direction;
+                m_btDirection = FBaseObject.Dir;
                 for (int i = 2; i >= 1; i--) {
                     if (FBaseObject.Envir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, i, ref nMX, ref nMY)) {
                         if (FBaseObject.CanMove(nMX, nMY, false)) {
@@ -216,131 +216,131 @@ namespace GameSrv.Maps {
         public static byte GetPoint1_GetNextDir(byte btDir) {
             byte result = 0;
             switch (btDir) {
-                case Grobal2.DR_UP:
+                case Direction.Up:
                     switch (M2Share.RandomNumber.Random(4)) {
                         case 0:
-                            result = Grobal2.DR_UPRIGHT;
+                            result = Direction.UpRight;
                             break;
                         case 1:
-                            result = Grobal2.DR_RIGHT;
+                            result = Direction.Right;
                             break;
                         case 2:
-                            result = Grobal2.DR_UPLEFT;
+                            result = Direction.UpLeft;
                             break;
                         case 3:
-                            result = Grobal2.DR_LEFT;
+                            result = Direction.Left;
                             break;
                     }
                     break;
-                case Grobal2.DR_UPRIGHT:
+                case Direction.UpRight:
                     switch (M2Share.RandomNumber.Random(4)) {
                         case 0:
-                            result = Grobal2.DR_RIGHT;
+                            result = Direction.Right;
                             break;
                         case 1:
-                            result = Grobal2.DR_DOWNRIGHT;
+                            result = Direction.DownRight;
                             break;
                         case 2:
-                            result = Grobal2.DR_UP;
+                            result = Direction.Up;
                             break;
                         case 3:
-                            result = Grobal2.DR_UPLEFT;
+                            result = Direction.UpLeft;
                             break;
                     }
                     break;
-                case Grobal2.DR_RIGHT:
+                case Direction.Right:
                     switch (M2Share.RandomNumber.Random(4)) {
                         case 0:
-                            result = Grobal2.DR_DOWNRIGHT;
+                            result = Direction.DownRight;
                             break;
                         case 1:
-                            result = Grobal2.DR_DOWN;
+                            result = Direction.Down;
                             break;
                         case 2:
-                            result = Grobal2.DR_UPRIGHT;
+                            result = Direction.UpRight;
                             break;
                         case 3:
-                            result = Grobal2.DR_UP;
+                            result = Direction.Up;
                             break;
                     }
                     break;
-                case Grobal2.DR_DOWNRIGHT:
+                case Direction.DownRight:
                     switch (M2Share.RandomNumber.Random(4)) {
                         case 0:
-                            result = Grobal2.DR_DOWN;
+                            result = Direction.Down;
                             break;
                         case 1:
-                            result = Grobal2.DR_DOWNLEFT;
+                            result = Direction.DownLeft;
                             break;
                         case 2:
-                            result = Grobal2.DR_RIGHT;
+                            result = Direction.Right;
                             break;
                         case 3:
-                            result = Grobal2.DR_UPRIGHT;
+                            result = Direction.UpRight;
                             break;
                     }
                     break;
-                case Grobal2.DR_DOWN:
+                case Direction.Down:
                     switch (M2Share.RandomNumber.Random(4)) {
                         case 0:
-                            result = Grobal2.DR_DOWNLEFT;
+                            result = Direction.DownLeft;
                             break;
                         case 1:
-                            result = Grobal2.DR_LEFT;
+                            result = Direction.Left;
                             break;
                         case 2:
-                            result = Grobal2.DR_DOWNRIGHT;
+                            result = Direction.DownRight;
                             break;
                         case 3:
-                            result = Grobal2.DR_RIGHT;
+                            result = Direction.Right;
                             break;
                     }
                     break;
-                case Grobal2.DR_DOWNLEFT:
+                case Direction.DownLeft:
                     switch (M2Share.RandomNumber.Random(4)) {
                         case 0:
-                            result = Grobal2.DR_LEFT;
+                            result = Direction.Left;
                             break;
                         case 1:
-                            result = Grobal2.DR_UPLEFT;
+                            result = Direction.UpLeft;
                             break;
                         case 2:
-                            result = Grobal2.DR_DOWN;
+                            result = Direction.Down;
                             break;
                         case 3:
-                            result = Grobal2.DR_DOWNRIGHT;
+                            result = Direction.DownRight;
                             break;
                     }
                     break;
-                case Grobal2.DR_LEFT:
+                case Direction.Left:
                     switch (M2Share.RandomNumber.Random(4)) {
                         case 0:
-                            result = Grobal2.DR_UPLEFT;
+                            result = Direction.UpLeft;
                             break;
                         case 1:
-                            result = Grobal2.DR_UP;
+                            result = Direction.Up;
                             break;
                         case 2:
-                            result = Grobal2.DR_DOWNLEFT;
+                            result = Direction.DownLeft;
                             break;
                         case 3:
-                            result = Grobal2.DR_DOWN;
+                            result = Direction.Down;
                             break;
                     }
                     break;
-                case Grobal2.DR_UPLEFT:
+                case Direction.UpLeft:
                     switch (M2Share.RandomNumber.Random(4)) {
                         case 0:
-                            result = Grobal2.DR_UP;
+                            result = Direction.Up;
                             break;
                         case 1:
-                            result = Grobal2.DR_UPRIGHT;
+                            result = Direction.UpRight;
                             break;
                         case 2:
-                            result = Grobal2.DR_LEFT;
+                            result = Direction.Left;
                             break;
                         case 3:
-                            result = Grobal2.DR_DOWNLEFT;
+                            result = Direction.DownLeft;
                             break;
                     }
                     break;
@@ -363,7 +363,7 @@ namespace GameSrv.Maps {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
                 nC = 0;
-                btDir = ((PlayObject)FBaseObject).Direction;
+                btDir = ((PlayObject)FBaseObject).Dir;
                 while (true) {
                     btDir = GetPoint1_GetNextDir(btDir);
                     for (int i = 2; i >= 1; i--) {
