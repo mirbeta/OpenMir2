@@ -18,7 +18,6 @@ namespace GameSvr.Npc {
         /// 用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)
         /// </summary>
         public short NpcFlag = 0;
-        public int[] FGotoLable;
         public IList<ScriptInfo> m_ScriptList;
         public string FilePath;
         /// <summary>
@@ -43,7 +42,6 @@ namespace GameSvr.Npc {
             FilePath = "";
             IsHide = false;
             IsQuest = true;
-            FGotoLable = new int[100];
             CellType = CellType.Merchant;
         }
 

@@ -22,7 +22,7 @@ namespace GameSvr.Npc {
             if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0) {
                 for (int i = 0; i < m_ScriptList.Count; i++) {
                     ScriptInfo Script3C = m_ScriptList[i];
-                    if (Script3C.RecordList.TryGetValue(sLabel, out SayingRecord)) {
+                    if (Script3C.RecordList.TryGetValue(sLabel, out _)) {
                         Script = Script3C;
                         PlayObject.MScript = Script;
                         PlayObject.LastNpc = this.ActorId;

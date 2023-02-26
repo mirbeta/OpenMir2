@@ -29,7 +29,7 @@ namespace GameSvr.Npc {
         public int RefillTick;
     }
 
-    public class QuestActionInfo {
+    public struct QuestActionInfo {
         public int nCmdCode;
         public string sParam1;
         public int nParam1;
@@ -47,7 +47,7 @@ namespace GameSvr.Npc {
         public string sOpHName;
     }
 
-    public class QuestConditionInfo {
+    public struct QuestConditionInfo {
         public int CmdCode;
         public string sParam1;
         public int nParam1;
@@ -68,22 +68,14 @@ namespace GameSvr.Npc {
     public class SayingProcedure {
         public IList<QuestConditionInfo> ConditionList;
         public IList<QuestActionInfo> ActionList;
-        public string sSayMsg;
-        public IList<string> SayOldLabelList;
-        public IList<string> SayNewLabelList;
         public IList<QuestActionInfo> ElseActionList;
+        public string sSayMsg;
         public string sElseSayMsg;
-        public IList<string> ElseSayOldLabelList;
-        public IList<string> ElseSayNewLabelList;
 
         public SayingProcedure() {
             ConditionList = new List<QuestConditionInfo>();
             ActionList = new List<QuestActionInfo>();
-            SayOldLabelList = new List<string>();
-            SayNewLabelList = new List<string>();
             ElseActionList = new List<QuestActionInfo>();
-            ElseSayOldLabelList = new List<string>();
-            ElseSayNewLabelList = new List<string>();
         }
     }
 
@@ -91,6 +83,10 @@ namespace GameSvr.Npc {
         public string sLabel;
         public IList<SayingProcedure> ProcedureList;
         public bool boExtJmp;
+
+        public SayingRecord() {
+            ProcedureList = new List<SayingProcedure>();
+        }
     }
 
     public class ScriptParams {
