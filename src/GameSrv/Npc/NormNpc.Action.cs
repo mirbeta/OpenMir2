@@ -1371,7 +1371,7 @@ namespace GameSrv.Npc {
                     continue;
                 }
                 sUserItemName = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[i].Index);
-                if (!(i != Grobal2.U_CHARM)) {
+                if (!(i != ItemLocation.Charm)) {
                     playObject.SysMsg(sUserItemName + " 禁止修理...", MsgColor.Red, MsgType.Hint);
                     continue;
                 }

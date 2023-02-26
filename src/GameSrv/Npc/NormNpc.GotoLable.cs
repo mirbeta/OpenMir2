@@ -115,62 +115,62 @@ namespace GameSrv.Npc {
             UserItem result = null;
             int nCount = 0;
             if (HUtil32.CompareLStr(sItemType, "[NECKLACE]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_NECKLACE].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_NECKLACE];
+                if (PlayObject.UseItems[ItemLocation.Necklace].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.Necklace];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[RING]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_RINGL].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_RINGL];
+                if (PlayObject.UseItems[ItemLocation.Ringl].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.Ringl];
                 }
-                if (PlayObject.UseItems[Grobal2.U_RINGR].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_RINGR];
+                if (PlayObject.UseItems[ItemLocation.Ringr].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.Ringr];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[ARMRING]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_ARMRINGL].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_ARMRINGL];
+                if (PlayObject.UseItems[ItemLocation.ArmRingl].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.ArmRingl];
                 }
-                if (PlayObject.UseItems[Grobal2.U_ARMRINGR].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_ARMRINGR];
+                if (PlayObject.UseItems[ItemLocation.ArmRingr].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.ArmRingr];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[WEAPON]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_WEAPON].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_WEAPON];
+                if (PlayObject.UseItems[ItemLocation.Weapon].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.Weapon];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[HELMET]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_HELMET].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_HELMET];
+                if (PlayObject.UseItems[ItemLocation.Helmet].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.Helmet];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[BUJUK]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_BUJUK].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_BUJUK];
+                if (PlayObject.UseItems[ItemLocation.Bujuk].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.Bujuk];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[BELT]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_BELT].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_BELT];
+                if (PlayObject.UseItems[ItemLocation.Belt].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.Belt];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[BOOTS]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_BOOTS].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_BOOTS];
+                if (PlayObject.UseItems[ItemLocation.Boots].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.Boots];
                 }
                 return result;
             }
             if (HUtil32.CompareLStr(sItemType, "[CHARM]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_CHARM].Index > 0) {
-                    result = PlayObject.UseItems[Grobal2.U_CHARM];
+                if (PlayObject.UseItems[ItemLocation.Charm].Index > 0) {
+                    result = PlayObject.UseItems[ItemLocation.Charm];
                 }
                 return result;
             }
@@ -1333,94 +1333,94 @@ namespace GameSrv.Npc {
         private static void GotoLable_TakeWItem(PlayObject PlayObject, string sItemName, int nItemCount) {
             string sC;
             if (HUtil32.CompareLStr(sItemName, "[NECKLACE]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_NECKLACE].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_NECKLACE]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].Index);
-                    PlayObject.UseItems[Grobal2.U_NECKLACE].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Necklace].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Necklace]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Necklace].Index);
+                    PlayObject.UseItems[ItemLocation.Necklace].Index = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[RING]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_RINGL].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_RINGL]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].Index);
-                    PlayObject.UseItems[Grobal2.U_RINGL].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Ringl].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Ringl]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringl].Index);
+                    PlayObject.UseItems[ItemLocation.Ringl].Index = 0;
                     return;
                 }
-                if (PlayObject.UseItems[Grobal2.U_RINGR].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_RINGR]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].Index);
-                    PlayObject.UseItems[Grobal2.U_RINGR].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Ringr].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Ringr]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringr].Index);
+                    PlayObject.UseItems[ItemLocation.Ringr].Index = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[ARMRING]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_ARMRINGL].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_ARMRINGL]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].Index);
-                    PlayObject.UseItems[Grobal2.U_ARMRINGL].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.ArmRingl].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.ArmRingl]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingl].Index);
+                    PlayObject.UseItems[ItemLocation.ArmRingl].Index = 0;
                     return;
                 }
-                if (PlayObject.UseItems[Grobal2.U_ARMRINGR].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_ARMRINGR]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].Index);
-                    PlayObject.UseItems[Grobal2.U_ARMRINGR].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.ArmRingr].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.ArmRingr]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingr].Index);
+                    PlayObject.UseItems[ItemLocation.ArmRingr].Index = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[WEAPON]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_WEAPON].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_WEAPON]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].Index);
-                    PlayObject.UseItems[Grobal2.U_WEAPON].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Weapon].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Weapon]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Weapon].Index);
+                    PlayObject.UseItems[ItemLocation.Weapon].Index = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[HELMET]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_HELMET].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_HELMET]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].Index);
-                    PlayObject.UseItems[Grobal2.U_HELMET].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Helmet].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Helmet]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Helmet].Index);
+                    PlayObject.UseItems[ItemLocation.Helmet].Index = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[DRESS]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_DRESS].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_DRESS]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].Index);
-                    PlayObject.UseItems[Grobal2.U_DRESS].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Dress].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Dress]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Dress].Index);
+                    PlayObject.UseItems[ItemLocation.Dress].Index = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[U_BUJUK]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_BUJUK].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_BUJUK]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].Index);
-                    PlayObject.UseItems[Grobal2.U_BUJUK].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Bujuk].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Bujuk]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Bujuk].Index);
+                    PlayObject.UseItems[ItemLocation.Bujuk].Index = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[U_BELT]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_BELT].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_BELT]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].Index);
-                    PlayObject.UseItems[Grobal2.U_BELT].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Belt].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Belt]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Belt].Index);
+                    PlayObject.UseItems[ItemLocation.Belt].Index = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[U_BOOTS]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_BOOTS].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_BOOTS]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].Index);
-                    PlayObject.UseItems[Grobal2.U_BOOTS].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Boots].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Boots]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Boots].Index);
+                    PlayObject.UseItems[ItemLocation.Boots].Index = 0;
                     return;
                 }
             }
             if (HUtil32.CompareLStr(sItemName, "[U_CHARM]", 4)) {
-                if (PlayObject.UseItems[Grobal2.U_CHARM].Index > 0) {
-                    PlayObject.SendDelItems(PlayObject.UseItems[Grobal2.U_CHARM]);
-                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].Index);
-                    PlayObject.UseItems[Grobal2.U_CHARM].Index = 0;
+                if (PlayObject.UseItems[ItemLocation.Charm].Index > 0) {
+                    PlayObject.SendDelItems(PlayObject.UseItems[ItemLocation.Charm]);
+                    sC = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Charm].Index);
+                    PlayObject.UseItems[ItemLocation.Charm].Index = 0;
                     return;
                 }
             }

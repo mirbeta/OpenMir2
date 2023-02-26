@@ -104,10 +104,10 @@ namespace GameSrv.Magic {
         }
 
         public static void DoSpell_sub_4934B4(PlayObject playObject) {
-            if (playObject.UseItems[Grobal2.U_ARMRINGL].Dura < 100) {
-                playObject.UseItems[Grobal2.U_ARMRINGL].Dura = 0;
-                playObject.SendDelItems(playObject.UseItems[Grobal2.U_ARMRINGL]);
-                playObject.UseItems[Grobal2.U_ARMRINGL].Index = 0;
+            if (playObject.UseItems[ItemLocation.ArmRingl].Dura < 100) {
+                playObject.UseItems[ItemLocation.ArmRingl].Dura = 0;
+                playObject.SendDelItems(playObject.UseItems[ItemLocation.ArmRingl]);
+                playObject.UseItems[ItemLocation.ArmRingl].Index = 0;
             }
         }
 

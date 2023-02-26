@@ -1391,11 +1391,11 @@ namespace GameSrv.Player {
         /// </summary>
         /// <returns></returns>
         private bool WeaptonMakeLuck() {
-            if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].Index <= 0) {
+            if (UseItems[ItemLocation.Weapon] == null || UseItems[ItemLocation.Weapon].Index <= 0) {
                 return false;
             }
             int nRand = 0;
-            StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
+            StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
             if (stdItem != null) {
                 nRand = Math.Abs(HUtil32.HiByte(stdItem.DC) - HUtil32.LoByte(stdItem.DC)) / 5;
             }
@@ -1404,23 +1404,23 @@ namespace GameSrv.Player {
             }
             else {
                 bool boMakeLuck = false;
-                if (UseItems[Grobal2.U_WEAPON].Desc[4] > 0) {
-                    UseItems[Grobal2.U_WEAPON].Desc[4] -= 1;
+                if (UseItems[ItemLocation.Weapon].Desc[4] > 0) {
+                    UseItems[ItemLocation.Weapon].Desc[4] -= 1;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[Grobal2.U_WEAPON].Desc[3] < M2Share.Config.WeaponMakeLuckPoint1) {
-                    UseItems[Grobal2.U_WEAPON].Desc[3]++;
+                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint1) {
+                    UseItems[ItemLocation.Weapon].Desc[3]++;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[Grobal2.U_WEAPON].Desc[3] < M2Share.Config.WeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.Config.WeaponMakeLuckPoint2Rate) == 1) {
-                    UseItems[Grobal2.U_WEAPON].Desc[3]++;
+                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.Config.WeaponMakeLuckPoint2Rate) == 1) {
+                    UseItems[ItemLocation.Weapon].Desc[3]++;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[Grobal2.U_WEAPON].Desc[3] < M2Share.Config.WeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.Config.WeaponMakeLuckPoint3Rate) == 1) {
-                    UseItems[Grobal2.U_WEAPON].Desc[3]++;
+                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.Config.WeaponMakeLuckPoint3Rate) == 1) {
+                    UseItems[ItemLocation.Weapon].Desc[3]++;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
@@ -1441,10 +1441,10 @@ namespace GameSrv.Player {
         /// </summary>
         /// <returns></returns>
         private bool RepairWeapon() {
-            if (UseItems[Grobal2.U_WEAPON] == null) {
+            if (UseItems[ItemLocation.Weapon] == null) {
                 return false;
             }
-            UserItem userItem = UseItems[Grobal2.U_WEAPON];
+            UserItem userItem = UseItems[ItemLocation.Weapon];
             if (userItem.Index <= 0 || userItem.DuraMax <= userItem.Dura) {
                 return false;
             }
@@ -1462,29 +1462,29 @@ namespace GameSrv.Player {
         /// </summary>
         /// <returns></returns>
         private bool SuperRepairWeapon() {
-            if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].Index <= 0) {
+            if (UseItems[ItemLocation.Weapon] == null || UseItems[ItemLocation.Weapon].Index <= 0) {
                 return false;
             }
-            UseItems[Grobal2.U_WEAPON].Dura = UseItems[Grobal2.U_WEAPON].DuraMax;
-            SendMsg(this, Messages.RM_DURACHANGE, 1, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+            UseItems[ItemLocation.Weapon].Dura = UseItems[ItemLocation.Weapon].DuraMax;
+            SendMsg(this, Messages.RM_DURACHANGE, 1, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
             SysMsg(Settings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
 
         internal void MakeWeaponUnlock() {
-            if (UseItems[Grobal2.U_WEAPON] == null) {
+            if (UseItems[ItemLocation.Weapon] == null) {
                 return;
             }
-            if (UseItems[Grobal2.U_WEAPON].Index <= 0) {
+            if (UseItems[ItemLocation.Weapon].Index <= 0) {
                 return;
             }
-            if (UseItems[Grobal2.U_WEAPON].Desc[3] > 0) {
-                UseItems[Grobal2.U_WEAPON].Desc[3] -= 1;
+            if (UseItems[ItemLocation.Weapon].Desc[3] > 0) {
+                UseItems[ItemLocation.Weapon].Desc[3] -= 1;
                 SysMsg(Settings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
             }
             else {
-                if (UseItems[Grobal2.U_WEAPON].Desc[4] < 10) {
-                    UseItems[Grobal2.U_WEAPON].Desc[4]++;
+                if (UseItems[ItemLocation.Weapon].Desc[4] < 10) {
+                    UseItems[ItemLocation.Weapon].Desc[4]++;
                     SysMsg(Settings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
                 }
             }
@@ -1790,7 +1790,7 @@ namespace GameSrv.Player {
                         if (UseItems[i].Dura == 0) {
                             stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                             if (stdItem != null) {
-                                if ((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) {
+                                if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) {
                                     WAbil.HandWeight = (byte)(WAbil.HandWeight + stdItem.Weight);
                                 }
                                 else {
@@ -1803,16 +1803,16 @@ namespace GameSrv.Player {
                         ApplyItemParameters(UseItems[i], stdItem, ref AddAbil);
                         ApplyItemParametersEx(UseItems[i], ref WAbil);
                         if (stdItem != null) {
-                            if ((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) {
+                            if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) {
                                 WAbil.HandWeight = (byte)(WAbil.HandWeight + stdItem.Weight);
                             }
                             else {
                                 WAbil.WearWeight = (byte)(WAbil.WearWeight + stdItem.Weight);
                             }
                             switch (i) {
-                                case Grobal2.U_WEAPON:
-                                case Grobal2.U_ARMRINGL:
-                                case Grobal2.U_ARMRINGR: {
+                                case ItemLocation.Weapon:
+                                case ItemLocation.ArmRingl:
+                                case ItemLocation.ArmRingr: {
                                         if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50)) {
                                             AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (-stdItem.SpecialPwr));
                                         }
@@ -1832,7 +1832,7 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case Grobal2.U_NECKLACE: {
+                                case ItemLocation.Necklace: {
                                         switch (stdItem.Shape) {
                                             case ItemShapeConst.NECTLACE_FASTTRAINING_ITEM:
                                                 FastTrain = true;
@@ -1893,8 +1893,8 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case Grobal2.U_RINGR:
-                                case Grobal2.U_RINGL: {
+                                case ItemLocation.Ringr:
+                                case ItemLocation.Ringl: {
                                         switch (stdItem.Shape) {
                                             case ItemShapeConst.RING_TRANSPARENT_ITEM:
                                                 StatusTimeArr[PoisonState.STATETRANSPARENT] = 60000;
@@ -1981,10 +1981,10 @@ namespace GameSrv.Player {
                                                 strongRubysetRing = true;
                                                 break;
                                             case DragonConst.DRAGON_RING_SHAPE: {
-                                                    if ((i == Grobal2.U_RINGL)) {
+                                                    if ((i == ItemLocation.Ringl)) {
                                                         dragonsetRingLeft = true;
                                                     }
-                                                    if ((i == Grobal2.U_RINGR)) {
+                                                    if ((i == ItemLocation.Ringr)) {
                                                         dragonsetRingRight = true;
                                                     }
                                                     break;
@@ -1994,8 +1994,8 @@ namespace GameSrv.Player {
                                     }
                             }
                             switch (i) {
-                                case Grobal2.U_ARMRINGL:
-                                case Grobal2.U_ARMRINGR: {
+                                case ItemLocation.ArmRingl:
+                                case ItemLocation.ArmRingr: {
                                         switch (stdItem.Shape) {
                                             case ItemShapeConst.ARMRING_HAP_ITEM:
                                                 cghi[2] = true;
@@ -2054,10 +2054,10 @@ namespace GameSrv.Player {
                                                 strongRubysetBracelet = true;
                                                 break;
                                             case DragonConst.DRAGON_BRACELET_SHAPE: {
-                                                    if ((i == Grobal2.U_ARMRINGL)) {
+                                                    if ((i == ItemLocation.ArmRingl)) {
                                                         dragonsetBraceletLeft = true;
                                                     }
-                                                    if ((i == Grobal2.U_ARMRINGR)) {
+                                                    if ((i == ItemLocation.ArmRingr)) {
                                                         dragonsetBraceletRight = true;
                                                     }
                                                     break;
@@ -2065,7 +2065,7 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case Grobal2.U_HELMET: {
+                                case ItemLocation.Helmet: {
                                         switch (stdItem.Shape) {
                                             case ItemShapeConst.HELMET_IL_ITEM:
                                                 cghi[3] = true;
@@ -2082,7 +2082,7 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case Grobal2.U_DRESS: {
+                                case ItemLocation.Dress: {
                                         switch (stdItem.Shape) {
                                             case ItemShapeConst.DRESS_SHAPE_WING:
                                                 dsetWingdress = true;
@@ -2096,7 +2096,7 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case Grobal2.U_BELT: {
+                                case ItemLocation.Belt: {
                                         switch (stdItem.Shape) {
                                             case ItemShapeConst.PTSET_BELT_SHAPE:
                                                 ptsetBelt = true;
@@ -2122,7 +2122,7 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case Grobal2.U_BOOTS: {
+                                case ItemLocation.Boots: {
                                         switch (stdItem.Shape) {
                                             case ItemShapeConst.PTSET_BOOTS_SHAPE:
                                                 ptsetBoots = true;
@@ -2148,7 +2148,7 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case Grobal2.U_CHARM: {
+                                case ItemLocation.Charm: {
                                         if ((stdItem.StdMode == 53) && (stdItem.Shape == ItemShapeConst.SHAPE_OF_LUCKYLADLE)) {
                                             AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 1));
                                         }
@@ -2420,7 +2420,7 @@ namespace GameSrv.Player {
                     WAbil.SC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
                 }
                 if (Race == ActorRace.Play) {
-                    bool fastmoveflag = UseItems[Grobal2.U_BOOTS] != null && UseItems[Grobal2.U_BOOTS].Dura > 0 && UseItems[Grobal2.U_BOOTS].Index == Settings.INDEX_MIRBOOTS;
+                    bool fastmoveflag = UseItems[ItemLocation.Boots] != null && UseItems[ItemLocation.Boots].Dura > 0 && UseItems[ItemLocation.Boots].Index == Settings.INDEX_MIRBOOTS;
                     if (fastmoveflag) {
                         StatusTimeArr[PoisonState.FASTMOVE] = 60000;
                     }
@@ -2499,31 +2499,31 @@ namespace GameSrv.Player {
             bool boRecalcAbi = false;
             ushort nDura;
             int nOldDura;
-            if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0) {
-                nDura = UseItems[Grobal2.U_DRESS].Dura;
+            if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0) {
+                nDura = UseItems[ItemLocation.Dress].Dura;
                 nOldDura = HUtil32.Round(nDura / 1000);
                 nDura -= nDam;
                 if (nDura <= 0) {
-                    SendDelItems(UseItems[Grobal2.U_DRESS]);
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
+                    SendDelItems(UseItems[ItemLocation.Dress]);
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
                     if (stdItem.NeedIdentify == 1) {
                         M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
                                                            ChrName + "\t" + stdItem.Name + "\t" +
-                                                           UseItems[Grobal2.U_DRESS].MakeIndex + "\t"
+                                                           UseItems[ItemLocation.Dress].MakeIndex + "\t"
                                                            + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
                                                            "\t" + '0');
                     }
-                    UseItems[Grobal2.U_DRESS].Index = 0;
+                    UseItems[ItemLocation.Dress].Index = 0;
                     FeatureChanged();
-                    UseItems[Grobal2.U_DRESS].Index = 0;
-                    UseItems[Grobal2.U_DRESS].Dura = 0;
+                    UseItems[ItemLocation.Dress].Index = 0;
+                    UseItems[ItemLocation.Dress].Dura = 0;
                     boRecalcAbi = true;
                 }
                 else {
-                    UseItems[Grobal2.U_DRESS].Dura = nDura;
+                    UseItems[ItemLocation.Dress].Dura = nDura;
                 }
                 if (nOldDura != HUtil32.Round(nDura / 1000)) {
-                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_DRESS, nDura, UseItems[Grobal2.U_DRESS].DuraMax, 0, "");
+                    SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Dress, nDura, UseItems[ItemLocation.Dress].DuraMax, 0, "");
                 }
             }
 
@@ -2844,9 +2844,9 @@ namespace GameSrv.Player {
             if (Race == ActorRace.Play) {
                 byte nDress = 0;
                 StdItem stdItem;
-                if (UseItems[Grobal2.U_DRESS] != null && UseItems[Grobal2.U_DRESS].Index > 0) // 衣服
+                if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0) // 衣服
                 {
-                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_DRESS].Index);
+                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
                     if (stdItem != null) {
                         nDress = (byte)(stdItem.Shape * 2);
                     }
@@ -2854,9 +2854,9 @@ namespace GameSrv.Player {
                 PlayGender playGender = Gender;
                 nDress += (byte)playGender;
                 byte nWeapon = (byte)playGender;
-                if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Index > 0) // 武器
+                if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Index > 0) // 武器
                 {
-                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
+                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
                     if (stdItem != null) {
                         nWeapon += (byte)(stdItem.Shape * 2);
                     }
@@ -3427,11 +3427,11 @@ namespace GameSrv.Player {
         /// 检查武器是否升级
         /// </summary>
         private void CheckWeaponUpgrade() {
-            if (UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0) {
-                UserItem useItems = new UserItem(UseItems[Grobal2.U_WEAPON]);
-                CheckWeaponUpgradeStatus(ref UseItems[Grobal2.U_WEAPON]);
+            if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Desc[ItemAttr.WeaponUpgrade] > 0) {
+                UserItem useItems = new UserItem(UseItems[ItemLocation.Weapon]);
+                CheckWeaponUpgradeStatus(ref UseItems[ItemLocation.Weapon]);
                 StdItem StdItem;
-                if (UseItems[Grobal2.U_WEAPON].Index == 0) {
+                if (UseItems[ItemLocation.Weapon].Index == 0) {
                     SysMsg(Settings.TheWeaponBroke, MsgColor.Red, MsgType.Hint);
                     SendDelItems(useItems);
                     SendRefMsg(Messages.RM_BREAKWEAPON, 0, 0, 0, 0, "");
@@ -3445,7 +3445,7 @@ namespace GameSrv.Player {
                 }
                 else {
                     SysMsg(Settings.TheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
-                    SendUpdateItem(UseItems[Grobal2.U_WEAPON]);
+                    SendUpdateItem(UseItems[ItemLocation.Weapon]);
                     StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
                     if (StdItem.NeedIdentify == 1) {
                         M2Share.EventSource.AddEventLog(20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -4405,7 +4405,7 @@ namespace GameSrv.Player {
                 if (UseItems[i] != null && UseItems[i].Index > 0) {
                     StdItem pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (pSItem != null) {
-                        if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == Grobal2.U_WEAPON) || (i == Grobal2.U_RIGHTHAND)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount))) {
+                        if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount))) {
                             ushort nDura = UseItems[i].Dura;
                             ushort tDura = (ushort)HUtil32.Round(nDura / 1000.0);
                             nDura -= 1000;
@@ -4447,7 +4447,7 @@ namespace GameSrv.Player {
                     currentLight = 1;
                 }
             }
-            for (byte i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++) {
+            for (byte i = ItemLocation.Dress; i <= ItemLocation.Charm; i++) {
                 if (UseItems[i] == null) {
                     continue;
                 }

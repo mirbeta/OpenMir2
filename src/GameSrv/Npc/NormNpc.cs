@@ -542,55 +542,55 @@ namespace GameSrv.Npc {
                     sMsg = ReplaceVariableText(sMsg, "<$LOGINLONG>", sText);
                     return;
                 case "$DRESS":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_DRESS].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Dress].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$DRESS>", sText);
                     return;
                 case "$WEAPON":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Weapon].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$WEAPON>", sText);
                     return;
                 case "$RIGHTHAND":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RIGHTHAND].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.RighThand].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$RIGHTHAND>", sText);
                     return;
                 case "$HELMET":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_HELMET].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Helmet].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$HELMET>", sText);
                     return;
                 case "$NECKLACE":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_NECKLACE].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Necklace].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$NECKLACE>", sText);
                     return;
                 case "$RING_R":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGR].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringr].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$RING_R>", sText);
                     return;
                 case "$RING_L":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_RINGL].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringl].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$RING_L>", sText);
                     return;
                 case "$ARMRING_R":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGR].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingr].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$ARMRING_R>", sText);
                     return;
                 case "$ARMRING_L":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_ARMRINGL].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingl].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$ARMRING_L>", sText);
                     return;
                 case "$BUJUK":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BUJUK].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Bujuk].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$BUJUK>", sText);
                     return;
                 case "$BELT":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BELT].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Belt].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$BELT>", sText);
                     return;
                 case "$BOOTS":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_BOOTS].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Boots].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$BOOTS>", sText);
                     return;
                 case "$CHARM":
-                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_CHARM].Index);
+                    sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Charm].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$CHARM>", sText);
                     return;
                 case "$IPADDR":

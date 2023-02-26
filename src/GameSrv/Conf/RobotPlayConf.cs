@@ -110,16 +110,16 @@ namespace GameSrv.Conf {
                     break;
                 }
             }
-            playObject.m_UseItemNames[Grobal2.U_DRESS] = ReadWriteString("UseItems", "UseItems0", "布衣(男)"); // '衣服';
-            playObject.m_UseItemNames[Grobal2.U_WEAPON] = ReadWriteString("UseItems", "UseItems1", "木剑"); // '武器';
-            playObject.m_UseItemNames[Grobal2.U_RIGHTHAND] = ReadWriteString("UseItems", "UseItems2", ""); // '照明物';
-            playObject.m_UseItemNames[Grobal2.U_NECKLACE] = ReadWriteString("UseItems", "UseItems3", ""); // '项链';
-            playObject.m_UseItemNames[Grobal2.U_HELMET] = ReadWriteString("UseItems", "UseItems4", ""); // '头盔';
-            playObject.m_UseItemNames[Grobal2.U_ARMRINGL] = ReadWriteString("UseItems", "UseItems5", ""); // '左手镯';
-            playObject.m_UseItemNames[Grobal2.U_ARMRINGR] = ReadWriteString("UseItems", "UseItems6", ""); // '右手镯';
-            playObject.m_UseItemNames[Grobal2.U_RINGL] = ReadWriteString("UseItems", "UseItems7", ""); // '左戒指';
-            playObject.m_UseItemNames[Grobal2.U_RINGR] = ReadWriteString("UseItems", "UseItems8", ""); // '右戒指';
-            for (byte i = Grobal2.U_DRESS; i <= Grobal2.U_CHARM; i++) {
+            playObject.m_UseItemNames[ItemLocation.Dress] = ReadWriteString("UseItems", "UseItems0", "布衣(男)"); // '衣服';
+            playObject.m_UseItemNames[ItemLocation.Weapon] = ReadWriteString("UseItems", "UseItems1", "木剑"); // '武器';
+            playObject.m_UseItemNames[ItemLocation.RighThand] = ReadWriteString("UseItems", "UseItems2", ""); // '照明物';
+            playObject.m_UseItemNames[ItemLocation.Necklace] = ReadWriteString("UseItems", "UseItems3", ""); // '项链';
+            playObject.m_UseItemNames[ItemLocation.Helmet] = ReadWriteString("UseItems", "UseItems4", ""); // '头盔';
+            playObject.m_UseItemNames[ItemLocation.ArmRingl] = ReadWriteString("UseItems", "UseItems5", ""); // '左手镯';
+            playObject.m_UseItemNames[ItemLocation.ArmRingr] = ReadWriteString("UseItems", "UseItems6", ""); // '右手镯';
+            playObject.m_UseItemNames[ItemLocation.Ringl] = ReadWriteString("UseItems", "UseItems7", ""); // '左戒指';
+            playObject.m_UseItemNames[ItemLocation.Ringr] = ReadWriteString("UseItems", "UseItems8", ""); // '右戒指';
+            for (byte i = ItemLocation.Dress; i <= ItemLocation.Charm; i++) {
                 if (!string.IsNullOrEmpty(playObject.m_UseItemNames[i])) {
                     StdItem = M2Share.WorldEngine.GetStdItem(playObject.m_UseItemNames[i]);
                     if (StdItem != null) {

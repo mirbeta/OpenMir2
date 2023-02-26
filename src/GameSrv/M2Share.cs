@@ -366,63 +366,63 @@ namespace GameSrv {
         public static bool CheckUserItems(int nIdx, StdItem StdItem) {
             bool result = false;
             switch (nIdx) {
-                case Grobal2.U_DRESS:
+                case ItemLocation.Dress:
                     if (StdItem.StdMode == 10 || StdItem.StdMode == 11) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_WEAPON:
+                case ItemLocation.Weapon:
                     if (StdItem.StdMode == 5 || StdItem.StdMode == 6) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_RIGHTHAND:
+                case ItemLocation.RighThand:
                     if (StdItem.StdMode == 29 || StdItem.StdMode == 30 || StdItem.StdMode == 28) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_NECKLACE:
+                case ItemLocation.Necklace:
                     if (StdItem.StdMode == 19 || StdItem.StdMode == 20 || StdItem.StdMode == 21) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_HELMET:
+                case ItemLocation.Helmet:
                     if (StdItem.StdMode == 15) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_ARMRINGL:
+                case ItemLocation.ArmRingl:
                     if (StdItem.StdMode == 24 || StdItem.StdMode == 25 || StdItem.StdMode == 26) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_ARMRINGR:
+                case ItemLocation.ArmRingr:
                     if (StdItem.StdMode == 24 || StdItem.StdMode == 26) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_RINGL:
-                case Grobal2.U_RINGR:
+                case ItemLocation.Ringl:
+                case ItemLocation.Ringr:
                     if (StdItem.StdMode == 22 || StdItem.StdMode == 23) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_BUJUK:
+                case ItemLocation.Bujuk:
                     if (StdItem.StdMode == 25 || StdItem.StdMode == 51) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_BELT:
+                case ItemLocation.Belt:
                     if (StdItem.StdMode == 54 || StdItem.StdMode == 64) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_BOOTS:
+                case ItemLocation.Boots:
                     if (StdItem.StdMode == 52 || StdItem.StdMode == 62) {
                         result = true;
                     }
                     break;
-                case Grobal2.U_CHARM:
+                case ItemLocation.Charm:
                     if (StdItem.StdMode == 53 || StdItem.StdMode == 63) {
                         result = true;
                     }

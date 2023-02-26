@@ -452,7 +452,7 @@ namespace GameSrv.Npc {
                     return;
                 }
             }
-            if (User.UseItems[Grobal2.U_WEAPON] != null && User.UseItems[Grobal2.U_WEAPON].Index != 0 && User.Gold >= M2Share.Config.UpgradeWeaponPrice
+            if (User.UseItems[ItemLocation.Weapon] != null && User.UseItems[ItemLocation.Weapon].Index != 0 && User.Gold >= M2Share.Config.UpgradeWeaponPrice
                 && User.CheckItems(M2Share.Config.BlackStone) != null) {
                 User.DecGold(M2Share.Config.UpgradeWeaponPrice);
                 if (CastleMerchant || M2Share.Config.GetAllNpcTax) {
@@ -466,14 +466,14 @@ namespace GameSrv.Npc {
                 User.GoldChanged();
                 upgradeInfo = new WeaponUpgradeInfo {
                     UserName = User.ChrName,
-                    UserItem = new UserItem(User.UseItems[Grobal2.U_WEAPON])
+                    UserItem = new UserItem(User.UseItems[ItemLocation.Weapon])
                 };
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(User.UseItems[Grobal2.U_WEAPON].Index);
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(User.UseItems[ItemLocation.Weapon].Index);
                 if (StdItem.NeedIdentify == 1) {
-                    M2Share.EventSource.AddEventLog(25, User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + User.UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + '1' + "\t" + '0');
+                    M2Share.EventSource.AddEventLog(25, User.MapName + "\t" + User.CurrX + "\t" + User.CurrY + "\t" + User.ChrName + "\t" + StdItem.Name + "\t" + User.UseItems[ItemLocation.Weapon].MakeIndex + "\t" + '1' + "\t" + '0');
                 }
-                User.SendDelItems(User.UseItems[Grobal2.U_WEAPON]);
-                User.UseItems[Grobal2.U_WEAPON].Index = 0;
+                User.SendDelItems(User.UseItems[ItemLocation.Weapon]);
+                User.UseItems[ItemLocation.Weapon].Index = 0;
                 User.RecalcAbilitys();
                 User.FeatureChanged();
                 User.SendMsg(User, Messages.RM_ABILITY, 0, 0, 0, 0, "");
@@ -907,8 +907,8 @@ namespace GameSrv.Npc {
                     sMsg = ReplaceVariableText(sMsg, "<$UPGRADEWEAPONFEE>", sText);
                     break;
                 case "$USERWEAPON": {
-                        if (PlayObject.UseItems[Grobal2.U_WEAPON].Index != 0) {
-                            sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[Grobal2.U_WEAPON].Index);
+                        if (PlayObject.UseItems[ItemLocation.Weapon].Index != 0) {
+                            sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Weapon].Index);
                         }
                         else {
                             sText = "无";

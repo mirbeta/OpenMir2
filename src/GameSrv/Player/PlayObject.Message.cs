@@ -1906,35 +1906,35 @@ namespace GameSrv.Player {
         private void UseLamp() {
             const string sExceptionMsg = "[Exception] TBaseObject::UseLamp";
             try {
-                if (UseItems[Grobal2.U_RIGHTHAND] != null && UseItems[Grobal2.U_RIGHTHAND].Index > 0) {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_RIGHTHAND].Index);
+                if (UseItems[ItemLocation.RighThand] != null && UseItems[ItemLocation.RighThand].Index > 0) {
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.RighThand].Index);
                     if ((stdItem == null) || (stdItem.SpecialPwr != 0)) {
                         return;
                     }
-                    int nOldDura = HUtil32.Round((ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura / 1000));
+                    int nOldDura = HUtil32.Round((ushort)(UseItems[ItemLocation.RighThand].Dura / 1000));
                     ushort nDura;
                     if (M2Share.Config.DecLampDura) {
-                        nDura = (ushort)(UseItems[Grobal2.U_RIGHTHAND].Dura - 1);
+                        nDura = (ushort)(UseItems[ItemLocation.RighThand].Dura - 1);
                     }
                     else {
-                        nDura = UseItems[Grobal2.U_RIGHTHAND].Dura;
+                        nDura = UseItems[ItemLocation.RighThand].Dura;
                     }
                     if (nDura <= 0) {
-                        UseItems[Grobal2.U_RIGHTHAND].Dura = 0;
+                        UseItems[ItemLocation.RighThand].Dura = 0;
                         if (Race == ActorRace.Play) {
-                            SendDelItems(UseItems[Grobal2.U_RIGHTHAND]);
+                            SendDelItems(UseItems[ItemLocation.RighThand]);
                         }
-                        UseItems[Grobal2.U_RIGHTHAND].Index = 0;
+                        UseItems[ItemLocation.RighThand].Index = 0;
                         Light = 0;
                         SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                         SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
                         RecalcAbilitys();
                     }
                     else {
-                        UseItems[Grobal2.U_RIGHTHAND].Dura = nDura;
+                        UseItems[ItemLocation.RighThand].Dura = nDura;
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000)) {
-                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, UseItems[Grobal2.U_RIGHTHAND].Dura, 0, 0, "");
+                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, UseItems[ItemLocation.RighThand].Dura, 0, 0, "");
                     }
                 }
             }

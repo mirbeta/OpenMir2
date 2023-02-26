@@ -1,5 +1,6 @@
 using GameSrv.Items;
 using GameSrv.Player;
+using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.Magic {
@@ -40,38 +41,38 @@ namespace GameSrv.Magic {
 
             Idx = 0;
             StdItem amuletStdItem;
-            if (PlayObject.UseItems[Grobal2.U_ARMRINGL] != null && PlayObject.UseItems[Grobal2.U_ARMRINGL].Index > 0) {
-                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_ARMRINGL].Index);
+            if (PlayObject.UseItems[ItemLocation.ArmRingl] != null && PlayObject.UseItems[ItemLocation.ArmRingl].Index > 0) {
+                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[ItemLocation.ArmRingl].Index);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25) {
                     switch (nType) {
                         case 1:
-                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.UseItems[Grobal2.U_ARMRINGL].Dura / 100) >= nCount) {
-                                Idx = Grobal2.U_ARMRINGL;
+                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.UseItems[ItemLocation.ArmRingl].Dura / 100) >= nCount) {
+                                Idx = ItemLocation.ArmRingl;
                                 return true;
                             }
                             break;
                         case 2:
-                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.UseItems[Grobal2.U_ARMRINGL].Dura / 100) >= nCount) {
-                                Idx = Grobal2.U_ARMRINGL;
+                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.UseItems[ItemLocation.ArmRingl].Dura / 100) >= nCount) {
+                                Idx = ItemLocation.ArmRingl;
                                 return true;
                             }
                             break;
                     }
                 }
             }
-            if (PlayObject.UseItems[Grobal2.U_BUJUK] != null && PlayObject.UseItems[Grobal2.U_BUJUK].Index > 0) {
-                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[Grobal2.U_BUJUK].Index);
+            if (PlayObject.UseItems[ItemLocation.Bujuk] != null && PlayObject.UseItems[ItemLocation.Bujuk].Index > 0) {
+                amuletStdItem = M2Share.WorldEngine.GetStdItem(PlayObject.UseItems[ItemLocation.Bujuk].Index);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25) {
                     switch (nType) {
                         case 1:
-                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.UseItems[Grobal2.U_BUJUK].Dura / 100) >= nCount) {
-                                Idx = Grobal2.U_BUJUK;
+                            if (amuletStdItem.Shape == 5 && HUtil32.Round(PlayObject.UseItems[ItemLocation.Bujuk].Dura / 100) >= nCount) {
+                                Idx = ItemLocation.Bujuk;
                                 return true;
                             }
                             break;
                         case 2:
-                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.UseItems[Grobal2.U_BUJUK].Dura / 100) >= nCount) {
-                                Idx = Grobal2.U_BUJUK;
+                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(PlayObject.UseItems[ItemLocation.Bujuk].Dura / 100) >= nCount) {
+                                Idx = ItemLocation.Bujuk;
                                 return true;
                             }
                             break;

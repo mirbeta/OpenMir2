@@ -76,7 +76,7 @@ namespace GameSrv.Player {
                     clientItem.MakeIndex = playObject.UseItems[i].MakeIndex;
                     clientItem.Dura = playObject.UseItems[i].Dura;
                     clientItem.DuraMax = playObject.UseItems[i].DuraMax;
-                    if (i == Grobal2.U_DRESS) {
+                    if (i == ItemLocation.Dress) {
                         ChangeItemWithLevel(ref clientItem, playObject.Abil.Level);
                     }
                     playObject.ChangeItemByJob(ref clientItem, playObject.Abil.Level);

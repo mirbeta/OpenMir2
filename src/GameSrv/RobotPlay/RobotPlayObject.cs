@@ -1317,9 +1317,9 @@ namespace GameSrv.RobotPlay {
         // 自动换毒符
         private bool CheckUserItemType(int nItemType, int nCount) {
             bool result = false;
-            if (UseItems[Grobal2.U_ARMRINGL] != null && UseItems[Grobal2.U_ARMRINGL].Index > 0 &&
-                Math.Round(Convert.ToDouble(UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount) {
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].Index);
+            if (UseItems[ItemLocation.ArmRingl] != null && UseItems[ItemLocation.ArmRingl].Index > 0 &&
+                Math.Round(Convert.ToDouble(UseItems[ItemLocation.ArmRingl].Dura / 100)) >= nCount) {
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                 if (StdItem != null) {
                     result = CheckItemType(nItemType, StdItem);
                 }
@@ -1348,17 +1348,17 @@ namespace GameSrv.RobotPlay {
             bool result = false;
             if (nIndex >= 0 && nIndex < ItemList.Count) {
                 UserItem UserItem = ItemList[nIndex];
-                if (UseItems[Grobal2.U_ARMRINGL].Index > 0) {
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].Index);
+                if (UseItems[ItemLocation.ArmRingl].Index > 0) {
+                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                     if (StdItem != null) {
                         if (CheckItemType(nItemType, StdItem)) {
                             result = true;
                         }
                         else {
                             ItemList.RemoveAt(nIndex);
-                            UserItem AddUserItem = UseItems[Grobal2.U_ARMRINGL];
+                            UserItem AddUserItem = UseItems[ItemLocation.ArmRingl];
                             if (AddItemToBag(AddUserItem)) {
-                                UseItems[Grobal2.U_ARMRINGL] = UserItem;
+                                UseItems[ItemLocation.ArmRingl] = UserItem;
                                 Dispose(UserItem);
                                 result = true;
                             }
@@ -1370,14 +1370,14 @@ namespace GameSrv.RobotPlay {
                     }
                     else {
                         ItemList.RemoveAt(nIndex);
-                        UseItems[Grobal2.U_ARMRINGL] = UserItem;
+                        UseItems[ItemLocation.ArmRingl] = UserItem;
                         Dispose(UserItem);
                         result = true;
                     }
                 }
                 else {
                     ItemList.RemoveAt(nIndex);
-                    UseItems[Grobal2.U_ARMRINGL] = UserItem;
+                    UseItems[ItemLocation.ArmRingl] = UserItem;
                     Dispose(UserItem);
                     result = true;
                 }
@@ -3460,19 +3460,19 @@ namespace GameSrv.RobotPlay {
             StdItem AmuletStdItem;
             try {
                 result = false;
-                if (UseItems[Grobal2.U_ARMRINGL].Index > 0) {
-                    AmuletStdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_ARMRINGL].Index);
+                if (UseItems[ItemLocation.ArmRingl].Index > 0) {
+                    AmuletStdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                     if (AmuletStdItem != null) {
                         if (AmuletStdItem.StdMode == 25) {
                             switch (nType) {
                                 case 1:
-                                    if (AmuletStdItem.Shape == 5 && Math.Round(Convert.ToDouble(UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount) {
+                                    if (AmuletStdItem.Shape == 5 && Math.Round(Convert.ToDouble(UseItems[ItemLocation.ArmRingl].Dura / 100)) >= nCount) {
                                         result = true;
                                         return result;
                                     }
                                     break;
                                 case 2:
-                                    if (AmuletStdItem.Shape <= 2 && Math.Round(Convert.ToDouble(UseItems[Grobal2.U_ARMRINGL].Dura / 100)) >= nCount) {
+                                    if (AmuletStdItem.Shape <= 2 && Math.Round(Convert.ToDouble(UseItems[ItemLocation.ArmRingl].Dura / 100)) >= nCount) {
                                         result = true;
                                         return result;
                                     }
@@ -3481,19 +3481,19 @@ namespace GameSrv.RobotPlay {
                         }
                     }
                 }
-                if (UseItems[Grobal2.U_BUJUK] != null && UseItems[Grobal2.U_BUJUK].Index > 0) {
-                    AmuletStdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_BUJUK].Index);
+                if (UseItems[ItemLocation.Bujuk] != null && UseItems[ItemLocation.Bujuk].Index > 0) {
+                    AmuletStdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Bujuk].Index);
                     if (AmuletStdItem != null) {
                         if (AmuletStdItem.StdMode == 25) {
                             switch (nType) {
                                 case 1: // 符
-                                    if (AmuletStdItem.Shape == 5 && Math.Round(Convert.ToDouble(UseItems[Grobal2.U_BUJUK].Dura / 100)) >= nCount) {
+                                    if (AmuletStdItem.Shape == 5 && Math.Round(Convert.ToDouble(UseItems[ItemLocation.Bujuk].Dura / 100)) >= nCount) {
                                         result = true;
                                         return result;
                                     }
                                     break;
                                 case 2: // 毒
-                                    if (AmuletStdItem.Shape <= 2 && Math.Round(Convert.ToDouble(UseItems[Grobal2.U_BUJUK].Dura / 100)) >= nCount) {
+                                    if (AmuletStdItem.Shape <= 2 && Math.Round(Convert.ToDouble(UseItems[ItemLocation.Bujuk].Dura / 100)) >= nCount) {
                                         result = true;
                                         return result;
                                     }

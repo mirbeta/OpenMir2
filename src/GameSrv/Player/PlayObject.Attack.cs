@@ -17,7 +17,7 @@ namespace GameSrv.Player {
 
         protected void AttackDir(BaseObject targetObject, short wHitMode, byte nDir) {
             BaseObject attackTarget = targetObject ?? GetPoseCreate();
-            if (UseItems[Grobal2.U_WEAPON] != null && (UseItems[Grobal2.U_WEAPON].Index > 0) && UseItems[Grobal2.U_WEAPON].Desc[ItemAttr.WeaponUpgrade] > 0) {
+            if (UseItems[ItemLocation.Weapon] != null && (UseItems[ItemLocation.Weapon].Index > 0) && UseItems[ItemLocation.Weapon].Desc[ItemAttr.WeaponUpgrade] > 0) {
                 if (attackTarget != null) {
                     CheckWeaponUpgrade();
                 }
@@ -179,7 +179,7 @@ namespace GameSrv.Player {
                 }
             }
             ushort nWeaponDamage = (ushort)(M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
-            if ((nWeaponDamage > 0) && (UseItems[Grobal2.U_WEAPON] != null) && (UseItems[Grobal2.U_WEAPON].Index > 0)) {
+            if ((nWeaponDamage > 0) && (UseItems[ItemLocation.Weapon] != null) && (UseItems[ItemLocation.Weapon].Index > 0)) {
                 DoDamageWeapon(nWeaponDamage);
             }
             if (SuckupEnemyHealthRate > 0)// 虹魔，吸血
@@ -697,10 +697,10 @@ namespace GameSrv.Player {
                 if (nX == CurrX && nY == CurrY) {
                     result = true;
                     AttackTick = HUtil32.GetTickCount();
-                    if (wIdent == Messages.CM_HEAVYHIT && UseItems[Grobal2.U_WEAPON] != null && UseItems[Grobal2.U_WEAPON].Dura > 0)// 挖矿
+                    if (wIdent == Messages.CM_HEAVYHIT && UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Dura > 0)// 挖矿
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false)) {
-                            StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
+                            StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
                             if (StdItem != null && StdItem.Shape == 19) {
                                 if (PileStones(n14, n18)) {
                                     SendSocket("=DIG");
@@ -747,7 +747,7 @@ namespace GameSrv.Player {
                             AttackDir(null, 11, nDir);
                             break;
                     }
-                    if (MagicArr[MagicConst.SKILL_YEDO] != null && UseItems[Grobal2.U_WEAPON].Dura > 0) {
+                    if (MagicArr[MagicConst.SKILL_YEDO] != null && UseItems[ItemLocation.Weapon].Dura > 0) {
                         AttackSkillCount -= 1;
                         if (AttackSkillPointCount == AttackSkillCount) {
                             PowerHit = true;
@@ -1150,31 +1150,31 @@ namespace GameSrv.Player {
         /// 减少武器持久值
         /// </summary>
         protected void DoDamageWeapon(ushort nWeaponDamage) {
-            if (UseItems[Grobal2.U_WEAPON] == null || UseItems[Grobal2.U_WEAPON].Index <= 0) {
+            if (UseItems[ItemLocation.Weapon] == null || UseItems[ItemLocation.Weapon].Index <= 0) {
                 return;
             }
-            ushort nDura = UseItems[Grobal2.U_WEAPON].Dura;
+            ushort nDura = UseItems[ItemLocation.Weapon].Dura;
             int nDuraPoint = HUtil32.Round(nDura / 1.03);
             nDura -= nWeaponDamage;
             if (nDura <= 0) {
                 nDura = 0;
-                UseItems[Grobal2.U_WEAPON].Dura = nDura;
+                UseItems[ItemLocation.Weapon].Dura = nDura;
                 if (Race == ActorRace.Play) {
-                    this.SendDelItems(UseItems[Grobal2.U_WEAPON]);
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_WEAPON].Index);
+                    this.SendDelItems(UseItems[ItemLocation.Weapon]);
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
                     if (stdItem.NeedIdentify == 1) {
                         M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
-                                                           UseItems[Grobal2.U_WEAPON].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                                                           UseItems[ItemLocation.Weapon].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }
-                UseItems[Grobal2.U_WEAPON].Index = 0;
-                SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_WEAPON, nDura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+                UseItems[ItemLocation.Weapon].Index = 0;
+                SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Weapon, nDura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
             }
             else {
-                UseItems[Grobal2.U_WEAPON].Dura = nDura;
+                UseItems[ItemLocation.Weapon].Dura = nDura;
             }
             if ((ushort)Math.Abs((nDura / 1.03)) != nDuraPoint) {
-                SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_WEAPON, UseItems[Grobal2.U_WEAPON].Dura, UseItems[Grobal2.U_WEAPON].DuraMax, 0, "");
+                SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Weapon, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
             }
         }
     }

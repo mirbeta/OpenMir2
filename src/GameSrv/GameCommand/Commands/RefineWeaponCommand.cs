@@ -1,4 +1,5 @@
 ﻿using GameSrv.Player;
+using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
     /// <summary>
@@ -18,14 +19,14 @@ namespace GameSrv.GameCommand.Commands {
             if (nDc + nMc + nSc > 10) {
                 return;
             }
-            if (PlayObject.UseItems[Grobal2.U_WEAPON] == null || PlayObject.UseItems[Grobal2.U_WEAPON].Index <= 0) {
+            if (PlayObject.UseItems[ItemLocation.Weapon] == null || PlayObject.UseItems[ItemLocation.Weapon].Index <= 0) {
                 return;
             }
-            PlayObject.UseItems[Grobal2.U_WEAPON].Desc[0] = (byte)nDc;
-            PlayObject.UseItems[Grobal2.U_WEAPON].Desc[1] = (byte)nMc;
-            PlayObject.UseItems[Grobal2.U_WEAPON].Desc[2] = (byte)nSc;
-            PlayObject.UseItems[Grobal2.U_WEAPON].Desc[5] = (byte)nHit;
-            PlayObject.SendUpdateItem(PlayObject.UseItems[Grobal2.U_WEAPON]);
+            PlayObject.UseItems[ItemLocation.Weapon].Desc[0] = (byte)nDc;
+            PlayObject.UseItems[ItemLocation.Weapon].Desc[1] = (byte)nMc;
+            PlayObject.UseItems[ItemLocation.Weapon].Desc[2] = (byte)nSc;
+            PlayObject.UseItems[ItemLocation.Weapon].Desc[5] = (byte)nHit;
+            PlayObject.SendUpdateItem(PlayObject.UseItems[ItemLocation.Weapon]);
             PlayObject.RecalcAbilitys();
             PlayObject.SendMsg(PlayObject, Messages.RM_ABILITY, 0, 0, 0, 0, "");
             PlayObject.SendMsg(PlayObject, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");

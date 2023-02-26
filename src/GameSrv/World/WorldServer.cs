@@ -1310,19 +1310,19 @@ namespace GameSrv.World {
             playObject.QuestUnit = humData.QuestUnit;
             playObject.QuestFlag = humData.QuestFlag;
             ServerUserItem[] humItems = humanRcd.Data.HumItems;
-            playObject.UseItems[Grobal2.U_DRESS] = humItems[Grobal2.U_DRESS].ToClientItem();
-            playObject.UseItems[Grobal2.U_WEAPON] = humItems[Grobal2.U_WEAPON].ToClientItem();
-            playObject.UseItems[Grobal2.U_RIGHTHAND] = humItems[Grobal2.U_RIGHTHAND].ToClientItem();
-            playObject.UseItems[Grobal2.U_NECKLACE] = humItems[Grobal2.U_HELMET].ToClientItem();
-            playObject.UseItems[Grobal2.U_HELMET] = humItems[Grobal2.U_NECKLACE].ToClientItem();
-            playObject.UseItems[Grobal2.U_ARMRINGL] = humItems[Grobal2.U_ARMRINGL].ToClientItem();
-            playObject.UseItems[Grobal2.U_ARMRINGR] = humItems[Grobal2.U_ARMRINGR].ToClientItem();
-            playObject.UseItems[Grobal2.U_RINGL] = humItems[Grobal2.U_RINGL].ToClientItem();
-            playObject.UseItems[Grobal2.U_RINGR] = humItems[Grobal2.U_RINGR].ToClientItem();
-            playObject.UseItems[Grobal2.U_BUJUK] = humItems[Grobal2.U_BUJUK].ToClientItem();
-            playObject.UseItems[Grobal2.U_BELT] = humItems[Grobal2.U_BELT].ToClientItem();
-            playObject.UseItems[Grobal2.U_BOOTS] = humItems[Grobal2.U_BOOTS].ToClientItem();
-            playObject.UseItems[Grobal2.U_CHARM] = humItems[Grobal2.U_CHARM].ToClientItem();
+            playObject.UseItems[ItemLocation.Dress] = humItems[ItemLocation.Dress].ToClientItem();
+            playObject.UseItems[ItemLocation.Weapon] = humItems[ItemLocation.Weapon].ToClientItem();
+            playObject.UseItems[ItemLocation.RighThand] = humItems[ItemLocation.RighThand].ToClientItem();
+            playObject.UseItems[ItemLocation.Necklace] = humItems[ItemLocation.Helmet].ToClientItem();
+            playObject.UseItems[ItemLocation.Helmet] = humItems[ItemLocation.Necklace].ToClientItem();
+            playObject.UseItems[ItemLocation.ArmRingl] = humItems[ItemLocation.ArmRingl].ToClientItem();
+            playObject.UseItems[ItemLocation.ArmRingr] = humItems[ItemLocation.ArmRingr].ToClientItem();
+            playObject.UseItems[ItemLocation.Ringl] = humItems[ItemLocation.Ringl].ToClientItem();
+            playObject.UseItems[ItemLocation.Ringr] = humItems[ItemLocation.Ringr].ToClientItem();
+            playObject.UseItems[ItemLocation.Bujuk] = humItems[ItemLocation.Bujuk].ToClientItem();
+            playObject.UseItems[ItemLocation.Belt] = humItems[ItemLocation.Belt].ToClientItem();
+            playObject.UseItems[ItemLocation.Boots] = humItems[ItemLocation.Boots].ToClientItem();
+            playObject.UseItems[ItemLocation.Charm] = humItems[ItemLocation.Charm].ToClientItem();
             ServerUserItem[] bagItems = humanRcd.Data.BagItems;
             if (bagItems != null) {
                 for (int i = 0; i < bagItems.Length; i++) {
@@ -1428,19 +1428,19 @@ namespace GameSrv.World {
             if (HumItems == null) {
                 HumItems = new ServerUserItem[13];
             }
-            HumItems[Grobal2.U_DRESS] = playObject.UseItems[Grobal2.U_DRESS] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_DRESS].ToServerItem();
-            HumItems[Grobal2.U_WEAPON] = playObject.UseItems[Grobal2.U_WEAPON] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_WEAPON].ToServerItem();
-            HumItems[Grobal2.U_RIGHTHAND] = playObject.UseItems[Grobal2.U_RIGHTHAND] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_RIGHTHAND].ToServerItem();
-            HumItems[Grobal2.U_HELMET] = playObject.UseItems[Grobal2.U_NECKLACE] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_NECKLACE].ToServerItem();
-            HumItems[Grobal2.U_NECKLACE] = playObject.UseItems[Grobal2.U_HELMET] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_HELMET].ToServerItem();
-            HumItems[Grobal2.U_ARMRINGL] = playObject.UseItems[Grobal2.U_ARMRINGL] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_ARMRINGL].ToServerItem();
-            HumItems[Grobal2.U_ARMRINGR] = playObject.UseItems[Grobal2.U_ARMRINGR] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_ARMRINGR].ToServerItem();
-            HumItems[Grobal2.U_RINGL] = playObject.UseItems[Grobal2.U_RINGL] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_RINGL].ToServerItem();
-            HumItems[Grobal2.U_RINGR] = playObject.UseItems[Grobal2.U_RINGR] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_RINGR].ToServerItem();
-            HumItems[Grobal2.U_BUJUK] = playObject.UseItems[Grobal2.U_BUJUK] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_BUJUK].ToServerItem();
-            HumItems[Grobal2.U_BELT] = playObject.UseItems[Grobal2.U_BELT] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_BELT].ToServerItem();
-            HumItems[Grobal2.U_BOOTS] = playObject.UseItems[Grobal2.U_BOOTS] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_BOOTS].ToServerItem();
-            HumItems[Grobal2.U_CHARM] = playObject.UseItems[Grobal2.U_CHARM] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[Grobal2.U_CHARM].ToServerItem();
+            HumItems[ItemLocation.Dress] = playObject.UseItems[ItemLocation.Dress] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Dress].ToServerItem();
+            HumItems[ItemLocation.Weapon] = playObject.UseItems[ItemLocation.Weapon] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Weapon].ToServerItem();
+            HumItems[ItemLocation.RighThand] = playObject.UseItems[ItemLocation.RighThand] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.RighThand].ToServerItem();
+            HumItems[ItemLocation.Helmet] = playObject.UseItems[ItemLocation.Necklace] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Necklace].ToServerItem();
+            HumItems[ItemLocation.Necklace] = playObject.UseItems[ItemLocation.Helmet] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Helmet].ToServerItem();
+            HumItems[ItemLocation.ArmRingl] = playObject.UseItems[ItemLocation.ArmRingl] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.ArmRingl].ToServerItem();
+            HumItems[ItemLocation.ArmRingr] = playObject.UseItems[ItemLocation.ArmRingr] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.ArmRingr].ToServerItem();
+            HumItems[ItemLocation.Ringl] = playObject.UseItems[ItemLocation.Ringl] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Ringl].ToServerItem();
+            HumItems[ItemLocation.Ringr] = playObject.UseItems[ItemLocation.Ringr] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Ringr].ToServerItem();
+            HumItems[ItemLocation.Bujuk] = playObject.UseItems[ItemLocation.Bujuk] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Bujuk].ToServerItem();
+            HumItems[ItemLocation.Belt] = playObject.UseItems[ItemLocation.Belt] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Belt].ToServerItem();
+            HumItems[ItemLocation.Boots] = playObject.UseItems[ItemLocation.Boots] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Boots].ToServerItem();
+            HumItems[ItemLocation.Charm] = playObject.UseItems[ItemLocation.Charm] == null ? HUtil32.DelfautItem.ToServerItem() : playObject.UseItems[ItemLocation.Charm].ToServerItem();
             ServerUserItem[] BagItems = humanRcd.Data.BagItems;
             if (BagItems == null) {
                 BagItems = new ServerUserItem[Grobal2.MaxBagItem];

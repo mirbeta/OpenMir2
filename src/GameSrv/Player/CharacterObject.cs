@@ -100,16 +100,16 @@ namespace GameSrv.Player {
         /// </summary>
         internal void LifeStone() {
             if (!Death && Race == ActorRace.Play || Race == ActorRace.PlayClone) {
-                if (UseItems.Length >= Grobal2.U_CHARM && UseItems[Grobal2.U_CHARM] != null && UseItems[Grobal2.U_CHARM].Index > 0) {
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[Grobal2.U_CHARM].Index);
+                if (UseItems.Length >= ItemLocation.Charm && UseItems[ItemLocation.Charm] != null && UseItems[ItemLocation.Charm].Index > 0) {
+                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Charm].Index);
                     if ((StdItem.StdMode == 7) && (StdItem.Shape == 2 || StdItem.Shape == 3)) {
                         ushort stoneDura;
                         ushort dCount;
                         ushort bCount;
                         // 加HP
-                        if ((IncHealth == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < M2Share.Config.HPStoneStartRate)) {
+                        if ((IncHealth == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < M2Share.Config.HPStoneStartRate)) {
                             IncHpStoneTime = HUtil32.GetTickCount();
-                            stoneDura = (ushort)(UseItems[Grobal2.U_CHARM].Dura * 10);
+                            stoneDura = (ushort)(UseItems[ItemLocation.Charm].Dura * 10);
                             bCount = (ushort)(stoneDura / M2Share.Config.HPStoneAddRate);
                             dCount = (ushort)(WAbil.MaxHP - WAbil.HP);
                             if (dCount > bCount) {
@@ -117,30 +117,30 @@ namespace GameSrv.Player {
                             }
                             if (stoneDura > dCount) {
                                 IncHealth += dCount;
-                                UseItems[Grobal2.U_CHARM].Dura -= (ushort)HUtil32.Round(dCount / 10);
+                                UseItems[ItemLocation.Charm].Dura -= (ushort)HUtil32.Round(dCount / 10);
                             }
                             else {
                                 stoneDura = 0;
                                 IncHealth += stoneDura;
-                                UseItems[Grobal2.U_CHARM].Dura = 0;
+                                UseItems[ItemLocation.Charm].Dura = 0;
                             }
-                            if (UseItems[Grobal2.U_CHARM].Dura >= 1000) {
+                            if (UseItems[ItemLocation.Charm].Dura >= 1000) {
                                 if (Race == ActorRace.Play) {
-                                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
+                                    SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Charm, UseItems[ItemLocation.Charm].Dura, UseItems[ItemLocation.Charm].DuraMax, 0, "");
                                 }
                             }
                             else {
-                                UseItems[Grobal2.U_CHARM].Dura = 0;
+                                UseItems[ItemLocation.Charm].Dura = 0;
                                 if (Race == ActorRace.Play) {
-                                    ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_CHARM]);
+                                    ((PlayObject)this).SendDelItems(UseItems[ItemLocation.Charm]);
                                 }
-                                UseItems[Grobal2.U_CHARM].Index = 0;
+                                UseItems[ItemLocation.Charm].Index = 0;
                             }
                         }
                         // 加MP
-                        if ((IncSpell == 0) && (UseItems[Grobal2.U_CHARM].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate)) {
+                        if ((IncSpell == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate)) {
                             IncMpStoneTime = HUtil32.GetTickCount();
-                            stoneDura = (ushort)(UseItems[Grobal2.U_CHARM].Dura * 10);
+                            stoneDura = (ushort)(UseItems[ItemLocation.Charm].Dura * 10);
                             bCount = (ushort)(stoneDura / M2Share.Config.MPStoneAddRate);
                             dCount = (ushort)(WAbil.MaxMP - WAbil.MP);
                             if (dCount > bCount) {
@@ -148,24 +148,24 @@ namespace GameSrv.Player {
                             }
                             if (stoneDura > dCount) {
                                 IncSpell += dCount;
-                                UseItems[Grobal2.U_CHARM].Dura -= (ushort)HUtil32.Round(dCount / 10);
+                                UseItems[ItemLocation.Charm].Dura -= (ushort)HUtil32.Round(dCount / 10);
                             }
                             else {
                                 stoneDura = 0;
                                 IncSpell += stoneDura;
-                                UseItems[Grobal2.U_CHARM].Dura = 0;
+                                UseItems[ItemLocation.Charm].Dura = 0;
                             }
-                            if (UseItems[Grobal2.U_CHARM].Dura >= 1000) {
+                            if (UseItems[ItemLocation.Charm].Dura >= 1000) {
                                 if (Race == ActorRace.Play) {
-                                    SendMsg(this, Messages.RM_DURACHANGE, Grobal2.U_CHARM, UseItems[Grobal2.U_CHARM].Dura, UseItems[Grobal2.U_CHARM].DuraMax, 0, "");
+                                    SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Charm, UseItems[ItemLocation.Charm].Dura, UseItems[ItemLocation.Charm].DuraMax, 0, "");
                                 }
                             }
                             else {
-                                UseItems[Grobal2.U_CHARM].Dura = 0;
+                                UseItems[ItemLocation.Charm].Dura = 0;
                                 if (Race == ActorRace.Play) {
-                                    ((PlayObject)this).SendDelItems(UseItems[Grobal2.U_CHARM]);
+                                    ((PlayObject)this).SendDelItems(UseItems[ItemLocation.Charm]);
                                 }
-                                UseItems[Grobal2.U_CHARM].Index = 0;
+                                UseItems[ItemLocation.Charm].Index = 0;
                             }
                         }
                     }

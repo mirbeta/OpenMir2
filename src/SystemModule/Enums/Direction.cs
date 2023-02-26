@@ -1,5 +1,5 @@
 ﻿namespace SystemModule.Enums {
-    public class Direction {
+    public static class Direction {
         public const byte Up = 0;
         public const byte UpRight = 1;
         public const byte Right = 2;
