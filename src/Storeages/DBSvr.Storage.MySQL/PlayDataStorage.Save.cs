@@ -1,4 +1,4 @@
-using DBSvr.Storage.Model;
+using DBSrv.Storage.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
-namespace DBSvr.Storage.MySQL
+namespace DBSrv.Storage.MySQL
 {
     public partial class PlayDataStorage : IPlayDataStorage
     {

@@ -13,7 +13,7 @@ using SystemModule.Sockets.Event;
 namespace SelGate.Services
 {
     /// <summary>
-    /// 网关客户端(SelGate-DBSvr)
+    /// 网关客户端(SelGate-DBSrv)
     /// </summary>
     public class ClientThread
     {
@@ -225,7 +225,7 @@ namespace SelGate.Services
                         CheckServerFail = false;
                         boGateReady = true;
                         isConnected = true;
-                        _logger.DebugLog("DBSvr Heartbeat Response");
+                        _logger.DebugLog("DBSrv Heartbeat Response");
                         break;
                     case ServerDataType.Leave:
                         _sessionManager.CloseSession(messageData.SocketId);
@@ -290,7 +290,7 @@ namespace SelGate.Services
             var messageData = new ServerDataMessage();
             messageData.Type = ServerDataType.KeepAlive;
             SendSocket(SerializerUtil.Serialize(messageData));
-            _logger.DebugLog("Send DBSvr Heartbeat.");
+            _logger.DebugLog("Send DBSrv Heartbeat.");
         }
 
         public void SendBuffer(string sendText)

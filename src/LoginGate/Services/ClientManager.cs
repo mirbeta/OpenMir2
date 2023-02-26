@@ -15,7 +15,7 @@ using SystemModule.Packets.ServerPackets;
 namespace LoginGate.Services
 {
     /// <summary>
-    /// LoginGate->LoginSvr
+    /// LoginGate->LoginSrv
     /// </summary>
     public class ClientManager
     {

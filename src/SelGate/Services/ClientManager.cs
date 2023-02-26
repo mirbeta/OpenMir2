@@ -8,7 +8,7 @@ using SystemModule.Logger;
 namespace SelGate.Services
 {
     /// <summary>
-    /// GameGate->GameSvr
+    /// GameGate->GameSrv
     /// </summary>
     public class ClientManager
     {

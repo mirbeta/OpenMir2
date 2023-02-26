@@ -4,13 +4,12 @@
     <file url="file://$PROJECT_DIR$/../Data/Mirserver/Mir200/Envir/QuestDiary/任务系统/循环任务/循环任务.txt" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/../Data/Mirserver/Mir200/Server.conf" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/../Data/Mirserver/Mir200/String.conf" charset="GB2312" />
-    <file url="file://$PROJECT_DIR$/src/DBSvr/bin/Debug/net6.0/dbsvr.conf" charset="GB2312" />
-    <file url="file://$PROJECT_DIR$/src/LoginSvr/bin/Debug/net6.0/!AddrTable.txt" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/src/DBSrv/bin/Debug/net6.0/dbsvr.conf" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/src/LoginSrv/bin/Debug/net6.0/!AddrTable.txt" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/RobotSvr/MShare.cs" charset="GBK" />
     <file url="file://$PROJECT_DIR$/src/RobotSvr/Objects/AxeMon.cs" charset="GBK" />
     <file url="file://$PROJECT_DIR$/src/RobotSvr/Scenes/IntroScn.cs" charset="GBK" />
     <file url="file://$PROJECT_DIR$/src/SelGate/Conf/ConfigManager.cs" charset="GB2312" />
-    <file url="file://$PROJECT_DIR$/src/SelGate/Services/ClientSession.cs" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/SelGate/Services/ClientSession.cs" charset="GB2312" />
   </component>
 </project>

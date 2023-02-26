@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSvr", "src\GameSvr\GameSvr.csproj", "{7D24A5E9-B907-4625-B0D6-B194996D11DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSrv", "src\GameSrv\GameSrv.csproj", "{7D24A5E9-B907-4625-B0D6-B194996D11DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemModule", "src\SystemModule\SystemModule.csproj", "{AC57E6B6-F9B1-474A-9823-DDADD343AA70}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameGate", "src\GameGate\GameGate.csproj", "{0E671CB2-DC3E-4CE7-90D6-9D2760C2CE1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoginSvr", "src\LoginSvr\LoginSvr.csproj", "{D4804C7B-3002-4A2B-B8F8-F7D5C9A69D07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoginSrv", "src\LoginSrv\LoginSrv.csproj", "{D4804C7B-3002-4A2B-B8F8-F7D5C9A69D07}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoginGate", "src\LoginGate\LoginGate.csproj", "{1DB111C8-2617-4F5D-A515-9EEC5D25C56E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SelGate", "src\SelGate\SelGate.csproj", "{A8F9A1AA-48F0-4731-8D6B-6DBBB61627E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr", "src\DBSvr\DBSvr.csproj", "{28ED3883-CEAF-4C74-A3C7-B3DD856F58E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSrv", "src\DBSrv\DBSrv.csproj", "{28ED3883-CEAF-4C74-A3C7-B3DD856F58E7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakePlayer", "src\MakePlayer\MakePlayer.csproj", "{9F27960B-B37F-43B6-A43A-227B0121242C}"
 EndProject
@@ -33,17 +33,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clouds", "Clouds", "{D1A900
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr.Storage.MySQL", "src\Storeages\DBSvr.Storage.MySQL\DBSvr.Storage.MySQL.csproj", "{EF22FC3B-2298-4B25-B826-31E79DF29573}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr.Storage", "src\Storeages\DBSvr.Storage\DBSvr.Storage.csproj", "{E0EE56B2-1816-4068-AB2B-5CC062D43462}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSrv.Storage", "src\Storeages\DBSrv.Storage\DBSrv.Storage.csproj", "{E0EE56B2-1816-4068-AB2B-5CC062D43462}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storages", "Storages", "{3D2C298D-650B-4818-A611-713A0573B931}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DBSvr", "DBSvr", "{6E1CC18F-2BBE-4CBA-903A-267FB4C218EE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DBSrv", "DBSrv", "{6E1CC18F-2BBE-4CBA-903A-267FB4C218EE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr.Storage.MongoDB", "src\Storeages\DBSvr.Storage.MongoDB\DBSvr.Storage.MongoDB.csproj", "{647E768C-E6EB-421B-BBD8-9BAC5162590D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogDataSvr", "src\LogDataSvr\LogDataSvr.csproj", "{3375F945-E67F-49B5-9358-A6DDAD075C6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogDataSrv", "src\LogDataSrv\LogDataSrv.csproj", "{3375F945-E67F-49B5-9358-A6DDAD075C6D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapSvr", "src\MapSvr\MapSvr.csproj", "{19D44174-D864-4625-B4C8-08A3DB5B6073}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapSrv", "src\MapSrv\MapSrv.csproj", "{19D44174-D864-4625-B4C8-08A3DB5B6073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

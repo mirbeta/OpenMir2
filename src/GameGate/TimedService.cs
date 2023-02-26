@@ -47,7 +47,7 @@ namespace GameGate
         }
 
         /// <summary>
-        /// GameGate->GameSvr 心跳
+        /// GameGate->GameSrv 心跳
         /// </summary>
         private void KeepAlive(int currentTick)
         {

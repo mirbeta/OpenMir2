@@ -11,7 +11,7 @@ using SystemModule.Sockets.Event;
 namespace GameGate.Services
 {
     /// <summary>
-    /// 网关客户端(GameGate-GameSvr)
+    /// 网关客户端(GameGate-GameSrv)
     /// </summary>
     public class ClientThread
     {

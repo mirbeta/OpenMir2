@@ -15,7 +15,7 @@ using SystemModule.Sockets.Event;
 namespace LoginGate.Services
 {
     /// <summary>
-    /// 网关客户端(LoginGate-LoginSvr)
+    /// 网关客户端(LoginGate-LoginSrv)
     /// </summary>
     public class ClientThread
     {

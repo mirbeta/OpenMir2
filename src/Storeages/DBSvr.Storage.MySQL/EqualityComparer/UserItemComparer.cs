@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using SystemModule.Packets.ClientPackets;
 
-namespace DBSvr.Storage.MySQL.EqualityComparer
+namespace DBSrv.Storage.MySQL.EqualityComparer
 {
     public class UserItemComparer : IEqualityComparer<UserItem>
     {

@@ -87,7 +87,7 @@ namespace GameGate.Services
 
         /// <summary>
         /// 客户端消息添加到队列给服务端处理
-        /// GameGate -> GameSvr
+        /// GameGate -> GameSrv
         /// </summary>
         public void SendMessageQueue(SessionMessage messagePacket)
         {

@@ -128,7 +128,7 @@ namespace GameGate.Services
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
                 SessionMgr.AddSession(GateInfo.ServiceId, userSession.SessionId, new ClientSession(userSession, clientThread, PacketSendQueue));
                 _logger.Info("开始连接: " + sRemoteAddress);
-                _logger.Debug($"用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSvr:{clientThread.EndPoint}-{clientThread.ThreadId}");
+                _logger.Debug($"用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}-{clientThread.ThreadId}");
             }
             else
             {

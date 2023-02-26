@@ -7,6 +7,8 @@
         <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
         <Nullable>disable</Nullable>
         <EnableDynamicLoading>true</EnableDynamicLoading>
+        <AssemblyName>DBSrv.Storage.MongoDB</AssemblyName>
+        <RootNamespace>DBSrv.Storage.MongoDB</RootNamespace>
     </PropertyGroup>
 
     <Choose>
@@ -35,7 +37,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DBSvr.Storage\DBSvr.Storage.csproj" />
+      <ProjectReference Include="..\DBSrv.Storage\DBSrv.Storage.csproj" />
     </ItemGroup>
 
 </Project>

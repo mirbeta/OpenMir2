@@ -6,7 +6,7 @@ using System.Linq;
 namespace GameGate.Services
 {
     /// <summary>
-    /// GameGate->GameSvr
+    /// GameGate->GameSrv
     /// </summary>
     public class ClientManager
     {
