@@ -24,23 +24,19 @@ namespace GameSrv.Script {
                 callStrList.LoadFromFile(sFileName);
                 sLabel = '[' + sLabel + ']';
                 var findLab = false;
-                for (var i = 0; i < callStrList.Count; i++) {
+                for (var i = 0; i < callStrList.Count; i++)
+                {
                     var sLine = callStrList[i].Trim();
                     if (!string.IsNullOrEmpty(sLine))
                     {
-                        if (!findLab)
-                        {
-                            if (sLine[0] == '[' && string.Compare(sLine, sLabel, StringComparison.OrdinalIgnoreCase) == 0)
-                            {
+                        if (!findLab) {
+                            if (sLine[0] == '[' && string.Compare(sLine, sLabel, StringComparison.OrdinalIgnoreCase) == 0) {
                                 findLab = true;
-                                //List.Add(sLine);
-                                List.Add("#SAY");
+                                continue;
                             }
                         }
-                        else if (sLine[0] != '{')
-                        {
-                            if (sLine[0] == '}')
-                            {
+                        if (sLine[0] != '{') {
+                            if (sLine[0] == '}') {
                                 result = true;
                                 break;
                             }
@@ -81,6 +77,11 @@ namespace GameSrv.Script {
 
         private void LoadCallScript(ref StringList LoadList, ref bool success)
         {
+            var callCount = GetScriptCallCount(LoadList.Text);
+            if (callCount <= 0) {
+                success = true;
+                return;
+            }
             var sLable = string.Empty;
             var callList = new StringList(1024);
             for (var i = 0; i < LoadList.Count; i++)
@@ -94,12 +95,14 @@ namespace GameSrv.Script {
                     var sFileName = M2Share.GetEnvirFilePath("QuestDiary", sCallScriptFile);
                     if (CallScriptDict.ContainsKey(sFileName))
                     {
+                        callCount--;
                         callList[i] = "#ACT";
                         callList.InsertText(i + 1, "goto " + sLabName);
                         break;
                     }
                     if (LoadScriptCallScript(sFileName, sLabName, callList))
                     {
+                        callCount--;
                         if (!CallScriptDict.ContainsKey(sLabName))
                         {
                             CallScriptDict.Add(sFileName, sLabName);
@@ -116,7 +119,6 @@ namespace GameSrv.Script {
                 }
             }
             LoadList = callList;
-            var callCount = GetScriptCallCount(LoadList.Text);
             success = callCount <= 0;
         }
 
