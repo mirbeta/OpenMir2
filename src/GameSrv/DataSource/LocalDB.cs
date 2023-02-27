@@ -64,9 +64,9 @@ namespace GameSrv.DataSource {
                             continue;
                         }
                         AdminInfo AdminInfo = new AdminInfo {
-                            nLv = nLv,
-                            sChrName = sChrName,
-                            sIPaddr = sIPaddr
+                            Level = nLv,
+                            ChrName = sChrName,
+                            IPaddr = sIPaddr
                         };
                         M2Share.WorldEngine.AdminList.Add(AdminInfo);
                     }

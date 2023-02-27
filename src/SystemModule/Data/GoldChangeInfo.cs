@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class GoldChangeInfo
+    public record struct GoldChangeInfo
     {
         public string sGameMasterName;
         public string sGetGoldUser;

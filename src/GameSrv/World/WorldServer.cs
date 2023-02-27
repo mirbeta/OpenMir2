@@ -1186,9 +1186,9 @@ namespace GameSrv.World {
             btPermission = M2Share.Config.StartPermission;
             for (var i = 0; i < AdminList.Count; i++) {
                 var adminInfo = AdminList[i];
-                if (string.Compare(adminInfo.sChrName, sUserName, StringComparison.OrdinalIgnoreCase) == 0) {
-                    btPermission = (byte)adminInfo.nLv;
-                    sIPaddr = adminInfo.sIPaddr;
+                if (string.Compare(adminInfo.ChrName, sUserName, StringComparison.OrdinalIgnoreCase) == 0) {
+                    btPermission = (byte)adminInfo.Level;
+                    sIPaddr = adminInfo.IPaddr;
                     result = true;
                     break;
                 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// 假人登陆结构
     /// </summary>
-    public class RoBotLogon
+    public struct RoBotLogon
     {
         /// <summary>
         /// 名字

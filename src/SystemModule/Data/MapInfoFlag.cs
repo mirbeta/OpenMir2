@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class MapInfoFlag
+    public record struct MapInfoFlag
     {
         public bool SafeArea;
         public int RequestLevel;

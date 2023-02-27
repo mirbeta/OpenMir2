@@ -2,8 +2,8 @@
 {
     public struct AdminInfo
     {
-        public int nLv;
-        public string sChrName;
-        public string sIPaddr;
+        public byte Level;
+        public string ChrName;
+        public string IPaddr;
     }
 }

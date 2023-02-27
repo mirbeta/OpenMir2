@@ -753,24 +753,24 @@ namespace GameSrv.Maps {
                 return false;
             }
             MapQuestInfo mapQuest = new MapQuestInfo {
-                nFlag = nFlag
+                Flag = nFlag
             };
             if (nValue > 1) {
                 nValue = 1;
             }
-            mapQuest.nValue = nValue;
+            mapQuest.Value = nValue;
             if (sMonName == "*") {
                 sMonName = "";
             }
-            mapQuest.sMonName = sMonName;
+            mapQuest.MonName = sMonName;
             if (sItem == "*") {
                 sItem = "";
             }
-            mapQuest.sItemName = sItem;
+            mapQuest.ItemName = sItem;
             if (sQuest == "*") {
                 sQuest = "";
             }
-            mapQuest.boGrouped = boGrouped;
+            mapQuest.Grouped = boGrouped;
             Merchant mapMerchant = new Merchant {
                 MapName = "0",
                 CurrX = 0,
@@ -940,22 +940,22 @@ namespace GameSrv.Maps {
         public Merchant GetQuestNpc(PlayObject baseObject, string sChrName, string itemName, bool boFlag) {
             for (int i = 0; i < QuestList.Count; i++) {
                 MapQuestInfo mapQuestFlag = QuestList[i];
-                int nFlagValue = baseObject.GetQuestFalgStatus(mapQuestFlag.nFlag);
-                if (nFlagValue == mapQuestFlag.nValue) {
-                    if (boFlag == mapQuestFlag.boGrouped || !boFlag) {
+                int nFlagValue = baseObject.GetQuestFalgStatus(mapQuestFlag.Flag);
+                if (nFlagValue == mapQuestFlag.Value) {
+                    if (boFlag == mapQuestFlag.Grouped || !boFlag) {
                         bool bo1D = false;
-                        if (!string.IsNullOrEmpty(mapQuestFlag.sMonName) && !string.IsNullOrEmpty(mapQuestFlag.sItemName)) {
-                            if (mapQuestFlag.sMonName == sChrName && mapQuestFlag.sItemName == itemName) {
+                        if (!string.IsNullOrEmpty(mapQuestFlag.MonName) && !string.IsNullOrEmpty(mapQuestFlag.ItemName)) {
+                            if (mapQuestFlag.MonName == sChrName && mapQuestFlag.ItemName == itemName) {
                                 bo1D = true;
                             }
                         }
-                        if (!string.IsNullOrEmpty(mapQuestFlag.sMonName) && string.IsNullOrEmpty(mapQuestFlag.sItemName)) {
-                            if (mapQuestFlag.sMonName == sChrName && string.IsNullOrEmpty(itemName)) {
+                        if (!string.IsNullOrEmpty(mapQuestFlag.MonName) && string.IsNullOrEmpty(mapQuestFlag.ItemName)) {
+                            if (mapQuestFlag.MonName == sChrName && string.IsNullOrEmpty(itemName)) {
                                 bo1D = true;
                             }
                         }
-                        if (string.IsNullOrEmpty(mapQuestFlag.sMonName) && !string.IsNullOrEmpty(mapQuestFlag.sItemName)) {
-                            if (mapQuestFlag.sItemName == itemName) {
+                        if (string.IsNullOrEmpty(mapQuestFlag.MonName) && !string.IsNullOrEmpty(mapQuestFlag.ItemName)) {
+                            if (mapQuestFlag.ItemName == itemName) {
                                 bo1D = true;
                             }
                         }

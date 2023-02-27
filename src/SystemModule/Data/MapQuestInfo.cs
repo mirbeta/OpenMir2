@@ -2,11 +2,11 @@
 {
     public struct MapQuestInfo
     {
-        public int nFlag;
-        public int nValue;
-        public string sMonName;
-        public string sItemName;
-        public bool boGrouped;
+        public int Flag;
+        public int Value;
+        public string MonName;
+        public string ItemName;
+        public bool Grouped;
         public object NPC;
     }
 }
