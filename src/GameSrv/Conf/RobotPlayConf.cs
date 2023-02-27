@@ -35,7 +35,7 @@ namespace GameSrv.Conf {
             playObject.Hair = (byte)ReadWriteInteger("Info", "Hair", 0);
             playObject.Abil.Level = (byte)ReadWriteInteger("Info", "Level", 1);
             playObject.Abil.MaxExp = BaseObject.GetLevelExp(playObject.Abil.Level);
-            playObject.MBoProtectStatus = ReadWriteBool("Info", "ProtectStatus", false);// 是否守护模式
+            playObject.ProtectStatus = ReadWriteBool("Info", "ProtectStatus", false);// 是否守护模式
             nAttatckMode = (byte)ReadWriteInteger("Info", "AttatckMode", 6);// 攻击模式
             if (nAttatckMode >= 0 && nAttatckMode <= 6) {
                 playObject.AttatckMode = (AttackMode)nAttatckMode;

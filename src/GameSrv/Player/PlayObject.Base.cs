@@ -1129,7 +1129,10 @@ namespace GameSrv.Player {
                 MapMoveTick = HUtil32.GetTickCount();
                 LogonTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 LogonTick = HUtil32.GetTickCount();
-                Initialize();
+                if (!IsRobot)
+                {
+                    Initialize();
+                }
                 SendPriorityMsg(this, Messages.RM_LOGON, 0, 0, 0, 0, "", MessagePriority.High);
                 if (Abil.Level <= 7) {
                     if (GetRangeHumanCount() >= 80) {

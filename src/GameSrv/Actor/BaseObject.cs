@@ -5,6 +5,7 @@ using GameSrv.Maps;
 using GameSrv.Monster;
 using GameSrv.Monster.Monsters;
 using GameSrv.Player;
+using Spectre.Console;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -1520,12 +1521,59 @@ namespace GameSrv.Actor {
             HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
         }
 
-        public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3,
-            string sMsg) {
-            try {
+        public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
+        {
+            try
+            {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                if (!Ghost) {
-                    SendMessage sendMessage = new SendMessage {
+                var boSend = false;
+                if (IsRobot)
+                {
+                    switch (wIdent)
+                    {
+                        case Messages.RM_MAGSTRUCK:
+                        case Messages.RM_MAGSTRUCK_MINE:
+                        case Messages.RM_DELAYPUSHED:
+                        case Messages.RM_POISON:
+                        case Messages.RM_TRANSPARENT:
+                        case Messages.RM_DOOPENHEALTH:
+                        case Messages.RM_MAGHEALING:
+                        case Messages.RM_DELAYMAGIC:
+                        case Messages.RM_SENDDELITEMLIST:
+                        case Messages.RM_10401:
+                        case Messages.RM_STRUCK:
+                        case Messages.RM_STRUCK_MAG:
+                            boSend = true;
+                            break;
+                    }
+
+                    if (!boSend && IsRobot && Race == ActorRace.Play)
+                    {
+                        switch (wIdent)
+                        {
+                            case Messages.RM_HEAR:
+                            case Messages.RM_WHISPER:
+                            case Messages.RM_CRY:
+                            case Messages.RM_SYSMESSAGE:
+                            case Messages.RM_MOVEMESSAGE:
+                            case Messages.RM_GROUPMESSAGE:
+                            case Messages.RM_SYSMESSAGE2:
+                            case Messages.RM_GUILDMESSAGE:
+                            case Messages.RM_SYSMESSAGE3:
+                            case Messages.RM_MERCHANTSAY:
+                                boSend = true;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    boSend = true;
+                }
+                if (boSend && !Ghost)
+                {
+                    SendMessage sendMessage = new SendMessage
+                    {
                         wIdent = wIdent,
                         wParam = wParam,
                         nParam1 = nParam1,
@@ -1539,7 +1587,8 @@ namespace GameSrv.Actor {
                     MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
-            finally {
+            finally
+            {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
         }

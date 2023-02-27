@@ -49,30 +49,30 @@ namespace GameSrv.RobotPlay
                             base.Run();
                             return;
                         }
-                        if (MBoProtectStatus) // 守护状态
+                        if (ProtectStatus) // 守护状态
                         {
-                            if (MNProtectTargetX == 0 || MNProtectTargetY == 0)// 取守护坐标
+                            if (ProtectTargetX == 0 || ProtectTargetY == 0)// 取守护坐标
                             {
-                                MNProtectTargetX = CurrX;// 守护坐标
-                                MNProtectTargetY = CurrY;// 守护坐标
+                                ProtectTargetX = CurrX;// 守护坐标
+                                ProtectTargetY = CurrY;// 守护坐标
                             }
-                            if (!MBoProtectOk && MManagedEnvir != null && TargetCret == null)
+                            if (!ProtectDest && MManagedEnvir != null && TargetCret == null)
                             {
                                 GotoProtect();
                                 MNGotoProtectXyCount++;
-                                if (Math.Abs(CurrX - MNProtectTargetX) <= 3 && Math.Abs(CurrY - MNProtectTargetY) <= 3)
+                                if (Math.Abs(CurrX - ProtectTargetX) <= 3 && Math.Abs(CurrY - ProtectTargetY) <= 3)
                                 {
                                     Dir = (byte)M2Share.RandomNumber.Random(8);
-                                    MBoProtectOk = true;
+                                    ProtectDest = true;
                                     MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
                                 }
-                                if (MNGotoProtectXyCount > 20 && !MBoProtectOk)// 20次还没有走到守护坐标，则飞回坐标上
+                                if (MNGotoProtectXyCount > 20 && !ProtectDest)// 20次还没有走到守护坐标，则飞回坐标上
                                 {
-                                    if (Math.Abs(CurrX - MNProtectTargetX) > 13 || Math.Abs(CurrY - MNProtectTargetY) > 13)
+                                    if (Math.Abs(CurrX - ProtectTargetX) > 13 || Math.Abs(CurrY - ProtectTargetY) > 13)
                                     {
-                                        SpaceMove(MManagedEnvir.MapName, MNProtectTargetX, MNProtectTargetY, 1);
+                                        SpaceMove(MManagedEnvir.MapName, ProtectTargetX, ProtectTargetY, 1);
                                         Dir = (byte)M2Share.RandomNumber.Random(8);
-                                        MBoProtectOk = true;
+                                        ProtectDest = true;
                                         MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
                                     }
                                 }
@@ -139,11 +139,11 @@ namespace GameSrv.RobotPlay
                                 {
                                     MDwHpToMapHomeTick = HUtil32.GetTickCount();
                                     DelTargetCreat();
-                                    if (MBoProtectStatus) // 守护状态
+                                    if (ProtectStatus) // 守护状态
                                     {
-                                        SpaceMove(MManagedEnvir.MapName, MNProtectTargetX, MNProtectTargetY, 1);// 地图移动
+                                        SpaceMove(MManagedEnvir.MapName, ProtectTargetX, ProtectTargetY, 1);// 地图移动
                                         Dir = M2Share.RandomNumber.RandomByte(8);
-                                        MBoProtectOk = true;
+                                        ProtectDest = true;
                                         MNGotoProtectXyCount = 0; // 是向守护坐标的累计数 
                                     }
                                     else
@@ -287,11 +287,11 @@ namespace GameSrv.RobotPlay
 
                     if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
                     {
-                        if (MBoProtectStatus && TargetCret == null)// 守护状态
+                        if (ProtectStatus && TargetCret == null)// 守护状态
                         {
-                            if (Math.Abs(CurrX - MNProtectTargetX) > 50 || Math.Abs(CurrY - MNProtectTargetY) > 50)
+                            if (Math.Abs(CurrX - ProtectTargetX) > 50 || Math.Abs(CurrY - ProtectTargetY) > 50)
                             {
-                                MBoProtectOk = false;
+                                ProtectDest = false;
                             }
                         }
                         if (TargetCret == null)

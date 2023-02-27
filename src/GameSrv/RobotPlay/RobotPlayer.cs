@@ -66,13 +66,13 @@ namespace GameSrv.RobotPlay
         /// <summary>
         /// 守护模式
         /// </summary>
-        public bool MBoProtectStatus;
-        public short MNProtectTargetX;
-        public short MNProtectTargetY;
+        public bool ProtectStatus;
+        public short ProtectTargetX;
+        public short ProtectTargetY;
         /// <summary>
         /// 到达守护坐标
         /// </summary>
-        public bool MBoProtectOk;
+        public bool ProtectDest;
         /// <summary>
         /// 是向守护坐标的累计数
         /// </summary>
@@ -148,8 +148,8 @@ namespace GameSrv.RobotPlay
             MDwAutoRepairItemTick = HUtil32.GetTickCount();
             MDwThinkTick = HUtil32.GetTickCount();
             MBoDupMode = false;
-            MBoProtectStatus = false;// 守护模式
-            MBoProtectOk = true;// 到达守护坐标
+            ProtectStatus = false;// 守护模式
+            ProtectDest = true;// 到达守护坐标
             MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
             MSelMapItem = null;
             MDwPickUpItemTick = HUtil32.GetTickCount();
@@ -266,9 +266,9 @@ namespace GameSrv.RobotPlay
             if (!Ghost && !Death && !MBoAiStart)
             {
                 MManagedEnvir = Envir;
-                MNProtectTargetX = CurrX;// 守护坐标
-                MNProtectTargetY = CurrY;// 守护坐标
-                MBoProtectOk = false;
+                ProtectTargetX = CurrX;// 守护坐标
+                ProtectTargetY = CurrY;// 守护坐标
+                ProtectDest = false;
                 MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
                 MPointManager.PathType = pathType;
                 MPointManager.Initialize(Envir);
@@ -962,10 +962,10 @@ namespace GameSrv.RobotPlay
             int n20;
             int nOldX;
             int nOldY;
-            if (CurrX != MNProtectTargetX || CurrY != MNProtectTargetY)
+            if (CurrX != ProtectTargetX || CurrY != ProtectTargetY)
             {
-                n10 = MNProtectTargetX;
-                n14 = MNProtectTargetY;
+                n10 = ProtectTargetX;
+                n14 = ProtectTargetY;
                 DwTick3F4 = HUtil32.GetTickCount();
                 nDir = Direction.Down;
                 if (n10 > CurrX)
@@ -1008,10 +1008,10 @@ namespace GameSrv.RobotPlay
                 }
                 nOldX = CurrX;
                 nOldY = CurrY;
-                if (Math.Abs(CurrX - MNProtectTargetX) >= 3 || Math.Abs(CurrY - MNProtectTargetY) >= 3)
+                if (Math.Abs(CurrX - ProtectTargetX) >= 3 || Math.Abs(CurrY - ProtectTargetY) >= 3)
                 {
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
-                    if (!RobotRunTo(nDir, false, MNProtectTargetX, MNProtectTargetY))
+                    if (!RobotRunTo(nDir, false, ProtectTargetX, ProtectTargetY))
                     {
                         WalkTo(nDir, false);
                         n20 = M2Share.RandomNumber.Random(3);
