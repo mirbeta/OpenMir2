@@ -22,7 +22,7 @@ namespace GameSrv.GameCommand.Commands {
                 short nY = 0;
                 string sMapName = World.WorldServer.GetHomeInfo(ref nX, ref nY);
                 M2Share.WorldEngine.AddAiLogon(new RoBotLogon() {
-                    sChrName = "玩家" + RandomNumber.GetInstance().Random() + "号",
+                    sChrName = "玩家" + RandomNumber.GetInstance().GenerateRandomNumber(4),
                     sConfigFileName = "",
                     sHeroConfigFileName = "",
                     sFilePath = M2Share.Config.EnvirDir,
