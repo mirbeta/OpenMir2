@@ -269,7 +269,7 @@ namespace DBSrv.Services
         private void LoadHumanRcd(int queryId, byte[] data, string connectionId)
         {
             var loadHumanPacket = SerializerUtil.Deserialize<LoadPlayerDataMessage>(data);
-            if (loadHumanPacket == null)
+            if (loadHumanPacket.SessionID <= 0)
             {
                 return;
             }
@@ -290,7 +290,7 @@ namespace DBSrv.Services
                 if (nIndex >= 0)
                 {
                     HumanRCD = _cacheStorage.Get(loadHumanPacket.ChrName);
-                    if (HumanRCD == null)
+                    if (HumanRCD.Data == null)
                     {
                         if (!_playDataStorage.Get(loadHumanPacket.ChrName, ref HumanRCD))
                         {

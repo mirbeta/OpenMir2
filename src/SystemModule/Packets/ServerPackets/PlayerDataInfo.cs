@@ -34,7 +34,7 @@ namespace SystemModule.Packets.ServerPackets
     }
 
     [MemoryPackable]
-    public partial class LoadPlayerDataMessage 
+    public partial record struct LoadPlayerDataMessage 
     {
         public string Account { get; set; }
         public string ChrName { get; set; }
