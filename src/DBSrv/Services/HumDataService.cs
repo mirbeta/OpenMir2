@@ -289,8 +289,9 @@ namespace DBSrv.Services
                 int nIndex = _playDataStorage.Index(loadHumanPacket.ChrName);
                 if (nIndex >= 0)
                 {
-                    HumanRCD = _cacheStorage.Get(loadHumanPacket.ChrName);
-                    if (HumanRCD.Data == null)
+                    var isExist = false;
+                    HumanRCD = _cacheStorage.Get(loadHumanPacket.ChrName, out isExist);
+                    if (!isExist)
                     {
                         if (!_playDataStorage.Get(loadHumanPacket.ChrName, ref HumanRCD))
                         {

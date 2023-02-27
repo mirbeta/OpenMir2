@@ -11,20 +11,19 @@ namespace DBSrv.Storage
         /// <summary>
         /// 添加角色数据到内存缓存
         /// </summary>
-        void Add(string ChrName, PlayerDataInfo playerData);
+        void Add(string chrName, PlayerDataInfo playerData);
 
         /// <summary>
         /// 从缓存取出角色数据
         /// </summary>
-        /// <param name="ChrName"></param>
         /// <returns></returns>
-        PlayerDataInfo Get(string ChrName);
+        PlayerDataInfo Get(string chrName, out bool exist);
 
         /// <summary>
         /// 从缓存删除角色数据
         /// </summary>
-        /// <param name="ChrName"></param>
-        void Delete(string ChrName);
+        /// <param name="chrName"></param>
+        void Delete(string chrName);
 
         /// <summary>
         /// 从缓存取出所有角色数据

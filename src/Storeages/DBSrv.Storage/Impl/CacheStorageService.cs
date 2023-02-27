@@ -18,10 +18,12 @@ namespace DBSrv.Storage.Impl
             }
         }
 
-        public PlayerDataInfo Get(string sChrName)
+        public PlayerDataInfo Get(string sChrName, out bool exist)
         {
+            exist = false;
             if (_cacheMap.TryGetValue(sChrName, out var humDataInfo))
             {
+                exist = true;
                 return humDataInfo;
             }
             return null;
