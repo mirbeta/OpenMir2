@@ -35,14 +35,14 @@ namespace GameSrv.GameCommand {
                 _logger.Info("获取游戏命令类型失败,请确认游戏命令是否注册.");
                 return null;
             }
-            Dictionary<string, GameCmd> customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
-            for (int i = 0; i < commands.Length; i++) {
-                GameCmd customCmd = (GameCmd)commands[i].GetValue(GameCommands);
+            var customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
+            for (var i = 0; i < commands.Length; i++) {
+                var customCmd = (GameCmd)commands[i].GetValue(GameCommands);
                 if (customCmd == null || string.IsNullOrEmpty(customCmd.CmdName)) {
                     continue;
                 }
-                RegisterCommandAttribute commandAttribute = (RegisterCommandAttribute)commands[i].GetCustomAttribute(typeof(RegisterCommandAttribute), true);
-                CommandAttribute commandInfo = (CommandAttribute)commandAttribute?.HandleType.GetCustomAttribute(typeof(CommandAttribute), true);
+                var commandAttribute = (RegisterCommandAttribute)commands[i].GetCustomAttribute(typeof(RegisterCommandAttribute), true);
+                var commandInfo = (CommandAttribute)commandAttribute?.HandleType.GetCustomAttribute(typeof(CommandAttribute), true);
                 if (commandInfo == null) {
                     continue;
                 }
@@ -59,28 +59,30 @@ namespace GameSrv.GameCommand {
         /// 注册游戏命令
         /// </summary>
         private static void RegisterCommandGroups(IReadOnlyDictionary<string, GameCmd> customCommands) {
-            List<Type> commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(GameCommand))).ToList();//只有继承GameCommand，才添加到命令Map中
-            if (!commands.Any()) {
+            var commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(GameCommand))).ToArray();//只有继承GameCommand，才添加到命令Map中
+            if (commands.Length <= 0)
+            {
                 return;
             }
-            foreach (Type command in commands) {
-                CommandAttribute commandAttribute = (CommandAttribute)command.GetCustomAttribute(typeof(CommandAttribute), true);
+            for (var i = 0; i < commands.Length; i++)
+            {
+                var commandAttribute = (CommandAttribute)commands[i].GetCustomAttribute(typeof(CommandAttribute), true);
                 if (commandAttribute == null) continue;
                 if (CommandMaps.ContainsKey(commandAttribute.Name)) {
                     M2Share.Logger.Error($"重复游戏命令: {commandAttribute.Name}");
                     continue;
                 }
-                GameCommand gameCommand = (GameCommand)Activator.CreateInstance(command);
+                var gameCommand = (GameCommand)Activator.CreateInstance(commands[i]);
                 if (gameCommand == null) {
                     continue;
                 }
-                if (customCommands.TryGetValue(commandAttribute.Name, out GameCmd customCommand)) {
+                if (customCommands.TryGetValue(commandAttribute.Name, out var customCommand)) {
                     commandAttribute.Command = commandAttribute.Name;
                     commandAttribute.Name = customCommand.CmdName;
                     commandAttribute.PermissionMax = customCommand.PerMissionMax;
                     commandAttribute.PermissionMin = customCommand.PerMissionMin;
                 }
-                MethodInfo executeMethod = gameCommand.GetType().GetMethod("Execute");
+                var executeMethod = gameCommand.GetType().GetMethod("Execute");
                 if (executeMethod == null) {
                     M2Share.Logger.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
                     continue;
@@ -100,14 +102,14 @@ namespace GameSrv.GameCommand {
             if (playObject == null)
                 throw new ArgumentException("PlayObject");
 
-            if (!ExtractCommandAndParameters(line, out string commandName, out string parameters))
+            if (!ExtractCommandAndParameters(line, out var commandName, out var parameters))
                 return false;
 
-            string output = string.Empty;
-            bool found = false;
+            var output = string.Empty;
+            var found = false;
 
-            if (CommandMaps.TryGetValue(commandName, out GameCommand commond)) {
-                output = commond.Handle(parameters, playObject);
+            if (CommandMaps.TryGetValue(commandName, out var command)) {
+                output = command.Handle(parameters, playObject);
                 found = true;
             }
 
@@ -123,13 +125,13 @@ namespace GameSrv.GameCommand {
         }
 
         public static void ExecCmd(string line) {
-            bool found = false;
+            var found = false;
 
-            if (!ExtractCommandAndParameters(line, out string command, out string parameters))
+            if (!ExtractCommandAndParameters(line, out var command, out var parameters))
                 return;
             string output;
 
-            if (CommandMaps.TryGetValue(command, out GameCommand commond)) {
+            if (CommandMaps.TryGetValue(command, out var commond)) {
                 output = commond.Handle(parameters);
                 found = true;
             }
@@ -171,9 +173,9 @@ namespace GameSrv.GameCommand {
             }
 
             public override string Fallback(string[] parameters = null, PlayObject PlayObject = null) {
-                string output = "Available commands: ";
-                List<GameCommand> commandList = CommandMaps.Values.ToList();
-                foreach (GameCommand pair in commandList) {
+                var output = "Available commands: ";
+                var commandList = CommandMaps.Values.ToList();
+                foreach (var pair in commandList) {
                     if (PlayObject != null && pair.Command.PermissionMin > PlayObject.Permission) continue;
                     output += pair.Command.Name + ", ";
                 }
@@ -195,10 +197,10 @@ namespace GameSrv.GameCommand {
             public override string Handle(string parameters, PlayObject PlayObject = null) {
                 if (parameters == string.Empty)
                     return this.Fallback();
-                string[] @params = parameters.Split(' ');
-                string group = @params[0];
-                string command = @params.Count() > 1 ? @params[1] : string.Empty;
-                string output = $"Unknown command: {group} {command}";
+                var @params = parameters.Split(' ');
+                var group = @params[0];
+                var command = @params.Count() > 1 ? @params[1] : string.Empty;
+                var output = $"Unknown command: {group} {command}";
                 return output;
             }
         }
