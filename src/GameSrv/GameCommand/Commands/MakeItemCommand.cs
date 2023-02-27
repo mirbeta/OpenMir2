@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
         public void Execute(string[] Params, PlayObject PlayObject) {
             if (Params == null) return;
             string sItemName = Params.Length > 0 ? Params[0] : ""; //物品名称
-            int nCount = Params.Length > 1 ? Convert.ToInt32(Params[1]) : 1; //数量
+            int nCount = Params.Length > 1 ? HUtil32.StrToInt(Params[1],0) : 1; //数量
             string sParam = Params.Length > 2 ? Params[2] : ""; //可选参数（持久力）
             if (string.IsNullOrEmpty(sItemName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

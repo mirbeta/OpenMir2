@@ -7,7 +7,7 @@ namespace GameSrv.GameCommand.Commands {
         public void Execute(string[] @Params, PlayObject PlayObject) {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";
-            //int nGameDiaMond = @Params.Length > 2 ? Convert.ToInt32(@Params[3]) : 0;
+            //int nGameDiaMond = @Params.Length > 2 ? HUtil32.StrToInt(@Params[3]) : 0;
             //var Ctr = '1';
             //if ((PlayObject.m_btPermission < this.Attributes.nPermissionMin))
             //{

@@ -15,12 +15,11 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             string sMonName = @Params.Length > 0 ? @Params[0] : "";
-            int nCount = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 0;
-            int nLevel = @Params.Length > 2 ? Convert.ToInt32(@Params[2]) : 0;
-            int nTick = @Params.Length > 3 ? Convert.ToInt32(@Params[3]) : 86400000;
-            int nAutoChangeColor = @Params.Length > 4 ? Convert.ToInt32(@Params[4]) : 0;
-            int nFixColor = @Params.Length > 5 ? Convert.ToInt32(@Params[5]) : 0;
-
+            int nCount = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1],0) : 0;
+            int nLevel = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2],0) : 0;
+            int nTick = @Params.Length > 3 ? HUtil32.StrToInt(@Params[3],0) : 86400000;
+            int nAutoChangeColor = @Params.Length > 4 ? HUtil32.StrToInt(@Params[4],0) : 0;
+            int nFixColor = @Params.Length > 5 ? HUtil32.StrToInt(@Params[5], 0) : 0;
             short nX = 0;
             short nY = 0;
             BaseObject mon;

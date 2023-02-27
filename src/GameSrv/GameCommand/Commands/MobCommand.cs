@@ -16,8 +16,8 @@ namespace GameSrv.GameCommand.Commands {
             short nX = 0;
             short nY = 0;
             string sMonName = Params.Length > 0 ? @Params[0] : "";//名称
-            int nCount = Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 1;//数量
-            byte nLevel = Params.Length > 2 ? Convert.ToByte(@Params[2]) : (byte)0;//怪物等级
+            int nCount = Params.Length > 1 ? HUtil32.StrToInt(@Params[1],0) : 1;//数量
+            byte nLevel = Params.Length > 2 ? (byte)HUtil32.StrToInt(@Params[2],0) : (byte)0;//怪物等级
             if (string.IsNullOrEmpty(sMonName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;

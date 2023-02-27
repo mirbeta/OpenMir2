@@ -16,10 +16,10 @@ namespace GameSrv.GameCommand.Commands {
             string sMonName = @Params[0];
             string OleMap = @Params[1];
             string NewMap = @Params[2];
-            short nX = @Params[3] == null ? (short)0 : Convert.ToInt16(@Params[3]);
-            short nY = @Params[4] == null ? (short)0 : Convert.ToInt16(@Params[4]);
-            short OnX = @Params[5] == null ? (short)0 : Convert.ToInt16(@Params[5]);
-            short OnY = @Params[6] == null ? (short)0 : Convert.ToInt16(@Params[6]);
+            short nX = (short)(@Params[3] == null ? (short)0 : HUtil32.StrToInt(@Params[3],0));
+            short nY = (short)(@Params[4] == null ? (short)0 : HUtil32.StrToInt(@Params[4],0));
+            short OnX = (short)(@Params[5] == null ? (short)0 : HUtil32.StrToInt(@Params[5],0));
+            short OnY = (short)(@Params[6] == null ? (short)0 : HUtil32.StrToInt(@Params[6],0));
             BaseObject MoveMon;
             if (string.IsNullOrEmpty(sMonName) || string.IsNullOrEmpty(OleMap) || string.IsNullOrEmpty(NewMap) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?') {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

@@ -13,9 +13,9 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             string sMonName = @Params.Length > 0 ? @Params[0] : "";
-            int nNameColor = @Params.Length > 0 ? Convert.ToInt32(@Params[1]) : 0;
-            short nX = @Params.Length > 0 ? Convert.ToInt16(@Params[2]) : (short)0;
-            short nY = @Params.Length > 0 ? Convert.ToInt16(@Params[3]) : (short)0;
+            int nNameColor = @Params.Length > 0 ? HUtil32.StrToInt(@Params[1],0) : 0;
+            short nX = (short)(@Params.Length > 0 ? HUtil32.StrToInt(@Params[2],0) : 0);
+            short nY = (short)(@Params.Length > 0 ? HUtil32.StrToInt(@Params[3],0) : 0);
             if (string.IsNullOrEmpty(sMonName) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?') {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;

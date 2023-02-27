@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             string sHumName = @params.Length > 0 ? @params[0] : ""; //玩家名称
-            int nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0; //数量
+            int nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1],0) : 0; //数量
             if (string.IsNullOrEmpty(sHumName) || nPoint <= 0) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;

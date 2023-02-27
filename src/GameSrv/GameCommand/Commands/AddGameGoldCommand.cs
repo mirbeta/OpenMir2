@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             string sHumName = @params.Length > 0 ? @params[0] : "";
-            int nPoint = @params.Length > 1 ? Convert.ToInt32(@params[1]) : 0;
+            int nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             if (PlayObject.Permission < 6) {
                 return;
             }

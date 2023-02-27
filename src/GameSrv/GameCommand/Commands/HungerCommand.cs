@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            int nHungerPoint = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : -1;
+            int nHungerPoint = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1],0) : -1;
             if (PlayObject.Permission < 6) {
                 return;
             }
