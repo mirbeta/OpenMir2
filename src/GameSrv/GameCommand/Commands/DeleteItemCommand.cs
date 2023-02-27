@@ -15,7 +15,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             string sHumanName = @Params.Length > 0 ? @Params[0] : ""; //玩家名称
             string sItemName = @Params.Length > 1 ? @Params[1] : ""; //物品名称
-            int nCount = @Params.Length > 2 ? int.Parse(@Params[2]) : 0; //数量
+            int nCount = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2], 0) : 0; //数量
             Items.StdItem StdItem;
             UserItem UserItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName)) {

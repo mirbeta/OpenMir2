@@ -14,9 +14,9 @@ namespace GameSrv.GameCommand.Commands {
             if (@Params == null) {
                 return;
             }
-            int nWhere = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
-            int nValueType = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;//参数16为吸伤属性
-            int nValue = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
+            int nWhere = @Params.Length > 0 ? HUtil32.StrToInt(@Params[0], 0) : 0;
+            int nValueType = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1], 0) : 0;//参数16为吸伤属性
+            int nValue = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2],0) : 0;
             string sShowMsg;
             if (nWhere >= 0 && nWhere <= 12 && nValueType >= 0 && nValueType <= 15 && nValue >= 0 && nValue <= 255) {
                 if (PlayObject.UseItems[nWhere].Index > 0) {

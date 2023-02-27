@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             string sHumName = @Params.Length > 0 ? @Params[0] : "";//玩家名称
-            int nCount = @Params.Length > 1 ? Convert.ToInt32(@Params[1]) : 0;//金币数量
+            int nCount = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1], 0) : 0;//金币数量
             int nServerIndex = 0;
             if (PlayObject.Permission < 6) {
                 return;

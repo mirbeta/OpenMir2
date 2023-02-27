@@ -14,8 +14,8 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             string sMineName = @Params.Length > 0 ? @Params[0] : "";
-            int nMineCount = @Params.Length > 0 ? int.Parse(@Params[1]) : 0;
-            int nDura = @Params.Length > 0 ? int.Parse(@Params[2]) : 0;
+            int nMineCount = @Params.Length > 0 ? HUtil32.StrToInt(@Params[1], 0) : 0;
+            int nDura = @Params.Length > 0 ? HUtil32.StrToInt(@Params[2], 0) : 0;
             if (PlayObject.Permission < this.Command.PermissionMin) {
                 PlayObject.SysMsg(CommandHelp.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;

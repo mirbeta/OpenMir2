@@ -15,7 +15,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             string sCtr = @Params.Length > 1 ? @Params[1] : "";
-            int nPoint = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
+            int nPoint = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2], 0) : 0;
             char Ctr = '1';
             int nCreditPoint;
             if (!string.IsNullOrEmpty(sCtr)) {

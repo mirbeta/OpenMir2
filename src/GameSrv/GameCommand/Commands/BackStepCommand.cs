@@ -11,8 +11,8 @@ namespace GameSrv.GameCommand.Commands {
             if (@Params == null) {
                 return;
             }
-            int nType = @Params.Length > 0 ? int.Parse(@Params[0]) : 0;
-            int nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
+            int nType = @Params.Length > 0 ? HUtil32.StrToInt(@Params[0], 0) : 0;
+            int nCount = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1], 0) : 0;
             if (PlayObject.Permission < 6) {
                 return;
             }

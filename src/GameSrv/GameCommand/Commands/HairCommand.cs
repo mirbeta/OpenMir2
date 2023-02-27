@@ -10,7 +10,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            int nHair = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
+            int nHair = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1], 0) : 0;
             if (string.IsNullOrEmpty(sHumanName) || nHair < 0) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;

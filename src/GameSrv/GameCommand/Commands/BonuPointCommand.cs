@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             string sHumName = @Params.Length > 0 ? @Params[0] : "";
-            int nCount = @Params.Length > 1 ? int.Parse(@Params[1]) : 0;
+            int nCount = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1], 0) : 0;
             if (string.IsNullOrEmpty(sHumName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;

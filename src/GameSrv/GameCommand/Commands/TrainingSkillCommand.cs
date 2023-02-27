@@ -15,7 +15,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             string sSkillName = @Params.Length > 1 ? @Params[1] : "";
-            int nLevel = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
+            int nLevel = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2], 0) : 0;
             UserMagic UserMagic;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sSkillName) || nLevel <= 0) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

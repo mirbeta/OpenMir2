@@ -750,7 +750,7 @@ namespace GameSrv {
             nY = 0;
             if (nIndex >= 0 && nIndex < StartPointList.Count) {
                 var startPoint = StartPointList[nIndex];
-                if (startPoint.Range > 0 && string.IsNullOrEmpty(startPoint.MapName)) {
+                if (!string.IsNullOrEmpty(startPoint.MapName)) {
                     nX = startPoint.CurrX;
                     nY = startPoint.CurrY;
                     result = startPoint.MapName;

@@ -10,7 +10,7 @@ namespace GameSrv.GameCommand.Commands {
         public void Execute(string[] @Params, PlayObject PlayObject) {
             //string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             //string sCtr = @Params.Length > 1 ? @Params[1] : "";
-            //int nGameGird = @Params.Length > 2 ? int.Parse(@Params[2]) : 0;
+            //int nGameGird = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2],0) : 0;
             //TPlayObject m_PlayObject;
             //char Ctr = '1';
             //if ((sCtr != ""))
