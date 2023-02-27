@@ -196,7 +196,7 @@ namespace GameSrv.World {
                     }
                     else {
                         merchant.LoadMerchantScript();
-                        merchant.LoadNPCData();
+                        merchant.LoadNpcData();
                     }
                 }
                 else {

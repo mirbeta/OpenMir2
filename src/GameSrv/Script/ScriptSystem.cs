@@ -1424,7 +1424,7 @@ namespace GameSrv.Script {
                                         ((Merchant)NPC).IsRepair = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sSUPERREPAIR, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.SuperRepair, StringComparison.OrdinalIgnoreCase)) {
                                         ((Merchant)NPC).IsSupRepair = true;
                                         continue;
                                     }
@@ -1432,7 +1432,7 @@ namespace GameSrv.Script {
                                         ((Merchant)NPC).IsSendMsg = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sUSEITEMNAME, StringComparison.OrdinalIgnoreCase)) {
+                                    if (command.Equals(ScriptConst.UseItemName, StringComparison.OrdinalIgnoreCase)) {
                                         ((Merchant)NPC).IsUseItemName = true;
                                         continue;
                                     }
@@ -1441,7 +1441,7 @@ namespace GameSrv.Script {
                                         continue;
                                     }
                                     if (string.Compare(command, ScriptConst.sybdeal, StringComparison.OrdinalIgnoreCase) == 0) {
-                                        ((Merchant)NPC).IsYBDeal = true;
+                                        ((Merchant)NPC).IsYbDeal = true;
                                         continue;
                                     }
                                 }

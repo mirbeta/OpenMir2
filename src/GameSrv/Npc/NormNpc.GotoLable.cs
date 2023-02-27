@@ -205,7 +205,7 @@ namespace GameSrv.Npc {
             return result;
         }
 
-        private static void GotoLable_QuestCheckCondition_SetVal(PlayObject PlayObject, string sIndex, int nCount) {
+        private static void GotoLableQuestCheckConditionSetVal(PlayObject PlayObject, string sIndex, int nCount) {
             int n14 = M2Share.GetValNameNo(sIndex);
             if (n14 >= 0) {
                 if (HUtil32.RangeInDefined(n14, 0, 99)) {
@@ -254,37 +254,32 @@ namespace GameSrv.Npc {
             bool result = false;
             sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             using StringList LoadList = new StringList();
-            try {
-                if (File.Exists(sListFileName)) {
-                    try {
-                        LoadList.LoadFromFile(sListFileName);
-                    }
-                    catch {
-                        M2Share.Logger.Error("loading fail.... => " + sListFileName);
-                    }
+            if (File.Exists(sListFileName)) {
+                try {
+                    LoadList.LoadFromFile(sListFileName);
                 }
-                int nDay = HUtil32.StrToInt(sDay, 0);
-                for (int i = 0; i < LoadList.Count; i++) {
-                    string sText = LoadList[i].Trim();
-                    sText = HUtil32.GetValidStrCap(sText, ref Name, new[] { ' ', '\t' });
-                    Name = Name.Trim();
-                    if (ChrName == Name) {
-                        string ssDay = sText.Trim();
-                        DateTime nnday = HUtil32.StrToDate(ssDay);
-                        int UseDay = HUtil32.Round(DateTime.Today.ToOADate() - nnday.ToOADate());
-                        int LastDay = nDay - UseDay;
-                        if (LastDay < 0) {
-                            result = true;
-                            LastDay = 0;
-                        }
-                        GotoLable_QuestCheckCondition_SetVal(PlayObject, param1, UseDay);
-                        GotoLable_QuestCheckCondition_SetVal(PlayObject, param2, LastDay);
-                        return result;
-                    }
+                catch {
+                    M2Share.Logger.Error("loading fail.... => " + sListFileName);
                 }
             }
-            finally {
-                //LoadList.Free;
+            int nDay = HUtil32.StrToInt(sDay, 0);
+            for (int i = 0; i < LoadList.Count; i++) {
+                string sText = LoadList[i].Trim();
+                sText = HUtil32.GetValidStrCap(sText, ref Name, new[] { ' ', '\t' });
+                Name = Name.Trim();
+                if (ChrName == Name) {
+                    string ssDay = sText.Trim();
+                    DateTime nnday = HUtil32.StrToDate(ssDay);
+                    int UseDay = HUtil32.Round(DateTime.Today.ToOADate() - nnday.ToOADate());
+                    int LastDay = nDay - UseDay;
+                    if (LastDay < 0) {
+                        result = true;
+                        LastDay = 0;
+                    }
+                    GotoLableQuestCheckConditionSetVal(PlayObject, param1, UseDay);
+                    GotoLableQuestCheckConditionSetVal(PlayObject, param2, LastDay);
+                    return result;
+                }
             }
             return result;
         }

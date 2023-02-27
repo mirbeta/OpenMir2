@@ -977,9 +977,15 @@
         public const string sOFFLINEMSG = "@@offlinemsg";
         // 增加挂机
         public const string sSL_SENDMSG = "@@sendmsg";
-        public const string sSUPERREPAIR = "@s_repair";
+        /// <summary>
+        /// 特殊修理
+        /// </summary>
+        public const string SuperRepair = "@s_repair";
         public const string sSUPERREPAIROK = "~@s_repair";
-        public const string sSUPERREPAIRFAIL = "@fail_s_repair";
+        /// <summary>
+        /// 特殊修理失败
+        /// </summary>
+        public const string Superrepairfail = "@fail_s_repair";
         public const string sREPAIR = "@repair";
         public const string sREPAIROK = "~@repair";
         public const string sBUY = "@buy";
@@ -1003,7 +1009,7 @@
         public const string sFAILMAIN = "~@main";
         public const string sGETMASTER = "@@getmaster";
         public const string sGETMARRY = "@@getmarry";
-        public const string sUSEITEMNAME = "@@useitemname";
+        public const string UseItemName = "@@useitemname";
         public const string sBUILDGUILDNOW = "@@buildguildnow";
         public const string sSCL_GUILDWAR = "@@guildwar";
         public const string sDONATE = "@@donate";
