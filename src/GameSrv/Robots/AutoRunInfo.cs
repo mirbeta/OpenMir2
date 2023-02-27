@@ -9,10 +9,6 @@
         /// </summary>        
         public long RunTimeTick;
         /// <summary>
-        /// 自动运行类型
-        /// </summary>
-        public int RunCmd;
-        /// <summary>
         /// 运行类型
         /// </summary>
         public int Moethod;

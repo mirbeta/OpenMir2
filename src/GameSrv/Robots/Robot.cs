@@ -20,7 +20,6 @@ namespace GameSrv.Robots {
     public static class Robot {
         public const string sROAUTORUN = "#AUTORUN";
         public const string sRONPCLABLEJMP = "NPC";
-        public const int nRONPCLABLEJMP = 100;
         /// <summary>
         /// 每天运行
         /// </summary>
