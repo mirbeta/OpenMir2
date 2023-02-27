@@ -33,7 +33,7 @@ namespace GameSrv.RobotPlay {
         }
 
         public bool DoThink_CanRunPos(int nAttackCount) {
-            return m_RunPos.nAttackCount >= nAttackCount;
+            return MRunPos.nAttackCount >= nAttackCount;
         }
 
         public bool DoThink_MotaeboPos(short wMagicID) {
@@ -41,7 +41,7 @@ namespace GameSrv.RobotPlay {
             short nTargetX = 0;
             short nTargetY = 0;
             byte btNewDir;
-            if (wMagicID == 27 && Master != null && TargetCret != null && AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && HUtil32.GetTickCount() - m_SkillUseTick[27] > 1000 * 10) {
+            if (wMagicID == 27 && Master != null && TargetCret != null && AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && HUtil32.GetTickCount() - MSkillUseTick[27] > 1000 * 10) {
                 btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY)) {
                     result = Envir.CanWalk(nTargetX, nTargetY, true);

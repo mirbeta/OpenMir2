@@ -189,7 +189,7 @@ namespace GameSrv.RobotPlay {
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
             for (byte i = Direction.Up; i <= Direction.UpLeft; i++) {
                 if (Envir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && Envir.CanWalkEx(nCurrX, nCurrY, false)) {
-                    if ((!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) && IsGotoXY(CurrX, CurrY, nCurrX, nCurrY)) {
+                    if ((!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) && IsGotoXy(CurrX, CurrY, nCurrX, nCurrY)) {
                         WalkStep[i].nWalkStep = nRange;
                         WalkStep[i].nX = nCurrX;
                         WalkStep[i].nY = nCurrY;
@@ -306,7 +306,7 @@ namespace GameSrv.RobotPlay {
                             if (MapWalkXY.nWalkStep > 0) {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
                                 if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
-                                    m_RunPos.btDirection = 0;
+                                    MRunPos.btDirection = 0;
                                     result = true;
                                     return result;
                                 }
@@ -324,7 +324,7 @@ namespace GameSrv.RobotPlay {
                             if (MapWalkXY.nWalkStep > 0) {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
                                 if (GotoNext(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
-                                    m_RunPos.btDirection = 0;
+                                    MRunPos.btDirection = 0;
                                     result = true;
                                     return result;
                                 }
@@ -345,7 +345,7 @@ namespace GameSrv.RobotPlay {
                             MapWalkXY = ActThink_FindGoodPathA(WalkStep, nRange, 0);
                             if (MapWalkXY.nWalkStep > 0) {
                                 if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
-                                    m_RunPos.btDirection = 0;
+                                    MRunPos.btDirection = 0;
                                     result = true;
                                     return result;
                                 }
@@ -357,7 +357,7 @@ namespace GameSrv.RobotPlay {
                             MapWalkXY = ActThink_FindMinRange(WalkStep);
                             if (MapWalkXY.nWalkStep > 0) {
                                 if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
-                                    m_RunPos.btDirection = 0;
+                                    MRunPos.btDirection = 0;
                                     result = true;
                                     return result;
                                 }
@@ -369,7 +369,7 @@ namespace GameSrv.RobotPlay {
                             MapWalkXY = ActThink_FindGoodPathB(WalkStep, 0);
                             if (MapWalkXY.nWalkStep > 0) {
                                 if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
-                                    m_RunPos.btDirection = 0;
+                                    MRunPos.btDirection = 0;
                                     result = true;
                                     return result;
                                 }
@@ -409,7 +409,7 @@ namespace GameSrv.RobotPlay {
                                     }
                                 }
                             }
-                            m_RunPos.btDirection = 0;
+                            MRunPos.btDirection = 0;
                             result = true;
                             return result;
                         }
@@ -431,7 +431,7 @@ namespace GameSrv.RobotPlay {
                                     break;
                                 }
                             }
-                            m_RunPos.btDirection = 0;
+                            MRunPos.btDirection = 0;
                             result = true;
                             return result;
                         }
@@ -452,7 +452,7 @@ namespace GameSrv.RobotPlay {
                     MapWalkXY = ActThink_FindMinRange(WalkStep);
                     if (MapWalkXY.nWalkStep > 0) {
                         if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
-                            m_RunPos.btDirection = 0;
+                            MRunPos.btDirection = 0;
                             result = true;
                             return result;
                         }
@@ -464,7 +464,7 @@ namespace GameSrv.RobotPlay {
                     MapWalkXY = ActThink_FindMinRange(WalkStep);
                     if (MapWalkXY.nWalkStep > 0) {
                         if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
-                            m_RunPos.btDirection = 0;
+                            MRunPos.btDirection = 0;
                             result = true;
                             return result;
                         }
@@ -500,7 +500,7 @@ namespace GameSrv.RobotPlay {
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(result, sizeof(TMapWalkXY), 0);
-            if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false) && (boFlag && CanLineAttack(nCurrX, nCurrY) || !boFlag) && IsGotoXY(CurrX, CurrY, nCurrX, nCurrY)) {
+            if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false) && (boFlag && CanLineAttack(nCurrX, nCurrY) || !boFlag) && IsGotoXy(CurrX, CurrY, nCurrX, nCurrY)) {
                 result = new MapWalkXY();
                 result.nWalkStep = nRange;
                 result.nX = nCurrX;
@@ -607,7 +607,7 @@ namespace GameSrv.RobotPlay {
             nNearTargetCount = GetNearTargetCount(CurrX, CurrY);
             MapWalkXY = null;
             if (WalkStep[0].nWalkStep > 0 && WalkStep[1].nWalkStep > 0) {
-                if (m_RunPos.btDirection > 0) {
+                if (MRunPos.btDirection > 0) {
                     MapWalkXY = WalkStep[1];
                 }
                 else {
@@ -616,10 +616,10 @@ namespace GameSrv.RobotPlay {
                 if (nNearTargetCount < WalkStep[0].nMonCount && nNearTargetCount < WalkStep[1].nMonCount) {
                     MapWalkXY = null;
                 }
-                else if (m_RunPos.btDirection > 0 && nNearTargetCount < WalkStep[1].nMonCount) {
+                else if (MRunPos.btDirection > 0 && nNearTargetCount < WalkStep[1].nMonCount) {
                     MapWalkXY = null;
                 }
-                else if (m_RunPos.btDirection <= 0 && nNearTargetCount < WalkStep[0].nMonCount) {
+                else if (MRunPos.btDirection <= 0 && nNearTargetCount < WalkStep[0].nMonCount) {
                     MapWalkXY = null;
                 }
                 if (nNearTargetCount > 0 && MapWalkXY != null && MapWalkXY.nMonCount > nNearTargetCount) {
@@ -631,14 +631,14 @@ namespace GameSrv.RobotPlay {
                 if (nNearTargetCount < WalkStep[0].nMonCount) {
                     MapWalkXY = null;
                 }
-                m_RunPos.btDirection = 0;
+                MRunPos.btDirection = 0;
             }
             else if (WalkStep[1].nWalkStep > 0) {
                 MapWalkXY = WalkStep[1];
                 if (nNearTargetCount < WalkStep[1].nMonCount) {
                     MapWalkXY = null;
                 }
-                m_RunPos.btDirection = 1;
+                MRunPos.btDirection = 1;
             }
             if (MapWalkXY != null) {
                 if (GotoNextOne(MapWalkXY.nX, MapWalkXY.nY, Race != 108)) {
@@ -646,7 +646,7 @@ namespace GameSrv.RobotPlay {
                 }
             }
             if (!result) {
-                m_RunPos.nAttackCount = 0;
+                MRunPos.nAttackCount = 0;
             }
             return result;
         }

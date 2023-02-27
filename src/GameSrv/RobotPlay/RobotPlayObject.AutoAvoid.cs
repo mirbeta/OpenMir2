@@ -11,15 +11,15 @@ namespace GameSrv.RobotPlay {
         private bool IsNeedAvoid() {
             bool result = false;
             try {
-                if (HUtil32.GetTickCount() - m_dwAutoAvoidTick > 1100 && m_boIsUseMagic && !Death) {
-                    if (Job > 0 && (m_nSelectMagic == 0 || WAbil.HP <= Math.Round(WAbil.MaxHP * 0.15)))// 血低于15%时,必定要躲 
+                if (HUtil32.GetTickCount() - MDwAutoAvoidTick > 1100 && MBoIsUseMagic && !Death) {
+                    if (Job > 0 && (MNSelectMagic == 0 || WAbil.HP <= Math.Round(WAbil.MaxHP * 0.15)))// 血低于15%时,必定要躲 
                     {
-                        m_dwAutoAvoidTick = HUtil32.GetTickCount();
+                        MDwAutoAvoidTick = HUtil32.GetTickCount();
                         if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22) // 22级前道法不躲避
                         {
                             if ((byte)Job == 1)// 法放魔法后要躲
                             {
-                                if (CheckTargetXYCount(CurrX, CurrY, 4) > 0) {
+                                if (CheckTargetXyCount(CurrX, CurrY, 4) > 0) {
                                     result = true;
                                     return result;
                                 }
@@ -28,7 +28,7 @@ namespace GameSrv.RobotPlay {
                         else {
                             switch (Job) {
                                 case PlayJob.Wizard:
-                                    if (CheckTargetXYCount(CurrX, CurrY, 4) > 0) {
+                                    if (CheckTargetXyCount(CurrX, CurrY, 4) > 0) {
                                         result = true;
                                         return result;
                                     }
@@ -38,21 +38,21 @@ namespace GameSrv.RobotPlay {
                                         if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) // 22级砍血量的怪
                                         {
                                             if (TargetCret.WAbil.MaxHP >= 700) {
-                                                if (CheckTargetXYCount(CurrX, CurrY, 4) > 0) {
+                                                if (CheckTargetXyCount(CurrX, CurrY, 4) > 0) {
                                                     result = true;
                                                     return result;
                                                 }
                                             }
                                         }
                                         else {
-                                            if (CheckTargetXYCount(CurrX, CurrY, 4) > 0) {
+                                            if (CheckTargetXyCount(CurrX, CurrY, 4) > 0) {
                                                 result = true;
                                                 return result;
                                             }
                                         }
                                     }
                                     else {
-                                        if (CheckTargetXYCount(CurrX, CurrY, 4) > 0) {
+                                        if (CheckTargetXyCount(CurrX, CurrY, 4) > 0) {
                                             result = true;
                                             return result;
                                         }
@@ -333,7 +333,7 @@ namespace GameSrv.RobotPlay {
             byte nDir = 0;
             short nX = nTargetX;
             short nY = nTargetY;
-            bool result = AutoAvoid_GetGotoXY(m_btLastDirection, ref nTargetX, ref nTargetY);
+            bool result = AutoAvoid_GetGotoXY(MBtLastDirection, ref nTargetX, ref nTargetY);
             n10 = 0;
             while (true) {
                 if (n10 >= 7) {
@@ -348,7 +348,7 @@ namespace GameSrv.RobotPlay {
                 result = AutoAvoid_GetGotoXY(nDir, ref nTargetX, ref nTargetY);
                 n10++;
             }
-            m_btLastDirection = nDir;
+            MBtLastDirection = nDir;
             return result;
         }
 
@@ -362,7 +362,7 @@ namespace GameSrv.RobotPlay {
                 byte nDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                 nDir = GetBackDir(nDir);
                 Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, 5, ref TargetX, ref TargetY);
-                result = GotoTargetXY(TargetX, TargetY, 1);
+                result = GotoTargetXy(TargetX, TargetY, 1);
             }
             return result;
         }

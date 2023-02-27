@@ -49,7 +49,7 @@ namespace GameSrv.RobotPlay {
             UserMagic UserMagic;
             bool result = false;
             try {
-                m_wHitMode = 0;
+                MWHitMode = 0;
                 if (WAbil.MP > 0) {
                     if (TargetCret != null) {
                         if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.25) || TargetCret.CrazyMode) {
@@ -57,18 +57,18 @@ namespace GameSrv.RobotPlay {
                             if (AllowUseMagic(12)) {
                                 // 血少时或目标疯狂模式时，做隔位刺杀 
                                 if (!(Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 2 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 2)) {
-                                    GetGotoXY(TargetCret, 2);
-                                    GotoTargetXY(TargetX, TargetY, 0);
+                                    GetGotoXy(TargetCret, 2);
+                                    GotoTargetXy(TargetX, TargetY, 0);
                                 }
                             }
                         }
                     }
                     SearchMagic();
-                    if (m_nSelectMagic > 0) {
-                        UserMagic = FindMagic(m_nSelectMagic);
+                    if (MNSelectMagic > 0) {
+                        UserMagic = FindMagic(MNSelectMagic);
                         if (UserMagic != null) {
                             if (UserMagic.Key == 0) {
-                                switch (m_nSelectMagic) {
+                                switch (MNSelectMagic) {
                                     // 技能打开状态才能使用
                                     // Modify the A .. B: 27, 39, 41, 60 .. 65, 68, 75, SKILL_101, SKILL_102
                                     case 27:
@@ -84,30 +84,30 @@ namespace GameSrv.RobotPlay {
                                         }
                                         break;
                                     case 7:
-                                        m_wHitMode = 3;
+                                        MWHitMode = 3;
                                         break;
                                     case 12:
-                                        m_wHitMode = 4;
+                                        MWHitMode = 4;
                                         break;
                                     case 25: // 四级刺杀
-                                        m_wHitMode = 5;
+                                        MWHitMode = 5;
                                         break;
                                     case 26: // 圆月弯刀(四级半月弯刀)
                                         if (UseSpell(UserMagic, CurrX, CurrY, TargetCret)) {
-                                            m_wHitMode = 7;
+                                            MWHitMode = 7;
                                         }
                                         break;
                                     case 40: // 使用烈火
-                                        m_wHitMode = 8;
+                                        MWHitMode = 8;
                                         break;
                                     case 43: // 抱月刀法
                                         if (UseSpell(UserMagic, CurrX, CurrY, TargetCret)) {
-                                            m_wHitMode = 9;
+                                            MWHitMode = 9;
                                         }
                                         break;
                                     case 42: // 开天斩
                                         if (UseSpell(UserMagic, CurrX, CurrY, TargetCret)) {
-                                            m_wHitMode = 12;
+                                            MWHitMode = 12;
                                         }
                                         break;
                                 }
@@ -116,7 +116,7 @@ namespace GameSrv.RobotPlay {
                     }
                 }
 
-                result = WarrAttackTarget1(m_wHitMode);
+                result = WarrAttackTarget1(MWHitMode);
                 if (result) {
                     AttackTick = HUtil32.GetTickCount();
                 }
@@ -134,23 +134,23 @@ namespace GameSrv.RobotPlay {
         private bool WizardAttackTarget1() {
             bool result = false;
             try {
-                m_wHitMode = 0;
+                MWHitMode = 0;
                 SearchMagic(); // 查询魔法
-                if (m_nSelectMagic == 0) {
-                    m_boIsUseMagic = true;// 是否能躲避
+                if (MNSelectMagic == 0) {
+                    MBoIsUseMagic = true;// 是否能躲避
                 }
-                if (m_nSelectMagic > 0) {
+                if (MNSelectMagic > 0) {
                     if (TargetCret != null) {
                         if (!MagCanHitTarget(CurrX, CurrY, TargetCret) || Math.Abs(TargetCret.CurrX - CurrX) > 7 || Math.Abs(TargetCret.CurrY - CurrY) > 7) {
                             // 魔法不能打到怪
-                            if (m_nSelectMagic != 10)// 除疾光电影外
+                            if (MNSelectMagic != 10)// 除疾光电影外
                             {
-                                GetGotoXY(TargetCret, 3);// 法只走向目标3格范围
-                                GotoTargetXY(TargetX, TargetY, 0);
+                                GetGotoXy(TargetCret, 3);// 法只走向目标3格范围
+                                GotoTargetXy(TargetX, TargetY, 0);
                             }
                         }
                     }
-                    UserMagic UserMagic = FindMagic(m_nSelectMagic);
+                    UserMagic UserMagic = FindMagic(MNSelectMagic);
                     if (UserMagic != null) {
                         if (UserMagic.Key == 0)// 技能打开状态才能使用
                         {
@@ -161,8 +161,8 @@ namespace GameSrv.RobotPlay {
                 }
                 AttackTick = HUtil32.GetTickCount();
                 if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22) {
-                    m_boIsUseMagic = false;// 是否能躲避
-                    result = WarrAttackTarget1(m_wHitMode);
+                    MBoIsUseMagic = false;// 是否能躲避
+                    result = WarrAttackTarget1(MWHitMode);
                 }
             }
             catch {
@@ -179,7 +179,7 @@ namespace GameSrv.RobotPlay {
             bool result = false;
             UserMagic UserMagic;
             try {
-                m_wHitMode = 0;
+                MWHitMode = 0;
                 if (TargetCret != null) {
                     if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) // 22级砍血量的怪 
                     {
@@ -187,13 +187,13 @@ namespace GameSrv.RobotPlay {
                             SearchMagic();// 查询魔法
                         }
                         else {
-                            if (HUtil32.GetTickCount() - m_dwSearchMagic > 1300) // 增加查询魔法的间隔
+                            if (HUtil32.GetTickCount() - MDwSearchMagic > 1300) // 增加查询魔法的间隔
                             {
                                 SearchMagic();// 查询魔法
-                                m_dwSearchMagic = HUtil32.GetTickCount();
+                                MDwSearchMagic = HUtil32.GetTickCount();
                             }
                             else {
-                                m_boIsUseAttackMagic = false;// 可以走向目标
+                                MBoIsUseAttackMagic = false;// 可以走向目标
                             }
                         }
                     }
@@ -201,30 +201,30 @@ namespace GameSrv.RobotPlay {
                         SearchMagic(); // 查询魔法
                     }
                 }
-                if (m_nSelectMagic == 0) {
-                    m_boIsUseMagic = true;// 是否能躲避 
+                if (MNSelectMagic == 0) {
+                    MBoIsUseMagic = true;// 是否能躲避 
                 }
-                if (m_nSelectMagic > 0) {
+                if (MNSelectMagic > 0) {
                     if (TargetCret != null) {
                         if (!MagCanHitTarget(CurrX, CurrY, TargetCret) || Math.Abs(TargetCret.CurrX - CurrX) > 7 || Math.Abs(TargetCret.CurrY - CurrY) > 7) {
                             // 魔法不能打到怪
                             if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪
                             {
                                 if (TargetCret.WAbil.MaxHP >= 700) {
-                                    GetGotoXY(TargetCret, 3); // 道只走向目标3格范围
-                                    GotoTargetXY(TargetX, TargetY, 0);
+                                    GetGotoXy(TargetCret, 3); // 道只走向目标3格范围
+                                    GotoTargetXy(TargetX, TargetY, 0);
                                 }
                             }
                             else {
-                                GetGotoXY(TargetCret, 3); // 道只走向目标3格范围
-                                GotoTargetXY(TargetX, TargetY, 0);
+                                GetGotoXy(TargetCret, 3); // 道只走向目标3格范围
+                                GotoTargetXy(TargetX, TargetY, 0);
                             }
                         }
                     }
-                    switch (m_nSelectMagic) {
+                    switch (MNSelectMagic) {
                         case MagicConst.SKILL_HEALLING:// 治愈术 
                             if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.7)) {
-                                UserMagic = FindMagic(m_nSelectMagic);
+                                UserMagic = FindMagic(MNSelectMagic);
                                 if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
                                 {
                                     UseSpell(UserMagic, CurrX, CurrY, null);
@@ -232,15 +232,15 @@ namespace GameSrv.RobotPlay {
                                     if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪
                                     {
                                         if (TargetCret.WAbil.MaxHP >= 700) {
-                                            m_boIsUseMagic = true;
+                                            MBoIsUseMagic = true;
                                             return result;
                                         }
                                         else {
-                                            m_nSelectMagic = 0;
+                                            MNSelectMagic = 0;
                                         }
                                     }
                                     else {
-                                        m_boIsUseMagic = true;
+                                        MBoIsUseMagic = true;
                                         return result;
                                     }
                                 }
@@ -248,7 +248,7 @@ namespace GameSrv.RobotPlay {
                             break;
                         case MagicConst.SKILL_BIGHEALLING:// 群体治疗术
                             if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.7)) {
-                                UserMagic = FindMagic(m_nSelectMagic);
+                                UserMagic = FindMagic(MNSelectMagic);
                                 if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
                                 {
                                     UseSpell(UserMagic, CurrX, CurrY, this);
@@ -256,15 +256,15 @@ namespace GameSrv.RobotPlay {
                                     if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪 
                                     {
                                         if (TargetCret.WAbil.MaxHP >= 700) {
-                                            m_boIsUseMagic = true;// 能躲避
+                                            MBoIsUseMagic = true;// 能躲避
                                             return result;
                                         }
                                         else {
-                                            m_nSelectMagic = 0;
+                                            MNSelectMagic = 0;
                                         }
                                     }
                                     else {
-                                        m_boIsUseMagic = true;// 能躲避
+                                        MBoIsUseMagic = true;// 能躲避
                                         return result;
                                     }
                                 }
@@ -272,22 +272,22 @@ namespace GameSrv.RobotPlay {
                             break;
                         case MagicConst.SKILL_FIRECHARM:// 灵符火符
                             if (!MagCanHitTarget(CurrX, CurrY, TargetCret)) {
-                                GetGotoXY(TargetCret, 3);
-                                GotoTargetXY(TargetX, TargetY, 1);
+                                GetGotoXy(TargetCret, 3);
+                                GotoTargetXy(TargetX, TargetY, 1);
                             }
                             break;
                         case MagicConst.SKILL_AMYOUNSUL:
                         case MagicConst.SKILL_GROUPAMYOUNSUL:
                             if (TargetCret.StatusTimeArr[PoisonState.DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0) {
-                                n_AmuletIndx = 1;
+                                NAmuletIndx = 1;
                             }
                             else if (TargetCret.StatusTimeArr[PoisonState.DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0) {
-                                n_AmuletIndx = 2;
+                                NAmuletIndx = 2;
                             }
                             break;
                         case MagicConst.SKILL_CLOAK:
                         case MagicConst.SKILL_BIGCLOAK: // 集体隐身术  隐身术
-                            UserMagic = FindMagic(m_nSelectMagic);
+                            UserMagic = FindMagic(MNSelectMagic);
                             if (UserMagic != null && UserMagic.Key == 0)// 技能打开状态才能使用
                             {
                                 UseSpell(UserMagic, CurrX, CurrY, this);
@@ -295,43 +295,43 @@ namespace GameSrv.RobotPlay {
                                 if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪 
                                 {
                                     if (TargetCret.WAbil.MaxHP >= 700) {
-                                        m_boIsUseMagic = false;
+                                        MBoIsUseMagic = false;
                                         return result;
                                     }
                                     else {
-                                        m_nSelectMagic = 0;
+                                        MNSelectMagic = 0;
                                     }
                                 }
                                 else {
-                                    m_boIsUseMagic = false;
+                                    MBoIsUseMagic = false;
                                     return result;
                                 }
                             }
                             break;
                         case MagicConst.SKILL_SKELLETON:
                         case MagicConst.SKILL_SINSU:
-                            UserMagic = FindMagic(m_nSelectMagic);
+                            UserMagic = FindMagic(MNSelectMagic);
                             if (UserMagic != null && UserMagic.Key == 0) {
                                 UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法
                                 AttackTick = HUtil32.GetTickCount();
                                 if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) {
                                     // 22级砍血量的怪
                                     if (TargetCret.WAbil.MaxHP >= 700) {
-                                        m_boIsUseMagic = true; // 能躲避
+                                        MBoIsUseMagic = true; // 能躲避
                                         return result;
                                     }
                                     else {
-                                        m_nSelectMagic = 0;
+                                        MNSelectMagic = 0;
                                     }
                                 }
                                 else {
-                                    m_boIsUseMagic = true; // 能躲避
+                                    MBoIsUseMagic = true; // 能躲避
                                     return result;
                                 }
                             }
                             break;
                     }
-                    UserMagic = FindMagic(m_nSelectMagic);
+                    UserMagic = FindMagic(MNSelectMagic);
                     if (UserMagic != null) {
                         if (UserMagic.Key == 0)   // 技能打开状态才能使用 
                         {
@@ -345,7 +345,7 @@ namespace GameSrv.RobotPlay {
                 }
                 AttackTick = HUtil32.GetTickCount();
                 if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.15)) {
-                    m_boIsUseMagic = true;
+                    MBoIsUseMagic = true;
                 }
                 // 是否能躲避 
                 // 增加人形条件
@@ -353,10 +353,10 @@ namespace GameSrv.RobotPlay {
                     // 20090106 道士22级前是否物理攻击  怪等级小于英雄时
                     if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1) {
                         // 道走近目标砍 
-                        GotoTargetXY(TargetCret.CurrX, TargetCret.CurrY, 0);
+                        GotoTargetXy(TargetCret.CurrX, TargetCret.CurrY, 0);
                     }
-                    m_boIsUseMagic = false;// 是否能躲避
-                    result = WarrAttackTarget1(m_wHitMode);
+                    MBoIsUseMagic = false;// 是否能躲避
+                    result = WarrAttackTarget1(MWHitMode);
                 }
             }
             catch {
@@ -389,7 +389,7 @@ namespace GameSrv.RobotPlay {
                 switch (Job) {
                     case PlayJob.Warrior:
                         if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAIWarrorAttackTime) {
-                            m_boIsUseMagic = false;// 是否能躲避
+                            MBoIsUseMagic = false;// 是否能躲避
                             result = WarrorAttackTarget1();
                         }
                         break;
@@ -397,22 +397,22 @@ namespace GameSrv.RobotPlay {
                         if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAIWizardAttackTime)// 连击也不受间隔控制
                         {
                             AttackTick = HUtil32.GetTickCount();
-                            m_boIsUseMagic = false;// 是否能躲避
+                            MBoIsUseMagic = false;// 是否能躲避
                             result = WizardAttackTarget1();
-                            m_nSelectMagic = 0;
+                            MNSelectMagic = 0;
                             return result;
                         }
-                        m_nSelectMagic = 0;
+                        MNSelectMagic = 0;
                         break;
                     case PlayJob.Taoist:
                         if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAITaoistAttackTime) {
                             AttackTick = HUtil32.GetTickCount();
-                            m_boIsUseMagic = false; // 是否能躲避
+                            MBoIsUseMagic = false; // 是否能躲避
                             result = TaoistAttackTarget();
-                            m_nSelectMagic = 0;
+                            MNSelectMagic = 0;
                             return result;
                         }
-                        m_nSelectMagic = 0;
+                        MNSelectMagic = 0;
                         break;
                 }
             }

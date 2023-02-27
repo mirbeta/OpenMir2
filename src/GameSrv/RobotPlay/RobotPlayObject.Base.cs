@@ -27,11 +27,11 @@ namespace GameSrv.RobotPlay {
                                 DelTargetCreat();
                             }
                         }
-                        if (!m_boAIStart) {
+                        if (!MBoAiStart) {
                             DelTargetCreat();
                         }
                         SearchTarget();
-                        if (m_ManagedEnvir != Envir) // 所在地图不是挂机地图则清空目标
+                        if (MManagedEnvir != Envir) // 所在地图不是挂机地图则清空目标
                         {
                             DelTargetCreat();
                         }
@@ -39,28 +39,28 @@ namespace GameSrv.RobotPlay {
                             base.Run();
                             return;
                         }
-                        if (m_boProtectStatus) // 守护状态
+                        if (MBoProtectStatus) // 守护状态
                         {
-                            if (m_nProtectTargetX == 0 || m_nProtectTargetY == 0)// 取守护坐标
+                            if (MNProtectTargetX == 0 || MNProtectTargetY == 0)// 取守护坐标
                             {
-                                m_nProtectTargetX = CurrX;// 守护坐标
-                                m_nProtectTargetY = CurrY;// 守护坐标
+                                MNProtectTargetX = CurrX;// 守护坐标
+                                MNProtectTargetY = CurrY;// 守护坐标
                             }
-                            if (!m_boProtectOK && m_ManagedEnvir != null && TargetCret == null) {
+                            if (!MBoProtectOk && MManagedEnvir != null && TargetCret == null) {
                                 GotoProtect();
-                                m_nGotoProtectXYCount++;
-                                if (Math.Abs(CurrX - m_nProtectTargetX) <= 3 && Math.Abs(CurrY - m_nProtectTargetY) <= 3) {
+                                MNGotoProtectXyCount++;
+                                if (Math.Abs(CurrX - MNProtectTargetX) <= 3 && Math.Abs(CurrY - MNProtectTargetY) <= 3) {
                                     Dir = (byte)M2Share.RandomNumber.Random(8);
-                                    m_boProtectOK = true;
-                                    m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
+                                    MBoProtectOk = true;
+                                    MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
                                 }
-                                if (m_nGotoProtectXYCount > 20 && !m_boProtectOK)// 20次还没有走到守护坐标，则飞回坐标上
+                                if (MNGotoProtectXyCount > 20 && !MBoProtectOk)// 20次还没有走到守护坐标，则飞回坐标上
                                 {
-                                    if (Math.Abs(CurrX - m_nProtectTargetX) > 13 || Math.Abs(CurrY - m_nProtectTargetY) > 13) {
-                                        SpaceMove(m_ManagedEnvir.MapName, m_nProtectTargetX, m_nProtectTargetY, 1);
+                                    if (Math.Abs(CurrX - MNProtectTargetX) > 13 || Math.Abs(CurrY - MNProtectTargetY) > 13) {
+                                        SpaceMove(MManagedEnvir.MapName, MNProtectTargetX, MNProtectTargetY, 1);
                                         Dir = (byte)M2Share.RandomNumber.Random(8);
-                                        m_boProtectOK = true;
-                                        m_nGotoProtectXYCount = 0;// 是向守护坐标的累计数
+                                        MBoProtectOk = true;
+                                        MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
                                     }
                                 }
                                 base.Run();
@@ -81,13 +81,13 @@ namespace GameSrv.RobotPlay {
                                 return;
                             }
                             else {
-                                if (IsNeedGotoXY())// 是否走向目标
+                                if (IsNeedGotoXy())// 是否走向目标
                                 {
                                     ActionTick = HUtil32.GetTickCount();
                                     TargetX = TargetCret.CurrX;
                                     TargetY = TargetCret.CurrY;
                                     if (AllowUseMagic(12) && Job == 0) {
-                                        GetGotoXY(TargetCret, 2);
+                                        GetGotoXy(TargetCret, 2);
                                     }
                                     if (Job > 0) {
                                         if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != ActorRace.Play) {
@@ -100,10 +100,10 @@ namespace GameSrv.RobotPlay {
                                             }
                                         }
                                         else {
-                                            GetGotoXY(TargetCret, 3); // 道法只走向目标3格范围
+                                            GetGotoXy(TargetCret, 3); // 道法只走向目标3格范围
                                         }
                                     }
-                                    GotoTargetXY(TargetX, TargetY, 0);
+                                    GotoTargetXy(TargetX, TargetY, 0);
                                     base.Run();
                                     return;
                                 }
@@ -112,16 +112,16 @@ namespace GameSrv.RobotPlay {
 
                         if (IsRobot && !Ghost && !Death) {
                             if (M2Share.Config.boHPAutoMoveMap) {
-                                if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - m_dwHPToMapHomeTick > 15000) // 低血时回城或回守护点 
+                                if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - MDwHpToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
-                                    m_dwHPToMapHomeTick = HUtil32.GetTickCount();
+                                    MDwHpToMapHomeTick = HUtil32.GetTickCount();
                                     DelTargetCreat();
-                                    if (m_boProtectStatus) // 守护状态
+                                    if (MBoProtectStatus) // 守护状态
                                     {
-                                        SpaceMove(m_ManagedEnvir.MapName, m_nProtectTargetX, m_nProtectTargetY, 1);// 地图移动
+                                        SpaceMove(MManagedEnvir.MapName, MNProtectTargetX, MNProtectTargetY, 1);// 地图移动
                                         Dir = M2Share.RandomNumber.RandomByte(8);
-                                        m_boProtectOK = true;
-                                        m_nGotoProtectXYCount = 0; // 是向守护坐标的累计数 20090203
+                                        MBoProtectOk = true;
+                                        MNGotoProtectXyCount = 0; // 是向守护坐标的累计数 20090203
                                     }
                                     else {
                                         MoveToHome(); // 不是守护状态，直接回城
@@ -129,18 +129,18 @@ namespace GameSrv.RobotPlay {
                                 }
                             }
                             if (M2Share.Config.boAutoRepairItem) {
-                                if (HUtil32.GetTickCount() - m_dwAutoRepairItemTick > 15000) {
-                                    m_dwAutoRepairItemTick = HUtil32.GetTickCount();
+                                if (HUtil32.GetTickCount() - MDwAutoRepairItemTick > 15000) {
+                                    MDwAutoRepairItemTick = HUtil32.GetTickCount();
                                     boRecalcAbilitys = false;
-                                    for (nWhere = 0; nWhere < m_UseItemNames.Length; nWhere++) {
-                                        if (string.IsNullOrEmpty(m_UseItemNames[nWhere])) {
+                                    for (nWhere = 0; nWhere < MUseItemNames.Length; nWhere++) {
+                                        if (string.IsNullOrEmpty(MUseItemNames[nWhere])) {
                                             continue;
                                         }
                                         if (UseItems[nWhere].Index <= 0) {
-                                            stdItem = M2Share.WorldEngine.GetStdItem(m_UseItemNames[nWhere]);
+                                            stdItem = M2Share.WorldEngine.GetStdItem(MUseItemNames[nWhere]);
                                             if (stdItem != null) {
                                                 userItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_UseItemNames[nWhere], ref userItem)) {
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(MUseItemNames[nWhere], ref userItem)) {
                                                     boRecalcAbilitys = true;
                                                     if (M2Share.StdModeMap.Contains(stdItem.StdMode)) {
                                                         if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132) {
@@ -153,15 +153,15 @@ namespace GameSrv.RobotPlay {
                                             }
                                         }
                                     }
-                                    if (m_BagItemNames.Count > 0) {
-                                        for (int i = 0; i < m_BagItemNames.Count; i++) {
+                                    if (MBagItemNames.Count > 0) {
+                                        for (int i = 0; i < MBagItemNames.Count; i++) {
                                             for (int j = 0; j < ItemList.Count; j++) {
                                                 userItem = ItemList[j];
                                                 if (userItem != null) {
                                                     stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                                                     if (stdItem != null) {
                                                         boFind = false;
-                                                        if (string.Compare(stdItem.Name, m_BagItemNames[i], StringComparison.OrdinalIgnoreCase) == 0) {
+                                                        if (string.Compare(stdItem.Name, MBagItemNames[i], StringComparison.OrdinalIgnoreCase) == 0) {
                                                             boFind = true;
                                                             break;
                                                         }
@@ -170,7 +170,7 @@ namespace GameSrv.RobotPlay {
                                             }
                                             if (!boFind) {
                                                 userItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(m_BagItemNames[i], ref userItem)) {
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(MBagItemNames[i], ref userItem)) {
                                                     if (!AddItemToBag(userItem)) {
                                                         Dispose(userItem);
                                                         break;
@@ -203,8 +203,8 @@ namespace GameSrv.RobotPlay {
                             }
                             if (M2Share.Config.boRenewHealth) // 自动增加HP MP
                             {
-                                if (HUtil32.GetTickCount() - m_dwAutoAddHealthTick > 5000) {
-                                    m_dwAutoAddHealthTick = HUtil32.GetTickCount();
+                                if (HUtil32.GetTickCount() - MDwAutoAddHealthTick > 5000) {
+                                    MDwAutoAddHealthTick = HUtil32.GetTickCount();
                                     nPercent = WAbil.HP * 100 / WAbil.MaxHP;
                                     nValue = WAbil.MaxHP / 10;
                                     if (nPercent < M2Share.Config.nRenewPercent) {
@@ -231,10 +231,10 @@ namespace GameSrv.RobotPlay {
                     }
 
                     if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0) {
-                        if (m_boProtectStatus && TargetCret == null)// 守护状态
+                        if (MBoProtectStatus && TargetCret == null)// 守护状态
                         {
-                            if (Math.Abs(CurrX - m_nProtectTargetX) > 50 || Math.Abs(CurrY - m_nProtectTargetY) > 50) {
-                                m_boProtectOK = false;
+                            if (Math.Abs(CurrX - MNProtectTargetX) > 50 || Math.Abs(CurrY - MNProtectTargetY) > 50) {
+                                MBoProtectOk = false;
                             }
                         }
                         if (TargetCret == null) {
@@ -661,7 +661,7 @@ namespace GameSrv.RobotPlay {
                     }
                 }
                 if (hiter.Race == ActorRace.Play && !hiter.IsRobot && TargetCret == hiter) {
-                    if (M2Share.RandomNumber.Random(8) == 0 && m_AISayMsgList.Count > 0) {
+                    if (M2Share.RandomNumber.Random(8) == 0 && MAiSayMsgList.Count > 0) {
                         if (HUtil32.GetTickCount() >= DisableSayMsgTick) {
                             DisableSayMsg = false;
                         }
@@ -673,7 +673,7 @@ namespace GameSrv.RobotPlay {
                         //}
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg) {
-                            SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + m_AISayMsgList[M2Share.RandomNumber.Random(m_AISayMsgList.Count)]);
+                            SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + MAiSayMsgList[M2Share.RandomNumber.Random(MAiSayMsgList.Count)]);
                         }
                     }
                 }
@@ -688,8 +688,8 @@ namespace GameSrv.RobotPlay {
         }
 
         protected override void SearchTarget() {
-            if ((TargetCret == null || HUtil32.GetTickCount() - m_dwSearchTargetTick > 1000) && m_boAIStart) {
-                m_dwSearchTargetTick = HUtil32.GetTickCount();
+            if ((TargetCret == null || HUtil32.GetTickCount() - MDwSearchTargetTick > 1000) && MBoAiStart) {
+                MDwSearchTargetTick = HUtil32.GetTickCount();
                 if (TargetCret == null || !(TargetCret != null && TargetCret.Race == ActorRace.Play) || TargetCret.Master != null && TargetCret.Master.Race == ActorRace.Play || (HUtil32.GetTickCount() - StruckTick) > 15000) {
                     base.SearchTarget();
                 }
@@ -697,8 +697,8 @@ namespace GameSrv.RobotPlay {
         }
 
         public override void Die() {
-            if (m_boAIStart) {
-                m_boAIStart = false;
+            if (MBoAiStart) {
+                MBoAiStart = false;
             }
             base.Die();
         }

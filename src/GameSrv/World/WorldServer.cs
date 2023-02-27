@@ -1839,11 +1839,11 @@ namespace GameSrv.World {
             }
             //Cert.m_sIPaddr = GetIPAddr;// Mac问题
             //Cert.m_sIPLocal = GetIPLocal(Cert.m_sIPaddr);
-            cert.m_sConfigFileName = ai.sConfigFileName;
-            cert.m_sHeroConfigFileName = ai.sHeroConfigFileName;
-            cert.m_sFilePath = ai.sFilePath;
-            cert.m_sConfigListFileName = ai.sConfigListFileName;
-            cert.m_sHeroConfigListFileName = ai.sHeroConfigListFileName;// 英雄配置列表目录
+            cert.MSConfigFileName = ai.sConfigFileName;
+            cert.MSHeroConfigFileName = ai.sHeroConfigFileName;
+            cert.MSFilePath = ai.sFilePath;
+            cert.MSConfigListFileName = ai.sConfigListFileName;
+            cert.MSHeroConfigListFileName = ai.sHeroConfigListFileName;// 英雄配置列表目录
             cert.Initialize();
             cert.RecalcLevelAbilitys();
             cert.RecalcAbilitys();
