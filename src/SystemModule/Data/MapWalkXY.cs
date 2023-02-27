@@ -5,20 +5,20 @@
         /// <summary>
         /// 走步长
         /// </summary>
-        public int nWalkStep;
+        public int WalkStep;
         /// <summary>
         /// 怪数量
         /// </summary>        
-        public int nMonCount;
+        public int MonCount;
         /// <summary>
         /// 怪范围
         /// </summary>        
-        public int nMonRange;
+        public int MonRange;
         /// <summary>
         /// 主体范围
         /// </summary>        
-        public int nMastrRange;
-        public short nX;
-        public short nY;
+        public int MastrRange;
+        public short X;
+        public short Y;
     }
 }

@@ -555,8 +555,7 @@ namespace GameSrv.World {
                 if (HUtil32.GetTickCount() - RobotLogonTick > 1000) {
                     RobotLogonTick = HUtil32.GetTickCount();
                     if (RobotLogonList.Count > 0) {
-                        var roBot = RobotLogonList[0];
-                        RegenAiObject(roBot);
+                        RegenAiObject(RobotLogonList[0]);
                         RobotLogonList.RemoveAt(0);
                     }
                 }
