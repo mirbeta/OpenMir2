@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Data
+﻿namespace SystemModule.Enums
 {
     public enum MonStatus
     {

@@ -139,7 +139,7 @@ namespace GameSrv.World {
         private void PrcocessData() {
             try {
                 for (var i = 0; i < MobThreads.Length; i++) {
-                    MonsterThread mobThread = MobThreads[i];
+                    var mobThread = MobThreads[i];
                     if (mobThread == null) {
                         continue;
                     }
@@ -184,8 +184,8 @@ namespace GameSrv.World {
         }
 
         private void MerchantInitialize() {
-            for (int i = MerchantList.Count - 1; i >= 0; i--) {
-                Merchant merchant = MerchantList[i];
+            for (var i = MerchantList.Count - 1; i >= 0; i--) {
+                var merchant = MerchantList[i];
                 merchant.Envir = M2Share.MapMgr.FindMap(merchant.MapName);
                 if (merchant.Envir != null) {
                     merchant.OnEnvirnomentChanged();
@@ -207,8 +207,8 @@ namespace GameSrv.World {
         }
 
         private void NpCinitialize() {
-            for (int i = QuestNpcList.Count - 1; i >= 0; i--) {
-                NormNpc normNpc = QuestNpcList[i];
+            for (var i = QuestNpcList.Count - 1; i >= 0; i--) {
+                var normNpc = QuestNpcList[i];
                 normNpc.Envir = M2Share.MapMgr.FindMap(normNpc.MapName);
                 if (normNpc.Envir != null) {
                     normNpc.OnEnvirnomentChanged();
@@ -241,12 +241,12 @@ namespace GameSrv.World {
         }
 
         private bool ProcessHumansIsLogined(string sChrName) {
-            bool result = false;
+            var result = false;
             if (M2Share.FrontEngine.InSaveRcdList(sChrName)) {
                 result = true;
             }
             else {
-                for (int i = 0; i < PlayObjectList.Count; i++) {
+                for (var i = 0; i < PlayObjectList.Count; i++) {
                     if (string.Compare(PlayObjectList[i].ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0) {
                         result = true;
                         break;
@@ -286,7 +286,7 @@ namespace GameSrv.World {
                         playObject.CurrX = GetRandHomeX(playObject);
                         playObject.CurrY = GetRandHomeY(playObject);
                         if (playObject.Abil.Level == 0) {
-                            Ability abil = playObject.Abil;
+                            var abil = playObject.Abil;
                             abil.Level = 1;
                             abil.AC = 0;
                             abil.MAC = 0;
@@ -304,7 +304,7 @@ namespace GameSrv.World {
                             playObject.IsNewHuman = true;
                         }
                     }
-                    Envirnoment envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
+                    var envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null) {
                         playObject.MapFileName = envir.MapFileName;
                         if (envir.Flag.Fight3Zone) // 是否在行会战争地图死亡
@@ -320,7 +320,7 @@ namespace GameSrv.World {
                         }
                     }
                     playObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(playObject.ChrName);
-                    Castle.UserCastle userCastle = M2Share.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
+                    var userCastle = M2Share.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
                     if (envir != null && userCastle != null && (userCastle.PalaceEnvir == envir || userCastle.UnderWar)) {
                         userCastle = M2Share.CastleMgr.IsCastleMember(playObject);
                         if (userCastle == null) {
@@ -378,7 +378,7 @@ namespace GameSrv.World {
                         return result;
                     }
                     playObject.MapFileName = envir.MapFileName;
-                    int nC = 0;
+                    var nC = 0;
                     while (true) {
                         if (envir.CanWalk(playObject.CurrX, playObject.CurrY, true)) break;
                         playObject.CurrX = (short)(playObject.CurrX - 3 + M2Share.RandomNumber.Random(6));
@@ -413,7 +413,7 @@ namespace GameSrv.World {
                     playObject.Abil = switchDataInfo.Abil;
                     LoadSwitchData(switchDataInfo, ref playObject);
                     DelSwitchData(switchDataInfo);
-                    Envirnoment envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
+                    var envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null) {
                         _logger.Warn(string.Format(sChangeServerFail3, new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
                         playObject.MapName = M2Share.Config.HomeMap;
@@ -471,7 +471,7 @@ namespace GameSrv.World {
         private void ProcessHumans() {
             const string sExceptionMsg1 = "[Exception] TUserEngine::ProcessHumans -> Ready, Save, Load...";
             const string sExceptionMsg3 = "[Exception] TUserEngine::ProcessHumans ClosePlayer.Delete";
-            int dwCheckTime = HUtil32.GetTickCount();
+            var dwCheckTime = HUtil32.GetTickCount();
             PlayObject playObject;
             if ((HUtil32.GetTickCount() - ProcessLoadPlayTick) > 200) {
                 ProcessLoadPlayTick = HUtil32.GetTickCount();
@@ -479,9 +479,9 @@ namespace GameSrv.World {
                     HUtil32.EnterCriticalSection(LoadPlaySection);
                     try {
                         //没有进入游戏前 不删除和清空列表
-                        List<int> tempList = new List<int>();
-                        for (int i = 0; i < LoadPlayList.Count; i++) {
-                            UserOpenInfo userOpenInfo = LoadPlayList[i];
+                        var tempList = new List<int>();
+                        for (var i = 0; i < LoadPlayList.Count; i++) {
+                            var userOpenInfo = LoadPlayList[i];
                             if (userOpenInfo == null) {
                                 continue;
                             }
@@ -517,12 +517,12 @@ namespace GameSrv.World {
                             }
                             LoadPlayList[i] = null;
                         }
-                        for (int i = 0; i < tempList.Count; i++) {
+                        for (var i = 0; i < tempList.Count; i++) {
                             LoadPlayList.RemoveAt(i);
                         }
                         //LoadPlayList.Clear();
-                        for (int i = 0; i < ChangeHumanDbGoldList.Count; i++) {
-                            GoldChangeInfo goldChangeInfo = ChangeHumanDbGoldList[i];
+                        for (var i = 0; i < ChangeHumanDbGoldList.Count; i++) {
+                            var goldChangeInfo = ChangeHumanDbGoldList[i];
                             playObject = GetPlayObject(goldChangeInfo.sGameMasterName);
                             if (playObject != null) {
                                 playObject.GoldChange(goldChangeInfo.sGetGoldUser, goldChangeInfo.nGold);
@@ -534,12 +534,12 @@ namespace GameSrv.World {
                     finally {
                         HUtil32.LeaveCriticalSection(LoadPlaySection);
                     }
-                    for (int i = 0; i < NewHumanList.Count; i++) {
+                    for (var i = 0; i < NewHumanList.Count; i++) {
                         playObject = NewHumanList[i];
                         M2Share.GateMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
                     }
                     NewHumanList.Clear();
-                    for (int i = 0; i < ListOfGateIdx.Count; i++) {
+                    for (var i = 0; i < ListOfGateIdx.Count; i++) {
                         M2Share.GateMgr.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
                     }
                     ListOfGateIdx.Clear();
@@ -556,7 +556,7 @@ namespace GameSrv.World {
                 if (HUtil32.GetTickCount() - RobotLogonTick > 1000) {
                     RobotLogonTick = HUtil32.GetTickCount();
                     if (RobotLogonList.Count > 0) {
-                        RoBotLogon roBot = RobotLogonList[0];
+                        var roBot = RobotLogonList[0];
                         RegenAiObject(roBot);
                         RobotLogonList.RemoveAt(0);
                     }
@@ -564,7 +564,7 @@ namespace GameSrv.World {
             }
 
             try {
-                for (int i = 0; i < PlayObjectFreeList.Count; i++) {
+                for (var i = 0; i < PlayObjectFreeList.Count; i++) {
                     playObject = PlayObjectFreeList[i];
                     if ((HUtil32.GetTickCount() - playObject.GhostTick) > M2Share.Config.HumanFreeDelayTime)// 5 * 60 * 1000
                     {
@@ -598,7 +598,7 @@ namespace GameSrv.World {
             if (ProcHumIdx == 0) {
                 ProcessHumanLoopTime = 0;
                 M2Share.ProcessHumanLoopTime = ProcessHumanLoopTime;
-                int dwUsrRotTime = HUtil32.GetTickCount() - M2Share.UsrRotCountTick;
+                var dwUsrRotTime = HUtil32.GetTickCount() - M2Share.UsrRotCountTick;
                 M2Share.UsrRotCountMin = dwUsrRotTime;
                 M2Share.UsrRotCountTick = HUtil32.GetTickCount();
                 if (M2Share.UsrRotCountMax < dwUsrRotTime) M2Share.UsrRotCountMax = dwUsrRotTime;
@@ -610,13 +610,13 @@ namespace GameSrv.World {
         private void ProcessRobotPlayData() {
             const string sExceptionMsg = "[Exception] TUserEngine::ProcessRobotPlayData";
             try {
-                int dwCurTick = HUtil32.GetTickCount();
-                int nIdx = ProcBotHubIdx;
-                bool boCheckTimeLimit = false;
-                int dwCheckTime = HUtil32.GetTickCount();
+                var dwCurTick = HUtil32.GetTickCount();
+                var nIdx = ProcBotHubIdx;
+                var boCheckTimeLimit = false;
+                var dwCheckTime = HUtil32.GetTickCount();
                 while (true) {
                     if (BotPlayObjectList.Count <= nIdx) break;
-                    PlayObject playObject = BotPlayObjectList[nIdx];
+                    var playObject = BotPlayObjectList[nIdx];
                     if (dwCurTick - playObject.RunTick > playObject.RunTime) {
                         playObject.RunTick = dwCurTick;
                         if (!playObject.Ghost) {
@@ -666,13 +666,13 @@ namespace GameSrv.World {
 
         private void ProcessPlayObjectData() {
             try {
-                int dwCurTick = HUtil32.GetTickCount();
-                int nIdx = ProcHumIdx;
-                bool boCheckTimeLimit = false;
-                int dwCheckTime = HUtil32.GetTickCount();
+                var dwCurTick = HUtil32.GetTickCount();
+                var nIdx = ProcHumIdx;
+                var boCheckTimeLimit = false;
+                var dwCheckTime = HUtil32.GetTickCount();
                 while (true) {
                     if (PlayObjectList.Count <= nIdx) break;
-                    PlayObject playObject = PlayObjectList[nIdx];
+                    var playObject = PlayObjectList[nIdx];
                     if (playObject == null) {
                         continue;
                     }
@@ -696,7 +696,7 @@ namespace GameSrv.World {
                                     if ((HUtil32.GetTickCount() - playObject.ShowLineNoticeTick) > M2Share.Config.ShowLineNoticeTime) {
                                         playObject.ShowLineNoticeTick = HUtil32.GetTickCount();
                                         if (M2Share.LineNoticeList.Count > playObject.ShowLineNoticeIdx) {
-                                            string lineNoticeMsg = M2Share.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
+                                            var lineNoticeMsg = M2Share.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
                                             switch (lineNoticeMsg[0]) {
                                                 case 'R':
                                                     playObject.SysMsg(lineNoticeMsg.AsSpan()[1..].ToString(), MsgColor.Red, MsgType.Notice);
@@ -753,13 +753,13 @@ namespace GameSrv.World {
         }
 
         private void ProcessMerchants() {
-            bool boProcessLimit = false;
+            var boProcessLimit = false;
             const string sExceptionMsg = "[Exception] TUserEngine::ProcessMerchants";
-            int dwRunTick = HUtil32.GetTickCount();
+            var dwRunTick = HUtil32.GetTickCount();
             try {
-                int dwCurrTick = HUtil32.GetTickCount();
-                for (int i = MerchantPosition; i < MerchantList.Count; i++) {
-                    Merchant merchantNpc = MerchantList[i];
+                var dwCurrTick = HUtil32.GetTickCount();
+                for (var i = MerchantPosition; i < MerchantList.Count; i++) {
+                    var merchantNpc = MerchantList[i];
                     if (!merchantNpc.Ghost) {
                         if ((dwCurrTick - merchantNpc.RunTick) > merchantNpc.RunTime) {
                             //if ((HUtil32.GetTickCount() - merchantNpc.SearchTick) > merchantNpc.SearchTime)
@@ -807,12 +807,12 @@ namespace GameSrv.World {
         }
 
         private void ProcessNpcs() {
-            int dwRunTick = HUtil32.GetTickCount();
-            bool boProcessLimit = false;
+            var dwRunTick = HUtil32.GetTickCount();
+            var boProcessLimit = false;
             try {
-                int dwCurrTick = HUtil32.GetTickCount();
-                for (int i = NpcPosition; i < QuestNpcList.Count; i++) {
-                    NormNpc npc = QuestNpcList[i];
+                var dwCurrTick = HUtil32.GetTickCount();
+                for (var i = NpcPosition; i < QuestNpcList.Count; i++) {
+                    var npc = QuestNpcList[i];
                     if (!npc.Ghost) {
                         if ((dwCurrTick - npc.RunTick) > npc.RunTime) {
                             //if ((HUtil32.GetTickCount() - npc.SearchTick) > npc.SearchTime)
@@ -880,8 +880,8 @@ namespace GameSrv.World {
         public Items.StdItem GetStdItem(string sItemName) {
             Items.StdItem result = null;
             if (string.IsNullOrEmpty(sItemName)) return null;
-            for (int i = 0; i < StdItemList.Count; i++) {
-                Items.StdItem stdItem = StdItemList[i];
+            for (var i = 0; i < StdItemList.Count; i++) {
+                var stdItem = StdItemList[i];
                 if (string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0) {
                     result = stdItem;
                     break;
@@ -891,7 +891,7 @@ namespace GameSrv.World {
         }
 
         public int GetStdItemWeight(int nItemIdx) {
-            int result = 0;
+            var result = 0;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx) {
                 result = StdItemList[nItemIdx].Weight;
@@ -900,7 +900,7 @@ namespace GameSrv.World {
         }
 
         public string GetStdItemName(int nItemIdx) {
-            string result = "";
+            var result = "";
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx) {
                 result = StdItemList[nItemIdx].Name;
@@ -909,7 +909,7 @@ namespace GameSrv.World {
         }
 
         public bool FindOtherServerUser(string sName, ref int nServerIndex) {
-            if (OtherUserNameList.TryGetValue(sName, out ServerGruopInfo groupServer)) {
+            if (OtherUserNameList.TryGetValue(sName, out var groupServer)) {
                 nServerIndex = groupServer.nServerIdx;
                 M2Share.Logger.Info($"玩家在[{nServerIndex}]服务器上.");
                 return true;
@@ -919,7 +919,7 @@ namespace GameSrv.World {
 
         public void CryCry(short wIdent, Envirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg) {
             PlayObject playObject;
-            for (int i = 0; i < PlayObjectList.Count; i++) {
+            for (var i = 0; i < PlayObjectList.Count; i++) {
                 playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == pMap && playObject.BanShout &&
                     Math.Abs(playObject.CurrX - nX) < nWide && Math.Abs(playObject.CurrY - nY) < nWide)
@@ -929,8 +929,8 @@ namespace GameSrv.World {
 
         public bool CopyToUserItemFromName(string sItemName, ref UserItem item) {
             if (string.IsNullOrEmpty(sItemName)) return false;
-            for (int i = 0; i < StdItemList.Count; i++) {
-                Items.StdItem stdItem = StdItemList[i];
+            for (var i = 0; i < StdItemList.Count; i++) {
+                var stdItem = StdItemList[i];
                 if (!stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase)) continue;
                 if (item == null) item = new UserItem();
                 item.Index = (ushort)(i + 1);
@@ -943,7 +943,7 @@ namespace GameSrv.World {
         }
 
         public static void ProcessUserMessage(PlayObject playObject, CommandMessage defMsg, string buff) {
-            string sMsg = string.Empty;
+            var sMsg = string.Empty;
             if (playObject.OffLineFlag) return;
             if (!string.IsNullOrEmpty(buff)) sMsg = buff;
             switch (defMsg.Ident) {
@@ -1058,8 +1058,8 @@ namespace GameSrv.World {
         }
 
         public void GetIsmChangeServerReceive(string flName) {
-            for (int i = 0; i < PlayObjectFreeList.Count; i++) {
-                PlayObject hum = PlayObjectFreeList[i];
+            for (var i = 0; i < PlayObjectFreeList.Count; i++) {
+                var hum = PlayObjectFreeList[i];
                 if (hum.SwitchDataTempFile == flName) {
                     hum.SwitchDataOk = true;
                     break;
@@ -1068,8 +1068,8 @@ namespace GameSrv.World {
         }
 
         public void OtherServerUserLogon(int sNum, string uname) {
-            string name = string.Empty;
-            string apmode = HUtil32.GetValidStr3(uname, ref name, ':');
+            var name = string.Empty;
+            var apmode = HUtil32.GetValidStr3(uname, ref name, ':');
             OtherUserNameList.Remove(name);
             OtherUserNameList.Add(name, new ServerGruopInfo() {
                 nServerIdx = sNum,
@@ -1078,8 +1078,8 @@ namespace GameSrv.World {
         }
 
         public void OtherServerUserLogout(int sNum, string uname) {
-            string name = string.Empty;
-            string apmode = HUtil32.GetValidStr3(uname, ref name, ':');
+            var name = string.Empty;
+            var apmode = HUtil32.GetValidStr3(uname, ref name, ':');
             OtherUserNameList.Remove(name);
             // for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
             // {
@@ -1093,9 +1093,9 @@ namespace GameSrv.World {
 
         public PlayObject GetPlayObject(string sName) {
             PlayObject result = null;
-            for (int i = 0; i < PlayObjectList.Count; i++) {
+            for (var i = 0; i < PlayObjectList.Count; i++) {
                 if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0) {
-                    PlayObject playObject = PlayObjectList[i];
+                    var playObject = PlayObjectList[i];
                     if (!playObject.Ghost) {
                         if (!(playObject.IsPasswordLocked && playObject.ObMode && playObject.AdminMode)) {
                             result = playObject;
@@ -1111,7 +1111,7 @@ namespace GameSrv.World {
             PlayObject playObject;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try {
-                for (int i = 0; i < PlayObjectList.Count; i++) {
+                for (var i = 0; i < PlayObjectList.Count; i++) {
                     if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0) {
                         playObject = PlayObjectList[i];
                         playObject.BoEmergencyClose = true;
@@ -1128,7 +1128,7 @@ namespace GameSrv.World {
             PlayObject result = null;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try {
-                for (int i = 0; i < PlayObjectList.Count; i++) {
+                for (var i = 0; i < PlayObjectList.Count; i++) {
                     if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0) {
                         result = PlayObjectList[i];
                         break;
@@ -1142,8 +1142,8 @@ namespace GameSrv.World {
         }
 
         public static T FindMerchant<T>(int merchantId) {
-            BaseObject normNpc = M2Share.ActorMgr.Get(merchantId);
-            Type npcType = normNpc.GetType();
+            var normNpc = M2Share.ActorMgr.Get(merchantId);
+            var npcType = normNpc.GetType();
             if (npcType == typeof(Merchant)) {
                 return (T)Convert.ChangeType(normNpc, typeof(T));
             }
@@ -1160,7 +1160,7 @@ namespace GameSrv.World {
         }
 
         public static T FindNpc<T>(int npcId) {
-            BaseObject normNpc = M2Share.ActorMgr.Get(npcId);
+            var normNpc = M2Share.ActorMgr.Get(npcId);
             return (T)Convert.ChangeType(normNpc, typeof(T));
         }
 
@@ -1169,9 +1169,9 @@ namespace GameSrv.World {
         /// </summary>
         /// <returns></returns>
         public int GetMapOfRangeHumanCount(Envirnoment envir, int nX, int nY, int nRange) {
-            int result = 0;
-            for (int i = 0; i < PlayObjectList.Count; i++) {
-                PlayObject playObject = PlayObjectList[i];
+            var result = 0;
+            for (var i = 0; i < PlayObjectList.Count; i++) {
+                var playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == envir) {
                     if (Math.Abs(playObject.CurrX - nX) < nRange && Math.Abs(playObject.CurrY - nY) < nRange) {
                         result++;
@@ -1182,10 +1182,10 @@ namespace GameSrv.World {
         }
 
         public bool GetHumPermission(string sUserName, ref string sIPaddr, ref byte btPermission) {
-            bool result = false;
+            var result = false;
             btPermission = M2Share.Config.StartPermission;
-            for (int i = 0; i < AdminList.Count; i++) {
-                AdminInfo adminInfo = AdminList[i];
+            for (var i = 0; i < AdminList.Count; i++) {
+                var adminInfo = AdminList[i];
                 if (string.Compare(adminInfo.sChrName, sUserName, StringComparison.OrdinalIgnoreCase) == 0) {
                     btPermission = (byte)adminInfo.nLv;
                     sIPaddr = adminInfo.sIPaddr;
@@ -1207,8 +1207,8 @@ namespace GameSrv.World {
         }
 
         private void KickOnlineUser(string sChrName) {
-            for (int i = 0; i < PlayObjectList.Count; i++) {
-                PlayObject playObject = PlayObjectList[i];
+            for (var i = 0; i < PlayObjectList.Count; i++) {
+                var playObject = PlayObjectList[i];
                 if (string.Compare(playObject.ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0) {
                     playObject.BoKickFlag = true;
                     break;
@@ -1217,8 +1217,8 @@ namespace GameSrv.World {
         }
 
         private static void SendChangeServer(PlayObject playObject, byte nServerIndex) {
-            string sIPaddr = string.Empty;
-            int nPort = 0;
+            var sIPaddr = string.Empty;
+            var nPort = 0;
             const string sMsg = "{0}/{1}";
             if (M2Share.GetMultiServerAddrPort(nServerIndex, ref sIPaddr, ref nPort)) {
                 playObject.BoReconnection = true;
@@ -1231,7 +1231,7 @@ namespace GameSrv.World {
             {
                 return;
             }
-            SavePlayerRcd saveRcd = new SavePlayerRcd {
+            var saveRcd = new SavePlayerRcd {
                 Account = playObject.UserAccount,
                 ChrName = playObject.ChrName,
                 SessionID = playObject.SessionId,
@@ -1248,7 +1248,7 @@ namespace GameSrv.World {
         }
 
         private void GetHumData(PlayObject playObject, ref PlayerDataInfo humanRcd) {
-            PlayerInfoData humData = humanRcd.Data;
+            var humData = humanRcd.Data;
             playObject.UserAccount = humData.Account;
             playObject.ChrName = humData.ChrName;
             playObject.MapName = humData.CurMap;
@@ -1324,7 +1324,7 @@ namespace GameSrv.World {
             playObject.UseItems[ItemLocation.Charm] = humItems[ItemLocation.Charm].ToClientItem();
             ServerUserItem[] bagItems = humanRcd.Data.BagItems;
             if (bagItems != null) {
-                for (int i = 0; i < bagItems.Length; i++) {
+                for (var i = 0; i < bagItems.Length; i++) {
                     if (bagItems[i] == null) {
                         continue;
                     }
@@ -1335,13 +1335,13 @@ namespace GameSrv.World {
             }
             MagicRcd[] humMagic = humanRcd.Data.Magic;
             if (humMagic != null) {
-                for (int i = 0; i < humMagic.Length; i++) {
+                for (var i = 0; i < humMagic.Length; i++) {
                     if (humMagic[i] == null) {
                         continue;
                     }
-                    MagicInfo magicInfo = FindMagic(humMagic[i].MagIdx);
+                    var magicInfo = FindMagic(humMagic[i].MagIdx);
                     if (magicInfo != null) {
-                        UserMagic userMagic = new UserMagic();
+                        var userMagic = new UserMagic();
                         userMagic.Magic = magicInfo;
                         userMagic.MagIdx = humMagic[i].MagIdx;
                         userMagic.Level = humMagic[i].Level;
@@ -1353,7 +1353,7 @@ namespace GameSrv.World {
             }
             ServerUserItem[] storageItems = humanRcd.Data.StorageItems;
             if (storageItems != null) {
-                for (int i = 0; i < storageItems.Length; i++) {
+                for (var i = 0; i < storageItems.Length; i++) {
                     if (storageItems[i] == null) {
                         continue;
                     }
@@ -1444,12 +1444,12 @@ namespace GameSrv.World {
             if (BagItems == null) {
                 BagItems = new ServerUserItem[Grobal2.MaxBagItem];
             }
-            for (int i = 0; i < playObject.ItemList.Count; i++) {
+            for (var i = 0; i < playObject.ItemList.Count; i++) {
                 if (i < Grobal2.MaxBagItem) {
                     BagItems[i] = playObject.ItemList[i].ToServerItem();
                 }
             }
-            for (int i = 0; i < BagItems.Length; i++) {
+            for (var i = 0; i < BagItems.Length; i++) {
                 if (BagItems[i] == null) {
                     BagItems[i] = HUtil32.DelfautItem.ToServerItem();
                 }
@@ -1458,11 +1458,11 @@ namespace GameSrv.World {
             if (HumMagic == null) {
                 HumMagic = new MagicRcd[Grobal2.MaxMagicCount];
             }
-            for (int i = 0; i < playObject.MagicList.Count; i++) {
+            for (var i = 0; i < playObject.MagicList.Count; i++) {
                 if (i >= Grobal2.MaxMagicCount) {
                     break;
                 }
-                UserMagic userMagic = playObject.MagicList[i];
+                var userMagic = playObject.MagicList[i];
                 if (HumMagic[i] == null) {
                     HumMagic[i] = new MagicRcd();
                 }
@@ -1471,7 +1471,7 @@ namespace GameSrv.World {
                 HumMagic[i].MagicKey = userMagic.Key;
                 HumMagic[i].TranPoint = userMagic.TranPoint;
             }
-            for (int i = 0; i < HumMagic.Length; i++) {
+            for (var i = 0; i < HumMagic.Length; i++) {
                 if (HumMagic[i] == null) {
                     HumMagic[i] = HUtil32.DetailtMagicRcd;
                 }
@@ -1480,13 +1480,13 @@ namespace GameSrv.World {
             if (StorageItems == null) {
                 StorageItems = new ServerUserItem[50];
             }
-            for (int i = 0; i < playObject.StorageItemList.Count; i++) {
+            for (var i = 0; i < playObject.StorageItemList.Count; i++) {
                 if (i >= StorageItems.Length) {
                     break;
                 }
                 StorageItems[i] = playObject.StorageItemList[i].ToServerItem();
             }
-            for (int i = 0; i < StorageItems.Length; i++) {
+            for (var i = 0; i < StorageItems.Length; i++) {
                 if (StorageItems[i] == null) {
                     StorageItems[i] = HUtil32.DelfautItem.ToServerItem();
                 }
@@ -1519,10 +1519,10 @@ namespace GameSrv.World {
             return (short)(M2Share.RandomNumber.Random(3) + (playObject.HomeY - 2));
         }
 
-        public MagicInfo FindMagic(int nMagIdx) {
+        private MagicInfo FindMagic(int nMagIdx) {
             MagicInfo result = null;
-            for (int i = 0; i < MagicList.Count; i++) {
-                MagicInfo magic = MagicList[i];
+            for (var i = 0; i < MagicList.Count; i++) {
+                var magic = MagicList[i];
                 if (magic.MagicId == nMagIdx) {
                     result = magic;
                     break;
@@ -1531,16 +1531,16 @@ namespace GameSrv.World {
             return result;
         }
 
-        public void OpenDoor(Envirnoment envir, int nX, int nY) {
-            DoorInfo door = envir.GetDoor(nX, nY);
-            if (door != null && !door.Status.Opened && !door.Status.bo01) {
+        public static void OpenDoor(Envirnoment envir, int nX, int nY) {
+            var door = envir.GetDoor(nX, nY);
+            if (door != null && !door.Status.Opened) {
                 door.Status.Opened = true;
                 door.Status.OpenTick = HUtil32.GetTickCount();
                 SendDoorStatus(envir, nX, nY, Messages.RM_DOOROPEN, 0, nX, nY);
             }
         }
 
-        private void CloseDoor(Envirnoment envir, DoorInfo door) {
+        private static void CloseDoor(Envirnoment envir, DoorInfo door) {
             if (door == null || !door.Status.Opened)
                 return;
             door.Status.Opened = false;
@@ -1548,18 +1548,18 @@ namespace GameSrv.World {
         }
 
         private static void SendDoorStatus(Envirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY) {
-            int n1C = nX - 12;
-            int n24 = nX + 12;
-            int n20 = nY - 12;
-            int n28 = nY + 12;
-            for (int n10 = n1C; n10 <= n24; n10++) {
-                for (int n14 = n20; n14 <= n28; n14++) {
-                    MapCellInfo cellInfo = envir.GetCellInfo(n10, n14, out bool cellSuccess);
+            var n1C = nX - 12;
+            var n24 = nX + 12;
+            var n20 = nY - 12;
+            var n28 = nY + 12;
+            for (var n10 = n1C; n10 <= n24; n10++) {
+                for (var n14 = n20; n14 <= n28; n14++) {
+                    var cellInfo = envir.GetCellInfo(n10, n14, out var cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable) {
-                        for (int i = 0; i < cellInfo.ObjList.Count; i++) {
-                            CellObject cellObject = cellInfo.ObjList[i];
-                            if (cellObject.CellObjId > 0 && (cellObject.CellType == CellType.Monster || cellObject.CellType == CellType.Play)) {
-                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        for (var i = 0; i < cellInfo.ObjList.Count; i++) {
+                            var cellObject = cellInfo.ObjList[i];
+                            if (cellObject.CellObjId > 0 && cellObject.ActorObject) {
+                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == ActorRace.Play) {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0, "");
                                 }
@@ -1572,10 +1572,10 @@ namespace GameSrv.World {
 
         private void ProcessMapDoor() {
             IList<Envirnoment> doorList = M2Share.MapMgr.GetDoorMapList();
-            for (int i = 0; i < doorList.Count; i++) {
-                Envirnoment envir = doorList[i];
-                for (int j = 0; j < envir.DoorList.Count; j++) {
-                    DoorInfo door = envir.DoorList[j];
+            for (var i = 0; i < doorList.Count; i++) {
+                var envir = doorList[i];
+                for (var j = 0; j < envir.DoorList.Count; j++) {
+                    var door = envir.DoorList[j];
                     if (door.Status.Opened) {
                         if ((HUtil32.GetTickCount() - door.Status.OpenTick) > 5 * 1000) {
                             CloseDoor(envir, door);
@@ -1586,18 +1586,18 @@ namespace GameSrv.World {
         }
 
         private void ProcessEvents() {
-            for (int i = MagicEventList.Count - 1; i >= 0; i--) {
-                MagicEvent magicEvent = MagicEventList[i];
+            for (var i = MagicEventList.Count - 1; i >= 0; i--) {
+                var magicEvent = MagicEventList[i];
                 if (magicEvent != null) {
-                    for (int j = magicEvent.BaseObjectList.Count - 1; j >= 0; j--) {
-                        BaseObject baseObject = magicEvent.BaseObjectList[j];
+                    for (var j = magicEvent.BaseObjectList.Count - 1; j >= 0; j--) {
+                        var baseObject = magicEvent.BaseObjectList[j];
                         if (baseObject.Death || baseObject.Ghost || !baseObject.HolySeize) {
                             magicEvent.BaseObjectList.RemoveAt(j);
                         }
                     }
                     if (magicEvent.BaseObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.dwStartTick) > magicEvent.dwTime ||
                         (HUtil32.GetTickCount() - magicEvent.dwStartTick) > 180000) {
-                        int count = 0;
+                        var count = 0;
                         while (true) {
                             if (magicEvent.Events[count] != null) magicEvent.Events[count].Close();
                             count++;
@@ -1611,8 +1611,8 @@ namespace GameSrv.World {
         }
 
         public MagicInfo FindMagic(string sMagicName) {
-            for (int i = 0; i < MagicList.Count; i++) {
-                MagicInfo magic = MagicList[i];
+            for (var i = 0; i < MagicList.Count; i++) {
+                var magic = MagicList[i];
                 if (magic.MagicName.Equals(sMagicName, StringComparison.OrdinalIgnoreCase)) {
                     return magic;
                 }
@@ -1621,15 +1621,15 @@ namespace GameSrv.World {
         }
 
         public int GetMapRangeMonster(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> list) {
-            int result = 0;
+            var result = 0;
             if (envir == null) return result;
-            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
-                for (int j = 0; j < MonGenInfoThreadMap[i].Count; j++) {
-                    MonGenInfo monGen = MonGenInfoThreadMap[i][j];
+            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
+                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++) {
+                    var monGen = MonGenInfoThreadMap[i][j];
                     if (monGen == null) continue;
                     if (monGen.Envir != null && monGen.Envir != envir) continue;
-                    for (int k = 0; k < monGen.CertList.Count; k++) {
-                        BaseObject baseObject = monGen.CertList[k];
+                    for (var k = 0; k < monGen.CertList.Count; k++) {
+                        var baseObject = monGen.CertList[k];
                         if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir &&
                             Math.Abs(baseObject.CurrX - nX) <= nRange && Math.Abs(baseObject.CurrY - nY) <= nRange) {
                             if (list != null) list.Add(baseObject);
@@ -1646,8 +1646,8 @@ namespace GameSrv.World {
         }
 
         public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList) {
-            for (int i = 0; i < MerchantList.Count; i++) {
-                Merchant merchant = MerchantList[i];
+            for (var i = 0; i < MerchantList.Count; i++) {
+                var merchant = MerchantList[i];
                 if (merchant.Envir == envir && Math.Abs(merchant.CurrX - nX) <= nRange &&
                     Math.Abs(merchant.CurrY - nY) <= nRange) tmpList.Add(merchant);
             }
@@ -1655,8 +1655,8 @@ namespace GameSrv.World {
         }
 
         public int GetNpcList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList) {
-            for (int i = 0; i < QuestNpcList.Count; i++) {
-                NormNpc npc = QuestNpcList[i];
+            for (var i = 0; i < QuestNpcList.Count; i++) {
+                var npc = QuestNpcList[i];
                 if (npc.Envir == envir && Math.Abs(npc.CurrX - nX) <= nRange &&
                     Math.Abs(npc.CurrY - nY) <= nRange) tmpList.Add(npc);
             }
@@ -1664,8 +1664,8 @@ namespace GameSrv.World {
         }
 
         public void ReloadMerchantList() {
-            for (int i = 0; i < MerchantList.Count; i++) {
-                Merchant merchant = MerchantList[i];
+            for (var i = 0; i < MerchantList.Count; i++) {
+                var merchant = MerchantList[i];
                 if (!merchant.Ghost) {
                     merchant.ClearScript();
                     merchant.LoadMerchantScript();
@@ -1674,8 +1674,8 @@ namespace GameSrv.World {
         }
 
         public void ReloadNpcList() {
-            for (int i = 0; i < QuestNpcList.Count; i++) {
-                NormNpc npc = QuestNpcList[i];
+            for (var i = 0; i < QuestNpcList.Count; i++) {
+                var npc = QuestNpcList[i];
                 npc.ClearScript();
                 npc.LoadNPCScript();
             }
@@ -1685,15 +1685,15 @@ namespace GameSrv.World {
             if (list == null) {
                 list = new List<BaseObject>();
             }
-            int result = 0;
+            var result = 0;
             if (envir == null) return result;
-            for (int i = 0; i < MonGenInfoThreadMap.Count; i++) {
+            for (var i = 0; i < MonGenInfoThreadMap.Count; i++) {
                 if (MonGenInfoThreadMap.TryGetValue(i, out IList<MonGenInfo> mongenList)) {
-                    for (int j = 0; j < mongenList.Count; j++) {
-                        MonGenInfo monGen = mongenList[j];
+                    for (var j = 0; j < mongenList.Count; j++) {
+                        var monGen = mongenList[j];
                         if (monGen == null) continue;
-                        for (int k = 0; k < monGen.CertList.Count; k++) {
-                            BaseObject monObject = monGen.CertList[k];
+                        for (var k = 0; k < monGen.CertList.Count; k++) {
+                            var monObject = monGen.CertList[k];
                             if (!monObject.Death && !monObject.Ghost && monObject.Envir == envir) {
                                 list.Add(monObject);
                                 result++;
@@ -1706,20 +1706,20 @@ namespace GameSrv.World {
         }
 
         public int GetMapHuman(string sMapName) {
-            int result = 0;
-            Envirnoment envir = M2Share.MapMgr.FindMap(sMapName);
+            var result = 0;
+            var envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir == null) return result;
-            for (int i = 0; i < PlayObjectList.Count; i++) {
-                PlayObject playObject = PlayObjectList[i];
+            for (var i = 0; i < PlayObjectList.Count; i++) {
+                var playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir) result++;
             }
             return result;
         }
 
         public int GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, IList<BaseObject> list) {
-            int result = 0;
-            for (int i = 0; i < PlayObjectList.Count; i++) {
-                PlayObject playObject = PlayObjectList[i];
+            var result = 0;
+            for (var i = 0; i < PlayObjectList.Count; i++) {
+                var playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir &&
                     Math.Abs(playObject.CurrX - nRageX) <= nRage && Math.Abs(playObject.CurrY - nRageY) <= nRage) {
                     list.Add(playObject);
@@ -1732,8 +1732,8 @@ namespace GameSrv.World {
         public ushort GetStdItemIdx(string sItemName) {
             ushort result = 0;
             if (string.IsNullOrEmpty(sItemName)) return result;
-            for (int i = 0; i < StdItemList.Count; i++) {
-                Items.StdItem stdItem = StdItemList[i];
+            for (var i = 0; i < StdItemList.Count; i++) {
+                var stdItem = StdItemList[i];
                 if (stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase)) {
                     result = (ushort)(i + 1);
                     break;
@@ -1746,16 +1746,16 @@ namespace GameSrv.World {
         /// 向每个人物发送消息
         /// </summary>
         public void SendBroadCastMsgExt(string sMsg, MsgType msgType) {
-            for (int i = 0; i < PlayObjectList.Count; i++) {
-                PlayObject playObject = PlayObjectList[i];
+            for (var i = 0; i < PlayObjectList.Count; i++) {
+                var playObject = PlayObjectList[i];
                 if (!playObject.Ghost)
                     playObject.SysMsg(sMsg, MsgColor.Red, msgType);
             }
         }
 
         public void SendBroadCastMsg(string sMsg, MsgType msgType) {
-            for (int i = 0; i < PlayObjectList.Count; i++) {
-                PlayObject playObject = PlayObjectList[i];
+            for (var i = 0; i < PlayObjectList.Count; i++) {
+                var playObject = PlayObjectList[i];
                 if (!playObject.Ghost) {
                     playObject.SysMsg(sMsg, MsgColor.Red, msgType);
                 }
@@ -1763,17 +1763,17 @@ namespace GameSrv.World {
         }
 
         public void sub_4AE514(GoldChangeInfo goldChangeInfo) {
-            GoldChangeInfo goldChange = goldChangeInfo;
+            var goldChange = goldChangeInfo;
             HUtil32.EnterCriticalSection(LoadPlaySection);
             ChangeHumanDbGoldList.Add(goldChange);
         }
 
         public void ClearMonSayMsg() {
-            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
-                for (int j = 0; j < MonGenInfoThreadMap[i].Count; j++) {
-                    MonGenInfo monGen = MonGenInfoThreadMap[i][j];
-                    for (int k = 0; k < monGen.CertList.Count; k++) {
-                        BaseObject monBaseObject = monGen.CertList[k];
+            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
+                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++) {
+                    var monGen = MonGenInfoThreadMap[i][j];
+                    for (var k = 0; k < monGen.CertList.Count; k++) {
+                        var monBaseObject = monGen.CertList[k];
                         monBaseObject.SayMsgList = null;
                     }
                 }
@@ -1807,7 +1807,7 @@ namespace GameSrv.World {
         }
 
         private bool RegenAiObject(RoBotLogon ai) {
-            RobotPlayObject playObject = AddAiPlayObject(ai);
+            var playObject = AddAiPlayObject(ai);
             if (playObject != null) {
                 playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
                 playObject.UserAccount = "假人" + ai.sChrName;
@@ -1823,11 +1823,11 @@ namespace GameSrv.World {
             int n20;
             int n24;
             object p28;
-            Envirnoment envirnoment = M2Share.MapMgr.FindMap(ai.sMapName);
+            var envirnoment = M2Share.MapMgr.FindMap(ai.sMapName);
             if (envirnoment == null) {
                 return null;
             }
-            RobotPlayObject cert = new RobotPlayObject();
+            var cert = new RobotPlayObject();
             cert.Envir = envirnoment;
             cert.MapName = ai.sMapName;
             cert.CurrX = ai.nX;
@@ -1903,7 +1903,7 @@ namespace GameSrv.World {
 
         public void SendQuestMsg(string sQuestName) {
             PlayObject playObject;
-            for (int i = 0; i < PlayObjectList.Count; i++) {
+            for (var i = 0; i < PlayObjectList.Count; i++) {
                 playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost)
                     M2Share.ManageNPC.GotoLable(playObject, sQuestName, false);
@@ -1924,14 +1924,14 @@ namespace GameSrv.World {
         }
 
         private void ClearMerchantData() {
-            for (int i = 0; i < MerchantList.Count; i++) {
+            for (var i = 0; i < MerchantList.Count; i++) {
                 MerchantList[i].ClearData();
             }
         }
 
         public void GuildMemberReGetRankName(GuildInfo guild) {
             short nRankNo = 0;
-            for (int i = 0; i < PlayObjectList.Count; i++) {
+            for (var i = 0; i < PlayObjectList.Count; i++) {
                 if (PlayObjectList[i].MyGuild == guild) {
                     guild.GetRankName(PlayObjectList[i], ref nRankNo);
                 }
@@ -1939,7 +1939,7 @@ namespace GameSrv.World {
         }
 
         public int GetPlayExpireTime(string account) {
-            for (int i = 0; i < PlayObjectList.Count; i++) {
+            for (var i = 0; i < PlayObjectList.Count; i++) {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0) {
                     return PlayObjectList[i].QueryExpireTick;
                 }
@@ -1948,7 +1948,7 @@ namespace GameSrv.World {
         }
 
         public void SetPlayExpireTime(string account, int playTime) {
-            for (int i = 0; i < PlayObjectList.Count; i++) {
+            for (var i = 0; i < PlayObjectList.Count; i++) {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0) {
                     PlayObjectList[i].QueryExpireTick = playTime;
                     break;
@@ -1957,7 +1957,7 @@ namespace GameSrv.World {
         }
 
         public void AccountExpired(string account) {
-            for (int i = 0; i < PlayObjectList.Count; i++) {
+            for (var i = 0; i < PlayObjectList.Count; i++) {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0) {
                     PlayObjectList[i].AccountExpired = true;
                     break;
@@ -1966,7 +1966,7 @@ namespace GameSrv.World {
         }
 
         public void TimeAccountExpired(string account) {
-            for (int i = 0; i < PlayObjectList.Count; i++) {
+            for (var i = 0; i < PlayObjectList.Count; i++) {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0) {
                     PlayObjectList[i].SetExpiredTime(5);
                     break;

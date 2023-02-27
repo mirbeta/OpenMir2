@@ -5,6 +5,7 @@ using NLog;
 using System.Net.Sockets;
 using System.Threading.Channels;
 using SystemModule.Data;
+using SystemModule.Enums;
 using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 

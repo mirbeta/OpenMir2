@@ -293,7 +293,7 @@ namespace GameSrv.Player {
             }
             Castle.UserCastle castle = M2Share.CastleMgr.IsCastleEnvir(Envir);
             if (castle == null || castle.DoorStatus != door.Status || Race != ActorRace.Play || castle.CheckInPalace(CurrX, CurrY, this)) {
-                M2Share.WorldEngine.OpenDoor(Envir, nX, nY);
+                WorldServer.OpenDoor(Envir, nX, nY);
             }
         }
 

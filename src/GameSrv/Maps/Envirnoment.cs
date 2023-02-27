@@ -677,7 +677,6 @@ namespace GameSrv.Maps {
                                             if (Math.Abs(DoorList[i].nY - door.nY) <= 10) {
                                                 if (DoorList[i].n08 == point) {
                                                     door.Status = DoorList[i].Status;
-                                                    door.Status.nRefCount++;
                                                     break;
                                                 }
                                             }
@@ -686,10 +685,7 @@ namespace GameSrv.Maps {
                                     if (door.Status == null) {
                                         door.Status = new DoorStatus {
                                             Opened = false,
-                                            bo01 = false,
-                                            n04 = 0,
-                                            OpenTick = 0,
-                                            nRefCount = 1
+                                            OpenTick = 0
                                         };
                                     }
                                     DoorList.Add(door);

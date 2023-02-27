@@ -130,7 +130,7 @@ namespace LoginSvr.Conf
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sRemote, new[] { ' ' });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sPublic, new[] { ' ' });
                         sLineText = sLineText.Trim();
-                        if (sTitle != "" && sRemote != "" && sPublic != "" && nRouteIdx < 60)
+                        if (!string.IsNullOrEmpty(sTitle) && !string.IsNullOrEmpty(sRemote) && !string.IsNullOrEmpty(sPublic) && nRouteIdx < 60)
                         {
                             Config.GateRoute[nRouteIdx] = new GateRoute();
                             Config.GateRoute[nRouteIdx].ServerName = sServerName;
@@ -138,7 +138,7 @@ namespace LoginSvr.Conf
                             Config.GateRoute[nRouteIdx].RemoteAddr = sRemote;
                             Config.GateRoute[nRouteIdx].PublicAddr = sPublic;
                             nSelGateIdx = 0;
-                            while (sLineText != "")
+                            while (string.IsNullOrEmpty(sLineText))
                             {
                                 if (nSelGateIdx > 9)
                                 {

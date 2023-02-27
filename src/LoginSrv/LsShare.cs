@@ -176,7 +176,7 @@ namespace LoginSvr
         public bool boEnable;
     }
 
-    public class GateRoute
+    public struct GateRoute
     {
         public string ServerName;
         public string Title;
