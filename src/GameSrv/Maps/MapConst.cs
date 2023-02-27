@@ -146,7 +146,7 @@ namespace GameSrv.Maps {
         LowWall = 2
     }
 
-    public class PointInfo {
+    public record struct PointInfo {
         public short nX;
         public short nY;
 
@@ -156,7 +156,7 @@ namespace GameSrv.Maps {
         }
     }
 
-    public class TRect {
+    public record struct TRect {
         public int Left;
         public int Top;
         public int Right;

@@ -1810,7 +1810,7 @@ namespace GameSrv.World {
             if (playObject != null) {
                 playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
                 playObject.UserAccount = "假人" + ai.sChrName;
-                playObject.Start(FindPathType.t_Dynamic);
+                playObject.Start(FindPathType.Dynamic);
                 BotPlayObjectList.Add(playObject);
                 return true;
             }

@@ -1,5 +1,5 @@
 ﻿namespace GameSrv.Magic {
-    public class MagicConst {
+    public static class MagicConst {
         /// <summary>
         /// 火球术
         /// </summary>

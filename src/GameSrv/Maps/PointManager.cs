@@ -4,39 +4,29 @@ using System.Collections;
 using SystemModule.Enums;
 
 namespace GameSrv.Maps {
-    public class PointManager {
-        public int Count {
-            get {
-                return GetCount();
-            }
-        }
-        public FindPathType PathType {
-            get {
-                return FPathType;
-            }
-            set {
-                FPathType = value;
-            }
-        }
+    public class PointManager 
+    {
         public short m_nCurrX;
         public short m_nCurrY;
         public int m_nPostion;
         public byte m_btDirection;
         public int m_nTurnCount;
         public Envirnoment m_PEnvir;
+        public FindPathType PathType;
         private readonly ArrayList FPointList;
         private readonly BaseObject FBaseObject;
-        private FindPathType FPathType;
 
-        public PointManager(BaseObject ABaseObject) {
+        public PointManager(BaseObject baseObject) {
             m_nCurrX = -1;
             m_nCurrY = -1;
             m_nPostion = -1;
-            FBaseObject = ABaseObject;
+            FBaseObject = baseObject;
             FPointList = new ArrayList();
-            FPathType = FindPathType.t_Dynamic;
+            PathType = FindPathType.Dynamic;
             m_PEnvir = null;
         }
+
+        public int Count => GetCount();
 
         private int GetCount() {
             return FPointList.Count;
@@ -47,7 +37,7 @@ namespace GameSrv.Maps {
             m_nPostion = 0;
         }
 
-        public static byte GetNextDir(byte btDir) {
+        private static byte GetNextDir(byte btDir) {
             byte result = 0;
             switch (btDir) {
                 case Direction.Up:
@@ -89,7 +79,7 @@ namespace GameSrv.Maps {
             byte btDir = 0;
             int nStep;
             bool result = false;
-            if (FPathType == FindPathType.t_Dynamic) {
+            if (PathType == FindPathType.Dynamic) {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
                 if (FBaseObject.Dir > 8) {
@@ -213,7 +203,7 @@ namespace GameSrv.Maps {
             return result;
         }
 
-        public static byte GetPoint1_GetNextDir(byte btDir) {
+        private static byte GetPoint1_GetNextDir(byte btDir) {
             byte result = 0;
             switch (btDir) {
                 case Direction.Up:
@@ -359,7 +349,7 @@ namespace GameSrv.Maps {
             short nCurrY;
             byte btDir = 0;
             int nStep;
-            if (FPathType == FindPathType.t_Dynamic) {
+            if (PathType == FindPathType.Dynamic) {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
                 nC = 0;
