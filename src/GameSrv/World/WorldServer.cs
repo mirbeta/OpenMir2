@@ -138,7 +138,7 @@ namespace GameSrv.World {
 
         private void PrcocessData() {
             try {
-                for (int i = 0; i < MobThreads.Length; i++) {
+                for (var i = 0; i < MobThreads.Length; i++) {
                     MonsterThread mobThread = MobThreads[i];
                     if (mobThread == null) {
                         continue;
@@ -150,7 +150,6 @@ namespace GameSrv.World {
                 lock (_locker) {
                     Monitor.PulseAll(_locker);
                 }
-
                 ProcessHumans();
                 ProcessMerchants();
                 ProcessNpcs();
@@ -170,15 +169,15 @@ namespace GameSrv.World {
         }
 
         private int GetMonRace(string sMonName) {
-            int result = -1;
-            if (MonsterList.ContainsKey(sMonName)) {
-                return MonsterList[sMonName].Race;
+            if (MonsterList.TryGetValue(sMonName, out var value))
+            {
+                return value.Race;
             }
-            return result;
+            return -1;
         }
 
         private int GetMonsterThreadId(string sMonName) {
-            if (MonsterThreadMap.TryGetValue(sMonName, out int threadId)) {
+            if (MonsterThreadMap.TryGetValue(sMonName, out var threadId)) {
                 return threadId;
             }
             return -1;
