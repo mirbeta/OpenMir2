@@ -202,7 +202,7 @@ namespace GameSrv {
                 _logger.Info("加载公告提示信息失败!!!");
             }
             _logger.Info("加载公告提示信息成功...");
-            LocalDB.LoadAdminList();
+            LocalDb.LoadAdminList();
             _logger.Info("管理员列表加载成功...");
         }
 
@@ -223,7 +223,7 @@ namespace GameSrv {
                 M2Share.FrontEngine.Start(stoppingToken);
                 M2Share.WorldEngine.InitializationMonsterThread();
                 if (!M2Share.Config.VentureServer) {
-                    LocalDB.LoadGuardList();
+                    LocalDb.LoadGuardList();
                     _logger.Info("守卫列表加载成功...");
                 }
                 _logger.Info("游戏处理引擎初始化成功...");

@@ -329,7 +329,7 @@ namespace GameSrv.Planes {
         }
 
         private static void MsgGetReloadAdmin() {
-            DataSource.LocalDB.LoadAdminList();
+            DataSource.LocalDb.LoadAdminList();
         }
 
         private static void MsgGetReloadChatLog() {

@@ -57,7 +57,7 @@ namespace GameSrv {
         /// 地图对象管理
         /// </summary>
         public static readonly CellObjectMgr CellObjectMgr;
-        public static readonly LocalDB LocalDb;
+        public static readonly LocalDb LocalDb;
         public static readonly CommonDB CommonDb;
         public static readonly RandomNumber RandomNumber;
         public static DBService DataServer = null;
@@ -226,7 +226,7 @@ namespace GameSrv {
             RandomNumber = RandomNumber.GetInstance();
             Statistics = new WordStatistics();
             ActorMgr = new ActorMgr();
-            LocalDb = new LocalDB();
+            LocalDb = new LocalDb();
             CommonDb = new CommonDB();
             FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();

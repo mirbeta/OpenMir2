@@ -161,7 +161,7 @@ namespace GameSrv.Npc {
                 nPrice = nPrice
             };
             ItemPriceList.Add(itemPrice);
-            DataSource.LocalDB.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
+            DataSource.LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
         }
 
         private void CheckItemPrice(ushort nIndex) {
@@ -203,13 +203,13 @@ namespace GameSrv.Npc {
                             if (Goods.Count > nRefillCount) {
                                 CheckItemPrice(nIndex);
                                 RefillGoodsItems(ref refillList, Goods.ItemName, Goods.Count - nRefillCount);
-                                DataSource.LocalDB.SaveGoodRecord(this, ScriptName + '-' + MapName);
-                                DataSource.LocalDB.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
+                                DataSource.LocalDb.SaveGoodRecord(this, ScriptName + '-' + MapName);
+                                DataSource.LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
                             }
                             if (Goods.Count < nRefillCount) {
                                 RefillDelReFillItem(ref refillList, nRefillCount - Goods.Count);
-                                DataSource.LocalDB.SaveGoodRecord(this, ScriptName + '-' + MapName);
-                                DataSource.LocalDB.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
+                                DataSource.LocalDb.SaveGoodRecord(this, ScriptName + '-' + MapName);
+                                DataSource.LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
                             }
                         }
                     }
@@ -859,15 +859,15 @@ namespace GameSrv.Npc {
 
         public void LoadNPCData() {
             string sFile = ScriptName + '-' + MapName;
-            DataSource.LocalDB.LoadGoodRecord(this, sFile);
-            DataSource.LocalDB.LoadGoodPriceRecord(this, sFile);
+            DataSource.LocalDb.LoadGoodRecord(this, sFile);
+            DataSource.LocalDb.LoadGoodPriceRecord(this, sFile);
             LoadUpgradeList();
         }
 
         private void SaveNPCData() {
             string sFile = ScriptName + '-' + MapName;
-            DataSource.LocalDB.SaveGoodRecord(this, sFile);
-            DataSource.LocalDB.SaveGoodPriceRecord(this, sFile);
+            DataSource.LocalDb.SaveGoodRecord(this, sFile);
+            DataSource.LocalDb.SaveGoodPriceRecord(this, sFile);
         }
 
         /// <summary>

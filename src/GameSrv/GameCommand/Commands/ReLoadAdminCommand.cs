@@ -9,7 +9,7 @@ namespace GameSrv.GameCommand.Commands {
     public class ReLoadAdminCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            DataSource.LocalDB.LoadAdminList();
+            DataSource.LocalDb.LoadAdminList();
             World.WorldServer.SendServerGroupMsg(213, M2Share.ServerIndex, "");
             playObject.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }

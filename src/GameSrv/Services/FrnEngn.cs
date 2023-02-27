@@ -212,7 +212,8 @@ namespace GameSrv.Services {
             if (changeGoldList != null) {
                 for (int i = 0; i < changeGoldList.Count; i++) {
                     GoldChangeInfo goldChangeInfo = changeGoldList[i];
-                    if (goldChangeInfo == null) {
+                    if (goldChangeInfo.nGold <= 0)
+                    {
                         continue;
                     }
                     ChangeUserGoldInDB(goldChangeInfo);
@@ -300,12 +301,12 @@ namespace GameSrv.Services {
         /// 添加到加载队列中
         /// </summary>
         public void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold) {
-            GoldChangeInfo GoldInfo = new GoldChangeInfo {
+            var goldInfo = new GoldChangeInfo {
                 sGameMasterName = sGameMasterName,
                 sGetGoldUser = sGetGoldUserName,
                 nGold = nGold
             };
-            m_ChangeGoldList.Add(GoldInfo);
+            m_ChangeGoldList.Add(goldInfo);
         }
 
         /// <summary>
