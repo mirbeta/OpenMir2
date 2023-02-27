@@ -11,10 +11,8 @@ namespace GameSrv.Npc {
         public byte Sc;
         public byte Mc;
         public byte Dura;
-        public int n2C;
         public DateTime UpgradeTime;
         public int GetBackTick;
-        public int n3C;
     }
 
     public struct ItemPrice {

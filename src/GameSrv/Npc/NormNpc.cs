@@ -1455,17 +1455,22 @@ namespace GameSrv.Npc {
             if (!string.IsNullOrEmpty(sData) && sData[0] == '@')// 处理脚本命令 @back 返回上级标签内容
             {
                 HUtil32.GetValidStr3(sData, ref sLabel, '\r');
-                if (PlayObject.ScriptCurrLable != sLabel) {
-                    if (sLabel != ScriptConst.sBACK) {
+                if (string.Compare(PlayObject.ScriptCurrLable, sLabel, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) != 0)
+                    {
                         PlayObject.ScriptGoBackLable = PlayObject.ScriptCurrLable;
                         PlayObject.ScriptCurrLable = sLabel;
                     }
-                    else {
-                        if (!string.IsNullOrEmpty(PlayObject.ScriptCurrLable)) {
-                            PlayObject.ScriptCurrLable = "";
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(PlayObject.ScriptCurrLable))
+                        {
+                            PlayObject.ScriptCurrLable = string.Empty;
                         }
-                        else {
-                            PlayObject.ScriptGoBackLable = "";
+                        else
+                        {
+                            PlayObject.ScriptGoBackLable = string.Empty;
                         }
                     }
                 }
@@ -1571,35 +1576,36 @@ namespace GameSrv.Npc {
             return result;
         }
 
-        private static bool GetValValue(PlayObject PlayObject, string sMsg, ref string sValue) {
-            bool result = false;
-            int n01;
-            try {
-                if (string.IsNullOrEmpty(sMsg)) {
-                    return result;
-                }
-                n01 = M2Share.GetValNameNo(sMsg);
-                if (n01 >= 0) {
-                    if (HUtil32.RangeInDefined(n01, 600, 699)) {
-                        sValue = PlayObject.MSString[n01 - 600];
-                        result = true;
-                    }
-                    else if (HUtil32.RangeInDefined(n01, 700, 799)) {
-                        sValue = M2Share.Config.GlobalAVal[n01 - 700];
-                        result = true;
-                    }
-                    else if (HUtil32.RangeInDefined(n01, 1200, 1599)) {
-                        sValue = M2Share.Config.GlobalAVal[n01 - 1100];// A变量(100-499)
-                        result = true;
-                    }
-                    else if (HUtil32.RangeInDefined(n01, 1600, 1699)) {
-                        sValue = PlayObject.MServerStrVal[n01 - 1600];
-                        result = true;
-                    }
-                }
+        private static bool GetValValue(PlayObject PlayObject, string sMsg, ref string sValue)
+        {
+            if (string.IsNullOrEmpty(sMsg))
+            {
+                return false;
             }
-            catch {
-                M2Share.Logger.Error("{异常} TNormNpc.GetValValue2");
+            bool result = false;
+            var n01 = M2Share.GetValNameNo(sMsg);
+            if (n01 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n01, 600, 699))
+                {
+                    sValue = PlayObject.MSString[n01 - 600];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 700, 799))
+                {
+                    sValue = M2Share.Config.GlobalAVal[n01 - 700];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1200, 1599))
+                {
+                    sValue = M2Share.Config.GlobalAVal[n01 - 1100];// A变量(100-499)
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1600, 1699))
+                {
+                    sValue = PlayObject.MServerStrVal[n01 - 1600];
+                    result = true;
+                }
             }
             return result;
         }

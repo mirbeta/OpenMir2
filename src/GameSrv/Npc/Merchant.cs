@@ -191,22 +191,21 @@ namespace GameSrv.Npc {
                 Goods goods;
                 for (var i = 0; i < RefillGoodsList.Count; i++) {
                     goods = RefillGoodsList[i];
+                    var goodCout = goods.Count;
                     if ((HUtil32.GetTickCount() - goods.RefillTick) > (goods.RefillTime * 60 * 1000)) {
                         goods.RefillTick = HUtil32.GetTickCount();
                         nIndex = M2Share.WorldEngine.GetStdItemIdx(goods.ItemName);
                         if (nIndex > 0) {
                             IList<UserItem> refillList = GetRefillList(nIndex);
-                            var nRefillCount = 0;
-                            if (refillList != null) {
-                                nRefillCount = refillList.Count;
-                            }
-                            if (goods.Count > nRefillCount) {
+                            var nRefillCount = refillList?.Count ?? 0;
+                            if (goodCout > nRefillCount) {
                                 CheckItemPrice(nIndex);
                                 RefillGoodsItems(ref refillList, goods.ItemName, goods.Count - nRefillCount);
                                 DataSource.LocalDb.SaveGoodRecord(this, ScriptName + '-' + MapName);
                                 DataSource.LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
+                                return;
                             }
-                            if (goods.Count < nRefillCount) {
+                            if (goodCout < nRefillCount) {
                                 RefillDelReFillItem(ref refillList, nRefillCount - goods.Count);
                                 DataSource.LocalDb.SaveGoodRecord(this, ScriptName + '-' + MapName);
                                 DataSource.LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
@@ -271,7 +270,7 @@ namespace GameSrv.Npc {
             }
         }
 
-        private void RefillDelReFillItem(ref IList<UserItem> list, int nInt) {
+        private static void RefillDelReFillItem(ref IList<UserItem> list, int nInt) {
             for (var i = list.Count - 1; i >= 0; i--) {
                 if (nInt <= 0) {
                     break;
@@ -437,8 +436,6 @@ namespace GameSrv.Npc {
                 var objectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(objectId, delItemList);
                 user.SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
-            }
-            if (duraList != null) {
             }
         }
 
