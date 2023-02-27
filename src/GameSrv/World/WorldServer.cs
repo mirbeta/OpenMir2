@@ -527,7 +527,6 @@ namespace GameSrv.World {
                             if (playObject != null) {
                                 playObject.GoldChange(goldChangeInfo.sGetGoldUser, goldChangeInfo.nGold);
                             }
-                            goldChangeInfo = null;
                         }
                         ChangeHumanDbGoldList.Clear();
                     }

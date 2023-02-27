@@ -64,7 +64,7 @@ namespace GameSrv.DataSource {
                             continue;
                         }
                         AdminInfo AdminInfo = new AdminInfo {
-                            Level = nLv,
+                            Level = (byte)nLv,
                             ChrName = sChrName,
                             IPaddr = sIPaddr
                         };
@@ -496,7 +496,7 @@ namespace GameSrv.DataSource {
             if (File.Exists(monFileName)) {
                 if (ItemList != null) {
                     for (int i = 0; i < ItemList.Count; i++) {
-                        ItemList[i] = null;
+                        ItemList[i] = default(MonsterDropItem);
                     }
                     ItemList.Clear();
                 }
