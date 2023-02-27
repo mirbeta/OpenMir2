@@ -1,22 +1,22 @@
+using LoginSrv.Conf;
+using LoginSrv.Services;
+using LoginSrv.Storage;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
+using Spectre.Console;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LoginSvr.Conf;
-using LoginSvr.Services;
-using LoginSvr.Storage;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
-using Spectre.Console;
 using SystemModule;
 using SystemModule.Hosts;
 using SystemModule.Logger;
 
-namespace LoginSvr
+namespace LoginSrv
 {
     public class AppServer : ServiceHost
     {

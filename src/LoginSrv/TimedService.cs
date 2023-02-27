@@ -1,4 +1,4 @@
-﻿using LoginSvr.Services;
+﻿using LoginSrv.Services;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Logger;
 
-namespace LoginSvr
+namespace LoginSrv
 {
     public class TimedService : BackgroundService
     {

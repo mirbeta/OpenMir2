@@ -1,4 +1,4 @@
-using LoginSvr.Conf;
+using LoginSrv.Conf;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using SystemModule.Extensions;
 using SystemModule.Logger;
 using SystemModule.Packets.ClientPackets;
 
-namespace LoginSvr.Storage
+namespace LoginSrv.Storage
 {
     public class AccountStorage
     {

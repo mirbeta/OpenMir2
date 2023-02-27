@@ -529,7 +529,7 @@ namespace GameSrv.Actor {
                                         if (targetBaseObject.WAbil.Level <= M2Share.Config.MonHptoExpLevel) {
                                             if (!M2Share.GetNoHptoexpMonList(ChrName)) {
                                                 if (targetBaseObject.IsRobot) {
-                                                    ((RobotPlayObject)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                    ((RobotPlayer)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
                                                 }
                                                 else {
                                                     ((PlayObject)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
@@ -542,7 +542,7 @@ namespace GameSrv.Actor {
                                             if (targetBaseObject.Master.WAbil.Level <= M2Share.Config.MonHptoExpLevel) {
                                                 if (!M2Share.GetNoHptoexpMonList(ChrName)) {
                                                     if (targetBaseObject.Master.IsRobot) {
-                                                        ((RobotPlayObject)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                        ((RobotPlayer)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
                                                     }
                                                     else {
                                                         ((PlayObject)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);

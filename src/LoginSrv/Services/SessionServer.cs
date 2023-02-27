@@ -1,5 +1,5 @@
-using LoginSvr.Conf;
-using LoginSvr.Storage;
+using LoginSrv.Conf;
+using LoginSrv.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ using SystemModule.Logger;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 
-namespace LoginSvr.Services
+namespace LoginSrv.Services
 {
     /// <summary>
     /// DBSVr、GameSvr会话服务

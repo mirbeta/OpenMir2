@@ -3,7 +3,7 @@ using SystemModule.Enums;
 
 namespace GameSrv.RobotPlay
 {
-    public partial class RobotPlayObject
+    public partial class RobotPlayer
     {
         /// <summary>
         /// 是否需要躲避

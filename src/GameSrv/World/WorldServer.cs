@@ -1816,7 +1816,7 @@ namespace GameSrv.World {
             return false;
         }
 
-        private static RobotPlayObject AddAiPlayObject(RoBotLogon ai) {
+        private static RobotPlayer AddAiPlayObject(RoBotLogon ai) {
             int n1C;
             int n20;
             int n24;
@@ -1825,7 +1825,7 @@ namespace GameSrv.World {
             if (envirnoment == null) {
                 return null;
             }
-            var cert = new RobotPlayObject();
+            var cert = new RobotPlayer();
             cert.Envir = envirnoment;
             cert.MapName = ai.sMapName;
             cert.CurrX = ai.nX;

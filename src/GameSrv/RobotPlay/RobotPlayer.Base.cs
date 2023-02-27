@@ -10,7 +10,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.RobotPlay
 {
-    public partial class RobotPlayObject
+    public partial class RobotPlayer
     {
         public override void Run()
         {

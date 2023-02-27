@@ -16,7 +16,7 @@ namespace GameSrv.Conf {
             Load();
         }
 
-        public void LoadConfig(RobotPlayObject playObject) {
+        public void LoadConfig(RobotPlayer playObject) {
             byte nAttatckMode;
             string sLineText;
             string sMagicName;

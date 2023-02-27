@@ -1,4 +1,4 @@
-using LoginSvr.Conf;
+using LoginSrv.Conf;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 
-namespace LoginSvr.Services
+namespace LoginSrv.Services
 {
     /// <summary>
     /// 账号服务 处理来自LoginGate的客户端登陆 注册 等登陆封包消息

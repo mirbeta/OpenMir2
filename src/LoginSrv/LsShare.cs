@@ -1,10 +1,10 @@
-using LoginSvr.Conf;
+using LoginSrv.Conf;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using SystemModule.Common;
 using SystemModule.Packets.ClientPackets;
 
-namespace LoginSvr
+namespace LoginSrv
 {
     public static class LsShare
     {

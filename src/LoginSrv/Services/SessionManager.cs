@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LoginSvr.Services
+namespace LoginSrv.Services
 {
     public class SessionManager
     {

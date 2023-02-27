@@ -1,5 +1,5 @@
-﻿using LoginSvr.Conf;
-using LoginSvr.Storage;
+﻿using LoginSrv.Conf;
+using LoginSrv.Storage;
 using System;
 using System.IO;
 using System.Net.Sockets;
@@ -12,12 +12,12 @@ using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 
-namespace LoginSvr.Services
+namespace LoginSrv.Services
 {
     public class ClientSession
     {
         private readonly MirLogger _logger;
-        private readonly Config _config;
+        private readonly ConfigManager _configMgr;
         private readonly AccountStorage _accountStorage;
         private readonly SessionServer _sessionService;
         private readonly ClientManager _clientManager;
@@ -27,7 +27,7 @@ namespace LoginSvr.Services
         public ClientSession(MirLogger logger, AccountStorage accountStorage, ConfigManager configManager, SessionServer sessionServer, ClientManager clientManager, SessionManager sessionManager)
         {
             _logger = logger;
-            _config = configManager.Config;
+            _configMgr = configManager;
             _accountStorage = accountStorage;
             _sessionService = sessionServer;
             _clientManager = clientManager;
@@ -123,7 +123,7 @@ namespace LoginSvr.Services
                     }
                     break;
                 case Messages.CM_ADDNEWUSER:
-                    if (_config.EnableMakingID)
+                    if (_configMgr.Config.EnableMakingID)
                     {
                         if (HUtil32.GetTickCount() - userInfo.ClientTick > 5000)
                         {
@@ -270,7 +270,7 @@ namespace LoginSvr.Services
                         userInfo.PayCost = false;
                     }
                     var sServerName = GetServerListInfo();
-                    defMsg = Messages.MakeMessage(Messages.SM_PASSOK_SELECTSERVER, 0, 0, 0, _config.ServerNameList.Count);
+                    defMsg = Messages.MakeMessage(Messages.SM_PASSOK_SELECTSERVER, 0, 0, 0, _configMgr.Config.ServerNameList.Count);
                     SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sServerName));
                     SessionAdd(userInfo.Account, userInfo.UserIPaddr, userInfo.SessionID, userInfo.PayCost, accountRecord.PayModel > 0);
                 }
@@ -501,14 +501,14 @@ namespace LoginSvr.Services
             var sServerName = EDCode.DeCodeString(sData);
             if (!string.IsNullOrEmpty(userInfo.Account) && !string.IsNullOrEmpty(sServerName) && _sessionManager.IsLogin(userInfo.SessionID))
             {
-                GetSelGateInfo(sServerName, _config.sGateIPaddr, ref sSelGateIp, ref nSelGatePort);
+                GetSelGateInfo(sServerName, _configMgr.Config.sGateIPaddr, ref sSelGateIp, ref nSelGatePort);
                 if (!string.IsNullOrEmpty(sSelGateIp) && nSelGatePort > 0)
                 {
-                    if (_config.DynamicIPMode)
+                    if (_configMgr.Config.DynamicIPMode)
                     {
                         sSelGateIp = userInfo.GateIPaddr;
                     }
-                    _logger.DebugLog(string.Format(sSelServerMsg, sServerName, _config.sGateIPaddr, sSelGateIp, nSelGatePort));
+                    _logger.DebugLog(string.Format(sSelServerMsg, sServerName, _configMgr.Config.sGateIPaddr, sSelGateIp, nSelGatePort));
                     userInfo.SelServer = true;
                     var nPayMode = userInfo.PayMode;
                     if (_sessionService.IsNotUserFull(sServerName))
@@ -786,15 +786,15 @@ namespace LoginSvr.Services
             {
                 sSelGateIp = "";
                 nSelGatePort = 0;
-                for (var i = 0; i < _config.RouteCount; i++)
+                for (var i = 0; i < _configMgr.Config.RouteCount; i++)
                 {
-                    if (_config.DynamicIPMode || (_config.GateRoute[i].ServerName == sServerName && _config.GateRoute[i].PublicAddr == sIPaddr))
+                    if (_configMgr.Config.DynamicIPMode || (_configMgr.Config.GateRoute[i].ServerName == sServerName && _configMgr.Config.GateRoute[i].PublicAddr == sIPaddr))
                     {
                         nGateCount = 0;
                         nGateIdx = 0;
                         while (true)
                         {
-                            if (!string.IsNullOrEmpty(_config.GateRoute[i].Gate[nGateIdx].sIPaddr) && _config.GateRoute[i].Gate[nGateIdx].boEnable)
+                            if (!string.IsNullOrEmpty(_configMgr.Config.GateRoute[i].Gate[nGateIdx].sIPaddr) && _configMgr.Config.GateRoute[i].Gate[nGateIdx].boEnable)
                             {
                                 nGateCount++;
                             }
@@ -808,13 +808,13 @@ namespace LoginSvr.Services
                         {
                             break;
                         }
-                        nSelIdx = _config.GateRoute[i].nSelIdx;
+                        nSelIdx = _configMgr.Config.GateRoute[i].nSelIdx;
                         boSelected = false;
                         for (nGateIdx = nSelIdx + 1; nGateIdx <= 9; nGateIdx++)
                         {
-                            if (_config.GateRoute[i].Gate[nGateIdx].sIPaddr != "" && _config.GateRoute[i].Gate[nGateIdx].boEnable)
+                            if (!string.IsNullOrEmpty(_configMgr.Config.GateRoute[i].Gate[nGateIdx].sIPaddr) && _configMgr.Config.GateRoute[i].Gate[nGateIdx].boEnable)
                             {
-                                _config.GateRoute[i].nSelIdx = nGateIdx;
+                                _configMgr.Config.GateRoute[i].nSelIdx = nGateIdx;
                                 boSelected = true;
                                 break;
                             }
@@ -823,16 +823,16 @@ namespace LoginSvr.Services
                         {
                             for (nGateIdx = 0; nGateIdx < nSelIdx; nGateIdx++)
                             {
-                                if (_config.GateRoute[i].Gate[nGateIdx].sIPaddr != "" && _config.GateRoute[i].Gate[nGateIdx].boEnable)
+                                if (!string.IsNullOrEmpty(_configMgr.Config.GateRoute[i].Gate[nGateIdx].sIPaddr) && _configMgr.Config.GateRoute[i].Gate[nGateIdx].boEnable)
                                 {
-                                    _config.GateRoute[i].nSelIdx = nGateIdx;
+                                    _configMgr.Config.GateRoute[i].nSelIdx = nGateIdx;
                                     break;
                                 }
                             }
                         }
-                        nSelIdx = _config.GateRoute[i].nSelIdx;
-                        sSelGateIp = _config.GateRoute[i].Gate[nSelIdx].sIPaddr;
-                        nSelGatePort = _config.GateRoute[i].Gate[nSelIdx].nPort;
+                        nSelIdx = _configMgr.Config.GateRoute[i].nSelIdx;
+                        sSelGateIp = _configMgr.Config.GateRoute[i].Gate[nSelIdx].sIPaddr;
+                        nSelGatePort = _configMgr.Config.GateRoute[i].Gate[nSelIdx].nPort;
                         break;
                     }
                 }
@@ -854,9 +854,9 @@ namespace LoginSvr.Services
             var sServerInfo = string.Empty;
             try
             {
-                for (var i = 0; i < _config.ServerNameList.Count; i++)
+                for (var i = 0; i < _configMgr.Config.ServerNameList.Count; i++)
                 {
-                    var sServerName = _config.ServerNameList[i];
+                    var sServerName = _configMgr.Config.ServerNameList[i];
                     if (!string.IsNullOrEmpty(sServerName))
                     {
                         sServerInfo = sServerInfo + sServerName + "/" + _sessionService.GetServerStatus(sServerName) + "/";

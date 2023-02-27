@@ -17,7 +17,7 @@ namespace GameSrv.RobotPlay
     /// <summary>
     /// 假人
     /// </summary>
-    public partial class RobotPlayObject : PlayObject
+    public partial class RobotPlayer : PlayObject
     {
         public long DwTick3F4 = 0;
         public long MDwSearchTargetTick = 0;
@@ -119,7 +119,7 @@ namespace GameSrv.RobotPlay
         public int MNDropUseItemRate;
         private readonly RobotPlayConf _conf;
 
-        public RobotPlayObject() : base()
+        public RobotPlayer() : base()
         {
             SoftVersionDate = Grobal2.CLIENT_VERSION_NUMBER;
             SoftVersionDateEx = M2Share.GetExVersionNO(Grobal2.CLIENT_VERSION_NUMBER, ref SoftVersionDate);

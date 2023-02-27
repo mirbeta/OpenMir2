@@ -4,7 +4,7 @@ using System.IO;
 using SystemModule;
 using SystemModule.Common;
 
-namespace LoginSvr.Conf
+namespace LoginSrv.Conf
 {
     public class ConfigManager : ConfigFile
     {
@@ -125,10 +125,10 @@ namespace LoginSvr.Conf
                     sLineText = LoadList[i];
                     if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, new[] { ' ' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sTitle, new[] { ' ' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRemote, new[] { ' ' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sPublic, new[] { ' ' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sServerName, ' ');
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sTitle, ' ');
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRemote, ' ');
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sPublic, ' ');
                         sLineText = sLineText.Trim();
                         if (!string.IsNullOrEmpty(sTitle) && !string.IsNullOrEmpty(sRemote) && !string.IsNullOrEmpty(sPublic) && nRouteIdx < 60)
                         {
@@ -138,14 +138,14 @@ namespace LoginSvr.Conf
                             Config.GateRoute[nRouteIdx].RemoteAddr = sRemote;
                             Config.GateRoute[nRouteIdx].PublicAddr = sPublic;
                             nSelGateIdx = 0;
-                            while (string.IsNullOrEmpty(sLineText))
+                            while (!string.IsNullOrEmpty(sLineText))
                             {
                                 if (nSelGateIdx > 9)
                                 {
                                     break;
                                 }
-                                sLineText = HUtil32.GetValidStr3(sLineText, ref sGate, new[] { ' ' });
-                                if (sGate != "")
+                                sLineText = HUtil32.GetValidStr3(sLineText, ref sGate, ' ');
+                                if (!string.IsNullOrEmpty(sGate))
                                 {
                                     if (sGate[0] == '*')
                                     {

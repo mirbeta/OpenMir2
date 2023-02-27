@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LoginSvr.Conf
+namespace LoginSrv.Conf
 {
     public class Config
     {

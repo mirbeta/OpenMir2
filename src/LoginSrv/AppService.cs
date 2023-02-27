@@ -1,12 +1,12 @@
-﻿using LoginSvr.Conf;
-using LoginSvr.Services;
-using LoginSvr.Storage;
+﻿using LoginSrv.Conf;
+using LoginSrv.Services;
+using LoginSrv.Storage;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule.Logger;
 
-namespace LoginSvr
+namespace LoginSrv
 {
     public class AppService : BackgroundService
     {

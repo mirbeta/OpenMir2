@@ -1503,7 +1503,7 @@ namespace GameSrv.Player {
             int monsterExp = CalcGetExp(WAbil.Level, killObject.FightExp);
             if (!M2Share.Config.VentureServer) {
                 if (IsRobot) {
-                    ((RobotPlayObject)ExpHitter).GainExp(monsterExp);
+                    ((RobotPlayer)ExpHitter).GainExp(monsterExp);
                 }
                 else {
                     GainExp(monsterExp);

@@ -5,7 +5,7 @@ using SystemModule.Enums;
 
 namespace GameSrv.RobotPlay
 {
-    public partial class RobotPlayObject
+    public partial class RobotPlayer
     {
         public int CheckTargetXYCount(int nX, int nY, int nRange)
         {

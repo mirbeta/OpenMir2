@@ -5,7 +5,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.RobotPlay
 {
-    public partial class RobotPlayObject
+    public partial class RobotPlayer
     {
         /// <summary>
         /// 物理攻击

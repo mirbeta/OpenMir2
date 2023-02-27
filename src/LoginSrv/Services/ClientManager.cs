@@ -1,7 +1,7 @@
 using NLog;
 using System.Collections.Concurrent;
 
-namespace LoginSvr.Services
+namespace LoginSrv.Services
 {
     public class ClientManager
     {

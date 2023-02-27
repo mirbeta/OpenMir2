@@ -234,9 +234,9 @@ namespace GameSrv.Player {
                 switch (Race) {
                     case ActorRace.Play:
                         if (IsRobot) {
-                            if (((RobotPlayObject)this).Abil.Level <= M2Share.Config.MonHptoExpLevel) {
+                            if (((RobotPlayer)this).Abil.Level <= M2Share.Config.MonHptoExpLevel) {
                                 if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName)) {
-                                    ((RobotPlayObject)this).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                    ((RobotPlayer)this).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                 }
                             }
                         }
@@ -251,9 +251,9 @@ namespace GameSrv.Player {
                     case ActorRace.PlayClone:
                         if (Master != null) {
                             if (Master.IsRobot) {
-                                if (((RobotPlayObject)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel) {
+                                if (((RobotPlayer)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel) {
                                     if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName)) {
-                                        ((RobotPlayObject)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                        ((RobotPlayer)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                     }
                                 }
                             }
