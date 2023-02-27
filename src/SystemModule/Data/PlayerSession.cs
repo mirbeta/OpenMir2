@@ -2,9 +2,9 @@
 {
     public class PlayerSession
     {
-        public int nSessionID;
-        public string sAccount;
-        public string sIPaddr;
+        public int SessionId;
+        public string Account;
+        public string IPaddr;
         public int PayMent;
         public int PayMode;
         /// <summary>

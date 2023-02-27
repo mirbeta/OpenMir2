@@ -72,7 +72,7 @@ namespace GameSrv.Services {
             const string sFormatMsg = "({0}/{1}/{2})";
             for (int i = 0; i < _sessionList.Count; i++) {
                 PlayerSession sessInfo = _sessionList[i];
-                if (sessInfo.nSessionID == nId && sessInfo.sAccount == sUserId) {
+                if (sessInfo.SessionId == nId && sessInfo.Account == sUserId) {
                     break;
                 }
             }
@@ -82,7 +82,7 @@ namespace GameSrv.Services {
         public void SendHumanLogOutMsgA(string sUserID, int nID) {
             for (int i = _sessionList.Count - 1; i >= 0; i--) {
                 PlayerSession sessInfo = _sessionList[i];
-                if (sessInfo.nSessionID == nID && sessInfo.sAccount == sUserID) {
+                if (sessInfo.SessionId == nID && sessInfo.Account == sUserID) {
                     break;
                 }
             }
@@ -243,9 +243,9 @@ namespace GameSrv.Services {
 
         private void NewSession(string sAccount, string sIPaddr, int nSessionID, int nPayMent, int nPayMode, long playTime) {
             PlayerSession sessInfo = new PlayerSession();
-            sessInfo.sAccount = sAccount;
-            sessInfo.sIPaddr = sIPaddr;
-            sessInfo.nSessionID = nSessionID;
+            sessInfo.Account = sAccount;
+            sessInfo.IPaddr = sIPaddr;
+            sessInfo.SessionId = nSessionID;
             sessInfo.PayMent = nPayMent;
             sessInfo.PayMode = nPayMode;
             sessInfo.SessionStatus = 0;
@@ -256,22 +256,22 @@ namespace GameSrv.Services {
             _sessionList.Add(sessInfo);
         }
 
-        private void DelSession(int nSessionID) {
-            string sAccount = string.Empty;
-            PlayerSession SessInfo = null;
-            const string sExceptionMsg = "[Exception] FrmIdSoc::DelSession";
+        private void DelSession(int sessionId) {
+            var sAccount = string.Empty;
+            PlayerSession sessInfo = null;
+            const string sExceptionMsg = "[Exception] AccountService:DelSession";
             try {
                 for (int i = 0; i < _sessionList.Count; i++) {
-                    SessInfo = _sessionList[i];
-                    if (SessInfo.nSessionID == nSessionID) {
-                        sAccount = SessInfo.sAccount;
+                    sessInfo = _sessionList[i];
+                    if (sessInfo.SessionId == sessionId) {
+                        sAccount = sessInfo.Account;
                         _sessionList.RemoveAt(i);
-                        SessInfo = null;
+                        sessInfo = null;
                         break;
                     }
                 }
                 if (!string.IsNullOrEmpty(sAccount)) {
-                    M2Share.GateMgr.KickUser(sAccount, nSessionID, SessInfo == null ? 0 : SessInfo.PayMode);
+                    M2Share.GateMgr.KickUser(sAccount, sessionId, sessInfo?.PayMode ?? 0);
                 }
             }
             catch (Exception e) {
@@ -293,9 +293,9 @@ namespace GameSrv.Services {
             const string sGetFailMsg = "[非法登录] 全局会话验证失败({0}/{1}/{2})";
             nPayMent = 0;
             nPayMode = 0;
-            for (int i = 0; i < _sessionList.Count; i++) {
-                PlayerSession sessInfo = _sessionList[i];
-                if (sessInfo.nSessionID == nSessionID && sessInfo.sAccount == sAccount) {
+            for (var i = 0; i < _sessionList.Count; i++) {
+                var sessInfo = _sessionList[i];
+                if (sessInfo.SessionId == nSessionID && sessInfo.Account == sAccount) {
                     switch (sessInfo.PayMent) {
                         case 2:
                             nPayMent = 3;
@@ -326,13 +326,13 @@ namespace GameSrv.Services {
 
         private void GetCancelAdmissionA(string sData) {
             string sAccount = string.Empty;
-            const string sExceptionMsg = "[Exception] FrmIdSoc::GetCancelAdmissionA";
+            const string sExceptionMsg = "[Exception] AccountService:GetCancelAdmissionA";
             try {
-                string sSessionID = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-                int nSessionID = HUtil32.StrToInt(sSessionID, 0);
+                string sessionId = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
+                int sessionID = HUtil32.StrToInt(sessionId, 0);
                 if (!M2Share.Config.TestServer) {
                     M2Share.WorldEngine.AccountExpired(sAccount);
-                    DelSession(nSessionID);
+                    DelSession(sessionID);
                 }
             }
             catch {
