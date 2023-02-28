@@ -293,13 +293,16 @@ namespace BotSrv.Player
                     MShare.g_nMyHungryState = msg.Param;
                     break;
                 case Messages.SM_TURN:
-                    //n = HUtil32.GetCodeMsgSize(8 * 4 / 3);
+                    unsafe
+                    {
+                        n = BotShare.GetCodeMsgSize((float)sizeof(CharDesc) * 4 / 3);
+                    }
                     if (body.Length > n)
                     {
-                        body2 = body.Substring(n, body.Length - n);
+                        body2 = body[n..];
                         data = EDCode.DeCodeString(body2);
-                        body2 = body.Substring(0, n);
                         Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
+                        body2 = body[..n];
                     }
                     else
                     {
@@ -308,7 +311,7 @@ namespace BotSrv.Player
                     }
                     desc = EDCode.DecodeBuffer<CharDesc>(body2);
                     PlayScene.SendMsg(Messages.SM_TURN, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
-                    if (data != "")
+                    if (!string.IsNullOrEmpty(data))
                     {
                         Actor = PlayScene.FindActor(msg.Recog);
                         if (Actor != null)

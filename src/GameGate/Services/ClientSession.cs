@@ -650,7 +650,7 @@ namespace GameGate.Services
             }
             else
             {
-                var tempStr = EDCode.DeCodeString(messagePacket.Buffer[2..(messagePacket.PacketLen - 3)]);
+                var tempStr = EDCode.DeCodeString(messagePacket.Buffer.AsSpan()[2..(messagePacket.PacketLen - 1)]);
                 ClientLogin(tempStr, messagePacket.PacketLen, "", ref success);
                 if (!success)
                 {
