@@ -1129,10 +1129,7 @@ namespace GameSrv.Player {
                 MapMoveTick = HUtil32.GetTickCount();
                 LogonTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 LogonTick = HUtil32.GetTickCount();
-                if (!IsRobot)
-                {
-                    Initialize();
-                }
+                Initialize();
                 SendPriorityMsg(this, Messages.RM_LOGON, 0, 0, 0, 0, "", MessagePriority.High);
                 if (Abil.Level <= 7) {
                     if (GetRangeHumanCount() >= 80) {
@@ -1499,16 +1496,21 @@ namespace GameSrv.Player {
         /// <summary>
         /// 角色杀死目标触发
         /// </summary>
-        internal void KillTargetTrigger(BaseObject killObject) {
-            if (M2Share.FunctionNPC != null) {
+        internal void KillTargetTrigger(BaseObject killObject)
+        {
+            if (M2Share.FunctionNPC != null)
+            {
                 M2Share.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
             }
             int monsterExp = CalcGetExp(WAbil.Level, killObject.FightExp);
-            if (!M2Share.Config.VentureServer) {
-                if (IsRobot) {
+            if (!M2Share.Config.VentureServer)
+            {
+                if (IsRobot && ExpHitter != null && ExpHitter.Race == ActorRace.Play)
+                {
                     ((RobotPlayer)ExpHitter).GainExp(monsterExp);
                 }
-                else {
+                else
+                {
                     GainExp(monsterExp);
                 }
             }
@@ -1516,91 +1518,119 @@ namespace GameSrv.Player {
             if (Envir.IsCheapStuff())// 地图是否有任务脚本
             {
                 Merchant QuestNPC;
-                if (GroupOwner != 0) {
+                if (GroupOwner != 0)
+                {
                     PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                    for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++) {
+                    for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
+                    {
                         PlayObject groupHuman = groupOwnerPlay.GroupMembers[i];
                         bool tCheck;
-                        if (!groupHuman.Death && Envir == groupHuman.Envir && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && this == groupHuman) {
+                        if (!groupHuman.Death && Envir == groupHuman.Envir && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && this == groupHuman)
+                        {
                             tCheck = false;
                         }
-                        else {
+                        else
+                        {
                             tCheck = true;
                         }
                         QuestNPC = Envir.GetQuestNpc(groupHuman, ChrName, "", tCheck);
-                        if (QuestNPC != null) {
+                        if (QuestNPC != null)
+                        {
                             QuestNPC.Click(groupHuman);
                         }
                     }
                 }
                 QuestNPC = Envir.GetQuestNpc(this, ChrName, "", false);
-                if (QuestNPC != null) {
+                if (QuestNPC != null)
+                {
                     QuestNPC.Click(this);
                 }
             }
-            try {
+            try
+            {
                 bool boPK = false;
-                if (!M2Share.Config.VentureServer && !Envir.Flag.FightZone && !Envir.Flag.Fight3Zone) {
-                    if (PvpLevel() < 2) {
+                if (!M2Share.Config.VentureServer && !Envir.Flag.FightZone && !Envir.Flag.Fight3Zone)
+                {
+                    if (PvpLevel() < 2)
+                    {
                         if ((killObject.Race == ActorRace.Play) || (killObject.Race == ActorRace.NPC))//允许NPC杀死人物
                         {
                             boPK = true;
                         }
-                        if (killObject.Master != null && killObject.Master.Race == ActorRace.Play) {
+                        if (killObject.Master != null && killObject.Master.Race == ActorRace.Play)
+                        {
                             killObject = killObject.Master;
                             boPK = true;
                         }
                     }
                 }
-                if (boPK && Race == ActorRace.Play && killObject.Race == ActorRace.Play) {
+                if (boPK && Race == ActorRace.Play && killObject.Race == ActorRace.Play)
+                {
                     bool guildwarkill = false;
                     PlayObject targetObject = ((PlayObject)killObject);
-                    if (MyGuild != null && targetObject.MyGuild != null) {
-                        if (GetGuildRelation(this, targetObject) == 2) {
+                    if (MyGuild != null && targetObject.MyGuild != null)
+                    {
+                        if (GetGuildRelation(this, targetObject) == 2)
+                        {
                             guildwarkill = true;
                         }
                     }
-                    else {
+                    else
+                    {
                         Castle.UserCastle Castle = M2Share.CastleMgr.InCastleWarArea(this);
-                        if ((Castle != null && Castle.UnderWar) || (InGuildWarArea)) {
+                        if ((Castle != null && Castle.UnderWar) || (InGuildWarArea))
+                        {
                             guildwarkill = true;
                         }
                     }
-                    if (!guildwarkill) {
-                        if ((M2Share.Config.IsKillHumanWinLevel || M2Share.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP)) {
+                    if (!guildwarkill)
+                    {
+                        if ((M2Share.Config.IsKillHumanWinLevel || M2Share.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP))
+                        {
                             PvpDie(targetObject);
                         }
-                        else {
-                            if (!IsGoodKilling(this)) {
+                        else
+                        {
+                            if (!IsGoodKilling(this))
+                            {
                                 targetObject.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
                                 targetObject.SysMsg(Settings.YouMurderedMsg, MsgColor.Red, MsgType.Hint);
                                 SysMsg(Format(Settings.YouKilledByMsg, targetObject.ChrName), MsgColor.Red, MsgType.Hint);
                                 targetObject.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
-                                if (PvpLevel() < 1) {
-                                    if (M2Share.RandomNumber.Random(5) == 0) {
+                                if (PvpLevel() < 1)
+                                {
+                                    if (M2Share.RandomNumber.Random(5) == 0)
+                                    {
                                         targetObject.MakeWeaponUnlock();
                                     }
                                 }
                             }
-                            else {
+                            else
+                            {
                                 targetObject.SysMsg(Settings.YouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
                             }
                         }
                         if (killObject.Race == ActorRace.Play)// 检查攻击人是否用了着经验或等级装备
                         {
-                            if (targetObject.PkDieLostExp > 0) {
-                                if (Abil.Exp >= targetObject.PkDieLostExp) {
+                            if (targetObject.PkDieLostExp > 0)
+                            {
+                                if (Abil.Exp >= targetObject.PkDieLostExp)
+                                {
                                     Abil.Exp -= targetObject.PkDieLostExp;
                                 }
-                                else {
+                                else
+                                {
                                     Abil.Exp = 0;
                                 }
                             }
-                            if (targetObject.PkDieLostLevel > 0) {
-                                if (Abil.Level >= targetObject.PkDieLostLevel) {
+                            if (targetObject.PkDieLostLevel > 0)
+                            {
+                                if (Abil.Level >= targetObject.PkDieLostLevel)
+                                {
                                     Abil.Level -= targetObject.PkDieLostLevel;
                                 }
-                                else {
+                                else
+                                {
                                     Abil.Level = 0;
                                 }
                             }
@@ -1608,38 +1638,50 @@ namespace GameSrv.Player {
                     }
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 M2Share.Logger.Error(ex);
             }
-            if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && !killObject.Animal) {
+            if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && !killObject.Animal)
+            {
                 BaseObject AttackBaseObject = killObject;
-                if (killObject.Master != null) {
+                if (killObject.Master != null)
+                {
                     AttackBaseObject = killObject.Master;
                 }
-                if (killObject.Race != ActorRace.Play) {
+                if (killObject.Race != ActorRace.Play)
+                {
                     killObject.DropUseItems(ActorId);
-                    if (Master == null && (!NoItem || !Envir.Flag.NoDropItem)) {
+                    if (Master == null && (!NoItem || !Envir.Flag.NoDropItem))
+                    {
                         killObject.ScatterBagItems(ActorId);
                     }
-                    if (killObject.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.NoDropItem)) {
+                    if (killObject.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.NoDropItem))
+                    {
                         killObject.ScatterGolds(ActorId);
                     }
                 }
-                else {
+                else
+                {
                     if (!NoItem || !Envir.Flag.NoDropItem)//允许设置 m_boNoItem 后人物死亡不掉物品
                     {
-                        if (AttackBaseObject != null) {
-                            if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play) {
+                        if (AttackBaseObject != null)
+                        {
+                            if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play)
+                            {
                                 killObject.DropUseItems(0);
                             }
                         }
-                        else {
+                        else
+                        {
                             killObject.DropUseItems(0);
                         }
-                        if (M2Share.Config.DieScatterBag) {
+                        if (M2Share.Config.DieScatterBag)
+                        {
                             killObject.ScatterBagItems(0);
                         }
-                        if (M2Share.Config.DieDropGold) {
+                        if (M2Share.Config.DieDropGold)
+                        {
                             killObject.ScatterGolds(0);
                         }
                     }
@@ -2652,6 +2694,10 @@ namespace GameSrv.Player {
                                                 break;
                                             }
                                             MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                            if (mapItem == null)
+                                            {
+                                                continue;
+                                            }
                                             UpdateVisibleItem(nX, nY, mapItem);
                                             if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0) {
                                                 if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > M2Share.Config.FloorItemCanPickUpTime)// 2 * 60 * 1000
@@ -4466,21 +4512,26 @@ namespace GameSrv.Player {
             return currentLight;
         }
 
-        protected void UpdateVisibleItem(short wX, short wY, MapItem MapItem) {
-            VisibleMapItem visibleMapItem;
+        protected void UpdateVisibleItem(short wX, short wY, MapItem MapItem)
+        {
+            VisibleMapItem visibleMapItem = null;
             bool boIsVisible = false;
-            for (int i = 0; i < VisibleItems.Count; i++) {
+            for (int i = 0; i < VisibleItems.Count; i++)
+            {
                 visibleMapItem = VisibleItems[i];
-                if (visibleMapItem.MapItem == MapItem) {
+                if (visibleMapItem.MapItem == MapItem)
+                {
                     visibleMapItem.VisibleFlag = VisibleFlag.Invisible;
                     boIsVisible = true;
                     break;
                 }
             }
-            if (boIsVisible) {
+            if (boIsVisible)
+            {
                 return;
             }
-            visibleMapItem = new VisibleMapItem {
+            visibleMapItem ??= new VisibleMapItem
+            {
                 VisibleFlag = VisibleFlag.Hidden,
                 nX = wX,
                 nY = wY,

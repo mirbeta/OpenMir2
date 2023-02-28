@@ -97,6 +97,9 @@ namespace GameSrv.Maps {
                                 CellObject cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellType == CellType.Item) {
                                     MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                    if (mapItem == null) {
+                                        continue;
+                                    }
                                     if (string.Compare(mapItem.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0) {
                                         int nGoldCount = mapItem.Count + ((MapItem)mapObject).Count;
                                         if (nGoldCount <= 2000) {

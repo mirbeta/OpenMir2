@@ -225,7 +225,7 @@ namespace GameSrv.RobotPlay
                                             }
                                         }
                                     }
-                                    for (nWhere = 0; nWhere <= UseItems.Length; nWhere++)
+                                    for (nWhere = 0; nWhere <= UseItems.Length - 1; nWhere++)
                                     {
                                         if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
                                         {
@@ -487,6 +487,10 @@ namespace GameSrv.RobotPlay
                         ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
+                            if (cellInfo.ObjList == null)
+                            {
+                                continue;
+                            }
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
                                 CellObject cellObject = cellInfo.ObjList[i];
@@ -496,7 +500,7 @@ namespace GameSrv.RobotPlay
                                 }
                                 if (cellInfo.IsAvailable && cellInfo.Count <= 0)
                                 {
-                                    cellInfo.Clear();
+                                    //cellInfo.Clear();
                                     break;
                                 }
                                 if (cellInfo.ObjList == null)
@@ -514,7 +518,7 @@ namespace GameSrv.RobotPlay
                                                 cellInfo.Remove(i);
                                                 if (cellInfo.Count <= 0)
                                                 {
-                                                    cellInfo.Clear();
+                                                    //cellInfo.Clear();
                                                     break;
                                                 }
                                                 continue;
@@ -543,12 +547,16 @@ namespace GameSrv.RobotPlay
                                                     cellInfo.Remove(i);
                                                     if (cellInfo.Count <= 0)
                                                     {
-                                                        cellInfo.Clear();
+                                                        //cellInfo.Clear();
                                                         break;
                                                     }
                                                     continue;
                                                 }
                                                 MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                                if (mapItem == null)
+                                                {
+                                                    continue;
+                                                }
                                                 UpdateVisibleItem(nX, nY, mapItem);
                                                 if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                 {
