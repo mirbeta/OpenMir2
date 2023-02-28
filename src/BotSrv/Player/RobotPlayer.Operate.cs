@@ -14,15 +14,12 @@ namespace BotSrv.Player
     {
         private void DecodeMessagePacket(string datablock, int btPacket)
         {
-            var head = string.Empty;
-            var body = string.Empty;
+            string body = string.Empty;
             var body2 = string.Empty;
             var data = string.Empty;
             var Str = string.Empty;
-            var Str2 = string.Empty;
             var str3 = string.Empty;
             CommandMessage msg = default;
-            ShortMessage sMsg;
             MessageBodyW mbw;
             CharDesc desc;
             MessageBodyWL wl;
@@ -47,7 +44,7 @@ namespace BotSrv.Player
             }
             if (btPacket == 0)
             {
-                head = datablock[..Messages.DefBlockSize];
+                var head = datablock[..Messages.DefBlockSize];
                 msg = EDCode.DecodePacket(head);
                 if (msg.Ident == 0)
                 {
@@ -307,7 +304,7 @@ namespace BotSrv.Player
                     else
                     {
                         body2 = body;
-                        data = "";
+                        data = string.Empty;
                     }
                     desc = EDCode.DecodeBuffer<CharDesc>(body2);
                     PlayScene.SendMsg(Messages.SM_TURN, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
@@ -316,11 +313,11 @@ namespace BotSrv.Player
                         Actor = PlayScene.FindActor(msg.Recog);
                         if (Actor != null)
                         {
-                            Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.m_sUserName, new string[] { "\\" });
-                            if (Actor.m_sUserName.IndexOf("(") != 0)
+                            Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.UserName, "\\");
+                            if (Actor.UserName.IndexOf("(") != 0)
                             {
-                                HUtil32.ArrestStringEx(Actor.m_sUserName, "(", ")", ref data);
-                                if (data == MShare.MySelf.m_sUserName)
+                                HUtil32.ArrestStringEx(Actor.UserName, "(", ")", ref data);
+                                if (string.Compare(data, MShare.MySelf.UserName, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     j = 0;
                                     for (i = 0; i < MShare.MySelf.m_SlaveObject.Count; i++)
@@ -337,20 +334,16 @@ namespace BotSrv.Player
                                     }
                                 }
                             }
-                            Actor.m_btNameColor = (byte)HUtil32.StrToInt(Str, 0);
-                            if (Actor.m_btRace == ActorRace.Merchant)
-                            {
-                                Actor.m_nNameColor = Color.Lime.ToArgb();
-                            }
-                            else
-                            {
-                                Actor.m_nNameColor = GetRGB(Actor.m_btNameColor);
-                            }
+                            Actor.NameColor = (byte)HUtil32.StrToInt(Str, 0);
+                            Actor.m_nNameColor = GetRGB(Actor.NameColor);
                         }
                     }
                     break;
                 case Messages.SM_BACKSTEP:
-                    //n = HUtil32.GetCodeMsgSize(sizeof(TCharDesc) * 4 / 3);
+                    unsafe
+                    {
+                        n = BotShare.GetCodeMsgSize(sizeof(CharDesc) * 4 / 3);
+                    }
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n + 1 - 1, body.Length);
@@ -365,21 +358,14 @@ namespace BotSrv.Player
                     }
                     desc = EDCode.DecodeBuffer<CharDesc>(body2);
                     PlayScene.SendMsg(Messages.SM_BACKSTEP, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
-                    if (data != "")
+                    if (!string.IsNullOrEmpty(data))
                     {
                         Actor = PlayScene.FindActor(msg.Recog);
                         if (Actor != null)
                         {
-                            Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.m_sUserName, new string[] { "\\" });
-                            Actor.m_btNameColor = (byte)HUtil32.StrToInt(Str, 0);
-                            if (Actor.m_btRace == ActorRace.Merchant)
-                            {
-                                Actor.m_nNameColor = (byte)Color.Lime.ToArgb();
-                            }
-                            else
-                            {
-                                Actor.m_nNameColor = GetRGB(Actor.m_btNameColor);
-                            }
+                            Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.UserName, "\\");
+                            Actor.NameColor = (byte)HUtil32.StrToInt(Str, 0);
+                            Actor.m_nNameColor = GetRGB(Actor.NameColor);
                         }
                     }
                     break;
@@ -392,10 +378,13 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_SPACEMOVE_SHOW:
                 case Messages.SM_SPACEMOVE_SHOW2:
-                    //n = HUtil32.GetCodeMsgSize(sizeof(TCharDesc) * 4 / 3);
+                    unsafe
+                    {
+                        n = BotShare.GetCodeMsgSize(sizeof(CharDesc) * 4 / 3);
+                    }
                     if (body.Length > n)
                     {
-                        body2 = body.Substring(n + 1 - 1, body.Length);
+                        body2 = body.Substring(n, body.Length);
                         data = EDCode.DeCodeString(body2);
                         body2 = body[..n];
                         Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
@@ -403,7 +392,7 @@ namespace BotSrv.Player
                     else
                     {
                         body2 = body;
-                        data = "";
+                        data = string.Empty;
                     }
                     desc = EDCode.DecodeBuffer<CharDesc>(body2);
                     if (msg.Recog != MShare.MySelf.m_nRecogId)
@@ -411,21 +400,14 @@ namespace BotSrv.Player
                         PlayScene.NewActor(msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status);
                     }
                     PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
-                    if (data != "")
+                    if (!string.IsNullOrEmpty(data))
                     {
                         Actor = PlayScene.FindActor(msg.Recog);
                         if (Actor != null)
                         {
-                            Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.m_sUserName, new string[] { "\\" });
-                            Actor.m_btNameColor = (byte)HUtil32.StrToInt(Str, 0);
-                            if (Actor.m_btRace == ActorRace.Merchant)
-                            {
-                                Actor.m_nNameColor = Color.Lime.ToArgb();
-                            }
-                            else
-                            {
-                                Actor.m_nNameColor = GetRGB(Actor.m_btNameColor);
-                            }
+                            Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.UserName, "\\");
+                            Actor.NameColor = (byte)HUtil32.StrToInt(Str, 0);
+                            Actor.m_nNameColor = GetRGB(Actor.NameColor);
                         }
                     }
                     break;
@@ -513,7 +495,7 @@ namespace BotSrv.Player
                             Actor.SendMsg(msg.Ident, msg.Param, msg.Tag, msg.Series, 0, 0, body, 0);
                             if (msg.Ident == Messages.SM_HEAVYHIT)
                             {
-                                if (body != "")
+                                if (!string.IsNullOrEmpty(body))
                                 {
                                     Actor.m_boDigFragment = true;
                                 }
@@ -566,7 +548,7 @@ namespace BotSrv.Player
                     if (Actor != null)
                     {
                         Actor.SendMsg(msg.Ident, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status, "", 0);
-                        Actor.m_Abil.HP = 0;
+                        Actor.Abil.HP = 0;
                         Actor.m_nIPower = -1;
                     }
                     else
@@ -588,7 +570,7 @@ namespace BotSrv.Player
                     MShare.MySelf.m_btJob = HUtil32.LoByte(msg.Param);
                     MShare.MySelf.m_nIPowerLvl = HUtil32.HiByte(msg.Param);
                     MShare.MySelf.m_nGameGold = HUtil32.MakeLong(msg.Tag, msg.Series);
-                    MShare.MySelf.m_Abil = EDCode.DecodeBuffer<Ability>(body);
+                    MShare.MySelf.Abil = EDCode.DecodeBuffer<Ability>(body);
                     break;
                 case Messages.SM_SUBABILITY:
                     MShare.g_nMyHitPoint = HUtil32.LoByte(msg.Param);
@@ -606,23 +588,23 @@ namespace BotSrv.Player
                     MShare.g_nDayBright = msg.Param;
                     break;
                 case Messages.SM_WINEXP:
-                    MShare.MySelf.m_Abil.Exp = msg.Recog;
+                    MShare.MySelf.Abil.Exp = msg.Recog;
                     if (!MShare.g_gcGeneral[3] || (HUtil32.MakeLong(msg.Param, msg.Tag) > MShare.g_MaxExpFilter))
                     {
                         DScreen.AddSysMsg($"经验值 +{HUtil32.MakeLong(msg.Param, msg.Tag)}");
                     }
                     break;
                 case Messages.SM_LEVELUP:
-                    MShare.MySelf.m_Abil.Level = (byte)msg.Param;
+                    MShare.MySelf.Abil.Level = (byte)msg.Param;
                     DScreen.AddSysMsg("您的等级已升级！");
                     break;
                 case Messages.SM_HEALTHSPELLCHANGED:
                     Actor = PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
-                        Actor.m_Abil.HP = msg.Param;
-                        Actor.m_Abil.MP = msg.Tag;
-                        Actor.m_Abil.MaxHP = msg.Series;
+                        Actor.Abil.HP = msg.Param;
+                        Actor.Abil.MP = msg.Tag;
+                        Actor.Abil.MaxHP = msg.Series;
                     }
                     break;
                 case Messages.SM_STRUCK:
@@ -645,11 +627,11 @@ namespace BotSrv.Player
                         {
                             if ((Actor.m_btRace != 0) || !MShare.g_gcGeneral[15])
                             {
-                                Actor.UpdateMsg(Messages.SM_STRUCK, (ushort)(short)wl.Tag2, 0, msg.Series, wl.Param1, wl.Param2, "", wl.Tag1);
+                                Actor.UpdateMsg(Messages.SM_STRUCK, (ushort)wl.Tag2, 0, msg.Series, wl.Param1, wl.Param2, "", wl.Tag1);
                             }
                         }
-                        Actor.m_Abil.HP = msg.Param;
-                        Actor.m_Abil.MaxHP = msg.Tag;
+                        Actor.Abil.HP = msg.Param;
+                        Actor.Abil.MaxHP = msg.Tag;
                         if (MShare.OpenAutoPlay && TimerAutoPlay.Enabled) //  自己受人攻击,小退
                         {
                             Actor2 = PlayScene.FindActor(wl.Tag1);
@@ -700,25 +682,25 @@ namespace BotSrv.Player
                     {
                         if (Actor != MShare.MySelf)
                         {
-                            Actor.m_Abil.HP = msg.Param;
-                            Actor.m_Abil.MaxHP = msg.Tag;
+                            Actor.Abil.HP = msg.Param;
+                            Actor.Abil.MaxHP = msg.Tag;
                         }
-                        Actor.m_boOpenHealth = true;
+                        Actor.OpenHealth = true;
                     }
                     break;
                 case Messages.SM_CLOSEHEALTH:
                     Actor = PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
-                        Actor.m_boOpenHealth = false;
+                        Actor.OpenHealth = false;
                     }
                     break;
                 case Messages.SM_INSTANCEHEALGUAGE:
                     Actor = PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
-                        Actor.m_Abil.HP = msg.Param;
-                        Actor.m_Abil.MaxHP = msg.Tag;
+                        Actor.Abil.HP = msg.Param;
+                        Actor.Abil.MaxHP = msg.Tag;
                         Actor.m_noInstanceOpenHealth = true;
                         Actor.m_dwOpenHealthTime = 2 * 1000;
                         Actor.m_dwOpenHealthStart = MShare.GetTickCount();
@@ -769,16 +751,9 @@ namespace BotSrv.Player
                     Actor = PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
-                        Actor.m_sDescUserName = HUtil32.GetValidStr3(Str, ref Actor.m_sUserName, new string[] { "\\" });
-                        Actor.m_btNameColor = (byte)msg.Param;
-                        if (Actor.m_btRace == ActorRace.Merchant)
-                        {
-                            Actor.m_nNameColor = (byte)Color.Lime.ToArgb();
-                        }
-                        else
-                        {
-                            Actor.m_nNameColor = GetRGB((byte)msg.Param);
-                        }
+                        Actor.m_sDescUserName = HUtil32.GetValidStr3(Str, ref Actor.UserName, "\\");
+                        Actor.NameColor = (byte)msg.Param;
+                        Actor.m_nNameColor = GetRGB((byte)msg.Param);
                         if (msg.Tag >= 1 && msg.Tag <= 5)
                         {
                             Actor.m_btAttribute = (byte)msg.Tag;
@@ -789,15 +764,8 @@ namespace BotSrv.Player
                     Actor = PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
-                        Actor.m_btNameColor = (byte)msg.Param;
-                        if (Actor.m_btRace == ActorRace.Merchant)
-                        {
-                            Actor.m_nNameColor = (byte)Color.Lime.ToArgb();
-                        }
-                        else
-                        {
-                            Actor.m_nNameColor = GetRGB((byte)msg.Param);
-                        }
+                        Actor.NameColor = (byte)msg.Param;
+                        Actor.m_nNameColor = GetRGB((byte)msg.Param);
                     }
                     break;
                 case Messages.SM_HIDE:
@@ -822,7 +790,7 @@ namespace BotSrv.Player
                     PlayScene.SendMsg(Messages.SM_DIGDOWN, msg.Recog, msg.Param, msg.Tag, 0, 0, 0, "");
                     break;
                 case Messages.SM_SHOWEVENT:
-                    sMsg = EDCode.DecodeBuffer<ShortMessage>(body);
+                    ShortMessage sMsg = EDCode.DecodeBuffer<ShortMessage>(body);
                     //__event = new TClEvent(msg.Recog, HUtil32.LoWord(msg.Tag), msg.Series, msg.Param);
                     //__event.m_nDir = 0;
                     //__event.m_nEventParam = sMsg.Ident;
@@ -907,9 +875,9 @@ namespace BotSrv.Player
                     ClientGetSendUseItems(body);
                     break;
                 case Messages.SM_WEIGHTCHANGED:
-                    MShare.MySelf.m_Abil.Weight = (ushort)msg.Recog;
-                    MShare.MySelf.m_Abil.WearWeight = (byte)msg.Param;
-                    MShare.MySelf.m_Abil.HandWeight = (byte)msg.Tag;
+                    MShare.MySelf.Abil.Weight = (ushort)msg.Recog;
+                    MShare.MySelf.Abil.WearWeight = (byte)msg.Param;
+                    MShare.MySelf.Abil.HandWeight = (byte)msg.Tag;
                     break;
                 case Messages.SM_GOLDCHANGED:
                     if (msg.Recog > MShare.MySelf.m_nGold)
@@ -923,7 +891,7 @@ namespace BotSrv.Player
                     PlayScene.SendMsg(msg.Ident, msg.Recog, 0, 0, 0, HUtil32.MakeLong(msg.Param, msg.Tag), HUtil32.MakeLong(msg.Series, 0), body);
                     break;
                 case Messages.SM_CHARSTATUSCHANGED:
-                    if (body != "")
+                    if (!string.IsNullOrEmpty(body))
                     {
                         PlayScene.SendMsg(msg.Ident, msg.Recog, 0, 0, 0, HUtil32.MakeLong(msg.Param, msg.Tag), msg.Series, EDCode.DeCodeString(body));
                     }
@@ -1006,13 +974,13 @@ namespace BotSrv.Player
                     }
                     break;
                 case Messages.SM_ADDMAGIC:
-                    if (body != "")
+                    if (!string.IsNullOrEmpty(body))
                     {
                         ClientGetAddMagic(body);
                     }
                     break;
                 case Messages.SM_SENDMYMAGIC:
-                    if (body != "")
+                    if (!string.IsNullOrEmpty(body))
                     {
                         ClientGetMyMagics(body);
                     }
@@ -1505,13 +1473,13 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_MENU_OK:
                     LastestClickTime = MShare.GetTickCount();
-                    if (body != "")
+                    if (!string.IsNullOrEmpty(body))
                     {
                         MainOutMessage(EDCode.DeCodeString(body));
                     }
                     break;
                 case Messages.SM_DLGMSG:
-                    if (body != "")
+                    if (!string.IsNullOrEmpty(body))
                     {
                         MainOutMessage(EDCode.DeCodeString(body));
                     }

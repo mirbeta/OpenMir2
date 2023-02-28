@@ -11,8 +11,27 @@ namespace BotSrv.Objects
     public class TActor
     {
         public RobotPlayer robotClient;
-        public Ability m_Abil = null;
-        //public TOAbility m_Abils = null;
+        public string UserName = string.Empty;
+        public byte NameColor;
+        public int m_nNameColor;
+        public byte m_btDir;
+        public byte m_btDress = 0; // 衣服类型
+        public byte m_btEffect = 0;
+        public byte m_btHair = 0;
+        public byte m_btHairEx = 0;
+        public byte m_btHorse = 0;
+        public byte m_btIsHero;
+        public byte m_btJob = 0;
+        public byte m_btPoisonDecHealth;
+        public byte m_btRace = ActorRace.Play;
+        public byte m_btSex = 0;
+        public byte m_btTitleIndex;
+        public byte m_btWeapon = 0; // 武器类型
+        public byte m_btWeaponEffect; // 武器特效类型
+        /// <summary>
+        /// 基础属性
+        /// </summary>
+        public Ability Abil = null;
         public TMonsterAction m_Action;
         public bool m_boAttackSlow; // 腕力不够时慢动作攻击.
         public bool m_boDeath;
@@ -30,7 +49,7 @@ namespace BotSrv.Objects
         public bool m_boMoveSlow; // 负重不够时慢动作跑
         protected bool m_boMsgMuch;
         public bool m_boNewMagic;
-        public bool m_boOpenHealth;
+        public bool OpenHealth;
         public bool m_boReverseFrame;
         public bool m_boRunSound = false;
         public bool m_boSkeleton;
@@ -49,21 +68,6 @@ namespace BotSrv.Objects
         public bool m_btAFilter;
         public byte m_btAttribute;
         public byte m_btDeathState = 0;
-        public byte m_btDir;
-        public byte m_btDress = 0; // 衣服类型
-        public byte m_btEffect = 0;
-        public byte m_btHair = 0;
-        public byte m_btHairEx = 0;
-        public byte m_btHorse = 0;
-        public byte m_btIsHero;
-        public byte m_btJob = 0;
-        public byte m_btNameColor;
-        public byte m_btPoisonDecHealth;
-        public byte m_btRace = ActorRace.Play;
-        public byte m_btSex = 0;
-        public byte m_btTitleIndex;
-        public byte m_btWeapon = 0; // 武器类型
-        public byte m_btWeaponEffect; // 武器特效类型
         public TChrMsg m_ChrMsg;
         public TUseMagicInfo m_CurMagic = new TUseMagicInfo();
         public long m_dwAutoTecHeroTick = 0;
@@ -159,7 +163,6 @@ namespace BotSrv.Objects
         public ArrayList m_nMoveHpList;
         public int m_nMoveSlowLevel;
         protected int m_nMoveStep;
-        public int m_nNameColor;
         public int m_nNormalSound;
         public bool m_noInstanceOpenHealth;
         protected int m_nOldDir;
@@ -207,7 +210,6 @@ namespace BotSrv.Objects
         public string m_sDescUserName;
         public string m_sLoyaly;
         public ArrayList m_StruckDamage;
-        public string m_sUserName = string.Empty;
         public short m_wAppearance = 0;
         public short m_wAppr;
         public short m_wGloryPoint;
@@ -241,9 +243,9 @@ namespace BotSrv.Objects
             m_nDownDrawLevel = 0;
             m_nCurrentFrame = -1;
             m_nEffectFrame = -1;
-            m_sUserName = "";
+            UserName = "";
             m_sAutoSayMsg = "";
-            m_btNameColor = 255;
+            NameColor = 255;
             m_nNameColor = 255;
             m_dwSendQueryUserNameTime = MShare.GetTickCount();
             m_boWarMode = false;
@@ -261,7 +263,7 @@ namespace BotSrv.Objects
             m_dwDefFrameTime = 0;
             m_dwLoadSurfaceTime = MShare.GetTickCount();
             m_boGrouped = false;
-            m_boOpenHealth = false;
+            OpenHealth = false;
             m_noInstanceOpenHealth = false;
             m_CurMagic.ServerMagicCode = 0;
             m_nSpellFrame = Actor.DEFSPELLFRAME;
@@ -288,7 +290,7 @@ namespace BotSrv.Objects
             m_nMoveHpList = new ArrayList();
             m_nTempState = 1;
             m_fHideMode = false;
-            m_Abil = new Ability();
+            Abil = new Ability();
         }
 
         public void SendMsg(int wIdent, ushort nX, ushort nY, int ndir, int nFeature, int nState, string sStr, int nSound, int dwDelay = 0)
@@ -377,11 +379,11 @@ namespace BotSrv.Objects
                         m_RushStep = HUtil32.HiByte(Msg.Dir);
                         if ((m_nState & PoisonState.OPENHEATH) != 0)
                         {
-                            m_boOpenHealth = true;
+                            OpenHealth = true;
                         }
                         else
                         {
-                            m_boOpenHealth = false;
+                            OpenHealth = false;
                         }
                         break;
                 }
@@ -652,7 +654,7 @@ namespace BotSrv.Objects
         public int CanRun()
         {
             var result = 1;
-            if (m_Abil.HP < Actor.RUN_MINHEALTH)
+            if (Abil.HP < Actor.RUN_MINHEALTH)
             {
                 result = -1;
             }

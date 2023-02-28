@@ -566,7 +566,7 @@ namespace BotSrv
 
         public static string GetJobName(int nJob)
         {
-            string result = "";
+            string result;
             switch (nJob)
             {
                 case 0:

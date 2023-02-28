@@ -381,11 +381,11 @@ namespace BotSrv.Objects
 
         public bool IsProperTarget(TActor actor)
         {
-            return actor != null && actor.m_btRace != ActorRace.Play && !string.IsNullOrEmpty(actor.m_sUserName) &&
+            return actor != null && actor.m_btRace != ActorRace.Play && !string.IsNullOrEmpty(actor.UserName) &&
                    (actor.m_btRace != 12 || actor.m_btRace != 50) && !actor.m_boDeath && actor.m_btRace != 12 &&
-                   (actor.m_nState & PoisonState.STONEMODE) == 0 && actor.m_sUserName.IndexOf("(", StringComparison.OrdinalIgnoreCase) == -1 &&
+                   (actor.m_nState & PoisonState.STONEMODE) == 0 && actor.UserName.IndexOf("(", StringComparison.OrdinalIgnoreCase) == -1 &&
                    actor.m_boVisible && !actor.m_boDelActor && !actor.m_btAFilter && MShare.g_gcAss[6] &&
-                   !MShare.g_APMobList.ContainsKey(actor.m_sUserName);
+                   !MShare.g_APMobList.ContainsKey(actor.UserName);
         }
 
         /// <summary>
@@ -658,8 +658,6 @@ namespace BotSrv.Objects
             int nTag;
             short nx = 0;
             short ny = 0;
-            short nAbsX = 0;
-            short nAbsY = 0;
             short nNx = 0;
             short nNy = 0;
             short nTx = 0;
@@ -672,6 +670,8 @@ namespace BotSrv.Objects
             {
                 return result;
             }
+            short nAbsX;
+            short nAbsY;
             switch (MShare.MySelf.m_btJob)
             {
                 case 0:
@@ -690,7 +690,7 @@ namespace BotSrv.Objects
                     }
                     break;
                 case 1:
-                    if (MShare.MySelf.m_Abil.Level < 7)
+                    if (MShare.MySelf.Abil.Level < 7)
                     {
                         if (_robotClient.AttackTarget(MShare.g_APTagget))
                         {
@@ -718,7 +718,7 @@ namespace BotSrv.Objects
                         if (nAbsX <= MShare.g_nMagicRange && nAbsY <= MShare.g_nMagicRange)
                         {
                             result = true;
-                            MShare.g_sAPStr = $"怪物目标：{MShare.g_APTagget.m_sUserName} ({MShare.g_APTagget.CurrX},{MShare.g_APTagget.CurrY}) 正在使用魔法攻击";
+                            MShare.g_sAPStr = $"怪物目标：{MShare.g_APTagget.UserName} ({MShare.g_APTagget.CurrX},{MShare.g_APTagget.CurrY}) 正在使用魔法攻击";
                             if (_robotClient.CanNextAction() && _robotClient.ServerAcceptNextAction())
                                 if (CanNextSpell())
                                 {
@@ -1032,7 +1032,7 @@ namespace BotSrv.Objects
                         // Healling
                         if (MShare.g_MagicArr[2] != null)
                         {
-                            if (HUtil32.Round(MShare.MySelf.m_Abil.HP / MShare.MySelf.m_Abil.MaxHP * 100) < 85)
+                            if (HUtil32.Round(MShare.MySelf.Abil.HP / MShare.MySelf.Abil.MaxHP * 100) < 85)
                             {
                                 result = true;
                                 if (AutoUseMagic(2, MShare.MySelf)) return result;
@@ -1042,10 +1042,10 @@ namespace BotSrv.Objects
                                 for (i = 0; i < MShare.MySelf.m_SlaveObject.Count; i++)
                                 {
                                     if (MShare.MySelf.m_SlaveObject[i].m_boDeath) continue;
-                                    if (MShare.MySelf.m_SlaveObject[i].m_Abil.HP != 0 && Math.Abs(MShare.MySelf.CurrX - MShare.MySelf.m_SlaveObject[i].CurrX + 2) <= MShare.g_nMagicRange
+                                    if (MShare.MySelf.m_SlaveObject[i].Abil.HP != 0 && Math.Abs(MShare.MySelf.CurrX - MShare.MySelf.m_SlaveObject[i].CurrX + 2) <= MShare.g_nMagicRange
                                                                                         && Math.Abs(MShare.MySelf.CurrY - MShare.MySelf.m_SlaveObject[i].CurrY + 2) <= MShare.g_nMagicRange)
                                     {
-                                        if (HUtil32.Round(MShare.MySelf.m_SlaveObject[i].m_Abil.HP / MShare.MySelf.m_SlaveObject[i].m_Abil.MaxHP * 100) <= 80)
+                                        if (HUtil32.Round(MShare.MySelf.m_SlaveObject[i].Abil.HP / MShare.MySelf.m_SlaveObject[i].Abil.MaxHP * 100) <= 80)
                                         {
                                             result = true;
                                             if (AutoUseMagic(2, MShare.MySelf.m_SlaveObject[i])) return result;
@@ -1056,7 +1056,7 @@ namespace BotSrv.Objects
                         }
                     }
 
-                    if (MShare.MySelf.m_Abil.Level < 18 || MShare.g_MagicArr[13] == null || n == 0 && m == 0)
+                    if (MShare.MySelf.Abil.Level < 18 || MShare.g_MagicArr[13] == null || n == 0 && m == 0)
                     {
                         goto CCCC;
                         if (_robotClient.AttackTarget(MShare.g_APTagget)) result = true;
@@ -1075,7 +1075,7 @@ namespace BotSrv.Objects
                         if (nAbsX <= MShare.g_nMagicRange && nAbsY <= MShare.g_nMagicRange)
                         {
                             result = true;
-                            MShare.g_sAPStr = $"怪物目标：{MShare.g_APTagget.m_sUserName} ({MShare.g_APTagget.CurrX},{MShare.g_APTagget.CurrY}) 正在使用魔法攻击";
+                            MShare.g_sAPStr = $"怪物目标：{MShare.g_APTagget.UserName} ({MShare.g_APTagget.CurrX},{MShare.g_APTagget.CurrY}) 正在使用魔法攻击";
                             if (_robotClient.CanNextAction() && _robotClient.ServerAcceptNextAction())
                             {
                                 goto EEEE;
@@ -1191,7 +1191,7 @@ namespace BotSrv.Objects
                         }
                         if (MShare.g_MagicArr[13] != null || MShare.g_MagicArr[57] != null)
                         {
-                            if (MShare.g_MagicArr[57] != null && (HUtil32.Round(MShare.MySelf.m_Abil.HP / MShare.MySelf.m_Abil.MaxHP * 100) < 80 && new Random(100 - HUtil32.Round(MShare.MySelf.m_Abil.HP / MShare.MySelf.m_Abil.MaxHP * 100)).Next() > 5 || new Random(10).Next() > 6))
+                            if (MShare.g_MagicArr[57] != null && (HUtil32.Round(MShare.MySelf.Abil.HP / MShare.MySelf.Abil.MaxHP * 100) < 80 && new Random(100 - HUtil32.Round(MShare.MySelf.Abil.HP / MShare.MySelf.Abil.MaxHP * 100)).Next() > 5 || new Random(10).Next() > 6))
                             {
                                 MShare.m_dwTargetFocusTick = MShare.GetTickCount();
                                 magicKey = 57;
@@ -1221,7 +1221,7 @@ namespace BotSrv.Objects
                         if (MShare.g_MagicArr[2] != null)
                         {
                             result = true;
-                            if (HUtil32.Round(MShare.MySelf.m_Abil.HP / MShare.MySelf.m_Abil.MaxHP * 100) < 85)
+                            if (HUtil32.Round(MShare.MySelf.Abil.HP / MShare.MySelf.Abil.MaxHP * 100) < 85)
                             {
                                 if (AutoUseMagic(2, MShare.MySelf))
                                 {
@@ -1233,7 +1233,7 @@ namespace BotSrv.Objects
                                 if (MShare.MySelf.m_SlaveObject[i].m_boDeath) continue;
                                 if (Math.Abs(MShare.MySelf.CurrX - MShare.MySelf.m_SlaveObject[i].CurrX + 2) <= MShare.g_nMagicRange && Math.Abs(MShare.MySelf.CurrY - MShare.MySelf.m_SlaveObject[i].CurrY + 2) <= MShare.g_nMagicRange)
                                 {
-                                    if (MShare.MySelf.m_SlaveObject[i].m_Abil.HP != 0 && HUtil32.Round(MShare.MySelf.m_SlaveObject[i].m_Abil.HP / MShare.MySelf.m_SlaveObject[i].m_Abil.MaxHP * 100) < 85)
+                                    if (MShare.MySelf.m_SlaveObject[i].Abil.HP != 0 && HUtil32.Round(MShare.MySelf.m_SlaveObject[i].Abil.HP / MShare.MySelf.m_SlaveObject[i].Abil.MaxHP * 100) < 85)
                                     {
                                         if (AutoUseMagic(2, MShare.MySelf.m_SlaveObject[i]))
                                         {
@@ -1251,7 +1251,6 @@ namespace BotSrv.Objects
 
         private void Dispose(object obj)
         {
-            obj = null;
         }
 
     }

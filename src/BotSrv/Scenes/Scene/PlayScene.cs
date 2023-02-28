@@ -80,7 +80,6 @@ namespace BotSrv.Scenes.Scene
                 }
                 if ((Math.Abs(dropItem.X - MShare.MySelf.CurrX) > 20) || (Math.Abs(dropItem.Y - MShare.MySelf.CurrY) > 20))
                 {
-                    dropItem = null;
                     MShare.g_DropedItemList.RemoveAt(i);
                     break;
                 }
@@ -219,8 +218,6 @@ namespace BotSrv.Scenes.Scene
         public TActor GetCharacter(int x, int y, int wantsel, ref int nowsel, bool liveonly)
         {
             int ccy = 0;
-            int dx = 0;
-            int dy = 0;
             TActor result = null;
             nowsel = -1;
             for (var k = ccy + 8; k >= ccy - 1; k--)
@@ -234,8 +231,8 @@ namespace BotSrv.Scenes.Scene
                         {
                             if (a.CurrY == k)
                             {
-                                dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
-                                dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
+                                int dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
+                                int dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
                                 if (a.CheckSelect(x - dx, y - dy))
                                 {
                                     result = a;
@@ -257,10 +254,6 @@ namespace BotSrv.Scenes.Scene
         public TActor GetAttackFocusCharacter(int x, int y, int wantsel, ref int nowsel, bool liveonly)
         {
             int ccy = 0;
-            int dx = 0;
-            int dy = 0;
-            int centx = 0;
-            int centy = 0;
             TActor a;
             TActor result = GetCharacter(x, y, wantsel, ref nowsel, liveonly);
             if (result == null)
@@ -277,8 +270,9 @@ namespace BotSrv.Scenes.Scene
                             {
                                 if (a.CurrY == k)
                                 {
-                                    dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
-                                    dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
+                                    int dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
+                                    int dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
+                                    int centx;
                                     if (a.CharWidth() > 40)
                                     {
                                         centx = (a.CharWidth() - 40) / 2;
@@ -287,6 +281,8 @@ namespace BotSrv.Scenes.Scene
                                     {
                                         centx = 0;
                                     }
+
+                                    int centy;
                                     if (a.CharHeight() > 70)
                                     {
                                         centy = (a.CharHeight() - 70) / 2;
@@ -504,7 +500,7 @@ namespace BotSrv.Scenes.Scene
             for (var i = 0; i < m_ActorList.Count; i++)
             {
                 TActor actor = m_ActorList[i];
-                if (string.Compare(actor.m_sUserName, sName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(actor.UserName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = actor;
                     break;
@@ -1180,7 +1176,7 @@ namespace BotSrv.Scenes.Scene
                             {
                                 if (!string.IsNullOrEmpty(str))
                                 {
-                                    actor.m_sUserName = str;
+                                    actor.UserName = str;
                                 }
                             }
                             actor.SendMsg(ident, x, y, cdir, feature, state, "", 0);

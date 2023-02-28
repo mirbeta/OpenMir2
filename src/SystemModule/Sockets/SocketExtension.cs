@@ -8,7 +8,7 @@ namespace SystemModule.Sockets
     {
         public static bool Send(this Socket socket, string str)
         {
-            if (string.IsNullOrEmpty(str))
+            if (str.Length <= 0)
             {
                 return false;
             }
@@ -22,13 +22,13 @@ namespace SystemModule.Sockets
 
         public static bool SendText(this Socket socket, string str)
         {
-            if (string.IsNullOrEmpty(str))
+            if (str.Length <= 0)
             {
                 return false;
             }
             if (socket.Connected)
             {
-                socket.Send( HUtil32.GetBytes(str));
+                socket.Send(HUtil32.GetBytes(str));
                 return true;
             }
             return false;

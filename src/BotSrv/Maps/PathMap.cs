@@ -203,8 +203,7 @@ namespace BotSrv.Maps
                     }
                 } while (!!OldWave.Next());
             }
-            NewWave = null;
-            OldWave = null;
+
             return result;
         }
     }

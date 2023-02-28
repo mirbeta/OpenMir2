@@ -12,7 +12,7 @@ namespace SystemModule
         /// </summary>
         public static CommandMessage DecodePacket(string str)
         {
-            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (string.IsNullOrEmpty(str)) throw new ArgumentNullException(nameof(str));
             var tempBuf = HUtil32.GetBytes(str);
             var buffLen = 0;
             var encBuf = EncryptUtil.Decode(tempBuf, str.Length, ref buffLen);
@@ -94,7 +94,7 @@ namespace SystemModule
 
         public static T DecodeBuffer<T>(string src) where T : new()
         {
-            if (src == null) throw new ArgumentNullException(nameof(src));
+            if (string.IsNullOrEmpty(src)) throw new ArgumentNullException(nameof(src));
             var bSrc = HUtil32.GetBytes(src);
             var nLen = 0;
             var data = EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
