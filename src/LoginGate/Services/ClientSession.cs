@@ -88,7 +88,7 @@ namespace LoginGate.Services
             { 
                 m_dwClientTimeOutTick = HUtil32.GetTickCount();
             }*/
-            //ClientMesaagePacket cltCmd = ClientPackage.ToPacket<ClientMesaagePacket>(packBuff);
+            //CommandMessage cltCmd = ClientPackage.ToPacket<CommandMessage>(packBuff);
             //switch (cltCmd.Cmd)
             //{
             //    case Messages.CM_ADDNEWUSER://注册账号

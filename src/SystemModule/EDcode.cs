@@ -92,7 +92,16 @@ namespace SystemModule
             return EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
         }
 
-        public static T DecodeBuffer<T>(string src) where T : ClientPacket, new()
+        public static T DecodeBuffer<T>(string src) where T : new()
+        {
+            if (src == null) throw new ArgumentNullException(nameof(src));
+            var bSrc = HUtil32.GetBytes(src);
+            var nLen = 0;
+            var data = EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
+            return SerializerUtil.Deserialize<T>(data);
+        }
+        
+        public static T DecodeClientBuffer<T>(string src) where T : ClientPacket, new()
         {
             if (src == null) throw new ArgumentNullException(nameof(src));
             var bSrc = HUtil32.GetBytes(src);

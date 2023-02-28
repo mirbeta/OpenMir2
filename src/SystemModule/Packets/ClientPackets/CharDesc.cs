@@ -1,10 +1,9 @@
 ﻿using MemoryPack;
-using System.IO;
 
-namespace SystemModule.Packets.ClientPackets
+namespace SystemModule.Packets
 {
     [MemoryPackable]
-    public partial struct CharDesc
+    public partial record struct CharDesc
     {
         public int Feature;
         public int Status;

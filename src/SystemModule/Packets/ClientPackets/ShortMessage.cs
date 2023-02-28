@@ -1,10 +1,9 @@
 ﻿using MemoryPack;
-using System.IO;
 
-namespace SystemModule.Packets.ClientPackets
+namespace SystemModule.Packets
 {
     [MemoryPackable]
-    public partial struct ShortMessage 
+    public partial record struct ShortMessage 
     {
         public ushort Ident;
         public ushort wMsg;
