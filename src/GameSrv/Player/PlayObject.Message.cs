@@ -20,7 +20,6 @@ namespace GameSrv.Player {
             const string sDisConnectMsg = "游戏被强行中断!!!";
             const string sExceptionMsg1 = "[Exception] TPlayObject::Run -> Operate 1";
             const string sExceptionMsg2 = "[Exception] TPlayObject::Run -> Operate 2 # {0} Ident:{1} Sender:{2} wP:{3} nP1:{4} nP2:{5} np3:{6} Msg:{7}";
-            const string sExceptionMsg3 = "[Exception] TPlayObject::Run -> GetHighHuman";
             const string sExceptionMsg4 = "[Exception] TPlayObject::Run -> ClearObj";
             try {
                 if (Dealing) {
@@ -466,99 +465,6 @@ namespace GameSrv.Player {
                         SysMsg("攻击力倍数恢复正常...", MsgColor.Red, MsgType.Hint);
                     }
                 }
-            }
-            try {
-                // 取得在线最高等级、PK、攻击力、魔法、道术 的人物
-                if (M2Share.HighLevelHuman == ActorId && (Death || Ghost)) {
-                    M2Share.HighLevelHuman = 0;
-                }
-                if (M2Share.HighPKPointHuman == ActorId && (Death || Ghost)) {
-                    M2Share.HighPKPointHuman = 0;
-                }
-                if (M2Share.HighDCHuman == ActorId && (Death || Ghost)) {
-                    M2Share.HighDCHuman = 0;
-                }
-                if (M2Share.HighMCHuman == ActorId && (Death || Ghost)) {
-                    M2Share.HighMCHuman = 0;
-                }
-                if (M2Share.HighSCHuman == ActorId && (Death || Ghost)) {
-                    M2Share.HighSCHuman = 0;
-                }
-                if (M2Share.HighOnlineHuman == ActorId && (Death || Ghost)) {
-                    M2Share.HighOnlineHuman = 0;
-                }
-                if (Permission < 6) {
-                    // 最高等级
-                    BaseObject targetObject = M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
-                    if (M2Share.HighLevelHuman == 0 || targetObject.Ghost) {
-                        M2Share.HighLevelHuman = ActorId;
-                    }
-                    else {
-                        if (Abil.Level > targetObject.Abil.Level) {
-                            M2Share.HighLevelHuman = ActorId;
-                        }
-                    }
-
-                    // 最高PK
-                    targetObject = M2Share.ActorMgr.Get(M2Share.HighPKPointHuman);
-                    if (M2Share.HighPKPointHuman == 0 || targetObject.Ghost) {
-                        if (PkPoint > 0) {
-                            M2Share.HighPKPointHuman = ActorId;
-                        }
-                    }
-                    else {
-                        if (PkPoint > ((PlayObject)targetObject).PkPoint) {
-                            M2Share.HighPKPointHuman = ActorId;
-                        }
-                    }
-
-                    // 最高攻击力
-                    targetObject = M2Share.ActorMgr.Get(M2Share.HighDCHuman);
-                    if (M2Share.HighDCHuman == 0 || targetObject.Ghost) {
-                        M2Share.HighDCHuman = ActorId;
-                    }
-                    else {
-                        if (HUtil32.HiWord(WAbil.DC) > HUtil32.HiWord(targetObject.WAbil.DC)) {
-                            M2Share.HighDCHuman = ActorId;
-                        }
-                    }
-
-                    // 最高魔法
-                    targetObject = M2Share.ActorMgr.Get(M2Share.HighMCHuman);
-                    if (M2Share.HighMCHuman == 0 || targetObject.Ghost) {
-                        M2Share.HighMCHuman = ActorId;
-                    }
-                    else {
-                        if (HUtil32.HiWord(WAbil.MC) > HUtil32.HiWord(targetObject.WAbil.MC)) {
-                            M2Share.HighMCHuman = ActorId;
-                        }
-                    }
-
-                    // 最高道术
-                    targetObject = M2Share.ActorMgr.Get(M2Share.HighSCHuman);
-                    if (M2Share.HighSCHuman == 0 || targetObject.Ghost) {
-                        M2Share.HighSCHuman = ActorId;
-                    }
-                    else {
-                        if (HUtil32.HiWord(WAbil.SC) > HUtil32.HiWord(targetObject.WAbil.SC)) {
-                            M2Share.HighSCHuman = ActorId;
-                        }
-                    }
-
-                    // 最长在线时间
-                    targetObject = M2Share.ActorMgr.Get(M2Share.HighOnlineHuman);
-                    if (M2Share.HighOnlineHuman == 0 || targetObject.Ghost) {
-                        M2Share.HighOnlineHuman = ActorId;
-                    }
-                    else {
-                        if (LogonTick < ((PlayObject)targetObject).LogonTick) {
-                            M2Share.HighOnlineHuman = ActorId;
-                        }
-                    }
-                }
-            }
-            catch (Exception) {
-                M2Share.Logger.Error(sExceptionMsg3);
             }
             if (M2Share.Config.ReNewChangeColor && ReLevel > 0 && (HUtil32.GetTickCount() - ReColorTick) > M2Share.Config.ReNewNameColorTime) {
                 ReColorTick = HUtil32.GetTickCount();

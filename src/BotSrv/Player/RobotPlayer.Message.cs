@@ -43,11 +43,11 @@ namespace BotSrv.Player
             }
             if (datablock.Length > Messages.DefBlockSize)
             {
-                body = datablock.Substring(Messages.DefBlockSize, datablock.Length - Messages.DefBlockSize);
+                body = datablock[Messages.DefBlockSize..];
             }
             if (btPacket == 0)
             {
-                head = datablock.Substring(0, Messages.DefBlockSize);
+                head = datablock[..Messages.DefBlockSize];
                 msg = EDCode.DecodePacket(head);
                 if (msg.Ident == 0)
                 {
@@ -355,7 +355,7 @@ namespace BotSrv.Player
                     {
                         body2 = body.Substring(n + 1 - 1, body.Length);
                         data = EDCode.DeCodeString(body2);
-                        body2 = body.Substring(1 - 1, n);
+                        body2 = body[..n];
                         Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
                     }
                     else
@@ -397,7 +397,7 @@ namespace BotSrv.Player
                     {
                         body2 = body.Substring(n + 1 - 1, body.Length);
                         data = EDCode.DeCodeString(body2);
-                        body2 = body.Substring(1 - 1, n);
+                        body2 = body[..n];
                         Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
                     }
                     else
@@ -1525,7 +1525,7 @@ namespace BotSrv.Player
                     //n = HUtil32.GetCodeMsgSize(sizeof(TMessageBodyWL) * 4 / 3);
                     body2 = body.Substring(n + 1 - 1, body.Length);
                     data = EDCode.DeCodeString(body2);
-                    body2 = body.Substring(1 - 1, n);
+                    body2 = body[..n];
                     wl = EDCode.DecodeBuffer<MessageBodyWL>(body2);
                     //FrmDlg.m_nDiceCount = msg.Param;
                     //FrmDlg.m_Dice[0].nDicePoint = HUtil32.LoByte(HUtil32.LoWord(wl.lParam1));
