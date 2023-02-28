@@ -23,7 +23,7 @@ namespace BotSrv.Objects
             {
                 if (bomarkpos)
                 {
-                    robotClient.Map.MarkCanWalk(m_nCurrX, m_nCurrY, true);
+                    robotClient.Map.MarkCanWalk(CurrX, CurrY, true);
                     bomarkpos = false;
                 }
             }
@@ -31,7 +31,7 @@ namespace BotSrv.Objects
             {
                 if (!bomarkpos)
                 {
-                    robotClient.Map.MarkCanWalk(m_nCurrX, m_nCurrY, false);
+                    robotClient.Map.MarkCanWalk(CurrX, CurrY, false);
                     bomarkpos = true;
                 }
             }

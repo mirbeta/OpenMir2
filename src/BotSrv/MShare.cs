@@ -23,19 +23,17 @@ namespace BotSrv
         public static Dictionary<string, string> g_ItemsFilter_All = null;
         public static Dictionary<string, string> g_ItemsFilter_All_Def = null;
         public static string[] g_sRenewBooks = new string[] { "随机传送卷", "地牢逃脱卷", "回城卷", "行会回城卷", "盟重传送石", "比奇传送石", "随机传送石", };
-        public static int g_nMagicRange = 8;
+        public static byte g_nMagicRange = 8;
         public static int g_TileMapOffSetX = 9;
         public static int g_TileMapOffSetY = 9;
         public static byte g_btMyEnergy = 0;
         public static byte g_btMyLuck = 0;
         public static string g_tiHintStr1 = "";
         public static string g_tiHintStr2 = "";
-        public static TMovingItem[] g_TIItems = new TMovingItem[1 + 1];
         public static string g_spHintStr1 = "";
         public static string g_spHintStr2 = "";
+        public static TMovingItem[] g_TIItems = new TMovingItem[1 + 1];
         public static TMovingItem[] g_spItems = new TMovingItem[1 + 1];
-        public static int g_dwActorLimit = 5;
-        public static int g_nProcActorIDx = 0;
         public static bool g_NextSeriesSkill = false;
         public static int g_dwSeriesSkillReadyTick = 0;
         public static int g_nCurrentMagic = 888;
@@ -65,13 +63,13 @@ namespace BotSrv
         public static string g_sBookLabel = "";
         public static int g_MaxExpFilter = 2000;
         public static string[] g_UnBindItems = { "万年雪霜", "疗伤药", "强效太阳水", "强效金创药", "强效魔法药", "金创药(小量)", "魔法药(小量)", "金创药(中量)", "魔法药(中量)", "地牢逃脱卷", "随机传送卷", "回城卷", "行会回城卷" };
-        public static string g_sGoldName = "金币";
-        public static string g_sGameGoldName = "元宝";
-        public static string g_sGamePointName = "泡点";
-        public static string g_sWarriorName = "武士";
-        public static string g_sWizardName = "魔法师";
-        public static string g_sTaoistName = "道士";
-        public static string g_sUnKnowName = "未知";
+        public static string GoldName = "金币";
+        public static string GameGoldName = "元宝";
+        public static string GamePointName = "泡点";
+        public static string WarriorName = "武士";
+        public static string WizardName = "魔法师";
+        public static string TaoistName = "道士";
+        public static string UnKnowName = "未知";
         public static bool g_boQueryExit = false;
         public static string g_psServerAddr = string.Empty;
         public static int g_pnServerPort = 0;
@@ -103,18 +101,30 @@ namespace BotSrv
         public static NakedAbility g_BonusAbilChg = default;
         public static string g_sGuildName = string.Empty;
         public static string g_sGuildRankName = string.Empty;
-        public static int g_dwLatestJoinAttackTick = 0;
-        // 最后魔法攻击时间
-        public static int g_dwLastAttackTick = 0;
-        // 最后攻击时间(包括物理攻击及魔法攻击)
-        public static int g_dwLastMoveTick = 0;
-        // 最后移动时间
-        public static int g_dwLatestSpellTick = 0;
-        // 最后魔法攻击时间
-        public static int g_dwLatestFireHitTick = 0;
-        // 最后列火攻击时间
-        public static int g_dwLatestSLonHitTick = 0;
-        // 最后列火攻击时间
+        /// <summary>
+        /// 最后魔法攻击时间
+        /// </summary>
+        public static int LatestJoinAttackTick = 0;
+        /// <summary>
+        /// 最后攻击时间(包括物理攻击及魔法攻击)
+        /// </summary>
+        public static int LastAttackTick = 0;
+        /// <summary>
+        /// 最后移动时间
+        /// </summary>        
+        public static int LastMoveTick = 0;
+        /// <summary>
+        /// 最后魔法攻击时间
+        /// </summary>        
+        public static int LatestSpellTick = 0;
+        /// <summary>
+        /// 最后列火攻击时间
+        /// </summary>        
+        public static int LatestFireHitTick = 0;
+        /// <summary>
+        /// 最后列火攻击时间
+        /// </summary>        
+        public static int LatestSLonHitTick = 0;
         public static int g_dwLatestTwinHitTick = 0;
         public static int g_dwLatestPursueHitTick = 0;
         public static int g_dwLatestRushHitTick = 0;
@@ -127,12 +137,12 @@ namespace BotSrv
         public static int g_dwLatestRushRushTick = 0;
         public static int g_dwMagicDelayTime = 0;
         public static int g_dwMagicPKDelayTime = 0;
-        public static short g_nMouseCurrX = 0;
-        public static short g_nMouseCurrY = 0;
-        public static ushort g_nMouseX = 0;
-        public static ushort g_nMouseY = 0;
-        public static short g_nTargetX = 0;
-        public static short g_nTargetY = 0;
+        public static short MouseCurrX = 0;
+        public static short MouseCurrY = 0;
+        public static ushort MouseX = 0;
+        public static ushort MouseY = 0;
+        public static short TargetX = 0;
+        public static short TargetY = 0;
         public static TActor g_TargetCret = null;
         public static TActor g_FocusCret = null;
         public static TActor g_MagicTarget = null;
@@ -172,9 +182,6 @@ namespace BotSrv
         public static Point[] g_APMapPath2;
         public static Point g_APLastPoint;
         public static Point g_APLastPoint2;
-        public static bool g_nApMiniMap = false;
-        public static int g_dwBlinkTime = 0;
-        public static bool g_boViewBlink = false;
         public static bool g_boMapMoving = false;
         public static bool g_boMapMovingWait = false;
         public static bool g_boCheckBadMapMode = false;
@@ -290,16 +297,16 @@ namespace BotSrv
         /// <summary>
         /// 地面物品闪时间间隔
         /// </summary>
-        public static int g_dwDropItemFlashTime = 5 * 1000;
+        public static int DropItemFlashTime = 5 * 1000;
         /// <summary>
         /// 攻击间隔时间间隔
         /// </summary>
-        public static int g_nHitTime = 1400;
-        public static int g_nItemSpeed = 60;
+        public static int HitTime = 1400;
+        public static int ItemSpeed = 60;
         /// <summary>
         /// 魔法攻间隔时间
         /// </summary>
-        public static int g_dwSpellTime = 500;
+        public static int SpellTime = 500;
         public static bool OpenAutoPlay = true;
         public static bool g_boClientCanSet = true;
         public static int g_nEatIteminvTime = 200;
@@ -332,12 +339,12 @@ namespace BotSrv
         public static bool SpeedRateShow = false;
         // 外挂功能变量结束
         public static bool g_boQuickPickup = false;
-        public static int g_dwAutoPickupTick = 0;
+        public static int AutoPickupTick = 0;
         /// <summary>
         /// 自动捡物品间隔
         /// </summary>
-        public static int g_dwAutoPickupTime = 100;
-        public static TActor g_MagicLockActor = null;
+        public static int AutoPickupTime = 100;
+        public static TActor MagicLockActor = null;
         public static bool g_boNextTimePowerHit = false;
         public static bool g_boCanLongHit = false;
         public static bool g_boCanWideHit = false;
@@ -390,8 +397,8 @@ namespace BotSrv
         public const string g_affiche1 = "健康游戏公告";
         public const string g_affiche2 = "抵制不良游戏 拒绝盗版游戏 注意自我保护 谨防受骗上当 适度游戏益脑";
         public const string g_affiche3 = "沉迷游戏伤身 合理安排时间 享受健康生活 严厉打击赌博 营造和谐环境";
-        public const int SCREENWIDTH = 800;
-        public const int SCREENHEIGHT = 600;
+        public const int ScreenWidth = 800;
+        public const int ScreenHeight = 600;
         public const string MAPDIRNAME = "Map/";
 
         // 得到地图文件名称自定义路径
@@ -563,16 +570,16 @@ namespace BotSrv
             switch (nJob)
             {
                 case 0:
-                    result = g_sWarriorName;
+                    result = WarriorName;
                     break;
                 case 1:
-                    result = g_sWizardName;
+                    result = WizardName;
                     break;
                 case 2:
-                    result = g_sTaoistName;
+                    result = TaoistName;
                     break;
                 default:
-                    result = g_sUnKnowName;
+                    result = UnKnowName;
                     break;
             }
             return result;
@@ -1524,7 +1531,7 @@ namespace BotSrv
             {
                 return result;
             }
-            if ((Math.Abs(Act.m_nCurrX - MySelf.m_nCurrX) <= (g_TileMapOffSetX - 2)) && (Math.Abs(Act.m_nCurrY - MySelf.m_nCurrY) <= (g_TileMapOffSetY - 1)))
+            if ((Math.Abs(Act.CurrX - MySelf.CurrX) <= (g_TileMapOffSetX - 2)) && (Math.Abs(Act.CurrY - MySelf.CurrY) <= (g_TileMapOffSetY - 1)))
             {
                 result = true;
             }
@@ -1539,7 +1546,7 @@ namespace BotSrv
             {
                 return result;
             }
-            if ((Math.Abs(X - MySelf.m_nCurrX) <= HUtil32._MIN(24, g_TileMapOffSetX + 9)) && (Math.Abs(Y - MySelf.m_nCurrY) <= HUtil32._MIN(24, g_TileMapOffSetY + 10)))
+            if ((Math.Abs(X - MySelf.CurrX) <= HUtil32._MIN(24, g_TileMapOffSetX + 9)) && (Math.Abs(Y - MySelf.CurrY) <= HUtil32._MIN(24, g_TileMapOffSetY + 10)))
             {
                 result = true;
             }

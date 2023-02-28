@@ -910,7 +910,7 @@ namespace BotSrv.Player
                 case Messages.SM_GOLDCHANGED:
                     if (msg.Recog > MShare.MySelf.m_nGold)
                     {
-                        DScreen.AddSysMsg("获得 " + (msg.Recog - MShare.MySelf.m_nGold).ToString() + MShare.g_sGoldName);
+                        DScreen.AddSysMsg("获得 " + (msg.Recog - MShare.MySelf.m_nGold).ToString() + MShare.GoldName);
                     }
                     MShare.MySelf.m_nGold = msg.Recog;
                     MShare.MySelf.m_nGameGold = HUtil32.MakeLong(msg.Param, msg.Tag);
@@ -1042,11 +1042,11 @@ namespace BotSrv.Player
                     {
                         if (msg.Recog > 0)
                         {
-                            MShare.g_sSellPriceStr = msg.Recog.ToString() + MShare.g_sGoldName;
+                            MShare.g_sSellPriceStr = msg.Recog.ToString() + MShare.GoldName;
                         }
                         else
                         {
-                            MShare.g_sSellPriceStr = "???? " + MShare.g_sGoldName;
+                            MShare.g_sSellPriceStr = "???? " + MShare.GoldName;
                         }
                     }
                     break;
@@ -1067,12 +1067,12 @@ namespace BotSrv.Player
                         if (msg.Recog >= 0)
                         {
                             // 金币
-                            MShare.g_sSellPriceStr = msg.Recog.ToString() + " " + MShare.g_sGoldName;
+                            MShare.g_sSellPriceStr = msg.Recog.ToString() + " " + MShare.GoldName;
                         }
                         else
                         {
                             // 金币
-                            MShare.g_sSellPriceStr = "???? " + MShare.g_sGoldName;
+                            MShare.g_sSellPriceStr = "???? " + MShare.GoldName;
                         }
                     }
                     break;
@@ -1177,7 +1177,7 @@ namespace BotSrv.Player
                             MainOutMessage("发生了错误");
                             break;
                         case 3:
-                            MainOutMessage(MShare.g_sGoldName + "不足");
+                            MainOutMessage(MShare.GoldName + "不足");
                             break;
                         case 4:
                             MainOutMessage("你缺乏所必需的物品");

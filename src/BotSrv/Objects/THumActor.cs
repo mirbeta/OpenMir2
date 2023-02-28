@@ -37,14 +37,14 @@ namespace BotSrv.Objects
         {
             if (MShare.g_SeriesSkillFire)
             {
-                if (MShare.g_MagicLockActor == null || MShare.g_MagicLockActor.m_boDeath)
+                if (MShare.MagicLockActor == null || MShare.MagicLockActor.m_boDeath)
                 {
                     MShare.g_SeriesSkillFire = false;
                     MShare.g_SeriesSkillStep = 0;
                 }
 
-                if (m_boUseMagic && this == MShare.MySelf && MShare.g_MagicLockActor != null &&
-                    !MShare.g_MagicLockActor.m_boDeath && MShare.g_nCurrentMagic <= 3)
+                if (m_boUseMagic && this == MShare.MySelf && MShare.MagicLockActor != null &&
+                    !MShare.MagicLockActor.m_boDeath && MShare.g_nCurrentMagic <= 3)
                     if (m_nCurrentFrame - m_nStartFrame >= m_nSpellFrame - 1)
                     {
                         if (MShare.g_MagicArr[MShare.g_SeriesSkillArr[MShare.g_nCurrentMagic]] != null)
@@ -357,7 +357,7 @@ namespace BotSrv.Objects
                                 //ClMain.g_PlayScene.NewMagic(this, _wvar2.ServerMagicCode, _wvar2.EffectNumber, this.m_nCurrX, this.m_nCurrY, _wvar2.targx, _wvar2.targy, _wvar2.target, _wvar2.EffectType, _wvar2.Recusion, _wvar2.anitime, ref boFly, _wvar2.magfirelv, _wvar2.Poison);
                             }
 
-                            if (this == MShare.MySelf) MShare.g_dwLatestSpellTick = MShare.GetTickCount();
+                            if (this == MShare.MySelf) MShare.LatestSpellTick = MShare.GetTickCount();
                             m_CurMagic.ServerMagicCode = 0;
                         }
                     }

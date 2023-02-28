@@ -68,7 +68,7 @@ namespace MakePlayer
                         {
                             var playClient = new PlayClient(_clientManager);
                             playClient.SessionId = Guid.NewGuid().ToString("N");
-                            playClient.m_boNewAccount = _options.NewAccount;
+                            playClient.MBoNewAccount = _options.NewAccount;
                             playClient.LoginAccount = string.Concat(_options.LoginAccount, _loginIndex);
                             if (playClient.LoginAccount.Length > 10)
                             {

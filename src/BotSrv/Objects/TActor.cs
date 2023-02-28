@@ -109,8 +109,14 @@ namespace BotSrv.Objects
         protected int m_nCurrentDefFrame;
         public int m_nCurrentEvent = 0;
         public int m_nCurrentFrame;
-        public short m_nCurrX;
-        public short m_nCurrY;
+        /// <summary>
+        /// 当前所在坐标X
+        /// </summary>
+        public short CurrX;
+        /// <summary>
+        /// 当前所在坐标Y
+        /// </summary>
+        public short CurrY;
         protected int m_nCurTick;
         protected int m_nDefFrameCount;
         public int m_nDie2Sound;
@@ -344,8 +350,8 @@ namespace BotSrv.Objects
 
         private void ReadyAction(TChrMsg Msg)
         {
-            m_nActBeforeX = m_nCurrX;
-            m_nActBeforeY = m_nCurrY;
+            m_nActBeforeX = CurrX;
+            m_nActBeforeY = CurrY;
             if (Msg.Ident == Messages.SM_ALIVE)
             {
                 m_boDeath = false;
@@ -390,14 +396,14 @@ namespace BotSrv.Objects
                     }
                     if (Msg.Ident == Messages.CM_RUN)
                     {
-                        if (!robotClient.PlayScene.CanRun(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, Msg.X, Msg.Y))
+                        if (!robotClient.PlayScene.CanRun(MShare.MySelf.CurrX, MShare.MySelf.CurrY, Msg.X, Msg.Y))
                         {
                             return;
                         }
                     }
                     if (Msg.Ident == Messages.CM_HORSERUN)
                     {
-                        if (!robotClient.PlayScene.CanRun(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, Msg.X, Msg.Y))
+                        if (!robotClient.PlayScene.CanRun(MShare.MySelf.CurrX, MShare.MySelf.CurrY, Msg.X, Msg.Y))
                         {
                             return;
                         }
@@ -451,8 +457,8 @@ namespace BotSrv.Objects
                             break;
                         case Messages.CM_SPELL:
                             if (MShare.g_MagicTarget != null)
-                                Msg.Dir = ClFunc.GetFlyDirection(m_nCurrX, m_nCurrY, MShare.g_MagicTarget.m_nCurrX,
-                                    MShare.g_MagicTarget.m_nCurrY);
+                                Msg.Dir = ClFunc.GetFlyDirection(CurrX, CurrY, MShare.g_MagicTarget.CurrX,
+                                    MShare.g_MagicTarget.CurrY);
                             RealActionMsg = Msg;
                             //UseMagic = (TUseMagicInfo)Msg.Feature;
                             //RealActionMsg.Dir = UseMagic.MagicSerial;
@@ -461,8 +467,8 @@ namespace BotSrv.Objects
                             //Msg.Y = m_btPoisonDecHealth;
                             break;
                     }
-                    m_nOldx = m_nCurrX;
-                    m_nOldy = m_nCurrY;
+                    m_nOldx = CurrX;
+                    m_nOldy = CurrY;
                     m_nOldDir = m_btDir;
                 }
                 switch (Msg.Ident)
@@ -489,14 +495,14 @@ namespace BotSrv.Objects
                     case Messages.SM_POWERHIT:
                     case Messages.SM_LONGHIT:
                     case Messages.SM_WIDEHIT:
-                        m_nCurrX = Msg.X;
-                        m_nCurrY = Msg.Y;
+                        CurrX = Msg.X;
+                        CurrY = Msg.Y;
                         m_btDir = (byte)Msg.Dir;
                         //m_CurMagic.magfirelv = Msg.Saying;
                         break;
                     default:
-                        m_nCurrX = Msg.X;
-                        m_nCurrY = Msg.Y;
+                        CurrX = Msg.X;
+                        CurrY = Msg.Y;
                         m_btDir = (byte)Msg.Dir;
                         break;
                 }
@@ -636,7 +642,7 @@ namespace BotSrv.Objects
         public int CanWalk()
         {
             int result;
-            if (MShare.GetTickCount() - MShare.g_dwLatestSpellTick < MShare.g_dwMagicPKDelayTime)
+            if (MShare.GetTickCount() - MShare.LatestSpellTick < MShare.g_dwMagicPKDelayTime)
                 result = -1;
             else
                 result = 1;
@@ -676,13 +682,13 @@ namespace BotSrv.Objects
             short unx = (short)(MShare.UNITX * step);
             short uny = (short)(MShare.UNITY * step);
             if (cur > max) cur = max;
-            m_nRx = m_nCurrX;
-            m_nRy = m_nCurrY;
+            m_nRx = CurrX;
+            m_nRy = CurrY;
             switch (dir)
             {
                 case Direction.Up:
                     ss = HUtil32.Round((max - cur) / max) * step;
-                    m_nRy = (short)(m_nCurrY + ss);
+                    m_nRy = (short)(CurrY + ss);
                     if (ss == step)
                     {
                         funx = (short)-HUtil32.Round(uny / max * cur);
@@ -703,8 +709,8 @@ namespace BotSrv.Objects
                     else
                         v = 0;
                     ss = HUtil32.Round((max - cur + v) / max) * step;
-                    m_nRx = (short)(m_nCurrX - ss);
-                    m_nRy = (short)(m_nCurrY + ss);
+                    m_nRx = (short)(CurrX - ss);
+                    m_nRy = (short)(CurrY + ss);
                     if (ss == step)
                     {
                         funx = (short)HUtil32.Round(unx / max * cur);
@@ -727,7 +733,7 @@ namespace BotSrv.Objects
                     break;
                 case Direction.Right:
                     ss = HUtil32.Round((max - cur) / max) * step;
-                    m_nRx = (short)(m_nCurrX - ss);
+                    m_nRx = (short)(CurrX - ss);
                     if (ss == step)
                         m_nShiftX = (short)HUtil32.Round(unx / max * cur);
                     else
@@ -740,8 +746,8 @@ namespace BotSrv.Objects
                     else
                         v = 0;
                     ss = HUtil32.Round((max - cur - v) / max) * step;
-                    m_nRx = (short)(m_nCurrX - ss);
-                    m_nRy = (short)(m_nCurrY - ss);
+                    m_nRx = (short)(CurrX - ss);
+                    m_nRy = (short)(CurrY - ss);
                     if (ss == step)
                     {
                         funx = (short)HUtil32.Round(unx / max * cur);
@@ -769,7 +775,7 @@ namespace BotSrv.Objects
                         v = 0;
                     ss = HUtil32.Round((max - cur - v) / max) * step;
                     m_nShiftX = 0;
-                    m_nRy = (short)(m_nCurrY - ss);
+                    m_nRy = (short)(CurrY - ss);
                     if (ss == step)
                     {
                         funy = (short)HUtil32.Round(uny / max * cur);
@@ -790,8 +796,8 @@ namespace BotSrv.Objects
                     else
                         v = 0;
                     ss = HUtil32.Round((max - cur - v) / max) * step;
-                    m_nRx = (short)(m_nCurrX + ss);
-                    m_nRy = (short)(m_nCurrY - ss);
+                    m_nRx = (short)(CurrX + ss);
+                    m_nRy = (short)(CurrY - ss);
                     if (ss == step)
                     {
                         funx = (short)-HUtil32.Round(unx / max * cur);
@@ -814,7 +820,7 @@ namespace BotSrv.Objects
                     break;
                 case Direction.Left:
                     ss = HUtil32.Round((max - cur) / max) * step;
-                    m_nRx = (short)(m_nCurrX + ss);
+                    m_nRx = (short)(CurrX + ss);
                     if (ss == step)
                         m_nShiftX = (short)-HUtil32.Round(unx / max * cur);
                     else
@@ -827,8 +833,8 @@ namespace BotSrv.Objects
                     else
                         v = 0;
                     ss = HUtil32.Round((max - cur + v) / max) * step;
-                    m_nRx = (short)(m_nCurrX + ss);
-                    m_nRy = (short)(m_nCurrY + ss);
+                    m_nRx = (short)(CurrX + ss);
+                    m_nRy = (short)(CurrY + ss);
                     if (ss == step)
                     {
                         funx = (short)-HUtil32.Round(unx / max * cur);
@@ -1159,10 +1165,10 @@ namespace BotSrv.Objects
                 if (m_nCurrentAction == Messages.SM_RUSHKUNG)
                     if (m_nCurrentFrame >= m_nEndFrame - 3)
                     {
-                        m_nCurrX = m_nActBeforeX;
-                        m_nCurrY = m_nActBeforeY;
-                        m_nRx = m_nCurrX;
-                        m_nRy = m_nCurrY;
+                        CurrX = m_nActBeforeX;
+                        CurrY = m_nActBeforeY;
+                        m_nRx = CurrX;
+                        m_nRy = CurrY;
                         m_nCurrentAction = 0;
                         m_boUseCboLib = false;
                         m_boLockEndFrame = true;
@@ -1214,8 +1220,8 @@ namespace BotSrv.Objects
         {
             m_nCurrentAction = 0;
             m_boLockEndFrame = true;
-            MShare.MySelf.m_nCurrX = m_nOldx;
-            MShare.MySelf.m_nCurrY = m_nOldy;
+            MShare.MySelf.CurrX = m_nOldx;
+            MShare.MySelf.CurrY = m_nOldy;
             MShare.MySelf.m_btDir = (byte)m_nOldDir;
             CleanUserMsgs();
         }
@@ -1241,8 +1247,8 @@ namespace BotSrv.Objects
 
         public void CleanCharMapSetting(short X, short Y)
         {
-            MShare.MySelf.m_nCurrX = X;
-            MShare.MySelf.m_nCurrY = Y;
+            MShare.MySelf.CurrX = X;
+            MShare.MySelf.CurrY = Y;
             MShare.MySelf.m_nRx = X;
             MShare.MySelf.m_nRy = Y;
             m_nOldx = X;

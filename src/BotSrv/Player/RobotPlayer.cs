@@ -88,8 +88,8 @@ namespace BotSrv.Player
             MShare.InitClientItems();
             MShare.g_DetectItemMineID = 0;
             MShare.g_nLastMapMusic = -1;
-            MShare.g_nTargetX = -1;
-            MShare.g_nTargetY = -1;
+            MShare.TargetX = -1;
+            MShare.TargetY = -1;
             MShare.g_TargetCret = null;
             MShare.g_FocusCret = null;
             MShare.g_FocusItem = null;
@@ -121,10 +121,10 @@ namespace BotSrv.Player
             MShare.g_boCheckBadMapMode = false;
             MShare.g_boCheckSpeedHackDisplay = false;
             MShare.g_nDupSelection = 0;
-            MShare.g_dwLastAttackTick = MShare.GetTickCount();
-            MShare.g_dwLastMoveTick = MShare.GetTickCount();
-            MShare.g_dwLatestSpellTick = MShare.GetTickCount();
-            MShare.g_dwAutoPickupTick = MShare.GetTickCount();
+            MShare.LastAttackTick = MShare.GetTickCount();
+            MShare.LastMoveTick = MShare.GetTickCount();
+            MShare.LatestSpellTick = MShare.GetTickCount();
+            MShare.AutoPickupTick = MShare.GetTickCount();
             MShare.g_boItemMoving = false;
             MShare.g_boNextTimePowerHit = false;
             MShare.g_boCanLongHit = false;
@@ -358,22 +358,22 @@ namespace BotSrv.Player
                 else if ((PlayScene.ProcMagic.XTarget != null) && !PlayScene.ProcMagic.XTarget.m_boDeath)
                 {
                     targid = PlayScene.ProcMagic.XTarget.m_nRecogId;
-                    targx = PlayScene.ProcMagic.XTarget.m_nCurrX;
-                    targy = PlayScene.ProcMagic.XTarget.m_nCurrY;
+                    targx = PlayScene.ProcMagic.XTarget.CurrX;
+                    targy = PlayScene.ProcMagic.XTarget.CurrY;
                 }
                 else
                 {
                     PlayScene.ProcMagic.NTargetX = -1;
                     return;
                 }
-                nSX = (short)Math.Abs(MShare.MySelf.m_nCurrX - targx);
-                nSY = (short)Math.Abs(MShare.MySelf.m_nCurrY - targy);
+                nSX = (short)Math.Abs(MShare.MySelf.CurrX - targx);
+                nSY = (short)Math.Abs(MShare.MySelf.CurrY - targy);
                 if ((nSX <= MShare.g_nMagicRange) && (nSY <= MShare.g_nMagicRange))
                 {
                     if (PlayScene.ProcMagic.FContinue || (CanNextAction() && ServerAcceptNextAction()))
                     {
-                        MShare.g_dwLatestSpellTick = MShare.GetTickCount();
-                        tdir = ClFunc.GetFlyDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, targx, targy);
+                        MShare.LatestSpellTick = MShare.GetTickCount();
+                        tdir = ClFunc.GetFlyDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targx, targy);
                         //pmag = new TUseMagicInfo();
                         //pmag.EffectNumber = g_PlayScene.ProcMagic.XMagic.Def.btEffect;
                         //pmag.MagicSerial = g_PlayScene.ProcMagic.XMagic.Def.wMagicID;
@@ -394,8 +394,8 @@ namespace BotSrv.Player
                 else
                 {
                     MShare.PlayerAction = PlayerAction.Run;
-                    MShare.g_nTargetX = targx;
-                    MShare.g_nTargetY = targy;
+                    MShare.TargetX = targx;
+                    MShare.TargetY = targy;
                 }
             }
         }
@@ -447,11 +447,11 @@ namespace BotSrv.Player
             {
                 return;
             }
-            if ((MShare.g_nTargetX >= 0) && CanNextAction() && ServerAcceptNextAction())
+            if ((MShare.TargetX >= 0) && CanNextAction() && ServerAcceptNextAction())
             {
                 if (MShare.OpenAutoPlay && (MShare.g_APMapPath != null) && (MShare.AutoStep >= 0) && (0 < MShare.g_APMapPath.Length))
                 {
-                    if ((Math.Abs(MShare.g_APMapPath[MShare.AutoStep].X - MShare.MySelf.m_nCurrX) <= 3) && (Math.Abs(MShare.g_APMapPath[MShare.AutoStep].X - MShare.MySelf.m_nCurrY) <= 3))
+                    if ((Math.Abs(MShare.g_APMapPath[MShare.AutoStep].X - MShare.MySelf.CurrX) <= 3) && (Math.Abs(MShare.g_APMapPath[MShare.AutoStep].X - MShare.MySelf.CurrY) <= 3))
                     {
                         if (MShare.g_APMapPath.Length >= 2)// 3点以上
                         {
@@ -502,7 +502,7 @@ namespace BotSrv.Player
                         }
                     }
                 }
-                if ((MShare.g_nTargetX != MShare.MySelf.m_nCurrX) || (MShare.g_nTargetY != MShare.MySelf.m_nCurrY))
+                if ((MShare.TargetX != MShare.MySelf.CurrX) || (MShare.TargetY != MShare.MySelf.CurrY))
                 {
                     if ((MShare.MySelf.m_nTagX > 0) && (MShare.MySelf.m_nTagY > 0))
                     {
@@ -531,7 +531,7 @@ namespace BotSrv.Player
                                     try
                                     {
                                         Map.ReLoadMapData();
-                                        PathMap.g_MapPath = Map.FindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.MySelf.m_nTagX, MShare.MySelf.m_nTagY, 0);
+                                        PathMap.g_MapPath = Map.FindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MySelf.m_nTagX, MShare.MySelf.m_nTagY, 0);
                                         if (PathMap.g_MapPath != null)
                                         {
                                             g_MoveStep = 1;
@@ -553,10 +553,10 @@ namespace BotSrv.Player
                         }
                     }
                 TTTT:
-                    var mx = MShare.MySelf.m_nCurrX;
-                    var my = MShare.MySelf.m_nCurrY;
-                    var dx = MShare.g_nTargetX;
-                    var dy = MShare.g_nTargetY;
+                    var mx = MShare.MySelf.CurrX;
+                    var my = MShare.MySelf.CurrY;
+                    var dx = MShare.TargetX;
+                    var dy = MShare.TargetY;
                     var ndir = ClFunc.GetNextDirection(mx, my, dx, dy);
                     int crun;
                     byte mdir;
@@ -574,14 +574,14 @@ namespace BotSrv.Player
                                     if (MShare.OpenAutoPlay && MShare.g_boAPAutoMove && (MShare.g_APPathList.Count > 0))
                                     {
                                         heroActor.Init_Queue2();
-                                        MShare.g_nTargetX = -1;
+                                        MShare.TargetX = -1;
                                     }
                                     var bowalk = false;
                                     byte adir = 0;
                                     if (!bowalk)
                                     {
-                                        mx = MShare.MySelf.m_nCurrX;
-                                        my = MShare.MySelf.m_nCurrY;
+                                        mx = MShare.MySelf.CurrX;
+                                        my = MShare.MySelf.CurrY;
                                         ClFunc.GetNextPosXY(ndir, ref mx, ref my);
                                         if (CheckDoorAction(mx, my))
                                         {
@@ -590,14 +590,14 @@ namespace BotSrv.Player
                                     }
                                     if (!bostop && (PlayScene.CrashMan(mx, my) || !Map.CanMove(mx, my)))
                                     {
-                                        mx = MShare.MySelf.m_nCurrX;
-                                        my = MShare.MySelf.m_nCurrY;
+                                        mx = MShare.MySelf.CurrX;
+                                        my = MShare.MySelf.CurrY;
                                         adir = ClFunc.PrivDir(ndir);
                                         ClFunc.GetNextPosXY(adir, ref mx, ref my);
                                         if (!Map.CanMove(mx, my))
                                         {
-                                            mx = MShare.MySelf.m_nCurrX;
-                                            my = MShare.MySelf.m_nCurrY;
+                                            mx = MShare.MySelf.CurrX;
+                                            my = MShare.MySelf.CurrY;
                                             adir = ClFunc.NextDir(ndir);
                                             ClFunc.GetNextPosXY(adir, ref mx, ref my);
                                             if (Map.CanMove(mx, my))
@@ -613,7 +613,7 @@ namespace BotSrv.Player
                                     if (bowalk)
                                     {
                                         MShare.MySelf.UpdateMsg(Messages.CM_WALK, (ushort)mx, (ushort)my, adir, 0, 0, "", 0);
-                                        MShare.g_dwLastMoveTick = MShare.GetTickCount();
+                                        MShare.LastMoveTick = MShare.GetTickCount();
                                         if (MShare.g_nOverAPZone > 0)
                                         {
                                             MShare.g_nOverAPZone -= 1;
@@ -621,23 +621,23 @@ namespace BotSrv.Player
                                     }
                                     else
                                     {
-                                        mdir = ClFunc.GetNextDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, dx, dy);
+                                        mdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, dx, dy);
                                         if (mdir != MShare.MySelf.m_btDir)
                                         {
-                                            MShare.MySelf.SendMsg(Messages.CM_TURN, (ushort)MShare.MySelf.m_nCurrX, (ushort)MShare.MySelf.m_nCurrY, mdir, 0, 0, "", 0);
+                                            MShare.MySelf.SendMsg(Messages.CM_TURN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, mdir, 0, 0, "", 0);
                                         }
-                                        MShare.g_nTargetX = -1;
+                                        MShare.TargetX = -1;
                                     }
                                 }
                                 else
                                 {
                                     MShare.MySelf.UpdateMsg(Messages.CM_WALK, (ushort)mx, (ushort)my, ndir, 0, 0, "", 0);
-                                    MShare.g_dwLastMoveTick = MShare.GetTickCount();
+                                    MShare.LastMoveTick = MShare.GetTickCount();
                                 }
                             }
                             else
                             {
-                                MShare.g_nTargetX = -1;
+                                MShare.TargetX = -1;
                             }
                             break;
                         case PlayerAction.Run: // 免助跑
@@ -647,10 +647,10 @@ namespace BotSrv.Player
                                 if ((MShare.MySelf.m_btHorse != 0) && (ClFunc.GetDistance(mx, my, dx, dy) >= 3) && (crun > 0) && IsUnLockAction())
                                 {
                                     ClFunc.GetNextHorseRunXY(ndir, ref mx, ref my);
-                                    if (PlayScene.CanRun(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, mx, my))
+                                    if (PlayScene.CanRun(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mx, my))
                                     {
                                         MShare.MySelf.UpdateMsg(Messages.CM_HORSERUN, (ushort)mx, (ushort)my, ndir, 0, 0, "", 0);
-                                        MShare.g_dwLastMoveTick = MShare.GetTickCount();
+                                        MShare.LastMoveTick = MShare.GetTickCount();
                                         if (MShare.g_nOverAPZone > 0)
                                         {
                                             MShare.g_nOverAPZone -= 1;
@@ -670,10 +670,10 @@ namespace BotSrv.Player
                                         if (IsUnLockAction())
                                         {
                                             ClFunc.GetNextRunXY(ndir, ref mx, ref my);
-                                            if (PlayScene.CanRun(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, mx, my))
+                                            if (PlayScene.CanRun(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mx, my))
                                             {
                                                 MShare.MySelf.UpdateMsg(Messages.CM_RUN, (ushort)mx, (ushort)my, ndir, 0, 0, "", 0);
-                                                MShare.g_dwLastMoveTick = MShare.GetTickCount();
+                                                MShare.LastMoveTick = MShare.GetTickCount();
                                                 if (MShare.g_nOverAPZone > 0)
                                                 {
                                                     MShare.g_nOverAPZone -= 1;
@@ -688,17 +688,17 @@ namespace BotSrv.Player
                                         }
                                         else
                                         {
-                                            MShare.g_nTargetX = -1;
+                                            MShare.TargetX = -1;
                                         }
                                     }
                                     else
                                     {
-                                        mdir = ClFunc.GetNextDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, dx, dy);
+                                        mdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, dx, dy);
                                         if (mdir != MShare.MySelf.m_btDir)
                                         {
-                                            MShare.MySelf.SendMsg(Messages.CM_TURN, (ushort)MShare.MySelf.m_nCurrX, (ushort)MShare.MySelf.m_nCurrY, mdir, 0, 0, "", 0);
+                                            MShare.MySelf.SendMsg(Messages.CM_TURN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, mdir, 0, 0, "", 0);
                                         }
-                                        MShare.g_nTargetX = -1;
+                                        MShare.TargetX = -1;
                                         goto LB_WALK;
                                     }
                                 }
@@ -718,11 +718,11 @@ namespace BotSrv.Player
                     if (MShare.g_boAPAutoMove && (MShare.g_APPathList.Count > 0))
                     {
                         heroActor.Init_Queue2();
-                        MShare.g_nTargetX = -1;
+                        MShare.TargetX = -1;
                     }
                 }
             }
-            MShare.g_nTargetX = -1;
+            MShare.TargetX = -1;
         MMMM:
             if (MShare.MySelf.RealActionMsg.Ident > 0)
             {
@@ -737,7 +737,7 @@ namespace BotSrv.Player
                 MShare.MySelf.RealActionMsg.Ident = 0;
                 if (MShare.g_nStallX != -1)
                 {
-                    if ((Math.Abs(MShare.g_nStallX - MShare.MySelf.m_nCurrX) >= 8) || (Math.Abs(MShare.g_nStallY - MShare.MySelf.m_nCurrY) >= 8))
+                    if ((Math.Abs(MShare.g_nStallX - MShare.MySelf.CurrX) >= 8) || (Math.Abs(MShare.g_nStallY - MShare.MySelf.CurrY) >= 8))
                     {
                         MShare.g_nStallX = -1;
                     }
@@ -762,7 +762,7 @@ namespace BotSrv.Player
                 MShare.g_APTagget = null;
                 MShare.g_AutoPicupItem = null;
                 MShare.g_nAPStatus = -1;
-                MShare.g_nTargetX = -1;
+                MShare.TargetX = -1;
                 MShare.g_APGoBack = false;
                 ScreenManager.AddChatBoardString("开始自动挂机...", ConsoleColor.Red);
                 SaveWayPoint();
@@ -864,8 +864,8 @@ namespace BotSrv.Player
                     }
                     switch (pcm.Def.MagicId)
                     {
-                        case 26 when MShare.g_boNextTimeFireHit || (MShare.GetTickCount() - MShare.g_dwLatestFireHitTick <= 10 * 1000): // 烈火时间间隔
-                        case 66 when MShare.g_boCanSLonHit || (MShare.GetTickCount() - MShare.g_dwLatestSLonHitTick <= 8 * 1000):
+                        case 26 when MShare.g_boNextTimeFireHit || (MShare.GetTickCount() - MShare.LatestFireHitTick <= 10 * 1000): // 烈火时间间隔
+                        case 66 when MShare.g_boCanSLonHit || (MShare.GetTickCount() - MShare.LatestSLonHitTick <= 8 * 1000):
                         case 43 when MShare.g_boNextTimeTwinHit || (MShare.GetTickCount() - MShare.g_dwLatestTwinHitTick <= 15 * 1000):
                         case 56 when MShare.g_boNextTimePursueHit || (MShare.GetTickCount() - MShare.g_dwLatestPursueHitTick <= 10 * 1000): // 野蛮时间间隔
                         case 27 when MShare.GetTickCount() - MShare.g_dwLatestRushRushTick <= 3 * 1000:
@@ -883,18 +883,18 @@ namespace BotSrv.Player
                     }
                     if (MShare.SpeedRate)
                     {
-                        if (boContinue || (MShare.GetTickCount() - MShare.g_dwLatestSpellTick > MShare.g_dwSpellTime - ((long)MShare.g_MagSpeedRate) * 20))
+                        if (boContinue || (MShare.GetTickCount() - MShare.LatestSpellTick > MShare.SpellTime - ((long)MShare.g_MagSpeedRate) * 20))
                         {
-                            MShare.g_dwLatestSpellTick = MShare.GetTickCount();
+                            MShare.LatestSpellTick = MShare.GetTickCount();
                             MShare.g_dwMagicDelayTime = 0;
                             SendSpellMsg(Messages.CM_SPELL, MShare.MySelf.m_btDir, 0, pcm.Def.MagicId, 0, false);
                         }
                     }
                     else
                     {
-                        if (boContinue || (MShare.GetTickCount() - MShare.g_dwLatestSpellTick > MShare.g_dwSpellTime))
+                        if (boContinue || (MShare.GetTickCount() - MShare.LatestSpellTick > MShare.SpellTime))
                         {
-                            MShare.g_dwLatestSpellTick = MShare.GetTickCount();
+                            MShare.LatestSpellTick = MShare.GetTickCount();
                             MShare.g_dwMagicDelayTime = 0;
                             SendSpellMsg(Messages.CM_SPELL, MShare.MySelf.m_btDir, 0, pcm.Def.MagicId, 0, false);
                         }
@@ -910,16 +910,16 @@ namespace BotSrv.Player
                 {
                     if (MShare.MagicLock && PlayScene.IsValidActor(MShare.g_FocusCret) && !MShare.g_FocusCret.m_boDeath)
                     {
-                        MShare.g_MagicLockActor = MShare.g_FocusCret;
+                        MShare.MagicLockActor = MShare.g_FocusCret;
                     }
-                    MShare.g_MagicTarget = MShare.g_MagicLockActor;
+                    MShare.g_MagicTarget = MShare.MagicLockActor;
                 }
                 if (MShare.g_MagicTarget != null)
                 {
                     if (!MShare.MagicLock || MShare.g_MagicTarget.m_boDeath || (MShare.g_MagicTarget.m_btRace == ActorRace.Merchant) || !PlayScene.IsValidActor(MShare.g_MagicTarget))
                     {
                         MShare.g_MagicTarget = null;
-                        MShare.g_MagicLockActor = null;
+                        MShare.MagicLockActor = null;
                     }
                 }
                 if ((MShare.g_MagicTarget != null) && (MShare.g_MagicTarget is THumActor))
@@ -927,7 +927,7 @@ namespace BotSrv.Player
                     if (((THumActor)MShare.g_MagicTarget).m_StallMgr.OnSale)
                     {
                         MShare.g_MagicTarget = null;
-                        MShare.g_MagicLockActor = null;
+                        MShare.MagicLockActor = null;
                     }
                 }
                 SmartChangePoison(pcm);
@@ -945,8 +945,8 @@ namespace BotSrv.Player
                 {
                     if (!boReacll)
                     {
-                        targx = MShare.g_MagicTarget.m_nCurrX;
-                        targy = MShare.g_MagicTarget.m_nCurrY;
+                        targx = MShare.g_MagicTarget.CurrX;
+                        targy = MShare.g_MagicTarget.CurrY;
                     }
                     else
                     {
@@ -955,14 +955,14 @@ namespace BotSrv.Player
                     }
                     targid = MShare.g_MagicTarget.m_nRecogId;
                 }
-                if ((Math.Abs(MShare.MySelf.m_nCurrX - targx) > MShare.g_nMagicRange) || (Math.Abs(MShare.MySelf.m_nCurrY - targy) > MShare.g_nMagicRange))
+                if ((Math.Abs(MShare.MySelf.CurrX - targx) > MShare.g_nMagicRange) || (Math.Abs(MShare.MySelf.CurrY - targy) > MShare.g_nMagicRange))
                 {
                     if (MShare.g_gcTec[14] && (fUnLockMagic || (targid != 0)))
                     {
                         PlayScene.ProcMagic.NTargetX = (short)targx;
                         PlayScene.ProcMagic.NTargetY = (short)targy;
                         PlayScene.ProcMagic.XMagic = pcm;
-                        PlayScene.ProcMagic.XTarget = MShare.g_MagicLockActor;
+                        PlayScene.ProcMagic.XTarget = MShare.MagicLockActor;
                         PlayScene.ProcMagic.FReacll = boReacll;
                         PlayScene.ProcMagic.FContinue = boContinue;
                         PlayScene.ProcMagic.FUnLockMagic = fUnLockMagic;
@@ -982,8 +982,8 @@ namespace BotSrv.Player
                 PlayScene.ProcMagic.NTargetX = -1;
                 if (boContinue || (CanNextAction() && ServerAcceptNextAction()))
                 {
-                    MShare.g_dwLatestSpellTick = MShare.GetTickCount();
-                    tdir = ClFunc.GetFlyDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, targx, targy);
+                    MShare.LatestSpellTick = MShare.GetTickCount();
+                    tdir = ClFunc.GetFlyDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targx, targy);
                     var pmag = new TUseMagicInfo();
                     pmag.EffectNumber = pcm.Def.Effect;
                     pmag.MagicSerial = pcm.Def.MagicId;
@@ -1023,7 +1023,7 @@ namespace BotSrv.Player
             var Actor = PlayScene.FindActor(who);
             if (Actor != null)
             {
-                var adir = ClFunc.GetFlyDirection(Actor.m_nCurrX, Actor.m_nCurrY, targetx, targety);
+                var adir = ClFunc.GetFlyDirection(Actor.CurrX, Actor.CurrY, targetx, targety);
                 var UseMagic = new TUseMagicInfo();
                 UseMagic.EffectNumber = effnum % 255;
                 UseMagic.ServerMagicCode = 0;
@@ -1629,9 +1629,9 @@ namespace BotSrv.Player
             {
                 return true;
             }
-            ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, ndir, ref nX, ref nY);
+            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
             ClFunc.GetFrontPosition(nX, nY, ndir, ref nX, ref nY);
-            if ((Math.Abs(MShare.MySelf.m_nCurrX - nX) == 2) || (Math.Abs(MShare.MySelf.m_nCurrY - nY) == 2))
+            if ((Math.Abs(MShare.MySelf.CurrX - nX) == 2) || (Math.Abs(MShare.MySelf.CurrY - nY) == 2))
             {
                 var Actor = PlayScene.FindActorXY(nX, nY);
                 if (Actor != null)
@@ -1673,21 +1673,21 @@ namespace BotSrv.Player
             short rx = 0;
             short ry = 0;
             var result = false;
-            ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, ndir, ref nX, ref nY);
+            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
             var Actor = PlayScene.FindActorXY(nX, nY);
             var mdir = (ndir + 1) % 8;
-            ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, mdir, ref rx, ref ry);
+            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
             var ractor = PlayScene.FindActorXY(rx, ry);
             if (ractor == null)
             {
                 mdir = (ndir + 2) % 8;
-                ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, mdir, ref rx, ref ry);
+                ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
                 ractor = PlayScene.FindActorXY(rx, ry);
             }
             if (ractor == null)
             {
                 mdir = (ndir + 7) % 8;
-                ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, mdir, ref rx, ref ry);
+                ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
                 ractor = PlayScene.FindActorXY(rx, ry);
             }
             if ((Actor != null) && (ractor != null))
@@ -1708,7 +1708,7 @@ namespace BotSrv.Player
             var result = false;
             while (true)
             {
-                if (GetNextPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, ndir, nC, ref nX, ref nY))
+                if (GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, nC, ref nX, ref nY))
                 {
                     var Actor = PlayScene.FindActorXY(nX, nY);
                     if ((Actor != null) && !Actor.m_boDeath)
@@ -1736,7 +1736,7 @@ namespace BotSrv.Player
             nC = 1;
             while (true)
             {
-                if (GetNextPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, ndir, nC, ref nX, ref nY))
+                if (GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, nC, ref nX, ref nY))
                 {
                     Actor = PlayScene.FindActorXY(nX, nY);
                     if ((Actor != null) && !Actor.m_boDeath)
@@ -1761,21 +1761,21 @@ namespace BotSrv.Player
             short rx = 0;
             short ry = 0;
             var result = false;
-            ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, ndir, ref nX, ref nY);
+            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
             var Actor = PlayScene.FindActorXY(nX, nY);
             var mdir = (ndir + 1) % 8;
-            ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, mdir, ref rx, ref ry);
+            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
             var ractor = PlayScene.FindActorXY(rx, ry);
             if (ractor == null)
             {
                 mdir = (ndir + 2) % 8;
-                ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, mdir, ref rx, ref ry);
+                ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
                 ractor = PlayScene.FindActorXY(rx, ry);
             }
             if (ractor == null)
             {
                 mdir = (ndir + 7) % 8;
-                ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, mdir, ref rx, ref ry);
+                ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
                 ractor = PlayScene.FindActorXY(rx, ry);
             }
             if ((Actor != null) && (ractor != null))
@@ -1796,15 +1796,15 @@ namespace BotSrv.Player
             {
                 nHitMsg = Messages.CM_HEAVYHIT;
             }
-            int tdir = ClFunc.GetNextDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, target.m_nCurrX, target.m_nCurrY);
-            if ((Math.Abs(MShare.MySelf.m_nCurrX - target.m_nCurrX) <= 1) && (Math.Abs(MShare.MySelf.m_nCurrY - target.m_nCurrY) <= 1) && (!target.m_boDeath))
+            int tdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY);
+            if ((Math.Abs(MShare.MySelf.CurrX - target.CurrX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - target.CurrY) <= 1) && (!target.m_boDeath))
             {
                 if (TimerAutoPlay.Enabled)
                 {
                     MShare.g_boAPAutoMove = false;
                     if (MShare.g_APTagget != null)
                     {
-                        MShare.g_sAPStr = $"怪物目标：{MShare.g_APTagget.m_sUserName} ({MShare.g_APTagget.m_nCurrX},{MShare.g_APTagget.m_nCurrY}) 正在使用普通攻击";
+                        MShare.g_sAPStr = $"怪物目标：{MShare.g_APTagget.m_sUserName} ({MShare.g_APTagget.CurrX},{MShare.g_APTagget.CurrY}) 正在使用普通攻击";
                     }
                 }
                 if (CanNextAction() && ServerAcceptNextAction())
@@ -1837,21 +1837,21 @@ namespace BotSrv.Player
                         {
                             nHitMsg = Messages.CM_LONGHIT;
                         }
-                        MShare.MySelf.SendMsg(nHitMsg, (ushort)MShare.MySelf.m_nCurrX, (ushort)MShare.MySelf.m_nCurrY, tdir, 0, 0, "", 0);
+                        MShare.MySelf.SendMsg(nHitMsg, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, tdir, 0, 0, "", 0);
                     }
                 }
                 result = true;
-                MShare.g_dwLastAttackTick = MShare.GetTickCount();
+                MShare.LastAttackTick = MShare.GetTickCount();
             }
             else
             {
-                if (MShare.g_boCanLongHit && (MShare.MySelf.m_btJob == 0) && (!target.m_boDeath) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.g_MagicArr[12] != null) && TargetInSwordLongAttackRange2(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, target.m_nCurrX, target.m_nCurrY))
+                if (MShare.g_boCanLongHit && (MShare.MySelf.m_btJob == 0) && (!target.m_boDeath) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.g_MagicArr[12] != null) && TargetInSwordLongAttackRange2(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY))
                 {
                     if (CanNextAction() && ServerAcceptNextAction() && CanNextHit())
                     {
                         nHitMsg = Messages.CM_LONGHIT;
-                        MShare.MySelf.SendMsg(nHitMsg, (ushort)MShare.MySelf.m_nCurrX, (ushort)MShare.MySelf.m_nCurrY, tdir, 0, 0, "", 0);
-                        MShare.g_dwLastAttackTick = MShare.GetTickCount();
+                        MShare.MySelf.SendMsg(nHitMsg, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, tdir, 0, 0, "", 0);
+                        MShare.LastAttackTick = MShare.GetTickCount();
                     }
                     else if (MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && TimerAutoPlay.Enabled)// 走刺杀位
                     {
@@ -1861,28 +1861,28 @@ namespace BotSrv.Player
                 }
                 else
                 {
-                    var dx = MShare.MySelf.m_nCurrX;
-                    var dy = MShare.MySelf.m_nCurrY;
+                    var dx = MShare.MySelf.CurrX;
+                    var dy = MShare.MySelf.CurrY;
                     if ((MShare.MySelf.m_btJob == 0) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.g_MagicArr[12] != null))
                     {
-                        ClFunc.GetNextHitPosition(target.m_nCurrX, target.m_nCurrY, ref dx, ref dy);
+                        ClFunc.GetNextHitPosition(target.CurrX, target.CurrY, ref dx, ref dy);
                         if (!PlayScene.CanWalk(dx, dy))
                         {
-                            ClFunc.GetBackPosition(target.m_nCurrX, target.m_nCurrY, tdir, ref dx, ref dy);
+                            ClFunc.GetBackPosition(target.CurrX, target.CurrY, tdir, ref dx, ref dy);
                         }
                     }
                     else
                     {
-                        ClFunc.GetBackPosition(target.m_nCurrX, target.m_nCurrY, tdir, ref dx, ref dy);
+                        ClFunc.GetBackPosition(target.CurrX, target.CurrY, tdir, ref dx, ref dy);
                     }
-                    MShare.g_nTargetX = dx;
-                    MShare.g_nTargetY = dy;
+                    MShare.TargetX = dx;
+                    MShare.TargetY = dy;
                     MShare.PlayerAction = PlayerAction.Run;
                 }
                 if (TimerAutoPlay.Enabled)
                 {
                     MShare.g_boAPAutoMove = true;
-                    MShare.g_sAPStr = $"怪物目标：{target.m_sUserName} ({target.m_nCurrX},{target.m_nCurrY}) 正在跑向";
+                    MShare.g_sAPStr = $"怪物目标：{target.m_sUserName} ({target.CurrX},{target.CurrY}) 正在跑向";
                 }
             }
             return result;
@@ -1986,29 +1986,29 @@ namespace BotSrv.Player
                 {
                     if (MShare.g_boAutoDig)
                     {
-                        MShare.MySelf.SendMsg(Messages.CM_HIT + 1, (ushort)MShare.MySelf.m_nCurrX, (ushort)MShare.MySelf.m_nCurrY, MShare.MySelf.m_btDir, 0, 0, "", 0);
+                        MShare.MySelf.SendMsg(Messages.CM_HIT + 1, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, MShare.MySelf.m_btDir, 0, 0, "", 0);
                     }
                     if (MShare.g_boAutoSit)
                     {
-                        target = PlayScene.ButchAnimal(MShare.g_nMouseCurrX, MShare.g_nMouseCurrY);
+                        target = PlayScene.ButchAnimal(MShare.MouseCurrX, MShare.MouseCurrY);
                         if (target != null)
                         {
-                            ii = ClFunc.GetNextDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nMouseCurrX, MShare.g_nMouseCurrY);
-                            SendButchAnimal(MShare.g_nMouseCurrX, MShare.g_nMouseCurrY, ii, target.m_nRecogId);
-                            MShare.MySelf.SendMsg(Messages.CM_SITDOWN, (ushort)MShare.MySelf.m_nCurrX, (ushort)MShare.MySelf.m_nCurrY, ii, 0, 0, "", 0);
+                            ii = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MouseCurrX, MShare.MouseCurrY);
+                            SendButchAnimal(MShare.MouseCurrX, MShare.MouseCurrY, ii, target.m_nRecogId);
+                            MShare.MySelf.SendMsg(Messages.CM_SITDOWN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, ii, 0, 0, "", 0);
                         }
                         else
                         {
-                            ii = ClFunc.GetNextDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nMouseCurrX, MShare.g_nMouseCurrY);
-                            SendButchAnimal(MShare.g_nMouseCurrX, MShare.g_nMouseCurrY, ii, MShare.g_DetectItemMineID);
-                            MShare.MySelf.SendMsg(Messages.CM_SITDOWN, (ushort)MShare.MySelf.m_nCurrX, (ushort)MShare.MySelf.m_nCurrY, ii, 0, 0, "", 0);
+                            ii = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MouseCurrX, MShare.MouseCurrY);
+                            SendButchAnimal(MShare.MouseCurrX, MShare.MouseCurrY, ii, MShare.g_DetectItemMineID);
+                            MShare.MySelf.SendMsg(Messages.CM_SITDOWN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, ii, 0, 0, "", 0);
                         }
                     }
                 }
             }
-            if (MShare.g_boAutoPickUp && (MShare.MySelf != null) && (MShare.GetTickCount() - MShare.g_dwAutoPickupTick) > MShare.g_dwAutoPickupTime)// 动自捡取
+            if (MShare.g_boAutoPickUp && (MShare.MySelf != null) && (MShare.GetTickCount() - MShare.AutoPickupTick) > MShare.AutoPickupTime)// 动自捡取
             {
-                MShare.g_dwAutoPickupTick = MShare.GetTickCount();
+                MShare.AutoPickupTick = MShare.GetTickCount();
                 AutoPickUpItem();
             }
         }
@@ -2017,7 +2017,7 @@ namespace BotSrv.Player
         {
             if (ServerAcceptNextAction())
             {
-                var DropItem = PlayScene.GetXyDropItems(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY);
+                var DropItem = PlayScene.GetXyDropItems(MShare.MySelf.CurrX, MShare.MySelf.CurrY);
                 if (DropItem != null)
                 {
                     if (MShare.g_boPickUpAll || DropItem.boPickUp)
@@ -2051,7 +2051,7 @@ namespace BotSrv.Player
                         MShare.g_sMapTitle = "";
                         PlayScene.SendMsg(Messages.SM_CHANGEMAP, 0, WaitingMsg.Param, WaitingMsg.Tag, (byte)WaitingMsg.Series, 0, 0, WaitingStr);
                         MShare.MySelf.CleanCharMapSetting((short)WaitingMsg.Param, (short)WaitingMsg.Tag);
-                        MShare.g_nTargetX = -1;
+                        MShare.TargetX = -1;
                         MShare.g_TargetCret = null;
                         MShare.g_FocusCret = null;
                         break;
@@ -2128,7 +2128,7 @@ namespace BotSrv.Player
             MShare.g_APTagget = null;
             MShare.g_AutoPicupItem = null;
             MShare.g_nAPStatus = -1;
-            MShare.g_nTargetX = -1;
+            MShare.TargetX = -1;
             MShare.g_boCanRunSafeZone = true;
             MShare.g_nEatIteminvTime = 200;
             MShare.g_SendSayListIdx = 0;
@@ -2204,7 +2204,7 @@ namespace BotSrv.Player
             MShare.g_OpenBoxItem.Item.Item.Name = "";
             MShare.g_EatingItem.Item.Name = "";
             MShare.g_nLastMapMusic = -1;
-            MShare.g_nTargetX = -1;
+            MShare.TargetX = -1;
             MShare.g_TargetCret = null;
             MShare.g_FocusCret = null;
             MShare.g_MagicTarget = null;
@@ -2288,7 +2288,7 @@ namespace BotSrv.Player
             MShare.g_OpenBoxItem.Item.Item.Name = "";
             MShare.g_EatingItem.Item.Name = "";
             MShare.g_nLastMapMusic = -1;
-            MShare.g_nTargetX = -1;
+            MShare.TargetX = -1;
             MShare.g_TargetCret = null;
             MShare.g_FocusCret = null;
             MShare.g_MagicTarget = null;
@@ -2386,7 +2386,7 @@ namespace BotSrv.Player
                                     try
                                     {
                                         Map.LoadMapData();
-                                        PathMap.g_MapPath = Map.FindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.MySelf.m_nTagX, MShare.MySelf.m_nTagY, 0);
+                                        PathMap.g_MapPath = Map.FindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MySelf.m_nTagX, MShare.MySelf.m_nTagY, 0);
                                         if (PathMap.g_MapPath != null)
                                         {
                                             g_MoveStep = 1;
@@ -2458,7 +2458,7 @@ namespace BotSrv.Player
 
         private void SendPickup()
         {
-            var msg = Messages.MakeMessage(Messages.CM_PICKUP, 0, MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, 0);
+            var msg = Messages.MakeMessage(Messages.CM_PICKUP, 0, MShare.MySelf.CurrX, MShare.MySelf.CurrY, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
@@ -2531,7 +2531,7 @@ namespace BotSrv.Player
                                     try
                                     {
                                         Map.LoadMapData();
-                                        PathMap.g_MapPath = Map.FindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.MySelf.m_nTagX, MShare.MySelf.m_nTagY, 0);
+                                        PathMap.g_MapPath = Map.FindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MySelf.m_nTagX, MShare.MySelf.m_nTagY, 0);
                                         if (PathMap.g_MapPath != null)
                                         {
                                             g_MoveStep = 1;
@@ -2846,27 +2846,27 @@ namespace BotSrv.Player
                 return false;
             }
             LevelFastTime = HUtil32._MIN(370, MShare.MySelf.m_Abil.Level * 14);
-            LevelFastTime = HUtil32._MIN(800, LevelFastTime + MShare.MySelf.m_nHitSpeed * MShare.g_nItemSpeed);
+            LevelFastTime = HUtil32._MIN(800, LevelFastTime + MShare.MySelf.m_nHitSpeed * MShare.ItemSpeed);
             if (MShare.SpeedRate)
             {
                 if (MShare.MySelf.m_boAttackSlow)
                 {
-                    NextHitTime = MShare.g_nHitTime - LevelFastTime + 1500 - MShare.g_HitSpeedRate * 20; // 腕力超过时，减慢攻击速度
+                    NextHitTime = MShare.HitTime - LevelFastTime + 1500 - MShare.g_HitSpeedRate * 20; // 腕力超过时，减慢攻击速度
                 }
                 else
                 {
-                    NextHitTime = MShare.g_nHitTime - LevelFastTime - MShare.g_HitSpeedRate * 20;
+                    NextHitTime = MShare.HitTime - LevelFastTime - MShare.g_HitSpeedRate * 20;
                 }
             }
             else
             {
                 if (MShare.MySelf.m_boAttackSlow)
                 {
-                    NextHitTime = MShare.g_nHitTime - LevelFastTime + 1500;
+                    NextHitTime = MShare.HitTime - LevelFastTime + 1500;
                 }
                 else
                 {
-                    NextHitTime = MShare.g_nHitTime - LevelFastTime;
+                    NextHitTime = MShare.HitTime - LevelFastTime;
                 }
             }
             if (NextHitTime < 0)
@@ -2890,8 +2890,8 @@ namespace BotSrv.Player
 
         private void ActionFailed()
         {
-            MShare.g_nTargetX = -1;
-            MShare.g_nTargetY = -1;
+            MShare.TargetX = -1;
+            MShare.TargetY = -1;
             MShare.MySelf.m_boUseCboLib = false;
             ActionFailLock = true;
             ActionFailLockTime = MShare.GetTickCount();
@@ -2939,7 +2939,7 @@ namespace BotSrv.Player
                     try
                     {
                         Map.ReLoadMapData();
-                        PathMap.g_MapPath = Map.FindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.MySelf.m_nTagX, MShare.MySelf.m_nTagY, 0);
+                        PathMap.g_MapPath = Map.FindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MySelf.m_nTagX, MShare.MySelf.m_nTagY, 0);
                         if (PathMap.g_MapPath != null)
                         {
                             g_MoveStep = 1;
@@ -3012,8 +3012,8 @@ namespace BotSrv.Player
             {
                 sBody = EDCode.DeCodeString(sBody);
                 sBody = HUtil32.GetValidStr3(sBody, ref sData, new char[] { '\r' });
-                MShare.g_sGameGoldName = sData;
-                MShare.g_sGamePointName = sBody;
+                MShare.GameGoldName = sData;
+                MShare.GamePointName = sBody;
             }
             MShare.MySelf.m_nGameGold = msg.Recog;
             MShare.MySelf.m_nGamePoint = HUtil32.MakeLong(msg.Param, msg.Tag);
@@ -3311,7 +3311,7 @@ namespace BotSrv.Player
                 MShare.g_APTagget = null;
                 MShare.g_AutoPicupItem = null;
                 MShare.g_nAPStatus = -1;
-                MShare.g_nTargetX = -1;
+                MShare.TargetX = -1;
                 MShare.g_APGoBack2 = false;
                 MShare.g_APMapPath2 = null;
                 GetNearPoint();
@@ -4120,7 +4120,7 @@ namespace BotSrv.Player
                 MShare.g_SeriesSkillFire_100 = false;
                 MShare.g_nCurrentMagic2 = 1;
                 MShare.g_nCurrentMagic = 888;
-                UseMagic(MShare.g_nMouseX, MShare.g_nMouseY, MShare.g_MagicArr[MShare.g_SeriesSkillArr[0]], false, true);
+                UseMagic(MShare.MouseX, MShare.MouseY, MShare.g_MagicArr[MShare.g_SeriesSkillArr[0]], false, true);
             }
         }
 
@@ -4220,13 +4220,13 @@ namespace BotSrv.Player
                     {
                         nspeed = MShare.g_MagSpeedRate * 20;
                     }
-                    if (MShare.GetTickCount() - MShare.g_dwLatestSpellTick > (MShare.g_dwSpellTime + MShare.g_dwMagicDelayTime - nspeed))
+                    if (MShare.GetTickCount() - MShare.LatestSpellTick > (MShare.SpellTime + MShare.g_dwMagicDelayTime - nspeed))
                     {
                         if (MShare.g_gcTec[4] && ((MShare.MySelf.m_nState & 0x00100000) == 0))
                         {
                             if (MShare.g_MagicArr[31] != null)
                             {
-                                UseMagic(MShare.SCREENWIDTH / 2, MShare.SCREENHEIGHT / 2, MShare.g_MagicArr[31]);
+                                UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, MShare.g_MagicArr[31]);
                                 return;
                             }
                         }
@@ -4238,7 +4238,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(56);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.SCREENWIDTH / 2, MShare.SCREENHEIGHT / 2, pcm);
+                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4247,7 +4247,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(113);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.SCREENWIDTH / 2, MShare.SCREENHEIGHT / 2, pcm);
+                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4256,7 +4256,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(26);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.SCREENWIDTH / 2, MShare.SCREENHEIGHT / 2, pcm);
+                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4265,7 +4265,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(66);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.SCREENWIDTH / 2, MShare.SCREENHEIGHT / 2, pcm);
+                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4274,7 +4274,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(43);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.SCREENWIDTH / 2, MShare.SCREENHEIGHT / 2, pcm);
+                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4285,7 +4285,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(18);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.SCREENWIDTH / 2, MShare.SCREENHEIGHT / 2, pcm);
+                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
                                     }
                                 }
                                 break;
@@ -4296,7 +4296,7 @@ namespace BotSrv.Player
                             pcm = GetMagicByID(MShare.g_gnTecPracticeKey);
                             if (pcm != null)
                             {
-                                UseMagic(MShare.g_nMouseX, MShare.g_nMouseY, pcm);
+                                UseMagic(MShare.MouseX, MShare.MouseY, pcm);
                             }
                         }
                     }
@@ -4368,7 +4368,7 @@ namespace BotSrv.Player
             //}
             if (PathMap.g_MapPath != null)
             {
-                if ((MShare.MySelf.m_nCurrX == MShare.MySelf.m_nTagX) && (MShare.MySelf.m_nCurrY == MShare.MySelf.m_nTagY))
+                if ((MShare.MySelf.CurrX == MShare.MySelf.m_nTagX) && (MShare.MySelf.CurrY == MShare.MySelf.m_nTagY))
                 {
                     TimerAutoMove.Enabled = false;
                     ScreenManager.AddChatBoardString("已经到达终点", GetRGB(5));
@@ -4381,21 +4381,21 @@ namespace BotSrv.Player
                 {
                     if (g_MoveStep <= PathMap.g_MapPath.Length)
                     {
-                        MShare.g_nTargetX = (short)PathMap.g_MapPath[g_MoveStep].X;
-                        MShare.g_nTargetY = (short)PathMap.g_MapPath[g_MoveStep].X;
-                        while ((Math.Abs(MShare.MySelf.m_nCurrX - MShare.g_nTargetX) <= 1) && (Math.Abs(MShare.MySelf.m_nCurrY - MShare.g_nTargetY) <= 1))
+                        MShare.TargetX = (short)PathMap.g_MapPath[g_MoveStep].X;
+                        MShare.TargetY = (short)PathMap.g_MapPath[g_MoveStep].X;
+                        while ((Math.Abs(MShare.MySelf.CurrX - MShare.TargetX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - MShare.TargetY) <= 1))
                         {
                             boCanRun = false;
                             if (g_MoveStep + 1 <= PathMap.g_MapPath.Length)
                             {
-                                X1 = MShare.MySelf.m_nCurrX;
-                                Y1 = MShare.MySelf.m_nCurrY;
+                                X1 = MShare.MySelf.CurrX;
+                                Y1 = MShare.MySelf.CurrY;
                                 X2 = (short)PathMap.g_MapPath[g_MoveStep + 1].X;
                                 Y2 = (short)PathMap.g_MapPath[g_MoveStep + 1].X;
                                 ndir = ClFunc.GetNextDirection(X1, Y1, X2, Y2);
                                 ClFunc.GetNextPosXY((byte)ndir, ref X1, ref Y1);
-                                X3 = MShare.MySelf.m_nCurrX;
-                                Y3 = MShare.MySelf.m_nCurrY;
+                                X3 = MShare.MySelf.CurrX;
+                                Y3 = MShare.MySelf.CurrY;
                                 ClFunc.GetNextRunXY(ndir, ref X3, ref Y3);
                                 if ((PathMap.g_MapPath[g_MoveStep + 1].X == X3) && (PathMap.g_MapPath[g_MoveStep + 1].X == Y3))
                                 {
@@ -4405,8 +4405,8 @@ namespace BotSrv.Player
                             if (boCanRun && Map.CanMove(X1, Y1) && !PlayScene.CrashMan(X1, Y1))
                             {
                                 g_MoveStep++;
-                                MShare.g_nTargetX = (short)PathMap.g_MapPath[g_MoveStep].X;
-                                MShare.g_nTargetY = (short)PathMap.g_MapPath[g_MoveStep].X;
+                                MShare.TargetX = (short)PathMap.g_MapPath[g_MoveStep].X;
+                                MShare.TargetY = (short)PathMap.g_MapPath[g_MoveStep].X;
                                 if (g_MoveStep >= PathMap.g_MapPath.Length)
                                 {
                                     break;
@@ -4414,17 +4414,17 @@ namespace BotSrv.Player
                             }
                             else
                             {
-                                MShare.g_nTargetX = (short)PathMap.g_MapPath[g_MoveStep].X;
-                                MShare.g_nTargetY = (short)PathMap.g_MapPath[g_MoveStep].X;
+                                MShare.TargetX = (short)PathMap.g_MapPath[g_MoveStep].X;
+                                MShare.TargetY = (short)PathMap.g_MapPath[g_MoveStep].X;
                                 break;
                             }
                         }
-                        if ((Math.Abs(MShare.MySelf.m_nCurrX - MShare.MySelf.m_nTagX) <= 1) && (Math.Abs(MShare.MySelf.m_nCurrY - MShare.MySelf.m_nTagY) <= 1))
+                        if ((Math.Abs(MShare.MySelf.CurrX - MShare.MySelf.m_nTagX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - MShare.MySelf.m_nTagY) <= 1))
                         {
-                            MShare.g_nTargetX = MShare.MySelf.m_nTagX;
-                            MShare.g_nTargetY = MShare.MySelf.m_nTagY;
+                            MShare.TargetX = MShare.MySelf.m_nTagX;
+                            MShare.TargetY = MShare.MySelf.m_nTagY;
                         }
-                        if ((Math.Abs(MShare.MySelf.m_nCurrX - MShare.g_nTargetX) <= 1) && (Math.Abs(MShare.MySelf.m_nCurrY - MShare.g_nTargetY) <= 1))
+                        if ((Math.Abs(MShare.MySelf.CurrX - MShare.TargetX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - MShare.TargetY) <= 1))
                         {
                             MShare.PlayerAction = PlayerAction.Walk;// 目标座标
                             g_MoveBusy = true;
@@ -4458,12 +4458,12 @@ namespace BotSrv.Player
             }
             while (i < 16)
             {
-                if (!GetNextPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, ndir, 2, ref MShare.g_nTargetX, ref MShare.g_nTargetY))
+                if (!GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, 2, ref MShare.TargetX, ref MShare.TargetY))
                 {
-                    ClFunc.GetFrontPosition(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, ndir, ref MShare.g_nTargetX, ref MShare.g_nTargetY);
-                    if (!PlayScene.CanWalk(MShare.g_nTargetX, MShare.g_nTargetY))
+                    ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref MShare.TargetX, ref MShare.TargetY);
+                    if (!PlayScene.CanWalk(MShare.TargetX, MShare.TargetY))
                     {
-                        MShare.MySelf.SendMsg(Messages.CM_TURN, (ushort)MShare.MySelf.m_nCurrX, (ushort)MShare.MySelf.m_nCurrY, RandomNumber.GetInstance().Random(8), 0, 0, "", 0);
+                        MShare.MySelf.SendMsg(Messages.CM_TURN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, RandomNumber.GetInstance().Random(8), 0, 0, "", 0);
                         i++;
                     }
                     else
@@ -4474,7 +4474,7 @@ namespace BotSrv.Player
                 }
                 else
                 {
-                    if (PlayScene.CanWalk(MShare.g_nTargetX, MShare.g_nTargetY))
+                    if (PlayScene.CanWalk(MShare.TargetX, MShare.TargetY))
                     {
                         success = true;
                         break;
@@ -4508,7 +4508,7 @@ namespace BotSrv.Player
                 MShare.g_APTagget = null;
                 MShare.g_AutoPicupItem = null;
                 MShare.g_nAPStatus = -1;
-                MShare.g_nTargetX = -1;
+                MShare.TargetX = -1;
                 TimerAutoPlay.Enabled = MShare.g_gcAss[0];
                 return;
             }
@@ -4528,7 +4528,7 @@ namespace BotSrv.Player
                     MShare.g_APTagget = null;
                     MShare.g_AutoPicupItem = null;
                     MShare.g_nAPStatus = -1;
-                    MShare.g_nTargetX = -1;
+                    MShare.TargetX = -1;
                     TimerAutoPlay.Enabled = MShare.g_gcAss[0];
                     MShare.g_boAPAutoMove = true;
                     break;
@@ -4539,29 +4539,29 @@ namespace BotSrv.Player
                     }
                     if (MShare.g_APTagget != null)
                     {
-                        MShare.g_nTargetX = MShare.g_APTagget.m_nCurrX;
-                        MShare.g_nTargetY = MShare.g_APTagget.m_nCurrY;
-                        heroActor.AutoFindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_APTagget.m_nCurrX, MShare.g_APTagget.m_nCurrY);
+                        MShare.TargetX = MShare.g_APTagget.CurrX;
+                        MShare.TargetY = MShare.g_APTagget.CurrY;
+                        heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.g_APTagget.CurrX, MShare.g_APTagget.CurrY);
                     }
-                    MShare.g_nTargetX = -1;
+                    MShare.TargetX = -1;
                     MShare.g_nAPStatus = 1;
                     MShare.g_boAPAutoMove = true;
                     break;
                 case 2:// 此时该物品为首次发现，自动寻找路径
                     if ((MShare.g_AutoPicupItem != null) && ((MShare.g_nAPStatus != 2) || (MShare.g_APPathList.Count == 0)))
                     {
-                        MShare.g_nTargetX = MShare.g_AutoPicupItem.X;
-                        MShare.g_nTargetY = MShare.g_AutoPicupItem.Y;
-                        heroActor.AutoFindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nTargetX, MShare.g_nTargetY);
-                        MShare.g_nTargetX = -1;
+                        MShare.TargetX = MShare.g_AutoPicupItem.X;
+                        MShare.TargetY = MShare.g_AutoPicupItem.Y;
+                        heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
+                        MShare.TargetX = -1;
                         MShare.g_sAPStr = $"物品目标：{MShare.g_AutoPicupItem.Name}({MShare.g_AutoPicupItem.X},{MShare.g_AutoPicupItem.Y}) 正在去拾取";
                     }
                     else if (MShare.g_AutoPicupItem != null)
                     {
-                        MShare.g_nTargetX = MShare.g_AutoPicupItem.X;
-                        MShare.g_nTargetY = MShare.g_AutoPicupItem.Y;
-                        heroActor.AutoFindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nTargetX, MShare.g_nTargetY);
-                        MShare.g_nTargetX = -1;
+                        MShare.TargetX = MShare.g_AutoPicupItem.X;
+                        MShare.TargetY = MShare.g_AutoPicupItem.Y;
+                        heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
+                        MShare.TargetX = -1;
                         MShare.g_sAPStr = $"物品目标：{MShare.g_AutoPicupItem.Name}({MShare.g_AutoPicupItem.X},{MShare.g_AutoPicupItem.Y}) 正在去拾取";
                     }
                     MShare.g_nAPStatus = 2;
@@ -4572,34 +4572,34 @@ namespace BotSrv.Player
                     {
                         if (MShare.g_APMapPath.Length > 0)
                         {
-                            MShare.g_nTargetX = (short)MShare.g_APMapPath[MShare.AutoStep].X;
-                            MShare.g_nTargetY = (short)MShare.g_APMapPath[MShare.AutoStep].X;
-                            heroActor.AutoFindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nTargetX, MShare.g_nTargetY);
-                            MShare.g_sAPStr = $"循路搜寻目标({MShare.g_nTargetX},{MShare.g_nTargetY})";
-                            MShare.g_nTargetX = -1;
+                            MShare.TargetX = (short)MShare.g_APMapPath[MShare.AutoStep].X;
+                            MShare.TargetY = (short)MShare.g_APMapPath[MShare.AutoStep].X;
+                            heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
+                            MShare.g_sAPStr = $"循路搜寻目标({MShare.TargetX},{MShare.TargetY})";
+                            MShare.TargetX = -1;
                         }
                         else
                         {
-                            if ((MShare.g_nTargetX == -1) || (MShare.g_APPathList.Count == 0))
+                            if ((MShare.TargetX == -1) || (MShare.g_APPathList.Count == 0))
                             {
                                 if (success)
                                 {
-                                    heroActor.AutoFindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nTargetX, MShare.g_nTargetY);
+                                    heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                                 }
                                 MShare.g_sAPStr = $"定点随机搜寻目标({MShare.g_APMapPath[MShare.AutoStep].X},{MShare.g_APMapPath[MShare.AutoStep].X})";
-                                MShare.g_nTargetX = -1;
+                                MShare.TargetX = -1;
                             }
                         }
                     }
-                    else if ((MShare.g_nTargetX == -1) || (MShare.g_APPathList.Count == 0))
+                    else if ((MShare.TargetX == -1) || (MShare.g_APPathList.Count == 0))
                     {
                         RunAutoPlayRandomTag(ref success, ref ndir);
                         if (success)
                         {
-                            heroActor.AutoFindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nTargetX, MShare.g_nTargetY);
+                            heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         }
                         MShare.g_sAPStr = "随机搜寻目标...";
-                        MShare.g_nTargetX = -1;
+                        MShare.TargetX = -1;
                     }
                     MShare.g_nAPStatus = 3;
                     MShare.g_boAPAutoMove = true;
@@ -4609,47 +4609,47 @@ namespace BotSrv.Player
                     {
                         if (MShare.g_APLastPoint.X >= 0)
                         {
-                            MShare.g_nTargetX = (short)MShare.g_APLastPoint.X;
-                            MShare.g_nTargetY = (short)MShare.g_APLastPoint.X;
-                            heroActor.AutoFindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nTargetX, MShare.g_nTargetY);
+                            MShare.TargetX = (short)MShare.g_APLastPoint.X;
+                            MShare.TargetY = (short)MShare.g_APLastPoint.X;
+                            heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         }
                         else
                         {
-                            MShare.g_nTargetX = (short)MShare.g_APMapPath[MShare.AutoStep].X;
-                            MShare.g_nTargetY = (short)MShare.g_APMapPath[MShare.AutoStep].X;
-                            heroActor.AutoFindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nTargetX, MShare.g_nTargetY);
+                            MShare.TargetX = (short)MShare.g_APMapPath[MShare.AutoStep].X;
+                            MShare.TargetY = (short)MShare.g_APMapPath[MShare.AutoStep].X;
+                            heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         }
-                        MShare.g_sAPStr = $"超出搜寻范围,返回({MShare.g_nTargetX},{MShare.g_nTargetY})";
-                        MShare.g_nTargetX = -1;
+                        MShare.g_sAPStr = $"超出搜寻范围,返回({MShare.TargetX},{MShare.TargetY})";
+                        MShare.TargetX = -1;
                     }
-                    else if ((MShare.g_nTargetX == -1) || (MShare.g_APPathList.Count == 0))
+                    else if ((MShare.TargetX == -1) || (MShare.g_APPathList.Count == 0))
                     {
                         RunAutoPlayRandomTag(ref success, ref ndir);
                         if (success)
                         {
-                            heroActor.AutoFindPath(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nTargetX, MShare.g_nTargetY);
+                            heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         }
-                        MShare.g_sAPStr = $"超出搜寻范围,随机搜寻目标({MShare.g_nTargetX},{MShare.g_nTargetY})";
-                        MShare.g_nTargetX = -1;
+                        MShare.g_sAPStr = $"超出搜寻范围,随机搜寻目标({MShare.TargetX},{MShare.TargetY})";
+                        MShare.TargetX = -1;
                     }
                     MShare.g_nAPStatus = 3;
                     MShare.g_boAPAutoMove = true;
                     break;
             }
-            if ((MShare.g_APPathList.Count > 0) && ((MShare.g_nTargetX == -1) || ((MShare.g_nTargetX == MShare.MySelf.m_nCurrX) && (MShare.g_nTargetY == MShare.MySelf.m_nCurrY))))
+            if ((MShare.g_APPathList.Count > 0) && ((MShare.TargetX == -1) || ((MShare.TargetX == MShare.MySelf.CurrX) && (MShare.TargetY == MShare.MySelf.CurrY))))
             {
                 T = MShare.g_APPathList[0];
-                MShare.g_nTargetX = (short)T.X;
-                MShare.g_nTargetY = (short)T.Y;
+                MShare.TargetX = (short)T.X;
+                MShare.TargetY = (short)T.Y;
                 if (MShare.g_nAPStatus >= 1 && MShare.g_nAPStatus <= 4)
                 {
-                    if ((Math.Abs(MShare.MySelf.m_nCurrX - MShare.g_nTargetX) <= 1) && (Math.Abs(MShare.MySelf.m_nCurrY - MShare.g_nTargetY) <= 1))
+                    if ((Math.Abs(MShare.MySelf.CurrX - MShare.TargetX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - MShare.TargetY) <= 1))
                     {
-                        if (PlayScene.CanWalk(MShare.g_nTargetX, MShare.g_nTargetY))
+                        if (PlayScene.CanWalk(MShare.TargetX, MShare.TargetY))
                         {
                             if ((MShare.g_nAPStatus == 2) && (MShare.g_AutoPicupItem != null))
                             {
-                                if ((Math.Abs(MShare.MySelf.m_nCurrX - MShare.g_AutoPicupItem.X) > 1) || (Math.Abs(MShare.MySelf.m_nCurrY - MShare.g_AutoPicupItem.Y) > 1))
+                                if ((Math.Abs(MShare.MySelf.CurrX - MShare.g_AutoPicupItem.X) > 1) || (Math.Abs(MShare.MySelf.CurrY - MShare.g_AutoPicupItem.Y) > 1))
                                 {
                                     goto AAAA;
                                 }
@@ -4663,27 +4663,27 @@ namespace BotSrv.Player
                         AAAA:
                             if (MShare.g_APPathList.Count > 2)
                             {
-                                ndir = ClFunc.GetNextDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_APPathList[2].X, MShare.g_APPathList[2].Y);
+                                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.g_APPathList[2].X, MShare.g_APPathList[2].Y);
                             }
                             else
                             {
-                                ndir = ClFunc.GetNextDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, MShare.g_nTargetX, MShare.g_nTargetY);
+                                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                             }
-                            X1 = MShare.MySelf.m_nCurrX;
-                            Y1 = MShare.MySelf.m_nCurrY;
+                            X1 = MShare.MySelf.CurrX;
+                            Y1 = MShare.MySelf.CurrY;
                             ClFunc.GetNextRunXY(ndir, ref X1, ref Y1);
                             if (Map.CanMove(X1, Y1))
                             {
                                 if (PlayScene.CrashMan(X1, Y1))
                                 {
-                                    MShare.g_nTargetX = (short)T.X;
-                                    MShare.g_nTargetY = (short)T.Y;
+                                    MShare.TargetX = (short)T.X;
+                                    MShare.TargetY = (short)T.Y;
                                     MShare.PlayerAction = PlayerAction.Walk;
                                 }
                                 else
                                 {
-                                    MShare.g_nTargetX = X1;
-                                    MShare.g_nTargetY = Y1;
+                                    MShare.TargetX = X1;
+                                    MShare.TargetY = Y1;
                                     MShare.PlayerAction = PlayerAction.Run;
                                 }
                             }
@@ -4831,7 +4831,7 @@ namespace BotSrv.Player
                     break;
                 case "FIR":
                     MShare.g_boNextTimeFireHit = true;
-                    MShare.g_dwLatestFireHitTick = MShare.GetTickCount();
+                    MShare.LatestFireHitTick = MShare.GetTickCount();
                     break;
                 case "PUR":
                     MShare.g_boNextTimePursueHit = true;
@@ -4905,7 +4905,7 @@ namespace BotSrv.Player
                     break;
                 case "SLON":
                     MShare.g_boCanSLonHit = true;
-                    MShare.g_dwLatestSLonHitTick = MShare.GetTickCount();
+                    MShare.LatestSLonHitTick = MShare.GetTickCount();
                     ScreenManager.AddChatBoardString("[开天斩] 力量凝聚...", GetRGB(219));
                     break;
                 case "USLON":
@@ -4929,7 +4929,7 @@ namespace BotSrv.Player
                 var n10 = 999;
                 for (var i = 0; i < MShare.g_APMapPath.Length; i++)
                 {
-                    var nC = Math.Abs(MShare.g_APMapPath[i].X - MShare.MySelf.m_nCurrX) + Math.Abs(MShare.g_APMapPath[i].X - MShare.MySelf.m_nCurrY);
+                    var nC = Math.Abs(MShare.g_APMapPath[i].X - MShare.MySelf.CurrX) + Math.Abs(MShare.g_APMapPath[i].X - MShare.MySelf.CurrY);
                     if (nC < n10)
                     {
                         n10 = nC;
@@ -5043,9 +5043,9 @@ namespace BotSrv.Player
         public bool GetAdvPosition(TActor TargetCret, ref short nX, ref short nY)
         {
             var result = false;
-            nX = MShare.MySelf.m_nCurrX;
-            nY = MShare.MySelf.m_nCurrY;
-            var btDir = ClFunc.GetNextDirection(MShare.MySelf.m_nCurrX, MShare.MySelf.m_nCurrY, TargetCret.m_nCurrX, TargetCret.m_nCurrY);
+            nX = MShare.MySelf.CurrX;
+            nY = MShare.MySelf.CurrY;
+            var btDir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, TargetCret.CurrX, TargetCret.CurrY);
             var _wvar1 = MShare.MySelf;
             switch (btDir)
             {
@@ -5062,7 +5062,7 @@ namespace BotSrv.Player
                     }
                     if (!PlayScene.CanWalk(nX, nY))
                     {
-                        nY = (short)(_wvar1.m_nCurrY + 2);
+                        nY = (short)(_wvar1.CurrY + 2);
                     }
                     break;
                 case Direction.Down:
@@ -5078,7 +5078,7 @@ namespace BotSrv.Player
                     }
                     if (!PlayScene.CanWalk(nX, nY))
                     {
-                        nY = (short)(_wvar1.m_nCurrY - 2);
+                        nY = (short)(_wvar1.CurrY - 2);
                     }
                     break;
                 case Direction.Left:
@@ -5094,7 +5094,7 @@ namespace BotSrv.Player
                     }
                     if (!PlayScene.CanWalk(nX, nY))
                     {
-                        nX = (short)(_wvar1.m_nCurrX + 2);
+                        nX = (short)(_wvar1.CurrX + 2);
                     }
                     break;
                 case Direction.Right:
@@ -5110,7 +5110,7 @@ namespace BotSrv.Player
                     }
                     if (!PlayScene.CanWalk(nX, nY))
                     {
-                        nX = (short)(_wvar1.m_nCurrX - 2);
+                        nX = (short)(_wvar1.CurrX - 2);
                     }
                     break;
                 case Direction.UpLeft:
@@ -5125,8 +5125,8 @@ namespace BotSrv.Player
                     }
                     if (!PlayScene.CanWalk(nX, nY))
                     {
-                        nX = (short)(_wvar1.m_nCurrX + 2);
-                        nY = (short)(_wvar1.m_nCurrY + 2);
+                        nX = (short)(_wvar1.CurrX + 2);
+                        nY = (short)(_wvar1.CurrY + 2);
                     }
                     break;
                 case Direction.UpRight:
@@ -5142,8 +5142,8 @@ namespace BotSrv.Player
                     }
                     if (!PlayScene.CanWalk(nX, nY))
                     {
-                        nX = (short)(_wvar1.m_nCurrX - 2);
-                        nY = (short)(_wvar1.m_nCurrY + 2);
+                        nX = (short)(_wvar1.CurrX - 2);
+                        nY = (short)(_wvar1.CurrY + 2);
                     }
                     break;
                 case Direction.DownLeft:
@@ -5157,8 +5157,8 @@ namespace BotSrv.Player
                     }
                     if (!PlayScene.CanWalk(nX, nY))
                     {
-                        nX = (short)(_wvar1.m_nCurrX + 2);
-                        nY = (short)(_wvar1.m_nCurrY - 2);
+                        nX = (short)(_wvar1.CurrX + 2);
+                        nY = (short)(_wvar1.CurrY - 2);
                     }
                     break;
                 case Direction.DownRight:
@@ -5172,8 +5172,8 @@ namespace BotSrv.Player
                     }
                     if (!PlayScene.CanWalk(nX, nY))
                     {
-                        nX = (short)(_wvar1.m_nCurrX - 2);
-                        nY = (short)(_wvar1.m_nCurrY - 2);
+                        nX = (short)(_wvar1.CurrX - 2);
+                        nY = (short)(_wvar1.CurrY - 2);
                     }
                     break;
             }

@@ -126,9 +126,9 @@ namespace BotSrv.Maps
             var result = false;
             if ((MShare.MySelf != null) && (m_nCurrentMap != null) && (m_MapBuf != null))
             {
-                for (var nX = MShare.MySelf.m_nCurrX - 32; nX <= MShare.MySelf.m_nCurrX + 32; nX++)
+                for (var nX = MShare.MySelf.CurrX - 32; nX <= MShare.MySelf.CurrX + 32; nX++)
                 {
-                    for (var nY = MShare.MySelf.m_nCurrY - 32; nY <= MShare.MySelf.m_nCurrY + 32; nY++)
+                    for (var nY = MShare.MySelf.CurrY - 32; nY <= MShare.MySelf.CurrY + 32; nY++)
                     {
                         if ((nX >= 0) && (nX < m_MapHeader.wWidth) && (nY >= 0) && (nY < m_MapHeader.wHeight))
                         {
@@ -143,11 +143,11 @@ namespace BotSrv.Maps
                     {
                         continue;
                     }
-                    if ((Actor.m_nCurrX >= MShare.MySelf.m_nCurrX - 32) && (Actor.m_nCurrX <= MShare.MySelf.m_nCurrX + 32) && (Actor.m_nCurrY >= MShare.MySelf.m_nCurrY - 32) && (Actor.m_nCurrY <= MShare.MySelf.m_nCurrY + 32))
+                    if ((Actor.CurrX >= MShare.MySelf.CurrX - 32) && (Actor.CurrX <= MShare.MySelf.CurrX + 32) && (Actor.CurrY >= MShare.MySelf.CurrY - 32) && (Actor.CurrY <= MShare.MySelf.CurrY + 32))
                     {
                         if (Actor.m_boVisible && Actor.m_boHoldPlace && (!Actor.m_boDeath))
                         {
-                            m_MapData[Actor.m_nCurrX, Actor.m_nCurrY].TCellActor = true;
+                            m_MapData[Actor.CurrX, Actor.CurrY].TCellActor = true;
                         }
                     }
                 }

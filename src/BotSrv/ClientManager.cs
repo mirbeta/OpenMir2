@@ -98,7 +98,7 @@ namespace BotSrv
                 _autoList.Remove(findSession);
             }
             _clients.TryRemove(sessionId, out var robotClient);
-            _clientList.Add(robotClient);
+            _clientList.Remove(robotClient);
         }
 
         public void Run()

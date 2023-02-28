@@ -78,7 +78,7 @@ namespace BotSrv.Scenes.Scene
                     // Continue;
                     break;
                 }
-                if ((Math.Abs(dropItem.X - MShare.MySelf.m_nCurrX) > 20) || (Math.Abs(dropItem.Y - MShare.MySelf.m_nCurrY) > 20))
+                if ((Math.Abs(dropItem.X - MShare.MySelf.CurrX) > 20) || (Math.Abs(dropItem.Y - MShare.MySelf.CurrY) > 20))
                 {
                     dropItem = null;
                     MShare.g_DropedItemList.RemoveAt(i);
@@ -154,12 +154,12 @@ namespace BotSrv.Scenes.Scene
                     if (actor.IsIdle())
                     {
                         ClFunc.DelChangeFace(actor.m_nWaitForRecogId);
-                        NewActor(actor.m_nWaitForRecogId, actor.m_nCurrX, actor.m_nCurrY, actor.m_btDir, actor.m_nWaitForFeature, actor.m_nWaitForStatus);
+                        NewActor(actor.m_nWaitForRecogId, actor.CurrX, actor.CurrY, actor.m_btDir, actor.m_nWaitForFeature, actor.m_nWaitForStatus);
                         actor.m_nWaitForRecogId = 0;
                         actor.m_boDelActor = true;
                     }
                 }
-                if (actor.m_boDelActor || (Math.Abs(MShare.MySelf.m_nCurrX - actor.m_nCurrX) > 16) || (Math.Abs(MShare.MySelf.m_nCurrY - actor.m_nCurrY) > 16))
+                if (actor.m_boDelActor || (Math.Abs(MShare.MySelf.CurrX - actor.CurrX) > 16) || (Math.Abs(MShare.MySelf.CurrY - actor.CurrY) > 16))
                 {
                     MShare.g_FreeActorList.Add(actor);
                     m_ActorList.RemoveAt(i);
@@ -171,9 +171,9 @@ namespace BotSrv.Scenes.Scene
                     {
                         MShare.g_FocusCret = null;
                     }
-                    if (MShare.g_MagicLockActor == actor)
+                    if (MShare.MagicLockActor == actor)
                     {
-                        MShare.g_MagicLockActor = null;
+                        MShare.MagicLockActor = null;
                     }
                     if (MShare.g_MagicTarget == actor)
                     {
@@ -232,7 +232,7 @@ namespace BotSrv.Scenes.Scene
                         TActor a = m_ActorList[i];
                         if ((!liveonly || !a.m_boDeath) && a.m_boHoldPlace && a.m_boVisible)
                         {
-                            if (a.m_nCurrY == k)
+                            if (a.CurrY == k)
                             {
                                 dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
                                 dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
@@ -275,7 +275,7 @@ namespace BotSrv.Scenes.Scene
                             a = m_ActorList[i];
                             if ((!liveonly || !a.m_boDeath) && a.m_boHoldPlace && a.m_boVisible)
                             {
-                                if (a.m_nCurrY == k)
+                                if (a.CurrY == k)
                                 {
                                     dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
                                     dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
@@ -319,7 +319,7 @@ namespace BotSrv.Scenes.Scene
             bool result = false;
             for (var k = ccy + 2; k >= ccy - 1; k--)
             {
-                if (MShare.MySelf.m_nCurrY == k)
+                if (MShare.MySelf.CurrY == k)
                 {
                     int dx = (MShare.MySelf.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + MShare.MySelf.m_nPx + MShare.MySelf.m_nShiftX;
                     int dy = (MShare.MySelf.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + MShare.MySelf.m_nPy + MShare.MySelf.m_nShiftY;
@@ -422,7 +422,7 @@ namespace BotSrv.Scenes.Scene
                 {
                     continue;
                 }
-                if (actor.m_boVisible && actor.m_boHoldPlace && (!actor.m_boDeath) && (actor.m_nCurrX == mx) && (actor.m_nCurrY == my))
+                if (actor.m_boVisible && actor.m_boHoldPlace && (!actor.m_boDeath) && (actor.CurrX == mx) && (actor.CurrY == my))
                 {
                     if ((MShare.MySelf.m_nTagX == 0) && (MShare.MySelf.m_nTagY == 0))
                     {
@@ -466,7 +466,7 @@ namespace BotSrv.Scenes.Scene
                 {
                     continue;
                 }
-                if (actor.m_boVisible && actor.m_boHoldPlace && (!actor.m_boDeath) && (actor.m_nCurrX == mx) && (actor.m_nCurrY == my))
+                if (actor.m_boVisible && actor.m_boHoldPlace && (!actor.m_boDeath) && (actor.CurrX == mx) && (actor.CurrY == my))
                 {
                     result = true;
                     break;
@@ -519,7 +519,7 @@ namespace BotSrv.Scenes.Scene
             for (var i = 0; i < m_ActorList.Count; i++)
             {
                 TActor a = m_ActorList[i];
-                if ((a.m_nCurrX == x) && (a.m_nCurrY == y))
+                if ((a.CurrX == x) && (a.CurrY == y))
                 {
                     result = a;
                     if (!result.m_boDeath && result.m_boVisible && result.m_boHoldPlace)
@@ -869,10 +869,10 @@ namespace BotSrv.Scenes.Scene
                     break;
             }
             actor.m_nRecogId = chrid;
-            actor.m_nCurrX = (short)(ushort)(short)cx;
-            actor.m_nCurrY = (short)(ushort)(short)cy;
-            actor.m_nRx = actor.m_nCurrX;
-            actor.m_nRy = actor.m_nCurrY;
+            actor.CurrX = (short)(ushort)(short)cx;
+            actor.CurrY = (short)(ushort)(short)cy;
+            actor.m_nRx = actor.CurrX;
+            actor.m_nRy = actor.CurrY;
             actor.m_btDir = (byte)cdir;
             actor.m_nFeature = cfeature;
             if (MShare.OpenAutoPlay && MShare.g_gcAss[6])
@@ -1009,7 +1009,7 @@ namespace BotSrv.Scenes.Scene
                 TActor a = m_ActorList[i];
                 if (a.m_boDeath)
                 {
-                    if ((Math.Abs(a.m_nCurrX - x) <= 1) && (Math.Abs(a.m_nCurrY - y) <= 1))
+                    if ((Math.Abs(a.CurrX - x) <= 1) && (Math.Abs(a.CurrY - y) <= 1))
                     {
                         result = a;
                         break;
@@ -1075,8 +1075,8 @@ namespace BotSrv.Scenes.Scene
                     RobotClient.Map.LoadMap(str, x, y);
                     if ((ident == Messages.SM_NEWMAP) && (MShare.MySelf != null))
                     {
-                        MShare.MySelf.m_nCurrX = (short)x;
-                        MShare.MySelf.m_nCurrY = (short)y;
+                        MShare.MySelf.CurrX = (short)x;
+                        MShare.MySelf.CurrY = (short)y;
                         MShare.MySelf.m_nRx = (short)x;
                         MShare.MySelf.m_nRy = (short)y;
                         DelActor(MShare.MySelf);

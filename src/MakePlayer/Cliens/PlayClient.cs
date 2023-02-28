@@ -21,37 +21,37 @@ namespace MakePlayer.Cliens
         public TConnectionStep ConnectionStep;
         public TConnectionStatus ConnectionStatus;
         public string ServerName = string.Empty;
-        public short m_wAvailIDDay = 0;
-        public short m_wAvailIDHour = 0;
-        public short m_wAvailIPDay = 0;
-        public short m_wAvailIPHour = 0;
-        public bool m_boDoFastFadeOut = false;
-        public long m_dwFirstServerTime = 0;
-        public long m_dwFirstClientTime = 0;
-        public string m_sSelChrAddr = string.Empty;
-        public int m_nSelChrPort = 0;
-        public string m_sRunServerAddr = string.Empty;
-        public int m_nRunServerPort = 0;
-        public TSelChar[] m_ChrArr;
-        public string m_sMapTitle = string.Empty;
-        public string m_sMapName = string.Empty;
-        public int m_nMapMusic = 0;
-        public bool m_boActionLock = false;
-        public long m_dwNotifyEventTick = 0;
-        public int m_nReceiveCount = 0;
-        public string m_sMakeNewId = string.Empty;
-        public bool m_boTimerMainBusy = false;
-        public bool m_boMapMovingWait = false;
-        public byte m_btCode = 0;
-        public bool m_boSendLogin = false;
-        public bool m_boNewAccount = false;
-        public int m_nGold = 0;
-        public byte m_btJob = 0;
-        public int m_nGameGold = 0;
-        public Ability m_Abil = null;
-        public bool m_boLogin = false;
-        public long m_dwSayTick = 0;
-        private Action? FNotifyEvent = null;
+        public short MWAvailIdDay = 0;
+        public short MWAvailIdHour = 0;
+        public short MWAvailIpDay = 0;
+        public short MWAvailIpHour = 0;
+        public bool MBoDoFastFadeOut = false;
+        public long MDwFirstServerTime = 0;
+        public long MDwFirstClientTime = 0;
+        public string MSSelChrAddr = string.Empty;
+        public int MNSelChrPort = 0;
+        public string MSRunServerAddr = string.Empty;
+        public int MNRunServerPort = 0;
+        public TSelChar[] MChrArr;
+        public string MSMapTitle = string.Empty;
+        public string MSMapName = string.Empty;
+        public int MNMapMusic = 0;
+        public bool MBoActionLock = false;
+        public long MDwNotifyEventTick = 0;
+        public int MNReceiveCount = 0;
+        public string MSMakeNewId = string.Empty;
+        public bool MBoTimerMainBusy = false;
+        public bool MBoMapMovingWait = false;
+        public byte MBtCode = 0;
+        public bool MBoSendLogin = false;
+        public bool MBoNewAccount = false;
+        public int MNGold = 0;
+        public byte MBtJob = 0;
+        public int MNGameGold = 0;
+        public Ability MAbil = null;
+        public bool MBoLogin = false;
+        public long MDwSayTick = 0;
+        private Action? _fNotifyEvent = null;
         public readonly ScoketClient ClientSocket;
         private readonly ClientManager _clientManager;
 
@@ -63,20 +63,20 @@ namespace MakePlayer.Cliens
             ClientSocket.OnDisconnected += SocketDisconnect;
             ClientSocket.OnReceivedData += SocketRead;
             ClientSocket.OnError += SocketError;
-            m_btCode = 0;
+            MBtCode = 0;
             LoginAccount = "";
             LoginPasswd = "";
             Certification = 0;
             ChrName = "";
             ConnectionStep = TConnectionStep.cnsConnect;
             ConnectionStatus = TConnectionStatus.cns_Success;
-            m_boSendLogin = false;
-            m_boLogin = false;
-            m_boNewAccount = false;
+            MBoSendLogin = false;
+            MBoLogin = false;
+            MBoNewAccount = false;
             ConnectTick = HUtil32.GetTickCount();
-            FNotifyEvent = null;
-            m_dwNotifyEventTick = HUtil32.GetTickCount();
-            m_ChrArr = new TSelChar[2];
+            _fNotifyEvent = null;
+            MDwNotifyEventTick = HUtil32.GetTickCount();
+            MChrArr = new TSelChar[2];
             _clientManager = clientManager;
         }
 
@@ -96,7 +96,7 @@ namespace MakePlayer.Cliens
         {
             if (ConnectionStep == TConnectionStep.cnsConnect)
             {
-                if (m_boNewAccount)
+                if (MBoNewAccount)
                 {
                     SetNotifyEvent(NewAccount, 6000);
                 }
@@ -159,20 +159,20 @@ namespace MakePlayer.Cliens
         {
             if (ClientSocket.IsConnected)
             {
-                var sSendText = "#" + m_btCode + sText + "!";
+                var sSendText = "#" + MBtCode + sText + "!";
                 ClientSocket.SendText(sSendText);
-                m_btCode++;
-                if (m_btCode >= 10)
+                MBtCode++;
+                if (MBtCode >= 10)
                 {
-                    m_btCode = 1;
+                    MBtCode = 1;
                 }
             }
         }
 
         private void SendClientMessage(int nIdent, int nRecog, int nParam, int nTag, int nSeries)
         {
-            var DefMsg = Messages.MakeMessage(nIdent, nRecog, nParam, nTag, nSeries);
-            SendSocket(EDCode.EncodeMessage(DefMsg));
+            var defMsg = Messages.MakeMessage(nIdent, nRecog, nParam, nTag, nSeries);
+            SendSocket(EDCode.EncodeMessage(defMsg));
         }
 
         private void SendNewAccount(string sAccount, string sPassword)
@@ -195,8 +195,8 @@ namespace MakePlayer.Cliens
             ua.MobilePhone = "";
             ua.Memo = "";
             ua.Memo2 = "";
-            var Msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
+            var msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
         }
 
         private void SelectChrCreateNewChr(string sChrName)
@@ -229,80 +229,80 @@ namespace MakePlayer.Cliens
             MainOutMessage($"[{LoginAccount}] 选择人物：{sChrName}");
             ConnectionStep = TConnectionStep.cnsSelChr;
             ChrName = sChrName;
-            var DefMsg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(LoginAccount + "/" + sChrName));
+            var defMsg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
+            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(LoginAccount + "/" + sChrName));
         }
 
         private void SendLogin(string sAccount, string sPassword)
         {
             MainOutMessage($"[{LoginAccount}] 开始登录");
             ConnectionStep = TConnectionStep.cnsLogin;
-            var DefMsg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sAccount + "/" + sPassword));
-            m_boSendLogin = true;
+            var defMsg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
+            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sAccount + "/" + sPassword));
+            MBoSendLogin = true;
         }
 
         private void SendNewChr(string sAccount, string sChrName, byte sHair, byte sJob, byte sSex)
         {
             MainOutMessage($"[{LoginAccount}] 创建人物：{sChrName}");
             ConnectionStep = TConnectionStep.cnsNewChr;
-            var DefMsg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sAccount + "/" + sChrName + "/" + sHair + "/" + sJob + "/" + sSex));
+            var defMsg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
+            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sAccount + "/" + sChrName + "/" + sHair + "/" + sJob + "/" + sSex));
         }
 
         private void SendQueryChr()
         {
             MainOutMessage($"[{LoginAccount}] 查询人物");
             ConnectionStep = TConnectionStep.cnsQueryChr;
-            var DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(LoginAccount + "/" + Certification.ToString()));
+            var defMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
+            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(LoginAccount + "/" + Certification));
         }
 
         private void SendSelectServer(string sServerName)
         {
             MainOutMessage($"[{LoginAccount}] 选择服务器：{sServerName}");
             ConnectionStep = TConnectionStep.cnsSelServer;
-            var DefMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(sServerName));
+            var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
+            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sServerName));
         }
 
         private void SendRunLogin()
         {
             MainOutMessage($"[{LoginAccount}] 进入游戏");
             ConnectionStep = TConnectionStep.cnsPlay;
-            var sSendMsg = string.Format("**{0}/{1}/{2}/{3}/{4}", new object[] { LoginAccount, ChrName, Certification, Grobal2.CLIENT_VERSION_NUMBER, 2022080300 });
+            var sSendMsg = $"**{LoginAccount}/{ChrName}/{Certification}/{Grobal2.CLIENT_VERSION_NUMBER}/{2022080300}";
             SendSocket(EDCode.EncodeString(sSendMsg));
         }
 
         private void DoNotifyEvent()
         {
-            if (FNotifyEvent != null)
+            if (_fNotifyEvent != null)
             {
-                if (HUtil32.GetTickCount() > m_dwNotifyEventTick)
+                if (HUtil32.GetTickCount() > MDwNotifyEventTick)
                 {
-                    FNotifyEvent();
-                    FNotifyEvent = null;
+                    _fNotifyEvent();
+                    _fNotifyEvent = null;
                 }
             }
         }
 
-        private void SetNotifyEvent(Action ANotifyEvent, int nTime)
+        private void SetNotifyEvent(Action aNotifyEvent, int nTime)
         {
-            m_dwNotifyEventTick = HUtil32.GetTickCount() + nTime;
-            FNotifyEvent = ANotifyEvent;
+            MDwNotifyEventTick = HUtil32.GetTickCount() + nTime;
+            _fNotifyEvent = aNotifyEvent;
         }
 
         private void ClientGetStartPlay(string sData)
         {
             var sText = EDCode.DeCodeString(sData);
-            var sRunPort = HUtil32.GetValidStr3(sText, ref m_sRunServerAddr, '/');
-            m_nRunServerPort = Convert.ToInt32(sRunPort);
+            var sRunPort = HUtil32.GetValidStr3(sText, ref MSRunServerAddr, '/');
+            MNRunServerPort = Convert.ToInt32(sRunPort);
             //ClientSocket.Disconnect();
             ConnectionStep = TConnectionStep.cnsPlay;
             MainOutMessage($"[{LoginAccount}] 准备进入游戏");
             //ClientSocket.ClientType = ClientSocket.ctNonBlocking;
             //ClientSocket.Close();
-            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(m_sRunServerAddr), m_nRunServerPort);
+            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(MSRunServerAddr), MNRunServerPort);
             ClientSocket.Connect();
             //ClientSocket.Active = true;
         }
@@ -323,9 +323,9 @@ namespace MakePlayer.Cliens
             SendClientMessage(Messages.CM_LOGINNOTICEOK, HUtil32.GetTickCount(), 0, 0, 0);
         }
 
-        private void ClientGetUserLogin(CommandMessage DefMsg, string sData)
+        private void ClientGetUserLogin(CommandMessage defMsg, string sData)
         {
-            m_boLogin = true;
+            MBoLogin = true;
             ConnectionStep = TConnectionStep.cnsPlay;
             ConnectionStatus = TConnectionStatus.cns_Success;
             MainOutMessage($"[{LoginAccount}] 成功进入游戏");
@@ -334,28 +334,28 @@ namespace MakePlayer.Cliens
 
         public void ClientLoginSay(string message)
         {
-            m_dwSayTick = HUtil32.GetTickCount();
-            var Msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(Msg) + EDCode.EncodeString(message));
+            MDwSayTick = HUtil32.GetTickCount();
+            var msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(message));
         }
 
-        private void ClientGetAbility(CommandMessage DefMsg, string sData)
+        private void ClientGetAbility(CommandMessage defMsg, string sData)
         {
-            m_nGold = DefMsg.Recog;
-            m_btJob = (byte)DefMsg.Param;
-            m_nGameGold = HUtil32.MakeLong(DefMsg.Tag, DefMsg.Series);
+            MNGold = defMsg.Recog;
+            MBtJob = (byte)defMsg.Param;
+            MNGameGold = HUtil32.MakeLong(defMsg.Tag, defMsg.Series);
             var buff = EDCode.DecodeBuffer(sData);
-            m_Abil = ClientPacket.ToPacket<Ability>(buff);
+            MAbil = ClientPacket.ToPacket<Ability>(buff);
         }
 
-        private void ClientGetWinExp(CommandMessage DefMsg)
+        private void ClientGetWinExp(CommandMessage defMsg)
         {
-            m_Abil.Exp = DefMsg.Recog;
+            MAbil.Exp = defMsg.Recog;
         }
 
-        private void ClientGetLevelUp(CommandMessage DefMsg)
+        private void ClientGetLevelUp(CommandMessage defMsg)
         {
-            m_Abil.Level = (byte)HUtil32.MakeLong(DefMsg.Param, DefMsg.Tag);
+            MAbil.Level = (byte)HUtil32.MakeLong(defMsg.Param, defMsg.Tag);
         }
 
         private void ClientQueryChrFail(int nFailCode)
@@ -387,7 +387,7 @@ namespace MakePlayer.Cliens
             }
         }
 
-        private void ClientNewIDFail(int nFailCode)
+        private void ClientNewIdFail(int nFailCode)
         {
             if (nFailCode != 0)
             {
@@ -418,15 +418,15 @@ namespace MakePlayer.Cliens
             var sCertification = string.Empty;
             MainOutMessage($"[{LoginAccount}] 帐号登录成功！");
             var sText = EDCode.DeCodeString(sData);
-            sText = HUtil32.GetValidStr3(sText, ref m_sSelChrAddr, '/');
+            sText = HUtil32.GetValidStr3(sText, ref MSSelChrAddr, '/');
             sText = HUtil32.GetValidStr3(sText, ref sSelChrPort, '/');
             sText = HUtil32.GetValidStr3(sText, ref sCertification, '/');
             Certification = Convert.ToInt32(sCertification);
-            m_nSelChrPort = Convert.ToInt32(sSelChrPort);
+            MNSelChrPort = Convert.ToInt32(sSelChrPort);
             //ClientSocket.Disconnect();
             ConnectionStep = TConnectionStep.cnsQueryChr;
             //ClientSocket.Close();
-            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(m_sSelChrAddr), m_nSelChrPort);
+            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(MSSelChrAddr), MNSelChrPort);
             ClientSocket.Connect();
             //ClientSocket.Active = true;
             // ClientSocket.Socket.SendText('#' + '+' + '!');
@@ -441,11 +441,11 @@ namespace MakePlayer.Cliens
         private void ClientGetReceiveChrs_AddChr(string sName, byte nJob, byte nHair, int nLevel, byte nSex)
         {
             int I;
-            if (!m_ChrArr[0].boValid)
+            if (!MChrArr[0].boValid)
             {
                 I = 0;
             }
-            else if (!m_ChrArr[1].boValid)
+            else if (!MChrArr[1].boValid)
             {
                 I = 1;
             }
@@ -453,12 +453,12 @@ namespace MakePlayer.Cliens
             {
                 return;
             }
-            m_ChrArr[I].UserChr.sName = sName;
-            m_ChrArr[I].UserChr.btJob = nJob;
-            m_ChrArr[I].UserChr.btHair = nHair;
-            m_ChrArr[I].UserChr.wLevel = (ushort)nLevel;
-            m_ChrArr[I].UserChr.btSex = nSex;
-            m_ChrArr[I].boValid = true;
+            MChrArr[I].UserChr.sName = sName;
+            MChrArr[I].UserChr.btJob = nJob;
+            MChrArr[I].UserChr.btHair = nHair;
+            MChrArr[I].UserChr.wLevel = (ushort)nLevel;
+            MChrArr[I].UserChr.btSex = nSex;
+            MChrArr[I].boValid = true;
         }
 
         public string ClientGetReceiveChrs_GetJobName(int nJob)
@@ -510,7 +510,7 @@ namespace MakePlayer.Cliens
             var sText = EDCode.DeCodeString(sData);
             var nChrCount = 0;
             var nSelect = 0;
-            for (var i = 0; i < m_ChrArr.Length; i++)
+            for (var i = 0; i < MChrArr.Length; i++)
             {
                 sText = HUtil32.GetValidStr3(sText, ref sName, '/');
                 sText = HUtil32.GetValidStr3(sText, ref sJob, '/');
@@ -530,22 +530,22 @@ namespace MakePlayer.Cliens
                 }
                 if (nSelect == 0)
                 {
-                    m_ChrArr[0].boFreezeState = false;
-                    m_ChrArr[0].boSelected = true;
-                    m_ChrArr[1].boFreezeState = true;
-                    m_ChrArr[1].boSelected = false;
+                    MChrArr[0].boFreezeState = false;
+                    MChrArr[0].boSelected = true;
+                    MChrArr[1].boFreezeState = true;
+                    MChrArr[1].boSelected = false;
                 }
                 else
                 {
-                    m_ChrArr[0].boFreezeState = true;
-                    m_ChrArr[0].boSelected = false;
-                    m_ChrArr[1].boFreezeState = false;
-                    m_ChrArr[1].boSelected = true;
+                    MChrArr[0].boFreezeState = true;
+                    MChrArr[0].boSelected = false;
+                    MChrArr[1].boFreezeState = false;
+                    MChrArr[1].boSelected = true;
                 }
             }
             if (nChrCount > 0)
             {
-                SendSelChr(m_ChrArr[nSelect].UserChr.sName);
+                SendSelChr(MChrArr[nSelect].UserChr.sName);
             }
             else
             {
@@ -584,17 +584,17 @@ namespace MakePlayer.Cliens
                         MainOutMessage($"[{LoginAccount}] 此帐号不存在或出现未知错误！！");
                         break;
                 }
-                m_boSendLogin = false;
+                MBoSendLogin = false;
                 Close();
             }
         }
 
-        private void ClientGetServerName(CommandMessage DefMsg, string sBody)
+        private void ClientGetServerName(CommandMessage defMsg, string sBody)
         {
             var sServerName = string.Empty;
             var sServerStatus = string.Empty;
             sBody = EDCode.DeCodeString(sBody);
-            var nCount = HUtil32._MIN(6, DefMsg.Series);
+            var nCount = HUtil32._MIN(6, defMsg.Series);
             for (var i = 0; i < nCount; i++)
             {
                 sBody = HUtil32.GetValidStr3(sBody, ref sServerName, '/');
@@ -612,7 +612,7 @@ namespace MakePlayer.Cliens
             }
         }
 
-        private void ClientGetPasswordOK(string sData)
+        private void ClientGetPasswordOk(string sData)
         {
             var sServerName = string.Empty;
             MainOutMessage($"[{LoginAccount}] 帐号登录成功！");
@@ -628,7 +628,7 @@ namespace MakePlayer.Cliens
 
         private void Login()
         {
-            if (ConnectionStep == TConnectionStep.cnsConnect && (FNotifyEvent == null) && !ClientSocket.IsConnected)
+            if (ConnectionStep == TConnectionStep.cnsConnect && (_fNotifyEvent == null) && !ClientSocket.IsConnected)
             {
                 if ((ConnectionStatus == TConnectionStatus.cns_Success) && (HUtil32.GetTickCount() > ConnectTick))
                 {
@@ -647,7 +647,7 @@ namespace MakePlayer.Cliens
 
         public void ProcessPacket(byte[] reviceBuffer)
         {
-            m_boTimerMainBusy = true;
+            MBoTimerMainBusy = true;
             try
             {
                 var sockText = HUtil32.GetString(reviceBuffer, 0, reviceBuffer.Length);
@@ -655,7 +655,7 @@ namespace MakePlayer.Cliens
                 {
                     while (sockText.Length >= 2)
                     {
-                        if (m_boMapMovingWait)
+                        if (MBoMapMovingWait)
                         {
                             break;
                         }
@@ -675,7 +675,7 @@ namespace MakePlayer.Cliens
             }
             finally
             {
-                m_boTimerMainBusy = false;
+                MBoTimerMainBusy = false;
             }
         }
 
@@ -697,8 +697,8 @@ namespace MakePlayer.Cliens
             }
             var sDefMsg = sDataBlock.Substring(0, Messages.DefBlockSize);
             var sBody = sDataBlock.Substring(Messages.DefBlockSize, sDataBlock.Length - Messages.DefBlockSize);
-            var DefMsg = EDCode.DecodePacket(sDefMsg);
-            switch (DefMsg.Ident)
+            var defMsg = EDCode.DecodePacket(sDefMsg);
+            switch (defMsg.Ident)
             {
                 case Messages.SM_NEWID_SUCCESS:
                     ClientNewIdSuccess(sBody);
@@ -707,25 +707,25 @@ namespace MakePlayer.Cliens
                     ClientGetPasswdSuccess(sBody);
                     break;
                 case Messages.SM_NEWID_FAIL:
-                    ClientNewIDFail(DefMsg.Recog);
+                    ClientNewIdFail(defMsg.Recog);
                     break;
                 case Messages.SM_PASSWD_FAIL:
-                    ClientLoginFail(DefMsg.Recog);
+                    ClientLoginFail(defMsg.Recog);
                     break;
                 case Messages.SM_PASSOK_SELECTSERVER:
-                    ClientGetPasswordOK(sBody);
+                    ClientGetPasswordOk(sBody);
                     break;
                 case Messages.SM_QUERYCHR:
                     ClientGetReceiveChrs(sBody);
                     break;
                 case Messages.SM_QUERYCHR_FAIL:
-                    ClientQueryChrFail(DefMsg.Recog);
+                    ClientQueryChrFail(defMsg.Recog);
                     break;
                 case Messages.SM_NEWCHR_SUCCESS:
                     SendQueryChr();
                     break;
                 case Messages.SM_NEWCHR_FAIL:
-                    ClientNewChrFail(DefMsg.Recog);
+                    ClientNewChrFail(defMsg.Recog);
                     break;
                 case Messages.SM_DELCHR_SUCCESS:
                     SendQueryChr();
@@ -744,19 +744,19 @@ namespace MakePlayer.Cliens
                 case Messages.SM_RECONNECT:
                     break;
                 case Messages.SM_ABILITY:
-                    ClientGetAbility(DefMsg, sBody);
+                    ClientGetAbility(defMsg, sBody);
                     break;
                 case Messages.SM_WINEXP:
-                    ClientGetWinExp(DefMsg);
+                    ClientGetWinExp(defMsg);
                     break;
                 case Messages.SM_LEVELUP:
-                    ClientGetLevelUp(DefMsg);
+                    ClientGetLevelUp(defMsg);
                     break;
                 case Messages.SM_SENDNOTICE:
                     ClientGetSendNotice(sBody);
                     break;
                 case Messages.SM_LOGON:
-                    ClientGetUserLogin(DefMsg, sBody);
+                    ClientGetUserLogin(defMsg, sBody);
                     break;
                     /*default:
                         MainOutMessage($"未处理消息:[{DefMsg.Ident}]");

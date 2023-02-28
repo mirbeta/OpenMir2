@@ -1,6 +1,6 @@
 namespace SystemModule {
     public class Grobal2 {
-        public const int CLIENT_VERSION_NUMBER = 120040918;
+        public const int CLIENT_VERSION_NUMBER = 1200409180;
         public const uint RunGateCode = 0xAA55AA55 + 0x00450045;
         /// <summary>
         /// 最大魔法技能数
