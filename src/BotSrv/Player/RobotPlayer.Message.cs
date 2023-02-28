@@ -573,6 +573,7 @@ namespace BotSrv.Player
                     {
                         PlayScene.SendMsg(Messages.SM_DEATH, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     }
+                    Console.WriteLine("啊,我死了,快救我");
                     break;
                 case Messages.SM_SKELETON:
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
