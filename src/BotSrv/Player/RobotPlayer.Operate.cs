@@ -331,7 +331,7 @@ namespace BotSrv.Player
                         if (Actor != null)
                         {
                             Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.UserName, "\\");
-                            if (Actor.UserName.IndexOf("(") != 0)
+                            if (Actor.UserName.IndexOf("(", StringComparison.Ordinal) != 0)
                             {
                                 HUtil32.ArrestStringEx(Actor.UserName, "(", ")", ref data);
                                 if (string.Compare(data, MShare.MySelf.UserName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -566,7 +566,7 @@ namespace BotSrv.Player
                     {
                         PlayScene.SendMsg(Messages.SM_DEATH, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     }
-                    Console.WriteLine("啊,我死了,快救我");
+                    MainOutMessage("啊,我死了,快救我");
                     break;
                 case Messages.SM_SKELETON:
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
@@ -801,7 +801,7 @@ namespace BotSrv.Player
                     PlayScene.SendMsg(Messages.SM_DIGDOWN, msg.Recog, msg.Param, msg.Tag, 0, 0, 0, "");
                     break;
                 case Messages.SM_SHOWEVENT:
-                    ShortMessage sMsg = EDCode.DecodeBuffer<ShortMessage>(body);
+                    //ShortMessage sMsg = EDCode.DecodeBuffer<ShortMessage>(body);
                     //__event = new TClEvent(msg.Recog, HUtil32.LoWord(msg.Tag), msg.Series, msg.Param);
                     //__event.m_nDir = 0;
                     //__event.m_nEventParam = sMsg.Ident;

@@ -66,7 +66,7 @@ namespace BotSrv.Scenes
 
         protected void MainOutMessage(string msg)
         {
-            Console.WriteLine(msg);
+            BotShare.logger.Info(msg);
         }
     }
 }

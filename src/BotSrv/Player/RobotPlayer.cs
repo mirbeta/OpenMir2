@@ -222,13 +222,13 @@ namespace BotSrv.Player
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    Console.WriteLine($"游戏服务器[{ClientSocket.RemoteEndPoint}]拒绝链接...");
+                    BotShare.logger.Warn($"游戏服务器[{ClientSocket.RemoteEndPoint}]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    Console.WriteLine($"游戏服务器[{ClientSocket.RemoteEndPoint}]关闭连接...");
+                    BotShare.logger.Warn($"游戏服务器[{ClientSocket.RemoteEndPoint}]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    Console.WriteLine($"游戏服务器[{ClientSocket.RemoteEndPoint}]链接超时...");
+                    BotShare.logger.Warn($"游戏服务器[{ClientSocket.RemoteEndPoint}]链接超时...");
                     break;
             }
             if (DScreen.CurrentScene == PlayScene)
@@ -3211,7 +3211,7 @@ namespace BotSrv.Player
                     break;
                 }
                 body = HUtil32.GetValidStr3(body, ref Str, HUtil32.Backslash);
-                cu = EDCode.DecodeBuffer<ClientItem>(Str);
+                cu = EDCode.DecodeClientBuffer<ClientItem>(Str);
                 ClFunc.AddItemBag(cu);
             }
             //ClFunc.Loadbagsdat(".\\Config\\" + MShare.g_sServerName + "." + m_sChrName + ".itm-plus", ItemSaveArr);
@@ -3901,7 +3901,7 @@ namespace BotSrv.Player
                 SendClientMessage(Messages.CM_LOGINNOTICEOK, 0, 0, 0, MShare.CLIENTTYPE);
                 return;
             }
-            MainOutMessage("发送游戏公告");
+            MainOutMessage("确认游戏公告");
             SendClientMessage(Messages.CM_LOGINNOTICEOK, HUtil32.GetTickCount(), 0, 0, 0);
         }
 
@@ -4022,7 +4022,7 @@ namespace BotSrv.Player
             MShare.g_boCanRunNpc = HUtil32.LoByte(HUtil32.HiWord(msg.Recog)) == 1;
             MShare.g_boCanRunAllInWarZone = HUtil32.HiByte(HUtil32.HiWord(msg.Recog)) == 1;
             sBody = EDCode.DeCodeString(sBody);
-            var ClientConf = EDCode.DecodeBuffer<ClientConf>(sBody);
+            var ClientConf = EDCode.DecodeClientBuffer<ClientConf>(sBody);
             //MShare.g_boCanRunHuman = ClientConf.boRunHuman;
             //MShare.g_boCanRunMon = ClientConf.boRunMon;
             //MShare.g_boCanRunNpc = ClientConf.boRunNpc;
@@ -4088,7 +4088,7 @@ namespace BotSrv.Player
             {
                 return;
             }
-            if ((MShare.g_UseItems[ItemLocation.Bujuk].Item.StdMode == 25) && (MShare.g_UseItems[ItemLocation.Bujuk].Item.Shape != 6) && (MShare.g_UseItems[ItemLocation.Bujuk].Item.Name.IndexOf(cStr) > 0))
+            if ((MShare.g_UseItems[ItemLocation.Bujuk].Item.StdMode == 25) && (MShare.g_UseItems[ItemLocation.Bujuk].Item.Shape != 6) && (MShare.g_UseItems[ItemLocation.Bujuk].Item.Name.IndexOf(cStr, StringComparison.Ordinal) > 0))
             {
                 return;
             }
@@ -4096,7 +4096,7 @@ namespace BotSrv.Player
             MShare.g_WaitingUseItem.Index = ItemLocation.Bujuk;
             for (var i = 6; i < MShare.MAXBAGITEMCL; i++)
             {
-                if ((MShare.g_ItemArr[i].Item.NeedIdentify < 4) && (MShare.g_ItemArr[i].Item.StdMode == 25) && (MShare.g_ItemArr[i].Item.Shape != 6) && (MShare.g_ItemArr[i].Item.Name.IndexOf(Str) > 0) && (MShare.g_ItemArr[i].Item.Name.IndexOf(cStr) > 0))
+                if ((MShare.g_ItemArr[i].Item.NeedIdentify < 4) && (MShare.g_ItemArr[i].Item.StdMode == 25) && (MShare.g_ItemArr[i].Item.Shape != 6) && (MShare.g_ItemArr[i].Item.Name.IndexOf(Str, StringComparison.Ordinal) > 0) && (MShare.g_ItemArr[i].Item.Name.IndexOf(cStr, StringComparison.Ordinal) > 0))
                 {
                     MShare.g_WaitingUseItem.Item = MShare.g_ItemArr[i];
                     MShare.g_ItemArr[i].Item.Name = "";
@@ -4615,7 +4615,6 @@ namespace BotSrv.Player
             {
                 heroActor.Init_Queue2();
             }
-            //Console.WriteLine(MShare.g_sAPStr);
         }
 
         private void ProcessActMsg(string datablock)
@@ -5191,7 +5190,7 @@ namespace BotSrv.Player
 
         private void MainOutMessage(string msg)
         {
-            Console.WriteLine($"账号:[{LoginID}] {msg}");
+            BotShare.logger.Info($"机器人:[{ChrName}] {msg}");
         }
     }
 }
