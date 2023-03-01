@@ -675,7 +675,6 @@ namespace BotSrv.Objects
             switch (MShare.MySelf.m_btJob)
             {
                 case 0:
-                    if (MShare.g_SeriesSkillReady) _robotClient.SendFireSerieSkill();
                     if (MShare.g_gcTec[4] && (MShare.MySelf.m_nState & 0x00100000) == 0 && CanNextSpell())
                     {
                         if (MShare.g_MagicArr[31] != null)
@@ -705,10 +704,6 @@ namespace BotSrv.Objects
                             _robotClient.UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, MShare.g_MagicArr[31]);
                             return result;
                         }
-                    }
-                    if (MShare.g_SeriesSkillReady && MShare.MagicLockActor != null && !MShare.MagicLockActor.m_boDeath)
-                    {
-                        _robotClient.SendFireSerieSkill();
                     }
                     magicKey = 11;
                     nAbsX = (short)Math.Abs(MShare.MySelf.CurrX - MShare.g_APTagget.CurrX);
@@ -1061,10 +1056,6 @@ namespace BotSrv.Objects
                         goto CCCC;
                         if (_robotClient.AttackTarget(MShare.g_APTagget)) result = true;
                         return result;
-                    }
-                    if (MShare.g_SeriesSkillReady && MShare.MagicLockActor != null && !MShare.MagicLockActor.m_boDeath)
-                    {
-                        _robotClient.SendFireSerieSkill();
                     }
                     magicKey = 0;
                     nAbsX = (short)Math.Abs(MShare.MySelf.CurrX - MShare.g_APTagget.CurrX);

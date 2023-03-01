@@ -35,47 +35,47 @@ namespace BotSrv.Objects
 
         public override void ActionEnded()
         {
-            if (MShare.g_SeriesSkillFire)
-            {
-                if (MShare.MagicLockActor == null || MShare.MagicLockActor.m_boDeath)
-                {
-                    MShare.g_SeriesSkillFire = false;
-                    MShare.g_SeriesSkillStep = 0;
-                }
+            //if (MShare.g_SeriesSkillFire)
+            //{
+            //    if (MShare.MagicLockActor == null || MShare.MagicLockActor.m_boDeath)
+            //    {
+            //        MShare.g_SeriesSkillFire = false;
+            //        MShare.g_SeriesSkillStep = 0;
+            //    }
 
-                if (m_boUseMagic && this == MShare.MySelf && MShare.MagicLockActor != null &&
-                    !MShare.MagicLockActor.m_boDeath && MShare.g_nCurrentMagic <= 3)
-                    if (m_nCurrentFrame - m_nStartFrame >= m_nSpellFrame - 1)
-                    {
-                        if (MShare.g_MagicArr[MShare.g_SeriesSkillArr[MShare.g_nCurrentMagic]] != null)
-                        {
-                            // ClMain.frmMain.UseMagic(MShare.g_nMouseX, MShare.g_nMouseY, MShare.g_MagicArr[MShare.g_SeriesSkillArr[MShare.g_nCurrentMagic]], false, true);
-                        }
+            //    if (m_boUseMagic && this == MShare.MySelf && MShare.MagicLockActor != null &&
+            //        !MShare.MagicLockActor.m_boDeath && MShare.g_nCurrentMagic <= 3)
+            //        if (m_nCurrentFrame - m_nStartFrame >= m_nSpellFrame - 1)
+            //        {
+            //            if (MShare.g_MagicArr[MShare.g_SeriesSkillArr[MShare.g_nCurrentMagic]] != null)
+            //            {
+            //                // ClMain.frmMain.UseMagic(MShare.g_nMouseX, MShare.g_nMouseY, MShare.g_MagicArr[MShare.g_SeriesSkillArr[MShare.g_nCurrentMagic]], false, true);
+            //            }
 
-                        MShare.g_nCurrentMagic++;
-                        if (MShare.g_nCurrentMagic > HUtil32._MIN(3, MShare.g_SeriesSkillStep))
-                        {
-                            MShare.g_SeriesSkillFire = false;
-                            MShare.g_SeriesSkillStep = 0;
-                        }
-                    }
-            }
+            //            MShare.g_nCurrentMagic++;
+            //            if (MShare.g_nCurrentMagic > HUtil32._MIN(3, MShare.g_SeriesSkillStep))
+            //            {
+            //                MShare.g_SeriesSkillFire = false;
+            //                MShare.g_SeriesSkillStep = 0;
+            //            }
+            //        }
+            //}
         }
 
         public override void ReadyNextAction()
         {
-            if (m_boUseCboLib && m_boHitEffect && this == MShare.MySelf && MShare.g_nCurrentMagic2 < 4)
-                if (m_nCurrentFrame - m_nStartFrame == 2)
-                {
-                    if (MShare.g_MagicArr[MShare.g_SeriesSkillArr[MShare.g_nCurrentMagic2]] != null)
-                    {
-                        // ClMain.frmMain.UseMagic(MShare.g_nMouseX, MShare.g_nMouseY, MShare.g_MagicArr[MShare.g_SeriesSkillArr[MShare.g_nCurrentMagic2]], false, true);
-                    }
+            //if (m_boUseCboLib && m_boHitEffect && this == MShare.MySelf && MShare.g_nCurrentMagic2 < 4)
+            //    if (m_nCurrentFrame - m_nStartFrame == 2)
+            //    {
+            //        if (MShare.g_MagicArr[MShare.g_SeriesSkillArr[MShare.g_nCurrentMagic2]] != null)
+            //        {
+            //            // ClMain.frmMain.UseMagic(MShare.g_nMouseX, MShare.g_nMouseY, MShare.g_MagicArr[MShare.g_SeriesSkillArr[MShare.g_nCurrentMagic2]], false, true);
+            //        }
 
-                    MShare.g_nCurrentMagic2++;
-                    if (MShare.g_nCurrentMagic2 > HUtil32._MIN(4, MShare.g_SeriesSkillStep))
-                        MShare.g_SeriesSkillFire = false;
-                }
+            //        MShare.g_nCurrentMagic2++;
+            //        if (MShare.g_nCurrentMagic2 > HUtil32._MIN(4, MShare.g_SeriesSkillStep))
+            //            MShare.g_SeriesSkillFire = false;
+            //    }
         }
 
         public override void DefaultMotion()

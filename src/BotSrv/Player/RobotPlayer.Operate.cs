@@ -12,14 +12,40 @@ namespace BotSrv.Player
 {
     public partial class RobotPlayer
     {
-        private void DecodeMessagePacket(string datablock, int btPacket)
+        public void ProcessPacket(string str)
+        {
+            var data = string.Empty;
+            if (!string.IsNullOrEmpty(str))
+            {
+                while (str.Length >= 2)
+                {
+                    if (MShare.MapMovingWait)
+                    {
+                        break;
+                    }
+                    if (str.IndexOf("!", StringComparison.OrdinalIgnoreCase) <= 0)
+                    {
+                        break;
+                    }
+                    str = HUtil32.ArrestStringEx(str, "#", "!", ref data);
+                    if (!string.IsNullOrEmpty(data))
+                    {
+                        DecodeMessagePacket(data);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        private void DecodeMessagePacket(string datablock)
         {
             string body = string.Empty;
-            var body2 = string.Empty;
             var data = string.Empty;
             var Str = string.Empty;
             var str3 = string.Empty;
-            CommandMessage msg = default;
             MessageBodyW mbw;
             CharDesc desc;
             MessageBodyWL wl;
@@ -29,7 +55,7 @@ namespace BotSrv.Player
             TActor Actor;
             TActor Actor2;
             //TClEvent __event;
-            if ((btPacket == 0) && (datablock[0] == '+'))
+            if (datablock[0] == '+') //动作包
             {
                 ProcessActMsg(datablock);
                 return;
@@ -42,18 +68,11 @@ namespace BotSrv.Player
             {
                 body = datablock[Messages.DefBlockSize..];
             }
-            if (btPacket == 0)
+            var head = datablock[..Messages.DefBlockSize];
+            CommandMessage msg = EDCode.DecodePacket(head);
+            if (msg.Ident == 0)
             {
-                var head = datablock[..Messages.DefBlockSize];
-                msg = EDCode.DecodePacket(head);
-                if (msg.Ident == 0)
-                {
-                    return;
-                }
-            }
-            else
-            {
-                body = body2;
+                return;
             }
             if (MShare.MySelf == null)
             {
@@ -204,11 +223,12 @@ namespace BotSrv.Player
                 {
                     WaitingMsg = msg;
                     WaitingStr = EDCode.DeCodeString(body);
-                    MShare.g_boMapMovingWait = true;
+                    MShare.MapMovingWait = true;
                     //WaitMsgTimer.Enabled = true;
                 }
                 return;
             }
+            string body2;
             switch (msg.Ident)
             {
                 case Messages.SM_PLAYERCONFIG:
@@ -290,10 +310,7 @@ namespace BotSrv.Player
                     MShare.g_nMyHungryState = msg.Param;
                     break;
                 case Messages.SM_TURN:
-                    unsafe
-                    {
-                        n = BotShare.GetCodeMsgSize((float)sizeof(CharDesc) * 4 / 3);
-                    }
+                    n = BotShare.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
                     if (body.Length > n)
                     {
                         body2 = body[n..];
@@ -340,10 +357,7 @@ namespace BotSrv.Player
                     }
                     break;
                 case Messages.SM_BACKSTEP:
-                    unsafe
-                    {
-                        n = BotShare.GetCodeMsgSize(sizeof(CharDesc) * 4 / 3);
-                    }
+                    n = BotShare.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n + 1 - 1, body.Length);
@@ -378,10 +392,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_SPACEMOVE_SHOW:
                 case Messages.SM_SPACEMOVE_SHOW2:
-                    unsafe
-                    {
-                        n = BotShare.GetCodeMsgSize(sizeof(CharDesc) * 4 / 3);
-                    }
+                    n = BotShare.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n, body.Length);
@@ -589,7 +600,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_WINEXP:
                     MShare.MySelf.Abil.Exp = msg.Recog;
-                    if (!MShare.g_gcGeneral[3] || (HUtil32.MakeLong(msg.Param, msg.Tag) > MShare.g_MaxExpFilter))
+                    if (!MShare.g_gcGeneral[3] || HUtil32.MakeLong(msg.Param, msg.Tag) > MShare.g_MaxExpFilter)
                     {
                         DScreen.AddSysMsg($"经验值 +{HUtil32.MakeLong(msg.Param, msg.Tag)}");
                     }
@@ -612,7 +623,7 @@ namespace BotSrv.Player
                     Actor = PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
-                        if (MShare.g_gcGeneral[13] && (msg.Series > 0))
+                        if (MShare.g_gcGeneral[13] && msg.Series > 0)
                         {
                             Actor.GetMoveHPShow(msg.Series);
                         }
@@ -623,9 +634,9 @@ namespace BotSrv.Player
                                 Actor.CancelAction();
                             }
                         }
-                        if ((Actor != MShare.MySelf))
+                        if (Actor != MShare.MySelf)
                         {
-                            if ((Actor.m_btRace != 0) || !MShare.g_gcGeneral[15])
+                            if (Actor.m_btRace != 0 || !MShare.g_gcGeneral[15])
                             {
                                 Actor.UpdateMsg(Messages.SM_STRUCK, (ushort)wl.Tag2, 0, msg.Series, wl.Param1, wl.Param2, "", wl.Tag1);
                             }
@@ -635,7 +646,7 @@ namespace BotSrv.Player
                         if (MShare.OpenAutoPlay && TimerAutoPlay.Enabled) //  自己受人攻击,小退
                         {
                             Actor2 = PlayScene.FindActor(wl.Tag1);
-                            if ((Actor2 == null) || ((Actor2.m_btRace != 0) && (Actor2.m_btIsHero != 1)))
+                            if (Actor2 == null || (Actor2.m_btRace != 0 && Actor2.m_btIsHero != 1))
                             {
                                 return;
                             }

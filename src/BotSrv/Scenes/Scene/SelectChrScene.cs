@@ -182,8 +182,8 @@ namespace BotSrv.Scenes.Scene
             string addr = string.Empty;
             string Str = EDCode.DeCodeString(body);
             string sport = HUtil32.GetValidStr3(Str, ref addr, HUtil32.Backslash);
-            MShare.g_nRunServerPort = HUtil32.StrToInt(sport, 0);
-            MShare.g_sRunServerAddr = addr;
+            MShare.RunServerPort = HUtil32.StrToInt(sport, 0);
+            MShare.RunServerAddr = addr;
             MShare.ConnectionStep = ConnectionStep.Play;
         }
 

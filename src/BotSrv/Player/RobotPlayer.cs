@@ -117,7 +117,7 @@ namespace BotSrv.Player
             MShare.g_SoftClosed = false;
             ActionFailLock = false;
             MShare.g_boMapMoving = false;
-            MShare.g_boMapMovingWait = false;
+            MShare.MapMovingWait = false;
             MShare.g_boCheckBadMapMode = false;
             MShare.g_boCheckSpeedHackDisplay = false;
             MShare.g_nDupSelection = 0;
@@ -163,20 +163,20 @@ namespace BotSrv.Player
             {
                 ClientSocket = new ScoketClient();
             }
-            ClientSocket.OnConnected -= CSocketConnect;
-            ClientSocket.OnDisconnected -= CSocketDisconnect;
-            ClientSocket.OnReceivedData -= CSocketRead;
-            ClientSocket.OnError -= CSocketError;
-            ClientSocket.OnConnected += CSocketConnect;
-            ClientSocket.OnDisconnected += CSocketDisconnect;
-            ClientSocket.OnReceivedData += CSocketRead;
-            ClientSocket.OnError += CSocketError;
-            ClientSocket.Connect(MShare.g_sRunServerAddr, MShare.g_nRunServerPort);
+            ClientSocket.OnConnected -= SocketConnect;
+            ClientSocket.OnDisconnected -= SocketDisconnect;
+            ClientSocket.OnReceivedData -= ReceivedData;
+            ClientSocket.OnError -= SocketError;
+            ClientSocket.OnConnected += SocketConnect;
+            ClientSocket.OnDisconnected += SocketDisconnect;
+            ClientSocket.OnReceivedData += ReceivedData;
+            ClientSocket.OnError += SocketError;
+            ClientSocket.Connect(MShare.RunServerAddr, MShare.RunServerPort);
         }
 
         #region Socket Events
 
-        private void CSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private void SocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             MShare.ServerConnected = true;
             if (MShare.ConnectionStep == ConnectionStep.Login)
@@ -198,7 +198,7 @@ namespace BotSrv.Player
             }
         }
 
-        private void CSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private void SocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
             MShare.ServerConnected = false;
             if (MShare.g_SoftClosed)
@@ -217,7 +217,7 @@ namespace BotSrv.Player
             }
         }
 
-        private void CSocketError(object sender, DSCClientErrorEventArgs e)
+        private void SocketError(object sender, DSCClientErrorEventArgs e)
         {
             switch (e.ErrorCode)
             {
@@ -238,7 +238,7 @@ namespace BotSrv.Player
             }
         }
 
-        private void CSocketRead(object sender, DSCClientDataInEventArgs e)
+        private void ReceivedData(object sender, DSCClientDataInEventArgs e)
         {
             var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (!string.IsNullOrEmpty(sData))
@@ -246,13 +246,12 @@ namespace BotSrv.Player
                 var n = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
                 if (n > 0)
                 {
-                    var data2 = sData.Substring(0, n - 1);
+                    var data2 = sData[..(n - 1)];
                     sData = data2 + sData.Substring(n, sData.Length);
                     ClientSocket.SendBuffer(HUtil32.GetBytes(activebuf));
                 }
                 BotShare.ClientMgr.AddPacket(SessionId, sData);
             }
-            Console.WriteLine(sData);
         }
 
         #endregion
@@ -2038,7 +2037,7 @@ namespace BotSrv.Player
                 switch (WaitingMsg.Ident)
                 {
                     case Messages.SM_CHANGEMAP:
-                        MShare.g_boMapMovingWait = false;
+                        MShare.MapMovingWait = false;
                         MShare.g_boMapMoving = false;
                         if (MShare.g_nStallX != -1)
                         {
@@ -2214,7 +2213,7 @@ namespace BotSrv.Player
             MShare.g_sGuildName = "";
             MShare.g_boMapMoving = false;
             //WaitMsgTimer.Enabled = false;
-            MShare.g_boMapMovingWait = false;
+            MShare.MapMovingWait = false;
             MShare.g_boNextTimePowerHit = false;
             MShare.g_boCanLongHit = false;
             MShare.g_boCanWideHit = false;
@@ -2298,7 +2297,7 @@ namespace BotSrv.Player
             MShare.g_sGuildName = "";
             MShare.g_boMapMoving = false;
             //WaitMsgTimer.Enabled = false;
-            MShare.g_boMapMovingWait = false;
+            MShare.MapMovingWait = false;
             MShare.g_boNextTimePowerHit = false;
             MShare.g_boCanLongHit = false;
             MShare.g_boCanWideHit = false;
@@ -2758,40 +2757,6 @@ namespace BotSrv.Player
         {
             var msg = Messages.MakeMessage(Messages.CM_ADJUST_BONUS, remain, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodePacket(babil));
-        }
-
-        public void SendFireSerieSkill()
-        {
-            if (MShare.MySelf == null)
-            {
-                return;
-            }
-            if (MShare.g_SeriesSkillFire)
-            {
-                return;
-            }
-            if (MShare.MySelf.m_boUseCboLib)
-            {
-                return;
-            }
-            if (MShare.MySelf.m_nIPower < 5)
-            {
-                if (MShare.GetTickCount() - MShare.g_IPointLessHintTick > 10000)
-                {
-                    MShare.g_IPointLessHintTick = MShare.GetTickCount();
-                    DScreen.AddSysMsg("内力值不足...");
-                }
-                return;
-            }
-            if (((MShare.MySelf.m_nState & 0x04000000) == 0) && ((MShare.MySelf.m_nState & 0x02000000) == 0))
-            {
-                if (MShare.GetTickCount() - MShare.g_SendFireSerieSkillTick > 1000)
-                {
-                    MShare.g_SendFireSerieSkillTick = MShare.GetTickCount();
-                    //var msg = Messages.MakeMessage(Messages.CM_FIRESERIESSKILL, MShare.g_MySelf.m_nRecogId, 0, 0, 0);
-                    //SendSocket(EDcode.EncodeMessage(msg));
-                }
-            }
         }
 
         public bool ServerAcceptNextAction()
@@ -4081,41 +4046,6 @@ namespace BotSrv.Player
                 return null;
             }
             return MShare.g_MagicArr[magid];
-        }
-
-        public void ProcessPacket(string str)
-        {
-            var data = string.Empty;
-            if (!string.IsNullOrEmpty(str))
-            {
-                while (str.Length >= 2)
-                {
-                    if (MShare.g_boMapMovingWait)
-                    {
-                        break;
-                    }
-                    if (str.IndexOf("!", StringComparison.OrdinalIgnoreCase) <= 0)
-                    {
-                        break;
-                    }
-                    str = HUtil32.ArrestStringEx(str, "#", "!", ref data);
-                    if (!string.IsNullOrEmpty(data))
-                    {
-                        DecodeMessagePacket(data, 0);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            if (MShare.g_SeriesSkillFire_100 && (MShare.MySelf != null) && MShare.MySelf.ActionFinished())
-            {
-                MShare.g_SeriesSkillFire_100 = false;
-                MShare.g_nCurrentMagic2 = 1;
-                MShare.g_nCurrentMagic = 888;
-                UseMagic(MShare.MouseX, MShare.MouseY, MShare.g_MagicArr[MShare.g_SeriesSkillArr[0]], false, true);
-            }
         }
 
         private void SmartChangePoison(ClientMagic pcm)

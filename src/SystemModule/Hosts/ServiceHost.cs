@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using NLog;
 using NLog.Extensions.Logging;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +19,13 @@ namespace SystemModule.Hosts
 
         protected ServiceHost()
         {
-            Configuration = new ConfigurationBuilder().Build();
+            if (File.Exists("AppSetting.json"))
+            {
+                Configuration = new ConfigurationBuilder().AddJsonFile("AppSetting.json", true, true).Build();
+            }
+            else {
+                Configuration = new ConfigurationBuilder().Build();
+            }
             LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(Configuration))
                 .GetCurrentClassLogger();

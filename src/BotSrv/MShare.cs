@@ -38,17 +38,8 @@ namespace BotSrv
         public static int g_dwSeriesSkillReadyTick = 0;
         public static int g_nCurrentMagic = 888;
         public static int g_nCurrentMagic2 = 888;
-        public static int g_SendFireSerieSkillTick = 0;
         public static int g_IPointLessHintTick = 0;
         public static int g_MPLessHintTick = 0;
-        public static int g_SeriesSkillStep = 0;
-        public static bool g_SeriesSkillFire_100 = false;
-        public static bool g_SeriesSkillFire = false;
-        public static bool g_SeriesSkillReady = false;
-        public static bool g_SeriesSkillReadyFlash = false;
-        public static byte[] g_TempSeriesSkillArr;
-        public static byte[] g_HTempSeriesSkillArr;
-        public static byte[] g_SeriesSkillArr = new byte[3 + 1];
         public static int g_dwAutoTecTick = 0;
         public static int g_rtime = 0;
         public static bool g_boExchgPoison = false;
@@ -75,8 +66,8 @@ namespace BotSrv
         public static int g_pnServerPort = 0;
         public static string g_sSelChrAddr = string.Empty;
         public static int g_nSelChrPort = 0;
-        public static string g_sRunServerAddr = string.Empty;
-        public static int g_nRunServerPort = 0;
+        public static string RunServerAddr = string.Empty;
+        public static int RunServerPort = 0;
         public static int g_nTopDrawPos = 0;
         public static int g_nLeftDrawPos = 0;
         public static bool SendLogin = false;
@@ -183,7 +174,7 @@ namespace BotSrv
         public static Point g_APLastPoint;
         public static Point g_APLastPoint2;
         public static bool g_boMapMoving = false;
-        public static bool g_boMapMovingWait = false;
+        public static bool MapMovingWait = false;
         public static bool g_boCheckBadMapMode = false;
         public static bool g_boCheckSpeedHackDisplay = false;
         public static int g_nStallX = 0;
@@ -455,10 +446,10 @@ namespace BotSrv
         {
             g_nCurrentMagic = 888;
             g_nCurrentMagic2 = 888;
-            g_SeriesSkillStep = 0;
-            g_SeriesSkillFire = false;
-            g_SeriesSkillFire_100 = false;
-            g_SeriesSkillReady = false;
+            //g_SeriesSkillStep = 0;
+            //g_SeriesSkillFire = false;
+            //g_SeriesSkillFire_100 = false;
+            //g_SeriesSkillReady = false;
             g_NextSeriesSkill = false;
             //FillChar(g_VenationInfos);   
             //FillChar(g_TempSeriesSkillArr);   

@@ -5,12 +5,14 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using BotSrv.Player;
+using NLog;
 using SystemModule;
 
 namespace BotSrv
 {
     public class ClientManager
     {
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private int g_dwProcessTimeMin = 0;
         private int g_dwProcessTimeMax = 0;
         private int g_nPosition = 0;
@@ -29,12 +31,10 @@ namespace BotSrv
             _reviceQueue = Channel.CreateUnbounded<RecvicePacket>();
         }
 
-        public void Start(CancellationToken stoppingToken)
+        public Task Start(CancellationToken stoppingToken)
         {
-            Task.Factory.StartNew(async () =>
-            {
-                await ProcessReviceMessage(stoppingToken);
-            }, stoppingToken);
+            logger.Info("消息处理线程启动...");
+            return ProcessReviceMessage(stoppingToken);
         }
 
         public void Stop(CancellationToken stoppingToken)
@@ -57,7 +57,7 @@ namespace BotSrv
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.StackTrace);
+                        logger.Error(ex);
                     }
                 }
             }
@@ -99,6 +99,7 @@ namespace BotSrv
             }
             _clients.TryRemove(sessionId, out var robotClient);
             _clientList.Remove(robotClient);
+            logger.Info("机器人[{0}] 会话ID:{1}]掉线或断开链接.", robotClient.ChrName, sessionId);
         }
 
         public void Run()
