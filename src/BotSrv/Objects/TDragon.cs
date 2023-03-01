@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace BotSrv.Objects
 {
-    public class TDragon : TActor
+    public class TDragon : Actor
     {
         protected int ax = 0;
         protected int ax2 = 0;
@@ -18,7 +18,7 @@ namespace BotSrv.Objects
 
         private void AttackEff()
         {
-            if (m_boDeath) return;
+            if (Death) return;
         }
 
         public override void Run()

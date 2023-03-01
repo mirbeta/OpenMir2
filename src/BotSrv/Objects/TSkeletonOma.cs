@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace BotSrv.Objects
 {
-    public class TSkeletonOma : TActor
+    public class TSkeletonOma : Actor
     {
         protected int ax = 0;
         protected int ay = 0;

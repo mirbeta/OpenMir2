@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace BotSrv.Objects;
 
-public class TSnowMon : TActor
+public class TSnowMon : Actor
 {
     protected int ax = 0;
     protected int ay = 0;

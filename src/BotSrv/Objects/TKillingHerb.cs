@@ -2,7 +2,7 @@
 
 namespace BotSrv.Objects;
 
-public class TKillingHerb : TActor
+public class TKillingHerb : Actor
 {
     public TKillingHerb(RobotPlayer robotClient) : base(robotClient)
     {

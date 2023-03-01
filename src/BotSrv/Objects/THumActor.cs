@@ -7,18 +7,18 @@ using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv.Objects
 {
-    public class THumActor : TActor
+    public class THumActor : Actor
     {
         private readonly bool m_boHideWeapon = false;
         private readonly bool m_boSSkill;
         public int m_nFrame;
-        public IList<TActor> m_SlaveObject;
+        public IList<Actor> m_SlaveObject;
         public TStallMgr m_StallMgr;
 
         public THumActor(RobotPlayer robotClient) : base(robotClient)
         {
             m_StallMgr = new TStallMgr();
-            m_SlaveObject = new List<TActor>();
+            m_SlaveObject = new List<Actor>();
             m_boSSkill = false;
             m_dwFrameTime = 150;
             m_nFrame = 0;
@@ -87,7 +87,7 @@ namespace BotSrv.Objects
         {
             int result;
             int cf;
-            if (m_boDeath)
+            if (Death)
             {
                 result = THumAction.HA.ActDie.start + m_btDir * (THumAction.HA.ActDie.frame + THumAction.HA.ActDie.skip) +
                          (THumAction.HA.ActDie.frame - 1);
@@ -363,7 +363,7 @@ namespace BotSrv.Objects
                     }
                 }
 
-                if (m_btRace == ActorRace.Play)
+                if (Race == ActorRace.Play)
                     m_nCurrentDefFrame = 0;
                 else
                     m_nCurrentDefFrame = -10;

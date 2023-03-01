@@ -8,7 +8,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv.Objects
 {
-    public class TActor
+    public class Actor
     {
         public RobotPlayer robotClient;
         public string UserName = string.Empty;
@@ -21,9 +21,9 @@ namespace BotSrv.Objects
         public byte m_btHairEx = 0;
         public byte m_btHorse = 0;
         public byte m_btIsHero;
-        public byte m_btJob = 0;
+        public byte Job = 0;
         public byte m_btPoisonDecHealth;
-        public byte m_btRace = ActorRace.Play;
+        public byte Race = ActorRace.Play;
         public byte m_btSex = 0;
         public byte m_btTitleIndex;
         public byte m_btWeapon = 0; // 武器类型
@@ -34,9 +34,9 @@ namespace BotSrv.Objects
         public Ability Abil = null;
         public TMonsterAction m_Action;
         public bool m_boAttackSlow; // 腕力不够时慢动作攻击.
-        public bool m_boDeath;
+        public bool Death;
         public bool m_boDelActionAfterFinished;
-        public bool m_boDelActor;
+        public bool DelActor;
         public bool m_boDigFragment = false;
         public bool m_boFisrShopItem;
         public bool m_boGrouped;
@@ -63,7 +63,7 @@ namespace BotSrv.Objects
         public bool m_boUseCboLib;
         public bool m_boUseEffect;
         public bool m_boUseMagic;
-        public bool m_boVisible;
+        public bool Visible;
         public bool m_boWarMode;
         public bool m_btAFilter;
         public byte m_btAttribute;
@@ -144,8 +144,8 @@ namespace BotSrv.Objects
         public int m_nHeroEnergy = 0;
         public int m_nHeroEnergyType = 0;
         public int m_nHitEffectNumber = 0;
-        public int m_nHiterCode;
-        public ushort m_nHitSpeed = 0;
+        public int HiterCode;
+        public ushort HitSpeed = 0;
         public int m_nHpx = 0;
         public int m_nHpy = 0;
         public int m_nHumWinOffset = 0;
@@ -170,7 +170,7 @@ namespace BotSrv.Objects
         protected short m_nOldy;
         public short m_nPx = 0;
         public short m_nPy = 0;
-        public int m_nRecogId;
+        public int RecogId;
         public int m_nRushDir = 0;
         public short m_nRx;
         public short m_nRy;
@@ -216,14 +216,14 @@ namespace BotSrv.Objects
         public bool n_boState;
         public TChrMsg RealActionMsg = new TChrMsg();
 
-        public TActor(RobotPlayer robotClient)
+        public Actor(RobotPlayer robotClient)
         {
             this.robotClient = robotClient;
             m_btTitleIndex = 0;
             m_nCurFocusFrame = 0;
             m_nWaitForRecogId = 0;
             m_MsgList = new List<TChrMsg>();
-            m_nRecogId = 0;
+            RecogId = 0;
             m_wAppr = 0;
             m_btPoisonDecHealth = 0;
             n_boState = false;
@@ -233,7 +233,7 @@ namespace BotSrv.Objects
             m_nIPowerExp = 0;
             m_btAttribute = 0;
             m_nGold = 0;
-            m_boVisible = true;
+            Visible = true;
             m_boHoldPlace = true;
             m_wGloryPoint = 0;
             m_nCurrentAction = 0;
@@ -250,10 +250,10 @@ namespace BotSrv.Objects
             m_dwSendQueryUserNameTime = MShare.GetTickCount();
             m_boWarMode = false;
             m_dwWarModeTime = 0;
-            m_boDeath = false;
+            Death = false;
             m_boSkeleton = false;
             m_boItemExplore = false;
-            m_boDelActor = false;
+            DelActor = false;
             m_boDelActionAfterFinished = false;
             m_nChrLight = 0;
             m_nMagLight = 0;
@@ -266,7 +266,7 @@ namespace BotSrv.Objects
             OpenHealth = false;
             m_noInstanceOpenHealth = false;
             m_CurMagic.ServerMagicCode = 0;
-            m_nSpellFrame = Actor.DEFSPELLFRAME;
+            m_nSpellFrame = ActorConst.DEFSPELLFRAME;
             m_nNormalSound = -1;
             m_nFootStepSound = -1;
             m_nAttackSound = -1;
@@ -356,12 +356,12 @@ namespace BotSrv.Objects
             m_nActBeforeY = CurrY;
             if (Msg.Ident == Messages.SM_ALIVE)
             {
-                m_boDeath = false;
+                Death = false;
                 m_boSkeleton = false;
                 m_boItemExplore = false;
             }
 
-            if (!m_boDeath)
+            if (!Death)
             {
                 switch (Msg.Ident)
                 {
@@ -458,9 +458,9 @@ namespace BotSrv.Objects
                             Msg.Ident = Messages.SM_FIREHIT;
                             break;
                         case Messages.CM_SPELL:
-                            if (MShare.g_MagicTarget != null)
-                                Msg.Dir = ClFunc.GetFlyDirection(CurrX, CurrY, MShare.g_MagicTarget.CurrX,
-                                    MShare.g_MagicTarget.CurrY);
+                            if (MShare.MagicTarget != null)
+                                Msg.Dir = ClFunc.GetFlyDirection(CurrX, CurrY, MShare.MagicTarget.CurrX,
+                                    MShare.MagicTarget.CurrY);
                             RealActionMsg = Msg;
                             //UseMagic = (TUseMagicInfo)Msg.Feature;
                             //RealActionMsg.Dir = UseMagic.MagicSerial;
@@ -519,7 +519,7 @@ namespace BotSrv.Objects
             }
             if (Msg.Ident == Messages.SM_DEATH || Msg.Ident == Messages.SM_NOWDEATH)
             {
-                m_boDeath = true;
+                Death = true;
                 if (HUtil32.HiByte(Msg.Dir) != 0) m_boItemExplore = true;
                 robotClient.PlayScene.ActorDied(this);
             }
@@ -553,7 +553,7 @@ namespace BotSrv.Objects
                 switch (m_ChrMsg.Ident)
                 {
                     case Messages.SM_STRUCK:
-                        m_nHiterCode = m_ChrMsg.Sound;
+                        HiterCode = m_ChrMsg.Sound;
                         ReadyAction(m_ChrMsg);
                         break;
                     case Messages.SM_DEATH:
@@ -654,7 +654,7 @@ namespace BotSrv.Objects
         public int CanRun()
         {
             var result = 1;
-            if (Abil.HP < Actor.RUN_MINHEALTH)
+            if (Abil.HP < ActorConst.RUN_MINHEALTH)
             {
                 result = -1;
             }
@@ -887,13 +887,11 @@ namespace BotSrv.Objects
 
         public virtual int GetDefaultFrame(bool wmode)
         {
-            int result;
             int cf;
-            TMonsterAction pm;
-            result = 0;
-            pm = Actor.GetRaceByPM(m_btRace, m_wAppearance);
+            int result = 0;
+            TMonsterAction pm = ActorConst.GetRaceByPM(Race, m_wAppearance);
             if (pm == null) return result;
-            if (m_boDeath)
+            if (Death)
             {
                 if (m_boSkeleton)
                     result = pm.ActDeath.start;
@@ -1012,7 +1010,7 @@ namespace BotSrv.Objects
                     }
                     else
                     {
-                        if (m_boDelActionAfterFinished) m_boDelActor = true;
+                        if (m_boDelActionAfterFinished) DelActor = true;
                         if (this == MShare.MySelf)
                         {
                             if (robotClient.ServerAcceptNextAction())
@@ -1020,7 +1018,7 @@ namespace BotSrv.Objects
                                 ActionEnded();
                                 m_nCurrentAction = 0;
                                 m_boUseMagic = false;
-                                if (m_btRace != 50)
+                                if (Race != 50)
                                 {
                                     m_boUseEffect = false;
                                     m_boHitEffect = false;
@@ -1032,7 +1030,7 @@ namespace BotSrv.Objects
                             ActionEnded();
                             m_nCurrentAction = 0;
                             m_boUseMagic = false;
-                            if (m_btRace != 50)
+                            if (Race != 50)
                             {
                                 m_boUseEffect = false;
                                 m_boHitEffect = false;
@@ -1106,7 +1104,7 @@ namespace BotSrv.Objects
                 }
 
                 m_nSkipTick = 0;
-                if (m_btRace == 0 && this == MShare.MySelf)
+                if (Race == 0 && this == MShare.MySelf)
                     if (new ArrayList(new[] { 5, 9, 11, 13 }).Contains(m_nCurrentAction))
                         switch (m_nCurrentFrame - m_nStartFrame)
                         {

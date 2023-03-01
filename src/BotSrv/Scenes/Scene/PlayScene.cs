@@ -17,14 +17,14 @@ namespace BotSrv.Scenes.Scene
         private int m_dwMoveTime = 0;
         private readonly int _mNDefXx = 0;
         private readonly int _mNDefYy = 0;
-        public IList<TActor> m_ActorList = null;
+        public IList<Actor> ActorList = null;
         public ProcMagic ProcMagic = null;
 
         public PlayScene(RobotPlayer robotClient) : base(SceneType.PlayGame, robotClient)
         {
             ProcMagic = new ProcMagic();
             ProcMagic.NTargetX = -1;
-            m_ActorList = new List<TActor>();
+            ActorList = new List<Actor>();
             m_dwMoveTime = HUtil32.GetTickCount();
         }
 
@@ -113,12 +113,12 @@ namespace BotSrv.Scenes.Scene
             var i = 0;
             while (true)
             {
-                if (i >= m_ActorList.Count)
+                if (i >= ActorList.Count)
                 {
                     break;
                 }
-                var actor = m_ActorList[i];
-                if (actor.m_boDeath && MShare.g_gcGeneral[8] && !actor.m_boItemExplore && (actor.m_btRace != 0) && actor.IsIdle())
+                var actor = ActorList[i];
+                if (actor.Death && MShare.g_gcGeneral[8] && !actor.m_boItemExplore && (actor.Race != 0) && actor.IsIdle())
                 {
                     i++;
                     continue;
@@ -155,28 +155,28 @@ namespace BotSrv.Scenes.Scene
                         ClFunc.DelChangeFace(actor.m_nWaitForRecogId);
                         NewActor(actor.m_nWaitForRecogId, actor.CurrX, actor.CurrY, actor.m_btDir, actor.m_nWaitForFeature, actor.m_nWaitForStatus);
                         actor.m_nWaitForRecogId = 0;
-                        actor.m_boDelActor = true;
+                        actor.DelActor = true;
                     }
                 }
-                if (actor.m_boDelActor || (Math.Abs(MShare.MySelf.CurrX - actor.CurrX) > 16) || (Math.Abs(MShare.MySelf.CurrY - actor.CurrY) > 16))
+                if (actor.DelActor || (Math.Abs(MShare.MySelf.CurrX - actor.CurrX) > 16) || (Math.Abs(MShare.MySelf.CurrY - actor.CurrY) > 16))
                 {
                     MShare.g_FreeActorList.Add(actor);
-                    m_ActorList.RemoveAt(i);
-                    if (MShare.g_TargetCret == actor)
+                    ActorList.RemoveAt(i);
+                    if (MShare.TargetCret == actor)
                     {
-                        MShare.g_TargetCret = null;
+                        MShare.TargetCret = null;
                     }
-                    if (MShare.g_FocusCret == actor)
+                    if (MShare.FocusCret == actor)
                     {
-                        MShare.g_FocusCret = null;
+                        MShare.FocusCret = null;
                     }
                     if (MShare.MagicLockActor == actor)
                     {
                         MShare.MagicLockActor = null;
                     }
-                    if (MShare.g_MagicTarget == actor)
+                    if (MShare.MagicTarget == actor)
                     {
-                        MShare.g_MagicTarget = null;
+                        MShare.MagicTarget = null;
                     }
                 }
                 else
@@ -197,7 +197,7 @@ namespace BotSrv.Scenes.Scene
 
         }
 
-        public void NewMagic(TActor aowner, int magid, int magnumb, int cx, int cy, int tx, int ty, int targetCode, MagicType mtype, bool recusion, int anitime, ref bool boFly, int maglv, int poison)
+        public void NewMagic(Actor aowner, int magid, int magnumb, int cx, int cy, int tx, int ty, int targetCode, MagicType mtype, bool recusion, int anitime, ref bool boFly, int maglv, int poison)
         {
 
         }
@@ -215,19 +215,19 @@ namespace BotSrv.Scenes.Scene
             //}
         }
 
-        public TActor GetCharacter(int x, int y, int wantsel, ref int nowsel, bool liveonly)
+        public Actor GetCharacter(int x, int y, int wantsel, ref int nowsel, bool liveonly)
         {
             int ccy = 0;
-            TActor result = null;
+            Actor result = null;
             nowsel = -1;
             for (var k = ccy + 8; k >= ccy - 1; k--)
             {
-                for (var i = m_ActorList.Count - 1; i >= 0; i--)
+                for (var i = ActorList.Count - 1; i >= 0; i--)
                 {
-                    if (m_ActorList[i] != MShare.MySelf)
+                    if (ActorList[i] != MShare.MySelf)
                     {
-                        TActor a = m_ActorList[i];
-                        if ((!liveonly || !a.m_boDeath) && a.m_boHoldPlace && a.m_boVisible)
+                        Actor a = ActorList[i];
+                        if ((!liveonly || !a.Death) && a.m_boHoldPlace && a.Visible)
                         {
                             if (a.CurrY == k)
                             {
@@ -251,22 +251,22 @@ namespace BotSrv.Scenes.Scene
         }
 
         // 取得鼠标所指坐标的角色
-        public TActor GetAttackFocusCharacter(int x, int y, int wantsel, ref int nowsel, bool liveonly)
+        public Actor GetAttackFocusCharacter(int x, int y, int wantsel, ref int nowsel, bool liveonly)
         {
             int ccy = 0;
-            TActor a;
-            TActor result = GetCharacter(x, y, wantsel, ref nowsel, liveonly);
+            Actor a;
+            Actor result = GetCharacter(x, y, wantsel, ref nowsel, liveonly);
             if (result == null)
             {
                 nowsel = -1;
                 for (var k = ccy + 8; k >= ccy - 1; k--)
                 {
-                    for (var i = m_ActorList.Count - 1; i >= 0; i--)
+                    for (var i = ActorList.Count - 1; i >= 0; i--)
                     {
-                        if (m_ActorList[i] != MShare.MySelf)
+                        if (ActorList[i] != MShare.MySelf)
                         {
-                            a = m_ActorList[i];
-                            if ((!liveonly || !a.m_boDeath) && a.m_boHoldPlace && a.m_boVisible)
+                            a = ActorList[i];
+                            if ((!liveonly || !a.Death) && a.m_boHoldPlace && a.Visible)
                             {
                                 if (a.CurrY == k)
                                 {
@@ -371,7 +371,7 @@ namespace BotSrv.Scenes.Scene
                 if ((dropItem.X == nX) && (dropItem.Y == nY))
                 {
                     result = dropItem;
-                    if (MShare.g_boPickUpAll || dropItem.boPickUp)
+                    if (MShare.PickUpAll || dropItem.boPickUp)
                     {
                         break;
                     }
@@ -411,26 +411,26 @@ namespace BotSrv.Scenes.Scene
         private bool CrashManEx(int mx, int my)
         {
             bool result = false;
-            for (var i = 0; i < m_ActorList.Count; i++)
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                TActor actor = m_ActorList[i];
+                Actor actor = ActorList[i];
                 if (actor == MShare.MySelf)
                 {
                     continue;
                 }
-                if (actor.m_boVisible && actor.m_boHoldPlace && (!actor.m_boDeath) && (actor.CurrX == mx) && (actor.CurrY == my))
+                if (actor.Visible && actor.m_boHoldPlace && (!actor.Death) && (actor.CurrX == mx) && (actor.CurrY == my))
                 {
                     if ((MShare.MySelf.m_nTagX == 0) && (MShare.MySelf.m_nTagY == 0))
                     {
-                        if ((actor.m_btRace == ActorRace.Play) && (MShare.g_boCanRunHuman || MShare.g_boCanRunSafeZone))
+                        if ((actor.Race == ActorRace.Play) && (MShare.g_boCanRunHuman || MShare.g_boCanRunSafeZone))
                         {
                             continue;
                         }
-                        if ((actor.m_btRace == ActorRace.Merchant) && MShare.g_boCanRunNpc)
+                        if ((actor.Race == ActorRace.Merchant) && MShare.g_boCanRunNpc)
                         {
                             continue;
                         }
-                        if ((actor.m_btRace > ActorRace.Play) && (actor.m_btRace != ActorRace.Merchant) && (MShare.g_boCanRunMon || MShare.g_boCanRunSafeZone))
+                        if ((actor.Race > ActorRace.Play) && (actor.Race != ActorRace.Merchant) && (MShare.g_boCanRunMon || MShare.g_boCanRunSafeZone))
                         {
                             continue;
                         }
@@ -455,14 +455,14 @@ namespace BotSrv.Scenes.Scene
         public bool CrashMan(int mx, int my)
         {
             bool result = false;
-            for (var i = 0; i < m_ActorList.Count; i++)
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                TActor actor = m_ActorList[i];
+                Actor actor = ActorList[i];
                 if (actor == null || actor == MShare.MySelf)
                 {
                     continue;
                 }
-                if (actor.m_boVisible && actor.m_boHoldPlace && (!actor.m_boDeath) && (actor.CurrX == mx) && (actor.CurrY == my))
+                if (actor.Visible && actor.m_boHoldPlace && (!actor.Death) && (actor.CurrX == mx) && (actor.CurrY == my))
                 {
                     result = true;
                     break;
@@ -476,30 +476,30 @@ namespace BotSrv.Scenes.Scene
             return RobotClient.Map.CanFly(mx, my);
         }
 
-        public TActor FindActor(int id)
+        public Actor FindActor(int id)
         {
-            TActor result = null;
+            Actor result = null;
             if (id == 0)
             {
                 return result;
             }
-            for (var i = 0; i < m_ActorList.Count; i++)
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                if (m_ActorList[i].m_nRecogId == id)
+                if (ActorList[i].RecogId == id)
                 {
-                    result = m_ActorList[i];
+                    result = ActorList[i];
                     break;
                 }
             }
             return result;
         }
 
-        public TActor FindActor(string sName)
+        public Actor FindActor(string sName)
         {
-            TActor result = null;
-            for (var i = 0; i < m_ActorList.Count; i++)
+            Actor result = null;
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                TActor actor = m_ActorList[i];
+                Actor actor = ActorList[i];
                 if (string.Compare(actor.UserName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = actor;
@@ -509,16 +509,16 @@ namespace BotSrv.Scenes.Scene
             return result;
         }
 
-        public TActor FindActorXY(int x, int y)
+        public Actor FindActorXY(int x, int y)
         {
-            TActor result = null;
-            for (var i = 0; i < m_ActorList.Count; i++)
+            Actor result = null;
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                TActor a = m_ActorList[i];
+                Actor a = ActorList[i];
                 if ((a.CurrX == x) && (a.CurrY == y))
                 {
                     result = a;
-                    if (!result.m_boDeath && result.m_boVisible && result.m_boHoldPlace)
+                    if (!result.Death && result.Visible && result.m_boHoldPlace)
                     {
                         break;
                     }
@@ -527,12 +527,12 @@ namespace BotSrv.Scenes.Scene
             return result;
         }
 
-        public bool IsValidActor(TActor actor)
+        public bool IsValidActor(Actor actor)
         {
             bool result = false;
-            for (var i = 0; i < m_ActorList.Count; i++)
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                if (m_ActorList[i] == actor)
+                if (ActorList[i] == actor)
                 {
                     result = true;
                     break;
@@ -546,15 +546,15 @@ namespace BotSrv.Scenes.Scene
             return (byte)cfeature;
         }
 
-        public TActor NewActor(int chrid, int cx, int cy, ushort cdir, int cfeature, int cstate)
+        public Actor NewActor(int chrid, int cx, int cy, ushort cdir, int cfeature, int cstate)
         {
-            TActor actor;
-            TActor result = null;
-            for (var i = 0; i < m_ActorList.Count; i++)
+            Actor actor;
+            Actor result = null;
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                if (m_ActorList[i].m_nRecogId == chrid)
+                if (ActorList[i].RecogId == chrid)
                 {
-                    result = m_ActorList[i];
+                    result = ActorList[i];
                     return result;
                 }
             }
@@ -861,10 +861,10 @@ namespace BotSrv.Scenes.Scene
                     actor = new TGhostShipMonster(RobotClient);
                     break;
                 default:
-                    actor = new TActor(RobotClient);
+                    actor = new Actor(RobotClient);
                     break;
             }
-            actor.m_nRecogId = chrid;
+            actor.RecogId = chrid;
             actor.CurrX = (short)(ushort)(short)cx;
             actor.CurrY = (short)(ushort)(short)cy;
             actor.m_nRx = actor.CurrX;
@@ -875,50 +875,50 @@ namespace BotSrv.Scenes.Scene
             {
                 // actor.m_btAFilter = MShare.g_APMobList.IndexOf(actor.m_sUserName) >= 0;
             }
-            actor.m_btRace = RACEfeature(cfeature);
+            actor.Race = RACEfeature(cfeature);
             actor.m_Action = null;
             actor.m_nState = cstate;
-            m_ActorList.Add(actor);
+            ActorList.Add(actor);
             result = actor;
             return result;
         }
 
-        public void ActorDied(TActor actor)
+        public void ActorDied(Actor actor)
         {
-            for (var i = 0; i < m_ActorList.Count; i++)
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                if (m_ActorList[i] == actor)
+                if (ActorList[i] == actor)
                 {
-                    m_ActorList.RemoveAt(i);
+                    ActorList.RemoveAt(i);
                     break;
                 }
             }
             bool flag = false;
-            for (var i = 0; i < m_ActorList.Count; i++)
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                if (!m_ActorList[i].m_boDeath)
+                if (!ActorList[i].Death)
                 {
-                    m_ActorList.Insert(i, actor);
+                    ActorList.Insert(i, actor);
                     flag = true;
                     break;
                 }
             }
             if (!flag)
             {
-                m_ActorList.Add(actor);
+                ActorList.Add(actor);
             }
         }
 
-        public void SetActorDrawLevel(TActor actor, int level)
+        public void SetActorDrawLevel(Actor actor, int level)
         {
             if (level == 0)
             {
-                for (var i = 0; i < m_ActorList.Count; i++)
+                for (var i = 0; i < ActorList.Count; i++)
                 {
-                    if (m_ActorList[i] == actor)
+                    if (ActorList[i] == actor)
                     {
-                        m_ActorList.RemoveAt(i);
-                        m_ActorList.Insert(0, actor);
+                        ActorList.RemoveAt(i);
+                        ActorList.Insert(0, actor);
                         break;
                     }
                 }
@@ -928,47 +928,47 @@ namespace BotSrv.Scenes.Scene
         // 清除所有角色
         public void ClearActors()
         {
-            m_ActorList.Clear();
+            ActorList.Clear();
             MShare.MySelf = null;
-            MShare.g_TargetCret = null;
-            MShare.g_FocusCret = null;
-            MShare.g_MagicTarget = null;
+            MShare.TargetCret = null;
+            MShare.FocusCret = null;
+            MShare.MagicTarget = null;
         }
 
-        public TActor DeleteActor(int id, bool boDeath)
+        public Actor DeleteActor(int id, bool boDeath)
         {
-            TActor result = null;
+            Actor result = null;
             int i = 0;
             while (true)
             {
-                if (i >= m_ActorList.Count)
+                if (i >= ActorList.Count)
                 {
                     break;
                 }
-                if (m_ActorList[i].m_nRecogId == id)
+                if (ActorList[i].RecogId == id)
                 {
-                    if (MShare.g_TargetCret == m_ActorList[i])
+                    if (MShare.TargetCret == ActorList[i])
                     {
-                        MShare.g_TargetCret = null;
+                        MShare.TargetCret = null;
                     }
-                    if (MShare.g_FocusCret == m_ActorList[i])
+                    if (MShare.FocusCret == ActorList[i])
                     {
-                        MShare.g_FocusCret = null;
+                        MShare.FocusCret = null;
                     }
-                    if (MShare.g_MagicTarget == m_ActorList[i])
+                    if (MShare.MagicTarget == ActorList[i])
                     {
-                        MShare.g_MagicTarget = null;
+                        MShare.MagicTarget = null;
                     }
-                    if (IsMySlaveObject(m_ActorList[i]))
+                    if (IsMySlaveObject(ActorList[i]))
                     {
                         if (!boDeath)
                         {
                             break;
                         }
                     }
-                    m_ActorList[i].m_dwDeleteTime = MShare.GetTickCount();
-                    MShare.g_FreeActorList.Add(m_ActorList[i]);
-                    m_ActorList.RemoveAt(i);
+                    ActorList[i].m_dwDeleteTime = MShare.GetTickCount();
+                    MShare.g_FreeActorList.Add(ActorList[i]);
+                    ActorList.RemoveAt(i);
                 }
                 else
                 {
@@ -978,32 +978,32 @@ namespace BotSrv.Scenes.Scene
             return result;
         }
 
-        public TActor DeleteActor(int id)
+        public Actor DeleteActor(int id)
         {
             return DeleteActor(id, false);
         }
 
         public void DelActor(object actor)
         {
-            for (var i = 0; i < m_ActorList.Count; i++)
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                if (m_ActorList[i] == actor)
+                if (ActorList[i] == actor)
                 {
-                    m_ActorList[i].m_dwDeleteTime = MShare.GetTickCount();
-                    MShare.g_FreeActorList.Add(m_ActorList[i]);
-                    m_ActorList.RemoveAt(i);
+                    ActorList[i].m_dwDeleteTime = MShare.GetTickCount();
+                    MShare.g_FreeActorList.Add(ActorList[i]);
+                    ActorList.RemoveAt(i);
                     break;
                 }
             }
         }
 
-        public TActor ButchAnimal(int x, int y)
+        public Actor ButchAnimal(int x, int y)
         {
-            TActor result = null;
-            for (var i = 0; i < m_ActorList.Count; i++)
+            Actor result = null;
+            for (var i = 0; i < ActorList.Count; i++)
             {
-                TActor a = m_ActorList[i];
-                if (a.m_boDeath)
+                Actor a = ActorList[i];
+                if (a.Death)
                 {
                     if ((Math.Abs(a.CurrX - x) <= 1) && (Math.Abs(a.CurrY - y) <= 1))
                     {
@@ -1017,7 +1017,7 @@ namespace BotSrv.Scenes.Scene
 
         public void SendMsg(int ident, int chrid, ushort x, ushort y, byte cdir, int feature, int state, string str, int ipInfo = 0)
         {
-            TActor actor;
+            Actor actor;
             MessageBodyW mbw;
             switch (ident)
             {
@@ -1041,10 +1041,10 @@ namespace BotSrv.Scenes.Scene
                             {
                                 RobotClient.TimerAutoPlay.Enabled = false;
                                 MShare.g_gcAss[0] = false;
-                                MShare.g_APMapPath = new Point[0];
+                                MShare.MapPath = new Point[0];
                                 MShare.g_APMapPath2 = new Point[0];
                                 MShare.AutoStep = -1;
-                                MShare.g_APLastPoint.X = -1;
+                                MShare.AutoLastPoint.X = -1;
                                 ScreenManager.AddChatBoardString("[挂机] 地图跳转，停止自动挂机", ConsoleColor.Red);
                             }
                         }
@@ -1108,7 +1108,7 @@ namespace BotSrv.Scenes.Scene
                         }
                         if (IsMySlaveObject(actor))
                         {
-                            if ((cdir != 0) || actor.m_boDeath)
+                            if ((cdir != 0) || actor.Death)
                             {
                                 DeleteActor(chrid, true);
                             }
@@ -1135,7 +1135,7 @@ namespace BotSrv.Scenes.Scene
                             cdir = HUtil32.LoByte(cdir);
                             if (ident == Messages.SM_SKELETON)
                             {
-                                actor.m_boDeath = true;
+                                actor.Death = true;
                                 actor.m_boSkeleton = true;
                             }
                             if (ident == Messages.SM_DEATH)
@@ -1169,7 +1169,7 @@ namespace BotSrv.Scenes.Scene
                             break;
                         case Messages.SM_CHARSTATUSCHANGED:
                             actor.m_nState = feature;
-                            actor.m_nHitSpeed = (ushort)state;
+                            actor.HitSpeed = (ushort)state;
                             break;
                         default:
                             if (ident == Messages.SM_TURN)
@@ -1186,7 +1186,7 @@ namespace BotSrv.Scenes.Scene
             }
         }
 
-        public static bool IsMySlaveObject(TActor atc)
+        public static bool IsMySlaveObject(Actor atc)
         {
             var result = false;
             if (MShare.MySelf == null)

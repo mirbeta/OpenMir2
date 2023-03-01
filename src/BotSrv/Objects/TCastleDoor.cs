@@ -2,7 +2,7 @@
 
 namespace BotSrv.Objects
 {
-    public class TCastleDoor : TActor
+    public class TCastleDoor : Actor
     {
         private readonly int ax = 0;
         private readonly int ay = 0;

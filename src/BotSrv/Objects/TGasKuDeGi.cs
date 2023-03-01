@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace BotSrv.Objects;
 
-public class TGasKuDeGi : TActor
+public class TGasKuDeGi : Actor
 {
     protected int ax = 0;
     protected int ay = 0;

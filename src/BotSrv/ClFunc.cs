@@ -229,12 +229,12 @@ namespace BotSrv
                             //}
                         }
                     }
-                    if (MShare.g_MovingItem != null)
+                    if (MShare.MovingItem != null)
                     {
-                        if ((MShare.g_ItemArr[i].Item.Name == MShare.g_MovingItem.Item.Item.Name) && (MShare.g_ItemArr[i].MakeIndex == MShare.g_MovingItem.Item.MakeIndex))
+                        if ((MShare.g_ItemArr[i].Item.Name == MShare.MovingItem.Item.Item.Name) && (MShare.g_ItemArr[i].MakeIndex == MShare.MovingItem.Item.MakeIndex))
                         {
-                            MShare.g_MovingItem.Index = 0;
-                            MShare.g_MovingItem.Item.Item.Name = "";
+                            MShare.MovingItem.Index = 0;
+                            MShare.MovingItem.Item.Item.Name = "";
                             MShare.g_boItemMoving = false;
                         }
                     }

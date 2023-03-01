@@ -136,16 +136,16 @@ namespace BotSrv.Maps
                         }
                     }
                 }
-                for (var i = 0; i < robotClient.PlayScene.m_ActorList.Count; i++)
+                for (var i = 0; i < robotClient.PlayScene.ActorList.Count; i++)
                 {
-                    var Actor = robotClient.PlayScene.m_ActorList[i];
+                    var Actor = robotClient.PlayScene.ActorList[i];
                     if (Actor == MShare.MySelf)
                     {
                         continue;
                     }
                     if ((Actor.CurrX >= MShare.MySelf.CurrX - 32) && (Actor.CurrX <= MShare.MySelf.CurrX + 32) && (Actor.CurrY >= MShare.MySelf.CurrY - 32) && (Actor.CurrY <= MShare.MySelf.CurrY + 32))
                     {
-                        if (Actor.m_boVisible && Actor.m_boHoldPlace && (!Actor.m_boDeath))
+                        if (Actor.Visible && Actor.m_boHoldPlace && (!Actor.Death))
                         {
                             m_MapData[Actor.CurrX, Actor.CurrY].TCellActor = true;
                         }

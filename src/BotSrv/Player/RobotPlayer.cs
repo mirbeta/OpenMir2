@@ -31,7 +31,7 @@ namespace BotSrv.Player
         public SelectChrScene SelectChrScene = null;
         public PlayScene PlayScene = null;
         public TMap Map = null;
-        public static TActor ShowMsgActor = null;
+        public static Actor ShowMsgActor = null;
         public static long g_dwOverSpaceWarningTick = 0;
         private const char activebuf = '*';
         private readonly TTimerCommand TimerCmd;
@@ -76,7 +76,7 @@ namespace BotSrv.Player
             Map = new TMap(this);
             MShare.g_DropedItemList = new List<TDropItem>();
             MShare.g_MagicList = new List<ClientMagic>();
-            MShare.g_FreeActorList = new List<TActor>();
+            MShare.g_FreeActorList = new List<Actor>();
             //EventMan = new TClEventManager();
             MShare.g_ChangeFaceReadyList = new ArrayList();
             MShare.g_SendSayList = new ArrayList();
@@ -90,10 +90,10 @@ namespace BotSrv.Player
             MShare.g_nLastMapMusic = -1;
             MShare.TargetX = -1;
             MShare.TargetY = -1;
-            MShare.g_TargetCret = null;
-            MShare.g_FocusCret = null;
+            MShare.TargetCret = null;
+            MShare.FocusCret = null;
             MShare.g_FocusItem = null;
-            MShare.g_MagicTarget = null;
+            MShare.MagicTarget = null;
             MShare.g_nTestReceiveCount = 0;
             MShare.g_boServerChanging = false;
             MShare.g_boBagLoaded = false;
@@ -353,9 +353,9 @@ namespace BotSrv.Player
                     targx = PlayScene.ProcMagic.NTargetX;
                     targy = PlayScene.ProcMagic.NTargetY;
                 }
-                else if ((PlayScene.ProcMagic.XTarget != null) && !PlayScene.ProcMagic.XTarget.m_boDeath)
+                else if ((PlayScene.ProcMagic.XTarget != null) && !PlayScene.ProcMagic.XTarget.Death)
                 {
-                    targid = PlayScene.ProcMagic.XTarget.m_nRecogId;
+                    targid = PlayScene.ProcMagic.XTarget.RecogId;
                     targx = PlayScene.ProcMagic.XTarget.CurrX;
                     targy = PlayScene.ProcMagic.XTarget.CurrY;
                 }
@@ -378,9 +378,9 @@ namespace BotSrv.Player
                         //pmag.ServerMagicCode = 0;
                         MShare.g_dwMagicDelayTime = 200 + PlayScene.ProcMagic.XMagic.Def.DelayTime;
                         MShare.g_dwMagicPKDelayTime = 0;
-                        if (MShare.g_MagicTarget != null)
+                        if (MShare.MagicTarget != null)
                         {
-                            if (MShare.g_MagicTarget.m_btRace == 0)
+                            if (MShare.MagicTarget.Race == 0)
                             {
                                 MShare.g_dwMagicPKDelayTime = 300 + RandomNumber.GetInstance().Random(1100);
                             }
@@ -447,25 +447,25 @@ namespace BotSrv.Player
             }
             if ((MShare.TargetX >= 0) && CanNextAction() && ServerAcceptNextAction())
             {
-                if (MShare.OpenAutoPlay && (MShare.g_APMapPath != null) && (MShare.AutoStep >= 0) && (0 < MShare.g_APMapPath.Length))
+                if (MShare.OpenAutoPlay && (MShare.MapPath != null) && (MShare.AutoStep >= 0) && (0 < MShare.MapPath.Length))
                 {
-                    if ((Math.Abs(MShare.g_APMapPath[MShare.AutoStep].X - MShare.MySelf.CurrX) <= 3) && (Math.Abs(MShare.g_APMapPath[MShare.AutoStep].X - MShare.MySelf.CurrY) <= 3))
+                    if ((Math.Abs(MShare.MapPath[MShare.AutoStep].X - MShare.MySelf.CurrX) <= 3) && (Math.Abs(MShare.MapPath[MShare.AutoStep].X - MShare.MySelf.CurrY) <= 3))
                     {
-                        if (MShare.g_APMapPath.Length >= 2)// 3点以上
+                        if (MShare.MapPath.Length >= 2)// 3点以上
                         {
-                            if (MShare.AutoStep >= MShare.g_APMapPath.Length) // 当前点在终点...
+                            if (MShare.AutoStep >= MShare.MapPath.Length) // 当前点在终点...
                             {
                                 // 终点 <-> 起点 距离过远...
-                                if ((Math.Abs(MShare.g_APMapPath[MShare.g_APMapPath.Length].X - MShare.g_APMapPath[0].X) >= 36) || (Math.Abs(MShare.g_APMapPath[MShare.g_APMapPath.Length].X - MShare.g_APMapPath[0].X) >= 36))
+                                if ((Math.Abs(MShare.MapPath[MShare.MapPath.Length].X - MShare.MapPath[0].X) >= 36) || (Math.Abs(MShare.MapPath[MShare.MapPath.Length].X - MShare.MapPath[0].X) >= 36))
                                 {
                                     MShare.g_APGoBack = true; // 原路返回
-                                    MShare.g_APLastPoint = MShare.g_APMapPath[MShare.AutoStep];
+                                    MShare.AutoLastPoint = MShare.MapPath[MShare.AutoStep];
                                     MShare.AutoStep -= 1;
                                 }
                                 else
                                 {
                                     MShare.g_APGoBack = false; // 循环到起点...
-                                    MShare.g_APLastPoint = MShare.g_APMapPath[MShare.AutoStep];
+                                    MShare.AutoLastPoint = MShare.MapPath[MShare.AutoStep];
                                     MShare.AutoStep = 0;
                                 }
                             }
@@ -473,7 +473,7 @@ namespace BotSrv.Player
                             {
                                 if (MShare.g_APGoBack) // 原路返回
                                 {
-                                    MShare.g_APLastPoint = MShare.g_APMapPath[MShare.AutoStep];
+                                    MShare.AutoLastPoint = MShare.MapPath[MShare.AutoStep];
                                     MShare.AutoStep -= 1;
                                     if (MShare.AutoStep <= 0)// 已回到起点
                                     {
@@ -483,7 +483,7 @@ namespace BotSrv.Player
                                 }
                                 else
                                 {
-                                    MShare.g_APLastPoint = MShare.g_APMapPath[MShare.AutoStep]; // 循环...
+                                    MShare.AutoLastPoint = MShare.MapPath[MShare.AutoStep]; // 循环...
                                     MShare.AutoStep++;
                                 }
                             }
@@ -491,9 +491,9 @@ namespace BotSrv.Player
                         else
                         {
                             // 2点,循环...
-                            MShare.g_APLastPoint = MShare.g_APMapPath[MShare.AutoStep];
+                            MShare.AutoLastPoint = MShare.MapPath[MShare.AutoStep];
                             MShare.AutoStep++;
-                            if (MShare.AutoStep > MShare.g_APMapPath.Length)
+                            if (MShare.AutoStep > MShare.MapPath.Length)
                             {
                                 MShare.AutoStep = 0;
                             }
@@ -571,7 +571,7 @@ namespace BotSrv.Player
                                 {
                                     if (MShare.OpenAutoPlay && MShare.g_boAPAutoMove && (MShare.g_APPathList.Count > 0))
                                     {
-                                        heroActor.Init_Queue2();
+                                        heroActor.InitQueue2();
                                         MShare.TargetX = -1;
                                     }
                                     var bowalk = false;
@@ -709,13 +709,13 @@ namespace BotSrv.Player
                             break;
                     }
                 }
-                else if (MShare.OpenAutoPlay && MShare.g_boAPAutoMove && (MShare.g_AutoPicupItem != null))
+                else if (MShare.OpenAutoPlay && MShare.g_boAPAutoMove && (MShare.AutoPicupItem != null))
                 {
                     SendPickup();
-                    MShare.g_sAPStr = "拾取物品";
+                    MShare.ConsoleStr = "拾取物品";
                     if (MShare.g_boAPAutoMove && (MShare.g_APPathList.Count > 0))
                     {
-                        heroActor.Init_Queue2();
+                        heroActor.InitQueue2();
                         MShare.TargetX = -1;
                     }
                 }
@@ -757,17 +757,17 @@ namespace BotSrv.Player
             TimerAutoPlay.Enabled = MShare.g_gcAss[0];
             if (TimerAutoPlay.Enabled)
             {
-                MShare.g_APTagget = null;
-                MShare.g_AutoPicupItem = null;
+                MShare.AutoTagget = null;
+                MShare.AutoPicupItem = null;
                 MShare.g_nAPStatus = -1;
                 MShare.TargetX = -1;
                 MShare.g_APGoBack = false;
                 ScreenManager.AddChatBoardString("开始自动挂机...", ConsoleColor.Red);
                 SaveWayPoint();
-                if (MShare.g_APMapPath != null)
+                if (MShare.MapPath != null)
                 {
                     MShare.AutoStep = 0;
-                    MShare.g_APLastPoint.X = -1;
+                    MShare.AutoLastPoint.X = -1;
                     GetNearPoint();
                 }
             }
@@ -901,35 +901,35 @@ namespace BotSrv.Player
                 fUnLockMagic = new ArrayList(new[] { 2, 9, 10, 14, 21, 33, 37, 41, 46, 50, 58, 70, 72, 75 }).Contains(pcm.Def.MagicId);
                 if (fUnLockMagic)
                 {
-                    MShare.g_MagicTarget = MShare.g_FocusCret;
+                    MShare.MagicTarget = MShare.FocusCret;
                 }
                 else
                 {
-                    if (MShare.MagicLock && PlayScene.IsValidActor(MShare.g_FocusCret) && !MShare.g_FocusCret.m_boDeath)
+                    if (MShare.MagicLock && PlayScene.IsValidActor(MShare.FocusCret) && !MShare.FocusCret.Death)
                     {
-                        MShare.MagicLockActor = MShare.g_FocusCret;
+                        MShare.MagicLockActor = MShare.FocusCret;
                     }
-                    MShare.g_MagicTarget = MShare.MagicLockActor;
+                    MShare.MagicTarget = MShare.MagicLockActor;
                 }
-                if (MShare.g_MagicTarget != null)
+                if (MShare.MagicTarget != null)
                 {
-                    if (!MShare.MagicLock || MShare.g_MagicTarget.m_boDeath || (MShare.g_MagicTarget.m_btRace == ActorRace.Merchant) || !PlayScene.IsValidActor(MShare.g_MagicTarget))
+                    if (!MShare.MagicLock || MShare.MagicTarget.Death || (MShare.MagicTarget.Race == ActorRace.Merchant) || !PlayScene.IsValidActor(MShare.MagicTarget))
                     {
-                        MShare.g_MagicTarget = null;
+                        MShare.MagicTarget = null;
                         MShare.MagicLockActor = null;
                     }
                 }
-                if ((MShare.g_MagicTarget != null) && (MShare.g_MagicTarget is THumActor))
+                if ((MShare.MagicTarget != null) && (MShare.MagicTarget is THumActor))
                 {
-                    if (((THumActor)MShare.g_MagicTarget).m_StallMgr.OnSale)
+                    if (((THumActor)MShare.MagicTarget).m_StallMgr.OnSale)
                     {
-                        MShare.g_MagicTarget = null;
+                        MShare.MagicTarget = null;
                         MShare.MagicLockActor = null;
                     }
                 }
                 SmartChangePoison(pcm);
                 int targid;
-                if (MShare.g_MagicTarget == null)
+                if (MShare.MagicTarget == null)
                 {
                     MShare.g_nCurrentMagic = 888;
                     if (boReacll)
@@ -943,15 +943,15 @@ namespace BotSrv.Player
                 {
                     if (!boReacll)
                     {
-                        targx = MShare.g_MagicTarget.CurrX;
-                        targy = MShare.g_MagicTarget.CurrY;
+                        targx = MShare.MagicTarget.CurrX;
+                        targy = MShare.MagicTarget.CurrY;
                     }
                     else
                     {
                         targx = tx;
                         targy = ty;
                     }
-                    targid = MShare.g_MagicTarget.m_nRecogId;
+                    targid = MShare.MagicTarget.RecogId;
                 }
                 if ((Math.Abs(MShare.MySelf.CurrX - targx) > MShare.g_nMagicRange) || (Math.Abs(MShare.MySelf.CurrY - targy) > MShare.g_nMagicRange))
                 {
@@ -988,9 +988,9 @@ namespace BotSrv.Player
                     pmag.ServerMagicCode = 0;
                     MShare.g_dwMagicDelayTime = 200 + pcm.Def.DelayTime;
                     MShare.g_dwMagicPKDelayTime = 0;
-                    if (MShare.g_MagicTarget != null)
+                    if (MShare.MagicTarget != null)
                     {
-                        if (MShare.g_MagicTarget.m_btRace == 0)
+                        if (MShare.MagicTarget.Race == 0)
                         {
                             MShare.g_dwMagicPKDelayTime = 300 + RandomNumber.GetInstance().Random(1100);
                         }
@@ -1046,7 +1046,7 @@ namespace BotSrv.Player
                     MShare.g_nFireCount++;
                 }
             }
-            MShare.g_MagicTarget = null;
+            MShare.MagicTarget = null;
         }
 
         private void UseMagicFireFail(int who)
@@ -1056,12 +1056,12 @@ namespace BotSrv.Player
             {
                 Actor.SendMsg(Messages.SM_MAGICFIRE_FAIL, 0, 0, 0, 0, 0, "", 0);
             }
-            MShare.g_MagicTarget = null;
+            MShare.MagicTarget = null;
         }
 
         public void ActorAutoEat(THumActor Actor)
         {
-            if (!Actor.m_boDeath)
+            if (!Actor.Death)
             {
                 ActorCheckHealth(false);
                 if (MShare.g_EatingItem.Item.Name == "")
@@ -1384,12 +1384,12 @@ namespace BotSrv.Player
         private bool EatItemName(string Str)
         {
             var result = false;
-            if ((Str == "小退") && (MShare.MySelf.m_nHiterCode > 0))
+            if ((Str == "小退") && (MShare.MySelf.HiterCode > 0))
             {
                 AppLogout();
                 return result;
             }
-            if ((Str == "大退") && (MShare.MySelf.m_nHiterCode > 0))
+            if ((Str == "大退") && (MShare.MySelf.HiterCode > 0))
             {
                 return result;
             }
@@ -1464,37 +1464,10 @@ namespace BotSrv.Player
                             if (i >= 0 && i <= 7)
                             {
                                 MShare.g_boItemMoving = true;
-                                MShare.g_MovingItem.Index = idx;
-                                MShare.g_MovingItem.Item = MShare.g_ItemArr[idx];
+                                MShare.MovingItem.Index = idx;
+                                MShare.MovingItem.Item = MShare.g_ItemArr[idx];
                                 MShare.g_ItemArr[idx].Item.Name = "";
                             }
-                            //switch (i)
-                            //{
-                            //    case 0:
-                            //        FrmDlg.DBAcus1Click(FrmDlg.DBAcus1, 0, 0);
-                            //        break;
-                            //    case 1:
-                            //        FrmDlg.DBAcus1Click(FrmDlg.DBAcus2, 0, 0);
-                            //        break;
-                            //    case 2:
-                            //        FrmDlg.DBAcus1Click(FrmDlg.DBAcus3, 0, 0);
-                            //        break;
-                            //    case 3:
-                            //        FrmDlg.DBAcus1Click(FrmDlg.DBAcus4, 0, 0);
-                            //        break;
-                            //    case 4:
-                            //        FrmDlg.DBAcus1Click(FrmDlg.DBAcus5, 0, 0);
-                            //        break;
-                            //    case 5:
-                            //        FrmDlg.DBAcus1Click(FrmDlg.DBCharm1, 0, 0);
-                            //        break;
-                            //    case 6:
-                            //        FrmDlg.DBAcus1Click(FrmDlg.DBCharm2, 0, 0);
-                            //        break;
-                            //    case 7:
-                            //        FrmDlg.DBAcus1Click(FrmDlg.DBCharm3, 0, 0);
-                            //        break;
-                            //}
                             return;
                         }
                         where = ClFunc.GetTakeOnPosition(MShare.g_ItemArr[idx], MShare.g_UseItems, true);
@@ -1509,20 +1482,20 @@ namespace BotSrv.Player
             }
             else if ((idx == -1) && MShare.g_boItemMoving)
             {
-                if ((MShare.g_MovingItem.Item.Item.StdMode <= 4) || (MShare.g_MovingItem.Item.Item.StdMode == 31) && (MShare.g_MovingItem.Item.Item.NeedIdentify < 4))
+                if ((MShare.MovingItem.Item.Item.StdMode <= 4) || (MShare.MovingItem.Item.Item.StdMode == 31) && (MShare.MovingItem.Item.Item.NeedIdentify < 4))
                 {
-                    if (((MShare.g_MovingItem.Item.Item.StdMode <= 3) || (MShare.g_MovingItem.Item.Item.StdMode == 31)) && (MShare.g_MovingItem.Item.Dura > 1))
+                    if (((MShare.MovingItem.Item.Item.StdMode <= 3) || (MShare.MovingItem.Item.Item.StdMode == 31)) && (MShare.MovingItem.Item.Dura > 1))
                     {
-                        MShare.g_MovingItem.Item.Dura = (ushort)(MShare.g_MovingItem.Item.Dura - 1);
+                        MShare.MovingItem.Item.Dura = (ushort)(MShare.MovingItem.Item.Dura - 1);
                         MShare.g_boItemMoving = false;
-                        MShare.g_EatingItem = MShare.g_MovingItem.Item;
-                        MShare.g_MovingItem.Item.Item.Name = "";
+                        MShare.g_EatingItem = MShare.MovingItem.Item;
+                        MShare.MovingItem.Item.Item.Name = "";
                     }
                     else
                     {
                         MShare.g_boItemMoving = false;
-                        MShare.g_EatingItem = MShare.g_MovingItem.Item;
-                        MShare.g_MovingItem.Item.Item.Name = "";
+                        MShare.g_EatingItem = MShare.MovingItem.Item;
+                        MShare.MovingItem.Item.Item.Name = "";
                     }
                     if ((MShare.g_EatingItem.Item.StdMode == 4) && (MShare.g_EatingItem.Item.Shape < 50))
                     {
@@ -1536,7 +1509,7 @@ namespace BotSrv.Player
                 else
                 {
                 lab2:
-                    if ((MShare.g_MovingItem.Item.Item.StdMode == 46) && MShare.g_MovingItem.Item.Item.Shape >= 2 && MShare.g_MovingItem.Item.Item.Shape <= 6)
+                    if ((MShare.MovingItem.Item.Item.StdMode == 46) && MShare.MovingItem.Item.Item.Shape >= 2 && MShare.MovingItem.Item.Item.Shape <= 6)
                     {
                         //if (!MShare.g_RareBoxWindow.m_boKeyAvail && (MShare.g_OpenBoxItem.Item.Item.Name == "") && !FrmDlg.DWBoxBKGnd.Visible)
                         //{
@@ -1547,55 +1520,27 @@ namespace BotSrv.Player
                         //}
                         return;
                     }
-                    if ((MShare.g_MovingItem.Item.Item.StdMode == 41) && new ArrayList(new int[] { 10, 30 }).Contains(MShare.g_MovingItem.Item.Item.Shape) && (MShare.g_BuildAcusesStep != 1))
+                    if ((MShare.MovingItem.Item.Item.StdMode == 41) && new ArrayList(new int[] { 10, 30 }).Contains(MShare.MovingItem.Item.Item.Shape) && (MShare.g_BuildAcusesStep != 1))
                     {
                         for (i = 0; i < 7; i++)
                         {
                             if (MShare.g_BuildAcuses[i].Item.Item.Name == "")
                             {
-                                if ((MShare.g_MovingItem.Item.Item.Shape >= 30 && MShare.g_MovingItem.Item.Item.Shape <= 34 && i >= 5 && i <= 7) || (MShare.g_MovingItem.Item.Item.Shape >= 10 && MShare.g_MovingItem.Item.Item.Shape <= 14 && i >= 0 && i <= 4))
+                                if ((MShare.MovingItem.Item.Item.Shape >= 30 && MShare.MovingItem.Item.Item.Shape <= 34 && i >= 5 && i <= 7) || (MShare.MovingItem.Item.Item.Shape >= 10 && MShare.MovingItem.Item.Item.Shape <= 14 && i >= 0 && i <= 4))
                                 {
                                     break;
                                 }
                             }
                         }
-                        switch (i)
-                        {
-                            //case 0:
-                            //    FrmDlg.DBAcus1Click(FrmDlg.DBAcus1, 0, 0);
-                            //    break;
-                            //case 1:
-                            //    FrmDlg.DBAcus1Click(FrmDlg.DBAcus2, 0, 0);
-                            //    break;
-                            //case 2:
-                            //    FrmDlg.DBAcus1Click(FrmDlg.DBAcus3, 0, 0);
-                            //    break;
-                            //case 3:
-                            //    FrmDlg.DBAcus1Click(FrmDlg.DBAcus4, 0, 0);
-                            //    break;
-                            //case 4:
-                            //    FrmDlg.DBAcus1Click(FrmDlg.DBAcus5, 0, 0);
-                            //    break;
-                            //case 5:
-                            //    FrmDlg.DBAcus1Click(FrmDlg.DBCharm1, 0, 0);
-                            //    break;
-                            //case 6:
-                            //    FrmDlg.DBAcus1Click(FrmDlg.DBCharm2, 0, 0);
-                            //    break;
-                            //case 7:
-                            //    FrmDlg.DBAcus1Click(FrmDlg.DBCharm3, 0, 0);
-                            //    break;
-                        }
                         return;
                     }
-
-                    where = ClFunc.GetTakeOnPosition(MShare.g_MovingItem.Item, MShare.g_UseItems, true);
+                    where = ClFunc.GetTakeOnPosition(MShare.MovingItem.Item, MShare.g_UseItems, true);
                     if (where >= 0 && where <= 13)
                     {
                         takeon = true;
                         MShare.g_boItemMoving = false;
-                        MShare.g_EatingItem = MShare.g_MovingItem.Item;
-                        MShare.g_MovingItem.Item.Item.Name = "";
+                        MShare.g_EatingItem = MShare.MovingItem.Item;
+                        MShare.MovingItem.Item.Item.Name = "";
                         idx = m_nEatRetIdx;
                     }
                 }
@@ -1620,13 +1565,12 @@ namespace BotSrv.Player
 
         private bool TargetInSwordLongAttackRange(int ndir)
         {
-            short nX = 0;
-            short nY = 0;
-            var result = false;
             if (MShare.g_gcTec[0])
             {
                 return true;
             }
+            short nX = 0;
+            short nY = 0;
             ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
             ClFunc.GetFrontPosition(nX, nY, ndir, ref nX, ref nY);
             if ((Math.Abs(MShare.MySelf.CurrX - nX) == 2) || (Math.Abs(MShare.MySelf.CurrY - nY) == 2))
@@ -1634,13 +1578,13 @@ namespace BotSrv.Player
                 var Actor = PlayScene.FindActorXY(nX, nY);
                 if (Actor != null)
                 {
-                    if (!Actor.m_boDeath)
+                    if (!Actor.Death)
                     {
-                        result = true;
+                        return true;
                     }
                 }
             }
-            return result;
+            return false;
         }
 
         private bool TargetInSwordLongAttackRange2(int sx, int sy, int dx, int dy)
@@ -1690,7 +1634,7 @@ namespace BotSrv.Player
             }
             if ((Actor != null) && (ractor != null))
             {
-                if (!Actor.m_boDeath && !ractor.m_boDeath)
+                if (!Actor.Death && !ractor.Death)
                 {
                     result = true;
                 }
@@ -1709,7 +1653,7 @@ namespace BotSrv.Player
                 if (GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, nC, ref nX, ref nY))
                 {
                     var Actor = PlayScene.FindActorXY(nX, nY);
-                    if ((Actor != null) && !Actor.m_boDeath)
+                    if ((Actor != null) && !Actor.Death)
                     {
                         result = true;
                         break;
@@ -1728,7 +1672,7 @@ namespace BotSrv.Player
         {
             short nX = 0;
             short nY = 0;
-            TActor Actor;
+            Actor Actor;
             var result = false;
             short nC = 1;
             while (true)
@@ -1736,7 +1680,7 @@ namespace BotSrv.Player
                 if (GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, nC, ref nX, ref nY))
                 {
                     Actor = PlayScene.FindActorXY(nX, nY);
-                    if ((Actor != null) && !Actor.m_boDeath)
+                    if ((Actor != null) && !Actor.Death)
                     {
                         result = true;
                         break;
@@ -1777,7 +1721,7 @@ namespace BotSrv.Player
             }
             if ((Actor != null) && (ractor != null))
             {
-                if (!Actor.m_boDeath && !ractor.m_boDeath)
+                if (!Actor.Death && !ractor.Death)
                 {
                     result = true;
                 }
@@ -1785,7 +1729,7 @@ namespace BotSrv.Player
             return result;
         }
 
-        public bool AttackTarget(TActor target)
+        public bool AttackTarget(Actor target)
         {
             var result = false;
             var nHitMsg = Messages.CM_HIT;
@@ -1794,14 +1738,15 @@ namespace BotSrv.Player
                 nHitMsg = Messages.CM_HEAVYHIT;
             }
             int tdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY);
-            if ((Math.Abs(MShare.MySelf.CurrX - target.CurrX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - target.CurrY) <= 1) && (!target.m_boDeath))
+            if ((Math.Abs(MShare.MySelf.CurrX - target.CurrX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - target.CurrY) <= 1) && (!target.Death))
             {
                 if (TimerAutoPlay.Enabled)
                 {
                     MShare.g_boAPAutoMove = false;
-                    if (MShare.g_APTagget != null)
+                    if (MShare.AutoTagget != null)
                     {
-                        MShare.g_sAPStr = $"怪物目标：{MShare.g_APTagget.UserName} ({MShare.g_APTagget.CurrX},{MShare.g_APTagget.CurrY}) 正在使用普通攻击";
+                        MShare.ConsoleStr = $"怪物目标：{MShare.AutoTagget.UserName} ({MShare.AutoTagget.CurrX},{MShare.AutoTagget.CurrY}) 正在使用普通攻击";
+                        MainOutMessage(MShare.ConsoleStr);
                     }
                 }
                 if (CanNextAction() && ServerAcceptNextAction())
@@ -1842,7 +1787,7 @@ namespace BotSrv.Player
             }
             else
             {
-                if (MShare.g_boCanLongHit && (MShare.MySelf.m_btJob == 0) && (!target.m_boDeath) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.g_MagicArr[12] != null) && TargetInSwordLongAttackRange2(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY))
+                if (MShare.g_boCanLongHit && (MShare.MySelf.Job == 0) && (!target.Death) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.g_MagicArr[12] != null) && TargetInSwordLongAttackRange2(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY))
                 {
                     if (CanNextAction() && ServerAcceptNextAction() && CanNextHit())
                     {
@@ -1860,7 +1805,7 @@ namespace BotSrv.Player
                 {
                     var dx = MShare.MySelf.CurrX;
                     var dy = MShare.MySelf.CurrY;
-                    if ((MShare.MySelf.m_btJob == 0) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.g_MagicArr[12] != null))
+                    if ((MShare.MySelf.Job == 0) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.g_MagicArr[12] != null))
                     {
                         ClFunc.GetNextHitPosition(target.CurrX, target.CurrY, ref dx, ref dy);
                         if (!PlayScene.CanWalk(dx, dy))
@@ -1879,7 +1824,7 @@ namespace BotSrv.Player
                 if (TimerAutoPlay.Enabled)
                 {
                     MShare.g_boAPAutoMove = true;
-                    MShare.g_sAPStr = $"怪物目标：{target.UserName} ({target.CurrX},{target.CurrY}) 正在跑向";
+                    MShare.ConsoleStr = $"怪物目标：{target.UserName} ({target.CurrX},{target.CurrY}) 正在跑向";
                 }
             }
             return result;
@@ -1904,11 +1849,11 @@ namespace BotSrv.Player
         {
             int ii;
             int fixidx;
-            TActor target;
+            Actor target;
             if ((MShare.g_gcGeneral[1] || MShare.g_gcGeneral[9]) && (MShare.GetTickCount() - m_dwDuraWarningTick > 60 * 1000))
             {
                 m_dwDuraWarningTick = MShare.GetTickCount();
-                if ((MShare.MySelf != null) && !MShare.MySelf.m_boDeath)
+                if ((MShare.MySelf != null) && !MShare.MySelf.Death)
                 {
                     for (var i = MShare.g_UseItems.Length; i > 0; i--)
                     {
@@ -1949,7 +1894,7 @@ namespace BotSrv.Player
                     }
                 }
             }
-            if ((MShare.MySelf != null) && !MShare.MySelf.m_boDeath && (MShare.MySelf.m_nIPowerLvl > 5) && (MShare.MySelf.m_nIPower < 30) && (MShare.GetTickCount() - dwIPTick > 30 * 1000))
+            if ((MShare.MySelf != null) && !MShare.MySelf.Death && (MShare.MySelf.m_nIPowerLvl > 5) && (MShare.MySelf.m_nIPower < 30) && (MShare.GetTickCount() - dwIPTick > 30 * 1000))
             {
                 dwIPTick = MShare.GetTickCount();
                 fixidx = -1;
@@ -1966,7 +1911,7 @@ namespace BotSrv.Player
                     EatItem(fixidx);
                 }
             }
-            if (MShare.g_TargetCret != null)
+            if (MShare.TargetCret != null)
             {
                 if (ActionKey > 0)
                 {
@@ -1974,7 +1919,7 @@ namespace BotSrv.Player
                 }
                 else
                 {
-                    MShare.g_TargetCret = null;
+                    MShare.TargetCret = null;
                 }
             }
             if ((MShare.MySelf != null) && (MShare.g_boAutoDig || MShare.g_boAutoSit))
@@ -1991,7 +1936,7 @@ namespace BotSrv.Player
                         if (target != null)
                         {
                             ii = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MouseCurrX, MShare.MouseCurrY);
-                            SendButchAnimal(MShare.MouseCurrX, MShare.MouseCurrY, ii, target.m_nRecogId);
+                            SendButchAnimal(MShare.MouseCurrX, MShare.MouseCurrY, ii, target.RecogId);
                             MShare.MySelf.SendMsg(Messages.CM_SITDOWN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, ii, 0, 0, "", 0);
                         }
                         else
@@ -2003,7 +1948,7 @@ namespace BotSrv.Player
                     }
                 }
             }
-            if (MShare.g_boAutoPickUp && (MShare.MySelf != null) && (MShare.GetTickCount() - MShare.AutoPickupTick) > MShare.AutoPickupTime)// 动自捡取
+            if (MShare.AutoPickUp && (MShare.MySelf != null) && (MShare.GetTickCount() - MShare.AutoPickupTick) > MShare.AutoPickupTime)// 动自捡取
             {
                 MShare.AutoPickupTick = MShare.GetTickCount();
                 AutoPickUpItem();
@@ -2017,7 +1962,7 @@ namespace BotSrv.Player
                 var DropItem = PlayScene.GetXyDropItems(MShare.MySelf.CurrX, MShare.MySelf.CurrY);
                 if (DropItem != null)
                 {
-                    if (MShare.g_boPickUpAll || DropItem.boPickUp)
+                    if (MShare.PickUpAll || DropItem.boPickUp)
                     {
                         SendPickup();
                     }
@@ -2049,8 +1994,8 @@ namespace BotSrv.Player
                         PlayScene.SendMsg(Messages.SM_CHANGEMAP, 0, WaitingMsg.Param, WaitingMsg.Tag, (byte)WaitingMsg.Series, 0, 0, WaitingStr);
                         MShare.MySelf.CleanCharMapSetting((short)WaitingMsg.Param, (short)WaitingMsg.Tag);
                         MShare.TargetX = -1;
-                        MShare.g_TargetCret = null;
-                        MShare.g_FocusCret = null;
+                        MShare.TargetCret = null;
+                        MShare.FocusCret = null;
                         break;
                 }
             }
@@ -2122,8 +2067,8 @@ namespace BotSrv.Player
         {
             //SaveWayPoint();
             MShare.g_gcAss[0] = false;
-            MShare.g_APTagget = null;
-            MShare.g_AutoPicupItem = null;
+            MShare.AutoTagget = null;
+            MShare.AutoPicupItem = null;
             MShare.g_nAPStatus = -1;
             MShare.TargetX = -1;
             MShare.g_boCanRunSafeZone = true;
@@ -2198,13 +2143,13 @@ namespace BotSrv.Player
             MShare.g_WaitingUseItem.Item.Item.Name = "";
             MShare.g_WaitingStallItem.Item.Item.Name = "";
             MShare.g_WaitingDetectItem.Item.Item.Name = "";
-            MShare.g_OpenBoxItem.Item.Item.Name = "";
+            MShare.OpenBoxItem.Item.Item.Name = "";
             MShare.g_EatingItem.Item.Name = "";
             MShare.g_nLastMapMusic = -1;
             MShare.TargetX = -1;
-            MShare.g_TargetCret = null;
-            MShare.g_FocusCret = null;
-            MShare.g_MagicTarget = null;
+            MShare.TargetCret = null;
+            MShare.FocusCret = null;
+            MShare.MagicTarget = null;
             ActionLock = false;
             m_boSupplyItem = false;
             m_nEatRetIdx = -1;
@@ -2282,13 +2227,13 @@ namespace BotSrv.Player
             MShare.g_WaitingUseItem.Item.Item.Name = "";
             MShare.g_WaitingStallItem.Item.Item.Name = "";
             MShare.g_WaitingDetectItem.Item.Item.Name = "";
-            MShare.g_OpenBoxItem.Item.Item.Name = "";
+            MShare.OpenBoxItem.Item.Item.Name = "";
             MShare.g_EatingItem.Item.Name = "";
             MShare.g_nLastMapMusic = -1;
             MShare.TargetX = -1;
-            MShare.g_TargetCret = null;
-            MShare.g_FocusCret = null;
-            MShare.g_MagicTarget = null;
+            MShare.TargetCret = null;
+            MShare.FocusCret = null;
+            MShare.MagicTarget = null;
             ActionLock = false;
             m_boSupplyItem = false;
             m_nEatRetIdx = -1;
@@ -2364,8 +2309,8 @@ namespace BotSrv.Player
             {
                 if (HUtil32.CompareLStr(Str, sam))
                 {
-                    var param = Str.Substring(sam.Length, Str.Length - sam.Length);
-                    if (param != "")
+                    var param = Str[sam.Length..];
+                    if (!string.IsNullOrEmpty(param))
                     {
                         string sy = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\09" });
                         if ((sx != "") && (sy != ""))
@@ -2412,7 +2357,7 @@ namespace BotSrv.Player
                 if (Str[0] == '/')
                 {
                     ScreenManager.AddChatBoardString(Str, GetRGB(180));
-                    HUtil32.GetValidStr3(Str.Substring(2 - 1, Str.Length - 1), ref WhisperName, " ");
+                    HUtil32.GetValidStr3(Str[1..^0], ref WhisperName, " ");
                 }
             }
         }
@@ -2806,7 +2751,7 @@ namespace BotSrv.Player
                 return false;
             }
             LevelFastTime = HUtil32._MIN(370, MShare.MySelf.Abil.Level * 14);
-            LevelFastTime = HUtil32._MIN(800, LevelFastTime + MShare.MySelf.m_nHitSpeed * MShare.ItemSpeed);
+            LevelFastTime = HUtil32._MIN(800, LevelFastTime + MShare.MySelf.HitSpeed * MShare.ItemSpeed);
             if (MShare.SpeedRate)
             {
                 if (MShare.MySelf.m_boAttackSlow)
@@ -3196,11 +3141,11 @@ namespace BotSrv.Player
             //FillChar(MShare.g_ItemArr * MShare.MAXBAGITEMCL, '\0');
             //FillChar(MShare.g_TIItems, sizeof(MShare.g_TIItems), '\0');
             //FillChar(MShare.g_spItems, sizeof(MShare.g_spItems), '\0');
-            if (MShare.g_MovingItem != null)
+            if (MShare.MovingItem != null)
             {
-                if ((MShare.g_MovingItem.Item.Item.Name != "") && MShare.IsBagItem(MShare.g_MovingItem.Index))
+                if ((MShare.MovingItem.Item.Item.Name != "") && MShare.IsBagItem(MShare.MovingItem.Index))
                 {
-                    MShare.g_MovingItem.Item.Item.Name = "";
+                    MShare.MovingItem.Item.Item.Name = "";
                     MShare.g_boItemMoving = false;
                 }
             }
@@ -3259,17 +3204,17 @@ namespace BotSrv.Player
                 MShare.g_APGoBack = MShare.g_APGoBack2;
                 if (MShare.g_APMapPath2 != null)
                 {
-                    MShare.g_APMapPath = new Point[MShare.g_APMapPath2.Length + 1];
+                    MShare.MapPath = new Point[MShare.g_APMapPath2.Length + 1];
                     for (k = 0; k <= MShare.g_APMapPath2.Length; k++)
                     {
-                        MShare.g_APMapPath[k] = MShare.g_APMapPath2[k];
+                        MShare.MapPath[k] = MShare.g_APMapPath2[k];
                     }
                 }
-                MShare.g_APLastPoint = MShare.g_APLastPoint2;
+                MShare.AutoLastPoint = MShare.AutoLastPoint2;
                 MShare.AutoStep = MShare.g_APStep2;
                 MShare.g_gcAss[0] = true;
-                MShare.g_APTagget = null;
-                MShare.g_AutoPicupItem = null;
+                MShare.AutoTagget = null;
+                MShare.AutoPicupItem = null;
                 MShare.g_nAPStatus = -1;
                 MShare.TargetX = -1;
                 MShare.g_APGoBack2 = false;
@@ -3929,15 +3874,15 @@ namespace BotSrv.Player
 
         public void MinTimerTimer(object Sender, EventArgs _e1)
         {
-            for (var i = 0; i < PlayScene.m_ActorList.Count; i++)
+            for (var i = 0; i < PlayScene.ActorList.Count; i++)
             {
-                if (IsGroupMember(PlayScene.m_ActorList[i].UserName))
+                if (IsGroupMember(PlayScene.ActorList[i].UserName))
                 {
-                    PlayScene.m_ActorList[i].m_boGrouped = true;
+                    PlayScene.ActorList[i].m_boGrouped = true;
                 }
                 else
                 {
-                    PlayScene.m_ActorList[i].m_boGrouped = false;
+                    PlayScene.ActorList[i].m_boGrouped = false;
                 }
             }
             for (var i = MShare.g_FreeActorList.Count - 1; i >= 0; i--)
@@ -4064,7 +4009,7 @@ namespace BotSrv.Player
             }
             else if (new ArrayList(new int[] { 6, 38 }).Contains(pcm.Def.MagicId))
             {
-                if (MShare.g_MagicTarget != null)
+                if (MShare.MagicTarget != null)
                 {
                     Str = "药";
                     MShare.g_boExchgPoison = !MShare.g_boExchgPoison;
@@ -4154,7 +4099,7 @@ namespace BotSrv.Player
                                 return;
                             }
                         }
-                        switch (MShare.MySelf.m_btJob)
+                        switch (MShare.MySelf.Job)
                         {
                             case 0:
                                 if (MShare.g_gcTec[3] && !MShare.g_boNextTimePursueHit)
@@ -4411,7 +4356,7 @@ namespace BotSrv.Player
             FindMapNode T;
             byte ndir = 0;
             var success = false;
-            MShare.g_sAPStr = "";
+            MShare.ConsoleStr = "";
             MShare.g_boAPAutoMove = false;
             if (MShare.MySelf == null)
             {
@@ -4421,80 +4366,80 @@ namespace BotSrv.Player
             {
                 return;
             }
-            if (MShare.MySelf.m_boDeath)
+            if (MShare.MySelf.Death)
             {
                 MShare.g_gcAss[0] = false;
-                MShare.g_APTagget = null;
-                MShare.g_AutoPicupItem = null;
+                MShare.AutoTagget = null;
+                MShare.AutoPicupItem = null;
                 MShare.g_nAPStatus = -1;
                 MShare.TargetX = -1;
                 TimerAutoPlay.Enabled = MShare.g_gcAss[0];
                 return;
             }
-            MShare.g_AutoPicupItem = null;
+            MShare.AutoPicupItem = null;
             switch (heroActor.GetAutoPalyStation())
             {
                 case 0:
                     if (!EatItemName("回城卷") && !EatItemName("回城卷包") && !EatItemName("盟重传送石") && !EatItemName("比奇传送石"))
                     {
-                        ScreenManager.AddChatBoardString("你的回城卷已用完,已挂机停止!!!", ConsoleColor.Red);
+                        ScreenManager.AddChatBoardString("你的回城卷已用完,回安全区等待!!!", ConsoleColor.Red);
                     }
                     else
                     {
-                        ScreenManager.AddChatBoardString("回城并挂机停止!!!", ConsoleColor.Red);
+                        ScreenManager.AddChatBoardString("回安全区等待!!!", ConsoleColor.Red);
                     }
                     MShare.g_gcAss[0] = false;
-                    MShare.g_APTagget = null;
-                    MShare.g_AutoPicupItem = null;
+                    MShare.AutoTagget = null;
+                    MShare.AutoPicupItem = null;
                     MShare.g_nAPStatus = -1;
                     MShare.TargetX = -1;
                     TimerAutoPlay.Enabled = MShare.g_gcAss[0];
                     MShare.g_boAPAutoMove = true;
                     break;
                 case 1:// 此时为该怪物首次被发现，自动寻找路径
-                    if (heroActor.AttackTagget(MShare.g_APTagget))
+                    if (heroActor.AttackTagget(MShare.AutoTagget))
                     {
                         return;
                     }
-                    if (MShare.g_APTagget != null)
+                    if (MShare.AutoTagget != null)
                     {
-                        MShare.TargetX = MShare.g_APTagget.CurrX;
-                        MShare.TargetY = MShare.g_APTagget.CurrY;
-                        heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.g_APTagget.CurrX, MShare.g_APTagget.CurrY);
+                        MShare.TargetX = MShare.AutoTagget.CurrX;
+                        MShare.TargetY = MShare.AutoTagget.CurrY;
+                        heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);
                     }
                     MShare.TargetX = -1;
                     MShare.g_nAPStatus = 1;
                     MShare.g_boAPAutoMove = true;
                     break;
                 case 2:// 此时该物品为首次发现，自动寻找路径
-                    if ((MShare.g_AutoPicupItem != null) && ((MShare.g_nAPStatus != 2) || (MShare.g_APPathList.Count == 0)))
+                    if ((MShare.AutoPicupItem != null) && ((MShare.g_nAPStatus != 2) || (MShare.g_APPathList.Count == 0)))
                     {
-                        MShare.TargetX = MShare.g_AutoPicupItem.X;
-                        MShare.TargetY = MShare.g_AutoPicupItem.Y;
+                        MShare.TargetX = MShare.AutoPicupItem.X;
+                        MShare.TargetY = MShare.AutoPicupItem.Y;
                         heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         MShare.TargetX = -1;
-                        MShare.g_sAPStr = $"物品目标：{MShare.g_AutoPicupItem.Name}({MShare.g_AutoPicupItem.X},{MShare.g_AutoPicupItem.Y}) 正在去拾取";
+                        MShare.ConsoleStr = $"物品目标：{MShare.AutoPicupItem.Name}({MShare.AutoPicupItem.X},{MShare.AutoPicupItem.Y}) 正在去拾取";
                     }
-                    else if (MShare.g_AutoPicupItem != null)
+                    else if (MShare.AutoPicupItem != null)
                     {
-                        MShare.TargetX = MShare.g_AutoPicupItem.X;
-                        MShare.TargetY = MShare.g_AutoPicupItem.Y;
+                        MShare.TargetX = MShare.AutoPicupItem.X;
+                        MShare.TargetY = MShare.AutoPicupItem.Y;
                         heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         MShare.TargetX = -1;
-                        MShare.g_sAPStr = $"物品目标：{MShare.g_AutoPicupItem.Name}({MShare.g_AutoPicupItem.X},{MShare.g_AutoPicupItem.Y}) 正在去拾取";
+                        MShare.ConsoleStr = $"物品目标：{MShare.AutoPicupItem.Name}({MShare.AutoPicupItem.X},{MShare.AutoPicupItem.Y}) 正在去拾取";
                     }
                     MShare.g_nAPStatus = 2;
                     MShare.g_boAPAutoMove = true;
                     break;
                 case 3:
-                    if ((MShare.g_APMapPath != null) && (MShare.AutoStep >= 0) && (MShare.AutoStep <= MShare.g_APMapPath.Length))
+                    if ((MShare.MapPath != null) && (MShare.AutoStep >= 0) && (MShare.AutoStep <= MShare.MapPath.Length))
                     {
-                        if (MShare.g_APMapPath.Length > 0)
+                        if (MShare.MapPath.Length > 0)
                         {
-                            MShare.TargetX = (short)MShare.g_APMapPath[MShare.AutoStep].X;
-                            MShare.TargetY = (short)MShare.g_APMapPath[MShare.AutoStep].X;
+                            MShare.TargetX = (short)MShare.MapPath[MShare.AutoStep].X;
+                            MShare.TargetY = (short)MShare.MapPath[MShare.AutoStep].X;
                             heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
-                            MShare.g_sAPStr = $"循路搜寻目标({MShare.TargetX},{MShare.TargetY})";
+                            MShare.ConsoleStr = $"循路搜寻目标({MShare.TargetX},{MShare.TargetY})";
                             MShare.TargetX = -1;
                         }
                         else
@@ -4505,7 +4450,7 @@ namespace BotSrv.Player
                                 {
                                     heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                                 }
-                                MShare.g_sAPStr = $"定点随机搜寻目标({MShare.g_APMapPath[MShare.AutoStep].X},{MShare.g_APMapPath[MShare.AutoStep].X})";
+                                MShare.ConsoleStr = $"定点随机搜寻目标({MShare.MapPath[MShare.AutoStep].X},{MShare.MapPath[MShare.AutoStep].X})";
                                 MShare.TargetX = -1;
                             }
                         }
@@ -4517,28 +4462,28 @@ namespace BotSrv.Player
                         {
                             heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         }
-                        MShare.g_sAPStr = "随机搜寻目标...";
+                        MShare.ConsoleStr = "随机搜寻目标...";
                         MShare.TargetX = -1;
                     }
                     MShare.g_nAPStatus = 3;
                     MShare.g_boAPAutoMove = true;
                     break;
                 case 4:
-                    if ((MShare.g_APMapPath != null) && (MShare.AutoStep >= 0) && (MShare.AutoStep <= MShare.g_APMapPath.Length))
+                    if ((MShare.MapPath != null) && (MShare.AutoStep >= 0) && (MShare.AutoStep <= MShare.MapPath.Length))
                     {
-                        if (MShare.g_APLastPoint.X >= 0)
+                        if (MShare.AutoLastPoint.X >= 0)
                         {
-                            MShare.TargetX = (short)MShare.g_APLastPoint.X;
-                            MShare.TargetY = (short)MShare.g_APLastPoint.X;
+                            MShare.TargetX = (short)MShare.AutoLastPoint.X;
+                            MShare.TargetY = (short)MShare.AutoLastPoint.X;
                             heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         }
                         else
                         {
-                            MShare.TargetX = (short)MShare.g_APMapPath[MShare.AutoStep].X;
-                            MShare.TargetY = (short)MShare.g_APMapPath[MShare.AutoStep].X;
+                            MShare.TargetX = (short)MShare.MapPath[MShare.AutoStep].X;
+                            MShare.TargetY = (short)MShare.MapPath[MShare.AutoStep].X;
                             heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         }
-                        MShare.g_sAPStr = $"超出搜寻范围,返回({MShare.TargetX},{MShare.TargetY})";
+                        MShare.ConsoleStr = $"超出搜寻范围,返回({MShare.TargetX},{MShare.TargetY})";
                         MShare.TargetX = -1;
                     }
                     else if ((MShare.TargetX == -1) || (MShare.g_APPathList.Count == 0))
@@ -4548,13 +4493,14 @@ namespace BotSrv.Player
                         {
                             heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         }
-                        MShare.g_sAPStr = $"超出搜寻范围,随机搜寻目标({MShare.TargetX},{MShare.TargetY})";
+                        MShare.ConsoleStr = $"超出搜寻范围,随机搜寻目标({MShare.TargetX},{MShare.TargetY})";
                         MShare.TargetX = -1;
                     }
                     MShare.g_nAPStatus = 3;
                     MShare.g_boAPAutoMove = true;
                     break;
             }
+            MainOutMessage(MShare.ConsoleStr);
             if ((MShare.g_APPathList.Count > 0) && ((MShare.TargetX == -1) || ((MShare.TargetX == MShare.MySelf.CurrX) && (MShare.TargetY == MShare.MySelf.CurrY))))
             {
                 T = MShare.g_APPathList[0];
@@ -4566,9 +4512,9 @@ namespace BotSrv.Player
                     {
                         if (PlayScene.CanWalk(MShare.TargetX, MShare.TargetY))
                         {
-                            if ((MShare.g_nAPStatus == 2) && (MShare.g_AutoPicupItem != null))
+                            if ((MShare.g_nAPStatus == 2) && (MShare.AutoPicupItem != null))
                             {
-                                if ((Math.Abs(MShare.MySelf.CurrX - MShare.g_AutoPicupItem.X) > 1) || (Math.Abs(MShare.MySelf.CurrY - MShare.g_AutoPicupItem.Y) > 1))
+                                if ((Math.Abs(MShare.MySelf.CurrX - MShare.AutoPicupItem.X) > 1) || (Math.Abs(MShare.MySelf.CurrY - MShare.AutoPicupItem.Y) > 1))
                                 {
                                     goto AAAA;
                                 }
@@ -4613,7 +4559,7 @@ namespace BotSrv.Player
             }
             if (MShare.g_boAPAutoMove && (MShare.g_APPathList.Count > 0))
             {
-                heroActor.Init_Queue2();
+                heroActor.InitQueue2();
             }
         }
 
@@ -4622,7 +4568,7 @@ namespace BotSrv.Player
             var tagstr = string.Empty;
             if ((datablock[1] == 'G') && (datablock[2] == 'D') && (datablock[3] == '/'))
             {
-                string data = datablock.Substring(1, datablock.Length - 1);
+                string data = datablock[1..];
                 data = HUtil32.GetValidStr3(data, ref tagstr, HUtil32.Backslash);
                 if (data != "")
                 {
@@ -4696,7 +4642,7 @@ namespace BotSrv.Player
             }
             else
             {
-                tagstr = datablock.Substring(2 - 1, datablock.Length - 1);
+                tagstr = datablock[1..^0];
             }
             switch (tagstr)
             {
@@ -4838,14 +4784,14 @@ namespace BotSrv.Player
 
         private static void GetNearPoint()
         {
-            if ((MShare.g_APMapPath != null) && (MShare.g_APMapPath.Length > 0))
+            if ((MShare.MapPath != null) && (MShare.MapPath.Length > 0))
             {
                 var n14 = 0;
-                MShare.g_APLastPoint.X = -1;
+                MShare.AutoLastPoint.X = -1;
                 var n10 = 999;
-                for (var i = 0; i < MShare.g_APMapPath.Length; i++)
+                for (var i = 0; i < MShare.MapPath.Length; i++)
                 {
-                    var nC = Math.Abs(MShare.g_APMapPath[i].X - MShare.MySelf.CurrX) + Math.Abs(MShare.g_APMapPath[i].X - MShare.MySelf.CurrY);
+                    var nC = Math.Abs(MShare.MapPath[i].X - MShare.MySelf.CurrX) + Math.Abs(MShare.MapPath[i].X - MShare.MySelf.CurrY);
                     if (nC < n10)
                     {
                         n10 = nC;
@@ -4932,7 +4878,7 @@ namespace BotSrv.Player
             var tCount = 0;
             for (var i = 0; i < 12; i++)
             {
-                TActor Actor = PlayScene.FindActorXY(sx, sy);
+                Actor Actor = PlayScene.FindActorXY(sx, sy);
                 if (Actor != null)
                 {
                     if (heroActor.IsProperTarget(Actor))
@@ -4956,7 +4902,7 @@ namespace BotSrv.Player
             return tCount;
         }
 
-        public bool GetAdvPosition(TActor TargetCret, ref short nX, ref short nY)
+        public bool GetAdvPosition(Actor TargetCret, ref short nX, ref short nY)
         {
             var result = false;
             nX = MShare.MySelf.CurrX;
@@ -5175,7 +5121,7 @@ namespace BotSrv.Player
             //}
         }
 
-        public int GetMagicLv(TActor Actor, int magid)
+        public int GetMagicLv(Actor Actor, int magid)
         {
             if (Actor == null)
             {

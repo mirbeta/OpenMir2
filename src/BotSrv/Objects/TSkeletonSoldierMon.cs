@@ -135,7 +135,7 @@ public class TSkeletonSoldierMon : TGasKuDeGi
         }
         else
         {
-            if (new ArrayList(new[] { 118, 119 }).Contains(m_btRace))
+            if (new ArrayList(new[] { 118, 119 }).Contains(Race))
             {
                 if (MShare.GetTickCount() - m_dwDefFrameTime > 150)
                 {

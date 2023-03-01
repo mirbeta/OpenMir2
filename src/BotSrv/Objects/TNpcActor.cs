@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace BotSrv.Objects
 {
-    public class TNpcActor : TActor
+    public class TNpcActor : Actor
     {
         private bool m_boDigUp;
         private long m_dwUseEffectTick;

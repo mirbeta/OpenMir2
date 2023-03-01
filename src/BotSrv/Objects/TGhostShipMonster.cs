@@ -3,7 +3,7 @@ using SystemModule;
 
 namespace BotSrv.Objects
 {
-    public class TGhostShipMonster : TActor
+    public class TGhostShipMonster : Actor
     {
         protected int ax = 0;
         protected int ax2 = 0;
@@ -72,7 +72,7 @@ namespace BotSrv.Objects
                     }
                     else
                     {
-                        if (m_boDelActionAfterFinished) m_boDelActor = true;
+                        if (m_boDelActionAfterFinished) DelActor = true;
                         ActionEnded();
                         m_nCurrentAction = 0;
                         m_boUseMagic = false;

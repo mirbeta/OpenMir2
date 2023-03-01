@@ -18,8 +18,15 @@ namespace BotSrv
         public const int UNITY = 32;
         public const int MAXX = 30;
         public const int MAXY = 40;
-        public static bool g_boAutoPickUp = true;
-        public static bool g_boPickUpAll = false;
+        /// <summary>
+        /// 是否自动捡取物品
+        /// </summary>
+        public static bool AutoPickUp = true;
+        /// <summary>
+        /// 是否自动捡取所有物品
+        /// </summary>
+        public static bool PickUpAll = false;
+        public static TDropItem AutoPicupItem = null;
         public static Dictionary<string, string> g_ItemsFilter_All = null;
         public static Dictionary<string, string> g_ItemsFilter_All_Def = null;
         public static string[] g_sRenewBooks = new string[] { "随机传送卷", "地牢逃脱卷", "回城卷", "行会回城卷", "盟重传送石", "比奇传送石", "随机传送石", };
@@ -85,7 +92,7 @@ namespace BotSrv
         public static IList<ClientMagic> g_MagicList = null;
         public static IList<TDropItem> g_DropedItemList = null;
         public static ArrayList g_ChangeFaceReadyList = null;
-        public static IList<TActor> g_FreeActorList = null;
+        public static IList<Actor> g_FreeActorList = null;
         public static NakedAbility g_BonusTick = default;
         public static NakedAbility g_BonusAbil = default;
         public static NakedAbility g_NakedAbil = default;
@@ -134,20 +141,19 @@ namespace BotSrv
         public static ushort MouseY = 0;
         public static short TargetX = 0;
         public static short TargetY = 0;
-        public static TActor g_TargetCret = null;
-        public static TActor g_FocusCret = null;
-        public static TActor g_MagicTarget = null;
+        public static Actor TargetCret = null;
+        public static Actor FocusCret = null;
+        public static Actor MagicTarget = null;
         public static MapLink g_APQueue = null;
         public static IList<FindMapNode> g_APPathList = null;
         public static ushort[,] g_APPass = null;
         public static ushort[,] g_APPassEmpty = new ushort[MAXX * 3, MAXY * 3];
-        public static TActor g_APTagget = null;
+        public static Actor AutoTagget = null;
         public static int g_APRunTick = 0;
         public static int g_APRunTick2 = 0;
-        public static TDropItem g_AutoPicupItem = null;
         public static int g_nAPStatus = 0;
         public static bool g_boAPAutoMove = false;
-        public static string g_sAPStr = string.Empty;
+        public static string ConsoleStr = string.Empty;
         public static int m_dwSpellTick = 0;
         public static int m_dwRecallTick = 0;
         public static int m_dwDoubluSCTick = 0;
@@ -156,8 +162,11 @@ namespace BotSrv
         public static int g_nTagCount = 0;
         public static int m_dwTargetFocusTick = 0;
         public static Dictionary<string, string> g_APPickUpList = null;
-        public static Dictionary<string, string> g_APMobList = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        public static TActor g_AttackTarget = null;
+        /// <summary>
+        /// 忽略攻击的怪物列表
+        /// </summary>
+        public static Dictionary<string, string> IgnoreMobList = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        public static Actor g_AttackTarget = null;
         public static int g_dwSearchEnemyTick = 0;
         public static byte g_nAPReLogon = 0;
         public static int g_nAPReLogonWaitTick = 0;
@@ -169,10 +178,10 @@ namespace BotSrv
         public static bool g_APGoBack2 = false;
         public static int AutoStep = -1;
         public static int g_APStep2 = -1;
-        public static Point[] g_APMapPath;
+        public static Point[] MapPath;
         public static Point[] g_APMapPath2;
-        public static Point g_APLastPoint;
-        public static Point g_APLastPoint2;
+        public static Point AutoLastPoint;
+        public static Point AutoLastPoint2;
         public static bool g_boMapMoving = false;
         public static bool MapMovingWait = false;
         public static bool g_boCheckBadMapMode = false;
@@ -252,8 +261,8 @@ namespace BotSrv
         public static ClientItem g_MouseUserStateItem = null;
         public static ClientItem g_EatingItem = null;
         public static bool g_boItemMoving = false;
-        public static TMovingItem g_MovingItem = null;
-        public static TMovingItem g_OpenBoxItem = null;
+        public static TMovingItem MovingItem = null;
+        public static TMovingItem OpenBoxItem = null;
         public static TMovingItem g_WaitingUseItem = null;
         public static TMovingItem g_WaitingStallItem = null;
         public static TMovingItem g_WaitingDetectItem = null;
@@ -335,7 +344,7 @@ namespace BotSrv
         /// 自动捡物品间隔
         /// </summary>
         public static int AutoPickupTime = 100;
-        public static TActor MagicLockActor = null;
+        public static Actor MagicLockActor = null;
         public static bool g_boNextTimePowerHit = false;
         public static bool g_boCanLongHit = false;
         public static bool g_boCanWideHit = false;
@@ -1514,7 +1523,7 @@ namespace BotSrv
             //G_RC_IMEMODE.Bottom = G_RC_IMEMODE.Top + 9;
         }
 
-        public static bool IsInMyRange(TActor Act)
+        public static bool IsInMyRange(Actor Act)
         {
             bool result;
             result = false;

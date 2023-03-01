@@ -7,7 +7,7 @@ namespace BotSrv.Data
     {
         public short NTargetX;
         public short NTargetY;
-        public TActor XTarget;
+        public Actor XTarget;
         public ClientMagic XMagic;
         public bool FReacll;
         public bool FContinue;

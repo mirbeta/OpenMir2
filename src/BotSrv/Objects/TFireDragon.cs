@@ -67,7 +67,7 @@ namespace BotSrv.Objects
             int prv;
             long m_dwEffectFrameTimetime;
             long m_dwFrameTimetime;
-            if (m_btRace != 120 && m_boDeath) return;
+            if (Race != 120 && Death) return;
             if (m_nCurrentAction == Messages.SM_WALK || m_nCurrentAction == Messages.SM_BACKSTEP ||
                 m_nCurrentAction == Messages.SM_RUN || m_nCurrentAction == Messages.SM_HORSERUN) return;
             m_boMsgMuch = false;
@@ -88,9 +88,9 @@ namespace BotSrv.Objects
                     }
                     else
                     {
-                        if (new ArrayList(new[] { 118, 119, 120 }).Contains(m_btRace))
+                        if (new ArrayList(new[] { 118, 119, 120 }).Contains(Race))
                         {
-                            if (m_boDeath)
+                            if (Death)
                                 m_boUseEffect = false;
                             else
                                 m_boUseEffect = true;
@@ -130,7 +130,7 @@ namespace BotSrv.Objects
             }
             else
             {
-                if (m_btRace == 120)
+                if (Race == 120)
                 {
                     if (MShare.GetTickCount() - m_dwDefFrameTime > 150)
                     {

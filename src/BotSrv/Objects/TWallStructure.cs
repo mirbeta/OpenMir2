@@ -2,7 +2,7 @@
 
 namespace BotSrv.Objects
 {
-    public class TWallStructure : TActor
+    public class TWallStructure : Actor
     {
         private const int V = 0;
         private readonly int ax = 0;
@@ -19,7 +19,7 @@ namespace BotSrv.Objects
 
         public override void Run()
         {
-            if (m_boDeath)
+            if (Death)
             {
                 if (bomarkpos)
                 {

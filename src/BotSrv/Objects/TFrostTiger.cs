@@ -27,9 +27,9 @@ namespace BotSrv.Objects
             var result = 0;
             if (boActive == false)
             {
-                var pm = Actor.GetRaceByPM(m_btRace, m_wAppearance);
+                var pm = ActorConst.GetRaceByPM(Race, m_wAppearance);
                 if (pm == null) return result;
-                if (m_boDeath)
+                if (Death)
                 {
                     base.GetDefaultFrame(wmode);
                     return result;

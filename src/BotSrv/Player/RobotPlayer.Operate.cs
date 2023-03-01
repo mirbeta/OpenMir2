@@ -46,14 +46,13 @@ namespace BotSrv.Player
             var data = string.Empty;
             var Str = string.Empty;
             var str3 = string.Empty;
-            MessageBodyW mbw;
             CharDesc desc;
             MessageBodyWL wl;
             int i;
             int j;
             var n = 0;
-            TActor Actor;
-            TActor Actor2;
+            Actor Actor;
+            Actor Actor2;
             //TClEvent __event;
             if (datablock[0] == '+') //动作包
             {
@@ -385,7 +384,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_SPACEMOVE_HIDE:
                 case Messages.SM_SPACEMOVE_HIDE2:
-                    if (msg.Recog != MShare.MySelf.m_nRecogId)
+                    if (msg.Recog != MShare.MySelf.RecogId)
                     {
                         PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, 0, 0, 0, "");
                     }
@@ -406,7 +405,7 @@ namespace BotSrv.Player
                         data = string.Empty;
                     }
                     desc = EDCode.DecodeBuffer<CharDesc>(body2);
-                    if (msg.Recog != MShare.MySelf.m_nRecogId)
+                    if (msg.Recog != MShare.MySelf.RecogId)
                     {
                         PlayScene.NewActor(msg.Recog, msg.Param, msg.Tag, msg.Series, desc.Feature, desc.Status);
                     }
@@ -425,7 +424,7 @@ namespace BotSrv.Player
                 case Messages.SM_RUSH:
                 case Messages.SM_RUSHKUNG:
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
-                    if (msg.Recog == MShare.MySelf.m_nRecogId)
+                    if (msg.Recog == MShare.MySelf.RecogId)
                     {
                         PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     }
@@ -442,7 +441,7 @@ namespace BotSrv.Player
                 case Messages.SM_RUN:
                 case Messages.SM_HORSERUN:
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
-                    if (msg.Recog != MShare.MySelf.m_nRecogId)
+                    if (msg.Recog != MShare.MySelf.RecogId)
                     {
                         PlayScene.SendMsg(msg.Ident, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, desc.Feature, desc.Status, "", 0);
                     }
@@ -470,7 +469,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_BUTCH:// 挖肉动作封包
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
-                    if (msg.Recog != MShare.MySelf.m_nRecogId)
+                    if (msg.Recog != MShare.MySelf.RecogId)
                     {
                         Actor = PlayScene.FindActor(msg.Recog);
                         if (Actor != null)
@@ -481,7 +480,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_SITDOWN:// 蹲下动作封包
                     desc = EDCode.DecodeBuffer<CharDesc>(body);
-                    if (msg.Recog != MShare.MySelf.m_nRecogId)
+                    if (msg.Recog != MShare.MySelf.RecogId)
                     {
                         Actor = PlayScene.FindActor(msg.Recog);
                         if (Actor != null)
@@ -498,7 +497,7 @@ namespace BotSrv.Player
                 case Messages.SM_WIDEHIT:
                 case Messages.SM_BIGHIT:
                 case Messages.SM_FIREHIT:
-                    if (msg.Recog != MShare.MySelf.m_nRecogId)
+                    if (msg.Recog != MShare.MySelf.RecogId)
                     {
                         Actor = PlayScene.FindActor(msg.Recog);
                         if (Actor != null)
@@ -515,7 +514,7 @@ namespace BotSrv.Player
                     }
                     break;
                 case Messages.SM_FLYAXE:
-                    mbw = EDCode.DecodeBuffer<MessageBodyW>(body);
+                    var mbw = EDCode.DecodeBuffer<MessageBodyW>(body);
                     Actor = PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
@@ -578,7 +577,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_ABILITY:
                     MShare.MySelf.m_nGold = msg.Recog;
-                    MShare.MySelf.m_btJob = HUtil32.LoByte(msg.Param);
+                    MShare.MySelf.Job = HUtil32.LoByte(msg.Param);
                     MShare.MySelf.m_nIPowerLvl = HUtil32.HiByte(msg.Param);
                     MShare.MySelf.m_nGameGold = HUtil32.MakeLong(msg.Tag, msg.Series);
                     MShare.MySelf.Abil = EDCode.DecodeBuffer<Ability>(body);
@@ -636,7 +635,7 @@ namespace BotSrv.Player
                         }
                         if (Actor != MShare.MySelf)
                         {
-                            if (Actor.m_btRace != 0 || !MShare.g_gcGeneral[15])
+                            if (Actor.Race != 0 || !MShare.g_gcGeneral[15])
                             {
                                 Actor.UpdateMsg(Messages.SM_STRUCK, (ushort)wl.Tag2, 0, msg.Series, wl.Param1, wl.Param2, "", wl.Tag1);
                             }
@@ -646,7 +645,7 @@ namespace BotSrv.Player
                         if (MShare.OpenAutoPlay && TimerAutoPlay.Enabled) //  自己受人攻击,小退
                         {
                             Actor2 = PlayScene.FindActor(wl.Tag1);
-                            if (Actor2 == null || (Actor2.m_btRace != 0 && Actor2.m_btIsHero != 1))
+                            if (Actor2 == null || (Actor2.Race != 0 && Actor2.m_btIsHero != 1))
                             {
                                 return;
                             }
@@ -657,15 +656,15 @@ namespace BotSrv.Player
                                     MShare.g_nAPReLogon = 1;
                                     MShare.g_nOverAPZone2 = MShare.g_nOverAPZone;
                                     MShare.g_APGoBack2 = MShare.g_APGoBack;
-                                    if (MShare.g_APMapPath != null)
+                                    if (MShare.MapPath != null)
                                     {
-                                        MShare.g_APMapPath2 = new Point[MShare.g_APMapPath.Length + 1];
-                                        for (i = 0; i < MShare.g_APMapPath.Length; i++)
+                                        MShare.g_APMapPath2 = new Point[MShare.MapPath.Length + 1];
+                                        for (i = 0; i < MShare.MapPath.Length; i++)
                                         {
-                                            MShare.g_APMapPath2[i] = MShare.g_APMapPath[i];
+                                            MShare.g_APMapPath2[i] = MShare.MapPath[i];
                                         }
                                     }
-                                    MShare.g_APLastPoint2 = MShare.g_APLastPoint;
+                                    MShare.AutoLastPoint2 = MShare.AutoLastPoint;
                                     MShare.g_APStep2 = MShare.AutoStep;
                                     AppLogout();
                                     // SaveBagsData();
@@ -782,7 +781,7 @@ namespace BotSrv.Player
                 case Messages.SM_HIDE:
                 case Messages.SM_GHOST:
                 case Messages.SM_DISAPPEAR:
-                    if (MShare.MySelf.m_nRecogId != msg.Recog)
+                    if (MShare.MySelf.RecogId != msg.Recog)
                     {
                         PlayScene.SendMsg(Messages.SM_HIDE, msg.Recog, msg.Param, msg.Tag, (byte)msg.Series, 0, 0, "");
                     }

@@ -2,7 +2,7 @@
 
 namespace BotSrv.Objects
 {
-    public class TBeeQueen : TActor
+    public class TBeeQueen : Actor
     {
         public TBeeQueen(RobotPlayer robotClient) : base(robotClient)
         {

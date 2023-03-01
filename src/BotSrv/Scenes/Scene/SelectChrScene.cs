@@ -128,7 +128,7 @@ namespace BotSrv.Scenes.Scene
                     if (chrname[0] == '*')
                     {
                         select = i;
-                        chrname = chrname.Substring(1, chrname.Length - 1);
+                        chrname = chrname[1..];
                     }
                     AddChr(chrname, HUtil32.StrToInt(job, 0), HUtil32.StrToInt(hair, 0), HUtil32.StrToInt(level, 0), HUtil32.StrToInt(sex, 0));
                     nChrCount++;
