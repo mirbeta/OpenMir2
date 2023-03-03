@@ -109,7 +109,6 @@ namespace BotSrv.Player
             MShare.g_nTimeFakeDetectCount = 0;
             MShare.g_nTimeFakeDetectTimer = 0;
             MShare.g_nTimeFakeDetectSum = 0;
-            MShare.g_nDayBright = 3;
             MShare.g_nAreaStateValue = 0;
             MShare.ConnectionStep = ConnectionStep.Intro;
             MShare.SendLogin = false;
@@ -148,9 +147,9 @@ namespace BotSrv.Player
             MShare.LoadItemDesc();
             MShare.LoadItemFilter();
             ConnectionStatus = ConnectionStatus.Failure;
-            for (var i = 0; i < MShare.MAXX * 3; i++)
+            for (var i = 0; i < BotConst.MAXX * 3; i++)
             {
-                for (var j = 0; j < MShare.MAXY * 3; j++)
+                for (var j = 0; j < BotConst.MAXY * 3; j++)
                 {
                     MShare.g_APPassEmpty[i, j] = 0xFF;
                 }
@@ -931,7 +930,6 @@ namespace BotSrv.Player
                 int targid;
                 if (MShare.MagicTarget == null)
                 {
-                    MShare.g_nCurrentMagic = 888;
                     if (boReacll)
                     {
                         targx = tx;
@@ -1282,7 +1280,7 @@ namespace BotSrv.Player
             {
                 if (MShare.g_ItemArr[idx].Item.Name == "")
                 {
-                    for (var i = MShare.MAXBAGITEMCL - 1; i >= 6; i--)
+                    for (var i = BotConst.MAXBAGITEMCL - 1; i >= 6; i--)
                     {
                         if (MShare.g_ItemArr[i].Item.Name == sItem)
                         {
@@ -1298,7 +1296,7 @@ namespace BotSrv.Player
 
         private void AutoSupplyBagItem(int nType, string sItem)
         {
-            for (var i = MShare.MAXBAGITEMCL - 1; i >= 6; i--)
+            for (var i = BotConst.MAXBAGITEMCL - 1; i >= 6; i--)
             {
                 if (MShare.g_ItemArr[i].Item.Name == sItem)
                 {
@@ -1330,7 +1328,7 @@ namespace BotSrv.Player
                 }
                 var n = 0;
                 var boUnBindAble = false;
-                for (var i = 0; i < MShare.MAXBAGITEMCL - 1 - 6; i++)
+                for (var i = 0; i < BotConst.MAXBAGITEMCL - 1 - 6; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.Name == "")
                     {
@@ -1347,7 +1345,7 @@ namespace BotSrv.Player
                     return;
                 }
                 var idx = -1;
-                for (var i = MShare.MAXBAGITEMCL - 1; i >= 6; i--)
+                for (var i = BotConst.MAXBAGITEMCL - 1; i >= 6; i--)
                 {
                     if (MShare.g_ItemArr[i].Item.StdMode == 31)
                     {
@@ -1393,7 +1391,7 @@ namespace BotSrv.Player
             {
                 return result;
             }
-            for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if ((MShare.g_ItemArr[i].Item.Name == Str) && (MShare.g_ItemArr[i].Item.NeedIdentify < 4))
                 {
@@ -1411,7 +1409,7 @@ namespace BotSrv.Player
             var eatable = false;
             var takeon = false;
             var where = -1;
-            if (idx >= 0 && idx <= MShare.MAXBAGITEMCL - 1)
+            if (idx >= 0 && idx <= BotConst.MAXBAGITEMCL - 1)
             {
                 if ((MShare.g_EatingItem.Item.Name != "") && (MShare.GetTickCount() - MShare.g_dwEatTime > 5 * 1000))
                 {
@@ -1751,10 +1749,6 @@ namespace BotSrv.Player
                 }
                 if (CanNextAction() && ServerAcceptNextAction())
                 {
-                    if (CanNextHit(false) || MShare.g_NextSeriesSkill)
-                    {
-                        MShare.g_NextSeriesSkill = false;
-                    }
                     if (CanNextHit())
                     {
                         if (MShare.g_boNextTimeFireHit && (MShare.MySelf.Abil.MP >= 7))
@@ -2075,7 +2069,6 @@ namespace BotSrv.Player
             MShare.g_nEatIteminvTime = 200;
             MShare.g_SendSayListIdx = 0;
             MShare.g_SendSayList.Clear();
-            MShare.ResetSeriesSkillVar();
             if (MShare.g_nStallX != -1)
             {
                 MShare.g_nStallX = -1;
@@ -2912,14 +2905,14 @@ namespace BotSrv.Player
 
         private void ClientGetGameGoldName(CommandMessage msg, string sBody)
         {
-            var sData = string.Empty;
-            if (sBody != "")
-            {
-                sBody = EDCode.DeCodeString(sBody);
-                sBody = HUtil32.GetValidStr3(sBody, ref sData, new char[] { '\r' });
-                MShare.GameGoldName = sData;
-                MShare.GamePointName = sBody;
-            }
+            //var sData = string.Empty;
+            //if (sBody != "")
+            //{
+            //    sBody = EDCode.DeCodeString(sBody);
+            //    sBody = HUtil32.GetValidStr3(sBody, ref sData, new char[] { '\r' });
+            //    //BotConst.GameGoldName = sData;
+            //    //BotConst.GamePointName = sBody;
+            //}
             MShare.MySelf.m_nGameGold = msg.Recog;
             MShare.MySelf.m_nGamePoint = HUtil32.MakeLong(msg.Param, msg.Tag);
         }
@@ -3078,12 +3071,12 @@ namespace BotSrv.Player
         public bool ClientGetBagItmes_CompareItemArr(ClientItem[] ItemSaveArr)
         {
             var flag = true;
-            for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if (ItemSaveArr[i].Item.Name != "")
                 {
                     flag = false;
-                    for (var j = 0; j < MShare.MAXBAGITEMCL; j++)
+                    for (var j = 0; j < BotConst.MAXBAGITEMCL; j++)
                     {
                         if ((MShare.g_ItemArr[j].Item.Name == ItemSaveArr[i].Item.Name) && (MShare.g_ItemArr[j].MakeIndex == ItemSaveArr[i].MakeIndex))
                         {
@@ -3102,12 +3095,12 @@ namespace BotSrv.Player
             }
             if (flag)
             {
-                for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+                for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.Name != "")
                     {
                         flag = false;
-                        for (var j = 0; j < MShare.MAXBAGITEMCL; j++)
+                        for (var j = 0; j < BotConst.MAXBAGITEMCL; j++)
                         {
                             if ((MShare.g_ItemArr[i].Item.Name == ItemSaveArr[j].Item.Name) && (MShare.g_ItemArr[i].MakeIndex == ItemSaveArr[j].MakeIndex))
                             {
@@ -3134,11 +3127,11 @@ namespace BotSrv.Player
             int k;
             var Str = string.Empty;
             ClientItem cu;
-            var ItemSaveArr = new ClientItem[MShare.MAXBAGITEMCL - 1 + 1];
+            var ItemSaveArr = new ClientItem[BotConst.MAXBAGITEMCL - 1 + 1];
             //MShare.g_SellDlgItem.Item.Name = "";
             //FillChar(MShare.g_RefineItems, sizeof(TMovingItem) * 3, '\0');
             //FillChar(MShare.g_BuildAcuses, sizeof(MShare.g_BuildAcuses), '\0');
-            //FillChar(MShare.g_ItemArr * MShare.MAXBAGITEMCL, '\0');
+            //FillChar(MShare.g_ItemArr * BotConst.MAXBAGITEMCL, '\0');
             //FillChar(MShare.g_TIItems, sizeof(MShare.g_TIItems), '\0');
             //FillChar(MShare.g_spItems, sizeof(MShare.g_spItems), '\0');
             if (MShare.MovingItem != null)
@@ -3162,7 +3155,7 @@ namespace BotSrv.Player
             //ClFunc.Loadbagsdat(".\\Config\\" + MShare.g_sServerName + "." + m_sChrName + ".itm-plus", ItemSaveArr);
             //if (ClientGetBagItmes_CompareItemArr())
             //{
-            //    Move(ItemSaveArr, MShare.g_ItemArr * MShare.MAXBAGITEMCL);
+            //    Move(ItemSaveArr, MShare.g_ItemArr * BotConst.MAXBAGITEMCL);
             //}
             ClFunc.ArrangeItembag();
             MShare.g_boBagLoaded = true;
@@ -3843,7 +3836,7 @@ namespace BotSrv.Player
             if (MShare.OpenAutoPlay && (MShare.g_nAPReLogon == 3))
             {
                 MShare.g_nAPReLogon = 4;
-                SendClientMessage(Messages.CM_LOGINNOTICEOK, 0, 0, 0, MShare.CLIENTTYPE);
+                SendClientMessage(Messages.CM_LOGINNOTICEOK, 0, 0, 0, BotConst.CLIENTTYPE);
                 return;
             }
             MainOutMessage("确认游戏公告");
@@ -4039,7 +4032,7 @@ namespace BotSrv.Player
             }
             MShare.g_boCheckTakeOffPoison = false;
             MShare.g_WaitingUseItem.Index = ItemLocation.Bujuk;
-            for (var i = 6; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 6; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if ((MShare.g_ItemArr[i].Item.NeedIdentify < 4) && (MShare.g_ItemArr[i].Item.StdMode == 25) && (MShare.g_ItemArr[i].Item.Shape != 6) && (MShare.g_ItemArr[i].Item.Name.IndexOf(Str, StringComparison.Ordinal) > 0) && (MShare.g_ItemArr[i].Item.Name.IndexOf(cStr, StringComparison.Ordinal) > 0))
                 {
@@ -4095,7 +4088,7 @@ namespace BotSrv.Player
                         {
                             if (MShare.g_MagicArr[31] != null)
                             {
-                                UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, MShare.g_MagicArr[31]);
+                                UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, MShare.g_MagicArr[31]);
                                 return;
                             }
                         }
@@ -4107,7 +4100,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(56);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
+                                        UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4116,7 +4109,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(113);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
+                                        UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4125,7 +4118,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(26);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
+                                        UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4134,7 +4127,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(66);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
+                                        UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4143,7 +4136,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(43);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
+                                        UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, pcm);
                                         return;
                                     }
                                 }
@@ -4154,7 +4147,7 @@ namespace BotSrv.Player
                                     pcm = GetMagicByID(18);
                                     if (pcm != null)
                                     {
-                                        UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, pcm);
+                                        UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, pcm);
                                     }
                                 }
                                 break;
@@ -4162,7 +4155,7 @@ namespace BotSrv.Player
                         if (MShare.g_gcTec[7] && (MShare.GetTickCount() - MShare.MySelf.m_dwPracticeTick > HUtil32._MAX(500, MShare.g_gnTecTime[8])))
                         {
                             MShare.MySelf.m_dwPracticeTick = MShare.GetTickCount();
-                            pcm = GetMagicByID(MShare.g_gnTecPracticeKey);
+                            pcm = GetMagicByID(BotConst.g_gnTecPracticeKey);
                             if (pcm != null)
                             {
                                 UseMagic(MShare.MouseX, MShare.MouseY, pcm);

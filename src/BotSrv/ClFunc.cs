@@ -51,7 +51,7 @@ namespace BotSrv
 
         public static void ClearBag()
         {
-            for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if (MShare.g_ItemArr[i] == null)
                 {
@@ -80,7 +80,7 @@ namespace BotSrv
                     return;
                 }
             }
-            for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if (MShare.g_ItemArr[i] == null)
                 {
@@ -106,7 +106,7 @@ namespace BotSrv
                     }
                 }
             }
-            for (var i = 6; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 6; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if ((MShare.g_ItemArr[i].Item.Name == cu.Item.Name) && (MShare.g_ItemArr[i].MakeIndex == cu.MakeIndex))
                 {
@@ -117,7 +117,7 @@ namespace BotSrv
             }
             if (!InputCheck)
             {
-                for (var i = 6; i < MShare.MAXBAGITEMCL; i++)
+                for (var i = 6; i < BotConst.MAXBAGITEMCL; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.Name == "")
                     {
@@ -131,7 +131,7 @@ namespace BotSrv
 
         public static void UpdateItemBag(ClientItem cu)
         {
-            for (var i = MShare.MAXBAGITEMCL - 1; i >= 0; i--)
+            for (var i = BotConst.MAXBAGITEMCL - 1; i >= 0; i--)
             {
                 if (MShare.g_ItemArr[i] == null)
                 {
@@ -147,7 +147,7 @@ namespace BotSrv
 
         public static void UpdateBagStallItem(ClientItem cu, byte ststus)
         {
-            for (var i = MShare.MAXBAGITEMCL - 1; i >= 6; i--)
+            for (var i = BotConst.MAXBAGITEMCL - 1; i >= 6; i--)
             {
                 if (MShare.g_ItemArr[i] == null)
                 {
@@ -164,7 +164,7 @@ namespace BotSrv
         public static bool FillBagStallItem(byte ststus)
         {
             bool result = false;
-            for (var i = MShare.MAXBAGITEMCL - 1; i >= 6; i--)
+            for (var i = BotConst.MAXBAGITEMCL - 1; i >= 6; i--)
             {
                 if (MShare.g_ItemArr[i] == null)
                 {
@@ -181,7 +181,7 @@ namespace BotSrv
 
         public static void DelItemBag(string iname, int iindex)
         {
-            for (var i = MShare.MAXBAGITEMCL - 1; i >= 0; i--)
+            for (var i = BotConst.MAXBAGITEMCL - 1; i >= 0; i--)
             {
                 if (MShare.g_ItemArr[i] == null)
                 {
@@ -207,7 +207,7 @@ namespace BotSrv
 
         public static void ArrangeItembag()
         {
-            for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if (MShare.g_ItemArr[i] == null)
                 {
@@ -215,7 +215,7 @@ namespace BotSrv
                 }
                 if (MShare.g_ItemArr[i].Item.Name != "")
                 {
-                    for (var k = i + 1; k < MShare.MAXBAGITEMCL; k++)
+                    for (var k = i + 1; k < BotConst.MAXBAGITEMCL; k++)
                     {
                         if (MShare.g_ItemArr[k] == null)
                         {
@@ -240,7 +240,7 @@ namespace BotSrv
                     }
                 }
             }
-            for (var i = 46; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 46; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if (MShare.g_ItemArr[i] == null)
                 {
@@ -1180,7 +1180,7 @@ namespace BotSrv
             //    result = true;
             //}
             //MShare.g_WaitingUseItem.Item.Item.Name = "";
-            //for (i = 0; i < MShare.MAXBAGITEMCL; i++)
+            //for (i = 0; i < BotConst.MAXBAGITEMCL; i++)
             //{
             //    if ((MShare.g_ItemArr[i].MakeIndex == mindex) && (MShare.g_ItemArr[i].Item.Name == iname) && (MShare.g_ItemArr[i].Item.Overlap > 0))
             //    {
@@ -1239,7 +1239,7 @@ namespace BotSrv
         public static bool SellItemProg(ushort remain, short sellcnt)
         {
             bool result = false;
-            for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if ((MShare.g_ItemArr[i].MakeIndex == MShare.g_SellDlgItemSellWait.Item.MakeIndex) && (MShare.g_ItemArr[i].Item.Name == MShare.g_SellDlgItemSellWait.Item.Item.Name))
                 {
@@ -1258,7 +1258,7 @@ namespace BotSrv
         public static bool DelCountItemBag(string iname, int iindex, short Count)
         {
             bool result = false;
-            for (var i = MShare.MAXBAGITEMCL - 1; i >= 0; i--)
+            for (var i = BotConst.MAXBAGITEMCL - 1; i >= 0; i--)
             {
                 if (MShare.g_ItemArr[i].Item.Name == iname)
                 {
@@ -1284,7 +1284,7 @@ namespace BotSrv
                     break;
                 }
             }
-            for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+            for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
             {
                 if ((MShare.g_ItemArr[i].Item.Name == ci.Item.Name) && (MShare.g_ItemArr[i].MakeIndex == ci.MakeIndex))
                 {

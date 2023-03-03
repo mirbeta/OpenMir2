@@ -231,8 +231,8 @@ namespace BotSrv.Scenes.Scene
                         {
                             if (a.CurrY == k)
                             {
-                                int dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
-                                int dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
+                                int dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * BotConst.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
+                                int dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * BotConst.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
                                 if (a.CheckSelect(x - dx, y - dy))
                                 {
                                     result = a;
@@ -270,8 +270,8 @@ namespace BotSrv.Scenes.Scene
                             {
                                 if (a.CurrY == k)
                                 {
-                                    int dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
-                                    int dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
+                                    int dx = (a.m_nRx - RobotClient.Map.m_ClientRect.Left) * BotConst.UNITX + _mNDefXx + a.m_nPx + a.m_nShiftX;
+                                    int dy = (a.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * BotConst.UNITY + _mNDefYy + a.m_nPy + a.m_nShiftY;
                                     int centx;
                                     if (a.CharWidth() > 40)
                                     {
@@ -317,8 +317,8 @@ namespace BotSrv.Scenes.Scene
             {
                 if (MShare.MySelf.CurrY == k)
                 {
-                    int dx = (MShare.MySelf.m_nRx - RobotClient.Map.m_ClientRect.Left) * MShare.UNITX + _mNDefXx + MShare.MySelf.m_nPx + MShare.MySelf.m_nShiftX;
-                    int dy = (MShare.MySelf.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * MShare.UNITY + _mNDefYy + MShare.MySelf.m_nPy + MShare.MySelf.m_nShiftY;
+                    int dx = (MShare.MySelf.m_nRx - RobotClient.Map.m_ClientRect.Left) * BotConst.UNITX + _mNDefXx + MShare.MySelf.m_nPx + MShare.MySelf.m_nShiftX;
+                    int dy = (MShare.MySelf.m_nRy - RobotClient.Map.m_ClientRect.Top - 1) * BotConst.UNITY + _mNDefYy + MShare.MySelf.m_nPy + MShare.MySelf.m_nShiftY;
                     if (MShare.MySelf.CheckSelect(x - dx, y - dy))
                     {
                         result = true;

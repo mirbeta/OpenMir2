@@ -681,8 +681,8 @@ namespace BotSrv.Objects
             int v;
             short funx;
             short funy;
-            short unx = (short)(MShare.UNITX * step);
-            short uny = (short)(MShare.UNITY * step);
+            short unx = (short)(BotConst.UNITX * step);
+            short uny = (short)(BotConst.UNITY * step);
             if (cur > max) cur = max;
             m_nRx = CurrX;
             m_nRy = CurrY;

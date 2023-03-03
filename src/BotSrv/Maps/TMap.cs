@@ -51,7 +51,7 @@ namespace BotSrv.Maps
             m_nBlockLeft = -1;
             m_nBlockTop = -1;
             m_sOldMap = "";
-            m_MArr = new MapInfo[MShare.MAXX * 3, MShare.MAXY * 3];
+            m_MArr = new MapInfo[BotConst.MAXX * 3, BotConst.MAXY * 3];
         }
 
         public void LoadMapData(bool bFirst = false)
@@ -165,10 +165,10 @@ namespace BotSrv.Maps
             if (m_nCurrentMap != null)
             {
                 //FillChar(m_MArr); 
-                nLx = (nCurrX - 1) * MShare.LOGICALMAPUNIT;
-                nRx = (nCurrX + 2) * MShare.LOGICALMAPUNIT;
-                nTy = (nCurrY - 1) * MShare.LOGICALMAPUNIT;
-                nBy = (nCurrY + 2) * MShare.LOGICALMAPUNIT;
+                nLx = (nCurrX - 1) * BotConst.LOGICALMAPUNIT;
+                nRx = (nCurrX + 2) * BotConst.LOGICALMAPUNIT;
+                nTy = (nCurrY - 1) * BotConst.LOGICALMAPUNIT;
+                nBy = (nCurrY + 2) * BotConst.LOGICALMAPUNIT;
                 if (nLx < 0)
                 {
                     nLx = 0;
@@ -250,7 +250,7 @@ namespace BotSrv.Maps
 
         public void UpdateMapPos_Unmark(int xx, int yy, ref int cx, ref int cy)
         {
-            if ((cx == xx / MShare.LOGICALMAPUNIT) && (cy == yy / MShare.LOGICALMAPUNIT))
+            if ((cx == xx / BotConst.LOGICALMAPUNIT) && (cy == yy / BotConst.LOGICALMAPUNIT))
             {
                 var ax = xx - m_nBlockLeft;
                 var ay = yy - m_nBlockTop;
@@ -261,10 +261,10 @@ namespace BotSrv.Maps
 
         public void UpdateMapPos(int mx, int my)
         {
-            var cx = mx / MShare.LOGICALMAPUNIT;
-            var cy = my / MShare.LOGICALMAPUNIT;
-            m_nBlockLeft = HUtil32._MAX(0, (cx - 1) * MShare.LOGICALMAPUNIT);
-            m_nBlockTop = HUtil32._MAX(0, (cy - 1) * MShare.LOGICALMAPUNIT);
+            var cx = mx / BotConst.LOGICALMAPUNIT;
+            var cy = my / BotConst.LOGICALMAPUNIT;
+            m_nBlockLeft = HUtil32._MAX(0, (cx - 1) * BotConst.LOGICALMAPUNIT);
+            m_nBlockTop = HUtil32._MAX(0, (cy - 1) * BotConst.LOGICALMAPUNIT);
             UpdateMapSquare(cx, cy);
             if ((m_nOldLeft != m_nBlockLeft) || (m_nOldTop != m_nBlockTop) || (m_sOldMap != m_sCurrentMap))
             {

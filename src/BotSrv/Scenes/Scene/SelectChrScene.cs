@@ -29,7 +29,7 @@ namespace BotSrv.Scenes.Scene
         public override void OpenScene()
         {
             ConnectionStep = ConnectionStep.QueryChr;
-            ClientSocket.Connect(MShare.g_sSelChrAddr, MShare.g_nSelChrPort);
+            ClientSocket.Connect(MShare.SelChrAddr, MShare.SelChrPort);
         }
 
         public override void CloseScene()
@@ -244,7 +244,7 @@ namespace BotSrv.Scenes.Scene
                 SetNotifyEvent(SendQueryChr, 1000);
                 ConnectionStep = ConnectionStep.SelChr;
             }
-            MainOutMessage($"连接角色网关:[{MShare.g_sSelChrAddr}:{MShare.g_nSelChrPort}]");
+            MainOutMessage($"连接角色网关:[{MShare.SelChrAddr}:{MShare.SelChrPort}]");
         }
 
         private void CSocketDisconnect(object sender, DSCClientConnectedEventArgs e)

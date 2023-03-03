@@ -595,7 +595,7 @@ namespace BotSrv.Player
                     MShare.g_nMyDecDamage = HUtil32.HiByte(HUtil32.HiWord(msg.Recog));
                     break;
                 case Messages.SM_DAYCHANGING:
-                    MShare.g_nDayBright = msg.Param;
+                    
                     break;
                 case Messages.SM_WINEXP:
                     MShare.MySelf.Abil.Exp = msg.Recog;
@@ -892,7 +892,7 @@ namespace BotSrv.Player
                 case Messages.SM_GOLDCHANGED:
                     if (msg.Recog > MShare.MySelf.m_nGold)
                     {
-                        DScreen.AddSysMsg("获得 " + (msg.Recog - MShare.MySelf.m_nGold).ToString() + MShare.GoldName);
+                        DScreen.AddSysMsg("获得 " + (msg.Recog - MShare.MySelf.m_nGold).ToString() + BotConst.GoldName);
                     }
                     MShare.MySelf.m_nGold = msg.Recog;
                     MShare.MySelf.m_nGameGold = HUtil32.MakeLong(msg.Param, msg.Tag);
@@ -919,7 +919,7 @@ namespace BotSrv.Player
                         Str = "";
                         if (msg.Recog != MShare.g_EatingItem.MakeIndex)
                         {
-                            for (i = MShare.MAXBAGITEMCL - 1; i >= 0; i--)
+                            for (i = BotConst.MAXBAGITEMCL - 1; i >= 0; i--)
                             {
                                 if (MShare.g_ItemArr[i].Item.Name != "")
                                 {
@@ -1024,11 +1024,11 @@ namespace BotSrv.Player
                     {
                         if (msg.Recog > 0)
                         {
-                            MShare.g_sSellPriceStr = msg.Recog.ToString() + MShare.GoldName;
+                            MShare.g_sSellPriceStr = msg.Recog.ToString() + BotConst.GoldName;
                         }
                         else
                         {
-                            MShare.g_sSellPriceStr = "???? " + MShare.GoldName;
+                            MShare.g_sSellPriceStr = "???? " + BotConst.GoldName;
                         }
                     }
                     break;
@@ -1049,12 +1049,12 @@ namespace BotSrv.Player
                         if (msg.Recog >= 0)
                         {
                             // 金币
-                            MShare.g_sSellPriceStr = msg.Recog.ToString() + " " + MShare.GoldName;
+                            MShare.g_sSellPriceStr = msg.Recog.ToString() + " " + BotConst.GoldName;
                         }
                         else
                         {
                             // 金币
-                            MShare.g_sSellPriceStr = "???? " + MShare.GoldName;
+                            MShare.g_sSellPriceStr = "???? " + BotConst.GoldName;
                         }
                     }
                     break;
@@ -1159,7 +1159,7 @@ namespace BotSrv.Player
                             MainOutMessage("发生了错误");
                             break;
                         case 3:
-                            MainOutMessage(MShare.GoldName + "不足");
+                            MainOutMessage(BotConst.GoldName + "不足");
                             break;
                         case 4:
                             MainOutMessage("你缺乏所必需的物品");

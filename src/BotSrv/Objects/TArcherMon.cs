@@ -12,7 +12,7 @@ namespace BotSrv.Objects
             if (m_nCurrentAction == Messages.SM_WALK || m_nCurrentAction == Messages.SM_BACKSTEP ||
                 m_nCurrentAction == Messages.SM_RUN || m_nCurrentAction == Messages.SM_HORSERUN) return;
             m_boMsgMuch = false;
-            if (m_MsgList.Count >= MShare.MSGMUCH) m_boMsgMuch = true;
+            if (m_MsgList.Count >= BotConst.MSGMUCH) m_boMsgMuch = true;
             RunFrameAction(m_nCurrentFrame - m_nStartFrame);
             prv = m_nCurrentFrame;
             if (m_nCurrentAction != 0)

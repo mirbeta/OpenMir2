@@ -14,10 +14,6 @@ namespace BotSrv
     {
         public static string g_sGameIPaddr;
         public static int g_nGamePort;
-        public const int UNITX = 48;
-        public const int UNITY = 32;
-        public const int MAXX = 30;
-        public const int MAXY = 40;
         /// <summary>
         /// 是否自动捡取物品
         /// </summary>
@@ -31,20 +27,10 @@ namespace BotSrv
         public static Dictionary<string, string> g_ItemsFilter_All_Def = null;
         public static string[] g_sRenewBooks = new string[] { "随机传送卷", "地牢逃脱卷", "回城卷", "行会回城卷", "盟重传送石", "比奇传送石", "随机传送石", };
         public static byte g_nMagicRange = 8;
-        public static int g_TileMapOffSetX = 9;
-        public static int g_TileMapOffSetY = 9;
-        public static byte g_btMyEnergy = 0;
-        public static byte g_btMyLuck = 0;
-        public static string g_tiHintStr1 = "";
-        public static string g_tiHintStr2 = "";
-        public static string g_spHintStr1 = "";
-        public static string g_spHintStr2 = "";
-        public static TMovingItem[] g_TIItems = new TMovingItem[1 + 1];
-        public static TMovingItem[] g_spItems = new TMovingItem[1 + 1];
-        public static bool g_NextSeriesSkill = false;
-        public static int g_dwSeriesSkillReadyTick = 0;
-        public static int g_nCurrentMagic = 888;
-        public static int g_nCurrentMagic2 = 888;
+        public static short g_TileMapOffSetX = 9;
+        public static short g_TileMapOffSetY = 9;
+        public static TMovingItem[] g_TIItems = new TMovingItem[2];
+        public static TMovingItem[] g_spItems = new TMovingItem[2];
         public static int g_IPointLessHintTick = 0;
         public static int g_MPLessHintTick = 0;
         public static int g_dwAutoTecTick = 0;
@@ -55,28 +41,14 @@ namespace BotSrv
         public static bool g_boQueryDynCode = false;
         public static bool g_boQuerySelChar = false;
         public static int g_dwCheckCount = 0;
-        public static int g_nBookPath = 0;
-        public static int g_nBookPage = 0;
-        public static int g_HillMerchant = 0;
         public static string g_sBookLabel = "";
         public static int g_MaxExpFilter = 2000;
         public static string[] g_UnBindItems = { "万年雪霜", "疗伤药", "强效太阳水", "强效金创药", "强效魔法药", "金创药(小量)", "魔法药(小量)", "金创药(中量)", "魔法药(中量)", "地牢逃脱卷", "随机传送卷", "回城卷", "行会回城卷" };
-        public static string GoldName = "金币";
-        public static string GameGoldName = "元宝";
-        public static string GamePointName = "泡点";
-        public static string WarriorName = "武士";
-        public static string WizardName = "魔法师";
-        public static string TaoistName = "道士";
-        public static string UnKnowName = "未知";
         public static bool g_boQueryExit = false;
-        public static string g_psServerAddr = string.Empty;
-        public static int g_pnServerPort = 0;
-        public static string g_sSelChrAddr = string.Empty;
-        public static int g_nSelChrPort = 0;
+        public static string SelChrAddr = string.Empty;
+        public static int SelChrPort = 0;
         public static string RunServerAddr = string.Empty;
         public static int RunServerPort = 0;
-        public static int g_nTopDrawPos = 0;
-        public static int g_nLeftDrawPos = 0;
         public static bool SendLogin = false;
         public static bool ServerConnected = false;
         public static bool g_SoftClosed = false;
@@ -87,7 +59,6 @@ namespace BotSrv
         public static ArrayList g_SendSayList = null;
         public static int g_SendSayListIdx = 0;
         public static IList<string> g_GroupMembers = null;
-        public static int g_DxFontsMgrTick = 0;
         public static ClientMagic[] g_MagicArr = new ClientMagic[255];
         public static IList<ClientMagic> g_MagicList = null;
         public static IList<TDropItem> g_DropedItemList = null;
@@ -147,7 +118,7 @@ namespace BotSrv
         public static MapLink g_APQueue = null;
         public static IList<FindMapNode> g_APPathList = null;
         public static ushort[,] g_APPass = null;
-        public static ushort[,] g_APPassEmpty = new ushort[MAXX * 3, MAXY * 3];
+        public static ushort[,] g_APPassEmpty = new ushort[BotConst.MAXX * 3, BotConst.MAXY * 3];
         public static Actor AutoTagget = null;
         public static int g_APRunTick = 0;
         public static int g_APRunTick2 = 0;
@@ -219,22 +190,10 @@ namespace BotSrv
         public static ushort g_wAvailIPDay = 0;
         public static ushort g_wAvailIPHour = 0;
         public static THumActor MySelf = null;
-        public static THumActor g_MyDrawActor = null;
-        public static string g_sAttackMode = "";
-        public static string sAttackModeOfAll = "[全体攻击模式]";
-        public static string sAttackModeOfPeaceful = "[和平攻击模式]";
-        public static string sAttackModeOfDear = "[夫妻攻击模式]";
-        public static string sAttackModeOfMaster = "[师徒攻击模式]";
-        public static string sAttackModeOfGroup = "[编组攻击模式]";
-        public static string sAttackModeOfGuild = "[行会攻击模式]";
-        public static string sAttackModeOfRedWhite = "[善恶攻击模式]";
-        public static int g_RIWhere = 0;
-        public static TMovingItem[] g_RefineItems = new TMovingItem[2 + 1];
         public static int g_BuildAcusesStep = 0;
-        public static TMovingItem[] g_BuildAcuses = new TMovingItem[7 + 1];
-        public static ClientItem[] g_tui = new ClientItem[13 + 1];
-        public static ClientItem[] g_UseItems = new ClientItem[13 + 1];
-        public static ClientItem[] g_ItemArr = new ClientItem[MAXBAGITEMCL - 1 + 1];
+        public static TMovingItem[] g_BuildAcuses = new TMovingItem[8];
+        public static ClientItem[] g_UseItems = new ClientItem[14];
+        public static ClientItem[] g_ItemArr = new ClientItem[BotConst.MAXBAGITEMCL];
         public static bool g_boBagLoaded = false;
         public static bool g_boServerChanging = false;
         public static int g_nTestReceiveCount = 0;
@@ -250,9 +209,9 @@ namespace BotSrv
         public static bool g_boQueryPrice = false;
         public static int g_dwQueryPriceTime = 0;
         public static string g_sSellPriceStr = string.Empty;
-        public static ClientItem[] g_DealItems = new ClientItem[9 + 1];
-        public static ClientItem[] g_YbDealItems = new ClientItem[9 + 1];
-        public static ClientItem[] g_DealRemoteItems = new ClientItem[19 + 1];
+        public static ClientItem[] g_DealItems = new ClientItem[10];
+        public static ClientItem[] g_YbDealItems = new ClientItem[10];
+        public static ClientItem[] g_DealRemoteItems = new ClientItem[20];
         public static int g_nDealGold = 0;
         public static int g_nDealRemoteGold = 0;
         public static string g_sDealWho = string.Empty;
@@ -274,7 +233,6 @@ namespace BotSrv
         public static bool g_boMutiHero = true;
         public static bool g_boSkill_114_MP = false;
         public static bool g_boSkill_68_MP = false;
-        public static int g_nDayBright = 0;
         public static int g_nAreaStateValue = 0;
         public static int g_nRunReadyCount = 0;
         public static bool g_boForceNotViewFog = true;
@@ -363,55 +321,31 @@ namespace BotSrv
         public static bool g_boCanSLonHit = false;
         public static bool g_boCanSquHit = false;
         public static Dictionary<string, string> g_ShowItemList = null;
-        public const int HEALTHBAR_BLACK = 0;
-        public const int CLIENT_VERSION_NUMBER = 120020522;
-        public const int RMCLIENT = 46;
-        public const int CLIENTTYPE = RMCLIENT;
-        public const int LOGICALMAPUNIT = 30;
-        public const int HUMWINEFFECTTICK = 200;
-        public const int WINLEFT = 100;
-        public const int WINTOP = 100;
-        public const int MAXBAGITEMCL = 52;
-        public const int MAXFONT = 8;
-        public const int HERO_MIIDX_OFFSET = 5000;
-        public const int SAVE_MIIDX_OFFSET = HERO_MIIDX_OFFSET + 500;
-        public const int STALL_MIIDX_OFFSET = HERO_MIIDX_OFFSET + 500 + 50;
-        public const int DETECT_MIIDX_OFFSET = HERO_MIIDX_OFFSET + 500 + 50 + 10 + 1;
-        public const int MSGMUCH = 2;
         public static bool[] g_gcGeneral = { true, true, false, true, true, true, false, true, false, true, true, true, true, false, false, true, true };
         public static bool[] g_gcProtect = { false, false, false, false, false, false, false, true, true, true, false, true };
         public static int[] g_gnProtectPercent = { 10, 10, 10, 10, 10, 10, 0, 88, 88, 88, 20, 00 };
         public static int[] g_gnProtectTime = { 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 1000, 1000, 1000 };
-        public const int MAX_GC_TEC = 14;
         public static string[] g_HintTec = { "钩选此项将开启刀刀刺杀", "钩选此项将开启智能半月", "钩选此项将自动凝聚烈火剑法", "钩选此项将自动凝聚逐日剑法", "钩选此项将自动开启魔法盾", "钩选此项英雄将自动开启魔法盾", "钩选此项道士将自动使用隐身术", "", "", "钩选此项将自动凝聚雷霆剑法", "钩选此项将自动进行隔位刺杀", "钩选此项将自动凝聚断空斩", "钩选此项英雄将不使用连击打怪\\方便玩家之间进行PK", "钩选此项将自动凝聚开天斩", "钩选此项：施展魔法超过允许距离时，会自动跑近目标并释放魔法" };
         public static string[] g_caTec = { "刀刀刺杀", "智能半月", "自动烈火", "逐日剑法", "自动开盾", "持续开盾(英雄)", "自动隐身", "时间间隔", "", "自动雷霆", "隔位刺杀", "自动断空斩", "英雄连击不打怪", "自动开天斩", "自动调节魔法距离" };
         public static string[] g_sMagics = { "火球术", "治愈术", "大火球", "施毒术", "攻杀剑术", "抗拒火环", "地狱火", "疾光电影", "雷电术", "雷电术", "雷电术", "雷电术", "雷电术", "开天斩", "开天斩" };
-        public const int g_gnTecPracticeKey = 0;
         public static bool[] g_gcTec = { true, true, true, true, true, true, false, false, false, false, false, false, false, true, false };
         public static int[] g_gnTecTime = { 0, 0, 0, 0, 0, 0, 0, 0, 4000, 0, 0, 0, 0, 0, 0 };
         public static bool[] g_gcAss = { false, false, false, false, false, false, true };
         public static int g_HitSpeedRate = 0;
         public static int g_MagSpeedRate = 0;
         public static int g_MoveSpeedRate = 0;
-        public const string g_affiche0 = "游戏音效已关闭！";
-        public const string g_affiche1 = "健康游戏公告";
-        public const string g_affiche2 = "抵制不良游戏 拒绝盗版游戏 注意自我保护 谨防受骗上当 适度游戏益脑";
-        public const string g_affiche3 = "沉迷游戏伤身 合理安排时间 享受健康生活 严厉打击赌博 营造和谐环境";
-        public const int ScreenWidth = 800;
-        public const int ScreenHeight = 600;
-        public const string MAPDIRNAME = "Map/";
 
         // 得到地图文件名称自定义路径
         public static string GetMapDirAndName(string sFileName)
         {
             string result;
-            if (File.Exists(MAPDIRNAME + sFileName + ".map"))
+            if (File.Exists(BotConst.MAPDIRNAME + sFileName + ".map"))
             {
-                result = MAPDIRNAME + sFileName + ".map";
+                result = BotConst.MAPDIRNAME + sFileName + ".map";
             }
             else
             {
-                result = MAPDIRNAME + sFileName + ".map";
+                result = BotConst.MAPDIRNAME + sFileName + ".map";
             }
             return result;
         }
@@ -423,7 +357,7 @@ namespace BotSrv
 
         public static bool IsDetectItem(int idx)
         {
-            return idx == DETECT_MIIDX_OFFSET;
+            return idx == BotConst.DETECT_MIIDX_OFFSET;
         }
 
         public static bool IsBagItem(int idx)
@@ -443,76 +377,12 @@ namespace BotSrv
 
         public static bool IsStorageItem(int idx)
         {
-            return (idx >= SAVE_MIIDX_OFFSET) && (idx < SAVE_MIIDX_OFFSET + 46);
+            return (idx >= BotConst.SAVE_MIIDX_OFFSET) && (idx < BotConst.SAVE_MIIDX_OFFSET + 46);
         }
 
         public static bool IsStallItem(int idx)
         {
-            return (idx >= STALL_MIIDX_OFFSET) && (idx < STALL_MIIDX_OFFSET + 10);
-        }
-
-        public static void ResetSeriesSkillVar()
-        {
-            g_nCurrentMagic = 888;
-            g_nCurrentMagic2 = 888;
-            //g_SeriesSkillStep = 0;
-            //g_SeriesSkillFire = false;
-            //g_SeriesSkillFire_100 = false;
-            //g_SeriesSkillReady = false;
-            g_NextSeriesSkill = false;
-            //FillChar(g_VenationInfos);   
-            //FillChar(g_TempSeriesSkillArr);   
-            //FillChar(g_HTempSeriesSkillArr); 
-            //FillChar(g_SeriesSkillArr);      
-        }
-
-        public static int GetSeriesSkillIcon(int id)
-        {
-            int result;
-            result = -1;
-            switch (id)
-            {
-                case 100:
-                    result = 950;
-                    break;
-                case 101:
-                    result = 952;
-                    break;
-                case 102:
-                    result = 956;
-                    break;
-                case 103:
-                    result = 954;
-                    break;
-                case 104:
-                    result = 942;
-                    break;
-                case 105:
-                    result = 946;
-                    break;
-                case 106:
-                    result = 940;
-                    break;
-                case 107:
-                    result = 944;
-                    break;
-                case 108:
-                    result = 934;
-                    break;
-                case 109:
-                    result = 936;
-                    break;
-                case 110:
-                    result = 932;
-                    break;
-                case 111:
-                    result = 930;
-                    break;
-                case 112:
-                    result = 944;
-                    break;
-            }
-            return result;
+            return (idx >= BotConst.STALL_MIIDX_OFFSET) && (idx < BotConst.STALL_MIIDX_OFFSET + 10);
         }
 
         public static void CheckSpeedCount(int Count)
@@ -570,16 +440,16 @@ namespace BotSrv
             switch (nJob)
             {
                 case 0:
-                    result = WarriorName;
+                    result = BotConst.WarriorName;
                     break;
                 case 1:
-                    result = WizardName;
+                    result = BotConst.WizardName;
                     break;
                 case 2:
-                    result = TaoistName;
+                    result = BotConst.TaoistName;
                     break;
                 default:
-                    result = UnKnowName;
+                    result = BotConst.UnKnowName;
                     break;
             }
             return result;
@@ -1020,8 +890,7 @@ namespace BotSrv
 
         public static int GetItemWhere(ClientItem clientItem)
         {
-            int result;
-            result = -1;
+            int result = -1;
             if (clientItem.Item.Name == "")
             {
                 return result;
@@ -1104,9 +973,7 @@ namespace BotSrv
 
         public static byte GetTIHintString1(int idx, ClientItem ci, string iname)
         {
-            byte result;
-            result = 0;
-            g_tiHintStr1 = "";
+            byte result = 0;
             //switch (idx)
             //{
             //    case 0:
@@ -1359,13 +1226,11 @@ namespace BotSrv
 
         public static byte GetSpHintString2(int idx, ClientItem ci, string iname)
         {
-            byte result;
-            result = 0;
-            g_spHintStr1 = "";
+            byte result = 0;
             switch (idx)
             {
                 case 0:
-                    g_spHintStr1 = "你可以把你对鉴宝的心得还有你的鉴定经验写在神秘卷轴上，这样的话，就可以帮助更多人解读神秘属性。";
+                    //g_spHintStr1 = "你可以把你对鉴宝的心得还有你的鉴定经验写在神秘卷轴上，这样的话，就可以帮助更多人解读神秘属性。";
                     break;
             }
             return result;
@@ -1551,49 +1416,6 @@ namespace BotSrv
                 result = true;
             }
             return result;
-        }
-
-        public void initialization()
-        {
-            //g_APPass = new double();
-            //g_dwThreadTick = new int();
-            //g_dwThreadTick = 0;
-            //g_pbRecallHero = new bool();
-            //g_pbRecallHero = false;
-            //InitializeCriticalSection(ProcMsgCS);
-            //InitializeCriticalSection(ThreadCS);
-            //g_APPickUpList = new THStringList();
-            //g_APMobList = new THStringList();
-            //g_ItemsFilter_All = new object();
-            //g_ItemsFilter_All_Def = new object();
-            //g_ItemsFilter_Dress = new object();
-            //g_ItemsFilter_Weapon = new object();
-            //g_ItemsFilter_Headgear = new object();
-            //g_ItemsFilter_Drug = new object();
-            //g_ItemsFilter_Other = new object();
-            //g_SuiteItemsList = new object();
-            //g_TitlesList = new object();
-            //g_xMapDescList = new object();
-            //g_xCurMapDescList = new object();
-        }
-
-        public void finalization()
-        {
-            //Dispose(g_APPass);
-            //DeleteCriticalSection(ProcMsgCS);
-            //DeleteCriticalSection(ThreadCS);
-            //g_APPickUpList.Free;
-            //g_APMobList.Free;
-            //g_ItemsFilter_All.Free;
-            //g_ItemsFilter_All_Def.Free;
-            //g_ItemsFilter_Dress.Free;
-            //g_ItemsFilter_Weapon.Free;
-            //g_ItemsFilter_Headgear.Free;
-            //g_ItemsFilter_Drug.Free;
-            //g_ItemsFilter_Other.Free;
-            //g_SuiteItemsList.Free;
-            //g_xMapDescList.Free;
-            //g_xCurMapDescList.Free;
         }
     }
 

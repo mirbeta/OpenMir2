@@ -93,7 +93,7 @@ namespace BotSrv.Objects
         {
             var cx = x - _robotClient.Map.m_nBlockLeft;
             var cy = y - _robotClient.Map.m_nBlockTop;
-            if (cx > MShare.MAXX * 3 || cy > MShare.MAXY * 3) return true;
+            if (cx > BotConst.MAXX * 3 || cy > BotConst.MAXY * 3) return true;
             if (cx < 0 || cy < 0) return true;
             if (h < MShare.g_APPass[cx, cy])
             {
@@ -279,7 +279,7 @@ namespace BotSrv.Objects
             if (MShare.g_gcAss[1])// 红没有回城
             {
                 has = false;
-                for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+                for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.Name != "" && MShare.g_ItemArr[i].Item.AC > 0 && MShare.g_ItemArr[i].Item.StdMode == 0)
                     {
@@ -297,7 +297,7 @@ namespace BotSrv.Objects
             if (MShare.g_gcAss[2])// 蓝没有回城
             {
                 has = false;
-                for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+                for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.Name != "" && MShare.g_ItemArr[i].Item.MAC > 0 &&
                         MShare.g_ItemArr[i].Item.StdMode == 0)
@@ -334,7 +334,7 @@ namespace BotSrv.Objects
             if (MShare.g_gcAss[3])// 符没有回城
             {
                 has = false;
-                for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+                for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.StdMode == 25 && MShare.g_ItemArr[i].Item.Name != "" && MShare.g_ItemArr[i].Item.Name.IndexOf("符", StringComparison.Ordinal) > 0)
                     {
@@ -349,7 +349,7 @@ namespace BotSrv.Objects
                     return result;
                 }
                 has = false;
-                for (var i = 0; i < MShare.MAXBAGITEMCL; i++)
+                for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.StdMode == 25 && MShare.g_ItemArr[i].Item.Name != "" && MShare.g_ItemArr[i].Item.Name.IndexOf("药", StringComparison.Ordinal) > 0)
                     {
@@ -669,7 +669,7 @@ namespace BotSrv.Objects
                     {
                         if (MShare.g_MagicArr[31] != null)
                         {
-                            _robotClient.UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, MShare.g_MagicArr[31]);
+                            _robotClient.UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, MShare.g_MagicArr[31]);
                             return result;
                         }
                     }
@@ -691,7 +691,7 @@ namespace BotSrv.Objects
                     {
                         if (MShare.g_MagicArr[31] != null)
                         {
-                            _robotClient.UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, MShare.g_MagicArr[31]);
+                            _robotClient.UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, MShare.g_MagicArr[31]);
                             return result;
                         }
                     }
@@ -907,7 +907,7 @@ namespace BotSrv.Objects
                     {
                         if (MShare.g_MagicArr[31] != null)
                         {
-                            _robotClient.UseMagic(MShare.ScreenWidth / 2, MShare.ScreenHeight / 2, MShare.g_MagicArr[31]);
+                            _robotClient.UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, MShare.g_MagicArr[31]);
                             return result;
                         }
                     }
@@ -918,7 +918,7 @@ namespace BotSrv.Objects
                     }
                     if (n == 0)
                     {
-                        for (i = 6; i < MShare.MAXBAGITEMCL; i++)
+                        for (i = 6; i < BotConst.MAXBAGITEMCL; i++)
                         {
                             if (MShare.g_ItemArr[i].Item.NeedIdentify < 4 && MShare.g_ItemArr[i].Item.StdMode == 25 && MShare.g_ItemArr[i].Item.Shape != 6 && MShare.g_ItemArr[i].Item.Name.IndexOf("药", StringComparison.Ordinal) > 0)
                             {
@@ -943,7 +943,7 @@ namespace BotSrv.Objects
                     }
                     if (m == 0)
                     {
-                        for (i = 6; i < MShare.MAXBAGITEMCL; i++)
+                        for (i = 6; i < BotConst.MAXBAGITEMCL; i++)
                         {
                             if (MShare.g_ItemArr[i].Item.NeedIdentify < 4 && MShare.g_ItemArr[i].Item.StdMode == 25 && MShare.g_ItemArr[i].Item.Shape != 6 && MShare.g_ItemArr[i].Item.Name.IndexOf("符", StringComparison.Ordinal) > 0)
                             {

@@ -167,8 +167,8 @@ namespace BotSrv.Scenes.Scene
             str = HUtil32.GetValidStr3(str, ref runport, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref certifystr, HUtil32.Backslash);
             RobotClient.Certification = HUtil32.StrToInt(certifystr, 0);
-            MShare.g_sSelChrAddr = runaddr;
-            MShare.g_nSelChrPort = HUtil32.StrToInt(runport, 0);
+            MShare.SelChrAddr = runaddr;
+            MShare.SelChrPort = HUtil32.StrToInt(runport, 0);
             ConnectionStep = ConnectionStep.QueryChr;
         }
 
