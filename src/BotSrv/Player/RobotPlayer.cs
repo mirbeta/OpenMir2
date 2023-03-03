@@ -66,8 +66,7 @@ namespace BotSrv.Player
             SessionId = Guid.NewGuid().ToString("N");
             heroActor = new HeroActor(this);
             MShare.InitScreenConfig();
-            MShare.g_APPathList = new List<FindMapNode>();
-            MShare.g_ShowItemList = new Dictionary<string, string>();
+            MShare.AutoPathList = new List<FindMapNode>();
             DScreen = new ScreenManager(this);
             IntroScene = new IntroScene(this);
             LoginScene = new LoginScene(this);
@@ -87,7 +86,7 @@ namespace BotSrv.Player
             }
             MShare.InitClientItems();
             MShare.g_DetectItemMineID = 0;
-            MShare.g_nLastMapMusic = -1;
+            MShare.LastMapMusic = -1;
             MShare.TargetX = -1;
             MShare.TargetY = -1;
             MShare.TargetCret = null;
@@ -365,7 +364,7 @@ namespace BotSrv.Player
                 }
                 nSX = (short)Math.Abs(MShare.MySelf.CurrX - targx);
                 nSY = (short)Math.Abs(MShare.MySelf.CurrY - targy);
-                if ((nSX <= MShare.g_nMagicRange) && (nSY <= MShare.g_nMagicRange))
+                if ((nSX <= BotConst.MagicRange) && (nSY <= BotConst.MagicRange))
                 {
                     if (PlayScene.ProcMagic.FContinue || (CanNextAction() && ServerAcceptNextAction()))
                     {
@@ -568,7 +567,7 @@ namespace BotSrv.Player
                                 var bostop = false;
                                 if (!PlayScene.CanWalk(mx, my))
                                 {
-                                    if (MShare.OpenAutoPlay && MShare.g_boAPAutoMove && (MShare.g_APPathList.Count > 0))
+                                    if (MShare.OpenAutoPlay && MShare.AutoMove && (MShare.AutoPathList.Count > 0))
                                     {
                                         heroActor.InitQueue2();
                                         MShare.TargetX = -1;
@@ -708,11 +707,11 @@ namespace BotSrv.Player
                             break;
                     }
                 }
-                else if (MShare.OpenAutoPlay && MShare.g_boAPAutoMove && (MShare.AutoPicupItem != null))
+                else if (MShare.OpenAutoPlay && MShare.AutoMove && (MShare.AutoPicupItem != null))
                 {
                     SendPickup();
                     MShare.ConsoleStr = "拾取物品";
-                    if (MShare.g_boAPAutoMove && (MShare.g_APPathList.Count > 0))
+                    if (MShare.AutoMove && (MShare.AutoPathList.Count > 0))
                     {
                         heroActor.InitQueue2();
                         MShare.TargetX = -1;
@@ -951,7 +950,7 @@ namespace BotSrv.Player
                     }
                     targid = MShare.MagicTarget.RecogId;
                 }
-                if ((Math.Abs(MShare.MySelf.CurrX - targx) > MShare.g_nMagicRange) || (Math.Abs(MShare.MySelf.CurrY - targy) > MShare.g_nMagicRange))
+                if ((Math.Abs(MShare.MySelf.CurrX - targx) > BotConst.MagicRange) || (Math.Abs(MShare.MySelf.CurrY - targy) > BotConst.MagicRange))
                 {
                     if (MShare.g_gcTec[14] && (fUnLockMagic || (targid != 0)))
                     {
@@ -1120,7 +1119,7 @@ namespace BotSrv.Player
                         case 3:
                             if (MShare.g_gcProtect[5])
                             {
-                                if (String.Compare(MShare.g_ItemArr[i].Item.Name, MShare.g_sRenewBooks[MShare.g_gnProtectPercent[6]], StringComparison.OrdinalIgnoreCase) == 0)
+                                if (String.Compare(MShare.g_ItemArr[i].Item.Name, BotConst.g_sRenewBooks[MShare.g_gnProtectPercent[6]], StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     bidx = i;
                                 }
@@ -1148,7 +1147,7 @@ namespace BotSrv.Player
                                     }
                                     break;
                                 default:
-                                    if (MShare.g_gcProtect[5] && (string.Compare(MShare.g_ItemArr[i].Item.Name, MShare.g_sRenewBooks[MShare.g_gnProtectPercent[6]] + "包", StringComparison.OrdinalIgnoreCase) == 0))
+                                    if (MShare.g_gcProtect[5] && (string.Compare(MShare.g_ItemArr[i].Item.Name, BotConst.g_sRenewBooks[MShare.g_gnProtectPercent[6]] + "包", StringComparison.OrdinalIgnoreCase) == 0))
                                     {
                                         ubidx = i;
                                     }
@@ -1268,7 +1267,7 @@ namespace BotSrv.Player
                     }
                     else if (bHint)
                     {
-                        ScreenManager.AddChatBoardString("你的" + MShare.g_sRenewBooks[MShare.g_gnProtectPercent[6]] + "已经用完！", ConsoleColor.Green, ConsoleColor.Black);
+                        ScreenManager.AddChatBoardString("你的" + BotConst.g_sRenewBooks[MShare.g_gnProtectPercent[6]] + "已经用完！", ConsoleColor.Green, ConsoleColor.Black);
                     }
                 }
             }
@@ -1280,7 +1279,7 @@ namespace BotSrv.Player
             {
                 if (MShare.g_ItemArr[idx].Item.Name == "")
                 {
-                    for (var i = BotConst.MAXBAGITEMCL - 1; i >= 6; i--)
+                    for (var i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
                     {
                         if (MShare.g_ItemArr[i].Item.Name == sItem)
                         {
@@ -1296,7 +1295,7 @@ namespace BotSrv.Player
 
         private void AutoSupplyBagItem(int nType, string sItem)
         {
-            for (var i = BotConst.MAXBAGITEMCL - 1; i >= 6; i--)
+            for (var i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
             {
                 if (MShare.g_ItemArr[i].Item.Name == sItem)
                 {
@@ -1314,9 +1313,9 @@ namespace BotSrv.Player
             if ((!string.IsNullOrEmpty(sItem)) && (nType != 0))
             {
                 var boIsUnBindItem = false;
-                for (var i = 0; i < MShare.g_UnBindItems.Length; i++)
+                for (var i = 0; i < BotConst.g_UnBindItems.Length; i++)
                 {
-                    if (sItem == MShare.g_UnBindItems[i])
+                    if (sItem == BotConst.g_UnBindItems[i])
                     {
                         boIsUnBindItem = true;
                         break;
@@ -1328,7 +1327,7 @@ namespace BotSrv.Player
                 }
                 var n = 0;
                 var boUnBindAble = false;
-                for (var i = 0; i < BotConst.MAXBAGITEMCL - 1 - 6; i++)
+                for (var i = 0; i < BotConst.MaxBagItemcl - 1 - 6; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.Name == "")
                     {
@@ -1345,7 +1344,7 @@ namespace BotSrv.Player
                     return;
                 }
                 var idx = -1;
-                for (var i = BotConst.MAXBAGITEMCL - 1; i >= 6; i--)
+                for (var i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
                 {
                     if (MShare.g_ItemArr[i].Item.StdMode == 31)
                     {
@@ -1391,7 +1390,7 @@ namespace BotSrv.Player
             {
                 return result;
             }
-            for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
+            for (var i = 0; i < BotConst.MaxBagItemcl; i++)
             {
                 if ((MShare.g_ItemArr[i].Item.Name == Str) && (MShare.g_ItemArr[i].Item.NeedIdentify < 4))
                 {
@@ -1409,7 +1408,7 @@ namespace BotSrv.Player
             var eatable = false;
             var takeon = false;
             var where = -1;
-            if (idx >= 0 && idx <= BotConst.MAXBAGITEMCL - 1)
+            if (idx >= 0 && idx <= BotConst.MaxBagItemcl - 1)
             {
                 if ((MShare.g_EatingItem.Item.Name != "") && (MShare.GetTickCount() - MShare.g_dwEatTime > 5 * 1000))
                 {
@@ -1740,7 +1739,7 @@ namespace BotSrv.Player
             {
                 if (TimerAutoPlay.Enabled)
                 {
-                    MShare.g_boAPAutoMove = false;
+                    MShare.AutoMove = false;
                     if (MShare.AutoTagget != null)
                     {
                         MShare.ConsoleStr = $"怪物目标：{MShare.AutoTagget.UserName} ({MShare.AutoTagget.CurrX},{MShare.AutoTagget.CurrY}) 正在使用普通攻击";
@@ -1781,7 +1780,7 @@ namespace BotSrv.Player
             }
             else
             {
-                if (MShare.g_boCanLongHit && (MShare.MySelf.Job == 0) && (!target.Death) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.g_MagicArr[12] != null) && TargetInSwordLongAttackRange2(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY))
+                if (MShare.g_boCanLongHit && (MShare.MySelf.Job == 0) && (!target.Death) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.MagicArr[12] != null) && TargetInSwordLongAttackRange2(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY))
                 {
                     if (CanNextAction() && ServerAcceptNextAction() && CanNextHit())
                     {
@@ -1799,7 +1798,7 @@ namespace BotSrv.Player
                 {
                     var dx = MShare.MySelf.CurrX;
                     var dy = MShare.MySelf.CurrY;
-                    if ((MShare.MySelf.Job == 0) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.g_MagicArr[12] != null))
+                    if ((MShare.MySelf.Job == 0) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.MagicArr[12] != null))
                     {
                         ClFunc.GetNextHitPosition(target.CurrX, target.CurrY, ref dx, ref dy);
                         if (!PlayScene.CanWalk(dx, dy))
@@ -1817,7 +1816,7 @@ namespace BotSrv.Player
                 }
                 if (TimerAutoPlay.Enabled)
                 {
-                    MShare.g_boAPAutoMove = true;
+                    MShare.AutoMove = true;
                     MShare.ConsoleStr = $"怪物目标：{target.UserName} ({target.CurrX},{target.CurrY}) 正在跑向";
                 }
             }
@@ -1984,7 +1983,7 @@ namespace BotSrv.Player
                         }
                         ClearDropItems();
                         PlayScene.CleanObjects();
-                        MShare.g_sMapTitle = "";
+                        MShare.MapTitle = "";
                         PlayScene.SendMsg(Messages.SM_CHANGEMAP, 0, WaitingMsg.Param, WaitingMsg.Tag, (byte)WaitingMsg.Series, 0, 0, WaitingStr);
                         MShare.MySelf.CleanCharMapSetting((short)WaitingMsg.Param, (short)WaitingMsg.Tag);
                         MShare.TargetX = -1;
@@ -2138,7 +2137,7 @@ namespace BotSrv.Player
             MShare.g_WaitingDetectItem.Item.Item.Name = "";
             MShare.OpenBoxItem.Item.Item.Name = "";
             MShare.g_EatingItem.Item.Name = "";
-            MShare.g_nLastMapMusic = -1;
+            MShare.LastMapMusic = -1;
             MShare.TargetX = -1;
             MShare.TargetCret = null;
             MShare.FocusCret = null;
@@ -2222,7 +2221,7 @@ namespace BotSrv.Player
             MShare.g_WaitingDetectItem.Item.Item.Name = "";
             MShare.OpenBoxItem.Item.Item.Name = "";
             MShare.g_EatingItem.Item.Name = "";
-            MShare.g_nLastMapMusic = -1;
+            MShare.LastMapMusic = -1;
             MShare.TargetX = -1;
             MShare.TargetCret = null;
             MShare.FocusCret = null;
@@ -2446,7 +2445,7 @@ namespace BotSrv.Player
                         string sM = HUtil32.GetValidStr3(param, ref sy, new string[] { " ", ":", ",", "\09" });
                         if ((sx != "") && (sy != ""))
                         {
-                            if ((sM != "") && (string.Compare(MShare.g_sMapTitle, sM, StringComparison.OrdinalIgnoreCase) != 0))// 自动移动
+                            if ((sM != "") && (string.Compare(MShare.MapTitle, sM, StringComparison.OrdinalIgnoreCase) != 0))// 自动移动
                             {
                                 ScreenManager.AddChatBoardString($"到达 {sM} 之后才能使用自动走路", ConsoleColor.Blue);
                                 return;
@@ -2884,21 +2883,21 @@ namespace BotSrv.Player
         {
             sBody = EDCode.DeCodeString(sBody);
             var sTitle = sBody;
-            MShare.g_sMapTitle = sTitle;
+            MShare.MapTitle = sTitle;
             LoadWayPoint();
             if (!MShare.g_gcGeneral[11])
             {
-                MShare.g_nLastMapMusic = msg.Recog;
+                MShare.LastMapMusic = msg.Recog;
             }
             else
             {
                 if (msg.Recog == -1)
                 {
-                    MShare.g_nLastMapMusic = -1;
+                    MShare.LastMapMusic = -1;
                 }
-                if (MShare.g_nLastMapMusic != msg.Recog)
+                if (MShare.LastMapMusic != msg.Recog)
                 {
-                    MShare.g_nLastMapMusic = msg.Recog;
+                    MShare.LastMapMusic = msg.Recog;
                 }
             }
         }
@@ -3071,12 +3070,12 @@ namespace BotSrv.Player
         public bool ClientGetBagItmes_CompareItemArr(ClientItem[] ItemSaveArr)
         {
             var flag = true;
-            for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
+            for (var i = 0; i < BotConst.MaxBagItemcl; i++)
             {
                 if (ItemSaveArr[i].Item.Name != "")
                 {
                     flag = false;
-                    for (var j = 0; j < BotConst.MAXBAGITEMCL; j++)
+                    for (var j = 0; j < BotConst.MaxBagItemcl; j++)
                     {
                         if ((MShare.g_ItemArr[j].Item.Name == ItemSaveArr[i].Item.Name) && (MShare.g_ItemArr[j].MakeIndex == ItemSaveArr[i].MakeIndex))
                         {
@@ -3095,12 +3094,12 @@ namespace BotSrv.Player
             }
             if (flag)
             {
-                for (var i = 0; i < BotConst.MAXBAGITEMCL; i++)
+                for (var i = 0; i < BotConst.MaxBagItemcl; i++)
                 {
                     if (MShare.g_ItemArr[i].Item.Name != "")
                     {
                         flag = false;
-                        for (var j = 0; j < BotConst.MAXBAGITEMCL; j++)
+                        for (var j = 0; j < BotConst.MaxBagItemcl; j++)
                         {
                             if ((MShare.g_ItemArr[i].Item.Name == ItemSaveArr[j].Item.Name) && (MShare.g_ItemArr[i].MakeIndex == ItemSaveArr[j].MakeIndex))
                             {
@@ -3127,7 +3126,7 @@ namespace BotSrv.Player
             int k;
             var Str = string.Empty;
             ClientItem cu;
-            var ItemSaveArr = new ClientItem[BotConst.MAXBAGITEMCL - 1 + 1];
+            var ItemSaveArr = new ClientItem[BotConst.MaxBagItemcl - 1 + 1];
             //MShare.g_SellDlgItem.Item.Name = "";
             //FillChar(MShare.g_RefineItems, sizeof(TMovingItem) * 3, '\0');
             //FillChar(MShare.g_BuildAcuses, sizeof(MShare.g_BuildAcuses), '\0');
@@ -3251,7 +3250,7 @@ namespace BotSrv.Player
             DropItem.FlashTime = MShare.GetTickCount() - RandomNumber.GetInstance().Random(3000);
             DropItem.BoFlash = false;
             DropItem.boNonSuch = false;
-            DropItem.boShowName = MShare.g_ShowItemList.ContainsKey(itmname);
+            DropItem.boShowName = BotConst.g_ShowItemList.ContainsKey(itmname);
             DropItem.boPickUp = DropItem.boShowName;
             if (MShare.g_gcAss[5])
             {
@@ -3336,7 +3335,7 @@ namespace BotSrv.Player
         private void ClientGetAddMagic(string body)
         {
             var pcm = EDCode.DecodeBuffer<ClientMagic>(body);
-            MShare.g_MagicArr[pcm.Def.MagicId] = pcm;
+            MShare.MagicArr[pcm.Def.MagicId] = pcm;
             MShare.g_MagicList.Add(pcm);
             for (var i = 0; i < MShare.g_MagicList.Count; i++)
             {
@@ -3359,7 +3358,7 @@ namespace BotSrv.Player
                     break;
                 }
             }
-            MShare.g_MagicArr[magid] = null;
+            MShare.MagicArr[magid] = null;
         }
 
         public int ClientConvertMagic_ListSortCompareLevel(object Item1, object Item2)
@@ -3501,7 +3500,7 @@ namespace BotSrv.Player
                 {
                     var pcm = EDCode.DecodeBuffer<ClientMagic>(data);
                     MShare.g_MagicList.Add(pcm);
-                    MShare.g_MagicArr[pcm.Def.MagicId] = pcm;
+                    MShare.MagicArr[pcm.Def.MagicId] = pcm;
                 }
                 else
                 {
@@ -3521,7 +3520,7 @@ namespace BotSrv.Player
         private void ClientGetMagicLvExp(int magid, int maglv, int magtrain)
         {
             magid = HUtil32.LoWord(magid);
-            var pcm = MShare.g_MagicArr[magid];
+            var pcm = MShare.MagicArr[magid];
             if (pcm != null)
             {
                 pcm.Level = (byte)maglv;
@@ -3534,7 +3533,7 @@ namespace BotSrv.Player
             magid = HUtil32.LoWord(magid);
             if (hero == 0)
             {
-                var pcm = MShare.g_MagicArr[magid];
+                var pcm = MShare.MagicArr[magid];
                 if ((magid <= 0) || (magid >= 255))
                 {
                     return;
@@ -3983,7 +3982,7 @@ namespace BotSrv.Player
             {
                 return null;
             }
-            return MShare.g_MagicArr[magid];
+            return MShare.MagicArr[magid];
         }
 
         private void SmartChangePoison(ClientMagic pcm)
@@ -4032,7 +4031,7 @@ namespace BotSrv.Player
             }
             MShare.g_boCheckTakeOffPoison = false;
             MShare.g_WaitingUseItem.Index = ItemLocation.Bujuk;
-            for (var i = 6; i < BotConst.MAXBAGITEMCL; i++)
+            for (var i = 6; i < BotConst.MaxBagItemcl; i++)
             {
                 if ((MShare.g_ItemArr[i].Item.NeedIdentify < 4) && (MShare.g_ItemArr[i].Item.StdMode == 25) && (MShare.g_ItemArr[i].Item.Shape != 6) && (MShare.g_ItemArr[i].Item.Name.IndexOf(Str, StringComparison.Ordinal) > 0) && (MShare.g_ItemArr[i].Item.Name.IndexOf(cStr, StringComparison.Ordinal) > 0))
                 {
@@ -4086,9 +4085,9 @@ namespace BotSrv.Player
                     {
                         if (MShare.g_gcTec[4] && ((MShare.MySelf.m_nState & 0x00100000) == 0))
                         {
-                            if (MShare.g_MagicArr[31] != null)
+                            if (MShare.MagicArr[31] != null)
                             {
-                                UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, MShare.g_MagicArr[31]);
+                                UseMagic(BotConst.ScreenWidth / 2, BotConst.ScreenHeight / 2, MShare.MagicArr[31]);
                                 return;
                             }
                         }
@@ -4350,7 +4349,7 @@ namespace BotSrv.Player
             byte ndir = 0;
             var success = false;
             MShare.ConsoleStr = "";
-            MShare.g_boAPAutoMove = false;
+            MShare.AutoMove = false;
             if (MShare.MySelf == null)
             {
                 return;
@@ -4387,7 +4386,7 @@ namespace BotSrv.Player
                     MShare.g_nAPStatus = -1;
                     MShare.TargetX = -1;
                     TimerAutoPlay.Enabled = MShare.g_gcAss[0];
-                    MShare.g_boAPAutoMove = true;
+                    MShare.AutoMove = true;
                     break;
                 case 1:// 此时为该怪物首次被发现，自动寻找路径
                     if (heroActor.AttackTagget(MShare.AutoTagget))
@@ -4402,10 +4401,10 @@ namespace BotSrv.Player
                     }
                     MShare.TargetX = -1;
                     MShare.g_nAPStatus = 1;
-                    MShare.g_boAPAutoMove = true;
+                    MShare.AutoMove = true;
                     break;
                 case 2:// 此时该物品为首次发现，自动寻找路径
-                    if ((MShare.AutoPicupItem != null) && ((MShare.g_nAPStatus != 2) || (MShare.g_APPathList.Count == 0)))
+                    if ((MShare.AutoPicupItem != null) && ((MShare.g_nAPStatus != 2) || (MShare.AutoPathList.Count == 0)))
                     {
                         MShare.TargetX = MShare.AutoPicupItem.X;
                         MShare.TargetY = MShare.AutoPicupItem.Y;
@@ -4422,7 +4421,7 @@ namespace BotSrv.Player
                         MShare.ConsoleStr = $"物品目标：{MShare.AutoPicupItem.Name}({MShare.AutoPicupItem.X},{MShare.AutoPicupItem.Y}) 正在去拾取";
                     }
                     MShare.g_nAPStatus = 2;
-                    MShare.g_boAPAutoMove = true;
+                    MShare.AutoMove = true;
                     break;
                 case 3:
                     if ((MShare.MapPath != null) && (MShare.AutoStep >= 0) && (MShare.AutoStep <= MShare.MapPath.Length))
@@ -4437,7 +4436,7 @@ namespace BotSrv.Player
                         }
                         else
                         {
-                            if ((MShare.TargetX == -1) || (MShare.g_APPathList.Count == 0))
+                            if ((MShare.TargetX == -1) || (MShare.AutoPathList.Count == 0))
                             {
                                 if (success)
                                 {
@@ -4448,7 +4447,7 @@ namespace BotSrv.Player
                             }
                         }
                     }
-                    else if ((MShare.TargetX == -1) || (MShare.g_APPathList.Count == 0))
+                    else if ((MShare.TargetX == -1) || (MShare.AutoPathList.Count == 0))
                     {
                         RunAutoPlayRandomTag(ref success, ref ndir);
                         if (success)
@@ -4459,7 +4458,7 @@ namespace BotSrv.Player
                         MShare.TargetX = -1;
                     }
                     MShare.g_nAPStatus = 3;
-                    MShare.g_boAPAutoMove = true;
+                    MShare.AutoMove = true;
                     break;
                 case 4:
                     if ((MShare.MapPath != null) && (MShare.AutoStep >= 0) && (MShare.AutoStep <= MShare.MapPath.Length))
@@ -4479,7 +4478,7 @@ namespace BotSrv.Player
                         MShare.ConsoleStr = $"超出搜寻范围,返回({MShare.TargetX},{MShare.TargetY})";
                         MShare.TargetX = -1;
                     }
-                    else if ((MShare.TargetX == -1) || (MShare.g_APPathList.Count == 0))
+                    else if ((MShare.TargetX == -1) || (MShare.AutoPathList.Count == 0))
                     {
                         RunAutoPlayRandomTag(ref success, ref ndir);
                         if (success)
@@ -4490,13 +4489,13 @@ namespace BotSrv.Player
                         MShare.TargetX = -1;
                     }
                     MShare.g_nAPStatus = 3;
-                    MShare.g_boAPAutoMove = true;
+                    MShare.AutoMove = true;
                     break;
             }
             MainOutMessage(MShare.ConsoleStr);
-            if ((MShare.g_APPathList.Count > 0) && ((MShare.TargetX == -1) || ((MShare.TargetX == MShare.MySelf.CurrX) && (MShare.TargetY == MShare.MySelf.CurrY))))
+            if ((MShare.AutoPathList.Count > 0) && ((MShare.TargetX == -1) || ((MShare.TargetX == MShare.MySelf.CurrX) && (MShare.TargetY == MShare.MySelf.CurrY))))
             {
-                T = MShare.g_APPathList[0];
+                T = MShare.AutoPathList[0];
                 MShare.TargetX = (short)T.X;
                 MShare.TargetY = (short)T.Y;
                 if (MShare.g_nAPStatus >= 1 && MShare.g_nAPStatus <= 4)
@@ -4513,14 +4512,14 @@ namespace BotSrv.Player
                                 }
                                 else
                                 {
-                                    MShare.g_APPathList.RemoveAt(0);
+                                    MShare.AutoPathList.RemoveAt(0);
                                     return;
                                 }
                             }
                         AAAA:
-                            if (MShare.g_APPathList.Count > 2)
+                            if (MShare.AutoPathList.Count > 2)
                             {
-                                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.g_APPathList[2].X, MShare.g_APPathList[2].Y);
+                                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoPathList[2].X, MShare.AutoPathList[2].Y);
                             }
                             else
                             {
@@ -4548,9 +4547,9 @@ namespace BotSrv.Player
                     }
                 }
 
-                MShare.g_APPathList.RemoveAt(0);
+                MShare.AutoPathList.RemoveAt(0);
             }
-            if (MShare.g_boAPAutoMove && (MShare.g_APPathList.Count > 0))
+            if (MShare.AutoMove && (MShare.AutoPathList.Count > 0))
             {
                 heroActor.InitQueue2();
             }
@@ -5124,7 +5123,7 @@ namespace BotSrv.Player
             {
                 return 0;
             }
-            return MShare.g_MagicArr[magid] != null ? MShare.g_MagicArr[magid].Level : 0;
+            return MShare.MagicArr[magid] != null ? MShare.MagicArr[magid].Level : 0;
         }
 
         private void MainOutMessage(string msg)

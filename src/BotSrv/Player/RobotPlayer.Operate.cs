@@ -239,7 +239,7 @@ namespace BotSrv.Player
                     }
                     break;
                 case Messages.SM_NEWMAP:
-                    MShare.g_sMapTitle = "";
+                    MShare.MapTitle = "";
                     Str = EDCode.DeCodeString(body);
                     PlayScene.SendMsg(Messages.SM_NEWMAP, 0, msg.Param, msg.Tag, (byte)msg.Series, 0, 0, Str);
                     break;
@@ -919,7 +919,7 @@ namespace BotSrv.Player
                         Str = "";
                         if (msg.Recog != MShare.g_EatingItem.MakeIndex)
                         {
-                            for (i = BotConst.MAXBAGITEMCL - 1; i >= 0; i--)
+                            for (i = BotConst.MaxBagItemcl - 1; i >= 0; i--)
                             {
                                 if (MShare.g_ItemArr[i].Item.Name != "")
                                 {

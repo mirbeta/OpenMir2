@@ -23,12 +23,6 @@ namespace BotSrv
         /// </summary>
         public static bool PickUpAll = false;
         public static TDropItem AutoPicupItem = null;
-        public static Dictionary<string, string> g_ItemsFilter_All = null;
-        public static Dictionary<string, string> g_ItemsFilter_All_Def = null;
-        public static string[] g_sRenewBooks = new string[] { "随机传送卷", "地牢逃脱卷", "回城卷", "行会回城卷", "盟重传送石", "比奇传送石", "随机传送石", };
-        public static byte g_nMagicRange = 8;
-        public static short g_TileMapOffSetX = 9;
-        public static short g_TileMapOffSetY = 9;
         public static TMovingItem[] g_TIItems = new TMovingItem[2];
         public static TMovingItem[] g_spItems = new TMovingItem[2];
         public static int g_IPointLessHintTick = 0;
@@ -43,7 +37,6 @@ namespace BotSrv
         public static int g_dwCheckCount = 0;
         public static string g_sBookLabel = "";
         public static int g_MaxExpFilter = 2000;
-        public static string[] g_UnBindItems = { "万年雪霜", "疗伤药", "强效太阳水", "强效金创药", "强效魔法药", "金创药(小量)", "魔法药(小量)", "金创药(中量)", "魔法药(中量)", "地牢逃脱卷", "随机传送卷", "回城卷", "行会回城卷" };
         public static bool g_boQueryExit = false;
         public static string SelChrAddr = string.Empty;
         public static int SelChrPort = 0;
@@ -54,12 +47,12 @@ namespace BotSrv
         public static bool g_SoftClosed = false;
         public static PlayerAction PlayerAction;
         public static ConnectionStep ConnectionStep;
-        public static string g_sMapTitle = string.Empty;
-        public static int g_nLastMapMusic = -1;
+        public static string MapTitle = string.Empty;
+        public static int LastMapMusic = -1;
         public static ArrayList g_SendSayList = null;
         public static int g_SendSayListIdx = 0;
         public static IList<string> g_GroupMembers = null;
-        public static ClientMagic[] g_MagicArr = new ClientMagic[255];
+        public static ClientMagic[] MagicArr = new ClientMagic[255];
         public static IList<ClientMagic> g_MagicList = null;
         public static IList<TDropItem> g_DropedItemList = null;
         public static ArrayList g_ChangeFaceReadyList = null;
@@ -116,14 +109,14 @@ namespace BotSrv
         public static Actor FocusCret = null;
         public static Actor MagicTarget = null;
         public static MapLink g_APQueue = null;
-        public static IList<FindMapNode> g_APPathList = null;
+        public static IList<FindMapNode> AutoPathList = null;
         public static ushort[,] g_APPass = null;
         public static ushort[,] g_APPassEmpty = new ushort[BotConst.MAXX * 3, BotConst.MAXY * 3];
         public static Actor AutoTagget = null;
         public static int g_APRunTick = 0;
         public static int g_APRunTick2 = 0;
         public static int g_nAPStatus = 0;
-        public static bool g_boAPAutoMove = false;
+        public static bool AutoMove = false;
         public static string ConsoleStr = string.Empty;
         public static int m_dwSpellTick = 0;
         public static int m_dwRecallTick = 0;
@@ -193,7 +186,7 @@ namespace BotSrv
         public static int g_BuildAcusesStep = 0;
         public static TMovingItem[] g_BuildAcuses = new TMovingItem[8];
         public static ClientItem[] g_UseItems = new ClientItem[14];
-        public static ClientItem[] g_ItemArr = new ClientItem[BotConst.MAXBAGITEMCL];
+        public static ClientItem[] g_ItemArr = new ClientItem[BotConst.MaxBagItemcl];
         public static bool g_boBagLoaded = false;
         public static bool g_boServerChanging = false;
         public static int g_nTestReceiveCount = 0;
@@ -320,14 +313,10 @@ namespace BotSrv
         public static bool g_boNextTimeSmiteWideHit2 = false;
         public static bool g_boCanSLonHit = false;
         public static bool g_boCanSquHit = false;
-        public static Dictionary<string, string> g_ShowItemList = null;
         public static bool[] g_gcGeneral = { true, true, false, true, true, true, false, true, false, true, true, true, true, false, false, true, true };
         public static bool[] g_gcProtect = { false, false, false, false, false, false, false, true, true, true, false, true };
         public static int[] g_gnProtectPercent = { 10, 10, 10, 10, 10, 10, 0, 88, 88, 88, 20, 00 };
         public static int[] g_gnProtectTime = { 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 1000, 1000, 1000 };
-        public static string[] g_HintTec = { "钩选此项将开启刀刀刺杀", "钩选此项将开启智能半月", "钩选此项将自动凝聚烈火剑法", "钩选此项将自动凝聚逐日剑法", "钩选此项将自动开启魔法盾", "钩选此项英雄将自动开启魔法盾", "钩选此项道士将自动使用隐身术", "", "", "钩选此项将自动凝聚雷霆剑法", "钩选此项将自动进行隔位刺杀", "钩选此项将自动凝聚断空斩", "钩选此项英雄将不使用连击打怪\\方便玩家之间进行PK", "钩选此项将自动凝聚开天斩", "钩选此项：施展魔法超过允许距离时，会自动跑近目标并释放魔法" };
-        public static string[] g_caTec = { "刀刀刺杀", "智能半月", "自动烈火", "逐日剑法", "自动开盾", "持续开盾(英雄)", "自动隐身", "时间间隔", "", "自动雷霆", "隔位刺杀", "自动断空斩", "英雄连击不打怪", "自动开天斩", "自动调节魔法距离" };
-        public static string[] g_sMagics = { "火球术", "治愈术", "大火球", "施毒术", "攻杀剑术", "抗拒火环", "地狱火", "疾光电影", "雷电术", "雷电术", "雷电术", "雷电术", "雷电术", "开天斩", "开天斩" };
         public static bool[] g_gcTec = { true, true, true, true, true, true, false, false, false, false, false, false, false, true, false };
         public static int[] g_gnTecTime = { 0, 0, 0, 0, 0, 0, 0, 0, 4000, 0, 0, 0, 0, 0, 0 };
         public static bool[] g_gcAss = { false, false, false, false, false, false, true };
@@ -1396,7 +1385,7 @@ namespace BotSrv
             {
                 return result;
             }
-            if ((Math.Abs(Act.CurrX - MySelf.CurrX) <= (g_TileMapOffSetX - 2)) && (Math.Abs(Act.CurrY - MySelf.CurrY) <= (g_TileMapOffSetY - 1)))
+            if ((Math.Abs(Act.CurrX - MySelf.CurrX) <= (BotConst.TileMapOffSetX - 2)) && (Math.Abs(Act.CurrY - MySelf.CurrY) <= (BotConst.TileMapOffSetY - 1)))
             {
                 result = true;
             }
@@ -1411,7 +1400,7 @@ namespace BotSrv
             {
                 return result;
             }
-            if ((Math.Abs(X - MySelf.CurrX) <= HUtil32._MIN(24, g_TileMapOffSetX + 9)) && (Math.Abs(Y - MySelf.CurrY) <= HUtil32._MIN(24, g_TileMapOffSetY + 10)))
+            if ((Math.Abs(X - MySelf.CurrX) <= HUtil32._MIN(24, BotConst.TileMapOffSetX + 9)) && (Math.Abs(Y - MySelf.CurrY) <= HUtil32._MIN(24, BotConst.TileMapOffSetY + 10)))
             {
                 result = true;
             }
