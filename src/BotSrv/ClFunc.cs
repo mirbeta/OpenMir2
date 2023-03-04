@@ -10,6 +10,15 @@ namespace BotSrv
     {
         private static readonly IList<ClientItem> DropItems = null;
 
+        public static int GetCodeMsgSize(float len)
+        {
+            if ((int)len < len)
+            {
+                return (int)(Math.Truncate(len) + 1);
+            }
+            return (int)Math.Truncate(len);
+        }
+        
         public static void GetNextHitPosition(short sX, short sY, ref short NewX, ref short NewY)
         {
             int dir = GetNextDirection(sX, sY, NewX, NewY);

@@ -1106,8 +1106,7 @@ namespace BotSrv
 
         public static byte GetTIHintString2(int idx, ClientItem ci, string iname)
         {
-            byte result;
-            result = 0;
+            byte result = 0;
             /*g_tiHintStr1 = "";
             switch (idx)
             {
@@ -1156,8 +1155,7 @@ namespace BotSrv
 
         public static byte GetSpHintString1(int idx, ClientItem ci, string iname)
         {
-            byte result;
-            result = 0;
+            byte result = 0;
             /*g_spHintStr1 = "";
             switch (idx)
             {
@@ -1361,31 +1359,9 @@ namespace BotSrv
             return result;
         }
 
-        public static void InitScreenConfig()
-        {
-            // 屏幕顶部滚动公告-范围
-            //g_SkidAD_Rect.Left = 5;
-            //g_SkidAD_Rect.Top = 7;
-            //g_SkidAD_Rect.Right = SCREENWIDTH - 5;
-            //g_SkidAD_Rect.Bottom = 7 + 20;
-            //g_SkidAD_Rect2.Left = 183;
-            //g_SkidAD_Rect2.Top = 6;
-            //g_SkidAD_Rect2.Right = SCREENWIDTH - 208;
-            //g_SkidAD_Rect2.Bottom = 6 + 20;
-            //G_RC_SQUENGINER.Left = 78;
-            //G_RC_SQUENGINER.Top = 90;
-            //G_RC_SQUENGINER.Right = G_RC_SQUENGINER.Left + 16;
-            //G_RC_SQUENGINER.Bottom = G_RC_SQUENGINER.Top + 95;
-            //G_RC_IMEMODE.Left = SCREENWIDTH - 270 - 65;
-            //G_RC_IMEMODE.Top = 105;
-            //G_RC_IMEMODE.Right = G_RC_IMEMODE.Left + 60;
-            //G_RC_IMEMODE.Bottom = G_RC_IMEMODE.Top + 9;
-        }
-
         public static bool IsInMyRange(Actor Act)
         {
-            bool result;
-            result = false;
+            var result = false;
             if ((Act == null) || (MySelf == null))
             {
                 return result;
@@ -1399,8 +1375,7 @@ namespace BotSrv
 
         public static bool IsItemInMyRange(int X, int Y)
         {
-            bool result;
-            result = false;
+            var result = false;
             if (MySelf == null)
             {
                 return result;

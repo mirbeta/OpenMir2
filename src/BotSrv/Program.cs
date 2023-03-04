@@ -16,31 +16,4 @@ namespace BotSrv
             await serviceRunner.RunAsync();
         }
     }
-    
-    //internal class Program
-    //{
-    //    private static async Task Main(string[] args)
-    //    {
-
-    //        var config = new ConfigurationBuilder()
-    //            .SetBasePath(Directory.GetCurrentDirectory())
-    //            .AddJsonFile("AppSetting.json", true, false)
-    //            .Build();
-
-    //        var builder = new HostBuilder()
-    //            .ConfigureServices((hostContext, services) =>
-    //            {
-    //                services.Configure<RobotOptions>(config.GetSection("BotPlay"));
-    //                services.AddSingleton<ClientManager>();
-    //                services.AddHostedService<AppService>();
-    //            }).ConfigureLogging((context, logging) =>
-    //            {
-    //                logging.ClearProviders();
-    //                logging.SetMinimumLevel(LogLevel.Trace);
-    //                logging.AddNLog(Configuration);
-    //            });
-
-    //        await builder.RunConsoleAsync();
-    //    }
-    //}
 }

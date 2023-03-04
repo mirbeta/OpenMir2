@@ -72,7 +72,6 @@ namespace BotSrv.Player
         {
             SessionId = Guid.NewGuid().ToString("N");
             _heroActor = new HeroActor(this);
-            MShare.InitScreenConfig();
             MShare.AutoPathList = new List<FindMapNode>();
             DScreen = new ScreenManager(this);
             IntroScene = new IntroScene(this);

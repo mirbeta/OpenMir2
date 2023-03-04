@@ -309,7 +309,7 @@ namespace BotSrv.Player
                     MShare.g_nMyHungryState = msg.Param;
                     break;
                 case Messages.SM_TURN:
-                    n = BotShare.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
+                    n = ClFunc.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
                     if (body.Length > n)
                     {
                         body2 = body[n..];
@@ -356,7 +356,7 @@ namespace BotSrv.Player
                     }
                     break;
                 case Messages.SM_BACKSTEP:
-                    n = BotShare.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
+                    n = ClFunc.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n + 1 - 1, body.Length);
@@ -391,7 +391,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_SPACEMOVE_SHOW:
                 case Messages.SM_SPACEMOVE_SHOW2:
-                    n = BotShare.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
+                    n = ClFunc.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n, body.Length);
