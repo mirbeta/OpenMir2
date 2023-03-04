@@ -71,7 +71,7 @@ namespace BotSrv.Scenes.Scene
         private void NewAccount()
         {
             ConnectionStep = ConnectionStep.NewAccount;
-            SendNewAccount(RobotClient.LoginID, RobotClient.LoginPasswd);
+            SendNewAccount(RobotClient.LoginId, RobotClient.LoginPasswd);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace BotSrv.Scenes.Scene
         /// </summary>
         public void ClientNewIdSuccess()
         {
-            SendLogin(RobotClient.LoginID, RobotClient.LoginPasswd);
+            SendLogin(RobotClient.LoginId, RobotClient.LoginPasswd);
         }
 
         private void SendNewAccount(string sAccount, string sPassword)
@@ -109,7 +109,7 @@ namespace BotSrv.Scenes.Scene
         private void SendLogin(string uid, string passwd)
         {
             MainOutMessage("开始登陆");
-            RobotClient.LoginID = uid;
+            RobotClient.LoginId = uid;
             RobotClient.LoginPasswd = passwd;
             var msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + passwd));

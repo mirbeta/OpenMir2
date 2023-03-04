@@ -537,7 +537,7 @@ namespace BotSrv.Objects
 
         private bool AutoUseMagic(byte magicKey, Actor target, int nx = 0, int ny = 0)
         {
-            var pcm = _robotClient.GetMagicByID(magicKey);
+            var pcm = _robotClient.GetMagicById(magicKey);
             if (pcm == null) return false;
             MShare.FocusCret = target;
             if (nx >= 0)
@@ -1085,7 +1085,7 @@ namespace BotSrv.Objects
                             if (magicKey != 0)
                             {
                                 result = true;
-                                var pcm = _robotClient.GetMagicByID(magicKey);
+                                var pcm = _robotClient.GetMagicById(magicKey);
                                 if (pcm == null)
                                 {
                                     result = false;

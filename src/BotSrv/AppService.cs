@@ -72,9 +72,9 @@ namespace BotSrv
                         {
                             var playClient = new RobotPlayer();
                             playClient.NewAccount = _options.NewAccount;
-                            playClient.LoginID = string.Concat(_options.LoginAccount, g_nLoginIndex);
-                            playClient.LoginPasswd = playClient.LoginID;
-                            playClient.ChrName = playClient.LoginID;
+                            playClient.LoginId = string.Concat(_options.LoginAccount, g_nLoginIndex);
+                            playClient.LoginPasswd = playClient.LoginId;
+                            playClient.ChrName = playClient.LoginId;
                             playClient.ServerName = _options.ServerName;
                             playClient.ConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
                             BotShare.ClientMgr.AddClient(playClient.SessionId, playClient);

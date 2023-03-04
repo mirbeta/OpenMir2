@@ -85,7 +85,7 @@ namespace BotSrv.Player
                         switch (msg.Recog)
                         {
                             case 0:
-                                MainOutMessage($"帐号 [{LoginID}] 已被其他的玩家使用了。请选择其它帐号名注册");
+                                MainOutMessage($"帐号 [{LoginId}] 已被其他的玩家使用了。请选择其它帐号名注册");
                                 break;
                             case -2:
                                 MainOutMessage("此帐号名被禁止使用！");
@@ -220,8 +220,8 @@ namespace BotSrv.Player
             {
                 if (msg.Ident == Messages.SM_CHANGEMAP)
                 {
-                    WaitingMsg = msg;
-                    WaitingStr = EDCode.DeCodeString(body);
+                    _waitingMsg = msg;
+                    _waitingStr = EDCode.DeCodeString(body);
                     MShare.MapMovingWait = true;
                     //WaitMsgTimer.Enabled = true;
                 }
@@ -264,19 +264,19 @@ namespace BotSrv.Player
                     MShare.g_boServerChanging = false;
                     if (MShare.g_wAvailIDDay > 0)
                     {
-                        ScreenManager.AddChatBoardString("您当前通过包月帐号充值", GetRGB(219));
+                        ScreenManager.AddChatBoardString("您当前通过包月帐号充值", GetRgb(219));
                     }
                     else if (MShare.g_wAvailIPDay > 0)
                     {
-                        ScreenManager.AddChatBoardString("您当前通过包月IP 充值", GetRGB(219));
+                        ScreenManager.AddChatBoardString("您当前通过包月IP 充值", GetRgb(219));
                     }
                     else if (MShare.g_wAvailIPHour > 0)
                     {
-                        ScreenManager.AddChatBoardString("您当前通过计时IP 充值", GetRGB(219));
+                        ScreenManager.AddChatBoardString("您当前通过计时IP 充值", GetRgb(219));
                     }
                     else if (MShare.g_wAvailIDHour > 0)
                     {
-                        ScreenManager.AddChatBoardString("您当前通过计时帐号充值", GetRGB(219));
+                        ScreenManager.AddChatBoardString("您当前通过计时帐号充值", GetRgb(219));
                     }
                     MShare.LoadUserConfig(ChrName);
                     MShare.LoadItemFilter2();
@@ -351,7 +351,7 @@ namespace BotSrv.Player
                                 }
                             }
                             Actor.NameColor = (byte)HUtil32.StrToInt(Str, 0);
-                            Actor.m_nNameColor = GetRGB(Actor.NameColor);
+                            Actor.m_nNameColor = GetRgb(Actor.NameColor);
                         }
                     }
                     break;
@@ -378,7 +378,7 @@ namespace BotSrv.Player
                         {
                             Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.UserName, "\\");
                             Actor.NameColor = (byte)HUtil32.StrToInt(Str, 0);
-                            Actor.m_nNameColor = GetRGB(Actor.NameColor);
+                            Actor.m_nNameColor = GetRgb(Actor.NameColor);
                         }
                     }
                     break;
@@ -417,7 +417,7 @@ namespace BotSrv.Player
                         {
                             Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.UserName, "\\");
                             Actor.NameColor = (byte)HUtil32.StrToInt(Str, 0);
-                            Actor.m_nNameColor = GetRGB(Actor.NameColor);
+                            Actor.m_nNameColor = GetRgb(Actor.NameColor);
                         }
                     }
                     break;
@@ -735,17 +735,17 @@ namespace BotSrv.Player
                     Str = EDCode.DeCodeString(body);
                     if (msg.Tag > 0)
                     {
-                        ScreenManager.AddChatBoardString(Str, GetRGB(HUtil32.LoByte(msg.Param)), GetRGB(HUtil32.HiByte(msg.Param)));
+                        ScreenManager.AddChatBoardString(Str, GetRgb(HUtil32.LoByte(msg.Param)), GetRgb(HUtil32.HiByte(msg.Param)));
                         return;
                     }
                     if (msg.Ident == Messages.SM_WHISPER)
                     {
                         HUtil32.GetValidStr3(Str, ref str3, new string[] { " ", "=", ">" });
-                        ScreenManager.AddChatBoardString(Str, GetRGB(HUtil32.LoByte(msg.Param)), GetRGB(HUtil32.HiByte(msg.Param)));
+                        ScreenManager.AddChatBoardString(Str, GetRgb(HUtil32.LoByte(msg.Param)), GetRgb(HUtil32.HiByte(msg.Param)));
                     }
                     else
                     {
-                        ScreenManager.AddChatBoardString(Str, GetRGB(HUtil32.LoByte(msg.Param)), GetRGB(HUtil32.HiByte(msg.Param)));
+                        ScreenManager.AddChatBoardString(Str, GetRgb(HUtil32.LoByte(msg.Param)), GetRgb(HUtil32.HiByte(msg.Param)));
                     }
                     if (msg.Ident == Messages.SM_HEAR)
                     {
@@ -763,7 +763,7 @@ namespace BotSrv.Player
                     {
                         Actor.m_sDescUserName = HUtil32.GetValidStr3(Str, ref Actor.UserName, "\\");
                         Actor.NameColor = (byte)msg.Param;
-                        Actor.m_nNameColor = GetRGB((byte)msg.Param);
+                        Actor.m_nNameColor = GetRgb((byte)msg.Param);
                         if (msg.Tag >= 1 && msg.Tag <= 5)
                         {
                             Actor.m_btAttribute = (byte)msg.Tag;
@@ -775,7 +775,7 @@ namespace BotSrv.Player
                     if (Actor != null)
                     {
                         Actor.NameColor = (byte)msg.Param;
-                        Actor.m_nNameColor = GetRGB((byte)msg.Param);
+                        Actor.m_nNameColor = GetRgb((byte)msg.Param);
                     }
                     break;
                 case Messages.SM_HIDE:
@@ -936,22 +936,22 @@ namespace BotSrv.Player
                         if (Str == "")
                         {
                             Str = MShare.g_EatingItem.Item.Name;
-                            if (m_boSupplyItem)
+                            if (MBoSupplyItem)
                             {
-                                if (m_nEatRetIdx >= 0 && m_nEatRetIdx <= 5)
+                                if (MNEatRetIdx >= 0 && MNEatRetIdx <= 5)
                                 {
-                                    AutoSupplyBeltItem(MShare.g_EatingItem.Item.AniCount, m_nEatRetIdx, Str);
+                                    AutoSupplyBeltItem(MShare.g_EatingItem.Item.AniCount, MNEatRetIdx, Str);
                                 }
                                 else
                                 {
                                     AutoSupplyBagItem(MShare.g_EatingItem.Item.AniCount, Str);
                                 }
-                                m_boSupplyItem = false;
+                                MBoSupplyItem = false;
                             }
                         }
                         MShare.g_EatingItem.Item.Name = "";
                         ClFunc.ArrangeItembag();
-                        m_nEatRetIdx = -1;
+                        MNEatRetIdx = -1;
                     }
                     break;
                 case Messages.SM_EAT_FAIL:
@@ -962,11 +962,11 @@ namespace BotSrv.Player
                         {
                             MShare.g_EatingItem.Dura = msg.Tag;
                         }
-                        ClFunc.AddItemBag(MShare.g_EatingItem, m_nEatRetIdx);
+                        ClFunc.AddItemBag(MShare.g_EatingItem, MNEatRetIdx);
                         MShare.g_EatingItem.Item.Name = "";
-                        m_nEatRetIdx = -1;
+                        MNEatRetIdx = -1;
                     }
-                    m_boSupplyItem = false;
+                    MBoSupplyItem = false;
                     switch (msg.Series)
                     {
                         case 1:
@@ -1179,12 +1179,12 @@ namespace BotSrv.Player
                     if (msg.Param > 0)
                     {
                         MShare.g_boAllowGroup = true;
-                        ScreenManager.AddChatBoardString("[开启组队开关]", GetRGB(219));
+                        ScreenManager.AddChatBoardString("[开启组队开关]", GetRgb(219));
                     }
                     else
                     {
                         MShare.g_boAllowGroup = false;
-                        ScreenManager.AddChatBoardString("[关闭组队开关]", GetRGB(219));
+                        ScreenManager.AddChatBoardString("[关闭组队开关]", GetRgb(219));
                     }
                     MShare.g_dwChangeGroupModeTick = MShare.GetTickCount();
                     break;

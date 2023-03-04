@@ -45,7 +45,7 @@ namespace BotSrv.Scenes.Scene
             }
             RobotClient.ChrName = chrname;
             CommandMessage msg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(RobotClient.LoginID + "/" + chrname));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(RobotClient.LoginId + "/" + chrname));
             MainOutMessage($"选择角色 {chrname}");
         }
 
@@ -172,7 +172,7 @@ namespace BotSrv.Scenes.Scene
             }
             var sJob = (byte)RandomNumber.GetInstance().Random(2);
             var sSex = (byte)RandomNumber.GetInstance().Random(1);
-            SendNewChr(RobotClient.LoginID, sChrName, sHair, sJob, sSex);
+            SendNewChr(RobotClient.LoginId, sChrName, sHair, sJob, sSex);
             MainOutMessage($"创建角色 {sChrName}");
         }
 
@@ -218,7 +218,7 @@ namespace BotSrv.Scenes.Scene
         {
             ConnectionStep = ConnectionStep.QueryChr;
             var DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(RobotClient.LoginID + "/" + RobotClient.Certification));
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(RobotClient.LoginId + "/" + RobotClient.Certification));
             MainOutMessage("查询角色.");
         }
 

@@ -1025,7 +1025,7 @@ namespace BotSrv.Scenes.Scene
                 case Messages.SM_NEWMAP:
                     ProcMagic.NTargetX = -1;
                     //robotClient.EventMan.ClearEvents();
-                    RobotClient.g_PathBusy = true;
+                    RobotClient.GPathBusy = true;
                     try
                     {
                         if (RobotClient.TimerAutoMove != null)
@@ -1035,7 +1035,7 @@ namespace BotSrv.Scenes.Scene
                                 RobotClient.TimerAutoMove.Enabled = false;
                                 PathMap.g_MapPath = new Point[0];
                                 PathMap.g_MapPath = null;
-                                ScreenManager.AddChatBoardString("地图跳转，停止自动移动", RobotClient.GetRGB(5));
+                                ScreenManager.AddChatBoardString("地图跳转，停止自动移动", RobotClient.GetRgb(5));
                             }
                             if (MShare.OpenAutoPlay && RobotClient.TimerAutoPlay.Enabled)
                             {
@@ -1066,7 +1066,7 @@ namespace BotSrv.Scenes.Scene
                     }
                     finally
                     {
-                        RobotClient.g_PathBusy = false;
+                        RobotClient.GPathBusy = false;
                     }
                     RobotClient.Map.LoadMap(str, x, y);
                     if ((ident == Messages.SM_NEWMAP) && (MShare.MySelf != null))
