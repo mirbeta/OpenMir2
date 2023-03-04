@@ -117,7 +117,6 @@ namespace BotSrv
         public static int g_APRunTick2 = 0;
         public static int g_nAPStatus = 0;
         public static bool AutoMove = false;
-        public static string ConsoleStr = string.Empty;
         public static int m_dwSpellTick = 0;
         public static int m_dwRecallTick = 0;
         public static int m_dwDoubluSCTick = 0;
@@ -185,8 +184,14 @@ namespace BotSrv
         public static THumActor MySelf = null;
         public static int g_BuildAcusesStep = 0;
         public static TMovingItem[] g_BuildAcuses = new TMovingItem[8];
-        public static ClientItem[] g_UseItems = new ClientItem[14];
-        public static ClientItem[] g_ItemArr = new ClientItem[BotConst.MaxBagItemcl];
+        /// <summary>
+        /// 穿戴物品
+        /// </summary>
+        public static ClientItem[] UseItems = new ClientItem[14];
+        /// <summary>
+        /// 包裹物品
+        /// </summary>
+        public static ClientItem[] ItemArr = new ClientItem[BotConst.MaxBagItemcl];
         public static bool g_boBagLoaded = false;
         public static bool g_boServerChanging = false;
         public static int g_nTestReceiveCount = 0;
@@ -515,7 +520,7 @@ namespace BotSrv
 
         public static bool GetItemShowFilter(string sItemName)
         {
-            return g_ShowItemList.ContainsKey(sItemName);
+            return BotConst.g_ShowItemList.ContainsKey(sItemName);
         }
 
         public static void LoadUserConfig(string sUserName)
@@ -1419,15 +1424,15 @@ namespace BotSrv
 
     public class FindMapNode
     {
-        public int X;
-        public int Y;
+        public short X;
+        public short Y;
     }
 
     public class MapTree
     {
         public int H;
-        public int X;
-        public int Y;
+        public short X;
+        public short Y;
         public byte Dir;
         public MapTree Father;
     }

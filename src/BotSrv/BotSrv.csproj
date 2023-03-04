@@ -48,11 +48,7 @@
     <ItemGroup>
         <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="..\..\logo.png" Link="logo.png" />
-    </ItemGroup>
-
+ 
 	<ItemGroup>
 		<None Update="AppSetting.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

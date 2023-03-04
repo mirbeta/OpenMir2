@@ -12,8 +12,7 @@ namespace BotSrv
 
         public static void GetNextHitPosition(short sX, short sY, ref short NewX, ref short NewY)
         {
-            int dir;
-            dir = GetNextDirection(sX, sY, NewX, NewY);
+            int dir = GetNextDirection(sX, sY, NewX, NewY);
             NewX = sX;
             NewY = sY;
             switch (dir)
@@ -53,11 +52,11 @@ namespace BotSrv
         {
             for (var i = 0; i < BotConst.MaxBagItemcl; i++)
             {
-                if (MShare.g_ItemArr[i] == null)
+                if (MShare.ItemArr[i] == null)
                 {
                     continue;
                 }
-                MShare.g_ItemArr[i].Item.Name = "";
+                MShare.ItemArr[i].Item.Name = "";
             }
         }
 
@@ -74,19 +73,19 @@ namespace BotSrv
             }
             if (idx >= 0)
             {
-                if (MShare.g_ItemArr[idx] == null || MShare.g_ItemArr[idx].Item.Name == "")
+                if (MShare.ItemArr[idx] == null || MShare.ItemArr[idx].Item.Name == "")
                 {
-                    MShare.g_ItemArr[idx] = cu;
+                    MShare.ItemArr[idx] = cu;
                     return;
                 }
             }
             for (var i = 0; i < BotConst.MaxBagItemcl; i++)
             {
-                if (MShare.g_ItemArr[i] == null)
+                if (MShare.ItemArr[i] == null)
                 {
                     continue;
                 }
-                if ((MShare.g_ItemArr[i].MakeIndex == cu.MakeIndex) && (MShare.g_ItemArr[i].Item.Name == cu.Item.Name))
+                if ((MShare.ItemArr[i].MakeIndex == cu.MakeIndex) && (MShare.ItemArr[i].Item.Name == cu.Item.Name))
                 {
                     return;
                 }
@@ -99,18 +98,18 @@ namespace BotSrv
             {
                 for (var i = 0; i < 5; i++)
                 {
-                    if (MShare.g_ItemArr[i] == null || MShare.g_ItemArr[i].Item.Name == "")
+                    if (MShare.ItemArr[i] == null || MShare.ItemArr[i].Item.Name == "")
                     {
-                        MShare.g_ItemArr[i] = cu;
+                        MShare.ItemArr[i] = cu;
                         return;
                     }
                 }
             }
             for (var i = 6; i < BotConst.MaxBagItemcl; i++)
             {
-                if ((MShare.g_ItemArr[i].Item.Name == cu.Item.Name) && (MShare.g_ItemArr[i].MakeIndex == cu.MakeIndex))
+                if ((MShare.ItemArr[i].Item.Name == cu.Item.Name) && (MShare.ItemArr[i].MakeIndex == cu.MakeIndex))
                 {
-                    MShare.g_ItemArr[i].Dura = (ushort)(MShare.g_ItemArr[i].Dura + cu.Dura);
+                    MShare.ItemArr[i].Dura = (ushort)(MShare.ItemArr[i].Dura + cu.Dura);
                     cu.Dura = 0;
                     InputCheck = true;
                 }
@@ -119,9 +118,9 @@ namespace BotSrv
             {
                 for (var i = 6; i < BotConst.MaxBagItemcl; i++)
                 {
-                    if (MShare.g_ItemArr[i].Item.Name == "")
+                    if (MShare.ItemArr[i].Item.Name == "")
                     {
-                        MShare.g_ItemArr[i] = cu;
+                        MShare.ItemArr[i] = cu;
                         break;
                     }
                 }
@@ -133,13 +132,13 @@ namespace BotSrv
         {
             for (var i = BotConst.MaxBagItemcl - 1; i >= 0; i--)
             {
-                if (MShare.g_ItemArr[i] == null)
+                if (MShare.ItemArr[i] == null)
                 {
                     continue;
                 }
-                if ((MShare.g_ItemArr[i].Item.Name == cu.Item.Name) && (MShare.g_ItemArr[i].MakeIndex == cu.MakeIndex))
+                if ((MShare.ItemArr[i].Item.Name == cu.Item.Name) && (MShare.ItemArr[i].MakeIndex == cu.MakeIndex))
                 {
-                    MShare.g_ItemArr[i] = cu;
+                    MShare.ItemArr[i] = cu;
                     break;
                 }
             }
@@ -149,13 +148,13 @@ namespace BotSrv
         {
             for (var i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
             {
-                if (MShare.g_ItemArr[i] == null)
+                if (MShare.ItemArr[i] == null)
                 {
                     continue;
                 }
-                if ((MShare.g_ItemArr[i].Item.Name == cu.Item.Name) && (MShare.g_ItemArr[i].MakeIndex == cu.MakeIndex))
+                if ((MShare.ItemArr[i].Item.Name == cu.Item.Name) && (MShare.ItemArr[i].MakeIndex == cu.MakeIndex))
                 {
-                    MShare.g_ItemArr[i].Item.NeedIdentify = ststus;
+                    MShare.ItemArr[i].Item.NeedIdentify = ststus;
                     break;
                 }
             }
@@ -166,13 +165,13 @@ namespace BotSrv
             bool result = false;
             for (var i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
             {
-                if (MShare.g_ItemArr[i] == null)
+                if (MShare.ItemArr[i] == null)
                 {
                     continue;
                 }
-                if ((MShare.g_ItemArr[i].Item.Name != "") && (MShare.g_ItemArr[i].Item.NeedIdentify != ststus))
+                if ((MShare.ItemArr[i].Item.Name != "") && (MShare.ItemArr[i].Item.NeedIdentify != ststus))
                 {
-                    MShare.g_ItemArr[i].Item.NeedIdentify = ststus;
+                    MShare.ItemArr[i].Item.NeedIdentify = ststus;
                     result = true;
                 }
             }
@@ -183,11 +182,11 @@ namespace BotSrv
         {
             for (var i = BotConst.MaxBagItemcl - 1; i >= 0; i--)
             {
-                if (MShare.g_ItemArr[i] == null)
+                if (MShare.ItemArr[i] == null)
                 {
                     continue;
                 }
-                if ((MShare.g_ItemArr[i].Item.Name == iname) && (MShare.g_ItemArr[i].MakeIndex == iindex))
+                if ((MShare.ItemArr[i].Item.Name == iname) && (MShare.ItemArr[i].MakeIndex == iindex))
                 {
                     break;
                 }
@@ -209,19 +208,19 @@ namespace BotSrv
         {
             for (var i = 0; i < BotConst.MaxBagItemcl; i++)
             {
-                if (MShare.g_ItemArr[i] == null)
+                if (MShare.ItemArr[i] == null)
                 {
                     continue;
                 }
-                if (MShare.g_ItemArr[i].Item.Name != "")
+                if (MShare.ItemArr[i].Item.Name != "")
                 {
                     for (var k = i + 1; k < BotConst.MaxBagItemcl; k++)
                     {
-                        if (MShare.g_ItemArr[k] == null)
+                        if (MShare.ItemArr[k] == null)
                         {
                             continue;
                         }
-                        if ((MShare.g_ItemArr[i].Item.Name == MShare.g_ItemArr[k].Item.Name) && (MShare.g_ItemArr[i].MakeIndex == MShare.g_ItemArr[k].MakeIndex))// ????????
+                        if ((MShare.ItemArr[i].Item.Name == MShare.ItemArr[k].Item.Name) && (MShare.ItemArr[i].MakeIndex == MShare.ItemArr[k].MakeIndex))// ????????
                         {
                             //if (MShare.g_ItemArr[i].Item.Overlap > 0)
                             //{
@@ -231,7 +230,7 @@ namespace BotSrv
                     }
                     if (MShare.MovingItem != null)
                     {
-                        if ((MShare.g_ItemArr[i].Item.Name == MShare.MovingItem.Item.Item.Name) && (MShare.g_ItemArr[i].MakeIndex == MShare.MovingItem.Item.MakeIndex))
+                        if ((MShare.ItemArr[i].Item.Name == MShare.MovingItem.Item.Item.Name) && (MShare.ItemArr[i].MakeIndex == MShare.MovingItem.Item.MakeIndex))
                         {
                             MShare.MovingItem.Index = 0;
                             MShare.MovingItem.Item.Item.Name = "";
@@ -242,18 +241,18 @@ namespace BotSrv
             }
             for (var i = 46; i < BotConst.MaxBagItemcl; i++)
             {
-                if (MShare.g_ItemArr[i] == null)
+                if (MShare.ItemArr[i] == null)
                 {
                     continue;
                 }
-                if (MShare.g_ItemArr[i].Item.Name != "")
+                if (MShare.ItemArr[i].Item.Name != "")
                 {
                     for (var k = 6; k < 45; k++)
                     {
-                        if (MShare.g_ItemArr[k].Item.Name == "")
+                        if (MShare.ItemArr[k].Item.Name == "")
                         {
-                            MShare.g_ItemArr[k] = MShare.g_ItemArr[i];
-                            MShare.g_ItemArr[i].Item.Name = "";
+                            MShare.ItemArr[k] = MShare.ItemArr[i];
+                            MShare.ItemArr[i].Item.Name = "";
                             break;
                         }
                     }
@@ -1241,14 +1240,14 @@ namespace BotSrv
             bool result = false;
             for (var i = 0; i < BotConst.MaxBagItemcl; i++)
             {
-                if ((MShare.g_ItemArr[i].MakeIndex == MShare.g_SellDlgItemSellWait.Item.MakeIndex) && (MShare.g_ItemArr[i].Item.Name == MShare.g_SellDlgItemSellWait.Item.Item.Name))
+                if ((MShare.ItemArr[i].MakeIndex == MShare.g_SellDlgItemSellWait.Item.MakeIndex) && (MShare.ItemArr[i].Item.Name == MShare.g_SellDlgItemSellWait.Item.Item.Name))
                 {
                     if (remain < 1)
                     {
-                        MShare.g_ItemArr[i].Item.Name = "";
+                        MShare.ItemArr[i].Item.Name = "";
                         remain = 0;
                     }
-                    MShare.g_ItemArr[i].Dura = remain;
+                    MShare.ItemArr[i].Dura = remain;
                     result = true;
                 }
             }
@@ -1260,9 +1259,9 @@ namespace BotSrv
             bool result = false;
             for (var i = BotConst.MaxBagItemcl - 1; i >= 0; i--)
             {
-                if (MShare.g_ItemArr[i].Item.Name == iname)
+                if (MShare.ItemArr[i].Item.Name == iname)
                 {
-                    if (MShare.g_ItemArr[i].MakeIndex == iindex)
+                    if (MShare.ItemArr[i].MakeIndex == iindex)
                     {
                         result = true;
                         break;
@@ -1286,14 +1285,14 @@ namespace BotSrv
             }
             for (var i = 0; i < BotConst.MaxBagItemcl; i++)
             {
-                if ((MShare.g_ItemArr[i].Item.Name == ci.Item.Name) && (MShare.g_ItemArr[i].MakeIndex == ci.MakeIndex))
+                if ((MShare.ItemArr[i].Item.Name == ci.Item.Name) && (MShare.ItemArr[i].MakeIndex == ci.MakeIndex))
                 {
                     if (Count < 1)
                     {
-                        MShare.g_ItemArr[i].Item.Name = "";
+                        MShare.ItemArr[i].Item.Name = "";
                         Count = 0;
                     }
-                    MShare.g_ItemArr[i].Dura = Count;
+                    MShare.ItemArr[i].Dura = Count;
                 }
             }
         }

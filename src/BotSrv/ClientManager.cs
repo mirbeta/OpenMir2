@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
@@ -33,7 +33,7 @@ namespace BotSrv
 
         public Task Start(CancellationToken stoppingToken)
         {
-            logger.Info("消息处理线程启动...");
+            logger.Info("娑堟伅澶勭悊绾跨▼鍚姩...");
             return ProcessReviceMessage(stoppingToken);
         }
 
@@ -99,7 +99,10 @@ namespace BotSrv
             }
             _clients.TryRemove(sessionId, out var robotClient);
             _clientList.Remove(robotClient);
-            logger.Info("机器人[{0}] 会话ID:{1}]掉线或断开链接.", robotClient.ChrName, sessionId);
+            if (robotClient != null)
+            {
+                logger.Info("鏈哄櫒浜篬{0}] 浼氳瘽ID:{1}]鎺夌嚎鎴栨柇寮�閾炬帴.", robotClient.ChrName, sessionId);
+            }
         }
 
         public void Run()

@@ -454,9 +454,9 @@ namespace BotSrv.Player
                     }
                     break;
                 case Messages.SM_LAMPCHANGEDURA:
-                    if (MShare.g_UseItems[ItemLocation.RighThand].Item.Name != "")
+                    if (MShare.UseItems[ItemLocation.RighThand].Item.Name != "")
                     {
-                        MShare.g_UseItems[ItemLocation.RighThand].Dura = (ushort)msg.Recog;
+                        MShare.UseItems[ItemLocation.RighThand].Dura = (ushort)msg.Recog;
                     }
                     break;
                 case Messages.SM_MOVEFAIL:
@@ -853,7 +853,7 @@ namespace BotSrv.Player
                     {
                         if (MShare.g_WaitingUseItem.Index >= 0 && MShare.g_WaitingUseItem.Index <= 13)
                         {
-                            MShare.g_UseItems[MShare.g_WaitingUseItem.Index] = MShare.g_WaitingUseItem.Item;
+                            MShare.UseItems[MShare.g_WaitingUseItem.Index] = MShare.g_WaitingUseItem.Item;
                         }
                         MShare.g_WaitingUseItem.Item.Item.Name = "";
                     }
@@ -876,7 +876,7 @@ namespace BotSrv.Player
                         if (MShare.g_WaitingUseItem.Index < 0)
                         {
                             n = -(MShare.g_WaitingUseItem.Index + 1);
-                            MShare.g_UseItems[n] = MShare.g_WaitingUseItem.Item;
+                            MShare.UseItems[n] = MShare.g_WaitingUseItem.Item;
                         }
                         MShare.g_WaitingUseItem.Item.Item.Name = "";
                     }
@@ -921,13 +921,13 @@ namespace BotSrv.Player
                         {
                             for (i = BotConst.MaxBagItemcl - 1; i >= 0; i--)
                             {
-                                if (MShare.g_ItemArr[i].Item.Name != "")
+                                if (MShare.ItemArr[i].Item.Name != "")
                                 {
-                                    if (MShare.g_ItemArr[i].MakeIndex == MShare.g_EatingItem.MakeIndex)
+                                    if (MShare.ItemArr[i].MakeIndex == MShare.g_EatingItem.MakeIndex)
                                     {
-                                        ClFunc.DelStallItem(MShare.g_ItemArr[i]);
-                                        Str = MShare.g_ItemArr[i].Item.Name;
-                                        MShare.g_ItemArr[i].Item.Name = "";
+                                        ClFunc.DelStallItem(MShare.ItemArr[i]);
+                                        Str = MShare.ItemArr[i].Item.Name;
+                                        MShare.ItemArr[i].Item.Name = "";
                                         break;
                                     }
                                 }
