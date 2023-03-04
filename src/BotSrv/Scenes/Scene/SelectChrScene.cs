@@ -1,5 +1,6 @@
 ﻿using System;
 using BotSrv.Player;
+using NLog;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -9,6 +10,7 @@ namespace BotSrv.Scenes.Scene
 {
     public class SelectChrScene : SceneBase
     {
+        private readonly static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient ClientSocket;
         private int NewIndex = 0;
         private readonly SelChar[] ChrArr;
@@ -46,7 +48,7 @@ namespace BotSrv.Scenes.Scene
             RobotClient.ChrName = chrname;
             CommandMessage msg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(RobotClient.LoginId + "/" + chrname));
-            MainOutMessage($"选择角色 {chrname}");
+            logger.Info($"选择角色 {chrname}");
         }
 
         private void SendDelChr(string chrname)
@@ -173,12 +175,12 @@ namespace BotSrv.Scenes.Scene
             var sJob = (byte)RandomNumber.GetInstance().Random(2);
             var sSex = (byte)RandomNumber.GetInstance().Random(1);
             SendNewChr(RobotClient.LoginId, sChrName, sHair, sJob, sSex);
-            MainOutMessage($"创建角色 {sChrName}");
+            logger.Info($"创建角色 {sChrName}");
         }
 
         public void ClientGetStartPlay(string body)
         {
-            MainOutMessage("准备进入游戏");
+            logger.Info("准备进入游戏");
             string addr = string.Empty;
             string Str = EDCode.DeCodeString(body);
             string sport = HUtil32.GetValidStr3(Str, ref addr, HUtil32.Backslash);
@@ -219,7 +221,7 @@ namespace BotSrv.Scenes.Scene
             ConnectionStep = ConnectionStep.QueryChr;
             var DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(RobotClient.LoginId + "/" + RobotClient.Certification));
-            MainOutMessage("查询角色.");
+            logger.Info("查询角色.");
         }
 
         private void SendSocket(string sendstr)
@@ -230,7 +232,7 @@ namespace BotSrv.Scenes.Scene
             }
             else
             {
-                MainOutMessage($"Socket Close {ClientSocket.RemoteEndPoint}");
+                logger.Warn($"Socket Close {ClientSocket.RemoteEndPoint}");
             }
         }
 
@@ -244,7 +246,7 @@ namespace BotSrv.Scenes.Scene
                 SetNotifyEvent(SendQueryChr, 1000);
                 ConnectionStep = ConnectionStep.SelChr;
             }
-            MainOutMessage($"连接角色网关:[{MShare.SelChrAddr}:{MShare.SelChrPort}]");
+            logger.Info($"连接角色网关:[{MShare.SelChrAddr}:{MShare.SelChrPort}]");
         }
 
         private void CSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -261,13 +263,13 @@ namespace BotSrv.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    Console.WriteLine($"角色服务器[{ClientSocket.RemoteEndPoint}拒绝链接...");
+                    logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    Console.WriteLine($"角色服务器[{ClientSocket.RemoteEndPoint}关闭连接...");
+                    logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    Console.WriteLine($"角色服务器[{ClientSocket.RemoteEndPoint}链接超时...");
+                    logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}链接超时...");
                     break;
             }
         }

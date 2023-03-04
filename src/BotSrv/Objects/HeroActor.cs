@@ -1041,7 +1041,7 @@ namespace BotSrv.Objects
                         if (MShare.GetTickCount() - _gHinttick1 > 60 * 1000)
                         {
                             _gHinttick1 = MShare.GetTickCount();
-                            ScreenManager.AddChatBoardString("你的[药粉]已经用完，注意补充", ConsoleColor.Blue);
+                            ScreenManager.AddChatBoardString("你的[药粉]已经用完，注意补充");
                         }
                     }
                     m = 0;
@@ -1065,7 +1065,7 @@ namespace BotSrv.Objects
                         if (MShare.GetTickCount() - _gHinttick2 > 60 * 1000)
                         {
                             _gHinttick2 = MShare.GetTickCount();
-                            ScreenManager.AddChatBoardString("你的[护身符]已经用完，注意补充", ConsoleColor.Blue);
+                            ScreenManager.AddChatBoardString("你的[护身符]已经用完，注意补充");
                         }
                     }
                     if (MShare.GetTickCount() - MShare.m_dwRecallTick > 1000 * 6)

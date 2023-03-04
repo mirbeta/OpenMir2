@@ -24,6 +24,7 @@ namespace BotSrv
         public const int DETECT_MIIDX_OFFSET = HERO_MIIDX_OFFSET + 500 + 50 + 10 + 1;
         public const int MSGMUCH = 2;
         public const int g_gnTecPracticeKey = 0;
+        public const char Activebuf = '*';
         public const string MAPDIRNAME = "Map/";
         public const string GoldName = "金币";
         public const string GameGoldName = "元宝";

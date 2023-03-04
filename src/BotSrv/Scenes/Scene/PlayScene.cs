@@ -1035,7 +1035,7 @@ namespace BotSrv.Scenes.Scene
                                 RobotClient.TimerAutoMove.Enabled = false;
                                 PathMap.g_MapPath = new Point[0];
                                 PathMap.g_MapPath = null;
-                                ScreenManager.AddChatBoardString("地图跳转，停止自动移动", RobotClient.GetRgb(5));
+                                ScreenManager.AddChatBoardString("地图跳转，停止自动移动");
                             }
                             if (MShare.OpenAutoPlay && RobotClient.TimerAutoPlay.Enabled)
                             {
@@ -1045,7 +1045,7 @@ namespace BotSrv.Scenes.Scene
                                 MShare.g_APMapPath2 = new Point[0];
                                 MShare.AutoStep = -1;
                                 MShare.AutoLastPoint.X = -1;
-                                ScreenManager.AddChatBoardString("[挂机] 地图跳转，停止自动挂机", ConsoleColor.Red);
+                                ScreenManager.AddChatBoardString("[挂机] 地图跳转，停止自动挂机");
                             }
                         }
                         if (MShare.MySelf != null)

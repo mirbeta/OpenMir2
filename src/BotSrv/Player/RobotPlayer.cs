@@ -41,10 +41,17 @@ namespace BotSrv.Player
         private string _waitingStr = string.Empty;
         private string _whisperName = string.Empty;
         private int _mDwProcUseMagicTick = 0;
+        public static long g_dwOverSpaceWarningTick = 0;
+        private readonly TTimerCommand TimerCmd;
+        private int ActionLockTime = 0;
+        private readonly short ActionKey = 0;
+        private CommandMessage WaitingMsg;
+        private string WaitingStr = string.Empty;
+        private string WhisperName = string.Empty;
+        private int m_dwProcUseMagicTick = 0;
         public bool ActionFailLock = false;
         public int ActionFailLockTime = 0;
         public int LastHitTick = 0;
-        public string ServerName = string.Empty;
         public bool NewAccount = false;
         public string LoginId = string.Empty;
         public string LoginPasswd = string.Empty;
@@ -220,13 +227,13 @@ namespace BotSrv.Player
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    BotShare.logger.Warn($"游戏服务器[{ClientSocket.RemoteEndPoint}]拒绝链接...");
+                    MainOutWarnMessage($"游戏服务器[{ClientSocket.RemoteEndPoint}]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    BotShare.logger.Warn($"游戏服务器[{ClientSocket.RemoteEndPoint}]关闭连接...");
+                    MainOutWarnMessage($"游戏服务器[{ClientSocket.RemoteEndPoint}]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    BotShare.logger.Warn($"游戏服务器[{ClientSocket.RemoteEndPoint}]链接超时...");
+                    MainOutWarnMessage($"游戏服务器[{ClientSocket.RemoteEndPoint}]链接超时...");
                     break;
             }
             if (DScreen.CurrentScene == PlayScene)
@@ -246,7 +253,7 @@ namespace BotSrv.Player
                 {
                     var data2 = sData[..(n - 1)];
                     sData = data2 + sData.Substring(n, sData.Length);
-                    ClientSocket.SendBuffer(HUtil32.GetBytes(Activebuf));
+                    ClientSocket.SendBuffer(HUtil32.GetBytes(BotConst.Activebuf));
                 }
                 BotShare.ClientMgr.AddPacket(SessionId, sData);
             }
@@ -537,7 +544,7 @@ namespace BotSrv.Player
                                         {
                                             MShare.MySelf.m_nTagX = 0;
                                             MShare.MySelf.m_nTagY = 0;
-                                            ScreenManager.AddChatBoardString("自动移动出错，停止移动", GetRgb(5));
+                                            ScreenManager.AddChatBoardString("自动移动出错，停止移动");
                                         }
                                     }
                                     finally
@@ -759,7 +766,7 @@ namespace BotSrv.Player
                 MShare.g_nAPStatus = -1;
                 MShare.TargetX = -1;
                 MShare.g_APGoBack = false;
-                ScreenManager.AddChatBoardString("开始自动挂机...", ConsoleColor.Red);
+                ScreenManager.AddChatBoardString("开始自动挂机...");
                 SaveWayPoint();
                 if (MShare.MapPath != null)
                 {
@@ -770,7 +777,7 @@ namespace BotSrv.Player
             }
             else
             {
-                ScreenManager.AddChatBoardString("停止自动挂机...", ConsoleColor.Red);
+                ScreenManager.AddChatBoardString("停止自动挂机...");
             }
             return;
         }
@@ -1190,7 +1197,7 @@ namespace BotSrv.Player
                             bEatSp = true;
                             if (bHint)
                             {
-                                ScreenManager.AddChatBoardString("你的金创药已经用完！", ConsoleColor.Green, ConsoleColor.Black);
+                                ScreenManager.AddChatBoardString("你的金创药已经用完！");
                             }
                             bEatOk = false;
                         }
@@ -1222,7 +1229,7 @@ namespace BotSrv.Player
                             }
                             if (bHint)
                             {
-                                ScreenManager.AddChatBoardString("你的魔法药已经用完！", ConsoleColor.Green, ConsoleColor.Black);
+                                ScreenManager.AddChatBoardString("你的魔法药已经用完！");
                             }
                             bEatOk = false;
                         }
@@ -1246,7 +1253,7 @@ namespace BotSrv.Player
                         }
                         else if (bHint)
                         {
-                            ScreenManager.AddChatBoardString("你的特殊药品已经用完！", ConsoleColor.Green, ConsoleColor.Black);
+                            ScreenManager.AddChatBoardString("你的特殊药品已经用完！");
                         }
                     }
                 }
@@ -1266,7 +1273,7 @@ namespace BotSrv.Player
                     }
                     else if (bHint)
                     {
-                        ScreenManager.AddChatBoardString("你的" + BotConst.g_sRenewBooks[MShare.g_gnProtectPercent[6]] + "已经用完！", ConsoleColor.Green, ConsoleColor.Black);
+                        ScreenManager.AddChatBoardString("你的" + BotConst.g_sRenewBooks[MShare.g_gnProtectPercent[6]] + "已经用完！");
                     }
                 }
             }
@@ -1852,7 +1859,7 @@ namespace BotSrv.Player
                             {
                                 if (MShare.g_gcGeneral[1])
                                 {
-                                    ScreenManager.AddChatBoardString($"你的[{MShare.UseItems[i].Item.Name}]持久已到底限，请及时修理！", ConsoleColor.Green, ConsoleColor.Black);
+                                    ScreenManager.AddChatBoardString($"你的[{MShare.UseItems[i].Item.Name}]持久已到底限，请及时修理！");
                                 }
                                 if (MShare.g_gcGeneral[9])
                                 {
@@ -1871,7 +1878,7 @@ namespace BotSrv.Player
                                     }
                                     else
                                     {
-                                        ScreenManager.AddChatBoardString($"你的{MShare.UseItems[i].Item.Name}已经用完，请及时补充！", ConsoleColor.Green, ConsoleColor.Black);
+                                        ScreenManager.AddChatBoardString($"你的{MShare.UseItems[i].Item.Name}已经用完，请及时补充！");
                                     }
                                 }
                             }
@@ -2316,12 +2323,12 @@ namespace BotSrv.Player
                                         {
                                             GMoveStep = 1;
                                             //TimerAutoMove.Enabled = true;
-                                            ScreenManager.AddChatBoardString($"自动移动至坐标({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})，点击鼠标任意键停止……", GetRgb(5));
+                                            ScreenManager.AddChatBoardString($"自动移动至坐标({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})，点击鼠标任意键停止……");
                                         }
                                         else
                                         {
                                             //TimerAutoMove.Enabled = false;
-                                            ScreenManager.AddChatBoardString($"自动移动坐标点({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})不可到达", GetRgb(5));
+                                            ScreenManager.AddChatBoardString($"自动移动坐标点({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})不可到达");
                                             MShare.MySelf.m_nTagX = 0;
                                             MShare.MySelf.m_nTagY = 0;
                                         }
@@ -2340,8 +2347,8 @@ namespace BotSrv.Player
                 SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(str));
                 if (str[0] == '/')
                 {
-                    ScreenManager.AddChatBoardString(str, GetRgb(180));
-                    HUtil32.GetValidStr3(str[1..^0], ref _whisperName, " ");
+                    ScreenManager.AddChatBoardString(str);
+                    HUtil32.GetValidStr3(str[1..], ref WhisperName, " ");
                 }
             }
         }
@@ -2439,7 +2446,7 @@ namespace BotSrv.Player
                         {
                             if ((sM != "") && (string.Compare(MShare.MapTitle, sM, StringComparison.OrdinalIgnoreCase) != 0))// 自动移动
                             {
-                                ScreenManager.AddChatBoardString($"到达 {sM} 之后才能使用自动走路", ConsoleColor.Blue);
+                                ScreenManager.AddChatBoardString($"到达 {sM} 之后才能使用自动走路");
                                 return;
                             }
                             x = Convert.ToInt32(sx);
@@ -2459,12 +2466,12 @@ namespace BotSrv.Player
                                         {
                                             GMoveStep = 1;
                                             TimerAutoMove.Enabled = true;
-                                            ScreenManager.AddChatBoardString($"自动移动至坐标({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})，点击鼠标任意键停止……", GetRgb(5));
+                                            ScreenManager.AddChatBoardString($"自动移动至坐标({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})，点击鼠标任意键停止……");
                                         }
                                         else
                                         {
                                             TimerAutoMove.Enabled = false;
-                                            ScreenManager.AddChatBoardString($"自动移动坐标点({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})不可到达", GetRgb(5));
+                                            ScreenManager.AddChatBoardString($"自动移动坐标点({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})不可到达");
                                             MShare.MySelf.m_nTagX = 0;
                                             MShare.MySelf.m_nTagY = 0;
                                         }
@@ -2723,18 +2730,16 @@ namespace BotSrv.Player
         /// <summary>
         /// 是否可以攻击，控制攻击速度
         /// </summary>
-        /// <param name="settime"></param>
         /// <returns></returns>
         private bool CanNextHit(bool settime = false)
         {
             bool result;
             int nextHitTime;
-            int levelFastTime;
             if ((MShare.MySelf != null) && MShare.MySelf.m_StallMgr.OnSale)
             {
                 return false;
             }
-            levelFastTime = HUtil32._MIN(370, MShare.MySelf.Abil.Level * 14);
+            var levelFastTime = HUtil32._MIN(370, MShare.MySelf.Abil.Level * 14);
             levelFastTime = HUtil32._MIN(800, levelFastTime + MShare.MySelf.HitSpeed * MShare.ItemSpeed);
             if (MShare.SpeedRate)
             {
@@ -2808,7 +2813,7 @@ namespace BotSrv.Player
             return result;
         }
 
-        private bool IsGroupMember(string uname)
+        private static bool IsGroupMember(string uname)
         {
             return MShare.g_GroupMembers.IndexOf(uname) >= 0; ;
         }
@@ -2839,7 +2844,7 @@ namespace BotSrv.Player
                             MShare.MySelf.m_nTagX = 0;
                             MShare.MySelf.m_nTagY = 0;
                             TimerAutoMove.Enabled = false;
-                            ScreenManager.AddChatBoardString($"自动移动目标({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})被占据，不可到达", GetRgb(5));
+                            ScreenManager.AddChatBoardString($"自动移动目标({MShare.MySelf.m_nTagX}:{MShare.MySelf.m_nTagY})被占据，不可到达");
                         }
                     }
                     finally
@@ -2975,7 +2980,7 @@ namespace BotSrv.Player
 
         private void ClientGetDelItem(string body)
         {
-            if (body != "")
+            if (!string.IsNullOrEmpty(body))
             {
                 var cu = EDCode.DecodeBuffer<ClientItem>(body);
                 ClFunc.DelItemBag(cu.Item.Name, cu.MakeIndex);
@@ -3014,11 +3019,10 @@ namespace BotSrv.Player
             var iname = string.Empty;
             var cu = new ClientItem();
             body = EDCode.DeCodeString(body);
-            while (body != "")
+            while (!string.IsNullOrEmpty(body))
             {
-                body = HUtil32.GetValidStr3(body, ref iname, HUtil32.Backslash);
                 body = HUtil32.GetValidStr3(body, ref str, HUtil32.Backslash);
-                if ((iname != "") && (!string.IsNullOrEmpty(str)))
+                if ((!string.IsNullOrEmpty(iname)) && (!string.IsNullOrEmpty(str)))
                 {
                     iindex = HUtil32.StrToInt(str, 0);
                     ClFunc.DelItemBag(iname, iindex);
@@ -3115,11 +3119,8 @@ namespace BotSrv.Player
 
         private void ClientGetBagItmes(string body)
         {
-            int k;
-            var str = string.Empty;
-            ClientItem cu;
-            var itemSaveArr = new ClientItem[BotConst.MaxBagItemcl - 1 + 1];
-            //MShare.g_SellDlgItem.Item.Name = "";
+            var Str = string.Empty;
+            //var ItemSaveArr = new ClientItem[BotConst.MaxBagItemcl];
             //FillChar(MShare.g_RefineItems, sizeof(TMovingItem) * 3, '\0');
             //FillChar(MShare.g_BuildAcuses, sizeof(MShare.g_BuildAcuses), '\0');
             //FillChar(MShare.g_ItemArr * BotConst.MAXBAGITEMCL, '\0');
@@ -3139,8 +3140,8 @@ namespace BotSrv.Player
                 {
                     break;
                 }
-                body = HUtil32.GetValidStr3(body, ref str, HUtil32.Backslash);
-                cu = EDCode.DecodeClientBuffer<ClientItem>(str);
+                body = HUtil32.GetValidStr3(body, ref Str, HUtil32.Backslash);
+                var cu = EDCode.DecodeClientBuffer<ClientItem>(Str);
                 ClFunc.AddItemBag(cu);
             }
             //ClFunc.Loadbagsdat(".\\Config\\" + MShare.g_sServerName + "." + m_sChrName + ".itm-plus", ItemSaveArr);
@@ -3189,7 +3190,7 @@ namespace BotSrv.Player
                 if (MShare.g_APMapPath2 != null)
                 {
                     MShare.MapPath = new Point[MShare.g_APMapPath2.Length + 1];
-                    for (k = 0; k <= MShare.g_APMapPath2.Length; k++)
+                    for (var k = 0; k <= MShare.g_APMapPath2.Length; k++)
                     {
                         MShare.MapPath[k] = MShare.g_APMapPath2[k];
                     }
@@ -3205,7 +3206,7 @@ namespace BotSrv.Player
                 MShare.g_APMapPath2 = null;
                 GetNearPoint();
                 TimerAutoPlay.Enabled = MShare.g_gcAss[0];
-                ScreenManager.AddChatBoardString("开始自动挂机...", ConsoleColor.Red);
+                ScreenManager.AddChatBoardString("开始自动挂机...");
                 SaveWayPoint();
             }
         }
@@ -3292,7 +3293,6 @@ namespace BotSrv.Player
             int index;
             var str = string.Empty;
             var data = string.Empty;
-            ClientItem cu;
             while (true)
             {
                 if (string.IsNullOrEmpty(body))
@@ -3304,7 +3304,7 @@ namespace BotSrv.Player
                 index = HUtil32.StrToInt(str, -1);
                 if (index >= 0 && index <= 13)
                 {
-                    cu = EDCode.DecodeBuffer<ClientItem>(data);
+                    var cu = EDCode.DecodeBuffer<ClientItem>(data);
                     MShare.UseItems[index] = cu;
                 }
             }
@@ -4037,15 +4037,15 @@ namespace BotSrv.Player
             }
             if (str == "符")
             {
-                ScreenManager.AddChatBoardString("你的[护身符]已经用完", ConsoleColor.Blue);
+                ScreenManager.AddChatBoardString("你的[护身符]已经用完");
             }
             else if (MShare.g_boExchgPoison)
             {
-                ScreenManager.AddChatBoardString("你的[灰色药粉]已经用完", ConsoleColor.Blue);
+                ScreenManager.AddChatBoardString("你的[灰色药粉]已经用完");
             }
             else
             {
-                ScreenManager.AddChatBoardString("你的[黄色药粉]已经用完", ConsoleColor.Blue);
+                ScreenManager.AddChatBoardString("你的[黄色药粉]已经用完");
             }
         }
 
@@ -4221,7 +4221,7 @@ namespace BotSrv.Player
                 if ((MShare.MySelf.CurrX == MShare.MySelf.m_nTagX) && (MShare.MySelf.CurrY == MShare.MySelf.m_nTagY))
                 {
                     TimerAutoMove.Enabled = false;
-                    ScreenManager.AddChatBoardString("已经到达终点", GetRgb(5));
+                    ScreenManager.AddChatBoardString("已经到达终点");
                     PathMap.g_MapPath = Array.Empty<Point>();
                     PathMap.g_MapPath = null;
                     MShare.MySelf.m_nTagX = 0;
@@ -4364,11 +4364,11 @@ namespace BotSrv.Player
                 case 0:
                     if (!EatItemName("回城卷") && !EatItemName("回城卷包") && !EatItemName("盟重传送石") && !EatItemName("比奇传送石"))
                     {
-                        ScreenManager.AddChatBoardString("你的回城卷已用完,回安全区等待!!!", ConsoleColor.Red);
+                        ScreenManager.AddChatBoardString("你的回城卷已用完,回安全区等待!!!");
                     }
                     else
                     {
-                        ScreenManager.AddChatBoardString("回安全区等待!!!", ConsoleColor.Red);
+                        ScreenManager.AddChatBoardString("回安全区等待!!!");
                     }
                     MShare.g_gcAss[0] = false;
                     MShare.AutoTagget = null;
@@ -4580,7 +4580,7 @@ namespace BotSrv.Player
                         }
                         var cltime = MShare.GetTickCount() - MShare.g_dwFirstClientTime;
                         var svtime = rtime - MShare.g_dwFirstServerTime;
-                        // DScreen.AddChatBoardString('[速度检测] 时间差：' + IntToStr(cltime - svtime), GetRGB(219), clWhite);
+                        // DScreen.AddChatBoardString('[速度检测] 时间差：' + IntToStr(cltime - svtime), clWhite);
                         if (cltime > svtime + 4500)
                         {
                             MShare.g_nTimeFakeDetectCount++;
@@ -4654,24 +4654,24 @@ namespace BotSrv.Player
                     break;
                 case "CRS":
                     MShare.g_boCanCrsHit = true;
-                    ScreenManager.AddChatBoardString("双龙斩开启", GetRgb(219));
+                    ScreenManager.AddChatBoardString("双龙斩开启");
                     break;
                 case "UCRS":
                     MShare.g_boCanCrsHit = false;
-                    ScreenManager.AddChatBoardString("双龙斩关闭", GetRgb(219));
+                    ScreenManager.AddChatBoardString("双龙斩关闭");
                     break;
                 case "TWN":
                     MShare.g_boNextTimeTwinHit = true;
                     MShare.g_dwLatestTwinHitTick = MShare.GetTickCount();
-                    ScreenManager.AddChatBoardString("召集雷电力量成功", GetRgb(219));
+                    ScreenManager.AddChatBoardString("召集雷电力量成功");
                     break;
                 case "UTWN":
                     MShare.g_boNextTimeTwinHit = false;
-                    ScreenManager.AddChatBoardString("雷电力量消失", GetRgb(219));
+                    ScreenManager.AddChatBoardString("雷电力量消失");
                     break;
                 case "SQU":
                     MShare.g_boCanSquHit = true;
-                    ScreenManager.AddChatBoardString("[龙影剑法] 开启", GetRgb(219));
+                    ScreenManager.AddChatBoardString("[龙影剑法] 开启");
                     break;
                 case "FIR":
                     MShare.g_boNextTimeFireHit = true;
@@ -4692,7 +4692,7 @@ namespace BotSrv.Player
                 case "SMIL3":
                     MShare.g_boNextTimeSmiteLongHit3 = true;
                     MShare.g_dwLatestSmiteLongHitTick3 = MShare.GetTickCount();
-                    ScreenManager.AddChatBoardString("[血魂一击] 已准备...", GetRgb(219));
+                    ScreenManager.AddChatBoardString("[血魂一击] 已准备...");
                     break;
                 case "SMIL":
                     MShare.g_boNextTimeSmiteLongHit = true;
@@ -4701,7 +4701,7 @@ namespace BotSrv.Player
                 case "SMIL2":
                     MShare.g_boNextTimeSmiteLongHit2 = true;
                     MShare.g_dwLatestSmiteLongHitTick2 = MShare.GetTickCount();
-                    ScreenManager.AddChatBoardString("[断空斩] 已准备...", GetRgb(219));
+                    ScreenManager.AddChatBoardString("[断空斩] 已准备...");
                     break;
                 case "SMIW":
                     MShare.g_boNextTimeSmiteWideHit = true;
@@ -4710,10 +4710,10 @@ namespace BotSrv.Player
                 case "SMIW2":
                     MShare.g_boNextTimeSmiteWideHit2 = true;
                     MShare.g_dwLatestSmiteWideHitTick2 = MShare.GetTickCount();
-                    ScreenManager.AddChatBoardString("[倚天辟地] 已准备", ConsoleColor.Blue);
+                    ScreenManager.AddChatBoardString("[倚天辟地] 已准备");
                     break;
                 case "MDS":
-                    ScreenManager.AddChatBoardString("[美杜莎之瞳] 技能可施展", ConsoleColor.Blue);
+                    ScreenManager.AddChatBoardString("[美杜莎之瞳] 技能可施展");
                     break;
                 case "UFIR":
                     MShare.g_boNextTimeFireHit = false;
@@ -4745,16 +4745,16 @@ namespace BotSrv.Player
                     break;
                 case "USQU":
                     MShare.g_boCanSquHit = false;
-                    ScreenManager.AddChatBoardString("[龙影剑法] 关闭", GetRgb(219));
+                    ScreenManager.AddChatBoardString("[龙影剑法] 关闭");
                     break;
                 case "SLON":
                     MShare.g_boCanSLonHit = true;
                     MShare.LatestSLonHitTick = MShare.GetTickCount();
-                    ScreenManager.AddChatBoardString("[开天斩] 力量凝聚...", GetRgb(219));
+                    ScreenManager.AddChatBoardString("[开天斩] 力量凝聚...");
                     break;
                 case "USLON":
                     MShare.g_boCanSLonHit = false;
-                    ScreenManager.AddChatBoardString("[开天斩] 力量消失", ConsoleColor.Red);
+                    ScreenManager.AddChatBoardString("[开天斩] 力量消失");
                     break;
             }
         }
@@ -5119,6 +5119,16 @@ namespace BotSrv.Player
         private void MainOutMessage(string msg)
         {
             BotShare.logger.Info($"机器人:[{ChrName}] {msg}");
+        }
+
+        private void MainOutErrorMessage(string msg)
+        {
+            BotShare.logger.Error($"机器人:[{ChrName}] {msg}");
+        }
+
+        private void MainOutWarnMessage(string msg)
+        {
+            BotShare.logger.Warn($"机器人:[{ChrName}] {msg}");
         }
     }
 }

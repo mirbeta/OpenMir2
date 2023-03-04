@@ -63,10 +63,5 @@ namespace BotSrv.Scenes
                 }
             }
         }
-
-        protected void MainOutMessage(string msg)
-        {
-            BotShare.logger.Info(msg);
-        }
     }
 }
