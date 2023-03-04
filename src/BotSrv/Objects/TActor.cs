@@ -525,11 +525,10 @@ namespace BotSrv.Objects
             }
         }
 
-        private bool GetMessage(out TChrMsg chrMsg)
+        private bool GetMessage(ref TChrMsg chrMsg)
         {
             bool result = false;
             int i = 0;
-            chrMsg = default(TChrMsg);
             while (m_MsgList.Count > i)
             {
                 TChrMsg Msg = m_MsgList[i];
@@ -548,7 +547,8 @@ namespace BotSrv.Objects
 
         public void ProcMsg()
         {
-            while (m_nCurrentAction == 0 && GetMessage(out m_ChrMsg))
+            m_ChrMsg = default(TChrMsg);
+            while (m_nCurrentAction == 0 && GetMessage(ref m_ChrMsg))
             {
                 switch (m_ChrMsg.Ident)
                 {

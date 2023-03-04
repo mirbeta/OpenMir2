@@ -804,7 +804,6 @@ namespace BotSrv.Player
             var targx = 0;
             var targy = 0;
             //TUseMagicInfo pmag;
-            short spellSpend;
             bool fUnLockMagic;
             if ((MShare.MySelf != null))
             {
@@ -818,7 +817,7 @@ namespace BotSrv.Player
             {
                 return;
             }
-            spellSpend = (short)(HUtil32.Round(pcm.Def.Spell / (pcm.Def.TrainLv + 1) * (pcm.Level + 1)) + pcm.Def.DefSpell);
+            var spellSpend = (short)(HUtil32.Round(pcm.Def.Spell / (pcm.Def.TrainLv + 1) * (pcm.Level + 1)) + pcm.Def.DefSpell);
             if (pcm.Def.MagicId == 114)
             {
                 if (MShare.g_boSkill_114_MP)
@@ -1788,8 +1787,7 @@ namespace BotSrv.Player
                     }
                     else if (MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && TimerAutoPlay.Enabled)// 走刺杀位
                     {
-                        result = true;
-                        return result;
+                        return true;
                     }
                 }
                 else
@@ -1815,7 +1813,7 @@ namespace BotSrv.Player
                 if (TimerAutoPlay.Enabled)
                 {
                     MShare.AutoMove = true;
-                    MainOutMessage($"怪物目标：{target.UserName} ({target.CurrX},{target.CurrY}) 正在跑向");
+                    MainOutMessage($"跑向目标怪物：{target.UserName} ({target.CurrX},{target.CurrY}) ");
                 }
             }
             return result;
@@ -2178,40 +2176,6 @@ namespace BotSrv.Player
         {
             CloseAllWindows();
             ClearDropItems();
-            //for (i = Low(FrmDlg.m_MissionList); i <= High(FrmDlg.m_MissionList); i++)
-            //{
-            //    List = FrmDlg.m_MissionList[i];
-            //    for (ii = 0; ii < List.Count; ii++)
-            //    {
-            //        this.Dispose((TClientMission)List[ii]);
-            //    }
-            //    List.Clear();
-            //}
-            //for (i = 0; i < MShare.g_MagicList.Count; i++)
-            //{
-            //    this.Dispose((TClientMagic)MShare.g_MagicList[i]);
-            //}
-            //MShare.g_MagicList.Clear();
-            //for (i = 0; i < MShare.g_IPMagicList.Count; i++)
-            //{
-            //    this.Dispose((TClientMagic)MShare.g_IPMagicList[i]);
-            //}
-            //MShare.g_IPMagicList.Clear();
-            //FillChar(MShare.g_MagicArr, sizeof(MShare.g_MagicArr), 0);
-            //for (i = 0; i < MShare.g_HeroIPMagicList.Count; i++)
-            //{
-            //    this.Dispose((TClientMagic)MShare.g_HeroIPMagicList[i]);
-            //}
-            //MShare.g_HeroIPMagicList.Clear();
-            //for (i = MShare.g_ShopListArr.GetLowerBound(0); i <= MShare.g_ShopListArr..Length; i++)
-            //{
-            //    List = MShare.g_ShopListArr[i];
-            //    for (ii = 0; ii < List.Count; ii++)
-            //    {
-            //        this.Dispose((TShopItem)List[ii]);
-            //    }
-            //    List.Clear();
-            //}
             MShare.g_boItemMoving = false;
             MShare.g_DetectItem.Item.Name = "";
             MShare.g_WaitingUseItem.Item.Item.Name = "";
@@ -2401,8 +2365,7 @@ namespace BotSrv.Player
 
         public void SendTakeOffItem(byte where, int itmindex, string itmname)
         {
-            CommandMessage msg;
-            msg = Messages.MakeMessage(Messages.CM_TAKEOFFITEM, itmindex, where, 0, 0);
+            var msg = Messages.MakeMessage(Messages.CM_TAKEOFFITEM, itmindex, where, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itmname));
         }
 
@@ -2429,7 +2392,6 @@ namespace BotSrv.Player
             const string sam = "@_automove ";
             int x;
             int y;
-            CommandMessage msg;
             var sx = string.Empty;
             var sy = string.Empty;
             if (rstr.Length >= 2)
@@ -2486,7 +2448,7 @@ namespace BotSrv.Player
                     return;
                 }
             }
-            msg = Messages.MakeMessage(Messages.CM_MERCHANTDLGSELECT, merchant, 0, 0, 0);
+            var msg = Messages.MakeMessage(Messages.CM_MERCHANTDLGSELECT, merchant, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(rstr));
         }
 
@@ -3222,7 +3184,6 @@ namespace BotSrv.Player
 
         private void ClientGetShowItem(int itemid, short x, short y, int looks, string itmname)
         {
-            TDropItem dropItem;
             for (var i = 0; i < MShare.g_DropedItemList.Count; i++)
             {
                 if (MShare.g_DropedItemList[i].id == itemid)
@@ -3230,7 +3191,7 @@ namespace BotSrv.Player
                     return;
                 }
             }
-            dropItem = new TDropItem();
+            var dropItem = new TDropItem();
             dropItem.id = itemid;
             dropItem.X = x;
             dropItem.Y = y;
