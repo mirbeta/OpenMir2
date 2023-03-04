@@ -1,10 +1,11 @@
-using System;
 using BotSrv.Player;
+using NLog;
 
 namespace BotSrv.Scenes
 {
     public class ScreenManager
     {
+        private readonly static Logger logger = LogManager.GetCurrentClassLogger();
         private readonly RobotPlayer robotClient;
         public SceneBase CurrentScene = null;
 
@@ -50,29 +51,12 @@ namespace BotSrv.Scenes
 
         public void AddSysMsg(string msg)
         {
-
+            logger.Info(msg);
         }
 
-        public static void AddChatBoardString(string str, int fcolor, ConsoleColor bcolor = ConsoleColor.White)
+        public static void AddChatBoardString(string str)
         {
-            Console.BackgroundColor = bcolor;
-            Console.ForegroundColor = (ConsoleColor)fcolor;
-            Console.WriteLine(str);
-            Console.ResetColor();
-        }
-
-        public static void AddChatBoardString(string str, ConsoleColor fcolor, ConsoleColor bcolor = ConsoleColor.White)
-        {
-            Console.BackgroundColor = bcolor;
-            Console.ForegroundColor = fcolor;
-            Console.WriteLine(str);
-            Console.ResetColor();
-        }
-
-        public static void AddChatBoardString(string str, int fcolor, int bcolor)
-        {
-            Console.WriteLine(str);
+            logger.Info(str);
         }
     }
 }
-

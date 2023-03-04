@@ -62,12 +62,12 @@ namespace BotSrv
 
         public static void AddItemBag(ClientItem cu, int idx = 0)
         {
-            bool InputCheck = false;
+            bool inputCheck = false;
             if (cu == null)
             {
                 return;
             }
-            if (cu.Item.Name == "")
+            if (string.IsNullOrEmpty(cu.Item.Name))
             {
                 return;
             }
@@ -90,7 +90,7 @@ namespace BotSrv
                     return;
                 }
             }
-            if (cu.Item.Name == "")
+            if (string.IsNullOrEmpty(cu.Item.Name))
             {
                 return;
             }
@@ -111,14 +111,14 @@ namespace BotSrv
                 {
                     MShare.ItemArr[i].Dura = (ushort)(MShare.ItemArr[i].Dura + cu.Dura);
                     cu.Dura = 0;
-                    InputCheck = true;
+                    inputCheck = true;
                 }
             }
-            if (!InputCheck)
+            if (!inputCheck)
             {
                 for (var i = 6; i < BotConst.MaxBagItemcl; i++)
                 {
-                    if (MShare.ItemArr[i].Item.Name == "")
+                    if (string.IsNullOrEmpty(MShare.ItemArr[i].Item.Name))
                     {
                         MShare.ItemArr[i] = cu;
                         break;
@@ -220,7 +220,7 @@ namespace BotSrv
                         {
                             continue;
                         }
-                        if ((MShare.ItemArr[i].Item.Name == MShare.ItemArr[k].Item.Name) && (MShare.ItemArr[i].MakeIndex == MShare.ItemArr[k].MakeIndex))// ????????
+                        if ((MShare.ItemArr[i].Item.Name == MShare.ItemArr[k].Item.Name) && (MShare.ItemArr[i].MakeIndex == MShare.ItemArr[k].MakeIndex))
                         {
                             //if (MShare.g_ItemArr[i].Item.Overlap > 0)
                             //{

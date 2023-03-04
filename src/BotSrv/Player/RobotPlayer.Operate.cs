@@ -234,7 +234,7 @@ namespace BotSrv.Player
                     switch (msg.Recog)
                     {
                         case -1:
-                            ScreenManager.AddChatBoardString("切换时装外显操作太快了！", ConsoleColor.Red);
+                            ScreenManager.AddChatBoardString("切换时装外显操作太快了！");
                             break;
                     }
                     break;
@@ -264,19 +264,19 @@ namespace BotSrv.Player
                     MShare.g_boServerChanging = false;
                     if (MShare.g_wAvailIDDay > 0)
                     {
-                        ScreenManager.AddChatBoardString("您当前通过包月帐号充值", GetRGB(219));
+                        ScreenManager.AddChatBoardString("您当前通过包月帐号充值");
                     }
                     else if (MShare.g_wAvailIPDay > 0)
                     {
-                        ScreenManager.AddChatBoardString("您当前通过包月IP 充值", GetRGB(219));
+                        ScreenManager.AddChatBoardString("您当前通过包月IP 充值");
                     }
                     else if (MShare.g_wAvailIPHour > 0)
                     {
-                        ScreenManager.AddChatBoardString("您当前通过计时IP 充值", GetRGB(219));
+                        ScreenManager.AddChatBoardString("您当前通过计时IP 充值");
                     }
                     else if (MShare.g_wAvailIDHour > 0)
                     {
-                        ScreenManager.AddChatBoardString("您当前通过计时帐号充值", GetRGB(219));
+                        ScreenManager.AddChatBoardString("您当前通过计时帐号充值");
                     }
                     MShare.LoadUserConfig(ChrName);
                     MShare.LoadItemFilter2();
@@ -735,17 +735,17 @@ namespace BotSrv.Player
                     Str = EDCode.DeCodeString(body);
                     if (msg.Tag > 0)
                     {
-                        ScreenManager.AddChatBoardString(Str, GetRGB(HUtil32.LoByte(msg.Param)), GetRGB(HUtil32.HiByte(msg.Param)));
+                        ScreenManager.AddChatBoardString(Str);
                         return;
                     }
                     if (msg.Ident == Messages.SM_WHISPER)
                     {
                         HUtil32.GetValidStr3(Str, ref str3, new string[] { " ", "=", ">" });
-                        ScreenManager.AddChatBoardString(Str, GetRGB(HUtil32.LoByte(msg.Param)), GetRGB(HUtil32.HiByte(msg.Param)));
+                        ScreenManager.AddChatBoardString(Str);
                     }
                     else
                     {
-                        ScreenManager.AddChatBoardString(Str, GetRGB(HUtil32.LoByte(msg.Param)), GetRGB(HUtil32.HiByte(msg.Param)));
+                        ScreenManager.AddChatBoardString(Str);
                     }
                     if (msg.Ident == Messages.SM_HEAR)
                     {
@@ -970,16 +970,16 @@ namespace BotSrv.Player
                     switch (msg.Series)
                     {
                         case 1:
-                            ScreenManager.AddChatBoardString("[失败] 你的金币不足，不能释放积灵珠！", ConsoleColor.Red);
+                            ScreenManager.AddChatBoardString("[失败] 你的金币不足，不能释放积灵珠！");
                             break;
                         case 2:
-                            ScreenManager.AddChatBoardString("[失败] 你的元宝不足，不能释放积灵珠！", ConsoleColor.Red);
+                            ScreenManager.AddChatBoardString("[失败] 你的元宝不足，不能释放积灵珠！");
                             break;
                         case 3:
-                            ScreenManager.AddChatBoardString("[失败] 你的金刚石不足，不能释放积灵珠！", ConsoleColor.Red);
+                            ScreenManager.AddChatBoardString("[失败] 你的金刚石不足，不能释放积灵珠！");
                             break;
                         case 4:
-                            ScreenManager.AddChatBoardString("[失败] 你的灵符不足，不能释放积灵珠！", ConsoleColor.Red);
+                            ScreenManager.AddChatBoardString("[失败] 你的灵符不足，不能释放积灵珠！");
                             break;
                     }
                     break;
@@ -1179,12 +1179,12 @@ namespace BotSrv.Player
                     if (msg.Param > 0)
                     {
                         MShare.g_boAllowGroup = true;
-                        ScreenManager.AddChatBoardString("[开启组队开关]", GetRGB(219));
+                        ScreenManager.AddChatBoardString("[开启组队开关]");
                     }
                     else
                     {
                         MShare.g_boAllowGroup = false;
-                        ScreenManager.AddChatBoardString("[关闭组队开关]", GetRGB(219));
+                        ScreenManager.AddChatBoardString("[关闭组队开关]");
                     }
                     MShare.g_dwChangeGroupModeTick = MShare.GetTickCount();
                     break;
@@ -1352,7 +1352,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_READMINIMAP_FAIL:
                     MShare.g_dwQueryMsgTick = MShare.GetTickCount();
-                    ScreenManager.AddChatBoardString("没有小地图", ConsoleColor.Red);
+                    ScreenManager.AddChatBoardString("没有小地图");
                     break;
                 case Messages.SM_CHANGEGUILDNAME:
                     ClientGetChangeGuildName(EDCode.DeCodeString(body));

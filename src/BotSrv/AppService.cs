@@ -16,12 +16,12 @@ namespace BotSrv
         /// <summary>
         /// 登录序号
         /// </summary>
-        private static int g_nLoginIndex = 0;
+        private static int g_nLoginIndex;
         /// <summary>
         /// 登录间隔
         /// </summary>
-        private static long g_dwLogonTick = 0;
-        private Thread runThread;
+        private static long g_dwLogonTick;
+        private readonly Thread runThread;
 
         public AppService(IOptions<RobotOptions> options, ClientManager clientManager)
         {
@@ -75,7 +75,6 @@ namespace BotSrv
                             playClient.LoginID = string.Concat(_options.LoginAccount, g_nLoginIndex);
                             playClient.LoginPasswd = playClient.LoginID;
                             playClient.ChrName = playClient.LoginID;
-                            playClient.ServerName = _options.ServerName;
                             playClient.ConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
                             BotShare.ClientMgr.AddClient(playClient.SessionId, playClient);
                             g_nLoginIndex++;
