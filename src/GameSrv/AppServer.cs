@@ -65,7 +65,7 @@ namespace GameSrv {
             FigletText header = new FigletText("OpenMir2") {
                 Color = Color.Fuchsia
             };
-            FigletText header2 = new FigletText("Game Svrver") {
+            FigletText header2 = new FigletText("Game Server") {
                 Color = Color.Aqua
             };
 
