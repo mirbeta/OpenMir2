@@ -70,10 +70,6 @@ namespace GameSrv.GameCommand.Commands
                     });
                 }
             }
-            if (userCount > 0)
-            {
-                World.WorldServer.StartAi();
-            }
             PlayObject.SysMsg($"已添加[{userCount}]个假人玩家,共[{M2Share.WorldEngine.RobotPlayerCount + userCount}]个假人玩家", MsgColor.Green, MsgType.Hint);
         }
     }

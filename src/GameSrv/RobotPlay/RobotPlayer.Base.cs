@@ -459,8 +459,6 @@ namespace GameSrv.RobotPlay
         public override void SearchViewRange()
         {
             BaseObject baseObject;
-            EventInfo mapEvent;
-            VisibleFlag nVisibleFlag;
             const string sExceptionMsg = "RobotPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
             if (Ghost)
             {
@@ -473,6 +471,7 @@ namespace GameSrv.RobotPlay
                     VisibleItems[i].VisibleFlag = 0;
                 }
             }
+            EventInfo mapEvent;
             try
             {
                 short nStartX = (short)(CurrX - ViewRange);
@@ -500,7 +499,7 @@ namespace GameSrv.RobotPlay
                                 }
                                 if (cellInfo.IsAvailable && cellInfo.Count <= 0)
                                 {
-                                    //cellInfo.Clear();
+                                    cellInfo.Clear();
                                     break;
                                 }
                                 if (cellInfo.ObjList == null)
@@ -518,7 +517,7 @@ namespace GameSrv.RobotPlay
                                                 cellInfo.Remove(i);
                                                 if (cellInfo.Count <= 0)
                                                 {
-                                                    //cellInfo.Clear();
+                                                    cellInfo.Clear();
                                                     break;
                                                 }
                                                 continue;
@@ -547,7 +546,7 @@ namespace GameSrv.RobotPlay
                                                     cellInfo.Remove(i);
                                                     if (cellInfo.Count <= 0)
                                                     {
-                                                        //cellInfo.Clear();
+                                                        cellInfo.Clear();
                                                         break;
                                                     }
                                                     continue;
@@ -607,6 +606,7 @@ namespace GameSrv.RobotPlay
                 M2Share.Logger.Error(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
                 KickException();
             }
+            VisibleFlag nVisibleFlag;
             try
             {
                 int n18 = 0;
@@ -845,7 +845,7 @@ namespace GameSrv.RobotPlay
                 }
                 if (hiter.Race == ActorRace.Play && !hiter.IsRobot && TargetCret == hiter)
                 {
-                    if (M2Share.RandomNumber.Random(8) == 0 && MAiSayMsgList.Count > 0)
+                    if (M2Share.RandomNumber.Random(8) == 0 && AiSayMsgList.Count > 0)
                     {
                         if (HUtil32.GetTickCount() >= DisableSayMsgTick)
                         {
@@ -860,7 +860,7 @@ namespace GameSrv.RobotPlay
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + MAiSayMsgList[M2Share.RandomNumber.Random(MAiSayMsgList.Count)]);
+                            SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + AiSayMsgList[M2Share.RandomNumber.Random(AiSayMsgList.Count)]);
                         }
                     }
                 }

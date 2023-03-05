@@ -234,7 +234,7 @@ namespace GameSrv
                     {
                         continue;
                     }
-                    M2Share.WorldEngine.SaveHumanRcd(play);
+                    World.WorldServer.SaveHumanRcd(play);
                 }
                 _scheduledSaveData = false;
             }

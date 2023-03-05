@@ -1,3 +1,4 @@
+using System.Collections;
 using GameSrv.Actor;
 using GameSrv.Event.Events;
 using GameSrv.Guild;
@@ -9,7 +10,6 @@ using GameSrv.Player;
 using GameSrv.RobotPlay;
 using GameSrv.Services;
 using NLog;
-using System.Collections;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -127,12 +127,6 @@ namespace GameSrv.World
         public int RobotPlayerCount => BotPlayObjectList.Count;
         public IEnumerable<PlayObject> PlayObjects => PlayObjectList;
 
-        public void Execute()
-        {
-            PrcocessData();
-            ProcessRobotPlayData();
-        }
-
         public void Initialize()
         {
             _logger.Info("正在初始化NPC脚本...");
@@ -141,7 +135,7 @@ namespace GameSrv.World
             _logger.Info("初始化NPC脚本完成...");
         }
 
-        private void PrcocessData()
+        public void PrcocessData()
         {
             try
             {
@@ -160,9 +154,6 @@ namespace GameSrv.World
                 {
                     Monitor.PulseAll(_locker);
                 }
-                ProcessHumans();
-                ProcessMerchants();
-                ProcessNpcs();
                 if ((HUtil32.GetTickCount() - ProcessMissionsTime) > 1000)
                 {
                     ProcessMissionsTime = HUtil32.GetTickCount();
@@ -197,63 +188,6 @@ namespace GameSrv.World
                 return threadId;
             }
             return -1;
-        }
-
-        private void MerchantInitialize()
-        {
-            for (var i = MerchantList.Count - 1; i >= 0; i--)
-            {
-                var merchant = MerchantList[i];
-                merchant.Envir = M2Share.MapMgr.FindMap(merchant.MapName);
-                if (merchant.Envir != null)
-                {
-                    merchant.OnEnvirnomentChanged();
-                    merchant.Initialize();
-                    if (merchant.AddtoMapSuccess && !merchant.IsHide)
-                    {
-                        _logger.Warn("Merchant Initalize fail..." + merchant.ChrName + ' ' + merchant.MapName + '(' + merchant.CurrX + ':' + merchant.CurrY + ')');
-                        MerchantList.RemoveAt(i);
-                    }
-                    else
-                    {
-                        merchant.LoadMerchantScript();
-                        merchant.LoadNpcData();
-                    }
-                }
-                else
-                {
-                    _logger.Error(merchant.ChrName + " - Merchant Initalize fail... (m.PEnvir=nil)");
-                    MerchantList.RemoveAt(i);
-                }
-            }
-        }
-
-        private void NpCinitialize()
-        {
-            for (var i = QuestNpcList.Count - 1; i >= 0; i--)
-            {
-                var normNpc = QuestNpcList[i];
-                normNpc.Envir = M2Share.MapMgr.FindMap(normNpc.MapName);
-                if (normNpc.Envir != null)
-                {
-                    normNpc.OnEnvirnomentChanged();
-                    normNpc.Initialize();
-                    if (normNpc.AddtoMapSuccess && !normNpc.IsHide)
-                    {
-                        _logger.Warn(normNpc.ChrName + " Npc Initalize fail... ");
-                        QuestNpcList.RemoveAt(i);
-                    }
-                    else
-                    {
-                        normNpc.LoadNPCScript();
-                    }
-                }
-                else
-                {
-                    _logger.Error(normNpc.ChrName + " Npc Initalize fail... (npc.PEnvir=nil) ");
-                    QuestNpcList.RemoveAt(i);
-                }
-            }
         }
 
         private int GetLoadPlayCount()
@@ -535,7 +469,7 @@ namespace GameSrv.World
             return result;
         }
 
-        private void ProcessHumans()
+        public void ProcessHumans()
         {
             const string sExceptionMsg1 = "[Exception] WorldServer::ProcessHumans -> Ready, Save, Load...";
             const string sExceptionMsg3 = "[Exception] WorldServer::ProcessHumans ClosePlayer.Delete";
@@ -702,76 +636,6 @@ namespace GameSrv.World
             if (M2Share.HumCountMax < M2Share.HumCountMin) M2Share.HumCountMax = M2Share.HumCountMin;
         }
 
-        private void ProcessRobotPlayData()
-        {
-            const string sExceptionMsg = "[Exception] WorldServer::ProcessRobotPlayData";
-            try
-            {
-                var dwCurTick = HUtil32.GetTickCount();
-                var nIdx = ProcBotHubIdx;
-                var boCheckTimeLimit = false;
-                var dwCheckTime = HUtil32.GetTickCount();
-                while (true)
-                {
-                    if (BotPlayObjectList.Count <= nIdx) break;
-                    var robotPlayer = BotPlayObjectList[nIdx];
-                    if (dwCurTick - robotPlayer.RunTick > robotPlayer.RunTime)
-                    {
-                        robotPlayer.RunTick = dwCurTick;
-                        if (!robotPlayer.Ghost)
-                        {
-                            if (!robotPlayer.LoginNoticeOk)
-                            {
-                                robotPlayer.RunNotice();
-                            }
-                            else
-                            {
-                                if (!robotPlayer.BoReadyRun)
-                                {
-                                    robotPlayer.BoReadyRun = true;
-                                    robotPlayer.UserLogon();
-                                }
-                                else
-                                {
-                                    if ((HUtil32.GetTickCount() - robotPlayer.SearchTick) > robotPlayer.SearchTime)
-                                    {
-                                        robotPlayer.SearchTick = HUtil32.GetTickCount();
-                                        robotPlayer.SearchViewRange();
-                                        robotPlayer.GameTimeChanged();
-                                    }
-                                    robotPlayer.Run();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            BotPlayObjectList.Remove(robotPlayer);
-                            robotPlayer.Disappear();
-                            AddToHumanFreeList(robotPlayer);
-                            robotPlayer.DealCancelA();
-                            SaveHumanRcd(robotPlayer);
-                            M2Share.GateMgr.CloseUser(robotPlayer.GateIdx, robotPlayer.SocketId);
-                            SendServerGroupMsg(Messages.SS_202, M2Share.ServerIndex, robotPlayer.ChrName);
-                            continue;
-                        }
-                    }
-                    nIdx++;
-                    if ((HUtil32.GetTickCount() - dwCheckTime) > M2Share.HumLimit)
-                    {
-                        boCheckTimeLimit = true;
-                        ProcBotHubIdx = nIdx;
-                        break;
-                    }
-                }
-                if (!boCheckTimeLimit) ProcBotHubIdx = 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(ex.StackTrace);
-            }
-        }
-
         private void ProcessPlayObjectData()
         {
             try
@@ -879,147 +743,24 @@ namespace GameSrv.World
             }
         }
 
-        private void ProcessMerchants()
-        {
-            var boProcessLimit = false;
-            const string sExceptionMsg = "[Exception] WorldServer::ProcessMerchants";
-            var dwRunTick = HUtil32.GetTickCount();
-            try
-            {
-                var dwCurrTick = HUtil32.GetTickCount();
-                for (var i = MerchantPosition; i < MerchantList.Count; i++)
-                {
-                    var merchantNpc = MerchantList[i];
-                    if (!merchantNpc.Ghost)
-                    {
-                        if ((dwCurrTick - merchantNpc.RunTick) > merchantNpc.RunTime)
-                        {
-                            //if ((HUtil32.GetTickCount() - merchantNpc.SearchTick) > merchantNpc.SearchTime)
-                            //{
-                            //    merchantNpc.SearchTick = HUtil32.GetTickCount();
-                            //   // merchantNpc.SearchViewRange();
-                            //}
-                            if ((HUtil32.GetTickCount() - merchantNpc.RunTick) > merchantNpc.RunTime)
-                            {
-                                merchantNpc.RunTick = dwCurrTick;
-                                merchantNpc.Run();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if ((HUtil32.GetTickCount() - merchantNpc.GhostTick) > 60 * 1000)
-                        {
-                            merchantNpc = null;
-                            MerchantList.RemoveAt(i);
-                            break;
-                        }
-                    }
-                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.NpcLimit)
-                    {
-                        MerchantPosition = i;
-                        boProcessLimit = true;
-                        break;
-                    }
-                }
-                if (!boProcessLimit)
-                {
-                    MerchantPosition = 0;
-                }
-            }
-            catch
-            {
-                _logger.Error(sExceptionMsg);
-            }
-            ProcessMerchantTimeMin = HUtil32.GetTickCount() - dwRunTick;
-            if (ProcessMerchantTimeMin > ProcessMerchantTimeMax)
-            {
-                ProcessMerchantTimeMax = ProcessMerchantTimeMin;
-            }
-            if (ProcessNpcTimeMin > ProcessNpcTimeMax)
-            {
-                ProcessNpcTimeMax = ProcessNpcTimeMin;
-            }
-        }
-
         private static void ProcessMissions()
         {
 
         }
-
-        private void ProcessNpcs()
-        {
-            var dwRunTick = HUtil32.GetTickCount();
-            var boProcessLimit = false;
-            try
-            {
-                var dwCurrTick = HUtil32.GetTickCount();
-                for (var i = NpcPosition; i < QuestNpcList.Count; i++)
-                {
-                    var npc = QuestNpcList[i];
-                    if (!npc.Ghost)
-                    {
-                        if ((dwCurrTick - npc.RunTick) > npc.RunTime)
-                        {
-                            //if ((HUtil32.GetTickCount() - npc.SearchTick) > npc.SearchTime)
-                            //{
-                            //    npc.SearchTick = HUtil32.GetTickCount();
-                            //    npc.SearchViewRange();
-                            //}
-                            if ((dwCurrTick - npc.RunTick) > npc.RunTime)
-                            {
-                                npc.RunTick = dwCurrTick;
-                                npc.Run();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if ((HUtil32.GetTickCount() - npc.GhostTick) > 60 * 1000)
-                        {
-                            QuestNpcList.RemoveAt(i);
-                            break;
-                        }
-                    }
-                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.NpcLimit)
-                    {
-                        NpcPosition = i;
-                        boProcessLimit = true;
-                        break;
-                    }
-                }
-                if (!boProcessLimit) NpcPosition = 0;
-            }
-            catch
-            {
-                _logger.Error("[Exceptioin] WorldServer.ProcessNpcs");
-            }
-            ProcessNpcTimeMin = HUtil32.GetTickCount() - dwRunTick;
-            if (ProcessNpcTimeMin > ProcessNpcTimeMax) ProcessNpcTimeMax = ProcessNpcTimeMin;
-        }
-
+        
         public void Run()
         {
-            const string sExceptionMsg = "[Exception] WorldServer::Run";
-            try
+            if ((HUtil32.GetTickCount() - ShowOnlineTick) > M2Share.Config.ConsoleShowUserCountTime)
             {
-                if ((HUtil32.GetTickCount() - ShowOnlineTick) > M2Share.Config.ConsoleShowUserCountTime)
-                {
-                    ShowOnlineTick = HUtil32.GetTickCount();
-                    M2Share.NoticeMgr.LoadingNotice();
-                    _logger.Info("在线数: " + PlayObjectCount);
-                    M2Share.CastleMgr.Save();
-                }
-                if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
-                {
-                    SendOnlineHumTime = HUtil32.GetTickCount();
-                    IdSrvClient.Instance.SendOnlineHumCountMsg(OnlinePlayObject);
-                }
+                ShowOnlineTick = HUtil32.GetTickCount();
+                M2Share.NoticeMgr.LoadingNotice();
+                _logger.Info("在线数: " + PlayObjectCount);
+                M2Share.CastleMgr.Save();
             }
-            catch (Exception e)
+            if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(e.Message);
+                SendOnlineHumTime = HUtil32.GetTickCount();
+                IdSrvClient.Instance.SendOnlineHumCountMsg(OnlinePlayObject);
             }
         }
 
@@ -1086,10 +827,9 @@ namespace GameSrv.World
 
         public void CryCry(short wIdent, Envirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
         {
-            PlayObject playObject;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                playObject = PlayObjectList[i];
+                PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == pMap && playObject.BanShout &&
                     Math.Abs(playObject.CurrX - nX) < nWide && Math.Abs(playObject.CurrY - nY) < nWide)
                     playObject.SendMsg(null, wIdent, 0, btFColor, btBColor, 0, sMsg);
@@ -1299,7 +1039,6 @@ namespace GameSrv.World
 
         public void KickPlayObjectEx(string sName)
         {
-            PlayObject playObject;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
@@ -1307,8 +1046,7 @@ namespace GameSrv.World
                 {
                     if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        playObject = PlayObjectList[i];
-                        playObject.BoEmergencyClose = true;
+                        PlayObjectList[i].BoEmergencyClose = true;
                         break;
                     }
                 }
@@ -1341,35 +1079,6 @@ namespace GameSrv.World
             return result;
         }
 
-        public static T FindMerchant<T>(int merchantId)
-        {
-            var normNpc = M2Share.ActorMgr.Get(merchantId);
-            var npcType = normNpc.GetType();
-            if (npcType == typeof(Merchant))
-            {
-                return (T)Convert.ChangeType(normNpc, typeof(T));
-            }
-            if (npcType == typeof(GuildOfficial))
-            {
-                return (T)Convert.ChangeType(normNpc, typeof(T));
-            }
-            if (npcType == typeof(CastleOfficial))
-            {
-                return (T)Convert.ChangeType(normNpc, typeof(T));
-            }
-            if (npcType == typeof(NormNpc))
-            {
-                return (T)Convert.ChangeType(normNpc, typeof(T));
-            }
-            return (T)Convert.ChangeType(normNpc, typeof(T));
-        }
-
-        public static T FindNpc<T>(int npcId)
-        {
-            var normNpc = M2Share.ActorMgr.Get(npcId);
-            return (T)Convert.ChangeType(normNpc, typeof(T));
-        }
-
         /// <summary>
         /// 获取指定地图范围对象数
         /// </summary>
@@ -1400,7 +1109,7 @@ namespace GameSrv.World
                 var adminInfo = AdminList[i];
                 if (string.Compare(adminInfo.ChrName, sUserName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    btPermission = (byte)adminInfo.Level;
+                    btPermission = adminInfo.Level;
                     sIPaddr = adminInfo.IPaddr;
                     result = true;
                     break;
@@ -1447,7 +1156,7 @@ namespace GameSrv.World
             }
         }
 
-        public void SaveHumanRcd(PlayObject playObject)
+        public static void SaveHumanRcd(PlayObject playObject)
         {
             if (playObject.IsRobot) //Bot玩家不保存数据
             {
@@ -1844,7 +1553,7 @@ namespace GameSrv.World
             }
         }
 
-        private void ProcessMapDoor()
+        private static void ProcessMapDoor()
         {
             IList<Envirnoment> doorList = M2Share.MapMgr.GetDoorMapList();
             for (var i = 0; i < doorList.Count; i++)
@@ -1935,56 +1644,6 @@ namespace GameSrv.World
             return result;
         }
 
-        public void AddMerchant(Merchant merchant)
-        {
-            MerchantList.Add(merchant);
-        }
-
-        public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
-        {
-            for (var i = 0; i < MerchantList.Count; i++)
-            {
-                var merchant = MerchantList[i];
-                if (merchant.Envir == envir && Math.Abs(merchant.CurrX - nX) <= nRange &&
-                    Math.Abs(merchant.CurrY - nY) <= nRange) tmpList.Add(merchant);
-            }
-            return tmpList.Count;
-        }
-
-        public int GetNpcList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
-        {
-            for (var i = 0; i < QuestNpcList.Count; i++)
-            {
-                var npc = QuestNpcList[i];
-                if (npc.Envir == envir && Math.Abs(npc.CurrX - nX) <= nRange &&
-                    Math.Abs(npc.CurrY - nY) <= nRange) tmpList.Add(npc);
-            }
-            return tmpList.Count;
-        }
-
-        public void ReloadMerchantList()
-        {
-            for (var i = 0; i < MerchantList.Count; i++)
-            {
-                var merchant = MerchantList[i];
-                if (!merchant.Ghost)
-                {
-                    merchant.ClearScript();
-                    merchant.LoadMerchantScript();
-                }
-            }
-        }
-
-        public void ReloadNpcList()
-        {
-            for (var i = 0; i < QuestNpcList.Count; i++)
-            {
-                var npc = QuestNpcList[i];
-                npc.ClearScript();
-                npc.LoadNPCScript();
-            }
-        }
-
         public int GetMapMonster(Envirnoment envir, IList<BaseObject> list)
         {
             if (list == null)
@@ -2029,9 +1688,8 @@ namespace GameSrv.World
             return result;
         }
 
-        public int GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, IList<BaseObject> list)
+        public void GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, ref IList<BaseObject> list, bool botPlay = false)
         {
-            var result = 0;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
                 var playObject = PlayObjectList[i];
@@ -2039,10 +1697,20 @@ namespace GameSrv.World
                     Math.Abs(playObject.CurrX - nRageX) <= nRage && Math.Abs(playObject.CurrY - nRageY) <= nRage)
                 {
                     list.Add(playObject);
-                    result++;
                 }
             }
-            return result;
+            if (botPlay)
+            {
+                for (var i = 0; i < BotPlayObjectList.Count; i++)
+                {
+                    var botPlayer = BotPlayObjectList[i];
+                    if (!botPlayer.Death && !botPlayer.Ghost && botPlayer.Envir == envir &&
+                        Math.Abs(botPlayer.CurrX - nRageX) <= nRage && Math.Abs(botPlayer.CurrY - nRageY) <= nRage)
+                    {
+                        list.Add(botPlayer);
+                    }
+                }
+            }
         }
 
         public ushort GetStdItemIdx(string sItemName)
@@ -2086,7 +1754,7 @@ namespace GameSrv.World
             }
         }
 
-        public void sub_4AE514(GoldChangeInfo goldChangeInfo)
+        public void sub4AE514(GoldChangeInfo goldChangeInfo)
         {
             var goldChange = goldChangeInfo;
             HUtil32.EnterCriticalSection(LoadPlaySection);
@@ -2130,139 +1798,11 @@ namespace GameSrv.World
             return result;
         }
 
-        public static void StartAi()
-        {
-
-        }
-
-        public void AddAiLogon(RoBotLogon ai)
-        {
-            RobotLogonList.Add(ai);
-        }
-
-        private bool RegenAiObject(RoBotLogon ai)
-        {
-            var playObject = AddAiPlayObject(ai);
-            if (playObject != null)
-            {
-                playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
-                playObject.MapFileName = playObject.HomeMap;
-                playObject.UserAccount = "假人" + ai.sChrName;
-                playObject.Start(FindPathType.Dynamic);
-                BotPlayObjectList.Add(playObject);
-                return true;
-            }
-            return false;
-        }
-
-        private static RobotPlayer AddAiPlayObject(RoBotLogon ai)
-        {
-            int n1C;
-            int n20;
-            int n24;
-            object p28;
-            var envirnoment = M2Share.MapMgr.FindMap(ai.sMapName);
-            if (envirnoment == null)
-            {
-                return null;
-            }
-            var cert = new RobotPlayer();
-            cert.Envir = envirnoment;
-            cert.MapName = ai.sMapName;
-            cert.CurrX = ai.nX;
-            cert.CurrY = ai.nY;
-            cert.Dir = (byte)M2Share.RandomNumber.Random(8);
-            cert.ChrName = ai.sChrName;
-            cert.WAbil = cert.Abil;
-            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode)
-            {
-                cert.CoolEye = true;
-            }
-            //Cert.m_sIPaddr = GetIPAddr;// Mac问题
-            //Cert.m_sIPLocal = GetIPLocal(Cert.m_sIPaddr);
-            cert.MSConfigFileName = ai.sConfigFileName;
-            cert.MSHeroConfigFileName = ai.sHeroConfigFileName;
-            cert.MSFilePath = ai.sFilePath;
-            cert.MSConfigListFileName = ai.sConfigListFileName;
-            cert.MSHeroConfigListFileName = ai.sHeroConfigListFileName;// 英雄配置列表目录
-            cert.Initialize();
-            cert.RecalcLevelAbilitys();
-            cert.RecalcAbilitys();
-            cert.Abil.HP = cert.Abil.MaxHP;
-            cert.Abil.MP = cert.Abil.MaxMP;
-            if (cert.AddtoMapSuccess)
-            {
-                p28 = null;
-                if (cert.Envir.Width < 50)
-                {
-                    n20 = 2;
-                }
-                else
-                {
-                    n20 = 3;
-                }
-                if (cert.Envir.Height < 250)
-                {
-                    if (cert.Envir.Height < 30)
-                    {
-                        n24 = 2;
-                    }
-                    else
-                    {
-                        n24 = 20;
-                    }
-                }
-                else
-                {
-                    n24 = 50;
-                }
-                n1C = 0;
-                while (true)
-                {
-                    if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false))
-                    {
-                        if ((cert.Envir.Width - n24 - 1) > cert.CurrX)
-                        {
-                            cert.CurrX += (short)n20;
-                        }
-                        else
-                        {
-                            cert.CurrX = (byte)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
-                            if (cert.Envir.Height - n24 - 1 > cert.CurrY)
-                            {
-                                cert.CurrY += (short)n20;
-                            }
-                            else
-                            {
-                                cert.CurrY = (byte)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, cert.CellType, cert.ActorId, cert);
-                        break;
-                    }
-                    n1C++;
-                    if (n1C >= 31)
-                    {
-                        break;
-                    }
-                }
-                if (p28 == null)
-                {
-                    cert = null;
-                }
-            }
-            return cert;
-        }
-
         public void SendQuestMsg(string sQuestName)
         {
-            PlayObject playObject;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                playObject = PlayObjectList[i];
+                PlayObject playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost)
                     M2Share.ManageNPC.GotoLable(playObject, sQuestName, false);
             }
@@ -2270,7 +1810,7 @@ namespace GameSrv.World
 
         public void ClearItemList()
         {
-            StdItemList.Reverse();
+            _ = StdItemList.Reverse();
             ClearMerchantData();
         }
 
@@ -2281,14 +1821,6 @@ namespace GameSrv.World
                 OldMagicList.Add(MagicList);
                 MagicList = null;
                 MagicList = new List<MagicInfo>();
-            }
-        }
-
-        private void ClearMerchantData()
-        {
-            for (var i = 0; i < MerchantList.Count; i++)
-            {
-                MerchantList[i].ClearData();
             }
         }
 

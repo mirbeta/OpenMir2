@@ -22,7 +22,7 @@ namespace GameSrv.GameCommand.Commands {
             IList<BaseObject> List10 = new List<BaseObject>();
             IList<PlayObject> List14 = new List<PlayObject>();
             IList<GuildInfo> guildList = new List<GuildInfo>();
-            M2Share.WorldEngine.GetMapRageHuman(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, List10);
+            M2Share.WorldEngine.GetMapRageHuman(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, ref List10);
             for (int i = 0; i < List10.Count; i++) {
                 m_PlayObject = List10[i] as PlayObject;
                 if (!m_PlayObject.ObMode || !m_PlayObject.AdminMode) {

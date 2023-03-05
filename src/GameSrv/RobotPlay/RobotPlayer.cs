@@ -32,11 +32,11 @@ namespace GameSrv.RobotPlay
         public PointManager MPointManager;
         public PointInfo[] MPath;
         public int MNPostion;
-        public int MNMoveFailCount;
-        public string MSConfigListFileName = string.Empty;
+        public int MoveFailCount;
+        public string ConfigListFileName = string.Empty;
+        public string FilePath = string.Empty;
+        public string ConfigFileName = string.Empty;
         public string MSHeroConfigListFileName = string.Empty;
-        public string MSFilePath = string.Empty;
-        public string MSConfigFileName = string.Empty;
         public string MSHeroConfigFileName = string.Empty;
         public IList<string> BagItemNames;
         public string[] UseItemNames;
@@ -51,8 +51,8 @@ namespace GameSrv.RobotPlay
         /// <summary>
         /// 攻击方式
         /// </summary>
-        public short MWHitMode;
-        public bool MBoSelSelf;
+        public short HitMode;
+        public bool BoSelSelf;
         public byte MBtTaoistUseItemType;
         public long MDwAutoRepairItemTick;
         public long MDwAutoAddHealthTick;
@@ -86,12 +86,15 @@ namespace GameSrv.RobotPlay
         /// <summary>
         /// 受攻击说话列表
         /// </summary>
-        public ArrayList MAiSayMsgList;
+        public ArrayList AiSayMsgList;
         /// <summary>
         /// 绿红毒标识
         /// </summary>
         public byte NAmuletIndx;
-        public bool MBoCanPickIng;
+        /// <summary>
+        /// 正在拾取物品
+        /// </summary>
+        public bool CanPickIng;
         /// <summary>
         /// 查询魔法
         /// </summary>
@@ -116,8 +119,7 @@ namespace GameSrv.RobotPlay
         /// <summary>
         /// 假人掉装备机率
         /// </summary>
-        public int MNDropUseItemRate;
-        private readonly RobotPlayConf _conf;
+        public int DropUseItemRate;
 
         public RobotPlayer() : base()
         {
@@ -130,19 +132,14 @@ namespace GameSrv.RobotPlay
             MManagedEnvir = null; // 挂机地图
             MPath = null;
             MNPostion = -1;
-            MSFilePath = "";
-            MSConfigFileName = "";
-            MSHeroConfigFileName = "";
-            MSConfigListFileName = "";
-            MSHeroConfigListFileName = "";
             UseItemNames = new string[13];
             BagItemNames = new List<string>();
             MPointManager = new PointManager(this);
-            MSkillUseTick = new long[59];// 魔法使用间隔
+            MSkillUseTick = new long[60];// 魔法使用间隔
             MNSelItemType = 1;
             MNIncSelfHealthCount = 0;
             MNIncMasterHealthCount = 0;
-            MBoSelSelf = false;
+            BoSelSelf = false;
             MBtTaoistUseItemType = 0;
             MDwAutoAddHealthTick = HUtil32.GetTickCount();
             MDwAutoRepairItemTick = HUtil32.GetTickCount();
@@ -153,9 +150,9 @@ namespace GameSrv.RobotPlay
             MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
             MSelMapItem = null;
             MDwPickUpItemTick = HUtil32.GetTickCount();
-            MAiSayMsgList = new ArrayList();// 受攻击说话列表
+            AiSayMsgList = new ArrayList();// 受攻击说话列表
             NAmuletIndx = 0;
-            MBoCanPickIng = false;
+            CanPickIng = false;
             AutoMagicId = 0;
             AutoUseMagic = false;// 是否能躲避
             MBoIsUseAttackMagic = false;
@@ -166,98 +163,7 @@ namespace GameSrv.RobotPlay
             WalkSpeed = 300;
             MRunPos = new TRunPos();
             MPath = new PointInfo[0];
-            string sFileName = GetRandomConfigFileName(ChrName, 0);
-            if (string.IsNullOrEmpty(sFileName) || !File.Exists(sFileName))
-            {
-                if (!string.IsNullOrEmpty(MSConfigFileName) && File.Exists(MSConfigFileName))
-                {
-                    sFileName = MSConfigFileName;
-                }
-            }
-            _conf = new RobotPlayConf(sFileName);
-        }
-
-        /// <summary>
-        /// 取随机配置
-        /// </summary>
-        /// <param name="sName"></param>
-        /// <param name="nType"></param>
-        /// <returns></returns>
-        private string GetRandomConfigFileName(string sName, byte nType)
-        {
-            int nIndex;
-            string str;
-            StringList loadList;
-            if (!Directory.Exists(MSFilePath + "RobotIni"))
-            {
-                Directory.CreateDirectory(MSFilePath + "RobotIni");
-            }
-            var sFileName = Path.Combine(MSFilePath, "RobotIni", sName + ".txt");
-            if (File.Exists(sFileName))
-            {
-                return sFileName;
-            }
-            var result = Path.Combine(MSFilePath, "RobotIni", "默认.txt");
-            switch (nType)
-            {
-                case 0:
-                    if (!string.IsNullOrEmpty(MSConfigListFileName) && File.Exists(MSConfigListFileName))
-                    {
-                        loadList = new StringList();
-                        loadList.LoadFromFile(MSConfigListFileName);
-                        nIndex = M2Share.RandomNumber.Random(loadList.Count);
-                        if (nIndex >= 0 && nIndex < loadList.Count)
-                        {
-                            str = loadList[nIndex];
-                            if (!string.IsNullOrEmpty(str))
-                            {
-                                if (str[1] == '\\')
-                                {
-                                    str = str.AsSpan()[1..].ToString();
-                                }
-                                if (str[2] == '\\')
-                                {
-                                    str = str.AsSpan()[2..].ToString();
-                                }
-                                if (str[3] == '\\')
-                                {
-                                    str = str.AsSpan()[3..].ToString();
-                                }
-                            }
-                            result = MSFilePath + str;
-                        }
-                    }
-                    break;
-                case 1:
-                    if (!string.IsNullOrEmpty(MSHeroConfigListFileName) && File.Exists(MSHeroConfigListFileName))
-                    {
-                        loadList = new StringList();
-                        loadList.LoadFromFile(MSHeroConfigListFileName);
-                        nIndex = M2Share.RandomNumber.Random(loadList.Count);
-                        if (nIndex >= 0 && nIndex < loadList.Count)
-                        {
-                            str = loadList[nIndex];
-                            if (!string.IsNullOrEmpty(str))
-                            {
-                                if (str[1] == '\\')
-                                {
-                                    str = str[1..];
-                                }
-                                if (str[2] == '\\')
-                                {
-                                    str = str[2..];
-                                }
-                                if (str[3] == '\\')
-                                {
-                                    str = str[3..];
-                                }
-                            }
-                            result = MSFilePath + str;
-                        }
-                    }
-                    break;
-            }
-            return result;
+            LoadConfig();
         }
 
         public void Start(FindPathType pathType)
@@ -265,14 +171,14 @@ namespace GameSrv.RobotPlay
             if (!Ghost && !Death && !MBoAiStart)
             {
                 MManagedEnvir = Envir;
+                ProtectDest = false;
                 ProtectTargetX = CurrX;// 守护坐标
                 ProtectTargetY = CurrY;// 守护坐标
-                ProtectDest = false;
                 MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
                 MPointManager.PathType = pathType;
                 MPointManager.Initialize(Envir);
                 MBoAiStart = true;
-                MNMoveFailCount = 0;
+                MoveFailCount = 0;
                 if (M2Share.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
@@ -286,7 +192,7 @@ namespace GameSrv.RobotPlay
             if (MBoAiStart)
             {
                 MBoAiStart = false;
-                MNMoveFailCount = 0;
+                MoveFailCount = 0;
                 MPath = null;
                 MNPostion = -1;
                 if (M2Share.FunctionNPC != null)
@@ -585,7 +491,7 @@ namespace GameSrv.RobotPlay
                     if (!boDisableSayMsg)
                     {
                         nPos = sMsg.IndexOf("=>", StringComparison.OrdinalIgnoreCase);
-                        if (nPos > 0 && MAiSayMsgList.Count > 0)
+                        if (nPos > 0 && AiSayMsgList.Count > 0)
                         {
                             sChrName = sMsg[..(nPos - 1)];
                             sSendMsg = sMsg.Substring(nPos + 3 - 1, sMsg.Length - nPos - 2);
@@ -728,7 +634,7 @@ namespace GameSrv.RobotPlay
                     boFound = false;
                     if (MSelMapItem != null)
                     {
-                        MBoCanPickIng = true;
+                        CanPickIng = true;
                         for (int i = 0; i < VisibleItems.Count; i++)
                         {
                             visibleMapItem = VisibleItems[i];
@@ -750,7 +656,7 @@ namespace GameSrv.RobotPlay
                     {
                         if (SearchPickUpItem_PickUpItem(CurrX, CurrY))
                         {
-                            MBoCanPickIng = false;
+                            CanPickIng = false;
                             result = true;
                             return result;
                         }
@@ -811,11 +717,11 @@ namespace GameSrv.RobotPlay
                         MSelMapItem = selVisibleMapItem.MapItem;
                         if (MSelMapItem != null)
                         {
-                            MBoCanPickIng = true;
+                            CanPickIng = true;
                         }
                         else
                         {
-                            MBoCanPickIng = false;
+                            CanPickIng = false;
                         }
                         if (CurrX != selVisibleMapItem.nX || CurrY != selVisibleMapItem.nY)
                         {
@@ -825,13 +731,13 @@ namespace GameSrv.RobotPlay
                     }
                     else
                     {
-                        MBoCanPickIng = false;
+                        CanPickIng = false;
                     }
                 }
                 else
                 {
                     MSelMapItem = null;
-                    MBoCanPickIng = false;
+                    CanPickIng = false;
                 }
             }
             catch
@@ -1073,7 +979,7 @@ namespace GameSrv.RobotPlay
 
         protected override void Wondering()
         {
-            if (MBoAiStart && TargetCret == null && !MBoCanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
+            if (MBoAiStart && TargetCret == null && !CanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
             {
                 short nX = CurrX;
                 short nY = CurrY;
@@ -1083,12 +989,12 @@ namespace GameSrv.RobotPlay
                     {
                         MPath = null;
                         MNPostion = -1;
-                        MNMoveFailCount++;
+                        MoveFailCount++;
                         MNPostion++;
                     }
                     else
                     {
-                        MNMoveFailCount = 0;
+                        MoveFailCount = 0;
                         return;
                     }
                 }
@@ -1109,11 +1015,11 @@ namespace GameSrv.RobotPlay
                             {
                                 MPath = null;
                                 MNPostion = -1;
-                                MNMoveFailCount++;
+                                MoveFailCount++;
                             }
                             else
                             {
-                                MNMoveFailCount = 0;
+                                MoveFailCount = 0;
                                 MNPostion++;
 
                                 return;
@@ -1123,18 +1029,18 @@ namespace GameSrv.RobotPlay
                         {
                             MPath = null;
                             MNPostion = -1;
-                            MNMoveFailCount++;
+                            MoveFailCount++;
                         }
                     }
                     else
                     {
                         if (GotoNextOne(nX, nY, true))
                         {
-                            MNMoveFailCount = 0;
+                            MoveFailCount = 0;
                         }
                         else
                         {
-                            MNMoveFailCount++;
+                            MoveFailCount++;
                         }
                     }
                 }
@@ -1150,10 +1056,10 @@ namespace GameSrv.RobotPlay
                     }
                     MPath = null;
                     MNPostion = -1;
-                    MNMoveFailCount++;
+                    MoveFailCount++;
                 }
             }
-            if (MNMoveFailCount >= 3)
+            if (MoveFailCount >= 3)
             {
                 if (M2Share.RandomNumber.Random(2) == 1)
                 {
@@ -1165,7 +1071,7 @@ namespace GameSrv.RobotPlay
                 }
                 MPath = null;
                 MNPostion = -1;
-                MNMoveFailCount = 0;
+                MoveFailCount = 0;
             }
         }
 
@@ -2006,7 +1912,7 @@ namespace GameSrv.RobotPlay
                             case MagicConst.SKILL_SINSU:
                             case MagicConst.SKILL_UNAMYOUNSUL:
                             case MagicConst.SKILL_46:
-                                if (MBoSelSelf)
+                                if (BoSelSelf)
                                 {
                                     baseObject = this;
                                     nTargetX = CurrX;
@@ -2194,7 +2100,7 @@ namespace GameSrv.RobotPlay
                                     dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed); // 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
-                                        MWHitMode = 4;
+                                        HitMode = 4;
                                         TargetFocusTick = HUtil32.GetTickCount();
                                         Dir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                                         Attack(TargetCret, Dir);
@@ -2235,7 +2141,7 @@ namespace GameSrv.RobotPlay
                                     dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed);// 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
-                                        MWHitMode = 9;
+                                        HitMode = 9;
                                         TargetFocusTick = HUtil32.GetTickCount();
                                         Dir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                                         Attack(TargetCret, Dir);
@@ -2270,7 +2176,7 @@ namespace GameSrv.RobotPlay
                                     // 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
-                                        MWHitMode = 9;
+                                        HitMode = 9;
                                         TargetFocusTick = HUtil32.GetTickCount();
                                         Dir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                                         Attack(TargetCret, Dir);

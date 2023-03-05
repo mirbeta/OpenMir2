@@ -25,7 +25,7 @@ namespace GameSrv.GameCommand.Commands {
             PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (m_PlayObject != null) {
                 HumanList = new List<BaseObject>();
-                M2Share.WorldEngine.GetMapRageHuman(m_PlayObject.Envir, m_PlayObject.CurrX, m_PlayObject.CurrY, nRange, HumanList);
+                M2Share.WorldEngine.GetMapRageHuman(m_PlayObject.Envir, m_PlayObject.CurrX, m_PlayObject.CurrY, nRange, ref HumanList);
                 for (int i = 0; i < HumanList.Count; i++) {
                     MoveHuman = HumanList[i] as PlayObject;
                     if (MoveHuman != PlayObject) {

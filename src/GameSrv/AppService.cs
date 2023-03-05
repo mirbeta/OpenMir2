@@ -143,7 +143,7 @@ namespace GameSrv
                 _logger.Info("保存玩家数据");
                 foreach (Player.PlayObject play in M2Share.WorldEngine.PlayObjects)
                 {
-                    M2Share.WorldEngine.SaveHumanRcd(play);
+                    World.WorldServer.SaveHumanRcd(play);
                 }
                 _logger.Info("数据保存完毕.");
             }

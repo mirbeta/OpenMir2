@@ -55,7 +55,7 @@ namespace GameSrv.RobotPlay
             bool result = false;
             try
             {
-                MWHitMode = 0;
+                HitMode = 0;
                 if (WAbil.MP > 0)
                 {
                     if (TargetCret != null)
@@ -99,33 +99,33 @@ namespace GameSrv.RobotPlay
                                         }
                                         break;
                                     case 7:
-                                        MWHitMode = 3;
+                                        HitMode = 3;
                                         break;
                                     case 12:
-                                        MWHitMode = 4;
+                                        HitMode = 4;
                                         break;
                                     case 25: // 四级刺杀
-                                        MWHitMode = 5;
+                                        HitMode = 5;
                                         break;
                                     case 26: // 圆月弯刀(四级半月弯刀)
                                         if (UseSpell(UserMagic, CurrX, CurrY, TargetCret))
                                         {
-                                            MWHitMode = 7;
+                                            HitMode = 7;
                                         }
                                         break;
                                     case 40: // 使用烈火
-                                        MWHitMode = 8;
+                                        HitMode = 8;
                                         break;
                                     case 43: // 抱月刀法
                                         if (UseSpell(UserMagic, CurrX, CurrY, TargetCret))
                                         {
-                                            MWHitMode = 9;
+                                            HitMode = 9;
                                         }
                                         break;
                                     case 42: // 开天斩
                                         if (UseSpell(UserMagic, CurrX, CurrY, TargetCret))
                                         {
-                                            MWHitMode = 12;
+                                            HitMode = 12;
                                         }
                                         break;
                                 }
@@ -133,7 +133,7 @@ namespace GameSrv.RobotPlay
                         }
                     }
                 }
-                result = WarrAttackTarget(MWHitMode);
+                result = WarrAttackTarget(HitMode);
                 if (result)
                 {
                     AttackTick = HUtil32.GetTickCount();
@@ -155,7 +155,7 @@ namespace GameSrv.RobotPlay
             bool result = false;
             try
             {
-                MWHitMode = 0;
+                HitMode = 0;
                 SearchMagic(); // 查询魔法
                 if (AutoMagicId == 0)
                 {
@@ -189,7 +189,7 @@ namespace GameSrv.RobotPlay
                 if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22)
                 {
                     AutoUseMagic = false;// 是否能躲避
-                    result = WarrAttackTarget(MWHitMode);
+                    result = WarrAttackTarget(HitMode);
                 }
             }
             catch
@@ -209,7 +209,7 @@ namespace GameSrv.RobotPlay
             UserMagic UserMagic;
             try
             {
-                MWHitMode = 0;
+                HitMode = 0;
                 if (TargetCret != null)
                 {
                     if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) // 22级砍血量的怪 
@@ -417,7 +417,7 @@ namespace GameSrv.RobotPlay
                         GotoTargetXy(TargetCret.CurrX, TargetCret.CurrY, 0);
                     }
                     AutoUseMagic = false;// 是否能躲避
-                    result = WarrAttackTarget(MWHitMode);
+                    result = WarrAttackTarget(HitMode);
                 }
             }
             catch

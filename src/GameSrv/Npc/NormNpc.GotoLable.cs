@@ -1639,7 +1639,7 @@ namespace GameSrv.Npc {
                         Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null) {
                             List58 = new List<BaseObject>();
-                            M2Share.WorldEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
+                            M2Share.WorldEngine.GetMapRageHuman(Envir, 0, 0, 1000, ref List58);
                             if (List58.Count > 0) {
                                 User = (PlayObject)List58[0];
                                 User.MapRandomMove(MapName, 0);
@@ -1654,7 +1654,7 @@ namespace GameSrv.Npc {
                         Envir = M2Share.MapMgr.FindMap(QuestActionInfo.sParam1);
                         if (Envir != null) {
                             List58 = new List<BaseObject>();
-                            M2Share.WorldEngine.GetMapRageHuman(Envir, 0, 0, 1000, List58);
+                            M2Share.WorldEngine.GetMapRageHuman(Envir, 0, 0, 1000, ref List58);
                             for (int k = 0; k < List58.Count; k++) {
                                 User = (PlayObject)List58[k];
                                 User.MapRandomMove(MapName, 0);

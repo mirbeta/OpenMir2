@@ -52,7 +52,7 @@ namespace SystemModule.Common
             return defValue;
         }
 
-        protected int ReadWriteInteger(string section, string key, int defValue)
+        public int ReadWriteInteger(string section, string key, int defValue)
         {
             if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
             {
@@ -82,7 +82,7 @@ namespace SystemModule.Common
             return defValue;
         }
 
-        protected bool ReadWriteBool(string section, string key, bool defValue)
+        public bool ReadWriteBool(string section, string key, bool defValue)
         {
             if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
             {
@@ -102,7 +102,7 @@ namespace SystemModule.Common
             return defValue;
         }
 
-        protected string ReadWriteString(string section, string key, string defValue)
+        public string ReadWriteString(string section, string key, string defValue)
         {
             if (CheckSectionExists(section) && CheckSectionNodeExists(section, key))
             {
