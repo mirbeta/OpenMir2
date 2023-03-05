@@ -6,7 +6,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv
 {
-    public class ClFunc
+    public static class BotHelper
     {
         private static readonly IList<ClientItem> DropItems = null;
 

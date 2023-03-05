@@ -859,9 +859,9 @@ namespace BotSrv.Objects
                                     {
                                         if (TargetCount3(MShare.AutoTagget) >= 15)
                                         {
-                                            tdir = ClFunc.GetNextDirection(MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY, MShare.MySelf.CurrX, MShare.MySelf.CurrY);
-                                            ClFunc.GetFrontPosition(MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY, tdir, ref nx, ref ny);
-                                            ClFunc.GetFrontPosition(nx, ny, tdir, ref nx, ref ny);
+                                            tdir = BotHelper.GetNextDirection(MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY, MShare.MySelf.CurrX, MShare.MySelf.CurrY);
+                                            BotHelper.GetFrontPosition(MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY, tdir, ref nx, ref ny);
+                                            BotHelper.GetFrontPosition(nx, ny, tdir, ref nx, ref ny);
                                             //if (robotClient.EventMan.GetEvent(nx, ny, Grobal2.ET_FIRE) == null)
                                             //{
                                             //    MShare.m_dwTargetFocusTick = MShare.GetTickCount();
@@ -878,7 +878,7 @@ namespace BotSrv.Objects
                                 FFFF:
                                     if (MShare.MagicArr[10] != null)
                                     {
-                                        tdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);
+                                        tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);
                                         if (_robotClient.GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, 1, ref nNx, ref nNy))
                                         {
                                             _robotClient.GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, 8, ref nTx, ref nTy);
@@ -892,7 +892,7 @@ namespace BotSrv.Objects
                                     }
                                     if (MShare.MagicArr[9] != null)
                                     {
-                                        tdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);
+                                        tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);
                                         if (_robotClient.GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, 1, ref nNx, ref nNy))
                                         {
                                             _robotClient.GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, 5, ref nTx, ref nTy);
@@ -966,21 +966,21 @@ namespace BotSrv.Objects
                                 }
                             }
                         }
-                        tdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);// 避怪
-                        ClFunc.GetBackPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny);
+                        tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);// 避怪
+                        BotHelper.GetBackPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny);
                         nTag = 0;
                         while (true)
                         {
                             if (_robotClient.PlayScene.CanWalk(nx, ny)) break;
                             tdir++;
                             tdir = tdir % 8;
-                            ClFunc.GetBackPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny);
+                            BotHelper.GetBackPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny);
                             nTag++;
                             if (nTag > 8) break;
                         }
                         if (_robotClient.PlayScene.CanWalk(nx, ny))
                         {
-                            ClFunc.GetBackPosition2(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nTx, ref nTy);
+                            BotHelper.GetBackPosition2(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nTx, ref nTy);
                             // Map.CanMove(nTX, nTY)
                             if (_robotClient.PlayScene.CanWalk(nTx, nTy))
                             {
@@ -1092,8 +1092,8 @@ namespace BotSrv.Objects
                                     return result;
                                 }
                                 MShare.FocusCret = null;
-                                tdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);
-                                ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny);
+                                tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);
+                                BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny);
                                 _robotClient.UseMagic(nx, ny, pcm, true);
                                 return result;
                             }
@@ -1197,22 +1197,22 @@ namespace BotSrv.Objects
                                 }
                             }
 
-                        tdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);
-                        ClFunc.GetBackPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny); // 避怪
+                        tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);
+                        BotHelper.GetBackPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny); // 避怪
                         nTag = 0;
                         while (true)
                         {
                             if (_robotClient.PlayScene.CanWalk(nx, ny)) break;
                             tdir++;
                             tdir = tdir % 8;
-                            ClFunc.GetBackPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny);
+                            BotHelper.GetBackPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nx, ref ny);
                             nTag++;
                             if (nTag > 8) break;
                         }
 
                         if (_robotClient.PlayScene.CanWalk(nx, ny))
                         {
-                            ClFunc.GetBackPosition2(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nTx, ref nTy);
+                            BotHelper.GetBackPosition2(MShare.MySelf.CurrX, MShare.MySelf.CurrY, tdir, ref nTx, ref nTy);
                             // Map.CanMove(nTX, nTY)
                             if (_robotClient.PlayScene.CanWalk(nTx, nTy))
                             {

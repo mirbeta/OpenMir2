@@ -459,7 +459,7 @@ namespace BotSrv.Objects
                             break;
                         case Messages.CM_SPELL:
                             if (MShare.MagicTarget != null)
-                                Msg.Dir = ClFunc.GetFlyDirection(CurrX, CurrY, MShare.MagicTarget.CurrX,
+                                Msg.Dir = BotHelper.GetFlyDirection(CurrX, CurrY, MShare.MagicTarget.CurrX,
                                     MShare.MagicTarget.CurrY);
                             RealActionMsg = Msg;
                             //UseMagic = (TUseMagicInfo)Msg.Feature;
@@ -1188,7 +1188,7 @@ namespace BotSrv.Objects
                             m_nCurrentFrame -= 1;
                     curstep = m_nEndFrame - m_nCurrentFrame + 1;
                     maxstep = m_nEndFrame - m_nStartFrame + 1;
-                    Shift(ClFunc.GetBack(m_btDir), m_nMoveStep, curstep, maxstep);
+                    Shift(BotHelper.GetBack(m_btDir), m_nMoveStep, curstep, maxstep);
                 }
 
                 if (m_nCurrentFrame <= m_nStartFrame)

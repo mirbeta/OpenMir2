@@ -309,7 +309,7 @@ namespace BotSrv.Player
                     MShare.g_nMyHungryState = msg.Param;
                     break;
                 case Messages.SM_TURN:
-                    n = ClFunc.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
+                    n = BotHelper.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
                     if (body.Length > n)
                     {
                         body2 = body[n..];
@@ -355,7 +355,7 @@ namespace BotSrv.Player
                     }
                     break;
                 case Messages.SM_BACKSTEP:
-                    n = ClFunc.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
+                    n = BotHelper.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n + 1 - 1, body.Length);
@@ -389,7 +389,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_SPACEMOVE_SHOW:
                 case Messages.SM_SPACEMOVE_SHOW2:
-                    n = ClFunc.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
+                    n = BotHelper.GetCodeMsgSize((float)8 * 4 / 3);//sizeof(CharDesc)
                     if (body.Length > n)
                     {
                         body2 = body.Substring(n, body.Length);
@@ -678,7 +678,7 @@ namespace BotSrv.Player
                         Actor.m_nWaitForRecogId = HUtil32.MakeLong(msg.Param, msg.Tag);
                         Actor.m_nWaitForFeature = desc.Feature;
                         Actor.m_nWaitForStatus = desc.Status;
-                        ClFunc.AddChangeFace(Actor.m_nWaitForRecogId);
+                        BotHelper.AddChangeFace(Actor.m_nWaitForRecogId);
                     }
                     break;
                 case Messages.SM_PASSWORD:
@@ -821,7 +821,7 @@ namespace BotSrv.Player
                     ClientGetDelItems(body, msg.Param);
                     break;
                 case Messages.SM_DROPITEM_SUCCESS:
-                    ClFunc.DelDropItem(EDCode.DeCodeString(body), msg.Recog);
+                    BotHelper.DelDropItem(EDCode.DeCodeString(body), msg.Recog);
                     break;
                 case Messages.SM_DROPITEM_FAIL:
                     ClientGetDropItemFail(EDCode.DeCodeString(body), msg.Recog);
@@ -856,7 +856,7 @@ namespace BotSrv.Player
                 case Messages.SM_TAKEON_FAIL:
                     if (MShare.g_WaitingUseItem.Item.Item.Name != "")
                     {
-                        ClFunc.AddItemBag(MShare.g_WaitingUseItem.Item);
+                        BotHelper.AddItemBag(MShare.g_WaitingUseItem.Item);
                         MShare.g_WaitingUseItem.Item.Item.Name = "";
                     }
                     break;
@@ -920,7 +920,7 @@ namespace BotSrv.Player
                                 {
                                     if (MShare.ItemArr[i].MakeIndex == MShare.g_EatingItem.MakeIndex)
                                     {
-                                        ClFunc.DelStallItem(MShare.ItemArr[i]);
+                                        BotHelper.DelStallItem(MShare.ItemArr[i]);
                                         str = MShare.ItemArr[i].Item.Name;
                                         MShare.ItemArr[i].Item.Name = "";
                                         break;
@@ -945,7 +945,7 @@ namespace BotSrv.Player
                             }
                         }
                         MShare.g_EatingItem.Item.Name = "";
-                        ClFunc.ArrangeItembag();
+                        BotHelper.ArrangeItembag();
                         MNEatRetIdx = -1;
                     }
                     break;
@@ -957,7 +957,7 @@ namespace BotSrv.Player
                         {
                             MShare.g_EatingItem.Dura = msg.Tag;
                         }
-                        ClFunc.AddItemBag(MShare.g_EatingItem, MNEatRetIdx);
+                        BotHelper.AddItemBag(MShare.g_EatingItem, MNEatRetIdx);
                         MShare.g_EatingItem.Item.Name = "";
                         MNEatRetIdx = -1;
                     }
@@ -1034,7 +1034,7 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_USERSELLITEM_FAIL:
                     LastestClickTime = MShare.GetTickCount();
-                    ClFunc.AddItemBag(MShare.g_SellDlgItemSellWait.Item);
+                    BotHelper.AddItemBag(MShare.g_SellDlgItemSellWait.Item);
                     MShare.g_SellDlgItemSellWait.Item.Item.Name = "";
                     MainOutMessage("此物品不能出售");
                     break;
@@ -1060,13 +1060,13 @@ namespace BotSrv.Player
                         MShare.MySelf.m_nGold = msg.Recog;
                         MShare.g_SellDlgItemSellWait.Item.Dura = msg.Param;
                         MShare.g_SellDlgItemSellWait.Item.DuraMax = msg.Tag;
-                        ClFunc.AddItemBag(MShare.g_SellDlgItemSellWait.Item);
+                        BotHelper.AddItemBag(MShare.g_SellDlgItemSellWait.Item);
                         MShare.g_SellDlgItemSellWait.Item.Item.Name = "";
                     }
                     break;
                 case Messages.SM_USERREPAIRITEM_FAIL:
                     LastestClickTime = MShare.GetTickCount();
-                    ClFunc.AddItemBag(MShare.g_SellDlgItemSellWait.Item);
+                    BotHelper.AddItemBag(MShare.g_SellDlgItemSellWait.Item);
                     MShare.g_SellDlgItemSellWait.Item.Item.Name = "";
                     MainOutMessage("您不能修理此物品");
                     break;
@@ -1273,10 +1273,10 @@ namespace BotSrv.Player
                     MShare.g_sDealWho = EDCode.DeCodeString(body);
                     break;
                 case Messages.SM_DEALCANCEL:
-                    ClFunc.MoveDealItemToBag();
+                    BotHelper.MoveDealItemToBag();
                     if (MShare.g_DealDlgItem.Item.Name != "")
                     {
-                        ClFunc.AddItemBag(MShare.g_DealDlgItem);
+                        BotHelper.AddItemBag(MShare.g_DealDlgItem);
                         MShare.g_DealDlgItem.Item.Name = "";
                     }
                     if (MShare.g_nDealGold > 0)
@@ -1289,7 +1289,7 @@ namespace BotSrv.Player
                     MShare.g_dwDealActionTick = MShare.GetTickCount();
                     if (MShare.g_DealDlgItem.Item.Name != "")
                     {
-                        ClFunc.ResultDealItem(MShare.g_DealDlgItem, msg.Recog, msg.Param);
+                        BotHelper.ResultDealItem(MShare.g_DealDlgItem, msg.Recog, msg.Param);
                         MShare.g_DealDlgItem.Item.Name = "";
                     }
                     break;
@@ -1297,7 +1297,7 @@ namespace BotSrv.Player
                     MShare.g_dwDealActionTick = MShare.GetTickCount();
                     if (MShare.g_DealDlgItem.Item.Name != "")
                     {
-                        ClFunc.AddItemBag(MShare.g_DealDlgItem);
+                        BotHelper.AddItemBag(MShare.g_DealDlgItem);
                         MShare.g_DealDlgItem.Item.Name = "";
                     }
                     if (msg.Recog != 0)
@@ -1316,7 +1316,7 @@ namespace BotSrv.Player
                     MShare.g_dwDealActionTick = MShare.GetTickCount();
                     if (MShare.g_DealDlgItem.Item.Name != "")
                     {
-                        ClFunc.AddDealItem(MShare.g_DealDlgItem);
+                        BotHelper.AddDealItem(MShare.g_DealDlgItem);
                         MShare.g_DealDlgItem.Item.Name = "";
                     }
                     break;

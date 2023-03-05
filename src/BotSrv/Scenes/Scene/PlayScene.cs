@@ -152,7 +152,7 @@ namespace BotSrv.Scenes.Scene
                 {
                     if (actor.IsIdle())
                     {
-                        ClFunc.DelChangeFace(actor.m_nWaitForRecogId);
+                        BotHelper.DelChangeFace(actor.m_nWaitForRecogId);
                         NewActor(actor.m_nWaitForRecogId, actor.CurrX, actor.CurrY, actor.m_btDir, actor.m_nWaitForFeature, actor.m_nWaitForStatus);
                         actor.m_nWaitForRecogId = 0;
                         actor.DelActor = true;
@@ -383,10 +383,10 @@ namespace BotSrv.Scenes.Scene
         public bool CanRun(short sX, short sY, int ex, int ey)
         {
             bool result;
-            byte ndir = ClFunc.GetNextDirection(sX, sY, ex, ey);
+            byte ndir = BotHelper.GetNextDirection(sX, sY, ex, ey);
             short rx = sX;
             short ry = sY;
-            ClFunc.GetNextPosXY(ndir, ref rx, ref ry);
+            BotHelper.GetNextPosXY(ndir, ref rx, ref ry);
             if (CanWalkEx(rx, ry) && CanWalkEx(ex, ey))
             {
                 result = true;
@@ -558,7 +558,7 @@ namespace BotSrv.Scenes.Scene
                     return result;
                 }
             }
-            if (ClFunc.IsChangingFace(chrid))
+            if (BotHelper.IsChangingFace(chrid))
             {
                 return result;
             }

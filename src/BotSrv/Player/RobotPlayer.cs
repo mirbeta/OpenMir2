@@ -193,7 +193,7 @@ namespace BotSrv.Player
                 SendRunLogin();
                 if (!MShare.g_boServerChanging)
                 {
-                    ClFunc.ClearBag();
+                    BotHelper.ClearBag();
                 }
                 else
                 {
@@ -375,7 +375,7 @@ namespace BotSrv.Player
                     if (PlayScene.ProcMagic.FContinue || (CanNextAction() && ServerAcceptNextAction()))
                     {
                         MShare.LatestSpellTick = MShare.GetTickCount();
-                        tdir = ClFunc.GetFlyDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targx, targy);
+                        tdir = BotHelper.GetFlyDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targx, targy);
                         //pmag = new TUseMagicInfo();
                         //pmag.EffectNumber = g_PlayScene.ProcMagic.XMagic.Def.btEffect;
                         //pmag.MagicSerial = g_PlayScene.ProcMagic.XMagic.Def.wMagicID;
@@ -530,7 +530,7 @@ namespace BotSrv.Player
                     var my = MShare.MySelf.CurrY;
                     var dx = MShare.TargetX;
                     var dy = MShare.TargetY;
-                    var ndir = ClFunc.GetNextDirection(mx, my, dx, dy);
+                    var ndir = BotHelper.GetNextDirection(mx, my, dx, dy);
                     int crun;
                     byte mdir;
                     switch (MShare.PlayerAction)
@@ -540,7 +540,7 @@ namespace BotSrv.Player
                             crun = MShare.MySelf.CanWalk();
                             if (IsUnLockAction() && (crun > 0))
                             {
-                                ClFunc.GetNextPosXY(ndir, ref mx, ref my);
+                                BotHelper.GetNextPosXY(ndir, ref mx, ref my);
                                 var bostop = false;
                                 if (!PlayScene.CanWalk(mx, my))
                                 {
@@ -555,7 +555,7 @@ namespace BotSrv.Player
                                     {
                                         mx = MShare.MySelf.CurrX;
                                         my = MShare.MySelf.CurrY;
-                                        ClFunc.GetNextPosXY(ndir, ref mx, ref my);
+                                        BotHelper.GetNextPosXY(ndir, ref mx, ref my);
                                         if (CheckDoorAction(mx, my))
                                         {
                                             bostop = true;
@@ -565,14 +565,14 @@ namespace BotSrv.Player
                                     {
                                         mx = MShare.MySelf.CurrX;
                                         my = MShare.MySelf.CurrY;
-                                        adir = ClFunc.PrivDir(ndir);
-                                        ClFunc.GetNextPosXY(adir, ref mx, ref my);
+                                        adir = BotHelper.PrivDir(ndir);
+                                        BotHelper.GetNextPosXY(adir, ref mx, ref my);
                                         if (!Map.CanMove(mx, my))
                                         {
                                             mx = MShare.MySelf.CurrX;
                                             my = MShare.MySelf.CurrY;
-                                            adir = ClFunc.NextDir(ndir);
-                                            ClFunc.GetNextPosXY(adir, ref mx, ref my);
+                                            adir = BotHelper.NextDir(ndir);
+                                            BotHelper.GetNextPosXY(adir, ref mx, ref my);
                                             if (Map.CanMove(mx, my))
                                             {
                                                 bowalk = true;
@@ -594,7 +594,7 @@ namespace BotSrv.Player
                                     }
                                     else
                                     {
-                                        mdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, dx, dy);
+                                        mdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, dx, dy);
                                         if (mdir != MShare.MySelf.m_btDir)
                                         {
                                             MShare.MySelf.SendMsg(Messages.CM_TURN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, mdir, 0, 0, "", 0);
@@ -617,9 +617,9 @@ namespace BotSrv.Player
                             if (MShare.g_boCanStartRun || (MShare.g_nRunReadyCount >= 1))
                             {
                                 crun = MShare.MySelf.CanRun();// 骑马开始
-                                if ((MShare.MySelf.m_btHorse != 0) && (ClFunc.GetDistance(mx, my, dx, dy) >= 3) && (crun > 0) && IsUnLockAction())
+                                if ((MShare.MySelf.m_btHorse != 0) && (BotHelper.GetDistance(mx, my, dx, dy) >= 3) && (crun > 0) && IsUnLockAction())
                                 {
-                                    ClFunc.GetNextHorseRunXY(ndir, ref mx, ref my);
+                                    BotHelper.GetNextHorseRunXY(ndir, ref mx, ref my);
                                     if (PlayScene.CanRun(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mx, my))
                                     {
                                         MShare.MySelf.UpdateMsg(Messages.CM_HORSERUN, (ushort)mx, (ushort)my, ndir, 0, 0, "", 0);
@@ -638,11 +638,11 @@ namespace BotSrv.Player
                                 }
                                 else
                                 {
-                                    if ((ClFunc.GetDistance(mx, my, dx, dy) >= 2) && (crun > 0))
+                                    if ((BotHelper.GetDistance(mx, my, dx, dy) >= 2) && (crun > 0))
                                     {
                                         if (IsUnLockAction())
                                         {
-                                            ClFunc.GetNextRunXY(ndir, ref mx, ref my);
+                                            BotHelper.GetNextRunXY(ndir, ref mx, ref my);
                                             if (PlayScene.CanRun(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mx, my))
                                             {
                                                 MShare.MySelf.UpdateMsg(Messages.CM_RUN, (ushort)mx, (ushort)my, ndir, 0, 0, "", 0);
@@ -666,7 +666,7 @@ namespace BotSrv.Player
                                     }
                                     else
                                     {
-                                        mdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, dx, dy);
+                                        mdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, dx, dy);
                                         if (mdir != MShare.MySelf.m_btDir)
                                         {
                                             MShare.MySelf.SendMsg(Messages.CM_TURN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, mdir, 0, 0, "", 0);
@@ -953,7 +953,7 @@ namespace BotSrv.Player
                 if (boContinue || (CanNextAction() && ServerAcceptNextAction()))
                 {
                     MShare.LatestSpellTick = MShare.GetTickCount();
-                    tdir = ClFunc.GetFlyDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targx, targy);
+                    tdir = BotHelper.GetFlyDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targx, targy);
                     var pmag = new TUseMagicInfo();
                     pmag.EffectNumber = pcm.Def.Effect;
                     pmag.MagicSerial = pcm.Def.MagicId;
@@ -993,7 +993,7 @@ namespace BotSrv.Player
             var actor = PlayScene.FindActor(who);
             if (actor != null)
             {
-                var adir = ClFunc.GetFlyDirection(actor.CurrX, actor.CurrY, targetx, targety);
+                var adir = BotHelper.GetFlyDirection(actor.CurrX, actor.CurrY, targetx, targety);
                 var useMagic = new TUseMagicInfo();
                 useMagic.EffectNumber = effnum % 255;
                 useMagic.ServerMagicCode = 0;
@@ -1440,7 +1440,7 @@ namespace BotSrv.Player
                             }
                             return;
                         }
-                        where = ClFunc.GetTakeOnPosition(MShare.ItemArr[idx], MShare.UseItems, true);
+                        where = BotHelper.GetTakeOnPosition(MShare.ItemArr[idx], MShare.UseItems, true);
                         if (where >= 0 && where <= 13)
                         {
                             takeon = true;
@@ -1470,7 +1470,7 @@ namespace BotSrv.Player
                     if ((MShare.g_EatingItem.Item.StdMode == 4) && (MShare.g_EatingItem.Item.Shape < 50))
                     {
                         MainOutMessage($"练习{MShare.g_EatingItem.Item.Name}技能");
-                        ClFunc.AddItemBag(MShare.g_EatingItem);
+                        BotHelper.AddItemBag(MShare.g_EatingItem);
                         return;
                     }
                     idx = MNEatRetIdx;
@@ -1504,7 +1504,7 @@ namespace BotSrv.Player
                         }
                         return;
                     }
-                    where = ClFunc.GetTakeOnPosition(MShare.MovingItem.Item, MShare.UseItems, true);
+                    where = BotHelper.GetTakeOnPosition(MShare.MovingItem.Item, MShare.UseItems, true);
                     if (where >= 0 && where <= 13)
                     {
                         takeon = true;
@@ -1541,8 +1541,8 @@ namespace BotSrv.Player
             }
             short nX = 0;
             short nY = 0;
-            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
-            ClFunc.GetFrontPosition(nX, nY, ndir, ref nX, ref nY);
+            BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
+            BotHelper.GetFrontPosition(nX, nY, ndir, ref nX, ref nY);
             if ((Math.Abs(MShare.MySelf.CurrX - nX) == 2) || (Math.Abs(MShare.MySelf.CurrY - nY) == 2))
             {
                 var actor = PlayScene.FindActorXY(nX, nY);
@@ -1581,21 +1581,21 @@ namespace BotSrv.Player
             short rx = 0;
             short ry = 0;
             var result = false;
-            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
+            BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
             var actor = PlayScene.FindActorXY(nX, nY);
             var mdir = (ndir + 1) % 8;
-            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
+            BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
             var ractor = PlayScene.FindActorXY(rx, ry);
             if (ractor == null)
             {
                 mdir = (ndir + 2) % 8;
-                ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
+                BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
                 ractor = PlayScene.FindActorXY(rx, ry);
             }
             if (ractor == null)
             {
                 mdir = (ndir + 7) % 8;
-                ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
+                BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
                 ractor = PlayScene.FindActorXY(rx, ry);
             }
             if ((actor != null) && (ractor != null))
@@ -1668,21 +1668,21 @@ namespace BotSrv.Player
             short rx = 0;
             short ry = 0;
             var result = false;
-            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
+            BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
             var actor = PlayScene.FindActorXY(nX, nY);
             var mdir = (ndir + 1) % 8;
-            ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
+            BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
             var ractor = PlayScene.FindActorXY(rx, ry);
             if (ractor == null)
             {
                 mdir = (ndir + 2) % 8;
-                ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
+                BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
                 ractor = PlayScene.FindActorXY(rx, ry);
             }
             if (ractor == null)
             {
                 mdir = (ndir + 7) % 8;
-                ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
+                BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
                 ractor = PlayScene.FindActorXY(rx, ry);
             }
             if ((actor != null) && (ractor != null))
@@ -1703,7 +1703,7 @@ namespace BotSrv.Player
             {
                 nHitMsg = Messages.CM_HEAVYHIT;
             }
-            int tdir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY);
+            int tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY);
             if ((Math.Abs(MShare.MySelf.CurrX - target.CurrX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - target.CurrY) <= 1) && (!target.Death))
             {
                 if (TimerAutoPlay.Enabled)
@@ -1767,15 +1767,15 @@ namespace BotSrv.Player
                     var dy = MShare.MySelf.CurrY;
                     if ((MShare.MySelf.Job == 0) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.MagicArr[12] != null))
                     {
-                        ClFunc.GetNextHitPosition(target.CurrX, target.CurrY, ref dx, ref dy);
+                        BotHelper.GetNextHitPosition(target.CurrX, target.CurrY, ref dx, ref dy);
                         if (!PlayScene.CanWalk(dx, dy))
                         {
-                            ClFunc.GetBackPosition(target.CurrX, target.CurrY, tdir, ref dx, ref dy);
+                            BotHelper.GetBackPosition(target.CurrX, target.CurrY, tdir, ref dx, ref dy);
                         }
                     }
                     else
                     {
-                        ClFunc.GetBackPosition(target.CurrX, target.CurrY, tdir, ref dx, ref dy);
+                        BotHelper.GetBackPosition(target.CurrX, target.CurrY, tdir, ref dx, ref dy);
                     }
                     MShare.TargetX = dx;
                     MShare.TargetY = dy;
@@ -1895,13 +1895,13 @@ namespace BotSrv.Player
                         target = PlayScene.ButchAnimal(MShare.MouseCurrX, MShare.MouseCurrY);
                         if (target != null)
                         {
-                            ii = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MouseCurrX, MShare.MouseCurrY);
+                            ii = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MouseCurrX, MShare.MouseCurrY);
                             SendButchAnimal(MShare.MouseCurrX, MShare.MouseCurrY, ii, target.RecogId);
                             MShare.MySelf.SendMsg(Messages.CM_SITDOWN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, ii, 0, 0, "", 0);
                         }
                         else
                         {
-                            ii = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MouseCurrX, MShare.MouseCurrY);
+                            ii = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.MouseCurrX, MShare.MouseCurrY);
                             SendButchAnimal(MShare.MouseCurrX, MShare.MouseCurrY, ii, MShare.g_DetectItemMineID);
                             MShare.MySelf.SendMsg(Messages.CM_SITDOWN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, ii, 0, 0, "", 0);
                         }
@@ -2863,7 +2863,7 @@ namespace BotSrv.Player
             if (!string.IsNullOrEmpty(body))
             {
                 var cu = EDCode.DecodeBuffer<ClientItem>(body);
-                ClFunc.AddItemBag(cu);
+                BotHelper.AddItemBag(cu);
                 if (hint != 0)
                 {
                     DScreen.AddSysMsg(cu.Item.Name + " 被发现");
@@ -2876,7 +2876,7 @@ namespace BotSrv.Player
             if (!string.IsNullOrEmpty(body))
             {
                 var cu = EDCode.DecodeBuffer<ClientItem>(body);
-                ClFunc.UpdateItemBag(cu);
+                BotHelper.UpdateItemBag(cu);
                 for (var i = 0; i < MShare.UseItems.Length; i++)
                 {
                     if ((MShare.UseItems[i].Item.Name == cu.Item.Name) && (MShare.UseItems[i].MakeIndex == cu.MakeIndex))
@@ -2915,7 +2915,7 @@ namespace BotSrv.Player
             if (!string.IsNullOrEmpty(body))
             {
                 var cu = EDCode.DecodeBuffer<ClientItem>(body);
-                ClFunc.DelItemBag(cu.Item.Name, cu.MakeIndex);
+                BotHelper.DelItemBag(cu.Item.Name, cu.MakeIndex);
                 for (var i = 0; i < MShare.UseItems.Length; i++)
                 {
                     if ((MShare.UseItems[i].Item.Name == cu.Item.Name) && (MShare.UseItems[i].MakeIndex == cu.MakeIndex))
@@ -2957,7 +2957,7 @@ namespace BotSrv.Player
                 if ((!string.IsNullOrEmpty(iname)) && (!string.IsNullOrEmpty(str)))
                 {
                     iindex = HUtil32.StrToInt(str, 0);
-                    ClFunc.DelItemBag(iname, iindex);
+                    BotHelper.DelItemBag(iname, iindex);
                     if (wOnlyBag == 0)
                     {
                         for (var i = 0; i < MShare.UseItems.Length; i++)
@@ -3074,14 +3074,14 @@ namespace BotSrv.Player
                 }
                 body = HUtil32.GetValidStr3(body, ref Str, HUtil32.Backslash);
                 var cu = EDCode.DecodeClientBuffer<ClientItem>(Str);
-                ClFunc.AddItemBag(cu);
+                BotHelper.AddItemBag(cu);
             }
             //ClFunc.Loadbagsdat(".\\Config\\" + MShare.g_sServerName + "." + m_sChrName + ".itm-plus", ItemSaveArr);
             //if (ClientGetBagItmes_CompareItemArr())
             //{
             //    Move(ItemSaveArr, MShare.g_ItemArr * BotConst.MAXBAGITEMCL);
             //}
-            ClFunc.ArrangeItembag();
+            BotHelper.ArrangeItembag();
             MShare.g_boBagLoaded = true;
             if (MShare.MySelf != null)
             {
@@ -3095,7 +3095,7 @@ namespace BotSrv.Player
                         }
                         if (MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name != "")
                         {
-                            ClFunc.UpdateBagStallItem(MShare.MySelf.StallMgr.mBlock.Items[i], 4);
+                            BotHelper.UpdateBagStallItem(MShare.MySelf.StallMgr.mBlock.Items[i], 4);
                         }
                     }
                 }
@@ -3109,7 +3109,7 @@ namespace BotSrv.Player
                         }
                         if (MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name != "")
                         {
-                            ClFunc.UpdateBagStallItem(MShare.MySelf.StallMgr.mBlock.Items[i], 5);
+                            BotHelper.UpdateBagStallItem(MShare.MySelf.StallMgr.mBlock.Items[i], 5);
                         }
                     }
                 }
@@ -3145,11 +3145,11 @@ namespace BotSrv.Player
 
         private void ClientGetDropItemFail(string iname, int sindex)
         {
-            var pc = ClFunc.GetDropItem(iname, sindex);
+            var pc = BotHelper.GetDropItem(iname, sindex);
             if (pc != null)
             {
-                ClFunc.AddItemBag(pc);
-                ClFunc.DelDropItem(iname, sindex);
+                BotHelper.AddItemBag(pc);
+                BotHelper.DelDropItem(iname, sindex);
             }
         }
 
@@ -3820,7 +3820,7 @@ namespace BotSrv.Player
             if (body != "")
             {
                 var ci = EDCode.DecodeBuffer<ClientItem>(body);
-                ClFunc.AddDealRemoteItem(ci);
+                BotHelper.AddDealRemoteItem(ci);
             }
         }
 
@@ -3829,7 +3829,7 @@ namespace BotSrv.Player
             if (body != "")
             {
                 var ci = EDCode.DecodeBuffer<ClientItem>(body);
-                ClFunc.DelDealRemoteItem(ci);
+                BotHelper.DelDealRemoteItem(ci);
             }
         }
 
@@ -3962,7 +3962,7 @@ namespace BotSrv.Player
                     MShare.ItemArr[i].Item.Name = "";
                     MShare.g_boCheckTakeOffPoison = true;
                     SendTakeOnItem(MShare.g_WaitingUseItem.Index, MShare.g_WaitingUseItem.Item.MakeIndex, MShare.g_WaitingUseItem.Item.Item.Name);
-                    ClFunc.ArrangeItembag();
+                    BotHelper.ArrangeItembag();
                     return;
                 }
             }
@@ -4173,11 +4173,11 @@ namespace BotSrv.Player
                                 y1 = MShare.MySelf.CurrY;
                                 short x2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
                                 short y2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
-                                int ndir = ClFunc.GetNextDirection(x1, y1, x2, y2);
-                                ClFunc.GetNextPosXY((byte)ndir, ref x1, ref y1);
+                                int ndir = BotHelper.GetNextDirection(x1, y1, x2, y2);
+                                BotHelper.GetNextPosXY((byte)ndir, ref x1, ref y1);
                                 x3 = MShare.MySelf.CurrX;
                                 y3 = MShare.MySelf.CurrY;
-                                ClFunc.GetNextRunXY(ndir, ref x3, ref y3);
+                                BotHelper.GetNextRunXY(ndir, ref x3, ref y3);
                                 if ((PathMap.g_MapPath[GMoveStep + 1].X == x3) && (PathMap.g_MapPath[GMoveStep + 1].X == y3))
                                 {
                                     boCanRun = true;
@@ -4241,7 +4241,7 @@ namespace BotSrv.Player
             {
                 if (!GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, 2, ref MShare.TargetX, ref MShare.TargetY))
                 {
-                    ClFunc.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref MShare.TargetX, ref MShare.TargetY);
+                    BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref MShare.TargetX, ref MShare.TargetY);
                     if (!PlayScene.CanWalk(MShare.TargetX, MShare.TargetY))
                     {
                         MShare.MySelf.SendMsg(Messages.CM_TURN, (ushort)MShare.MySelf.CurrX, (ushort)MShare.MySelf.CurrY, RandomNumber.GetInstance().Random(8), 0, 0, "", 0);
@@ -4453,15 +4453,15 @@ namespace BotSrv.Player
             var ndir = 0;
             if (MShare.AutoPathList.Count > 2)
             {
-                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoPathList[2].X, MShare.AutoPathList[2].Y);
+                ndir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoPathList[2].X, MShare.AutoPathList[2].Y);
             }
             else
             {
-                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
+                ndir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
             }
             short x1 = MShare.MySelf.CurrX;
             short y1 = MShare.MySelf.CurrY;
-            ClFunc.GetNextRunXY(ndir, ref x1, ref y1);
+            BotHelper.GetNextRunXY(ndir, ref x1, ref y1);
             if (Map.CanMove(x1, y1))
             {
                 if (PlayScene.CrashMan(x1, y1))
@@ -4799,7 +4799,7 @@ namespace BotSrv.Player
                 }
                 if (!((Math.Abs(sx - tx) <= 0) && (Math.Abs(sy - ty) <= 0)))
                 {
-                    ndir = ClFunc.GetNextDirection(sx, sy, tx, ty);
+                    ndir = BotHelper.GetNextDirection(sx, sy, tx, ty);
                     if (!GetNextPosition(sx, sy, ndir, 1, ref sx, ref sy))
                     {
                         break;
@@ -4818,7 +4818,7 @@ namespace BotSrv.Player
             var result = false;
             nX = MShare.MySelf.CurrX;
             nY = MShare.MySelf.CurrY;
-            var btDir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targetCret.CurrX, targetCret.CurrY);
+            var btDir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targetCret.CurrX, targetCret.CurrY);
             var wvar1 = MShare.MySelf;
             switch (btDir)
             {
