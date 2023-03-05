@@ -392,8 +392,7 @@ namespace BotSrv
                     if (MShare.MySelf.StallMgr.mBlock.Items[i].MakeIndex == ci.MakeIndex)
                     {
                         MShare.MySelf.StallMgr.mBlock.Items[i] = ci;
-                        result = true;
-                        return result;
+                        return true;
                     }
                 }
             }

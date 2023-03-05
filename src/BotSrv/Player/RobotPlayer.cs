@@ -31,9 +31,7 @@ namespace BotSrv.Player
         public SelectChrScene SelectChrScene = null;
         public PlayScene PlayScene = null;
         public TMap Map = null;
-        public static Actor ShowMsgActor = null;
         public static long GDwOverSpaceWarningTick = 0;
-        private const char Activebuf = '*';
         private readonly TTimerCommand _timerCmd;
         private int _actionLockTime = 0;
         private readonly short _actionKey = 0;
@@ -41,12 +39,9 @@ namespace BotSrv.Player
         private string _waitingStr = string.Empty;
         private string _whisperName = string.Empty;
         private int _mDwProcUseMagicTick = 0;
-        public static long g_dwOverSpaceWarningTick = 0;
         private readonly TTimerCommand TimerCmd;
         private int ActionLockTime = 0;
-        private readonly short ActionKey = 0;
         private CommandMessage WaitingMsg;
-        private string WaitingStr = string.Empty;
         private string WhisperName = string.Empty;
         private int m_dwProcUseMagicTick = 0;
         public bool ActionFailLock = false;

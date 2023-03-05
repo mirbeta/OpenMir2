@@ -4,11 +4,6 @@ namespace BotSrv.Objects
 {
     public class TWallStructure : Actor
     {
-        private const int V = 0;
-        private readonly int ax = 0;
-        private readonly int ay = 0;
-        private readonly int bx = 0;
-        private readonly int by = 0;
         private bool bomarkpos;
 
         public TWallStructure(RobotPlayer robotClient) : base(robotClient)
@@ -35,7 +30,6 @@ namespace BotSrv.Objects
                     bomarkpos = true;
                 }
             }
-
             robotClient.PlayScene.SetActorDrawLevel(this, 0);
             base.Run();
         }

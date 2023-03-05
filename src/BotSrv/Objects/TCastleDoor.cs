@@ -4,12 +4,6 @@ namespace BotSrv.Objects
 {
     public class TCastleDoor : Actor
     {
-        private readonly int ax = 0;
-        private readonly int ay = 0;
-        private readonly int oldunitx = 0;
-        private readonly int oldunity = 0;
-        public bool BoDoorOpen;
-
         public TCastleDoor(RobotPlayer robotClient) : base(robotClient)
         {
             m_btDir = 0;

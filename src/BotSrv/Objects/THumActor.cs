@@ -9,8 +9,6 @@ namespace BotSrv.Objects
 {
     public class THumActor : Actor
     {
-        private readonly bool m_boHideWeapon = false;
-        private readonly bool m_boSSkill;
         public IList<Actor> SlaveObject;
         public TStallMgr StallMgr;
 
@@ -18,7 +16,6 @@ namespace BotSrv.Objects
         {
             StallMgr = new TStallMgr();
             SlaveObject = new List<Actor>();
-            m_boSSkill = false;
             m_dwFrameTime = 150;
             m_nHumWinOffset = 0;
             m_nCboHumWinOffSet = 0;

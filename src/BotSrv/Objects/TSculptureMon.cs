@@ -5,8 +5,6 @@ namespace BotSrv.Objects
 {
     public class TSculptureMon : TSkeletonOma
     {
-        private readonly int firedir;
-
         public TSculptureMon(RobotPlayer robotClient) : base(robotClient)
         {
         }

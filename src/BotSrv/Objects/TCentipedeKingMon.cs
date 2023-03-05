@@ -5,9 +5,6 @@ namespace BotSrv.Objects
 {
     public class TCentipedeKingMon : TKillingHerb
     {
-        private readonly int ax = 0;
-        private readonly int ay = 0;
-
         public TCentipedeKingMon(RobotPlayer robotClient) : base(robotClient)
         {
 
