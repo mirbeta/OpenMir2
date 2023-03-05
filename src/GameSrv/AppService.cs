@@ -194,7 +194,7 @@ namespace GameSrv {
                     continue;
                 }
                 try {
-                    _application.Execute(new[] { cmdline });
+                    _application.Execute(cmdline);
                 }
                 catch {
                     // ignored

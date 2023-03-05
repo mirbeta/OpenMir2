@@ -52,7 +52,6 @@ namespace BotSrv.Player
             int j;
             var n = 0;
             Actor Actor;
-            Actor Actor2;
             //TClEvent __event;
             if (datablock[0] == '+') //动作包
             {
@@ -641,7 +640,7 @@ namespace BotSrv.Player
                         Actor.Abil.MaxHP = msg.Tag;
                         if (MShare.OpenAutoPlay && TimerAutoPlay.Enabled) //  自己受人攻击,小退
                         {
-                            Actor2 = PlayScene.FindActor(wl.Tag1);
+                            var Actor2 = PlayScene.FindActor(wl.Tag1);
                             if (Actor2 == null || (Actor2.Race != 0 && Actor2.m_btIsHero != 1))
                             {
                                 return;

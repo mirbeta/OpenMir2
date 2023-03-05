@@ -386,7 +386,7 @@ namespace BotSrv.Scenes.Scene
             byte ndir = BotHelper.GetNextDirection(sX, sY, ex, ey);
             short rx = sX;
             short ry = sY;
-            BotHelper.GetNextPosXY(ndir, ref rx, ref ry);
+            BotHelper.GetNextPosXy(ndir, ref rx, ref ry);
             if (CanWalkEx(rx, ry) && CanWalkEx(ex, ey))
             {
                 result = true;

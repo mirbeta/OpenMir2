@@ -19,40 +19,40 @@ namespace BotSrv
             return (int)Math.Truncate(len);
         }
         
-        public static void GetNextHitPosition(short sX, short sY, ref short NewX, ref short NewY)
+        public static void GetNextHitPosition(short sX, short sY, ref short newX, ref short newY)
         {
-            int dir = GetNextDirection(sX, sY, NewX, NewY);
-            NewX = sX;
-            NewY = sY;
+            var dir = GetNextDirection(sX, sY, newX, newY);
+            newX = sX;
+            newY = sY;
             switch (dir)
             {
                 case Direction.Up:
-                    NewY = (short)(NewY - 2);
+                    newY = (short)(newY - 2);
                     break;
                 case Direction.Down:
-                    NewY = (short)(NewY + 2);
+                    newY = (short)(newY + 2);
                     break;
                 case Direction.Left:
-                    NewX = (short)(NewX + 2);
+                    newX = (short)(newX + 2);
                     break;
                 case Direction.Right:
-                    NewX = (short)(NewX - 2);
+                    newX = (short)(newX - 2);
                     break;
                 case Direction.UpLeft:
-                    NewX = (short)(NewX - 2);
-                    NewY = (short)(NewY - 2);
+                    newX = (short)(newX - 2);
+                    newY = (short)(newY - 2);
                     break;
                 case Direction.UpRight:
-                    NewX = (short)(NewX + 2);
-                    NewY = (short)(NewY + 2);
+                    newX = (short)(newX + 2);
+                    newY = (short)(newY + 2);
                     break;
                 case Direction.DownLeft:
-                    NewX = (short)(NewX - 2);
-                    NewY = (short)(NewY + 2);
+                    newX = (short)(newX - 2);
+                    newY = (short)(newY + 2);
                     break;
                 case Direction.DownRight:
-                    NewX = (short)(NewX + 2);
-                    NewY = (short)(NewY + 2);
+                    newX = (short)(newX + 2);
+                    newY = (short)(newY + 2);
                     break;
             }
         }
@@ -299,12 +299,12 @@ namespace BotSrv
             }
         }
 
-        public static ClientItem GetDrosItem(string iname, int MakeIndex)
+        public static ClientItem GetDrosItem(string iname, int makeIndex)
         {
             ClientItem result = null;
             for (var i = 0; i < DropItems.Count; i++)
             {
-                if ((DropItems[i].Item.Name == iname) && (DropItems[i].MakeIndex == MakeIndex))
+                if ((DropItems[i].Item.Name == iname) && (DropItems[i].MakeIndex == makeIndex))
                 {
                     result = DropItems[i];
                     break;
@@ -313,11 +313,11 @@ namespace BotSrv
             return result;
         }
 
-        public static void DelDroItemItem(string iname, int MakeIndex)
+        public static void DelDroItemItem(string iname, int makeIndex)
         {
             for (var i = 0; i < DropItems.Count; i++)
             {
-                if ((DropItems[i].Item.Name == iname) && (DropItems[i].MakeIndex == MakeIndex))
+                if ((DropItems[i].Item.Name == iname) && (DropItems[i].MakeIndex == makeIndex))
                 {
                     DropItems[i] = null;
                     DropItems.RemoveAt(i);
@@ -479,107 +479,107 @@ namespace BotSrv
             return HUtil32._MAX(Math.Abs(sX - dx), Math.Abs(sY - dy));
         }
 
-        public static void GetNextPosXY(byte dir, ref short X, ref short Y)
+        public static void GetNextPosXy(byte dir, ref short x, ref short y)
         {
             switch (dir)
             {
                 case Direction.Up:
-                    Y = (short)(Y - 1);
+                    y = (short)(y - 1);
                     break;
                 case Direction.UpRight:
-                    X = (short)(X + 1);
-                    Y = (short)(Y - 1);
+                    x = (short)(x + 1);
+                    y = (short)(y - 1);
                     break;
                 case Direction.Right:
-                    X = (short)(X + 1);
+                    x = (short)(x + 1);
                     break;
                 case Direction.DownRight:
-                    X = (short)(X + 1);
-                    Y = (short)(Y + 1);
+                    x = (short)(x + 1);
+                    y = (short)(y + 1);
                     break;
                 case Direction.Down:
-                    Y = (short)(Y + 1);
+                    y = (short)(y + 1);
                     break;
                 case Direction.DownLeft:
-                    X = (short)(X - 1);
-                    Y = (short)(Y + 1);
+                    x = (short)(x - 1);
+                    y = (short)(y + 1);
                     break;
                 case Direction.Left:
-                    X = (short)(X - 1);
+                    x = (short)(x - 1);
                     break;
                 case Direction.UpLeft:
-                    X = (short)(X - 1);
-                    Y = (short)(Y - 1);
+                    x = (short)(x - 1);
+                    y = (short)(y - 1);
                     break;
             }
         }
 
-        public static void GetNextRunXY(int dir, ref short X, ref short Y)
+        public static void GetNextRunXy(int dir, ref short x, ref short y)
         {
             switch (dir)
             {
                 case Direction.Up:
-                    Y = (short)(Y - 2);
+                    y = (short)(y - 2);
                     break;
                 case Direction.UpRight:
-                    X = (short)(X + 2);
-                    Y = (short)(Y - 2);
+                    x = (short)(x + 2);
+                    y = (short)(y - 2);
                     break;
                 case Direction.Right:
-                    X = (short)(X + 2);
+                    x = (short)(x + 2);
                     break;
                 case Direction.DownRight:
-                    X = (short)(X + 2);
-                    Y = (short)(Y + 2);
+                    x = (short)(x + 2);
+                    y = (short)(y + 2);
                     break;
                 case Direction.Down:
-                    Y = (short)(Y + 2);
+                    y = (short)(y + 2);
                     break;
                 case Direction.DownLeft:
-                    X = (short)(X - 2);
-                    Y = (short)(Y + 2);
+                    x = (short)(x - 2);
+                    y = (short)(y + 2);
                     break;
                 case Direction.Left:
-                    X = (short)(X - 2);
+                    x = (short)(x - 2);
                     break;
                 case Direction.UpLeft:
-                    X = (short)(X - 2);
-                    Y = (short)(Y - 2);
+                    x = (short)(x - 2);
+                    y = (short)(y - 2);
                     break;
             }
         }
 
-        public static void GetNextHorseRunXY(byte dir, ref short X, ref short Y)
+        public static void GetNextHorseRunXy(byte dir, ref short x, ref short y)
         {
             switch (dir)
             {
                 case Direction.Up:
-                    Y = (short)(Y - 3);
+                    y = (short)(y - 3);
                     break;
                 case Direction.UpRight:
-                    X = (short)(X + 3);
-                    Y = (short)(Y - 3);
+                    x = (short)(x + 3);
+                    y = (short)(y - 3);
                     break;
                 case Direction.Right:
-                    X = (short)(X + 3);
+                    x = (short)(x + 3);
                     break;
                 case Direction.DownRight:
-                    X = (short)(X + 3);
-                    Y = (short)(Y + 3);
+                    x = (short)(x + 3);
+                    y = (short)(y + 3);
                     break;
                 case Direction.Down:
-                    Y = (short)(Y + 3);
+                    y = (short)(y + 3);
                     break;
                 case Direction.DownLeft:
-                    X = (short)(X - 3);
-                    Y = (short)(Y + 3);
+                    x = (short)(x - 3);
+                    y = (short)(y + 3);
                     break;
                 case Direction.Left:
-                    X = (short)(X - 3);
+                    x = (short)(x - 3);
                     break;
                 case Direction.UpLeft:
-                    X = (short)(X - 3);
-                    Y = (short)(Y - 3);
+                    x = (short)(x - 3);
+                    y = (short)(y - 3);
                     break;
             }
         }
@@ -664,7 +664,7 @@ namespace BotSrv
 
         public static int GetBack(int dir)
         {
-            int result = Direction.Up;
+            var result = Direction.Up;
             switch (dir)
             {
                 case Direction.Up:
@@ -695,122 +695,122 @@ namespace BotSrv
             return result;
         }
 
-        public static void GetBackPosition(short sX, short sY, int dir, ref short NewX, ref short NewY)
+        public static void GetBackPosition(short sX, short sY, int dir, ref short newX, ref short newY)
         {
-            NewX = sX;
-            NewY = sY;
+            newX = sX;
+            newY = sY;
             switch (dir)
             {
                 case Direction.Up:
-                    NewY = (short)(NewY + 1);
+                    newY = (short)(newY + 1);
                     break;
                 case Direction.Down:
-                    NewY = (short)(NewY - 1);
+                    newY = (short)(newY - 1);
                     break;
                 case Direction.Left:
-                    NewX = (short)(NewX + 1);
+                    newX = (short)(newX + 1);
                     break;
                 case Direction.Right:
-                    NewX = (short)(NewX - 1);
+                    newX = (short)(newX - 1);
                     break;
                 case Direction.UpLeft:
-                    NewX = (short)(NewX + 1);
-                    NewY = (short)(NewY + 1);
+                    newX = (short)(newX + 1);
+                    newY = (short)(newY + 1);
                     break;
                 case Direction.UpRight:
-                    NewX = (short)(NewX - 1);
-                    NewY = (short)(NewY + 1);
+                    newX = (short)(newX - 1);
+                    newY = (short)(newY + 1);
                     break;
                 case Direction.DownLeft:
-                    NewX = (short)(NewX + 1);
-                    NewY = (short)(NewY - 1);
+                    newX = (short)(newX + 1);
+                    newY = (short)(newY - 1);
                     break;
                 case Direction.DownRight:
-                    NewX = (short)(NewX - 1);
-                    NewY = (short)(NewY - 1);
+                    newX = (short)(newX - 1);
+                    newY = (short)(newY - 1);
                     break;
             }
         }
 
-        public static void GetBackPosition2(short sX, short sY, int dir, ref short NewX, ref short NewY)
+        public static void GetBackPosition2(short sX, short sY, int dir, ref short newX, ref short newY)
         {
-            NewX = sX;
-            NewY = sY;
+            newX = sX;
+            newY = sY;
             switch (dir)
             {
                 case Direction.Up:
-                    NewY = (short)(NewY + 2);
+                    newY = (short)(newY + 2);
                     break;
                 case Direction.Down:
-                    NewY = (short)(NewY - 2);
+                    newY = (short)(newY - 2);
                     break;
                 case Direction.Left:
-                    NewX = (short)(NewX + 2);
+                    newX = (short)(newX + 2);
                     break;
                 case Direction.Right:
-                    NewX = (short)(NewX - 2);
+                    newX = (short)(newX - 2);
                     break;
                 case Direction.UpLeft:
-                    NewX = (short)(NewX + 2);
-                    NewY = (short)(NewY + 2);
+                    newX = (short)(newX + 2);
+                    newY = (short)(newY + 2);
                     break;
                 case Direction.UpRight:
-                    NewX = (short)(NewX - 2);
-                    NewY = (short)(NewY + 2);
+                    newX = (short)(newX - 2);
+                    newY = (short)(newY + 2);
                     break;
                 case Direction.DownLeft:
-                    NewX = (short)(NewX + 2);
-                    NewY = (short)(NewY - 2);
+                    newX = (short)(newX + 2);
+                    newY = (short)(newY - 2);
                     break;
                 case Direction.DownRight:
-                    NewX = (short)(NewX - 2);
-                    NewY = (short)(NewY - 2);
+                    newX = (short)(newX - 2);
+                    newY = (short)(newY - 2);
                     break;
             }
         }
 
-        public static void GetFrontPosition(short sX, short sY, int dir, ref short NewX, ref short NewY)
+        public static void GetFrontPosition(short sX, short sY, int dir, ref short newX, ref short newY)
         {
-            NewX = sX;
-            NewY = sY;
+            newX = sX;
+            newY = sY;
             switch (dir)
             {
                 case Direction.Up:
-                    NewY = (short)(NewY - 1);
+                    newY = (short)(newY - 1);
                     break;
                 case Direction.Down:
-                    NewY = (short)(NewY + 1);
+                    newY = (short)(newY + 1);
                     break;
                 case Direction.Left:
-                    NewX = (short)(NewX - 1);
+                    newX = (short)(newX - 1);
                     break;
                 case Direction.Right:
-                    NewX = (short)(NewX + 1);
+                    newX = (short)(newX + 1);
                     break;
                 case Direction.UpLeft:
-                    NewX = (short)(NewX - 1);
-                    NewY = (short)(NewY - 1);
+                    newX = (short)(newX - 1);
+                    newY = (short)(newY - 1);
                     break;
                 case Direction.UpRight:
-                    NewX = (short)(NewX + 1);
-                    NewY = (short)(NewY - 1);
+                    newX = (short)(newX + 1);
+                    newY = (short)(newY - 1);
                     break;
                 case Direction.DownLeft:
-                    NewX = (short)(NewX - 1);
-                    NewY = (short)(NewY + 1);
+                    newX = (short)(newX - 1);
+                    newY = (short)(newY + 1);
                     break;
                 case Direction.DownRight:
-                    NewX = (short)(NewX + 1);
-                    NewY = (short)(NewY + 1);
+                    newX = (short)(newX + 1);
+                    newY = (short)(newY + 1);
                     break;
             }
         }
 
-        public static int GetFlyDirection(int sX, int sY, int ttx, int tty)
+        public static byte GetFlyDirection(int sX, int sY, int ttx, int tty)
         {
             double fx = ttx - sX;
             double fy = tty - sY;
-            int result = Direction.Down;
+            var result = Direction.Down;
             if (fx == 0)
             {
                 if (fy < 0)
@@ -1038,7 +1038,7 @@ namespace BotSrv
             return result;
         }
 
-        public static int GetTakeOnPosition(ClientItem smode, ClientItem[] UseItems, bool bPos)
+        public static int GetTakeOnPosition(ClientItem smode, ClientItem[] useItems, bool bPos)
         {
             int result = -1;
             switch (smode.Item.StdMode)
@@ -1124,9 +1124,9 @@ namespace BotSrv
             return result;
         }
 
-        public static int GetTakeOnPosition(ClientItem smode, ClientItem[] UseItems)
+        public static int GetTakeOnPosition(ClientItem smode, ClientItem[] useItems)
         {
-            return GetTakeOnPosition(smode, UseItems, false);
+            return GetTakeOnPosition(smode, useItems, false);
         }
 
         public static void AddChangeFace(int recogid)
@@ -1148,7 +1148,7 @@ namespace BotSrv
             return MShare.g_ChangeFaceReadyList.IndexOf(recogid) > -1;
         }
 
-        public static bool ChangeItemCount(int mindex, short Count, short MsgNum, string iname)
+        public static bool ChangeItemCount(int mindex, short count, short msgNum, string iname)
         {
             bool result = false;
             //for (i = MShare.g_TIItems.GetLowerBound(0); i <= MShare.g_TIItems..Length(0); i++)
@@ -1263,7 +1263,7 @@ namespace BotSrv
             return result;
         }
 
-        public static bool DelCountItemBag(string iname, int iindex, short Count)
+        public static bool DelCountItemBag(string iname, int iindex, short count)
         {
             bool result = false;
             for (var i = BotConst.MaxBagItemcl - 1; i >= 0; i--)
@@ -1281,7 +1281,7 @@ namespace BotSrv
             return result;
         }
 
-        public static void ResultDealItem(ClientItem ci, int mindex, ushort Count)
+        public static void ResultDealItem(ClientItem ci, int mindex, ushort count)
         {
             for (var i = 0; i < 10; i++)
             {
@@ -1296,12 +1296,12 @@ namespace BotSrv
             {
                 if ((MShare.ItemArr[i].Item.Name == ci.Item.Name) && (MShare.ItemArr[i].MakeIndex == ci.MakeIndex))
                 {
-                    if (Count < 1)
+                    if (count < 1)
                     {
                         MShare.ItemArr[i].Item.Name = "";
-                        Count = 0;
+                        count = 0;
                     }
-                    MShare.ItemArr[i].Dura = Count;
+                    MShare.ItemArr[i].Dura = count;
                 }
             }
         }

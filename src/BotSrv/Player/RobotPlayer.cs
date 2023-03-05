@@ -540,7 +540,7 @@ namespace BotSrv.Player
                             crun = MShare.MySelf.CanWalk();
                             if (IsUnLockAction() && (crun > 0))
                             {
-                                BotHelper.GetNextPosXY(ndir, ref mx, ref my);
+                                BotHelper.GetNextPosXy(ndir, ref mx, ref my);
                                 var bostop = false;
                                 if (!PlayScene.CanWalk(mx, my))
                                 {
@@ -555,7 +555,7 @@ namespace BotSrv.Player
                                     {
                                         mx = MShare.MySelf.CurrX;
                                         my = MShare.MySelf.CurrY;
-                                        BotHelper.GetNextPosXY(ndir, ref mx, ref my);
+                                        BotHelper.GetNextPosXy(ndir, ref mx, ref my);
                                         if (CheckDoorAction(mx, my))
                                         {
                                             bostop = true;
@@ -566,13 +566,13 @@ namespace BotSrv.Player
                                         mx = MShare.MySelf.CurrX;
                                         my = MShare.MySelf.CurrY;
                                         adir = BotHelper.PrivDir(ndir);
-                                        BotHelper.GetNextPosXY(adir, ref mx, ref my);
+                                        BotHelper.GetNextPosXy(adir, ref mx, ref my);
                                         if (!Map.CanMove(mx, my))
                                         {
                                             mx = MShare.MySelf.CurrX;
                                             my = MShare.MySelf.CurrY;
                                             adir = BotHelper.NextDir(ndir);
-                                            BotHelper.GetNextPosXY(adir, ref mx, ref my);
+                                            BotHelper.GetNextPosXy(adir, ref mx, ref my);
                                             if (Map.CanMove(mx, my))
                                             {
                                                 bowalk = true;
@@ -619,7 +619,7 @@ namespace BotSrv.Player
                                 crun = MShare.MySelf.CanRun();// 骑马开始
                                 if ((MShare.MySelf.m_btHorse != 0) && (BotHelper.GetDistance(mx, my, dx, dy) >= 3) && (crun > 0) && IsUnLockAction())
                                 {
-                                    BotHelper.GetNextHorseRunXY(ndir, ref mx, ref my);
+                                    BotHelper.GetNextHorseRunXy(ndir, ref mx, ref my);
                                     if (PlayScene.CanRun(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mx, my))
                                     {
                                         MShare.MySelf.UpdateMsg(Messages.CM_HORSERUN, (ushort)mx, (ushort)my, ndir, 0, 0, "", 0);
@@ -642,7 +642,7 @@ namespace BotSrv.Player
                                     {
                                         if (IsUnLockAction())
                                         {
-                                            BotHelper.GetNextRunXY(ndir, ref mx, ref my);
+                                            BotHelper.GetNextRunXy(ndir, ref mx, ref my);
                                             if (PlayScene.CanRun(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mx, my))
                                             {
                                                 MShare.MySelf.UpdateMsg(Messages.CM_RUN, (ushort)mx, (ushort)my, ndir, 0, 0, "", 0);
@@ -1703,7 +1703,7 @@ namespace BotSrv.Player
             {
                 nHitMsg = Messages.CM_HEAVYHIT;
             }
-            int tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY);
+            var tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY);
             if ((Math.Abs(MShare.MySelf.CurrX - target.CurrX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - target.CurrY) <= 1) && (!target.Death))
             {
                 if (TimerAutoPlay.Enabled)
@@ -2237,11 +2237,11 @@ namespace BotSrv.Player
                     var param = str[sam.Length..];
                     if (!string.IsNullOrEmpty(param))
                     {
-                        string sy = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\09" });
+                        var sy = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\09" });
                         if ((sx != "") && (sy != ""))
                         {
-                            short x = Convert.ToInt16(sx);
-                            short y = Convert.ToInt16(sy);
+                            var x = Convert.ToInt16(sx);
+                            var y = Convert.ToInt16(sy);
                             if ((x > 0) && (y > 0))
                             {
                                 MShare.MySelf.m_nTagX = x;
@@ -2369,11 +2369,11 @@ namespace BotSrv.Player
             {
                 if (HUtil32.CompareLStr(rstr, sam))
                 {
-                    string param = rstr.Substring(sam.Length + 1 - 1, rstr.Length - sam.Length);
+                    var param = rstr.Substring(sam.Length + 1 - 1, rstr.Length - sam.Length);
                     if (param != "")
                     {
                         param = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\09" });
-                        string sM = HUtil32.GetValidStr3(param, ref sy, new string[] { " ", ":", ",", "\09" });
+                        var sM = HUtil32.GetValidStr3(param, ref sy, new string[] { " ", ":", ",", "\09" });
                         if ((sx != "") && (sy != ""))
                         {
                             if ((sM != "") && (string.Compare(MShare.MapTitle, sM, StringComparison.OrdinalIgnoreCase) != 0))// 自动移动
@@ -4171,13 +4171,13 @@ namespace BotSrv.Player
                             {
                                 x1 = MShare.MySelf.CurrX;
                                 y1 = MShare.MySelf.CurrY;
-                                short x2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
-                                short y2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
-                                int ndir = BotHelper.GetNextDirection(x1, y1, x2, y2);
-                                BotHelper.GetNextPosXY((byte)ndir, ref x1, ref y1);
+                                var x2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
+                                var y2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
+                                var ndir = BotHelper.GetNextDirection(x1, y1, x2, y2);
+                                BotHelper.GetNextPosXy((byte)ndir, ref x1, ref y1);
                                 x3 = MShare.MySelf.CurrX;
                                 y3 = MShare.MySelf.CurrY;
-                                BotHelper.GetNextRunXY(ndir, ref x3, ref y3);
+                                BotHelper.GetNextRunXy(ndir, ref x3, ref y3);
                                 if ((PathMap.g_MapPath[GMoveStep + 1].X == x3) && (PathMap.g_MapPath[GMoveStep + 1].X == y3))
                                 {
                                     boCanRun = true;
@@ -4459,9 +4459,9 @@ namespace BotSrv.Player
             {
                 ndir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
             }
-            short x1 = MShare.MySelf.CurrX;
-            short y1 = MShare.MySelf.CurrY;
-            BotHelper.GetNextRunXY(ndir, ref x1, ref y1);
+            var x1 = MShare.MySelf.CurrX;
+            var y1 = MShare.MySelf.CurrY;
+            BotHelper.GetNextRunXy(ndir, ref x1, ref y1);
             if (Map.CanMove(x1, y1))
             {
                 if (PlayScene.CrashMan(x1, y1))
@@ -4484,7 +4484,7 @@ namespace BotSrv.Player
             var tagstr = string.Empty;
             if ((datablock[1] == 'G') && (datablock[2] == 'D') && (datablock[3] == '/'))
             {
-                string data = datablock[1..];
+                var data = datablock[1..];
                 data = HUtil32.GetValidStr3(data, ref tagstr, HUtil32.Backslash);
                 if (data != "")
                 {
@@ -4789,7 +4789,7 @@ namespace BotSrv.Player
             var tCount = 0;
             for (var i = 0; i < 12; i++)
             {
-                Actor actor = PlayScene.FindActorXY(sx, sy);
+                var actor = PlayScene.FindActorXY(sx, sy);
                 if (actor != null)
                 {
                     if (_heroActor.IsProperTarget(actor))
