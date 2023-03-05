@@ -2,11 +2,14 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using NLog.Fluent;
 using Spectre.Console;
 using SystemModule.Enums;
 
-namespace GameSrv {
-    public class AppService : IHostedService, IDisposable {
+namespace GameSrv
+{
+    public class AppService : IHostedService, IDisposable
+    {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly IHost Host;
@@ -17,63 +20,80 @@ namespace GameSrv {
         private readonly CommandLineApplication _application = new CommandLineApplication();
         private PeriodicTimer _timer;
 
-        public AppService(IHostApplicationLifetime lifetime, GameApp serverApp, IServiceProvider serviceProvider) {
+        public AppService(IHostApplicationLifetime lifetime, GameApp serverApp, IServiceProvider serviceProvider)
+        {
             _appLifetime = lifetime;
             _mirApp = serverApp;
             Host = serviceProvider.GetService<IHost>();
         }
 
-        public Task StartAsync(CancellationToken stoppingToken) {
+        public Task StartAsync(CancellationToken stoppingToken)
+        {
             _logger.Debug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
 
             _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
 
             _application.HelpOption("-?|-h|-help");
-            _application.OnExecute(() => {
+            _application.OnExecute(() =>
+            {
                 _application.ShowHelp();
                 return 0;
             });
-            _application.Command("reloadconf", command => {
+            _application.Command("reloadconf", command =>
+            {
                 command.Description = "重新读取配置文件";
-                command.OnExecute(() => {
+                command.OnExecute(() =>
+                {
                     Console.WriteLine("重新读取所有配置文件");
                 });
             });
-            _application.Command("save", command => {
+            _application.Command("save", command =>
+            {
                 command.Description = "立即保存游戏数据";
                 command.OnExecute(SavePlayer);
             });
-            _application.Command("gamestatus", command => {
+            _application.Command("gamestatus", command =>
+            {
                 command.Description = "查看游戏网关状况";
-                command.OnExecuteAsync(async (cancellationToken) => {
+                command.OnExecuteAsync(async (cancellationToken) =>
+                {
                     await ShowGateStatus(cancellationToken);
                 });
             });
-            _application.Command("exit", command => {
+            _application.Command("exit", command =>
+            {
                 command.Description = "停止游戏服务";
-                command.OnExecute(() => {
+                command.OnExecute(() =>
+                {
                     _appLifetime.StopApplication();
                     return 0;
                 });
             });
-            _application.Command("quit", command => {
+            _application.Command("quit", command =>
+            {
                 command.Description = "退出程序";
-                command.OnExecute(() => {
+                command.OnExecute(() =>
+                {
                     Exit();
                     return 0;
                 });
             });
-            _application.Command("status", command => {
+            _application.Command("status", command =>
+            {
                 command.Description = "查看系统状态";
-                command.OnExecute(() => {
+                command.OnExecute(() =>
+                {
                     ShowWordStatus(stoppingToken);
                 });
             });
 
-            _appLifetime.ApplicationStarted.Register(() => {
+            _appLifetime.ApplicationStarted.Register(() =>
+            {
                 _logger.Debug("Application has started");
-                _applicationTask = Task.Run(() => {
-                    try {
+                _applicationTask = Task.Run(() =>
+                {
+                    try
+                    {
                         _logger.Info("正在读取配置信息...");
                         _mirApp.Initialize();
                         _logger.Info("读取配置信息完成...");
@@ -81,10 +101,12 @@ namespace GameSrv {
                         _mirApp.StartWorld(stoppingToken);
                         _exitCode = 0;
                     }
-                    catch (TaskCanceledException) {
+                    catch (TaskCanceledException)
+                    {
                         // This means the application is shutting down, so just swallow this exception
                     }
-                    catch (Exception ex) {
+                    catch (Exception ex)
+                    {
                         _logger.Error(ex, "Unhandled exception!");
                         _logger.Error(ex.StackTrace);
                         _exitCode = 1;
@@ -98,10 +120,12 @@ namespace GameSrv {
             return Task.CompletedTask;
         }
 
-        public async Task StopAsync(CancellationToken stoppingToken) {
+        public async Task StopAsync(CancellationToken stoppingToken)
+        {
             // Wait for the application logic to fully complete any cleanup tasks.
             // Note that this relies on the cancellation token to be properly used in the application.
-            if (_applicationTask != null) {
+            if (_applicationTask != null)
+            {
                 await _applicationTask;
             }
 
@@ -112,48 +136,63 @@ namespace GameSrv {
             Environment.Exit(Environment.ExitCode);
         }
 
-        private void SavePlayer() {
+        private void SavePlayer()
+        {
             if (M2Share.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
                 _logger.Info("保存玩家数据");
-                foreach (Player.PlayObject play in M2Share.WorldEngine.PlayObjects) {
+                foreach (Player.PlayObject play in M2Share.WorldEngine.PlayObjects)
+                {
                     M2Share.WorldEngine.SaveHumanRcd(play);
                 }
                 _logger.Info("数据保存完毕.");
             }
         }
 
-        private void StopService(string sIPaddr, int nPort, bool isTransfer) {
-            Task.Factory.StartNew(async () => {
-                int shutdownSeconds = M2Share.Config.CloseCountdown;
-                int playerCount = M2Share.WorldEngine.PlayObjectCount;
-                while (true) {
-                    if (playerCount <= 0) {
-                        break;
-                    }
-                    foreach (Player.PlayObject playObject in M2Share.WorldEngine.PlayObjects) {
-                        string closeMsg = isTransfer ? $"服务器关闭倒计时[{shutdownSeconds}]. 关闭后自动转移到其他大区，请勿退出游戏。" : $"服务器关闭倒计时[{shutdownSeconds}].";
-                        playObject.SysMsg(closeMsg, MsgColor.Red, MsgType.Notice);
-                        _logger.Info(closeMsg);
-                        shutdownSeconds--;
-                    }
-                    if (shutdownSeconds > 0) {
-                        await Task.Delay(TimeSpan.FromSeconds(1));
-                    }
-                    else {
-                        if (isTransfer) {
-                            foreach (Player.PlayObject playObject in M2Share.WorldEngine.PlayObjects) {
+        private const string CloseTransferMessgae = "服务器关闭倒计时[{0}],无需下线或退出游戏,稍后传送至新服务器安全区.";
+        private const string CloseServerMessage = "服务器关闭倒计时[{0}]";
+
+        private void StopService(string sIPaddr, int nPort, bool isTransfer)
+        {
+            var playerCount = M2Share.WorldEngine.PlayObjectCount;
+            if (playerCount == 0)
+            {
+                ServerBase.Stop();
+                Host.StopAsync(_cancellationTokenSource.Token);
+                _logger.Info("游戏服务已停止...");
+                return;
+            }
+            //todo 通知游戏网关暂停接收新的连接,发送消息后停止5秒,防止玩家在倒计时结束前进入游戏
+            Task.Factory.StartNew(async () =>
+            {
+                var shutdownSeconds = M2Share.Config.CloseCountdown;
+                _logger.Debug("停止网关新玩家连接");
+                await Task.Delay(5000); //强制5秒延迟，防止玩家在倒计时结束前进入游戏
+                while (true)
+                {
+                    if (shutdownSeconds <= 0)
+                    {
+                        if (isTransfer)
+                        {
+                            foreach (var playObject in M2Share.WorldEngine.PlayObjects)
+                            {
                                 if (playObject.Ghost || playObject.Death)//死亡或者下线的玩家不进行转移
                                 {
-                                    playerCount--;
                                     continue;
                                 }
                                 playObject.TransferPlanesServer(sIPaddr, nPort);
-                                playerCount--;
                             }
-                            break;
                         }
+                        break; //转移结束后跳出循环
                     }
+                    foreach (var playObject in M2Share.WorldEngine.PlayObjects)
+                    {
+                        var closeMsg = isTransfer ? string.Format(CloseTransferMessgae, shutdownSeconds) : string.Format(CloseServerMessage, shutdownSeconds);
+                        playObject.SysMsg(closeMsg, MsgColor.Red, MsgType.Notice);
+                        _logger.Info(closeMsg);
+                    }
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    shutdownSeconds--;
                 }
                 ServerBase.Stop();
                 await Host.StopAsync(_cancellationTokenSource.Token);
@@ -161,62 +200,77 @@ namespace GameSrv {
             }, _cancellationTokenSource.Token);
         }
 
-        private void OnShutdown() {
+        private void OnShutdown()
+        {
             _logger.Debug("Application is stopping");
             M2Share.StartReady = false;
             SavePlayer();
-            if (M2Share.ServerIndex == 0) {
+            if (M2Share.ServerIndex == 0)
+            {
                 StopService("", 0, false);
             }
-            else if (M2Share.ServerIndex > 0) {
+            else if (M2Share.ServerIndex > 0)
+            {
                 _logger.Info("检查是否有其他可用服务器.");
                 //如果有多机负载转移在线玩家到新服务器
                 string sIPaddr = string.Empty;
                 int nPort = 0;
                 bool isMultiServer = M2Share.GetMultiServerAddrPort(M2Share.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
-                if (isMultiServer) {
+                if (isMultiServer)
+                {
                     //todo 通知网关断开链接.停止新玩家进入游戏
                     _logger.Info($"转移到新服务器[{sIPaddr}:{nPort}]");
                     StopService(sIPaddr, nPort, true);
                 }
             }
-            else {
+            else
+            {
                 _logger.Info("没有可用服务器，即将关闭游戏服务器.");
                 StopService("", 0, false);
             }
             _cancellationTokenSource?.CancelAfter(3000);
         }
 
-        private void ProcessLoopAsync() {
-            while (true) {
+        private void ProcessLoopAsync()
+        {
+            while (true)
+            {
                 string cmdline = Console.ReadLine();
-                if (string.IsNullOrEmpty(cmdline)) {
+                if (string.IsNullOrEmpty(cmdline))
+                {
                     continue;
                 }
-                try {
+                try
+                {
                     _application.Execute(cmdline);
                 }
-                catch {
+                catch
+                {
                     // ignored
                 }
             }
         }
 
-        private static void Exit() {
-            if (AnsiConsole.Confirm("Do you really want to exit?")) {
+        private static void Exit()
+        {
+            if (AnsiConsole.Confirm("Do you really want to exit?"))
+            {
                 // _cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));//延时5分钟关闭游戏服务.
                 Environment.Exit(Environment.ExitCode);
             }
         }
 
-        private static Task ClearConsole() {
+        private static Task ClearConsole()
+        {
             Console.Clear();
             AnsiConsole.Clear();
             return Task.CompletedTask;
         }
 
-        private void ShowWordStatus(CancellationToken cancellationToken) {
-            if (_timer != null) {
+        private void ShowWordStatus(CancellationToken cancellationToken)
+        {
+            if (_timer != null)
+            {
                 _timer.Dispose();
                 _timer = null;
             }
@@ -225,10 +279,13 @@ namespace GameSrv {
                 .AutoRefresh(true)
                 .Spinner(Spinner.Known.Star)
                 .SpinnerStyle(Style.Parse("green bold"))
-                .Start("Thinking...", async ctx => {
-                    while (await _timer.WaitForNextTickAsync(cancellationToken)) {
+                .Start("Thinking...", async ctx =>
+                {
+                    while (await _timer.WaitForNextTickAsync(cancellationToken))
+                    {
                         int monsterCount = 0;
-                        for (int i = 0; i < M2Share.WorldEngine.MobThreads.Length; i++) {
+                        for (int i = 0; i < M2Share.WorldEngine.MobThreads.Length; i++)
+                        {
                             monsterCount += M2Share.WorldEngine.MobThreads[i].MonsterCount;
                         }
                         AnsiConsole.MarkupLine($"Monsters:{monsterCount}");
@@ -238,7 +295,8 @@ namespace GameSrv {
                 });
         }
 
-        private static Task ShowGateStatus(CancellationToken cancellationToken) {
+        private static Task ShowGateStatus(CancellationToken cancellationToken)
+        {
             //GateShare.ShowLog = false;
             //_timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             //var serverList = ServerManager.Instance.GetServerList();
@@ -282,7 +340,8 @@ namespace GameSrv {
             return Task.CompletedTask;
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
 
         }
     }
