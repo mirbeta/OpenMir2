@@ -697,14 +697,14 @@ namespace BotSrv.Objects
                             return result;
                         }
                     }
-                    for (var i = 0; i < MShare.MySelf.m_SlaveObject.Count; i++)
+                    for (var i = 0; i < MShare.MySelf.SlaveObject.Count; i++)
                     {
-                        if (MShare.MySelf.m_SlaveObject[i].Death) continue;
-                        if (Math.Abs(MShare.MySelf.CurrX - MShare.MySelf.m_SlaveObject[i].CurrX + 2) <= BotConst.MagicRange && Math.Abs(MShare.MySelf.CurrY - MShare.MySelf.m_SlaveObject[i].CurrY + 2) <= BotConst.MagicRange)
+                        if (MShare.MySelf.SlaveObject[i].Death) continue;
+                        if (Math.Abs(MShare.MySelf.CurrX - MShare.MySelf.SlaveObject[i].CurrX + 2) <= BotConst.MagicRange && Math.Abs(MShare.MySelf.CurrY - MShare.MySelf.SlaveObject[i].CurrY + 2) <= BotConst.MagicRange)
                         {
-                            if (MShare.MySelf.m_SlaveObject[i].Abil.HP != 0 && HUtil32.Round(MShare.MySelf.m_SlaveObject[i].Abil.HP / MShare.MySelf.m_SlaveObject[i].Abil.MaxHP * 100) < 85)
+                            if (MShare.MySelf.SlaveObject[i].Abil.HP != 0 && HUtil32.Round(MShare.MySelf.SlaveObject[i].Abil.HP / MShare.MySelf.SlaveObject[i].Abil.MaxHP * 100) < 85)
                             {
-                                if (AutoUseMagic(2, MShare.MySelf.m_SlaveObject[i]))
+                                if (AutoUseMagic(2, MShare.MySelf.SlaveObject[i]))
                                 {
                                     return result;
                                 }
@@ -1072,7 +1072,7 @@ namespace BotSrv.Objects
                     {
                         // 设置比较大时间,以便其他攻击...
                         MShare.m_dwRecallTick = MShare.GetTickCount();
-                        if (MShare.MySelf.m_SlaveObject.Count == 0 && m > 0)
+                        if (MShare.MySelf.SlaveObject.Count == 0 && m > 0)
                         {
                             magicKey = 0;
                             if (MShare.MagicArr[55] != null)
@@ -1129,18 +1129,18 @@ namespace BotSrv.Objects
                                 result = true;
                                 if (AutoUseMagic(2, MShare.MySelf)) return result;
                             }
-                            if (MShare.MySelf.m_SlaveObject.Count > 0)
+                            if (MShare.MySelf.SlaveObject.Count > 0)
                             {
-                                for (i = 0; i < MShare.MySelf.m_SlaveObject.Count; i++)
+                                for (i = 0; i < MShare.MySelf.SlaveObject.Count; i++)
                                 {
-                                    if (MShare.MySelf.m_SlaveObject[i].Death) continue;
-                                    if (MShare.MySelf.m_SlaveObject[i].Abil.HP != 0 && Math.Abs(MShare.MySelf.CurrX - MShare.MySelf.m_SlaveObject[i].CurrX + 2) <= BotConst.MagicRange
-                                                                                        && Math.Abs(MShare.MySelf.CurrY - MShare.MySelf.m_SlaveObject[i].CurrY + 2) <= BotConst.MagicRange)
+                                    if (MShare.MySelf.SlaveObject[i].Death) continue;
+                                    if (MShare.MySelf.SlaveObject[i].Abil.HP != 0 && Math.Abs(MShare.MySelf.CurrX - MShare.MySelf.SlaveObject[i].CurrX + 2) <= BotConst.MagicRange
+                                                                                        && Math.Abs(MShare.MySelf.CurrY - MShare.MySelf.SlaveObject[i].CurrY + 2) <= BotConst.MagicRange)
                                     {
-                                        if (HUtil32.Round(MShare.MySelf.m_SlaveObject[i].Abil.HP / MShare.MySelf.m_SlaveObject[i].Abil.MaxHP * 100) <= 80)
+                                        if (HUtil32.Round(MShare.MySelf.SlaveObject[i].Abil.HP / MShare.MySelf.SlaveObject[i].Abil.MaxHP * 100) <= 80)
                                         {
                                             result = true;
-                                            if (AutoUseMagic(2, MShare.MySelf.m_SlaveObject[i])) return result;
+                                            if (AutoUseMagic(2, MShare.MySelf.SlaveObject[i])) return result;
                                         }
                                     }
                                 }

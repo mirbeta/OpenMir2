@@ -11,17 +11,15 @@ namespace BotSrv.Objects
     {
         private readonly bool m_boHideWeapon = false;
         private readonly bool m_boSSkill;
-        public int m_nFrame;
-        public IList<Actor> m_SlaveObject;
-        public TStallMgr m_StallMgr;
+        public IList<Actor> SlaveObject;
+        public TStallMgr StallMgr;
 
         public THumActor(RobotPlayer robotClient) : base(robotClient)
         {
-            m_StallMgr = new TStallMgr();
-            m_SlaveObject = new List<Actor>();
+            StallMgr = new TStallMgr();
+            SlaveObject = new List<Actor>();
             m_boSSkill = false;
             m_dwFrameTime = 150;
-            m_nFrame = 0;
             m_nHumWinOffset = 0;
             m_nCboHumWinOffSet = 0;
         }

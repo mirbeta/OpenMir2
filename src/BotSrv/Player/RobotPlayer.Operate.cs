@@ -42,9 +42,9 @@ namespace BotSrv.Player
         
         private void DecodeMessagePacket(string datablock)
         {
-            string body = string.Empty;
-            var data = string.Empty;
-            var Str = string.Empty;
+            var body = string.Empty;
+            string data;
+            var str = string.Empty;
             var str3 = string.Empty;
             CharDesc desc;
             MessageBodyWL wl;
@@ -68,7 +68,7 @@ namespace BotSrv.Player
                 body = datablock[Messages.DefBlockSize..];
             }
             var head = datablock[..Messages.DefBlockSize];
-            CommandMessage msg = EDCode.DecodePacket(head);
+            var msg = EDCode.DecodePacket(head);
             if (msg.Ident == 0)
             {
                 return;
@@ -240,8 +240,8 @@ namespace BotSrv.Player
                     break;
                 case Messages.SM_NEWMAP:
                     MShare.MapTitle = "";
-                    Str = EDCode.DeCodeString(body);
-                    PlayScene.SendMsg(Messages.SM_NEWMAP, 0, msg.Param, msg.Tag, (byte)msg.Series, 0, 0, Str);
+                    str = EDCode.DeCodeString(body);
+                    PlayScene.SendMsg(Messages.SM_NEWMAP, 0, msg.Param, msg.Tag, (byte)msg.Series, 0, 0, str);
                     break;
                 case Messages.SM_LOGON:
                     MShare.g_dwFirstServerTime = 0;
@@ -314,7 +314,7 @@ namespace BotSrv.Player
                     {
                         body2 = body[n..];
                         data = EDCode.DeCodeString(body2);
-                        Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
+                        str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
                         body2 = body[..n];
                     }
                     else
@@ -336,9 +336,9 @@ namespace BotSrv.Player
                                 if (string.Compare(data, MShare.MySelf.UserName, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     j = 0;
-                                    for (i = 0; i < MShare.MySelf.m_SlaveObject.Count; i++)
+                                    for (i = 0; i < MShare.MySelf.SlaveObject.Count; i++)
                                     {
-                                        if (MShare.MySelf.m_SlaveObject[i] == Actor)
+                                        if (MShare.MySelf.SlaveObject[i] == Actor)
                                         {
                                             j = 1;
                                             break;
@@ -346,12 +346,11 @@ namespace BotSrv.Player
                                     }
                                     if (j == 0)
                                     {
-                                        MShare.MySelf.m_SlaveObject.Add(Actor);
+                                        MShare.MySelf.SlaveObject.Add(Actor);
                                     }
                                 }
                             }
-                            Actor.NameColor = (byte)HUtil32.StrToInt(Str, 0);
-                            Actor.m_nNameColor = GetRgb(Actor.NameColor);
+                            Actor.NameColor = (byte)HUtil32.StrToInt(str, 0);
                         }
                     }
                     break;
@@ -362,7 +361,7 @@ namespace BotSrv.Player
                         body2 = body.Substring(n + 1 - 1, body.Length);
                         data = EDCode.DeCodeString(body2);
                         body2 = body[..n];
-                        Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
+                        str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
                     }
                     else
                     {
@@ -377,8 +376,7 @@ namespace BotSrv.Player
                         if (Actor != null)
                         {
                             Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.UserName, "\\");
-                            Actor.NameColor = (byte)HUtil32.StrToInt(Str, 0);
-                            Actor.m_nNameColor = GetRgb(Actor.NameColor);
+                            Actor.NameColor = (byte)HUtil32.StrToInt(str, 0);
                         }
                     }
                     break;
@@ -397,7 +395,7 @@ namespace BotSrv.Player
                         body2 = body.Substring(n, body.Length);
                         data = EDCode.DeCodeString(body2);
                         body2 = body[..n];
-                        Str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
+                        str = HUtil32.GetValidStr3(data, ref data, HUtil32.Backslash);
                     }
                     else
                     {
@@ -416,8 +414,7 @@ namespace BotSrv.Player
                         if (Actor != null)
                         {
                             Actor.m_sDescUserName = HUtil32.GetValidStr3(data, ref Actor.UserName, "\\");
-                            Actor.NameColor = (byte)HUtil32.StrToInt(Str, 0);
-                            Actor.m_nNameColor = GetRgb(Actor.NameColor);
+                            Actor.NameColor = (byte)HUtil32.StrToInt(str, 0);
                         }
                     }
                     break;
@@ -732,38 +729,37 @@ namespace BotSrv.Player
                 case Messages.SM_GUILDMESSAGE:
                 case Messages.SM_WHISPER:
                 case Messages.SM_SYSMESSAGE:
-                    Str = EDCode.DeCodeString(body);
+                    str = EDCode.DeCodeString(body);
                     if (msg.Tag > 0)
                     {
-                        ScreenManager.AddChatBoardString(Str);
+                        ScreenManager.AddChatBoardString(str);
                         return;
                     }
                     if (msg.Ident == Messages.SM_WHISPER)
                     {
-                        HUtil32.GetValidStr3(Str, ref str3, new string[] { " ", "=", ">" });
-                        ScreenManager.AddChatBoardString(Str);
+                        HUtil32.GetValidStr3(str, ref str3, new string[] { " ", "=", ">" });
+                        ScreenManager.AddChatBoardString(str);
                     }
                     else
                     {
-                        ScreenManager.AddChatBoardString(Str);
+                        ScreenManager.AddChatBoardString(str);
                     }
                     if (msg.Ident == Messages.SM_HEAR)
                     {
                         Actor = PlayScene.FindActor(msg.Recog);
                         if (Actor != null)
                         {
-                            Actor.Say(Str);
+                            Actor.Say(str);
                         }
                     }
                     break;
                 case Messages.SM_USERNAME:
-                    Str = EDCode.DeCodeString(body);
+                    str = EDCode.DeCodeString(body);
                     Actor = PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
-                        Actor.m_sDescUserName = HUtil32.GetValidStr3(Str, ref Actor.UserName, "\\");
+                        Actor.m_sDescUserName = HUtil32.GetValidStr3(str, ref Actor.UserName, "\\");
                         Actor.NameColor = (byte)msg.Param;
-                        Actor.m_nNameColor = GetRgb((byte)msg.Param);
                         if (msg.Tag >= 1 && msg.Tag <= 5)
                         {
                             Actor.m_btAttribute = (byte)msg.Tag;
@@ -775,7 +771,6 @@ namespace BotSrv.Player
                     if (Actor != null)
                     {
                         Actor.NameColor = (byte)msg.Param;
-                        Actor.m_nNameColor = GetRgb((byte)msg.Param);
                     }
                     break;
                 case Messages.SM_HIDE:
@@ -916,7 +911,7 @@ namespace BotSrv.Player
                 case Messages.SM_EAT_OK:
                     if (msg.Recog != 0)
                     {
-                        Str = "";
+                        str = "";
                         if (msg.Recog != MShare.g_EatingItem.MakeIndex)
                         {
                             for (i = BotConst.MaxBagItemcl - 1; i >= 0; i--)
@@ -926,25 +921,25 @@ namespace BotSrv.Player
                                     if (MShare.ItemArr[i].MakeIndex == MShare.g_EatingItem.MakeIndex)
                                     {
                                         ClFunc.DelStallItem(MShare.ItemArr[i]);
-                                        Str = MShare.ItemArr[i].Item.Name;
+                                        str = MShare.ItemArr[i].Item.Name;
                                         MShare.ItemArr[i].Item.Name = "";
                                         break;
                                     }
                                 }
                             }
                         }
-                        if (Str == "")
+                        if (str == "")
                         {
-                            Str = MShare.g_EatingItem.Item.Name;
+                            str = MShare.g_EatingItem.Item.Name;
                             if (MBoSupplyItem)
                             {
                                 if (MNEatRetIdx >= 0 && MNEatRetIdx <= 5)
                                 {
-                                    AutoSupplyBeltItem(MShare.g_EatingItem.Item.AniCount, MNEatRetIdx, Str);
+                                    AutoSupplyBeltItem(MShare.g_EatingItem.Item.AniCount, MNEatRetIdx, str);
                                 }
                                 else
                                 {
-                                    AutoSupplyBagItem(MShare.g_EatingItem.Item.AniCount, Str);
+                                    AutoSupplyBagItem(MShare.g_EatingItem.Item.AniCount, str);
                                 }
                                 MBoSupplyItem = false;
                             }

@@ -204,7 +204,7 @@ namespace BotSrv
             {
                 for (var i = 10 - 1; i >= 0; i--)
                 {
-                    if ((MShare.MySelf.m_StallMgr.mBlock.Items[i].Item.Name == iname) && (MShare.MySelf.m_StallMgr.mBlock.Items[i].MakeIndex == iindex))
+                    if ((MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name == iname) && (MShare.MySelf.StallMgr.mBlock.Items[i].MakeIndex == iindex))
                     {
                         break;
                     }
@@ -360,7 +360,7 @@ namespace BotSrv
             bool result = false;
             for (var i = 0; i < 10; i++)
             {
-                if (MShare.MySelf.m_StallMgr.mBlock.Items[i].Item.Name == "")
+                if (MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name == "")
                 {
                     result = true;
                     break;
@@ -374,7 +374,7 @@ namespace BotSrv
             int result = 0;
             for (var i = 0; i < 10; i++)
             {
-                if (MShare.MySelf.m_StallMgr.mBlock.Items[i].Item.Name != "")
+                if (MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name != "")
                 {
                     result++;
                 }
@@ -387,11 +387,11 @@ namespace BotSrv
             bool result = false;
             for (var i = 0; i < 10; i++)
             {
-                if (MShare.MySelf.m_StallMgr.mBlock.Items[i].Item.Name != "")
+                if (MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name != "")
                 {
-                    if (MShare.MySelf.m_StallMgr.mBlock.Items[i].MakeIndex == ci.MakeIndex)
+                    if (MShare.MySelf.StallMgr.mBlock.Items[i].MakeIndex == ci.MakeIndex)
                     {
-                        MShare.MySelf.m_StallMgr.mBlock.Items[i] = ci;
+                        MShare.MySelf.StallMgr.mBlock.Items[i] = ci;
                         result = true;
                         return result;
                     }
@@ -399,9 +399,9 @@ namespace BotSrv
             }
             for (var i = 0; i < 10; i++)
             {
-                if (MShare.MySelf.m_StallMgr.mBlock.Items[i].Item.Name == "")
+                if (MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name == "")
                 {
-                    MShare.MySelf.m_StallMgr.mBlock.Items[i] = ci;
+                    MShare.MySelf.StallMgr.mBlock.Items[i] = ci;
                     result = true;
                     break;
                 }
@@ -414,9 +414,9 @@ namespace BotSrv
             bool result = false;
             for (var i = 0; i < 10; i++)
             {
-                if ((MShare.MySelf.m_StallMgr.mBlock.Items[i].Item.Name == ci.Item.Name) && (ci.MakeIndex == MShare.MySelf.m_StallMgr.mBlock.Items[i].MakeIndex))
+                if ((MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name == ci.Item.Name) && (ci.MakeIndex == MShare.MySelf.StallMgr.mBlock.Items[i].MakeIndex))
                 {
-                    MShare.MySelf.m_StallMgr.mBlock.Items[i].Item.Name = "";
+                    MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name = "";
                     result = true;
                     break;
                 }

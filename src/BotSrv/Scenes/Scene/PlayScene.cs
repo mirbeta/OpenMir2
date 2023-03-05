@@ -1089,7 +1089,7 @@ namespace BotSrv.Scenes.Scene
                     }
                     if (MShare.MySelf != null)
                     {
-                        MShare.MySelf.m_SlaveObject.Clear();
+                        MShare.MySelf.SlaveObject.Clear();
                         MShare.MySelf = null;
                     }
                     MShare.MySelf = (THumActor)actor;
@@ -1193,9 +1193,9 @@ namespace BotSrv.Scenes.Scene
             {
                 return result;
             }
-            for (var i = 0; i < MShare.MySelf.m_SlaveObject.Count; i++)
+            for (var i = 0; i < MShare.MySelf.SlaveObject.Count; i++)
             {
-                if (atc == MShare.MySelf.m_SlaveObject[i])
+                if (atc == MShare.MySelf.SlaveObject[i])
                 {
                     result = true;
                     break;

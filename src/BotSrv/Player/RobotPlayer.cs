@@ -87,7 +87,7 @@ namespace BotSrv.Player
             MShare.g_SendSayList = new ArrayList();
             if (MShare.MySelf != null)
             {
-                MShare.MySelf.m_SlaveObject.Clear();
+                MShare.MySelf.SlaveObject.Clear();
                 MShare.MySelf = null;
             }
             MShare.InitClientItems();
@@ -408,39 +408,10 @@ namespace BotSrv.Player
             {
                 return;
             }
-            if ((MShare.MySelf != null) && MShare.MySelf.m_StallMgr.OnSale)
+            if ((MShare.MySelf != null) && MShare.MySelf.StallMgr.OnSale)
             {
                 return;
             }
-            //switch (ActionKey)
-            //{
-            //    case VK_F1:
-            //    case VK_F2:
-            //    case VK_F3:
-            //    case VK_F4:
-            //    case VK_F5:
-            //    case VK_F6:
-            //    case VK_F7:
-            //    case VK_F8:
-            //        if (MShare.g_MySelf.m_btHorse == 0)
-            //        {
-            //            UseMagic(MShare.g_nMouseX, MShare.g_nMouseY, GetMagicByKey((char)(ActionKey - VK_F1) + (byte)"1"));
-            //        }
-            //        ActionKey = 0;
-            //        MShare.g_nTargetX = -1;
-            //        return;
-            //        break;
-            //    // Modify the A .. B: 12 .. 19
-            //    case 12:
-            //        if (MShare.g_MySelf.m_btHorse == 0)
-            //        {
-            //            UseMagic(MShare.g_nMouseX, MShare.g_nMouseY, GetMagicByKey((char)(ActionKey - 12) + (byte)"1" + (byte)0x14));
-            //        }
-            //        ActionKey = 0;
-            //        MShare.g_nTargetX = -1;
-            //        return;
-            //        break;
-            //}
         }
 
         private void ProcessActionMessages()
@@ -923,7 +894,7 @@ namespace BotSrv.Player
                 }
                 if ((MShare.MagicTarget != null) && (MShare.MagicTarget is THumActor))
                 {
-                    if (((THumActor)MShare.MagicTarget).m_StallMgr.OnSale)
+                    if (((THumActor)MShare.MagicTarget).StallMgr.OnSale)
                     {
                         MShare.MagicTarget = null;
                         MShare.MagicLockActor = null;
@@ -2658,7 +2629,7 @@ namespace BotSrv.Player
 
         public bool ServerAcceptNextAction()
         {
-            if ((MShare.MySelf != null) && MShare.MySelf.m_StallMgr.OnSale)
+            if ((MShare.MySelf != null) && MShare.MySelf.StallMgr.OnSale)
             {
                 return false;
             }
@@ -2676,7 +2647,7 @@ namespace BotSrv.Player
 
         public bool CanNextAction()
         {
-            if ((MShare.MySelf != null) && MShare.MySelf.m_StallMgr.OnSale)
+            if ((MShare.MySelf != null) && MShare.MySelf.StallMgr.OnSale)
             {
                 return false;
             }
@@ -2696,7 +2667,7 @@ namespace BotSrv.Player
         {
             bool result;
             int nextHitTime;
-            if ((MShare.MySelf != null) && MShare.MySelf.m_StallMgr.OnSale)
+            if ((MShare.MySelf != null) && MShare.MySelf.StallMgr.OnSale)
             {
                 return false;
             }
@@ -3114,17 +3085,17 @@ namespace BotSrv.Player
             MShare.g_boBagLoaded = true;
             if (MShare.MySelf != null)
             {
-                if (!MShare.MySelf.m_StallMgr.OnSale)
+                if (!MShare.MySelf.StallMgr.OnSale)
                 {
                     for (var i = 0; i < 9; i++)
                     {
-                        if (MShare.MySelf.m_StallMgr.mBlock.Items[i] == null)
+                        if (MShare.MySelf.StallMgr.mBlock.Items[i] == null)
                         {
                             continue;
                         }
-                        if (MShare.MySelf.m_StallMgr.mBlock.Items[i].Item.Name != "")
+                        if (MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name != "")
                         {
-                            ClFunc.UpdateBagStallItem(MShare.MySelf.m_StallMgr.mBlock.Items[i], 4);
+                            ClFunc.UpdateBagStallItem(MShare.MySelf.StallMgr.mBlock.Items[i], 4);
                         }
                     }
                 }
@@ -3132,13 +3103,13 @@ namespace BotSrv.Player
                 {
                     for (var i = 0; i < 9; i++)
                     {
-                        if (MShare.MySelf.m_StallMgr.mBlock.Items[i] == null)
+                        if (MShare.MySelf.StallMgr.mBlock.Items[i] == null)
                         {
                             continue;
                         }
-                        if (MShare.MySelf.m_StallMgr.mBlock.Items[i].Item.Name != "")
+                        if (MShare.MySelf.StallMgr.mBlock.Items[i].Item.Name != "")
                         {
-                            ClFunc.UpdateBagStallItem(MShare.MySelf.m_StallMgr.mBlock.Items[i], 5);
+                            ClFunc.UpdateBagStallItem(MShare.MySelf.StallMgr.mBlock.Items[i], 5);
                         }
                     }
                 }
@@ -4012,7 +3983,7 @@ namespace BotSrv.Player
         public void TimerAutoMagicTimer(object sender, EventArgs e1)
         {
             ClientMagic pcm;
-            if ((MShare.MySelf != null) && MShare.MySelf.m_StallMgr.OnSale)
+            if ((MShare.MySelf != null) && MShare.MySelf.StallMgr.OnSale)
             {
                 return;
             }
@@ -4458,7 +4429,7 @@ namespace BotSrv.Player
                             {
                                 if ((Math.Abs(MShare.MySelf.CurrX - MShare.AutoPicupItem.X) > 1) || (Math.Abs(MShare.MySelf.CurrY - MShare.AutoPicupItem.Y) > 1))
                                 {
-                                    goto AAAA;
+                                    RunAutoPlayAAAA(findMap.X, findMap.Y);
                                 }
                                 else
                                 {
@@ -4466,42 +4437,45 @@ namespace BotSrv.Player
                                     return;
                                 }
                             }
-                        AAAA:
-                            if (MShare.AutoPathList.Count > 2)
-                            {
-                                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoPathList[2].X, MShare.AutoPathList[2].Y);
-                            }
-                            else
-                            {
-                                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
-                            }
-                            short x1 = MShare.MySelf.CurrX;
-                            short y1 = MShare.MySelf.CurrY;
-                            ClFunc.GetNextRunXY(ndir, ref x1, ref y1);
-                            if (Map.CanMove(x1, y1))
-                            {
-                                if (PlayScene.CrashMan(x1, y1))
-                                {
-                                    MShare.TargetX = findMap.X;
-                                    MShare.TargetY = findMap.Y;
-                                    MShare.PlayerAction = PlayerAction.Walk;
-                                }
-                                else
-                                {
-                                    MShare.TargetX = x1;
-                                    MShare.TargetY = y1;
-                                    MShare.PlayerAction = PlayerAction.Run;
-                                }
-                            }
                         }
                     }
                 }
-
                 MShare.AutoPathList.RemoveAt(0);
             }
             if (MShare.AutoMove && (MShare.AutoPathList.Count > 0))
             {
                 _heroActor.InitQueue2();
+            }
+        }
+
+        private void RunAutoPlayAAAA(short X,short Y)
+        {
+            var ndir = 0;
+            if (MShare.AutoPathList.Count > 2)
+            {
+                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoPathList[2].X, MShare.AutoPathList[2].Y);
+            }
+            else
+            {
+                ndir = ClFunc.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
+            }
+            short x1 = MShare.MySelf.CurrX;
+            short y1 = MShare.MySelf.CurrY;
+            ClFunc.GetNextRunXY(ndir, ref x1, ref y1);
+            if (Map.CanMove(x1, y1))
+            {
+                if (PlayScene.CrashMan(x1, y1))
+                {
+                    MShare.TargetX = X;
+                    MShare.TargetY = Y;
+                    MShare.PlayerAction = PlayerAction.Walk;
+                }
+                else
+                {
+                    MShare.TargetX = x1;
+                    MShare.TargetY = y1;
+                    MShare.PlayerAction = PlayerAction.Run;
+                }
             }
         }
 
@@ -4717,11 +4691,6 @@ namespace BotSrv.Player
                     ScreenManager.AddChatBoardString("[开天斩] 力量消失");
                     break;
             }
-        }
-
-        public int GetRgb(byte c256)
-        {
-            return 255;
         }
 
         private static void GetNearPoint()
