@@ -158,19 +158,19 @@ namespace GameSrv.RobotPlay
                                 {
                                     MDwAutoRepairItemTick = HUtil32.GetTickCount();
                                     boRecalcAbilitys = false;
-                                    for (nWhere = 0; nWhere < MUseItemNames.Length; nWhere++)
+                                    for (nWhere = 0; nWhere < UseItemNames.Length; nWhere++)
                                     {
-                                        if (string.IsNullOrEmpty(MUseItemNames[nWhere]))
+                                        if (string.IsNullOrEmpty(UseItemNames[nWhere]))
                                         {
                                             continue;
                                         }
                                         if (UseItems[nWhere].Index <= 0)
                                         {
-                                            stdItem = M2Share.WorldEngine.GetStdItem(MUseItemNames[nWhere]);
+                                            stdItem = M2Share.WorldEngine.GetStdItem(UseItemNames[nWhere]);
                                             if (stdItem != null)
                                             {
                                                 userItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(MUseItemNames[nWhere], ref userItem))
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(UseItemNames[nWhere], ref userItem))
                                                 {
                                                     boRecalcAbilitys = true;
                                                     if (M2Share.StdModeMap.Contains(stdItem.StdMode))
@@ -186,9 +186,9 @@ namespace GameSrv.RobotPlay
                                             }
                                         }
                                     }
-                                    if (MBagItemNames.Count > 0)
+                                    if (BagItemNames.Count > 0)
                                     {
-                                        for (int i = 0; i < MBagItemNames.Count; i++)
+                                        for (int i = 0; i < BagItemNames.Count; i++)
                                         {
                                             for (int j = 0; j < ItemList.Count; j++)
                                             {
@@ -199,7 +199,7 @@ namespace GameSrv.RobotPlay
                                                     if (stdItem != null)
                                                     {
                                                         boFind = false;
-                                                        if (string.Compare(stdItem.Name, MBagItemNames[i], StringComparison.OrdinalIgnoreCase) == 0)
+                                                        if (string.Compare(stdItem.Name, BagItemNames[i], StringComparison.OrdinalIgnoreCase) == 0)
                                                         {
                                                             boFind = true;
                                                             break;
@@ -210,7 +210,7 @@ namespace GameSrv.RobotPlay
                                             if (!boFind)
                                             {
                                                 userItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(MBagItemNames[i], ref userItem))
+                                                if (M2Share.WorldEngine.CopyToUserItemFromName(BagItemNames[i], ref userItem))
                                                 {
                                                     if (!AddItemToBag(userItem))
                                                     {

@@ -38,8 +38,8 @@ namespace GameSrv.RobotPlay
         public string MSFilePath = string.Empty;
         public string MSConfigFileName = string.Empty;
         public string MSHeroConfigFileName = string.Empty;
-        public IList<string> MBagItemNames;
-        public string[] MUseItemNames;
+        public IList<string> BagItemNames;
+        public string[] UseItemNames;
         public TRunPos MRunPos;
         /// <summary>
         /// 魔法使用间隔
@@ -135,8 +135,8 @@ namespace GameSrv.RobotPlay
             MSHeroConfigFileName = "";
             MSConfigListFileName = "";
             MSHeroConfigListFileName = "";
-            MUseItemNames = new string[13];
-            MBagItemNames = new List<string>();
+            UseItemNames = new string[13];
+            BagItemNames = new List<string>();
             MPointManager = new PointManager(this);
             MSkillUseTick = new long[59];// 魔法使用间隔
             MNSelItemType = 1;
@@ -193,12 +193,11 @@ namespace GameSrv.RobotPlay
                 Directory.CreateDirectory(MSFilePath + "RobotIni");
             }
             var sFileName = Path.Combine(MSFilePath, "RobotIni", sName + ".txt");
-            string result;
             if (File.Exists(sFileName))
             {
                 return sFileName;
             }
-            result = sFileName = Path.Combine(MSFilePath, "RobotIni", "默认.txt");
+            var result = Path.Combine(MSFilePath, "RobotIni", "默认.txt");
             switch (nType)
             {
                 case 0:

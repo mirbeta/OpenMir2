@@ -24,6 +24,10 @@ namespace GameSrv {
         }
 
         public void ShowServerStatus() {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) //todo 待实现MACOS下的状态显示
+            {
+                return;
+            }
             ServerEnvironment.GetCPULoad();
             ServerEnvironment.MemoryInfo memoryInfo = ServerEnvironment.GetMemoryStatus();
             _logger.Debug("CPU使用率:[{0}%]", ServerEnvironment.CpuLoad.ToString("F"));
