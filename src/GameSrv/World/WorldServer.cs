@@ -65,6 +65,7 @@ namespace GameSrv.World
         protected readonly Dictionary<string, ServerGruopInfo> OtherUserNameList;
         protected readonly IList<PlayObject> PlayObjectList;
         protected readonly IList<RobotPlayer> BotPlayObjectList;
+        protected readonly List<int> LoadPlayerQueue = new List<int>();
         private readonly ArrayList OldMagicList;
         public readonly IList<NormNpc> QuestNpcList;
         /// <summary>
@@ -484,7 +485,6 @@ namespace GameSrv.World
                     try
                     {
                         //没有进入游戏前 不删除和清空列表
-                        var tempList = new List<int>();
                         for (var i = 0; i < LoadPlayList.Count; i++)
                         {
                             var userOpenInfo = LoadPlayList[i];
@@ -497,7 +497,7 @@ namespace GameSrv.World
                                 if (userOpenInfo.FailCount >= 50) //超过错误查询次数
                                 {
                                     _logger.Warn($"获取玩家数据[{userOpenInfo.ChrName}]失败.");
-                                    tempList.Add(i);
+                                    LoadPlayerQueue.Add(i);
                                     GameGate.GameGateMgr.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
                                     continue;
                                 }
@@ -506,7 +506,7 @@ namespace GameSrv.World
                                     userOpenInfo.FailCount++;
                                     continue;
                                 }
-                                tempList.Add(i);
+                                LoadPlayerQueue.Add(i);
                                 playObject = ProcessHumansMakeNewHuman(userOpenInfo);
                                 if (playObject != null)
                                 {
@@ -530,10 +530,11 @@ namespace GameSrv.World
                             }
                             LoadPlayList[i] = null;
                         }
-                        for (var i = 0; i < tempList.Count; i++)
+                        for (var i = 0; i < LoadPlayerQueue.Count; i++)
                         {
                             LoadPlayList.RemoveAt(i);
                         }
+                        LoadPlayerQueue.Clear();
                         //LoadPlayList.Clear();
                         for (var i = 0; i < ChangeHumanDbGoldList.Count; i++)
                         {
@@ -569,20 +570,6 @@ namespace GameSrv.World
                     _logger.Error(e.StackTrace);
                 }
             }
-
-            //人工智障开始登陆
-            if (RobotLogonQueue.Count > 0)
-            {
-                if (HUtil32.GetTickCount() - RobotLogonTick > 1000)
-                {
-                    RobotLogonTick = HUtil32.GetTickCount();
-                    if (RobotLogonQueue.Count > 0)
-                    {
-                        RegenRobotPlayer(RobotLogonQueue.Dequeue());
-                    }
-                }
-            }
-
             try
             {
                 for (var i = 0; i < PlayObjectFreeList.Count; i++)
@@ -804,7 +791,7 @@ namespace GameSrv.World
 
         public string GetStdItemName(int nItemIdx)
         {
-            var result = "";
+            var result = string.Empty;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {

@@ -1,12 +1,10 @@
 using GameSrv.Actor;
-using GameSrv.Conf;
 using GameSrv.Items;
 using GameSrv.Magic;
 using GameSrv.Maps;
 using GameSrv.Monster.Monsters;
 using GameSrv.Player;
 using System.Collections;
-using SystemModule.Common;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -120,7 +118,7 @@ namespace GameSrv.RobotPlay
         /// </summary>
         public bool Resurrection;
 
-        public RobotPlayer() : base()
+        public RobotPlayer() 
         {
             SoftVersionDate = M2Share.Config.SoftVersionDate;
             SoftVersionDateEx = Grobal2.CLIENT_VERSION_NUMBER;
@@ -386,7 +384,7 @@ namespace GameSrv.RobotPlay
             }
         }
 
-        public UserMagic FindMagic(short wMagIdx)
+        private UserMagic FindMagic(short wMagIdx)
         {
             UserMagic result = null;
             for (int i = 0; i < MagicList.Count; i++)
@@ -401,7 +399,7 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public UserMagic FindMagic(string sMagicName)
+        private UserMagic FindMagic(string sMagicName)
         {
             UserMagic result = null;
             for (int i = 0; i < MagicList.Count; i++)
@@ -526,20 +524,20 @@ namespace GameSrv.RobotPlay
             }
         }
 
-        private bool SearchPickUpItem_PickUpItem(int nX, int nY)
+        private bool SearchPickUpItemPickUpItem(int nX, int nY)
         {
             bool result = false;
             UserItem userItem = null;
             MapItem mapItem = Envir.GetItem(nX, nY);
             if (mapItem == null)
             {
-                return result;
+                return false;
             }
             if (string.Compare(mapItem.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (Envir.DeleteFromMap(nX, nY, CellType.Item, mapItem.ItemId, null) == 1)
                 {
-                    if (this.IncGold(mapItem.Count))
+                    if (IncGold(mapItem.Count))
                     {
                         SendRefMsg(Messages.RM_ITEMHIDE, 0, mapItem.ItemId, nX, nY, "");
                         result = true;
@@ -579,7 +577,7 @@ namespace GameSrv.RobotPlay
                             if (AddItemToBag(userItem))
                             {
                                 SendRefMsg(Messages.RM_ITEMHIDE, 0, mapItem.ItemId, nX, nY, "");
-                                this.SendAddItem(userItem);
+                                SendAddItem(userItem);
                                 Abil.Weight = RecalcBagWeight();
                                 result = true;
                                 SearchPickUpItem_SetHideItem(mapItem);
@@ -615,10 +613,10 @@ namespace GameSrv.RobotPlay
             {
                 if ((HUtil32.GetTickCount() - MDwPickUpItemTick) < nPickUpTime)
                 {
-                    return result;
+                    return false;
                 }
                 MDwPickUpItemTick = HUtil32.GetTickCount();
-                if (this.IsEnoughBag() && TargetCret == null)
+                if (IsEnoughBag() && TargetCret == null)
                 {
                     var boFound = false;
                     if (MSelMapItem != null)
@@ -643,11 +641,10 @@ namespace GameSrv.RobotPlay
                     }
                     if (MSelMapItem != null)
                     {
-                        if (SearchPickUpItem_PickUpItem(CurrX, CurrY))
+                        if (SearchPickUpItemPickUpItem(CurrX, CurrY))
                         {
                             CanPickIng = false;
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
                     int n01 = 999;
@@ -683,7 +680,7 @@ namespace GameSrv.RobotPlay
                                     {
                                         if (IsAllowAiPickUpItem(visibleMapItem.sName) && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(mapItem.UserItem.Index)))
                                         {
-                                            if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == this.ActorId || (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Master == this))
+                                            if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == ActorId || (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Master == this))
                                             {
                                                 if (Math.Abs(visibleMapItem.nX - CurrX) <= 5 && Math.Abs(visibleMapItem.nY - CurrY) <= 5)
                                                 {
@@ -750,7 +747,7 @@ namespace GameSrv.RobotPlay
             }
             if (StatusTimeArr[PoisonState.STONE] != 0 && StatusTimeArr[PoisonState.DONTMOVE] != 0 || StatusTimeArr[PoisonState.LOCKSPELL] != 0)
             {
-                return result;// 麻痹不能跑动 
+                return false;// 麻痹不能跑动 
             }
             if (nTargetX != CurrX || nTargetY != CurrY)
             {
@@ -845,7 +842,6 @@ namespace GameSrv.RobotPlay
 
         private void GotoProtect()
         {
-            int n20;
             if (CurrX != ProtectTargetX || CurrY != ProtectTargetY)
             {
                 int n10 = ProtectTargetX;
@@ -892,6 +888,7 @@ namespace GameSrv.RobotPlay
                 }
                 int nOldX = CurrX;
                 int nOldY = CurrY;
+                int n20;
                 if (Math.Abs(CurrX - ProtectTargetX) >= 3 || Math.Abs(CurrY - ProtectTargetY) >= 3)
                 {
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
@@ -1201,7 +1198,7 @@ namespace GameSrv.RobotPlay
             {
                 if (processMsg.wIdent == Messages.RM_STRUCK)
                 {
-                    if (processMsg.ActorId == this.ActorId)
+                    if (processMsg.ActorId == ActorId)
                     {
                         BaseObject attackBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                         if (attackBaseObject != null)
@@ -1584,7 +1581,6 @@ namespace GameSrv.RobotPlay
 
         private int GetRangeTargetCount(short nX, short nY, int nRange)
         {
-            int result = 0;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
             if (Envirnoment.GetMapBaseObjects(nX, nY, nRange, baseObjectList))
             {
@@ -1598,7 +1594,7 @@ namespace GameSrv.RobotPlay
                 }
                 return baseObjectList.Count;
             }
-            return result;
+            return 0;
         }
 
         // 目标是否和自己在一条线上，用来检测直线攻击的魔法是否可以攻击到目标
@@ -2046,7 +2042,6 @@ namespace GameSrv.RobotPlay
         private bool IsNeedGotoXy()
         {
             bool result = false;
-            long dwAttackTime;
             if (TargetCret != null && HUtil32.GetTickCount() - AutoAvoidTick > 1100 && (!BoUseAttackMagic || Job == 0))
             {
                 if (Job > 0)
@@ -2063,6 +2058,7 @@ namespace GameSrv.RobotPlay
                 }
                 else
                 {
+                    long dwAttackTime;
                     switch (AutoMagicId)
                     {
                         case MagicConst.SKILL_ERGUM:

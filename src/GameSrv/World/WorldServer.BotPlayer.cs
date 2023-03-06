@@ -23,111 +23,22 @@ namespace GameSrv.World
                 BotPlayObjectList.Add(playObject);
             }
         }
-
-        private static RobotPlayer CreateRobotPlayObject(RoBotLogon ai)
-        {
-            int n1C;
-            int n20;
-            int n24;
-            object p28;
-            var envirnoment = M2Share.MapMgr.FindMap(ai.sMapName);
-            if (envirnoment == null)
-            {
-                return null;
-            }
-            var cert = new RobotPlayer();
-            cert.Envir = envirnoment;
-            cert.MapName = ai.sMapName;
-            cert.CurrX = ai.nX;
-            cert.CurrY = ai.nY;
-            cert.Dir = (byte)M2Share.RandomNumber.Random(8);
-            cert.ChrName = ai.sChrName;
-            cert.WAbil = cert.Abil;
-            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode)
-            {
-                cert.CoolEye = true;
-            }
-            //Cert.m_sIPaddr = GetIPAddr;// Mac问题
-            //Cert.m_sIPLocal = GetIPLocal(Cert.m_sIPaddr);
-            cert.ConfigFileName = ai.sConfigFileName;
-            cert.FilePath = ai.sFilePath;
-            cert.ConfigListFileName = ai.sConfigListFileName;
-            cert.HeroConfigListFileName = ai.sHeroConfigListFileName;// 英雄配置列表目录
-            cert.Initialize();
-            cert.RecalcLevelAbilitys();
-            cert.RecalcAbilitys();
-            cert.Abil.HP = cert.Abil.MaxHP;
-            cert.Abil.MP = cert.Abil.MaxMP;
-            if (cert.AddtoMapSuccess)
-            {
-                p28 = null;
-                if (cert.Envir.Width < 50)
-                {
-                    n20 = 2;
-                }
-                else
-                {
-                    n20 = 3;
-                }
-                if (cert.Envir.Height < 250)
-                {
-                    if (cert.Envir.Height < 30)
-                    {
-                        n24 = 2;
-                    }
-                    else
-                    {
-                        n24 = 20;
-                    }
-                }
-                else
-                {
-                    n24 = 50;
-                }
-                n1C = 0;
-                while (true)
-                {
-                    if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false))
-                    {
-                        if ((cert.Envir.Width - n24 - 1) > cert.CurrX)
-                        {
-                            cert.CurrX += (short)n20;
-                        }
-                        else
-                        {
-                            cert.CurrX = (byte)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
-                            if (cert.Envir.Height - n24 - 1 > cert.CurrY)
-                            {
-                                cert.CurrY += (short)n20;
-                            }
-                            else
-                            {
-                                cert.CurrY = (byte)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, cert.CellType, cert.ActorId, cert);
-                        break;
-                    }
-                    n1C++;
-                    if (n1C >= 31)
-                    {
-                        break;
-                    }
-                }
-                if (p28 == null)
-                {
-                    cert = null;
-                }
-            }
-            return cert;
-        }
         
         public void ProcessRobotPlayData()
         {
             const string sExceptionMsg = "[Exception] WorldServer::ProcessRobotPlayData";
+            //人工智障开始登陆
+            if (RobotLogonQueue.Count > 0)
+            {
+                if (HUtil32.GetTickCount() - RobotLogonTick > 1000)
+                {
+                    RobotLogonTick = HUtil32.GetTickCount();
+                    if (RobotLogonQueue.Count > 0)
+                    {
+                        RegenRobotPlayer(RobotLogonQueue.Dequeue());
+                    }
+                }
+            }
             try
             {
                 var dwCurTick = HUtil32.GetTickCount();
@@ -193,6 +104,105 @@ namespace GameSrv.World
                 _logger.Error(sExceptionMsg);
                 _logger.Error(ex.StackTrace);
             }
+        }
+        
+        private static RobotPlayer CreateRobotPlayObject(RoBotLogon ai)
+        {
+            var envirnoment = M2Share.MapMgr.FindMap(ai.sMapName);
+            if (envirnoment == null)
+            {
+                return null;
+            }
+            var cert = new RobotPlayer();
+            cert.Envir = envirnoment;
+            cert.MapName = ai.sMapName;
+            cert.CurrX = ai.nX;
+            cert.CurrY = ai.nY;
+            cert.Dir = (byte)M2Share.RandomNumber.Random(8);
+            cert.ChrName = ai.sChrName;
+            cert.WAbil = cert.Abil;
+            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode)
+            {
+                cert.CoolEye = true;
+            }
+            //Cert.m_sIPaddr = GetIPAddr;// Mac问题
+            //Cert.m_sIPLocal = GetIPLocal(Cert.m_sIPaddr);
+            cert.ConfigFileName = ai.sConfigFileName;
+            cert.FilePath = ai.sFilePath;
+            cert.ConfigListFileName = ai.sConfigListFileName;
+            cert.HeroConfigListFileName = ai.sHeroConfigListFileName;// 英雄配置列表目录
+            cert.Initialize();
+            cert.RecalcLevelAbilitys();
+            cert.RecalcAbilitys();
+            cert.Abil.HP = cert.Abil.MaxHP;
+            cert.Abil.MP = cert.Abil.MaxMP;
+            if (cert.AddtoMapSuccess)
+            {
+                object p28 = null;
+                int n20;
+                if (cert.Envir.Width < 50)
+                {
+                    n20 = 2;
+                }
+                else
+                {
+                    n20 = 3;
+                }
+                int n24;
+                if (cert.Envir.Height < 250)
+                {
+                    if (cert.Envir.Height < 30)
+                    {
+                        n24 = 2;
+                    }
+                    else
+                    {
+                        n24 = 20;
+                    }
+                }
+                else
+                {
+                    n24 = 50;
+                }
+                var n1C = 0;
+                while (true)
+                {
+                    if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false))
+                    {
+                        if ((cert.Envir.Width - n24 - 1) > cert.CurrX)
+                        {
+                            cert.CurrX += (short)n20;
+                        }
+                        else
+                        {
+                            cert.CurrX = (byte)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
+                            if (cert.Envir.Height - n24 - 1 > cert.CurrY)
+                            {
+                                cert.CurrY += (short)n20;
+                            }
+                            else
+                            {
+                                cert.CurrY = (byte)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, cert.CellType, cert.ActorId, cert);
+                        break;
+                    }
+                    n1C++;
+                    if (n1C >= 31)
+                    {
+                        break;
+                    }
+                }
+                if (p28 == null)
+                {
+                    cert = null;
+                }
+            }
+            return cert;
         }
     }
 }
