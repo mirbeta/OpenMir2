@@ -400,7 +400,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 可视范围内的人物列表
         /// </summary>
-        protected readonly IList<BaseObject> VisibleHumanList;
+        protected readonly IList<int> VisibleHumanList;
         /// <summary>
         /// 是否在可视范围内有人物,及宝宝
         /// </summary>
@@ -515,7 +515,7 @@ namespace GameSrv.Actor
             NoTame = false;
             AddAbil = new AddAbility();
             MsgQueue = new PriorityQueue<SendMessage, int>();
-            VisibleHumanList = new List<BaseObject>();
+            VisibleHumanList = new List<int>();
             VisibleActors = new List<VisibleBaseObject>();
             ItemList = new List<UserItem>(Grobal2.MaxBagItem);
             IsVisibleActive = false;
@@ -2141,14 +2141,14 @@ namespace GameSrv.Actor
                                                             if (baseObject.Race == ActorRace.Play)
                                                             {
                                                                 baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
-                                                                VisibleHumanList.Add(baseObject);
+                                                                VisibleHumanList.Add(baseObject.ActorId);
                                                             }
                                                             else if (baseObject.WantRefMsg)
                                                             {
                                                                 if ((wIdent == Messages.RM_STRUCK) || (wIdent == Messages.RM_HEAR) || (wIdent == Messages.RM_DEATH))
                                                                 {
                                                                     baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
-                                                                    VisibleHumanList.Add(baseObject);
+                                                                    VisibleHumanList.Add(baseObject.ActorId);
                                                                 }
                                                             }
                                                         }
@@ -2176,7 +2176,7 @@ namespace GameSrv.Actor
 
                 for (int nC = 0; nC < VisibleHumanList.Count; nC++)
                 {
-                    BaseObject baseObject = VisibleHumanList[nC];
+                    BaseObject baseObject = M2Share.ActorMgr.Get(VisibleHumanList[nC]);
                     if (baseObject.Ghost)
                     {
                         continue;
