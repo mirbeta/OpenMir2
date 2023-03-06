@@ -13,7 +13,6 @@ namespace GameSrv.Maps {
         public int m_nTurnCount;
         public Envirnoment m_PEnvir;
         public FindPathType PathType;
-        private readonly ArrayList FPointList;
         private readonly BaseObject FBaseObject;
 
         public PointManager(BaseObject baseObject) {
@@ -21,15 +20,8 @@ namespace GameSrv.Maps {
             m_nCurrY = -1;
             m_nPostion = -1;
             FBaseObject = baseObject;
-            FPointList = new ArrayList();
             PathType = FindPathType.Dynamic;
             m_PEnvir = null;
-        }
-
-        public int Count => GetCount();
-
-        private int GetCount() {
-            return FPointList.Count;
         }
 
         public void Initialize(Envirnoment Envir) {

@@ -50,7 +50,6 @@ namespace GameSrv.World
             //Cert.m_sIPaddr = GetIPAddr;// Mac问题
             //Cert.m_sIPLocal = GetIPLocal(Cert.m_sIPaddr);
             cert.ConfigFileName = ai.sConfigFileName;
-            cert.HeroConfigFileName = ai.sHeroConfigFileName;
             cert.FilePath = ai.sFilePath;
             cert.ConfigListFileName = ai.sConfigListFileName;
             cert.HeroConfigListFileName = ai.sHeroConfigListFileName;// 英雄配置列表目录

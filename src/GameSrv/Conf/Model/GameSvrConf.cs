@@ -994,6 +994,9 @@ namespace GameSrv.Conf.Model {
         public short nAIHomeX;
         public short nAIHomeY;
         public bool boHPAutoMoveMap;//低血回城
+        /// <summary>
+        /// 机器人自动修复装备
+        /// </summary>
         public bool boAutoRepairItem;
         public bool boRenewHealth;
         public long nAIWarrorAttackTime;

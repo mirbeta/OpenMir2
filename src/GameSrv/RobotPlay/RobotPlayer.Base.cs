@@ -14,13 +14,7 @@ namespace GameSrv.RobotPlay
     {
         public override void Run()
         {
-            int nWhere;
-            int nPercent;
-            int nValue;
-            StdItem stdItem;
-            UserItem userItem;
-            bool boRecalcAbilitys;
-            bool boFind = false;
+            var boFind = false;
             try
             {
                 if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
@@ -40,7 +34,7 @@ namespace GameSrv.RobotPlay
                             DelTargetCreat();
                         }
                         SearchTarget();
-                        if (MManagedEnvir != Envir) // 所在地图不是挂机地图则清空目标
+                        if (ManagedEnvir != Envir) // 所在地图不是挂机地图则清空目标
                         {
                             DelTargetCreat();
                         }
@@ -56,24 +50,24 @@ namespace GameSrv.RobotPlay
                                 ProtectTargetX = CurrX;// 守护坐标
                                 ProtectTargetY = CurrY;// 守护坐标
                             }
-                            if (!ProtectDest && MManagedEnvir != null && TargetCret == null)
+                            if (!ProtectDest && ManagedEnvir != null && TargetCret == null)
                             {
                                 GotoProtect();
-                                MNGotoProtectXyCount++;
+                                GotoProtectXyCount++;
                                 if (Math.Abs(CurrX - ProtectTargetX) <= 3 && Math.Abs(CurrY - ProtectTargetY) <= 3)
                                 {
                                     Dir = (byte)M2Share.RandomNumber.Random(8);
                                     ProtectDest = true;
-                                    MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
+                                    GotoProtectXyCount = 0;// 是向守护坐标的累计数
                                 }
-                                if (MNGotoProtectXyCount > 20 && !ProtectDest)// 20次还没有走到守护坐标，则飞回坐标上
+                                if (GotoProtectXyCount > 20 && !ProtectDest)// 20次还没有走到守护坐标，则飞回坐标上
                                 {
                                     if (Math.Abs(CurrX - ProtectTargetX) > 13 || Math.Abs(CurrY - ProtectTargetY) > 13)
                                     {
-                                        SpaceMove(MManagedEnvir.MapName, ProtectTargetX, ProtectTargetY, 1);
+                                        SpaceMove(ManagedEnvir.MapName, ProtectTargetX, ProtectTargetY, 1);
                                         Dir = (byte)M2Share.RandomNumber.Random(8);
                                         ProtectDest = true;
-                                        MNGotoProtectXyCount = 0;// 是向守护坐标的累计数
+                                        GotoProtectXyCount = 0;// 是向守护坐标的累计数
                                     }
                                 }
                                 base.Run();
@@ -141,10 +135,10 @@ namespace GameSrv.RobotPlay
                                     DelTargetCreat();
                                     if (ProtectStatus) // 守护状态
                                     {
-                                        SpaceMove(MManagedEnvir.MapName, ProtectTargetX, ProtectTargetY, 1);// 地图移动
+                                        SpaceMove(ManagedEnvir.MapName, ProtectTargetX, ProtectTargetY, 1);// 地图移动
                                         Dir = M2Share.RandomNumber.RandomByte(8);
                                         ProtectDest = true;
-                                        MNGotoProtectXyCount = 0; // 是向守护坐标的累计数 
+                                        GotoProtectXyCount = 0; // 是向守护坐标的累计数 
                                     }
                                     else
                                     {
@@ -157,8 +151,10 @@ namespace GameSrv.RobotPlay
                                 if (HUtil32.GetTickCount() - AutoRepairItemTick > 15000)
                                 {
                                     AutoRepairItemTick = HUtil32.GetTickCount();
-                                    boRecalcAbilitys = false;
-                                    for (nWhere = 0; nWhere < UseItemNames.Length; nWhere++)
+                                    var boRecalcAbilitys = false;
+                                    StdItem stdItem;
+                                    UserItem userItem;
+                                    for (var nWhere = 0; nWhere < UseItemNames.Length; nWhere++)
                                     {
                                         if (string.IsNullOrEmpty(UseItemNames[nWhere]))
                                         {
@@ -188,9 +184,9 @@ namespace GameSrv.RobotPlay
                                     }
                                     if (BagItemNames.Count > 0)
                                     {
-                                        for (int i = 0; i < BagItemNames.Count; i++)
+                                        for (var i = 0; i < BagItemNames.Count; i++)
                                         {
-                                            for (int j = 0; j < ItemList.Count; j++)
+                                            for (var j = 0; j < ItemList.Count; j++)
                                             {
                                                 userItem = ItemList[j];
                                                 if (userItem != null)
@@ -225,7 +221,7 @@ namespace GameSrv.RobotPlay
                                             }
                                         }
                                     }
-                                    for (nWhere = 0; nWhere <= UseItems.Length - 1; nWhere++)
+                                    for (var nWhere = 0; nWhere <= UseItems.Length - 1; nWhere++)
                                     {
                                         if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
                                         {
@@ -254,8 +250,8 @@ namespace GameSrv.RobotPlay
                                 if (HUtil32.GetTickCount() - AutoAddHealthTick > 5000)
                                 {
                                     AutoAddHealthTick = HUtil32.GetTickCount();
-                                    nPercent = WAbil.HP * 100 / WAbil.MaxHP;
-                                    nValue = WAbil.MaxHP / 10;
+                                    var nPercent = WAbil.HP * 100 / WAbil.MaxHP;
+                                    var nValue = WAbil.MaxHP / 10;
                                     if (nPercent < M2Share.Config.nRenewPercent)
                                     {
                                         if (WAbil.HP + nValue >= WAbil.MaxHP)
@@ -306,7 +302,6 @@ namespace GameSrv.RobotPlay
                             }
                         }
                     }
-
                     LifeStone();
                 }
             }
@@ -329,7 +324,7 @@ namespace GameSrv.RobotPlay
 
         public override bool IsProperTarget(BaseObject baseObject)
         {
-            bool result = false;
+            var result = false;
             if (baseObject != null)
             {
                 if (base.IsProperTarget(baseObject))
@@ -373,7 +368,7 @@ namespace GameSrv.RobotPlay
                     {
                         if (baseObject.Race == ActorRace.Play)
                         {
-                            byte targetPvpLevel = ((PlayObject)baseObject).PvpLevel();
+                            var targetPvpLevel = ((PlayObject)baseObject).PvpLevel();
                             if (PvpLevel() >= 2)
                             {
                                 result = targetPvpLevel < 2;
@@ -466,7 +461,7 @@ namespace GameSrv.RobotPlay
             }
             if (VisibleItems.Count > 0)
             {
-                for (int i = 0; i < VisibleItems.Count; i++)
+                for (var i = 0; i < VisibleItems.Count; i++)
                 {
                     VisibleItems[i].VisibleFlag = 0;
                 }
@@ -474,25 +469,25 @@ namespace GameSrv.RobotPlay
             EventInfo mapEvent;
             try
             {
-                short nStartX = (short)(CurrX - ViewRange);
-                short nEndX = (short)(CurrX + ViewRange);
-                short nStartY = (short)(CurrY - ViewRange);
-                short nEndY = (short)(CurrY + ViewRange);
-                int dwRunTick = HUtil32.GetTickCount();
-                for (short nX = nStartX; nX <= nEndX; nX++)
+                var nStartX = (short)(CurrX - ViewRange);
+                var nEndX = (short)(CurrX + ViewRange);
+                var nStartY = (short)(CurrY - ViewRange);
+                var nEndY = (short)(CurrY + ViewRange);
+                var dwRunTick = HUtil32.GetTickCount();
+                for (var nX = nStartX; nX <= nEndX; nX++)
                 {
-                    for (short nY = nStartY; nY <= nEndY; nY++)
+                    for (var nY = nStartY; nY <= nEndY; nY++)
                     {
-                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
+                        ref var cellInfo = ref Envir.GetCellInfo(nX, nY, out var cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             if (cellInfo.ObjList == null)
                             {
                                 continue;
                             }
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            for (var i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                CellObject cellObject = cellInfo.ObjList[i];
+                                var cellObject = cellInfo.ObjList[i];
                                 if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
                                     break;
@@ -551,7 +546,7 @@ namespace GameSrv.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                                var mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                                 if (mapItem == null)
                                                 {
                                                     continue;
@@ -609,7 +604,7 @@ namespace GameSrv.RobotPlay
             VisibleFlag nVisibleFlag;
             try
             {
-                int n18 = 0;
+                var n18 = 0;
                 while (true)
                 {
                     try
@@ -703,7 +698,7 @@ namespace GameSrv.RobotPlay
             }
             try
             {
-                int position = 0;
+                var position = 0;
                 while (true)
                 {
                     try
@@ -851,7 +846,7 @@ namespace GameSrv.RobotPlay
                         {
                             DisableSayMsg = false;
                         }
-                        bool boDisableSayMsg = DisableSayMsg;
+                        var boDisableSayMsg = DisableSayMsg;
                         //g_DenySayMsgList.Lock;
                         //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                         //{
@@ -878,9 +873,9 @@ namespace GameSrv.RobotPlay
 
         protected override void SearchTarget()
         {
-            if ((TargetCret == null || HUtil32.GetTickCount() - MDwSearchTargetTick > 1000) && MBoAiStart)
+            if ((TargetCret == null || HUtil32.GetTickCount() - SearchTargetTick > 1000) && MBoAiStart)
             {
-                MDwSearchTargetTick = HUtil32.GetTickCount();
+                SearchTargetTick = HUtil32.GetTickCount();
                 if (TargetCret == null || !(TargetCret != null && TargetCret.Race == ActorRace.Play) || TargetCret.Master != null && TargetCret.Master.Race == ActorRace.Play || (HUtil32.GetTickCount() - StruckTick) > 15000)
                 {
                     base.SearchTarget();
@@ -913,8 +908,8 @@ namespace GameSrv.RobotPlay
                 return;
             }
             IList<DeleteItem> dropItemList = new List<DeleteItem>();
-            int nRate = PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
-            int nC = 0;
+            var nRate = PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
+            var nC = 0;
             while (true)
             {
                 if (M2Share.RandomNumber.Random(nRate) == 0)
@@ -926,7 +921,7 @@ namespace GameSrv.RobotPlay
                     }
                     if (DropItemDown(UseItems[nC], 2, true, baseObject, this.ActorId))
                     {
-                        StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
+                        var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
                         if (stdItem != null)
                         {
                             if ((stdItem.ItemDesc & 10) == 0)
@@ -952,7 +947,7 @@ namespace GameSrv.RobotPlay
             }
             if (dropItemList.Count > 0)
             {
-                int objectId = HUtil32.Sequence();
+                var objectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(objectId, dropItemList);
                 SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }

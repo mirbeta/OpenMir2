@@ -414,7 +414,7 @@ namespace GameSrv.RobotPlay
             byte nDir = 0;
             short nX = nTargetX;
             short nY = nTargetY;
-            bool result = AutoAvoid_GetGotoXY(MBtLastDirection, ref nTargetX, ref nTargetY);
+            bool result = AutoAvoid_GetGotoXY(LastDirection, ref nTargetX, ref nTargetY);
             n10 = 0;
             while (true)
             {
@@ -432,7 +432,7 @@ namespace GameSrv.RobotPlay
                 result = AutoAvoid_GetGotoXY(nDir, ref nTargetX, ref nTargetY);
                 n10++;
             }
-            MBtLastDirection = nDir;
+            LastDirection = nDir;
             return result;
         }
 

@@ -227,7 +227,7 @@ namespace GameSrv.RobotPlay
                             }
                             else
                             {
-                                MBoIsUseAttackMagic = false;// 可以走向目标
+                                BoUseAttackMagic = false;// 可以走向目标
                             }
                         }
                     }
