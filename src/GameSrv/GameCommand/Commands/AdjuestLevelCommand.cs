@@ -29,11 +29,9 @@ namespace GameSrv.GameCommand.Commands {
                     M2Share.Logger.Warn("[等级调整] " + PlayObject.ChrName + "(" + m_PlayObject.ChrName + " " + nOLevel + " -> " + m_PlayObject.Abil.Level + ")");
                 }
             }
-            else {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, new object[]
-                {
-                    sHumanName
-                }), MsgColor.Red, MsgType.Hint);
+            else
+            {
+                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

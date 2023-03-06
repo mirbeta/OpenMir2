@@ -186,7 +186,7 @@ namespace GameSrv.RobotPlay
                     }
                 }
                 AttackTick = HUtil32.GetTickCount();
-                if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22)
+                if (AttackLevelTarget())
                 {
                     AutoUseMagic = false;// 是否能躲避
                     result = WarrAttackTarget(HitMode);
@@ -206,13 +206,12 @@ namespace GameSrv.RobotPlay
         private bool TaoistAttackTarget()
         {
             bool result = false;
-            UserMagic UserMagic;
             try
             {
                 HitMode = 0;
                 if (TargetCret != null)
                 {
-                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) // 22级砍血量的怪 
+                    if (TaoLevelHitAttack()) // 22级砍血量的怪 
                     {
                         if (TargetCret.WAbil.MaxHP >= 700)
                         {
@@ -220,10 +219,10 @@ namespace GameSrv.RobotPlay
                         }
                         else
                         {
-                            if (HUtil32.GetTickCount() - MDwSearchMagic > 1300) // 增加查询魔法的间隔
+                            if (HUtil32.GetTickCount() - SearchUseMagic > 1300) // 增加查询魔法的间隔
                             {
                                 SearchMagic();// 查询魔法
-                                MDwSearchMagic = HUtil32.GetTickCount();
+                                SearchUseMagic = HUtil32.GetTickCount();
                             }
                             else
                             {
@@ -246,7 +245,7 @@ namespace GameSrv.RobotPlay
                     {
                         if (!MagCanHitTarget(CurrX, CurrY, TargetCret) || Math.Abs(TargetCret.CurrX - CurrX) > 7 || Math.Abs(TargetCret.CurrY - CurrY) > 7)// 魔法不能打到怪
                         {
-                            if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪
+                            if (TaoLevelHitAttack())// 22级砍血量的怪
                             {
                                 if (TargetCret.WAbil.MaxHP >= 700)
                                 {
@@ -261,6 +260,7 @@ namespace GameSrv.RobotPlay
                             }
                         }
                     }
+                    UserMagic UserMagic;
                     switch (AutoMagicId)
                     {
                         case MagicConst.SKILL_HEALLING:// 治愈术 
@@ -271,7 +271,7 @@ namespace GameSrv.RobotPlay
                                 {
                                     UseSpell(UserMagic, CurrX, CurrY, null);
                                     AttackTick = HUtil32.GetTickCount();
-                                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪
+                                    if (TaoLevelHitAttack())// 22级砍血量的怪
                                     {
                                         if (TargetCret.WAbil.MaxHP >= 700)
                                         {
@@ -299,7 +299,7 @@ namespace GameSrv.RobotPlay
                                 {
                                     UseSpell(UserMagic, CurrX, CurrY, this);
                                     AttackTick = HUtil32.GetTickCount();
-                                    if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪 
+                                    if (TaoLevelHitAttack())// 22级砍血量的怪 
                                     {
                                         if (TargetCret.WAbil.MaxHP >= 700)
                                         {
@@ -344,7 +344,7 @@ namespace GameSrv.RobotPlay
                             {
                                 UseSpell(UserMagic, CurrX, CurrY, this);
                                 AttackTick = HUtil32.GetTickCount();
-                                if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪 
+                                if (TaoLevelHitAttack())// 22级砍血量的怪 
                                 {
                                     if (TargetCret.WAbil.MaxHP >= 700)
                                     {
@@ -370,7 +370,7 @@ namespace GameSrv.RobotPlay
                             {
                                 UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法
                                 AttackTick = HUtil32.GetTickCount();
-                                if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 22级砍血量的怪
+                                if (TaoLevelHitAttack())// 22级砍血量的怪
                                 {
                                     if (TargetCret.WAbil.MaxHP >= 700)
                                     {
@@ -410,7 +410,7 @@ namespace GameSrv.RobotPlay
                     AutoUseMagic = true;
                 }
                 // 是否能躲避 
-                if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || TargetCret.WAbil.MaxHP < 700 && M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play)// 道士22级前是否物理攻击  怪等级小于英雄时
+                if (AttackLevelTarget() || TargetCret.WAbil.MaxHP < 700 && TaoLevelHitAttack())// 道士22级前是否物理攻击  怪等级小于英雄时
                 {
                     if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)// 道走近目标砍 
                     {
@@ -427,6 +427,24 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
+        /// <summary>
+        /// 道法22级前是否可以攻击
+        /// </summary>
+        /// <returns></returns>
+        private bool AttackLevelTarget()
+        {
+            return M2Share.Config.boHeroAttackTarget && Abil.Level < 22;
+        }
+
+        /// <summary>
+        /// 道士22级后是否物理攻击
+        /// </summary>
+        /// <returns></returns>
+        private bool TaoLevelHitAttack()
+        {
+            return M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play;
+        }
+
         private bool AttackTarget()
         {
             bool result = false;
@@ -434,24 +452,24 @@ namespace GameSrv.RobotPlay
             {
                 if (TargetCret != null)
                 {
-                    if (InSafeZone())// 英雄进入安全区内就不打PK目标
+                    if (InSafeZone())// 进入安全区内就不打PK目标
                     {
                         if (TargetCret.Race == ActorRace.Play)
                         {
                             TargetCret = null;
-                            return result;
+                            return false;
                         }
                     }
-                    if (TargetCret == this) // 防止英雄自己打自己
+                    if (TargetCret.ActorId == ActorId) // 防止英雄自己打自己
                     {
                         TargetCret = null;
-                        return result;
+                        return false;
                     }
                 }
                 TargetFocusTick = HUtil32.GetTickCount();
                 if (Death || Ghost)
                 {
-                    return result;
+                    return false;
                 }
                 switch (Job)
                 {

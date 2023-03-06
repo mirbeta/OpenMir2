@@ -381,8 +381,7 @@ namespace GameSrv.World
                     }
                     if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                     {
-                        _logger.Warn(string.Format(sChangeServerFail2,
-                            new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
+                        _logger.Warn(string.Format(sChangeServerFail2, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         playObject.MapName = M2Share.Config.HomeMap;
                         envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                         playObject.CurrX = M2Share.Config.HomeX;

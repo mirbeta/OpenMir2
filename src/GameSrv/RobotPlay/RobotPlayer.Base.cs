@@ -101,9 +101,8 @@ namespace GameSrv.RobotPlay
                                     }
                                     if (Job > 0)
                                     {
-                                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.WAbil.MaxHP < 700 && Job == PlayJob.Taoist && TargetCret.Race != ActorRace.Play)
+                                        if (AttackLevelTarget() || TaoLevelHitAttack() && TargetCret.WAbil.MaxHP < 700 && Job == PlayJob.Taoist)// 道法22前是否物理攻击
                                         {
-                                            // 道法22前是否物理攻击
                                             if (Master != null)
                                             {
                                                 if (Math.Abs(Master.CurrX - CurrX) > 6 || Math.Abs(Master.CurrY - CurrY) > 6)
@@ -693,7 +692,7 @@ namespace GameSrv.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
+                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
             try

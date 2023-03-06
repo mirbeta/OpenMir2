@@ -19,7 +19,7 @@ namespace GameSrv.RobotPlay
                     if (Job > 0 && (AutoMagicId == 0 || WAbil.HP <= Math.Round(WAbil.MaxHP * 0.15)))// 血低于15%时,必定要躲 
                     {
                         AutoAvoidTick = HUtil32.GetTickCount();
-                        if (M2Share.Config.boHeroAttackTarget && Abil.Level < 22) // 22级前道法不躲避
+                        if (AttackLevelTarget()) // 22级前道法不躲避
                         {
                             if ((byte)Job == 1)// 法放魔法后要躲
                             {
@@ -37,21 +37,19 @@ namespace GameSrv.RobotPlay
                                 case PlayJob.Wizard:
                                     if (CheckTargetXyCount(CurrX, CurrY, 4) > 0)
                                     {
-                                        result = true;
-                                        return result;
+                                        return true;
                                     }
                                     break;
                                 case PlayJob.Taoist:
                                     if (TargetCret != null)
                                     {
-                                        if (M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play) // 22级砍血量的怪
+                                        if (TaoLevelHitAttack()) // 22级砍血量的怪
                                         {
                                             if (TargetCret.WAbil.MaxHP >= 700)
                                             {
                                                 if (CheckTargetXyCount(CurrX, CurrY, 4) > 0)
                                                 {
-                                                    result = true;
-                                                    return result;
+                                                    return true;
                                                 }
                                             }
                                         }
@@ -59,8 +57,7 @@ namespace GameSrv.RobotPlay
                                         {
                                             if (CheckTargetXyCount(CurrX, CurrY, 4) > 0)
                                             {
-                                                result = true;
-                                                return result;
+                                                return true;
                                             }
                                         }
                                     }
@@ -68,8 +65,7 @@ namespace GameSrv.RobotPlay
                                     {
                                         if (CheckTargetXyCount(CurrX, CurrY, 4) > 0)
                                         {
-                                            result = true;
-                                            return result;
+                                            return true;
                                         }
                                     }
                                     break;

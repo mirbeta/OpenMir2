@@ -1169,8 +1169,9 @@ namespace GameSrv.Npc {
                     break;
                 }
             }
-            if (!bo15) {
-                s10 = string.Format("{0}    {1}", new object[] { sHumName, DateTime.Today });
+            if (!bo15)
+            {
+                s10 = $"{sHumName}    {DateTime.Today}";
                 LoadList.Add(s10);
                 try {
                     LoadList.SaveToFile(sListFileName);

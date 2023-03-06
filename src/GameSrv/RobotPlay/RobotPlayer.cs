@@ -39,9 +39,9 @@ namespace GameSrv.RobotPlay
         public string[] UseItemNames;
         public TRunPos MRunPos;
         /// <summary>
-        /// 魔法使用间隔
+        /// 技能使用间隔
         /// </summary>
-        public long[] MSkillUseTick;
+        public long[] SkillUseTick;
         /// <summary>
         /// 攻击方式
         /// </summary>
@@ -51,7 +51,7 @@ namespace GameSrv.RobotPlay
         public long AutoAddHealthTick;
         public long MDwThinkTick;
         public bool MBoDupMode;
-        public long MDwSearchMagic = 0;
+        public long SearchUseMagic = 0;
         /// <summary>
         /// 低血回城间隔
         /// </summary>
@@ -75,7 +75,7 @@ namespace GameSrv.RobotPlay
         /// <summary>
         /// 跑步计时
         /// </summary>
-        public long DwTick5F4;
+        public long RunIntervalTick;
         /// <summary>
         /// 受攻击说话列表
         /// </summary>
@@ -132,7 +132,7 @@ namespace GameSrv.RobotPlay
             UseItemNames = new string[13];
             BagItemNames = new List<string>();
             PointManager = new PointManager(this);
-            MSkillUseTick = new long[60];// 魔法使用间隔
+            SkillUseTick = new long[60];// 魔法使用间隔
             BoSelSelf = false;
             AutoAddHealthTick = HUtil32.GetTickCount();
             AutoRepairItemTick = HUtil32.GetTickCount();
@@ -259,28 +259,28 @@ namespace GameSrv.RobotPlay
                 }
                 if (Permission > 0)
                 {
-                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { ChrName, Abil.Level, saystr }));
+                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
                     // 取得私聊信息
                     // m_GetWhisperHuman 侦听私聊对象
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, playObject.ChrName, saystr }));
+                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                     if (playObject.WhisperHuman != null && !playObject.WhisperHuman.Ghost)
                     {
-                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, playObject.ChrName, saystr }));
+                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                 }
                 else
                 {
-                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", new object[] { ChrName, Abil.Level, saystr }));
+                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, playObject.ChrName, saystr }));
+                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                     if (playObject.WhisperHuman != null && !playObject.WhisperHuman.Ghost)
                     {
-                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", new object[] { ChrName, Abil.Level, playObject.ChrName, saystr }));
+                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                 }
             }
@@ -355,7 +355,7 @@ namespace GameSrv.RobotPlay
                                 }
                                 ShoutMsgTick = HUtil32.GetTickCount();
                                 sc = sData[1..];
-                                string sCryCryMsg = "(!)" + ChrName + ": " + sc;
+                                var sCryCryMsg = "(!)" + ChrName + ": " + sc;
                                 if (FilterSendMsg)
                                 {
                                     SendMsg(null, Messages.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
@@ -366,7 +366,7 @@ namespace GameSrv.RobotPlay
                                 }
                                 return;
                             }
-                            SysMsg(Format(Settings.YouCanSendCyCyLaterMsg, new object[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
+                            SysMsg(Format(Settings.YouCanSendCyCyLaterMsg, 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000), MsgColor.Red, MsgType.Hint);
                             return;
                         }
                         SysMsg(Settings.ThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
@@ -380,7 +380,7 @@ namespace GameSrv.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, new object[] { sData }));
+                M2Share.Logger.Error(Format(sExceptionMsg, sData));
             }
         }
 
@@ -417,10 +417,10 @@ namespace GameSrv.RobotPlay
         private bool RunToNext(short nX, short nY)
         {
             bool result = false;
-            if ((HUtil32.GetTickCount() - DwTick5F4) > M2Share.Config.nAIRunIntervalTime)
+            if ((HUtil32.GetTickCount() - RunIntervalTick) > M2Share.Config.nAIRunIntervalTime)
             {
                 result = RobotRunTo(M2Share.GetNextDirection(CurrX, CurrY, nX, nY), false, nX, nY);
-                DwTick5F4 = HUtil32.GetTickCount();
+                RunIntervalTick = HUtil32.GetTickCount();
                 //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
             }
             return result;
@@ -1944,7 +1944,7 @@ namespace GameSrv.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Logger.Error(Format("RobotPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", new object[] { userMagic.MagIdx, nTargetX, nTargetY }));
+                M2Share.Logger.Error(Format("RobotPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, nTargetX, nTargetY));
             }
             return result;
         }
@@ -2050,8 +2050,7 @@ namespace GameSrv.RobotPlay
                     {
                         return true;
                     }
-                    if ((M2Share.Config.boHeroAttackTarget && Abil.Level < 22 || M2Share.Config.boHeroAttackTao && TargetCret.Abil.MaxHP < 700 &&
-                        TargetCret.Race != ActorRace.Play && Job == PlayJob.Taoist) && (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
+                    if ((AttackLevelTarget() || TaoLevelHitAttack() && TargetCret.Abil.MaxHP < 700 && Job == PlayJob.Taoist) && (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
                     {
                         return true;
                     }
@@ -2354,7 +2353,7 @@ namespace GameSrv.RobotPlay
             {
                 return false;
             }
-            if (HUtil32.GetTickCount() - DwTick5F4 > RunIntervalTime) // 跑步使用单独的变量计数
+            if (HUtil32.GetTickCount() - RunIntervalTick > RunIntervalTime) // 跑步使用单独的变量计数
             {
                 short nX = nTargetX;
                 short nY = nTargetY;
@@ -2364,7 +2363,7 @@ namespace GameSrv.RobotPlay
                     result = WalkToTargetXy(nTargetX, nTargetY);
                     if (result)
                     {
-                        DwTick5F4 = HUtil32.GetTickCount();
+                        RunIntervalTick = HUtil32.GetTickCount();
                     }
                 }
                 else
@@ -2372,7 +2371,7 @@ namespace GameSrv.RobotPlay
                     if (Math.Abs(nTargetX - CurrX) <= 1 && Math.Abs(nTargetY - CurrY) <= 1)
                     {
                         result = true;
-                        DwTick5F4 = HUtil32.GetTickCount();
+                        RunIntervalTick = HUtil32.GetTickCount();
                     }
                 }
             }
@@ -2655,10 +2654,10 @@ namespace GameSrv.RobotPlay
                     if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level)
                     {
                         // PK时,使用野蛮冲撞 
-                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - MSkillUseTick[27] > 10000)
+                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - SkillUseTick[27] > 10000)
                         {
                             // pk时如果对方等级比自己低就每隔一段时间用一次野蛮  
-                            MSkillUseTick[27] = HUtil32.GetTickCount();
+                            SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
                             return result;
                         }
@@ -2666,9 +2665,9 @@ namespace GameSrv.RobotPlay
                     else
                     {
                         // 打怪使用 
-                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - MSkillUseTick[27] > 10000 && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.85))
+                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - SkillUseTick[27] > 10000 && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.85))
                         {
-                            MSkillUseTick[27] = HUtil32.GetTickCount();
+                            SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
                             return result;
                         }
@@ -2682,22 +2681,22 @@ namespace GameSrv.RobotPlay
                         switch (M2Share.RandomNumber.Random(3))
                         {
                             case 0:// 被怪物包围
-                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - MSkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
-                                    MSkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
+                                    SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
                                     return result;
                                 }
-                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - MSkillUseTick[7] > 10000)// 攻杀剑术 
+                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - SkillUseTick[7] > 10000)// 攻杀剑术 
                                 {
-                                    MSkillUseTick[7] = HUtil32.GetTickCount();
+                                    SkillUseTick[7] = HUtil32.GetTickCount();
                                     PowerHit = true;// 开启攻杀
                                     result = 7;
                                     return result;
                                 }
-                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - MSkillUseTick[39] > 10000)
+                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - SkillUseTick[39] > 10000)
                                 {
-                                    MSkillUseTick[39] = HUtil32.GetTickCount();// 彻地钉
+                                    SkillUseTick[39] = HUtil32.GetTickCount();// 彻地钉
                                     result = 39;
                                     return result;
                                 }
@@ -2733,22 +2732,22 @@ namespace GameSrv.RobotPlay
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - MSkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
-                                    MSkillUseTick[41] = HUtil32.GetTickCount(); // 狮子吼
+                                    SkillUseTick[41] = HUtil32.GetTickCount(); // 狮子吼
                                     result = 41;
                                     return result;
                                 }
-                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - MSkillUseTick[7] > 10000)// 攻杀剑术 
+                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - SkillUseTick[7] > 10000)// 攻杀剑术 
                                 {
-                                    MSkillUseTick[7] = HUtil32.GetTickCount();
+                                    SkillUseTick[7] = HUtil32.GetTickCount();
                                     PowerHit = true;
                                     result = 7;
                                     return result;
                                 }
-                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - MSkillUseTick[39] > 10000)
+                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - SkillUseTick[39] > 10000)
                                 {
-                                    MSkillUseTick[39] = HUtil32.GetTickCount(); // 英雄彻地钉
+                                    SkillUseTick[39] = HUtil32.GetTickCount(); // 英雄彻地钉
                                     result = 39;
                                     return result;
                                 }
@@ -2784,21 +2783,21 @@ namespace GameSrv.RobotPlay
                                 }
                                 break;
                             case 2:
-                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - MSkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
-                                    MSkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
+                                    SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                                     result = 41;
                                     return result;
                                 }
-                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - MSkillUseTick[39] > 10000)
+                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - SkillUseTick[39] > 10000)
                                 {
-                                    MSkillUseTick[39] = HUtil32.GetTickCount();// 英雄彻地钉
+                                    SkillUseTick[39] = HUtil32.GetTickCount();// 英雄彻地钉
                                     result = 39;
                                     return result;
                                 }
-                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - MSkillUseTick[7] > 10000)// 攻杀剑术
+                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - SkillUseTick[7] > 10000)// 攻杀剑术
                                 {
-                                    MSkillUseTick[7] = HUtil32.GetTickCount();
+                                    SkillUseTick[7] = HUtil32.GetTickCount();
                                     PowerHit = true;//  开启攻杀
                                     result = 7;
                                     return result;
@@ -2841,9 +2840,9 @@ namespace GameSrv.RobotPlay
                         if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXyCount1(CurrX, CurrY, 1) > 1)
                         {
                             // PK  身边超过2个目标才使用
-                            if (AllowUseMagic(40) && (HUtil32.GetTickCount() - MSkillUseTick[40]) > 3000)// 英雄抱月刀法
+                            if (AllowUseMagic(40) && (HUtil32.GetTickCount() - SkillUseTick[40]) > 3000)// 英雄抱月刀法
                             {
-                                MSkillUseTick[40] = HUtil32.GetTickCount();
+                                SkillUseTick[40] = HUtil32.GetTickCount();
                                 if (!CrsHitkill)
                                 {
                                     SkillCrsOnOff(true);
@@ -2851,14 +2850,14 @@ namespace GameSrv.RobotPlay
                                 result = 40;
                                 return result;
                             }
-                            if ((HUtil32.GetTickCount() - MSkillUseTick[25]) > 1500)
+                            if ((HUtil32.GetTickCount() - SkillUseTick[25]) > 1500)
                             {
                                 if (AllowUseMagic(MagicConst.SKILL_BANWOL))
                                 {
                                     // 半月弯刀
                                     if (CheckTargetXyCount2(MagicConst.SKILL_BANWOL) > 0)
                                     {
-                                        MSkillUseTick[25] = HUtil32.GetTickCount();
+                                        SkillUseTick[25] = HUtil32.GetTickCount();
                                         if (!UseHalfMoon)
                                         {
                                             HalfMoonOnOff(true);
@@ -2869,14 +2868,14 @@ namespace GameSrv.RobotPlay
                                 }
                             }
                         }
-                        if (AllowUseMagic(7) && (HUtil32.GetTickCount() - MSkillUseTick[7]) > 10000) // 少于三个怪用 刺杀剑术
+                        if (AllowUseMagic(7) && (HUtil32.GetTickCount() - SkillUseTick[7]) > 10000) // 少于三个怪用 刺杀剑术
                         {
-                            MSkillUseTick[7] = HUtil32.GetTickCount();
+                            SkillUseTick[7] = HUtil32.GetTickCount();
                             PowerHit = true;// 开启攻杀
                             result = 7;
                             return result;
                         }
-                        if (HUtil32.GetTickCount() - MSkillUseTick[12] > 1000)
+                        if (HUtil32.GetTickCount() - SkillUseTick[12] > 1000)
                         {
                             if (AllowUseMagic(12))// 英雄刺杀剑术
                             {
@@ -2884,7 +2883,7 @@ namespace GameSrv.RobotPlay
                                 {
                                     ThrustingOnOff(true);
                                 }
-                                MSkillUseTick[12] = HUtil32.GetTickCount();
+                                SkillUseTick[12] = HUtil32.GetTickCount();
                                 result = 12;
                                 return result;
                             }
@@ -2897,24 +2896,24 @@ namespace GameSrv.RobotPlay
                         result = 26;
                         return result;
                     }
-                    if (AllowUseMagic(40) && (HUtil32.GetTickCount() - MSkillUseTick[40]) > 3000 && CheckTargetXyCount1(CurrX, CurrY, 1) > 1)
+                    if (AllowUseMagic(40) && (HUtil32.GetTickCount() - SkillUseTick[40]) > 3000 && CheckTargetXyCount1(CurrX, CurrY, 1) > 1)
                     {
                         // 英雄抱月刀法
                         if (!CrsHitkill)
                         {
                             SkillCrsOnOff(true);
                         }
-                        MSkillUseTick[40] = HUtil32.GetTickCount();
+                        SkillUseTick[40] = HUtil32.GetTickCount();
                         result = 40;
                         return result;
                     }
-                    if (AllowUseMagic(39) && (HUtil32.GetTickCount() - MSkillUseTick[39]) > 3000) // 英雄彻地钉
+                    if (AllowUseMagic(39) && (HUtil32.GetTickCount() - SkillUseTick[39]) > 3000) // 英雄彻地钉
                     {
-                        MSkillUseTick[39] = HUtil32.GetTickCount();
+                        SkillUseTick[39] = HUtil32.GetTickCount();
                         result = 39;
                         return result;
                     }
-                    if ((HUtil32.GetTickCount() - MSkillUseTick[25]) > 3000)
+                    if ((HUtil32.GetTickCount() - SkillUseTick[25]) > 3000)
                     {
                         if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                         {
@@ -2922,12 +2921,12 @@ namespace GameSrv.RobotPlay
                             {
                                 HalfMoonOnOff(true);
                             }
-                            MSkillUseTick[25] = HUtil32.GetTickCount();
+                            SkillUseTick[25] = HUtil32.GetTickCount();
                             result = MagicConst.SKILL_BANWOL;
                             return result;
                         }
                     }
-                    if ((HUtil32.GetTickCount() - MSkillUseTick[12]) > 3000)// 英雄刺杀剑术
+                    if ((HUtil32.GetTickCount() - SkillUseTick[12]) > 3000)// 英雄刺杀剑术
                     {
                         if (AllowUseMagic(12))
                         {
@@ -2935,40 +2934,40 @@ namespace GameSrv.RobotPlay
                             {
                                 ThrustingOnOff(true);
                             }
-                            MSkillUseTick[12] = HUtil32.GetTickCount();
+                            SkillUseTick[12] = HUtil32.GetTickCount();
                             result = 12;
                             return result;
                         }
                     }
-                    if (AllowUseMagic(7) && (HUtil32.GetTickCount() - MSkillUseTick[7]) > 3000)// 攻杀剑术
+                    if (AllowUseMagic(7) && (HUtil32.GetTickCount() - SkillUseTick[7]) > 3000)// 攻杀剑术
                     {
                         PowerHit = true;
-                        MSkillUseTick[7] = HUtil32.GetTickCount();
+                        SkillUseTick[7] = HUtil32.GetTickCount();
                         result = 7;
                         return result;
                     }
                     if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(WAbil.MaxHP * 0.6))
                     {
                         // PK时,使用野蛮冲撞
-                        if (AllowUseMagic(27) && (HUtil32.GetTickCount() - MSkillUseTick[27]) > 3000)
+                        if (AllowUseMagic(27) && (HUtil32.GetTickCount() - SkillUseTick[27]) > 3000)
                         {
-                            MSkillUseTick[27] = HUtil32.GetTickCount();
+                            SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
                             return result;
                         }
                     }
                     else
                     {
-                        if (AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.6) && HUtil32.GetTickCount() - MSkillUseTick[27] > 3000)
+                        if (AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.6) && HUtil32.GetTickCount() - SkillUseTick[27] > 3000)
                         {
-                            MSkillUseTick[27] = HUtil32.GetTickCount();
+                            SkillUseTick[27] = HUtil32.GetTickCount();
                             result = 27;
                             return result;
                         }
                     }
-                    if (AllowUseMagic(41) && HUtil32.GetTickCount() - MSkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                    if (AllowUseMagic(41) && HUtil32.GetTickCount() - SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                     {
-                        MSkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
+                        SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
                         result = 41;
                         return result;
                     }
@@ -2990,9 +2989,9 @@ namespace GameSrv.RobotPlay
                     if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)
                     {
                         // PK时,旁边有人贴身,使用抗拒火环
-                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - MSkillUseTick[8] > 3000)
+                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - SkillUseTick[8] > 3000)
                         {
-                            MSkillUseTick[8] = HUtil32.GetTickCount();
+                            SkillUseTick[8] = HUtil32.GetTickCount();
                             result = 8;
                             return result;
                         }
@@ -3000,32 +2999,32 @@ namespace GameSrv.RobotPlay
                     else
                     {
                         // 打怪,怪级低于自己,并且有怪包围自己就用 抗拒火环
-                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - MSkillUseTick[8] > 3000 && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)
+                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - SkillUseTick[8] > 3000 && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)
                         {
-                            MSkillUseTick[8] = HUtil32.GetTickCount();
+                            SkillUseTick[8] = HUtil32.GetTickCount();
                             result = 8;
                             return result;
                         }
                     }
-                    if (AllowUseMagic(45) && HUtil32.GetTickCount() - MSkillUseTick[45] > 3000)
+                    if (AllowUseMagic(45) && HUtil32.GetTickCount() - SkillUseTick[45] > 3000)
                     {
-                        MSkillUseTick[45] = HUtil32.GetTickCount();
+                        SkillUseTick[45] = HUtil32.GetTickCount();
                         result = 45;// 英雄灭天火
                         return result;
                     }
-                    if (HUtil32.GetTickCount() - MSkillUseTick[10] > 5000 && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY))
+                    if (HUtil32.GetTickCount() - SkillUseTick[10] > 5000 && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY))
                     {
                         if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && GetDirBaseObjectsCount(Dir, 5) > 0 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
                         {
                             if (AllowUseMagic(10))
                             {
-                                MSkillUseTick[10] = HUtil32.GetTickCount();
+                                SkillUseTick[10] = HUtil32.GetTickCount();
                                 result = 10;// 英雄疾光电影 
                                 return result;
                             }
                             else if (AllowUseMagic(9))
                             {
-                                MSkillUseTick[10] = HUtil32.GetTickCount();
+                                SkillUseTick[10] = HUtil32.GetTickCount();
                                 result = 9;// 地狱火
                                 return result;
                             }
@@ -3034,32 +3033,32 @@ namespace GameSrv.RobotPlay
                         {
                             if (AllowUseMagic(10))
                             {
-                                MSkillUseTick[10] = HUtil32.GetTickCount();
+                                SkillUseTick[10] = HUtil32.GetTickCount();
                                 result = 10;// 英雄疾光电影 
                                 return result;
                             }
                             else if (AllowUseMagic(9))
                             {
-                                MSkillUseTick[10] = HUtil32.GetTickCount();
+                                SkillUseTick[10] = HUtil32.GetTickCount();
                                 result = 9;// 地狱火
                                 return result;
                             }
                         }
                     }
-                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - MSkillUseTick[32] > 10000 && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1)
+                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - SkillUseTick[32] > 10000 && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1)
                     {
                         // 目标为不死系
-                        MSkillUseTick[32] = HUtil32.GetTickCount();
+                        SkillUseTick[32] = HUtil32.GetTickCount();
                         result = 32;// 圣言术
                         return result;
                     }
                     if (CheckTargetXyCount(CurrX, CurrY, 2) > 1)// 被怪物包围
                     {
-                        if (AllowUseMagic(22) && (HUtil32.GetTickCount() - MSkillUseTick[22]) > 10000)
+                        if (AllowUseMagic(22) && (HUtil32.GetTickCount() - SkillUseTick[22]) > 10000)
                         {
                             if (TargetCret.Race != 101 && TargetCret.Race != 102 && TargetCret.Race != 104) // 除祖玛怪,才放火墙
                             {
-                                MSkillUseTick[22] = HUtil32.GetTickCount();
+                                SkillUseTick[22] = HUtil32.GetTickCount();
                                 result = 22;// 火墙
                                 return result;
                             }
@@ -3069,9 +3068,9 @@ namespace GameSrv.RobotPlay
                         if (new ArrayList(new byte[] { 91, 92, 97, 101, 102, 104 }).Contains(TargetCret.Race))
                         {
                             // 1000 * 4
-                            if (AllowUseMagic(24) && (HUtil32.GetTickCount() - MSkillUseTick[24]) > 4000 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                            if (AllowUseMagic(24) && (HUtil32.GetTickCount() - SkillUseTick[24]) > 4000 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                             {
-                                MSkillUseTick[24] = HUtil32.GetTickCount();
+                                SkillUseTick[24] = HUtil32.GetTickCount();
                                 result = 24;// 地狱雷光
                                 return result;
                             }
@@ -3090,17 +3089,17 @@ namespace GameSrv.RobotPlay
                                 result = 33;// 英雄冰咆哮
                                 return result;
                             }
-                            else if (HUtil32.GetTickCount() - MSkillUseTick[58] > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                            else if (HUtil32.GetTickCount() - SkillUseTick[58] > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                             {
                                 if (AllowUseMagic(92))
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 92;// 四级流星火雨
                                     return result;
                                 }
                                 if (AllowUseMagic(58))
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 58;// 流星火雨
                                     return result;
                                 }
@@ -3109,15 +3108,15 @@ namespace GameSrv.RobotPlay
                         switch (M2Share.RandomNumber.Random(4))// 随机选择魔法
                         {
                             case 0: // 火球术,大火球,雷电术,爆裂火焰,英雄冰咆哮,流星火雨 从高到低选择
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - MSkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 92;// 四级流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - MSkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 58;// 流星火雨
                                     return result;
                                 }
@@ -3183,15 +3182,15 @@ namespace GameSrv.RobotPlay
                                     result = 44;// 寒冰掌
                                     return result;
                                 }
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - MSkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 92;// 四级流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - MSkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 58;// 流星火雨
                                     return result;
                                 }
@@ -3238,15 +3237,15 @@ namespace GameSrv.RobotPlay
                                     result = 44;// 寒冰掌
                                     return result;
                                 }
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - MSkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 92;// 四级流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - MSkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 58;// 流星火雨
                                     return result;
                                 }
@@ -3293,15 +3292,15 @@ namespace GameSrv.RobotPlay
                                     result = 44; // 寒冰掌
                                     return result;
                                 }
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - MSkillUseTick[58] > 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - SkillUseTick[58] > 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 92; // 四级流星火雨
                                     return result;
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - MSkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    MSkillUseTick[58] = HUtil32.GetTickCount();
+                                    SkillUseTick[58] = HUtil32.GetTickCount();
                                     result = 58; // 流星火雨
                                     return result;
                                 }
@@ -3351,11 +3350,11 @@ namespace GameSrv.RobotPlay
                     else
                     {
                         // 只有一个怪时所用的魔法
-                        if (AllowUseMagic(22) && HUtil32.GetTickCount() - MSkillUseTick[22] > 10000)
+                        if (AllowUseMagic(22) && HUtil32.GetTickCount() - SkillUseTick[22] > 10000)
                         {
                             if (TargetCret.Race != 101 && TargetCret.Race != 102 && TargetCret.Race != 104)// 除祖玛怪,才放火墙
                             {
-                                MSkillUseTick[22] = HUtil32.GetTickCount();
+                                SkillUseTick[22] = HUtil32.GetTickCount();
                                 result = 22;
                                 return result;
                             }
@@ -3553,17 +3552,17 @@ namespace GameSrv.RobotPlay
                         }
                     }
                     // 从高到低使用魔法 
-                    if ((HUtil32.GetTickCount() - MSkillUseTick[58]) > 1500)
+                    if ((HUtil32.GetTickCount() - SkillUseTick[58]) > 1500)
                     {
                         if (AllowUseMagic(92))// 四级流星火雨
                         {
-                            MSkillUseTick[58] = HUtil32.GetTickCount();
+                            SkillUseTick[58] = HUtil32.GetTickCount();
                             result = 92;
                             return result;
                         }
                         if (AllowUseMagic(58)) // 流星火雨
                         {
-                            MSkillUseTick[58] = HUtil32.GetTickCount();
+                            SkillUseTick[58] = HUtil32.GetTickCount();
                             result = 58;
                             return result;
                         }
@@ -3653,9 +3652,9 @@ namespace GameSrv.RobotPlay
                     }
                     break;
                 case PlayJob.Taoist:// 道士
-                    if (SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && HUtil32.GetTickCount() - MSkillUseTick[17] > 3000 && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && Abil.MP > 20)
+                    if (SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && HUtil32.GetTickCount() - SkillUseTick[17] > 3000 && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && Abil.MP > 20)
                     {
-                        MSkillUseTick[17] = HUtil32.GetTickCount(); // 默认,从高到低
+                        SkillUseTick[17] = HUtil32.GetTickCount(); // 默认,从高到低
                         if (AllowUseMagic(104)) // 召唤火灵
                         {
                             result = 104;
@@ -3685,9 +3684,9 @@ namespace GameSrv.RobotPlay
                     if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)
                     {
                         // PK时,旁边有人贴身,使用气功波
-                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - MSkillUseTick[48] > 3000)
+                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - SkillUseTick[48] > 3000)
                         {
-                            MSkillUseTick[48] = HUtil32.GetTickCount();
+                            SkillUseTick[48] = HUtil32.GetTickCount();
                             result = 48;
                             return result;
                         }
@@ -3695,9 +3694,9 @@ namespace GameSrv.RobotPlay
                     else
                     {
                         // 打怪,怪级低于自己,并且有怪包围自己就用 气功波
-                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - MSkillUseTick[48] > 5000 && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)
+                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - SkillUseTick[48] > 5000 && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)
                         {
-                            MSkillUseTick[48] = HUtil32.GetTickCount();
+                            SkillUseTick[48] = HUtil32.GetTickCount();
                             result = 48;
                             return result;
                         }
@@ -3712,19 +3711,19 @@ namespace GameSrv.RobotPlay
                         switch (M2Share.RandomNumber.Random(2))
                         {
                             case 0:
-                                if (AllowUseMagic(38) && HUtil32.GetTickCount() - MSkillUseTick[38] > 1000)
+                                if (AllowUseMagic(38) && HUtil32.GetTickCount() - SkillUseTick[38] > 1000)
                                 {
                                     if (Envir != null)// 判断地图是否禁用
                                     {
                                         if (Envirnoment.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
                                         {
-                                            MSkillUseTick[38] = HUtil32.GetTickCount();
+                                            SkillUseTick[38] = HUtil32.GetTickCount();
                                             result = MagicConst.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
                                             return result;
                                         }
                                     }
                                 }
-                                else if ((HUtil32.GetTickCount() - MSkillUseTick[6]) > 1000)
+                                else if ((HUtil32.GetTickCount() - SkillUseTick[6]) > 1000)
                                 {
                                     if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
@@ -3732,7 +3731,7 @@ namespace GameSrv.RobotPlay
                                         {
                                             if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
-                                                MSkillUseTick[6] = HUtil32.GetTickCount();
+                                                SkillUseTick[6] = HUtil32.GetTickCount();
                                                 result = MagicConst.SKILL_AMYOUNSUL;// 英雄施毒术
                                                 return result;
                                             }
@@ -3741,7 +3740,7 @@ namespace GameSrv.RobotPlay
                                 }
                                 break;
                             case 1:
-                                if ((HUtil32.GetTickCount() - MSkillUseTick[6]) > 1000)
+                                if ((HUtil32.GetTickCount() - SkillUseTick[6]) > 1000)
                                 {
                                     if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
@@ -3749,7 +3748,7 @@ namespace GameSrv.RobotPlay
                                         {
                                             if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
-                                                MSkillUseTick[6] = HUtil32.GetTickCount();
+                                                SkillUseTick[6] = HUtil32.GetTickCount();
                                                 result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
@@ -3768,20 +3767,20 @@ namespace GameSrv.RobotPlay
                         switch (M2Share.RandomNumber.Random(2))
                         {
                             case 0:
-                                if (AllowUseMagic(38) && (HUtil32.GetTickCount() - MSkillUseTick[38]) > 1000)
+                                if (AllowUseMagic(38) && (HUtil32.GetTickCount() - SkillUseTick[38]) > 1000)
                                 {
                                     if (Envir != null)
                                     {
                                         // 判断地图是否禁用
                                         if (Envirnoment.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
                                         {
-                                            MSkillUseTick[38] = HUtil32.GetTickCount();
+                                            SkillUseTick[38] = HUtil32.GetTickCount();
                                             result = MagicConst.SKILL_GROUPAMYOUNSUL; // 英雄群体施毒
                                             return result;
                                         }
                                     }
                                 }
-                                else if ((HUtil32.GetTickCount() - MSkillUseTick[6]) > 1000)
+                                else if ((HUtil32.GetTickCount() - SkillUseTick[6]) > 1000)
                                 {
                                     if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
@@ -3790,7 +3789,7 @@ namespace GameSrv.RobotPlay
                                             // 判断地图是否禁用
                                             if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
                                             {
-                                                MSkillUseTick[6] = HUtil32.GetTickCount();
+                                                SkillUseTick[6] = HUtil32.GetTickCount();
                                                 result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
@@ -3799,7 +3798,7 @@ namespace GameSrv.RobotPlay
                                 }
                                 break;
                             case 1:
-                                if ((HUtil32.GetTickCount() - MSkillUseTick[6]) > 1000)
+                                if ((HUtil32.GetTickCount() - SkillUseTick[6]) > 1000)
                                 {
                                     if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
@@ -3808,7 +3807,7 @@ namespace GameSrv.RobotPlay
                                             // 判断地图是否禁用
                                             if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
                                             {
-                                                MSkillUseTick[6] = HUtil32.GetTickCount();
+                                                SkillUseTick[6] = HUtil32.GetTickCount();
                                                 result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
                                                 return result;
                                             }
@@ -3818,9 +3817,9 @@ namespace GameSrv.RobotPlay
                                 break;
                         }
                     }
-                    if (AllowUseMagic(51) && (HUtil32.GetTickCount() - MSkillUseTick[51]) > 5000)// 英雄飓风破 
+                    if (AllowUseMagic(51) && (HUtil32.GetTickCount() - SkillUseTick[51]) > 5000)// 英雄飓风破 
                     {
-                        MSkillUseTick[51] = HUtil32.GetTickCount();
+                        SkillUseTick[51] = HUtil32.GetTickCount();
                         result = 51;
                         return result;
                     }
@@ -3839,10 +3838,10 @@ namespace GameSrv.RobotPlay
                                     result = 59; // 英雄噬血术
                                     return result;
                                 }
-                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - MSkillUseTick[13]) > 3000)
+                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - SkillUseTick[13]) > 3000)
                                 {
                                     result = 13;// 英雄灵魂火符
-                                    MSkillUseTick[13] = HUtil32.GetTickCount();
+                                    SkillUseTick[13] = HUtil32.GetTickCount();
                                     return result;
                                 }
                                 if (AllowUseMagic(52)) // 诅咒术
@@ -3873,18 +3872,18 @@ namespace GameSrv.RobotPlay
                                     result = 59;// 英雄噬血术
                                     return result;
                                 }
-                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - MSkillUseTick[13]) > 3000)
+                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - SkillUseTick[13]) > 3000)
                                 {
                                     result = 13;// 英雄灵魂火符
-                                    MSkillUseTick[13] = HUtil32.GetTickCount();
+                                    SkillUseTick[13] = HUtil32.GetTickCount();
                                     return result;
                                 }
                                 break;
                             case 2:
-                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - MSkillUseTick[13]) > 3000)
+                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - SkillUseTick[13]) > 3000)
                                 {
                                     result = 13;// 英雄灵魂火符
-                                    MSkillUseTick[13] = HUtil32.GetTickCount();
+                                    SkillUseTick[13] = HUtil32.GetTickCount();
                                     return result;
                                 }
                                 if (AllowUseMagic(94))

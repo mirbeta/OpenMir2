@@ -2678,8 +2678,9 @@ namespace GameSrv.Npc {
             }
             playObject.PowerRate = nRate;
             playObject.PowerRateTime = nTime;
-            if (M2Share.Config.ShowScriptActionMsg) {
-                playObject.SysMsg(Format(Settings.ChangePowerRateMsg, new object[] { playObject.PowerRate / 100, playObject.PowerRateTime }), MsgColor.Green, MsgType.Hint);
+            if (M2Share.Config.ShowScriptActionMsg)
+            {
+                playObject.SysMsg(Format(Settings.ChangePowerRateMsg, playObject.PowerRate / 100, playObject.PowerRateTime), MsgColor.Green, MsgType.Hint);
             }
         }
 

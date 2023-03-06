@@ -261,7 +261,7 @@ namespace GameSrv.Player {
                                         dealOffInfo.Flag = 2; // 交易结束
                                         PlayObject.GameGold += dealOffInfo.nSellGold;
                                         PlayObject.GameGoldChanged();
-                                        PlayObject.SysMsg(string.Format(CommandHelp.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
+                                        PlayObject.SysMsg(string.Format(CommandHelp.GetSellOffGlod, dealOffInfo.nSellGold, M2Share.Config.GameGoldName), MsgColor.Red, MsgType.Hint);
                                         if (M2Share.GameLogGameGold) {
                                             M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, PlayObject.MapName, PlayObject.CurrX, PlayObject.CurrY, PlayObject.ChrName, M2Share.Config.GameGoldName, PlayObject.GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.ChrName));
                                         }
@@ -333,7 +333,7 @@ namespace GameSrv.Player {
                             // sSellOffItemList.Add(DealOffInfo);
                             GameGold += dealOffInfo.nSellGold;
                             this.GameGoldChanged();
-                            this.SysMsg(string.Format(CommandHelp.GetSellOffGlod, new object[] { dealOffInfo.nSellGold, M2Share.Config.GameGoldName }), MsgColor.Red, MsgType.Hint);
+                            this.SysMsg(string.Format(CommandHelp.GetSellOffGlod, dealOffInfo.nSellGold, M2Share.Config.GameGoldName), MsgColor.Red, MsgType.Hint);
                             if (M2Share.GameLogGameGold) {
                                 M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
                             }
