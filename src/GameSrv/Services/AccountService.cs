@@ -103,34 +103,43 @@ namespace GameSrv.Services {
             SendSocket(string.Format(sFormatMsg, Messages.ISM_GAMETIMEOFTIMECARDUSER, M2Share.Config.ServerName, account, playTime));
         }
 
-        public void Run() {
+        public void Run()
+        {
             string sSocketText;
             string sData = string.Empty;
             string sCode = string.Empty;
             const string sExceptionMsg = "[Exception] AccountService:DecodeSocStr";
             Conf.Model.GameSvrConf Config = M2Share.Config;
             HUtil32.EnterCriticalSection(Config.UserIDSection);
-            try {
-                if (string.IsNullOrEmpty(Config.sIDSocketRecvText)) {
+            try
+            {
+                if (string.IsNullOrEmpty(Config.sIDSocketRecvText))
+                {
                     return;
                 }
-                if (Config.sIDSocketRecvText.IndexOf(')') <= 0) {
+                if (Config.sIDSocketRecvText.IndexOf(')') <= 0)
+                {
                     return;
                 }
                 sSocketText = Config.sIDSocketRecvText;
                 Config.sIDSocketRecvText = string.Empty;
             }
-            finally {
+            finally
+            {
                 HUtil32.LeaveCriticalSection(Config.UserIDSection);
             }
-            try {
-                while (true) {
+            try
+            {
+                while (true)
+                {
                     sSocketText = HUtil32.ArrestStringEx(sSocketText, "(", ")", ref sData);
-                    if (string.IsNullOrEmpty(sData)) {
+                    if (string.IsNullOrEmpty(sData))
+                    {
                         break;
                     }
                     string sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
-                    switch (HUtil32.StrToInt(sCode, 0)) {
+                    switch (HUtil32.StrToInt(sCode, 0))
+                    {
                         case Messages.SS_OPENSESSION:// 100
                             GetPasswdSuccess(sBody);
                             break;
@@ -155,22 +164,27 @@ namespace GameSrv.Services {
                             QueryAccountExpired(sBody);
                             break;
                     }
-                    if (sSocketText.IndexOf(')') <= 0) {
+                    if (sSocketText.IndexOf(')') <= 0)
+                    {
                         break;
                     }
                 }
                 HUtil32.EnterCriticalSection(Config.UserIDSection);
-                try {
+                try
+                {
                     Config.sIDSocketRecvText = sSocketText + Config.sIDSocketRecvText;
                 }
-                finally {
+                finally
+                {
                     HUtil32.LeaveCriticalSection(Config.UserIDSection);
                 }
             }
-            catch {
+            catch
+            {
                 _logger.Error(sExceptionMsg);
             }
-            if ((HUtil32.GetTickCount() - _dwClearEmptySessionTick) > 10000) {
+            if ((HUtil32.GetTickCount() - _dwClearEmptySessionTick) > 10000)
+            {
                 _dwClearEmptySessionTick = HUtil32.GetTickCount();
             }
         }

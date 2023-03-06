@@ -17,13 +17,14 @@ namespace GameSrv
         private Task _applicationTask;
         private int? _exitCode;
         private CancellationTokenSource _cancellationTokenSource;
-        private readonly CommandLineApplication _application = new CommandLineApplication();
+        private readonly CommandLineApplication _application;
         private PeriodicTimer _timer;
 
         public AppService(IHostApplicationLifetime lifetime, GameApp serverApp, IServiceProvider serviceProvider)
         {
             _appLifetime = lifetime;
             _mirApp = serverApp;
+            _application = new CommandLineApplication();
             Host = serviceProvider.GetService<IHost>();
         }
 
@@ -157,7 +158,7 @@ namespace GameSrv
             var playerCount = M2Share.WorldEngine.PlayObjectCount;
             if (playerCount == 0)
             {
-                ServerBase.Stop();
+                _mirApp.Stop();
                 Host.StopAsync(_cancellationTokenSource.Token);
                 _logger.Info("游戏服务已停止...");
                 return;
@@ -194,7 +195,7 @@ namespace GameSrv
                     await Task.Delay(TimeSpan.FromSeconds(1));
                     shutdownSeconds--;
                 }
-                ServerBase.Stop();
+                _mirApp.Stop();
                 await Host.StopAsync(_cancellationTokenSource.Token);
                 _logger.Info("游戏服务已停止...");
             }, _cancellationTokenSource.Token);

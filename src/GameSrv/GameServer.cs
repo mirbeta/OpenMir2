@@ -33,15 +33,23 @@ namespace GameSrv
             M2Share.GateMgr.Start(stoppingToken);
             _worldThread.Start();
             _worldDataThread.Start();
+            _worldBotThread.Start();
             _worldMerchantThread.Start();
             M2Share.EventMgr.Start();
+            M2Share.RobotMgr.Start();
             _logger.Info("启动游戏世界和环境服务线程...");
         }
 
-        public static void Stop()
+        public void Stop()
         {
             M2Share.DataServer.Stop();
             M2Share.GateMgr.Stop();
+            M2Share.EventMgr.Stop();
+            M2Share.RobotMgr.Stop();
+            _worldThread.Interrupt();
+            _worldDataThread.Interrupt();
+            _worldBotThread.Interrupt();
+            _worldMerchantThread.Interrupt();
         }
 
         private void Execute()
@@ -49,7 +57,6 @@ namespace GameSrv
             while (M2Share.StartReady)
             {
                 IdSrvClient.Instance.Run();
-                M2Share.WorldEngine.Run();
                 M2Share.WorldEngine.PrcocessData();
                 ProcessGameRun();
                 if (M2Share.ServerIndex == 0)
@@ -69,10 +76,10 @@ namespace GameSrv
             HUtil32.EnterCriticalSections(M2Share.ProcessHumanCriticalSection);
             try
             {
-                M2Share.RobotMgr.Run();
                 if ((HUtil32.GetTickCount() - _runTimeTick) > 10000)
                 {
                     _runTimeTick = HUtil32.GetTickCount();
+                    M2Share.WorldEngine.Run();
                     M2Share.GuildMgr.Run();
                     M2Share.CastleMgr.Run();
                     M2Share.GateMgr.Run();
@@ -145,6 +152,5 @@ namespace GameSrv
             ProcessGameNotice();
             M2Share.ServerConf.SaveVariable();
         }
-    
     }
 }
