@@ -6,14 +6,14 @@ namespace GameSrv.World
 {
     public partial class WorldServer
     {
-        public void AddAiLogon(RoBotLogon ai)
+        public void AddRobotLogon(RoBotLogon ai)
         {
-            RobotLogonList.Add(ai);
+            RobotLogonQueue.Enqueue(ai);
         }
 
-        private bool RegenAiObject(RoBotLogon ai)
+        private void RegenRobotPlayer(RoBotLogon ai)
         {
-            var playObject = AddAiPlayObject(ai);
+            var playObject = CreateRobotPlayObject(ai);
             if (playObject != null)
             {
                 playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
@@ -21,12 +21,10 @@ namespace GameSrv.World
                 playObject.UserAccount = "假人" + ai.sChrName;
                 playObject.Start(FindPathType.Dynamic);
                 BotPlayObjectList.Add(playObject);
-                return true;
             }
-            return false;
         }
 
-        private static RobotPlayer AddAiPlayObject(RoBotLogon ai)
+        private static RobotPlayer CreateRobotPlayObject(RoBotLogon ai)
         {
             int n1C;
             int n20;
@@ -52,10 +50,10 @@ namespace GameSrv.World
             //Cert.m_sIPaddr = GetIPAddr;// Mac问题
             //Cert.m_sIPLocal = GetIPLocal(Cert.m_sIPaddr);
             cert.ConfigFileName = ai.sConfigFileName;
-            cert.MSHeroConfigFileName = ai.sHeroConfigFileName;
+            cert.HeroConfigFileName = ai.sHeroConfigFileName;
             cert.FilePath = ai.sFilePath;
             cert.ConfigListFileName = ai.sConfigListFileName;
-            cert.MSHeroConfigListFileName = ai.sHeroConfigListFileName;// 英雄配置列表目录
+            cert.HeroConfigListFileName = ai.sHeroConfigListFileName;// 英雄配置列表目录
             cert.Initialize();
             cert.RecalcLevelAbilitys();
             cert.RecalcAbilitys();

@@ -154,9 +154,9 @@ namespace GameSrv.RobotPlay
                             }
                             if (M2Share.Config.boAutoRepairItem)
                             {
-                                if (HUtil32.GetTickCount() - MDwAutoRepairItemTick > 15000)
+                                if (HUtil32.GetTickCount() - AutoRepairItemTick > 15000)
                                 {
-                                    MDwAutoRepairItemTick = HUtil32.GetTickCount();
+                                    AutoRepairItemTick = HUtil32.GetTickCount();
                                     boRecalcAbilitys = false;
                                     for (nWhere = 0; nWhere < UseItemNames.Length; nWhere++)
                                     {
@@ -251,9 +251,9 @@ namespace GameSrv.RobotPlay
                             }
                             if (M2Share.Config.boRenewHealth) // 自动增加HP MP
                             {
-                                if (HUtil32.GetTickCount() - MDwAutoAddHealthTick > 5000)
+                                if (HUtil32.GetTickCount() - AutoAddHealthTick > 5000)
                                 {
-                                    MDwAutoAddHealthTick = HUtil32.GetTickCount();
+                                    AutoAddHealthTick = HUtil32.GetTickCount();
                                     nPercent = WAbil.HP * 100 / WAbil.MaxHP;
                                     nValue = WAbil.MaxHP / 10;
                                     if (nPercent < M2Share.Config.nRenewPercent)
@@ -603,7 +603,7 @@ namespace GameSrv.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, new object[] { ChrName, MapName, CurrX, CurrY }));
+                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
             VisibleFlag nVisibleFlag;
@@ -890,9 +890,17 @@ namespace GameSrv.RobotPlay
 
         public override void Die()
         {
-            if (MBoAiStart)
+            if (Resurrection) //死亡后回安全区复活
             {
-                MBoAiStart = false;
+                MoveToHome();
+                ReAlive();
+            }
+            else
+            {
+                if (MBoAiStart)
+                {
+                    MBoAiStart = false;
+                }
             }
             base.Die();
         }

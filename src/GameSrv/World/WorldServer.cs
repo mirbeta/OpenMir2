@@ -78,7 +78,7 @@ namespace GameSrv.World
         /// <summary>
         /// 假人列表
         /// </summary>
-        private readonly IList<RoBotLogon> RobotLogonList;
+        public readonly Queue<RoBotLogon> RobotLogonQueue;
 
         public WorldServer()
         {
@@ -117,7 +117,7 @@ namespace GameSrv.World
             ListOfSocket = new List<int>();
             OldMagicList = new ArrayList();
             OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
-            RobotLogonList = new List<RoBotLogon>();
+            RobotLogonQueue = new Queue<RoBotLogon>();
             BotPlayObjectList = new List<RobotPlayer>();
         }
 
@@ -360,7 +360,7 @@ namespace GameSrv.World
                         playObject.ServerIndex = (byte)M2Share.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
                         {
-                            _logger.Warn(string.Format(sChangeServerFail1, new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
+                            _logger.Warn(string.Format(sChangeServerFail1, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         }
                         SendSwitchData(playObject, playObject.ServerIndex);
                         SendChangeServer(playObject, playObject.ServerIndex);
@@ -411,7 +411,7 @@ namespace GameSrv.World
                     var envir = M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
-                        _logger.Warn(string.Format(sChangeServerFail3, new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
+                        _logger.Warn(string.Format(sChangeServerFail3, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         playObject.MapName = M2Share.Config.HomeMap;
                         envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                         playObject.CurrX = M2Share.Config.HomeX;
@@ -421,7 +421,7 @@ namespace GameSrv.World
                     {
                         if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                         {
-                            _logger.Warn(string.Format(sChangeServerFail4, new object[] { M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName }));
+                            _logger.Warn(string.Format(sChangeServerFail4, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                             playObject.MapName = M2Share.Config.HomeMap;
                             envir = M2Share.MapMgr.FindMap(M2Share.Config.HomeMap);
                             playObject.CurrX = M2Share.Config.HomeX;
@@ -571,15 +571,14 @@ namespace GameSrv.World
             }
 
             //人工智障开始登陆
-            if (RobotLogonList.Count > 0)
+            if (RobotLogonQueue.Count > 0)
             {
                 if (HUtil32.GetTickCount() - RobotLogonTick > 1000)
                 {
                     RobotLogonTick = HUtil32.GetTickCount();
-                    if (RobotLogonList.Count > 0)
+                    if (RobotLogonQueue.Count > 0)
                     {
-                        RegenAiObject(RobotLogonList[0]);
-                        RobotLogonList.RemoveAt(0);
+                        RegenRobotPlayer(RobotLogonQueue.Dequeue());
                     }
                 }
             }
@@ -747,7 +746,7 @@ namespace GameSrv.World
         {
 
         }
-        
+
         public void Run()
         {
             if ((HUtil32.GetTickCount() - ShowOnlineTick) > M2Share.Config.ConsoleShowUserCountTime)

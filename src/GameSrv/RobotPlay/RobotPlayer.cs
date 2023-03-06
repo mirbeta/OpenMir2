@@ -36,8 +36,8 @@ namespace GameSrv.RobotPlay
         public string ConfigListFileName = string.Empty;
         public string FilePath = string.Empty;
         public string ConfigFileName = string.Empty;
-        public string MSHeroConfigListFileName = string.Empty;
-        public string MSHeroConfigFileName = string.Empty;
+        public string HeroConfigListFileName = string.Empty;
+        public string HeroConfigFileName = string.Empty;
         public IList<string> BagItemNames;
         public string[] UseItemNames;
         public TRunPos MRunPos;
@@ -54,8 +54,8 @@ namespace GameSrv.RobotPlay
         public short HitMode;
         public bool BoSelSelf;
         public byte MBtTaoistUseItemType;
-        public long MDwAutoRepairItemTick;
-        public long MDwAutoAddHealthTick;
+        public long AutoRepairItemTick;
+        public long AutoAddHealthTick;
         public long MDwThinkTick;
         public bool MBoDupMode;
         public long MDwSearchMagic = 0;
@@ -120,6 +120,10 @@ namespace GameSrv.RobotPlay
         /// 假人掉装备机率
         /// </summary>
         public int DropUseItemRate;
+        /// <summary>
+        /// 死亡复活
+        /// </summary>
+        public bool Resurrection;
 
         public RobotPlayer() : base()
         {
@@ -141,8 +145,8 @@ namespace GameSrv.RobotPlay
             MNIncMasterHealthCount = 0;
             BoSelSelf = false;
             MBtTaoistUseItemType = 0;
-            MDwAutoAddHealthTick = HUtil32.GetTickCount();
-            MDwAutoRepairItemTick = HUtil32.GetTickCount();
+            AutoAddHealthTick = HUtil32.GetTickCount();
+            AutoRepairItemTick = HUtil32.GetTickCount();
             MDwThinkTick = HUtil32.GetTickCount();
             MBoDupMode = false;
             ProtectStatus = false;// 守护模式

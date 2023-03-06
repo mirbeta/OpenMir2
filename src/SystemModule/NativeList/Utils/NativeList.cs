@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using SystemModule.NativeList.Abstracts;
 using SystemModule.NativeList.Helpers;
 
@@ -82,8 +83,10 @@ namespace SystemModule.NativeList.Utils
             }
         }
 
+        private int _count;
+
         /// <inheritdoc/>
-        public int Count { get; private set; }
+        public int Count => _count;
 
         /// <inheritdoc/>
         /// <remarks>
@@ -101,7 +104,7 @@ namespace SystemModule.NativeList.Utils
 
             SetAt(Count, item);
 
-            Count++;
+            Interlocked.Increment(ref _count);
         }
 
         /// <inheritdoc/>
@@ -120,7 +123,7 @@ namespace SystemModule.NativeList.Utils
 
             SetAt(index, item);
 
-            Count++;
+            Interlocked.Increment(ref _count);
         }
 
         /// <inheritdoc/>
@@ -155,7 +158,7 @@ namespace SystemModule.NativeList.Utils
             for (var i = index; i < Count; i++)
                 SetAt(i, GetAt(i + 1));
 
-            Count--;
+            Interlocked.Decrement(ref _count);
         }
 
         /// <inheritdoc/>
@@ -181,7 +184,7 @@ namespace SystemModule.NativeList.Utils
             for (var i = 0; i < Count; i++)
                 SetAt(i, default(TItem));
 
-            Count = 0;
+            Interlocked.Exchange(ref _count, 0);
         }
 
         /// <inheritdoc/>
@@ -276,7 +279,7 @@ namespace SystemModule.NativeList.Utils
 
         protected override void InternalDispose(bool manual)
         {
-            Count = 0;
+            Interlocked.Exchange(ref _count, 0);
             _bufferLength = 0;
 
             base.InternalDispose(manual);

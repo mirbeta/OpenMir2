@@ -24,6 +24,7 @@ namespace GameSrv.RobotPlay
             IList<string> tempList;
             UserItem userItem;
             StdItem stdItem;
+            Resurrection = conf.ReadWriteBool("Info", "Resurrection", false);// 是否掉包裹物品
             NoDropItem = conf.ReadWriteBool("Info", "NoDropItem", true);// 是否掉包裹物品
             NoDropUseItem = conf.ReadWriteBool("Info", "DropUseItem", true);// 是否掉装备
             DropUseItemRate = conf.ReadWriteInteger("Info", "DropUseItemRate", 100);// 掉装备机率
@@ -201,10 +202,10 @@ namespace GameSrv.RobotPlay
                     }
                     break;
                 case 1:
-                    if (!string.IsNullOrEmpty(MSHeroConfigListFileName) && File.Exists(MSHeroConfigListFileName))
+                    if (!string.IsNullOrEmpty(HeroConfigListFileName) && File.Exists(HeroConfigListFileName))
                     {
                         loadList = new StringList();
-                        loadList.LoadFromFile(MSHeroConfigListFileName);
+                        loadList.LoadFromFile(HeroConfigListFileName);
                         nIndex = M2Share.RandomNumber.Random(loadList.Count);
                         if (nIndex >= 0 && nIndex < loadList.Count)
                         {
