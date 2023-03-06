@@ -162,6 +162,7 @@ namespace GameGate.Services
             var availableList = _serverServices.Where(x => x.ClientThread.Running == RunningState.Runing).ToArray();//允许分配玩家连接
             if (availableList.Length == 1)
             {
+                threadId = 1;
                 return availableList[0].ClientThread;
             }
             var random = RandomNumber.GetInstance().Random(availableList.Length);

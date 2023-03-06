@@ -2127,7 +2127,7 @@ namespace GameSrv.Actor
                                                     cellInfo.Remove(i);
                                                     if (cellInfo.Count <= 0)
                                                     {
-                                                        //cellInfo.Clear();
+                                                        cellInfo.Clear();
                                                         break;
                                                     }
                                                 }
@@ -2158,7 +2158,7 @@ namespace GameSrv.Actor
                                                         cellInfo.Remove(i);
                                                         if (cellInfo.Count <= 0)
                                                         {
-                                                            //cellInfo.Clear();
+                                                            cellInfo.Clear();
                                                         }
                                                         M2Share.Logger.Error(Format(sExceptionMsg, ChrName));
                                                         M2Share.Logger.Error(e.Message);
