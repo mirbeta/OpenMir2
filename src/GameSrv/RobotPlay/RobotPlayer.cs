@@ -2025,7 +2025,6 @@ namespace GameSrv.RobotPlay
         /// <returns></returns>
         private bool IsNeedGotoXy()
         {
-            bool result = false;
             if (TargetCret != null && HUtil32.GetTickCount() - AutoAvoidTick > 1100 && (!BoUseAttackMagic || Job == 0))
             {
                 if (Job > 0)
@@ -2058,15 +2057,14 @@ namespace GameSrv.RobotPlay
                                         Attack(TargetCret, Dir);
                                         BreakHolySeizeMode();
                                         AttackTick = HUtil32.GetTickCount();
-                                        return result;
+                                        return false;
                                     }
                                 }
                                 else
                                 {
                                     if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)
                                     {
-                                        result = true;
-                                        return result;
+                                        return true;
                                     }
                                 }
                             }
@@ -2075,14 +2073,12 @@ namespace GameSrv.RobotPlay
                             {
                                 if (Math.Abs(TargetCret.CurrX - CurrX) > 2 || Math.Abs(TargetCret.CurrY - CurrY) > 2)
                                 {
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                             }
                             else if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)
                             {
-                                result = true;
-                                return result;
+                                return true;
                             }
                             break;
                         case 43:
@@ -2099,7 +2095,7 @@ namespace GameSrv.RobotPlay
                                         Attack(TargetCret, Dir);
                                         BreakHolySeizeMode();
                                         AttackTick = HUtil32.GetTickCount();
-                                        return result;
+                                        return false;
                                     }
                                 }
                                 else
@@ -2108,14 +2104,12 @@ namespace GameSrv.RobotPlay
                                     {
                                         if (Math.Abs(CurrX - TargetCret.CurrX) != 2 && Math.Abs(CurrY - TargetCret.CurrY) != 0 || Math.Abs(CurrX - TargetCret.CurrX) != 0 && Math.Abs(CurrY - TargetCret.CurrY) != 2 || Math.Abs(CurrX - TargetCret.CurrX) != 2 && Math.Abs(CurrY - TargetCret.CurrY) != 2)
                                         {
-                                            result = true;
-                                            return result;
+                                            return true;
                                         }
                                     }
                                     else if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)
                                     {
-                                        result = true;
-                                        return result;
+                                        return true;
                                     }
                                 }
                             }
@@ -2134,15 +2128,14 @@ namespace GameSrv.RobotPlay
                                         Attack(TargetCret, Dir);
                                         BreakHolySeizeMode();
                                         AttackTick = HUtil32.GetTickCount();
-                                        return result;
+                                        return false;
                                     }
                                 }
                                 else
                                 {
                                     if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)
                                     {
-                                        result = true;
-                                        return result;
+                                        return true;
                                     }
                                 }
                             }
@@ -2151,14 +2144,12 @@ namespace GameSrv.RobotPlay
                             {
                                 if (Math.Abs(TargetCret.CurrX - CurrX) > 2 || Math.Abs(TargetCret.CurrY - CurrY) > 2)
                                 {
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                             }
                             else if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)
                             {
-                                result = true;
-                                return result;
+                                return true;
                             }
                             break;
                         case 7:
@@ -2166,9 +2157,8 @@ namespace GameSrv.RobotPlay
                         case 26:
                             if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)
                             {
-                                result = true;
                                 AutoMagicId = 0;
-                                return result;
+                                return true;
                             }
                             break;
                         default:
@@ -2176,25 +2166,22 @@ namespace GameSrv.RobotPlay
                             {
                                 if (!(Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 2 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 2))
                                 {
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                                 if (Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 2 || Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 1)
                                 {
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                             }
                             else if (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1)
                             {
-                                result = true;
-                                return result;
+                                return true;
                             }
                             break;
                     }
                 }
             }
-            return result;
+            return false;
         }
 
         /// <summary>
@@ -2214,49 +2201,49 @@ namespace GameSrv.RobotPlay
                         {
                             TargetX = (short)(CurrX - 2);
                             TargetY = CurrY;
-                            return result;
+                            return true;
                         }
                         if (CurrX + 2 == baseObject.CurrX && CurrY == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX + 2);
                             TargetY = CurrY;
-                            return result;
+                            return true;
                         }
                         if (CurrX == baseObject.CurrX && CurrY - 2 == baseObject.CurrY)
                         {
                             TargetX = CurrX;
                             TargetY = (short)(CurrY - 2);
-                            return result;
+                            return true;
                         }
                         if (CurrX == baseObject.CurrX && CurrY + 2 == baseObject.CurrY)
                         {
                             TargetX = CurrX;
                             TargetY = (short)(CurrY + 2);
-                            return result;
+                            return true;
                         }
                         if (CurrX - 2 == baseObject.CurrX && CurrY - 2 == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX - 2);
                             TargetY = (short)(CurrY - 2);
-                            return result;
+                            return true;
                         }
                         if (CurrX + 2 == baseObject.CurrX && CurrY - 2 == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX + 2);
                             TargetY = (short)(CurrY - 2);
-                            return result;
+                            return true;
                         }
                         if (CurrX - 2 == baseObject.CurrX && CurrY + 2 == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX - 2);
                             TargetY = (short)(CurrY + 2);
-                            return result;
+                            return true;
                         }
                         if (CurrX + 2 == baseObject.CurrX && CurrY + 2 == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX + 2);
                             TargetY = (short)(CurrY + 2);
-                            return result;
+                            return true;
                         }
                     }
                     break;
@@ -2268,49 +2255,49 @@ namespace GameSrv.RobotPlay
                         {
                             TargetX = (short)(CurrX - 3);
                             TargetY = CurrY;
-                            return result;
+                            return true;
                         }
                         if (CurrX + 3 == baseObject.CurrX && CurrY == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX + 3);
                             TargetY = CurrY;
-                            return result;
+                            return true;
                         }
                         if (CurrX == baseObject.CurrX && CurrY - 3 == baseObject.CurrY)
                         {
                             TargetX = CurrX;
                             TargetY = (short)(CurrY - 3);
-                            return result;
+                            return true;
                         }
                         if (CurrX == baseObject.CurrX && CurrY + 3 == baseObject.CurrY)
                         {
                             TargetX = CurrX;
                             TargetY = (short)(CurrY + 3);
-                            return result;
+                            return true;
                         }
                         if (CurrX - 3 == baseObject.CurrX && CurrY - 3 == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX - 3);
                             TargetY = (short)(CurrY - 3);
-                            return result;
+                            return true;
                         }
                         if (CurrX + 3 == baseObject.CurrX && CurrY - 3 == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX + 3);
                             TargetY = (short)(CurrY - 3);
-                            return result;
+                            return true;
                         }
                         if (CurrX - 3 == baseObject.CurrX && CurrY + 3 == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX - 3);
                             TargetY = (short)(CurrY + 3);
-                            return result;
+                            return true;
                         }
                         if (CurrX + 3 == baseObject.CurrX && CurrY + 3 == baseObject.CurrY)
                         {
                             TargetX = (short)(CurrX + 3);
                             TargetY = (short)(CurrY + 3);
-                            return result;
+                            return true;
                         }
                     }
                     break;
