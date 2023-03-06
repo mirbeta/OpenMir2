@@ -83,8 +83,18 @@ namespace GameGate
 
     public enum RunningState : byte
     {
-        Runing = 0,
-        Stop = 1
+        /// <summary>
+        /// 等待连接服务器
+        /// </summary>
+        Waiting = 0,
+        /// <summary>
+        /// 正在运行
+        /// </summary>
+        Runing = 1,
+        /// <summary>
+        /// 停止服务
+        /// </summary>
+        Stop = 2
     }
 
     public class SessionInfo

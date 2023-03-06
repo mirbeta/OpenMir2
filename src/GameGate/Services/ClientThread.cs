@@ -82,7 +82,7 @@ namespace GameGate.Services
         public ClientThread(IPEndPoint endPoint, GameGateInfo gameGate)
         {
             GateInfo = gameGate;
-            RunningState = RunningState.Runing;
+            RunningState = RunningState.Waiting;
             ReceiveBytes = 0;
             SendBytes = 0;
             Connected = false;
@@ -155,6 +155,7 @@ namespace GameGate.Services
             Connected = true;
             ReceiveBytes = 0;
             SendBytes = 0;
+            RunningState = RunningState.Runing;
             ReceiveBuffer = new byte[102400];
             SendBuffer = new byte[2048];
             RestSessionArray();
