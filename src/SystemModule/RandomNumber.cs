@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SystemModule
 {
@@ -14,7 +15,7 @@ namespace SystemModule
         private static RandomNumber singleton;
         //定义一个只读静态对象 
         //且这个对象是在程序运行时创建的
-        private static readonly object syncObject = new object();
+        private static readonly object syncObject = new();
         private static char[] Constant =   
         {   
             '0','1','2','3','4','5','6','7','8','9',  
@@ -97,11 +98,10 @@ namespace SystemModule
         
         public string GenerateRandomNumber(int Length)
         {
-            System.Text.StringBuilder newRandom = new System.Text.StringBuilder(62);
-            Random rd = new Random();
+            StringBuilder newRandom = new(62);
             for (int i = 0; i < Length; i++)
             {
-                newRandom.Append(Constant[rd.Next(62)]);
+                newRandom.Append(Constant[random.Next(62)]);
             }
             return newRandom.ToString();
         }

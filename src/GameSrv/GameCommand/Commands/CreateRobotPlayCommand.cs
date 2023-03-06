@@ -23,22 +23,18 @@ namespace GameSrv.GameCommand.Commands
                 return;
             }
             var userCount = HUtil32.StrToInt(@params[0], 1);
-            var mapName = string.Empty;
             short nX = 0;
             short nY = 0;
-            if (@params.Length > 1)
+            if (@params.Length >= 3)
             {
-                mapName = string.IsNullOrEmpty(@params[1]) ? "" : @params[1];
+                string mapName = string.IsNullOrEmpty(@params[1]) ? "" : @params[1];
                 nX = HUtil32.StrToInt16(@params[2], 0);
                 nY = HUtil32.StrToInt16(@params[3], 0);
-            }
-            if (!string.IsNullOrEmpty(mapName) && (nX == 0 || nY == 0))
-            {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
-                return;
-            }
-            if (!string.IsNullOrEmpty(mapName) && nX > 0 && nY > 0)
-            {
+                if (string.IsNullOrEmpty(mapName) || (nX == 0 || nY == 0))
+                {
+                    PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                    return;
+                }
                 for (int i = 0; i < userCount; i++)
                 {
                     M2Share.WorldEngine.AddAiLogon(new RoBotLogon()

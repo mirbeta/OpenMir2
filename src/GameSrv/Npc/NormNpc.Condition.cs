@@ -2033,7 +2033,7 @@ namespace GameSrv.Npc {
             int nCount = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
             if (nCount < 0) {
                 ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMAPHUMANCOUNT);
-                return result;
+                return false;
             }
             int nHumanCount = M2Share.WorldEngine.GetMapHuman(QuestConditionInfo.sParam1);
             char cMethod = QuestConditionInfo.sParam2[0];
