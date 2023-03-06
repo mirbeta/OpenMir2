@@ -813,7 +813,7 @@ namespace GameSrv.RobotPlay
                     {
                         if (TargetCret != null && (TargetCret.Race == ActorRace.Play || TargetCret.Master != null && TargetCret.GetMaster().Race == ActorRace.Play))
                         {
-                            if (Struck_MINXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
+                            if (StruckMinXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
                             {
                                 SetTargetCreat(hiter);
                             }
@@ -825,7 +825,7 @@ namespace GameSrv.RobotPlay
                     }
                     else
                     {
-                        if (TargetCret != null && Struck_MINXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
+                        if (TargetCret != null && StruckMinXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
                         {
                             if (Job > 0 || TargetCret != null && (HUtil32.GetTickCount() - TargetFocusTick) > 1000 * 3)
                             {

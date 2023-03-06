@@ -957,8 +957,8 @@ namespace GameSrv.RobotPlay
         {
             if (MBoAiStart && TargetCret == null && !CanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
             {
-                short nX = CurrX;
-                short nY = CurrY;
+                var nX = CurrX;
+                var nY = CurrY;
                 if (MPath != null && MPath.Length > 0 && MNPostion < MPath.Length)
                 {
                     if (!GotoNextOne(MPath[MNPostion].nX, MPath[MNPostion].nY, true))
@@ -1050,20 +1050,11 @@ namespace GameSrv.RobotPlay
             }
         }
 
-        private BaseObject Struck_MINXY(BaseObject aObject, BaseObject bObject)
+        private BaseObject StruckMinXY(BaseObject aObject, BaseObject bObject)
         {
-            BaseObject result;
             int nA = Math.Abs(CurrX - aObject.CurrX) + Math.Abs(CurrY - aObject.CurrY);
             int nB = Math.Abs(CurrX - bObject.CurrX) + Math.Abs(CurrY - bObject.CurrY);
-            if (nA > nB)
-            {
-                result = bObject;
-            }
-            else
-            {
-                result = aObject;
-            }
-            return result;
+            return nA > nB ? bObject : aObject;
         }
 
         private bool CanWalk(short nCurrX, short nCurrY, short nTargetX, short nTargetY, byte nDir, ref int nStep, bool boFlag)
@@ -1118,7 +1109,6 @@ namespace GameSrv.RobotPlay
 
         private bool IsGotoXy(short x1, short y1, short x2, short y2)
         {
-            bool result = false;
             int nStep = 0;
             //0代替-1
             if (!CanWalk(x1, y1, x2, y2, 0, ref nStep, Race != 108))
@@ -1126,16 +1116,10 @@ namespace GameSrv.RobotPlay
                 PointInfo[] path = M2Share.FindPath.Find(Envir, x1, y1, x2, y2, false);
                 if (path.Length <= 0)
                 {
-                    return result;
+                    return false;
                 }
-
-                result = true;
             }
-            else
-            {
-                result = true;
-            }
-            return result;
+            return true;
         }
 
         private bool GotoNext(short nX, short nY, bool boRun)
@@ -1337,9 +1321,9 @@ namespace GameSrv.RobotPlay
                 Master.GetBackPosition(ref nX, ref nY);
                 if (!Master.Envir.CanWalk(nX, nY, true))
                 {
-                    for (int i = 0; i < 7; i++)
+                    for (byte i = 0; i < 7; i++)
                     {
-                        if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, (byte)i, 1, ref nX, ref nY))
+                        if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, i, 1, ref nX, ref nY))
                         {
                             if (Master.Envir.CanWalk(nX, nY, true))
                             {
@@ -1357,7 +1341,7 @@ namespace GameSrv.RobotPlay
             Master.GetBackPosition(ref nCurrX, ref nCurrY);
             if (TargetCret == null && !Master.SlaveRelax)
             {
-                for (int i = 0; i < 2; i++)
+                for (byte i = 0; i < 2; i++)
                 {
                     // 判断主人是否在英雄对面
                     if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Dir, i, ref nX, ref nY))
@@ -1370,11 +1354,11 @@ namespace GameSrv.RobotPlay
                             }
                             for (int k = 0; k < 2; k++)
                             {
-                                for (int j = 0; j < 7; j++)
+                                for (byte j = 0; j < 7; j++)
                                 {
                                     if (j != Master.Dir)
                                     {
-                                        if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, (byte)j, k, ref nX, ref nY) && GotoNext(nX, nY, true))
+                                        if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, j, k, ref nX, ref nY) && GotoNext(nX, nY, true))
                                         {
                                             return true;
                                         }
@@ -1405,11 +1389,11 @@ namespace GameSrv.RobotPlay
                     }
                     for (int j = 0; j < 2; j++)
                     {
-                        for (int k = 0; k < 7; k++)
+                        for (byte k = 0; k < 7; k++)
                         {
                             if (k != Master.Dir)
                             {
-                                if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, (byte)k, j, ref nX, ref nY) && GotoNextOne(nX, nY, true))
+                                if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, k, j, ref nX, ref nY) && GotoNextOne(nX, nY, true))
                                 {
                                     return true;
                                 }
