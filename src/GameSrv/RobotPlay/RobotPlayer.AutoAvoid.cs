@@ -86,64 +86,63 @@ namespace GameSrv.RobotPlay
         private int CheckTargetXYCountOfDirection(int nX, int nY, int nDir, int nRange)
         {
             int result = 0;
-            BaseObject BaseObject;
             if (VisibleActors.Count > 0)
             {
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    BaseObject = VisibleActors[i].BaseObject;
-                    if (BaseObject != null)
+                    var baseObject = VisibleActors[i].BaseObject;
+                    if (baseObject != null)
                     {
-                        if (!BaseObject.Death)
+                        if (!baseObject.Death)
                         {
-                            if (IsProperTarget(BaseObject) && (!BaseObject.HideMode || CoolEye))
+                            if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye))
                             {
                                 switch (nDir)
                                 {
                                     case Direction.Up:
-                                        if (Math.Abs(nX - BaseObject.CurrX) <= nRange && BaseObject.CurrY - nY >= 0 && BaseObject.CurrY - nY <= nRange)
+                                        if (Math.Abs(nX - baseObject.CurrX) <= nRange && baseObject.CurrY - nY >= 0 && baseObject.CurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Direction.UpRight:
-                                        if (BaseObject.CurrX - nX >= 0 && BaseObject.CurrX - nX <= nRange && BaseObject.CurrY - nY >= 0 && BaseObject.CurrY - nY <= nRange)
+                                        if (baseObject.CurrX - nX >= 0 && baseObject.CurrX - nX <= nRange && baseObject.CurrY - nY >= 0 && baseObject.CurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Direction.Right:
-                                        if (BaseObject.CurrX - nX >= 0 && BaseObject.CurrX - nX <= nRange && Math.Abs(nY - BaseObject.CurrY) <= nRange)
+                                        if (baseObject.CurrX - nX >= 0 && baseObject.CurrX - nX <= nRange && Math.Abs(nY - baseObject.CurrY) <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Direction.DownRight:
-                                        if (BaseObject.CurrX - nX >= 0 && BaseObject.CurrX - nX <= nRange && nY - BaseObject.CurrY >= 0 && nY - BaseObject.CurrY <= nRange)
+                                        if (baseObject.CurrX - nX >= 0 && baseObject.CurrX - nX <= nRange && nY - baseObject.CurrY >= 0 && nY - baseObject.CurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Direction.Down:
-                                        if (Math.Abs(nX - BaseObject.CurrX) <= nRange && nY - BaseObject.CurrY >= 0 && nY - BaseObject.CurrY <= nRange)
+                                        if (Math.Abs(nX - baseObject.CurrX) <= nRange && nY - baseObject.CurrY >= 0 && nY - baseObject.CurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Direction.DownLeft:
-                                        if (nX - BaseObject.CurrX >= 0 && nX - BaseObject.CurrX <= nRange && nY - BaseObject.CurrY >= 0 && nY - BaseObject.CurrY <= nRange)
+                                        if (nX - baseObject.CurrX >= 0 && nX - baseObject.CurrX <= nRange && nY - baseObject.CurrY >= 0 && nY - baseObject.CurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Direction.Left:
-                                        if (nX - BaseObject.CurrX >= 0 && nX - BaseObject.CurrX <= nRange && Math.Abs(nY - BaseObject.CurrY) <= nRange)
+                                        if (nX - baseObject.CurrX >= 0 && nX - baseObject.CurrX <= nRange && Math.Abs(nY - baseObject.CurrY) <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
                                     case Direction.UpLeft:
-                                        if (nX - BaseObject.CurrX >= 0 && nX - BaseObject.CurrX <= nRange && BaseObject.CurrY - nY >= 0 && BaseObject.CurrY - nY <= nRange)
+                                        if (nX - baseObject.CurrX >= 0 && nX - baseObject.CurrX <= nRange && baseObject.CurrY - nY >= 0 && baseObject.CurrY - nY <= nRange)
                                         {
                                             result++;
                                         }

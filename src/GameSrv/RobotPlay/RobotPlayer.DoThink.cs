@@ -9,7 +9,6 @@ namespace GameSrv.RobotPlay
     {
         public int CheckTargetXYCount(int nX, int nY, int nRange)
         {
-            BaseObject BaseObject;
             int nC;
             int n10 = nRange;
             int result = 0;
@@ -17,14 +16,14 @@ namespace GameSrv.RobotPlay
             {
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    BaseObject = VisibleActors[i].BaseObject;
-                    if (BaseObject != null)
+                    var baseObject = VisibleActors[i].BaseObject;
+                    if (baseObject != null)
                     {
-                        if (!BaseObject.Death)
+                        if (!baseObject.Death)
                         {
-                            if (IsProperTarget(BaseObject) && (!BaseObject.HideMode || CoolEye))
+                            if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye))
                             {
-                                nC = Math.Abs(nX - BaseObject.CurrX) + Math.Abs(nY - BaseObject.CurrY);
+                                nC = Math.Abs(nX - baseObject.CurrX) + Math.Abs(nY - baseObject.CurrY);
                                 if (nC <= n10)
                                 {
                                     result++;
@@ -67,7 +66,6 @@ namespace GameSrv.RobotPlay
         public bool MagPushArround(int MagicID, short wMagicID)
         {
             bool result = false;
-            BaseObject ActorObject;
             byte btNewDir;
             short nTargetX = 0;
             short nTargetY = 0;
@@ -87,15 +85,15 @@ namespace GameSrv.RobotPlay
             {
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    ActorObject = VisibleActors[i].BaseObject;
-                    if (Math.Abs(CurrX - ActorObject.CurrX) <= 1 && Math.Abs(CurrY - ActorObject.CurrY) <= 1)
+                    var actorObject = VisibleActors[i].BaseObject;
+                    if (Math.Abs(CurrX - actorObject.CurrX) <= 1 && Math.Abs(CurrY - actorObject.CurrY) <= 1)
                     {
-                        if (!ActorObject.Death && ActorObject != this && IsProperTarget(ActorObject))
+                        if (!actorObject.Death && actorObject != this && IsProperTarget(actorObject))
                         {
-                            if (Abil.Level > ActorObject.Abil.Level && !ActorObject.StickMode)
+                            if (Abil.Level > actorObject.Abil.Level && !actorObject.StickMode)
                             {
-                                btNewDir = M2Share.GetNextDirection(ActorObject.CurrX, ActorObject.CurrY, CurrX, CurrY);
-                                if (Envir.GetNextPosition(ActorObject.CurrX, ActorObject.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
+                                btNewDir = M2Share.GetNextDirection(actorObject.CurrX, actorObject.CurrY, CurrX, CurrY);
+                                if (Envir.GetNextPosition(actorObject.CurrX, actorObject.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                                 {
                                     if (Envir.CanWalk(nTargetX, nTargetY, true))
                                     {

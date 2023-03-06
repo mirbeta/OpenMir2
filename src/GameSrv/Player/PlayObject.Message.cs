@@ -11,9 +11,12 @@ using SystemModule.Enums;
 using SystemModule.Packets;
 using SystemModule.Packets.ServerPackets;
 
-namespace GameSrv.Player {
-    public partial class PlayObject {
-        public override void Run() {
+namespace GameSrv.Player
+{
+    public partial class PlayObject
+    {
+        public override void Run()
+        {
             int tObjCount;
             int nInteger;
             const string sPayMentExpire = "您的帐户充值时间已到期!!!";
@@ -21,13 +24,17 @@ namespace GameSrv.Player {
             const string sExceptionMsg1 = "[Exception] TPlayObject::Run -> Operate 1";
             const string sExceptionMsg2 = "[Exception] TPlayObject::Run -> Operate 2 # {0} Ident:{1} Sender:{2} wP:{3} nP1:{4} nP2:{5} np3:{6} Msg:{7}";
             const string sExceptionMsg4 = "[Exception] TPlayObject::Run -> ClearObj";
-            try {
-                if (Dealing) {
-                    if (GetPoseCreate() != DealCreat || DealCreat == this || DealCreat == null) {
+            try
+            {
+                if (Dealing)
+                {
+                    if (GetPoseCreate() != DealCreat || DealCreat == this || DealCreat == null)
+                    {
                         DealCancel();
                     }
                 }
-                if (M2Share.Config.PayMentMode == 3) {
+                if (M2Share.Config.PayMentMode == 3)
+                {
                     if (HUtil32.GetTickCount() - AccountExpiredTick > QueryExpireTick)//一分钟查询一次账号游戏到期时间
                     {
                         ExpireTime = ExpireTime - 60;//游戏时间减去一分钟
@@ -35,19 +42,22 @@ namespace GameSrv.Player {
                         AccountExpiredTick = HUtil32.GetTickCount();
                         CheckExpiredTime();
                     }
-                    if (AccountExpired) {
+                    if (AccountExpired)
+                    {
                         SysMsg(sPayMentExpire, MsgColor.Red, MsgType.Hint);
                         SysMsg(sDisConnectMsg, MsgColor.Red, MsgType.Hint);
                         BoEmergencyClose = true;
                         AccountExpired = false;
                     }
                 }
-                if (FireHitSkill && (HUtil32.GetTickCount() - LatestFireHitTick) > 20 * 1000) {
+                if (FireHitSkill && (HUtil32.GetTickCount() - LatestFireHitTick) > 20 * 1000)
+                {
                     FireHitSkill = false;
                     SysMsg(Settings.SpiritsGone, MsgColor.Red, MsgType.Hint);
                     SendSocket("+UFIR");
                 }
-                if (TwinHitSkill && (HUtil32.GetTickCount() - LatestTwinHitTick) > 60 * 1000) {
+                if (TwinHitSkill && (HUtil32.GetTickCount() - LatestTwinHitTick) > 60 * 1000)
+                {
                     TwinHitSkill = false;
                     SendSocket("+UTWN");
                 }
@@ -58,9 +68,12 @@ namespace GameSrv.Player {
                 }
                 for (int i = 0; i < 20; i++) //个人定时器
                 {
-                    if (AutoTimerStatus[i] > 500) {
-                        if ((HUtil32.GetTickCount() - AutoTimerTick[i]) > AutoTimerStatus[i]) {
-                            if (M2Share.ManageNPC != null) {
+                    if (AutoTimerStatus[i] > 500)
+                    {
+                        if ((HUtil32.GetTickCount() - AutoTimerTick[i]) > AutoTimerStatus[i])
+                        {
+                            if (M2Share.ManageNPC != null)
+                            {
                                 AutoTimerTick[i] = HUtil32.GetTickCount();
                                 ScriptGotoCount = 0;
                                 M2Share.ManageNPC.GotoLable(this, "@OnTimer" + i, false);
@@ -69,16 +82,21 @@ namespace GameSrv.Player {
                     }
                 }
                 bool boNeedRecalc = false;
-                if (StatusTimeArr[PoisonState.STATETRANSPARENT] == 0) {
+                if (StatusTimeArr[PoisonState.STATETRANSPARENT] == 0)
+                {
                     AbilMagBubbleDefence = false;
                 }
-                for (int i = 0; i < ExtraAbil.Length; i++) {
-                    if (ExtraAbil[i] > 0) {
-                        if (HUtil32.GetTickCount() > ExtraAbilTimes[i]) {
+                for (int i = 0; i < ExtraAbil.Length; i++)
+                {
+                    if (ExtraAbil[i] > 0)
+                    {
+                        if (HUtil32.GetTickCount() > ExtraAbilTimes[i])
+                        {
                             ExtraAbil[i] = 0;
                             ExtraAbilFlag[i] = 0;
                             boNeedRecalc = true;
-                            switch (i) {
+                            switch (i)
+                            {
                                 case 0:
                                     SysMsg("攻击力恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
@@ -102,9 +120,11 @@ namespace GameSrv.Player {
                                     break;
                             }
                         }
-                        else if (ExtraAbilFlag[i] == 0 && HUtil32.GetTickCount() > ExtraAbilTimes[i] - 10000) {
+                        else if (ExtraAbilFlag[i] == 0 && HUtil32.GetTickCount() > ExtraAbilTimes[i] - 10000)
+                        {
                             ExtraAbilFlag[i] = 1;
-                            switch (i) {
+                            switch (i)
+                            {
                                 case AbilConst.EABIL_DCUP:
                                     SysMsg("攻击力10秒后恢复正常。", MsgColor.Green, MsgType.Hint);
                                     break;
@@ -127,7 +147,8 @@ namespace GameSrv.Player {
                         }
                     }
                 }
-                if (boNeedRecalc) {
+                if (boNeedRecalc)
+                {
                     HealthSpellChanged();
                 }
                 LifeStone();
@@ -137,81 +158,104 @@ namespace GameSrv.Player {
                     ((Merchant)TimeGotoNpc)?.GotoLable(this, TimeGotoLable, false);
                 }
                 // 增加挂机
-                if (OffLineFlag && HUtil32.GetTickCount() > KickOffLineTick) {
+                if (OffLineFlag && HUtil32.GetTickCount() > KickOffLineTick)
+                {
                     OffLineFlag = false;
                     BoSoftClose = true;
                 }
-                if (IsDelayCall && (HUtil32.GetTickCount() - DelayCallTick) > DelayCall) {
+                if (IsDelayCall && (HUtil32.GetTickCount() - DelayCallTick) > DelayCall)
+                {
                     IsDelayCall = false;
                     NormNpc normNpc = WorldServer.FindMerchant<Merchant>(DelayCallNpc) ?? WorldServer.FindNpc<NormNpc>(DelayCallNpc);
-                    if (normNpc != null) {
+                    if (normNpc != null)
+                    {
                         normNpc.GotoLable(this, DelayCallLabel, false);
                     }
                 }
                 if ((HUtil32.GetTickCount() - DecPkPointTick) > M2Share.Config.DecPkPointTime)// 减少PK值
                 {
                     DecPkPointTick = HUtil32.GetTickCount();
-                    if (PkPoint > 0) {
+                    if (PkPoint > 0)
+                    {
                         DecPkPoint(M2Share.Config.DecPkPointCount);
                     }
                 }
-                if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.DecLightItemDrugTime) {
+                if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.DecLightItemDrugTime)
+                {
                     DecLightItemDrugTick += M2Share.Config.DecLightItemDrugTime;
                     UseLamp();
                     CheckPkStatus();
                 }
-                if ((HUtil32.GetTickCount() - CheckDupObjTick) > 3000) {
+                if ((HUtil32.GetTickCount() - CheckDupObjTick) > 3000)
+                {
                     CheckDupObjTick = HUtil32.GetTickCount();
                     GetStartPoint();
                     tObjCount = Envir.GetXyObjCount(CurrX, CurrY);
-                    if (tObjCount >= 2) {
-                        if (!BoDuplication) {
+                    if (tObjCount >= 2)
+                    {
+                        if (!BoDuplication)
+                        {
                             BoDuplication = true;
                             DupStartTick = HUtil32.GetTickCount();
                         }
                     }
-                    else {
+                    else
+                    {
                         BoDuplication = false;
                     }
                     if ((tObjCount >= 3 && ((HUtil32.GetTickCount() - DupStartTick) > 3000) || tObjCount == 2
-                        && ((HUtil32.GetTickCount() - DupStartTick) > 10000)) && ((HUtil32.GetTickCount() - DupStartTick) < 20000)) {
+                        && ((HUtil32.GetTickCount() - DupStartTick) > 10000)) && ((HUtil32.GetTickCount() - DupStartTick) < 20000))
+                    {
                         CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
                 }
                 Castle.UserCastle castle = M2Share.CastleMgr.InCastleWarArea(this);
-                if (castle != null && castle.UnderWar) {
+                if (castle != null && castle.UnderWar)
+                {
                     ChangePkStatus(true);
                 }
-                if ((HUtil32.GetTickCount() - DiscountForNightTick) > 1000) {
+                if ((HUtil32.GetTickCount() - DiscountForNightTick) > 1000)
+                {
                     DiscountForNightTick = HUtil32.GetTickCount();
                     int wHour = DateTime.Now.Hour;
                     int wMin = DateTime.Now.Minute;
                     int wSec = DateTime.Now.Second;
                     int wMSec = DateTime.Now.Millisecond;
-                    if (M2Share.Config.DiscountForNightTime && (wHour == M2Share.Config.HalfFeeStart || wHour == M2Share.Config.HalfFeeEnd)) {
-                        if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - LogonTick) > 60000) {
+                    if (M2Share.Config.DiscountForNightTime && (wHour == M2Share.Config.HalfFeeStart || wHour == M2Share.Config.HalfFeeEnd))
+                    {
+                        if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - LogonTick) > 60000)
+                        {
                             LogonTimcCost();
                             LogonTick = HUtil32.GetTickCount();
                             LogonTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                         }
                     }
-                    if (MyGuild != null) {
-                        if (MyGuild.GuildWarList.Count > 0) {
+                    if (MyGuild != null)
+                    {
+                        if (MyGuild.GuildWarList.Count > 0)
+                        {
                             bool boInSafeArea = InSafeArea();
-                            if (boInSafeArea != IsSafeArea) {
+                            if (boInSafeArea != IsSafeArea)
+                            {
                                 IsSafeArea = boInSafeArea;
                                 RefNameColor();
                             }
                         }
                     }
-                    if (castle != null && castle.UnderWar) {
-                        if (Envir == castle.PalaceEnvir && MyGuild != null) {
-                            if (!castle.IsMember(this)) {
-                                if (castle.IsAttackGuild(MyGuild)) {
-                                    if (castle.CanGetCastle(MyGuild)) {
+                    if (castle != null && castle.UnderWar)
+                    {
+                        if (Envir == castle.PalaceEnvir && MyGuild != null)
+                        {
+                            if (!castle.IsMember(this))
+                            {
+                                if (castle.IsAttackGuild(MyGuild))
+                                {
+                                    if (castle.CanGetCastle(MyGuild))
+                                    {
                                         castle.GetCastle(MyGuild);
                                         WorldServer.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, MyGuild.GuildName);
-                                        if (castle.InPalaceGuildCount() <= 1) {
+                                        if (castle.InPalaceGuildCount() <= 1)
+                                        {
                                             castle.StopWallconquestWar();
                                         }
                                     }
@@ -219,40 +263,51 @@ namespace GameSrv.Player {
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         ChangePkStatus(false);
                     }
-                    if (NameColorChanged) {
+                    if (NameColorChanged)
+                    {
                         NameColorChanged = false;
                         RefUserState();
                         RefShowName();
                     }
                 }
             }
-            catch {
+            catch
+            {
                 M2Share.Logger.Error(sExceptionMsg1);
             }
             ProcessMessage processMsg = default;
-            try {
+            try
+            {
                 GetMessageTick = HUtil32.GetTickCount();
-                while (((HUtil32.GetTickCount() - GetMessageTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(ref processMsg)) {
-                    if (!Operate(processMsg)) {
+                while (((HUtil32.GetTickCount() - GetMessageTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(ref processMsg))
+                {
+                    if (!Operate(processMsg))
+                    {
                         break;
                     }
                 }
-                if (BoEmergencyClose || BoKickFlag || BoSoftClose) {
-                    if (SwitchData) {
+                if (BoEmergencyClose || BoKickFlag || BoSoftClose)
+                {
+                    if (SwitchData)
+                    {
                         MapName = SwitchMapName;
                         CurrX = SwitchMapX;
                         CurrY = SwitchMapY;
                     }
                     MakeGhost();
-                    if (BoKickFlag) {
+                    if (BoKickFlag)
+                    {
                         SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
                     }
-                    if (!BoReconnection && BoSoftClose) {
+                    if (!BoReconnection && BoSoftClose)
+                    {
                         MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
-                        if (MyGuild != null) {
+                        if (MyGuild != null)
+                        {
                             MyGuild.SendGuildMsg(ChrName + " 已经退出游戏.");
                             WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + "" + '/' + ChrName + " has exited the game.");
                         }
@@ -260,8 +315,10 @@ namespace GameSrv.Player {
                     }
                 }
             }
-            catch (Exception e) {
-                if (processMsg.wIdent == 0) {
+            catch (Exception e)
+            {
+                if (processMsg.wIdent == 0)
+                {
                     MakeGhost();//用于处理 人物异常退出，但人物还在游戏中问题
                 }
                 M2Share.Logger.Error(Format(sExceptionMsg2, ChrName, processMsg.wIdent, processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
@@ -269,178 +326,230 @@ namespace GameSrv.Player {
             }
             bool boTakeItem = false;
             // 检查身上的装备有没不符合
-            for (int i = 0; i < UseItems.Length; i++) {
-                if (UseItems[i] != null && UseItems[i].Index > 0) {
+            for (int i = 0; i < UseItems.Length; i++)
+            {
+                if (UseItems[i] != null && UseItems[i].Index > 0)
+                {
                     StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                    if (stdItem != null) {
-                        if (!CheckItemsNeed(stdItem)) {
+                    if (stdItem != null)
+                    {
+                        if (!CheckItemsNeed(stdItem))
+                        {
                             // m_ItemList.Add((UserItem));
                             SystemModule.Packets.ClientPackets.UserItem userItem = UseItems[i];
-                            if (AddItemToBag(userItem)) {
+                            if (AddItemToBag(userItem))
+                            {
                                 SendAddItem(userItem);
                                 WeightChanged();
                                 boTakeItem = true;
                             }
-                            else {
-                                if (DropItemDown(UseItems[i], 1, false, 0, ActorId)) {
+                            else
+                            {
+                                if (DropItemDown(UseItems[i], 1, false, 0, ActorId))
+                                {
                                     boTakeItem = true;
                                 }
                             }
-                            if (boTakeItem) {
+                            if (boTakeItem)
+                            {
                                 SendDelItems(UseItems[i]);
                                 UseItems[i].Index = 0;
                                 RecalcAbilitys();
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         UseItems[i].Index = 0;
                     }
                 }
             }
             tObjCount = GameGold;
-            if (BoDecGameGold && (HUtil32.GetTickCount() - DecGameGoldTick) > DecGameGoldTime) {
+            if (BoDecGameGold && (HUtil32.GetTickCount() - DecGameGoldTick) > DecGameGoldTime)
+            {
                 DecGameGoldTick = HUtil32.GetTickCount();
-                if (GameGold >= DecGameGold) {
+                if (GameGold >= DecGameGold)
+                {
                     GameGold -= DecGameGold;
                     nInteger = DecGameGold;
                 }
-                else {
+                else
+                {
                     nInteger = GameGold;
                     GameGold = 0;
                     BoDecGameGold = false;
                     MoveToHome();
                 }
-                if (M2Share.GameLogGameGold) {
+                if (M2Share.GameLogGameGold)
+                {
                     M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
-            if (BoIncGameGold && (HUtil32.GetTickCount() - IncGameGoldTick) > IncGameGoldTime) {
+            if (BoIncGameGold && (HUtil32.GetTickCount() - IncGameGoldTick) > IncGameGoldTime)
+            {
                 IncGameGoldTick = HUtil32.GetTickCount();
-                if (GameGold + IncGameGold < 2000000) {
+                if (GameGold + IncGameGold < 2000000)
+                {
                     GameGold += IncGameGold;
                     nInteger = IncGameGold;
                 }
-                else {
+                else
+                {
                     GameGold = 2000000;
                     nInteger = 2000000 - GameGold;
                     BoIncGameGold = false;
                 }
-                if (M2Share.GameLogGameGold) {
+                if (M2Share.GameLogGameGold)
+                {
                     M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
-            if (!BoDecGameGold && Envir.Flag.boDECGAMEGOLD) {
-                if ((HUtil32.GetTickCount() - DecGameGoldTick) > Envir.Flag.nDECGAMEGOLDTIME * 1000) {
+            if (!BoDecGameGold && Envir.Flag.boDECGAMEGOLD)
+            {
+                if ((HUtil32.GetTickCount() - DecGameGoldTick) > Envir.Flag.nDECGAMEGOLDTIME * 1000)
+                {
                     DecGameGoldTick = HUtil32.GetTickCount();
-                    if (GameGold >= Envir.Flag.nDECGAMEGOLD) {
+                    if (GameGold >= Envir.Flag.nDECGAMEGOLD)
+                    {
                         GameGold -= Envir.Flag.nDECGAMEGOLD;
                         nInteger = Envir.Flag.nDECGAMEGOLD;
                     }
-                    else {
+                    else
+                    {
                         nInteger = GameGold;
                         GameGold = 0;
                         BoDecGameGold = false;
                         MoveToHome();
                     }
-                    if (M2Share.GameLogGameGold) {
+                    if (M2Share.GameLogGameGold)
+                    {
                         M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Map"));
                     }
                 }
             }
-            if (!BoIncGameGold && Envir.Flag.boINCGAMEGOLD) {
-                if ((HUtil32.GetTickCount() - IncGameGoldTick) > (Envir.Flag.nINCGAMEGOLDTIME * 1000)) {
+            if (!BoIncGameGold && Envir.Flag.boINCGAMEGOLD)
+            {
+                if ((HUtil32.GetTickCount() - IncGameGoldTick) > (Envir.Flag.nINCGAMEGOLDTIME * 1000))
+                {
                     IncGameGoldTick = HUtil32.GetTickCount();
-                    if (GameGold + Envir.Flag.nINCGAMEGOLD <= 2000000) {
+                    if (GameGold + Envir.Flag.nINCGAMEGOLD <= 2000000)
+                    {
                         GameGold += Envir.Flag.nINCGAMEGOLD;
                         nInteger = Envir.Flag.nINCGAMEGOLD;
                     }
-                    else {
+                    else
+                    {
                         nInteger = 2000000 - GameGold;
                         GameGold = 2000000;
                     }
-                    if (M2Share.GameLogGameGold) {
+                    if (M2Share.GameLogGameGold)
+                    {
                         M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '+', "Map"));
                     }
                 }
             }
-            if (tObjCount != GameGold) {
+            if (tObjCount != GameGold)
+            {
                 SendUpdateMsg(this, Messages.RM_GOLDCHANGED, 0, 0, 0, 0, "");
             }
-            if (Envir.Flag.Fight3Zone) {
+            if (Envir.Flag.Fight3Zone)
+            {
                 FightZoneDieCount++;
-                if (MyGuild != null) {
+                if (MyGuild != null)
+                {
                     MyGuild.TeamFightWhoDead(ChrName);
                 }
-                if (LastHiter != null && LastHiter.Race == ActorRace.Play) {
+                if (LastHiter != null && LastHiter.Race == ActorRace.Play)
+                {
                     PlayObject lastHiterPlay = LastHiter as PlayObject;
-                    if (lastHiterPlay.MyGuild != null && MyGuild != null) {
+                    if (lastHiterPlay.MyGuild != null && MyGuild != null)
+                    {
                         lastHiterPlay.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
                         string tStr = lastHiterPlay.MyGuild.GuildName + ':' + lastHiterPlay.MyGuild.ContestPoint + "  " + MyGuild.GuildName + ':' + MyGuild.ContestPoint;
                         M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
                     }
                 }
             }
-            if (Envir.Flag.boINCGAMEPOINT) {
-                if ((HUtil32.GetTickCount() - IncGamePointTick) > (Envir.Flag.nINCGAMEPOINTTIME * 1000)) {
+            if (Envir.Flag.boINCGAMEPOINT)
+            {
+                if ((HUtil32.GetTickCount() - IncGamePointTick) > (Envir.Flag.nINCGAMEPOINTTIME * 1000))
+                {
                     IncGamePointTick = HUtil32.GetTickCount();
-                    if (GamePoint + Envir.Flag.nINCGAMEPOINT <= 2000000) {
+                    if (GamePoint + Envir.Flag.nINCGAMEPOINT <= 2000000)
+                    {
                         GamePoint += Envir.Flag.nINCGAMEPOINT;
                         nInteger = Envir.Flag.nINCGAMEPOINT;
                     }
-                    else {
+                    else
+                    {
                         GamePoint = 2000000;
                         nInteger = 2000000 - GamePoint;
                     }
-                    if (M2Share.GameLogGamePoint) {
+                    if (M2Share.GameLogGamePoint)
+                    {
                         M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GamePointName, nInteger, '+', "Map"));
                     }
                 }
             }
-            if (Envir.Flag.boDECHP && (HUtil32.GetTickCount() - DecHpTick) > (Envir.Flag.nDECHPTIME * 1000)) {
+            if (Envir.Flag.boDECHP && (HUtil32.GetTickCount() - DecHpTick) > (Envir.Flag.nDECHPTIME * 1000))
+            {
                 DecHpTick = HUtil32.GetTickCount();
-                if (WAbil.HP > Envir.Flag.nDECHPPOINT) {
+                if (WAbil.HP > Envir.Flag.nDECHPPOINT)
+                {
                     WAbil.HP -= (ushort)Envir.Flag.nDECHPPOINT;
                 }
-                else {
+                else
+                {
                     WAbil.HP = 0;
                 }
                 HealthSpellChanged();
             }
-            if (Envir.Flag.boINCHP && (HUtil32.GetTickCount() - IncHpTick) > (Envir.Flag.nINCHPTIME * 1000)) {
+            if (Envir.Flag.boINCHP && (HUtil32.GetTickCount() - IncHpTick) > (Envir.Flag.nINCHPTIME * 1000))
+            {
                 IncHpTick = HUtil32.GetTickCount();
-                if (WAbil.HP + Envir.Flag.nDECHPPOINT < WAbil.MaxHP) {
+                if (WAbil.HP + Envir.Flag.nDECHPPOINT < WAbil.MaxHP)
+                {
                     WAbil.HP += (ushort)Envir.Flag.nDECHPPOINT;
                 }
-                else {
+                else
+                {
                     WAbil.HP = WAbil.MaxHP;
                 }
                 HealthSpellChanged();
             }
             // 降饥饿点
-            if (M2Share.Config.HungerSystem) {
-                if ((HUtil32.GetTickCount() - DecHungerPointTick) > 1000) {
+            if (M2Share.Config.HungerSystem)
+            {
+                if ((HUtil32.GetTickCount() - DecHungerPointTick) > 1000)
+                {
                     DecHungerPointTick = HUtil32.GetTickCount();
-                    if (HungerStatus > 0) {
+                    if (HungerStatus > 0)
+                    {
                         tObjCount = GetMyStatus();
                         HungerStatus -= 1;
-                        if (tObjCount != GetMyStatus()) {
+                        if (tObjCount != GetMyStatus())
+                        {
                             RefMyStatus();
                         }
                     }
-                    else {
-                        if (M2Share.Config.HungerDecHP) {
+                    else
+                    {
+                        if (M2Share.Config.HungerDecHP)
+                        {
                             // 减少涨HP，MP
                             HealthTick -= 60;
                             SpellTick -= 10;
                             SpellTick = HUtil32._MAX(0, SpellTick);
                             PerHealth -= 1;
                             PerSpell -= 1;
-                            if (WAbil.HP > WAbil.HP / 100) {
+                            if (WAbil.HP > WAbil.HP / 100)
+                            {
                                 WAbil.HP -= (ushort)HUtil32._MAX(1, WAbil.HP / 100);
                             }
-                            else {
-                                if (WAbil.HP <= 2) {
+                            else
+                            {
+                                if (WAbil.HP <= 2)
+                                {
                                     WAbil.HP = 0;
                                 }
                             }
@@ -449,96 +558,126 @@ namespace GameSrv.Player {
                     }
                 }
             }
-            if ((HUtil32.GetTickCount() - ExpRateTick) > 1000) {
+            if ((HUtil32.GetTickCount() - ExpRateTick) > 1000)
+            {
                 ExpRateTick = HUtil32.GetTickCount();
-                if (KillMonExpRateTime > 0) {
+                if (KillMonExpRateTime > 0)
+                {
                     KillMonExpRateTime -= 1;
-                    if (KillMonExpRateTime == 0) {
+                    if (KillMonExpRateTime == 0)
+                    {
                         KillMonExpRate = 100;
                         SysMsg("经验倍数恢复正常...", MsgColor.Red, MsgType.Hint);
                     }
                 }
-                if (PowerRateTime > 0) {
+                if (PowerRateTime > 0)
+                {
                     PowerRateTime -= 1;
-                    if (PowerRateTime == 0) {
+                    if (PowerRateTime == 0)
+                    {
                         PowerRate = 100;
                         SysMsg("攻击力倍数恢复正常...", MsgColor.Red, MsgType.Hint);
                     }
                 }
             }
-            if (M2Share.Config.ReNewChangeColor && ReLevel > 0 && (HUtil32.GetTickCount() - ReColorTick) > M2Share.Config.ReNewNameColorTime) {
+            if (M2Share.Config.ReNewChangeColor && ReLevel > 0 && (HUtil32.GetTickCount() - ReColorTick) > M2Share.Config.ReNewNameColorTime)
+            {
                 ReColorTick = HUtil32.GetTickCount();
                 ReColorIdx++;
-                if (ReColorIdx >= M2Share.Config.ReNewNameColor.Length) {
+                if (ReColorIdx >= M2Share.Config.ReNewNameColor.Length)
+                {
                     ReColorIdx = 0;
                 }
                 NameColor = M2Share.Config.ReNewNameColor[ReColorIdx];
                 RefNameColor();
             }
             // 检测侦听私聊对像
-            if (WhisperHuman != null) {
-                if (WhisperHuman.Death || WhisperHuman.Ghost) {
+            if (WhisperHuman != null)
+            {
+                if (WhisperHuman.Death || WhisperHuman.Ghost)
+                {
                     WhisperHuman = null;
                 }
             }
             ProcessSpiritSuite();
-            try {
-                if ((HUtil32.GetTickCount() - ClearInvalidObjTick) > 30 * 1000) {
+            try
+            {
+                if ((HUtil32.GetTickCount() - ClearInvalidObjTick) > 30 * 1000)
+                {
                     ClearInvalidObjTick = HUtil32.GetTickCount();
-                    if (DearHuman != null && (DearHuman.Death || DearHuman.Ghost)) {
+                    if (DearHuman != null && (DearHuman.Death || DearHuman.Ghost))
+                    {
                         DearHuman = null;
                     }
-                    if (IsMaster) {
-                        for (int i = MasterList.Count - 1; i >= 0; i--) {
-                            if (MasterList[i].Death || MasterList[i].Ghost) {
+                    if (IsMaster)
+                    {
+                        for (int i = MasterList.Count - 1; i >= 0; i--)
+                        {
+                            if (MasterList[i].Death || MasterList[i].Ghost)
+                            {
                                 MasterList.RemoveAt(i);
                             }
                         }
                     }
-                    else {
-                        if (MasterHuman != null && (MasterHuman.Death || MasterHuman.Ghost)) {
+                    else
+                    {
+                        if (MasterHuman != null && (MasterHuman.Death || MasterHuman.Ghost))
+                        {
                             MasterHuman = null;
                         }
                     }
 
                     // 清组队已死亡成员
-                    if (GroupOwner != 0) {
+                    if (GroupOwner != 0)
+                    {
                         PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                        if (groupOwnerPlay.Death || groupOwnerPlay.Ghost) {
+                        if (groupOwnerPlay.Death || groupOwnerPlay.Ghost)
+                        {
                             GroupOwner = 0;
                         }
                     }
 
-                    if (GroupOwner == ActorId) {
-                        for (int i = GroupMembers.Count - 1; i >= 0; i--) {
+                    if (GroupOwner == ActorId)
+                    {
+                        for (int i = GroupMembers.Count - 1; i >= 0; i--)
+                        {
                             BaseObject baseObject = GroupMembers[i];
-                            if (baseObject.Death || baseObject.Ghost) {
+                            if (baseObject.Death || baseObject.Ghost)
+                            {
                                 GroupMembers.RemoveAt(i);
                             }
                         }
                     }
 
                     // 检查交易双方 状态
-                    if ((DealCreat != null) && DealCreat.Ghost) {
+                    if ((DealCreat != null) && DealCreat.Ghost)
+                    {
                         DealCreat = null;
                     }
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 M2Share.Logger.Error(sExceptionMsg4);
                 M2Share.Logger.Error(e.Message);
             }
-            if (AutoGetExpPoint > 0 && (AutoGetExpEnvir == null || AutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - AutoGetExpTick) > AutoGetExpTime) {
+            if (AutoGetExpPoint > 0 && (AutoGetExpEnvir == null || AutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - AutoGetExpTick) > AutoGetExpTime)
+            {
                 AutoGetExpTick = HUtil32.GetTickCount();
-                if (!AutoGetExpInSafeZone || AutoGetExpInSafeZone && InSafeZone()) {
+                if (!AutoGetExpInSafeZone || AutoGetExpInSafeZone && InSafeZone())
+                {
                     GetExp(AutoGetExpPoint);
                 }
             }
 
-            if (!Death) {
-                if (WAbil.HP == 0) {
-                    if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !((PlayObject)LastHiter).UnRevival)) {
-                        if (Race == ActorRace.Play && Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime)) {
+            if (!Death)
+            {
+                if (WAbil.HP == 0)
+                {
+                    if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !((PlayObject)LastHiter).UnRevival))
+                    {
+                        if (Race == ActorRace.Play && Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))
+                        {
                             RevivalTick = HUtil32.GetTickCount();
                             ItemDamageRevivalRing();
                             WAbil.HP = WAbil.MaxHP;
@@ -552,26 +691,31 @@ namespace GameSrv.Player {
             base.Run();
         }
 
-        protected override bool Operate(ProcessMessage processMsg) {
+        protected override bool Operate(ProcessMessage processMsg)
+        {
             int nObjCount;
             string sendMsg;
             int dwDelayTime = 0;
             int nMsgCount;
             bool result = true;
             BaseObject baseObject = null;
-            if (processMsg.ActorId > 0) {
+            if (processMsg.ActorId > 0)
+            {
                 baseObject = M2Share.ActorMgr.Get(processMsg.ActorId);
             }
-            switch (processMsg.wIdent) {
+            switch (processMsg.wIdent)
+            {
                 case Messages.CM_QUERYUSERNAME:
                     ClientQueryUserName(processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
                     break;
                 case Messages.CM_QUERYBAGITEMS: //僵尸攻击：不断刷新包裹发送大量数据，导致网络阻塞
-                    if ((HUtil32.GetTickCount() - QueryBagItemsTick) > 30 * 1000) {
+                    if ((HUtil32.GetTickCount() - QueryBagItemsTick) > 30 * 1000)
+                    {
                         QueryBagItemsTick = HUtil32.GetTickCount();
                         ClientQueryBagItems();
                     }
-                    else {
+                    else
+                    {
                         SysMsg(Settings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                     }
                     break;
@@ -582,15 +726,18 @@ namespace GameSrv.Player {
                     ClientQueryUserSet(processMsg);
                     break;
                 case Messages.CM_DROPITEM:
-                    if (ClientDropItem(processMsg.Msg, processMsg.nParam1)) {
+                    if (ClientDropItem(processMsg.Msg, processMsg.nParam1))
+                    {
                         SendDefMessage(Messages.SM_DROPITEM_SUCCESS, processMsg.nParam1, 0, 0, 0, processMsg.Msg);
                     }
-                    else {
+                    else
+                    {
                         SendDefMessage(Messages.SM_DROPITEM_FAIL, processMsg.nParam1, 0, 0, 0, processMsg.Msg);
                     }
                     break;
                 case Messages.CM_PICKUP:
-                    if (CurrX == processMsg.nParam2 && CurrY == processMsg.nParam3) {
+                    if (CurrX == processMsg.nParam2 && CurrY == processMsg.nParam3)
+                    {
                         ClientPickUpItem();
                     }
                     break;
@@ -607,30 +754,40 @@ namespace GameSrv.Player {
                     ClientUseItems(processMsg.nParam1, processMsg.Msg);
                     break;
                 case Messages.CM_BUTCH:
-                    if (!ClientGetButchItem(processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, (byte)processMsg.wParam, ref dwDelayTime)) {
-                        if (dwDelayTime != 0) {
+                    if (!ClientGetButchItem(processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, (byte)processMsg.wParam, ref dwDelayTime))
+                    {
+                        if (dwDelayTime != 0)
+                        {
                             nMsgCount = GetDigUpMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxDigUpMsgCount) {
+                            if (nMsgCount >= M2Share.Config.MaxDigUpMsgCount)
+                            {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount) {
-                                    if (M2Share.Config.KickOverSpeed) {
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                {
+                                    if (M2Share.Config.KickOverSpeed)
+                                    {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage) {
+                                    if (M2Share.Config.ViewHackMessage)
+                                    {
                                         M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
-                            else {
-                                if (dwDelayTime < M2Share.Config.DropOverSpeed) {
-                                    if (TestSpeedMode) {
+                            else
+                            {
+                                if (dwDelayTime < M2Share.Config.DropOverSpeed)
+                                {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendSocket(M2Share.GetGoodTick);
                                 }
-                                else {
+                                else
+                                {
                                     SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
@@ -642,10 +799,12 @@ namespace GameSrv.Player {
                     ClientChangeMagicKey(processMsg.nParam1, (char)processMsg.nParam2);
                     break;
                 case Messages.CM_SOFTCLOSE:
-                    if (!OffLineFlag) {
+                    if (!OffLineFlag)
+                    {
                         BoReconnection = true;
                         BoSoftClose = true;
-                        if (processMsg.wParam == 1) {
+                        if (processMsg.wParam == 1)
+                        {
                             BoEmergencyClose = true;
                         }
                     }
@@ -669,7 +828,8 @@ namespace GameSrv.Player {
                     ClientUserBuyItem(processMsg.wIdent, processMsg.nParam1, 0, processMsg.nParam2, processMsg.Msg);
                     break;
                 case Messages.CM_DROPGOLD:
-                    if (processMsg.nParam1 > 0) {
+                    if (processMsg.nParam1 > 0)
+                    {
                         ClientDropGold(processMsg.nParam1);
                     }
                     break;
@@ -677,16 +837,20 @@ namespace GameSrv.Player {
                     SendDefMessage(1, 0, 0, 0, 0, "");
                     break;
                 case Messages.CM_GROUPMODE:
-                    if (processMsg.nParam2 == 0) {
+                    if (processMsg.nParam2 == 0)
+                    {
                         ClientGroupClose();
                     }
-                    else {
+                    else
+                    {
                         AllowGroup = true;
                     }
-                    if (AllowGroup) {
+                    if (AllowGroup)
+                    {
                         SendDefMessage(Messages.SM_GROUPMODECHANGED, 0, 1, 0, 0, "");
                     }
-                    else {
+                    else
+                    {
                         SendDefMessage(Messages.SM_GROUPMODECHANGED, 0, 0, 0, 0, "");
                     }
                     break;
@@ -769,37 +933,49 @@ namespace GameSrv.Player {
                     ClientGuildBreakAlly(processMsg.Msg);
                     break;
                 case Messages.CM_TURN:
-                    if (ClientChangeDir((short)processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime)) {
+                    if (ClientChangeDir((short)processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
+                    {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
-                    else {
-                        if (dwDelayTime == 0) {
+                    else
+                    {
+                        if (dwDelayTime == 0)
+                        {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
-                        else {
+                        else
+                        {
                             nMsgCount = GetTurnMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxTurnMsgCount) {
+                            if (nMsgCount >= M2Share.Config.MaxTurnMsgCount)
+                            {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount) {
-                                    if (M2Share.Config.KickOverSpeed) {
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                {
+                                    if (M2Share.Config.KickOverSpeed)
+                                    {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage) {
+                                    if (M2Share.Config.ViewHackMessage)
+                                    {
                                         M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
-                            else {
-                                if (dwDelayTime < M2Share.Config.DropOverSpeed) {
+                            else
+                            {
+                                if (dwDelayTime < M2Share.Config.DropOverSpeed)
+                                {
                                     SendSocket(M2Share.GetGoodTick);
-                                    if (TestSpeedMode) {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
-                                else {
+                                else
+                                {
                                     SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
@@ -808,41 +984,55 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.CM_WALK:
-                    if (ClientWalkXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime)) {
+                    if (ClientWalkXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime))
+                    {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
-                    else {
-                        if (dwDelayTime == 0) {
+                    else
+                    {
+                        if (dwDelayTime == 0)
+                        {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
-                        else {
+                        else
+                        {
                             nMsgCount = GetWalkMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxWalkMsgCount) {
+                            if (nMsgCount >= M2Share.Config.MaxWalkMsgCount)
+                            {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount) {
-                                    if (M2Share.Config.KickOverSpeed) {
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                {
+                                    if (M2Share.Config.KickOverSpeed)
+                                    {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage) {
+                                    if (M2Share.Config.ViewHackMessage)
+                                    {
                                         M2Share.Logger.Warn(Format(CommandHelp.WalkOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
-                                if (TestSpeedMode) {
+                                if (TestSpeedMode)
+                                {
                                     SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
                             }
-                            else {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction) {
+                            else
+                            {
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
-                                    if (TestSpeedMode) {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
-                                else {
-                                    if (TestSpeedMode) {
+                                else
+                                {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
@@ -853,34 +1043,45 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.CM_HORSERUN:
-                    if (ClientHorseRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime)) {
+                    if (ClientHorseRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime))
+                    {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
-                    else {
-                        if (dwDelayTime == 0) {
+                    else
+                    {
+                        if (dwDelayTime == 0)
+                        {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
-                        else {
+                        else
+                        {
                             nMsgCount = GetRunMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxRunMsgCount) {
+                            if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
+                            {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount) {
-                                    if (M2Share.Config.KickOverSpeed) {
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                {
+                                    if (M2Share.Config.KickOverSpeed)
+                                    {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage) {
+                                    if (M2Share.Config.ViewHackMessage)
+                                    {
                                         M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
-                                if (TestSpeedMode) {
+                                if (TestSpeedMode)
+                                {
                                     SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
                             }
-                            else {
-                                if (TestSpeedMode) {
+                            else
+                            {
+                                if (TestSpeedMode)
+                                {
                                     SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
                                 SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
@@ -890,38 +1091,51 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.CM_RUN:
-                    if (ClientRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.nParam3, ref dwDelayTime)) {
+                    if (ClientRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.nParam3, ref dwDelayTime))
+                    {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
-                    else {
-                        if (dwDelayTime == 0) {
+                    else
+                    {
+                        if (dwDelayTime == 0)
+                        {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
-                        else {
+                        else
+                        {
                             nMsgCount = GetRunMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxRunMsgCount) {
+                            if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
+                            {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount) {
-                                    if (M2Share.Config.KickOverSpeed) {
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                {
+                                    if (M2Share.Config.KickOverSpeed)
+                                    {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage) {
+                                    if (M2Share.Config.ViewHackMessage)
+                                    {
                                         M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
                             }
-                            else {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction) {
+                            else
+                            {
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
-                                    if (TestSpeedMode) {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
-                                else {
-                                    if (TestSpeedMode) {
+                                else
+                                {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, Messages.CM_RUN, "", dwDelayTime);
@@ -940,38 +1154,51 @@ namespace GameSrv.Player {
                 case Messages.CM_CRSHIT:
                 case Messages.CM_TWINHIT:
                 case Messages.CM_FIREHIT:
-                    if (ClientHitXY(processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, processMsg.LateDelivery, ref dwDelayTime)) {
+                    if (ClientHitXY(processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, processMsg.LateDelivery, ref dwDelayTime))
+                    {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
-                    else {
-                        if (dwDelayTime == 0) {
+                    else
+                    {
+                        if (dwDelayTime == 0)
+                        {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
-                        else {
+                        else
+                        {
                             nMsgCount = GetHitMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxHitMsgCount) {
+                            if (nMsgCount >= M2Share.Config.MaxHitMsgCount)
+                            {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount) {
-                                    if (M2Share.Config.KickOverSpeed) {
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                {
+                                    if (M2Share.Config.KickOverSpeed)
+                                    {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage) {
+                                    if (M2Share.Config.ViewHackMessage)
+                                    {
                                         M2Share.Logger.Warn(Format(CommandHelp.HitOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
-                            else {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction) {
+                            else
+                            {
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                {
                                     SendSocket(M2Share.GetGoodTick);
-                                    if (TestSpeedMode) {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
-                                else {
-                                    if (TestSpeedMode) {
+                                else
+                                {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg("操作延迟 Ident: " + processMsg.wIdent + " Time: " + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
@@ -982,38 +1209,51 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.CM_SITDOWN:
-                    if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime)) {
+                    if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
+                    {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
-                    else {
-                        if (dwDelayTime == 0) {
+                    else
+                    {
+                        if (dwDelayTime == 0)
+                        {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
-                        else {
+                        else
+                        {
                             nMsgCount = GetSiteDownMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxSitDonwMsgCount) {
+                            if (nMsgCount >= M2Share.Config.MaxSitDonwMsgCount)
+                            {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount) {
-                                    if (M2Share.Config.KickOverSpeed) {
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                {
+                                    if (M2Share.Config.KickOverSpeed)
+                                    {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage) {
+                                    if (M2Share.Config.ViewHackMessage)
+                                    {
                                         M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
-                            else {
-                                if (dwDelayTime < M2Share.Config.DropOverSpeed) {
+                            else
+                            {
+                                if (dwDelayTime < M2Share.Config.DropOverSpeed)
+                                {
                                     SendSocket(M2Share.GetGoodTick);
-                                    if (TestSpeedMode) {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
-                                else {
-                                    if (TestSpeedMode) {
+                                else
+                                {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
@@ -1024,38 +1264,51 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.CM_SPELL:
-                    if (ClientSpellXY(processMsg.wIdent, processMsg.wParam, (short)processMsg.nParam1, (short)processMsg.nParam2, M2Share.ActorMgr.Get(processMsg.nParam3), processMsg.LateDelivery, ref dwDelayTime)) {
+                    if (ClientSpellXY(processMsg.wIdent, processMsg.wParam, (short)processMsg.nParam1, (short)processMsg.nParam2, M2Share.ActorMgr.Get(processMsg.nParam3), processMsg.LateDelivery, ref dwDelayTime))
+                    {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
-                    else {
-                        if (dwDelayTime == 0) {
+                    else
+                    {
+                        if (dwDelayTime == 0)
+                        {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
-                        else {
+                        else
+                        {
                             nMsgCount = GetSpellMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxSpellMsgCount) {
+                            if (nMsgCount >= M2Share.Config.MaxSpellMsgCount)
+                            {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount) {
-                                    if (M2Share.Config.KickOverSpeed) {
+                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                {
+                                    if (M2Share.Config.KickOverSpeed)
+                                    {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage) {
+                                    if (M2Share.Config.ViewHackMessage)
+                                    {
                                         M2Share.Logger.Warn(Format(CommandHelp.SpellOverSpeed, ChrName, dwDelayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
-                            else {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction) {
+                            else
+                            {
+                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
-                                    if (TestSpeedMode) {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
-                                else {
-                                    if (TestSpeedMode) {
+                                else
+                                {
+                                    if (TestSpeedMode)
+                                    {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
@@ -1075,7 +1328,8 @@ namespace GameSrv.Player {
                     ProcessQueryValue(processMsg.nParam1, processMsg.Msg);
                     break;
                 case Messages.RM_WALK:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_WALK, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                         CharDesc walkmessage = default;
                         walkmessage.Feature = baseObject.GetFeature(baseObject);
@@ -1084,7 +1338,8 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.RM_HORSERUN:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_HORSERUN, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                         CharDesc horserunmessage = default;
                         horserunmessage.Feature = baseObject.GetFeature(baseObject);
@@ -1093,7 +1348,8 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.RM_RUN:
-                    if (processMsg.ActorId != ActorId && baseObject != null) {
+                    if (processMsg.ActorId != ActorId && baseObject != null)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_RUN, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                         CharDesc runmessage = default;
                         runmessage.Feature = baseObject.GetFeature(baseObject);
@@ -1102,31 +1358,36 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.RM_HIT:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_HIT, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_HEAVYHIT:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_HEAVYHIT, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg, processMsg.Msg);
                     }
                     break;
                 case Messages.RM_BIGHIT:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_BIGHIT, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_SPELL:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_SPELL, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg, processMsg.nParam3.ToString());
                     }
                     break;
                 case Messages.RM_SPELL2:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_POWERHIT, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
@@ -1139,43 +1400,50 @@ namespace GameSrv.Player {
                     SendSocket(ClientMsg, EDCode.EncodePacket(movefailmessage));
                     break;
                 case Messages.RM_LONGHIT:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_LONGHIT, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_WIDEHIT:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_WIDEHIT, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_FIREHIT:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_FIREHIT, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_CRSHIT:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_CRSHIT, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_41:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_41, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_TWINHIT:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_TWINHIT, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
                     break;
                 case Messages.RM_43:
-                    if (processMsg.ActorId != ActorId) {
+                    if (processMsg.ActorId != ActorId)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_43, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
@@ -1184,8 +1452,10 @@ namespace GameSrv.Player {
                 case Messages.RM_PUSH:
                 case Messages.RM_RUSH:
                 case Messages.RM_RUSHKUNG:
-                    if (processMsg.ActorId != ActorId || processMsg.wIdent == Messages.RM_PUSH || processMsg.wIdent == Messages.RM_RUSH || processMsg.wIdent == Messages.RM_RUSHKUNG) {
-                        switch (processMsg.wIdent) {
+                    if (processMsg.ActorId != ActorId || processMsg.wIdent == Messages.RM_PUSH || processMsg.wIdent == Messages.RM_RUSH || processMsg.wIdent == Messages.RM_RUSHKUNG)
+                    {
+                        switch (processMsg.wIdent)
+                        {
                             case Messages.RM_PUSH:
                                 ClientMsg = Messages.MakeMessage(Messages.SM_BACKSTEP, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                                 break;
@@ -1204,11 +1474,13 @@ namespace GameSrv.Player {
                         turnmessage.Status = baseObject.CharStatus;
                         sendMsg = EDCode.EncodePacket(turnmessage);
                         nObjCount = GetChrColor(baseObject);
-                        if (!string.IsNullOrEmpty(processMsg.Msg)) {
+                        if (!string.IsNullOrEmpty(processMsg.Msg))
+                        {
                             sendMsg = sendMsg + EDCode.EncodeString($"{processMsg.Msg}/{nObjCount}");
                         }
                         SendSocket(ClientMsg, sendMsg);
-                        if (processMsg.wIdent == Messages.RM_TURN) {
+                        if (processMsg.wIdent == Messages.RM_TURN)
+                        {
                             nObjCount = baseObject.GetFeatureToLong();
                             SendDefMessage(Messages.SM_FEATURECHANGED, processMsg.ActorId, HUtil32.LoWord(nObjCount), HUtil32.HiWord(nObjCount), baseObject.GetFeatureEx(), "");
                         }
@@ -1216,16 +1488,22 @@ namespace GameSrv.Player {
                     break;
                 case Messages.RM_STRUCK:
                 case Messages.RM_STRUCK_MAG:
-                    if (processMsg.wParam > 0) {
-                        if (processMsg.ActorId == ActorId) {
-                            if (M2Share.ActorMgr.Get(processMsg.nParam3) != null) {
-                                if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Play) {
+                    if (processMsg.wParam > 0)
+                    {
+                        if (processMsg.ActorId == ActorId)
+                        {
+                            if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                            {
+                                if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Play)
+                                {
                                     SetPkFlag(M2Share.ActorMgr.Get(processMsg.nParam3));
                                 }
                                 SetLastHiter(M2Share.ActorMgr.Get(processMsg.nParam3));
                             }
-                            if (M2Share.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null) {
-                                if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard) {
+                            if (M2Share.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                            {
+                                if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard)
+                                {
                                     ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).BoCrimeforCastle = true;
                                     ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).CrimeforCastleTime = HUtil32.GetTickCount();
                                 }
@@ -1236,20 +1514,25 @@ namespace GameSrv.Player {
                             PerSpell -= 1;
                             StruckTick = HUtil32.GetTickCount();
                         }
-                        if (processMsg.ActorId != 0) {
-                            if (processMsg.ActorId == ActorId && M2Share.Config.DisableSelfStruck || baseObject.Race == ActorRace.Play && M2Share.Config.DisableStruck) {
+                        if (processMsg.ActorId != 0)
+                        {
+                            if (processMsg.ActorId == ActorId && M2Share.Config.DisableSelfStruck || baseObject.Race == ActorRace.Play && M2Share.Config.DisableStruck)
+                            {
                                 baseObject.SendRefMsg(Messages.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
                             }
-                            else {
+                            else
+                            {
                                 ClientMsg = Messages.MakeMessage(Messages.SM_STRUCK, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, processMsg.wParam);
                                 MessageBodyWL struckMessage = default;
                                 struckMessage.Param1 = baseObject.GetFeature(this);
                                 struckMessage.Param2 = baseObject.CharStatus;
                                 struckMessage.Tag1 = processMsg.nParam3;
-                                if (processMsg.wIdent == Messages.RM_STRUCK_MAG) {
+                                if (processMsg.wIdent == Messages.RM_STRUCK_MAG)
+                                {
                                     struckMessage.Tag2 = 1;
                                 }
-                                else {
+                                else
+                                {
                                     struckMessage.Tag2 = 0;
                                 }
                                 SendSocket(ClientMsg, EDCode.EncodePacket(struckMessage));
@@ -1258,15 +1541,19 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.RM_DEATH:
-                    if (processMsg.nParam3 == 1) {
+                    if (processMsg.nParam3 == 1)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_NOWDEATH, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
-                        if (processMsg.ActorId == ActorId) {
-                            if (M2Share.FunctionNPC != null) {
+                        if (processMsg.ActorId == ActorId)
+                        {
+                            if (M2Share.FunctionNPC != null)
+                            {
                                 M2Share.FunctionNPC.GotoLable(this, "@OnDeath", false);
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_DEATH, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                     }
                     CharDesc deathmessage = default;
@@ -1326,7 +1613,8 @@ namespace GameSrv.Player {
                 case Messages.RM_SYSMESSAGE3:
                 case Messages.RM_MOVEMESSAGE:
                 case Messages.RM_MERCHANTSAY:
-                    switch (processMsg.wIdent) {
+                    switch (processMsg.wIdent)
+                    {
                         case Messages.RM_HEAR:
                             ClientMsg = Messages.MakeMessage(Messages.SM_HEAR, processMsg.ActorId, HUtil32.MakeWord((ushort)processMsg.nParam1, (ushort)processMsg.nParam2), 0, 1);
                             break;
@@ -1389,7 +1677,8 @@ namespace GameSrv.Player {
                     break;
                 case Messages.RM_CLEAROBJECTS:
                     VisibleEvents.Clear();
-                    for (int i = 0; i < VisibleItems.Count; i++) {
+                    for (int i = 0; i < VisibleItems.Count; i++)
+                    {
                         VisibleItems[i] = null;
                     }
                     VisibleItems.Clear();
@@ -1403,7 +1692,8 @@ namespace GameSrv.Player {
                     SendServerConfig();
                     break;
                 case Messages.RM_BUTCH:
-                    if (processMsg.ActorId != 0) {
+                    if (processMsg.ActorId != 0)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_BUTCH, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         SendSocket(ClientMsg);
                     }
@@ -1525,7 +1815,8 @@ namespace GameSrv.Player {
                     SendSocket(ClientMsg);
                     break;
                 case Messages.RM_FLYAXE:
-                    if (M2Share.ActorMgr.Get(processMsg.nParam3) != null) {
+                    if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                    {
                         MessageBodyW flyaxeMessage = default;
                         flyaxeMessage.Param1 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrX;
                         flyaxeMessage.Param2 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
@@ -1536,7 +1827,8 @@ namespace GameSrv.Player {
                     }
                     break;
                 case Messages.RM_LIGHTING:
-                    if (M2Share.ActorMgr.Get(processMsg.nParam3) != null) {
+                    if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                    {
                         MessageBodyWL lightingMessage = default;
                         lightingMessage.Param1 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrX;
                         lightingMessage.Param2 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
@@ -1575,20 +1867,24 @@ namespace GameSrv.Player {
                     break;
                 case Messages.RM_SPACEMOVE_FIRE:
                 case Messages.RM_SPACEMOVE_FIRE2:
-                    if (processMsg.wIdent == Messages.RM_SPACEMOVE_FIRE) {
+                    if (processMsg.wIdent == Messages.RM_SPACEMOVE_FIRE)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_SPACEMOVE_HIDE, processMsg.ActorId, 0, 0, 0);
                     }
-                    else {
+                    else
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_SPACEMOVE_HIDE2, processMsg.ActorId, 0, 0, 0);
                     }
                     SendSocket(ClientMsg);
                     break;
                 case Messages.RM_SPACEMOVE_SHOW:
                 case Messages.RM_SPACEMOVE_SHOW2:
-                    if (processMsg.wIdent == Messages.RM_SPACEMOVE_SHOW) {
+                    if (processMsg.wIdent == Messages.RM_SPACEMOVE_SHOW)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_SPACEMOVE_SHOW, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                     }
-                    else {
+                    else
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_SPACEMOVE_SHOW2, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                     }
                     CharDesc showmessage = default;
@@ -1596,7 +1892,8 @@ namespace GameSrv.Player {
                     showmessage.Status = baseObject.CharStatus;
                     sendMsg = EDCode.EncodePacket(showmessage);
                     nObjCount = GetChrColor(baseObject);
-                    if (!string.IsNullOrEmpty(processMsg.Msg)) {
+                    if (!string.IsNullOrEmpty(processMsg.Msg))
+                    {
                         sendMsg = sendMsg + EDCode.EncodeString(processMsg.Msg + '/' + nObjCount);
                     }
                     SendSocket(ClientMsg, sendMsg);
@@ -1635,7 +1932,8 @@ namespace GameSrv.Player {
                     SendDefMessage(Messages.SM_INSTANCEHEALGUAGE, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0, "");
                     break;
                 case Messages.RM_CHANGEFACE:
-                    if (processMsg.nParam1 != 0 && processMsg.nParam2 != 0) {
+                    if (processMsg.nParam1 != 0 && processMsg.nParam2 != 0)
+                    {
                         ClientMsg = Messages.MakeMessage(Messages.SM_CHANGEFACE, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0);
                         CharDesc changefacemessae = default;
                         changefacemessae.Feature = M2Share.ActorMgr.Get(processMsg.nParam2).GetFeature(this);
@@ -1730,41 +2028,54 @@ namespace GameSrv.Player {
             return result;
         }
 
-        public override void Disappear() {
-            if (BoReadyRun) {
+        public override void Disappear()
+        {
+            if (BoReadyRun)
+            {
                 DisappearA();
             }
-            if (Transparent && HideMode) {
+            if (Transparent && HideMode)
+            {
                 StatusTimeArr[PoisonState.STATETRANSPARENT] = 0;
             }
-            if (GroupOwner != 0) {
+            if (GroupOwner != 0)
+            {
                 PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
                 groupOwnerPlay.DelMember(this);
             }
-            if (MyGuild != null) {
+            if (MyGuild != null)
+            {
                 MyGuild.DelHumanObj(this);
             }
             LogonTimcCost();
             base.Disappear();
         }
 
-        internal override void DropUseItems(int baseObject) {
+        internal override void DropUseItems(int baseObject)
+        {
             const string sExceptionMsg = "[Exception] TPlayObject::DropUseItems";
-            try {
-                if (AngryRing || NoDropUseItem) {
+            try
+            {
+                if (AngryRing || NoDropUseItem)
+                {
                     return;
                 }
                 IList<DeleteItem> dropItemList = new List<DeleteItem>();
                 StdItem stdItem;
-                for (int i = 0; i < UseItems.Length; i++) {
-                    if (UseItems[i] == null) {
+                for (int i = 0; i < UseItems.Length; i++)
+                {
+                    if (UseItems[i] == null)
+                    {
                         continue;
                     }
                     stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                    if (stdItem != null) {
-                        if ((stdItem.ItemDesc & 8) != 0) {
+                    if (stdItem != null)
+                    {
+                        if ((stdItem.ItemDesc & 8) != 0)
+                        {
                             dropItemList.Add(new DeleteItem() { MakeIndex = UseItems[i].MakeIndex });
-                            if (stdItem.NeedIdentify == 1) {
+                            if (stdItem.NeedIdentify == 1)
+                            {
                                 M2Share.EventSource.AddEventLog(16, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                             }
                             UseItems[i].Index = 0;
@@ -1772,20 +2083,28 @@ namespace GameSrv.Player {
                     }
                 }
                 int nRate = PvpLevel() > 2 ? M2Share.Config.DieRedDropUseItemRate : M2Share.Config.DieDropUseItemRate;
-                for (int i = 0; i < UseItems.Length; i++) {
-                    if (M2Share.RandomNumber.Random(nRate) != 0) {
+                for (int i = 0; i < UseItems.Length; i++)
+                {
+                    if (M2Share.RandomNumber.Random(nRate) != 0)
+                    {
                         continue;
                     }
-                    if (UseItems[i] != null && M2Share.InDisableTakeOffList(UseItems[i].Index)) {
+                    if (UseItems[i] != null && M2Share.InDisableTakeOffList(UseItems[i].Index))
+                    {
                         continue;
                     }
                     // 检查是否在禁止取下列表,如果在列表中则不掉此物品
-                    if (DropItemDown(UseItems[i], 2, true, baseObject, ActorId)) {
+                    if (DropItemDown(UseItems[i], 2, true, baseObject, ActorId))
+                    {
                         stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                        if (stdItem != null) {
-                            if ((stdItem.ItemDesc & 10) == 0) {
-                                if (Race == ActorRace.Play) {
-                                    dropItemList.Add(new DeleteItem() {
+                        if (stdItem != null)
+                        {
+                            if ((stdItem.ItemDesc & 10) == 0)
+                            {
+                                if (Race == ActorRace.Play)
+                                {
+                                    dropItemList.Add(new DeleteItem()
+                                    {
                                         ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index),
                                         MakeIndex = UseItems[i].MakeIndex
                                     });
@@ -1795,13 +2114,15 @@ namespace GameSrv.Player {
                         }
                     }
                 }
-                if (dropItemList.Count > 0) {
+                if (dropItemList.Count > 0)
+                {
                     int objectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(objectId, dropItemList);
                     SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 M2Share.Logger.Error(sExceptionMsg);
                 M2Share.Logger.Error(ex.StackTrace);
             }
@@ -1810,25 +2131,33 @@ namespace GameSrv.Player {
         /// <summary>
         /// 蜡烛勋章减少持久
         /// </summary>
-        private void UseLamp() {
+        private void UseLamp()
+        {
             const string sExceptionMsg = "[Exception] TBaseObject::UseLamp";
-            try {
-                if (UseItems[ItemLocation.RighThand] != null && UseItems[ItemLocation.RighThand].Index > 0) {
+            try
+            {
+                if (UseItems[ItemLocation.RighThand] != null && UseItems[ItemLocation.RighThand].Index > 0)
+                {
                     StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.RighThand].Index);
-                    if ((stdItem == null) || (stdItem.SpecialPwr != 0)) {
+                    if ((stdItem == null) || (stdItem.SpecialPwr != 0))
+                    {
                         return;
                     }
                     int nOldDura = HUtil32.Round((ushort)(UseItems[ItemLocation.RighThand].Dura / 1000));
                     ushort nDura;
-                    if (M2Share.Config.DecLampDura) {
+                    if (M2Share.Config.DecLampDura)
+                    {
                         nDura = (ushort)(UseItems[ItemLocation.RighThand].Dura - 1);
                     }
-                    else {
+                    else
+                    {
                         nDura = UseItems[ItemLocation.RighThand].Dura;
                     }
-                    if (nDura <= 0) {
+                    if (nDura <= 0)
+                    {
                         UseItems[ItemLocation.RighThand].Dura = 0;
-                        if (Race == ActorRace.Play) {
+                        if (Race == ActorRace.Play)
+                        {
                             SendDelItems(UseItems[ItemLocation.RighThand]);
                         }
                         UseItems[ItemLocation.RighThand].Index = 0;
@@ -1837,15 +2166,18 @@ namespace GameSrv.Player {
                         SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
                         RecalcAbilitys();
                     }
-                    else {
+                    else
+                    {
                         UseItems[ItemLocation.RighThand].Dura = nDura;
                     }
-                    if (nOldDura != HUtil32.Round(nDura / 1000)) {
+                    if (nOldDura != HUtil32.Round(nDura / 1000))
+                    {
                         SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, UseItems[ItemLocation.RighThand].Dura, 0, 0, "");
                     }
                 }
             }
-            catch {
+            catch
+            {
                 M2Share.Logger.Error(sExceptionMsg);
             }
         }
