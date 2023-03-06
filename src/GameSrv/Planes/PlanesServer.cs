@@ -25,9 +25,9 @@ namespace GameSrv.Planes {
             _groupMessageHandle = new PlanesMessage();
         }
 
-        public void StartSnapsServer() {
-            _msgServer.Start(M2Share.Config.MsgSrvAddr, M2Share.Config.MsgSrvPort);
-            M2Share.Logger.Info($"节点数据服务[{M2Share.Config.MsgSrvAddr}:{M2Share.Config.MsgSrvPort}]已启动.");
+        public void StartPlanesServer() {
+            _msgServer.Start(M2Share.Config.MasterSrvAddr, M2Share.Config.MasterSrvPort);
+            M2Share.Logger.Info($"节点数据服务[{M2Share.Config.MasterSrvAddr}:{M2Share.Config.MasterSrvPort}]已启动.");
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr) {

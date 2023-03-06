@@ -228,12 +228,12 @@ namespace GameSrv {
                 }
                 _logger.Info("游戏处理引擎初始化成功...");
                 if (M2Share.ServerIndex == 0) {
-                    PlanesServer.Instance.StartSnapsServer();
-                    _logger.Debug("当前服务运行主节点模式...");
+                    PlanesServer.Instance.StartPlanesServer();
+                    _logger.Debug("主机运行模式...");
                 }
                 else {
-                    PlanesClient.Instance.ConnectMsgServer();
-                    _logger.Info($"当前运行从节点模式...[{M2Share.Config.MsgSrvAddr}:{M2Share.Config.MsgSrvPort}]");
+                    PlanesClient.Instance.ConnectPlanesServer();
+                    _logger.Info($"节点运行模式...[{M2Share.Config.MasterSrvAddr}:{M2Share.Config.MasterSrvPort}]");
                 }
                 IdSrvClient.Instance.Initialize();
                 M2Share.GuildMgr.LoadGuildInfo();

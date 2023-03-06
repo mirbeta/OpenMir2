@@ -26,7 +26,7 @@ namespace GameSrv.Planes {
         }
 
         private PlanesClient() {
-            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.MsgSrvAddr), M2Share.Config.MsgSrvPort));
+            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.MasterSrvAddr), M2Share.Config.MasterSrvPort));
             _msgClient.OnConnected += MsgClientConnect;
             _msgClient.OnReceivedData += MsgClientRead;
             _msgClient.OnError += MsgClientError;
@@ -34,7 +34,7 @@ namespace GameSrv.Planes {
             _groupMessageHandle = new PlanesMessage();
         }
 
-        public void ConnectMsgServer() {
+        public void ConnectPlanesServer() {
             _msgClient.Connect();
         }
 

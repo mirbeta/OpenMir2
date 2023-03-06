@@ -70,13 +70,13 @@ namespace GameSrv.Conf.Model {
         public string sIDSAddr;
         public int nIDSPort;
         /// <summary>
-        /// Master节点服务器IP
+        /// Master服务器IP
         /// </summary>
-        public string MsgSrvAddr;
+        public string MasterSrvAddr;
         /// <summary>
-        /// Master节点服务器端口
+        /// Master服务器端口
         /// </summary>
-        public int MsgSrvPort;
+        public int MasterSrvPort;
         /// <summary>
         /// 服务器关闭倒计时秒数
         /// </summary>
@@ -1067,8 +1067,8 @@ namespace GameSrv.Conf.Model {
             nDBPort = 6000;
             sIDSAddr = "127.0.0.1";
             nIDSPort = 5600;
-            MsgSrvAddr = "127.0.0.1";
-            MsgSrvPort = 4900;
+            MasterSrvAddr = "127.0.0.1";
+            MasterSrvPort = 4900;
             LogServerAddr = "127.0.0.1";
             LogServerPort = 10000;
             DiscountForNightTime = false;

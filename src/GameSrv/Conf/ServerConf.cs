@@ -29,8 +29,8 @@ namespace GameSrv.Conf {
             M2Share.Config.nDBPort = ReadWriteInteger("Server", "DBPort", M2Share.Config.nDBPort);
             M2Share.Config.sIDSAddr = ReadWriteString("Server", "IDSAddr", M2Share.Config.sIDSAddr);
             M2Share.Config.nIDSPort = ReadWriteInteger("Server", "IDSPort", M2Share.Config.nIDSPort);
-            M2Share.Config.MsgSrvAddr = ReadWriteString("Server", "MsgSrvAddr", M2Share.Config.MsgSrvAddr);
-            M2Share.Config.MsgSrvPort = ReadWriteInteger("Server", "MsgSrvPort", M2Share.Config.MsgSrvPort);
+            M2Share.Config.MasterSrvAddr = ReadWriteString("Server", "MsgSrvAddr", M2Share.Config.MasterSrvAddr);
+            M2Share.Config.MasterSrvPort = ReadWriteInteger("Server", "MsgSrvPort", M2Share.Config.MasterSrvPort);
             M2Share.Config.LogServerAddr = ReadWriteString("Server", "LogServerAddr", M2Share.Config.LogServerAddr);
             M2Share.Config.LogServerPort = ReadWriteInteger("Server", "LogServerPort", M2Share.Config.LogServerPort);
             M2Share.Config.DiscountForNightTime = ReadWriteString("Server", "DiscountForNightTime", HUtil32.BoolToStr(M2Share.Config.DiscountForNightTime)).CompareTo("TRUE".ToLower()) == 0;
