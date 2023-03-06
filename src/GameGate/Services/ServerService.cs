@@ -100,6 +100,7 @@ namespace GameGate.Services
             var clientThread = ServerMgr.GetClientThread(out threadId);
             if (clientThread == null || threadId < 0)
             {
+                //todo 这里应该直接断开玩家连接，并在客户端尽兴提示
                 _logger.Debug("获取GameSvr服务器实例失败，请确认GameGate和GameSvr是否链接正常。");
                 return;
             }

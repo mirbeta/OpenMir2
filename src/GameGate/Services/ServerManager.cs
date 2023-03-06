@@ -159,14 +159,14 @@ namespace GameGate.Services
             threadId = -1;
             if (!_serverServices.Any())
                 return null;
-            if (_serverServices.Length == 1)
+            var availableList = _serverServices.Where(x => x.ClientThread.Running == RunningState.Runing).ToArray();//允许分配玩家连接
+            if (availableList.Length == 1)
             {
-                threadId = 0;
-                return _serverServices[0].ClientThread;
+                return availableList[0].ClientThread;
             }
-            var random = RandomNumber.GetInstance().Random(_serverServices.Length);
+            var random = RandomNumber.GetInstance().Random(availableList.Length);
             threadId = random;
-            return _serverServices[random].ClientThread;
+            return availableList[random].ClientThread;
         }
 
         /// <summary>

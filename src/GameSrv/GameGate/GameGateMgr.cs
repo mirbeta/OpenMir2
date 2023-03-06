@@ -202,6 +202,28 @@ namespace GameSrv.GameGate {
             }
         }
 
+        public void SendGameStopMsg()
+        {
+            if (M2Share.StartReady)
+            {
+                if (GameGates.Length > 0)
+                {
+                    for (int i = 0; i < GameGates.Length; i++) //循环通知每一个网关，游戏引擎停止服务
+                    {
+                        if (GameGates[i] == null)
+                        {
+                            continue;
+                        }
+                        GameGateInfo gateInfo = GameGates[i].GateInfo;
+                        if (gateInfo.Socket != null && gateInfo.Socket.Connected)
+                        {
+                            GameGates[i].SendCheck(Grobal2.GM_STOP);
+                        }
+                    }
+                }
+            }
+        }
+
         public static void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx) {
             //todo 
             //var defMsg = EDCode.MakeDefaultMsg(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);

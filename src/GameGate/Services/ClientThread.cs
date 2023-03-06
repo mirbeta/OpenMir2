@@ -62,6 +62,10 @@ namespace GameGate.Services
         /// 接收总字节数
         /// </summary>
         private int ReceiveBytes { get; set; }
+        /// <summary>
+        /// 运行状态
+        /// </summary>
+        private RunningState RunningState { get; set; }
         private int CheckRecviceTick { get; set; }
         private int CheckServerTick { get; set; }
         private int CheckServerTimeMin { get; set; }
@@ -78,6 +82,7 @@ namespace GameGate.Services
         public ClientThread(IPEndPoint endPoint, GameGateInfo gameGate)
         {
             GateInfo = gameGate;
+            RunningState = RunningState.Runing;
             ReceiveBytes = 0;
             SendBytes = 0;
             Connected = false;
@@ -95,6 +100,8 @@ namespace GameGate.Services
         public string EndPoint => $"{ClientSocket.RemoteEndpoint}";
         
         public string ThreadId=> $"{GateInfo.ThreadId}";
+
+        public RunningState Running => RunningState;
 
         public void Start()
         {
@@ -248,6 +255,9 @@ namespace GameGate.Services
                     }
                     switch (packetHeader.Ident)
                     {
+                        case Grobal2.GM_STOP://游戏引擎停止服务,网关不在接收或分配用户连接到该游戏引擎
+                            RunningState = RunningState.Stop;//停止分配后，10分钟内不允许尝试连接服务器
+                            break;
                         case Grobal2.GM_CHECKSERVER:
                             CheckServerFail = false;
                             CheckServerTick = HUtil32.GetTickCount();
@@ -417,6 +427,15 @@ namespace GameGate.Services
         /// </summary>
         public void CheckConnectedState()
         {
+            if (Running == RunningState.Stop) //停止服务后暂时停止心跳连接检查
+            {
+                if ((HUtil32.GetTickCount() - CheckServerTick) > 60 * 10000) //10分钟分不允许尽兴链接服务器
+                {
+                    ReConnected();
+                    _logger.Debug($"游戏引擎维护时间结束,重新连接游戏引擎[{EndPoint}].");
+                }
+                return;
+            }
             if (GateReady)
             {
                 SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, 0, "");

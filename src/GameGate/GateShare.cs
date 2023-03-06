@@ -81,6 +81,12 @@ namespace GameGate
         }
     }
 
+    public enum RunningState : byte
+    {
+        Runing = 0,
+        Stop = 1
+    }
+
     public class SessionInfo
     {
         public Socket Socket;

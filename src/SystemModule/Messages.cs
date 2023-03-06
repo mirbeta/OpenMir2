@@ -484,6 +484,7 @@ namespace SystemModule
         public const int SM_RUNGATELOGOUT = 599;
         public const int SM_PLAYERCONFIG = 560;
         public const int GM_TEST = 20;
+        public const int GM_STOP = 21;
         public const int CM_42HIT = 42;
 
         public const int CM_QUERYVAL = 1065;
