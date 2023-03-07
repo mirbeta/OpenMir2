@@ -62,7 +62,7 @@ namespace GameSrv.RobotPlay
                     {
                         if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.25) || TargetCret.CrazyMode)
                         {
-                            if (AllowUseMagic(12))
+                            if (AllowUseMagic(MagicConst.SKILL_ERGUM))
                             {
                                 // 血少时或目标疯狂模式时，做隔位刺杀 
                                 if (!(Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 2 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 2))

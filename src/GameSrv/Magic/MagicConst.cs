@@ -17,7 +17,7 @@
         /// </summary>
         public const byte SKILL_ILKWANG = 4;
         /// <summary>
-        /// 未知
+        /// 大火球
         /// </summary>
         public const byte SKILL_FIREBALL2 = 5;
         /// <summary>
@@ -196,5 +196,9 @@
         public const byte SKILL_57 = 57;
         public const byte SKILL_58 = 58;
         public const byte SKILL_59 = 59;
+        /// <summary>
+        /// 四级雷电术
+        /// </summary>
+        public const byte SKILL_LIGHTENINGFOUR = 91;
     }
 }

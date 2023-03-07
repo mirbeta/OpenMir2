@@ -46,15 +46,18 @@ namespace GameSrv.RobotPlay
             return MRunPos.AttackCount >= nAttackCount;
         }
 
-        public bool DoThinkMotaeboPos(short wMagicID)
+        /// <summary>
+        /// 使用野蛮冲撞技能时，判断目标是否需要移动
+        /// </summary>
+        /// <returns></returns>
+        private bool DoThinkMotaeboPos(short wMagicID)
         {
             bool result = false;
             short nTargetX = 0;
             short nTargetY = 0;
-            byte btNewDir;
-            if (wMagicID == 27 && Master != null && TargetCret != null && AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && HUtil32.GetTickCount() - SkillUseTick[27] > 1000 * 10)
+            if (wMagicID == MagicConst.SKILL_MOOTEBO && Master != null && TargetCret != null && AllowUseMagic(MagicConst.SKILL_MOOTEBO) && TargetCret.Abil.Level < Abil.Level && CheckMagicInterval(27,  1000 * 10))
             {
-                btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
+                var btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                 {
                     result = Envir.CanWalk(nTargetX, nTargetY, true);
@@ -63,7 +66,7 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public bool MagPushArround(int MagicID, short wMagicID)
+        private bool MagPushArround(int MagicID, short wMagicID)
         {
             bool result = false;
             byte btNewDir;

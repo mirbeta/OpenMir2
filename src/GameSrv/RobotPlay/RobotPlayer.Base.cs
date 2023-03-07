@@ -1,6 +1,7 @@
 using GameSrv.Actor;
 using GameSrv.Event;
 using GameSrv.Items;
+using GameSrv.Magic;
 using GameSrv.Maps;
 using GameSrv.Player;
 using SystemModule.Consts;
@@ -29,7 +30,7 @@ namespace GameSrv.RobotPlay
                                 DelTargetCreat();
                             }
                         }
-                        if (!MBoAiStart)
+                        if (!RobotStart)
                         {
                             DelTargetCreat();
                         }
@@ -95,7 +96,7 @@ namespace GameSrv.RobotPlay
                                     ActionTick = HUtil32.GetTickCount();
                                     TargetX = TargetCret.CurrX;
                                     TargetY = TargetCret.CurrY;
-                                    if (AllowUseMagic(12) && Job == 0)
+                                    if (AllowUseMagic(MagicConst.SKILL_ERGUM) && Job == 0)
                                     {
                                         GetGotoXy(TargetCret, 2);
                                     }
@@ -872,7 +873,7 @@ namespace GameSrv.RobotPlay
 
         protected override void SearchTarget()
         {
-            if ((TargetCret == null || HUtil32.GetTickCount() - SearchTargetTick > 1000) && MBoAiStart)
+            if ((TargetCret == null || HUtil32.GetTickCount() - SearchTargetTick > 1000) && RobotStart)
             {
                 SearchTargetTick = HUtil32.GetTickCount();
                 if (TargetCret == null || !(TargetCret != null && TargetCret.Race == ActorRace.Play) || TargetCret.Master != null && TargetCret.Master.Race == ActorRace.Play || (HUtil32.GetTickCount() - StruckTick) > 15000)
@@ -891,9 +892,9 @@ namespace GameSrv.RobotPlay
             }
             else
             {
-                if (MBoAiStart)
+                if (RobotStart)
                 {
-                    MBoAiStart = false;
+                    RobotStart = false;
                 }
             }
             base.Die();

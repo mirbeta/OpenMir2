@@ -22,7 +22,7 @@ namespace GameSrv.RobotPlay
         /// <summary>
         /// 假人启动
         /// </summary>
-        public bool MBoAiStart;
+        public bool RobotStart;
         /// <summary>
         /// 挂机地图
         /// </summary>
@@ -49,7 +49,10 @@ namespace GameSrv.RobotPlay
         public bool BoSelSelf;
         public long AutoRepairItemTick;
         public long AutoAddHealthTick;
-        public long MDwThinkTick;
+        /// <summary>
+        /// 思考时间
+        /// </summary>
+        public long ThinkTick;
         public bool MBoDupMode;
         public long SearchUseMagic = 0;
         /// <summary>
@@ -70,7 +73,10 @@ namespace GameSrv.RobotPlay
         /// 是向守护坐标的累计数
         /// </summary>
         public int GotoProtectXyCount;
-        public long MDwPickUpItemTick;
+        /// <summary>
+        /// 拾取物品间隔
+        /// </summary>
+        public long PickUpItemTick;
         public MapItem MSelMapItem;
         /// <summary>
         /// 跑步计时
@@ -125,7 +131,7 @@ namespace GameSrv.RobotPlay
             AbilCopyToWAbil();
             IsRobot = true;
             LoginNoticeOk = true;
-            MBoAiStart = false; // 开始挂机
+            RobotStart = false; // 开始挂机
             ManagedEnvir = null; // 挂机地图
             MPath = null;
             MNPostion = -1;
@@ -136,13 +142,13 @@ namespace GameSrv.RobotPlay
             BoSelSelf = false;
             AutoAddHealthTick = HUtil32.GetTickCount();
             AutoRepairItemTick = HUtil32.GetTickCount();
-            MDwThinkTick = HUtil32.GetTickCount();
+            ThinkTick = HUtil32.GetTickCount();
             MBoDupMode = false;
             ProtectStatus = false;// 守护模式
             ProtectDest = true;// 到达守护坐标
             GotoProtectXyCount = 0;// 是向守护坐标的累计数
             MSelMapItem = null;
-            MDwPickUpItemTick = HUtil32.GetTickCount();
+            PickUpItemTick = HUtil32.GetTickCount();
             AiSayMsgList = new ArrayList();// 受攻击说话列表
             NAmuletIndx = 0;
             CanPickIng = false;
@@ -161,7 +167,7 @@ namespace GameSrv.RobotPlay
 
         public void Start(FindPathType pathType)
         {
-            if (!Ghost && !Death && !MBoAiStart)
+            if (!Ghost && !Death && !RobotStart)
             {
                 ManagedEnvir = Envir;
                 ProtectDest = false;
@@ -170,7 +176,7 @@ namespace GameSrv.RobotPlay
                 GotoProtectXyCount = 0;// 是向守护坐标的累计数
                 PointManager.PathType = pathType;
                 PointManager.Initialize(Envir);
-                MBoAiStart = true;
+                RobotStart = true;
                 MoveFailCount = 0;
                 if (M2Share.FunctionNPC != null)
                 {
@@ -182,9 +188,9 @@ namespace GameSrv.RobotPlay
 
         public void Stop()
         {
-            if (MBoAiStart)
+            if (RobotStart)
             {
-                MBoAiStart = false;
+                RobotStart = false;
                 MoveFailCount = 0;
                 MPath = null;
                 MNPostion = -1;
@@ -237,9 +243,9 @@ namespace GameSrv.RobotPlay
 
         public override void MakeGhost()
         {
-            if (MBoAiStart)
+            if (RobotStart)
             {
-                MBoAiStart = false;
+                RobotStart = false;
             }
             base.MakeGhost();
         }
@@ -611,11 +617,11 @@ namespace GameSrv.RobotPlay
             VisibleMapItem visibleMapItem = null;
             try
             {
-                if ((HUtil32.GetTickCount() - MDwPickUpItemTick) < nPickUpTime)
+                if ((HUtil32.GetTickCount() - PickUpItemTick) < nPickUpTime)
                 {
                     return false;
                 }
-                MDwPickUpItemTick = HUtil32.GetTickCount();
+                PickUpItemTick = HUtil32.GetTickCount();
                 if (IsEnoughBag() && TargetCret == null)
                 {
                     var boFound = false;
@@ -955,7 +961,7 @@ namespace GameSrv.RobotPlay
 
         protected override void Wondering()
         {
-            if (MBoAiStart && TargetCret == null && !CanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
+            if (RobotStart && TargetCret == null && !CanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
             {
                 var nX = CurrX;
                 var nY = CurrY;
@@ -1271,9 +1277,9 @@ namespace GameSrv.RobotPlay
             {
                 result++;
             }
-            for (int i = 0; i < 7; i++)
+            for (byte i = 0; i < 7; i++)
             {
-                if (Envir.GetNextPosition(nCurrX, nCurrY, (byte)i, 1, ref nX, ref nY))
+                if (Envir.GetNextPosition(nCurrX, nCurrY, i, 1, ref nX, ref nY))
                 {
                     baseObject = Envir.GetMovingObject(nX, nY, true);
                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost && IsProperTarget(baseObject))
@@ -1419,10 +1425,10 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private bool AllowUseMagic(short wMagIdx)
+        private bool AllowUseMagic(short magIdx)
         {
             bool result = false;
-            UserMagic userMagic = FindMagic(wMagIdx);
+            UserMagic userMagic = FindMagic(magIdx);
             if (userMagic != null)
             {
                 if (!MagicManager.IsWarrSkill(userMagic.MagIdx))
@@ -1956,9 +1962,9 @@ namespace GameSrv.RobotPlay
                         return true;
                     }
                 }
-                if (HUtil32.GetTickCount() - MDwThinkTick > 3000)
+                if (HUtil32.GetTickCount() - ThinkTick > 3000)
                 {
-                    MDwThinkTick = HUtil32.GetTickCount();
+                    ThinkTick = HUtil32.GetTickCount();
                     if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
                     {
                         MBoDupMode = true;
@@ -2044,7 +2050,7 @@ namespace GameSrv.RobotPlay
                     switch (AutoMagicId)
                     {
                         case MagicConst.SKILL_ERGUM:
-                            if (AllowUseMagic(12) && Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref TargetX, ref TargetY))
+                            if (AllowUseMagic(MagicConst.SKILL_ERGUM) && Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref TargetX, ref TargetY))
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2)
                                 {
@@ -2069,7 +2075,7 @@ namespace GameSrv.RobotPlay
                                 }
                             }
                             AutoMagicId = 0;
-                            if (AllowUseMagic(12))
+                            if (AllowUseMagic(MagicConst.SKILL_ERGUM))
                             {
                                 if (Math.Abs(TargetCret.CurrX - CurrX) > 2 || Math.Abs(TargetCret.CurrY - CurrY) > 2)
                                 {
@@ -2100,7 +2106,7 @@ namespace GameSrv.RobotPlay
                                 }
                                 else
                                 {
-                                    if (AllowUseMagic(12))
+                                    if (AllowUseMagic(MagicConst.SKILL_ERGUM))
                                     {
                                         if (Math.Abs(CurrX - TargetCret.CurrX) != 2 && Math.Abs(CurrY - TargetCret.CurrY) != 0 || Math.Abs(CurrX - TargetCret.CurrX) != 0 && Math.Abs(CurrY - TargetCret.CurrY) != 2 || Math.Abs(CurrX - TargetCret.CurrX) != 2 && Math.Abs(CurrY - TargetCret.CurrY) != 2)
                                         {
@@ -2118,8 +2124,7 @@ namespace GameSrv.RobotPlay
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed);
-                                    // 防止负数出错
+                                    dwAttackTime = HUtil32._MAX(0, (int)M2Share.Config.dwHeroWarrorAttackTime - HitSpeed * M2Share.Config.ItemSpeed);// 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
                                         HitMode = 9;
@@ -2140,7 +2145,7 @@ namespace GameSrv.RobotPlay
                                 }
                             }
                             AutoMagicId = 0;
-                            if (AllowUseMagic(12))
+                            if (AllowUseMagic(MagicConst.SKILL_ERGUM))
                             {
                                 if (Math.Abs(TargetCret.CurrX - CurrX) > 2 || Math.Abs(TargetCret.CurrY - CurrY) > 2)
                                 {
@@ -2162,7 +2167,7 @@ namespace GameSrv.RobotPlay
                             }
                             break;
                         default:
-                            if (AllowUseMagic(12))
+                            if (AllowUseMagic(MagicConst.SKILL_ERGUM))
                             {
                                 if (!(Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 0 || Math.Abs(TargetCret.CurrX - CurrX) == 1 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 2 && Math.Abs(TargetCret.CurrY - CurrY) == 2 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 1 || Math.Abs(TargetCret.CurrX - CurrX) == 0 && Math.Abs(TargetCret.CurrY - CurrY) == 2))
                                 {
@@ -2616,31 +2621,23 @@ namespace GameSrv.RobotPlay
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    if (AllowUseMagic(26) && HUtil32.GetTickCount() - LatestFireHitTick > 9000)// 烈火
+                    if (AllowUseMagic(MagicConst.SKILL_FIRESWORD) && HUtil32.GetTickCount() - LatestFireHitTick > 9000)// 烈火
                     {
                         FireHitSkill = true;
-                        result = 26;
-                        return result;
+                        return MagicConst.SKILL_FIRESWORD;
                     }
-                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level)
+                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level)// PK时,使用野蛮冲撞 
                     {
-                        // PK时,使用野蛮冲撞 
-                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - SkillUseTick[27] > 10000)
+                        if (AllowUseMagic(MagicConst.SKILL_MOOTEBO) && CheckMagicInterval(MagicConst.SKILL_MOOTEBO, 10000))// pk时如果对方等级比自己低就每隔一段时间用一次野蛮  
                         {
-                            // pk时如果对方等级比自己低就每隔一段时间用一次野蛮  
-                            SkillUseTick[27] = HUtil32.GetTickCount();
-                            result = 27;
-                            return result;
+                            return MagicConst.SKILL_MOOTEBO;
                         }
                     }
                     else
                     {
-                        // 打怪使用 
-                        if (AllowUseMagic(27) && HUtil32.GetTickCount() - SkillUseTick[27] > 10000 && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.85))
+                        if (AllowUseMagic(MagicConst.SKILL_MOOTEBO) && CheckMagicInterval(MagicConst.SKILL_MOOTEBO, 10000) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.85))// 打怪使用 
                         {
-                            SkillUseTick[27] = HUtil32.GetTickCount();
-                            result = 27;
-                            return result;
+                            return MagicConst.SKILL_MOOTEBO;
                         }
                     }
                     if (TargetCret.Master != null)
@@ -2649,27 +2646,21 @@ namespace GameSrv.RobotPlay
                     }
                     if (CheckTargetXyCount1(CurrX, CurrY, 1) > 1)
                     {
-                        switch (M2Share.RandomNumber.Random(3))
+                        switch (M2Share.RandomNumber.Random(3))// 被怪物包围
                         {
-                            case 0:// 被怪物包围
-                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                            case 0:
+                                if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
-                                    SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
-                                    result = 41;
-                                    return result;
+                                    return 41;
                                 }
-                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - SkillUseTick[7] > 10000)// 攻杀剑术 
+                                if (AllowUseMagic(MagicConst.SKILL_YEDO) && CheckMagicInterval(MagicConst.SKILL_YEDO, 10000))// 攻杀剑术 
                                 {
-                                    SkillUseTick[7] = HUtil32.GetTickCount();
                                     PowerHit = true;// 开启攻杀
-                                    result = 7;
-                                    return result;
+                                    return MagicConst.SKILL_YEDO;
                                 }
-                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - SkillUseTick[39] > 10000)
+                                if (AllowUseMagic(MagicConst.SKILL_GROUPDEDING) && CheckMagicInterval(MagicConst.SKILL_GROUPDEDING, 10000))
                                 {
-                                    SkillUseTick[39] = HUtil32.GetTickCount();// 彻地钉
-                                    result = 39;
-                                    return result;
+                                    return MagicConst.SKILL_GROUPDEDING;
                                 }
                                 if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                                 {
@@ -2679,8 +2670,7 @@ namespace GameSrv.RobotPlay
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = MagicConst.SKILL_BANWOL;
-                                        return result;
+                                        return MagicConst.SKILL_BANWOL;
                                     }
                                 }
                                 if (AllowUseMagic(40))// 英雄抱月刀法
@@ -2689,38 +2679,30 @@ namespace GameSrv.RobotPlay
                                     {
                                         SkillCrsOnOff(true);
                                     }
-                                    result = 40;
-                                    return result;
+                                    return 40;
                                 }
-                                if (AllowUseMagic(12))// 英雄刺杀剑术
+                                if (AllowUseMagic(MagicConst.SKILL_ERGUM))// 英雄刺杀剑术
                                 {
                                     if (!UseThrusting)
                                     {
                                         ThrustingOnOff(true);
                                     }
-                                    result = 12;
-                                    return result;
+                                    return MagicConst.SKILL_ERGUM;
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
-                                    SkillUseTick[41] = HUtil32.GetTickCount(); // 狮子吼
-                                    result = 41;
-                                    return result;
+                                    return 41;
                                 }
-                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - SkillUseTick[7] > 10000)// 攻杀剑术 
+                                if (AllowUseMagic(MagicConst.SKILL_YEDO) && CheckMagicInterval(MagicConst.SKILL_YEDO, 10000))// 攻杀剑术 
                                 {
-                                    SkillUseTick[7] = HUtil32.GetTickCount();
                                     PowerHit = true;
-                                    result = 7;
-                                    return result;
+                                    return MagicConst.SKILL_YEDO;
                                 }
-                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - SkillUseTick[39] > 10000)
+                                if (AllowUseMagic(MagicConst.SKILL_GROUPDEDING) && CheckMagicInterval(MagicConst.SKILL_GROUPDEDING, 10000))
                                 {
-                                    SkillUseTick[39] = HUtil32.GetTickCount(); // 英雄彻地钉
-                                    result = 39;
-                                    return result;
+                                    return MagicConst.SKILL_GROUPDEDING;
                                 }
                                 if (AllowUseMagic(40))// 英雄抱月刀法
                                 {
@@ -2728,8 +2710,7 @@ namespace GameSrv.RobotPlay
                                     {
                                         SkillCrsOnOff(true);
                                     }
-                                    result = 40;
-                                    return result;
+                                    return 40;
                                 }
                                 if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                                 {
@@ -2739,39 +2720,31 @@ namespace GameSrv.RobotPlay
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = MagicConst.SKILL_BANWOL;
-                                        return result;
+                                        return MagicConst.SKILL_BANWOL;
                                     }
                                 }
-                                if (AllowUseMagic(12))// 英雄刺杀剑术
+                                if (AllowUseMagic(MagicConst.SKILL_ERGUM))// 英雄刺杀剑术
                                 {
                                     if (!UseThrusting)
                                     {
                                         ThrustingOnOff(true);
                                     }
-                                    result = 12;
-                                    return result;
+                                    return MagicConst.SKILL_ERGUM;
                                 }
                                 break;
                             case 2:
-                                if (AllowUseMagic(41) && HUtil32.GetTickCount() - SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
-                                    SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
-                                    result = 41;
-                                    return result;
+                                    return 41;
                                 }
-                                if (AllowUseMagic(39) && HUtil32.GetTickCount() - SkillUseTick[39] > 10000)
+                                if (AllowUseMagic(MagicConst.SKILL_GROUPDEDING) && CheckMagicInterval(MagicConst.SKILL_GROUPDEDING, 10000))
                                 {
-                                    SkillUseTick[39] = HUtil32.GetTickCount();// 英雄彻地钉
-                                    result = 39;
-                                    return result;
+                                    return MagicConst.SKILL_GROUPDEDING;
                                 }
-                                if (AllowUseMagic(7) && HUtil32.GetTickCount() - SkillUseTick[7] > 10000)// 攻杀剑术
+                                if (AllowUseMagic(MagicConst.SKILL_YEDO) && CheckMagicInterval(MagicConst.SKILL_YEDO, 10000))// 攻杀剑术
                                 {
-                                    SkillUseTick[7] = HUtil32.GetTickCount();
                                     PowerHit = true;//  开启攻杀
-                                    result = 7;
-                                    return result;
+                                    return MagicConst.SKILL_YEDO;
                                 }
                                 if (AllowUseMagic(40))// 英雄抱月刀法
                                 {
@@ -2779,8 +2752,7 @@ namespace GameSrv.RobotPlay
                                     {
                                         SkillCrsOnOff(true);
                                     }
-                                    result = 40;
-                                    return result;
+                                    return 40;
                                 }
                                 if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                                 {
@@ -2790,42 +2762,36 @@ namespace GameSrv.RobotPlay
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = MagicConst.SKILL_BANWOL;
-                                        return result;
+                                        return MagicConst.SKILL_BANWOL;
                                     }
                                 }
-                                if (AllowUseMagic(12)) // 英雄刺杀剑术
+                                if (AllowUseMagic(MagicConst.SKILL_ERGUM)) // 英雄刺杀剑术
                                 {
                                     if (!UseThrusting)
                                     {
                                         ThrustingOnOff(true);
                                     }
-                                    result = 12;
-                                    return result;
+                                    return 12;
                                 }
                                 break;
                         }
                     }
                     else
                     {
-                        if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXyCount1(CurrX, CurrY, 1) > 1)
+                        if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXyCount1(CurrX, CurrY, 1) > 1) // PK  身边超过2个目标才使用
                         {
-                            // PK  身边超过2个目标才使用
-                            if (AllowUseMagic(40) && (HUtil32.GetTickCount() - SkillUseTick[40]) > 3000)// 英雄抱月刀法
+                            if (AllowUseMagic(40) && CheckMagicInterval(40, 3000))// 英雄抱月刀法
                             {
-                                SkillUseTick[40] = HUtil32.GetTickCount();
                                 if (!CrsHitkill)
                                 {
                                     SkillCrsOnOff(true);
                                 }
-                                result = 40;
-                                return result;
+                                return 40;
                             }
-                            if ((HUtil32.GetTickCount() - SkillUseTick[25]) > 1500)
+                            if (CheckMagicInterval(MagicConst.SKILL_BANWOL, 3000))
                             {
-                                if (AllowUseMagic(MagicConst.SKILL_BANWOL))
+                                if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                                 {
-                                    // 半月弯刀
                                     if (CheckTargetXyCount2(MagicConst.SKILL_BANWOL) > 0)
                                     {
                                         SkillUseTick[25] = HUtil32.GetTickCount();
@@ -2833,58 +2799,47 @@ namespace GameSrv.RobotPlay
                                         {
                                             HalfMoonOnOff(true);
                                         }
-                                        result = MagicConst.SKILL_BANWOL;
-                                        return result;
+                                        return MagicConst.SKILL_BANWOL;
                                     }
                                 }
                             }
                         }
-                        if (AllowUseMagic(7) && (HUtil32.GetTickCount() - SkillUseTick[7]) > 10000) // 少于三个怪用 刺杀剑术
+                        if (AllowUseMagic(MagicConst.SKILL_YEDO) && CheckMagicInterval(MagicConst.SKILL_YEDO, 10000)) // 少于三个怪用 刺杀剑术
                         {
-                            SkillUseTick[7] = HUtil32.GetTickCount();
                             PowerHit = true;// 开启攻杀
-                            result = 7;
-                            return result;
+                            return MagicConst.SKILL_YEDO;
                         }
-                        if (HUtil32.GetTickCount() - SkillUseTick[12] > 1000)
+                        if (CheckMagicInterval(MagicConst.SKILL_ERGUM, 1000))
                         {
-                            if (AllowUseMagic(12))// 英雄刺杀剑术
+                            if (AllowUseMagic(MagicConst.SKILL_ERGUM))// 英雄刺杀剑术
                             {
                                 if (!UseThrusting)
                                 {
                                     ThrustingOnOff(true);
                                 }
-                                SkillUseTick[12] = HUtil32.GetTickCount();
-                                result = 12;
-                                return result;
+                                return MagicConst.SKILL_ERGUM;
                             }
                         }
                     }
                     // 从高到低使用魔法
-                    if (AllowUseMagic(26) && (HUtil32.GetTickCount() - LatestFireHitTick) > 9000)// 烈火
+                    if (AllowUseMagic(MagicConst.SKILL_FIRESWORD) && (HUtil32.GetTickCount() - LatestFireHitTick) > 9000)// 烈火
                     {
                         FireHitSkill = true;
-                        result = 26;
-                        return result;
+                        return MagicConst.SKILL_FIRESWORD;
                     }
-                    if (AllowUseMagic(40) && (HUtil32.GetTickCount() - SkillUseTick[40]) > 3000 && CheckTargetXyCount1(CurrX, CurrY, 1) > 1)
+                    if (AllowUseMagic(40) && CheckMagicInterval(40, 3000) && CheckTargetXyCount1(CurrX, CurrY, 1) > 1)// 英雄抱月刀法
                     {
-                        // 英雄抱月刀法
                         if (!CrsHitkill)
                         {
                             SkillCrsOnOff(true);
                         }
-                        SkillUseTick[40] = HUtil32.GetTickCount();
-                        result = 40;
-                        return result;
+                        return 40;
                     }
-                    if (AllowUseMagic(39) && (HUtil32.GetTickCount() - SkillUseTick[39]) > 3000) // 英雄彻地钉
+                    if (AllowUseMagic(MagicConst.SKILL_GROUPDEDING) && CheckMagicInterval(MagicConst.SKILL_GROUPDEDING, 3000)) // 英雄彻地钉
                     {
-                        SkillUseTick[39] = HUtil32.GetTickCount();
-                        result = 39;
-                        return result;
+                        return MagicConst.SKILL_GROUPDEDING;
                     }
-                    if ((HUtil32.GetTickCount() - SkillUseTick[25]) > 3000)
+                    if (CheckMagicInterval(MagicConst.SKILL_BANWOL, 3000))
                     {
                         if (AllowUseMagic(MagicConst.SKILL_BANWOL))// 半月弯刀
                         {
@@ -2892,55 +2847,44 @@ namespace GameSrv.RobotPlay
                             {
                                 HalfMoonOnOff(true);
                             }
-                            SkillUseTick[25] = HUtil32.GetTickCount();
-                            result = MagicConst.SKILL_BANWOL;
-                            return result;
+                            return MagicConst.SKILL_BANWOL;
                         }
                     }
-                    if ((HUtil32.GetTickCount() - SkillUseTick[12]) > 3000)// 英雄刺杀剑术
+                    if (CheckMagicInterval(MagicConst.SKILL_ERGUM, 3000))// 英雄刺杀剑术
                     {
-                        if (AllowUseMagic(12))
+                        if (AllowUseMagic(MagicConst.SKILL_ERGUM))
                         {
                             if (!UseThrusting)
                             {
                                 ThrustingOnOff(true);
                             }
                             SkillUseTick[12] = HUtil32.GetTickCount();
-                            result = 12;
-                            return result;
+                            return MagicConst.SKILL_ERGUM;
                         }
                     }
-                    if (AllowUseMagic(7) && (HUtil32.GetTickCount() - SkillUseTick[7]) > 3000)// 攻杀剑术
+                    if (AllowUseMagic(MagicConst.SKILL_YEDO) && CheckMagicInterval(MagicConst.SKILL_YEDO, 3000))// 攻杀剑术
                     {
                         PowerHit = true;
-                        SkillUseTick[7] = HUtil32.GetTickCount();
-                        result = 7;
-                        return result;
+                        return MagicConst.SKILL_YEDO;
                     }
-                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(WAbil.MaxHP * 0.6))
+                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(WAbil.MaxHP * 0.6))// PK时,使用野蛮冲撞
                     {
-                        // PK时,使用野蛮冲撞
-                        if (AllowUseMagic(27) && (HUtil32.GetTickCount() - SkillUseTick[27]) > 3000)
+                        if (AllowUseMagic(MagicConst.SKILL_MOOTEBO) && CheckMagicInterval(MagicConst.SKILL_MOOTEBO, 3000))
                         {
                             SkillUseTick[27] = HUtil32.GetTickCount();
-                            result = 27;
-                            return result;
+                            return MagicConst.SKILL_MOOTEBO;
                         }
                     }
                     else
                     {
-                        if (AllowUseMagic(27) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.6) && HUtil32.GetTickCount() - SkillUseTick[27] > 3000)
+                        if (AllowUseMagic(MagicConst.SKILL_MOOTEBO) && TargetCret.Abil.Level < Abil.Level && WAbil.HP <= Math.Round(Abil.MaxHP * 0.6) && CheckMagicInterval(MagicConst.SKILL_MOOTEBO, 3000))
                         {
-                            SkillUseTick[27] = HUtil32.GetTickCount();
-                            result = 27;
-                            return result;
+                            return MagicConst.SKILL_MOOTEBO;
                         }
                     }
-                    if (AllowUseMagic(41) && HUtil32.GetTickCount() - SkillUseTick[41] > 10000 && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                    if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || M2Share.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                     {
-                        SkillUseTick[41] = HUtil32.GetTickCount();// 狮子吼
-                        result = 41;
-                        return result;
+                        return 41;
                     }
                     break;
                 case PlayJob.Wizard: // 法师
@@ -2948,372 +2892,300 @@ namespace GameSrv.RobotPlay
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
                         {
-                            result = 66;
-                            return result;
+                            return 66;
                         }
-                        if (AllowUseMagic(31))
+                        if (AllowUseMagic(MagicConst.SKILL_SHIELD))
                         {
-                            result = 31;
-                            return result;
+                            return MagicConst.SKILL_SHIELD;
                         }
                     }
-                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)
+                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)// PK时,旁边有人贴身,使用抗拒火环
                     {
-                        // PK时,旁边有人贴身,使用抗拒火环
-                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - SkillUseTick[8] > 3000)
+                        if (AllowUseMagic(MagicConst.SKILL_FIREWIND) && CheckMagicInterval(8, 3000))
                         {
-                            SkillUseTick[8] = HUtil32.GetTickCount();
-                            result = 8;
-                            return result;
+                            return MagicConst.SKILL_FIREWIND;
                         }
                     }
                     else
                     {
-                        // 打怪,怪级低于自己,并且有怪包围自己就用 抗拒火环
-                        if (AllowUseMagic(8) && HUtil32.GetTickCount() - SkillUseTick[8] > 3000 && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)
+                        if (AllowUseMagic(MagicConst.SKILL_FIREWIND) && CheckMagicInterval(MagicConst.SKILL_FIREWIND, 3000) && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level < Abil.Level)// 打怪,怪级低于自己,并且有怪包围自己就用 抗拒火环
                         {
-                            SkillUseTick[8] = HUtil32.GetTickCount();
-                            result = 8;
-                            return result;
+                            return MagicConst.SKILL_FIREWIND;
                         }
                     }
-                    if (AllowUseMagic(45) && HUtil32.GetTickCount() - SkillUseTick[45] > 3000)
+                    if (AllowUseMagic(45) && CheckMagicInterval(45, 3000))
                     {
-                        SkillUseTick[45] = HUtil32.GetTickCount();
-                        result = 45;// 英雄灭天火
-                        return result;
+                        return 45;
                     }
-                    if (HUtil32.GetTickCount() - SkillUseTick[10] > 5000 && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY))
+                    if (CheckMagicInterval(10, 5000) && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY))
                     {
                         if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && GetDirBaseObjectsCount(Dir, 5) > 0 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
                         {
-                            if (AllowUseMagic(10))
+                            if (AllowUseMagic(MagicConst.SKILL_SHOOTLIGHTEN))
                             {
-                                SkillUseTick[10] = HUtil32.GetTickCount();
-                                result = 10;// 英雄疾光电影 
-                                return result;
+                                SkillUseTick[MagicConst.SKILL_SHOOTLIGHTEN] = HUtil32.GetTickCount();
+                                return MagicConst.SKILL_SHOOTLIGHTEN;
                             }
-                            else if (AllowUseMagic(9))
+                            if (AllowUseMagic(MagicConst.SKILL_FIRE))
                             {
-                                SkillUseTick[10] = HUtil32.GetTickCount();
-                                result = 9;// 地狱火
-                                return result;
+                                SkillUseTick[MagicConst.SKILL_SHOOTLIGHTEN] = HUtil32.GetTickCount();
+                                return MagicConst.SKILL_FIRE;
                             }
                         }
                         else if (GetDirBaseObjectsCount(Dir, 5) > 1 && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
                         {
-                            if (AllowUseMagic(10))
+                            if (AllowUseMagic(MagicConst.SKILL_SHOOTLIGHTEN))
                             {
                                 SkillUseTick[10] = HUtil32.GetTickCount();
-                                result = 10;// 英雄疾光电影 
-                                return result;
+                                return MagicConst.SKILL_SHOOTLIGHTEN;
                             }
-                            else if (AllowUseMagic(9))
+                            if (AllowUseMagic(MagicConst.SKILL_FIRE))
                             {
                                 SkillUseTick[10] = HUtil32.GetTickCount();
-                                result = 9;// 地狱火
-                                return result;
+                                return MagicConst.SKILL_FIRE;
                             }
                         }
                     }
-                    if (AllowUseMagic(32) && HUtil32.GetTickCount() - SkillUseTick[32] > 10000 && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1)
+                    if (AllowUseMagic(MagicConst.SKILL_KILLUNDEAD) && CheckMagicInterval(MagicConst.SKILL_KILLUNDEAD, 10000) && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1) // 目标为不死系
                     {
-                        // 目标为不死系
-                        SkillUseTick[32] = HUtil32.GetTickCount();
-                        result = 32;// 圣言术
-                        return result;
+                        return MagicConst.SKILL_KILLUNDEAD;
                     }
                     if (CheckTargetXyCount(CurrX, CurrY, 2) > 1)// 被怪物包围
                     {
-                        if (AllowUseMagic(22) && (HUtil32.GetTickCount() - SkillUseTick[22]) > 10000)
+                        if (AllowUseMagic(MagicConst.SKILL_EARTHFIRE) && CheckMagicInterval(22, 10000))
                         {
                             if (TargetCret.Race != 101 && TargetCret.Race != 102 && TargetCret.Race != 104) // 除祖玛怪,才放火墙
                             {
-                                SkillUseTick[22] = HUtil32.GetTickCount();
-                                result = 22;// 火墙
-                                return result;
+                                SkillUseTick[MagicConst.SKILL_EARTHFIRE] = HUtil32.GetTickCount();
+                                return MagicConst.SKILL_EARTHFIRE;
                             }
                         }
                         // 地狱雷光,只对祖玛(101,102,104)，沃玛(91,92,97)，野猪(81)系列的
                         // 遇到祖玛的怪应该多用地狱雷光，夹杂雷电术，少用冰咆哮
                         if (new ArrayList(new byte[] { 91, 92, 97, 101, 102, 104 }).Contains(TargetCret.Race))
                         {
-                            // 1000 * 4
-                            if (AllowUseMagic(24) && (HUtil32.GetTickCount() - SkillUseTick[24]) > 4000 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                            if (AllowUseMagic(MagicConst.SKILL_LIGHTFLOWER) && CheckMagicInterval(24, 4000) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                             {
-                                SkillUseTick[24] = HUtil32.GetTickCount();
-                                result = 24;// 地狱雷光
-                                return result;
+                                return MagicConst.SKILL_LIGHTFLOWER;
                             }
-                            else if (AllowUseMagic(91))
+                            if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))// 四级雷电术
                             {
-                                result = 91;// 四级雷电术
-                                return result;
+                                return MagicConst.SKILL_LIGHTENINGFOUR;
                             }
-                            else if (AllowUseMagic(11))
+                            if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                             {
-                                result = 11;// 英雄雷电术
-                                return result;
+                                return MagicConst.SKILL_LIGHTENING;
                             }
-                            else if (AllowUseMagic(33) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 2) > 2)
+                            if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 2) > 2)
                             {
-                                result = 33;// 英雄冰咆哮
-                                return result;
+                                return MagicConst.SKILL_SNOWWIND;
                             }
-                            else if (HUtil32.GetTickCount() - SkillUseTick[58] > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                            if (CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                             {
-                                if (AllowUseMagic(92))
+                                if (AllowUseMagic(92))// 四级流星火雨
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 92;// 四级流星火雨
-                                    return result;
+                                    return 92;
                                 }
-                                if (AllowUseMagic(58))
+                                if (AllowUseMagic(58))// 流星火雨
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 58;// 流星火雨
-                                    return result;
+                                    return 58;
                                 }
                             }
                         }
                         switch (M2Share.RandomNumber.Random(4))// 随机选择魔法
                         {
                             case 0: // 火球术,大火球,雷电术,爆裂火焰,英雄冰咆哮,流星火雨 从高到低选择
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 92;// 四级流星火雨
-                                    return result;
+                                    return 92;// 四级流星火雨
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
-                                    SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 58;// 流星火雨
-                                    return result;
+                                    return 58;// 流星火雨
                                 }
-                                else if (AllowUseMagic(33) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
-                                    result = 33;// 英雄冰咆哮
-                                    return result;
+                                    return MagicConst.SKILL_SNOWWIND;
                                 }
-                                else if (AllowUseMagic(23) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
-                                    result = 23;// 爆裂火焰
-                                    return result;
+                                    return MagicConst.SKILL_FIREBOOM;
                                 }
-                                else if (AllowUseMagic(91))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))// 四级雷电术
                                 {
-                                    result = 91;// 四级雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENINGFOUR;
                                 }
-                                else if (AllowUseMagic(11))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                                 {
-                                    result = 11;// 英雄雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENING;
                                 }
-                                else if (AllowUseMagic(5))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL2))
                                 {
-                                    result = 5;// 大火球
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL2;
                                 }
-                                else if (AllowUseMagic(1))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL))
                                 {
-                                    result = 1;// 火球术
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL;
                                 }
-                                if (AllowUseMagic(37))
+                                if (AllowUseMagic(37))// 英雄群体雷电
                                 {
-                                    result = 37;// 英雄群体雷电
-                                    return result;
+                                    return 37;
                                 }
-                                if (AllowUseMagic(47))
+                                if (AllowUseMagic(47))// 火龙焰
                                 {
-                                    result = 47;// 火龙焰
-                                    return result;
+                                    return 47;
                                 }
-                                if (AllowUseMagic(44))
+                                if (AllowUseMagic(44))// 寒冰掌
                                 {
-                                    result = 44;// 寒冰掌
-                                    return result;
+                                    return 44;
                                 }
                                 break;
                             case 1:
                                 if (AllowUseMagic(37))
                                 {
-                                    result = 37;
-                                    return result;
+                                    return 37;
                                 }
                                 if (AllowUseMagic(47))
                                 {
-                                    result = 47;
-                                    return result;
+                                    return 47;
                                 }
-                                if (AllowUseMagic(44))
+                                if (AllowUseMagic(44))// 寒冰掌
                                 {
-                                    result = 44;// 寒冰掌
-                                    return result;
+                                    return 44;
                                 }
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 92;// 四级流星火雨
-                                    return result;
+                                    return 92;// 四级流星火雨
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 58;// 流星火雨
-                                    return result;
+                                    return 58;// 流星火雨
                                 }
-                                else if (AllowUseMagic(33) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
                                     // 火球术,大火球,地狱火,爆裂火焰,冰咆哮  从高到低选择
-                                    result = 33;// 冰咆哮
-                                    return result;
+                                    return MagicConst.SKILL_SNOWWIND;
                                 }
-                                else if (AllowUseMagic(23) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
-                                    result = 23;// 爆裂火焰
-                                    return result;
+                                    return MagicConst.SKILL_FIREBOOM;
                                 }
-                                else if (AllowUseMagic(91))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))// 四级雷电术
                                 {
-                                    result = 91;// 四级雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENINGFOUR;
                                 }
-                                else if (AllowUseMagic(11))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                                 {
-                                    result = 11;// 英雄雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENING;
                                 }
-                                else if (AllowUseMagic(5))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL2))
                                 {
-                                    result = 5;// 大火球
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL2;
                                 }
-                                else if (AllowUseMagic(1))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL))
                                 {
-                                    result = 1;// 火球术
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL;
                                 }
                                 break;
                             case 2:
                                 if (AllowUseMagic(47))
                                 {
-                                    result = 47;
-                                    return result;
+                                    return 47;
                                 }
-                                if (AllowUseMagic(44))
+                                if (AllowUseMagic(44))// 寒冰掌
                                 {
-                                    result = 44;// 寒冰掌
-                                    return result;
+                                    return 44;
                                 }
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 92;// 四级流星火雨
-                                    return result;
+                                    return 92;// 四级流星火雨
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 58;// 流星火雨
-                                    return result;
+                                    return 58;// 流星火雨
                                 }
-                                else if (AllowUseMagic(33) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
                                     // 火球术,大火球,地狱火,爆裂火焰 从高到低选择
-                                    result = 33;
-                                    return result;
+                                    return MagicConst.SKILL_SNOWWIND;
                                 }
-                                else if (AllowUseMagic(23) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
-                                    result = 23;// 爆裂火焰
-                                    return result;
+                                    return MagicConst.SKILL_FIREBOOM;
                                 }
-                                else if (AllowUseMagic(91))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))// 四级雷电术
                                 {
-                                    result = 91;// 四级雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENINGFOUR;
                                 }
-                                else if (AllowUseMagic(11))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                                 {
-                                    result = 11;// 英雄雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENING;
                                 }
-                                else if (AllowUseMagic(5))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL2))
                                 {
-                                    result = 5;// 大火球
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL2;
                                 }
-                                else if (AllowUseMagic(1))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL))
                                 {
-                                    result = 1;// 火球术
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL;
                                 }
                                 if (AllowUseMagic(37))
                                 {
-                                    result = 37;
-                                    return result;
+                                    return 37;
                                 }
                                 break;
                             case 3:
-                                if (AllowUseMagic(44))
+                                if (AllowUseMagic(44))// 寒冰掌
                                 {
-                                    result = 44; // 寒冰掌
-                                    return result;
+                                    return 44;
                                 }
-                                if (AllowUseMagic(92) && (HUtil32.GetTickCount() - SkillUseTick[58] > 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 92; // 四级流星火雨
-                                    return result;
+                                    return 92;// 四级流星火雨
                                 }
-                                else if (AllowUseMagic(58) && (HUtil32.GetTickCount() - SkillUseTick[58]) > 1500 && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
-                                    result = 58; // 流星火雨
-                                    return result;
+                                    return 58;// 流星火雨
                                 }
-                                else if (AllowUseMagic(33) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)// 火球术,大火球,地狱火,爆裂火焰 从高到低选择
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)// 火球术,大火球,地狱火,爆裂火焰 从高到低选择
                                 {
-                                    result = 33;
-                                    return result;
+                                    return MagicConst.SKILL_SNOWWIND;
                                 }
-                                else if (AllowUseMagic(23) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
-                                    result = 23;// 爆裂火焰
-                                    return result;
+                                    return MagicConst.SKILL_FIREBOOM;
                                 }
-                                else if (AllowUseMagic(91))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))
                                 {
-                                    result = 91;// 四级雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENINGFOUR;// 四级雷电术
                                 }
-                                else if (AllowUseMagic(11))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                                 {
-                                    result = 11;// 英雄雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENING;
                                 }
-                                else if (AllowUseMagic(5))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL2))
                                 {
-                                    result = 5;// 大火球
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL2;
                                 }
-                                else if (AllowUseMagic(1))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL))
                                 {
-                                    result = 1;// 火球术
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL;
                                 }
                                 if (AllowUseMagic(37))
                                 {
-                                    result = 37;
-                                    return result;
+                                    return 37;
                                 }
                                 if (AllowUseMagic(47))
                                 {
-                                    result = 47;
-                                    return result;
+                                    return 47;
                                 }
                                 break;
                         }
@@ -3321,311 +3193,251 @@ namespace GameSrv.RobotPlay
                     else
                     {
                         // 只有一个怪时所用的魔法
-                        if (AllowUseMagic(22) && HUtil32.GetTickCount() - SkillUseTick[22] > 10000)
+                        if (AllowUseMagic(MagicConst.SKILL_EARTHFIRE) && CheckMagicInterval(22, 10000))
                         {
                             if (TargetCret.Race != 101 && TargetCret.Race != 102 && TargetCret.Race != 104)// 除祖玛怪,才放火墙
                             {
                                 SkillUseTick[22] = HUtil32.GetTickCount();
-                                result = 22;
-                                return result;
+                                return MagicConst.SKILL_EARTHFIRE;
                             }
                         }
                         switch (M2Share.RandomNumber.Random(4))// 随机选择魔法
                         {
                             case 0:
-                                if (AllowUseMagic(91))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))// 四级雷电术
                                 {
-                                    result = 91;// 四级雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENINGFOUR;
                                 }
-                                else if (AllowUseMagic(11))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                                 {
-                                    result = 11;// 雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENING;
                                 }
-                                else if (AllowUseMagic(33))
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND))
                                 {
-                                    result = 33;
-                                    return result;
+                                    return MagicConst.SKILL_SNOWWIND;
                                 }
-                                else if (AllowUseMagic(23)) // 火球术,大火球,地狱火,爆裂火焰 从高到低选择
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM))// 火球术,大火球,地狱火,爆裂火焰 从高到低选择
                                 {
-                                    result = 23;// 爆裂火焰
-                                    return result;
+                                    return MagicConst.SKILL_FIREBOOM;
                                 }
-                                else if (AllowUseMagic(5))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL2))
                                 {
-                                    result = 5;// 大火球
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL2;
                                 }
-                                else if (AllowUseMagic(1))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL))
                                 {
-                                    result = 1;// 火球术
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL;
                                 }
                                 if (AllowUseMagic(37))
                                 {
-                                    result = 37;
-                                    return result;
+                                    return 37;
                                 }
                                 if (AllowUseMagic(47))
                                 {
-                                    result = 47;
-                                    return result;
+                                    return 47;
                                 }
                                 if (AllowUseMagic(44))
                                 {
-                                    result = 44;
-                                    return result;
+                                    return 44;
                                 }
                                 break;
                             case 1:
                                 if (AllowUseMagic(37))
                                 {
-                                    result = 37;
-                                    return result;
+                                    return 37;
                                 }
                                 if (AllowUseMagic(47))
                                 {
-                                    result = 47;
-                                    return result;
+                                    return 47;
                                 }
                                 if (AllowUseMagic(44))
                                 {
-                                    result = 44;
-                                    return result;
+                                    return 44;
                                 }
-                                if (AllowUseMagic(91))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))// 四级雷电术
                                 {
-                                    result = 91;// 四级雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENINGFOUR;
                                 }
-                                else if (AllowUseMagic(11))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                                 {
-                                    result = 11;// 雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENING;
                                 }
-                                else if (AllowUseMagic(33))
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND))
                                 {
-                                    result = 33;
-                                    return result;
+                                    return MagicConst.SKILL_SNOWWIND;
                                 }
-                                else if (AllowUseMagic(23))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM))
                                 {
-                                    result = 23;// 爆裂火焰
-                                    return result;
+                                    return MagicConst.SKILL_FIREBOOM;
                                 }
-                                else if (AllowUseMagic(5))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL2))
                                 {
-                                    result = 5;// 大火球
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL2;
                                 }
-                                else if (AllowUseMagic(1))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL))
                                 {
-                                    result = 1;// 火球术
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL;
                                 }
                                 break;
                             case 2:
                                 if (AllowUseMagic(47))
                                 {
-                                    result = 47;
-                                    return result;
+                                    return 47;
                                 }
                                 if (AllowUseMagic(44))
                                 {
-                                    result = 44;
-                                    return result;
+                                    return 44;
                                 }
-                                if (AllowUseMagic(91))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))// 四级雷电术
                                 {
-                                    result = 91;// 四级雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENINGFOUR;
                                 }
-                                else if (AllowUseMagic(11))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                                 {
-                                    result = 11;// 雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENING;
                                 }
-                                else if (AllowUseMagic(33))
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND))
                                 {
-                                    result = 33;
-                                    return result;
+                                    return MagicConst.SKILL_SNOWWIND;
                                 }
-                                else if (AllowUseMagic(23))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM))
                                 {
-                                    result = 23;// 爆裂火焰
-                                    return result;
+                                    return MagicConst.SKILL_FIREBOOM;
                                 }
-                                else if (AllowUseMagic(5))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL2))
                                 {
-                                    result = 5;// 大火球
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL2;
                                 }
-                                else if (AllowUseMagic(1))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL))
                                 {
-                                    result = 1;// 火球术
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL;
                                 }
                                 if (AllowUseMagic(37))
                                 {
-                                    result = 37;
-                                    return result;
+                                    return 37;
                                 }
                                 break;
                             case 3:
                                 if (AllowUseMagic(44))
                                 {
-                                    result = 44;
-                                    return result;
+                                    return 44;
                                 }
-                                if (AllowUseMagic(91))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))// 四级雷电术
                                 {
-                                    result = 91;// 四级雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENINGFOUR;
                                 }
-                                else if (AllowUseMagic(11))
+                                if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                                 {
-                                    result = 11;// 雷电术
-                                    return result;
+                                    return MagicConst.SKILL_LIGHTENING;
                                 }
-                                else if (AllowUseMagic(33))
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND))
                                 {
-                                    result = 33;
-                                    return result;
+                                    return MagicConst.SKILL_SNOWWIND;
                                 }
-                                else if (AllowUseMagic(23))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM))
                                 {
-                                    result = 23;// 爆裂火焰
-                                    return result;
+                                    return MagicConst.SKILL_FIREBOOM;
                                 }
-                                else if (AllowUseMagic(5))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL2))
                                 {
-                                    result = 5;// 大火球
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL2;
                                 }
-                                else if (AllowUseMagic(1))
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBALL))
                                 {
-                                    result = 1;// 火球术
-                                    return result;
+                                    return MagicConst.SKILL_FIREBALL;
                                 }
                                 if (AllowUseMagic(37))
                                 {
-                                    result = 37;
-                                    return result;
+                                    return 37;
                                 }
                                 if (AllowUseMagic(47))
                                 {
-                                    result = 47;
-                                    return result;
+                                    return 47;
                                 }
                                 break;
                         }
                     }
                     // 从高到低使用魔法 
-                    if ((HUtil32.GetTickCount() - SkillUseTick[58]) > 1500)
+                    if (CheckMagicInterval(58, 1500))
                     {
                         if (AllowUseMagic(92))// 四级流星火雨
                         {
                             SkillUseTick[58] = HUtil32.GetTickCount();
-                            result = 92;
-                            return result;
+                            return 92;
                         }
                         if (AllowUseMagic(58)) // 流星火雨
                         {
                             SkillUseTick[58] = HUtil32.GetTickCount();
-                            result = 58;
-                            return result;
+                            return 58;
                         }
                     }
-                    if (AllowUseMagic(47))
+                    if (AllowUseMagic(47))// 火龙焰
                     {
-                        // 火龙焰
-                        result = 47;
-                        return result;
+                        return 47;
                     }
-                    if (AllowUseMagic(45))
+                    if (AllowUseMagic(45))// 英雄灭天火
                     {
-                        // 英雄灭天火
-                        result = 45;
-                        return result;
+                        return 45;
                     }
                     if (AllowUseMagic(44))
                     {
-                        result = 44;
-                        return result;
+                        return 44;
                     }
-                    if (AllowUseMagic(37))
+                    if (AllowUseMagic(37))// 英雄群体雷电
                     {
-                        // 英雄群体雷电
-                        result = 37;
-                        return result;
+                        return 37;
                     }
-                    if (AllowUseMagic(33))
+                    if (AllowUseMagic(MagicConst.SKILL_SNOWWIND))// 英雄冰咆哮
                     {
-                        // 英雄冰咆哮
-                        result = 33;
-                        return result;
+                        return MagicConst.SKILL_SNOWWIND;
                     }
-                    if (AllowUseMagic(32) && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1)
+                    if (AllowUseMagic(32) && TargetCret.Abil.Level < M2Share.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1)// 目标为不死系
                     {
-                        // 目标为不死系
-                        result = 32;// 圣言术
-                        return result;
+                        return 32;// 圣言术
                     }
-                    if (AllowUseMagic(24) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                    if (AllowUseMagic(MagicConst.SKILL_LIGHTFLOWER) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                     {
-                        result = 24;// 地狱雷光
-                        return result;
+                        return MagicConst.SKILL_LIGHTFLOWER;
                     }
-                    if (AllowUseMagic(23))
+                    if (AllowUseMagic(MagicConst.SKILL_FIREBOOM))
                     {
-                        result = 23;// 爆裂火焰
-                        return result;
+                        return MagicConst.SKILL_FIREBOOM;
                     }
-                    if (AllowUseMagic(91))
+                    if (AllowUseMagic(MagicConst.SKILL_LIGHTENINGFOUR))// 四级雷电术
                     {
-                        result = 91; // 四级雷电术
-                        return result;
+                        return MagicConst.SKILL_LIGHTENINGFOUR;
                     }
-                    if (AllowUseMagic(11))
+                    if (AllowUseMagic(MagicConst.SKILL_LIGHTENING))
                     {
-                        result = 11;// 英雄雷电术
-                        return result;
+                        return MagicConst.SKILL_LIGHTENING;
                     }
-                    if (AllowUseMagic(10) && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
+                    if (AllowUseMagic(MagicConst.SKILL_SHOOTLIGHTEN) && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
                     {
-                        result = 10; // 英雄疾光电影
-                        return result;
+                        return MagicConst.SKILL_SHOOTLIGHTEN;
                     }
-                    if (AllowUseMagic(9) && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
+                    if (AllowUseMagic(MagicConst.SKILL_FIRE) && Envir.GetNextPosition(CurrX, CurrY, Dir, 5, ref TargetX, ref TargetY) && (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4))
                     {
-                        result = 9; // 地狱火
-                        return result;
+                        return MagicConst.SKILL_FIRE;
                     }
-                    if (AllowUseMagic(5))
+                    if (AllowUseMagic(MagicConst.SKILL_FIREBALL2))
                     {
-                        result = 5; // 大火球
-                        return result;
+                        return MagicConst.SKILL_FIREBALL2;
                     }
-                    if (AllowUseMagic(1))
+                    if (AllowUseMagic(MagicConst.SKILL_FIREBALL))
                     {
-                        result = 1; // 火球术
-                        return result;
+                        return MagicConst.SKILL_FIREBALL;
                     }
-                    if (AllowUseMagic(22))
+                    if (AllowUseMagic(MagicConst.SKILL_EARTHFIRE))
                     {
                         if (TargetCret.Race != 101 && TargetCret.Race != 102 && TargetCret.Race != 104)// 除祖玛怪,才放火墙
                         {
-                            result = 22;// 火墙
-                            return result;
+                            return MagicConst.SKILL_EARTHFIRE;
                         }
                     }
                     break;
                 case PlayJob.Taoist:// 道士
-                    if (SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && HUtil32.GetTickCount() - SkillUseTick[17] > 3000 && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && Abil.MP > 20)
+                    if (SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && CheckMagicInterval(17, 3000) && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && Abil.MP > 20)
                     {
-                        SkillUseTick[17] = HUtil32.GetTickCount(); // 默认,从高到低
                         if (AllowUseMagic(104)) // 召唤火灵
                         {
                             result = 104;
@@ -3648,53 +3460,44 @@ namespace GameSrv.RobotPlay
                     {
                         if (AllowUseMagic(73)) // 道力盾
                         {
-                            result = 73;
-                            return result;
+                            return 73;
                         }
                     }
-                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)
+                    if ((TargetCret.Race == ActorRace.Play || TargetCret.Master != null) && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)// PK时,旁边有人贴身,使用气功波
                     {
-                        // PK时,旁边有人贴身,使用气功波
-                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - SkillUseTick[48] > 3000)
+                        if (AllowUseMagic(48) && CheckMagicInterval(48, 3000))
                         {
-                            SkillUseTick[48] = HUtil32.GetTickCount();
-                            result = 48;
-                            return result;
+                            return 48;
                         }
                     }
                     else
                     {
-                        // 打怪,怪级低于自己,并且有怪包围自己就用 气功波
-                        if (AllowUseMagic(48) && HUtil32.GetTickCount() - SkillUseTick[48] > 5000 && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)
+                        if (AllowUseMagic(48) && CheckMagicInterval(48, 5000) && CheckTargetXyCount3(CurrX, CurrY, 1, 0) > 0 && TargetCret.Abil.Level <= Abil.Level)// 打怪,怪级低于自己,并且有怪包围自己就用 气功波
                         {
-                            SkillUseTick[48] = HUtil32.GetTickCount();
-                            result = 48;
-                            return result;
+                            return 48;
                         }
                     }
                     // 绿毒
                     if (TargetCret.StatusTimeArr[PoisonState.DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
                                                                                                                                                      || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
-                        && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
+                        && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))// 对于血量超过800的怪用 不毒城墙
                     {
-                        // 对于血量超过800的怪用 不毒城墙
                         NAmuletIndx = 0;
                         switch (M2Share.RandomNumber.Random(2))
                         {
                             case 0:
-                                if (AllowUseMagic(38) && HUtil32.GetTickCount() - SkillUseTick[38] > 1000)
+                                if (AllowUseMagic(38) && CheckMagicInterval(38, 1000))
                                 {
                                     if (Envir != null)// 判断地图是否禁用
                                     {
                                         if (Envirnoment.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
                                         {
                                             SkillUseTick[38] = HUtil32.GetTickCount();
-                                            result = MagicConst.SKILL_GROUPAMYOUNSUL;// 英雄群体施毒
-                                            return result;
+                                            return MagicConst.SKILL_GROUPAMYOUNSUL;
                                         }
                                     }
                                 }
-                                else if ((HUtil32.GetTickCount() - SkillUseTick[6]) > 1000)
+                                else if (CheckMagicInterval(MagicConst.SKILL_AMYOUNSUL, 1000))
                                 {
                                     if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
@@ -3703,15 +3506,14 @@ namespace GameSrv.RobotPlay
                                             if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
                                                 SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = MagicConst.SKILL_AMYOUNSUL;// 英雄施毒术
-                                                return result;
+                                                return MagicConst.SKILL_AMYOUNSUL;
                                             }
                                         }
                                     }
                                 }
                                 break;
                             case 1:
-                                if ((HUtil32.GetTickCount() - SkillUseTick[6]) > 1000)
+                                if (CheckMagicInterval(MagicConst.SKILL_AMYOUNSUL, 1000))
                                 {
                                     if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
@@ -3720,8 +3522,7 @@ namespace GameSrv.RobotPlay
                                             if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
                                                 SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
-                                                return result;
+                                                return MagicConst.SKILL_AMYOUNSUL;
                                             }
                                         }
                                     }
@@ -3731,56 +3532,49 @@ namespace GameSrv.RobotPlay
                     }
                     if (TargetCret.StatusTimeArr[PoisonState.DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (M2Share.Config.btHeroSkillMode || !M2Share.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
                             || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
-                        && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))
+                        && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))// 对于血量超过700的怪用 不毒城墙
                     {
-                        // 对于血量超过100的怪用 不毒城墙
                         NAmuletIndx = 0;
                         switch (M2Share.RandomNumber.Random(2))
                         {
                             case 0:
-                                if (AllowUseMagic(38) && (HUtil32.GetTickCount() - SkillUseTick[38]) > 1000)
+                                if (AllowUseMagic(38) && CheckMagicInterval(38, 1000))
                                 {
                                     if (Envir != null)
                                     {
-                                        // 判断地图是否禁用
-                                        if (Envirnoment.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))
+                                        if (Envirnoment.AllowMagics(MagicConst.SKILL_GROUPAMYOUNSUL, 1))// 判断地图是否禁用
                                         {
                                             SkillUseTick[38] = HUtil32.GetTickCount();
-                                            result = MagicConst.SKILL_GROUPAMYOUNSUL; // 英雄群体施毒
-                                            return result;
+                                            return MagicConst.SKILL_GROUPAMYOUNSUL;
                                         }
                                     }
                                 }
-                                else if ((HUtil32.GetTickCount() - SkillUseTick[6]) > 1000)
+                                else if (CheckMagicInterval(MagicConst.SKILL_AMYOUNSUL, 1000))
                                 {
                                     if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
                                         if (Envir != null)
                                         {
-                                            // 判断地图是否禁用
-                                            if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
+                                            if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))// 判断地图是否禁用
                                             {
                                                 SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
-                                                return result;
+                                                return MagicConst.SKILL_AMYOUNSUL;
                                             }
                                         }
                                     }
                                 }
                                 break;
                             case 1:
-                                if ((HUtil32.GetTickCount() - SkillUseTick[6]) > 1000)
+                                if (CheckMagicInterval(MagicConst.SKILL_AMYOUNSUL, 1000))
                                 {
                                     if (AllowUseMagic(MagicConst.SKILL_AMYOUNSUL))
                                     {
                                         if (Envir != null)
                                         {
-                                            // 判断地图是否禁用
-                                            if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1))
+                                            if (Envirnoment.AllowMagics(MagicConst.SKILL_AMYOUNSUL, 1)) // 判断地图是否禁用
                                             {
                                                 SkillUseTick[6] = HUtil32.GetTickCount();
-                                                result = MagicConst.SKILL_AMYOUNSUL; // 英雄施毒术
-                                                return result;
+                                                return MagicConst.SKILL_AMYOUNSUL;
                                             }
                                         }
                                     }
@@ -3788,91 +3582,74 @@ namespace GameSrv.RobotPlay
                                 break;
                         }
                     }
-                    if (AllowUseMagic(51) && (HUtil32.GetTickCount() - SkillUseTick[51]) > 5000)// 英雄飓风破 
+                    if (AllowUseMagic(51) && CheckMagicInterval(51, 5000))// 英雄飓风破 
                     {
-                        SkillUseTick[51] = HUtil32.GetTickCount();
-                        result = 51;
-                        return result;
+                        return 51;
                     }
                     if (CheckHeroAmulet(1, 1))
                     {
-                        switch (M2Share.RandomNumber.Random(3))
+                        switch (M2Share.RandomNumber.Random(3))// 使用符的魔法
                         {
-                            case 0: // 使用符的魔法
-                                if (AllowUseMagic(94))
+                            case 0: 
+                                if (AllowUseMagic(94))// 英雄四级噬血术
                                 {
-                                    result = 94; // 英雄四级噬血术
-                                    return result;
+                                    return 94;
                                 }
-                                if (AllowUseMagic(59))
+                                if (AllowUseMagic(59)) // 英雄噬血术
                                 {
-                                    result = 59; // 英雄噬血术
-                                    return result;
+                                    return 59;
                                 }
-                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - SkillUseTick[13]) > 3000)
+                                if (AllowUseMagic(MagicConst.SKILL_FIRECHARM) && CheckMagicInterval(13, 3000))
                                 {
-                                    result = 13;// 英雄灵魂火符
-                                    SkillUseTick[13] = HUtil32.GetTickCount();
-                                    return result;
+                                    return MagicConst.SKILL_FIRECHARM;
                                 }
                                 if (AllowUseMagic(52)) // 诅咒术
                                 {
-                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)(TargetCret as PlayObject).Job + 6] == 0)
+                                    if (TargetCret.Race == ActorRace.Play && ((PlayObject)TargetCret).ExtraAbil[(byte)((PlayObject)TargetCret).Job + 6] == 0)
                                     {
-                                        result = 52;// 英雄诅咒术
-                                        return result;
+                                        return 52;// 英雄诅咒术
                                     }
                                 }
                                 break;
                             case 1:
                                 if (AllowUseMagic(52)) // 诅咒术
                                 {
-                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)(TargetCret as PlayObject).Job + 6] == 0)
+                                    if (TargetCret.Race == ActorRace.Play && ((PlayObject)TargetCret).ExtraAbil[(byte)((PlayObject)TargetCret).Job + 6] == 0)
                                     {
-                                        result = 52;// 英雄诅咒术
-                                        return result;
+                                        return 52;// 英雄诅咒术
                                     }
                                 }
-                                if (AllowUseMagic(94))
+                                if (AllowUseMagic(94))// 英雄四级噬血术
                                 {
-                                    result = 94;// 英雄四级噬血术
-                                    return result;
+                                    return 94;
                                 }
-                                if (AllowUseMagic(59))
+                                if (AllowUseMagic(59))// 英雄噬血术
                                 {
-                                    result = 59;// 英雄噬血术
-                                    return result;
+                                    return 59;
                                 }
-                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - SkillUseTick[13]) > 3000)
+                                if (AllowUseMagic(MagicConst.SKILL_FIRECHARM) &&CheckMagicInterval(13, 3000))
                                 {
-                                    result = 13;// 英雄灵魂火符
-                                    SkillUseTick[13] = HUtil32.GetTickCount();
-                                    return result;
+                                    return MagicConst.SKILL_FIRECHARM;
                                 }
                                 break;
                             case 2:
-                                if (AllowUseMagic(13) && (HUtil32.GetTickCount() - SkillUseTick[13]) > 3000)
+                                if (AllowUseMagic(MagicConst.SKILL_FIRECHARM) && CheckMagicInterval(13, 3000))
                                 {
-                                    result = 13;// 英雄灵魂火符
-                                    SkillUseTick[13] = HUtil32.GetTickCount();
-                                    return result;
+                                    return MagicConst.SKILL_FIRECHARM;
                                 }
                                 if (AllowUseMagic(94))
                                 {
-                                    result = 94;// 英雄四级噬血术
-                                    return result;
+                                    return 94;// 英雄四级噬血术
                                 }
                                 if (AllowUseMagic(59))
                                 {
-                                    result = 59;// 英雄噬血术
-                                    return result;
+                                    return 59;// 英雄噬血术
                                 }
                                 if (AllowUseMagic(52))// 诅咒术
                                 {
-                                    if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)(TargetCret as PlayObject).Job + 6] == 0)
+                                    if (TargetCret.Race == ActorRace.Play && ((PlayObject)TargetCret).ExtraAbil[(byte)((PlayObject)TargetCret).Job + 6] == 0)
                                     {
-                                        result = 52;
-                                        return result;
+                                        return 52;
                                     }
                                 }
                                 break;
@@ -3880,46 +3657,49 @@ namespace GameSrv.RobotPlay
                         // 技能从高到低选择 
                         if (AllowUseMagic(94))
                         {
-                            result = 94;// 英雄四级噬血术
-                            return result;
+                            return 94;// 英雄四级噬血术
                         }
                         if (AllowUseMagic(59))// 英雄噬血术
                         {
-                            result = 59;
-                            return result;
+                            return 59;
                         }
                         if (AllowUseMagic(54)) // 英雄骷髅咒
                         {
-                            result = 54;
-                            return result;
+                            return 54;
                         }
                         if (AllowUseMagic(53))// 英雄血咒
                         {
-                            result = 53;
-                            return result;
+                            return 53;
                         }
                         if (AllowUseMagic(51))// 英雄飓风破
                         {
-                            result = 51;
-                            return result;
+                            return 51;
                         }
                         if (AllowUseMagic(13))// 英雄灵魂火符
                         {
-                            result = 13;
-                            return result;
+                            return 13;
                         }
                         if (AllowUseMagic(52))// 诅咒术
                         {
-                            if (TargetCret.Race == ActorRace.Play && (TargetCret as PlayObject).ExtraAbil[(byte)(TargetCret as PlayObject).Job + 6] == 0)
+                            if (TargetCret.Race == ActorRace.Play && ((PlayObject)TargetCret).ExtraAbil[(byte)((PlayObject)TargetCret).Job + 6] == 0)
                             {
-                                result = 52;
-                                return result;
+                                return 52;
                             }
                         }
                     }
                     break;
             }
             return result;
+        }
+
+        private bool CheckMagicInterval(ushort magicId, int interval)
+        {
+            if (HUtil32.GetTickCount() - SkillUseTick[magicId] > interval)
+            {
+                SkillUseTick[magicId] = HUtil32.GetTickCount();
+                return true;
+            }
+            return false;
         }
 
         // 战士判断使用
