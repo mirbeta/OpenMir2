@@ -10,7 +10,7 @@ namespace GameSrv.Conf {
             M2Share.Config.ConnctionString = ReadWriteString("DataBase", "ConnctionString", M2Share.Config.ConnctionString);
             M2Share.Config.sDBType = ReadWriteString("DataBase", "DbType", M2Share.Config.sDBType);
             M2Share.ServerIndex = ReadWriteByte("Server", "ServerIndex", M2Share.ServerIndex);
-            M2Share.Config.CloseCountdown = ReadWriteInteger("Server", "CloseCountdown", M2Share.Config.CloseCountdown);
+            M2Share.Config.ShutdownSeconds = ReadWriteInteger("Server", "ShutdownSeconds", M2Share.Config.ShutdownSeconds);
             M2Share.Config.ServerName = ReadWriteString("Server", "ServerName", M2Share.Config.ServerName);
             M2Share.Config.nServerNumber = ReadWriteInteger("Server", "ServerNumber", M2Share.Config.nServerNumber);
             M2Share.Config.VentureServer = string.Compare(ReadWriteString("Server", "VentureServer", "FALSE"), "TRUE", StringComparison.OrdinalIgnoreCase) == 0;

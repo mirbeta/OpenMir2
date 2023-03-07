@@ -139,7 +139,7 @@ namespace GameSrv.Player
                 if (!(boDisableSayMsg || Envir.Flag.boNOCHAT))
                 {
                     //M2Share.Log.Info('[' + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + ChrName + ": " + sData);
-                    OldSayMsg = sData;
+                    //OldSayMsg = sData;
                     if (sData.StartsWith("@@加速处理"))
                     {
                         M2Share.FunctionNPC.GotoLable(this, "@加速处理", false);

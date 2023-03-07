@@ -239,7 +239,6 @@ namespace GameSrv.Player {
         public short GuildRankNo;
         public string GuildRankName = string.Empty;
         public string ScriptLable = string.Empty;
-        public string OldSayMsg;
         public int SayMsgCount = 0;
         public int SayMsgTick;
         public bool DisableSayMsg;
@@ -778,7 +777,7 @@ namespace GameSrv.Player {
         /// 清理无效对象间隔
         /// </summary>
         public int ClearInvalidObjTick = 0;
-        public short MWContribution;
+        public short Contribution;
         public string RankLevelName = string.Empty;
         public bool IsFilterAction = false;
         public int AutoGetExpTick;
@@ -903,7 +902,6 @@ namespace GameSrv.Player {
             MagicAttackCount = 0;
             MoveCount = 0;
             OverSpeedCount = 0;
-            OldSayMsg = "";
             SayMsgTick = HUtil32.GetTickCount();
             DisableSayMsg = false;
             DisableSayMsgTick = HUtil32.GetTickCount();
@@ -968,7 +966,7 @@ namespace GameSrv.Player {
             ReColorIdx = 0;
             WhisperHuman = null;
             OnHorse = false;
-            MWContribution = 0;
+            Contribution = 0;
             HitPlus = 0;
             HitDouble = 0;
             RankLevelName = Settings.RankLevelName;

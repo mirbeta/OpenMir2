@@ -1723,22 +1723,22 @@ namespace GameSrv.Npc {
             char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod) {
                 case '=':
-                    if (PlayObject.MWContribution == nContribution) {
+                    if (PlayObject.Contribution == nContribution) {
                         result = true;
                     }
                     break;
                 case '>':
-                    if (PlayObject.MWContribution > nContribution) {
+                    if (PlayObject.Contribution > nContribution) {
                         result = true;
                     }
                     break;
                 case '<':
-                    if (PlayObject.MWContribution < nContribution) {
+                    if (PlayObject.Contribution < nContribution) {
                         result = true;
                     }
                     break;
                 default:
-                    if (PlayObject.MWContribution >= nContribution) {
+                    if (PlayObject.Contribution >= nContribution) {
                         result = true;
                     }
                     break;

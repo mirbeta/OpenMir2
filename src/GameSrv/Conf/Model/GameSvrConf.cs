@@ -80,7 +80,7 @@ namespace GameSrv.Conf.Model {
         /// <summary>
         /// 服务器关闭倒计时秒数
         /// </summary>
-        public int CloseCountdown;
+        public int ShutdownSeconds;
         public string LogServerAddr;
         public int LogServerPort;
         public bool DiscountForNightTime;
@@ -1712,7 +1712,7 @@ namespace GameSrv.Conf.Model {
             sDBType = "MySQL";
             NpcNameColor = 255;
             ItemSpeed = 60;
-            CloseCountdown = 360;
+            ShutdownSeconds = 360;
         }
     }
 }

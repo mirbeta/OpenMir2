@@ -166,8 +166,8 @@ namespace GameSrv
             //todo 通知游戏网关暂停接收新的连接,发送消息后停止5秒,防止玩家在倒计时结束前进入游戏
             Task.Factory.StartNew(async () =>
             {
-                var shutdownSeconds = M2Share.Config.CloseCountdown;
-                _logger.Debug("停止网关新玩家连接");
+                var shutdownSeconds = M2Share.Config.ShutdownSeconds;
+                _logger.Debug("网关停止新玩家连接");
                 M2Share.GateMgr.SendGameStopMsg();//通知网关停止分配新的玩家连接
                 await Task.Delay(5000); //强制5秒延迟，防止玩家在倒计时结束前进入游戏
                 while (true)
@@ -196,11 +196,17 @@ namespace GameSrv
                     await Task.Delay(TimeSpan.FromSeconds(1));
                     shutdownSeconds--;
                 }
-                await Task.Delay(1000); //延时1秒，等待网关服务停止
+                _logger.Info("5秒后关闭网关服务...");
+                await Task.Delay(5000); //延时1秒，等待网关服务停止
                 M2Share.GateMgr.Stop();//停止网关服务
+                _logger.Info("网关服务已停止...");
+                _logger.Info("即将停止游戏引擎世界服务...");
+                await Task.Delay(500); //延时1秒，等待网关服务停止
                 _mirApp.Stop();
+                _logger.Info("游戏引擎世界服务已停止...");
                 await Host.StopAsync(_cancellationTokenSource.Token);
                 _logger.Info("游戏服务已停止...");
+                _logger.Info("goodbye!");
             }, _cancellationTokenSource.Token);
         }
 

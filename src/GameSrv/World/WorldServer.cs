@@ -1219,7 +1219,7 @@ namespace GameSrv.World
             playObject.IncHealing = humData.IncHealing;
             playObject.FightZoneDieCount = humData.FightZoneDieCount;
             playObject.IsLockLogon = humData.LockLogon;
-            playObject.MWContribution = humData.Contribution;
+            playObject.Contribution = humData.Contribution;
             playObject.HungerStatus = humData.HungerStatus;
             playObject.AllowGuildReCall = humData.AllowGuildReCall;
             playObject.GroupRcallTime = humData.GroupRcallTime;
@@ -1347,7 +1347,7 @@ namespace GameSrv.World
             humanRcd.Data.FightZoneDieCount = (byte)playObject.FightZoneDieCount;
             humanRcd.Data.Account = playObject.UserAccount;
             humanRcd.Data.LockLogon = playObject.IsLockLogon;
-            humanRcd.Data.Contribution = playObject.MWContribution;
+            humanRcd.Data.Contribution = playObject.Contribution;
             humanRcd.Data.HungerStatus = playObject.HungerStatus;
             humanRcd.Data.AllowGuildReCall = playObject.AllowGuildReCall;
             humanRcd.Data.GroupRcallTime = playObject.GroupRcallTime;
