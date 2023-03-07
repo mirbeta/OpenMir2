@@ -142,7 +142,7 @@ namespace GameSrv
             if (M2Share.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
                 _logger.Info("保存玩家数据");
-                foreach (Player.PlayObject play in M2Share.WorldEngine.PlayObjects)
+                foreach (var play in M2Share.WorldEngine.PlayObjects)
                 {
                     World.WorldServer.SaveHumanRcd(play);
                 }
@@ -223,9 +223,9 @@ namespace GameSrv
             {
                 _logger.Info("检查是否有其他可用服务器.");
                 //如果有多机负载转移在线玩家到新服务器
-                string sIPaddr = string.Empty;
-                int nPort = 0;
-                bool isMultiServer = M2Share.GetMultiServerAddrPort(M2Share.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
+                var sIPaddr = string.Empty;
+                var nPort = 0;
+                var isMultiServer = M2Share.GetMultiServerAddrPort(M2Share.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
                 if (isMultiServer)
                 {
                     //todo 通知网关断开链接.停止新玩家进入游戏
@@ -245,7 +245,7 @@ namespace GameSrv
         {
             while (true)
             {
-                string cmdline = Console.ReadLine();
+                var cmdline = Console.ReadLine();
                 if (string.IsNullOrEmpty(cmdline))
                 {
                     continue;
@@ -293,8 +293,8 @@ namespace GameSrv
                 {
                     while (await _timer.WaitForNextTickAsync(cancellationToken))
                     {
-                        int monsterCount = 0;
-                        for (int i = 0; i < M2Share.WorldEngine.MobThreads.Length; i++)
+                        var monsterCount = 0;
+                        for (var i = 0; i < M2Share.WorldEngine.MobThreads.Length; i++)
                         {
                             monsterCount += M2Share.WorldEngine.MobThreads[i].MonsterCount;
                         }
