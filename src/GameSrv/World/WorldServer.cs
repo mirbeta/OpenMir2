@@ -439,7 +439,7 @@ namespace GameSrv.World
                         {
                             playObject.BoReadyRun = false;
                             playObject.LoginNoticeOk = true;
-                            playObject.Bo6Ab = true;
+                            playObject.TryPlayMode = true;
                         }
                     }
                 }

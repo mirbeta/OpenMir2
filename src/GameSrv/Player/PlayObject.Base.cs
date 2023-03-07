@@ -589,7 +589,10 @@ namespace GameSrv.Player {
         private bool IsSendNotice;
         private int WaitLoginNoticeOkTick;
         public bool LoginNoticeOk;
-        public bool Bo6Ab;
+        /// <summary>
+        /// 试玩模式
+        /// </summary>
+        public bool TryPlayMode;
         public int ShowLineNoticeTick;
         public int ShowLineNoticeIdx;
         public int SoftVersionDateEx;
@@ -884,7 +887,7 @@ namespace GameSrv.Player {
             IsNewHuman = false;
             LoginNoticeOk = false;
             AttatckMode = 0;
-            Bo6Ab = false;
+            TryPlayMode = false;
             BonusAbil = new NakedAbility();
             AccountExpired = false;
             IsSendNotice = false;
@@ -1236,7 +1239,7 @@ namespace GameSrv.Player {
                 if (Gold > M2Share.Config.HumanMaxGold * 2 && M2Share.Config.HumanMaxGold > 0) {
                     Gold = M2Share.Config.HumanMaxGold * 2;
                 }
-                if (!Bo6Ab) {
+                if (!TryPlayMode) {
                     if (SoftVersionDate < M2Share.Config.SoftVersionDate)//登录版本号验证
                     {
                         SysMsg(Settings.ClientSoftVersionError, MsgColor.Red, MsgType.Hint);
@@ -1307,17 +1310,17 @@ namespace GameSrv.Player {
                 }
                 RefShowName();
                 if (PayMent == 1) {
-                    if (!Bo6Ab) {
+                    if (!TryPlayMode) {
                         SysMsg(Settings.YouNowIsTryPlayMode, MsgColor.Red, MsgType.Hint);
                     }
                     GoldMax = M2Share.Config.HumanTryModeMaxGold;
                     if (Abil.Level > M2Share.Config.TryModeLevel) {
                         SysMsg("测试状态可以使用到第 " + M2Share.Config.TryModeLevel, MsgColor.Red, MsgType.Hint);
-                        SysMsg("链接中断，请到以下地址获得收费相关信息。(http://www.mir2.com)", MsgColor.Red, MsgType.Hint);
+                        SysMsg("链接中断，请到以下地址获得收费相关信息。(https://www.mir2.com)", MsgColor.Red, MsgType.Hint);
                         BoEmergencyClose = true;
                     }
                 }
-                if (PayMent == 3 && !Bo6Ab) {
+                if (PayMent == 3 && !TryPlayMode) {
                     SysMsg(Settings.NowIsFreePlayMode, MsgColor.Green, MsgType.Hint);
                 }
                 if (M2Share.Config.VentureServer) {

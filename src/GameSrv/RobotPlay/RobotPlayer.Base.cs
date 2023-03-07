@@ -302,7 +302,7 @@ namespace GameSrv.RobotPlay
                             }
                         }
                     }
-                    LifeStone();
+                    PlaySuperRock();
                 }
             }
             catch (Exception ex)

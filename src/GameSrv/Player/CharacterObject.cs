@@ -98,7 +98,7 @@ namespace GameSrv.Player {
         /// <summary>
         /// 气血石和魔血石
         /// </summary>
-        internal void LifeStone() {
+        internal void PlaySuperRock() {
             if (!Death && Race == ActorRace.Play || Race == ActorRace.PlayClone) {
                 if (UseItems.Length >= ItemLocation.Charm && UseItems[ItemLocation.Charm] != null && UseItems[ItemLocation.Charm].Index > 0) {
                     StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Charm].Index);

@@ -151,7 +151,7 @@ namespace GameSrv.Player
                 {
                     HealthSpellChanged();
                 }
-                LifeStone();
+                PlaySuperRock();
                 if (IsTimeGoto && (HUtil32.GetTickCount() > TimeGotoTick)) //Delaygoto延时跳转
                 {
                     IsTimeGoto = false;
