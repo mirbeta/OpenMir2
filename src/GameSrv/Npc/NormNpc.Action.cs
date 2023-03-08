@@ -19,7 +19,7 @@ namespace GameSrv.Npc {
         private void ActionOfOpenybdeal(PlayObject playObject, QuestActionInfo questActionInfo) {
             int nGameGold = 0;
             try {
-                if (playObject.BoYbDeal) {
+                if (playObject.SaleDeal) {
                     playObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/您已开通寄售服务,不需要再开通!!!\\ \\<返回/@main>");
                     return;// 如已开通元宝服务则退出
                 }
@@ -29,7 +29,7 @@ namespace GameSrv.Npc {
                 if (playObject.GameGold >= nGameGold)// 玩家的元宝数大于或等于开通所需的元宝数
                 {
                     playObject.GameGold -= nGameGold;
-                    playObject.BoYbDeal = true;
+                    playObject.SaleDeal = true;
                     playObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + "/开通寄售服务成功!!!\\ \\<返回/@main>");
                 }
                 else {
@@ -52,7 +52,7 @@ namespace GameSrv.Npc {
             bool bo12;
             try {
                 bo12 = false;
-                if (playObject.BoYbDeal) // 已开通元宝服务
+                if (playObject.SaleDeal) // 已开通元宝服务
                 {
                     if (playObject.SellOffInTime(0)) {
                         if (M2Share.SellOffItemList.Count > 0) {
@@ -146,7 +146,7 @@ namespace GameSrv.Npc {
             bool bo12;
             try {
                 bo12 = false;
-                if (playObject.BoYbDeal) {
+                if (playObject.SaleDeal) {
                     // 已开通元宝服务
                     if (playObject.SellOffInTime(1)) {
                         if (M2Share.SellOffItemList.Count > 0) {

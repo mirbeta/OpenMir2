@@ -173,7 +173,6 @@ namespace GameSrv.Player
                                     M2Share.CustomItemMgr.DelCustomItemName(userItem.MakeIndex, userItem.Index);
                                     userItem.Desc[13] = 0;
                                 }
-
                                 ItemList.RemoveAt(i);
                                 WeightChanged();
                             }

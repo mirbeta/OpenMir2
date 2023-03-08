@@ -835,7 +835,7 @@ namespace GameSrv.Player {
         /// <summary>
         /// 是否开通元宝交易服务
         /// </summary>
-        public bool BoYbDeal;
+        public bool SaleDeal;
         /// <summary>
         /// 确认元宝寄售标志
         /// </summary>
