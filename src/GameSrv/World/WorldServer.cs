@@ -1620,7 +1620,7 @@ namespace GameSrv.World
                         if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir &&
                             Math.Abs(baseObject.CurrX - nX) <= nRange && Math.Abs(baseObject.CurrY - nY) <= nRange)
                         {
-                            if (list != null) list.Add(baseObject);
+                            list.Add(baseObject);
                             result++;
                         }
                     }
