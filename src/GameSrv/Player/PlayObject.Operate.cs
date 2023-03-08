@@ -1213,9 +1213,9 @@ namespace GameSrv.Player
             }
         }
 
-        private void ClientMakeDrugItem(int objectId, string nItemName)
+        private void ClientMakeDrugItem(int actorId, string nItemName)
         {
-            Merchant merchant = WorldServer.FindMerchant<Merchant>(objectId);
+            Merchant merchant = WorldServer.FindMerchant<Merchant>(actorId);
             if (merchant == null || !merchant.IsMakeDrug)
             {
                 return;
@@ -1562,7 +1562,7 @@ namespace GameSrv.Player
             }
         }
 
-        private void ClientQueryRepairCost(int nParam1, int nInt, string sMsg)
+        private void ClientQueryRepairCost(int actorId, int nInt, string sMsg)
         {
             UserItem userItemA = null;
             for (int i = 0; i < ItemList.Count; i++)
@@ -1582,14 +1582,14 @@ namespace GameSrv.Player
             {
                 return;
             }
-            Merchant merchant = WorldServer.FindMerchant<Merchant>(nParam1);
+            Merchant merchant = WorldServer.FindMerchant<Merchant>(actorId);
             if (merchant != null && merchant.Envir == Envir && IsWithinSight(merchant))
             {
                 merchant.ClientQueryRepairCost(this, userItemA);
             }
         }
 
-        private void ClientRepairItem(int nParam1, int nInt, string sMsg)
+        private void ClientRepairItem(int actorId, int nInt, string sMsg)
         {
             UserItem userItem = null;
             for (int i = 0; i < ItemList.Count; i++)
@@ -1605,14 +1605,14 @@ namespace GameSrv.Player
             {
                 return;
             }
-            Merchant merchant = WorldServer.FindMerchant<Merchant>(nParam1);
+            Merchant merchant = WorldServer.FindMerchant<Merchant>(actorId);
             if (merchant != null && merchant.Envir == Envir && IsWithinSight(merchant))
             {
                 merchant.ClientRepairItem(this, userItem);
             }
         }
 
-        private void ClientStorageItem(int objectId, int nItemIdx, string sMsg)
+        private void ClientStorageItem(int actorId, int nItemIdx, string sMsg)
         {
             bool bo19 = false;
             if (sMsg.IndexOf(' ') >= 0)
@@ -1624,7 +1624,7 @@ namespace GameSrv.Player
                 SysMsg(Settings.TryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Merchant merchant = WorldServer.FindMerchant<Merchant>(objectId);
+            Merchant merchant = WorldServer.FindMerchant<Merchant>(actorId);
             for (int i = 0; i < ItemList.Count; i++)
             {
                 UserItem userItem = ItemList[i];
@@ -1661,10 +1661,10 @@ namespace GameSrv.Player
             }
         }
 
-        private void ClientTakeBackStorageItem(int npc, int nItemIdx, string sMsg)
+        private void ClientTakeBackStorageItem(int actorId, int nItemIdx, string sMsg)
         {
             bool bo19 = false;
-            Merchant merchant = WorldServer.FindMerchant<Merchant>(npc);
+            Merchant merchant = WorldServer.FindMerchant<Merchant>(actorId);
             if (merchant == null)
             {
                 return;
