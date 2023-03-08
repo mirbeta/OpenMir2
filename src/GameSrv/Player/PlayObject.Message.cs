@@ -933,7 +933,7 @@ namespace GameSrv.Player
                     ClientGuildBreakAlly(processMsg.Msg);
                     break;
                 case Messages.CM_TURN:
-                    if (ClientChangeDir((short)processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
+                    if (ClientChangeDir((short)processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref dwDelayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -1209,7 +1209,7 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.CM_SITDOWN:
-                    if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
+                    if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref dwDelayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);

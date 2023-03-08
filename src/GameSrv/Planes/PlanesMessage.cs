@@ -309,7 +309,7 @@ namespace GameSrv.Planes {
             Str = HUtil32.GetValidStr3(Str, ref minstr, HUtil32.Backslash);
             if (!string.IsNullOrEmpty(whostr)) {
                 //PlayObject.CmdShutup(Settings.g_GameCommand.SHUTUP, whostr, minstr);
-                CommandMgr.Execute("Shutup", PlayObject);
+                CommandMgr.Execute(PlayObject, "Shutup");
             }
         }
 

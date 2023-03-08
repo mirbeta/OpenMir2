@@ -213,26 +213,26 @@ namespace GameSrv.Player
             }
         }
 
-        private bool ClientDropGold(int nGold)
+        private void ClientDropGold(int nGold)
         {
             if (M2Share.Config.InSafeDisableDrop && InSafeZone())
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
-                return false;
+                return;
             }
             if (M2Share.Config.ControlDropItem && nGold < M2Share.Config.CanDropGold)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropGoldMsg);
-                return false;
+                return;
             }
             if (!IsCanDrop || Envir.Flag.NoThrowItem)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
-                return false;
+                return;
             }
             if (nGold >= Gold)
             {
-                return false;
+                return;
             }
             Gold -= nGold;
             if (!DropGoldDown(nGold, false, 0, this.ActorId))
@@ -240,7 +240,6 @@ namespace GameSrv.Player
                 Gold += nGold;
             }
             GoldChanged();
-            return true;
         }
 
         private bool ClientDropItem(string sItemName, int nItemIdx)
@@ -301,7 +300,7 @@ namespace GameSrv.Player
             return result;
         }
 
-        private bool ClientChangeDir(short wIdent, int nX, int nY, int nDir, ref int dwDelayTime)
+        private bool ClientChangeDir(short wIdent, int nX, int nY, byte nDir, ref int dwDelayTime)
         {
             if (Death || StatusTimeArr[PoisonState.STONE] != 0)// 防麻
             {
@@ -324,7 +323,7 @@ namespace GameSrv.Player
             }
             if (nX == CurrX && nY == CurrY)
             {
-                Dir = (byte)nDir;
+                Dir = nDir;
                 if (Walk(Messages.RM_TURN))
                 {
                     TurnTick = HUtil32.GetTickCount();
@@ -334,7 +333,7 @@ namespace GameSrv.Player
             return false;
         }
 
-        private bool ClientSitDownHit(int nX, int nY, int nDir, ref int dwDelayTime)
+        private bool ClientSitDownHit(int nX, int nY, byte nDir, ref int dwDelayTime)
         {
             if (Death || StatusTimeArr[PoisonState.STONE] != 0)// 防麻
             {
@@ -451,7 +450,6 @@ namespace GameSrv.Player
                             SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
                             SendDefMessage(Messages.SM_TAKEON_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
                             FeatureChanged();
-
                             if ((stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_MAN) || (stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_WOMAN))
                             {
                                 if (stdItem.Shape == ItemShapeConst.DRESS_SHAPE_WING)
@@ -751,7 +749,7 @@ namespace GameSrv.Player
             return false;
         }
 
-        protected bool TakeBagItems(BaseObject baseObject)
+        private bool TakeBagItems(BaseObject baseObject)
         {
             bool result = false;
             while (true)
@@ -1309,7 +1307,7 @@ namespace GameSrv.Player
 
         private void ClientGuildAddMember(string sHumName)
         {
-            int nC = 1; // '你没有权利使用这个命令。'
+            byte nC = 1; // '你没有权利使用这个命令。'
             if (IsGuildMaster())
             {
                 PlayObject playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
@@ -1369,7 +1367,7 @@ namespace GameSrv.Player
 
         private void ClientGuildDelMember(string sHumName)
         {
-            int nC = 1;
+            byte nC = 1;
             if (IsGuildMaster())
             {
                 if (MyGuild.IsMember(sHumName))
@@ -1426,11 +1424,11 @@ namespace GameSrv.Player
 
         private void ClientGuildUpdateNotice(string sNotict)
         {
-            string sC = string.Empty;
             if (MyGuild == null || GuildRankNo != 1)
             {
                 return;
             }
+            string sC = string.Empty;
             MyGuild.NoticeList.Clear();
             while (!string.IsNullOrEmpty(sNotict))
             {
@@ -1472,23 +1470,23 @@ namespace GameSrv.Player
                 BaseObject poseObject = GetPoseCreate();
                 if (poseObject != null && poseObject.Race == ActorRace.Play)
                 {
-                    PlayObject posePlay = poseObject as PlayObject;
-                    if (posePlay.MyGuild != null && posePlay.GetPoseCreate() == this)
+                    var posePlayer = (PlayObject)poseObject;
+                    if (posePlayer.MyGuild != null && posePlayer.GetPoseCreate() == this)
                     {
-                        if (posePlay.MyGuild.EnableAuthAlly)
+                        if (posePlayer.MyGuild.EnableAuthAlly)
                         {
-                            if (posePlay.IsGuildMaster() && IsGuildMaster())
+                            if (posePlayer.IsGuildMaster() && IsGuildMaster())
                             {
-                                if (MyGuild.IsNotWarGuild(posePlay.MyGuild) && posePlay.MyGuild.IsNotWarGuild(MyGuild))
+                                if (MyGuild.IsNotWarGuild(posePlayer.MyGuild) && posePlayer.MyGuild.IsNotWarGuild(MyGuild))
                                 {
-                                    MyGuild.AllyGuild(posePlay.MyGuild);
-                                    posePlay.MyGuild.AllyGuild(MyGuild);
-                                    MyGuild.SendGuildMsg(posePlay.MyGuild.GuildName + "行会已经和您的行会联盟成功。");
-                                    posePlay.MyGuild.SendGuildMsg(MyGuild.GuildName + "行会已经和您的行会联盟成功。");
+                                    MyGuild.AllyGuild(posePlayer.MyGuild);
+                                    posePlayer.MyGuild.AllyGuild(MyGuild);
+                                    MyGuild.SendGuildMsg(posePlayer.MyGuild.GuildName + "行会已经和您的行会联盟成功。");
+                                    posePlayer.MyGuild.SendGuildMsg(MyGuild.GuildName + "行会已经和您的行会联盟成功。");
                                     MyGuild.RefMemberName();
-                                    posePlay.MyGuild.RefMemberName();
+                                    posePlayer.MyGuild.RefMemberName();
                                     WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
-                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, posePlay.MyGuild.GuildName);
+                                    WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, posePlayer.MyGuild.GuildName);
                                     n8 = 0;
                                 }
                                 else
@@ -1567,13 +1565,12 @@ namespace GameSrv.Player
         private void ClientQueryRepairCost(int nParam1, int nInt, string sMsg)
         {
             UserItem userItemA = null;
-            string sUserItemName;
             for (int i = 0; i < ItemList.Count; i++)
             {
                 UserItem userItem = ItemList[i];
                 if (userItem.MakeIndex == nInt)
                 {
-                    sUserItemName = CustomItem.GetItemName(userItem); // 取自定义物品名称
+                    var sUserItemName = CustomItem.GetItemName(userItem);
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         userItemA = userItem;
@@ -1620,7 +1617,7 @@ namespace GameSrv.Player
             bool bo19 = false;
             if (sMsg.IndexOf(' ') >= 0)
             {
-                HUtil32.GetValidStr3(sMsg, ref sMsg, new[] { ' ' });
+                HUtil32.GetValidStr3(sMsg, ref sMsg, ' ');
             }
             if (PayMent == 1 && !M2Share.Config.TryModeUseStorage)
             {

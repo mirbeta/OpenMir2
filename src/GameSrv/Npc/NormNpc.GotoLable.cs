@@ -1582,15 +1582,16 @@ namespace GameSrv.Npc {
                         PlayObject.IsTimeRecall = false;
                         break;
                     case ScriptConst.nCHANGEMODE:
-                        switch (QuestActionInfo.nParam1) {
+                        switch (QuestActionInfo.nParam1)
+                        {
                             case 1:
-                                CommandMgr.Execute("ChangeAdminMode", PlayObject);
+                                CommandMgr.Execute(PlayObject, "ChangeAdminMode");
                                 break;
                             case 2:
-                                CommandMgr.Execute("ChangeSuperManMode", PlayObject);
+                                CommandMgr.Execute(PlayObject, "ChangeSuperManMode");
                                 break;
                             case 3:
-                                CommandMgr.Execute("ChangeObMode", PlayObject);
+                                CommandMgr.Execute(PlayObject, "ChangeObMode");
                                 break;
                             default:
                                 ScriptActionError(PlayObject, "", QuestActionInfo, ScriptConst.sCHANGEMODE);
