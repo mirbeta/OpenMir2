@@ -236,7 +236,7 @@ namespace GameSrv.Player
             string sParam6 = string.Empty;
             string sParam7 = string.Empty;
             int nLen;
-            const string sExceptionMsg = "[Exception] TPlayObject::ProcessUserLineMsg Msg = {0}";
+            const string sExceptionMsg = "[Exception] PlayObject::ProcessUserLineMsg Msg = {0}";
             try
             {
                 nLen = sData.Length;

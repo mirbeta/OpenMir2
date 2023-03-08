@@ -650,7 +650,7 @@ namespace GameSrv.Player {
             bool result = false;
             short n14 = 0;
             short n18 = 0;
-            const string sExceptionMsg = "[Exception] TPlayObject::ClientHitXY";
+            const string sExceptionMsg = "[Exception] PlayObject::ClientHitXY";
             dwDelayTime = 0;
             try {
                 if (!IsCanHit) {

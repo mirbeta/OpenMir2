@@ -1053,7 +1053,7 @@ namespace GameSrv.Player {
         }
 
         public void RunNotice() {
-            const string sExceptionMsg = "[Exception] TPlayObject::RunNotice";
+            const string sExceptionMsg = "[Exception] PlayObject::RunNotice";
             if (BoEmergencyClose || BoKickFlag || BoSoftClose) {
                 if (BoKickFlag) {
                     SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
@@ -1113,7 +1113,7 @@ namespace GameSrv.Player {
         /// </summary>
         public void UserLogon() {
             string sIPaddr = "127.0.0.1";
-            const string sExceptionMsg = "[Exception] TPlayObject::UserLogon";
+            const string sExceptionMsg = "[Exception] PlayObject::UserLogon";
             const string sCheckIPaddrFail = "登录IP地址不匹配!!!";
             try {
                 if (M2Share.Config.TestServer) {
@@ -2819,7 +2819,7 @@ namespace GameSrv.Player {
             string sGuildName = string.Empty;
             string sDearName = string.Empty;
             string sMasterName = string.Empty;
-            const string sExceptionMsg = "[Exception] TPlayObject::GetShowName";
+            const string sExceptionMsg = "[Exception] PlayObject::GetShowName";
             try {
                 if (MyGuild != null) {
                     Castle.UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
@@ -2918,7 +2918,7 @@ namespace GameSrv.Player {
         }
 
         public override void MakeGhost() {
-            const string sExceptionMsg = "[Exception] TPlayObject::MakeGhost";
+            const string sExceptionMsg = "[Exception] PlayObject::MakeGhost";
             try {
                 if (M2Share.HighLevelHuman == ActorId) {
                     M2Share.HighLevelHuman = 0;
@@ -3007,7 +3007,7 @@ namespace GameSrv.Player {
             if (AngryRing || NoDropItem || Envir.Flag.NoDropItem) {
                 return;// 不死戒指
             }
-            const string sExceptionMsg = "[Exception] TPlayObject::ScatterBagItems";
+            const string sExceptionMsg = "[Exception] PlayObject::ScatterBagItems";
             try {
                 if (ItemList.Count > 0) {
                     IList<DeleteItem> delList = new List<DeleteItem>();

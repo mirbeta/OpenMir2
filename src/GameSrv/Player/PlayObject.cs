@@ -356,7 +356,7 @@ namespace GameSrv.Player {
         }
 
         private bool HorseRunTo(byte btDir, bool boFlag) {
-            const string sExceptionMsg = "[Exception] TPlayObject::HorseRunTo";
+            const string sExceptionMsg = "[Exception] PlayObject::HorseRunTo";
             bool result = false;
             try {
                 int n10 = CurrX;
@@ -586,7 +586,7 @@ namespace GameSrv.Player {
 
         public void GainExp(int dwExp) {
             PlayObject playObject;
-            const string sExceptionMsg = "[Exception] TPlayObject::GainExp";
+            const string sExceptionMsg = "[Exception] PlayObject::GainExp";
             double[] bonus = { 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2 };
             try {
                 if (GroupOwner != 0) {

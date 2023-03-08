@@ -1466,7 +1466,7 @@ namespace GameSrv.Player
 
         internal void ClientGuildAlly()
         {
-            const string sExceptionMsg = "[Exception] TPlayObject::ClientGuildAlly";
+            const string sExceptionMsg = "[Exception] PlayObject::ClientGuildAlly";
             try
             {
                 int n8 = -1;
