@@ -1768,7 +1768,7 @@ namespace GameSrv.Npc {
                         ActionOfRecallGroupMembers(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_CLEARNAMELIST:
-                        ActionOfClearNameList(PlayObject, QuestActionInfo);
+                        ActionOfClearList(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nSC_MAPTING:
                         ActionOfMapTing(PlayObject, QuestActionInfo);
@@ -2028,10 +2028,10 @@ namespace GameSrv.Npc {
                         }
                         break;
                     case ScriptConst.nOPENYBDEAL:
-                        ActionOfOpenybdeal(PlayObject, QuestActionInfo);
+                        ActionOfOpenSaleDeal(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nQUERYYBSELL:
-                        ActionOfQueryybsell(PlayObject, QuestActionInfo);
+                        ActionOfQuerySaleSell(PlayObject, QuestActionInfo);
                         break;
                     case ScriptConst.nQUERYYBDEAL:
                         ActionOfQueryTrustDeal(PlayObject, QuestActionInfo);
