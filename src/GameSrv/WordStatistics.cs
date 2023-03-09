@@ -37,6 +37,17 @@ namespace GameSrv {
             _logger.Debug($"网络流入:[{HUtil32.FormatBytesValue(ServerEnvironment.PerSecondBytesReceived)}] 网络流出:[{HUtil32.FormatBytesValue(ServerEnvironment.PerSecondBytesSent)}]");
             ShowGCStatus();
             GetRunTime();
+            FreeMemory();
+        }
+
+        private void FreeMemory()
+        {
+            var gcMemoryInfo = GC.GetGCMemoryInfo();
+            if (gcMemoryInfo.TotalCommittedBytes > gcMemoryInfo.TotalAvailableMemoryBytes / 2)
+            {
+                _logger.Debug("释放内存...");
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive);
+            }
         }
 
         private void GetRunTime() {
