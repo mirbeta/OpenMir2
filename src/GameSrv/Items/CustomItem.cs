@@ -11,17 +11,16 @@ namespace GameSrv.Items {
         }
 
         ~CustomItem() {
-            for (int i = 0; i < ItemNameList.Count; i++) {
+            for (var i = 0; i < ItemNameList.Count; i++) {
                 ItemNameList[i] = null;
             }
             ItemNameList = null;
         }
 
         public string GetCustomItemName(int nMakeIndex, int nItemIndex) {
-            string result = string.Empty;
-            ItemName itemName;
-            for (int i = ItemNameList.Count - 1; i >= 0; i--) {
-                itemName = ItemNameList[i];
+            var result = string.Empty;
+            for (var i = ItemNameList.Count - 1; i >= 0; i--) {
+                var itemName = ItemNameList[i];
                 if (itemName.nMakeIndex != nMakeIndex || itemName.nItemIndex != nItemIndex) continue;
                 result = itemName.sItemName;
                 break;
@@ -31,7 +30,7 @@ namespace GameSrv.Items {
 
         public bool AddCustomItemName(int nMakeIndex, int nItemIndex, string sItemName) {
             ItemName itemName;
-            for (int i = ItemNameList.Count - 1; i >= 0; i--) {
+            for (var i = ItemNameList.Count - 1; i >= 0; i--) {
                 itemName = ItemNameList[i];
                 if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex) {
                     return false;
@@ -46,8 +45,8 @@ namespace GameSrv.Items {
         }
 
         public void DelCustomItemName(int nMakeIndex, int nItemIndex) {
-            for (int i = 0; i < ItemNameList.Count; i++) {
-                ItemName itemName = ItemNameList[i];
+            for (var i = 0; i < ItemNameList.Count; i++) {
+                var itemName = ItemNameList[i];
                 if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex) {
                     ItemNameList.RemoveAt(i);
                     return;
@@ -59,23 +58,23 @@ namespace GameSrv.Items {
         /// 读取自定义物品名称
         /// </summary>
         public void LoadCustomItemName() {
-            string sMakeIndex = string.Empty;
-            string sItemIndex = string.Empty;
-            string sItemName = string.Empty;
-            string sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
-            using StringList loadList = new StringList();
+            var sMakeIndex = string.Empty;
+            var sItemIndex = string.Empty;
+            var sItemName = string.Empty;
+            var sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
+            using var loadList = new StringList();
             if (File.Exists(sFileName)) {
                 ItemNameList.Clear();
                 loadList.LoadFromFile(sFileName);
-                for (int i = 0; i < loadList.Count; i++) {
-                    string sLineText = loadList[i].Trim();
+                for (var i = 0; i < loadList.Count; i++) {
+                    var sLineText = loadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '\t' });
-                    int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-                    int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if (nMakeIndex < 0 || nItemIndex < 0) continue;
-                    ItemName itemName = new ItemName();
+                    var itemName = new ItemName();
                     itemName.nMakeIndex = nMakeIndex;
                     itemName.nItemIndex = nItemIndex;
                     itemName.sItemName = sItemName;
@@ -92,13 +91,12 @@ namespace GameSrv.Items {
         /// </summary>
         /// <param name="userItem"></param>
         /// <returns></returns>
-        public static string GetItemName(UserItem userItem) {
-            string result = string.Empty;
-            if (userItem.Desc[13] == 1) {
+        public static string GetItemName(UserItem userItem)
+        {
+            var result = M2Share.WorldEngine.GetStdItemName(userItem.Index);
+            if (userItem.Desc[13] == 1)
+            {
                 result = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
-            }
-            if (string.IsNullOrEmpty(result)) {
-                result = M2Share.WorldEngine.GetStdItemName(userItem.Index);
             }
             return result;
         }
@@ -107,10 +105,10 @@ namespace GameSrv.Items {
         /// 保存自定义物品名称
         /// </summary>
         public void SaveCustomItemName() {
-            string sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
-            StringList saveList = new StringList();
-            for (int i = ItemNameList.Count - 1; i >= 0; i--) {
-                ItemName itemName = ItemNameList[i];
+            var sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
+            var saveList = new StringList();
+            for (var i = ItemNameList.Count - 1; i >= 0; i--) {
+                var itemName = ItemNameList[i];
                 saveList.Add(itemName.nMakeIndex + "\t" + itemName.nItemIndex + "\t" + itemName.sItemName);
             }
             saveList.SaveToFile(sFileName);
@@ -122,7 +120,7 @@ namespace GameSrv.Items {
         /// <param name="UserItem"></param>
         /// <returns></returns>
         public static int GetItemAddValuePointColor(UserItem UserItem) {
-            int result = 0;
+            var result = 0;
             // if (Settings.g_Config.boRandomnameColor)
             // {
             //     for (var I = 0; I <= 7; I ++ )

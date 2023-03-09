@@ -796,7 +796,7 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.CM_MAGICKEYCHANGE:
-                    ClientChangeMagicKey(processMsg.nParam1, (char)processMsg.nParam2);
+                    ClientChangeMagicKey((ushort)processMsg.nParam1, (char)processMsg.nParam2);
                     break;
                 case Messages.CM_SOFTCLOSE:
                     if (!OffLineFlag)

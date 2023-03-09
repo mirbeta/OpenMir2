@@ -75,7 +75,7 @@ namespace GameSrv.Maps {
                 Flag = mapFlag,
                 QuestNpc = questNpc
             };
-            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out int minMap)) {
+            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out var minMap)) {
                 envirnoment.MinMap = minMap;
             }
             if (envirnoment.LoadMapData(Path.Combine(M2Share.BasePath, M2Share.Config.MapDir, sMapFileName + ".map"))) {

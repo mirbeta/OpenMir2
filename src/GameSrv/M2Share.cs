@@ -89,7 +89,7 @@ namespace GameSrv {
         public static IList<IList<TQDDinfo>> QuestDiaryList = null;
         public static StringList AbuseTextList = null;
         public static ConcurrentDictionary<string, long> DenySayMsgList = null;
-        public static ConcurrentDictionary<string, int> MiniMapList = null;
+        public static ConcurrentDictionary<string, short> MiniMapList = null;
         public static IList<DealOffInfo> SellOffItemList = null;
         public static ArrayList LogonCostLogList = null;
         /// <summary>

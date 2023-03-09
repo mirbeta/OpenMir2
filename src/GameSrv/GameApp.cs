@@ -70,7 +70,7 @@ namespace GameSrv {
             M2Share.StartPointList = new List<StartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];
             M2Share.DenySayMsgList = new ConcurrentDictionary<string, long>(StringComparer.OrdinalIgnoreCase);
-            M2Share.MiniMapList = new ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            M2Share.MiniMapList = new ConcurrentDictionary<string, short>(StringComparer.OrdinalIgnoreCase);
             M2Share.UnbindList = new Dictionary<int, string>();
             M2Share.LineNoticeList = new List<string>();
             M2Share.QuestDiaryList = new List<IList<TQDDinfo>>();

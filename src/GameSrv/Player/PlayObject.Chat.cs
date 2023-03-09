@@ -151,7 +151,7 @@ namespace GameSrv.Player
                         case '/':
                             {
                                 sText = sData.AsSpan()[1..].ToString();
-                                sText = HUtil32.GetValidStr3(sText, ref sParam1, new[] { ' ' });
+                                sText = HUtil32.GetValidStr3(sText, ref sParam1, ' ');
                                 if (!FilterSendMsg)
                                 {
                                     Whisper(sParam1, sText);

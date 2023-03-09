@@ -316,26 +316,31 @@ namespace GameSrv.Maps {
 
         public static int LoadMinMap() {
             logger.Info("正在加小地图数据文件...");
-            var sMapNO = string.Empty;
+            var sMapNo = string.Empty;
             var sMapIdx = string.Empty;
             var result = 0;
             var sFileName = M2Share.GetEnvirFilePath("MiniMap.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 M2Share.MiniMapList.Clear();
                 var tMapList = new StringList();
                 tMapList.LoadFromFile(sFileName);
-                for (var i = 0; i < tMapList.Count; i++) {
+                for (var i = 0; i < tMapList.Count; i++)
+                {
                     var tStr = tMapList[i];
-                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';') {
-                        tStr = HUtil32.GetValidStr3(tStr, ref sMapNO, HUtil32.Separator);
+                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
+                    {
+                        tStr = HUtil32.GetValidStr3(tStr, ref sMapNo, HUtil32.Separator);
                         tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx, HUtil32.Separator);
-                        var nIdx = HUtil32.StrToInt(sMapIdx, 0);
-                        if (nIdx > 0) {
-                            if (M2Share.MiniMapList.ContainsKey(sMapNO)) {
-                                M2Share.Logger.Error($"重复小地图配置信息[{sMapNO}]");
+                        var nIdx = (short)HUtil32.StrToInt(sMapIdx, 0);
+                        if (nIdx > 0)
+                        {
+                            if (M2Share.MiniMapList.ContainsKey(sMapNo))
+                            {
+                                M2Share.Logger.Error($"重复小地图配置信息[{sMapNo}]");
                                 continue;
                             }
-                            M2Share.MiniMapList.TryAdd(sMapNO, nIdx);
+                            M2Share.MiniMapList.TryAdd(sMapNo, nIdx);
                         }
                     }
                 }

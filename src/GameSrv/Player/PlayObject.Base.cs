@@ -78,7 +78,7 @@ namespace GameSrv.Player {
         /// </summary>
         public bool BanGuildChat;
         /// <summary>
-        /// 是不允许交易
+        /// 是否允许交易
         /// </summary>
         internal bool AllowDeal;
         /// <summary>
@@ -718,6 +718,9 @@ namespace GameSrv.Player {
         /// 是否允许使用物品
         /// </summary>
         public bool MBoCanUseItem;
+        /// <summary>
+        /// 是否允许交易物品
+        /// </summary>
         public bool IsCanDeal;
         public bool IsCanDrop;
         public bool IsCanGetBackItem;

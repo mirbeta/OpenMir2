@@ -26,7 +26,7 @@ namespace GameSrv.Maps {
         public string MapName = string.Empty;
         public string MapDesc = string.Empty;
         private MapCellInfo[] _cellArray;
-        public int MinMap;
+        public short MinMap;
         public byte ServerIndex;
         /// <summary>
         /// 进入本地图所需等级
