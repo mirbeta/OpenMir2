@@ -59,7 +59,7 @@ namespace GameSrv.Actor {
                     sw.Stop();
                     _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{GenerateQueue.Count}]");
                 }
-                Thread.Sleep(5000);
+                Thread.SpinWait(5000);
             }
         }
 

@@ -20,12 +20,12 @@ namespace GameSrv.Event
         public void Start()
         {
             _worldEventThread.Start();
-            _logger.Info("ÓÎÏ·ÊÂ¼şÏß³ÌÆô¶¯...");
+            _logger.Info("äº‹ä»¶ç®¡ç†çº¿ç¨‹åˆå§‹åŒ–å®Œæˆ...");
         }
 
         public void Stop() {
             _worldEventThread.Interrupt();
-            _logger.Info("ÓÎÏ·ÊÂ¼şÏß³ÌÍ£Ö¹...");
+            _logger.Info("äº‹ä»¶ç®¡ç†çº¿ç¨‹åœæ­¢Ö¹...");
         }
 
         private void Run()
@@ -58,7 +58,7 @@ namespace GameSrv.Event
                     }
                 }
 
-                Thread.Sleep(20);
+                Thread.SpinWait(20);
             }
         }
 

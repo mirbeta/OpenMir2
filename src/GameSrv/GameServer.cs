@@ -67,7 +67,7 @@ namespace GameSrv
                 {
                     PlanesClient.Instance.Run();
                 }
-                Thread.Sleep(20);
+                Thread.SpinWait(20);//SpinWait 无法使你准确控制等待时间，主要是使用一些锁时用到，例如 Monitor.Enter。
             }
         }
 
@@ -114,7 +114,7 @@ namespace GameSrv
             while (M2Share.StartReady)
             {
                 M2Share.WorldEngine.ProcessHumans();
-                Thread.Sleep(20);
+                Thread.SpinWait(20);
             }
         }
 
@@ -124,7 +124,7 @@ namespace GameSrv
             {
                 M2Share.WorldEngine.ProcessNpcs();
                 M2Share.WorldEngine.ProcessMerchants();
-                Thread.Sleep(20);
+                Thread.SpinWait(20);
             }
         }
 
@@ -133,7 +133,7 @@ namespace GameSrv
             while (M2Share.StartReady)
             {
                 M2Share.WorldEngine.ProcessRobotPlayData();
-                Thread.Sleep(20);
+                Thread.SpinWait(20);
             }
         }
 

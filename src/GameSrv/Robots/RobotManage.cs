@@ -79,7 +79,7 @@ namespace GameSrv.Robots
                     _logger.Error(sExceptionMsg);
                     _logger.Error(e.Message);
                 }
-                Thread.Sleep(20);
+                Thread.SpinWait(20);
             }
         }
 

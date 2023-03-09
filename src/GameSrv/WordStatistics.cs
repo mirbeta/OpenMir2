@@ -72,7 +72,7 @@ namespace GameSrv {
         private static string GetCpuUsageForProcess() {
             DateTime startTime = DateTime.UtcNow;
             TimeSpan startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            Thread.Sleep(500);
+            Thread.SpinWait(500);
             DateTime endTime = DateTime.UtcNow;
             TimeSpan endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
             double cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
