@@ -839,7 +839,7 @@ namespace GameSrv.Npc {
         /// </summary>
         /// <param name="user"></param>
         private void UserSelectOpenDealOffForm(PlayObject user) {
-            if (user.BoYbDeal) {
+            if (user.SaleDeal) {
                 if (!user.SellOffInTime(0)) {
                     user.SendMsg(this, Messages.RM_SENDDEALOFFFORM, 0, ActorId, 0, 0, "");
                     user.GetBackSellOffItems();

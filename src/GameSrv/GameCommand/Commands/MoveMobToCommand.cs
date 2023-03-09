@@ -2,73 +2,85 @@
 using GameSrv.Player;
 using SystemModule.Enums;
 
-namespace GameSrv.GameCommand.Commands {
+namespace GameSrv.GameCommand.Commands
+{
     /// <summary>
     /// 将指定坐标的怪物移动到新坐标，名称为ALL则移动该坐标所有怪物
     /// </summary>
     [Command("MoveMobTo", "将指定坐标的怪物移动到新坐标", "怪物名称 原地图 原X 原Y 新地图 新X 新Y", 10)]
-    public class MoveMobToCommand : GameCommand {
+    public class MoveMobToCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject)
+        {
+            if (@params == null)
+            {
                 return;
             }
-            string sMonName = @Params[0];
-            string OleMap = @Params[1];
-            string NewMap = @Params[2];
-            short nX = (short)(@Params[3] == null ? 0 : HUtil32.StrToInt(@Params[3],0));
-            short nY = (short)(@Params[4] == null ? 0 : HUtil32.StrToInt(@Params[4],0));
-            short OnX = (short)(@Params[5] == null ? 0 : HUtil32.StrToInt(@Params[5],0));
-            short OnY = (short)(@Params[6] == null ? 0 : HUtil32.StrToInt(@Params[6],0));
-            BaseObject MoveMon;
-            if (string.IsNullOrEmpty(sMonName) || string.IsNullOrEmpty(OleMap) || string.IsNullOrEmpty(NewMap) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?') {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+            var sMonName = @params[0];
+            var oleMap = @params[1];
+            var newMap = @params[2];
+            var nX = (short)(@params[3] == null ? 0 : HUtil32.StrToInt(@params[3], 0));
+            var nY = (short)(@params[4] == null ? 0 : HUtil32.StrToInt(@params[4], 0));
+            var x = (short)(@params[5] == null ? 0 : HUtil32.StrToInt(@params[5], 0));
+            var y = (short)(@params[6] == null ? 0 : HUtil32.StrToInt(@params[6], 0));
+            if (string.IsNullOrEmpty(sMonName) || string.IsNullOrEmpty(oleMap) || string.IsNullOrEmpty(newMap) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?')
+            {
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            bool boMoveAll = false;
-            if (sMonName == "ALL") {
-                boMoveAll = true;
-            }
-            if (nX < 0) {
+            var boMoveAll = sMonName == "ALL";
+            if (nX < 0)
+            {
                 nX = 0;
             }
-            if (nY < 0) {
+            if (nY < 0)
+            {
                 nY = 0;
             }
-            if (OnX < 0) {
-                OnX = 0;
+            if (x < 0)
+            {
+                x = 0;
             }
-            if (OnY < 0) {
-                OnY = 0;
+            if (y < 0)
+            {
+                y = 0;
             }
-            Maps.Envirnoment SrcEnvir = M2Share.MapMgr.FindMap(OleMap);// 原地图
-            Maps.Envirnoment DenEnvir = M2Share.MapMgr.FindMap(NewMap);// 新地图
-            if (SrcEnvir == null || DenEnvir == null) {
+            var srcEnvir = M2Share.MapMgr.FindMap(oleMap);// 原地图
+            var denEnvir = M2Share.MapMgr.FindMap(newMap);// 新地图
+            if (srcEnvir == null || denEnvir == null)
+            {
                 return;
             }
-            IList<BaseObject> MonList = new List<BaseObject>();
+            IList<BaseObject> monList = new List<BaseObject>();
             if (!boMoveAll)// 指定名称的怪移动
             {
-                M2Share.WorldEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 10, MonList);// 查指定XY范围内的怪
-                if (MonList.Count > 0) {
-                    for (int i = 0; i < MonList.Count; i++) {
-                        MoveMon = MonList[i];
-                        if (MoveMon != PlayObject) {
-                            if (string.Compare(MoveMon.ChrName, sMonName, StringComparison.OrdinalIgnoreCase) == 0) // 是否是指定名称的怪
+                M2Share.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 10, monList);// 查指定XY范围内的怪
+                if (monList.Count > 0)
+                {
+                    for (var i = 0; i < monList.Count; i++)
+                    {
+                        var moveMon = monList[i];
+                        if (moveMon != playObject)
+                        {
+                            if (string.Compare(moveMon.ChrName, sMonName, StringComparison.OrdinalIgnoreCase) == 0)// 是否是指定名称的怪
                             {
-                                MoveMon.SpaceMove(NewMap, nX, nY, 0);
+                                moveMon.SpaceMove(newMap, nX, nY, 0);
                             }
                         }
                     }
                 }
             }
-            else {
+            else
+            {
                 // 所有怪移动
-                M2Share.WorldEngine.GetMapRangeMonster(SrcEnvir, OnX, OnY, 1000, MonList);// 查指定XY范围内的怪
-                for (int i = 0; i < MonList.Count; i++) {
-                    MoveMon = MonList[i];
-                    if (MoveMon != PlayObject) {
-                        MoveMon.SpaceMove(NewMap, nX, nY, 0);
+                M2Share.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 1000, monList);// 查指定XY范围内的怪
+                for (var i = 0; i < monList.Count; i++)
+                {
+                    var moveMon = monList[i];
+                    if (moveMon != playObject)
+                    {
+                        moveMon.SpaceMove(newMap, nX, nY, 0);
                     }
                 }
             }

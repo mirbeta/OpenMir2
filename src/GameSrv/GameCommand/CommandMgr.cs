@@ -95,10 +95,10 @@ namespace GameSrv.GameCommand {
         /// <summary>
         /// 执行游戏命令
         /// </summary>
-        /// <param name="line">命令字符串</param>
         /// <param name="playObject">命令对象</param>
+        /// <param name="line">命令字符串</param>
         /// <returns><see cref="bool"/></returns>
-        public static bool Execute(string line, PlayObject playObject) {
+        public static bool Execute(PlayObject playObject,string line) {
             if (playObject == null)
                 throw new ArgumentException("PlayObject");
 

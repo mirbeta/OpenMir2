@@ -236,7 +236,7 @@ namespace GameSrv.Player
             string sParam6 = string.Empty;
             string sParam7 = string.Empty;
             int nLen;
-            const string sExceptionMsg = "[Exception] TPlayObject::ProcessUserLineMsg Msg = {0}";
+            const string sExceptionMsg = "[Exception] PlayObject::ProcessUserLineMsg Msg = {0}";
             try
             {
                 nLen = sData.Length;
@@ -403,7 +403,7 @@ namespace GameSrv.Player
                 {
                     sC = HUtil32.GetValidStr3(sC, ref sParam7, new[] { ' ', ':', ',', '\t' });
                 }
-                if (CommandMgr.Execute(sData, this))
+                if (CommandMgr.Execute(this, sData))
                 {
                     return;
                 }

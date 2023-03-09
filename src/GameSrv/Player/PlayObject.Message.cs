@@ -21,9 +21,9 @@ namespace GameSrv.Player
             int nInteger;
             const string sPayMentExpire = "您的帐户充值时间已到期!!!";
             const string sDisConnectMsg = "游戏被强行中断!!!";
-            const string sExceptionMsg1 = "[Exception] TPlayObject::Run -> Operate 1";
-            const string sExceptionMsg2 = "[Exception] TPlayObject::Run -> Operate 2 # {0} Ident:{1} Sender:{2} wP:{3} nP1:{4} nP2:{5} np3:{6} Msg:{7}";
-            const string sExceptionMsg4 = "[Exception] TPlayObject::Run -> ClearObj";
+            const string sExceptionMsg1 = "[Exception] PlayObject::Run -> Operate 1";
+            const string sExceptionMsg2 = "[Exception] PlayObject::Run -> Operate 2 # {0} Ident:{1} Sender:{2} wP:{3} nP1:{4} nP2:{5} np3:{6} Msg:{7}";
+            const string sExceptionMsg4 = "[Exception] PlayObject::Run -> ClearObj";
             try
             {
                 if (Dealing)
@@ -933,7 +933,7 @@ namespace GameSrv.Player
                     ClientGuildBreakAlly(processMsg.Msg);
                     break;
                 case Messages.CM_TURN:
-                    if (ClientChangeDir((short)processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
+                    if (ClientChangeDir((short)processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref dwDelayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -1209,7 +1209,7 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.CM_SITDOWN:
-                    if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, processMsg.wParam, ref dwDelayTime))
+                    if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref dwDelayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -2053,7 +2053,7 @@ namespace GameSrv.Player
 
         internal override void DropUseItems(int baseObject)
         {
-            const string sExceptionMsg = "[Exception] TPlayObject::DropUseItems";
+            const string sExceptionMsg = "[Exception] PlayObject::DropUseItems";
             try
             {
                 if (AngryRing || NoDropUseItem)

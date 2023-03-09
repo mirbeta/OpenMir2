@@ -3,10 +3,8 @@ using SystemModule.Data;
 
 namespace GameSrv.Player {
     public class PlayCloneObject : PlayObject {
-        private readonly int m_dwRunTime;
 
         public PlayCloneObject(PlayObject PlayObject) : base() {
-            this.m_dwRunTime = HUtil32.GetTickCount();
             this.ChrName = "Clone";
             this.CurrX = PlayObject.CurrX;
             this.CurrY = PlayObject.CurrY;
