@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class MapWalkXY
+    public struct MapWalkXY
     {
         /// <summary>
         /// 走步长

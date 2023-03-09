@@ -9,11 +9,10 @@ namespace GameSrv.RobotPlay
     {
         private MapWalkXY FindGoodPathA(MapWalkXY[] WalkStep, int nRange, int nType)
         {
-            MapWalkXY result = null;
-            int n10 = int.MaxValue;
-            MapWalkXY MapWalkXY = null;
-            //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            var n10 = int.MaxValue;
+            MapWalkXY result = default;
+            MapWalkXY MapWalkXY = default;
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (WalkStep[i].WalkStep > 0 && Math.Abs(WalkStep[i].X - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].Y - TargetCret.CurrY) >= nRange)
                 {
@@ -24,14 +23,13 @@ namespace GameSrv.RobotPlay
                     }
                 }
             }
-            if (MapWalkXY != null && Master != null)
+            if (MapWalkXY.WalkStep > 0 && Master != null)
             {
                 var nMonCount = MapWalkXY.MonCount;
                 var nMastrRange = MapWalkXY.MastrRange;
                 n10 = int.MaxValue;
-                MapWalkXY MapWalkXYA = MapWalkXY;
-                MapWalkXY = null;
-                for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+                var MapWalkXYA = MapWalkXY;
+                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
                 {
                     if (WalkStep[i].WalkStep > 0 && WalkStep[i].MonCount <= nMonCount && Math.Abs(WalkStep[i].X - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].Y - TargetCret.CurrY) >= nRange)
                     {
@@ -42,12 +40,12 @@ namespace GameSrv.RobotPlay
                         }
                     }
                 }
-                if (MapWalkXY == null)
+                if (MapWalkXY.WalkStep == 0)
                 {
                     MapWalkXY = MapWalkXYA;
                 }
             }
-            if (MapWalkXY != null)
+            if (MapWalkXY.WalkStep > 0)
             {
                 result = MapWalkXY;
             }
@@ -56,11 +54,10 @@ namespace GameSrv.RobotPlay
 
         private MapWalkXY FindGoodPathB(MapWalkXY[] WalkStep, int nType)
         {
-            MapWalkXY result = null;
-            MapWalkXY MapWalkXY = null;
-            int n10 = int.MaxValue;
-            //FillChar(result, sizeof(TMapWalkXY), 0);
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            MapWalkXY result = default;
+            MapWalkXY MapWalkXY = default;
+            var n10 = int.MaxValue;
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (WalkStep[i].WalkStep > 0)
                 {
@@ -71,14 +68,13 @@ namespace GameSrv.RobotPlay
                     }
                 }
             }
-            if (MapWalkXY != null && Master != null)
+            if (MapWalkXY.WalkStep>0 && Master != null)
             {
                 var nMonCount = MapWalkXY.MonCount;
                 var nMastrRange = MapWalkXY.MastrRange;
                 n10 = int.MaxValue;
-                MapWalkXY MapWalkXYA = MapWalkXY;
-                MapWalkXY = null;
-                for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+                var MapWalkXYA = MapWalkXY;
+                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
                 {
                     if (WalkStep[i].WalkStep > 0 && WalkStep[i].MonCount <= nMonCount)
                     {
@@ -89,12 +85,12 @@ namespace GameSrv.RobotPlay
                         }
                     }
                 }
-                if (MapWalkXY == null)
+                if (MapWalkXY.WalkStep == 0)
                 {
                     MapWalkXY = MapWalkXYA;
                 }
             }
-            if (MapWalkXY != null)
+            if (MapWalkXY.WalkStep > 0)
             {
                 result = MapWalkXY;
             }
@@ -103,15 +99,14 @@ namespace GameSrv.RobotPlay
 
         private MapWalkXY FindMinRange(MapWalkXY[] WalkStep)
         {
-            MapWalkXY result = null;
-            int n10 = int.MaxValue;
-            int n1C;
-            MapWalkXY MapWalkXY = null;
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            var n10 = int.MaxValue;
+            MapWalkXY result = default;
+            MapWalkXY MapWalkXY = default;
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (WalkStep[i].WalkStep > 0)
                 {
-                    n1C = Math.Abs(WalkStep[i].X - TargetCret.CurrX) + Math.Abs(WalkStep[i].Y - TargetCret.CurrY);
+                    var n1C = Math.Abs(WalkStep[i].X - TargetCret.CurrX) + Math.Abs(WalkStep[i].Y - TargetCret.CurrY);
                     if (n1C < n10)
                     {
                         n10 = n1C;
@@ -119,16 +114,15 @@ namespace GameSrv.RobotPlay
                     }
                 }
             }
-            if (MapWalkXY != null)
+            if (MapWalkXY.WalkStep > 0)
             {
                 var nMonCount = MapWalkXY.MonCount;
-                MapWalkXY MapWalkXYA = MapWalkXY;
-                MapWalkXY = null;
-                for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+                var MapWalkXYA = MapWalkXY;
+                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
                 {
                     if (WalkStep[i].WalkStep > 0 && WalkStep[i].MonCount <= nMonCount)
                     {
-                        n1C = Math.Abs(WalkStep[i].X - TargetCret.CurrX) + Math.Abs(WalkStep[i].Y - TargetCret.CurrY);
+                        var n1C = Math.Abs(WalkStep[i].X - TargetCret.CurrX) + Math.Abs(WalkStep[i].Y - TargetCret.CurrY);
                         if (n1C <= n10)
                         {
                             n10 = n1C;
@@ -136,12 +130,12 @@ namespace GameSrv.RobotPlay
                         }
                     }
                 }
-                if (MapWalkXY == null)
+                if (MapWalkXY.WalkStep == 0)
                 {
                     MapWalkXY = MapWalkXYA;
                 }
             }
-            if (MapWalkXY != null)
+            if (MapWalkXY.WalkStep > 0)
             {
                 result = MapWalkXY;
             }
@@ -167,25 +161,29 @@ namespace GameSrv.RobotPlay
             return false;
         }
 
-        private bool FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag)
+        private bool FindPosOfSelf(ref MapWalkXY[] walkStep, int nRange, bool boFlag)
         {
-            bool result = false;
+            if (walkStep == null)
+            {
+                walkStep = new MapWalkXY[8];
+            }
+            var result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
                     {
-                        WalkStep[i].WalkStep = nRange;
-                        WalkStep[i].X = nCurrX;
-                        WalkStep[i].Y = nCurrY;
-                        WalkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
-                        WalkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
-                        WalkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
+                        walkStep[i] = new MapWalkXY();
+                        walkStep[i].WalkStep = nRange;
+                        walkStep[i].X = nCurrX;
+                        walkStep[i].Y = nCurrY;
+                        walkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
+                        walkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
+                        walkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
                     }
                 }
@@ -193,24 +191,29 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private bool ActThink__FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag)
+        private bool ActThinkFindPosOfSelf(ref MapWalkXY[] walkStep, int nRange, bool boFlag)
         {
+            if (walkStep == null)
+            {
+                walkStep = new MapWalkXY[8];
+            }
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            bool result = false;
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            var result = false;
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
                     {
-                        WalkStep[i].WalkStep = nRange;
-                        WalkStep[i].X = nCurrX;
-                        WalkStep[i].Y = nCurrY;
-                        WalkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
-                        WalkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
-                        WalkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
+                        walkStep[i] = new MapWalkXY();
+                        walkStep[i].WalkStep = nRange;
+                        walkStep[i].X = nCurrX;
+                        walkStep[i].Y = nCurrY;
+                        walkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
+                        walkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
+                        walkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
                     }
                 }
@@ -218,25 +221,29 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private bool FindPosOfTarget(MapWalkXY[] WalkStep, short nTargetX, short nTargetY, int nRange, bool boFlag)
+        private bool FindPosOfTarget(ref MapWalkXY[] walkStep, short nTargetX, short nTargetY, int nRange, bool boFlag)
         {
-            bool result = false;
+            if (walkStep == null)
+            {
+                walkStep = new MapWalkXY[8];
+            }
+            var result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && Envir.CanWalkEx(nCurrX, nCurrY, false))
                 {
                     if ((!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir)) && IsGotoXy(CurrX, CurrY, nCurrX, nCurrY))
                     {
-                        WalkStep[i].WalkStep = nRange;
-                        WalkStep[i].X = nCurrX;
-                        WalkStep[i].Y = nCurrY;
-                        WalkStep[i].MonRange = Math.Abs(nCurrX - nTargetX) + Math.Abs(nCurrY - nTargetY);
-                        WalkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
-                        WalkStep[i].MonCount = GetRangeTargetCount(nCurrX, nCurrY, 2);
+                        walkStep[i] = new MapWalkXY();
+                        walkStep[i].WalkStep = nRange;
+                        walkStep[i].X = nCurrX;
+                        walkStep[i].Y = nCurrY;
+                        walkStep[i].MonRange = Math.Abs(nCurrX - nTargetX) + Math.Abs(nCurrY - nTargetY);
+                        walkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
+                        walkStep[i].MonCount = GetRangeTargetCount(nCurrX, nCurrY, 2);
                         result = true;
                     }
                 }
@@ -244,25 +251,26 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public bool FindPos(MapWalkXY[] WalkStep, int nRange, bool boFlag)
+        public bool FindPos(ref MapWalkXY[] walkStep, int nRange, bool boFlag)
         {
-            bool result = false;
+            var result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
                     {
-                        WalkStep[i].WalkStep = nRange;
-                        WalkStep[i].X = nCurrX;
-                        WalkStep[i].Y = nCurrY;
-                        WalkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
-                        WalkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
-                        WalkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
+                        walkStep[i] = new MapWalkXY();
+                        walkStep[i].WalkStep = nRange;
+                        walkStep[i].X = nCurrX;
+                        walkStep[i].Y = nCurrY;
+                        walkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
+                        walkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
+                        walkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
                     }
                 }
@@ -272,18 +280,18 @@ namespace GameSrv.RobotPlay
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir))
                     {
-                        WalkStep[i].WalkStep = nRange;
-                        WalkStep[i].X = nCurrX;
-                        WalkStep[i].Y = nCurrY;
-                        WalkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
-                        WalkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
-                        WalkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
+                        walkStep[i].WalkStep = nRange;
+                        walkStep[i].X = nCurrX;
+                        walkStep[i].Y = nCurrY;
+                        walkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
+                        walkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
+                        walkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
                     }
                 }
@@ -291,25 +299,26 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public bool ActThink__FindPos(MapWalkXY[] WalkStep, int nRange, bool boFlag)
+        public bool ActThink__FindPos(MapWalkXY[] walkStep, int nRange, bool boFlag)
         {
-            bool result = false;
+            var result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
                     {
-                        WalkStep[i].WalkStep = nRange;
-                        WalkStep[i].X = nCurrX;
-                        WalkStep[i].Y = nCurrY;
-                        WalkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
-                        WalkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
-                        WalkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
+                        walkStep[i] = new MapWalkXY();
+                        walkStep[i].WalkStep = nRange;
+                        walkStep[i].X = nCurrX;
+                        walkStep[i].Y = nCurrY;
+                        walkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
+                        walkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
+                        walkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
                     }
                 }
@@ -319,18 +328,18 @@ namespace GameSrv.RobotPlay
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
                     if (!boFlag || CanAttack(nCurrX, nCurrY, TargetCret, nRange, ref btDir) || CanWalkNextPosition(nCurrX, nCurrY, nRange, i, boFlag))
                     {
-                        WalkStep[i].WalkStep = nRange;
-                        WalkStep[i].X = nCurrX;
-                        WalkStep[i].Y = nCurrY;
-                        WalkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
-                        WalkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
-                        WalkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
+                        walkStep[i].WalkStep = nRange;
+                        walkStep[i].X = nCurrX;
+                        walkStep[i].Y = nCurrY;
+                        walkStep[i].MonRange = Math.Abs(nCurrX - TargetCret.CurrX) + Math.Abs(nCurrY - TargetCret.CurrY);
+                        walkStep[i].MonCount = GetNearTargetCount(nCurrX, nCurrY);
+                        walkStep[i].MastrRange = GetMasterRange(nCurrX, nCurrY);
                         result = true;
                     }
                 }
@@ -340,11 +349,11 @@ namespace GameSrv.RobotPlay
 
         private bool WalkToRightPos(int wMagicID)
         {
-            MapWalkXY[] WalkStep = null;
+            MapWalkXY[] walkStep = null;
             try
             {
                 var boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || Job == 0;
-                MapWalkXY MapWalkXY;
+                MapWalkXY mapWalkXy;
                 int nRange;
                 if (Job == 0 || wMagicID <= 0)
                 {
@@ -361,14 +370,14 @@ namespace GameSrv.RobotPlay
                     {
                         nRange = 6;
                     }
-                    for (int i = nRange; i >= 1; i--)
+                    for (var i = nRange; i >= 1; i--)
                     {
-                        if (FindPosOfTarget(WalkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
+                        if (FindPosOfTarget(ref walkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
                         {
-                            MapWalkXY = FindGoodPathB(WalkStep, 0);
-                            if (MapWalkXY.WalkStep > 0)
+                            mapWalkXy = FindGoodPathB(walkStep, 0);
+                            if (mapWalkXy.WalkStep > 0)
                             {
-                                if (GotoNext(MapWalkXY.X, MapWalkXY.Y, Race != 108))
+                                if (GotoNext(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
                                     return true;
@@ -376,22 +385,22 @@ namespace GameSrv.RobotPlay
                             }
                         }
                     }
-                    for (int i = 2; i >= 1; i--)
+                    for (var i = 2; i >= 1; i--)
                     {
-                        if (FindPosOfSelf(WalkStep, i, boFlag))
+                        if (FindPosOfSelf(ref walkStep, i, boFlag))
                         {
                             if (Master != null)
                             {
-                                MapWalkXY = FindGoodPathB(WalkStep, 1);
+                                mapWalkXy = FindGoodPathB(walkStep, 1);
                             }
                             else
                             {
-                                MapWalkXY = FindGoodPathB(WalkStep, 0);
+                                mapWalkXy = FindGoodPathB(walkStep, 0);
                             }
-                            if (MapWalkXY.WalkStep > 0)
+                            if (mapWalkXy.WalkStep > 0)
                             {
                                 // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
-                                if (GotoNext(MapWalkXY.X, MapWalkXY.Y, Race != 108))
+                                if (GotoNext(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
                                     return true;
@@ -411,14 +420,14 @@ namespace GameSrv.RobotPlay
                         nRange = 1;
                     }
                     boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
-                    for (int i = 2; i >= 1; i--)
+                    for (var i = 2; i >= 1; i--)
                     {
-                        if (FindPosOfSelf(WalkStep, i, boFlag))
+                        if (FindPosOfSelf(ref walkStep, i, boFlag))
                         {
-                            MapWalkXY = FindGoodPathA(WalkStep, nRange, 0);
-                            if (MapWalkXY.WalkStep > 0)
+                            mapWalkXy = FindGoodPathA(walkStep, nRange, 0);
+                            if (mapWalkXy.WalkStep > 0)
                             {
-                                if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
+                                if (GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
                                     return true;
@@ -426,14 +435,14 @@ namespace GameSrv.RobotPlay
                             }
                         }
                     }
-                    for (int i = 2; i >= 1; i--)
+                    for (var i = 2; i >= 1; i--)
                     {
-                        if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
+                        if (ActThinkFindPosOfSelf(ref walkStep, i, boFlag))
                         {
-                            MapWalkXY = FindMinRange(WalkStep);
-                            if (MapWalkXY.WalkStep > 0)
+                            mapWalkXy = FindMinRange(walkStep);
+                            if (mapWalkXy.WalkStep > 0)
                             {
-                                if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
+                                if (GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
                                     return true;
@@ -441,14 +450,14 @@ namespace GameSrv.RobotPlay
                             }
                         }
                     }
-                    for (int i = nRange; i >= 1; i--)
+                    for (var i = nRange; i >= 1; i--)
                     {
-                        if (FindPosOfTarget(WalkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
+                        if (FindPosOfTarget(ref walkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
                         {
-                            MapWalkXY = FindGoodPathB(WalkStep, 0);
-                            if (MapWalkXY.WalkStep > 0)
+                            mapWalkXy = FindGoodPathB(walkStep, 0);
+                            if (mapWalkXy.WalkStep > 0)
                             {
-                                if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
+                                if (GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
                                     return true;
@@ -470,13 +479,13 @@ namespace GameSrv.RobotPlay
             short nX = 0;
             short nY = 0;
             MapWalkXY[] WalkStep = null;
-            int nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
+            var nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
             var boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
             MapWalkXY mapWalkXy;
-            for (int i = nRange; i >= 1; i--)
+            for (var i = nRange; i >= 1; i--)
             {
-                if (FindPosOfSelf(WalkStep, i, boFlag))
+                if (FindPosOfSelf(ref WalkStep, i, boFlag))
                 {
                     mapWalkXy = FindGoodPathB(WalkStep, 0);
                     if (mapWalkXy.WalkStep > 0)
@@ -486,7 +495,7 @@ namespace GameSrv.RobotPlay
                         {
                             if (Race != 108)
                             {
-                                for (int j = nRange; j >= 1; j--)// 再跑1次
+                                for (var j = nRange; j >= 1; j--)// 再跑1次
                                 {
                                     if (Envir.GetNextPosition(mapWalkXy.X, mapWalkXy.Y, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= mapWalkXy.MonCount)
                                     {
@@ -501,9 +510,9 @@ namespace GameSrv.RobotPlay
                     }
                 }
             }
-            for (int i = nRange; i >= 1; i--)
+            for (var i = nRange; i >= 1; i--)
             {
-                if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
+                if (ActThinkFindPosOfSelf(ref WalkStep, i, boFlag))
                 {
                     mapWalkXy = FindGoodPathB(WalkStep, 0);
                     if (mapWalkXy.WalkStep > 0)
@@ -511,7 +520,7 @@ namespace GameSrv.RobotPlay
                         btDir = M2Share.GetNextDirection(CurrX, CurrY, mapWalkXy.X, mapWalkXy.Y);
                         if (GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                         {
-                            for (int j = nRange; j >= 1; j--)
+                            for (var j = nRange; j >= 1; j--)
                             {
                                 // 再跑1次
                                 if (Envir.GetNextPosition(mapWalkXy.X, mapWalkXy.Y, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= mapWalkXy.MonCount)
@@ -533,13 +542,13 @@ namespace GameSrv.RobotPlay
 
         private bool FollowTarget(short wMagicID)
         {
-            int nRange = 2;
+            var nRange = 2;
             MapWalkXY[] WalkStep = null;
             MapWalkXY MapWalkXY;
-            bool boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
-            for (int i = nRange; i >= 1; i--)
+            var boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
+            for (var i = nRange; i >= 1; i--)
             {
-                if (FindPosOfSelf(WalkStep, i, boFlag))
+                if (FindPosOfSelf(ref WalkStep, i, boFlag))
                 {
                     MapWalkXY = FindMinRange(WalkStep);
                     if (MapWalkXY.WalkStep > 0)
@@ -552,9 +561,9 @@ namespace GameSrv.RobotPlay
                     }
                 }
             }
-            for (int i = nRange; i >= 1; i--)
+            for (var i = nRange; i >= 1; i--)
             {
-                if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
+                if (ActThinkFindPosOfSelf(ref WalkStep, i, boFlag))
                 {
                     MapWalkXY = FindMinRange(WalkStep);
                     if (MapWalkXY.WalkStep > 0)
@@ -594,7 +603,7 @@ namespace GameSrv.RobotPlay
 
         private MapWalkXY FindPosOfDir(byte nDir, int nRange, bool boFlag)
         {
-            MapWalkXY result = null;
+            MapWalkXY result = default;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(result, sizeof(TMapWalkXY), 0);
@@ -679,14 +688,12 @@ namespace GameSrv.RobotPlay
 
         private bool RunPosAttack(int magicId)
         {
-            MapWalkXY[] WalkStep = new MapWalkXY[2];
+            var walkStep = new MapWalkXY[2];
             int nRange;
-            int nNearTargetCount;
-            bool result = false;
-            byte btDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
-            byte btNewDir1 = RunPosAttackGetNextRunPos(btDir, true);
-            byte btNewDir2 = RunPosAttackGetNextRunPos(btDir, false);
-            //FillChar(WalkStep, sizeof(TMapWalkXY) * 2, 0);
+            var result = false;
+            var btDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+            var btNewDir1 = RunPosAttackGetNextRunPos(btDir, true);
+            var btNewDir2 = RunPosAttackGetNextRunPos(btDir, false);
             if (Job == 0)
             {
                 nRange = 1;
@@ -702,65 +709,65 @@ namespace GameSrv.RobotPlay
                 {
                     nRange = 6;
                 }
-                WalkStep[0] = FindPosOfDir(btNewDir1, nRange, true);
-                WalkStep[1] = FindPosOfDir(btNewDir2, nRange, true);
+                walkStep[0] = FindPosOfDir(btNewDir1, nRange, true);
+                walkStep[1] = FindPosOfDir(btNewDir2, nRange, true);
             }
             else
             {
                 nRange = 2;
-                WalkStep[0] = FindPosOfDir(btNewDir1, nRange, false);
-                WalkStep[1] = FindPosOfDir(btNewDir2, nRange, false);
+                walkStep[0] = FindPosOfDir(btNewDir1, nRange, false);
+                walkStep[1] = FindPosOfDir(btNewDir2, nRange, false);
             }
-            nNearTargetCount = GetNearTargetCount(CurrX, CurrY);
-            MapWalkXY MapWalkXY = null;
-            if (WalkStep[0].WalkStep > 0 && WalkStep[1].WalkStep > 0)
+            var nNearTargetCount = GetNearTargetCount(CurrX, CurrY);
+            MapWalkXY mapWalkXY = default;
+            if (walkStep[0].WalkStep > 0 && walkStep[1].WalkStep > 0)
             {
                 if (MRunPos.btDirection > 0)
                 {
-                    MapWalkXY = WalkStep[1];
+                    mapWalkXY = walkStep[1];
                 }
                 else
                 {
-                    MapWalkXY = WalkStep[0];
+                    mapWalkXY = walkStep[0];
                 }
-                if (nNearTargetCount < WalkStep[0].MonCount && nNearTargetCount < WalkStep[1].MonCount)
+                if (nNearTargetCount < walkStep[0].MonCount && nNearTargetCount < walkStep[1].MonCount)
                 {
-                    MapWalkXY = null;
+                    mapWalkXY = default(MapWalkXY);
                 }
-                else if (MRunPos.btDirection > 0 && nNearTargetCount < WalkStep[1].MonCount)
+                else if (MRunPos.btDirection > 0 && nNearTargetCount < walkStep[1].MonCount)
                 {
-                    MapWalkXY = null;
+                    mapWalkXY = default(MapWalkXY);
                 }
-                else if (MRunPos.btDirection <= 0 && nNearTargetCount < WalkStep[0].MonCount)
+                else if (MRunPos.btDirection <= 0 && nNearTargetCount < walkStep[0].MonCount)
                 {
-                    MapWalkXY = null;
+                    mapWalkXY = default(MapWalkXY);
                 }
-                if (nNearTargetCount > 0 && MapWalkXY != null && MapWalkXY.MonCount > nNearTargetCount)
+                if (nNearTargetCount > 0 && mapWalkXY.WalkStep > 0 && mapWalkXY.MonCount > nNearTargetCount)
                 {
-                    MapWalkXY = null;
+                    mapWalkXY = default(MapWalkXY);
                 }
             }
-            else if (WalkStep[0].WalkStep > 0)
+            else if (walkStep[0].WalkStep > 0)
             {
-                MapWalkXY = WalkStep[0];
-                if (nNearTargetCount < WalkStep[0].MonCount)
+                mapWalkXY = walkStep[0];
+                if (nNearTargetCount < walkStep[0].MonCount)
                 {
-                    MapWalkXY = null;
+                    mapWalkXY = default(MapWalkXY);
                 }
                 MRunPos.btDirection = 0;
             }
-            else if (WalkStep[1].WalkStep > 0)
+            else if (walkStep[1].WalkStep > 0)
             {
-                MapWalkXY = WalkStep[1];
-                if (nNearTargetCount < WalkStep[1].MonCount)
+                mapWalkXY = walkStep[1];
+                if (nNearTargetCount < walkStep[1].MonCount)
                 {
-                    MapWalkXY = null;
+                    mapWalkXY = default(MapWalkXY);
                 }
                 MRunPos.btDirection = 1;
             }
-            if (MapWalkXY != null)
+            if (mapWalkXY.WalkStep > 0)
             {
-                if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
+                if (GotoNextOne(mapWalkXY.X, mapWalkXY.Y, Race != 108))
                 {
                     result = true;
                 }
@@ -774,9 +781,9 @@ namespace GameSrv.RobotPlay
 
         private bool ActThink(short magicId)
         {
-            bool result = false;
-            int nCode = 0;
-            int nThinkCount = 0;
+            var result = false;
+            var nCode = 0;
+            var nThinkCount = 0;
             try
             {
                 while (true)
