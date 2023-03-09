@@ -804,7 +804,7 @@ namespace GameSrv.World
             if (OtherUserNameList.TryGetValue(sName, out var groupServer))
             {
                 nServerIndex = groupServer.nServerIdx;
-                M2Share.Logger.Info($"玩家在[{nServerIndex}]服务器上.");
+                _logger.Info($"玩家在[{nServerIndex}]服务器上.");
                 return true;
             }
             return false;
@@ -840,8 +840,8 @@ namespace GameSrv.World
 
         public static void ProcessUserMessage(PlayObject playObject, CommandMessage defMsg, string buff)
         {
-            var sMsg = string.Empty;
             if (playObject.OffLineFlag) return;
+            var sMsg = string.Empty;
             if (!string.IsNullOrEmpty(buff)) sMsg = buff;
             switch (defMsg.Ident)
             {

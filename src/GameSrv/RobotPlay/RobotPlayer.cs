@@ -252,7 +252,7 @@ namespace GameSrv.RobotPlay
 
         protected override void Whisper(string whostr, string saystr)
         {
-            PlayObject playObject = M2Share.WorldEngine.GetPlayObject(whostr);
+            var playObject = M2Share.WorldEngine.GetPlayObject(whostr);
             if (playObject != null)
             {
                 if (!playObject.BoReadyRun)
@@ -301,7 +301,7 @@ namespace GameSrv.RobotPlay
             }
             try
             {
-                string sParam1 = string.Empty;
+                var sParam1 = string.Empty;
                 if (sData.Length > M2Share.Config.SayMsgMaxLen)
                 {
                     sData = sData[..M2Share.Config.SayMsgMaxLen];
@@ -310,7 +310,7 @@ namespace GameSrv.RobotPlay
                 {
                     DisableSayMsg = false;
                 }
-                bool boDisableSayMsg = DisableSayMsg;
+                var boDisableSayMsg = DisableSayMsg;
                 //g_DenySayMsgList.Lock;
                 //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                 //{
@@ -393,7 +393,7 @@ namespace GameSrv.RobotPlay
         private UserMagic FindMagic(short wMagIdx)
         {
             UserMagic result = null;
-            for (int i = 0; i < MagicList.Count; i++)
+            for (var i = 0; i < MagicList.Count; i++)
             {
                 var userMagic = MagicList[i];
                 if (userMagic.Magic.MagicId == wMagIdx)
@@ -408,9 +408,9 @@ namespace GameSrv.RobotPlay
         private UserMagic FindMagic(string sMagicName)
         {
             UserMagic result = null;
-            for (int i = 0; i < MagicList.Count; i++)
+            for (var i = 0; i < MagicList.Count; i++)
             {
-                UserMagic userMagic = MagicList[i];
+                var userMagic = MagicList[i];
                 if (string.Compare(userMagic.Magic.MagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = userMagic;
@@ -422,7 +422,7 @@ namespace GameSrv.RobotPlay
 
         private bool RunToNext(short nX, short nY)
         {
-            bool result = false;
+            var result = false;
             if ((HUtil32.GetTickCount() - RunIntervalTick) > M2Share.Config.nAIRunIntervalTime)
             {
                 result = RobotRunTo(M2Share.GetNextDirection(CurrX, CurrY, nX, nY), false, nX, nY);
@@ -434,7 +434,7 @@ namespace GameSrv.RobotPlay
 
         private bool WalkToNext(short nX, short nY)
         {
-            bool result = false;
+            var result = false;
             if (HUtil32.GetTickCount() - WalkIntervalTick > M2Share.Config.nAIWalkIntervalTime)
             {
                 result = WalkTo(M2Share.GetNextDirection(CurrX, CurrY, nX, nY), false);
@@ -449,7 +449,7 @@ namespace GameSrv.RobotPlay
 
         private bool GotoNextOne(short nX, short nY, bool boRun)
         {
-            bool result = false;
+            var result = false;
             if (Math.Abs(nX - CurrX) <= 2 && Math.Abs(nY - CurrY) <= 2)
             {
                 if (Math.Abs(nX - CurrX) <= 1 && Math.Abs(nY - CurrY) <= 1)
@@ -516,7 +516,7 @@ namespace GameSrv.RobotPlay
 
         private void SearchPickUpItemSetHideItem(MapItem mapItem)
         {
-            for (int i = 0; i < VisibleItems.Count; i++)
+            for (var i = 0; i < VisibleItems.Count; i++)
             {
                 var visibleMapItem = VisibleItems[i];
                 if (visibleMapItem != null && visibleMapItem.VisibleFlag > 0)
@@ -532,9 +532,9 @@ namespace GameSrv.RobotPlay
 
         private bool SearchPickUpItemPickUpItem(short nX, short nY)
         {
-            bool result = false;
+            var result = false;
             UserItem userItem = null;
-            MapItem mapItem = Envir.GetItem(nX, nY);
+            var mapItem = Envir.GetItem(nX, nY);
             if (mapItem == null)
             {
                 return false;
@@ -564,7 +564,7 @@ namespace GameSrv.RobotPlay
             else
             {
                 // 捡物品
-                StdItem stdItem = M2Share.WorldEngine.GetStdItem(mapItem.UserItem.Index);
+                var stdItem = M2Share.WorldEngine.GetStdItem(mapItem.UserItem.Index);
                 if (stdItem != null)
                 {
                     if (Envir.DeleteFromMap(nX, nY, CellType.Item, mapItem.ItemId, null) == 1)
@@ -613,7 +613,7 @@ namespace GameSrv.RobotPlay
 
         private bool SearchPickUpItem(int nPickUpTime)
         {
-            bool result = false;
+            var result = false;
             VisibleMapItem visibleMapItem = null;
             try
             {
@@ -628,7 +628,7 @@ namespace GameSrv.RobotPlay
                     if (MSelMapItem != null)
                     {
                         CanPickIng = true;
-                        for (int i = 0; i < VisibleItems.Count; i++)
+                        for (var i = 0; i < VisibleItems.Count; i++)
                         {
                             visibleMapItem = VisibleItems[i];
                             if (visibleMapItem != null && visibleMapItem.VisibleFlag > 0)
@@ -653,12 +653,12 @@ namespace GameSrv.RobotPlay
                             return true;
                         }
                     }
-                    int n01 = 999;
+                    var n01 = 999;
                     VisibleMapItem selVisibleMapItem = null;
                     boFound = false;
                     if (MSelMapItem != null)
                     {
-                        for (int i = 0; i < VisibleItems.Count; i++)
+                        for (var i = 0; i < VisibleItems.Count; i++)
                         {
                             visibleMapItem = VisibleItems[i];
                             if (visibleMapItem != null && visibleMapItem.VisibleFlag > 0)
@@ -674,14 +674,14 @@ namespace GameSrv.RobotPlay
                     }
                     if (!boFound)
                     {
-                        for (int i = 0; i < VisibleItems.Count; i++)
+                        for (var i = 0; i < VisibleItems.Count; i++)
                         {
                             visibleMapItem = VisibleItems[i];
                             if (visibleMapItem != null)
                             {
                                 if (visibleMapItem.VisibleFlag > 0)
                                 {
-                                    MapItem mapItem = visibleMapItem.MapItem;
+                                    var mapItem = visibleMapItem.MapItem;
                                     if (mapItem != null)
                                     {
                                         if (IsAllowAiPickUpItem(visibleMapItem.sName) && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(mapItem.UserItem.Index)))
@@ -690,7 +690,7 @@ namespace GameSrv.RobotPlay
                                             {
                                                 if (Math.Abs(visibleMapItem.nX - CurrX) <= 5 && Math.Abs(visibleMapItem.nY - CurrY) <= 5)
                                                 {
-                                                    int n02 = Math.Abs(visibleMapItem.nX - CurrX) + Math.Abs(visibleMapItem.nY - CurrY);
+                                                    var n02 = Math.Abs(visibleMapItem.nX - CurrX) + Math.Abs(visibleMapItem.nY - CurrY);
                                                     if (n02 < n01)
                                                     {
                                                         n01 = n02;
@@ -746,7 +746,7 @@ namespace GameSrv.RobotPlay
 
         private bool WalkToTargetXy2(short nTargetX, short nTargetY)
         {
-            bool result = false;
+            var result = false;
             if (Transparent && HideMode)
             {
                 StatusTimeArr[PoisonState.STATETRANSPARENT] = 1;// 隐身,一动就显身
@@ -811,7 +811,7 @@ namespace GameSrv.RobotPlay
                     if (!result)
                     {
                         var n20 = M2Share.RandomNumber.Random(3);
-                        for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+                        for (var i = Direction.Up; i <= Direction.UpLeft; i++)
                         {
                             if (nOldX == CurrX && nOldY == CurrY)
                             {
@@ -892,17 +892,16 @@ namespace GameSrv.RobotPlay
                         }
                     }
                 }
-                int nOldX = CurrX;
-                int nOldY = CurrY;
-                int n20;
+                var nOldX = CurrX;
+                var nOldY = CurrY;
                 if (Math.Abs(CurrX - ProtectTargetX) >= 3 || Math.Abs(CurrY - ProtectTargetY) >= 3)
                 {
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
                     if (!RobotRunTo(nDir, false, ProtectTargetX, ProtectTargetY))
                     {
                         WalkTo(nDir, false);
-                        n20 = M2Share.RandomNumber.Random(3);
-                        for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+                        var n20 = M2Share.RandomNumber.Random(3);
+                        for (var i = Direction.Up; i <= Direction.UpLeft; i++)
                         {
                             if (nOldX == CurrX && nOldY == CurrY)
                             {
@@ -931,8 +930,8 @@ namespace GameSrv.RobotPlay
                 {
                     WalkTo(nDir, false);
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
-                    n20 = M2Share.RandomNumber.Random(3);
-                    for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+                    var n20 = M2Share.RandomNumber.Random(3);
+                    for (var i = Direction.Up; i <= Direction.UpLeft; i++)
                     {
                         if (nOldX == CurrX && nOldY == CurrY)
                         {
@@ -1058,14 +1057,14 @@ namespace GameSrv.RobotPlay
 
         private BaseObject StruckMinXY(BaseObject aObject, BaseObject bObject)
         {
-            int nA = Math.Abs(CurrX - aObject.CurrX) + Math.Abs(CurrY - aObject.CurrY);
-            int nB = Math.Abs(CurrX - bObject.CurrX) + Math.Abs(CurrY - bObject.CurrY);
+            var nA = Math.Abs(CurrX - aObject.CurrX) + Math.Abs(CurrY - aObject.CurrY);
+            var nB = Math.Abs(CurrX - bObject.CurrX) + Math.Abs(CurrY - bObject.CurrY);
             return nA > nB ? bObject : aObject;
         }
 
         private bool CanWalk(short nCurrX, short nCurrY, short nTargetX, short nTargetY, byte nDir, ref int nStep, bool boFlag)
         {
-            bool result = false;
+            var result = false;
             short nX = 0;
             short nY = 0;
             nStep = 0;
@@ -1115,7 +1114,7 @@ namespace GameSrv.RobotPlay
 
         private bool IsGotoXy(short x1, short y1, short x2, short y2)
         {
-            int nStep = 0;
+            var nStep = 0;
             //0代替-1
             if (!CanWalk(x1, y1, x2, y2, 0, ref nStep, Race != 108))
             {
@@ -1130,8 +1129,8 @@ namespace GameSrv.RobotPlay
 
         private bool GotoNext(short nX, short nY, bool boRun)
         {
-            bool result = false;
-            int nStep = 0;
+            var result = false;
+            var nStep = 0;
             if (Math.Abs(nX - CurrX) <= 2 && Math.Abs(nY - CurrY) <= 2)
             {
                 if (Math.Abs(nX - CurrX) <= 1 && Math.Abs(nY - CurrY) <= 1)
@@ -1149,7 +1148,7 @@ namespace GameSrv.RobotPlay
                 PointInfo[] path = M2Share.FindPath.Find(Envir, CurrX, CurrY, nX, nY, boRun);
                 if (path.Length > 0)
                 {
-                    for (int i = 0; i < path.Length; i++)
+                    for (var i = 0; i < path.Length; i++)
                     {
                         if (path[i].nX != CurrX || path[i].nY != CurrY)
                         {
@@ -1183,14 +1182,14 @@ namespace GameSrv.RobotPlay
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            bool result = false;
+            var result = false;
             try
             {
                 if (processMsg.wIdent == Messages.RM_STRUCK)
                 {
                     if (processMsg.ActorId == ActorId)
                     {
-                        BaseObject attackBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                        var attackBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                         if (attackBaseObject != null)
                         {
                             if (attackBaseObject.Race == ActorRace.Play)
@@ -1205,7 +1204,7 @@ namespace GameSrv.RobotPlay
                         {
                             if (attackBaseObject.Race == ActorRace.Guard)
                             {
-                                ((GuardUnit)attackBaseObject).BoCrimeforCastle = true;
+                                ((GuardUnit)attackBaseObject).CrimeforCastle = true;
                                 ((GuardUnit)attackBaseObject).CrimeforCastleTime = HUtil32.GetTickCount();
                             }
                         }
@@ -1231,14 +1230,14 @@ namespace GameSrv.RobotPlay
 
         private int GetRangeTargetCountByDir(byte nDir, short nX, short nY, int nRange)
         {
-            int result = 0;
-            short nCurrX = nX;
-            short nCurrY = nY;
-            for (int i = 0; i < nRange; i++)
+            var result = 0;
+            var nCurrX = nX;
+            var nCurrY = nY;
+            for (var i = 0; i < nRange; i++)
             {
                 if (Envir.GetNextPosition(nCurrX, nCurrY, nDir, 1, ref nCurrX, ref nCurrY))
                 {
-                    BaseObject baseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
+                    var baseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost && (!baseObject.HideMode || CoolEye) && IsProperTarget(baseObject))
                     {
                         result++;
@@ -1250,10 +1249,10 @@ namespace GameSrv.RobotPlay
 
         private int GetNearTargetCount()
         {
-            int result = 0;
+            var result = 0;
             short nX = 0;
             short nY = 0;
-            for (int n10 = 0; n10 < 7; n10++)
+            for (var n10 = 0; n10 < 7; n10++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))
                 {
@@ -1269,10 +1268,10 @@ namespace GameSrv.RobotPlay
 
         private int GetNearTargetCount(short nCurrX, short nCurrY)
         {
-            int result = 0;
+            var result = 0;
             short nX = 0;
             short nY = 0;
-            BaseObject baseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
+            var baseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
             if (baseObject != null && !baseObject.Death && !baseObject.Ghost && IsProperTarget(baseObject))
             {
                 result++;
@@ -1295,8 +1294,8 @@ namespace GameSrv.RobotPlay
         {
             if (Master != null)
             {
-                short nCurrX = Master.CurrX;
-                short nCurrY = Master.CurrY;
+                var nCurrX = Master.CurrX;
+                var nCurrY = Master.CurrY;
                 return Math.Abs(nCurrX - nTargetX) + Math.Abs(nCurrY - nTargetY);
             }
             return 0;
@@ -1306,15 +1305,13 @@ namespace GameSrv.RobotPlay
         /// 跟随主人
         /// </summary>
         /// <returns></returns>
-        private bool FollowMaster()
+        private void FollowMaster()
         {
             short nX = 0;
             short nY = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            int nStep;
-            bool boNeed = false;
-            bool result = false;
+            var boNeed = false;
             if (!Master.SlaveRelax)
             {
                 if (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 || Math.Abs(CurrY - Master.CurrY) > 20)
@@ -1342,23 +1339,22 @@ namespace GameSrv.RobotPlay
                 TargetX = nX;
                 TargetY = nY;
                 SpaceMove(Master.Envir.MapName, TargetX, TargetY, 1);
-                return true;
+                return;
             }
             Master.GetBackPosition(ref nCurrX, ref nCurrY);
             if (TargetCret == null && !Master.SlaveRelax)
             {
                 for (byte i = 0; i < 2; i++)
                 {
-                    // 判断主人是否在英雄对面
-                    if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Dir, i, ref nX, ref nY))
+                    if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Dir, i, ref nX, ref nY))// 判断主人是否在英雄对面
                     {
                         if (CurrX == nX && CurrY == nY)
                         {
                             if (Master.GetBackPosition(ref nX, ref nY) && GotoNext(nX, nY, true))
                             {
-                                return true;
+                                return;
                             }
-                            for (int k = 0; k < 2; k++)
+                            for (var k = 0; k < 2; k++)
                             {
                                 for (byte j = 0; j < 7; j++)
                                 {
@@ -1366,7 +1362,7 @@ namespace GameSrv.RobotPlay
                                     {
                                         if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, j, k, ref nX, ref nY) && GotoNext(nX, nY, true))
                                         {
-                                            return true;
+                                            return;
                                         }
                                     }
                                 }
@@ -1375,25 +1371,18 @@ namespace GameSrv.RobotPlay
                         }
                     }
                 }
-                if (Race == 108) // 是否为月灵
-                {
-                    nStep = 0;
-                }
-                else
-                {
-                    nStep = 1;
-                }
+                var nStep = Race == 108 ? 0 : 1;
                 if (Math.Abs(CurrX - nCurrX) > nStep || Math.Abs(CurrY - nCurrY) > nStep)
                 {
                     if (GotoNextOne(nCurrX, nCurrY, true))
                     {
-                        return result;
+                        return;
                     }
                     if (GotoNextOne(nX, nY, true))
                     {
-                        return result;
+                        return;
                     }
-                    for (int j = 0; j < 2; j++)
+                    for (var j = 0; j < 2; j++)
                     {
                         for (byte k = 0; k < 7; k++)
                         {
@@ -1401,20 +1390,19 @@ namespace GameSrv.RobotPlay
                             {
                                 if (Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, k, j, ref nX, ref nY) && GotoNextOne(nX, nY, true))
                                 {
-                                    return true;
+                                    return;
                                 }
                             }
                         }
                     }
                 }
             }
-            return result;
         }
 
         private bool FindVisibleActors(BaseObject actorObject)
         {
-            bool result = false;
-            for (int i = 0; i < VisibleActors.Count; i++)
+            var result = false;
+            for (var i = 0; i < VisibleActors.Count; i++)
             {
                 if (VisibleActors[i].BaseObject == actorObject)
                 {
@@ -1427,8 +1415,8 @@ namespace GameSrv.RobotPlay
 
         private bool AllowUseMagic(short magIdx)
         {
-            bool result = false;
-            UserMagic userMagic = FindMagic(magIdx);
+            var result = false;
+            var userMagic = FindMagic(magIdx);
             if (userMagic != null)
             {
                 if (!MagicManager.IsWarrSkill(userMagic.MagIdx))
@@ -1450,7 +1438,7 @@ namespace GameSrv.RobotPlay
 
         private static bool CheckItemType(int nItemType, StdItem stdItem)
         {
-            bool result = false;
+            var result = false;
             switch (nItemType)
             {
                 case 1:
@@ -1484,11 +1472,11 @@ namespace GameSrv.RobotPlay
         // 自动换毒符
         private bool CheckUserItemType(int nItemType, int nCount)
         {
-            bool result = false;
+            var result = false;
             if (UseItems[ItemLocation.ArmRingl] != null && UseItems[ItemLocation.ArmRingl].Index > 0 &&
                 Math.Round(Convert.ToDouble(UseItems[ItemLocation.ArmRingl].Dura / 100)) >= nCount)
             {
-                StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                 if (stdItem != null)
                 {
                     result = CheckItemType(nItemType, stdItem);
@@ -1501,10 +1489,10 @@ namespace GameSrv.RobotPlay
         // nType 为指定类型 5 为护身符 1,2 为毒药   3,诅咒术专用
         private int GetUserItemList(int nItemType, int nCount)
         {
-            int result = -1;
-            for (int i = 0; i < ItemList.Count; i++)
+            var result = -1;
+            for (var i = 0; i < ItemList.Count; i++)
             {
-                StdItem stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
+                var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     if (CheckItemType(nItemType, stdItem) && HUtil32.Round(ItemList[i].Dura / 100) >= nCount)
@@ -1520,13 +1508,13 @@ namespace GameSrv.RobotPlay
         // 自动换毒符
         private bool UseItem(int nItemType, int nIndex)
         {
-            bool result = false;
+            var result = false;
             if (nIndex >= 0 && nIndex < ItemList.Count)
             {
-                UserItem userItem = ItemList[nIndex];
+                var userItem = ItemList[nIndex];
                 if (UseItems[ItemLocation.ArmRingl].Index > 0)
                 {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                     if (stdItem != null)
                     {
                         if (CheckItemType(nItemType, stdItem))
@@ -1536,7 +1524,7 @@ namespace GameSrv.RobotPlay
                         else
                         {
                             ItemList.RemoveAt(nIndex);
-                            UserItem addUserItem = UseItems[ItemLocation.ArmRingl];
+                            var addUserItem = UseItems[ItemLocation.ArmRingl];
                             if (AddItemToBag(addUserItem))
                             {
                                 UseItems[ItemLocation.ArmRingl] = userItem;
@@ -1574,7 +1562,7 @@ namespace GameSrv.RobotPlay
             IList<BaseObject> baseObjectList = new List<BaseObject>();
             if (Envirnoment.GetMapBaseObjects(nX, nY, nRange, baseObjectList))
             {
-                for (int i = baseObjectList.Count - 1; i >= 0; i--)
+                for (var i = baseObjectList.Count - 1; i >= 0; i--)
                 {
                     var baseObject = baseObjectList[i];
                     if (baseObject.HideMode && !CoolEye || !IsProperTarget(baseObject))
@@ -1590,10 +1578,10 @@ namespace GameSrv.RobotPlay
         // 目标是否和自己在一条线上，用来检测直线攻击的魔法是否可以攻击到目标
         private bool CanLineAttack(short nCurrX, short nCurrY)
         {
-            bool result = false;
-            short nX = nCurrX;
-            short nY = nCurrY;
-            byte btDir = M2Share.GetNextDirection(nCurrX, nCurrY, TargetCret.CurrX, TargetCret.CurrY);
+            var result = false;
+            var nX = nCurrX;
+            var nY = nCurrY;
+            //byte btDir = M2Share.GetNextDirection(nCurrX, nCurrY, TargetCret.CurrX, TargetCret.CurrY);
             while (true)
             {
                 if (TargetCret.CurrX == nX && TargetCret.CurrY == nY)
@@ -1601,7 +1589,7 @@ namespace GameSrv.RobotPlay
                     result = true;
                     break;
                 }
-                btDir = M2Share.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
+                var btDir = M2Share.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
                 if (!Envir.GetNextPosition(nX, nY, btDir, 1, ref nX, ref nY))
                 {
                     break;
@@ -1617,18 +1605,18 @@ namespace GameSrv.RobotPlay
         // 是否是能直线攻击
         private bool CanLineAttack(int nStep)
         {
-            bool result = false;
-            short nX = CurrX;
-            short nY = CurrY;
-            byte btDir = M2Share.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
-            for (int i = 0; i < nStep; i++)
+            var result = false;
+            var nX = CurrX;
+            var nY = CurrY;
+            //byte btDir = M2Share.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
+            for (var i = 0; i < nStep; i++)
             {
                 if (TargetCret.CurrX == nX && TargetCret.CurrY == nY)
                 {
                     result = true;
                     break;
                 }
-                btDir = M2Share.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
+                var btDir = M2Share.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
                 if (!Envir.GetNextPosition(nX, nY, btDir, 1, ref nX, ref nY))
                 {
                     break;
@@ -1643,11 +1631,11 @@ namespace GameSrv.RobotPlay
 
         private bool CanAttack(short nCurrX, short nCurrY, BaseObject baseObject, int nRange, ref byte btDir)
         {
-            bool result = false;
+            var result = false;
             short nX = 0;
             short nY = 0;
             btDir = M2Share.GetNextDirection(nCurrX, nCurrY, baseObject.CurrX, baseObject.CurrY);
-            for (int i = 0; i < nRange; i++)
+            for (var i = 0; i < nRange; i++)
             {
                 if (!Envir.GetNextPosition(nCurrX, nCurrY, btDir, i, ref nX, ref nY))
                 {
@@ -1666,9 +1654,9 @@ namespace GameSrv.RobotPlay
         {
             short nX = 0;
             short nY = 0;
-            bool result = false;
+            var result = false;
             btDir = M2Share.GetNextDirection(CurrX, CurrY, baseObject.CurrX, baseObject.CurrY);
-            for (int i = 0; i < nRange; i++)
+            for (var i = 0; i < nRange; i++)
             {
                 if (!Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nX, ref nY))
                 {
@@ -1690,14 +1678,14 @@ namespace GameSrv.RobotPlay
         private bool IsUseAttackMagic()
         {
             UserMagic userMagic;
-            bool result = false;
+            var result = false;
             switch (Job)
             {
                 case PlayJob.Warrior:
                     result = true;
                     break;
                 case PlayJob.Wizard:
-                    for (int i = 0; i < MagicList.Count; i++)
+                    for (var i = 0; i < MagicList.Count; i++)
                     {
                         userMagic = MagicList[i];
                         switch (userMagic.MagIdx)
@@ -1724,7 +1712,7 @@ namespace GameSrv.RobotPlay
                     }
                     break;
                 case PlayJob.Taoist:
-                    for (int i = 0; i < MagicList.Count; i++)
+                    for (var i = 0; i < MagicList.Count; i++)
                     {
                         userMagic = MagicList[i];
                         if (userMagic.Magic.Job == 2 || userMagic.Magic.Job == 99)
@@ -1775,7 +1763,7 @@ namespace GameSrv.RobotPlay
 
         private bool UseSpell(UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetBaseObject)
         {
-            bool result = false;
+            var result = false;
             if (!IsCanSpell)
             {
                 return false;
@@ -1916,7 +1904,7 @@ namespace GameSrv.RobotPlay
 
         private bool AutoSpell(UserMagic userMagic, short nTargetX, short nTargetY, BaseObject baseObject)
         {
-            bool result = false;
+            var result = false;
             try
             {
                 if (baseObject != null)
@@ -1941,7 +1929,7 @@ namespace GameSrv.RobotPlay
 
         private bool Thinking()
         {
-            bool result = false;
+            var result = false;
             try
             {
                 if (M2Share.Config.RobotAutoPickUpItem)//&& (g_AllowAIPickUpItemList.Count > 0)
@@ -1999,11 +1987,11 @@ namespace GameSrv.RobotPlay
 
         private int CheckTargetXyCount(int nX, int nY, int nRange)
         {
-            int n10 = nRange;
-            int result = 0;
+            var n10 = nRange;
+            var result = 0;
             if (VisibleActors.Count > 0)
             {
-                for (int i = 0; i < VisibleActors.Count; i++)
+                for (var i = 0; i < VisibleActors.Count; i++)
                 {
                     var baseObject = VisibleActors[i].BaseObject;
                     if (baseObject != null)
@@ -2195,7 +2183,7 @@ namespace GameSrv.RobotPlay
         /// <returns></returns>
         private bool GetGotoXy(BaseObject baseObject, byte nCode)
         {
-            bool result = false;
+            var result = false;
             switch (nCode)
             {
                 case 2:// 刺杀位
@@ -2316,7 +2304,7 @@ namespace GameSrv.RobotPlay
         /// <returns></returns>
         private bool RunToTargetXy(short nTargetX, short nTargetY)
         {
-            bool result = false;
+            var result = false;
             if (Transparent && HideMode)
             {
                 StatusTimeArr[PoisonState.STATETRANSPARENT] = 1;// 隐身,一动就显身
@@ -2331,9 +2319,9 @@ namespace GameSrv.RobotPlay
             }
             if (HUtil32.GetTickCount() - RunIntervalTick > RunIntervalTime) // 跑步使用单独的变量计数
             {
-                short nX = nTargetX;
-                short nY = nTargetY;
-                byte nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
+                var nX = nTargetX;
+                var nY = nTargetY;
+                var nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
                 if (!RobotRunTo(nDir, false, nTargetX, nTargetY))
                 {
                     result = WalkToTargetXy(nTargetX, nTargetY);
@@ -2357,13 +2345,13 @@ namespace GameSrv.RobotPlay
         private bool RobotRunTo(byte btDir, bool boFlag, short nDestX, short nDestY)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
-            bool result = false;
+            var result = false;
             try
             {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 Dir = btDir;
-                bool canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll || M2Share.Config.boSafeAreaLimited && InSafeZone();
+                var canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll || M2Share.Config.boSafeAreaLimited && InSafeZone();
                 switch (btDir)
                 {
                     case Direction.Up:
@@ -2447,7 +2435,7 @@ namespace GameSrv.RobotPlay
         /// <returns></returns>
         private bool WalkToTargetXy(int nTargetX, int nTargetY)
         {
-            bool result = false;
+            var result = false;
             if (Transparent && HideMode)
             {
                 StatusTimeArr[PoisonState.STATETRANSPARENT] = 1;// 隐身,一动就显身
@@ -2462,7 +2450,7 @@ namespace GameSrv.RobotPlay
                 {
                     var n10 = nTargetX;
                     var n14 = nTargetY;
-                    byte nDir = Direction.Down;
+                    var nDir = Direction.Down;
                     if (n10 > CurrX)
                     {
                         nDir = Direction.Right;
@@ -2512,7 +2500,7 @@ namespace GameSrv.RobotPlay
                     if (!result)
                     {
                         var n20 = M2Share.RandomNumber.Random(3);
-                        for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
+                        for (var i = Direction.Up; i <= Direction.UpLeft; i++)
                         {
                             if (nOldX == CurrX && nOldY == CurrY)
                             {
@@ -2553,7 +2541,7 @@ namespace GameSrv.RobotPlay
         /// <returns></returns>
         private bool GotoTargetXy(short nTargetX, short nTargetY, int nCode)
         {
-            bool result = false;
+            var result = false;
             switch (nCode)
             {
                 case 0:// 正常模式
@@ -2599,7 +2587,7 @@ namespace GameSrv.RobotPlay
             AutoMagicId = SelectMagic();
             if (AutoMagicId > 0)
             {
-                UserMagic userMagic = FindMagic(AutoMagicId);
+                var userMagic = FindMagic(AutoMagicId);
                 if (userMagic != null)
                 {
                     BoUseAttackMagic = IsUseAttackMagic();
@@ -3705,12 +3693,12 @@ namespace GameSrv.RobotPlay
         // 战士判断使用
         private int CheckTargetXyCount1(int nX, int nY, int nRange)
         {
-            int result = 0;
+            var result = 0;
             if (VisibleActors.Count > 0)
             {
-                for (int i = 0; i < VisibleActors.Count; i++)
+                for (var i = 0; i < VisibleActors.Count; i++)
                 {
-                    BaseObject baseObject = VisibleActors[i].BaseObject;
+                    var baseObject = VisibleActors[i].BaseObject;
                     if (baseObject != null)
                     {
                         if (!baseObject.Death)
@@ -3732,14 +3720,14 @@ namespace GameSrv.RobotPlay
         // 半月弯刀判断目标函数
         private int CheckTargetXyCount2(short nMode)
         {
-            int result = 0;
-            int nC = 0;
-            int n10 = 0;
+            var result = 0;
+            var nC = 0;
+            var n10 = 0;
             short nX = 0;
             short nY = 0;
             if (VisibleActors.Count > 0)
             {
-                for (int i = 0; i < VisibleActors.Count; i++)
+                for (var i = 0; i < VisibleActors.Count; i++)
                 {
                     switch (nMode)
                     {
@@ -3749,7 +3737,7 @@ namespace GameSrv.RobotPlay
                     }
                     if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))
                     {
-                        BaseObject baseObject = Envir.GetMovingObject(nX, nY, true);
+                        var baseObject = Envir.GetMovingObject(nX, nY, true);
                         if (baseObject != null)
                         {
                             if (!baseObject.Death)
@@ -3782,12 +3770,12 @@ namespace GameSrv.RobotPlay
         /// <returns></returns>
         private int CheckTargetXyCount3(int nX, int nY, int nRange, int nCount)
         {
-            int result = 0;
+            var result = 0;
             if (VisibleActors.Count > 0)
             {
-                for (int i = 0; i < VisibleActors.Count; i++)
+                for (var i = 0; i < VisibleActors.Count; i++)
                 {
-                    BaseObject baseObject = VisibleActors[i].BaseObject;
+                    var baseObject = VisibleActors[i].BaseObject;
                     if (baseObject != null)
                     {
                         if (!baseObject.Death)
@@ -3813,7 +3801,7 @@ namespace GameSrv.RobotPlay
         // 参数 nType 为指定类型 1 为护身符 2 为毒药    nCount 为持久,即数量
         private bool CheckHeroAmulet(int nType, int nCount)
         {
-            bool result = false;
+            var result = false;
             StdItem amuletStdItem;
             try
             {
@@ -3874,10 +3862,10 @@ namespace GameSrv.RobotPlay
                 // 检测人物包裹是否存在毒,护身符
                 if (ItemList.Count > 0)
                 {
-                    for (int i = 0; i < ItemList.Count; i++)
+                    for (var i = 0; i < ItemList.Count; i++)
                     {
                         // 人物包裹不为空
-                        UserItem userItem = ItemList[i];
+                        var userItem = ItemList[i];
                         if (userItem != null)
                         {
                             amuletStdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);

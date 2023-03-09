@@ -177,7 +177,7 @@ namespace GameSrv.Planes {
         public string SocketId;
     }
 
-    public class ServerGruopInfo {
+    public struct ServerGruopInfo {
         public int nServerIdx;
         public string sChrName;
     }

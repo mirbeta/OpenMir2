@@ -1504,7 +1504,7 @@ namespace GameSrv.Player
                             {
                                 if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard)
                                 {
-                                    ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).BoCrimeforCastle = true;
+                                    ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).CrimeforCastle = true;
                                     ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).CrimeforCastleTime = HUtil32.GetTickCount();
                                 }
                             }

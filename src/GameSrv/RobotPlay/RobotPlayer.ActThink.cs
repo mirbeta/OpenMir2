@@ -7,12 +7,10 @@ namespace GameSrv.RobotPlay
 {
     public partial class RobotPlayer
     {
-        public MapWalkXY FindGoodPathA(MapWalkXY[] WalkStep, int nRange, int nType)
+        private MapWalkXY FindGoodPathA(MapWalkXY[] WalkStep, int nRange, int nType)
         {
             MapWalkXY result = null;
             int n10 = int.MaxValue;
-            int nMastrRange;
-            int nMonCount;
             MapWalkXY MapWalkXY = null;
             //FillChar(result, sizeof(TMapWalkXY), 0);
             for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
@@ -28,8 +26,8 @@ namespace GameSrv.RobotPlay
             }
             if (MapWalkXY != null && Master != null)
             {
-                nMonCount = MapWalkXY.MonCount;
-                nMastrRange = MapWalkXY.MastrRange;
+                var nMonCount = MapWalkXY.MonCount;
+                var nMastrRange = MapWalkXY.MastrRange;
                 n10 = int.MaxValue;
                 MapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
@@ -56,11 +54,9 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public MapWalkXY FindGoodPathB(MapWalkXY[] WalkStep, int nType)
+        private MapWalkXY FindGoodPathB(MapWalkXY[] WalkStep, int nType)
         {
             MapWalkXY result = null;
-            int nMastrRange;
-            int nMonCount;
             MapWalkXY MapWalkXY = null;
             int n10 = int.MaxValue;
             //FillChar(result, sizeof(TMapWalkXY), 0);
@@ -77,8 +73,8 @@ namespace GameSrv.RobotPlay
             }
             if (MapWalkXY != null && Master != null)
             {
-                nMonCount = MapWalkXY.MonCount;
-                nMastrRange = MapWalkXY.MastrRange;
+                var nMonCount = MapWalkXY.MonCount;
+                var nMastrRange = MapWalkXY.MastrRange;
                 n10 = int.MaxValue;
                 MapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
@@ -105,12 +101,11 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public MapWalkXY FindMinRange(MapWalkXY[] WalkStep)
+        private MapWalkXY FindMinRange(MapWalkXY[] WalkStep)
         {
             MapWalkXY result = null;
             int n10 = int.MaxValue;
             int n1C;
-            int nMonCount;
             MapWalkXY MapWalkXY = null;
             for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
@@ -126,7 +121,7 @@ namespace GameSrv.RobotPlay
             }
             if (MapWalkXY != null)
             {
-                nMonCount = MapWalkXY.MonCount;
+                var nMonCount = MapWalkXY.MonCount;
                 MapWalkXY MapWalkXYA = MapWalkXY;
                 MapWalkXY = null;
                 for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
@@ -157,7 +152,7 @@ namespace GameSrv.RobotPlay
         /// 检测下一步在不在攻击位
         /// </summary>
         /// <returns></returns>
-        public bool CanWalkNextPosition(short nX, short nY, int nRange, byte btDir, bool boFlag)
+        private bool CanWalkNextPosition(short nX, short nY, int nRange, byte btDir, bool boFlag)
         {
             short nCurrX = 0;
             short nCurrY = 0;
@@ -172,7 +167,7 @@ namespace GameSrv.RobotPlay
             return false;
         }
 
-        public bool FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag)
+        private bool FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag)
         {
             bool result = false;
             byte btDir = 0;
@@ -198,7 +193,7 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public bool ActThink__FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag)
+        private bool ActThink__FindPosOfSelf(MapWalkXY[] WalkStep, int nRange, bool boFlag)
         {
             byte btDir = 0;
             short nCurrX = 0;
@@ -343,16 +338,14 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public bool WalkToRightPos(int wMagicID)
+        private bool WalkToRightPos(int wMagicID)
         {
-            bool boFlag;
-            int nRange;
             MapWalkXY[] WalkStep = null;
-            MapWalkXY MapWalkXY;
-            bool result = false;
             try
             {
-                boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || Job == 0;
+                var boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || Job == 0;
+                MapWalkXY MapWalkXY;
+                int nRange;
                 if (Job == 0 || wMagicID <= 0)
                 {
                     nRange = 1;
@@ -364,7 +357,7 @@ namespace GameSrv.RobotPlay
                     {
                         nRange = 2;
                     }
-                    if (new ArrayList(new[] { 60, 61, 62 }).Contains(wMagicID))
+                    if (wMagicID <= 62 && wMagicID >= 60)
                     {
                         nRange = 6;
                     }
@@ -375,12 +368,10 @@ namespace GameSrv.RobotPlay
                             MapWalkXY = FindGoodPathB(WalkStep, 0);
                             if (MapWalkXY.WalkStep > 0)
                             {
-                                // if RunToTargetXY(MapWalkXY.nX, MapWalkXY.nY) then begin
                                 if (GotoNext(MapWalkXY.X, MapWalkXY.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                             }
                         }
@@ -403,8 +394,7 @@ namespace GameSrv.RobotPlay
                                 if (GotoNext(MapWalkXY.X, MapWalkXY.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                             }
                         }
@@ -431,8 +421,7 @@ namespace GameSrv.RobotPlay
                                 if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                             }
                         }
@@ -447,8 +436,7 @@ namespace GameSrv.RobotPlay
                                 if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                             }
                         }
@@ -463,8 +451,7 @@ namespace GameSrv.RobotPlay
                                 if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
                                 {
                                     MRunPos.btDirection = 0;
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                             }
                         }
@@ -475,36 +462,33 @@ namespace GameSrv.RobotPlay
             {
                 M2Share.Logger.Error("WalkToRightPos:" + ChrName);
             }
-            return result;
+            return false;
         }
 
-        public bool AvoidTarget(short wMagicID)
+        private bool AvoidTarget(short wMagicID)
         {
             short nX = 0;
             short nY = 0;
-            bool boFlag;
             MapWalkXY[] WalkStep = null;
-            bool result = false;
             int nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
-            boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
+            var boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
-            MapWalkXY MapWalkXY;
+            MapWalkXY mapWalkXy;
             for (int i = nRange; i >= 1; i--)
             {
                 if (FindPosOfSelf(WalkStep, i, boFlag))
                 {
-                    MapWalkXY = FindGoodPathB(WalkStep, 0);
-                    if (MapWalkXY.WalkStep > 0)
+                    mapWalkXy = FindGoodPathB(WalkStep, 0);
+                    if (mapWalkXy.WalkStep > 0)
                     {
-                        btDir = M2Share.GetNextDirection(CurrX, CurrY, MapWalkXY.X, MapWalkXY.Y);
-                        if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
+                        btDir = M2Share.GetNextDirection(CurrX, CurrY, mapWalkXy.X, mapWalkXy.Y);
+                        if (GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                         {
                             if (Race != 108)
                             {
-                                for (int j = nRange; j >= 1; j--)
+                                for (int j = nRange; j >= 1; j--)// 再跑1次
                                 {
-                                    // 再跑1次
-                                    if (Envir.GetNextPosition(MapWalkXY.X, MapWalkXY.Y, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.MonCount)
+                                    if (Envir.GetNextPosition(mapWalkXy.X, mapWalkXy.Y, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= mapWalkXy.MonCount)
                                     {
                                         GotoNextOne(nX, nY, Race != 108);
                                         break;
@@ -512,8 +496,7 @@ namespace GameSrv.RobotPlay
                                 }
                             }
                             MRunPos.btDirection = 0;
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
                 }
@@ -522,39 +505,37 @@ namespace GameSrv.RobotPlay
             {
                 if (ActThink__FindPosOfSelf(WalkStep, i, boFlag))
                 {
-                    MapWalkXY = FindGoodPathB(WalkStep, 0);
-                    if (MapWalkXY.WalkStep > 0)
+                    mapWalkXy = FindGoodPathB(WalkStep, 0);
+                    if (mapWalkXy.WalkStep > 0)
                     {
-                        btDir = M2Share.GetNextDirection(CurrX, CurrY, MapWalkXY.X, MapWalkXY.Y);
-                        if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
+                        btDir = M2Share.GetNextDirection(CurrX, CurrY, mapWalkXy.X, mapWalkXy.Y);
+                        if (GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                         {
                             for (int j = nRange; j >= 1; j--)
                             {
                                 // 再跑1次
-                                if (Envir.GetNextPosition(MapWalkXY.X, MapWalkXY.Y, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= MapWalkXY.MonCount)
+                                if (Envir.GetNextPosition(mapWalkXy.X, mapWalkXy.Y, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= mapWalkXy.MonCount)
                                 {
-                                    MapWalkXY.X = nX;
-                                    MapWalkXY.Y = nY;
-                                    GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108);
+                                    mapWalkXy.X = nX;
+                                    mapWalkXy.Y = nY;
+                                    GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108);
                                     break;
                                 }
                             }
                             MRunPos.btDirection = 0;
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
                 }
             }
-            return result;
+            return false;
         }
 
-        public bool FollowTarget(short wMagicID)
+        private bool FollowTarget(short wMagicID)
         {
             int nRange = 2;
             MapWalkXY[] WalkStep = null;
             MapWalkXY MapWalkXY;
-            bool result = false;
             bool boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             for (int i = nRange; i >= 1; i--)
             {
@@ -566,8 +547,7 @@ namespace GameSrv.RobotPlay
                         if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
                         {
                             MRunPos.btDirection = 0;
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
                 }
@@ -582,27 +562,25 @@ namespace GameSrv.RobotPlay
                         if (GotoNextOne(MapWalkXY.X, MapWalkXY.Y, Race != 108))
                         {
                             MRunPos.btDirection = 0;
-                            result = true;
-                            return result;
+                            return true;
                         }
                     }
                 }
             }
-            return result;
+            return false;
         }
 
         public bool MotaeboPos(short wMagicID)
         {
             short nTargetX = 0;
             short nTargetY = 0;
-            byte btNewDir;
             if (TargetCret == null || Master == null)
             {
                 return false;
             }
             if (GetPoseCreate() == TargetCret || TargetCret.GetPoseCreate() == this)
             {
-                btNewDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                var btNewDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, btNewDir, 1, ref nTargetX, ref nTargetY))
                 {
                     if (Envir.CanWalk(nTargetX, nTargetY, true))
@@ -614,7 +592,7 @@ namespace GameSrv.RobotPlay
             return WalkToRightPos(wMagicID);
         }
 
-        public MapWalkXY FindPosOfDir(byte nDir, int nRange, bool boFlag)
+        private MapWalkXY FindPosOfDir(byte nDir, int nRange, bool boFlag)
         {
             MapWalkXY result = null;
             short nCurrX = 0;
@@ -633,7 +611,7 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public static byte RunPosAttackGetNextRunPos(byte btDir, bool boTurn)
+        private static byte RunPosAttackGetNextRunPos(byte btDir, bool boTurn)
         {
             byte result = 0;
             if (boTurn)
@@ -699,12 +677,10 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public bool RunPosAttack(int wMagicID)
+        private bool RunPosAttack(int magicId)
         {
             MapWalkXY[] WalkStep = new MapWalkXY[2];
-            MapWalkXY MapWalkXY;
             int nRange;
-            bool boFlag;
             int nNearTargetCount;
             bool result = false;
             byte btDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
@@ -714,15 +690,15 @@ namespace GameSrv.RobotPlay
             if (Job == 0)
             {
                 nRange = 1;
-                if (wMagicID == 43)
+                if (magicId == 43)
                 {
                     nRange = 2;
                 }
-                if (wMagicID == 12)
+                if (magicId == 12)
                 {
                     nRange = 2;
                 }
-                if (new ArrayList(new[] { 60, 61, 62 }).Contains(wMagicID))
+                if (magicId <= 62 && magicId >= 60)
                 {
                     nRange = 6;
                 }
@@ -732,12 +708,11 @@ namespace GameSrv.RobotPlay
             else
             {
                 nRange = 2;
-                boFlag = false;
-                WalkStep[0] = FindPosOfDir(btNewDir1, nRange, boFlag);
-                WalkStep[1] = FindPosOfDir(btNewDir2, nRange, boFlag);
+                WalkStep[0] = FindPosOfDir(btNewDir1, nRange, false);
+                WalkStep[1] = FindPosOfDir(btNewDir2, nRange, false);
             }
             nNearTargetCount = GetNearTargetCount(CurrX, CurrY);
-            MapWalkXY = null;
+            MapWalkXY MapWalkXY = null;
             if (WalkStep[0].WalkStep > 0 && WalkStep[1].WalkStep > 0)
             {
                 if (MRunPos.btDirection > 0)
@@ -797,7 +772,7 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private bool ActThink(short wMagicID)
+        private bool ActThink(short magicId)
         {
             bool result = false;
             int nCode = 0;
@@ -806,19 +781,19 @@ namespace GameSrv.RobotPlay
             {
                 while (true)
                 {
-                    if (TargetCret == null || wMagicID > 255)
+                    if (TargetCret == null || magicId > 255)
                     {
                         break;
                     }
                     nThinkCount = nThinkCount + 1;
-                    nCode = DoThink(wMagicID);
+                    nCode = DoThink(magicId);
                     switch (Job)
                     {
                         case 0:
                             switch (nCode)
                             {
                                 case 2:
-                                    if (WalkToRightPos(wMagicID))
+                                    if (WalkToRightPos(magicId))
                                     {
                                         result = true;
                                     }
@@ -833,7 +808,7 @@ namespace GameSrv.RobotPlay
                                     }
                                     break;
                                 case 5:
-                                    if (RunPosAttack(wMagicID))
+                                    if (RunPosAttack(magicId))
                                     {
                                         result = true;
                                     }
@@ -846,10 +821,10 @@ namespace GameSrv.RobotPlay
                             switch (nCode)
                             {
                                 case 1:
-                                    result = AvoidTarget(wMagicID);
+                                    result = AvoidTarget(magicId);
                                     break;
                                 case 2:
-                                    if (FollowTarget(wMagicID))
+                                    if (FollowTarget(magicId))
                                     {
                                         result = true;
                                     }
@@ -865,7 +840,7 @@ namespace GameSrv.RobotPlay
                                     break;
                                 case 3:
                                 case 4:
-                                    if (WalkToRightPos(wMagicID))
+                                    if (WalkToRightPos(magicId))
                                     {
                                         result = true;
                                     }
@@ -881,7 +856,7 @@ namespace GameSrv.RobotPlay
 
                                     break;
                                 case 5:
-                                    result = RunPosAttack(wMagicID);
+                                    result = RunPosAttack(magicId);
                                     break;
                             }
                             break;
