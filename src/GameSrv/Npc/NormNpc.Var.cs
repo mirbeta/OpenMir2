@@ -2254,7 +2254,7 @@ namespace GameSrv.Npc {
             return result;
         }
 
-        private bool GetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType) {
+        private static bool GetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType) {
             string sName = string.Empty;
             sValue = "";
             nValue = -1;
@@ -2279,7 +2279,7 @@ namespace GameSrv.Npc {
             return false;
         }
 
-        private bool SetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType) {
+        private static bool SetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType) {
             string sName = string.Empty;
             bool boVarFound = false;
             Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);

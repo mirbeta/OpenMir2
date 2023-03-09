@@ -2270,7 +2270,7 @@ namespace GameSrv.Npc {
             return result;
         }
 
-        private bool GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject PlayObject, string sVarType, string sValName, ref int nValue) {
+        private static bool GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject PlayObject, string sVarType, string sValName, ref int nValue) {
             bool result = false;
             string sName = string.Empty;
             Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);
