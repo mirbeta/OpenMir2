@@ -5,8 +5,8 @@ using SystemModule.Packets.ClientPackets;
 namespace GameSrv.Maps {
     public class DoorInfo {
         public int DoorId;
-        public int nX;
-        public int nY;
+        public short nX;
+        public short nY;
         public DoorStatus Status;
         public int n08;
 
@@ -68,8 +68,8 @@ namespace GameSrv.Maps {
     /// 地图物品
     /// </summary>
     public class VisibleMapItem {
-        public int nX;
-        public int nY;
+        public short nX;
+        public short nY;
         public MapItem MapItem;
         public string sName;
         public ushort wLooks;

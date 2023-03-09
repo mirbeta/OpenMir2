@@ -670,8 +670,8 @@ namespace GameSrv.Maps {
                                 point = mapUnitInfo.btDoorIndex & 0x7F;
                                 if (point > 0) {
                                     door = new DoorInfo {
-                                        nX = nW,
-                                        nY = nH,
+                                        nX = (short)nW,
+                                        nY = (short)nH,
                                         n08 = point,
                                         Status = null
                                     };

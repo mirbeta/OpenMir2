@@ -2783,7 +2783,7 @@ namespace GameSrv.Npc {
                 }
                 if (string.Compare(sItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)// 金币
                 {
-                    if (ActionOfTHROWITEM_RobotGetDropPosition(envir, nX, nY, nRange, ref dX, ref dY)) {
+                    if (GetActionOfThrowitemDropPosition(envir, nX, nY, nRange, ref dX, ref dY)) {
                         mapItem = new MapItem();
                         mapItem.Name = Grobal2.StringGoldName;
                         mapItem.Count = nCount;
@@ -2806,7 +2806,7 @@ namespace GameSrv.Npc {
                     }
                 }
                 for (int i = 0; i < nCount; i++) {
-                    if (ActionOfTHROWITEM_RobotGetDropPosition(envir, nX, nY, nRange, ref dX, ref dY)) // 修正出现在一个坐标上
+                    if (GetActionOfThrowitemDropPosition(envir, nX, nY, nRange, ref dX, ref dY)) // 修正出现在一个坐标上
                     {
                         if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem)) {
                             StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
@@ -2823,9 +2823,9 @@ namespace GameSrv.Npc {
                                 mapItem.UserItem = new UserItem(userItem);
                                 mapItem.Name = stdItem.Name;
                                 string nameCorlr = "@" + CustomItem.GetItemAddValuePointColor(userItem); // 取自定义物品名称
-                                string sUserItemName = string.Empty;
-                                if (userItem.Desc[13] == 1) {
-                                    sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
+                                if (userItem.Desc[13] == 1)
+                                {
+                                    var sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
                                     if (!string.IsNullOrEmpty(sUserItemName)) {
                                         mapItem.Name = sUserItemName;
                                     }
@@ -2866,29 +2866,25 @@ namespace GameSrv.Npc {
             }
         }
 
-        public static bool ActionOfTHROWITEM_RobotGetDropPosition(Envirnoment neEnvir, int nOrgX, int nOrgY, int nRange, ref int nDx, ref int nDy) {
-            bool result;
+        private static bool GetActionOfThrowitemDropPosition(Envirnoment envir, int nOrgX, int nOrgY, int nRange, ref int nDx, ref int nDy) {
             int nItemCount = 0;
-            int n24;
-            int n28;
-            int n2C;
-            n24 = 999;
-            result = false;
-            n28 = 0;
-            n2C = 0;
+            var n24 = 999;
+            var result = false;
+            var n28 = 0;
+            var n2C = 0;
             for (int i = 0; i < nRange; i++) {
                 for (int j = -i; j <= i; j++) {
                     for (int k = -i; k <= i; k++) {
                         nDx = nOrgX + k;
                         nDy = nOrgY + j;
-                        if (neEnvir.GetItemEx(nDx, nDy, ref nItemCount) == 0) {
-                            if (neEnvir.Bo2C) {
+                        if (envir.GetItemEx(nDx, nDy, ref nItemCount) == 0) {
+                            if (envir.Bo2C) {
                                 result = true;
                                 break;
                             }
                         }
                         else {
-                            if (neEnvir.Bo2C && n24 > nItemCount) {
+                            if (envir.Bo2C && n24 > nItemCount) {
                                 n24 = nItemCount;
                                 n28 = nDx;
                                 n2C = nDy;

@@ -514,7 +514,7 @@ namespace GameSrv.RobotPlay
             base.Initialize();
         }
 
-        private void SearchPickUpItem_SetHideItem(MapItem mapItem)
+        private void SearchPickUpItemSetHideItem(MapItem mapItem)
         {
             for (int i = 0; i < VisibleItems.Count; i++)
             {
@@ -530,7 +530,7 @@ namespace GameSrv.RobotPlay
             }
         }
 
-        private bool SearchPickUpItemPickUpItem(int nX, int nY)
+        private bool SearchPickUpItemPickUpItem(short nX, short nY)
         {
             bool result = false;
             UserItem userItem = null;
@@ -548,7 +548,7 @@ namespace GameSrv.RobotPlay
                         SendRefMsg(Messages.RM_ITEMHIDE, 0, mapItem.ItemId, nX, nY, "");
                         result = true;
                         GoldChanged();
-                        SearchPickUpItem_SetHideItem(mapItem);
+                        SearchPickUpItemSetHideItem(mapItem);
                         Dispose(mapItem);
                     }
                     else
@@ -586,7 +586,7 @@ namespace GameSrv.RobotPlay
                                 SendAddItem(userItem);
                                 Abil.Weight = RecalcBagWeight();
                                 result = true;
-                                SearchPickUpItem_SetHideItem(mapItem);
+                                SearchPickUpItemSetHideItem(mapItem);
                                 Dispose(mapItem);
                             }
                             else
@@ -744,7 +744,7 @@ namespace GameSrv.RobotPlay
             return true;
         }
 
-        private bool WalkToTargetXy2(int nTargetX, int nTargetY)
+        private bool WalkToTargetXy2(short nTargetX, short nTargetY)
         {
             bool result = false;
             if (Transparent && HideMode)
