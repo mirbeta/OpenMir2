@@ -2592,7 +2592,7 @@ namespace GameSrv.Npc
             }
         }
 
-        private void ActionOfGmExecute(PlayObject playObject, QuestActionInfo questActionInfo)
+        private static void ActionOfGmExecute(PlayObject playObject, QuestActionInfo questActionInfo)
         {
             var sParam1 = questActionInfo.sParam1;
             var sParam2 = questActionInfo.sParam2;
@@ -3015,7 +3015,6 @@ namespace GameSrv.Npc
             playObject.ReLevel = 0;
             playObject.HasLevelUp(0);
         }
-
 
         private void ActionOfChangeNameColor(PlayObject playObject, QuestActionInfo questActionInfo)
         {
