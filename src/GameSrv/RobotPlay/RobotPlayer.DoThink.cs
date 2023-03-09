@@ -7,9 +7,8 @@ namespace GameSrv.RobotPlay
 {
     public partial class RobotPlayer
     {
-        public int CheckTargetXYCount(int nX, int nY, int nRange)
+        private int CheckTargetXYCount(int nX, int nY, int nRange)
         {
-            int nC;
             int n10 = nRange;
             int result = 0;
             if (VisibleActors.Count > 0)
@@ -23,7 +22,7 @@ namespace GameSrv.RobotPlay
                         {
                             if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye))
                             {
-                                nC = Math.Abs(nX - baseObject.CurrX) + Math.Abs(nY - baseObject.CurrY);
+                                var nC = Math.Abs(nX - baseObject.CurrX) + Math.Abs(nY - baseObject.CurrY);
                                 if (nC <= n10)
                                 {
                                     result++;
@@ -36,12 +35,12 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        public bool TargetNeedRunPos()
+        private bool TargetNeedRunPos()
         {
             return TargetCret.Race == ActorRace.Play || TargetCret.Race == 108;
         }
 
-        public bool CanRunPos(int nAttackCount)
+        private bool CanRunPos(int nAttackCount)
         {
             return MRunPos.AttackCount >= nAttackCount;
         }
@@ -50,12 +49,12 @@ namespace GameSrv.RobotPlay
         /// 使用野蛮冲撞技能时，判断目标是否需要移动
         /// </summary>
         /// <returns></returns>
-        private bool DoThinkMotaeboPos(short wMagicID)
+        private bool DoThinkMotaeboPos(short magicId)
         {
             bool result = false;
             short nTargetX = 0;
             short nTargetY = 0;
-            if (wMagicID == MagicConst.SKILL_MOOTEBO && Master != null && TargetCret != null && AllowUseMagic(MagicConst.SKILL_MOOTEBO) && TargetCret.Abil.Level < Abil.Level && CheckMagicInterval(27,  1000 * 10))
+            if (magicId == MagicConst.SKILL_MOOTEBO && Master != null && TargetCret != null && AllowUseMagic(MagicConst.SKILL_MOOTEBO) && TargetCret.Abil.Level < Abil.Level && CheckMagicInterval(27,  1000 * 10))
             {
                 var btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
@@ -66,7 +65,7 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private bool MagPushArround(int MagicID, short wMagicID)
+        private bool MagPushArround(int magicId, short wMagicId)
         {
             bool result = false;
             byte btNewDir;
@@ -84,7 +83,7 @@ namespace GameSrv.RobotPlay
                     return result;
                 }
             }
-            if (wMagicID == MagicID)
+            if (wMagicId == magicId)
             {
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
@@ -112,41 +111,40 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private int DoThink(short wMagicID)
+        private int DoThink(short magicId)
         {
             byte btDir = 0;
-            int nRange;
             int result = -1;
             switch (Job)
             {
                 case PlayJob.Warrior: // 1=野蛮冲撞 2=无法攻击到目标需要移动 3=走位
-                    if (DoThinkMotaeboPos(wMagicID))
+                    if (DoThinkMotaeboPos(magicId))
                     {
                         result = 1;
                     }
                     else
                     {
-                        nRange = 1;
-                        if (wMagicID == 43)
+                        var nRange = 1;
+                        if (magicId == 43)
                         {
                             nRange = 4;
                         }
-                        if (wMagicID == 12)
+                        if (magicId == 12)
                         {
                             nRange = 2;
                         }
-                        if (wMagicID == 60)
+                        if (magicId == 60)
                         {
                             nRange = 6;
                         }
                         result = 2;
-                        if (wMagicID == 61 || wMagicID == 62 || CanAttack(TargetCret, nRange, ref btDir))
+                        if (magicId == 61 || magicId == 62 || CanAttack(TargetCret, nRange, ref btDir))
                         {
                             result = 0;
                         }
                         if (Math.Abs(TargetCret.CurrX - CurrX) > 2 || Math.Abs(TargetCret.CurrY - CurrY) > 2)
                         {
-                            if (result == 0 && !new ArrayList(new short[] { 60, 61, 62 }).Contains(wMagicID))
+                            if (result == 0 && !new ArrayList(new short[] { 60, 61, 62 }).Contains(magicId))
                             {
                                 if (TargetNeedRunPos())
                                 {
@@ -171,12 +169,11 @@ namespace GameSrv.RobotPlay
                     }
                     break;
                 case PlayJob.Wizard:
-                    if (wMagicID == 8 && MagPushArround(wMagicID, wMagicID))
+                    if (magicId == 8 && MagPushArround(magicId, magicId))
                     {
                         return result;
                     }
-                    // 1=躲避 2=追击 3=魔法直线攻击不到目标 4=无法攻击到目标需要移动 5=走位
-                    if (IsUseAttackMagic())
+                    if (IsUseAttackMagic()) // 1=躲避 2=追击 3=魔法直线攻击不到目标 4=无法攻击到目标需要移动 5=走位
                     {
                         if (CheckTargetXYCount(CurrX, CurrY, 2) > 0)
                         {
@@ -186,7 +183,7 @@ namespace GameSrv.RobotPlay
                         {
                             result = 2;
                         }
-                        else if (new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2 }).Contains(wMagicID) && !CanAttack(TargetCret, 10, ref btDir))
+                        else if (new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2 }).Contains(magicId) && !CanAttack(TargetCret, 10, ref btDir))
                         {
                             result = 3;
                         }
@@ -204,12 +201,11 @@ namespace GameSrv.RobotPlay
                     }
                     break;
                 case PlayJob.Taoist:
-                    if (wMagicID == 48 && MagPushArround(wMagicID, wMagicID))
+                    if (magicId == 48 && MagPushArround(magicId, magicId))
                     {
                         return result;
                     }
-                    // 1=躲避 2=追击 3=魔法直线攻击不到目标 4=无法攻击到目标需要移动 5=走位
-                    if (IsUseAttackMagic())
+                    if (IsUseAttackMagic())// 1=躲避 2=追击 3=魔法直线攻击不到目标 4=无法攻击到目标需要移动 5=走位
                     {
                         if (CheckTargetXYCount(CurrX, CurrY, 2) > 0)
                         {
@@ -219,7 +215,7 @@ namespace GameSrv.RobotPlay
                         {
                             result = 2;
                         }
-                        else if (wMagicID == MagicConst.SKILL_FIRECHARM && !CanAttack(TargetCret, 10, ref btDir))
+                        else if (magicId == MagicConst.SKILL_FIRECHARM && !CanAttack(TargetCret, 10, ref btDir))
                         {
                             result = 3;
                         }

@@ -1985,34 +1985,6 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private int CheckTargetXyCount(int nX, int nY, int nRange)
-        {
-            var n10 = nRange;
-            var result = 0;
-            if (VisibleActors.Count > 0)
-            {
-                for (var i = 0; i < VisibleActors.Count; i++)
-                {
-                    var baseObject = VisibleActors[i].BaseObject;
-                    if (baseObject != null)
-                    {
-                        if (!baseObject.Death)
-                        {
-                            if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye))
-                            {
-                                var nC = Math.Abs(nX - baseObject.CurrX) + Math.Abs(nY - baseObject.CurrY);
-                                if (nC <= n10)
-                                {
-                                    result++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
         /// <summary>
         /// 是否走向目标
         /// </summary>
@@ -2938,7 +2910,7 @@ namespace GameSrv.RobotPlay
                     {
                         return MagicConst.SKILL_KILLUNDEAD;
                     }
-                    if (CheckTargetXyCount(CurrX, CurrY, 2) > 1)// 被怪物包围
+                    if (CheckTargetXYCount(CurrX, CurrY, 2) > 1)// 被怪物包围
                     {
                         if (AllowUseMagic(MagicConst.SKILL_EARTHFIRE) && CheckMagicInterval(22, 10000))
                         {
@@ -2952,7 +2924,7 @@ namespace GameSrv.RobotPlay
                         // 遇到祖玛的怪应该多用地狱雷光，夹杂雷电术，少用冰咆哮
                         if (new ArrayList(new byte[] { 91, 92, 97, 101, 102, 104 }).Contains(TargetCret.Race))
                         {
-                            if (AllowUseMagic(MagicConst.SKILL_LIGHTFLOWER) && CheckMagicInterval(24, 4000) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                            if (AllowUseMagic(MagicConst.SKILL_LIGHTFLOWER) && CheckMagicInterval(24, 4000) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                             {
                                 return MagicConst.SKILL_LIGHTFLOWER;
                             }
@@ -2964,11 +2936,11 @@ namespace GameSrv.RobotPlay
                             {
                                 return MagicConst.SKILL_LIGHTENING;
                             }
-                            if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 2) > 2)
+                            if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 2) > 2)
                             {
                                 return MagicConst.SKILL_SNOWWIND;
                             }
-                            if (CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                            if (CheckMagicInterval(58, 1500) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                             {
                                 if (AllowUseMagic(92))// 四级流星火雨
                                 {
@@ -2985,19 +2957,19 @@ namespace GameSrv.RobotPlay
                         switch (M2Share.RandomNumber.Random(4))// 随机选择魔法
                         {
                             case 0: // 火球术,大火球,雷电术,爆裂火焰,英雄冰咆哮,流星火雨 从高到低选择
-                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     return 92;// 四级流星火雨
                                 }
-                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     return 58;// 流星火雨
                                 }
-                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
                                     return MagicConst.SKILL_SNOWWIND;
                                 }
-                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
                                     return MagicConst.SKILL_FIREBOOM;
                                 }
@@ -3043,22 +3015,21 @@ namespace GameSrv.RobotPlay
                                 {
                                     return 44;
                                 }
-                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
                                     return 92;// 四级流星火雨
                                 }
-                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
                                     return 58;// 流星火雨
                                 }
-                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)// 火球术,大火球,地狱火,爆裂火焰,冰咆哮  从高到低选择
                                 {
-                                    // 火球术,大火球,地狱火,爆裂火焰,冰咆哮  从高到低选择
                                     return MagicConst.SKILL_SNOWWIND;
                                 }
-                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
                                     return MagicConst.SKILL_FIREBOOM;
                                 }
@@ -3088,22 +3059,22 @@ namespace GameSrv.RobotPlay
                                 {
                                     return 44;
                                 }
-                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
                                     return 92;// 四级流星火雨
                                 }
-                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
                                     return 58;// 流星火雨
                                 }
-                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
                                     // 火球术,大火球,地狱火,爆裂火焰 从高到低选择
                                     return MagicConst.SKILL_SNOWWIND;
                                 }
-                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
                                     return MagicConst.SKILL_FIREBOOM;
                                 }
@@ -3133,21 +3104,21 @@ namespace GameSrv.RobotPlay
                                 {
                                     return 44;
                                 }
-                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(92) && CheckMagicInterval(58, 1500) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
                                     return 92;// 四级流星火雨
                                 }
-                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                                if (AllowUseMagic(58) && CheckMagicInterval(58, 1500) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                                 {
                                     SkillUseTick[58] = HUtil32.GetTickCount();
                                     return 58;// 流星火雨
                                 }
-                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)// 火球术,大火球,地狱火,爆裂火焰 从高到低选择
+                                if (AllowUseMagic(MagicConst.SKILL_SNOWWIND) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)// 火球术,大火球,地狱火,爆裂火焰 从高到低选择
                                 {
                                     return MagicConst.SKILL_SNOWWIND;
                                 }
-                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
+                                if (AllowUseMagic(MagicConst.SKILL_FIREBOOM) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 1)
                                 {
                                     return MagicConst.SKILL_FIREBOOM;
                                 }
@@ -3383,7 +3354,7 @@ namespace GameSrv.RobotPlay
                     {
                         return 32;// 圣言术
                     }
-                    if (AllowUseMagic(MagicConst.SKILL_LIGHTFLOWER) && CheckTargetXyCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
+                    if (AllowUseMagic(MagicConst.SKILL_LIGHTFLOWER) && CheckTargetXYCount(TargetCret.CurrX, TargetCret.CurrY, 3) > 2)
                     {
                         return MagicConst.SKILL_LIGHTFLOWER;
                     }

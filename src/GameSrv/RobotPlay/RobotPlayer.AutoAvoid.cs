@@ -23,10 +23,9 @@ namespace GameSrv.RobotPlay
                         {
                             if ((byte)Job == 1)// 法放魔法后要躲
                             {
-                                if (CheckTargetXyCount(CurrX, CurrY, 4) > 0)
+                                if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                 {
-                                    result = true;
-                                    return result;
+                                    return true;
                                 }
                             }
                         }
@@ -35,7 +34,7 @@ namespace GameSrv.RobotPlay
                             switch (Job)
                             {
                                 case PlayJob.Wizard:
-                                    if (CheckTargetXyCount(CurrX, CurrY, 4) > 0)
+                                    if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                     {
                                         return true;
                                     }
@@ -47,7 +46,7 @@ namespace GameSrv.RobotPlay
                                         {
                                             if (TargetCret.WAbil.MaxHP >= 700)
                                             {
-                                                if (CheckTargetXyCount(CurrX, CurrY, 4) > 0)
+                                                if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                                 {
                                                     return true;
                                                 }
@@ -55,7 +54,7 @@ namespace GameSrv.RobotPlay
                                         }
                                         else
                                         {
-                                            if (CheckTargetXyCount(CurrX, CurrY, 4) > 0)
+                                            if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                             {
                                                 return true;
                                             }
@@ -63,7 +62,7 @@ namespace GameSrv.RobotPlay
                                     }
                                     else
                                     {
-                                        if (CheckTargetXyCount(CurrX, CurrY, 4) > 0)
+                                        if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                         {
                                             return true;
                                         }

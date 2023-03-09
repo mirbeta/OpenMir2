@@ -23,7 +23,7 @@ namespace GameSrv.GameCommand.Commands
                 return;
             }
             var userCount = HUtil32.StrToInt(@params[0], 1);
-            string sMapName = string.Empty;
+            string sMapName;
             short nX = 0;
             short nY = 0;
             if (@params.Length >= 3)
