@@ -12,10 +12,10 @@ namespace GameSrv.Maps
 
         private PointInfo[] _path;
         private Envirnoment _pathEnvir;
-        public int BeginX;
-        public int BeginY;
-        public int EndX;
-        public int EndY;
+        public short BeginX;
+        public short BeginY;
+        public short EndX;
+        public short EndY;
 
         public FindPath() : base() {
             this.StartFind = false;

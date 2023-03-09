@@ -44,8 +44,8 @@ namespace GameSrv.Maps {
 
     public struct WaveCell {
         // 路线点
-        public int X;
-        public int Y;
+        public short X;
+        public short Y;
         public int Cost;
         public int Direction;
     }
@@ -71,7 +71,7 @@ namespace GameSrv.Maps {
             return _fData[_fPos];
         }
 
-        public void Add(int newX, int newY, int newCost, int newDirection) {
+        public void Add(short newX, short newY, int newCost, int newDirection) {
             if (_fCount >= _fData.Length) {
                 _fData = new WaveCell[_fData.Length + 30];
             }

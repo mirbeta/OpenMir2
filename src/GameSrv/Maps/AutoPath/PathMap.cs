@@ -310,8 +310,8 @@ namespace GameSrv.Maps
         // 合法点是指非障碍物且Result[X，Y]中未访问的点
         private void FillPathMapTestNeighbours(Wave oldWave, Wave newWave, ref PathcellSuccess[,] result) {
             for (int i = 0; i < 8; i++) {
-                int x = oldWave.Item.X + DirToDx(i);
-                int y = oldWave.Item.Y + DirToDy(i);
+                short x = (short)(oldWave.Item.X + DirToDx(i));
+                short y = (short)(oldWave.Item.Y + DirToDy(i));
                 int c = GetCost(x, y, i);
                 if ((c >= 0) && (result[y, x].Distance < 0)) {
                     newWave.Add(x, y, c, i);
