@@ -1216,7 +1216,7 @@ namespace GameSrv.Npc {
         }
 
         public void ClientMakeDrugItem(PlayObject playObject, string sItemName) {
-            var n14 = 1;
+            byte n14 = 1;
             for (var i = 0; i < _goodsList.Count; i++)
             {
                 IList<UserItem> list1C = _goodsList[i];

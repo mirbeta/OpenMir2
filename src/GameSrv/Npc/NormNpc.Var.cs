@@ -1570,28 +1570,22 @@ namespace GameSrv.Npc {
                     result = true;
                     return result;
                 case "$MACRUNTIME":
-                    // (24 * 60 * 60 * 1000)
-                    sValue = (HUtil32.GetTickCount() / 86400000).ToString();
+                    sValue = (HUtil32.GetTickCount() / 86400000).ToString();// (24 * 60 * 60 * 1000)
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$SERVERRUNTIME":
-                    //nSecond = (HUtil32.GetTickCount() - M2Share.StartTick) / 1000;
-                    //wHour = nSecond / 3600;
-                    //wMinute = (nSecond / 60) % 60;
-                    //wSecond = nSecond % 60;
-                    //sValue = string.Format("%d:%d:%d", new short[] { wHour, wMinute, wSecond });
                     sValue = DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime).ToString("YYYY-MM-DD HH:mm:ss");
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$DATETIME":
-                    //sValue = FormatDateTime("dddddd,dddd,hh:mm:nn", DateTime.Now);
+                    sValue = DateTime.Now.ToString("YYYY-MM-DD HH:mm:ss");
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$DATE":
-                    //sValue = FormatDateTime("dddddd", DateTime.Now);
+                    sValue = DateTime.Now.ToString("yyyy-MM-dd");
                     nDataType = 0;
                     result = true;
                     return result;
@@ -1659,13 +1653,13 @@ namespace GameSrv.Npc {
                     result = true;
                     return result;
                 case "$STATSERVERTIME":// 显示M2启动时间
-                                       // sValue = FormatDateTime("dddddd,dddd,hh:mm:nn", Settings.g_dwRunStartTick);
+                    DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime).ToString("YYYY-MM-DD HH:mm:ss");
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RUNDATETIME":// 开区间隔时间 显示为XX小时。
-                                    // IntDays = MinutesBetween(DateTime.Now, Settings.g_dwDiyStartTick);
-                                    //sValue = (IntDays / 60).ToString();
+                    var ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
+                    sValue = $"服务器运行:[{ts.Days}天{ts.Hours}小时{ts.Minutes}分{ts.Seconds}秒]";
                     nDataType = 0;
                     result = true;
                     return result;
