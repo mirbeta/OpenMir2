@@ -7,13 +7,11 @@ namespace GameSrv.Robots
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<RobotObject> RobotHumanList;
-        private readonly Thread _roBotThread;
 
         public RobotManage()
         {
             RobotHumanList = new List<RobotObject>();
             LoadRobot();
-            _roBotThread = new Thread(Run) { IsBackground = true };
         }
 
         ~RobotManage()
@@ -21,17 +19,7 @@ namespace GameSrv.Robots
             UnLoadRobot();
         }
 
-        public void Start()
-        {
-            _roBotThread.Start();
-            _logger.Info("脚本机器人线程启动...");
-        }
-
-        public void Stop()
-        {
-            _roBotThread.Interrupt();
-            _logger.Info("脚本机器人线程停止...");
-        }
+        public IList<RobotObject> Robots => RobotHumanList;
 
         private void LoadRobot()
         {
@@ -60,27 +48,6 @@ namespace GameSrv.Robots
         {
             UnLoadRobot();
             LoadRobot();
-        }
-
-        private void Run()
-        {
-            const string sExceptionMsg = "[Exception] TRobotManage::Run";
-            while (M2Share.StartReady)
-            {
-                try
-                {
-                    for (var i = RobotHumanList.Count - 1; i >= 0; i--)
-                    {
-                        RobotHumanList[i].Run();
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(sExceptionMsg);
-                    _logger.Error(e.Message);
-                }
-                Thread.Sleep(20);
-            }
         }
 
         private void UnLoadRobot()
