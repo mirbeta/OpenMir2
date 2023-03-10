@@ -72,7 +72,7 @@ namespace GameSrv {
         public static GuildManager GuildMgr = null;
         public static EventManager EventMgr = null;
         public static CastleManager CastleMgr = null;
-        public static TFrontEngine FrontEngine = null;
+        public static FrontEngine FrontEngine = null;
         public static WorldServer WorldEngine = null;
         public static RobotManage RobotMgr = null;
         public static NormNpc ManageNPC = null;
@@ -84,6 +84,7 @@ namespace GameSrv {
         public static RobotProcessor RobotProcessor = null;
         public static MerchantProcessor MerchantProcessor = null;
         public static GeneratorProcessor GeneratorProcessor = null;
+        public static EventProcessor EventProcessor = null;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -243,6 +244,7 @@ namespace GameSrv {
             RobotProcessor = new RobotProcessor();
             MerchantProcessor = new MerchantProcessor();
             GeneratorProcessor = new GeneratorProcessor();
+            EventProcessor = new EventProcessor();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

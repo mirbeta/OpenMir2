@@ -36,7 +36,7 @@ namespace GameSrv.GameGate {
         /// </summary>
         public PlayerSession SessInfo;
         public int nSocket;
-        public TFrontEngine FrontEngine;
+        public FrontEngine FrontEngine;
         public WorldServer UserEngine;
         public int dwNewUserTick;
     }
