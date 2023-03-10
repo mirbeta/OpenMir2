@@ -21,7 +21,7 @@ namespace GameSrv
             await M2Share.GeneratorProcessor.StartAsync(stoppingToken);
             await M2Share.EventProcessor.StartAsync(stoppingToken);
             await M2Share.StorageProcessor.StartAsync(stoppingToken);
-            M2Share.RobotMgr.Start();
+            await M2Share.TimedRobotProcessor.StartAsync(stoppingToken);
             M2Share.DataServer.Start();
             M2Share.GateMgr.Start(stoppingToken);
             M2Share.UsrRotCountTick = HUtil32.GetTickCount();
@@ -32,14 +32,14 @@ namespace GameSrv
         {
             M2Share.DataServer.Stop();
             M2Share.GateMgr.Stop();
-            M2Share.RobotMgr.Stop();
             M2Share.GeneratorProcessor.StopAsync(cancellationToken);
             M2Share.SystemProcess.StopAsync(cancellationToken);
             M2Share.UserProcessor.StopAsync(cancellationToken);
             M2Share.RobotProcessor.StopAsync(cancellationToken);
             M2Share.MerchantProcessor.StopAsync(cancellationToken);
             M2Share.EventProcessor.StopAsync(cancellationToken);
-            M2Share.StorageProcessor.StartAsync(cancellationToken);
+            M2Share.StorageProcessor.StopAsync(cancellationToken);
+            M2Share.TimedRobotProcessor.StopAsync(cancellationToken);
         }
 
         private static void ProcessGameNotice()
