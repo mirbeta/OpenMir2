@@ -11,7 +11,7 @@ namespace GameSrv.Maps {
         public int n08;
 
         public DoorInfo() {
-            DoorId = M2Share.ActorMgr.Dequeue();
+            DoorId = M2Share.ActorMgr.GetNextIdentity();
         }
     }
 
@@ -49,7 +49,7 @@ namespace GameSrv.Maps {
         public UserItem UserItem;
 
         public MapItem() {
-            this.ItemId = M2Share.ActorMgr.Dequeue();
+            this.ItemId = M2Share.ActorMgr.GetNextIdentity();
         }
     }
 

@@ -2,7 +2,6 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
-using NLog.Fluent;
 using Spectre.Console;
 using SystemModule.Enums;
 
@@ -117,7 +116,7 @@ namespace GameSrv
             });
 
             _appLifetime.ApplicationStopping.Register(OnShutdown);
-
+            
             return Task.CompletedTask;
         }
 
@@ -153,23 +152,23 @@ namespace GameSrv
         private const string CloseTransferMessgae = "服务器关闭倒计时[{0}],无需下线或退出游戏,稍后传送至新服务器安全区.";
         private const string CloseServerMessage = "服务器关闭倒计时[{0}]";
 
-        private void StopService(string sIPaddr, int nPort, bool isTransfer)
+        private async Task StopService(string sIPaddr, int nPort, bool isTransfer)
         {
             var playerCount = M2Share.WorldEngine.PlayObjectCount;
             if (playerCount == 0)
             {
                 ServerBase.Stop(_cancellationTokenSource.Token);
-                Host.StopAsync(_cancellationTokenSource.Token);
+                await Host.StopAsync(_cancellationTokenSource.Token);
                 _logger.Info("游戏服务已停止...");
                 return;
             }
             //todo 通知游戏网关暂停接收新的连接,发送消息后停止5秒,防止玩家在倒计时结束前进入游戏
-            Task.Factory.StartNew(async () =>
+            await Task.Factory.StartNew(async () =>
             {
                 var shutdownSeconds = M2Share.Config.ShutdownSeconds;
                 _logger.Debug("网关停止新玩家连接");
                 M2Share.GateMgr.SendGameStopMsg();//通知网关停止分配新的玩家连接
-                await Task.Delay(5000); //强制5秒延迟，防止玩家在倒计时结束前进入游戏
+                await Task.Delay(5000);//强制5秒延迟，防止玩家在倒计时结束前进入游戏
                 while (true)
                 {
                     if (shutdownSeconds <= 0)
@@ -185,7 +184,7 @@ namespace GameSrv
                                 playObject.TransferPlanesServer(sIPaddr, nPort);
                             }
                         }
-                        break; //转移结束后跳出循环
+                        break;//转移结束后跳出循环
                     }
                     foreach (var playObject in M2Share.WorldEngine.PlayObjects)
                     {
@@ -197,11 +196,11 @@ namespace GameSrv
                     shutdownSeconds--;
                 }
                 _logger.Info("5秒后关闭网关服务...");
-                await Task.Delay(5000); //延时1秒，等待网关服务停止
+                await Task.Delay(5000);//延时1秒，等待网关服务停止
                 M2Share.GateMgr.Stop();//停止网关服务
                 _logger.Info("网关服务已停止...");
                 _logger.Info("即将停止游戏引擎世界服务...");
-                await Task.Delay(500); //延时1秒，等待网关服务停止
+                await Task.Delay(500);//延时1秒，等待网关服务停止
                 ServerBase.Stop(_cancellationTokenSource.Token);
                 _logger.Info("游戏引擎世界服务已停止...");
                 await Host.StopAsync(_cancellationTokenSource.Token);
@@ -210,14 +209,14 @@ namespace GameSrv
             }, _cancellationTokenSource.Token);
         }
 
-        private void OnShutdown()
+        private async void OnShutdown()
         {
             _logger.Debug("Application is stopping");
             M2Share.StartReady = false;
             SavePlayer();
             if (M2Share.ServerIndex == 0)
             {
-                StopService("", 0, false);
+                await StopService("", 0, false);
             }
             else if (M2Share.ServerIndex > 0)
             {
@@ -230,13 +229,13 @@ namespace GameSrv
                 {
                     //todo 通知网关断开链接.停止新玩家进入游戏
                     _logger.Info($"转移到新服务器[{sIPaddr}:{nPort}]");
-                    StopService(sIPaddr, nPort, true);
+                    await StopService(sIPaddr, nPort, true);
                 }
             }
             else
             {
                 _logger.Info("没有可用服务器，即将关闭游戏服务器.");
-                StopService("", 0, false);
+                await StopService("", 0, false);
             }
             _cancellationTokenSource?.CancelAfter(3000);
         }

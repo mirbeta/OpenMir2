@@ -24,19 +24,26 @@ namespace GameSrv.Actor {
         private static int MonsterDisposeCount { get; set; }
         private static int PlayerGhostCount { get; set; }
 
-        public ActorMgr() 
-        {
-
-        }
-
-        public ConcurrentDictionary<int, ActorEntity> ActorsMap => _actorsMap;
-        public ConcurrentQueue<int> GenerateQueue => _generateQueue;
-
-        public int Dequeue() {
+        public int GetNextIdentity() {
             return _generateQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
         }
 
-        public void Add(BaseObject actor) {
+        public int GetGenerateQueueCount()
+        {
+            return _generateQueue.Count;
+        }
+
+       public void Create(int sequence)
+        {
+            _generateQueue.Enqueue(sequence);
+        }
+
+       public bool ContainsKey(int actorId)
+       {
+           return _actorsMap.ContainsKey(actorId);
+       }
+
+       public void Add(BaseObject actor) {
             _actorsMap.TryAdd(actor.ActorId, actor);
         }
 
