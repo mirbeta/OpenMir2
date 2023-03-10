@@ -2,11 +2,13 @@
 using System.Collections.Concurrent;
 using SystemModule.Enums;
 
-namespace GameSrv.Actor {
+namespace GameSrv.Actor
+{
     /// <summary>
     /// 精灵管理
     /// </summary>
-    public sealed class ActorMgr {
+    public sealed class ActorMgr
+    {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConcurrentQueue<int> _generateQueue = new ConcurrentQueue<int>();
         private readonly IList<int> ActorIds = new List<int>(1000);
@@ -24,7 +26,8 @@ namespace GameSrv.Actor {
         private static int MonsterDisposeCount { get; set; }
         private static int PlayerGhostCount { get; set; }
 
-        public int GetNextIdentity() {
+        public int GetNextIdentity()
+        {
             return _generateQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
         }
 
@@ -33,72 +36,87 @@ namespace GameSrv.Actor {
             return _generateQueue.Count;
         }
 
-       public void AddToQueue(int sequence)
+        public void AddToQueue(int sequence)
         {
             _generateQueue.Enqueue(sequence);
         }
 
-       public bool ContainsKey(int actorId)
-       {
-           return _actorsMap.ContainsKey(actorId);
-       }
+        public bool ContainsKey(int actorId)
+        {
+            return _actorsMap.ContainsKey(actorId);
+        }
 
-       public void Add(BaseObject actor) {
+        public void Add(BaseObject actor)
+        {
             _actorsMap.TryAdd(actor.ActorId, actor);
         }
 
-        public BaseObject Get(int actorId) {
+        public BaseObject Get(int actorId)
+        {
             return _actorsMap.TryGetValue(actorId, out var actor) ? (BaseObject)actor : null;
         }
 
-        public T Get<T>(int actorId) where T : ActorEntity {
+        public T Get<T>(int actorId) where T : ActorEntity
+        {
             return _actorsMap.TryGetValue(actorId, out var actor) ? (T)actor : default;
         }
 
-        public void AddOhter(int objectId, object obj) {
+        public void AddOhter(int objectId, object obj)
+        {
             _ohterMap.TryAdd(objectId, obj);
         }
 
-        public object GetOhter(int objectId) {
+        public object GetOhter(int objectId)
+        {
             return _ohterMap.TryGetValue(objectId, out var obj) ? obj : null;
         }
 
-        public void RevomeOhter(int actorId) {
+        public void RevomeOhter(int actorId)
+        {
             _ohterMap.TryRemove(actorId, out var actor);
         }
 
         /// <summary>
         /// 清理
         /// </summary>
-        public void ClearObject() {
+        public void ClearObject()
+        {
             ActorIds.Clear();
             PlayerCount = 0;
             MonsterCount = 0;
             using IEnumerator<KeyValuePair<int, ActorEntity>> actors = _actorsMap.GetEnumerator();
-            while (actors.MoveNext()) {
+            while (actors.MoveNext())
+            {
                 var actor = (BaseObject)actors.Current.Value;
-                if (!actor.Death && !actor.Ghost) {
-                    if (actor.Race == ActorRace.Play) {
+                if (!actor.Death && !actor.Ghost)
+                {
+                    if (actor.Race == ActorRace.Play)
+                    {
                         PlayerCount++;
                         PlayerGhostCount++;
                     }
-                    else {
+                    else
+                    {
                         MonsterCount++;
                     }
                 }
-                else if (actor.Race != ActorRace.Play && actor.Death || actor.Ghost) {
+                else if (actor.Race != ActorRace.Play && actor.Death || actor.Ghost)
+                {
                     MonsterDeathCount++;
                 }
                 if (!actor.Ghost || actor.GhostTick <= 0) continue;
-                if ((HUtil32.GetTickCount() - actor.GhostTick) <= 20000) //死亡对象清理时间
+                if ((HUtil32.GetTickCount() - actor.GhostTick) <= 20000)//死亡对象清理时间
                 {
                     continue;
                 }
                 ActorIds.Add(actors.Current.Key);
             }
-            foreach (var actorId in ActorIds) {
-                if (_actorsMap.TryRemove(actorId, out var actor)) {
-                    if (((BaseObject)actor).Race != ActorRace.Play) {
+            foreach (var actorId in ActorIds)
+            {
+                if (_actorsMap.TryRemove(actorId, out var actor))
+                {
+                    if (((BaseObject)actor).Race != ActorRace.Play)
+                    {
                         MonsterDisposeCount++;
                     }
                     actors.Dispose();
