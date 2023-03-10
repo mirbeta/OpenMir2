@@ -15,6 +15,7 @@ using GameSrv.Robots;
 using GameSrv.Script;
 using GameSrv.Services;
 using GameSrv.World;
+using GameSrv.World.Threads;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -77,6 +78,10 @@ namespace GameSrv {
         public static NormNpc ManageNPC = null;
         public static NormNpc RobotNPC = null;
         public static Merchant FunctionNPC = null;
+        public static NetworkMonitor NetworkMonitor = null;
+        public static SystemProcessor SystemProcess = null;
+        public static UserProcessor UserProcessor = null;
+        public static RobotProcessor RobotProcessor = null;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -230,6 +235,10 @@ namespace GameSrv {
             CommonDb = new CommonDB();
             FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();
+            NetworkMonitor = new NetworkMonitor();
+            SystemProcess = new SystemProcessor();
+            UserProcessor = new UserProcessor();
+            RobotProcessor = new RobotProcessor();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
