@@ -33,7 +33,7 @@ namespace GameSrv.Actor {
             return _generateQueue.Count;
         }
 
-       public void Create(int sequence)
+       public void AddToQueue(int sequence)
         {
             _generateQueue.Enqueue(sequence);
         }
