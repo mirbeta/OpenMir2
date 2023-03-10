@@ -11,14 +11,23 @@ namespace GameSrv.World.Threads
         private int ShowOnlineTick { get; set; }
         private int SendOnlineHumTime { get; set; }
 
-
         public SystemProcessor() : base(TimeSpan.FromMilliseconds(50), "SystemThread")
+        {
+
+        }
+
+        protected override void Startup(CancellationToken stoppingToken)
         {
             RunTimeTick = HUtil32.GetTickCount();
             ShowOnlineTick = HUtil32.GetTickCount();
             SendOnlineHumTime = HUtil32.GetTickCount();
         }
 
+        protected override void Stopping(CancellationToken stoppingToken)
+        {
+            
+        }
+        
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             Run();

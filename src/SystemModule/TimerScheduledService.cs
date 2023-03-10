@@ -32,11 +32,13 @@ namespace SystemModule
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.Debug($"Timer [{m_name}] has started");
+            Startup(cancellationToken);
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
+            Stopping(cancellationToken);
             m_timer.Dispose();
             _logger.Debug($"Timer [{m_name}] has finished");
             return base.StopAsync(cancellationToken);
@@ -71,6 +73,8 @@ namespace SystemModule
         }
 
         protected abstract Task ExecuteInternal(CancellationToken stoppingToken);
+        protected abstract void Startup(CancellationToken stoppingToken);
+        protected abstract void Stopping(CancellationToken stoppingToken);
         
         public void Dispose()
         {

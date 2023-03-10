@@ -29,5 +29,15 @@ namespace GameSrv.World.Threads
             }
             return Task.CompletedTask;
         }
+
+        protected override void Startup(CancellationToken stoppingToken)
+        {
+            logger.Info("机器人管理线程初始化完成...");
+        }
+
+        protected override void Stopping(CancellationToken stoppingToken)
+        {
+            logger.Info("机器人管理线程停止ֹ...");
+        }
     }
 }

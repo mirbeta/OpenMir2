@@ -21,6 +21,16 @@ namespace GameSrv.World.Threads
             return Task.CompletedTask;
         }
 
+        protected override void Startup(CancellationToken stoppingToken)
+        {
+            _logger.Info("Id生成器启动...");
+        }
+
+        protected override void Stopping(CancellationToken stoppingToken)
+        {
+            _logger.Info("Id生成器停止...");
+        }
+
         private void GenerateIdThread()
         {
             if (M2Share.ActorMgr.GetGenerateQueueCount() < 20000)

@@ -3,7 +3,7 @@ using NLog;
 using SystemModule.Data;
 
 namespace GameSrv.Services {
-    public class TFrontEngine {
+    public class FrontEngine {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly object UserCriticalSection;
         private readonly IList<SavePlayerRcd> m_SaveRcdList;
@@ -12,7 +12,7 @@ namespace GameSrv.Services {
         private IList<LoadDBInfo> m_LoadRcdTempList;
         private IList<LoadDBInfo> m_LoadRcdList;
 
-        public TFrontEngine() {
+        public FrontEngine() {
             UserCriticalSection = new object();
             m_LoadRcdList = new List<LoadDBInfo>();
             m_SaveRcdList = new List<SavePlayerRcd>();

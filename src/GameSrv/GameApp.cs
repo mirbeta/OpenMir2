@@ -63,7 +63,7 @@ namespace GameSrv {
             M2Share.GuildMgr = new GuildManager();
             M2Share.EventMgr = new EventManager();
             M2Share.CastleMgr = new CastleManager();
-            M2Share.FrontEngine = new TFrontEngine();
+            M2Share.FrontEngine = new FrontEngine();
             M2Share.WorldEngine = new WorldServer();
             M2Share.RobotMgr = new RobotManage();
             M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
