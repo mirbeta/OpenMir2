@@ -6,7 +6,7 @@ namespace GameSrv.Actor {
         public int ActorId { get; private set; }
 
         public ActorEntity() {
-            ActorId = M2Share.ActorMgr.Dequeue();
+            ActorId = M2Share.ActorMgr.GetNextIdentity();
         }
 
         /// <summary>

@@ -103,7 +103,7 @@ namespace GameSrv.Maps {
             Envirnoment dEnvir = FindMap(sDMapNo);
             if (sEnvir != null && dEnvir != null) {
                 GateObject gateObj = new GateObject {
-                    RouteId = M2Share.ActorMgr.Dequeue(),
+                    RouteId = M2Share.ActorMgr.GetNextIdentity(),
                     Flag = false,
                     Envir = dEnvir,
                     X = (short)nDMapX,

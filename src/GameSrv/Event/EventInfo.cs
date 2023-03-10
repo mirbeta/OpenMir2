@@ -47,7 +47,7 @@ namespace GameSrv.Event {
         public bool IsDispose;
 
         public EventInfo(Envirnoment envir, short ntX, short ntY, byte nType, int dwETime, bool boVisible) {
-            Id = M2Share.ActorMgr.Dequeue();
+            Id = M2Share.ActorMgr.GetNextIdentity();
             OpenStartTick = HUtil32.GetTickCount();
             EventType = nType;
             EventParam = 0;
