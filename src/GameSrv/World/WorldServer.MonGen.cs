@@ -306,7 +306,7 @@ namespace GameSrv.World {
                     _logger.Error(e.StackTrace);
                 }
                 finally {
-                    Thread.SpinWait(20);
+                    Thread.Sleep(20);
                 }
             }
         }

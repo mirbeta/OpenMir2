@@ -2,19 +2,17 @@ using NLog;
 
 namespace GameSrv.World.Threads
 {
-    public class RobotProcessor : TimerBase
+    public class RobotProcessor : TimerScheduledService
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         public int ProcessedMonsters { get; private set; }
 
-        public RobotProcessor() : base(500, "RobotProcessor")
+        public RobotProcessor() : base(TimeSpan.FromMilliseconds(100), "RobotProcessor")
         {
 
         }
 
-        
-
-        protected override bool OnElapseAsync()
+        protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             try
             {
@@ -29,8 +27,7 @@ namespace GameSrv.World.Threads
                 logger.Error($"RobotProcessor::OnElapseAsync error");
                 logger.Error(ex);
             }
-
-            return true;
+            return Task.CompletedTask;
         }
     }
 }

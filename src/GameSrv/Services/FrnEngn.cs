@@ -34,7 +34,7 @@ namespace GameSrv.Services {
                         M2Share.Logger.Error(ex.StackTrace);
                     }
                     finally {
-                        Thread.SpinWait(20);
+                        Thread.Sleep(20);
                     }
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);

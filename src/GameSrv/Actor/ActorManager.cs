@@ -1,8 +1,6 @@
 ﻿using NLog;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using SystemModule.Enums;
-using SystemModule.Generation.Entities;
 
 namespace GameSrv.Actor {
     /// <summary>
@@ -10,9 +8,7 @@ namespace GameSrv.Actor {
     /// </summary>
     public sealed class ActorMgr {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ConcurrentQueue<int> GenerateQueue = new ConcurrentQueue<int>();
-        private readonly StandardRandomizer standardRandomizer = new StandardRandomizer();
-        private readonly Thread IdWorkThread;
+        private readonly ConcurrentQueue<int> _generateQueue = new ConcurrentQueue<int>();
         private readonly IList<int> ActorIds = new List<int>(1000);
         /// <summary>
         /// 精灵列表
@@ -28,43 +24,16 @@ namespace GameSrv.Actor {
         private static int MonsterDisposeCount { get; set; }
         private static int PlayerGhostCount { get; set; }
 
-        public ActorMgr() {
-            IdWorkThread = new Thread(GenerateIdThread) {
-                IsBackground = true
-            };
-            IdWorkThread.Start();
+        public ActorMgr() 
+        {
+
         }
 
-        private void GenerateIdThread(object obj) {
-            while (true) {
-                if (GenerateQueue.Count < 20000) {
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-                    for (int i = 0; i < 100000; i++) {
-                        int sequence = standardRandomizer.NextInteger();
-                        if (_actorsMap.ContainsKey(sequence)) {
-                            while (true) {
-                                sequence = standardRandomizer.NextInteger();
-                                if (!_actorsMap.ContainsKey(sequence)) {
-                                    break;
-                                }
-                            }
-                        }
-                        while (sequence < 0) {
-                            sequence = Environment.TickCount + HUtil32.Sequence();
-                            if (sequence > 0) break;
-                        }
-                        GenerateQueue.Enqueue(sequence);
-                    }
-                    sw.Stop();
-                    _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{GenerateQueue.Count}]");
-                }
-                Thread.SpinWait(5000);
-            }
-        }
+        public ConcurrentDictionary<int, ActorEntity> ActorsMap => _actorsMap;
+        public ConcurrentQueue<int> GenerateQueue => _generateQueue;
 
         public int Dequeue() {
-            return GenerateQueue.TryDequeue(out int sequence) ? sequence : HUtil32.Sequence();
+            return _generateQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
         }
 
         public void Add(BaseObject actor) {
@@ -72,11 +41,11 @@ namespace GameSrv.Actor {
         }
 
         public BaseObject Get(int actorId) {
-            return _actorsMap.TryGetValue(actorId, out ActorEntity actor) ? (BaseObject)actor : null;
+            return _actorsMap.TryGetValue(actorId, out var actor) ? (BaseObject)actor : null;
         }
 
         public T Get<T>(int actorId) where T : ActorEntity {
-            return _actorsMap.TryGetValue(actorId, out ActorEntity actor) ? (T)actor : default;
+            return _actorsMap.TryGetValue(actorId, out var actor) ? (T)actor : default;
         }
 
         public void AddOhter(int objectId, object obj) {
@@ -84,11 +53,11 @@ namespace GameSrv.Actor {
         }
 
         public object GetOhter(int objectId) {
-            return _ohterMap.TryGetValue(objectId, out object obj) ? obj : null;
+            return _ohterMap.TryGetValue(objectId, out var obj) ? obj : null;
         }
 
         public void RevomeOhter(int actorId) {
-            _ohterMap.TryRemove(actorId, out object actor);
+            _ohterMap.TryRemove(actorId, out var actor);
         }
 
         /// <summary>
@@ -100,7 +69,7 @@ namespace GameSrv.Actor {
             MonsterCount = 0;
             using IEnumerator<KeyValuePair<int, ActorEntity>> actors = _actorsMap.GetEnumerator();
             while (actors.MoveNext()) {
-                BaseObject actor = (BaseObject)actors.Current.Value;
+                var actor = (BaseObject)actors.Current.Value;
                 if (!actor.Death && !actor.Ghost) {
                     if (actor.Race == ActorRace.Play) {
                         PlayerCount++;
@@ -120,8 +89,8 @@ namespace GameSrv.Actor {
                 }
                 ActorIds.Add(actors.Current.Key);
             }
-            foreach (int actorId in ActorIds) {
-                if (_actorsMap.TryRemove(actorId, out ActorEntity actor)) {
+            foreach (var actorId in ActorIds) {
+                if (_actorsMap.TryRemove(actorId, out var actor)) {
                     if (((BaseObject)actor).Race != ActorRace.Play) {
                         MonsterDisposeCount++;
                     }
