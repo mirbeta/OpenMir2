@@ -98,7 +98,7 @@ namespace GameSrv
                         _mirApp.Initialize();
                         _logger.Info("读取配置信息完成...");
                         _mirApp.StartServer(stoppingToken);
-                        await _mirApp.StartWorld(stoppingToken);
+                        await _mirApp.StartUp(stoppingToken);
                         _exitCode = 0;
                     }
                     catch (TaskCanceledException)
@@ -157,7 +157,7 @@ namespace GameSrv
             var playerCount = M2Share.WorldEngine.PlayObjectCount;
             if (playerCount == 0)
             {
-                ServerBase.Stop(_cancellationTokenSource.Token);
+                ServerBase.Stopping(_cancellationTokenSource.Token);
                 await Host.StopAsync(_cancellationTokenSource.Token);
                 _logger.Info("游戏服务已停止...");
                 return;
@@ -201,7 +201,7 @@ namespace GameSrv
                 _logger.Info("网关服务已停止...");
                 _logger.Info("即将停止游戏引擎世界服务...");
                 await Task.Delay(500);//延时1秒，等待网关服务停止
-                ServerBase.Stop(_cancellationTokenSource.Token);
+                ServerBase.Stopping(_cancellationTokenSource.Token);
                 _logger.Info("游戏引擎世界服务已停止...");
                 await Host.StopAsync(_cancellationTokenSource.Token);
                 _logger.Info("游戏服务已停止...");
