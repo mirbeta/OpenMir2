@@ -232,7 +232,7 @@ namespace GameSrv {
                 }
                 else {
                     PlanesClient.Instance.ConnectPlanesServer();
-                    _logger.Info($"节点运行模式...[{M2Share.Config.MasterSrvAddr}:{M2Share.Config.MasterSrvPort}]");
+                    _logger.Info($"节点运行模式...主机端口:[{M2Share.Config.MasterSrvAddr}:{M2Share.Config.MasterSrvPort}]");
                 }
                 IdSrvClient.Instance.Initialize();
                 M2Share.GuildMgr.LoadGuildInfo();
