@@ -14,11 +14,11 @@ namespace GameSrv
 
         public async Task StartUp(CancellationToken stoppingToken)
         {
+            await M2Share.GeneratorProcessor.StartAsync(stoppingToken);
             await M2Share.SystemProcess.StartAsync(stoppingToken);
             await M2Share.UserProcessor.StartAsync(stoppingToken);
             await M2Share.RobotProcessor.StartAsync(stoppingToken);
             await M2Share.MerchantProcessor.StartAsync(stoppingToken);
-            await M2Share.GeneratorProcessor.StartAsync(stoppingToken);
             await M2Share.EventProcessor.StartAsync(stoppingToken);
             await M2Share.StorageProcessor.StartAsync(stoppingToken);
             await M2Share.TimedRobotProcessor.StartAsync(stoppingToken);

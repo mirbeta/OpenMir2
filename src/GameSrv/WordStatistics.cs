@@ -49,11 +49,11 @@ namespace GameSrv {
             TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
             _logger.Debug("{0}", $"Server Start Time: {DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime):G}");
             _logger.Debug("{0}", $"Total Online Time: {(int)ts.TotalDays} days, {ts.Hours} hours, {ts.Minutes} minutes, {ts.Seconds} seconds");
-            //_logger.Debug("{0}", $"Online Players[{Kernel.RoleManager.OnlinePlayers}], Max Online Players[{Kernel.RoleManager.MaxOnlinePlayers}], Distinct Players[{Kernel.RoleManager.OnlineUniquePlayers}], Role Count[{Kernel.RoleManager.RolesCount}]");
+            _logger.Debug("{0}", $"Online Players[{M2Share.WorldEngine.OnlinePlayObject}], Max Online Players[{M2Share.WorldEngine.PlayObjectCount}], Offline Players[{M2Share.WorldEngine.OfflinePlayCount}], Role Count[{M2Share.WorldEngine.PlayObjectCount}]");
             _logger.Debug("{0}", $"Total Bytes Sent: {M2Share.NetworkMonitor.TotalBytesSent:N0}, Total Packets Sent: {M2Share.NetworkMonitor.TotalPacketsSent:N0}");
             _logger.Debug("{0}", $"Total Bytes Recv: {M2Share.NetworkMonitor.TotalBytesRecv:N0}, Total Packets Recv: {M2Share.NetworkMonitor.TotalPacketsRecv:N0}");
             _logger.Debug("{0}", $"System Thread: {M2Share.SystemProcess.ElapsedMilliseconds:N0}ms");
-            //_logger.Debug("{0}", $"Generator Thread: {M2Share.GeneratorManager.ElapsedMilliseconds}ms");
+            _logger.Debug("{0}", $"Generator Thread: {M2Share.GeneratorProcessor.ElapsedMilliseconds}ms");
             _logger.Debug("{0}", $"User Thread: {M2Share.UserProcessor.ElapsedMilliseconds:N0}ms");
             _logger.Debug("{0}", $"RobotUser Thread: {M2Share.RobotProcessor.ElapsedMilliseconds:N0}ms ({M2Share.RobotProcessor.ProcessedMonsters} RobotUser Agents)");
             _logger.Debug("{0}", $"Identities Remaining: ");

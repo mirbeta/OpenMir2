@@ -35,6 +35,7 @@ namespace GameSrv.World.Threads
         {
             if (M2Share.ActorMgr.GetGenerateQueueCount() < 20000)
             {
+                sw.Reset();
                 sw.Start();
                 for (var i = 0; i < 100000; i++)
                 {
