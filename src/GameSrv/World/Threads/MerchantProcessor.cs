@@ -1,20 +1,14 @@
 ﻿
 namespace GameSrv.World.Threads
 {
-    public class MerchantProcessor : TimerBase
+    public class MerchantProcessor : TimerScheduledService
     {
-        public MerchantProcessor() : base(200, "MerchantProcessor")
+        public MerchantProcessor() : base(TimeSpan.FromMilliseconds(200), "MerchantProcessor")
         {
 
         }
 
-        protected override void OnStartAsync()
-        {
-            Console.Write("启动");
-            base.OnStartAsync();
-        }
-
-        protected override bool OnElapseAsync()
+        protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             try
             {
@@ -26,8 +20,7 @@ namespace GameSrv.World.Threads
                 M2Share.Logger.Error("[异常] MerchantProcessor::OnElapseAsync error");
                 M2Share.Logger.Error(ex);
             }
-
-            return true;
+            return Task.CompletedTask;
         }
     }
 }

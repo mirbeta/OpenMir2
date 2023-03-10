@@ -1,14 +1,13 @@
 namespace GameSrv.World.Threads
 {
-    public class UserProcessor : TimerBase
+    public class UserProcessor : TimerScheduledService
     {
-
-        public UserProcessor() : base(100, "UserProcessor")
+        public UserProcessor() : base(TimeSpan.FromMilliseconds(50), "UserProcessor")
         {
 
         }
 
-        protected override bool OnElapseAsync()
+        protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             try
             {
@@ -16,10 +15,10 @@ namespace GameSrv.World.Threads
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error("[�쳣] UserProcessor::OnElapseAsync error");
+                M2Share.Logger.Error("[�쳣] UserProcessor::OnElapseAsync error");
                 M2Share.Logger.Error(ex);
             }
-            return true;
+            return Task.CompletedTask;
         }
     }
 }

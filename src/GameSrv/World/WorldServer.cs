@@ -26,8 +26,6 @@ namespace GameSrv.World
         private int ProcessMissionsTime { get; set; }
         private int ProcessNpcTimeMax { get; set; }
         private int ProcessNpcTimeMin { get; set; }
-        private int SendOnlineHumTime { get; set; }
-        private int ShowOnlineTick { get; set; }
         private int ProcessLoadPlayTick { get; set; }
         private int ProcHumIdx { get; set; }
         private int ProcBotHubIdx { get; set; }
@@ -88,8 +86,6 @@ namespace GameSrv.World
             PlayObjectList = new List<PlayObject>();
             PlayObjectFreeList = new List<PlayObject>();
             ChangeHumanDbGoldList = new List<GoldChangeInfo>();
-            ShowOnlineTick = HUtil32.GetTickCount();
-            SendOnlineHumTime = HUtil32.GetTickCount();
             ProcessMapDoorTick = HUtil32.GetTickCount();
             ProcessMissionsTime = HUtil32.GetTickCount();
             ProcessLoadPlayTick = HUtil32.GetTickCount();
@@ -196,12 +192,12 @@ namespace GameSrv.World
             return LoadPlayList.Count;
         }
 
-        private int GetOnlineHumCount()
+        internal int GetOnlineHumCount()
         {
             return PlayObjectList.Count + BotPlayObjectList.Count;
         }
 
-        private int GetUserCount()
+        internal int GetUserCount()
         {
             return PlayObjectList.Count + BotPlayObjectList.Count;
         }
@@ -732,23 +728,7 @@ namespace GameSrv.World
         {
 
         }
-
-        public void Run()
-        {
-            if ((HUtil32.GetTickCount() - ShowOnlineTick) > M2Share.Config.ConsoleShowUserCountTime)
-            {
-                ShowOnlineTick = HUtil32.GetTickCount();
-                M2Share.NoticeMgr.LoadingNotice();
-                _logger.Info("在线数: " + PlayObjectCount);
-                M2Share.CastleMgr.Save();
-            }
-            if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
-            {
-                SendOnlineHumTime = HUtil32.GetTickCount();
-                IdSrvClient.Instance.SendOnlineHumCountMsg(OnlinePlayObject);
-            }
-        }
-
+        
         public Items.StdItem GetStdItem(ushort nItemIdx)
         {
             Items.StdItem result = null;

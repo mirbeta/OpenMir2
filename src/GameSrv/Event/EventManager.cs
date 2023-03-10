@@ -58,7 +58,7 @@ namespace GameSrv.Event
                     }
                 }
 
-                Thread.SpinWait(20);
+                Thread.Sleep(20);
             }
         }
 

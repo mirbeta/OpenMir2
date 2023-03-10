@@ -1,19 +1,27 @@
 using GameSrv.Planes;
 using GameSrv.Services;
+using NLog;
 
 namespace GameSrv.World.Threads
 {
-    public class SystemProcessor : TimerBase
+    public class SystemProcessor : TimerScheduledService
     {
-        private int runTimeTick;
-        
-        public SystemProcessor() : base(200, "SystemThread")
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private int RunTimeTick;
+        private int ShowOnlineTick { get; set; }
+        private int SendOnlineHumTime { get; set; }
+
+
+        public SystemProcessor() : base(TimeSpan.FromMilliseconds(50), "SystemThread")
         {
-            runTimeTick = HUtil32.GetTickCount();
+            RunTimeTick = HUtil32.GetTickCount();
+            ShowOnlineTick = HUtil32.GetTickCount();
+            SendOnlineHumTime = HUtil32.GetTickCount();
         }
 
-        protected override bool OnElapseAsync()
+        protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
+            Run();
             IdSrvClient.Instance.Run();
             M2Share.WorldEngine.PrcocessData();
             ProcessGameRun();
@@ -25,7 +33,23 @@ namespace GameSrv.World.Threads
             {
                 PlanesClient.Instance.Run();
             }
-            return true;
+            return Task.CompletedTask;
+        }
+
+        private void Run()
+        {
+            if ((HUtil32.GetTickCount() - ShowOnlineTick) > M2Share.Config.ConsoleShowUserCountTime)
+            {
+                ShowOnlineTick = HUtil32.GetTickCount();
+                M2Share.NoticeMgr.LoadingNotice();
+                _logger.Info("在线数: " + M2Share.WorldEngine.PlayObjectCount);
+                M2Share.CastleMgr.Save();
+            }
+            if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
+            {
+                SendOnlineHumTime = HUtil32.GetTickCount();
+                IdSrvClient.Instance.SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
+            }
         }
 
         private void ProcessGameRun()
@@ -33,10 +57,9 @@ namespace GameSrv.World.Threads
             HUtil32.EnterCriticalSections(M2Share.ProcessHumanCriticalSection);
             try
             {
-                if ((HUtil32.GetTickCount() - runTimeTick) > 10000)
+                if ((HUtil32.GetTickCount() - RunTimeTick) > 10000)
                 {
-                    runTimeTick = HUtil32.GetTickCount();
-                    M2Share.WorldEngine.Run();
+                    RunTimeTick = HUtil32.GetTickCount();
                     M2Share.GuildMgr.Run();
                     M2Share.CastleMgr.Run();
                     M2Share.GateMgr.Run();
@@ -65,6 +88,5 @@ namespace GameSrv.World.Threads
                 HUtil32.LeaveCriticalSections(M2Share.ProcessHumanCriticalSection);
             }
         }
-
     }
 }
