@@ -20,6 +20,7 @@ namespace GameSrv
             await M2Share.MerchantProcessor.StartAsync(stoppingToken);
             await M2Share.GeneratorProcessor.StartAsync(stoppingToken);
             await M2Share.EventProcessor.StartAsync(stoppingToken);
+            await M2Share.StorageProcessor.StartAsync(stoppingToken);
             M2Share.RobotMgr.Start();
             M2Share.DataServer.Start();
             M2Share.GateMgr.Start(stoppingToken);
@@ -38,6 +39,7 @@ namespace GameSrv
             M2Share.RobotProcessor.StopAsync(cancellationToken);
             M2Share.MerchantProcessor.StopAsync(cancellationToken);
             M2Share.EventProcessor.StopAsync(cancellationToken);
+            M2Share.StorageProcessor.StartAsync(cancellationToken);
         }
 
         private static void ProcessGameNotice()
