@@ -120,6 +120,7 @@ namespace GameSrv.World
 
         public int OnlinePlayObject => GetOnlineHumCount();
         public int PlayObjectCount => GetUserCount();
+        public int OfflinePlayCount = 0;
         public int LoadPlayCount => GetLoadPlayCount();
         public int RobotPlayerCount => BotPlayObjectList.Count;
         public IEnumerable<PlayObject> PlayObjects => PlayObjectList;
