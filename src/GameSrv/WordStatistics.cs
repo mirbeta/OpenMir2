@@ -23,8 +23,9 @@ namespace GameSrv {
             }
         }
 
-        public void ShowServerStatus() {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) //todo 待实现MACOS下的状态显示
+        public void ShowServerStatus()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))//todo 待实现MACOS下的状态显示
             {
                 return;
             }
@@ -38,6 +39,24 @@ namespace GameSrv {
             ShowGCStatus();
             GetRunTime();
             FreeMemory();
+
+            TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
+            _logger.Debug("{0}", "=".PadLeft(64, '='));
+            _logger.Debug("{0}", $"Server Start Time: {DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime):G}");
+            _logger.Debug("{0}", $"Total Online Time: {(int)ts.TotalDays} days, {ts.Hours} hours, {ts.Minutes} minutes, {ts.Seconds} seconds");
+            //_logger.Debug("{0}", $"Online Players[{Kernel.RoleManager.OnlinePlayers}], Max Online Players[{Kernel.RoleManager.MaxOnlinePlayers}], Distinct Players[{Kernel.RoleManager.OnlineUniquePlayers}], Role Count[{Kernel.RoleManager.RolesCount}]");
+            _logger.Debug("{0}", $"Total Bytes Sent: {M2Share.NetworkMonitor.TotalBytesSent:N0}, Total Packets Sent: {M2Share.NetworkMonitor.TotalPacketsSent:N0}");
+            _logger.Debug("{0}", $"Total Bytes Recv: {M2Share.NetworkMonitor.TotalBytesRecv:N0}, Total Packets Recv: {M2Share.NetworkMonitor.TotalPacketsRecv:N0}");
+            _logger.Debug("{0}", $"System Thread: {M2Share.SystemProcess.ElapsedMilliseconds:N0}ms");
+            //_logger.Debug("{0}", $"Generator Thread: {M2Share.GeneratorManager.ElapsedMilliseconds}ms");
+            _logger.Debug("{0}", $"User Thread: {M2Share.UserProcessor.ElapsedMilliseconds:N0}ms");
+            _logger.Debug("{0}", $"Ai Thread: {M2Share.RobotProcessor.ElapsedMilliseconds:N0}ms ({M2Share.RobotProcessor.ProcessedMonsters} AI Agents)");
+            _logger.Debug("{0}", $"Identities Remaining: ");
+            //_logger.Debug("{0}", $"\tMonster: {IdentityGenerator.Monster.IdentitiesCount()}");
+            //_logger.Debug("{0}", $"\tFurniture: {IdentityGenerator.Furniture.IdentitiesCount()}");
+            //_logger.Debug("{0}", $"\tMapItem: {IdentityGenerator.MapItem.IdentitiesCount()}");
+            //_logger.Debug("{0}", $"\tTraps: {IdentityGenerator.Traps.IdentitiesCount()}");
+            _logger.Debug("{0}", "=".PadLeft(64, '='));
         }
 
         private void FreeMemory()
