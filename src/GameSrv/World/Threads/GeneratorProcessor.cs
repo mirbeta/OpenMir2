@@ -26,9 +26,9 @@ namespace GameSrv.World.Threads
             if (M2Share.ActorMgr.GetGenerateQueueCount() < 20000)
             {
                 sw.Start();
-                for (int i = 0; i < 100000; i++)
+                for (var i = 0; i < 100000; i++)
                 {
-                    int sequence = _standardRandomizer.NextInteger();
+                    var sequence = _standardRandomizer.NextInteger();
                     if (M2Share.ActorMgr.ContainsKey(sequence))
                     {
                         while (true)
@@ -45,7 +45,7 @@ namespace GameSrv.World.Threads
                         sequence = Environment.TickCount + HUtil32.Sequence();
                         if (sequence > 0) break;
                     }
-                    M2Share.ActorMgr.Create(sequence);
+                    M2Share.ActorMgr.AddToQueue(sequence);
                 }
                 sw.Stop();
                 _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{M2Share.ActorMgr.GetGenerateQueueCount()}]");
