@@ -220,7 +220,6 @@ namespace GameSrv {
                 _logger.Info("正在初始安全区光圈...");
                 M2Share.MapMgr.MakeSafePkZone();
                 _logger.Info("安全区光圈初始化成功...");
-                M2Share.FrontEngine.Start(stoppingToken);
                 M2Share.WorldEngine.InitializationMonsterThread();
                 if (!M2Share.Config.VentureServer) {
                     LocalDb.LoadGuardList();
