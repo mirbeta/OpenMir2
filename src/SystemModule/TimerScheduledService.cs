@@ -31,14 +31,14 @@ namespace SystemModule
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Info($"Timer [{m_name}] has started");
+            _logger.Debug($"Timer [{m_name}] has started");
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             m_timer.Dispose();
-            _logger.Info($"Timer [{m_name}] has finished");
+            _logger.Debug($"Timer [{m_name}] has finished");
             return base.StopAsync(cancellationToken);
         }
 
