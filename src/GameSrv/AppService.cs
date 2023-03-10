@@ -158,7 +158,7 @@ namespace GameSrv
             var playerCount = M2Share.WorldEngine.PlayObjectCount;
             if (playerCount == 0)
             {
-                _mirApp.Stop();
+                ServerBase.Stop();
                 Host.StopAsync(_cancellationTokenSource.Token);
                 _logger.Info("游戏服务已停止...");
                 return;
@@ -202,7 +202,7 @@ namespace GameSrv
                 _logger.Info("网关服务已停止...");
                 _logger.Info("即将停止游戏引擎世界服务...");
                 await Task.Delay(500); //延时1秒，等待网关服务停止
-                _mirApp.Stop();
+                ServerBase.Stop();
                 _logger.Info("游戏引擎世界服务已停止...");
                 await Host.StopAsync(_cancellationTokenSource.Token);
                 _logger.Info("游戏服务已停止...");

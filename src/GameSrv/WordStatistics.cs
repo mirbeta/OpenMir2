@@ -50,7 +50,7 @@ namespace GameSrv {
             _logger.Debug("{0}", $"System Thread: {M2Share.SystemProcess.ElapsedMilliseconds:N0}ms");
             //_logger.Debug("{0}", $"Generator Thread: {M2Share.GeneratorManager.ElapsedMilliseconds}ms");
             _logger.Debug("{0}", $"User Thread: {M2Share.UserProcessor.ElapsedMilliseconds:N0}ms");
-            _logger.Debug("{0}", $"Ai Thread: {M2Share.RobotProcessor.ElapsedMilliseconds:N0}ms ({M2Share.RobotProcessor.ProcessedMonsters} AI Agents)");
+            _logger.Debug("{0}", $"RobotUser Thread: {M2Share.RobotProcessor.ElapsedMilliseconds:N0}ms ({M2Share.RobotProcessor.ProcessedMonsters} RobotUser Agents)");
             _logger.Debug("{0}", $"Identities Remaining: ");
             //_logger.Debug("{0}", $"\tMonster: {IdentityGenerator.Monster.IdentitiesCount()}");
             //_logger.Debug("{0}", $"\tFurniture: {IdentityGenerator.Furniture.IdentitiesCount()}");

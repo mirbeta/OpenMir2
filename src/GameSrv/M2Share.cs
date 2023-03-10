@@ -82,6 +82,7 @@ namespace GameSrv {
         public static SystemProcessor SystemProcess = null;
         public static UserProcessor UserProcessor = null;
         public static RobotProcessor RobotProcessor = null;
+        public static MerchantProcessor MerchantProcessor = null;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -239,6 +240,7 @@ namespace GameSrv {
             SystemProcess = new SystemProcessor();
             UserProcessor = new UserProcessor();
             RobotProcessor = new RobotProcessor();
+            MerchantProcessor = new MerchantProcessor();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

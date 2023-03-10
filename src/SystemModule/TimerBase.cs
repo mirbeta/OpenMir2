@@ -1,10 +1,8 @@
-using NLog;
 using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
-using Timer = System.Timers.Timer;
+using NLog;
 
 namespace SystemModule
 {
@@ -12,22 +10,20 @@ namespace SystemModule
     {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private CancellationToken m_cancellationToken = CancellationToken.None;
-        private Timer m_timer;
-        private string m_name;
+        //private readonly PeriodicTimer m_timer;
+        private readonly Thread _thread;
+        private readonly string m_name;
         protected int m_interval = 1000;
+        protected Stopwatch sw;
+
 
         protected TimerBase(int intervalMs, string name)
         {
             m_name = name;
             m_interval = intervalMs;
-
-            m_timer = new Timer
-            {
-                Interval = intervalMs,
-                AutoReset = false
-            };
-            m_timer.Elapsed += TimerOnElapse;
-            m_timer.Disposed += TimerOnDisposed;
+            sw = new Stopwatch();
+            //m_timer = new PeriodicTimer(TimeSpan.FromMilliseconds(intervalMs));
+            _thread = new Thread(TimerOnElapse) { IsBackground = true };
         }
 
         public string Name => m_name;
@@ -38,58 +34,63 @@ namespace SystemModule
 
         public bool CloseRequest = false;
 
-        public async Task StartAsync()
+        public void StartAsync()
         {
-            await OnStartAsync();
-
-            m_timer.Start();
+            //OnStartAsync();
+            _thread.Start();
+            /*while (await m_timer.WaitForNextTickAsync())
+            {
+                TimerOnElapse();
+            }*/
         }
 
         public Task CloseAsync()
         {
-            m_timer.Stop();
+            //m_timer.Dispose();
             m_cancellationToken = new CancellationToken(true);
             return Task.CompletedTask;
         }
 
-        private async void TimerOnDisposed(object sender, EventArgs e)
+        private void TimerOnDisposed(object sender, EventArgs e)
         {
-            await OnCloseAsync();
+            OnCloseAsync();
         }
 
-        private async void TimerOnElapse(object sender, ElapsedEventArgs e)
+        private void TimerOnElapse()
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            try
+            while (true)
             {
-                await OnElapseAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Exception thrown on [{Name}] thread!!!");
-                _logger.Error(ex);
-            }
-            finally
-            {
-                m_timer.Enabled = !m_cancellationToken.IsCancellationRequested;
-                sw.Stop();
-                ElapsedMilliseconds = sw.ElapsedMilliseconds;
+                sw.Start();
+                try
+                {
+                    OnElapseAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error($"Exception thrown on [{Name}] thread!!!");
+                    _logger.Error(ex);
+                }
+                finally
+                {
+                    sw.Stop();
+                    ElapsedMilliseconds = sw.ElapsedMilliseconds;
+                }
+                Thread.SpinWait(m_interval);
             }
         }
 
-        protected virtual async Task OnStartAsync()
+        protected virtual void OnStartAsync()
         {
             _logger.Info($"Timer [{m_name}] has started");
         }
 
-        protected virtual async Task<bool> OnElapseAsync()
+        protected virtual bool OnElapseAsync()
         {
             _logger.Info($"Timer [{m_name}] has elapsed at {DateTime.Now}");
             return true;
         }
 
-        protected virtual async Task OnCloseAsync()
+        protected virtual void OnCloseAsync()
         {
             _logger.Info($"Timer [{m_name}] has finished");
         }
