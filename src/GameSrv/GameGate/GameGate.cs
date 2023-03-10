@@ -144,6 +144,7 @@ namespace GameSrv.GameGate {
                     GateInfo.nSendCount++;
                     GateInfo.nSendBytesCount += sendBuffLen;
                     GateInfo.nSendBlockCount += sendBuffLen;
+                    M2Share.NetworkMonitor.Receive(sendBuffLen);
                 }
                 if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.SocLimit) {
                     return;
