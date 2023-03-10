@@ -12,11 +12,14 @@ namespace GameSrv.World.Threads
 
         }
 
-        protected override async Task<bool> OnElapseAsync()
+        
+
+        protected override bool OnElapseAsync()
         {
             try
             {
                 ProcessedMonsters = 0;
+                M2Share.WorldEngine.ProcessRobotPlayData();
                 /*foreach (var map in Kernel.MapManager.GameMaps.Values)
                     ProcessedMonsters += await map.OnTimerAsync();
                 await Kernel.RoleManager.OnRoleTimerAsync();*/
