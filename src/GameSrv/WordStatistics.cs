@@ -1,5 +1,6 @@
 ﻿using NLog;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using SystemModule.Base;
 
@@ -14,6 +15,8 @@ namespace GameSrv {
         private readonly string processName;
         private readonly PerformanceCounter MemoryCounter;
         private readonly PerformanceCounter CpuCounter;
+        private readonly string AppVersion;
+        private const string TITLE_FORMAT_S = @"[{0}] - Legend of Mir 2 Game Server [{8}] - {1} - Players: {3} (max:{4}) - {2} - Threads[S:{5:0000},U:{6:0000},A:{7:0000}]ms";
 
         public WordStatistics() {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
@@ -21,27 +24,29 @@ namespace GameSrv {
                 MemoryCounter = new PerformanceCounter();
                 CpuCounter = new PerformanceCounter();
             }
+            AppVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Error";
         }
 
         public void ShowServerStatus()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))//todo 待实现MACOS下的状态显示
-            {
-                return;
-            }
-            ServerEnvironment.GetCPULoad();
-            ServerEnvironment.MemoryInfo memoryInfo = ServerEnvironment.GetMemoryStatus();
-            _logger.Debug("CPU使用率:[{0}%]", ServerEnvironment.CpuLoad.ToString("F"));
-            _logger.Debug($"物理内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPhys)}] 内存使用率:[{memoryInfo.dwMemoryLoad}%] 空闲内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailPhys)}]");
-            _logger.Debug($"虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalVirtual)}] 虚拟内存使用率:[{ServerEnvironment.VirtualMemoryLoad}%] 空闲虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailVirtual)}]");
-            _logger.Debug($"使用内存:[{HUtil32.FormatBytesValue(ServerEnvironment.UsedPhysicalMemory)}] 工作内存:[{HUtil32.FormatBytesValue(ServerEnvironment.PrivateWorkingSet)}] GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
-            _logger.Debug($"网络流入:[{HUtil32.FormatBytesValue(ServerEnvironment.PerSecondBytesReceived)}] 网络流出:[{HUtil32.FormatBytesValue(ServerEnvironment.PerSecondBytesSent)}]");
-            ShowGCStatus();
-            GetRunTime();
-            FreeMemory();
-
-            TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
             _logger.Debug("{0}", "=".PadLeft(64, '='));
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))//todo 待实现MACOS下的状态显示
+            {
+                ServerEnvironment.GetCPULoad();
+                ServerEnvironment.MemoryInfo memoryInfo = ServerEnvironment.GetMemoryStatus();
+                _logger.Debug("CPU使用率:[{0}%]", ServerEnvironment.CpuLoad.ToString("F"));
+                _logger.Debug($"物理内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPhys)}] 内存使用率:[{memoryInfo.dwMemoryLoad}%] 空闲内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailPhys)}]");
+                _logger.Debug($"虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalVirtual)}] 虚拟内存使用率:[{ServerEnvironment.VirtualMemoryLoad}%] 空闲虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailVirtual)}]");
+            }
+            ShowGCStatus();
+            //GetRunTime();
+            FreeMemory();
+            _logger.Info(string.Format(TITLE_FORMAT_S, M2Share.Config.ServerName, DateTime.UtcNow.ToString("G"),
+                M2Share.NetworkMonitor.UpdateStatsAsync(1000), M2Share.WorldEngine.OnlinePlayObject, M2Share.WorldEngine.PlayObjectCount,
+                M2Share.SystemProcess.ElapsedMilliseconds, M2Share.UserProcessor.ElapsedMilliseconds,
+                M2Share.RobotProcessor.ElapsedMilliseconds, AppVersion));
+            
+            TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
             _logger.Debug("{0}", $"Server Start Time: {DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime):G}");
             _logger.Debug("{0}", $"Total Online Time: {(int)ts.TotalDays} days, {ts.Hours} hours, {ts.Minutes} minutes, {ts.Seconds} seconds");
             //_logger.Debug("{0}", $"Online Players[{Kernel.RoleManager.OnlinePlayers}], Max Online Players[{Kernel.RoleManager.MaxOnlinePlayers}], Distinct Players[{Kernel.RoleManager.OnlineUniquePlayers}], Role Count[{Kernel.RoleManager.RolesCount}]");
