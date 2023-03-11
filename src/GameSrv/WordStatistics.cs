@@ -4,13 +4,13 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using SystemModule.Base;
 
-namespace GameSrv {
+namespace GameSrv
+{
     /// <summary>
     /// 统计系统运行状态 
-    /// 仅支持Windows系统
     /// </summary>
-    //[SupportedOSPlatform("windows")]
-    public class WordStatistics {
+    public class WordStatistics
+    {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly string processName;
         private readonly PerformanceCounter MemoryCounter;
@@ -18,8 +18,10 @@ namespace GameSrv {
         private readonly string AppVersion;
         private const string TITLE_FORMAT_S = @"[{0}] - Legend of Mir 2 Game Server [{8}] - {1} - Players: {3} (max:{4}) - {2} - Threads[S:{5:0000},U:{6:0000},A:{7:0000}]ms";
 
-        public WordStatistics() {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+        public WordStatistics()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
                 processName = Process.GetCurrentProcess().ProcessName;
                 MemoryCounter = new PerformanceCounter();
                 CpuCounter = new PerformanceCounter();
@@ -30,6 +32,11 @@ namespace GameSrv {
         public void ShowServerStatus()
         {
             _logger.Debug("{0}", "=".PadLeft(64, '='));
+            _logger.Info(string.Format(TITLE_FORMAT_S, M2Share.Config.ServerName, DateTimeOffset.Now.ToString("G"),
+      M2Share.NetworkMonitor.UpdateStatsAsync(1000), M2Share.WorldEngine.OnlinePlayObject, M2Share.WorldEngine.PlayObjectCount,
+      M2Share.SystemProcess.ElapsedMilliseconds, M2Share.UserProcessor.ElapsedMilliseconds,
+      M2Share.RobotProcessor.ElapsedMilliseconds, AppVersion));
+
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))//todo 待实现MACOS下的状态显示
             {
                 ServerEnvironment.GetCPULoad();
@@ -41,11 +48,7 @@ namespace GameSrv {
             ShowGCStatus();
             //GetRunTime();
             FreeMemory();
-            _logger.Info(string.Format(TITLE_FORMAT_S, M2Share.Config.ServerName, DateTime.UtcNow.ToString("G"),
-                M2Share.NetworkMonitor.UpdateStatsAsync(1000), M2Share.WorldEngine.OnlinePlayObject, M2Share.WorldEngine.PlayObjectCount,
-                M2Share.SystemProcess.ElapsedMilliseconds, M2Share.UserProcessor.ElapsedMilliseconds,
-                M2Share.RobotProcessor.ElapsedMilliseconds, AppVersion));
-            
+
             TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
             _logger.Debug("{0}", $"Server Start Time: {DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime):G}");
             _logger.Debug("{0}", $"Total Online Time: {(int)ts.TotalDays} days, {ts.Hours} hours, {ts.Minutes} minutes, {ts.Seconds} seconds");
@@ -53,9 +56,10 @@ namespace GameSrv {
             _logger.Debug("{0}", $"Total Bytes Sent: {M2Share.NetworkMonitor.TotalBytesSent:N0}, Total Packets Sent: {M2Share.NetworkMonitor.TotalPacketsSent:N0}");
             _logger.Debug("{0}", $"Total Bytes Recv: {M2Share.NetworkMonitor.TotalBytesRecv:N0}, Total Packets Recv: {M2Share.NetworkMonitor.TotalPacketsRecv:N0}");
             _logger.Debug("{0}", $"System Thread: {M2Share.SystemProcess.ElapsedMilliseconds:N0}ms");
-            _logger.Debug("{0}", $"Generator Thread: {M2Share.GeneratorProcessor.ElapsedMilliseconds}ms");
-            _logger.Debug("{0}", $"User Thread: {M2Share.UserProcessor.ElapsedMilliseconds:N0}ms");
-            _logger.Debug("{0}", $"RobotUser Thread: {M2Share.RobotProcessor.ElapsedMilliseconds:N0}ms ({M2Share.RobotProcessor.ProcessedMonsters} RobotUser Agents)");
+            _logger.Debug("{0} - {1}", $"User Thread: [{M2Share.UserProcessor.ElapsedMilliseconds:N0}ms]", $"RobotUser Thread: [{M2Share.RobotProcessor.ElapsedMilliseconds:N0}ms] ({M2Share.RobotProcessor.ProcessedMonsters} RobotUser Agents)");
+            _logger.Debug("{0} - {1}", $"Event Thread: [{M2Share.EventProcessor.ElapsedMilliseconds:N0}ms]", $"Merchant Thread: [{M2Share.MerchantProcessor.ElapsedMilliseconds:N0}ms]");
+            _logger.Debug("{0} - {1}", $"Storage Thread: [{M2Share.StorageProcessor.ElapsedMilliseconds:N0}ms]", $"TimedBot Thread: [{M2Share.TimedRobotProcessor.ElapsedMilliseconds:N0}ms]");
+            _logger.Debug("{0}", $"Generator Thread: [{M2Share.GeneratorProcessor.ElapsedMilliseconds}ms]");
             _logger.Debug("{0}", $"Identities Remaining: ");
             //_logger.Debug("{0}", $"\tMonster: {IdentityGenerator.Monster.IdentitiesCount()}");
             //_logger.Debug("{0}", $"\tFurniture: {IdentityGenerator.Furniture.IdentitiesCount()}");
@@ -74,12 +78,14 @@ namespace GameSrv {
             }
         }
 
-        private void GetRunTime() {
+        private void GetRunTime()
+        {
             TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
             _logger.Debug($"服务器运行:[{ts.Days}天{ts.Hours}小时{ts.Minutes}分{ts.Seconds}秒]");
         }
 
-        private void ShowGCStatus() {
+        private void ShowGCStatus()
+        {
             _logger.Debug($"GC回收:[{GC.CollectionCount(0)}]次 GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
             GC.Collect(0, GCCollectionMode.Forced, false);
         }
@@ -88,12 +94,14 @@ namespace GameSrv {
         /// 获取CPU使用率
         /// </summary>
         /// <returns></returns>
-        private string GetProcessorData() {
+        private string GetProcessorData()
+        {
             float d = GetCounterValue(CpuCounter, "Processor", "% Processor Time", processName);
             return d.ToString("F") + "%";
         }
 
-        private static string GetCpuUsageForProcess() {
+        private static string GetCpuUsageForProcess()
+        {
             DateTime startTime = DateTime.UtcNow;
             TimeSpan startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
             Thread.Sleep(500);
@@ -109,7 +117,8 @@ namespace GameSrv {
         /// 获取当前程序线程数
         /// </summary>
         /// <returns></returns>
-        private float GetThreadCount() {
+        private float GetThreadCount()
+        {
             return GetCounterValue(CpuCounter, "Process", "Thread Count", processName);
         }
 
@@ -117,7 +126,8 @@ namespace GameSrv {
         /// 获取工作集内存大小
         /// </summary>
         /// <returns></returns>
-        private float GetWorkingSet() {
+        private float GetWorkingSet()
+        {
             return GetCounterValue(MemoryCounter, "Memory", "Working Set", processName);
         }
 
@@ -125,7 +135,8 @@ namespace GameSrv {
         /// 获取虚拟内存使用率详情
         /// </summary>
         /// <returns></returns>
-        private string GetMemoryVData() {
+        private string GetMemoryVData()
+        {
             float d = GetCounterValue(MemoryCounter, "Memory", "% Committed Bytes In Use", null);
             string str = d.ToString("F") + "% (";
             d = GetCounterValue(MemoryCounter, "Memory", "Committed Bytes", null);
@@ -138,7 +149,8 @@ namespace GameSrv {
         /// 获取虚拟内存使用率
         /// </summary>
         /// <returns></returns>
-        private float GetUsageVirtualMemory() {
+        private float GetUsageVirtualMemory()
+        {
             return GetCounterValue(MemoryCounter, "Memory", "% Committed Bytes In Use", null);
         }
 
@@ -146,7 +158,8 @@ namespace GameSrv {
         /// 获取虚拟内存已用大小
         /// </summary>
         /// <returns></returns>
-        private float GetUsedVirtualMemory() {
+        private float GetUsedVirtualMemory()
+        {
             return GetCounterValue(MemoryCounter, "Memory", "Committed Bytes", null);
         }
 
@@ -154,7 +167,8 @@ namespace GameSrv {
         /// 获取虚拟内存总大小
         /// </summary>
         /// <returns></returns>
-        private float GetTotalVirtualMemory() {
+        private float GetTotalVirtualMemory()
+        {
             return GetCounterValue(MemoryCounter, "Memory", "Commit Limit", null);
         }
 
@@ -162,11 +176,13 @@ namespace GameSrv {
         /// 获取空闲的物理内存数，单位B
         /// </summary>
         /// <returns></returns>
-        private float GetFreePhysicalMemory() {
+        private float GetFreePhysicalMemory()
+        {
             return GetCounterValue(MemoryCounter, "Memory", "Available Bytes", null);
         }
 
-        private static float GetCounterValue(PerformanceCounter pc, string categoryName, string counterName, string instanceName) {
+        private static float GetCounterValue(PerformanceCounter pc, string categoryName, string counterName, string instanceName)
+        {
             pc.CategoryName = categoryName;
             pc.CounterName = counterName;
             pc.InstanceName = instanceName;

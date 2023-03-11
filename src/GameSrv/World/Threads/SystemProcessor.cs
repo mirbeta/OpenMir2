@@ -86,7 +86,7 @@ namespace GameSrv.World.Threads
                         {
                             if (M2Share.DenySayMsgList.TryRemove(denyList[i], out long _))
                             {
-                                M2Share.Logger.Debug($"������[{denyList[i]}]����");
+                                M2Share.Logger.Debug($"解除玩家禁言[{denyList[i]}]");
                             }
                         }
                     }
