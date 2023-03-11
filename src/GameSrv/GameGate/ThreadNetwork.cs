@@ -11,11 +11,11 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.GameGate
 {
-    public class GameGate
+    public class ThreadNetwork
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly int GateIdx;
-        private readonly GameGateInfo _gateInfo;
+        private readonly ThreadGateInfo _gateInfo;
         private readonly GateSendQueue _sendQueue;
         private readonly object _runSocketSection;
         private readonly CancellationTokenSource _cancellation;
@@ -26,7 +26,7 @@ namespace GameSrv.GameGate
         public byte[] ReceiveBuffer;
         public int ReceiveLen;
 
-        public GameGate(int gateIdx, GameGateInfo gateInfo)
+        public ThreadNetwork(int gateIdx, ThreadGateInfo gateInfo)
         {
             GateIdx = gateIdx;
             _gateInfo = gateInfo;
@@ -35,12 +35,12 @@ namespace GameSrv.GameGate
             _cancellation = new CancellationTokenSource();
             _clientMesaagePacket = new CommandMessage();
             ReceiveBuffer = new byte[4096];
-            StartGateQueue();
+            StartNetwork();
         }
 
-        public GameGateInfo GateInfo => _gateInfo;
+        public ThreadGateInfo GateInfo => _gateInfo;
 
-        private void StartGateQueue()
+        private void StartNetwork()
         {
             _sendQueue.ProcessSendQueue(_cancellation);
         }
@@ -541,9 +541,9 @@ namespace GameSrv.GameGate
         {
             private Channel<byte[]> SendQueue { get; }
             private string ConnectionId { get; }
-            private GameGateInfo GameGate { get; }
+            private ThreadGateInfo GameGate { get; }
 
-            public GateSendQueue(GameGateInfo gateInfo)
+            public GateSendQueue(ThreadGateInfo gateInfo)
             {
                 SendQueue = Channel.CreateUnbounded<byte[]>();
                 ConnectionId = gateInfo.SocketId;

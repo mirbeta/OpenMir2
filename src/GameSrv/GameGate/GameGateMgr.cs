@@ -20,7 +20,7 @@ namespace GameSrv.GameGate
         private readonly SocketServer _gateSocket;
         private readonly object m_RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;//todo 一个网关一个队列
-        private readonly GameGate[] GameGates;
+        private readonly ThreadNetwork[] GameGates;
         private static int CurrentGateIdx = 0;
         private readonly Dictionary<int, int> GameGateLinkMap = new Dictionary<int, int>();
         private readonly HashSet<long> RunGatePermitMap = new HashSet<long>();
@@ -30,7 +30,7 @@ namespace GameSrv.GameGate
         {
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
-            GameGates = new GameGate[20];
+            GameGates = new ThreadNetwork[20];
             _gateSocket = new SocketServer(100, 1024);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
@@ -94,7 +94,7 @@ namespace GameSrv.GameGate
                     _logger.Error("超过网关最大链接数量.关闭链接");
                     return;
                 }
-                var gateInfo = new GameGateInfo();
+                var gateInfo = new ThreadGateInfo();
                 gateInfo.nSendMsgCount = 0;
                 gateInfo.nSendRemainCount = 0;
                 gateInfo.dwSendTick = HUtil32.GetTickCount();
@@ -108,7 +108,7 @@ namespace GameSrv.GameGate
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
-                GameGates[CurrentGateIdx] = new GameGate(CurrentGateIdx, gateInfo);
+                GameGates[CurrentGateIdx] = new ThreadNetwork(CurrentGateIdx, gateInfo);
                 GameGateLinkMap.Add(e.SocHandle, CurrentGateIdx);
                 CurrentGateIdx++;
                 _logger.Info(string.Format(sGateOpen, e.EndPoint));
