@@ -1,7 +1,7 @@
 using System.Net.Sockets;
 
 namespace GameSrv.GameGate {
-    public class GameGateInfo {
+    public class ThreadGateInfo {
         /// <summary>
         /// 网关是否已启用
         /// </summary>
