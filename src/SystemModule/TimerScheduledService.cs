@@ -63,6 +63,7 @@ namespace SystemModule
                     {
                         _stopwatch.Stop();
                         ElapsedMilliseconds = _stopwatch.ElapsedMilliseconds;
+                        _stopwatch.Reset();
                     }
                 }
             }
