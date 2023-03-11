@@ -23,23 +23,23 @@ namespace GameSrv
             await M2Share.StorageProcessor.StartAsync(stoppingToken);
             await M2Share.TimedRobotProcessor.StartAsync(stoppingToken);
             M2Share.DataServer.Start();
-            M2Share.GateMgr.Start(stoppingToken);
+            M2Share.GateMgr.Start();
             M2Share.UsrRotCountTick = HUtil32.GetTickCount();
             _logger.Info("初始化游戏世界服务线程完成...");
         }
 
-        public static void Stopping(CancellationToken cancellationToken)
+        public static async Task Stopping(CancellationToken cancellationToken)
         {
+            await M2Share.GeneratorProcessor.StopAsync(cancellationToken);
+            await M2Share.SystemProcess.StopAsync(cancellationToken);
+            await M2Share.UserProcessor.StopAsync(cancellationToken);
+            await M2Share.RobotProcessor.StopAsync(cancellationToken);
+            await M2Share.MerchantProcessor.StopAsync(cancellationToken);
+            await M2Share.EventProcessor.StopAsync(cancellationToken);
+            await M2Share.StorageProcessor.StopAsync(cancellationToken);
+            await M2Share.TimedRobotProcessor.StopAsync(cancellationToken);
+            await M2Share.GateMgr.StopAsync();
             M2Share.DataServer.Stop();
-            M2Share.GateMgr.Stop();
-            M2Share.GeneratorProcessor.StopAsync(cancellationToken);
-            M2Share.SystemProcess.StopAsync(cancellationToken);
-            M2Share.UserProcessor.StopAsync(cancellationToken);
-            M2Share.RobotProcessor.StopAsync(cancellationToken);
-            M2Share.MerchantProcessor.StopAsync(cancellationToken);
-            M2Share.EventProcessor.StopAsync(cancellationToken);
-            M2Share.StorageProcessor.StopAsync(cancellationToken);
-            M2Share.TimedRobotProcessor.StopAsync(cancellationToken);
         }
 
         private static void ProcessGameNotice()
