@@ -329,13 +329,15 @@ namespace GameSrv.DataSource {
 
         private bool Open() {
             if (_dbConnection == null) {
-                try {
+                try
+                {
                     _dbConnection = new MySqlConnection(M2Share.Config.ConnctionString);
                     _dbConnection.Open();
                     return true;
                 }
-                catch (Exception e) {
-                    Console.WriteLine(M2Share.Config.ConnctionString);
+                catch (Exception e)
+                {
+                    M2Share.Logger.Error(M2Share.Config.ConnctionString);
                     M2Share.Logger.Error(e.StackTrace);
                     return false;
                 }

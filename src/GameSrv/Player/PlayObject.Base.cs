@@ -2654,7 +2654,7 @@ namespace GameSrv.Player {
                 for (short nX = nStartX; nX <= nEndX; nX++) {
                     for (short nY = nStartY; nY <= nEndY; nY++) {
                         if (!Envir.ValidCell(nX, nY)) {
-                            Console.WriteLine("超出地图范围，跳出搜索范围");
+                            //Console.WriteLine("超出地图范围，跳出搜索范围");
                             break;//已超出地图范围，无需继续搜索
                         }
                         ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);

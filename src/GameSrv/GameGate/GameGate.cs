@@ -581,8 +581,7 @@ namespace GameSrv.GameGate
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine(ex.StackTrace);
-                                continue;
+                                M2Share.Logger.Error(ex.StackTrace);
                             }
                             //GameGate.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         }
