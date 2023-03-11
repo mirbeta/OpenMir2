@@ -24,7 +24,7 @@ namespace GameSrv.World.Threads
             }
             catch (Exception ex)
             {
-                logger.Error($"RobotProcessor::OnElapseAsync error");
+                M2Share.Logger.Error("[Exception] RobotProcessor::ExecuteInternal");
                 logger.Error(ex);
             }
             return Task.CompletedTask;

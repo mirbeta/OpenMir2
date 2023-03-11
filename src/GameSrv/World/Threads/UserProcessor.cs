@@ -19,7 +19,7 @@ namespace GameSrv.World.Threads
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error("[�쳣] UserProcessor::OnElapseAsync error");
+                M2Share.Logger.Error("[Exception] UserProcessor::ExecuteInternal");
                 M2Share.Logger.Error(ex);
             }
             return Task.CompletedTask;
