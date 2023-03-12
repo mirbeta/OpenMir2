@@ -1,4 +1,6 @@
+using GameSrv.DataSource;
 using GameSrv.Player;
+using GameSrv.World;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -9,8 +11,8 @@ namespace GameSrv.GameCommand.Commands {
     public class ReLoadAdminCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            DataSource.LocalDb.LoadAdminList();
-            World.WorldServer.SendServerGroupMsg(213, M2Share.ServerIndex, "");
+            LocalDb.LoadAdminList();
+            WorldServer.SendServerGroupMsg(213, M2Share.ServerIndex, "");
             playObject.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }
     }

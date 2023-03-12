@@ -1,4 +1,5 @@
 ﻿using GameSrv.GameCommand;
+using GameSrv.World;
 using SystemModule.Enums;
 
 namespace GameSrv.Player
@@ -67,7 +68,7 @@ namespace GameSrv.Player
             {
                 if (M2Share.WorldEngine.FindOtherServerUser(whostr, ref svidx))
                 {
-                    World.WorldServer.SendServerGroupMsg(Messages.ISM_WHISPER, svidx, whostr + '/' + ChrName + "=> " + saystr);
+                    WorldServer.SendServerGroupMsg(Messages.ISM_WHISPER, svidx, whostr + '/' + ChrName + "=> " + saystr);
                 }
                 else
                 {
@@ -167,12 +168,12 @@ namespace GameSrv.Player
                                         case '!'://发送组队消息
                                             sText = sData.AsSpan()[2..].ToString();
                                             SendGroupText(ChrName + ": " + sText);
-                                            World.WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, ChrName + "/:" + sText);
+                                            WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, ChrName + "/:" + sText);
                                             return;
                                         case '~' when MyGuild != null://发送行会消息
                                             sText = sData.AsSpan()[2..].ToString();
                                             MyGuild.SendGuildMsg(ChrName + ": " + sText);
-                                            World.WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + ChrName + '/' + sText);
+                                            WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + ChrName + '/' + sText);
                                             return;
                                     }
                                 }

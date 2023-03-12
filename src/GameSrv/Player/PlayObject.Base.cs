@@ -1,4 +1,6 @@
-﻿using GameSrv.Actor;
+﻿using System.Collections;
+using GameSrv.Actor;
+using GameSrv.Castle;
 using GameSrv.Event;
 using GameSrv.GameCommand;
 using GameSrv.Guild;
@@ -8,7 +10,6 @@ using GameSrv.Maps;
 using GameSrv.Npc;
 using GameSrv.RobotPlay;
 using GameSrv.Script;
-using System.Collections;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -1581,7 +1582,7 @@ namespace GameSrv.Player {
                     }
                     else
                     {
-                        Castle.UserCastle Castle = M2Share.CastleMgr.InCastleWarArea(this);
+                        UserCastle Castle = M2Share.CastleMgr.InCastleWarArea(this);
                         if ((Castle != null && Castle.UnderWar) || (InGuildWarArea))
                         {
                             guildwarkill = true;
@@ -2825,7 +2826,7 @@ namespace GameSrv.Player {
             const string sExceptionMsg = "[Exception] PlayObject::GetShowName";
             try {
                 if (MyGuild != null) {
-                    Castle.UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
+                    UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
                     if (castle != null) {
                         sGuildName = Settings.CastleGuildName.Replace("%castlename", castle.sName);
                         sGuildName = sGuildName.Replace("%guildname", MyGuild.GuildName);
@@ -3071,7 +3072,7 @@ namespace GameSrv.Player {
                         result = MyGuild == targetObject.MyGuild ? M2Share.Config.AllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
                     }
                 }
-                Castle.UserCastle castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
+                UserCastle castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
                 if ((castle != null) && castle.UnderWar && InGuildWarArea && targetObject.InGuildWarArea) {
                     result = M2Share.Config.InFreePKAreaNameColor;
                     GuildWarArea = true;
@@ -3179,7 +3180,7 @@ namespace GameSrv.Player {
                 if (!envir.CellValid(nDMapX, nDMapY)) {
                     return false;
                 }
-                Castle.UserCastle castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
+                UserCastle castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
                 if ((castle != null)) {
                     if (!castle.CheckInPalace(CurrX, CurrY)) {
                         return false;

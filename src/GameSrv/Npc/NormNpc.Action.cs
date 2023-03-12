@@ -6,6 +6,7 @@ using GameSrv.Maps;
 using GameSrv.Player;
 using GameSrv.Script;
 using GameSrv.Services;
+using GameSrv.World;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -883,7 +884,7 @@ namespace GameSrv.Npc
                     if (playObject.MyGuild != null)
                     {
                         playObject.MyGuild.SendGuildMsg(sMsg);
-                        World.WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, playObject.MyGuild.GuildName + "/" + playObject.ChrName + "/" + sMsg);
+                        WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, playObject.MyGuild.GuildName + "/" + playObject.ChrName + "/" + sMsg);
                     }
                     break;
                 default:
@@ -1773,7 +1774,7 @@ namespace GameSrv.Npc
             var sVarName = questActionInfo.sParam3;
             var sVarValue = questActionInfo.sParam4;
             var nVarValue = HUtil32.StrToInt(questActionInfo.sParam4, 0);
-            var varType = SystemModule.Enums.VarType.None;
+            var varType = VarType.None;
             if (string.Compare(questActionInfo.sParam1, "Integer", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 varType = VarType.Integer;

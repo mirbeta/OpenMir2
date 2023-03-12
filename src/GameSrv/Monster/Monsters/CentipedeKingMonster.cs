@@ -1,4 +1,5 @@
-﻿using SystemModule.Consts;
+﻿using GameSrv.Actor;
+using SystemModule.Consts;
 
 namespace GameSrv.Monster.Monsters {
     public class CentipedeKingMonster : StickMonster {
@@ -15,7 +16,7 @@ namespace GameSrv.Monster.Monsters {
         private bool CheckAttackTarget() {
             bool result = false;
             for (int i = 0; i < VisibleActors.Count; i++) {
-                Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
+                BaseObject baseObject = VisibleActors[i].BaseObject;
                 if (baseObject.Death) {
                     continue;
                 }
@@ -38,7 +39,7 @@ namespace GameSrv.Monster.Monsters {
                 SendAttackMsg(Messages.RM_HIT, Dir, CurrX, CurrY);
                 int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
                 for (int i = 0; i < VisibleActors.Count; i++) {
-                    Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
+                    BaseObject baseObject = VisibleActors[i].BaseObject;
                     if (baseObject.Death) {
                         continue;
                     }
@@ -74,7 +75,7 @@ namespace GameSrv.Monster.Monsters {
                     if (FixedHideMode) {
                         if ((HUtil32.GetTickCount() - _attackTick) > 10000) {
                             for (int i = 0; i < VisibleActors.Count; i++) {
-                                Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
+                                BaseObject baseObject = VisibleActors[i].BaseObject;
                                 if (baseObject.Death) {
                                     continue;
                                 }

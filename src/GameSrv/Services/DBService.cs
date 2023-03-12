@@ -1,5 +1,6 @@
-﻿using NLog;
-using System.Net;
+﻿using System.Net;
+using System.Net.Sockets;
+using NLog;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
@@ -82,13 +83,13 @@ namespace GameSrv.Services {
         private void DBSocketError(object sender, DSCClientErrorEventArgs e) {
             _clientScoket.IsConnected = false;
             switch (e.ErrorCode) {
-                case System.Net.Sockets.SocketError.ConnectionRefused:
+                case SocketError.ConnectionRefused:
                     _logger.Error("数据库服务器[" + M2Share.Config.sDBAddr + ":" + M2Share.Config.nDBPort + "]拒绝链接...");
                     break;
-                case System.Net.Sockets.SocketError.ConnectionReset:
+                case SocketError.ConnectionReset:
                     _logger.Error("数据库服务器[" + M2Share.Config.sDBAddr + ":" + M2Share.Config.nDBPort + "]关闭连接...");
                     break;
-                case System.Net.Sockets.SocketError.TimedOut:
+                case SocketError.TimedOut:
                     _logger.Error("数据库服务器[" + M2Share.Config.sDBAddr + ":" + M2Share.Config.nDBPort + "]链接超时...");
                     break;
             }

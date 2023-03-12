@@ -1,4 +1,5 @@
 ﻿using GameSrv.Player;
+using GameSrv.World;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -39,7 +40,7 @@ namespace GameSrv.GameCommand.Commands
             }
             else
             {
-                sMapName = World.WorldServer.GetHomeInfo(ref nX, ref nY);
+                sMapName = WorldServer.GetHomeInfo(ref nX, ref nY);
             }
             for (int i = 0; i < userCount; i++)
             {

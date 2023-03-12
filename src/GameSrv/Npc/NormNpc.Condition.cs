@@ -1,4 +1,6 @@
 ﻿using GameSrv.Actor;
+using GameSrv.Guild;
+using GameSrv.Items;
 using GameSrv.Maps;
 using GameSrv.Monster.Monsters;
 using GameSrv.Player;
@@ -437,7 +439,7 @@ namespace GameSrv.Npc {
             if (PlayObject.MyGuild == null) {
                 return false;
             }
-            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            GuildInfo Guild = PlayObject.MyGuild;
             char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod) {
                 case '=':
@@ -474,7 +476,7 @@ namespace GameSrv.Npc {
             if (PlayObject.MyGuild == null) {
                 return false;
             }
-            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            GuildInfo Guild = PlayObject.MyGuild;
             char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod) {
                 case '=':
@@ -511,7 +513,7 @@ namespace GameSrv.Npc {
             if (PlayObject.MyGuild == null) {
                 return false;
             }
-            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            GuildInfo Guild = PlayObject.MyGuild;
             char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod) {
                 case '=':
@@ -548,7 +550,7 @@ namespace GameSrv.Npc {
             if (PlayObject.MyGuild == null) {
                 return false;
             }
-            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            GuildInfo Guild = PlayObject.MyGuild;
             char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod) {
                 case '=':
@@ -585,7 +587,7 @@ namespace GameSrv.Npc {
             if (PlayObject.MyGuild == null) {
                 return result;
             }
-            Guild.GuildInfo Guild = PlayObject.MyGuild;
+            GuildInfo Guild = PlayObject.MyGuild;
             char cMethod = QuestConditionInfo.sParam1[0];
             switch (cMethod) {
                 case '=':
@@ -992,7 +994,7 @@ namespace GameSrv.Npc {
             if (UserItem == null && UserItem.Index == 0) {
                 return result;
             }
-            Items.StdItem Stditem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+            StdItem Stditem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             if ((Stditem != null) && (Stditem.StdMode == nType)) {
                 result = true;
             }

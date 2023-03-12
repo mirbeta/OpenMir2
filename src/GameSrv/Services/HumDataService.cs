@@ -1,5 +1,5 @@
-using NLog;
 using System.Collections.Concurrent;
+using NLog;
 using SystemModule.Data;
 using SystemModule.Packets.ServerPackets;
 

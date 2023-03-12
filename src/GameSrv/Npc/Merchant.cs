@@ -1,4 +1,5 @@
-﻿using GameSrv.Items;
+﻿using GameSrv.DataSource;
+using GameSrv.Items;
 using GameSrv.Maps;
 using GameSrv.Player;
 using GameSrv.Script;
@@ -161,7 +162,7 @@ namespace GameSrv.Npc {
                 nPrice = nPrice
             };
             _itemPriceList.Add(itemPrice);
-            DataSource.LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
+            LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
         }
 
         private void CheckItemPrice(ushort nIndex) {
@@ -201,14 +202,14 @@ namespace GameSrv.Npc {
                             if (goodCout > nRefillCount) {
                                 CheckItemPrice(nIndex);
                                 RefillGoodsItems(ref refillList, goods.ItemName, goods.Count - nRefillCount);
-                                DataSource.LocalDb.SaveGoodRecord(this, ScriptName + '-' + MapName);
-                                DataSource.LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
+                                LocalDb.SaveGoodRecord(this, ScriptName + '-' + MapName);
+                                LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
                                 return;
                             }
                             if (goodCout < nRefillCount) {
                                 RefillDelReFillItem(ref refillList, nRefillCount - goods.Count);
-                                DataSource.LocalDb.SaveGoodRecord(this, ScriptName + '-' + MapName);
-                                DataSource.LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
+                                LocalDb.SaveGoodRecord(this, ScriptName + '-' + MapName);
+                                LocalDb.SaveGoodPriceRecord(this, ScriptName + '-' + MapName);
                             }
                         }
                     }
@@ -855,15 +856,15 @@ namespace GameSrv.Npc {
 
         public void LoadNpcData() {
             var sFile = ScriptName + '-' + MapName;
-            DataSource.LocalDb.LoadGoodRecord(this, sFile);
-            DataSource.LocalDb.LoadGoodPriceRecord(this, sFile);
+            LocalDb.LoadGoodRecord(this, sFile);
+            LocalDb.LoadGoodPriceRecord(this, sFile);
             LoadUpgradeList();
         }
 
         private void SaveNpcData() {
             var sFile = ScriptName + '-' + MapName;
-            DataSource.LocalDb.SaveGoodRecord(this, sFile);
-            DataSource.LocalDb.SaveGoodPriceRecord(this, sFile);
+            LocalDb.SaveGoodRecord(this, sFile);
+            LocalDb.SaveGoodPriceRecord(this, sFile);
         }
 
         /// <summary>
@@ -1385,7 +1386,7 @@ namespace GameSrv.Npc {
         private void LoadUpgradeList() {
             _upgradeWeaponList.Clear();
             try {
-                DataSource.CommonDB.LoadUpgradeWeaponRecord(ScriptName + '-' + MapName, _upgradeWeaponList);
+                CommonDB.LoadUpgradeWeaponRecord(ScriptName + '-' + MapName, _upgradeWeaponList);
             }
             catch {
                 M2Share.Logger.Error("Failure in loading upgradinglist - " + ChrName);
@@ -1394,7 +1395,7 @@ namespace GameSrv.Npc {
 
         private void SaveUpgradingList() {
             try {
-                DataSource.CommonDB.SaveUpgradeWeaponRecord(ScriptName + '-' + MapName, _upgradeWeaponList);
+                CommonDB.SaveUpgradeWeaponRecord(ScriptName + '-' + MapName, _upgradeWeaponList);
             }
             catch {
                 M2Share.Logger.Error("Failure in saving upgradinglist - " + ChrName);

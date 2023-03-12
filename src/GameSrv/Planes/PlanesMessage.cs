@@ -1,6 +1,8 @@
-﻿using GameSrv.GameCommand;
+﻿using GameSrv.DataSource;
+using GameSrv.GameCommand;
 using GameSrv.Guild;
 using GameSrv.Player;
+using GameSrv.World;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -137,7 +139,7 @@ namespace GameSrv.Planes {
             if (M2Share.ServerIndex == sNum) {
                 try {
                     M2Share.WorldEngine.AddSwitchData(new SwitchDataInfo());
-                    World.WorldServer.SendServerGroupMsg(Messages.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
+                    WorldServer.SendServerGroupMsg(Messages.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
                 }
                 catch {
                     M2Share.Logger.Error(sExceptionMsg);
@@ -329,7 +331,7 @@ namespace GameSrv.Planes {
         }
 
         private static void MsgGetReloadAdmin() {
-            DataSource.LocalDb.LoadAdminList();
+            LocalDb.LoadAdminList();
         }
 
         private static void MsgGetReloadChatLog() {
@@ -387,7 +389,7 @@ namespace GameSrv.Planes {
                 if (humlover != null) {
                     int svidx = 0;
                     if (M2Share.WorldEngine.FindOtherServerUser(uname, ref svidx)) {
-                        World.WorldServer.SendServerGroupMsg(Messages.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.Envir.MapDesc);
+                        WorldServer.SendServerGroupMsg(Messages.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.Envir.MapDesc);
                     }
                 }
             }

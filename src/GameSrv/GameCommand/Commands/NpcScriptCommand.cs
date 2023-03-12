@@ -1,4 +1,5 @@
-﻿using GameSrv.Npc;
+﻿using GameSrv.Actor;
+using GameSrv.Npc;
 using GameSrv.Player;
 using GameSrv.Script;
 using SystemModule.Common;
@@ -11,7 +12,7 @@ namespace GameSrv.GameCommand.Commands {
         public void Execute(PlayObject PlayObject) {
             string sScriptFileName = string.Empty;
             int nNPCType = -1;
-            Actor.BaseObject BaseObject = PlayObject.GetPoseCreate();
+            BaseObject BaseObject = PlayObject.GetPoseCreate();
             if (BaseObject != null) {
                 for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
                     if (M2Share.WorldEngine.MerchantList[i] == BaseObject) {

@@ -1,4 +1,5 @@
 ﻿using GameSrv.Actor;
+using GameSrv.Maps;
 using GameSrv.Player;
 using SystemModule.Enums;
 
@@ -28,7 +29,7 @@ namespace GameSrv.GameCommand.Commands {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Maps.Envirnoment MEnvir = M2Share.MapMgr.FindMap(M2Share.MissionMap);
+            Envirnoment MEnvir = M2Share.MapMgr.FindMap(M2Share.MissionMap);
             if (!M2Share.BoMission || MEnvir == null) {
                 PlayObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);
                 PlayObject.SysMsg("请先用命令" + this.Command.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);

@@ -1,4 +1,5 @@
-﻿using GameSrv.Event;
+﻿using GameSrv.Actor;
+using GameSrv.Event;
 
 namespace GameSrv.Monster.Monsters {
     public class DigOutZombi : MonsterObject {
@@ -13,7 +14,7 @@ namespace GameSrv.Monster.Monsters {
             if (CanMove() && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed) {
                 if (FixedHideMode) {
                     for (int i = 0; i < VisibleActors.Count; i++) {
-                        Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
+                        BaseObject baseObject = VisibleActors[i].BaseObject;
                         if (baseObject.Death) {
                             continue;
                         }

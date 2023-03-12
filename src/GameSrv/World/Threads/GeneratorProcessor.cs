@@ -1,5 +1,5 @@
-using NLog;
 using System.Diagnostics;
+using NLog;
 using SystemModule.Generation.Entities;
 
 namespace GameSrv.World.Threads

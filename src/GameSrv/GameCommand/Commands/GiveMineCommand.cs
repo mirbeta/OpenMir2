@@ -1,4 +1,5 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Items;
+using GameSrv.Player;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -31,7 +32,7 @@ namespace GameSrv.GameCommand.Commands {
             for (int i = 0; i < nMineCount; i++) {
                 UserItem UserItem = new UserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sMineName, ref UserItem)) {
-                    Items.StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (StdItem != null && StdItem.StdMode == 43) {
                         if (PlayObject.IsAddWeightAvailable(StdItem.Weight * nMineCount)) {
                             UserItem.Dura = Convert.ToUInt16(nDura * 1000);

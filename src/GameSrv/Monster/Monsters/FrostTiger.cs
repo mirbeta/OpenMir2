@@ -1,4 +1,5 @@
-﻿using SystemModule.Consts;
+﻿using GameSrv.Magic;
+using SystemModule.Consts;
 
 namespace GameSrv.Monster.Monsters {
     public class FrostTiger : MonsterObject {
@@ -10,7 +11,7 @@ namespace GameSrv.Monster.Monsters {
             if (CanMove()) {
                 if (TargetCret == null) {
                     if (StatusTimeArr[PoisonState.STATETRANSPARENT] == 0) {
-                        Magic.MagicManager.MagMakePrivateTransparent(this, 180);
+                        MagicManager.MagMakePrivateTransparent(this, 180);
                     }
                 }
                 else {

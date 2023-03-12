@@ -1,4 +1,5 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Items;
+using GameSrv.Player;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -16,7 +17,7 @@ namespace GameSrv.GameCommand.Commands {
             string sHumanName = @Params.Length > 0 ? @Params[0] : ""; //玩家名称
             string sItemName = @Params.Length > 1 ? @Params[1] : ""; //物品名称
             int nCount = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2], 0) : 0; //数量
-            Items.StdItem StdItem;
+            StdItem StdItem;
             UserItem UserItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName)) {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

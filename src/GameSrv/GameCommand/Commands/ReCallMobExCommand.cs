@@ -1,4 +1,5 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Actor;
+using GameSrv.Player;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -32,7 +33,7 @@ namespace GameSrv.GameCommand.Commands {
             if (nNameColor > 255) {
                 nNameColor = 255;
             }
-            Actor.BaseObject mon = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, nX, nY, sMonName);
+            BaseObject mon = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, nX, nY, sMonName);
             if (mon != null) {
                 mon.Master = PlayObject;
                 mon.MasterRoyaltyTick = 86400000;// 24 * 60 * 60 * 1000

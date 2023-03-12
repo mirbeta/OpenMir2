@@ -1,4 +1,7 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Castle;
+using GameSrv.Guild;
+using GameSrv.Player;
+using GameSrv.World;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -19,17 +22,17 @@ namespace GameSrv.GameCommand.Commands {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Castle.UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);
+            UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);
             if (Castle == null) {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Guild.GuildInfo Guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            GuildInfo Guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (Guild != null) {
                 M2Share.EventSource.AddEventLog(27, Castle.OwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + PlayObject.ChrName + "\09" + '0' + "\09" + '1' + "\09" + '0');
                 Castle.GetCastle(Guild);
                 if (boFlag) {
-                    World.WorldServer.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, sGuildName);
+                    WorldServer.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, sGuildName);
                 }
                 PlayObject.SysMsg(Castle.sName + " 所属行会已经更改为 " + sGuildName, MsgColor.Green, MsgType.Hint);
             }

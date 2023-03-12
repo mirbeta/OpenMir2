@@ -1,4 +1,5 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Maps;
+using GameSrv.Player;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands
@@ -22,7 +23,7 @@ namespace GameSrv.GameCommand.Commands
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Maps.Envirnoment Envir = M2Share.MapMgr.FindMap(sMapName);
+            Envirnoment Envir = M2Share.MapMgr.FindMap(sMapName);
             if (Envir == null)
             {
                 PlayObject.SysMsg(CommandHelp.GameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);

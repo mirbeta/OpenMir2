@@ -1,4 +1,5 @@
 ﻿using GameSrv.Actor;
+using GameSrv.Castle;
 using GameSrv.GameCommand;
 using GameSrv.Items;
 using GameSrv.Monster.Monsters;
@@ -9,6 +10,7 @@ using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
 namespace GameSrv.Player
@@ -209,7 +211,7 @@ namespace GameSrv.Player
                         CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
                 }
-                Castle.UserCastle castle = M2Share.CastleMgr.InCastleWarArea(this);
+                UserCastle castle = M2Share.CastleMgr.InCastleWarArea(this);
                 if (castle != null && castle.UnderWar)
                 {
                     ChangePkStatus(true);
@@ -336,7 +338,7 @@ namespace GameSrv.Player
                         if (!CheckItemsNeed(stdItem))
                         {
                             // m_ItemList.Add((UserItem));
-                            SystemModule.Packets.ClientPackets.UserItem userItem = UseItems[i];
+                            UserItem userItem = UseItems[i];
                             if (AddItemToBag(userItem))
                             {
                                 SendAddItem(userItem);

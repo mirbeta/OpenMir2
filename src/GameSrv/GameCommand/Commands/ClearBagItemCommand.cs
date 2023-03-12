@@ -1,6 +1,7 @@
 ﻿using GameSrv.Player;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.GameCommand.Commands {
     [Command("ClearBagItem", "清理包裹物品", "人物名称", 10)]
@@ -24,7 +25,7 @@ namespace GameSrv.GameCommand.Commands {
             if (m_PlayObject.ItemList.Count > 0) {
                 DelList = new List<DeleteItem>();
                 for (int i = m_PlayObject.ItemList.Count - 1; i >= 0; i--) {
-                    SystemModule.Packets.ClientPackets.UserItem UserItem = m_PlayObject.ItemList[i];
+                    UserItem UserItem = m_PlayObject.ItemList[i];
                     DelList.Add(new DeleteItem() {
                         ItemName = M2Share.WorldEngine.GetStdItemName(UserItem.Index),
                         MakeIndex = UserItem.MakeIndex

@@ -1,4 +1,5 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Guild;
+using GameSrv.Player;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -24,7 +25,7 @@ namespace GameSrv.GameCommand.Commands {
                 PlayObject.SysMsg(CommandHelp.GameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Guild.GuildInfo Guild = M2Share.GuildMgr.FindGuild(sParam1);
+            GuildInfo Guild = M2Share.GuildMgr.FindGuild(sParam1);
             if (Guild == null) {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);
                 return;

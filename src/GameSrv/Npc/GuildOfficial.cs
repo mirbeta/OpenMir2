@@ -1,5 +1,7 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Castle;
+using GameSrv.Player;
 using GameSrv.Script;
+using GameSrv.World;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -112,7 +114,7 @@ namespace GameSrv.Npc {
             }
             if (result == 0) {
                 if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName)) {
-                    World.WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
+                    WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.WomaHorn);
                     PlayObject.DecGold(M2Share.Config.BuildGuildPrice);
@@ -167,7 +169,7 @@ namespace GameSrv.Npc {
             if (nIndex < 0) {
                 nIndex = 0;
             }
-            Castle.UserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
+            UserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
             if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject)) {
                 UserItem UserItem = PlayObject.CheckItems(M2Share.Config.ZumaPiece);
                 if (UserItem != null) {

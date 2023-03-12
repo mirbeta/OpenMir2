@@ -1,4 +1,6 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Castle;
+using GameSrv.Guild;
+using GameSrv.Player;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -21,7 +23,7 @@ namespace GameSrv.GameCommand.Commands {
                 PlayObject.SysMsg("本地图不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Castle.UserCastle m_Castle = M2Share.CastleMgr.InCastleWarArea(PlayObject);
+            UserCastle m_Castle = M2Share.CastleMgr.InCastleWarArea(PlayObject);
             if (m_Castle != null && m_Castle.UnderWar) {
                 PlayObject.SysMsg("攻城区域不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -44,7 +46,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             for (int i = 0; i < PlayObject.MyGuild.MRankList.Count; i++) {
-                Guild.GuildRank guildRank = PlayObject.MyGuild.MRankList[i];
+                GuildRank guildRank = PlayObject.MyGuild.MRankList[i];
                 if (guildRank == null) {
                     continue;
                 }

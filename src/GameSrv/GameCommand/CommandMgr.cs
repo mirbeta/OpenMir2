@@ -1,7 +1,7 @@
-﻿using GameSrv.Conf;
+﻿using System.Reflection;
+using GameSrv.Conf;
 using GameSrv.Player;
 using NLog;
-using System.Reflection;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand {

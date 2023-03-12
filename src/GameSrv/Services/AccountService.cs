@@ -1,6 +1,8 @@
-using NLog;
 using System.Collections;
 using System.Net;
+using System.Net.Sockets;
+using GameSrv.Conf.Model;
+using NLog;
 using SystemModule.Data;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
@@ -45,13 +47,13 @@ namespace GameSrv.Services {
 
         private void IDSocketError(object sender, DSCClientErrorEventArgs e) {
             switch (e.ErrorCode) {
-                case System.Net.Sockets.SocketError.ConnectionRefused:
+                case SocketError.ConnectionRefused:
                     _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]拒绝链接...");
                     break;
-                case System.Net.Sockets.SocketError.ConnectionReset:
+                case SocketError.ConnectionReset:
                     _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]关闭连接...");
                     break;
-                case System.Net.Sockets.SocketError.TimedOut:
+                case SocketError.TimedOut:
                     _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]链接超时...");
                     break;
             }
@@ -109,7 +111,7 @@ namespace GameSrv.Services {
             string sData = string.Empty;
             string sCode = string.Empty;
             const string sExceptionMsg = "[Exception] AccountService:DecodeSocStr";
-            Conf.Model.GameSvrConf Config = M2Share.Config;
+            GameSvrConf Config = M2Share.Config;
             HUtil32.EnterCriticalSection(Config.UserIDSection);
             try
             {

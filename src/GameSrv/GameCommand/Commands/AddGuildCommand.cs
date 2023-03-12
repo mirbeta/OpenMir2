@@ -1,4 +1,5 @@
 ﻿using GameSrv.Player;
+using GameSrv.World;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -30,7 +31,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             if (M2Share.GuildMgr.MemberOfGuild(sGuildChief) == null) {
                 if (M2Share.GuildMgr.AddGuild(sGuildName, sGuildChief)) {
-                    World.WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + sGuildChief);
+                    WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + sGuildChief);
                     PlayObject.SysMsg("行会名称: " + sGuildName + " 掌门人: " + sGuildChief, MsgColor.Green, MsgType.Hint);
                     boAddState = true;
                 }

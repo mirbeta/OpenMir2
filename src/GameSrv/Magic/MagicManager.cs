@@ -1,5 +1,7 @@
 ﻿using GameSrv.Actor;
 using GameSrv.Event.Events;
+using GameSrv.Items;
+using GameSrv.Maps;
 using GameSrv.Player;
 using SystemModule.Consts;
 using SystemModule.Enums;
@@ -178,7 +180,7 @@ namespace GameSrv.Magic {
                     boSpellFail = true;
                     if (playObject.IsProperTarget(targetObject)) {
                         if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx)) {
-                            Items.StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
+                            StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                             if (stdItem != null) {
                                 MagicBase.UseAmulet(playObject, 1, 2, ref nAmuletIdx);
                                 if (M2Share.RandomNumber.Random(targetObject.AntiPoison + 7) <= 6) {
@@ -704,7 +706,7 @@ namespace GameSrv.Magic {
             bool result = false;
             if (M2Share.RandomNumber.Random(11) < nLevel * 2 + 4) {
                 playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE2, 0, 0, 0, 0, "");
-                Maps.Envirnoment envir = playObject.Envir;
+                Envirnoment envir = playObject.Envir;
                 playObject.MapRandomMove(playObject.HomeMap, 1);
                 if (envir != playObject.Envir && playObject.Race == ActorRace.Play) {
                     playObject.IsTimeRecall = false;
@@ -726,7 +728,7 @@ namespace GameSrv.Magic {
                 }
                 if (playObject.IsProperTarget(baseObject)) {
                     if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx)) {
-                        Items.StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
+                        StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                         if (stdItem != null) {
                             MagicBase.UseAmulet(playObject, 1, 2, ref nAmuletIdx);
                             if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 7) <= 6) {

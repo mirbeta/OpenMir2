@@ -1,7 +1,9 @@
 using System.Collections;
 using GameSrv.Actor;
 using GameSrv.Event.Events;
+using GameSrv.GameGate;
 using GameSrv.Guild;
+using GameSrv.Items;
 using GameSrv.Maps;
 using GameSrv.Monster;
 using GameSrv.Npc;
@@ -69,7 +71,7 @@ namespace GameSrv.World
         /// <summary>
         /// 物品列表
         /// </summary>
-        public readonly IList<Items.StdItem> StdItemList;
+        public readonly IList<StdItem> StdItemList;
         /// <summary>
         /// 怪物列表
         /// </summary>
@@ -94,7 +96,7 @@ namespace GameSrv.World
             ProcessHumanLoopTime = 0;
             MerchantPosition = 0;
             NpcPosition = 0;
-            StdItemList = new List<Items.StdItem>();
+            StdItemList = new List<StdItem>();
             MonsterList = new Dictionary<string, MonsterInfo>(StringComparer.OrdinalIgnoreCase);
             MonGenList = new List<MonGenInfo>();
             MonGenInfoThreadMap = new Dictionary<int, IList<MonGenInfo>>();
@@ -494,7 +496,7 @@ namespace GameSrv.World
                                 {
                                     _logger.Warn($"获取玩家数据[{userOpenInfo.ChrName}]失败.");
                                     LoadPlayerQueue.Add(i);
-                                    GameGate.GameGateMgr.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
+                                    GameGateMgr.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
                                     continue;
                                 }
                                 if (!PlayerDataService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
@@ -730,9 +732,9 @@ namespace GameSrv.World
 
         }
         
-        public Items.StdItem GetStdItem(ushort nItemIdx)
+        public StdItem GetStdItem(ushort nItemIdx)
         {
-            Items.StdItem result = null;
+            StdItem result = null;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
@@ -742,9 +744,9 @@ namespace GameSrv.World
             return result;
         }
 
-        public Items.StdItem GetStdItem(string sItemName)
+        public StdItem GetStdItem(string sItemName)
         {
-            Items.StdItem result = null;
+            StdItem result = null;
             if (string.IsNullOrEmpty(sItemName)) return null;
             for (var i = 0; i < StdItemList.Count; i++)
             {

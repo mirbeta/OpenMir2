@@ -1,6 +1,6 @@
+using System.Text;
 using GameSrv.Maps;
 using NLog;
-using System.Text;
 
 namespace GameSrv {
     public class MapPipeClient {
