@@ -1,4 +1,5 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Castle;
+using GameSrv.Player;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -27,7 +28,7 @@ namespace GameSrv.GameCommand.Commands {
                 }
                 return;
             }
-            Castle.UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);
+            UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);
             if (Castle == null) {
                 PlayObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;

@@ -1,5 +1,5 @@
-﻿using GameSrv.Player;
-using System.Reflection;
+﻿using System.Reflection;
+using GameSrv.Player;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand {

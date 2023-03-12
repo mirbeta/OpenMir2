@@ -1,6 +1,6 @@
-using Microsoft.Extensions.Hosting;
 using System.Runtime;
 using System.Text;
+using Microsoft.Extensions.Hosting;
 
 namespace GameSrv {
     internal class Program {

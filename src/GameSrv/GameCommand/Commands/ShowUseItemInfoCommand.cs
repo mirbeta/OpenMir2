@@ -1,5 +1,6 @@
 ﻿using GameSrv.Player;
 using SystemModule.Enums;
+using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.GameCommand.Commands {
     /// <summary>
@@ -23,7 +24,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             for (int i = 0; i < m_PlayObject.UseItems.Length; i++) {
-                SystemModule.Packets.ClientPackets.UserItem UserItem = m_PlayObject.UseItems[i];
+                UserItem UserItem = m_PlayObject.UseItems[i];
                 if (UserItem.Index == 0) {
                     continue;
                 }

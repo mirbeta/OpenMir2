@@ -1,4 +1,5 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Items;
+using GameSrv.Player;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -41,7 +42,7 @@ namespace GameSrv.GameCommand.Commands {
                 if (PlayObject.ItemList.Count >= Grobal2.MaxBagItem) return;
                 UserItem UserItem = null;
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref UserItem)) {
-                    Items.StdItem stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
                     if (stdItem.Price >= 15000 && !M2Share.Config.TestServer && PlayObject.Permission < 5) {
                         return;
                     }

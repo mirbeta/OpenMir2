@@ -1,6 +1,5 @@
 ﻿using GameSrv.Actor;
 using GameSrv.Player;
-using System.Collections;
 using SystemModule.Enums;
 
 namespace GameSrv.Maps {

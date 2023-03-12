@@ -1,5 +1,5 @@
-﻿using NLog;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using NLog;
 using SystemModule.Enums;
 
 namespace GameSrv.Actor

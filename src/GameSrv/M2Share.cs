@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 using GameSrv.Actor;
 using GameSrv.Castle;
 using GameSrv.Conf;
@@ -17,9 +20,6 @@ using GameSrv.Services;
 using GameSrv.World;
 using GameSrv.World.Threads;
 using NLog;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Text.RegularExpressions;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;

@@ -1,4 +1,5 @@
 ﻿using GameSrv.Items;
+using GameSrv.Magic;
 using GameSrv.Player;
 using GameSrv.RobotPlay;
 using SystemModule.Consts;
@@ -632,7 +633,7 @@ namespace GameSrv.Actor {
                         }
                         break;
                     case Messages.RM_TRANSPARENT:
-                        Magic.MagicManager.MagMakePrivateTransparent(this, (ushort)processMsg.nParam1);
+                        MagicManager.MagMakePrivateTransparent(this, (ushort)processMsg.nParam1);
                         break;
                     case Messages.RM_DOOPENHEALTH:
                         MakeOpenHealth();

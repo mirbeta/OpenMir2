@@ -1,4 +1,6 @@
-﻿using GameSrv.Castle;
+﻿using System.Collections;
+using System.Collections.Concurrent;
+using GameSrv.Castle;
 using GameSrv.DataSource;
 using GameSrv.Event;
 using GameSrv.GameCommand;
@@ -14,8 +16,6 @@ using GameSrv.Script;
 using GameSrv.Services;
 using GameSrv.World;
 using NLog;
-using System.Collections;
-using System.Collections.Concurrent;
 using SystemModule.Common;
 using SystemModule.Data;
 

@@ -1,4 +1,6 @@
-﻿namespace GameSrv.Monster.Monsters {
+﻿using GameSrv.Actor;
+
+namespace GameSrv.Monster.Monsters {
     public class MagCowMonster : AtMonster {
         public MagCowMonster() : base() {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
@@ -9,7 +11,7 @@
             int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nPower > 0) {
                 SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
-                Actor.BaseObject baseObject = GetPoseCreate();
+                BaseObject baseObject = GetPoseCreate();
                 if (baseObject != null && IsProperTarget(baseObject) && AntiMagic >= 0) {
                     nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);
                     if (nPower > 0) {

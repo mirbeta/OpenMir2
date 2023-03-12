@@ -1,5 +1,7 @@
 using GameSrv.Planes;
+using GameSrv.Player;
 using GameSrv.Services;
+using GameSrv.World;
 using Microsoft.Extensions.Hosting;
 using NLog;
 
@@ -228,13 +230,13 @@ namespace GameSrv
             if (M2Share.WorldEngine.PlayObjectCount > 0)
             {
                 _scheduledSaveData = true;
-                foreach (Player.PlayObject play in M2Share.WorldEngine.PlayObjects)
+                foreach (PlayObject play in M2Share.WorldEngine.PlayObjects)
                 {
                     if (M2Share.FrontEngine.InSaveRcdList(play.ChrName))
                     {
                         continue;
                     }
-                    World.WorldServer.SaveHumanRcd(play);
+                    WorldServer.SaveHumanRcd(play);
                 }
                 _scheduledSaveData = false;
             }

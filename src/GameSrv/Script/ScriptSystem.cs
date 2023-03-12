@@ -1,7 +1,7 @@
-﻿using GameSrv.Npc;
-using NLog;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using GameSrv.Npc;
+using NLog;
 using SystemModule.Common;
 
 namespace GameSrv.Script {

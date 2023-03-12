@@ -1,12 +1,15 @@
-﻿using GameSrv.Actor;
+﻿using System.Text.RegularExpressions;
+using GameSrv.Actor;
+using GameSrv.Castle;
 using GameSrv.Event.Events;
 using GameSrv.GameCommand;
+using GameSrv.Guild;
 using GameSrv.Items;
+using GameSrv.Magic;
 using GameSrv.Maps;
 using GameSrv.Npc;
 using GameSrv.Services;
 using GameSrv.World;
-using System.Text.RegularExpressions;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -1220,7 +1223,7 @@ namespace GameSrv.Player {
         private bool DoSpell(UserMagic userMagic, short targetX, short targetY, BaseObject baseObject) {
             bool result = false;
             try {
-                if (!Magic.MagicManager.IsWarrSkill(userMagic.MagIdx)) {
+                if (!MagicManager.IsWarrSkill(userMagic.MagIdx)) {
                     ushort nSpellPoint = GetSpellPoint(userMagic);
                     if (nSpellPoint > 0) {
                         if (WAbil.MP < nSpellPoint) {
@@ -1229,7 +1232,7 @@ namespace GameSrv.Player {
                         DamageSpell(nSpellPoint);
                         HealthSpellChanged();
                     }
-                    result = Magic.MagicManager.DoSpell(this, userMagic, targetX, targetY, baseObject);
+                    result = MagicManager.DoSpell(this, userMagic, targetX, targetY, baseObject);
                 }
             }
             catch (Exception e) {
@@ -1840,7 +1843,7 @@ namespace GameSrv.Player {
                 case 5:
                     if (MyGuild != null) {
                         if (!InGuildWarArea) {
-                            Castle.UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
+                            UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
                             if (castle != null && castle.IsMasterGuild(MyGuild)) {
                                 BaseObjectMove(castle.HomeMap, castle.GetHomeX(), castle.GetHomeY());
                             }
@@ -2424,7 +2427,7 @@ namespace GameSrv.Player {
 
         private bool CheckItemsNeed(StdItem stdItem) {
             bool result = true;
-            Castle.UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
+            UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
             switch (stdItem.Need) {
                 case 6:
                     if (MyGuild == null) {
@@ -2852,13 +2855,13 @@ namespace GameSrv.Player {
                 SysMsg("这个命令不能在本服务器上使用!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Guild.GuildInfo guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            GuildInfo guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (guild == null) {
                 SysMsg("行会不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boReQuestOk = false;
-            Guild.WarGuild warGuild = MyGuild.AddWarGuild(guild);
+            WarGuild warGuild = MyGuild.AddWarGuild(guild);
             if (warGuild.dwWarTick > 0) {
                 if (guild.AddWarGuild(MyGuild).Guild != null) {
                     warGuild.dwWarTick = 0;

@@ -1,4 +1,5 @@
 ﻿using GameSrv.Event.Events;
+using GameSrv.Maps;
 using GameSrv.Player;
 using SystemModule.Enums;
 
@@ -37,9 +38,9 @@ namespace GameSrv.GameCommand.Commands {
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Maps.Envirnoment Envir = M2Share.MapMgr.FindMap(sMAP);
+            Envirnoment Envir = M2Share.MapMgr.FindMap(sMAP);
             if (Envir != null) {
-                Maps.Envirnoment OldEnvir = PlayObject.Envir;
+                Envirnoment OldEnvir = PlayObject.Envir;
                 PlayObject.Envir = Envir;
                 FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
                 M2Share.EventMgr.AddEvent(FireBurnEvent);

@@ -1,4 +1,6 @@
-﻿namespace GameSrv.Monster.Monsters {
+﻿using GameSrv.Actor;
+
+namespace GameSrv.Monster.Monsters {
     public class ExplosionSpider : MonsterObject {
         private int explosionMakeTime;
 
@@ -14,7 +16,7 @@
             WAbil.HP = 0;
             int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
             for (int i = 0; i < VisibleActors.Count; i++) {
-                Actor.BaseObject baseObject = VisibleActors[i].BaseObject;
+                BaseObject baseObject = VisibleActors[i].BaseObject;
                 if (baseObject.Death) {
                     continue;
                 }

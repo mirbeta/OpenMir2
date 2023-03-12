@@ -3,6 +3,7 @@ using GameSrv.Guild;
 using GameSrv.Maps;
 using GameSrv.Monster.Monsters;
 using GameSrv.Player;
+using GameSrv.World;
 using NLog;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -388,10 +389,10 @@ namespace GameSrv.Castle
                             AttackGuildList.Add(MasterGuild);
                             StartWallconquestWar();
                             SaveAttackSabukWall();
-                            World.WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
+                            WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
                             string s20 = string.Format(sWarStartMsg, sName);
                             M2Share.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
+                            WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
                             _logger.Info(s20);
                             MainDoorControl(true);
                         }
@@ -423,7 +424,7 @@ namespace GameSrv.Castle
                             ShowOverMsg = true;
                             string s20 = string.Format(sWarStopTimeMsg, sName, M2Share.Config.ShowCastleWarEndMsgTime / (60 * 1000));
                             M2Share.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
+                            WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
                             _logger.Warn(s20);
                         }
                     }
@@ -546,7 +547,7 @@ namespace GameSrv.Castle
             }
             string castleMessage = string.Format(sGetCastleMsg, sName, OwnGuild);
             M2Share.WorldEngine.SendBroadCastMsgExt(castleMessage, MsgType.System);
-            World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, castleMessage);
+            WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, castleMessage);
             _logger.Info(castleMessage);
         }
 
@@ -584,7 +585,7 @@ namespace GameSrv.Castle
             }
             string stopMessage = string.Format(sWallWarStop, sName);
             M2Share.WorldEngine.SendBroadCastMsgExt(stopMessage, MsgType.System);
-            World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, stopMessage);
+            WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, stopMessage);
             _logger.Info(stopMessage);
         }
 
@@ -933,7 +934,7 @@ namespace GameSrv.Castle
             AttackerInfo.Guild = Guild;
             AttackWarList.Add(AttackerInfo);
             SaveAttackSabukWall();
-            World.WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
+            WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
             AttackerInfo.Dispose();
             return true;
         }

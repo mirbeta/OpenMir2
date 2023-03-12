@@ -1,4 +1,5 @@
 ﻿using GameSrv.Player;
+using GameSrv.World;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -22,7 +23,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             if (M2Share.GuildMgr.DelGuild(sGuildName)) {
-                World.WorldServer.SendServerGroupMsg(Messages.SS_206, M2Share.ServerIndex, sGuildName);
+                WorldServer.SendServerGroupMsg(Messages.SS_206, M2Share.ServerIndex, sGuildName);
             }
             else {
                 PlayObject.SysMsg("没找到" + sGuildName + "这个行会!!!", MsgColor.Red, MsgType.Hint);

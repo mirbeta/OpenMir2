@@ -1,6 +1,6 @@
-﻿using GameSrv.Actor;
+﻿using System.Collections;
+using GameSrv.Actor;
 using GameSrv.Player;
-using System.Collections;
 using SystemModule.Common;
 using SystemModule.Data;
 

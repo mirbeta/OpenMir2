@@ -1,3 +1,4 @@
+using GameSrv.World;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -143,7 +144,7 @@ namespace GameSrv
                 _logger.Info("保存玩家数据");
                 foreach (var play in M2Share.WorldEngine.PlayObjects)
                 {
-                    World.WorldServer.SaveHumanRcd(play);
+                    WorldServer.SaveHumanRcd(play);
                 }
                 _logger.Info("数据保存完毕.");
             }

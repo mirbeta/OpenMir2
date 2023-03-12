@@ -1,8 +1,9 @@
+using System.Collections;
 using GameSrv.Actor;
+using GameSrv.Maps;
 using GameSrv.Monster;
 using GameSrv.Npc;
 using GameSrv.Script;
-using System.Collections;
 using SystemModule.Common;
 using SystemModule.Data;
 
@@ -308,7 +309,7 @@ namespace GameSrv.DataSource {
                         tStr = HUtil32.GetValidStr3(tStr, ref sQuest, _textSpitConst);
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, _textSpitConst);
                         if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest)) {
-                            Maps.Envirnoment map = M2Share.MapMgr.FindMap(sMap);
+                            Envirnoment map = M2Share.MapMgr.FindMap(sMap);
                             if (map != null) {
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
                                 int n38 = HUtil32.StrToInt(s34, 0);

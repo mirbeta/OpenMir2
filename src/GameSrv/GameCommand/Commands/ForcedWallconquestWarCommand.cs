@@ -1,4 +1,6 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Castle;
+using GameSrv.Player;
+using GameSrv.World;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -17,7 +19,7 @@ namespace GameSrv.GameCommand.Commands {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Castle.UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);
+            UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);
             if (Castle != null) {
                 Castle.UnderWar = !Castle.UnderWar;
                 if (Castle.UnderWar) {
@@ -25,10 +27,10 @@ namespace GameSrv.GameCommand.Commands {
                     Castle.WarDate = DateTime.Now;
                     Castle.StartCastleWarTick = HUtil32.GetTickCount();
                     Castle.StartWallconquestWar();
-                    World.WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
+                    WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
                     string s20 = "[" + Castle.sName + " 攻城战已经开始]";
                     M2Share.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
-                    World.WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
+                    WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
                     Castle.MainDoorControl(true);
                 }
                 else {

@@ -1,4 +1,5 @@
 ﻿using GameSrv.Player;
+using GameSrv.World;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -12,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
             if (PlayObject.MyGuild != null) {
                 if (PlayObject.GuildRankNo > 1) {
                     if (PlayObject.MyGuild.IsMember(PlayObject.ChrName) && PlayObject.MyGuild.DelMember(PlayObject.ChrName)) {
-                        World.WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, PlayObject.MyGuild.GuildName);
+                        WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, PlayObject.MyGuild.GuildName);
                         PlayObject.MyGuild = null;
                         PlayObject.RefRankInfo(0, "");
                         PlayObject.RefShowName();

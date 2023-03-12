@@ -1,10 +1,11 @@
-﻿using GameSrv.Actor;
+﻿using System.Text;
+using GameSrv.Actor;
+using GameSrv.Castle;
 using GameSrv.Event;
 using GameSrv.Event.Events;
 using GameSrv.Monster.Monsters;
 using GameSrv.Npc;
 using GameSrv.Player;
-using System.Text;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -399,7 +400,7 @@ namespace GameSrv.Maps {
                         if (cellObject.CellObjId > 0 && cellObject.ActorObject) {
                             BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null) {
-                                Castle.UserCastle castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
+                                UserCastle castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
                                 if (M2Share.Config.boWarDisHumRun && castle != null && castle.UnderWar) {
 
                                 }

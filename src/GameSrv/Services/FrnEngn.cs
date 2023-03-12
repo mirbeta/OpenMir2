@@ -1,3 +1,4 @@
+using GameSrv.GameGate;
 using GameSrv.Player;
 using NLog;
 using SystemModule.Data;
@@ -296,7 +297,7 @@ namespace GameSrv.Services
             }
             if (!PlayerDataService.LoadHumRcdFromDB(LoadUser.Account, LoadUser.ChrName, LoadUser.sIPaddr, ref queryId, LoadUser.SessionID))
             {
-                GameGate.GameGateMgr.SendOutConnectMsg(LoadUser.GateIdx, LoadUser.SocketId, LoadUser.GSocketIdx);
+                GameGateMgr.SendOutConnectMsg(LoadUser.GateIdx, LoadUser.SocketId, LoadUser.GSocketIdx);
             }
             else
             {

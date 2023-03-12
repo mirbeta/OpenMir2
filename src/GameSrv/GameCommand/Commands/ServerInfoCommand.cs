@@ -1,5 +1,5 @@
-﻿using GameSrv.Player;
-using System.Text;
+﻿using System.Text;
+using GameSrv.Player;
 
 namespace GameSrv.GameCommand.Commands {
     [Command("ServerInfo", "查看服务器信息", 10)]

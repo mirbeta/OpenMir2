@@ -1,7 +1,7 @@
-﻿using NLog;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using NLog;
 using SystemModule.Base;
 
 namespace GameSrv

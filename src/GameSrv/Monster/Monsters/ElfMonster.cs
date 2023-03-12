@@ -1,4 +1,5 @@
-﻿using SystemModule.Enums;
+﻿using GameSrv.Actor;
+using SystemModule.Enums;
 
 namespace GameSrv.Monster.Monsters {
     /// <summary>
@@ -52,7 +53,7 @@ namespace GameSrv.Monster.Monsters {
                     boChangeFace = true;
                 }
                 if (boChangeFace) {
-                    Actor.BaseObject elfMon = MakeClone(M2Share.Config.Dragon1, this);
+                    BaseObject elfMon = MakeClone(M2Share.Config.Dragon1, this);
                     if (elfMon != null) {
                         elfMon.AutoChangeColor = AutoChangeColor;
                         if (elfMon is ElfWarriorMonster monster) {

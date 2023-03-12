@@ -1,4 +1,5 @@
-﻿using GameSrv.Player;
+﻿using GameSrv.Guild;
+using GameSrv.Player;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
@@ -18,7 +19,7 @@ namespace GameSrv.GameCommand.Commands {
                 PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Guild.GuildInfo Guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            GuildInfo Guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (Guild != null) {
                 PlayObject.SysMsg($"{sGuildName} 的得分为: {Guild.ContestPoint}", MsgColor.Green, MsgType.Hint);
             }
