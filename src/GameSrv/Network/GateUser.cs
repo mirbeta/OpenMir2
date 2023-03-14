@@ -3,8 +3,8 @@ using GameSrv.Services;
 using GameSrv.World;
 using SystemModule.Data;
 
-namespace GameSrv.GameGate {
-    public class GateUserInfo {
+namespace GameSrv.Network {
+    public class GateUser {
         /// <summary>
         /// 人物对象
         /// </summary>

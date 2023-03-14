@@ -1,4 +1,4 @@
-using GameSrv.GameGate;
+using GameSrv.Network;
 using GameSrv.Player;
 using NLog;
 using SystemModule.Data;

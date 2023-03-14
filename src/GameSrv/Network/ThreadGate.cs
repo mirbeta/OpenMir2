@@ -1,7 +1,7 @@
 using System.Net.Sockets;
 
-namespace GameSrv.GameGate {
-    public class ThreadGateInfo {
+namespace GameSrv.Network {
+    public class ThreadGate {
         /// <summary>
         /// 网关是否已启用
         /// </summary>
@@ -14,7 +14,7 @@ namespace GameSrv.GameGate {
         /// <summary>
         /// 玩家列表
         /// </summary>
-        public IList<GateUserInfo> UserList;
+        public IList<GateUser> UserList;
         /// <summary>
         /// 在线人数
         /// </summary>

@@ -1,9 +1,9 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using System.Threading.Channels;
-using GameSrv.Player;
+﻿using GameSrv.Player;
 using GameSrv.Services;
 using NLog;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Channels;
 using SystemModule.Common;
 using SystemModule.Enums;
 using SystemModule.Packets;
@@ -11,7 +11,7 @@ using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
 
-namespace GameSrv.GameGate
+namespace GameSrv.Network
 {
     public class GameGateMgr
     {
@@ -19,7 +19,7 @@ namespace GameSrv.GameGate
         private readonly SocketServer _gateSocket;
         private readonly object m_RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;//todo 一个网关一个队列
-        private readonly ThreadNetwork[] GameGates;
+        private readonly SocketThread[] GameGates;
         private static int CurrentGateIdx = 0;
         private readonly Dictionary<int, int> GameGateLinkMap = new Dictionary<int, int>();
         private readonly HashSet<long> RunGatePermitMap = new HashSet<long>();
@@ -29,7 +29,7 @@ namespace GameSrv.GameGate
         {
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
-            GameGates = new ThreadNetwork[20];
+            GameGates = new SocketThread[20];
             _gateSocket = new SocketServer(100, 1024);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
@@ -93,7 +93,7 @@ namespace GameSrv.GameGate
                     _logger.Error("超过网关最大链接数量.关闭链接");
                     return;
                 }
-                var gateInfo = new ThreadGateInfo();
+                var gateInfo = new ThreadGate();
                 gateInfo.nSendMsgCount = 0;
                 gateInfo.nSendRemainCount = 0;
                 gateInfo.dwSendTick = HUtil32.GetTickCount();
@@ -102,12 +102,12 @@ namespace GameSrv.GameGate
                 gateInfo.BoUsed = true;
                 gateInfo.SocketId = e.ConnectionId;
                 gateInfo.Socket = e.Socket;
-                gateInfo.UserList = new List<GateUserInfo>();
+                gateInfo.UserList = new List<GateUser>();
                 gateInfo.nUserCount = 0;
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
-                GameGates[CurrentGateIdx] = new ThreadNetwork(CurrentGateIdx, gateInfo);
+                GameGates[CurrentGateIdx] = new SocketThread(CurrentGateIdx, gateInfo);
                 GameGateLinkMap.Add(e.SocHandle, CurrentGateIdx);
                 CurrentGateIdx++;
                 _logger.Info(string.Format(sGateOpen, e.EndPoint));
