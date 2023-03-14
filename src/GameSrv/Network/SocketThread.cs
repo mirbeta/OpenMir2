@@ -1,9 +1,9 @@
-﻿using GameSrv.Player;
+﻿using System.Net.Sockets;
+using System.Threading.Channels;
+using GameSrv.Player;
 using GameSrv.Services;
 using GameSrv.World;
 using NLog;
-using System.Net.Sockets;
-using System.Threading.Channels;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets;
@@ -15,8 +15,8 @@ namespace GameSrv.Network
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly int GateIdx;
-        private readonly ThreadGate _gateInfo;
-        private readonly GateSendQueue _sendQueue;
+        private readonly ThreadGateInfo _gateInfo;
+        private readonly SocketSendQueue _sendQueue;
         private readonly object _runSocketSection;
         private readonly CancellationTokenSource _cancellation;
         private CommandMessage _clientMesaagePacket;
@@ -26,21 +26,21 @@ namespace GameSrv.Network
         public byte[] ReceiveBuffer;
         public int ReceiveLen;
 
-        public SocketThread(int gateIdx, ThreadGate gateInfo)
+        public SocketThread(int gateIdx, ThreadGateInfo gateInfo)
         {
             GateIdx = gateIdx;
             _gateInfo = gateInfo;
             _runSocketSection = new object();
-            _sendQueue = new GateSendQueue(gateInfo);
+            _sendQueue = new SocketSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
             _clientMesaagePacket = new CommandMessage();
             ReceiveBuffer = new byte[4096];
-            StartNetwork();
+            Start();
         }
 
-        public ThreadGate GateInfo => _gateInfo;
+        public ThreadGateInfo GateInfo => _gateInfo;
 
-        private void StartNetwork()
+        private void Start()
         {
             _sendQueue.ProcessSendQueue(_cancellation);
         }
@@ -225,7 +225,7 @@ namespace GameSrv.Network
                         GateInfo.nSendBlockCount = 0;
                         break;
                     case Grobal2.GM_DATA:
-                        GateUser gateUser = null;
+                        SessionUser gateUser = null;
                         if (msgPacket.ServerIndex >= 1)
                         {
                             nUserIdx = msgPacket.ServerIndex - 1;
@@ -335,7 +335,7 @@ namespace GameSrv.Network
             return result;
         }
 
-        private void DoClientCertification(int gateIdx, GateUser gateUser, int nSocket, string sMsg)
+        private void DoClientCertification(int gateIdx, SessionUser gateUser, int nSocket, string sMsg)
         {
             string sAccount = string.Empty;
             string sChrName = string.Empty;
@@ -423,7 +423,7 @@ namespace GameSrv.Network
                     {
                         if (GateInfo.UserList[i] != null)
                         {
-                            GateUser gateUser = GateInfo.UserList[i];
+                            SessionUser gateUser = GateInfo.UserList[i];
                             if (gateUser == null)
                             {
                                 continue;
@@ -463,9 +463,9 @@ namespace GameSrv.Network
             }
         }
 
-        private static int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<GateUser> userList)
+        private static int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<SessionUser> userList)
         {
-            GateUser gateUser = new GateUser
+            SessionUser gateUser = new SessionUser
             {
                 Account = string.Empty,
                 sChrName = string.Empty,
@@ -521,7 +521,7 @@ namespace GameSrv.Network
             {
                 for (int i = 0; i < GateInfo.UserList.Count; i++)
                 {
-                    GateUser gateUserInfo = GateInfo.UserList[i];
+                    SessionUser gateUserInfo = GateInfo.UserList[i];
                     if (gateUserInfo != null && gateUserInfo.nSocket == nSocket)
                     {
                         gateUserInfo.FrontEngine = null;
@@ -537,17 +537,15 @@ namespace GameSrv.Network
             }
         }
 
-        private class GateSendQueue
+        private class SocketSendQueue
         {
             private Channel<byte[]> SendQueue { get; }
             private string ConnectionId { get; }
-            private ThreadGate GameGate { get; }
 
-            public GateSendQueue(ThreadGate gateInfo)
+            public SocketSendQueue(ThreadGateInfo gateInfo)
             {
                 SendQueue = Channel.CreateUnbounded<byte[]>();
                 ConnectionId = gateInfo.SocketId;
-                GameGate = gateInfo;
             }
 
             /// <summary>

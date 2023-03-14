@@ -53,7 +53,7 @@ namespace GameSrv {
             M2Share.Config.WinLotteryLevel6 = 0;
             M2Share.DataServer = new DBService();
             M2Share.ScriptSystem = new ScriptSystem();
-            M2Share.GateMgr = new GameGateMgr();
+            M2Share.GateMgr = new ThreadSocketMgr();
             M2Share.EventSource = new GameEventSource();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MapMgr = new MapManager();

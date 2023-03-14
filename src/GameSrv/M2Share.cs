@@ -63,7 +63,7 @@ namespace GameSrv {
         public static readonly RandomNumber RandomNumber;
         public static DBService DataServer = null;
         public static ScriptSystem ScriptSystem = null;
-        public static GameGateMgr GateMgr = null;
+        public static ThreadSocketMgr GateMgr = null;
         public static GameEventSource EventSource;
         public static MapManager MapMgr = null;
         public static CustomItem CustomItemMgr = null;

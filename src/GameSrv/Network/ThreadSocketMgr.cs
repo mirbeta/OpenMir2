@@ -1,9 +1,9 @@
-﻿using GameSrv.Player;
-using GameSrv.Services;
-using NLog;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
+using GameSrv.Player;
+using GameSrv.Services;
+using NLog;
 using SystemModule.Common;
 using SystemModule.Enums;
 using SystemModule.Packets;
@@ -13,7 +13,7 @@ using SystemModule.Sockets.AsyncSocketServer;
 
 namespace GameSrv.Network
 {
-    public class GameGateMgr
+    public class ThreadSocketMgr
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SocketServer _gateSocket;
@@ -25,7 +25,7 @@ namespace GameSrv.Network
         private readonly HashSet<long> RunGatePermitMap = new HashSet<long>();
         private CancellationToken stoppingCancelReads;
 
-        public GameGateMgr()
+        public ThreadSocketMgr()
         {
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
@@ -93,7 +93,7 @@ namespace GameSrv.Network
                     _logger.Error("超过网关最大链接数量.关闭链接");
                     return;
                 }
-                var gateInfo = new ThreadGate();
+                var gateInfo = new ThreadGateInfo();
                 gateInfo.nSendMsgCount = 0;
                 gateInfo.nSendRemainCount = 0;
                 gateInfo.dwSendTick = HUtil32.GetTickCount();
@@ -102,7 +102,7 @@ namespace GameSrv.Network
                 gateInfo.BoUsed = true;
                 gateInfo.SocketId = e.ConnectionId;
                 gateInfo.Socket = e.Socket;
-                gateInfo.UserList = new List<GateUser>();
+                gateInfo.UserList = new List<SessionUser>();
                 gateInfo.nUserCount = 0;
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;

@@ -1,7 +1,13 @@
 using System.Net.Sockets;
+using GameSrv.Player;
+using GameSrv.Services;
+using GameSrv.World;
+using SystemModule.Data;
 
-namespace GameSrv.Network {
-    public class ThreadGate {
+namespace GameSrv.Network
+{
+    public class ThreadGateInfo
+    {
         /// <summary>
         /// 网关是否已启用
         /// </summary>
@@ -14,7 +20,7 @@ namespace GameSrv.Network {
         /// <summary>
         /// 玩家列表
         /// </summary>
-        public IList<GateUser> UserList;
+        public IList<SessionUser> UserList;
         /// <summary>
         /// 在线人数
         /// </summary>
@@ -54,5 +60,43 @@ namespace GameSrv.Network {
         /// 上次心跳时间
         /// </summary>
         public int dwSendCheckTick;
+    }
+
+    public class SessionUser
+    {
+        /// <summary>
+        /// 人物对象
+        /// </summary>
+        public PlayObject PlayObject;
+        public int SessionID;
+        /// <summary>
+        /// 账号
+        /// </summary>
+        public string Account;
+        public ushort SocketId;
+        /// <summary>
+        /// 玩家IP
+        /// </summary>
+        public string sIPaddr;
+        /// <summary>
+        /// 认证是否通过
+        /// </summary>
+        public bool Certification;
+        /// <summary>
+        /// 玩家名称
+        /// </summary>
+        public string sChrName;
+        /// <summary>
+        /// 客户端版本号
+        /// </summary>
+        public int ClientVersion;
+        /// <summary>
+        /// 当前会话信息
+        /// </summary>
+        public PlayerSession SessInfo;
+        public int nSocket;
+        public FrontEngine FrontEngine;
+        public WorldServer UserEngine;
+        public int dwNewUserTick;
     }
 }
