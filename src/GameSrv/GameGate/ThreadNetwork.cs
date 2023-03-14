@@ -440,14 +440,14 @@ namespace GameSrv.GameGate
                                     {
                                         gateUser.PlayObject.BoSoftClose = true;
                                     }
-                                }
-                                if (gateUser.PlayObject != null && gateUser.PlayObject.Ghost && !gateUser.PlayObject.BoReconnection)
-                                {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
-                                }
-                                if (gateUser.PlayObject != null && gateUser.PlayObject.BoSoftClose && gateUser.PlayObject.BoReconnection && gateUser.PlayObject.BoEmergencyClose)
-                                {
-                                    IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                    if (gateUser.PlayObject.Ghost && !gateUser.PlayObject.BoReconnection)
+                                    {
+                                        IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                    }
+                                    if (gateUser.PlayObject.BoSoftClose && gateUser.PlayObject.BoReconnection && gateUser.PlayObject.BoEmergencyClose)
+                                    {
+                                        IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                    }
                                 }
                                 GateInfo.UserList[i] = null;
                                 GateInfo.nUserCount -= 1;
