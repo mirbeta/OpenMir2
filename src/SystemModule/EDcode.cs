@@ -3,7 +3,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule
 {
-    public class EDCode
+    public static class EDCode
     {
         private const int BufferSize = 10000;
         
@@ -48,7 +48,7 @@ namespace SystemModule
         /// </summary>
         public static string DeCodeString(string str)
         {
-            if (str == null) throw new ArgumentNullException(nameof(str));
+            if (string.IsNullOrEmpty(str)) throw new ArgumentNullException(nameof(str));
             var nLen = 0;
             var bSrc = HUtil32.GetBytes(str);
             var encBuf = EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
