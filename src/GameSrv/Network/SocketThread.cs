@@ -14,12 +14,12 @@ namespace GameSrv.Network
     public class SocketThread
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly int GateIdx;
+        private readonly int ThreadId;
         private readonly ThreadGateInfo _gateInfo;
         private readonly SocketSendQueue _sendQueue;
         private readonly object _runSocketSection;
         private readonly CancellationTokenSource _cancellation;
-        private CommandMessage _clientMesaagePacket;
+        private CommandMessage mesaagePacket;
         /// <summary>
         /// 数据接收缓冲区
         /// </summary>
@@ -28,12 +28,12 @@ namespace GameSrv.Network
 
         public SocketThread(int gateIdx, ThreadGateInfo gateInfo)
         {
-            GateIdx = gateIdx;
+            ThreadId = gateIdx;
             _gateInfo = gateInfo;
             _runSocketSection = new object();
             _sendQueue = new SocketSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
-            _clientMesaagePacket = new CommandMessage();
+            mesaagePacket = new CommandMessage();
             ReceiveBuffer = new byte[4096];
             Start();
         }
@@ -54,7 +54,6 @@ namespace GameSrv.Network
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             int nLen = packetLen;
-            int buffIndex = 0;
             int processLen = 0;
             Span<byte> processBuff = packetBuff.AsSpan();
             try
@@ -86,11 +85,9 @@ namespace GameSrv.Network
                             break;
                         }
                         ReceiveLen = nLen;
-                        buffIndex = 0;
                     }
                     else
                     {
-                        buffIndex++;
                         //if (buffIndex > memoryStream.Length)//异常数据，整段数据丢弃
                         //{
                         //    memoryStream.Position = 0;
@@ -240,7 +237,7 @@ namespace GameSrv.Network
                         }
                         if (gateUser == null)
                         {
-                            for (int i = 0; i < GateInfo.UserList.Count; i++)
+                            for (var i = 0; i < GateInfo.UserList.Count; i++)
                             {
                                 if (GateInfo.UserList[i] == null)
                                 {
@@ -259,26 +256,26 @@ namespace GameSrv.Network
                             {
                                 if (gateUser.Certification && nMsgLen >= 12)
                                 {
-                                    _clientMesaagePacket.Recog = BitConverter.ToInt32(msgBuff[..4]);
-                                    _clientMesaagePacket.Ident = BitConverter.ToUInt16(msgBuff.Slice(4, 2));
-                                    _clientMesaagePacket.Param = BitConverter.ToUInt16(msgBuff.Slice(6, 2));
-                                    _clientMesaagePacket.Tag = BitConverter.ToUInt16(msgBuff.Slice(8, 2));
-                                    _clientMesaagePacket.Series = BitConverter.ToUInt16(msgBuff.Slice(10, 2));
+                                    mesaagePacket.Recog = BitConverter.ToInt32(msgBuff[..4]);
+                                    mesaagePacket.Ident = BitConverter.ToUInt16(msgBuff.Slice(4, 2));
+                                    mesaagePacket.Param = BitConverter.ToUInt16(msgBuff.Slice(6, 2));
+                                    mesaagePacket.Tag = BitConverter.ToUInt16(msgBuff.Slice(8, 2));
+                                    mesaagePacket.Series = BitConverter.ToUInt16(msgBuff.Slice(10, 2));
                                     if (nMsgLen == 12)
                                     {
-                                        WorldServer.ProcessUserMessage(gateUser.PlayObject, _clientMesaagePacket, null);
+                                        WorldServer.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, null);
                                     }
                                     else
                                     {
-                                        string sMsg = EDCode.DeCodeString(HUtil32.GetString(msgBuff, 12, msgBuff.Length - 13));
-                                        WorldServer.ProcessUserMessage(gateUser.PlayObject, _clientMesaagePacket, sMsg);
+                                        var sMsg = EDCode.DeCodeString(HUtil32.GetString(msgBuff, 12, msgBuff.Length - 13));
+                                        WorldServer.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, sMsg);
                                     }
                                 }
                             }
                             else
                             {
-                                string sMsg = HUtil32.StrPas(msgBuff);
-                                DoClientCertification(GateIdx, gateUser, msgPacket.Socket, sMsg);
+                                var sMsg = HUtil32.SpanToStr(msgBuff);
+                                DoClientCertification(ThreadId, gateUser, msgPacket.Socket, sMsg);
                             }
                         }
                         break;

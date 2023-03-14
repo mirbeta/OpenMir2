@@ -1,4 +1,6 @@
 using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -240,16 +242,9 @@ namespace SystemModule
             return sb.ToString();
         }
 
-        public static string StrPas(Span<byte> buff)
+        public static string SpanToStr(Span<byte> buff)
         {
-            var nLen = buff.Length;
-            var ret = new string('\0', nLen);
-            var sb = new StringBuilder(ret);
-            for (var i = 0; i < nLen; i++)
-            {
-                sb[i] = (char)buff[i];
-            }
-            return sb.ToString();
+            return Encoding.ASCII.GetString(buff);
         }
 
         /// <summary>
