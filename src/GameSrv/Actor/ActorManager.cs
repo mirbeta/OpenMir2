@@ -77,14 +77,33 @@ namespace GameSrv.Actor
         }
 
         /// <summary>
-        /// 清理
+        /// 清理无效或者死亡对象
         /// </summary>
-        public void ClearObject()
+        public void CleanObject()
+        {
+            foreach (var actorId in ActorIds)
+            {
+                if (_actorsMap.TryRemove(actorId, out var actor))
+                {
+                    if (((BaseObject)actor).Race != ActorRace.Play)
+                    {
+                        MonsterDisposeCount++;
+                    }
+                    actor.Dispose();
+                }
+            }
+            ActorIds.Clear();
+        }
+
+        /// <summary>
+        /// 统计对象数量
+        /// </summary>
+        public void Analytics()
         {
             ActorIds.Clear();
             PlayerCount = 0;
             MonsterCount = 0;
-            using IEnumerator<KeyValuePair<int, ActorEntity>> actors = _actorsMap.GetEnumerator();
+            using var actors = _actorsMap.GetEnumerator();
             while (actors.MoveNext())
             {
                 var actor = (BaseObject)actors.Current.Value;
@@ -110,17 +129,6 @@ namespace GameSrv.Actor
                     continue;
                 }
                 ActorIds.Add(actors.Current.Key);
-            }
-            foreach (var actorId in ActorIds)
-            {
-                if (_actorsMap.TryRemove(actorId, out var actor))
-                {
-                    if (((BaseObject)actor).Race != ActorRace.Play)
-                    {
-                        MonsterDisposeCount++;
-                    }
-                    actors.Dispose();
-                }
             }
             _logger.Debug($"对象数:[{_actorsMap.Count}] 玩家/怪物:[{PlayerCount}/{MonsterCount}] 死亡角色:[{PlayerGhostCount}] 死亡怪物:[{MonsterDeathCount}] 释放怪物:[{MonsterDisposeCount}]");
         }

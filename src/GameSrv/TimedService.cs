@@ -78,8 +78,8 @@ namespace GameSrv
             if ((currentTick - _clearIntervalTime) > 60 * 10000) //定时清理游戏对象
             {
                 _clearIntervalTime = HUtil32.GetTickCount();
-                M2Share.ActorMgr.ClearObject();
                 M2Share.Statistics.ShowServerStatus();
+                M2Share.ActorMgr.CleanObject();
             }
             if ((currentTick - _playerHighestRankTime) > 60 * 1000) //定时更新玩家最高属性排行榜
             {

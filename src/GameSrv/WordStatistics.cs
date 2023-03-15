@@ -37,6 +37,8 @@ namespace GameSrv
       M2Share.SystemProcess.ElapsedMilliseconds, M2Share.UserProcessor.ElapsedMilliseconds,
       M2Share.RobotProcessor.ElapsedMilliseconds, AppVersion));
 
+            M2Share.ActorMgr.Analytics();
+
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))//todo 待实现MACOS下的状态显示
             {
                 ServerEnvironment.GetCPULoad();
