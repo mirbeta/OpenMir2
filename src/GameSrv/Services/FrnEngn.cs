@@ -208,7 +208,7 @@ namespace GameSrv.Services
                 }
                 if (!LoadHumFromDB(loadDbInfo, ref boReTryLoadDb))
                 {
-                    M2Share.GateMgr.CloseUser(loadDbInfo.GateIdx, loadDbInfo.SocketId);
+                    M2Share.SocketMgr.CloseUser(loadDbInfo.GateIdx, loadDbInfo.SocketId);
                     _logger.Debug("读取用户数据失败，踢出用户.");
                 }
                 else

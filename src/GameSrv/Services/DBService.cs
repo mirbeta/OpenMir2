@@ -45,27 +45,27 @@ namespace GameSrv.Services {
             if (!_clientScoket.IsConnected) {
                 return false;
             }
-            ServerRequestData requestPacket = new ServerRequestData();
+            var requestPacket = new ServerRequestData();
             requestPacket.QueryId = queryId;
             requestPacket.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(message));
             requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
-            int sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+            var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
             SendMessage(SerializerUtil.Serialize(requestPacket));
             return true;
         }
 
         private void SendMessage(byte[] sendBuffer) {
-            using MemoryStream memoryStream = new MemoryStream();
-            using BinaryWriter backingStream = new BinaryWriter(memoryStream);
-            ServerDataPacket serverMessage = new ServerDataPacket {
+            using var memoryStream = new MemoryStream();
+            using var backingStream = new BinaryWriter(memoryStream);
+            var serverMessage = new ServerDataPacket {
                 PacketCode = Grobal2.RunGateCode,
                 PacketLen = (short)sendBuffer.Length
             };
             backingStream.Write(serverMessage.GetBuffer());
             backingStream.Write(sendBuffer);
             memoryStream.Seek(0, SeekOrigin.Begin);
-            byte[] data = new byte[memoryStream.Length];
+            var data = new byte[memoryStream.Length];
             memoryStream.Read(data, 0, data.Length);
             _clientScoket.Send(data);
         }
@@ -95,14 +95,35 @@ namespace GameSrv.Services {
             }
         }
 
+        private void DBSocketRead(object sender, DSCClientDataInEventArgs e) {
+            HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
+            try {
+                var nMsgLen = e.BuffLen;
+                var packetData = e.Buff;
+                if (BuffLen > 0) {
+                    MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
+                    ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
+                }
+                else {
+                    ProcessServerPacket(packetData, nMsgLen);
+                }
+            }
+            catch (Exception exception) {
+                _logger.Error(exception);
+            }
+            finally {
+                HUtil32.LeaveCriticalSection(M2Share.UserDBCriticalSection);
+            }
+        }
+        
         private void ProcessServerPacket(byte[] buff, int buffLen) {
             try {
-                int srcOffset = 0;
-                int nLen = buffLen;
-                Span<byte> dataBuff = buff;
+                var srcOffset = 0;
+                var nLen = buffLen;
+                var dataBuff = buff.AsSpan();
                 while (nLen >= ServerDataPacket.FixedHeaderLen) {
-                    Span<byte> packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                    ServerDataPacket message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
+                    var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                    var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
                     if (message.PacketCode != Grobal2.RunGateCode) {
                         srcOffset++;
                         dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
@@ -110,12 +131,12 @@ namespace GameSrv.Services {
                         _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
-                    int nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
+                    var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
                     if (nCheckMsgLen > nLen) {
                         break;
                     }
                     SocketWorking = true;
-                    ServerRequestData messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                    var messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                     ProcessServerData(messageData);
                     nLen -= nCheckMsgLen;
                     if (nLen <= 0) {
@@ -142,42 +163,21 @@ namespace GameSrv.Services {
             }
         }
 
-        private void DBSocketRead(object sender, DSCClientDataInEventArgs e) {
-            HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
-            try {
-                int nMsgLen = e.BuffLen;
-                byte[] packetData = e.Buff;
-                if (BuffLen > 0) {
-                    MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
-                    ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
-                }
-                else {
-                    ProcessServerPacket(packetData, nMsgLen);
-                }
-            }
-            catch (Exception exception) {
-                _logger.Error(exception);
-            }
-            finally {
-                HUtil32.LeaveCriticalSection(M2Share.UserDBCriticalSection);
-            }
-        }
-
         private void ProcessServerData(ServerRequestData responsePacket) {
             try {
                 if (!SocketWorking) return;
                 if (responsePacket != null) {
-                    int respCheckCode = responsePacket.QueryId;
-                    int nLen = responsePacket.Message.Length + responsePacket.Packet.Length + 6;
+                    var respCheckCode = responsePacket.QueryId;
+                    var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + 6;
                     if (nLen >= 12) {
-                        int queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
+                        var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                         if (queryId <= 0 || responsePacket.Sgin.Length <= 0) {
                             M2Share.Config.nLoadDBErrorCount++;
                             return;
                         }
-                        byte[] signatureBuff = BitConverter.GetBytes(queryId);
-                        byte[] sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
-                        short signatureId = BitConverter.ToInt16(signatureBuff);
+                        var signatureBuff = BitConverter.GetBytes(queryId);
+                        var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
+                        var signatureId = BitConverter.ToInt16(signatureBuff);
                         if (signatureId == BitConverter.ToInt16(sginBuff)) {
                             PlayerDataService.Enqueue(respCheckCode, responsePacket);
                         }

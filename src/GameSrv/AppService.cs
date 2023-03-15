@@ -160,15 +160,15 @@ namespace GameSrv
             {
                 await ServerBase.Stopping(_cancellationTokenSource.Token);
                 await Host.StopAsync(_cancellationTokenSource.Token);
-                _logger.Info("游戏服务已停止...");
+                _logger.Info("没有玩家在线，游戏引擎服务已停止...Bye!");
                 return;
             }
-            //todo 通知游戏网关暂停接收新的连接,发送消息后停止5秒,防止玩家在倒计时结束前进入游戏
+            // 通知游戏网关暂停接收新的连接,发送消息后停止5秒,防止玩家在倒计时结束前进入游戏
             await Task.Factory.StartNew(async () =>
             {
                 var shutdownSeconds = M2Share.Config.ShutdownSeconds;
                 _logger.Debug("网关停止新玩家连接");
-                M2Share.GateMgr.SendGameStopMsg();//通知网关停止分配新的玩家连接
+                M2Share.SocketMgr.SendServerStopMsg();//通知网关停止分配新的玩家连接
                 await Task.Delay(5000);//强制5秒延迟，防止玩家在倒计时结束前进入游戏
                 while (true)
                 {
@@ -198,7 +198,7 @@ namespace GameSrv
                 }
                 _logger.Info("5秒后关闭网关服务...");
                 await Task.Delay(5000);//延时1秒，等待网关服务停止
-                await M2Share.GateMgr.StopAsync();//停止网关服务
+                await M2Share.SocketMgr.StopAsync();//停止网关服务
                 _logger.Info("网关服务已停止...");
                 _logger.Info("即将停止游戏引擎世界服务...");
                 await Task.Delay(500);//延时1秒，等待网关服务停止
@@ -228,8 +228,7 @@ namespace GameSrv
                 var isMultiServer = M2Share.GetMultiServerAddrPort(M2Share.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
                 if (isMultiServer)
                 {
-                    //todo 通知网关断开链接.停止新玩家进入游戏
-                    _logger.Info($"转移到新服务器[{sIPaddr}:{nPort}]");
+                    _logger.Info($"玩家转移目标服务器[{sIPaddr}:{nPort}].");
                     await StopService(sIPaddr, nPort, true);
                 }
             }

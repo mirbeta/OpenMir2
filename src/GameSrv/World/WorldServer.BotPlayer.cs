@@ -84,7 +84,7 @@ namespace GameSrv.World
                             AddToHumanFreeList(robotPlayer);
                             robotPlayer.DealCancelA();
                             SaveHumanRcd(robotPlayer);
-                            M2Share.GateMgr.CloseUser(robotPlayer.GateIdx, robotPlayer.SocketId);
+                            M2Share.SocketMgr.CloseUser(robotPlayer.GateIdx, robotPlayer.SocketId);
                             SendServerGroupMsg(Messages.SS_202, M2Share.ServerIndex, robotPlayer.ChrName);
                             continue;
                         }

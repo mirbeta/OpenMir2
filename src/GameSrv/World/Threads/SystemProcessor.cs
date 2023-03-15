@@ -71,7 +71,7 @@ namespace GameSrv.World.Threads
                     RunTimeTick = HUtil32.GetTickCount();
                     M2Share.GuildMgr.Run();
                     M2Share.CastleMgr.Run();
-                    M2Share.GateMgr.Run();
+                    M2Share.SocketMgr.Run();
                     if (!M2Share.DenySayMsgList.IsEmpty)
                     {
                         List<string> denyList = new List<string>(M2Share.DenySayMsgList.Count);

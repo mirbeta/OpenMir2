@@ -40,7 +40,7 @@ namespace GameSrv.Player
             byte[] actionData = new byte[ServerMessage.PacketSize + msgBuff.Length];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, actionData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(msgBuff, 0, actionData, ServerMessage.PacketSize, msgBuff.Length);
-            M2Share.GateMgr.AddGateBuffer(GateIdx, actionData);
+            M2Share.SocketMgr.AddGateBuffer(GateIdx, actionData);
             //Console.WriteLine($"发送动作消息 Len:{actionData.Length}");
         }
 
@@ -62,7 +62,7 @@ namespace GameSrv.Player
             byte[] sendData = new byte[HeaderLen];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
-            M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
+            M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
             //Console.WriteLine($"发送命令消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 
@@ -86,7 +86,7 @@ namespace GameSrv.Player
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
             MemoryCopy.BlockCopy(bMsg, 0, sendData, HeaderLen, bMsg.Length);
-            M2Share.GateMgr.AddGateBuffer(GateIdx, sendData);
+            M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
             //Console.WriteLine($"发送文字消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 

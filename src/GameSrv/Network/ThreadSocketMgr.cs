@@ -39,11 +39,14 @@ namespace GameSrv.Network
             stoppingCancelReads = new CancellationToken();
         }
 
-        public void Start()
+        public void Initialize()
         {
             _gateSocket.Init(50);
+        }
+
+        public void Start()
+        {
             _gateSocket.Start(M2Share.Config.sGateAddr, M2Share.Config.nGatePort);
-            StartMessageThread();
             _logger.Info($"游戏网关[{M2Share.Config.sGateAddr}:{M2Share.Config.nGatePort}]已启动...");
         }
 
@@ -251,23 +254,20 @@ namespace GameSrv.Network
             }
         }
 
-        public void SendGameStopMsg()
+        public void SendServerStopMsg()
         {
-            if (M2Share.StartReady)
+            if (GameGates.Length > 0)
             {
-                if (GameGates.Length > 0)
+                for (var i = 0; i < GameGates.Length; i++) //循环网关发送消息游戏引擎停止服务消息
                 {
-                    for (var i = 0; i < GameGates.Length; i++) //循环通知每一个网关，游戏引擎停止服务
+                    if (GameGates[i] == null)
                     {
-                        if (GameGates[i] == null)
-                        {
-                            continue;
-                        }
-                        var gateInfo = GameGates[i].GateInfo;
-                        if (gateInfo.Socket != null && gateInfo.Socket.Connected)
-                        {
-                            GameGates[i].SendCheck(Grobal2.GM_STOP);
-                        }
+                        continue;
+                    }
+                    var gateInfo = GameGates[i].GateInfo;
+                    if (gateInfo.Socket != null && gateInfo.Socket.Connected)
+                    {
+                        GameGates[i].SendCheck(Grobal2.GM_STOP);
                     }
                 }
             }
@@ -389,9 +389,9 @@ namespace GameSrv.Network
         /// <summary>
         /// 处理GameGate消息
         /// </summary>
-        private void StartMessageThread()
+        public Task StartMessageThread()
         {
-            Task.Factory.StartNew(async () =>
+           return Task.Factory.StartNew(async () =>
             {
                 while (await _receiveQueue.Reader.WaitToReadAsync(stoppingCancelReads))
                 {
@@ -415,7 +415,7 @@ namespace GameSrv.Network
         {
             if (GameGateLinkMap.TryGetValue(e.SocHandle, out var gateId))
             {
-                M2Share.GateMgr.CloseGate(gateId, e.ConnectionId, e.RemoteIPaddr);
+                M2Share.SocketMgr.CloseGate(gateId, e.ConnectionId, e.RemoteIPaddr);
                 CurrentGateIdx--;
                 GameGateLinkMap.Remove(e.SocHandle);
             }
@@ -425,7 +425,7 @@ namespace GameSrv.Network
         {
             if (RunGatePermitMap.Contains(HUtil32.IpToInt(e.RemoteIPaddr)))
             {
-                M2Share.GateMgr.AddGate(e);
+                M2Share.SocketMgr.AddGate(e);
             }
             else
             {

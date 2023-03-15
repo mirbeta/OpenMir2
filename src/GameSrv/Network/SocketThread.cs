@@ -572,7 +572,7 @@ namespace GameSrv.Network
                         {
                             try
                             {
-                                M2Share.GateMgr.Send(ConnectionId, buffer);
+                                M2Share.SocketMgr.Send(ConnectionId, buffer);
                             }
                             catch (Exception ex)
                             {

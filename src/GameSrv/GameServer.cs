@@ -22,10 +22,12 @@ namespace GameSrv
             await M2Share.EventProcessor.StartAsync(stoppingToken);
             await M2Share.StorageProcessor.StartAsync(stoppingToken);
             await M2Share.TimedRobotProcessor.StartAsync(stoppingToken);
+            await M2Share.SocketMgr.StartMessageThread();
             M2Share.DataServer.Start();
-            M2Share.GateMgr.Start();
+            M2Share.SocketMgr.Start();
             M2Share.UsrRotCountTick = HUtil32.GetTickCount();
             _logger.Info("初始化游戏世界服务线程完成...");
+            M2Share.StartReady = true;
         }
 
         public static async Task Stopping(CancellationToken cancellationToken)
@@ -38,7 +40,7 @@ namespace GameSrv
             await M2Share.EventProcessor.StopAsync(cancellationToken);
             await M2Share.StorageProcessor.StopAsync(cancellationToken);
             await M2Share.TimedRobotProcessor.StopAsync(cancellationToken);
-            await M2Share.GateMgr.StopAsync();
+            await M2Share.SocketMgr.StopAsync();
             M2Share.DataServer.Stop();
         }
 

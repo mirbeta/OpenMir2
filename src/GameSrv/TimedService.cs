@@ -28,7 +28,7 @@ namespace GameSrv
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            int currentTick = HUtil32.GetTickCount();
+            var currentTick = HUtil32.GetTickCount();
             _checkIntervalTime = currentTick;
             _saveIntervalTime = currentTick;
             _clearIntervalTime = currentTick;
@@ -43,7 +43,7 @@ namespace GameSrv
             {
                 while (await _timer.WaitForNextTickAsync(stoppingToken))
                 {
-                    ServerRunTimer();
+                    ExecuteInternal();
                 }
             }
             catch (OperationCanceledException)
@@ -59,39 +59,37 @@ namespace GameSrv
             return base.StopAsync(cancellationToken);
         }
 
-        private void ServerRunTimer()
+        private void ExecuteInternal()
         {
-            if (M2Share.StartReady)
+            if (!M2Share.StartReady) return;
+            var currentTick = HUtil32.GetTickCount();
+            if ((currentTick - _checkIntervalTime) > 10 * 1000) //10s一次检查链接
             {
-                int currentTick = HUtil32.GetTickCount();
-                if ((currentTick - _checkIntervalTime) > 10 * 1000) //10s一次检查链接
-                {
-                    _checkIntervalTime = HUtil32.GetTickCount();
-                    M2Share.DataServer.CheckConnected();
-                    IdSrvClient.Instance.CheckConnected();
-                    PlanesClient.Instance.CheckConnected();
-                }
-                if ((currentTick - _saveIntervalTime) > 50 * 1000) //保存游戏变量等
-                {
-                    _saveIntervalTime = HUtil32.GetTickCount();
-                    ServerBase.SaveItemNumber();
-                }
-                if ((currentTick - _clearIntervalTime) > 60 * 10000) //定时清理游戏对象
-                {
-                    _clearIntervalTime = HUtil32.GetTickCount();
-                    M2Share.ActorMgr.ClearObject();
-                    M2Share.Statistics.ShowServerStatus();
-                }
-                if ((currentTick - _playerHighestRankTime) > 60 * 1000) //定时更新玩家最高属性排行榜
-                {
-                    _playerHighestRankTime = HUtil32.GetTickCount();
-                    PlayerHighestRank();
-                }
-                if (currentTick - _scheduledSaveIntervalTime > 60 * 10000) //定时保存玩家数据
-                {
-                    _scheduledSaveIntervalTime = HUtil32.GetTickCount();
-                    TimingSaveData();
-                }
+                _checkIntervalTime = HUtil32.GetTickCount();
+                M2Share.DataServer.CheckConnected();
+                IdSrvClient.Instance.CheckConnected();
+                PlanesClient.Instance.CheckConnected();
+            }
+            if ((currentTick - _saveIntervalTime) > 60 * 1000) //保存游戏变量等
+            {
+                _saveIntervalTime = HUtil32.GetTickCount();
+                ServerBase.SaveItemNumber();
+            }
+            if ((currentTick - _clearIntervalTime) > 60 * 10000) //定时清理游戏对象
+            {
+                _clearIntervalTime = HUtil32.GetTickCount();
+                M2Share.ActorMgr.ClearObject();
+                M2Share.Statistics.ShowServerStatus();
+            }
+            if ((currentTick - _playerHighestRankTime) > 60 * 1000) //定时更新玩家最高属性排行榜
+            {
+                _playerHighestRankTime = HUtil32.GetTickCount();
+                PlayerHighestRank();
+            }
+            if (currentTick - _scheduledSaveIntervalTime > 60 * 10000) //定时保存玩家数据
+            {
+                _scheduledSaveIntervalTime = HUtil32.GetTickCount();
+                TimingSaveData();
             }
         }
 
@@ -230,7 +228,7 @@ namespace GameSrv
             if (M2Share.WorldEngine.PlayObjectCount > 0)
             {
                 _scheduledSaveData = true;
-                foreach (PlayObject play in M2Share.WorldEngine.PlayObjects)
+                foreach (var play in M2Share.WorldEngine.PlayObjects)
                 {
                     if (M2Share.FrontEngine.InSaveRcdList(play.ChrName))
                     {

@@ -552,12 +552,12 @@ namespace GameSrv.World
                     for (var i = 0; i < NewHumanList.Count; i++)
                     {
                         playObject = NewHumanList[i];
-                        M2Share.GateMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
+                        M2Share.SocketMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
                     }
                     NewHumanList.Clear();
                     for (var i = 0; i < ListOfGateIdx.Count; i++)
                     {
-                        M2Share.GateMgr.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
+                        M2Share.SocketMgr.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
                     }
                     ListOfGateIdx.Clear();
                     ListOfSocket.Clear();
@@ -705,7 +705,7 @@ namespace GameSrv.World
                             AddToHumanFreeList(playObject);
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
-                            M2Share.GateMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
+                            M2Share.SocketMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
                             SendServerGroupMsg(Messages.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }

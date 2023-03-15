@@ -287,7 +287,7 @@ namespace GameSrv.Services {
                     }
                 }
                 if (!string.IsNullOrEmpty(sAccount)) {
-                    M2Share.GateMgr.KickUser(sAccount, sessionId, sessInfo?.PayMode ?? 0);
+                    M2Share.SocketMgr.KickUser(sAccount, sessionId, sessInfo?.PayMode ?? 0);
                 }
             }
             catch (Exception e) {

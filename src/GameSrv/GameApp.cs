@@ -53,7 +53,7 @@ namespace GameSrv {
             M2Share.Config.WinLotteryLevel6 = 0;
             M2Share.DataServer = new DBService();
             M2Share.ScriptSystem = new ScriptSystem();
-            M2Share.GateMgr = new ThreadSocketMgr();
+            M2Share.SocketMgr = new ThreadSocketMgr();
             M2Share.EventSource = new GameEventSource();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MapMgr = new MapManager();
@@ -204,6 +204,8 @@ namespace GameSrv {
             _logger.Info("加载公告提示信息成功...");
             LocalDb.LoadAdminList();
             _logger.Info("管理员列表加载成功...");
+            M2Share.SocketMgr.Initialize();
+            _logger.Info("正在初始化网络引擎...");
         }
 
         public void StartServer(CancellationToken stoppingToken) {
@@ -240,7 +242,6 @@ namespace GameSrv {
                 M2Share.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
                 Map.StartMakeStoneThread();
-                M2Share.StartReady = true;
             }
             catch (Exception ex) {
                 _logger.Error(ex.StackTrace);
