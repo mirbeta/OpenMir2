@@ -150,17 +150,17 @@ namespace GameSrv
             }
         }
 
-        private const string CloseTransferMessgae = "服务器关闭倒计时[{0}],无需下线或退出游戏,稍后传送至新服务器安全区.";
-        private const string CloseServerMessage = "服务器关闭倒计时[{0}]";
+        private const string CloseTransferMessgae = "服务器关闭倒计时[{0}],无需下线或退出游戏,稍后自动回到安全区.";
+        private const string CloseServerMessage = "服务器关闭倒计时[{0}].";
 
         private async Task StopService(string sIPaddr, int nPort, bool isTransfer)
         {
             var playerCount = M2Share.WorldEngine.PlayObjectCount;
             if (playerCount == 0)
             {
+                _logger.Info("没有玩家在线，游戏引擎服务已停止...Bye!");
                 await ServerBase.Stopping(_cancellationTokenSource.Token);
                 await Host.StopAsync(_cancellationTokenSource.Token);
-                _logger.Info("没有玩家在线，游戏引擎服务已停止...Bye!");
                 return;
             }
             // 通知游戏网关暂停接收新的连接,发送消息后停止5秒,防止玩家在倒计时结束前进入游戏
@@ -204,9 +204,9 @@ namespace GameSrv
                 await Task.Delay(500);//延时1秒，等待网关服务停止
                 await ServerBase.Stopping(_cancellationTokenSource.Token);
                 _logger.Info("游戏引擎世界服务已停止...");
-                await Host.StopAsync(_cancellationTokenSource.Token);
                 _logger.Info("游戏服务已停止...");
                 _logger.Info("goodbye!");
+                await Host.StopAsync(_cancellationTokenSource.Token);
             }, _cancellationTokenSource.Token);
         }
 
@@ -217,7 +217,7 @@ namespace GameSrv
             SavePlayer();
             if (M2Share.ServerIndex == 0)
             {
-                await StopService("", 0, false);
+                await StopService(string.Empty, 0, false);
             }
             else if (M2Share.ServerIndex > 0)
             {
@@ -235,7 +235,7 @@ namespace GameSrv
             else
             {
                 _logger.Info("没有可用服务器，即将关闭游戏服务器.");
-                await StopService("", 0, false);
+                await StopService(string.Empty, 0, false);
             }
             _cancellationTokenSource?.CancelAfter(3000);
         }
