@@ -663,10 +663,10 @@ namespace GameSrv.Magic {
             return result;
         }
 
-        private static bool MagTurnUndead(PlayObject baseObject, BaseObject targetBaseObject, int nTargetX, int nTargetY, int nLevel) {
+        private static bool MagTurnUndead(BaseObject baseObject, BaseObject targetBaseObject, int nTargetX, int nTargetY, int nLevel) {
             bool result = false;
             if (targetBaseObject.SuperMan || targetBaseObject.LifeAttrib != Grobal2.LA_UNDEAD) {
-                return result;
+                return false;
             }
             ((AnimalObject)targetBaseObject).Struck(baseObject);
             if (targetBaseObject.TargetCret == null) {
@@ -688,7 +688,7 @@ namespace GameSrv.Magic {
             return result;
         }
 
-        private static bool MagWindTebo(PlayObject playObject, UserMagic userMagic) {
+        private static bool MagWindTebo(BaseObject playObject, UserMagic userMagic) {
             bool result = false;
             BaseObject poseBaseObject = playObject.GetPoseCreate();
             if (poseBaseObject != null && poseBaseObject != playObject && !poseBaseObject.Death && !poseBaseObject.Ghost && playObject.IsProperTarget(poseBaseObject) && !poseBaseObject.StickMode) {
@@ -756,7 +756,7 @@ namespace GameSrv.Magic {
             return result;
         }
 
-        private static bool MagGroupDeDing(PlayObject playObject, UserMagic userMagic, int nTargetX, int nTargetY, BaseObject targetBaseObject) {
+        private static bool MagGroupDeDing(BaseObject playObject, UserMagic userMagic, int nTargetX, int nTargetY, BaseObject targetBaseObject) {
             BaseObject baseObject;
             bool result = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
@@ -788,7 +788,7 @@ namespace GameSrv.Magic {
             return result;
         }
 
-        private static bool MagGroupLightening(PlayObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetBaseObject, ref bool boSpellFire) {
+        private static bool MagGroupLightening(BaseObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetBaseObject, ref bool boSpellFire) {
             bool result = false;
             boSpellFire = false;
             IList<BaseObject> baseObjectList = new List<BaseObject>();
@@ -819,7 +819,7 @@ namespace GameSrv.Magic {
             return result;
         }
 
-        private static bool MagHbFireBall(PlayObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, ref BaseObject targetBaseObject) {
+        private static bool MagHbFireBall(BaseObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, ref BaseObject targetBaseObject) {
             bool result = false;
             if (!playObject.MagCanHitTarget(playObject.CurrX, playObject.CurrY, targetBaseObject)) {
                 targetBaseObject = null;
@@ -855,7 +855,7 @@ namespace GameSrv.Magic {
         /// 火墙
         /// </summary>
         /// <returns></returns>
-        private static bool MagMakeFireCross(PlayObject playObject, int nDamage, ushort time, short nX, short nY) {
+        private static bool MagMakeFireCross(BaseObject playObject, int nDamage, ushort time, short nX, short nY) {
             const string sDisableInSafeZoneFireCross = "安全区不允许使用...";
             if (M2Share.Config.DisableInSafeZoneFireCross && playObject.InSafeZone(playObject.Envir, nX, nY)) {
                 playObject.SysMsg(sDisableInSafeZoneFireCross, MsgColor.Red, MsgType.Notice);
@@ -1030,7 +1030,7 @@ namespace GameSrv.Magic {
             return result;
         }
 
-        private static bool MagMakeSinSuSlave(PlayObject playObject, UserMagic userMagic) {
+        private static bool MagMakeSinSuSlave(BaseObject playObject, UserMagic userMagic) {
             bool result = false;
             if (!playObject.CheckServerMakeSlave()) {
                 string sMonName = M2Share.Config.Dragon;
@@ -1056,7 +1056,7 @@ namespace GameSrv.Magic {
             return result;
         }
 
-        private static bool MagMakeSlave(PlayObject playObject, UserMagic userMagic) {
+        private static bool MagMakeSlave(BaseObject playObject, UserMagic userMagic) {
             bool result = false;
             if (!playObject.CheckServerMakeSlave()) {
                 string sMonName = M2Share.Config.Skeleton;
@@ -1084,11 +1084,10 @@ namespace GameSrv.Magic {
             return true;
         }
 
-        private static bool MagMakeAngelSlave(PlayObject playObject, UserMagic userMagic) {
+        private static bool MagMakeAngelSlave(BaseObject playObject, UserMagic userMagic) {
             bool result = false;
             if (!playObject.CheckServerMakeSlave()) {
-                string sMonName = M2Share.Config.Angel;
-                if (playObject.MakeSlave(sMonName, userMagic.Level, userMagic.Level, 1, DwRoyaltySec) != null) {
+                if (playObject.MakeSlave(M2Share.Config.Angel, userMagic.Level, userMagic.Level, 1, DwRoyaltySec) != null) {
                     result = true;
                 }
             }
