@@ -135,6 +135,7 @@ namespace GameSrv.Network
         {
             const string sExceptionMsg = "[Exception] TRunSocket::KickUser";
             const string sKickUserMsg = "当前登录帐号正在其它位置登录，本机已被强行离线!!!";
+            const string accountExpiredMsg = "账号付费时间已到,本机已被强行离线,请充值后再继续进行游戏!";
             try
             {
                 for (var i = 0; i < GameGates.Length; i++)
@@ -170,7 +171,7 @@ namespace GameSrv.Network
                                         }
                                         else
                                         {
-                                            gateUserInfo.PlayObject.SysMsg("账号付费时间已到,本机已被强行离线,请充值后再继续进行游戏!", MsgColor.Red, MsgType.Hint);
+                                            gateUserInfo.PlayObject.SysMsg(accountExpiredMsg, MsgColor.Red, MsgType.Hint);
                                         }
                                         gateUserInfo.PlayObject.BoEmergencyClose = true;
                                         gateUserInfo.PlayObject.BoSoftClose = true;
