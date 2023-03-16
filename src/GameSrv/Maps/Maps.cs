@@ -10,8 +10,10 @@ namespace GameSrv.Maps {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private static Thread _makeStoneMinesThread;
 
-        public static void StartMakeStoneThread() {
-            _makeStoneMinesThread ??= new Thread(MakeStoneMines) {
+        public static void StartMakeStoneThread()
+        {
+            _makeStoneMinesThread = new Thread(MakeStoneMines)
+            {
                 IsBackground = true
             };
             _makeStoneMinesThread.Start();

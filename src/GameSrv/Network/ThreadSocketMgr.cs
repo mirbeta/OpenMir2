@@ -113,7 +113,7 @@ namespace GameSrv.Network
                 gateInfo.nSendBlockCount = 0;
                 GameGates[CurrentGateIdx] = new SocketThread(CurrentGateIdx, gateInfo);
                 GameGateLinkMap.Add(e.SocHandle, CurrentGateIdx);
-                CurrentGateIdx++;
+                Interlocked.Increment(ref CurrentGateIdx);
                 _logger.Info(string.Format(sGateOpen, e.EndPoint));
             }
             else
@@ -414,11 +414,10 @@ namespace GameSrv.Network
 
         private void GateSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            if (GameGateLinkMap.TryGetValue(e.SocHandle, out var gateId))
+            if (GameGateLinkMap.Remove(e.SocHandle, out var gateId))
             {
                 M2Share.SocketMgr.CloseGate(gateId, e.ConnectionId, e.RemoteIPaddr);
-                CurrentGateIdx--;
-                GameGateLinkMap.Remove(e.SocHandle);
+                Interlocked.Decrement(ref CurrentGateIdx);
             }
         }
 
