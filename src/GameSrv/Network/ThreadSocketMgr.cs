@@ -42,6 +42,7 @@ namespace GameSrv.Network
         public void Initialize()
         {
             _gateSocket.Init(50);
+            _logger.Info("游戏网关初始化完成...");
         }
 
         public void Start()

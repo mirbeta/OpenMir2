@@ -15,10 +15,13 @@ namespace GameSrv.GameCommand {
             CommandConf = new GameCmdConf(Path.Combine(M2Share.BasePath, ConfConst.CommandFileName));
         }
 
-        public static void RegisterCommand() {
+        public static void RegisterCommand()
+        {
+            Logger.Info("读取游戏命令配置...");
             CommandConf.LoadConfig();
             var customCommandMap = RegisterCustomCommand();
-            if (customCommandMap == null) {
+            if (customCommandMap == null)
+            {
                 Logger.Info("读取自定义命令配置失败.");
                 return;
             }
