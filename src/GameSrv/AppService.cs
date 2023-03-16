@@ -141,12 +141,12 @@ namespace GameSrv
         {
             if (M2Share.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
-                _logger.Info("保存玩家数据");
+                _logger.Debug("保存玩家数据");
                 foreach (var play in M2Share.WorldEngine.PlayObjects)
                 {
                     WorldServer.SaveHumanRcd(play);
                 }
-                _logger.Info("数据保存完毕.");
+                _logger.Debug("数据保存完毕.");
             }
         }
 

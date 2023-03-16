@@ -146,7 +146,7 @@ namespace GameSrv {
             }
             _logger.Info($"加载技能数据库成功...[{M2Share.WorldEngine.MagicList.Count}]");
             _logger.Info("正在加载怪物刷新配置信息...");
-            nCode = M2Share.LocalDb.LoadMonGen(out int mongenCount);
+            nCode = M2Share.LocalDb.LoadMonGen(out var mongenCount);
             if (nCode < 0) {
                 _logger.Info("加载怪物刷新配置信息失败!!!" + "Code: " + nCode);
                 return;

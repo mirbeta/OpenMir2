@@ -6,9 +6,9 @@ using SystemModule.Enums;
 
 namespace GameSrv.GameCommand {
     public static class CommandMgr {
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly GameCmdConf CommandConf;
-        public static readonly GameCommands GameCommands = new();
+        public static readonly GameCommands GameCommands = new GameCommands();
         private static readonly Dictionary<string, GameCommand> CommandMaps = new(StringComparer.OrdinalIgnoreCase);
 
         static CommandMgr() {
@@ -17,22 +17,22 @@ namespace GameSrv.GameCommand {
 
         public static void RegisterCommand() {
             CommandConf.LoadConfig();
-            Dictionary<string, GameCmd> customCommandMap = RegisterCustomCommand();
+            var customCommandMap = RegisterCustomCommand();
             if (customCommandMap == null) {
-                _logger.Info("读取自定义命令配置失败.");
+                Logger.Info("读取自定义命令配置失败.");
                 return;
             }
             RegisterCommandGroups(customCommandMap);
-            _logger.Info("读取游戏命令配置完成...");
+            Logger.Info("读取游戏命令配置完成...");
         }
 
         /// <summary>
         /// 注册自定义命令
         /// </summary>
         private static Dictionary<string, GameCmd> RegisterCustomCommand() {
-            FieldInfo[] commands = GameCommands.GetType().GetFields();
+            var commands = GameCommands.GetType().GetFields();
             if (commands.Length <= 0) {
-                _logger.Info("获取游戏命令类型失败,请确认游戏命令是否注册.");
+                Logger.Info("获取游戏命令类型失败,请确认游戏命令是否注册.");
                 return null;
             }
             var customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
@@ -47,7 +47,7 @@ namespace GameSrv.GameCommand {
                     continue;
                 }
                 if (customCommandMap.ContainsKey(commandInfo.Name)) {
-                    _logger.Warn($"游戏命令[{commandInfo.Name}]重复定义,请确认配置文件是否正确.");
+                    Logger.Warn($"游戏命令[{commandInfo.Name}]重复定义,请确认配置文件是否正确.");
                     continue;
                 }
                 customCommandMap.Add(commandInfo.Name, customCmd);

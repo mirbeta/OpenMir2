@@ -38,18 +38,18 @@ namespace GameSrv {
         /// <summary>
         /// 服务器启动时间
         /// </summary>
-        public static long StartTime = 0;
+        public static long StartTime;
         public static int ShareFileNameNum = 0;
         public static int ServerTickDifference = 0;
-        public static readonly ReaderWriterLockWrapper SyncLock = new ReaderWriterLockWrapper();
-        public static readonly WordStatistics Statistics;
-        public static readonly ActorMgr ActorMgr = null;
         public static readonly ServerConf ServerConf;
         public static readonly GameSvrConf Config;
         private static readonly StringConf StringConf;
         private static readonly ExpsConf ExpConf;
         private static readonly GlobalConf GlobalConf;
         private static readonly GameSettingConf GameSetting;
+        public static readonly ReaderWriterLockWrapper SyncLock = new ReaderWriterLockWrapper();
+        public static readonly WordStatistics Statistics;
+        public static readonly ActorMgr ActorMgr;
         /// <summary>
         /// 寻路
         /// </summary>
@@ -78,15 +78,15 @@ namespace GameSrv {
         public static NormNpc ManageNPC = null;
         public static NormNpc RobotNPC = null;
         public static Merchant FunctionNPC = null;
-        public static NetworkMonitor NetworkMonitor = null;
-        public static SystemProcessor SystemProcess = null;
-        public static UserProcessor UserProcessor = null;
-        public static RobotProcessor RobotProcessor = null;
-        public static MerchantProcessor MerchantProcessor = null;
-        public static GeneratorProcessor GeneratorProcessor = null;
-        public static EventProcessor EventProcessor = null;
-        public static StorageProcessor StorageProcessor = null;
-        public static TimedRobotProcessor TimedRobotProcessor = null;
+        public static NetworkMonitor NetworkMonitor;
+        public static SystemProcessor SystemProcess;
+        public static UserProcessor UserProcessor;
+        public static RobotProcessor RobotProcessor;
+        public static MerchantProcessor MerchantProcessor;
+        public static GeneratorProcessor GeneratorProcessor;
+        public static EventProcessor EventProcessor;
+        public static StorageProcessor StorageProcessor;
+        public static TimedRobotProcessor TimedRobotProcessor;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
