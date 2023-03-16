@@ -71,7 +71,6 @@ namespace GameSrv.World.Threads
 
         private static void ProcessSaveStorage()
         {
-            PlayerDataService.ProcessSaveList();
             for (var i = 0; i < M2Share.FrontEngine.m_SaveRcdTempList.Count; i++)
             {
                 SavePlayerRcd saveRcd = M2Share.FrontEngine.m_SaveRcdTempList[i];
@@ -97,12 +96,13 @@ namespace GameSrv.World.Threads
                 }
             }
             M2Share.FrontEngine.m_SaveRcdTempList.Clear();
+            PlayerDataService.ProcessSaveQueue();
         }
 
         private void ProcessReadStorage()
         {
             bool boReTryLoadDb = false;
-            PlayerDataService.ProcessQueryList();
+            PlayerDataService.ProcessQueryQueue();
             for (int i = 0; i < M2Share.FrontEngine.m_LoadRcdTempList.Count; i++)
             {
                 LoadDBInfo loadDbInfo = M2Share.FrontEngine.m_LoadRcdTempList[i];

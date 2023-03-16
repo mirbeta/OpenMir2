@@ -15,8 +15,8 @@ namespace GameSrv.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly ConcurrentDictionary<int, ServerRequestData> ReceivedMap = new ConcurrentDictionary<int, ServerRequestData>();
-        private static readonly Queue<QueryPlayData> QueryProcessList = new Queue<QueryPlayData>();
-        private static readonly Queue<int> SaveProcessList = new Queue<int>();
+        private static readonly ConcurrentQueue<QueryPlayData> QueryProcessList = new ConcurrentQueue<QueryPlayData>();
+        private static readonly ConcurrentQueue<int> SaveProcessList = new ConcurrentQueue<int>();
         private static readonly ConcurrentDictionary<int, LoadPlayerDataPacket> LoadPlayDataMap = new ConcurrentDictionary<int, LoadPlayerDataPacket>();
 
         public static void Enqueue(int queryId, ServerRequestData data)
@@ -105,15 +105,12 @@ namespace GameSrv.Services
             return false;
         }
 
-        public static void ProcessSaveList()
+        public static void ProcessSaveQueue()
         {
-            //todo 保存数据优化一下流程，GameSrv无需等待DBSrv结果，异步通知即可
-            if (SaveProcessList.Count > 0)
+            while (!SaveProcessList.IsEmpty)//todo 保存数据优化一下流程，GameSrv无需等待DBSrv结果，异步通知即可
             {
-                IList<int> tempList = new List<int>();
-                while (SaveProcessList.Count > 0)
+                if (SaveProcessList.TryPeek(out var queryId))
                 {
-                    int queryId = SaveProcessList.Dequeue();
                     int nIdent = 0;
                     int nRecog = 0;
                     byte[] data = null;
@@ -123,32 +120,22 @@ namespace GameSrv.Services
                         {
                             M2Share.FrontEngine.RemoveSaveList(queryId);
                         }
-                    }
-                    else
-                    {
-                        tempList.Add(queryId);
-                    }
-                }
-                if (tempList.Count > 0)
-                {
-                    for (int i = 0; i < tempList.Count; i++)
-                    {
-                        SaveProcessList.Enqueue(tempList[i]);
+                        SaveProcessList.TryDequeue(out _);
                     }
                 }
             }
         }
 
-        public static void ProcessQueryList()
+        public static void ProcessQueryQueue()
         {
-            if (QueryProcessList.Count > 0)
+            while (!QueryProcessList.IsEmpty)
             {
-                IList<QueryPlayData> tempList = new List<QueryPlayData>();
-                while (QueryProcessList.Count > 0)
+                if (QueryProcessList.TryPeek(out var queryData))
                 {
-                    QueryPlayData queryData = QueryProcessList.Dequeue();
                     if (queryData.QuetyCount >= 50)
                     {
+                        QueryProcessList.TryDequeue(out _);
+                        Logger.Warn("超过最大查询次数,放弃此次保存.");
                         continue;
                     }
                     int nIdent = 0;
@@ -162,18 +149,11 @@ namespace GameSrv.Services
                             responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
                             LoadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
                         }
+                        QueryProcessList.TryDequeue(out _);
                     }
                     else
                     {
                         queryData.QuetyCount++;
-                        tempList.Add(queryData);
-                    }
-                }
-                if (tempList.Count > 0)
-                {
-                    for (int i = 0; i < tempList.Count; i++)
-                    {
-                        QueryProcessList.Enqueue(tempList[i]);
                     }
                 }
             }
