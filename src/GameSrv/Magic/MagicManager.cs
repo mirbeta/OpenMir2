@@ -182,7 +182,7 @@ namespace GameSrv.Magic {
                         if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx)) {
                             StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                             if (stdItem != null) {
-                                MagicBase.UseAmulet(playObject, 1, 2, ref nAmuletIdx);
+                                MagicBase.UseAmulet(playObject, 1, 2, nAmuletIdx);
                                 if (M2Share.RandomNumber.Random(targetObject.AntiPoison + 7) <= 6) {
                                     switch (stdItem.Shape) {
                                         case 1:
@@ -258,7 +258,7 @@ namespace GameSrv.Magic {
                 case MagicConst.SKILL_BIGCLOAK:
                     boSpellFail = true;
                     if (MagicBase.CheckAmulet(playObject, 1, 1, ref nAmuletIdx)) {
-                        MagicBase.UseAmulet(playObject, 1, 1, ref nAmuletIdx);
+                        MagicBase.UseAmulet(playObject, 1, 1, nAmuletIdx);
                         switch (userMagic.Magic.MagicId) {
                             case MagicConst.SKILL_FIRECHARM:
                                 if (playObject.MagCanHitTarget(playObject.CurrX, playObject.CurrY, targetObject)) {
@@ -364,7 +364,7 @@ namespace GameSrv.Magic {
                 case MagicConst.SKILL_SINSU:
                     boSpellFail = true;
                     if (MagicBase.CheckAmulet(playObject, 5, 1, ref nAmuletIdx)) {
-                        MagicBase.UseAmulet(playObject, 5, 1, ref nAmuletIdx);
+                        MagicBase.UseAmulet(playObject, 5, 1, nAmuletIdx);
                         if (MagMakeSinSuSlave(playObject, userMagic)) {
                             boTrain = true;
                         }
@@ -374,7 +374,7 @@ namespace GameSrv.Magic {
                 case MagicConst.SKILL_ANGEL:
                     boSpellFail = true;
                     if (MagicBase.CheckAmulet(playObject, 2, 1, ref nAmuletIdx)) {
-                        MagicBase.UseAmulet(playObject, 2, 1, ref nAmuletIdx);
+                        MagicBase.UseAmulet(playObject, 2, 1, nAmuletIdx);
                         if (MagMakeAngelSlave(playObject, userMagic)) {
                             boTrain = true;
                         }
@@ -501,7 +501,7 @@ namespace GameSrv.Magic {
                     }
                     if (playObject.IsProperFriend(targetObject)) {
                         if (MagicBase.CheckAmulet(playObject, 1, 1, ref nAmuletIdx)) {
-                            MagicBase.UseAmulet(playObject, 1, 1, ref nAmuletIdx);
+                            MagicBase.UseAmulet(playObject, 1, 1, nAmuletIdx);
                             nPower = (ushort)(userMagic.Level + 1 + M2Share.RandomNumber.Random(userMagic.Level));
                             n14 = (short)playObject.GetAttackPower(GetPower13(userMagic, 60) + HUtil32.LoByte(playObject.WAbil.SC) * 10, HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
                             ((PlayObject)targetObject).AttPowerUp(nPower, n14);
@@ -730,7 +730,7 @@ namespace GameSrv.Magic {
                     if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx)) {
                         StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                         if (stdItem != null) {
-                            MagicBase.UseAmulet(playObject, 1, 2, ref nAmuletIdx);
+                            MagicBase.UseAmulet(playObject, 1, 2, nAmuletIdx);
                             if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 7) <= 6) {
                                 int nPower;
                                 switch (stdItem.Shape) {
