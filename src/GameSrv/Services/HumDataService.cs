@@ -15,11 +15,7 @@ namespace GameSrv.Services {
         private static readonly Queue<QueryPlayData> QueryProcessList = new Queue<QueryPlayData>();
         private static readonly Queue<int> SaveProcessList = new Queue<int>();
         private static readonly ConcurrentDictionary<int, LoadPlayerDataPacket> LoadPlayDataMap = new ConcurrentDictionary<int, LoadPlayerDataPacket>();
-
-        public static bool SocketConnected() {
-            return true;
-        }
-
+        
         public static void Enqueue(int queryId, ServerRequestData data) {
             ReceivedMap.TryAdd(queryId, data);
         }
@@ -159,7 +155,7 @@ namespace GameSrv.Services {
                     QueryId = nQueryId
                 });
                 queryId = nQueryId;
-                Logger.Info($"查询[{queryId}]");
+                Logger.Debug($"查询玩家数据任务ID:[{queryId}]");
                 return true;
             }
             Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");

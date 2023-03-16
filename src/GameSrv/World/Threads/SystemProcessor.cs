@@ -47,6 +47,7 @@ namespace GameSrv.World.Threads
             {
                 PlanesClient.Instance.Run();
             }
+            GetGameTime();
             return Task.CompletedTask;
         }
 
@@ -100,6 +101,45 @@ namespace GameSrv.World.Threads
             finally
             {
                 HUtil32.LeaveCriticalSections(M2Share.ProcessHumanCriticalSection);
+            }
+        }
+
+        private static void GetGameTime()
+        {
+            switch (DateTime.Now.Hour)
+            {
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 21:
+                    M2Share.GameTime = 1;//白天
+                    break;
+                case 11:
+                case 23:
+                case 20:
+                    M2Share.GameTime = 2;//日落
+                    break;
+                case 4:
+                case 15:
+                    M2Share.GameTime = 0;//日出
+                    break;
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 12:
+                case 13:
+                case 14:
+                case 22:
+                    M2Share.GameTime = 3;//夜晚
+                    break;
             }
         }
     }

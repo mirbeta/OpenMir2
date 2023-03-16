@@ -275,23 +275,19 @@ namespace GameSrv.Network
             }
         }
 
-        public static void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx)
+        public void SendOutConnectMsg(int nGateIdx, int nSocket, ushort nGsIdx)
         {
-            //todo 
-            //var defMsg = EDCode.MakeDefaultMsg(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            //var msgHeader = new ServerMessagePacket();
-            //msgHeader.PacketCode = Grobal2.RUNGATECODE;
-            //msgHeader.Socket = nSocket;
-            //msgHeader.SessionId = nGsIdx;
-            //msgHeader.Ident = Messages.GM_DATA;
-            //msgHeader.PackLength = ClientCommandPacket.PackSize;
-            //ClientOutMessage outMessage = new ClientOutMessage();
-            //outMessage.MessagePacket = msgHeader;
-            //outMessage.CommandPacket = defMsg;
-            //if (!AddGateBuffer(nGateIdx, 0, ServerPackSerializer.Serialize(outMessage), null))
-            //{
-            //    M2Share.Log.Error("发送玩家退出消息失败.");
-            //}
+            var defMsg = Messages.MakeMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            var msgHeader = new ServerMessage();
+            msgHeader.PacketCode = Grobal2.RunGateCode;
+            msgHeader.Socket = nSocket;
+            msgHeader.SessionId = nGsIdx;
+            msgHeader.Ident = Grobal2.GM_DATA;
+            msgHeader.PackLength = CommandMessage.Size;
+            ClientOutMessage outMessage = new ClientOutMessage();
+            outMessage.MessagePacket = msgHeader;
+            outMessage.CommandPacket = defMsg;
+            AddGateBuffer(nGateIdx, SerializerUtil.Serialize(outMessage));
         }
 
         /// <summary>

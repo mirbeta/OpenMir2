@@ -31,6 +31,8 @@ namespace GameSrv.Services {
             _clientScoket.Disconnect();
         }
 
+        public bool IsConnected => _clientScoket.IsConnected;
+        
         public void CheckConnected() {
             if (_clientScoket.IsConnected) {
                 return;
