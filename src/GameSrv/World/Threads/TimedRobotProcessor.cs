@@ -10,7 +10,12 @@ namespace GameSrv.World.Threads
         {
             
         }
-
+        
+        public override void Initialize(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        
         protected override void Startup(CancellationToken stoppingToken)
         {
             _logger.Info("脚本机器人线程启动...");
@@ -20,7 +25,7 @@ namespace GameSrv.World.Threads
         {
             _logger.Info("脚本机器人线程停止...");
         }
-        
+
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             const string sExceptionMsg = "[Exception] TimedRobotProcessor::ExecuteInternal";

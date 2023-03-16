@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using GameSrv.Maps;
+using NLog;
 using SystemModule.Enums;
 
 namespace GameSrv
@@ -28,6 +29,7 @@ namespace GameSrv
             M2Share.UsrRotCountTick = HUtil32.GetTickCount();
             _logger.Info("初始化游戏世界服务线程完成...");
             M2Share.StartReady = true;
+            Map.StartMakeStoneThread();
         }
 
         public static async Task Stopping(CancellationToken cancellationToken)

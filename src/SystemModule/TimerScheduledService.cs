@@ -72,6 +72,7 @@ namespace SystemModule
             }
         }
 
+        public abstract void Initialize(CancellationToken cancellationToken);
         protected abstract Task ExecuteInternal(CancellationToken cancellationToken);
         protected abstract void Startup(CancellationToken cancellationToken);
         protected abstract void Stopping(CancellationToken cancellationToken);

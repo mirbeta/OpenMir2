@@ -11,6 +11,21 @@ namespace GameSrv.World.Threads
 
         }
 
+        public override void Initialize(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        
+        protected override void Startup(CancellationToken stoppingToken)
+        {
+            _logger.Info("人物数据引擎启动成功...");
+        }
+
+        protected override void Stopping(CancellationToken stoppingToken)
+        {
+            _logger.Info("人物数据引擎停止...");
+        }
+
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             const string sExceptionMsg = "[Exception] StorageProcessor::ExecuteInternal";
@@ -25,16 +40,6 @@ namespace GameSrv.World.Threads
                 M2Share.Logger.Error(ex.StackTrace);
             }
             return Task.CompletedTask;
-        }
-
-        protected override void Startup(CancellationToken stoppingToken)
-        {
-            _logger.Info("人物数据引擎启动成功...");
-        }
-
-        protected override void Stopping(CancellationToken stoppingToken)
-        {
-            _logger.Info("人物数据引擎停止...");
         }
     }
 }

@@ -15,6 +15,11 @@ namespace GameSrv.World.Threads
 
         }
 
+        public override void Initialize(CancellationToken cancellationToken)
+        {
+            GenerateIdThread();
+        }
+
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             GenerateIdThread();

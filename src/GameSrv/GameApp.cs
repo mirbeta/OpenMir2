@@ -102,8 +102,9 @@ namespace GameSrv {
             M2Share.SellOffItemList = new List<DealOffInfo>();
         }
 
-        public void Initialize() {
+        public void Initialize(CancellationToken stoppingToken) {
             _logger.Info("读取游戏引擎数据配置文件...");
+            M2Share.GeneratorProcessor.Initialize(stoppingToken);
             M2Share.LoadConfig();
             LoadServerTable();
             _logger.Info("读取游戏引擎数据配置文件完成...");
@@ -208,8 +209,10 @@ namespace GameSrv {
             _logger.Info("正在初始化网络引擎...");
         }
 
-        public void StartServer(CancellationToken stoppingToken) {
-            try {
+        public void StartServer(CancellationToken stoppingToken)
+        {
+            try
+            {
                 M2Share.MapMgr.LoadMapDoor();
                 M2Share.LocalDb.LoadMerchant();
                 _logger.Info("交易NPC列表加载成功...");
@@ -223,16 +226,19 @@ namespace GameSrv {
                 M2Share.MapMgr.MakeSafePkZone();
                 _logger.Info("安全区光圈初始化成功...");
                 M2Share.WorldEngine.InitializationMonsterThread();
-                if (!M2Share.Config.VentureServer) {
+                if (!M2Share.Config.VentureServer)
+                {
                     LocalDb.LoadGuardList();
                     _logger.Info("守卫列表加载成功...");
                 }
                 _logger.Info("游戏处理引擎初始化成功...");
-                if (M2Share.ServerIndex == 0) {
+                if (M2Share.ServerIndex == 0)
+                {
                     PlanesServer.Instance.StartPlanesServer();
                     _logger.Debug("主机运行模式...");
                 }
-                else {
+                else
+                {
                     PlanesClient.Instance.ConnectPlanesServer();
                     _logger.Info($"节点运行模式...主机端口:[{M2Share.Config.MasterSrvAddr}:{M2Share.Config.MasterSrvPort}]");
                 }
@@ -241,9 +247,9 @@ namespace GameSrv {
                 M2Share.CastleMgr.LoadCastleList();
                 M2Share.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
-                Map.StartMakeStoneThread();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger.Error(ex.StackTrace);
             }
         }
