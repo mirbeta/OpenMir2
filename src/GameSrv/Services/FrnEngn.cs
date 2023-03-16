@@ -1,5 +1,3 @@
-using GameSrv.Network;
-using GameSrv.Player;
 using NLog;
 using SystemModule.Data;
 
@@ -118,7 +116,6 @@ namespace GameSrv.Services
                         continue;
                     }
                     ChangeUserGoldInDB(goldChangeInfo);
-                    DisPose(goldChangeInfo);
                 }
             }
         }
@@ -129,7 +126,7 @@ namespace GameSrv.Services
             HUtil32.EnterCriticalSection(UserCriticalSection);
             try
             {
-                if (m_SaveRcdList.Count >= ushort.MaxValue)
+                if (m_SaveRcdList.Count >= int.MaxValue)
                 {
                     result = true;
                 }
@@ -221,7 +218,6 @@ namespace GameSrv.Services
                     var loadRcdInfo = m_LoadRcdList[i];
                     if (loadRcdInfo.GateIdx == nGateIndex && loadRcdInfo.SocketId == nSocket)
                     {
-                        DisPose(loadRcdInfo);
                         m_LoadRcdList.RemoveAt(i);
                         break;
                     }
@@ -249,10 +245,6 @@ namespace GameSrv.Services
                 }
             }*/
             return result;
-        }
-
-        private static void DisPose(object obj)
-        {
         }
     }
 }

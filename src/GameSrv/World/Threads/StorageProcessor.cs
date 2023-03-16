@@ -9,7 +9,7 @@ namespace GameSrv.World.Threads
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public StorageProcessor() : base(TimeSpan.FromMilliseconds(20), "PlayerDataProcessor")
+        public StorageProcessor() : base(TimeSpan.FromMilliseconds(20), "StorageProcessor")
         {
 
         }
@@ -21,12 +21,12 @@ namespace GameSrv.World.Threads
 
         protected override void Startup(CancellationToken stoppingToken)
         {
-            _logger.Info("人物数据引擎启动成功...");
+            _logger.Info("玩家数据读写线程启动...");
         }
 
         protected override void Stopping(CancellationToken stoppingToken)
         {
-            _logger.Info("人物数据引擎停止...");
+            _logger.Info("玩家数据读写线程停止...");
         }
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
@@ -34,10 +34,9 @@ namespace GameSrv.World.Threads
             const string sExceptionMsg = "[Exception] StorageProcessor::ExecuteInternal";
             try
             {
-                if (!M2Share.DataServer.IsConnected)
+                if (!M2Share.DataServer.IsConnected && M2Share.FrontEngine.m_SaveRcdList.Count > 0)
                 {
-                    // 如果DB已经关闭，不在保存
-                    _logger.Error("DBSrv 断开链接，保存数据失败.");
+                    _logger.Error("DBServer 断开链接，保存玩家数据失败.");
                     HUtil32.EnterCriticalSection(M2Share.FrontEngine.UserCriticalSection);
                     try
                     {
@@ -73,12 +72,6 @@ namespace GameSrv.World.Threads
         private static void ProcessSaveStorage()
         {
             PlayerDataService.ProcessSaveList();
-        }
-
-        private void ProcessReadStorage()
-        {
-            bool boReTryLoadDb = false;
-            PlayerDataService.ProcessQueryList();
             for (var i = 0; i < M2Share.FrontEngine.m_SaveRcdTempList.Count; i++)
             {
                 SavePlayerRcd saveRcd = M2Share.FrontEngine.m_SaveRcdTempList[i];
@@ -104,6 +97,12 @@ namespace GameSrv.World.Threads
                 }
             }
             M2Share.FrontEngine.m_SaveRcdTempList.Clear();
+        }
+
+        private void ProcessReadStorage()
+        {
+            bool boReTryLoadDb = false;
+            PlayerDataService.ProcessQueryList();
             for (int i = 0; i < M2Share.FrontEngine.m_LoadRcdTempList.Count; i++)
             {
                 LoadDBInfo loadDbInfo = M2Share.FrontEngine.m_LoadRcdTempList[i];
@@ -118,13 +117,8 @@ namespace GameSrv.World.Threads
                 }
                 else
                 {
-                    if (!boReTryLoadDb)
+                    if (boReTryLoadDb)// 如果读取人物数据失败(数据还没有保存),则重新加入队列
                     {
-                        loadDbInfo = default;
-                    }
-                    else
-                    {
-                        // 如果读取人物数据失败(数据还没有保存),则重新加入队列
                         HUtil32.EnterCriticalSection(M2Share.FrontEngine.UserCriticalSection);
                         try
                         {
@@ -174,5 +168,6 @@ namespace GameSrv.World.Threads
             }
             return result;
         }
+
     }
 }
