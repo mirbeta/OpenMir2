@@ -7,21 +7,20 @@ using NLog;
 
 namespace SystemModule
 {
-    public abstract class TimerScheduledService : BackgroundService, IDisposable
+    public abstract class TimerScheduledService : BackgroundService
     {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-        private PeriodicTimer m_timer;
-        private readonly string m_name;
+        private readonly PeriodicTimer _timer;
         private readonly Stopwatch _stopwatch;
 
         protected TimerScheduledService(TimeSpan timeSpan, string name)
         {
-            m_name = name;
+            Name = name;
             _stopwatch = new Stopwatch();
-            m_timer = new PeriodicTimer(timeSpan);
+            _timer = new PeriodicTimer(timeSpan);
         }
 
-        public string Name => m_name;
+        public string Name { get; }
 
         public long ElapsedMilliseconds { get; private set; }
 
@@ -31,7 +30,7 @@ namespace SystemModule
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug($"Timer [{m_name}] has started");
+            _logger.Debug($"Thread [{Name}] has started");
             Startup(cancellationToken);
             return base.StartAsync(cancellationToken);
         }
@@ -39,8 +38,8 @@ namespace SystemModule
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             Stopping(cancellationToken);
-            m_timer.Dispose();
-            _logger.Debug($"Timer [{m_name}] has finished");
+            _timer.Dispose();
+            _logger.Debug($"Thread [{Name}] has finished");
             return base.StopAsync(cancellationToken);
         }
 
@@ -48,7 +47,7 @@ namespace SystemModule
         {
             try
             {
-                while (await m_timer.WaitForNextTickAsync(stoppingToken))
+                while (await _timer.WaitForNextTickAsync(stoppingToken))
                 {
                     _stopwatch.Start();
                     try
@@ -73,13 +72,14 @@ namespace SystemModule
             }
         }
 
-        protected abstract Task ExecuteInternal(CancellationToken stoppingToken);
-        protected abstract void Startup(CancellationToken stoppingToken);
-        protected abstract void Stopping(CancellationToken stoppingToken);
+        protected abstract Task ExecuteInternal(CancellationToken cancellationToken);
+        protected abstract void Startup(CancellationToken cancellationToken);
+        protected abstract void Stopping(CancellationToken cancellationToken);
         
-        public void Dispose()
+        public override void Dispose()
         {
-            m_timer?.Dispose();
+            _timer?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }
