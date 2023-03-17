@@ -309,18 +309,15 @@ namespace SelGate.Services
         
         private void SendMessage(byte[] sendBuffer)
         {
-            using var memoryStream = new MemoryStream();
-            using var backingStream = new BinaryWriter(memoryStream);
             var serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.RunGateCode,
-                PacketLen = (short)sendBuffer.Length
+                PacketLen = (ushort)sendBuffer.Length
             };
-            backingStream.Write(serverMessage.GetBuffer());
-            backingStream.Write(sendBuffer);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var data = new byte[memoryStream.Length];
-            memoryStream.Read(data, 0, data.Length);
+            var dataBuff = serverMessage.GetBuffer();
+            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
+            MemoryCopy.BlockCopy(sendBuffer, 0, data, data.Length, sendBuffer.Length);
             _clientSocket.Send(data);
         }
     }

@@ -17,12 +17,12 @@ namespace SystemModule.Packets.ServerPackets
         /// <summary>
         /// 封包总长度
         /// </summary>
-        public short PacketLen { get; set; }
+        public ushort PacketLen { get; set; }
 
         protected override void ReadPacket(BinaryReader reader)
         {
             PacketCode = reader.ReadUInt32();
-            PacketLen = reader.ReadInt16();
+            PacketLen = reader.ReadUInt16();
         }
 
         protected override void WritePacket(BinaryWriter writer)

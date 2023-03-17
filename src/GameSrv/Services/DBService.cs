@@ -5,15 +5,18 @@ using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
-namespace GameSrv.Services {
-    public class DBService {
+namespace GameSrv.Services
+{
+    public class DBService
+    {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient _clientScoket;
         private byte[] ReceiveBuffer { get; set; }
         public int BuffLen { get; set; }
         private bool SocketWorking { get; set; }
 
-        public DBService() {
+        public DBService()
+        {
             _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.sDBAddr), M2Share.Config.nDBPort), 4096);
             _clientScoket.OnConnected += DbScoketConnected;
             _clientScoket.OnDisconnected += DbScoketDisconnected;
@@ -23,28 +26,35 @@ namespace GameSrv.Services {
             ReceiveBuffer = new byte[10 * 2048];
         }
 
-        public void Start() {
+        public void Start()
+        {
             _clientScoket.Connect();
         }
 
-        public void Stop() {
+        public void Stop()
+        {
             _clientScoket.Disconnect();
         }
 
         public bool IsConnected => _clientScoket.IsConnected;
-        
-        public void CheckConnected() {
-            if (_clientScoket.IsConnected) {
+
+        public void CheckConnected()
+        {
+            if (_clientScoket.IsConnected)
+            {
                 return;
             }
-            if (_clientScoket.IsBusy) {
+            if (_clientScoket.IsBusy)
+            {
                 return;
             }
             _clientScoket.Connect(M2Share.Config.sDBAddr, M2Share.Config.nDBPort);
         }
 
-        public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet) {
-            if (!_clientScoket.IsConnected) {
+        public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet)
+        {
+            if (!_clientScoket.IsConnected)
+            {
                 return false;
             }
             var requestPacket = new ServerRequestData();
@@ -57,34 +67,37 @@ namespace GameSrv.Services {
             return true;
         }
 
-        private void SendMessage(byte[] sendBuffer) {
-            using var memoryStream = new MemoryStream();
-            using var backingStream = new BinaryWriter(memoryStream);
-            var serverMessage = new ServerDataPacket {
+        private void SendMessage(byte[] sendBuffer)
+        {
+            var serverMessage = new ServerDataPacket
+            {
                 PacketCode = Grobal2.RunGateCode,
-                PacketLen = (short)sendBuffer.Length
+                PacketLen = (ushort)sendBuffer.Length
             };
-            backingStream.Write(serverMessage.GetBuffer());
-            backingStream.Write(sendBuffer);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var data = new byte[memoryStream.Length];
-            memoryStream.Read(data, 0, data.Length);
+            var dataBuff = serverMessage.GetBuffer();
+            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
+            MemoryCopy.BlockCopy(sendBuffer, 0, data, data.Length, sendBuffer.Length);
             _clientScoket.Send(data);
         }
 
-        private void DbScoketDisconnected(object sender, DSCClientConnectedEventArgs e) {
+        private void DbScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
+        {
             _clientScoket.IsConnected = false;
             _logger.Error("数据库服务器[" + e.RemoteEndPoint + "]断开连接...");
         }
 
-        private void DbScoketConnected(object sender, DSCClientConnectedEventArgs e) {
+        private void DbScoketConnected(object sender, DSCClientConnectedEventArgs e)
+        {
             _clientScoket.IsConnected = true;
             _logger.Info("数据库服务器[" + e.RemoteEndPoint + "]连接成功...");
         }
 
-        private void DBSocketError(object sender, DSCClientErrorEventArgs e) {
+        private void DBSocketError(object sender, DSCClientErrorEventArgs e)
+        {
             _clientScoket.IsConnected = false;
-            switch (e.ErrorCode) {
+            switch (e.ErrorCode)
+            {
                 case SocketError.ConnectionRefused:
                     _logger.Error("数据库服务器[" + M2Share.Config.sDBAddr + ":" + M2Share.Config.nDBPort + "]拒绝链接...");
                     break;
@@ -97,36 +110,46 @@ namespace GameSrv.Services {
             }
         }
 
-        private void DBSocketRead(object sender, DSCClientDataInEventArgs e) {
+        private void DBSocketRead(object sender, DSCClientDataInEventArgs e)
+        {
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
-            try {
+            try
+            {
                 var nMsgLen = e.BuffLen;
                 var packetData = e.Buff;
-                if (BuffLen > 0) {
+                if (BuffLen > 0)
+                {
                     MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
                     ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
                 }
-                else {
+                else
+                {
                     ProcessServerPacket(packetData, nMsgLen);
                 }
             }
-            catch (Exception exception) {
+            catch (Exception exception)
+            {
                 _logger.Error(exception);
             }
-            finally {
+            finally
+            {
                 HUtil32.LeaveCriticalSection(M2Share.UserDBCriticalSection);
             }
         }
-        
-        private void ProcessServerPacket(byte[] buff, int buffLen) {
-            try {
+
+        private void ProcessServerPacket(Span<byte> buff, int buffLen)
+        {
+            try
+            {
                 var srcOffset = 0;
                 var nLen = buffLen;
-                var dataBuff = buff.AsSpan();
-                while (nLen >= ServerDataPacket.FixedHeaderLen) {
+                var dataBuff = buff;
+                while (nLen >= ServerDataPacket.FixedHeaderLen)
+                {
                     var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
                     var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
-                    if (message.PacketCode != Grobal2.RunGateCode) {
+                    if (message.PacketCode != Grobal2.RunGateCode)
+                    {
                         srcOffset++;
                         dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
                         nLen -= 1;
@@ -134,20 +157,23 @@ namespace GameSrv.Services {
                         continue;
                     }
                     var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
-                    if (nCheckMsgLen > nLen) {
+                    if (nCheckMsgLen > nLen)
+                    {
                         break;
                     }
                     SocketWorking = true;
                     var messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                     ProcessServerData(messageData);
                     nLen -= nCheckMsgLen;
-                    if (nLen <= 0) {
+                    if (nLen <= 0)
+                    {
                         break;
                     }
                     dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
                     BuffLen = nLen;
                     srcOffset = 0;
-                    if (nLen < ServerDataPacket.FixedHeaderLen) {
+                    if (nLen < ServerDataPacket.FixedHeaderLen)
+                    {
                         break;
                     }
                 }
@@ -156,43 +182,52 @@ namespace GameSrv.Services {
                     MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
                     BuffLen = nLen;
                 }
-                else {
+                else
+                {
                     BuffLen = 0;
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger.Error(ex);
             }
         }
 
-        private void ProcessServerData(ServerRequestData responsePacket) {
-            try {
+        private void ProcessServerData(ServerRequestData responsePacket)
+        {
+            try
+            {
                 if (!SocketWorking) return;
-                if (responsePacket != null) {
+                if (responsePacket != null)
+                {
                     var respCheckCode = responsePacket.QueryId;
                     var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + 6;
-                    if (nLen >= 12) {
+                    if (nLen >= 12)
+                    {
                         var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
-                        if (queryId <= 0 || responsePacket.Sgin.Length <= 0) {
+                        if (queryId <= 0 || responsePacket.Sgin.Length <= 0)
+                        {
                             M2Share.Config.nLoadDBErrorCount++;
                             return;
                         }
-                        var signatureBuff = BitConverter.GetBytes(queryId);
                         var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
-                        var signatureId = BitConverter.ToInt16(signatureBuff);
-                        if (signatureId == BitConverter.ToInt16(sginBuff)) {
+                        if (queryId == BitConverter.ToInt16(sginBuff))
+                        {
                             PlayerDataService.Enqueue(respCheckCode, responsePacket);
                         }
-                        else {
+                        else
+                        {
                             M2Share.Config.nLoadDBErrorCount++;
                         }
                     }
                 }
-                else {
+                else
+                {
                     _logger.Error("错误的封包数据");
                 }
             }
-            finally {
+            finally
+            {
                 SocketWorking = false;
             }
         }
