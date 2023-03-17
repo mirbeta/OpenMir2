@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DBSrv.Storage
 {
     /// <summary>
-    /// 角色记录
+    /// 角色记录存储接口
     /// </summary>
     public interface IPlayRecordStorage
     {

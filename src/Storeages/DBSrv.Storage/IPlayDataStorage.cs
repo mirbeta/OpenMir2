@@ -5,7 +5,7 @@ using SystemModule.Packets.ServerPackets;
 namespace DBSrv.Storage
 {
     /// <summary>
-    /// 角色数据
+    /// 角色数据存储接口
     /// </summary>
     public interface IPlayDataStorage
     {
