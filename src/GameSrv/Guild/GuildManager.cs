@@ -23,7 +23,7 @@ namespace GameSrv.Guild {
             for (int i = 0; i < GuildList.Count; i++) {
                 GuildInfo Guild = GuildList[i];
                 if (string.Compare(Guild.GuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0) {
-                    if (Guild.MRankList.Count > 1) {
+                    if (Guild.RankList.Count > 1) {
                         break;
                     }
                     Guild.BackupGuildFile();

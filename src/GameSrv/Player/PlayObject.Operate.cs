@@ -1284,9 +1284,9 @@ namespace GameSrv.Player
                 return;
             }
             var sSendMsg = string.Empty;
-            for (var i = 0; i < MyGuild.MRankList.Count; i++)
+            for (var i = 0; i < MyGuild.RankList.Count; i++)
             {
-                var guildRank = MyGuild.MRankList[i];
+                var guildRank = MyGuild.RankList[i];
                 sSendMsg = sSendMsg + '#' + guildRank.RankNo + "/*" + guildRank.RankName + '/';
                 for (var j = 0; j < guildRank.MemberList.Count; j++)
                 {
@@ -1315,7 +1315,7 @@ namespace GameSrv.Player
                         {
                             if (!MyGuild.IsMember(sHumName))
                             {
-                                if (playObject.MyGuild == null && MyGuild.MRankList.Count < 400)
+                                if (playObject.MyGuild == null && MyGuild.RankList.Count < 400)
                                 {
                                     MyGuild.AddMember(playObject);
                                     WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);

@@ -45,8 +45,8 @@ namespace GameSrv.GameCommand.Commands {
                 PlayObject.SysMsg($"{PlayObject.GroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = 0; i < PlayObject.MyGuild.MRankList.Count; i++) {
-                GuildRank guildRank = PlayObject.MyGuild.MRankList[i];
+            for (int i = 0; i < PlayObject.MyGuild.RankList.Count; i++) {
+                GuildRank guildRank = PlayObject.MyGuild.RankList[i];
                 if (guildRank == null) {
                     continue;
                 }
