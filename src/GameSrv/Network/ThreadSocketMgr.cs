@@ -19,7 +19,7 @@ namespace GameSrv.Network
         private readonly SocketServer _gateSocket;
         private readonly object m_RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;//todo 一个网关一个队列
-        private readonly SocketThread[] GameGates;
+        private readonly ThreadSocket[] GameGates;
         private static int CurrentGateIdx = 0;
         private readonly Dictionary<int, int> GameGateLinkMap = new Dictionary<int, int>();
         private readonly HashSet<long> RunGatePermitMap = new HashSet<long>();
@@ -29,7 +29,7 @@ namespace GameSrv.Network
         {
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
-            GameGates = new SocketThread[20];
+            GameGates = new ThreadSocket[20];
             _gateSocket = new SocketServer(100, 1024);
             _gateSocket.OnClientConnect += GateSocketClientConnect;
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
@@ -111,7 +111,7 @@ namespace GameSrv.Network
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
-                GameGates[CurrentGateIdx] = new SocketThread(CurrentGateIdx, gateInfo);
+                GameGates[CurrentGateIdx] = new ThreadSocket(CurrentGateIdx, gateInfo);
                 GameGateLinkMap.Add(e.SocHandle, CurrentGateIdx);
                 Interlocked.Increment(ref CurrentGateIdx);
                 _logger.Info(string.Format(sGateOpen, e.EndPoint));

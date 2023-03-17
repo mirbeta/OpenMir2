@@ -11,7 +11,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.Network
 {
-    public class SocketThread
+    public class ThreadSocket
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly int ThreadId;
@@ -26,7 +26,7 @@ namespace GameSrv.Network
         public byte[] ReceiveBuffer;
         public int ReceiveLen;
 
-        public SocketThread(int gateIdx, ThreadGateInfo gateInfo)
+        public ThreadSocket(int gateIdx, ThreadGateInfo gateInfo)
         {
             ThreadId = gateIdx;
             _gateInfo = gateInfo;
@@ -47,7 +47,8 @@ namespace GameSrv.Network
 
         public void Stop()
         {
-            _cancellation.CancelAfter(3000);
+            //await _sendQueue.Stop();
+            _cancellation.CancelAfter(1000);
         }
 
         internal void ProcessBufferReceive(byte[] packetBuff, int packetLen)
@@ -558,6 +559,14 @@ namespace GameSrv.Network
                 SendQueue.Writer.TryWrite(buffer);
             }
 
+            public async Task Stop()
+            {
+                if (SendQueue.Reader.Count > 0)
+                {
+                    await SendQueue.Reader.Completion;
+                }
+            }
+
             /// <summary>
             /// 处理队列数据并发送到GameGate
             /// GameSrv -> GameGate
@@ -581,7 +590,7 @@ namespace GameSrv.Network
                             //GameGate.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         }
                     }
-                }, cancellation.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+                }, cancellation.Token);
             }
         }
     }
