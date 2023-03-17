@@ -33,7 +33,7 @@
 // 将地图数据的读取和估价函数封装成一个类使用。
 // *******************************************************************************)
 
-namespace GameSrv.Maps {
+namespace GameSrv.Maps.AutoPath {
     // 路径数组
     public class PathcellSuccess {
         // 路径图元

@@ -1,15 +1,13 @@
 using SelGate.Conf;
 using SelGate.Package;
-using SelGate.Services;
 using System;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Logger;
-using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
-namespace SelGate
+namespace SelGate.Services
 {
     /// <summary>
     /// 会话封包处理

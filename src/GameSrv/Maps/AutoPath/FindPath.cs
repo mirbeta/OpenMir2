@@ -1,4 +1,4 @@
-namespace GameSrv.Maps
+namespace GameSrv.Maps.AutoPath
 {
     public class FindPath : PathMap {
         public PointInfo[] Path {

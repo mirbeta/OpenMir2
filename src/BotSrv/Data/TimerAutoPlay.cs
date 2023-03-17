@@ -1,4 +1,4 @@
-﻿namespace BotSrv
+﻿namespace BotSrv.Data
 {
     public class TimerAutoPlay
     {

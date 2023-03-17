@@ -11,6 +11,7 @@ using GameSrv.Guild;
 using GameSrv.Items;
 using GameSrv.Magic;
 using GameSrv.Maps;
+using GameSrv.Maps.AutoPath;
 using GameSrv.Network;
 using GameSrv.Notices;
 using GameSrv.Npc;

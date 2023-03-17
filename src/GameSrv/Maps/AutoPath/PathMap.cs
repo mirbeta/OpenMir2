@@ -1,4 +1,4 @@
-namespace GameSrv.Maps
+namespace GameSrv.Maps.AutoPath
 {
     public class PathMap {
         protected PathcellSuccess[,] PathMapArray;

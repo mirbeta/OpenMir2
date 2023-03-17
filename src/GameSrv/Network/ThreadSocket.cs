@@ -502,11 +502,8 @@ namespace GameSrv.Network
             msgHeader.Ident = Grobal2.GM_SERVERUSERINDEX;
             msgHeader.ServerIndex = (ushort)nUserIdex;
             msgHeader.PackLength = 0;
-            if (socket.Connected)
-            {
-                byte[] data = SerializerUtil.Serialize(msgHeader);
-                socket.Send(data, 0, data.Length, SocketFlags.None);
-            }
+            byte[] data = SerializerUtil.Serialize(msgHeader);
+            socket.Send(data, 0, data.Length, SocketFlags.None);
         }
 
         /// <summary>

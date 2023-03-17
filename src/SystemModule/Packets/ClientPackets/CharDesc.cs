@@ -1,6 +1,6 @@
 ﻿using MemoryPack;
 
-namespace SystemModule.Packets
+namespace SystemModule.Packets.ClientPackets
 {
     [MemoryPackable]
     public partial record struct CharDesc
