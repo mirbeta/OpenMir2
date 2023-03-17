@@ -606,18 +606,10 @@ namespace GameSrv.World
             }
             ProcessPlayObjectData();
             ProcessHumanLoopTime++;
-            M2Share.ProcessHumanLoopTime = ProcessHumanLoopTime;
             if (ProcHumIdx == 0)
             {
                 ProcessHumanLoopTime = 0;
-                M2Share.ProcessHumanLoopTime = ProcessHumanLoopTime;
-                var dwUsrRotTime = HUtil32.GetTickCount() - M2Share.UsrRotCountTick;
-                M2Share.UsrRotCountMin = dwUsrRotTime;
-                M2Share.UsrRotCountTick = HUtil32.GetTickCount();
-                if (M2Share.UsrRotCountMax < dwUsrRotTime) M2Share.UsrRotCountMax = dwUsrRotTime;
             }
-            M2Share.HumCountMin = HUtil32.GetTickCount() - dwCheckTime;
-            if (M2Share.HumCountMax < M2Share.HumCountMin) M2Share.HumCountMax = M2Share.HumCountMin;
         }
 
         private void ProcessPlayObjectData()

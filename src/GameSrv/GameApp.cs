@@ -27,11 +27,6 @@ namespace GameSrv
 
         public GameApp()
         {
-            M2Share.SockCountMax = 0;
-            M2Share.HumCountMax = 0;
-            M2Share.UsrRotCountMin = 0;
-            M2Share.UsrRotCountMax = 0;
-            M2Share.ProcessHumanLoopTime = 0;
             M2Share.HumLimit = 30;
             M2Share.MonLimit = 30;
             M2Share.ZenLimit = 5;
@@ -101,7 +96,6 @@ namespace GameSrv
             M2Share.EventSource = new GameEventSource();
             M2Share.MapMgr = new MapManager();
             M2Share.CustomItemMgr = new CustomItem();
-            M2Share.MagicMgr = new MagicManager();
             M2Share.NoticeMgr = new NoticeManager();
             M2Share.GuildMgr = new GuildManager();
             M2Share.EventMgr = new EventManager();

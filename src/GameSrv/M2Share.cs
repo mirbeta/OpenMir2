@@ -47,7 +47,6 @@ namespace GameSrv {
         private static readonly ExpsConf ExpConf;
         private static readonly GlobalConf GlobalConf;
         private static readonly GameSettingConf GameSetting;
-        public static readonly ReaderWriterLockWrapper SyncLock = new ReaderWriterLockWrapper();
         public static readonly WordStatistics Statistics;
         public static readonly ActorMgr ActorMgr;
         /// <summary>
@@ -67,7 +66,6 @@ namespace GameSrv {
         public static GameEventSource EventSource;
         public static MapManager MapMgr = null;
         public static CustomItem CustomItemMgr = null;
-        public static MagicManager MagicMgr = null;
         public static NoticeManager NoticeMgr = null;
         public static GuildManager GuildMgr = null;
         public static EventManager EventMgr = null;
@@ -196,14 +194,6 @@ namespace GameSrv {
         public static short MissionY = 0;
         public static bool StartReady = false;
         public static bool FilterWord = false;
-        public static int SockCountMin = 0;
-        public static int SockCountMax = 0;
-        public static int HumCountMin = 0;
-        public static int HumCountMax = 0;
-        public static int UsrRotCountMin = 0;
-        public static int UsrRotCountMax = 0;
-        public static int UsrRotCountTick = 0;
-        public static int ProcessHumanLoopTime = 0;
         public static int HumLimit = 30;
         public static int MonLimit = 30;
         public static int ZenLimit = 5;

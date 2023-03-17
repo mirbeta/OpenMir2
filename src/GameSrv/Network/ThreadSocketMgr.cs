@@ -331,11 +331,6 @@ namespace GameSrv.Network
                     }
                 }
             }
-            M2Share.SockCountMin = HUtil32.GetTickCount() - dwRunTick;
-            if (M2Share.SockCountMin > M2Share.SockCountMax)
-            {
-                M2Share.SockCountMax = M2Share.SockCountMin;
-            }
         }
 
         private static void SendGateTestMsg(int nIndex)
