@@ -17,7 +17,7 @@ namespace GameSrv.Network
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SocketServer _gateSocket;
-        private readonly object m_RunSocketSection;
+        private readonly object runSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;//todo 一个网关一个队列
         private readonly ThreadSocket[] GameGates;
         private static int CurrentGateIdx = 0;
@@ -35,7 +35,7 @@ namespace GameSrv.Network
             _gateSocket.OnClientDisconnect += GateSocketClientDisconnect;
             _gateSocket.OnClientRead += GateSocketClientRead;
             _gateSocket.OnClientError += GateSocketClientError;
-            m_RunSocketSection = new object();
+            runSocketSection = new object();
             stoppingCancelReads = new CancellationToken();
         }
 
@@ -147,7 +147,7 @@ namespace GameSrv.Network
                     var gateInfo = GameGates[i].GateInfo;
                     if (gateInfo.BoUsed && gateInfo.Socket != null && gateInfo.UserList != null)
                     {
-                        HUtil32.EnterCriticalSection(m_RunSocketSection);
+                        HUtil32.EnterCriticalSection(runSocketSection);
                         try
                         {
                             for (var j = 0; j < gateInfo.UserList.Count; j++)
@@ -184,7 +184,7 @@ namespace GameSrv.Network
                         }
                         finally
                         {
-                            HUtil32.LeaveCriticalSection(m_RunSocketSection);
+                            HUtil32.LeaveCriticalSection(runSocketSection);
                         }
                     }
                 }
@@ -215,14 +215,14 @@ namespace GameSrv.Network
         private void CloseGate(int gateId, string connectionId, string endPoint)
         {
             const string sGateClose = "游戏网关[{0}]已关闭...";
-            HUtil32.EnterCriticalSection(m_RunSocketSection);
+            HUtil32.EnterCriticalSection(runSocketSection);
             try
             {
                 var gameGate = GameGates[gateId];
                 var gateInfo = gameGate.GateInfo;
                 if (gateInfo.Socket == null)
                 {
-                    _logger.Warn("Scoket为空，无需关闭");
+                    _logger.Error("Scoket异常，无需关闭");
                     return;
                 }
                 if (gateInfo.SocketId.Equals(connectionId))
@@ -252,7 +252,7 @@ namespace GameSrv.Network
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(m_RunSocketSection);
+                HUtil32.LeaveCriticalSection(runSocketSection);
             }
         }
 
