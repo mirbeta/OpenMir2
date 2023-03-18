@@ -36,6 +36,7 @@ namespace DBSrv.Services
         {
             _socketServer.Init();
             _socketServer.Start(_setting.MarketServerAddr, _setting.MarketServerPort);
+            _logger.Info($"拍卖行数据服务[{_setting.MarketServerAddr}:{_setting.MarketServerPort}]已启动.等待链接...");
         }
 
         public void Stop()

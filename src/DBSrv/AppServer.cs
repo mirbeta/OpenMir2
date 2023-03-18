@@ -27,7 +27,7 @@ namespace DBSrv
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static PeriodicTimer _timer;
-        private static SettingConf _config;
+        private static SettingConf _setting;
 
         public AppServer()
         {
@@ -40,7 +40,7 @@ namespace DBSrv
             _logger.Info("初始化配置文件...");
             var configManager = new ConfigManager();
             configManager.LoadConfig();
-            _config = configManager.GetConfig;
+            _setting = configManager.GetConfig;
             _logger.Info("配置文件读取完成...");
         }
 
@@ -63,7 +63,7 @@ namespace DBSrv
 
         public void ConfigureServices(IServiceCollection services)
         {
-            if (!Enum.TryParse<StoragePolicy>(_config.StoreageType, true, out var storagePolicy))
+            if (!Enum.TryParse<StoragePolicy>(_setting.StoreageType, true, out var storagePolicy))
             {
                 throw new Exception("数据存储配置文件错误或者不支持该存储类型");
             }
@@ -86,7 +86,7 @@ namespace DBSrv
                     _logger.Info("[Local]数据存储引擎初始化成功.");
                     break;
             }
-            services.AddSingleton(_config);
+            services.AddSingleton(_setting);
             services.AddSingleton<SessionService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<DataService>();
@@ -120,6 +120,7 @@ namespace DBSrv
             }
             var playDataStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.PlayDataStorage", true);
             var playRecordStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.PlayRecordStorage", true);
+            var marketStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.MarketStoageService", true);
             if (playDataStorageType == null)
             {
                 throw new ArgumentNullException(nameof(storageName), "获取数据存储实例失败，请确认文件是否正确或程序版本是否正确.");
@@ -128,9 +129,14 @@ namespace DBSrv
             {
                 throw new ArgumentNullException(nameof(storageName), "获取数据索引存储实例失败，请确认文件是否正确或程序版本是否正确.");
             }
-            var storageOption = new StorageOption(_config.ConnctionString);
+            if (marketStorageType == null)
+            {
+                throw new ArgumentNullException(nameof(storageName), "获取拍卖行存储实例失败，请确认文件是否正确或程序版本是否正确.");
+            }
+            var storageOption = new StorageOption(_setting.ConnctionString);
             var playDataStorage = (IPlayDataStorage)Activator.CreateInstance(playDataStorageType, storageOption);
             var playRecordStorage = (IPlayRecordStorage)Activator.CreateInstance(playRecordStorageType, storageOption);
+            var marketStorage = (IMarketStorage)Activator.CreateInstance(marketStorageType, storageOption);
             if (playDataStorage == null)
             {
                 throw new ArgumentNullException(nameof(storageName), "创建数据存储实例失败，请确认文件是否正确或程序版本是否正确.");
@@ -139,8 +145,13 @@ namespace DBSrv
             {
                 throw new ArgumentNullException(nameof(storageName), "创建数据索引存储实例失败，请确认文件是否正确或程序版本是否正确.");
             }
+            if (marketStorage == null)
+            {
+                throw new ArgumentNullException(nameof(storageName), "创建拍卖行数据存储实力失败，请确认文件是否正确或程序版本是否正确.");
+            }
             services.AddSingleton(playDataStorage);
             services.AddSingleton(playRecordStorage);
+            services.AddSingleton(marketStorage);
         }
 
         /// <summary>
@@ -323,10 +334,10 @@ namespace DBSrv
             }
             _logger.Info($"读取网关配置信息成功.[{loadList.Count}]");
             DBShare.MapList.Clear();
-            if (File.Exists(_config.MapFile))
+            if (File.Exists(_setting.MapFile))
             {
                 loadList.Clear();
-                loadList.LoadFromFile(_config.MapFile);
+                loadList.LoadFromFile(_setting.MapFile);
                 for (var i = 0; i < loadList.Count; i++)
                 {
                     var sLineText = loadList[i];
