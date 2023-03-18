@@ -29,6 +29,14 @@
         /// </summary>
         public string LoginServerAddr = "127.0.0.1";
         /// <summary>
+        /// 拍卖行服务器地址
+        /// </summary>
+        public string MarketServerAddr = "127.0.0.1";
+        /// <summary>
+        /// 拍卖行服务器端口
+        /// </summary>
+        public int MarketServerPort = 5700;
+        /// <summary>
         /// 是否禁止全英文名字
         /// </summary>
         public bool EnglishNames = false;

@@ -28,6 +28,8 @@ namespace DBSrv.Conf
             _config.GateAddr = ReadWriteString("Setup", "GateAddr", _config.GateAddr);
             _config.LoginServerAddr = ReadWriteString("Server", "IDSAddr", _config.LoginServerAddr);
             _config.LoginServerPort = ReadWriteInteger("Server", "IDSPort", _config.LoginServerPort);
+            _config.MarketServerAddr = ReadWriteString("Server", "MarketAddr", _config.MarketServerAddr);
+            _config.MarketServerPort = ReadWriteInteger("Server", "MarketPort", _config.MarketServerPort);
             _config.ServerName = ReadWriteString("Setup", "ServerName", _config.ServerName);
             _config.boDenyChrName = ReadWriteBool("Setup", "DenyChrName", _config.boDenyChrName);
             _config.DeleteMinLevel = ReadWriteInteger("Setup", "DELMaxLevel", _config.DeleteMinLevel);
