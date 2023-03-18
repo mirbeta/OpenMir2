@@ -307,7 +307,7 @@ namespace LoginSrv.Services
             var dataBuff = serverMessage.GetBuffer();
             var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
-            MemoryCopy.BlockCopy(sendBuffer, 0, data, data.Length, sendBuffer.Length);
+            MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             if (_serverSocket.IsOnline(connectionId))
             {
                 _serverSocket.Send(connectionId, data);
