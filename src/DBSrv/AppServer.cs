@@ -90,6 +90,7 @@ namespace DBSrv
             services.AddSingleton<SessionService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<DataService>();
+            services.AddSingleton<MarketService>();
             services.AddSingleton<ICacheStorage, CacheStorageService>();
             services.AddHostedService<TimedService>();
             services.AddHostedService<AppService>();
