@@ -3,7 +3,7 @@
 namespace SystemModule.Data
 {
     [MemoryPackable]
-    public partial class RecordHeader
+    public partial struct RecordHeader
     {
         public string sAccount { get; set; }
         public string Name { get; set; }
@@ -12,5 +12,10 @@ namespace SystemModule.Data
         public bool Deleted { get; set; }
         public double UpdateDate { get; set; }
         public double CreateDate { get; set; }
+
+        public void SetName(string name)
+        {
+            Name = name;
+        }
     }
 }

@@ -1,10 +1,10 @@
-using DBSrv.Storage.Impl;
-using DBSrv.Storage.Model;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using DBSrv.Storage.Impl;
+using DBSrv.Storage.Model;
+using NLog;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
@@ -169,7 +169,7 @@ namespace DBSrv.Storage.MySQL
                 }
                 humanRcd = new PlayerDataInfo();
                 humanRcd.Data = GetChrRecord(playerId, context);
-                humanRcd.Header.Name = humanRcd.Data.ChrName;
+                humanRcd.Header.SetName(humanRcd.Data.ChrName);
                 GetAbilGetRecord(playerId, context, ref humanRcd);
                 GetBonusAbilRecord(playerId, context, ref humanRcd);
                 GetMagicRecord(playerId, context, ref humanRcd);

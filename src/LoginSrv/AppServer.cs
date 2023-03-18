@@ -12,14 +12,17 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 using SystemModule;
 using SystemModule.Hosts;
 using SystemModule.Logger;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace LoginSrv
 {
     public class AppServer : ServiceHost
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private PeriodicTimer _timer;
 
         public AppServer()
@@ -37,6 +40,11 @@ namespace LoginSrv
 
             Builder.ConfigureLogging(ConfigureLogging);
             Builder.ConfigureServices(ConfigureServices);
+        }
+        
+        public override void Initialize()
+        {
+
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -62,21 +70,16 @@ namespace LoginSrv
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            Logger.Info("正在启动服务器...");
+            _logger.Info("正在启动服务器...");
             Host = await Builder.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();
-            Logger.Info("正在等待服务器连接...");
+            _logger.Info("正在等待服务器连接...");
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
-        }
-
-        public override void Dispose()
-        {
-
         }
 
         private void Stop()

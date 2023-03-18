@@ -11,15 +11,43 @@ namespace DBSrv
 {
     public class DBShare
     {
+        public static StringList DenyChrNameList = null;
+        public static readonly StringList ClearMakeIndex = null;
+        public static readonly GateRouteInfo[] RouteInfo = new GateRouteInfo[20];
+        public static Dictionary<string, int> MapList;
+        public static bool ShowLog = true;
+        private static HashSet<string> _serverIpList = null;
+        private static Dictionary<string, short> _gateIdList = null;
         public static readonly string GateConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServerInfo.txt");
         private static readonly string ServerIpConfFileNmae = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AddrTable.txt");
         private static readonly string GateIdConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SelectID.txt");
-        public static StringList DenyChrNameList = null;
-        private static Hashtable _serverIpList = null;
-        private static Dictionary<string, short> _gateIdList = null;
-        public static readonly StringList ClearMakeIndex = null;
-        public static readonly GateRouteInfo[] RouteInfo = new GateRouteInfo[20];
-        public static bool ShowLog = true;
+        
+        public static int GetMapIndex(string sMap)
+        {
+            if (string.IsNullOrEmpty(sMap))
+            {
+                return 0;
+            }
+            return MapList.TryGetValue(sMap, out int value) ? value : 0;
+        }
+
+        /// <summary>
+        /// 检查是否禁止名称
+        /// </summary>
+        /// <returns></returns>
+        public static bool CheckDenyChrName(string sChrName)
+        {
+            var result = true;
+            for (var i = 0; i < DenyChrNameList.Count; i++)
+            {
+                if (string.Compare(sChrName, DenyChrNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    result = false;
+                    break;
+                }
+            }
+            return result;
+        }
 
         private static void LoadGateID()
         {
@@ -69,11 +97,11 @@ namespace DBSrv
                 stringList.LoadFromFile(ServerIpConfFileNmae);
                 for (var i = 0; i < stringList.Count; i++)
                 {
-                    if (_serverIpList.ContainsKey(stringList[i]))
+                    if (_serverIpList.Contains(stringList[i]))
                     {
                         continue;
                     }
-                    _serverIpList.Add(stringList[i], stringList[i]);
+                    _serverIpList.Add(stringList[i]);
                 }
                 stringList = null;
             }
@@ -181,7 +209,7 @@ namespace DBSrv
         public static bool CheckServerIP(string sIP)
         {
             bool result = false;
-            if (_serverIpList.ContainsKey(sIP))
+            if (_serverIpList.Contains(sIP))
             {
                 return true;
             }
@@ -191,8 +219,9 @@ namespace DBSrv
         public static void Initialization()
         {
             DenyChrNameList = new StringList();
-            _serverIpList = new Hashtable();
+            _serverIpList = new HashSet<string>();
             _gateIdList = new Dictionary<string, short>();
+            MapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         }
     }
 

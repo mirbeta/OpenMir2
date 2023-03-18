@@ -7,17 +7,19 @@ using SelGate.Services;
 using Spectre.Console;
 using System;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 using SystemModule.Hosts;
 using SystemModule.Logger;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace SelGate
 {
     public class AppServer : ServiceHost
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly PeriodicTimer _timer;
 
         public AppServer()
@@ -36,6 +38,11 @@ namespace SelGate
             Builder.ConfigureServices(ConfigureServices);
         }
 
+        public override void Initialize()
+        {
+
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<MirLogger>();
@@ -112,7 +119,7 @@ namespace SelGate
         {
             var config = Host.Services.GetService<ConfigManager>();
             config?.ReLoadConfig();
-            Logger.Info("重新读取配置文件完成...");
+            _logger.Info("重新读取配置文件完成...");
             return Task.CompletedTask;
         }
 
@@ -217,11 +224,6 @@ namespace SelGate
 
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();
-        }
-
-        public override void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,29 +1,28 @@
-using DBSrv.Services;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using DBSrv.Services;
+using Microsoft.Extensions.Hosting;
+using NLog;
 
 namespace DBSrv
 {
     public class AppService : BackgroundService
     {
-        private readonly ILogger<AppService> _logger;
-        private readonly GateUserService _userSocService;
-        private readonly LoginSessionServer _loginSvrService;
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly UserService _userSocService;
+        private readonly LoginSessionService _loginSvrService;
         private readonly PlayerDataService _dataService;
 
-        public AppService(ILogger<AppService> logger, GateUserService userSoc, LoginSessionServer idSoc, PlayerDataService dataService)
+        public AppService( UserService userSoc, LoginSessionService loginSession, PlayerDataService dataService)
         {
-            _logger = logger;
             _userSocService = userSoc;
-            _loginSvrService = idSoc;
+            _loginSvrService = loginSession;
             _dataService = dataService;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logger.LogDebug("DBSrv is stopping."));
+            stoppingToken.Register(() => logger.Debug("DBSrv is stopping."));
             _userSocService.Start(stoppingToken);
             _loginSvrService.Start();
             _dataService.Start();
@@ -32,15 +31,14 @@ namespace DBSrv
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug("DBSrv is starting.");
-            DBShare.Initialization();
+            logger.Debug("DBSrv is starting.");
             DBShare.LoadConfig();
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug("DBSrv is stopping.");
+            logger.Debug("DBSrv is stopping.");
             _userSocService.Stop();
             return base.StopAsync(cancellationToken);
         }

@@ -1,8 +1,7 @@
-﻿using DBSrv.Conf;
-using DBSrv.Storage;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using DBSrv.Conf;
+using DBSrv.Storage;
 using SystemModule;
 using SystemModule.Logger;
 using SystemModule.Packets.ServerPackets;
@@ -22,14 +21,14 @@ namespace DBSrv.Services
         private readonly IPlayDataStorage _playDataStorage;
         private readonly ICacheStorage _cacheStorage;
         private readonly SocketServer _serverSocket;
-        private readonly LoginSessionServer _loginSvrService;
+        private readonly LoginSessionService _loginService;
         private readonly DbSrvConf _conf;
         private IList<THumSession> PlaySessionList { get; set; }
 
-        public PlayerDataService(MirLogger logger, DbSrvConf conf, LoginSessionServer loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
+        public PlayerDataService(MirLogger logger, DbSrvConf conf, LoginSessionService loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
         {
             _logger = logger;
-            _loginSvrService = loginService;
+            _loginService = loginService;
             _playDataStorage = playDataStorage;
             _cacheStorage = cacheStorage;
             _serverList = new List<ServerDataInfo>();
@@ -47,7 +46,7 @@ namespace DBSrv.Services
             _serverSocket.Init();
             _serverSocket.Start(_conf.ServerAddr, _conf.ServerPort);
             _playDataStorage.LoadQuickList();
-            _logger.LogInformation($"数据库角色服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
+            _logger.LogInformation($"玩家数据存储服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
@@ -167,7 +166,7 @@ namespace DBSrv.Services
                     return;
                 }
                 _serverSocket.CloseSocket(serverInfo.ConnectionId);
-                _logger.LogWarning("关闭错误的查询请求.");
+                _logger.LogError($"关闭错误的任务{nQueryId}查询请求.");
                 return;
             }
             var responsePack = new ServerRequestData();
@@ -278,7 +277,7 @@ namespace DBSrv.Services
             int nCheckCode = -1;
             if ((!string.IsNullOrEmpty(loadHumanPacket.Account)) && (!string.IsNullOrEmpty(loadHumanPacket.ChrName)))
             {
-                nCheckCode = _loginSvrService.CheckSessionLoadRcd(loadHumanPacket.Account, loadHumanPacket.UserAddr, loadHumanPacket.SessionID, ref boFoundSession);
+                nCheckCode = _loginService.CheckSessionLoadRcd(loadHumanPacket.Account, loadHumanPacket.UserAddr, loadHumanPacket.SessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
                     _logger.LogWarning("[非法请求] " + "帐号: " + loadHumanPacket.Account + " IP: " + loadHumanPacket.UserAddr + " 标识: " + loadHumanPacket.SessionID);
@@ -289,8 +288,7 @@ namespace DBSrv.Services
                 int nIndex = _playDataStorage.Index(loadHumanPacket.ChrName);
                 if (nIndex >= 0)
                 {
-                    var isExist = false;
-                    HumanRCD = _cacheStorage.Get(loadHumanPacket.ChrName, out isExist);
+                    HumanRCD = _cacheStorage.Get(loadHumanPacket.ChrName, out bool isExist);
                     if (!isExist)
                     {
                         if (!_playDataStorage.Get(loadHumanPacket.ChrName, ref HumanRCD))
@@ -340,21 +338,20 @@ namespace DBSrv.Services
                 if (!bo21)
                 {
                     bo21 = true;
+                    humanRcd.Header.SetName(sChrName);
                     var nIndex = _playDataStorage.Index(sChrName);
                     if (nIndex < 0)
                     {
-                        humanRcd.Header.Name = sChrName;
                         _playDataStorage.Add(humanRcd);
                         nIndex = _playDataStorage.Index(sChrName);
                     }
                     if (nIndex >= 0)
                     {
-                        humanRcd.Header.Name = sChrName;
                         _cacheStorage.Add(sChrName, humanRcd);
                         _playDataStorage.Update(sChrName, humanRcd);
                         bo21 = false;
                     }
-                    _loginSvrService.SetSessionSaveRcd(sUserID);
+                    _loginService.SetSessionSaveRcd(sUserID);
                 }
                 var responsePack = new ServerRequestData();
                 if (!bo21)

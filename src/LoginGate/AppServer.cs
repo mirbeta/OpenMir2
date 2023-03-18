@@ -8,17 +8,18 @@ using Spectre.Console;
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 using SystemModule.Hosts;
-using SystemModule.Logger;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace LoginGate
 {
     public class AppServer : ServiceHost
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static PeriodicTimer _timer;
 
         public AppServer()
@@ -36,6 +37,11 @@ namespace LoginGate
             };
             Builder.ConfigureLogging(ConfigureLogging);
             Builder.ConfigureServices(ConfigureServices);
+        }
+
+        public override void Initialize()
+        {
+
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -59,8 +65,8 @@ namespace LoginGate
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            Logger.Debug("LoginGate is starting.");
-            Logger.Info("正在启动服务...", 2);
+            _logger.Debug("LoginGate is starting.");
+            _logger.Info("正在启动服务...", 2);
             Host = await Builder.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();
@@ -232,11 +238,6 @@ namespace LoginGate
 
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();
-        }
-
-        public override void Dispose()
-        {
-
         }
     }
 }

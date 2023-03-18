@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DBSrv.Conf;
@@ -14,22 +13,25 @@ using DBSrv.Storage.Model;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
+using SystemModule;
+using SystemModule.Common;
 using SystemModule.Hosts;
 using SystemModule.Logger;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace DBSrv
 {
     public class AppServer : ServiceHost
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static PeriodicTimer _timer;
         private static DbSrvConf _config;
 
         public AppServer()
         {
-
-            PrintUsage();
             Console.CancelKeyPress += delegate
             {
                 DBShare.ShowLog = true;
@@ -43,12 +45,33 @@ namespace DBSrv
             Builder.ConfigureServices(ConfigureServices);
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public override void Initialize()
         {
+            _logger.Info("初始化配置文件...");
             var configManager = new ConfigManager();
             configManager.LoadConfig();
             _config = configManager.GetConfig;
-            Logger.Info("数据库配置文件读取完成...");
+            _logger.Info("配置文件读取完成...");
+        }
+
+        public override async Task StartAsync(CancellationToken cancellationToken)
+        {
+            DBShare.Initialization();
+            LoadServerInfo();
+            LoadChrNameList("DenyChrName.txt");
+            LoadClearMakeIndexList("ClearMakeIndex.txt");
+            Host = await Builder.StartAsync(cancellationToken);
+            await ProcessLoopAsync();
+            Stop();
+        }
+
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
             if (!Enum.TryParse<StoragePolicy>(_config.StoreageType, true, out var storagePolicy))
             {
                 throw new Exception("数据存储配置文件错误或者不支持该存储类型");
@@ -57,25 +80,25 @@ namespace DBSrv
             {
                 case StoragePolicy.MySQL:
                     LoadAssembly(services, "MySQL");
-                    Logger.Info("使用[MySQL]数据存储.");
+                    _logger.Info("[MySQL]数据存储引擎初始化成功...");
                     break;
                 case StoragePolicy.MongoDB:
                     LoadAssembly(services, "MongoDB");
-                    Logger.Info("使用[MongoDB]数据存储.");
+                    _logger.Info("[MongoDB]数据存储引擎初始化成功.");
                     break;
                 case StoragePolicy.Sqlite:
                     LoadAssembly(services, "Sqlite");
-                    Logger.Info("使用[Sqlite]数据存储.");
+                    _logger.Info("[Sqlite]数据存储引擎初始化成功.");
                     break;
                 case StoragePolicy.Local:
                     LoadAssembly(services, "Local");
-                    Logger.Info("使用[Local]数据存储.");
+                    _logger.Info("[Local]数据存储引擎初始化成功.");
                     break;
             }
             services.AddSingleton(_config);
             services.AddSingleton<MirLogger>();
-            services.AddSingleton<LoginSessionServer>();
-            services.AddSingleton<GateUserService>();
+            services.AddSingleton<LoginSessionService>();
+            services.AddSingleton<UserService>();
             services.AddSingleton<PlayerDataService>();
             services.AddSingleton<ICacheStorage, CacheStorageService>();
             services.AddHostedService<TimedService>();
@@ -89,18 +112,6 @@ namespace DBSrv
             logging.AddNLog(Configuration);
         }
 
-        public override async Task StartAsync(CancellationToken cancellationToken)
-        {
-            Host = await Builder.StartAsync(cancellationToken);
-            await ProcessLoopAsync();
-            Stop();
-        }
-
-        public override Task StopAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         private void LoadAssembly(IServiceCollection services, string storageName)
         {
             var storageFileName = $"DBSrv.Storage.{storageName}.dll";
@@ -110,7 +121,7 @@ namespace DBSrv
                 throw new Exception($"{storageFileName} 存储策略文件不存在,服务启动失败.");
             }
             var context = new AssemblyLoadContext(storagePath);
-            context.Resolving += Context_Resolving;
+            context.Resolving += ContextResolving;
             var assembly = context.LoadFromAssemblyPath(storagePath);
             if (assembly == null)
             {
@@ -145,7 +156,7 @@ namespace DBSrv
         /// 加载依赖项
         /// </summary>
         /// <returns></returns>
-        private Assembly Context_Resolving(AssemblyLoadContext context, AssemblyName assemblyName)
+        private Assembly ContextResolving(AssemblyLoadContext context, AssemblyName assemblyName)
         {
             var expectedPath = Path.Combine(AppContext.BaseDirectory, assemblyName.Name + ".dll");
             if (File.Exists(expectedPath))
@@ -157,12 +168,12 @@ namespace DBSrv
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"加载依赖项{expectedPath}发生异常：{ex.Message},{ex.StackTrace}");
+                    _logger.Error($"加载依赖项{expectedPath}发生异常：{ex.Message},{ex.StackTrace}");
                 }
             }
             else
             {
-                Logger.Error($"依赖项不存在：{expectedPath}");
+                _logger.Error($"依赖项不存在：{expectedPath}");
             }
             return null;
         }
@@ -224,7 +235,7 @@ namespace DBSrv
         private async Task ShowServerStatus()
         {
             DBShare.ShowLog = false;
-            var userService = Host.Services.GetService<GateUserService>();
+            var userService = Host.Services.GetService<UserService>();
             if (userService == null)
             {
                 return;
@@ -246,7 +257,7 @@ namespace DBSrv
                  .Cropping(VerticalOverflowCropping.Bottom)
                  .StartAsync(async ctx =>
                  {
-                     foreach (var _ in Enumerable.Range(0, 10))
+                     foreach (var _ in Enumerable.Range(0, serverList.Length))
                      {
                          table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
@@ -270,54 +281,123 @@ namespace DBSrv
                  });
         }
 
-        private static void PrintUsage()
+        private void LoadServerInfo()
         {
-            AnsiConsole.WriteLine();
-
-            var table = new Table()
+            var sSelGateIPaddr = string.Empty;
+            var sGameGateIPaddr = string.Empty;
+            var sGameGate = string.Empty;
+            var sGameGatePort = string.Empty;
+            var sMapName = string.Empty;
+            var sMapInfo = string.Empty;
+            var sServerIndex = string.Empty;
+            var loadList = new StringList();
+            if (!File.Exists(DBShare.GateConfFileName))
             {
-                Border = TableBorder.None,
-                Expand = true,
-            }.HideHeaders();
-            table.AddColumn(new TableColumn("One"));
-
-            var header = new FigletText("OpenMir2")
+                return;
+            }
+            loadList.LoadFromFile(DBShare.GateConfFileName);
+            if (loadList.Count <= 0)
             {
-                Color = Color.Fuchsia
-            };
-            var header2 = new FigletText("DB Server")
+                _logger.Error("加载游戏服务配置文件ServerInfo.txt失败.");
+                return;
+            }
+            var nRouteIdx = 0;
+            var nGateIdx = 0;
+            for (var i = 0; i < loadList.Count; i++)
             {
-                Color = Color.Aqua
-            };
-
-            var sb = new StringBuilder();
-            sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
-            sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
-            sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
-            sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-            var markup = new Markup(sb.ToString());
-
-            table.AddColumn(new TableColumn("Two"));
-
-            var rightTable = new Table()
-                .HideHeaders()
-                .Border(TableBorder.None)
-                .AddColumn(new TableColumn("Content"));
-
-            rightTable.AddRow(header)
-                .AddRow(header2)
-                .AddEmptyRow()
-                .AddEmptyRow()
-                .AddRow(markup);
-            table.AddRow(rightTable);
-
-            AnsiConsole.Write(table);
-            AnsiConsole.WriteLine();
+                var sLineText = loadList[i].Trim();
+                if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
+                {
+                    sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
+                    if ((string.IsNullOrEmpty(sGameGate)) || (string.IsNullOrEmpty(sSelGateIPaddr)))
+                    {
+                        continue;
+                    }
+                    DBShare.RouteInfo[nRouteIdx] = new GateRouteInfo();
+                    DBShare.RouteInfo[nRouteIdx].SelGateIP = sSelGateIPaddr.Trim();
+                    DBShare.RouteInfo[nRouteIdx].GateCount = 0;
+                    nGateIdx = 0;
+                    while ((sGameGate != ""))
+                    {
+                        sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
+                        sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
+                        DBShare.RouteInfo[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
+                        DBShare.RouteInfo[nRouteIdx].GameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
+                        nGateIdx++;
+                    }
+                    DBShare.RouteInfo[nRouteIdx].GateCount = nGateIdx;
+                    nRouteIdx++;
+                    _logger.Info($"读取网关配置信息.GameGateIP:[{sGameGateIPaddr}:{sGameGatePort}]");
+                }
+            }
+            _logger.Info($"读取网关配置信息成功.[{loadList.Count}]");
+            DBShare.MapList.Clear();
+            if (File.Exists(_config.MapFile))
+            {
+                loadList.Clear();
+                loadList.LoadFromFile(_config.MapFile);
+                for (var i = 0; i < loadList.Count; i++)
+                {
+                    var sLineText = loadList[i];
+                    if ((!string.IsNullOrEmpty(sLineText)) && (sLineText[0] == '['))
+                    {
+                        sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
+                        sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new[] { " ", "\09" });
+                        sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new[] { " ", "\09" });
+                        var nServerIndex = HUtil32.StrToInt(sServerIndex, 0);
+                        DBShare.MapList.Add(sMapName, nServerIndex);
+                    }
+                }
+            }
+            loadList = null;
         }
 
-        public override void Dispose()
+        private static void LoadChrNameList(string sFileName)
         {
+            int i;
+            if (File.Exists(sFileName))
+            {
+                DBShare.DenyChrNameList.LoadFromFile(sFileName);
+                i = 0;
+                while (true)
+                {
+                    if (DBShare.DenyChrNameList.Count <= i)
+                    {
+                        break;
+                    }
+                    if (string.IsNullOrEmpty(DBShare.DenyChrNameList[i].Trim()))
+                    {
+                        DBShare.DenyChrNameList.RemoveAt(i);
+                        continue;
+                    }
+                    i++;
+                }
+            }
+        }
 
+        private static void LoadClearMakeIndexList(string sFileName)
+        {
+            if (File.Exists(sFileName))
+            {
+                DBShare.ClearMakeIndex.LoadFromFile(sFileName);
+                var i = 0;
+                while (true)
+                {
+                    if (DBShare.ClearMakeIndex.Count <= i)
+                    {
+                        break;
+                    }
+                    var sLineText = DBShare.ClearMakeIndex[i];
+                    var nIndex = HUtil32.StrToInt(sLineText, -1);
+                    if (nIndex < 0)
+                    {
+                        DBShare.ClearMakeIndex.RemoveAt(i);
+                        continue;
+                    }
+                    DBShare.ClearMakeIndex[i] = nIndex.ToString();
+                    i++;
+                }
+            }
         }
     }
 }

@@ -19,13 +19,13 @@ namespace DBSrv
         private int _lastClearTick;
         private int _syncSaveTick;
         private readonly MirLogger _logger;
-        private readonly GateUserService _userSoc;
-        private readonly LoginSessionServer _loginSoc;
+        private readonly UserService _userSoc;
+        private readonly LoginSessionService _loginSoc;
         private readonly PlayerDataService _dataService;
         private readonly ICacheStorage _cacheStorage;
         private readonly IPlayDataStorage _playDataStorage;
 
-        public TimedService(MirLogger logger, GateUserService userSoc, LoginSessionServer loginSoc, PlayerDataService dataService, ICacheStorage cacheStorage, IPlayDataStorage playDataStorage)
+        public TimedService(MirLogger logger, UserService userSoc, LoginSessionService loginSoc, PlayerDataService dataService, ICacheStorage cacheStorage, IPlayDataStorage playDataStorage)
         {
             _logger = logger;
             _userSoc = userSoc;
@@ -72,7 +72,7 @@ namespace DBSrv
         private void ProcessCacheStorage()
         {
             //从内存获取保存数据，刷新到数据库，减少数据库压力，和防止大量数据保存超时
-            _logger.LogInformation("同步缓存数据.");
+            _logger.LogInformation("同步玩家缓存数据.");
             using IEnumerator<PlayerDataInfo> playList = _cacheStorage.QueryCacheData();
             while (playList.MoveNext())
             {
@@ -91,7 +91,7 @@ namespace DBSrv
                 }
                 _cacheStorage.Delete(play.Header.Name);//处理完从缓存删除
             }
-            _logger.LogInformation("同步缓存数据完成.");
+            _logger.LogInformation("同步玩家缓存数据完成.");
         }
     }
 }

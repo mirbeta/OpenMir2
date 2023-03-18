@@ -12,7 +12,7 @@ namespace SystemModule.Hosts
 {
     public abstract class ServiceHost : IHost
     {
-        protected readonly ILogger Logger;
+        private readonly ILogger Logger;
         protected readonly IConfigurationRoot Configuration;
         protected IHost Host;
         protected readonly IHostBuilder Builder;
@@ -23,7 +23,8 @@ namespace SystemModule.Hosts
             {
                 Configuration = new ConfigurationBuilder().AddJsonFile("AppSetting.json", true, true).Build();
             }
-            else {
+            else
+            {
                 Configuration = new ConfigurationBuilder().Build();
             }
             LogManager.Setup()
@@ -36,14 +37,20 @@ namespace SystemModule.Hosts
             {
                 options.ShutdownTimeout = TimeSpan.FromSeconds(30);
             });
+            Initialize();
         }
 
         public IServiceProvider Services => Host?.Services;
+
+        public abstract void Initialize();
 
         public abstract Task StartAsync(CancellationToken cancellationToken);
 
         public abstract Task StopAsync(CancellationToken cancellationToken);
 
-        public abstract void Dispose();
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
     }
 }

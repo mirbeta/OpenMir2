@@ -16,6 +16,11 @@ namespace BotSrv
             Builder.ConfigureServices(ConfigureServices);
         }
 
+        public override void Initialize()
+        {
+           
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<RobotOptions>(Configuration.GetSection("BotPlay"));
@@ -39,11 +44,6 @@ namespace BotSrv
         {
             Host.StopAsync(cancellationToken);
             return Task.CompletedTask;
-        }
-
-        public override void Dispose()
-        {
-             
         }
     }
 }
