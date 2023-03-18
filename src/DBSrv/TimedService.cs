@@ -18,12 +18,13 @@ namespace DBSrv
         private int _lastKeepTick;
         private int _lastClearTick;
         private int _syncSaveTick;
+        private readonly PeriodicTimer _timer;
         private readonly UserService _userSoc;
         private readonly LoginSessionService _loginSoc;
         private readonly PlayerDataService _dataService;
         private readonly ICacheStorage _cacheStorage;
         private readonly IPlayDataStorage _playDataStorage;
-
+        
         public TimedService( UserService userSoc, LoginSessionService loginSoc, PlayerDataService dataService, ICacheStorage cacheStorage, IPlayDataStorage playDataStorage)
         {
             _userSoc = userSoc;
@@ -31,6 +32,7 @@ namespace DBSrv
             _dataService = dataService;
             _cacheStorage = cacheStorage;
             _playDataStorage = playDataStorage;
+            _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -40,30 +42,36 @@ namespace DBSrv
             _lastKeepTick = currentTick;
             _lastClearTick = currentTick;
             _syncSaveTick = currentTick;
-            while (!stoppingToken.IsCancellationRequested)
+            try
             {
-                currentTick = HUtil32.GetTickCount();
-                if (currentTick - _lastKeepTick > 7000)
+                while (await _timer.WaitForNextTickAsync(stoppingToken))
                 {
-                    _lastKeepTick = HUtil32.GetTickCount();
-                    _loginSoc.SendKeepAlivePacket(_userSoc.GetUserCount());
+                    currentTick = HUtil32.GetTickCount();
+                    if (currentTick - _lastKeepTick > 7000)
+                    {
+                        _lastKeepTick = HUtil32.GetTickCount();
+                        _loginSoc.SendKeepAlivePacket(_userSoc.GetUserCount());
+                    }
+                    if (currentTick - _lastSocketTick > 10000)
+                    {
+                        _lastSocketTick = HUtil32.GetTickCount();
+                        _loginSoc.CheckConnection();
+                    }
+                    if (currentTick - _lastClearTick > 10000)
+                    {
+                        _lastClearTick = HUtil32.GetTickCount();
+                        _dataService.ClearTimeoutSession();
+                    }
+                    if (currentTick - _syncSaveTick > 300000)//5分钟刷新一次缓存数据到数据库
+                    {
+                        _syncSaveTick = HUtil32.GetTickCount();
+                        ProcessCacheStorage();
+                    }
                 }
-                if (currentTick - _lastSocketTick > 10000)
-                {
-                    _lastSocketTick = HUtil32.GetTickCount();
-                    _loginSoc.CheckConnection();
-                }
-                if (currentTick - _lastClearTick > 10000)
-                {
-                    _lastClearTick = HUtil32.GetTickCount();
-                    _dataService.ClearTimeoutSession();
-                }
-                if (currentTick - _syncSaveTick > 300000)//5分钟刷新一次缓存数据到数据库
-                {
-                    _syncSaveTick = HUtil32.GetTickCount();
-                    ProcessCacheStorage();
-                }
-                await Task.Delay(TimeSpan.FromMilliseconds(1000), stoppingToken);
+            }
+            catch (OperationCanceledException operationCancelledException)
+            {
+                _logger.Warn(operationCancelledException, "service stopped");
             }
         }
 

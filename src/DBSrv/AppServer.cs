@@ -19,7 +19,6 @@ using Spectre.Console;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Hosts;
-using SystemModule.Logger;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace DBSrv
@@ -32,15 +31,6 @@ namespace DBSrv
 
         public AppServer()
         {
-            Console.CancelKeyPress += delegate
-            {
-                DBShare.ShowLog = true;
-                if (_timer != null)
-                {
-                    _timer.Dispose();
-                }
-                AnsiConsole.Reset();
-            };
             Builder.ConfigureLogging(ConfigureLogging);
             Builder.ConfigureServices(ConfigureServices);
         }
@@ -61,13 +51,11 @@ namespace DBSrv
             LoadChrNameList("DenyChrName.txt");
             LoadClearMakeIndexList("ClearMakeIndex.txt");
             Host = await Builder.StartAsync(cancellationToken);
-            await ProcessLoopAsync();
-            Stop();
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public override async Task StopAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await Host.StopAsync(cancellationToken);
         }
 
         public void ConfigureServices(IServiceCollection services)

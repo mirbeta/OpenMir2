@@ -47,9 +47,9 @@ namespace GameSrv {
             await Builder.StartAsync(cancellationToken);
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken) {
-            Host.StopAsync(cancellationToken);
-            return Task.CompletedTask;
+        public override async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await Host.StopAsync(cancellationToken);
         }
 
         private static void Stop() {
