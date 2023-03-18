@@ -132,7 +132,7 @@ namespace MakePlayer.Cliens
             var nIdx = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
             if (nIdx > 0)
             {
-                var sData2 = sData.Substring(0, nIdx - 1);
+                var sData2 = sData[..(nIdx - 1)];
                 sData = sData2 + sData.Substring(nIdx, sData.Length);
                 ClientSocket.SendText("*");
             }
@@ -695,7 +695,7 @@ namespace MakePlayer.Cliens
             {
                 return;
             }
-            var sDefMsg = sDataBlock.Substring(0, Messages.DefBlockSize);
+            var sDefMsg = sDataBlock[..Messages.DefBlockSize];
             var sBody = sDataBlock.Substring(Messages.DefBlockSize, sDataBlock.Length - Messages.DefBlockSize);
             var defMsg = EDCode.DecodePacket(sDefMsg);
             switch (defMsg.Ident)

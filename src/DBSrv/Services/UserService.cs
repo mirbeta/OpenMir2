@@ -132,7 +132,7 @@ namespace DBSrv.Services
                             userInfo.sText = string.Empty;
                             continue;
                         }
-                        sData = sData.Substring(1, sData.Length - 1);
+                        sData = sData[1..];
                         if (sData.Length >= Messages.DefBlockSize)
                         {
                             DeCodeUserMsg(sData, gateInfo, ref userInfo);

@@ -256,7 +256,7 @@ namespace SystemModule.Common
                             int index = str.IndexOf(";;");
                             if (index >= 0)
                             {
-                                str = str.Substring(0, index).Trim();
+                                str = str[..index].Trim();
                             }
                             if (curSec == null)
                             {
@@ -352,7 +352,7 @@ namespace SystemModule.Common
             }
             if ((pos > 0) && (pos < str.Length))
             {
-                return new[] { str.Substring(0, pos), str.Substring(pos + 1) };
+                return new[] { str[..pos], str[(pos + 1)..] };
             }
             return null;
         }
