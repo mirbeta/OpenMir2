@@ -11,6 +11,7 @@ namespace GameSrv.Services
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient _clientScoket;
+        private bool IsFirstData = false;
         private byte[] ReceiveBuffer { get; set; }
         private int BuffLen { get; set; }
 
@@ -23,7 +24,7 @@ namespace GameSrv.Services
             _clientScoket.OnError += MarketSocketError;
             ReceiveBuffer = new byte[10 * 2048];
         }
-        
+
         public void Start()
         {
             if (M2Share.Config.EnableMarket)
@@ -99,7 +100,7 @@ namespace GameSrv.Services
         {
             _clientScoket.IsConnected = true;
             _logger.Info("数据库(拍卖行)服务器[" + e.RemoteEndPoint + "]连接成功...");
-            // SendRequest(0, null, null); //todo 链接成功后进行第一次主动拉取拍卖行数据
+            SendFirstMessage();// 链接成功后进行第一次主动拉取拍卖行数据
         }
 
         private void MarketSocketError(object sender, DSCClientErrorEventArgs e)
@@ -117,6 +118,21 @@ namespace GameSrv.Services
                     _logger.Error("数据库(拍卖行)服务器[" + M2Share.Config.MarketSrvAddr + ":" + M2Share.Config.MarketSrvPort + "]链接超时...");
                     break;
             }
+        }
+
+        /// <summary>
+        /// 发送拍卖行注册信息
+        /// </summary>
+        public void SendFirstMessage()
+        {
+            if (IsFirstData)
+            {
+                return;
+            }
+            var request = new ServerRequestMessage(1000, 0, 0, 0, 0);
+            var requestData = new MarketRegisterMessage() { ServerIndex = M2Share.ServerIndex, ServerName = M2Share.Config.ServerName, GroupId = 0 };
+            M2Share.MarketService.SendRequest(1, request, requestData);
+            IsFirstData = true;
         }
 
         private void MarketSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -219,7 +235,7 @@ namespace GameSrv.Services
                     var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
                     if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(sginBuff))
                     {
-                        PlayerDataService.Enqueue(respCheckCode, responsePacket);
+                        M2Share.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
                     }
                     else
                     {

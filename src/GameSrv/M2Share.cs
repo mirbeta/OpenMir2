@@ -19,6 +19,7 @@ using GameSrv.Robots;
 using GameSrv.Script;
 using GameSrv.Services;
 using GameSrv.World;
+using GameSrv.World.Managers;
 using GameSrv.World.Threads;
 using NLog;
 using SystemModule.Common;
@@ -68,6 +69,7 @@ namespace GameSrv {
         public static GameEventSource EventSource;
         public static MapManager MapMgr = null;
         public static CustomItem CustomItemMgr = null;
+        public static MarketManager MarketManager = null;
         public static NoticeManager NoticeMgr = null;
         public static GuildManager GuildMgr = null;
         public static EventManager EventMgr = null;

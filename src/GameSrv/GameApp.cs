@@ -15,6 +15,7 @@ using GameSrv.Robots;
 using GameSrv.Script;
 using GameSrv.Services;
 using GameSrv.World;
+using GameSrv.World.Managers;
 using NLog;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -99,6 +100,7 @@ namespace GameSrv
             M2Share.CustomItemMgr = new CustomItem();
             M2Share.NoticeMgr = new NoticeManager();
             M2Share.GuildMgr = new GuildManager();
+            M2Share.MarketManager = new MarketManager();
             M2Share.EventMgr = new EventManager();
             M2Share.CastleMgr = new CastleManager();
             M2Share.FrontEngine = new FrontEngine();

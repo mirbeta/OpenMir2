@@ -1,4 +1,6 @@
+using NLog;
 using SystemModule.Data;
+using SystemModule.Packets.ServerPackets;
 
 namespace GameSrv.World.Managers
 {
@@ -19,6 +21,7 @@ namespace GameSrv.World.Managers
 
     public class MarketManager
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 0 = Empty , 1 = Loading 2 = Full
         /// </summary>
@@ -59,18 +62,21 @@ namespace GameSrv.World.Managers
         {
             if (!IsEmpty) RemoveAll();
             Load();
+            _logger.Info("重载拍卖行物品列表...");
         }
 
         public void RemoveAll()
         {
             Items.Clear();
+            _logger.Info("清空拍卖行物品列表...");
         }
 
         protected void Add(MarketItem marketItem)
         {
             if ((Items != null) && (marketItem != null))
             {
-                Items.Add(marketItem);
+                //Items.Add(marketItem);
+                OnMsgWriteData(marketItem);
             }
             if (Items.Count % MarketConst.MAKET_ITEMCOUNT_PER_PAGE == 0)
             {
@@ -80,7 +86,6 @@ namespace GameSrv.World.Managers
             {
                 FLoadedPage = (Items.Count / MarketConst.MAKET_ITEMCOUNT_PER_PAGE) + 1;
             }
-            OnMsgWriteData();
         }
 
         protected void Delete(int index)
@@ -189,16 +194,23 @@ namespace GameSrv.World.Managers
             }
         }
 
-        protected void OnMsgReadData()
+        public void OnMsgReadData(MarketDataMessage serverRequestData = default)
         {
             //todo 收到DBSrv最新的拍卖行数据
             //循环新数据和历史数据进行对比，删除不存在和新增，避免同时客户端正在操作
-            ReLoad();
+            FState = 0;
+            Items = serverRequestData.List;
+            FMaxPage = (int)Math.Ceiling(serverRequestData.TotalCount / (double)MarketConst.MAKET_ITEMCOUNT_PER_PAGE);
+            _logger.Info("收到拍卖行数据同步消息，共{0}条数据", serverRequestData.TotalCount);
         }
-        
-        protected void OnMsgWriteData()
+
+        private void OnMsgWriteData(MarketItem marketItem)
         {
-            //todo 写入新增的拍卖行数据到DBSrv,避免数据不一致的情况
+            //新增拍卖行数据实时同步到DBSrv,避免数据不一致的情况,并由DBSrv定时广播给所有GameSrv
+            var request = new ServerRequestMessage(1003, 0, 0, 0, 0); 
+            var requestData = new MarketDataItem() { Item = marketItem };
+            M2Share.MarketService.SendRequest(1, request, requestData);
+            _logger.Info("发送拍卖行数据同步消息，物品名称:{0} 物品编号:{1} 售卖人:{2}", marketItem.Item.Item.Name, marketItem.Item.MakeIndex, marketItem.SellWho);
         }
 
         public int UserMode { get => FUserMode; set { FUserMode = value; } }
