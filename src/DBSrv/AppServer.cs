@@ -96,7 +96,6 @@ namespace DBSrv
                     break;
             }
             services.AddSingleton(_config);
-            services.AddSingleton<MirLogger>();
             services.AddSingleton<LoginSessionService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<PlayerDataService>();

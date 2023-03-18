@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using DBSrv.Conf;
 using DBSrv.Storage;
 using DBSrv.Storage.Model;
+using NLog;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Logger;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
@@ -23,7 +23,7 @@ namespace DBSrv.Services
     /// </summary>
     public class UserService
     {
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly DbSrvConf _conf;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
@@ -32,9 +32,8 @@ namespace DBSrv.Services
         private readonly Channel<UserGateMessage> _reviceQueue;
         private readonly Dictionary<string, SelGateInfo> _gateMap;
 
-        public UserService(MirLogger logger, DbSrvConf conf, LoginSessionService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
+        public UserService(DbSrvConf conf, LoginSessionService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
-            _logger = logger;
             _loginService = loginService;
             _playRecordStorage = playRecord;
             _playDataStorage = playData;
@@ -54,7 +53,7 @@ namespace DBSrv.Services
             _playRecordStorage.LoadQuickList();
             _userSocket.Start(_conf.GateAddr, _conf.GatePort);
             StartMessageThread(stoppingToken);
-            _logger.LogInformation($"玩家数据网关服务[{_conf.GateAddr}:{_conf.GatePort}]已启动.等待链接...");
+            _logger.Info($"玩家数据网关服务[{_conf.GateAddr}:{_conf.GatePort}]已启动.等待链接...");
         }
 
         public void Stop()
@@ -98,7 +97,7 @@ namespace DBSrv.Services
                         }
                         catch (Exception e)
                         {
-                            _logger.LogError(e);
+                            _logger.Error(e);
                         }
                     }
                 }
@@ -149,7 +148,7 @@ namespace DBSrv.Services
             if (!DBShare.CheckServerIP(sIPaddr))
             {
                 e.Socket.Close();
-                _logger.LogWarning("非法地址连接: " + sIPaddr);
+                _logger.Warn("非法地址连接: " + sIPaddr);
                 return;
             }
             var selGateInfo = new SelGateInfo();
@@ -159,7 +158,7 @@ namespace DBSrv.Services
             selGateInfo.UserList = new List<SessionUserInfo>();
             selGateInfo.nGateID = DBShare.GetGateID(sIPaddr);
             _gateMap.Add(e.ConnectionId, selGateInfo);
-            _logger.LogInformation(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
+            _logger.Info(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
         }
 
         private const string sGateOpen = "角色网关[{0}]({1}:{2})已打开...";
@@ -180,7 +179,7 @@ namespace DBSrv.Services
                         }
                         gateInfo.UserList = null;
                     }
-                    _logger.LogInformation(string.Format(sGateClose, gateIndex, e.RemoteIPaddr, e.RemotePort));
+                    _logger.Info(string.Format(sGateClose, gateIndex, e.RemoteIPaddr, e.RemotePort));
                 }
                 gateIndex++;
                 _gateMap.Remove(e.ConnectionId);
@@ -207,7 +206,7 @@ namespace DBSrv.Services
                         srcOffset++;
                         dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
                         nLen -= 1;
-                        _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
                     var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
@@ -220,7 +219,7 @@ namespace DBSrv.Services
                     {
                         case ServerDataType.KeepAlive:
                             SendKeepAlivePacket(gateInfo.ConnectionId);
-                            _logger.DebugLog("Received SelGate Heartbeat.");
+                            _logger.Debug("Received SelGate Heartbeat.");
                             break;
                         case ServerDataType.Enter:
                             var sData = string.Empty;
@@ -265,7 +264,7 @@ namespace DBSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex);
+                _logger.Error(ex);
             }
         }
 
@@ -397,16 +396,16 @@ namespace DBSrv.Services
                         if (QueryChr(sText, ref userInfo, ref gateInfo))
                         {
                             userInfo.boChrQueryed = true;
-                            _logger.DebugLog("[QueryChr]:" + sText);
+                            _logger.Debug("[QueryChr]:" + sText);
                         }
                         else
                         {
-                            _logger.DebugLog("[QueryChr]:" + sText);
+                            _logger.Debug("[QueryChr]:" + sText);
                         }
                     }
                     else
                     {
-                        _logger.LogWarning("[Hacker Attack] QueryChr:" + userInfo.sUserIPaddr);
+                        _logger.Warn("[Hacker Attack] QueryChr:" + userInfo.sUserIPaddr);
                     }
                     break;
                 case Messages.CM_NEWCHR:
@@ -427,7 +426,7 @@ namespace DBSrv.Services
                     }
                     else
                     {
-                        _logger.LogWarning("[Hacker Attack] NEWCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
+                        _logger.Warn("[Hacker Attack] NEWCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
                 case Messages.CM_DELCHR:
@@ -446,7 +445,7 @@ namespace DBSrv.Services
                     }
                     else
                     {
-                        _logger.LogWarning("[Hacker Attack] DELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
+                        _logger.Warn("[Hacker Attack] DELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
                 case Messages.CM_SELCHR:
@@ -466,7 +465,7 @@ namespace DBSrv.Services
                     }
                     else
                     {
-                        _logger.LogWarning("Double send SELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
+                        _logger.Warn("Double send SELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
             }

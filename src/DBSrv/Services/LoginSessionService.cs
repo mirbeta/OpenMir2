@@ -2,8 +2,8 @@ using DBSrv.Conf;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using NLog;
 using SystemModule;
-using SystemModule.Logger;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -14,15 +14,14 @@ namespace DBSrv.Services
     /// </summary>
     public class LoginSessionService
     {
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient _clientScoket;
         private readonly IList<GlobaSessionInfo> _globaSessionList = null;
         private readonly DbSrvConf _conf;
         private string _sockMsg = string.Empty;
 
-        public LoginSessionService(MirLogger logger, DbSrvConf conf)
+        public LoginSessionService(DbSrvConf conf)
         {
-            _logger = logger;
             _conf = conf;
             _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(_conf.LoginServerAddr), _conf.LoginServerPort));
             _clientScoket.OnReceivedData += LoginSocketRead;
@@ -37,25 +36,25 @@ namespace DBSrv.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logger.LogWarning("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]拒绝链接...");
+                    _logger.Warn("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logger.LogWarning("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]关闭连接...");
+                    _logger.Warn("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logger.LogWarning("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]链接超时...");
+                    _logger.Warn("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]链接超时...");
                     break;
             }
         }
 
         private void LoginSocketConnected(object sender, DSCClientConnectedEventArgs e)
         {
-            _logger.LogInformation($"账号服务器[{e.RemoteEndPoint}]链接成功.");
+            _logger.Info($"账号服务器[{e.RemoteEndPoint}]链接成功.");
         }
 
         private void LoginSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
-            _logger.LogError($"账号服务器[{e.RemoteEndPoint}]断开链接.");
+            _logger.Error($"账号服务器[{e.RemoteEndPoint}]断开链接.");
         }
 
         public void Start()
@@ -81,7 +80,7 @@ namespace DBSrv.Services
             {
                 return;
             }
-            _logger.DebugLog($"重新链接账号服务器[{_clientScoket.RemoteEndPoint}].");
+            _logger.Debug($"重链接账号服务器[{_clientScoket.RemoteEndPoint}].");
             _clientScoket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
         }
 

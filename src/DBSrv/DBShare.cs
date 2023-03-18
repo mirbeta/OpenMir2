@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -9,7 +8,7 @@ using SystemModule.Common;
 
 namespace DBSrv
 {
-    public class DBShare
+    public static class DBShare
     {
         public static StringList DenyChrNameList = null;
         public static readonly StringList ClearMakeIndex = null;

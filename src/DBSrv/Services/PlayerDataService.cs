@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using DBSrv.Conf;
 using DBSrv.Storage;
+using NLog;
 using SystemModule;
-using SystemModule.Logger;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
@@ -16,7 +16,7 @@ namespace DBSrv.Services
     /// </summary>
     public class PlayerDataService
     {
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<ServerDataInfo> _serverList;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly ICacheStorage _cacheStorage;
@@ -25,9 +25,8 @@ namespace DBSrv.Services
         private readonly DbSrvConf _conf;
         private IList<THumSession> PlaySessionList { get; set; }
 
-        public PlayerDataService(MirLogger logger, DbSrvConf conf, LoginSessionService loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
+        public PlayerDataService(DbSrvConf conf, LoginSessionService loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
         {
-            _logger = logger;
             _loginService = loginService;
             _playDataStorage = playDataStorage;
             _cacheStorage = cacheStorage;
@@ -46,7 +45,7 @@ namespace DBSrv.Services
             _serverSocket.Init();
             _serverSocket.Start(_conf.ServerAddr, _conf.ServerPort);
             _playDataStorage.LoadQuickList();
-            _logger.LogInformation($"玩家数据存储服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
+            _logger.Info($"玩家数据存储服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
         }
 
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
@@ -54,7 +53,7 @@ namespace DBSrv.Services
             string sIPaddr = e.RemoteIPaddr;
             if (!DBShare.CheckServerIP(sIPaddr))
             {
-                _logger.LogWarning("非法服务器连接: " + sIPaddr);
+                _logger.Warn("非法服务器连接: " + sIPaddr);
                 e.Socket.Close();
                 return;
             }
@@ -98,7 +97,7 @@ namespace DBSrv.Services
                         srcOffset++;
                         dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
                         nLen -= 1;
-                        _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        _logger.Error($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
                     var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
@@ -133,7 +132,7 @@ namespace DBSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex);
+                _logger.Error(ex);
             }
         }
         
@@ -166,7 +165,7 @@ namespace DBSrv.Services
                     return;
                 }
                 _serverSocket.CloseSocket(serverInfo.ConnectionId);
-                _logger.LogError($"关闭错误的任务{nQueryId}查询请求.");
+                _logger.Error($"关闭错误的任务{nQueryId}查询请求.");
                 return;
             }
             var responsePack = new ServerRequestData();
@@ -280,7 +279,7 @@ namespace DBSrv.Services
                 nCheckCode = _loginService.CheckSessionLoadRcd(loadHumanPacket.Account, loadHumanPacket.UserAddr, loadHumanPacket.SessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
-                    _logger.LogWarning("[非法请求] " + "帐号: " + loadHumanPacket.Account + " IP: " + loadHumanPacket.UserAddr + " 标识: " + loadHumanPacket.SessionID);
+                    _logger.Warn("[非法请求] " + "帐号: " + loadHumanPacket.Account + " IP: " + loadHumanPacket.UserAddr + " 标识: " + loadHumanPacket.SessionID);
                 }
             }
             if ((nCheckCode == 1) || boFoundSession)
@@ -311,7 +310,7 @@ namespace DBSrv.Services
                 var messagePacket = new ServerRequestMessage(Messages.DBR_LOADHUMANRCD, 1, 0, 0, 1);
                 responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
                 SendRequest(connectionId, queryId, responsePack, loadHumData);
-                _logger.DebugLog($"获取玩家[{loadHumanPacket.ChrName}]数据成功");
+                _logger.Debug($"获取玩家[{loadHumanPacket.ChrName}]数据成功");
             }
             else
             {
@@ -328,7 +327,7 @@ namespace DBSrv.Services
                 var saveHumDataPacket = SerializerUtil.Deserialize<SavePlayerDataMessage>(sMsg);
                 if (saveHumDataPacket == null)
                 {
-                    _logger.LogError("保存玩家数据出错.");
+                    _logger.Error("保存玩家数据出错.");
                     return;
                 }
                 var sUserID = saveHumDataPacket.Account;
@@ -378,7 +377,7 @@ namespace DBSrv.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(e);
+                _logger.Error(e);
             }
         }
 
@@ -387,7 +386,7 @@ namespace DBSrv.Services
             var saveHumDataPacket = SerializerUtil.Deserialize<SavePlayerDataMessage>(sMsg);
             if (saveHumDataPacket == null)
             {
-                _logger.LogError("保存玩家数据出错.");
+                _logger.Error("保存玩家数据出错.");
                 return;
             }
             var sChrName = saveHumDataPacket.ChrName;
