@@ -47,6 +47,9 @@ namespace DBSrv
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
             DBShare.Initialization();
+            _logger.Info("正在读取基础配置信息...");
+            DBShare.LoadConfig();
+            _logger.Info("读取基础配置信息完成...");
             LoadServerInfo();
             LoadChrNameList("DenyChrName.txt");
             LoadClearMakeIndexList("ClearMakeIndex.txt");
@@ -84,9 +87,9 @@ namespace DBSrv
                     break;
             }
             services.AddSingleton(_config);
-            services.AddSingleton<LoginSessionService>();
+            services.AddSingleton<SessionService>();
             services.AddSingleton<UserService>();
-            services.AddSingleton<PlayerDataService>();
+            services.AddSingleton<DataService>();
             services.AddSingleton<ICacheStorage, CacheStorageService>();
             services.AddHostedService<TimedService>();
             services.AddHostedService<AppService>();

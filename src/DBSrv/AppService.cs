@@ -14,13 +14,13 @@ namespace DBSrv
         private readonly IHost Host;
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly UserService _userSocService;
-        private readonly LoginSessionService _loginSvrService;
-        private readonly PlayerDataService _dataService;
+        private readonly SessionService _loginSvrService;
+        private readonly DataService _dataService;
         private CancellationTokenSource _cancellationTokenSource;
         private Task _applicationTask;
         private int _exitCode;
         
-        public AppService(IHostApplicationLifetime lifetime, IServiceProvider serviceProvider, UserService userSoc, LoginSessionService loginSession, PlayerDataService dataService)
+        public AppService(IHostApplicationLifetime lifetime, IServiceProvider serviceProvider, UserService userSoc, SessionService loginSession, DataService dataService)
         {
             _appLifetime = lifetime;
             _userSocService = userSoc;
@@ -41,9 +41,6 @@ namespace DBSrv
                 {
                     try
                     {
-                        logger.Info("正在读取配置信息...");
-                        DBShare.LoadConfig();
-                        logger.Info("读取配置信息完成...");
                         _userSocService.Start(cancellationToken);
                         _loginSvrService.Start();
                         _dataService.Start();

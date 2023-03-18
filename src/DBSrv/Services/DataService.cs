@@ -14,18 +14,18 @@ namespace DBSrv.Services
     /// 玩家数据服务
     /// DBSrv->GameSvr
     /// </summary>
-    public class PlayerDataService
+    public class DataService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<ServerDataInfo> _serverList;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly ICacheStorage _cacheStorage;
         private readonly SocketServer _serverSocket;
-        private readonly LoginSessionService _loginService;
+        private readonly SessionService _loginService;
         private readonly DbSrvConf _conf;
         private IList<THumSession> PlaySessionList { get; set; }
 
-        public PlayerDataService(DbSrvConf conf, LoginSessionService loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
+        public DataService(DbSrvConf conf, SessionService loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
         {
             _loginService = loginService;
             _playDataStorage = playDataStorage;
@@ -37,11 +37,11 @@ namespace DBSrv.Services
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
             _conf = conf;
+            PlaySessionList = new List<THumSession>();
         }
 
         public void Start()
         {
-            PlaySessionList = new List<THumSession>();
             _serverSocket.Init();
             _serverSocket.Start(_conf.ServerAddr, _conf.ServerPort);
             _playDataStorage.LoadQuickList();

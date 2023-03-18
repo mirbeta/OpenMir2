@@ -28,11 +28,11 @@ namespace DBSrv.Services
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
         private readonly SocketServer _userSocket;
-        private readonly LoginSessionService _loginService;
+        private readonly SessionService _loginService;
         private readonly Channel<UserGateMessage> _reviceQueue;
         private readonly Dictionary<string, SelGateInfo> _gateMap;
 
-        public UserService(DbSrvConf conf, LoginSessionService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
+        public UserService(DbSrvConf conf, SessionService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
             _loginService = loginService;
             _playRecordStorage = playRecord;
@@ -695,6 +695,7 @@ namespace DBSrv.Services
             {
                 msg = Messages.MakeMessage(Messages.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
             }
+            _logger.Info("创建角色:{0} 结果:{1}", sChrName, nCode == 1 ? "成功" : "失败");
             var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
             return nCode == 1;
@@ -745,7 +746,7 @@ namespace DBSrv.Services
                 if (nIndex >= 0)
                 {
                     var chrRecord = _playDataStorage.Query(nIndex);
-                    if (chrRecord != null)
+                    if (string.IsNullOrEmpty(chrRecord.ChrName))
                     {
                         sCurMap = chrRecord.CurMap;
                         boDataOk = true;
@@ -765,7 +766,7 @@ namespace DBSrv.Services
                 SendUserSocket(curGate.ConnectionId, userInfo.SessionId, sDefMsg + sRouteMsg);
                 _loginService.SetGlobaSessionPlay(userInfo.nSessionID);
                 result = true;
-                //_logger.DebugLog($"玩家使用游戏网关信息 GameRun:{sRouteIp} Port:{nRoutePort + nMapIndex}");
+                _logger.Debug($"玩家获取游戏网关信息 GameRun:{sRouteIp} Port:{nRoutePort + nMapIndex}");
             }
             else
             {
@@ -786,7 +787,7 @@ namespace DBSrv.Services
             return result;
         }
 
-        private string GateRouteIp(string sGateIp, ref int nPort)
+        private static string GateRouteIp(string sGateIp, ref int nPort)
         {
             var result = string.Empty;
             nPort = 0;

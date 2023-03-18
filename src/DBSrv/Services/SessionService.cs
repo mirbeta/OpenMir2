@@ -12,7 +12,7 @@ namespace DBSrv.Services
     /// <summary>
     /// 登陆会话同步服务(DBSrv-LoginSrv)
     /// </summary>
-    public class LoginSessionService
+    public class SessionService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient _clientScoket;
@@ -20,7 +20,7 @@ namespace DBSrv.Services
         private readonly DbSrvConf _conf;
         private string _sockMsg = string.Empty;
 
-        public LoginSessionService(DbSrvConf conf)
+        public SessionService(DbSrvConf conf)
         {
             _conf = conf;
             _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(_conf.LoginServerAddr), _conf.LoginServerPort));

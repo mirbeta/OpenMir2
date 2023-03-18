@@ -14,21 +14,17 @@ namespace DBSrv
     public class TimedService : BackgroundService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private int _lastSocketTick;
-        private int _lastKeepTick;
-        private int _lastClearTick;
-        private int _syncSaveTick;
         private readonly PeriodicTimer _timer;
-        private readonly UserService _userSoc;
-        private readonly LoginSessionService _loginSoc;
-        private readonly PlayerDataService _dataService;
+        private readonly UserService _userService;
+        private readonly SessionService _sessionService;
+        private readonly DataService _dataService;
         private readonly ICacheStorage _cacheStorage;
         private readonly IPlayDataStorage _playDataStorage;
-        
-        public TimedService( UserService userSoc, LoginSessionService loginSoc, PlayerDataService dataService, ICacheStorage cacheStorage, IPlayDataStorage playDataStorage)
+
+        public TimedService(ICacheStorage cacheStorage, UserService userService, SessionService session, DataService dataService, IPlayDataStorage playDataStorage)
         {
-            _userSoc = userSoc;
-            _loginSoc = loginSoc;
+            _userService = userService;
+            _sessionService = session;
             _dataService = dataService;
             _cacheStorage = cacheStorage;
             _playDataStorage = playDataStorage;
@@ -38,33 +34,33 @@ namespace DBSrv
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var currentTick = HUtil32.GetTickCount();
-            _lastSocketTick = currentTick;
-            _lastKeepTick = currentTick;
-            _lastClearTick = currentTick;
-            _syncSaveTick = currentTick;
+            var lastSocketTick = currentTick;
+            var lastKeepTick = currentTick;
+            var lastClearTick = currentTick;
+            var syncSaveTick = currentTick;
             try
             {
                 while (await _timer.WaitForNextTickAsync(stoppingToken))
                 {
                     currentTick = HUtil32.GetTickCount();
-                    if (currentTick - _lastKeepTick > 7000)
+                    if (currentTick - lastSocketTick > 10000)
                     {
-                        _lastKeepTick = HUtil32.GetTickCount();
-                        _loginSoc.SendKeepAlivePacket(_userSoc.GetUserCount());
+                        lastSocketTick = HUtil32.GetTickCount();
+                        _sessionService.CheckConnection();
                     }
-                    if (currentTick - _lastSocketTick > 10000)
+                    if (currentTick - lastKeepTick > 7000)
                     {
-                        _lastSocketTick = HUtil32.GetTickCount();
-                        _loginSoc.CheckConnection();
+                        lastKeepTick = HUtil32.GetTickCount();
+                        _sessionService.SendKeepAlivePacket(_userService.GetUserCount());
                     }
-                    if (currentTick - _lastClearTick > 10000)
+                    if (currentTick - lastClearTick > 10000)
                     {
-                        _lastClearTick = HUtil32.GetTickCount();
+                        lastClearTick = HUtil32.GetTickCount();
                         _dataService.ClearTimeoutSession();
                     }
-                    if (currentTick - _syncSaveTick > 300000)//5分钟刷新一次缓存数据到数据库
+                    if (currentTick - syncSaveTick > 300000) //5分钟刷新一次缓存数据到数据库
                     {
-                        _syncSaveTick = HUtil32.GetTickCount();
+                        syncSaveTick = HUtil32.GetTickCount();
                         ProcessCacheStorage();
                     }
                 }
