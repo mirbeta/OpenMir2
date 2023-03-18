@@ -210,8 +210,9 @@ namespace GameSrv.Services
                             M2Share.Config.nLoadDBErrorCount++;
                             return;
                         }
+                        var signatureBuff = BitConverter.GetBytes(queryId);
                         var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
-                        if (queryId == BitConverter.ToInt16(sginBuff))
+                        if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(sginBuff))
                         {
                             PlayerDataService.Enqueue(respCheckCode, responsePacket);
                         }

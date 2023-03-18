@@ -9,7 +9,7 @@ namespace GameSrv.World.Threads
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public StorageProcessor() : base(TimeSpan.FromMilliseconds(20), "StorageProcessor")
+        public StorageProcessor() : base(TimeSpan.FromMilliseconds(1000), "StorageProcessor")
         {
 
         }
@@ -34,6 +34,7 @@ namespace GameSrv.World.Threads
             const string sExceptionMsg = "[Exception] StorageProcessor::ExecuteInternal";
             try
             {
+                M2Share.FrontEngine.ProcessGameDate();
                 if (!M2Share.DataServer.IsConnected && M2Share.FrontEngine.m_SaveRcdList.Count > 0)
                 {
                     _logger.Error("DBServer 断开链接，保存玩家数据失败.");
@@ -59,7 +60,6 @@ namespace GameSrv.World.Threads
                     ProcessReadStorage();
                     ProcessSaveStorage();
                 }
-                M2Share.FrontEngine.ProcessGameDate();
             }
             catch (Exception ex)
             {
@@ -102,7 +102,6 @@ namespace GameSrv.World.Threads
         private void ProcessReadStorage()
         {
             bool boReTryLoadDb = false;
-            PlayerDataService.ProcessQueryQueue();
             for (int i = 0; i < M2Share.FrontEngine.m_LoadRcdTempList.Count; i++)
             {
                 LoadDBInfo loadDbInfo = M2Share.FrontEngine.m_LoadRcdTempList[i];
@@ -132,6 +131,7 @@ namespace GameSrv.World.Threads
                 }
             }
             M2Share.FrontEngine.m_LoadRcdTempList.Clear();
+            PlayerDataService.ProcessQueryQueue();
         }
 
         private static bool LoadPlayerFromDB(LoadDBInfo loadUser, ref bool boReTry)

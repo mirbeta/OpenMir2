@@ -22,6 +22,7 @@ namespace GameSrv.Services
         public static void Enqueue(int queryId, ServerRequestData data)
         {
             ReceivedMap.TryAdd(queryId, data);
+            Logger.Debug($"执行任务Id:{queryId}成功");
         }
 
         private static bool GetDbSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
