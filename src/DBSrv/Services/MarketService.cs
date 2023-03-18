@@ -70,7 +70,8 @@ namespace DBSrv.Services
         private void PushMarketData()
         {
             //todo 根据服务器分组推送到各个GameSrv或者推送到所有GameSrv
-            var marketItems = _marketStorage.QueryMarketItems(0);
+            byte groupId = 0;//GroupID为0时查询所有区服的拍卖行数据
+            var marketItems = _marketStorage.QueryMarketItems(groupId); 
             if (!marketItems.Any())
             {
                 _logger.Info("当前服务器分组拍卖行数据为空,推送拍卖行数据失败.");
@@ -84,6 +85,7 @@ namespace DBSrv.Services
                     _socketServer.Send(client.ConnectionId, Array.Empty<byte>());//推送拍卖行数据
                 }
             }
+            _logger.Info($"推送拍卖行数据成功.当前拍卖行共:[{marketItems.Count()}]条数据,在线服务器:[{socketList.Count}]");
         }
     }
 }

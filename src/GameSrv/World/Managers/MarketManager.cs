@@ -63,7 +63,7 @@ namespace GameSrv.World.Managers
 
         public void RemoveAll()
         {
-
+            Items.Clear();
         }
 
         protected void Add(MarketItem marketItem)
@@ -80,6 +80,7 @@ namespace GameSrv.World.Managers
             {
                 FLoadedPage = (Items.Count / MarketConst.MAKET_ITEMCOUNT_PER_PAGE) + 1;
             }
+            OnMsgWriteData();
         }
 
         protected void Delete(int index)
@@ -190,12 +191,14 @@ namespace GameSrv.World.Managers
 
         protected void OnMsgReadData()
         {
-        
+            //todo 收到DBSrv最新的拍卖行数据
+            //循环新数据和历史数据进行对比，删除不存在和新增，避免同时客户端正在操作
+            ReLoad();
         }
         
         protected void OnMsgWriteData()
         {
-
+            //todo 写入新增的拍卖行数据到DBSrv,避免数据不一致的情况
         }
 
         public int UserMode { get => FUserMode; set { FUserMode = value; } }
