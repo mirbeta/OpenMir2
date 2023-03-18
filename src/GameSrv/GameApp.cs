@@ -91,6 +91,7 @@ namespace GameSrv
             _logger.Info("读取游戏引擎数据配置文件...");
             M2Share.GeneratorProcessor.Initialize(stoppingToken);
             M2Share.DataServer = new DBService();
+            M2Share.MarketService = new MarketService();
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.SocketMgr = new ThreadSocketMgr();
             M2Share.EventSource = new GameEventSource();

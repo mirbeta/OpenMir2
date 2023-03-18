@@ -191,7 +191,7 @@ namespace GameSrv.World.Managers
 
         protected void OnMsgReadData()
         {
-
+        
         }
         
         protected void OnMsgWriteData()

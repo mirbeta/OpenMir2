@@ -12,7 +12,7 @@ namespace GameSrv.Services
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient _clientScoket;
         private byte[] ReceiveBuffer { get; set; }
-        public int BuffLen { get; set; }
+        private int BuffLen { get; set; }
         private bool SocketWorking { get; set; }
 
         public DBService()

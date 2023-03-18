@@ -70,6 +70,12 @@ namespace GameSrv.Conf.Model {
         public string sIDSAddr;
         public int nIDSPort;
         /// <summary>
+        /// 是否启用拍卖行
+        /// </summary>
+        public bool EnableMarket;
+        public string MarketSrvAddr;
+        public int MarketSrvPort;
+        /// <summary>
         /// Master服务器IP
         /// </summary>
         public string MasterSrvAddr;
@@ -1067,6 +1073,9 @@ namespace GameSrv.Conf.Model {
             nDBPort = 6000;
             sIDSAddr = "127.0.0.1";
             nIDSPort = 5600;
+            EnableMarket = true;
+            MarketSrvAddr = "127.0.0.1";
+            MarketSrvPort = 5700;
             MasterSrvAddr = "127.0.0.1";
             MasterSrvPort = 4900;
             LogServerAddr = "127.0.0.1";
