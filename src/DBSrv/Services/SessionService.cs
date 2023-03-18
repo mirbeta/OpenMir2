@@ -17,10 +17,10 @@ namespace DBSrv.Services
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient _clientScoket;
         private readonly IList<GlobaSessionInfo> _globaSessionList = null;
-        private readonly DbSrvConf _conf;
+        private readonly SettingConf _conf;
         private string _sockMsg = string.Empty;
 
-        public SessionService(DbSrvConf conf)
+        public SessionService(SettingConf conf)
         {
             _conf = conf;
             _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(_conf.LoginServerAddr), _conf.LoginServerPort));

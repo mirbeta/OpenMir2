@@ -6,16 +6,16 @@ namespace DBSrv.Conf
 {
     public class ConfigManager : ConfigFile
     {
-        private readonly DbSrvConf _config;
+        private readonly SettingConf _config;
         private static readonly string ConfitFile = Path.Combine(AppContext.BaseDirectory, "dbsvr.conf");
 
         public ConfigManager() : base(ConfitFile)
         {
-            _config = new DbSrvConf();
+            _config = new SettingConf();
             Load();
         }
 
-        public DbSrvConf GetConfig => _config;
+        public SettingConf GetConfig => _config;
 
         public void LoadConfig()
         {

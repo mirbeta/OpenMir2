@@ -22,10 +22,10 @@ namespace DBSrv.Services
         private readonly ICacheStorage _cacheStorage;
         private readonly SocketServer _serverSocket;
         private readonly SessionService _loginService;
-        private readonly DbSrvConf _conf;
+        private readonly SettingConf _conf;
         private IList<THumSession> PlaySessionList { get; set; }
 
-        public DataService(DbSrvConf conf, SessionService loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
+        public DataService(SettingConf conf, SessionService loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
         {
             _loginService = loginService;
             _playDataStorage = playDataStorage;

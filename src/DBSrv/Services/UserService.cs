@@ -24,7 +24,7 @@ namespace DBSrv.Services
     public class UserService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly DbSrvConf _conf;
+        private readonly SettingConf _setting;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
         private readonly SocketServer _userSocket;
@@ -32,9 +32,9 @@ namespace DBSrv.Services
         private readonly Channel<UserGateMessage> _reviceQueue;
         private readonly Dictionary<string, SelGateInfo> _gateMap;
 
-        public UserService(DbSrvConf conf, SessionService loginService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
+        public UserService(SettingConf conf, SessionService sessionService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
-            _loginService = loginService;
+            _loginService = sessionService;
             _playRecordStorage = playRecord;
             _playDataStorage = playData;
             _gateMap = new Dictionary<string, SelGateInfo>(StringComparer.OrdinalIgnoreCase);
@@ -44,16 +44,16 @@ namespace DBSrv.Services
             _userSocket.OnClientDisconnect += UserSocketClientDisconnect;
             _userSocket.OnClientRead += UserSocketClientRead;
             _userSocket.OnClientError += UserSocketClientError;
-            _conf = conf;
+            _setting = conf;
         }
 
         public void Start(CancellationToken stoppingToken)
         {
             _userSocket.Init();
             _playRecordStorage.LoadQuickList();
-            _userSocket.Start(_conf.GateAddr, _conf.GatePort);
+            _userSocket.Start(_setting.GateAddr, _setting.GatePort);
             StartMessageThread(stoppingToken);
-            _logger.Info($"玩家数据网关服务[{_conf.GateAddr}:{_conf.GatePort}]已启动.等待链接...");
+            _logger.Info($"玩家数据网关服务[{_setting.GateAddr}:{_setting.GatePort}]已启动.等待链接...");
         }
 
         public void Stop()
@@ -572,7 +572,7 @@ namespace DBSrv.Services
                     if (humRecord.sAccount == userInfo.sAccount)
                     {
                         var nLevel = DelChrSnameToLevel(sChrName);
-                        if (nLevel < _conf.DeleteMinLevel)
+                        if (nLevel < _setting.DeleteMinLevel)
                         {
                             humRecord.Deleted = true;
                             boCheck = _playRecordStorage.Update(nIndex, ref humRecord);
@@ -619,7 +619,7 @@ namespace DBSrv.Services
             {
                 nCode = 0;
             }
-            if (_conf.EnglishNames && !HUtil32.IsEnglishStr(sChrName))
+            if (_setting.EnglishNames && !HUtil32.IsEnglishStr(sChrName))
             {
                 nCode = 0;
             }
@@ -758,7 +758,7 @@ namespace DBSrv.Services
                 var nMapIndex = DBShare.GetMapIndex(sCurMap);
                 var sDefMsg = EDCode.EncodeMessage(Messages.MakeMessage(Messages.SM_STARTPLAY, 0, 0, 0, 0));
                 var sRouteIp = GateRouteIp(curGate.RemoteEndPoint.GetIPAddress(), ref nRoutePort);
-                if (_conf.DynamicIpMode)// 使用动态IP
+                if (_setting.DynamicIpMode)// 使用动态IP
                 {
                     sRouteIp = userInfo.sGateIPaddr;
                 }

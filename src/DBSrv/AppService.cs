@@ -16,16 +16,19 @@ namespace DBSrv
         private readonly UserService _userSocService;
         private readonly SessionService _loginSvrService;
         private readonly DataService _dataService;
+        private readonly MarketService _marketService;
         private CancellationTokenSource _cancellationTokenSource;
         private Task _applicationTask;
         private int _exitCode;
-        
-        public AppService(IHostApplicationLifetime lifetime, IServiceProvider serviceProvider, UserService userSoc, SessionService loginSession, DataService dataService)
+
+        public AppService(IHostApplicationLifetime lifetime, IServiceProvider serviceProvider, UserService userService, SessionService loginSession,
+            DataService dataService, MarketService marketService)
         {
             _appLifetime = lifetime;
-            _userSocService = userSoc;
+            _userSocService = userService;
             _loginSvrService = loginSession;
             _dataService = dataService;
+            _marketService = marketService;
             Host = serviceProvider.GetService<IHost>();
         }
 
@@ -44,6 +47,7 @@ namespace DBSrv
                         _userSocService.Start(cancellationToken);
                         _loginSvrService.Start();
                         _dataService.Start();
+                        _marketService.Start();
                         _exitCode = 0;
                     }
                     catch (TaskCanceledException)

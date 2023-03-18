@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using DBSrv.Conf;
 using DBSrv.Storage;
 using NLog;
 using SystemModule.Sockets;
@@ -17,9 +18,11 @@ namespace DBSrv.Services
         private readonly ICacheStorage _cacheStorage;
         private readonly IMarketStorage _marketStorage;
         private readonly SocketServer _socketServer;
+        private readonly SettingConf _setting;
 
-        public MarketService(ICacheStorage cacheStorage, IMarketStorage marketStorage)
+        public MarketService(SettingConf setting,ICacheStorage cacheStorage, IMarketStorage marketStorage)
         {
+            _setting = setting;
             _cacheStorage = cacheStorage;
             _marketStorage = marketStorage;
             _socketServer = new SocketServer(byte.MaxValue, 1024);
@@ -32,7 +35,7 @@ namespace DBSrv.Services
         public void Start()
         {
             _socketServer.Init();
-            _socketServer.Start("127.0.0.1", 5700);
+            _socketServer.Start(_setting.MarketServerAddr, _setting.MarketServerPort);
         }
 
         public void Stop()

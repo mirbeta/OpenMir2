@@ -27,7 +27,7 @@ namespace DBSrv
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static PeriodicTimer _timer;
-        private static DbSrvConf _config;
+        private static SettingConf _config;
 
         public AppServer()
         {
