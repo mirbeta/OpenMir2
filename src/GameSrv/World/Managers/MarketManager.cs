@@ -22,15 +22,15 @@ namespace GameSrv.World.Managers
         /// <summary>
         /// 0 = Empty , 1 = Loading 2 = Full
         /// </summary>
-        protected int FState;
+        private int FState;
         protected int FMaxPage;
-        protected int FCurrPage;
-        protected int FLoadedPage;
-        protected int FSelectedIndex;
-        protected int FUserMode;
-        protected int FItemType;
-        protected IList<MarketItem> Items;
-        protected MarKetReqInfo ReqInfo;
+        private int FCurrPage;
+        private int FLoadedPage;
+        private int FSelectedIndex;
+        private int FUserMode;
+        private int FItemType;
+        private IList<MarketItem> Items;
+        private MarKetReqInfo ReqInfo;
 
         public MarketManager()
         {
@@ -156,7 +156,6 @@ namespace GameSrv.World.Managers
             return result;
         }
 
-
         public bool Select(int index)
         {
             var result = false;
@@ -199,9 +198,9 @@ namespace GameSrv.World.Managers
 
         }
 
-        protected int UserMode { get { return FUserMode; } set { FUserMode = value; } }
-        protected int ItemType { get { return FItemType; } set { FItemType = value; } }
-        protected int LodedPage { get { return FLoadedPage; } }
-        protected int CurrPage { get { return FCurrPage; } set { FCurrPage = value; } }
+        public int UserMode { get => FUserMode; set { FUserMode = value; } }
+        public int ItemType { get => FItemType; set { FItemType = value; } }
+        public int LodedPage => FLoadedPage;
+        public int CurrPage { get => FCurrPage; set { FCurrPage = value; } }
     }
 }
