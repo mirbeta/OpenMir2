@@ -192,9 +192,8 @@ namespace GameSrv.Guild
         public bool LoadGuild()
         {
             var sFileName = GuildName + ".txt";
-            var result = LoadGuildFile(sFileName);
             LoadGuildConfig();
-            return result;
+            return LoadGuildFile(sFileName);
         }
 
         private void LoadGuildConfig()
@@ -285,9 +284,6 @@ namespace GameSrv.Guild
                                 guildWar.dwWarTick = HUtil32.GetTickCount();
                                 guildWar.dwWarTime = HUtil32.StrToInt(s20.Trim(), 0);
                                 GuildWarList.Add(guildWar);
-                            }
-                            else
-                            {
                             }
                         }
                         break;
@@ -765,15 +761,11 @@ namespace GameSrv.Guild
                 var count = 0;
                 while (true)
                 {
-                    // 将成员名称加入职称表里
-                    if (string.IsNullOrEmpty(sRankInfo))
+                    if (string.IsNullOrEmpty(sRankInfo)) // 将成员名称加入职称表里
                     {
                         break;
                     }
-                    sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sMemberName, new[]
-                    {
-                        ' ', ','
-                    });
+                    sRankInfo = HUtil32.GetValidStr3(sRankInfo, ref sMemberName, guildSplit);
                     if (!string.IsNullOrEmpty(sMemberName))
                     {
                         guildRank.MemberList.Add(new GuildMember()
@@ -881,9 +873,8 @@ namespace GameSrv.Guild
                         boCheckChange = false;
                         sMemberName = guildRank.MemberList[j].MemberName;
                         n2C++;
-                        for (var k = 0; k < guildRankList.Count; k++)
+                        for (var k = 0; k < guildRankList.Count; k++)// 搜索新列表
                         {
-                            // 搜索新列表
                             newGuildRank = guildRankList[k];
                             for (n28 = 0; n28 < newGuildRank.MemberList.Count; n28++)
                             {
@@ -952,8 +943,7 @@ namespace GameSrv.Guild
             }
             if (result == 0)
             {
-                // 检查职位号是否重复及非法
-                for (var i = 0; i < guildRankList.Count; i++)
+                for (var i = 0; i < guildRankList.Count; i++)// 检查职位号是否重复及非法
                 {
                     n28 = guildRankList[i].RankNo;
                     for (var k = i + 1; k < guildRankList.Count; k++)
