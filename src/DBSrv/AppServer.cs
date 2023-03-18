@@ -71,19 +71,15 @@ namespace DBSrv
             {
                 case StoragePolicy.MySQL:
                     LoadAssembly(services, "MySQL");
-                    _logger.Info("[MySQL]数据存储引擎初始化成功...");
                     break;
                 case StoragePolicy.MongoDB:
                     LoadAssembly(services, "MongoDB");
-                    _logger.Info("[MongoDB]数据存储引擎初始化成功.");
                     break;
                 case StoragePolicy.Sqlite:
                     LoadAssembly(services, "Sqlite");
-                    _logger.Info("[Sqlite]数据存储引擎初始化成功.");
                     break;
                 case StoragePolicy.Local:
                     LoadAssembly(services, "Local");
-                    _logger.Info("[Local]数据存储引擎初始化成功.");
                     break;
             }
             services.AddSingleton(_setting);
@@ -152,6 +148,7 @@ namespace DBSrv
             services.AddSingleton(playDataStorage);
             services.AddSingleton(playRecordStorage);
             services.AddSingleton(marketStorage);
+            _logger.Info($"[{storageName}]数据存储引擎初始化成功.");
         }
 
         /// <summary>
