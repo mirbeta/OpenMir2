@@ -83,7 +83,7 @@ namespace DBSrv.Services
             serverInfo.Data = new byte[1024 * 20];
             serverInfo.ConnectionId = e.ConnectionId;
             serverList.Add(serverInfo);
-            _logger.Info("新的客户端连接 " + e.RemoteIPaddr);
+            _logger.Info("拍卖行客户端(GameSrv)连接 " + e.RemoteIPaddr);
         }
 
         private void ServerSocketClientRead(object sender, AsyncUserToken e)
@@ -112,7 +112,14 @@ namespace DBSrv.Services
 
         private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-
+            for (int i = 0; i < serverList.Count; i++)
+            {
+                if (serverList[i].ConnectionId == e.ConnectionId)
+                {
+                    serverList.RemoveAt(i);
+                }
+            }
+            _logger.Info("拍卖行客户端(GameSrv)断开连接 " + e.RemoteIPaddr);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
