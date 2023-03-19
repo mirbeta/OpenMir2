@@ -760,9 +760,16 @@ namespace GameSrv.Npc {
                                 UserSelectOpenDealOffForm(playObject); // 打开出售物品窗口
                             }
                         }
-                        else if (CanItemMarket && string.Compare(sLabel, "market_0", StringComparison.OrdinalIgnoreCase) == 0) //拍卖行
+                        else if (CanItemMarket) //拍卖行
                         {
-                            SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_BUY);
+                            if (string.Compare(sLabel, "market_0", StringComparison.OrdinalIgnoreCase) == 0)
+                            {
+                                SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_BUY);
+                            }
+                            else if (string.Compare(sLabel, "@market_sell", StringComparison.OrdinalIgnoreCase) == 0)
+                            {
+                                SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_SELL);
+                            }
                         }
                     }
                 }
@@ -847,7 +854,10 @@ namespace GameSrv.Npc {
         
         private void SendUserMarketSellReady(PlayObject user)
         {
-            
+            if (!M2Share.Config.EnableMarket)
+            {
+                SysMsg("寄售商人功能无法使用。", MsgColor.Red, MsgType.Hint);
+            }
         }
 
         /// <summary>
