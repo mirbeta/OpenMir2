@@ -207,8 +207,8 @@ namespace GameSrv.World.Managers
         private void OnMsgWriteData(MarketItem marketItem)
         {
             //新增拍卖行数据实时同步到DBSrv,避免数据不一致的情况,并由DBSrv定时广播给所有GameSrv
-            var request = new ServerRequestMessage(1003, 0, 0, 0, 0); 
-            var requestData = new MarketDataItem() { Item = marketItem };
+            var request = new ServerRequestMessage(Messages.DB_SAVEMARKET, 0, 0, 0, 0); 
+            var requestData = new MarketSaveDataItem() { Item = marketItem };
             M2Share.MarketService.SendRequest(1, request, requestData);
             _logger.Info("发送拍卖行数据同步消息，物品名称:{0} 物品编号:{1} 售卖人:{2}", marketItem.Item.Item.Name, marketItem.Item.MakeIndex, marketItem.SellWho);
         }

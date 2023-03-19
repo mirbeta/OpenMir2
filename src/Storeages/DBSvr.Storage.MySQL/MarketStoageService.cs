@@ -14,5 +14,20 @@ namespace DBSrv.Storage.MySQL
         {
             return new List<MarketItem>();
         }
+
+        IEnumerable<MarketItem> IMarketStorage.QueryMarketItems(byte serverGroupId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        int IMarketStorage.QueryMarketItemsCount(byte serverGroupId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        bool IMarketStorage.SaveMarketItem(MarketItem item, byte serverGroupId, byte serverIndex)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
