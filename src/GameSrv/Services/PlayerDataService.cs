@@ -9,6 +9,7 @@ namespace GameSrv.Services
     {
         public int QueryId;
         public int QuetyCount;
+        public Action CallBack;
     }
 
     public static class PlayerDataService
@@ -60,6 +61,7 @@ namespace GameSrv.Services
         {
             if (!LoadPlayDataMap.TryGetValue(queryId, out var loadPlayDataPacket))
                 return false;
+            LoadPlayDataMap.TryRemove(queryId, out _);
             playerData = loadPlayDataPacket.HumDataInfo;
             return true;
         }
