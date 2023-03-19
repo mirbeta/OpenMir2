@@ -15,11 +15,13 @@ namespace DBSrv
         public static readonly GateRouteInfo[] RouteInfo = new GateRouteInfo[20];
         public static Dictionary<string, int> MapList;
         public static bool ShowLog = true;
-        private static HashSet<string> _serverIpList = null;
+        private static HashSet<string> ServerIpList = null;
         private static Dictionary<string, short> _gateIdList = null;
         public static readonly string GateConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServerInfo.txt");
         private static readonly string ServerIpConfFileNmae = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AddrTable.txt");
         private static readonly string GateIdConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SelectID.txt");
+
+        public static int ServerIpCount => ServerIpList.Count;
         
         public static int GetMapIndex(string sMap)
         {
@@ -89,18 +91,18 @@ namespace DBSrv
 
         private static void LoadIPTable()
         {
-            _serverIpList.Clear();
+            ServerIpList.Clear();
             try
             {
                 var stringList = new StringList();
                 stringList.LoadFromFile(ServerIpConfFileNmae);
                 for (var i = 0; i < stringList.Count; i++)
                 {
-                    if (_serverIpList.Contains(stringList[i]))
+                    if (ServerIpList.Contains(stringList[i]))
                     {
                         continue;
                     }
-                    _serverIpList.Add(stringList[i]);
+                    ServerIpList.Add(stringList[i]);
                 }
                 stringList = null;
             }
@@ -208,7 +210,7 @@ namespace DBSrv
         public static bool CheckServerIP(string sIP)
         {
             bool result = false;
-            if (_serverIpList.Contains(sIP))
+            if (ServerIpList.Contains(sIP))
             {
                 return true;
             }
@@ -218,7 +220,7 @@ namespace DBSrv
         public static void Initialization()
         {
             DenyChrNameList = new StringList();
-            _serverIpList = new HashSet<string>();
+            ServerIpList = new HashSet<string>();
             _gateIdList = new Dictionary<string, short>();
             MapList = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         }

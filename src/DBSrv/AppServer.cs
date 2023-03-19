@@ -49,6 +49,7 @@ namespace DBSrv
             DBShare.Initialization();
             _logger.Info("正在读取基础配置信息...");
             DBShare.LoadConfig();
+            _logger.Info($"加载IP授权文件列表成功...[{DBShare.ServerIpCount}]");
             _logger.Info("读取基础配置信息完成...");
             LoadServerInfo();
             LoadChrNameList("DenyChrName.txt");
