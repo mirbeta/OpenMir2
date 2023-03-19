@@ -798,7 +798,7 @@ namespace GameSrv.Npc {
             marKetReqInfo.ItemType = ItemType;
             marKetReqInfo.ItemSet = 0;
             marKetReqInfo.UserMode = UserMode;
-
+            
             switch (ItemType)
             {
                 case MarketConst.USERMARKET_TYPE_ALL:
@@ -832,7 +832,7 @@ namespace GameSrv.Npc {
             }
             if (IsOk)
             {
-                if (M2Share.MarketService.RequestLoadPageUserMarket(marKetReqInfo))
+                if (M2Share.MarketService.RequestLoadPageUserMarket(user.ActorId, marKetReqInfo))
                 {
                     SendUserMarketCloseMsg(user);
                 }

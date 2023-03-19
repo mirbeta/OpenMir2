@@ -851,6 +851,7 @@ namespace GameSrv.Player {
         public byte[] QuestUnitOpen;
         public byte[] QuestUnit;
         public byte[] QuestFlag;
+        public MarketUser MarketUser;
 
         public PlayObject() {
             Race = ActorRace.Play;

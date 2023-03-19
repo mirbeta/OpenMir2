@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using GameSrv.Player;
+using System.Net;
 using System.Net.Sockets;
 using NLog;
 using SystemModule.Data;
@@ -136,13 +137,13 @@ namespace GameSrv.Services
             IsFirstData = true;
         }
 
-        public bool RequestLoadPageUserMarket(MarKetReqInfo marKetReqInfo)
+        public bool RequestLoadPageUserMarket(int actorId, MarKetReqInfo marKetReqInfo)
         {
             if (!M2Share.Config.EnableMarket)
             {
                 return false;
             }
-            var request = new ServerRequestMessage(Messages.DB_SEARCHMARKET, 0, 0, 0, 0);
+            var request = new ServerRequestMessage(Messages.DB_SEARCHMARKET, actorId, 0, 0, 0);
             var requestData = new MarketSearchMessage
             {
                 UserName = marKetReqInfo.UserName,
@@ -262,12 +263,26 @@ namespace GameSrv.Services
                         {
                             case Messages.DB_LOADMARKETSUCCESS:
                                 M2Share.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                                _logger.Info("加载拍卖行数据成功...");
                                 break;
                             case Messages.DB_SEARCHMARKETSUCCESS:
-                                _logger.Info("搜索拍卖行数据成功");
+                                if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
+                                {
+                                    var user = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                    if (user != null)
+                                    {
+                                        user.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                                    }
+                                    else
+                                    {
+                                        _logger.Debug("玩家不在线,拍卖行数据无法返回给玩家");
+                                    }
+                                }
+                                _logger.Info("搜索拍卖行数据成功...");
                                 break;
                             case Messages.DB_SAVEMARKETSUCCESS:
-                                _logger.Info("保存拍卖行数据成功");
+                                //todo 保存数据需要返回给玩家
+                                _logger.Info("保存拍卖行数据成功...");
                                 break;
                         }
                     }
