@@ -12,7 +12,7 @@ namespace DBSrv.Storage.MySQL
 
         public IEnumerable<MarketItem> QueryMarketItems(byte serverGroupId)
         {
-            throw new System.NotImplementedException();
+            return new List<MarketItem>();
         }
     }
 }

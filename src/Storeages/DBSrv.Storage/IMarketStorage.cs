@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using SystemModule.Data;
 
 namespace DBSrv.Storage
@@ -13,5 +9,9 @@ namespace DBSrv.Storage
     public interface IMarketStorage
     {
         IEnumerable<MarketItem> QueryMarketItems(byte serverGroupId);
+
+        int QueryMarketItemsCount(byte serverGroupId);
+
+        bool SaveMarketItem(MarketItem item, byte serverGroupId, byte serverIndex);
     }
 }

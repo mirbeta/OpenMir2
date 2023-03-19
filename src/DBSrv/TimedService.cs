@@ -18,16 +18,18 @@ namespace DBSrv
         private readonly UserService _userService;
         private readonly SessionService _sessionService;
         private readonly DataService _dataService;
+        private readonly MarketService _marketService;
         private readonly ICacheStorage _cacheStorage;
         private readonly IPlayDataStorage _playDataStorage;
 
-        public TimedService(ICacheStorage cacheStorage, UserService userService, SessionService session, DataService dataService, IPlayDataStorage playDataStorage)
+        public TimedService(ICacheStorage cacheStorage, UserService userService, SessionService session, DataService dataService, IPlayDataStorage playDataStorage, MarketService marketService)
         {
             _userService = userService;
             _sessionService = session;
             _dataService = dataService;
             _cacheStorage = cacheStorage;
             _playDataStorage = playDataStorage;
+            _marketService = marketService;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
         }
 
@@ -38,6 +40,7 @@ namespace DBSrv
             var lastKeepTick = currentTick;
             var lastClearTick = currentTick;
             var syncSaveTick = currentTick;
+            var marketPushTick = currentTick;
             try
             {
                 while (await _timer.WaitForNextTickAsync(stoppingToken))
@@ -62,6 +65,11 @@ namespace DBSrv
                     {
                         syncSaveTick = HUtil32.GetTickCount();
                         ProcessCacheStorage();
+                    }
+                    if (marketPushTick - syncSaveTick > 300000) //5分钟推送一次拍卖行数据到各个GameSrv
+                    {
+                        marketPushTick = HUtil32.GetTickCount();
+                        _marketService.PushMarketData();
                     }
                 }
             }

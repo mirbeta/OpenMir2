@@ -481,6 +481,13 @@ namespace SystemModule
         public const int DBR_LOADHUMANRCD = 1100;
         public const int DBR_SAVEHUMANRCD = 1102;
 
+        public const byte DB_LOADMARKET = 100;
+        public const byte DB_SAVEMARKET = 101;
+        public const byte DB_LOADMARKETSUCCESS = 102;
+        public const byte DB_LOADMARKETFAIL = 103;
+        public const byte DB_SAVEMARKETSUCCESS = 104;
+        public const byte DB_SAVEMARKETFAIL = 105;
+
         public const int SM_RUNGATELOGOUT = 599;
         public const int SM_PLAYERCONFIG = 560;
         public const int GM_TEST = 20;
