@@ -17,8 +17,6 @@ namespace DBSrv
         
         private static void PrintUsage()
         {
-            AnsiConsole.WriteLine();
-
             var table = new Table()
             {
                 Border = TableBorder.None,

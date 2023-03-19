@@ -58,7 +58,7 @@ namespace GameSrv.Services
             {
                 return;
             }
-            _clientScoket.Connect(M2Share.Config.sDBAddr, M2Share.Config.nDBPort);
+            _clientScoket.Connect(M2Share.Config.MarketSrvAddr, M2Share.Config.MarketSrvPort);
         }
 
         public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet)
@@ -257,7 +257,19 @@ namespace GameSrv.Services
                     var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
                     if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(sginBuff))
                     {
-                        M2Share.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                        var commandMessage = SerializerUtil.Deserialize<ServerRequestMessage>(responsePacket.Message);
+                        switch (commandMessage.Ident)
+                        {
+                            case Messages.DB_LOADMARKETSUCCESS:
+                                M2Share.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                                break;
+                            case Messages.DB_SEARCHMARKETSUCCESS:
+                                _logger.Info("搜索拍卖行数据成功");
+                                break;
+                            case Messages.DB_SAVEMARKETSUCCESS:
+                                _logger.Info("保存拍卖行数据成功");
+                                break;
+                        }
                     }
                     else
                     {

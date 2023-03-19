@@ -481,15 +481,38 @@ namespace SystemModule
         public const int DBR_LOADHUMANRCD = 1100;
         public const int DBR_SAVEHUMANRCD = 1102;
 
+        /// <summary>
+        /// 读取拍卖行数据
+        /// </summary>
         public const byte DB_LOADMARKET = 100;
+        /// <summary>
+        /// 保存拍卖行数据
+        /// </summary>
         public const byte DB_SAVEMARKET = 101;
+        /// <summary>
+        /// 搜索拍卖行数据
+        /// </summary>
         public const byte DB_SEARCHMARKET = 102;
+        /// <summary>
+        /// 搜索拍卖行数据成功
+        /// </summary>
         public const byte DB_SEARCHMARKETSUCCESS = 103;
-        
-        public const byte DB_LOADMARKETSUCCESS = 102;
-        public const byte DB_LOADMARKETFAIL = 103;
-        public const byte DB_SAVEMARKETSUCCESS = 104;
-        public const byte DB_SAVEMARKETFAIL = 105;
+        /// <summary>
+        /// 读取拍卖行数据成功
+        /// </summary>
+        public const byte DB_LOADMARKETSUCCESS = 104;
+        /// <summary>
+        /// 读取拍卖行数据失败
+        /// </summary>
+        public const byte DB_LOADMARKETFAIL = 105;
+        /// <summary>
+        /// 保存拍卖行数据成功
+        /// </summary>
+        public const byte DB_SAVEMARKETSUCCESS = 106;
+        /// <summary>
+        /// 保存拍卖行数据失败
+        /// </summary>
+        public const byte DB_SAVEMARKETFAIL = 107;
 
         public const int SM_RUNGATELOGOUT = 599;
         public const int SM_PLAYERCONFIG = 560;
