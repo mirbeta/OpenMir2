@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using NLog;
 using SystemModule.Data;
+using SystemModule.Enums;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
@@ -258,36 +259,81 @@ namespace GameSrv.Services
                     var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
                     if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(sginBuff))
                     {
-                        var commandMessage = SerializerUtil.Deserialize<ServerRequestMessage>(responsePacket.Message);
+                        var commandMessage = SerializerUtil.Deserialize<ServerRequestMessage>(responsePacket.Message, true);
                         switch (commandMessage.Ident)
                         {
                             case Messages.DB_LOADMARKETSUCCESS:
                                 M2Share.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
                                 _logger.Info("加载拍卖行数据成功...");
                                 break;
+                            case Messages.DB_LOADMARKETFAIL:
+                                if (commandMessage.Param == 1)
+                                {
+                                    _logger.Info("拍卖行物品列表为空...");
+                                }
+                                else
+                                {
+                                    _logger.Info("获取拍卖行数据失败...");
+                                }
+                                M2Share.MarketManager.OnMsgReadData();
+                                break;
                             case Messages.DB_SEARCHMARKETSUCCESS:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
                                 {
-                                    var user = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
-                                    if (user != null)
+                                    var searchUser = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                    if (searchUser != null)
                                     {
-                                        user.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                                        searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
                                     }
                                     else
                                     {
-                                        _logger.Debug("玩家不在线,拍卖行数据无法返回给玩家");
+                                        _logger.Debug("玩家不在线,拍卖行数据无需返回给玩家");
                                     }
                                 }
                                 _logger.Info("搜索拍卖行数据成功...");
                                 break;
-                            case Messages.DB_SAVEMARKETSUCCESS:
-                                //todo 保存数据需要返回给玩家
+                            case Messages.DB_SRARCHMARKETFAIL:
+                                if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
+                                {
+                                    var searchUser = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                    if (searchUser != null && commandMessage.Param <= 1)
+                                    {
+                                        //searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                                        searchUser.SysMsg("未找到相关物品.", MsgColor.Green, MsgType.Hint);
+                                    }
+                                    else
+                                    {
+                                        _logger.Debug("玩家不在线,拍卖行数据无需返回给玩家");
+                                    }
+                                }
+                                _logger.Info("搜索拍卖行数据失败...");
+                                break;
+                            case Messages.DB_SAVEMARKETSUCCESS:// 保存结果需要返回给玩家
+                                var saveUser = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                if (saveUser != null)
+                                {
+                                    if (commandMessage.Tag == 1)
+                                    {
+                                        saveUser.SysMsg("物品上架成功...由于缓存原因需要等待几分钟后才能正常显示.", MsgColor.Green, MsgType.Hint);
+                                    }
+                                    else
+                                    {
+                                        //todo 把物品还给玩家
+                                        saveUser.SysMsg("物品上架失败.", MsgColor.Green, MsgType.Hint);
+                                    }
+                                }
+                                else
+                                {
+                                    //todo 把物品还给玩家，或者需要通过邮件发送给玩家
+                                    _logger.Debug("玩家不在线,拍卖行数据无法返回给玩家");
+                                }
                                 _logger.Info("保存拍卖行数据成功...");
                                 break;
                         }
                     }
                     else
                     {
+                        _logger.Warn("非法拍卖行数据封包，解析失败...");
                         M2Share.Config.nLoadDBErrorCount++;
                     }
                 }

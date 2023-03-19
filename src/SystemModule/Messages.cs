@@ -498,21 +498,25 @@ namespace SystemModule
         /// </summary>
         public const byte DB_SEARCHMARKETSUCCESS = 103;
         /// <summary>
+        /// 搜索拍卖行数据失败
+        /// </summary>
+        public const byte DB_SRARCHMARKETFAIL = 104;
+        /// <summary>
         /// 读取拍卖行数据成功
         /// </summary>
-        public const byte DB_LOADMARKETSUCCESS = 104;
+        public const byte DB_LOADMARKETSUCCESS = 105;
         /// <summary>
         /// 读取拍卖行数据失败
         /// </summary>
-        public const byte DB_LOADMARKETFAIL = 105;
+        public const byte DB_LOADMARKETFAIL = 106;
         /// <summary>
         /// 保存拍卖行数据成功
         /// </summary>
-        public const byte DB_SAVEMARKETSUCCESS = 106;
+        public const byte DB_SAVEMARKETSUCCESS = 107;
         /// <summary>
         /// 保存拍卖行数据失败
         /// </summary>
-        public const byte DB_SAVEMARKETFAIL = 107;
+        public const byte DB_SAVEMARKETFAIL = 108;
 
         public const int SM_RUNGATELOGOUT = 599;
         public const int SM_PLAYERCONFIG = 560;

@@ -9,7 +9,7 @@ namespace SystemModule.Data
         /// <summary>
         /// 出售物品
         /// </summary>
-        public ClientItem Item;
+        public ClientItem SellItem;
         /// <summary>
         /// 极品次数
         /// </summary>
@@ -29,7 +29,7 @@ namespace SystemModule.Data
         /// <summary>
         /// 出售时间（0312311210 = 2003-12-31 12:10）
         /// </summary>
-        public string Selldate;
+        public string SellDate;
         /// <summary>
         /// 出售状态(1:销售中 2:已售出)
         /// </summary>
@@ -42,12 +42,12 @@ namespace SystemModule.Data
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Item.GetBuffer());
+            writer.Write(SellItem.GetBuffer());
             writer.Write(UpgCount);
             writer.Write(Index);
             writer.Write(SellPrice);
             writer.WriteAsciiString(SellWho, 20);
-            writer.WriteAsciiString(Selldate, 10);
+            writer.WriteAsciiString(SellDate, 10);
             writer.Write(SellState);
         }
     }

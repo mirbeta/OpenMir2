@@ -17,6 +17,16 @@ namespace SystemModule
         {
             return MemoryPackSerializer.Deserialize<T>(bytes, MemoryPackSerializerOptions.Utf16)!;
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T Deserialize<T>(byte[] bytes,bool decrypt)
+        {
+            if (decrypt)
+            {
+                return MemoryPackSerializer.Deserialize<T>(EDCode.DecodeBuff(bytes), MemoryPackSerializerOptions.Utf16)!;
+            }
+            return MemoryPackSerializer.Deserialize<T>(bytes, MemoryPackSerializerOptions.Utf16)!;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Deserialize<T>(Span<byte> bytes)

@@ -1,5 +1,8 @@
+using NLog;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
@@ -7,6 +10,7 @@ namespace DBSrv.Storage.MySQL
 {
     public class MarketStoageService : IMarketStorage
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly StorageOption _storageOption;
 
         public MarketStoageService(StorageOption storageOption)
@@ -36,15 +40,15 @@ namespace DBSrv.Storage.MySQL
                 marketItem.Index = dr.GetInt32("SellIndex");
                 marketItem.SellWho = dr.GetString("SellName");
                 marketItem.SellPrice = dr.GetInt32("SellPrice");
-                marketItem.Selldate = dr.GetString("SellDate");
+                marketItem.SellDate = dr.GetString("SellDate");
                 marketItem.SellState = dr.GetByte("SellState");
-                marketItem.Item = new ClientItem();
-                marketItem.Item.MakeIndex = dr.GetInt32("MaekeIndex");
-                marketItem.Item.Dura = dr.GetUInt16("Dura");
-                marketItem.Item.DuraMax = dr.GetUInt16("DuraMax");
+                marketItem.SellItem = new ClientItem();
+                marketItem.SellItem.MakeIndex = dr.GetInt32("MaekeIndex");
+                marketItem.SellItem.Dura = dr.GetUInt16("Dura");
+                marketItem.SellItem.DuraMax = dr.GetUInt16("DuraMax");
                 for (int i = 0; i < 13; i++)
                 {
-                    marketItem.Item.Desc[i] = dr.GetByte($"Value{i}");
+                    marketItem.SellItem.Desc[i] = dr.GetByte($"Value{i}");
                 }
                 itemList.Add(marketItem);
             }
@@ -58,8 +62,45 @@ namespace DBSrv.Storage.MySQL
             return 0;
         }
 
-        public bool SaveMarketItem(MarketItem item, byte serverGroupId, byte serverIndex)
+        public bool SaveMarketItem(MarketItem market, byte serverGroupId, byte serverIndex)
         {
+            var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO marketitems (GroupId, ServerIndex, SellIndex, SellState, MarketName, ItemType, ItemSet, ItemName, MakeIndex, SellName, SellPrice, SellDate) ");
+            sb.AppendLine("VALUES ");
+            sb.AppendLine("(@GroupId, @ServerIndex, @SellIndex, @SellState, @MarketName, @ItemType, @ItemSet, @ItemName, @MakeIndex, @SellName, @SellPrice, @SellDate)");
+            using var context = new StorageContext(_storageOption);
+            var success = false;
+            context.Open(ref success);
+            if (!success)
+            {
+                return false;
+            }
+            var command = context.CreateCommand();
+            command.CommandText = sb.ToString();
+            command.Parameters.AddWithValue("@GroupId", serverGroupId);
+            command.Parameters.AddWithValue("@ServerIndex", serverIndex);
+            command.Parameters.AddWithValue("@MakeIndex", market.SellItem.MakeIndex);
+            command.Parameters.AddWithValue("@SellIndex", market.Index);
+            command.Parameters.AddWithValue("@MarketName", "Market");
+            command.Parameters.AddWithValue("@ItemName", market.SellItem.Item.Name);
+            command.Parameters.AddWithValue("@SellState", market.SellState);
+            command.Parameters.AddWithValue("@ItemType", market.SellItem.Item.ItemType);
+            command.Parameters.AddWithValue("@ItemSet", market.SellItem.Item.ItemSet);
+            command.Parameters.AddWithValue("@SellName", market.SellWho);
+            command.Parameters.AddWithValue("@SellPrice", market.SellPrice);
+            command.Parameters.AddWithValue("@SellDate", market.SellDate);
+            try
+            {
+                command.ExecuteNonQuery();
+                var s = (int)command.LastInsertedId;
+            }
+            catch (Exception ex)
+            {
+                context.RollBack();
+                _logger.Error("[Exception] PlayDataStorage.CreateCharacters");
+                _logger.Error(ex.StackTrace);
+                return false;
+            }
             return true;
         }
 

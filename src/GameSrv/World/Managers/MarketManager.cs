@@ -74,7 +74,7 @@ namespace GameSrv.World.Managers
         /// <summary>
         /// 0 = Empty , 1 = Loading 2 = Full
         /// </summary>
-        private int FState;
+        private int MarketState;
         protected int FMaxPage;
         private int FCurrPage;
         private int FLoadedPage;
@@ -88,7 +88,7 @@ namespace GameSrv.World.Managers
         {
             Items = new List<MarketItem>();
             FSelectedIndex = -1;
-            FState = MarketConst.MAKET_STATE_EMPTY;
+            MarketState = MarketConst.MAKET_STATE_EMPTY;
             ReqInfo = new MarKetReqInfo();
             ReqInfo.UserName = string.Empty;
             ReqInfo.MarketName = string.Empty;
@@ -101,7 +101,7 @@ namespace GameSrv.World.Managers
 
         protected void Load()
         {
-            if (IsEmpty && FState == MarketConst.MAKET_STATE_EMPTY)
+            if (IsEmpty && MarketState == MarketConst.MAKET_STATE_EMPTY)
             {
                 OnMsgReadData();
             }
@@ -146,7 +146,7 @@ namespace GameSrv.World.Managers
         {
             RemoveAll();
             FSelectedIndex = -1;
-            FState = MarketConst.MAKET_STATE_EMPTY;
+            MarketState = MarketConst.MAKET_STATE_EMPTY;
         }
 
         public MarketItem GetItem(int index, ref bool selected)
@@ -247,7 +247,12 @@ namespace GameSrv.World.Managers
         {
             //todo 收到DBSrv最新的拍卖行数据
             //循环新数据和历史数据进行对比，删除不存在和新增，避免同时客户端正在操作
-            FState = 0;
+            MarketState = 0;
+            if (serverRequestData.TotalCount == 0)
+            {
+                Items = new List<MarketItem>();
+                return;
+            }
             Items = serverRequestData.List;
             FMaxPage = (int)Math.Ceiling(serverRequestData.TotalCount / (double)MarketConst.MAKET_ITEMCOUNT_PER_PAGE);
             _logger.Info("收到拍卖行数据同步消息，共{0}条数据", serverRequestData.TotalCount);
@@ -259,7 +264,7 @@ namespace GameSrv.World.Managers
             var request = new ServerRequestMessage(Messages.DB_SAVEMARKET, 0, 0, 0, 0); 
             var requestData = new MarketSaveDataItem() { Item = marketItem };
             M2Share.MarketService.SendRequest(1, request, requestData);
-            _logger.Info("发送拍卖行数据同步消息，物品名称:{0} 物品编号:{1} 售卖人:{2}", marketItem.Item.Item.Name, marketItem.Item.MakeIndex, marketItem.SellWho);
+            _logger.Info("发送拍卖行数据同步消息，物品名称:{0} 物品编号:{1} 售卖人:{2}", marketItem.SellItem.Item.Name, marketItem.SellItem.MakeIndex, marketItem.SellWho);
         }
 
         public int UserMode { get => FUserMode; set { FUserMode = value; } }

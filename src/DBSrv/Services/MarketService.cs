@@ -192,12 +192,12 @@ namespace DBSrv.Services
                 var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
                 if (queryId <= 0)
                 {
-                    SendFailMessage(nQueryId, serverInfo.ConnectionId);
+                    SendFailMessage(nQueryId, serverInfo.ConnectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
                     return;
                 }
                 if (requestData.Sgin.Length <= 0)
                 {
-                    SendFailMessage(nQueryId, serverInfo.ConnectionId);
+                    SendFailMessage(nQueryId, serverInfo.ConnectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
                     return;
                 }
                 var signatureBuff = BitConverter.GetBytes(queryId);
@@ -213,7 +213,7 @@ namespace DBSrv.Services
                 _logger.Error($"关闭错误的任务{nQueryId}查询请求.");
                 return;
             }
-            SendFailMessage(nQueryId, serverInfo.ConnectionId);
+            SendFailMessage(nQueryId, serverInfo.ConnectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
         }
 
         private void ProcessMarketPacket(int nQueryId, ServerRequestMessage packet, byte[] sData, string connectionId)
@@ -234,16 +234,27 @@ namespace DBSrv.Services
 
         private void SearchMarketItem(int nQueryId, int actorId, byte[] sData, string connectionId)
         {
-            var marKetReqInfo = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
-            if (marKetReqInfo.GroupId == 0)
+            var marketSearch = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
+            if (marketSearch.GroupId == 0)
             {
+                var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 0, 0, 0);
+                SendFailMessage(nQueryId, connectionId, messagePacket);
+                _logger.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
                 return;
             }
-            var searchItems = _marketStorage.SearchMarketItems(marKetReqInfo.GroupId,marKetReqInfo.MarketName, marKetReqInfo.SearchItem, marKetReqInfo.SearchWho, marKetReqInfo.ItemType, marKetReqInfo.ItemSet);
+            var searchItems = _marketStorage.SearchMarketItems(marketSearch.GroupId,marketSearch.MarketName, marketSearch.SearchItem, marketSearch.SearchWho, marketSearch.ItemType, marketSearch.ItemSet);
+            if (!searchItems.Any())
+            {
+                var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 1, 0, 0);
+                SendFailMessage(nQueryId, connectionId, messagePacket);
+                _logger.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
+                return;
+            }
             var marketItemMessgae = new MarketDataMessage();
             marketItemMessgae.List = searchItems.ToList();
             marketItemMessgae.TotalCount = searchItems.Count();
             SendSuccessMessage(connectionId, actorId, Messages.DB_SEARCHMARKETSUCCESS, marketItemMessgae);
+            _logger.Info($"服务器组[{marketSearch.GroupId}]搜索拍卖行数据...");
         }
         
         private void LoadMarketList(int nQueryId, byte[] sData, string connectionId)
@@ -257,7 +268,9 @@ namespace DBSrv.Services
             var marketItems = _marketStorage.QueryMarketItems(marketMessage.GroupId);
             if (!marketItems.Any())
             {
-                _logger.Info("当前服务器分组拍卖行数据为空,读取拍卖行数据失败.");
+                var messagePacket = new ServerRequestMessage(Messages.DB_LOADMARKETFAIL, 0, 1, 0, 0);
+                SendFailMessage(nQueryId, connectionId, messagePacket);
+                _logger.Info($"当前服务器组[{marketMessage.GroupId}]拍卖行数据为空,读取拍卖行数据失败.");
                 return;
             }
             var marketItemMessgae = new MarketDataMessage();
@@ -295,10 +308,9 @@ namespace DBSrv.Services
             SendRequest(connectionId, 1, responsePack);
         }
 
-        private void SendFailMessage(int nQueryId, string connectionId)
+        private void SendFailMessage(int nQueryId, string connectionId, ServerRequestMessage messagePacket)
         {
             var responsePack = new ServerRequestData();
-            var messagePacket = new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0);
             responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
             SendRequest(connectionId, nQueryId, responsePack);
         }
