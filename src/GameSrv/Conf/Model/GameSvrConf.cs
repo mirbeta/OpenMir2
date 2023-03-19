@@ -73,8 +73,18 @@ namespace GameSrv.Conf.Model {
         /// 是否启用拍卖行
         /// </summary>
         public bool EnableMarket;
+        /// <summary>
+        /// 拍卖行服务器IP
+        /// </summary>
         public string MarketSrvAddr;
+        /// <summary>
+        /// 拍卖行服务器端口
+        /// </summary>
         public int MarketSrvPort;
+        /// <summary>
+        /// 拍卖行令牌
+        /// </summary>
+        public string MarketToken;
         /// <summary>
         /// Master服务器IP
         /// </summary>
@@ -1076,6 +1086,7 @@ namespace GameSrv.Conf.Model {
             EnableMarket = true;
             MarketSrvAddr = "127.0.0.1";
             MarketSrvPort = 5700;
+            MarketToken = "1234567890";
             MasterSrvAddr = "127.0.0.1";
             MasterSrvPort = 4900;
             LogServerAddr = "127.0.0.1";

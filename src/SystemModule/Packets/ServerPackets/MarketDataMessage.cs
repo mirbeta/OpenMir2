@@ -27,5 +27,6 @@ namespace SystemModule.Packets.ServerPackets
         public byte ServerIndex { get; set; }
         public string ServerName { get; set; }
         public byte GroupId { get; set; }
+        public string Token { get; set; }
     }
 }

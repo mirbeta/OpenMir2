@@ -225,15 +225,15 @@ namespace DBSrv.Services
         private void LoadMarketList(int nQueryId, byte[] sData, string connectionId)
         {
             var marketMessage = SerializerUtil.Deserialize<MarketRegisterMessage>(sData);
-            if (marketMessage.GroupId == 0 || string.IsNullOrEmpty(marketMessage.ServerName))
+            if (string.IsNullOrEmpty(marketMessage.Token) || string.IsNullOrEmpty(marketMessage.ServerName))
             {
-                _logger.Warn($"任务[{nQueryId}]非法获取拍卖行数据...");
+                _logger.Warn($"SocketId:{connectionId} QueryId:[{nQueryId}] 非法获取拍卖行数据...");
                 return;
             }
             var marketItems = _marketStorage.QueryMarketItems(marketMessage.GroupId);
             if (!marketItems.Any())
             {
-                _logger.Info("当前服务器分组拍卖行数据为空,推送拍卖行数据失败.");
+                _logger.Info("当前服务器分组拍卖行数据为空,读取拍卖行数据失败.");
                 return;
             }
             var marketItemMessgae = new MarketDataMessage();
