@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using SystemModule.Data;
 
@@ -15,24 +16,55 @@ namespace DBSrv.Storage.MySQL
             return new List<MarketItem>();
         }
 
-        int IMarketStorage.QueryMarketItemsCount(byte serverGroupId)
+        public int QueryMarketItemsCount(byte serverGroupId)
         {
-            throw new System.NotImplementedException();
+            return 0;
         }
 
-        bool IMarketStorage.SaveMarketItem(MarketItem item, byte serverGroupId, byte serverIndex)
+        public bool SaveMarketItem(MarketItem item, byte serverGroupId, byte serverIndex)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
-        public IEnumerable<MarketItem> SearchMarketItems(byte serverGroupId, string sellWho, string itemName, short itemType, byte itemSet)
+        public IEnumerable<MarketItem> SearchMarketItems(byte groupId, string marketName, string sellWho, string itemName, short itemType, byte itemSet)
         {
-            var SearchStr = string.Empty;
-            if (!string.IsNullOrEmpty(itemName)) SearchStr = "EXEC UM_LOAD_ITEMNAME ''' +marketname+''','''+itemname+'''";
-            else if (!string.IsNullOrEmpty(sellWho)) SearchStr = "EXEC UM_LOAD_USERNAME ''' +marketname+''','''+sellwho+'''";
-            else if (itemSet != 0) SearchStr = "EXEC UM_LOAD_ITEMSET ''' +marketname+''','+intToStr(itemset)";
-            else if (itemType >= 0) SearchStr = "EXEC UM_LOAD_ITEMTYPE '''+marketname+''','+intToStr(itemtype)";
-            throw new System.NotImplementedException();
+            if (!string.IsNullOrEmpty(itemName)) return SearchMarketNameItems(groupId, marketName, itemName);
+            if (!string.IsNullOrEmpty(sellWho)) return SearchMarketItemNameItems(groupId, marketName, sellWho);
+            if (itemSet != 0) return SearchMarketItemSetItems(groupId, marketName, itemSet);
+            if (itemType >= 0) return SearchMarketItemTypeItems(groupId, marketName, itemType);
+            return new List<MarketItem>();
+        }
+
+        private IEnumerable<MarketItem> SearchMarketItemNameItems(byte groupId, string marketName, string sellWho)
+        {
+            const string sSql = "select * from marketItems where SellState!=20 and SellWho = @SellWho and MarketName = @MarketName";
+            return new List<MarketItem>();
+        }
+
+        private IEnumerable<MarketItem> SearchMarketItemSetItems(byte groupId, string marketName, byte itemSet)
+        {
+            const string sSql = "select * from marketItems where SellState=1 and ItemSet = @ItemSet and MarketName = @MarketName";
+            return new List<MarketItem>();
+        }
+
+        private IEnumerable<MarketItem> SearchMarketItemTypeItems(byte groupId, string marketName, short itemType)
+        {
+            var sSql = string.Empty;
+            if (itemType == 0)
+            {
+                sSql = "select * from marketItems where SellState=1";
+            }
+            else
+            {
+                sSql = "select * from marketItems where SellState=1 and ItemType = @ItemType and MarketName = @MarketName";
+            }
+            return new List<MarketItem>();
+        }
+
+        private IEnumerable<MarketItem> SearchMarketNameItems(byte groupId, string marketName, string itemName)
+        {
+            const string sSql = "select * from marketItems where MarketName = @MarketName and ItemName = @ItemName";
+            return new List<MarketItem>();
         }
     }
 }

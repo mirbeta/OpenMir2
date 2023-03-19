@@ -232,7 +232,7 @@ namespace DBSrv.Services
             {
                 return;
             }
-            var searchItems = _marketStorage.SearchMarketItems(marKetReqInfo.GroupId, marKetReqInfo.SearchItem, marKetReqInfo.SearchWho, marKetReqInfo.ItemType, marKetReqInfo.ItemSet);
+            var searchItems = _marketStorage.SearchMarketItems(marKetReqInfo.GroupId,marKetReqInfo.MarketName, marKetReqInfo.SearchItem, marKetReqInfo.SearchWho, marKetReqInfo.ItemType, marKetReqInfo.ItemSet);
             var marketItemMessgae = new MarketDataMessage();
             marketItemMessgae.List = searchItems.ToList();
             marketItemMessgae.TotalCount = searchItems.Count();
