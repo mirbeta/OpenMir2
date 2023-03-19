@@ -213,19 +213,19 @@ namespace DBSrv.Services
         {
             switch (packet.Ident)
             {
-                case Messages.DB_LOADMARKET: //GameSrv主动拉取拍卖行数据
+                case Messages.DB_LOADMARKET://GameSrv主动拉取拍卖行数据
                     LoadMarketList(nQueryId, sData, connectionId);
                     break;
-                case Messages.DB_SAVEMARKET: //GameSrv保存拍卖行数据
-                    SaveMarketItem(nQueryId, sData, connectionId);
+                case Messages.DB_SAVEMARKET://GameSrv保存拍卖行数据
+                    SaveMarketItem(nQueryId, packet.Recog, sData, connectionId);
                     break;
-                case Messages.DB_SEARCHMARKET: //GameSrv搜索拍卖行数据
-                    SearchMarketItem(nQueryId, sData, connectionId);
+                case Messages.DB_SEARCHMARKET://GameSrv搜索拍卖行数据
+                    SearchMarketItem(nQueryId, packet.Recog, sData, connectionId);
                     break;
             }
         }
 
-        private void SearchMarketItem(int nQueryId, byte[] sData, string connectionId)
+        private void SearchMarketItem(int nQueryId, int actorId, byte[] sData, string connectionId)
         {
             var marKetReqInfo = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
             if (marKetReqInfo.GroupId == 0)
@@ -236,7 +236,7 @@ namespace DBSrv.Services
             var marketItemMessgae = new MarketDataMessage();
             marketItemMessgae.List = searchItems.ToList();
             marketItemMessgae.TotalCount = searchItems.Count();
-            SendSuccessMessage(connectionId, Messages.DB_SEARCHMARKETSUCCESS, marketItemMessgae);
+            SendSuccessMessage(connectionId, actorId, Messages.DB_SEARCHMARKETSUCCESS, marketItemMessgae);
         }
         
         private void LoadMarketList(int nQueryId, byte[] sData, string connectionId)
@@ -256,11 +256,11 @@ namespace DBSrv.Services
             var marketItemMessgae = new MarketDataMessage();
             marketItemMessgae.List = marketItems.ToList();
             marketItemMessgae.TotalCount = marketItems.Count();
-            SendSuccessMessage(connectionId, Messages.DB_LOADMARKETSUCCESS, marketItemMessgae);
+            SendSuccessMessage(connectionId, 0, Messages.DB_LOADMARKETSUCCESS, marketItemMessgae);
             _logger.Info($"服务器组[{marketMessage.GroupId}] [{marketMessage.ServerName}]读取拍卖行数据成功.当前拍卖行物品数据:[{marketItemMessgae.TotalCount}]");
         }
 
-        private void SaveMarketItem(int nQueryId, byte[] sData, string connectionId)
+        private void SaveMarketItem(int nQueryId, int actorId, byte[] sData, string connectionId)
         {
             var saveMessage = SerializerUtil.Deserialize<MarketSaveDataItem>(sData);
             if (saveMessage.GroupId == 0 || string.IsNullOrEmpty(saveMessage.ServerName))
@@ -275,17 +275,17 @@ namespace DBSrv.Services
                 return;
             }
             var marketItemsCount = _marketStorage.QueryMarketItems(saveMessage.GroupId);
-            SendSuccessMessage(connectionId, Messages.DB_SAVEMARKETSUCCESS, saveMessage);
+            SendSuccessMessage(connectionId, actorId, Messages.DB_SAVEMARKETSUCCESS, saveMessage);
             _logger.Info($"服务器组[{saveMessage.GroupId}] [{saveMessage.ServerName}]保存拍卖行数据成功.当前拍卖行物品数据:[{marketItemsCount}]");
         }
 
-        private void SendSuccessMessage<T>(string connectionId, byte messageId, T data)
+        private void SendSuccessMessage<T>(string connectionId, int actorId, byte messageId, T data)
         {
             var responsePack = new ServerRequestData();
-            var messagePacket = new ServerRequestMessage(messageId, 0, 0, 0, 0);
+            var messagePacket = new ServerRequestMessage(messageId, actorId, 0, 0, 0);
             responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
             responsePack.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(data));
-            SendRequest(connectionId, 0, responsePack);
+            SendRequest(connectionId, 1, responsePack);
         }
 
         private void SendFailMessage(int nQueryId, string connectionId)
