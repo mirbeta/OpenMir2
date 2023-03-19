@@ -6,8 +6,8 @@ namespace SystemModule.Data
         public string MarketName;
         public string SearchWho;
         public string SearchItem;
-        public int ItemType;
-        public int ItemSet;
+        public short ItemType;
+        public byte ItemSet;
         public int UserMode;
     }
 }

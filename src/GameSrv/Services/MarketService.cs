@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using NLog;
+using SystemModule.Data;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
@@ -133,6 +134,27 @@ namespace GameSrv.Services
             var requestData = new MarketRegisterMessage() { ServerIndex = M2Share.ServerIndex, ServerName = M2Share.Config.ServerName, GroupId = 1, Token = M2Share.Config.MarketToken };
             M2Share.MarketService.SendRequest(1, request, requestData);
             IsFirstData = true;
+        }
+
+        public bool RequestLoadPageUserMarket(MarKetReqInfo marKetReqInfo)
+        {
+            if (!M2Share.Config.EnableMarket)
+            {
+                return false;
+            }
+            var request = new ServerRequestMessage(Messages.DB_SEARCHMARKET, 0, 0, 0, 0);
+            var requestData = new MarketSearchMessage
+            {
+                UserName = marKetReqInfo.UserName,
+                MarketName = marKetReqInfo.MarketName,
+                SearchWho = marKetReqInfo.SearchWho,
+                SearchItem = marKetReqInfo.SearchItem,
+                ItemType = marKetReqInfo.ItemType,
+                ItemSet = marKetReqInfo.ItemSet,
+                UserMode = marKetReqInfo.UserMode
+            };
+            M2Share.MarketService.SendRequest(1, request, requestData);
+            return true;
         }
 
         private void MarketSocketRead(object sender, DSCClientDataInEventArgs e)

@@ -3,6 +3,7 @@ using GameSrv.Items;
 using GameSrv.Maps;
 using GameSrv.Player;
 using GameSrv.Script;
+using GameSrv.World.Managers;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -75,6 +76,7 @@ namespace GameSrv.Npc {
         public bool IsUseItemName;
         public bool IsOffLineMsg = false;
         public bool IsYbDeal = false;
+        public bool CanItemMarket = false;
 
         public Merchant() : base() {
             RaceImg = ActorRace.Merchant;
@@ -758,6 +760,10 @@ namespace GameSrv.Npc {
                                 UserSelectOpenDealOffForm(playObject); // 打开出售物品窗口
                             }
                         }
+                        else if (CanItemMarket && string.Compare(sLabel, "market_0", StringComparison.OrdinalIgnoreCase) == 0) //拍卖行
+                        {
+                            SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_BUY);
+                        }
                     }
                 }
             }
@@ -765,6 +771,83 @@ namespace GameSrv.Npc {
                 M2Share.Logger.Error(Format(sExceptionMsg, sData));
                 M2Share.Logger.Error(ex.StackTrace);
             }
+        }
+
+        private void SendUserMarket(PlayObject user, short ItemType, byte UserMode)
+        {
+            switch (UserMode)
+            {
+                case MarketConst.USERMARKET_MODE_BUY:
+                case MarketConst.USERMARKET_MODE_INQUIRY:
+                    RequireLoadUserMarket(user, M2Share.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
+                    break;
+                case MarketConst.USERMARKET_MODE_SELL:
+                    SendUserMarketSellReady(user);
+                    break;
+            }
+        }
+        
+        private void RequireLoadUserMarket(PlayObject user,string MarketName, short ItemType, byte UserMode, string OtherName, string ItemName)
+        {
+            var IsOk = false;
+            var marKetReqInfo = new MarKetReqInfo();
+            marKetReqInfo.UserName = ChrName;
+            marKetReqInfo.MarketName = MarketName;
+            marKetReqInfo.SearchWho = OtherName;
+            marKetReqInfo.SearchItem = ItemName;
+            marKetReqInfo.ItemType = ItemType;
+            marKetReqInfo.ItemSet = 0;
+            marKetReqInfo.UserMode = UserMode;
+
+            switch (ItemType)
+            {
+                case MarketConst.USERMARKET_TYPE_ALL:
+                case MarketConst.USERMARKET_TYPE_WEAPON:
+                case MarketConst.USERMARKET_TYPE_NECKLACE:
+                case MarketConst.USERMARKET_TYPE_RING:
+                case MarketConst.USERMARKET_TYPE_BRACELET:
+                case MarketConst.USERMARKET_TYPE_CHARM:
+                case MarketConst.USERMARKET_TYPE_HELMET:
+                case MarketConst.USERMARKET_TYPE_BELT:
+                case MarketConst.USERMARKET_TYPE_SHOES:
+                case MarketConst.USERMARKET_TYPE_ARMOR:
+                case MarketConst.USERMARKET_TYPE_DRINK:
+                case MarketConst.USERMARKET_TYPE_JEWEL:
+                case MarketConst.USERMARKET_TYPE_BOOK:
+                case MarketConst.USERMARKET_TYPE_MINERAL:
+                case MarketConst.USERMARKET_TYPE_QUEST:
+                case MarketConst.USERMARKET_TYPE_ETC:
+                case MarketConst.USERMARKET_TYPE_OTHER:
+                case MarketConst.USERMARKET_TYPE_ITEMNAME:
+                    IsOk = true;
+                    break;
+                case MarketConst.USERMARKET_TYPE_SET:
+                    marKetReqInfo.ItemSet = 1;
+                    IsOk = true;
+                    break;
+                case MarketConst.USERMARKET_TYPE_MINE:
+                    marKetReqInfo.SearchWho = ChrName;
+                    IsOk = true;
+                    break;
+            }
+            if (IsOk)
+            {
+                if (M2Share.MarketService.RequestLoadPageUserMarket(marKetReqInfo))
+                {
+                    SendUserMarketCloseMsg(user);
+                }
+            }
+        }
+
+        private void SendUserMarketCloseMsg(PlayObject user)
+        {
+            user.SendMsg(this,  Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_MarketNotReady, 0, "");
+            user.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "你不能使用寄售商人功能。");
+        }
+        
+        private void SendUserMarketSellReady(PlayObject user)
+        {
+            
         }
 
         /// <summary>

@@ -483,6 +483,9 @@ namespace SystemModule
 
         public const byte DB_LOADMARKET = 100;
         public const byte DB_SAVEMARKET = 101;
+        public const byte DB_SEARCHMARKET = 102;
+        public const byte DB_SEARCHMARKETSUCCESS = 103;
+        
         public const byte DB_LOADMARKETSUCCESS = 102;
         public const byte DB_LOADMARKETFAIL = 103;
         public const byte DB_SAVEMARKETSUCCESS = 104;
@@ -744,6 +747,9 @@ namespace SystemModule
         public const int SM_SELLOFFBUY_OK = 23027;
         // 购买成功
         public const int RM_SELLOFFBUY_OK = 23028;
+
+        public const int RM_MARKET_LIST = 11015;
+        public const int RM_MARKET_RESULT = 11016;
 
         public static CommandMessage MakeMessage(int msg, int recog, int param, int tag, int series) {
             var result = new CommandMessage {

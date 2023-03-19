@@ -29,4 +29,18 @@ namespace SystemModule.Packets.ServerPackets
         public byte GroupId { get; set; }
         public string Token { get; set; }
     }
+
+    [MemoryPackable]
+    public partial struct MarketSearchMessage
+    {
+        public byte ServerIndex { get; set; }
+        public byte GroupId { get; set; }
+        public string UserName { get; set; }
+        public string MarketName { get; set; }
+        public string SearchWho { get; set; }
+        public string SearchItem { get; set; }
+        public short ItemType { get; set; }
+        public byte ItemSet { get; set; }
+        public int UserMode { get; set; }
+    }
 }
