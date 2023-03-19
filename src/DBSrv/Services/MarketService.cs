@@ -56,7 +56,7 @@ namespace DBSrv.Services
             var marketItems = _marketStorage.QueryMarketItems(groupId);
             if (!marketItems.Any())
             {
-                _logger.Info("当前服务器分组拍卖行数据为空,推送拍卖行数据失败.");
+                _logger.Info("拍卖行数据为空,跳过推送拍卖行数据.");
                 return;
             }
             var socketList = _socketServer.GetSockets();

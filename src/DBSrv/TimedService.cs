@@ -1,3 +1,4 @@
+using DBSrv.Conf;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -15,6 +16,7 @@ namespace DBSrv
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly PeriodicTimer _timer;
+        private readonly SettingConf _config;
         private readonly UserService _userService;
         private readonly SessionService _sessionService;
         private readonly DataService _dataService;
@@ -22,8 +24,9 @@ namespace DBSrv
         private readonly ICacheStorage _cacheStorage;
         private readonly IPlayDataStorage _playDataStorage;
 
-        public TimedService(ICacheStorage cacheStorage, UserService userService, SessionService session, DataService dataService, IPlayDataStorage playDataStorage, MarketService marketService)
+        public TimedService(SettingConf config, ICacheStorage cacheStorage, UserService userService, SessionService session, DataService dataService, IPlayDataStorage playDataStorage, MarketService marketService)
         {
+            _config = config;
             _userService = userService;
             _sessionService = session;
             _dataService = dataService;
@@ -66,7 +69,7 @@ namespace DBSrv
                         syncSaveTick = HUtil32.GetTickCount();
                         ProcessCacheStorage();
                     }
-                    if (marketPushTick - syncSaveTick > 300000) //5分钟推送一次拍卖行数据到各个GameSrv
+                    if (currentTick - marketPushTick > _config.SyncMarketInterval) //自定义时间推送一次拍卖行数据到各个GameSrv
                     {
                         marketPushTick = HUtil32.GetTickCount();
                         _marketService.PushMarketData();

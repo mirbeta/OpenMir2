@@ -37,6 +37,10 @@
         /// </summary>
         public int MarketServerPort = 5700;
         /// <summary>
+        /// 同步拍卖行数据间隔(毫秒)
+        /// </summary>
+        public int SyncMarketInterval = 30000;
+        /// <summary>
         /// 是否禁止全英文名字
         /// </summary>
         public bool EnglishNames = false;
