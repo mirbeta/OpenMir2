@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:WebApi.Controller.AuthenticationController">
+            <summary>
+            认证授权API
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.AuthenticationController.GetToken(System.String,System.String)">
+            <summary>
+            获取Token
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="password">密码</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.AuthenticationController.Unblocking">
+            <summary>
+            自助解封
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controller.CelebrityController">
+            <summary>
+            名人榜API
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.CelebrityController.GetCelebrity">
+            <summary>
+            获取名人榜
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.CelebrityController.Warriors">
+            <summary>
+            获取战士名人榜
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.CelebrityController.Wizards">
+            <summary>
+            获取法师名人榜
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.CelebrityController.Taoists">
+            <summary>
+            获取道士名人榜
+            </summary>
+        </member>
+        <member name="T:WebApi.Controller.GuildController">
+            <summary>
+            游戏行会API
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.GuildController.Items">
+            <summary>
+            获取所有游戏行会数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.GuildController.Detail(System.Int32)">
+            <summary>
+            获取游戏行会详情
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controller.ItemController">
+            <summary>
+            游戏道具API
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.ItemController.Items">
+            <summary>
+            获取所有游戏道具数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.ItemController.Detail(System.Int32)">
+            <summary>
+            获取游戏道具详情
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controller.MarketController">
+            <summary>
+            寄售行API
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.MarketController.Market">
+            <summary>
+            获取寄售行数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.MarketController.MarketType">
+            <summary>
+            获取寄售行物品类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.MarketController.BuyItem">
+            <summary>
+            购买寄售行物品
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.MarketController.SearchItem">
+            <summary>
+            搜索寄售行物品
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.MarketController.SellItem">
+            <summary>
+            物品寄售
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.MarketController.CancelSell">
+            <summary>
+            取消物品寄售
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controller.MonsterController">
+            <summary>
+            游戏怪物API
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.MonsterController.Items">
+            <summary>
+            获取所有游戏怪物数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.MonsterController.Detail(System.Int32)">
+            <summary>
+            获取怪物道具详情
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controller.PayController">
+            <summary>
+            充值API
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.PayController.List">
+            <summary>
+            获取充值记录
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.PayController.Pay">
+            <summary>
+            充值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controller.StatusController">
+            <summary>
+            系统状态API
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.StatusController.Get">
+            <summary>
+            获取系统状态
+            </summary>
+        </member>
+        <member name="M:WebApi.Controller.StatusController.GameSrv">
+            <summary>
+            获取游戏服务器状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.StatusController.DBSrv">
+            <summary>
+            获取数据库服务器状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controller.StatusController.LoginSrv">
+            <summary>
+            获取登录服务器状态
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
