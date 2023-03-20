@@ -175,6 +175,7 @@ namespace GameGate.Services
         /// </summary>
         private class ClientMessageWorkThread : IDisposable
         {
+            private readonly Logger _logger = LogManager.GetCurrentClassLogger();
             private readonly ManualResetEvent _resetEvent;
             private string _threadId;
             private readonly CancellationTokenSource _cts;
@@ -184,7 +185,6 @@ namespace GameGate.Services
             private readonly ChannelReader<SessionMessage> _messageQueue;
             public MessageThreadState ThreadState;
             private static SessionManager SessionMgr => SessionManager.Instance;
-            private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
             public ClientMessageWorkThread(CancellationToken stoppingToken, ChannelReader<SessionMessage> channel)
             {
@@ -220,7 +220,7 @@ namespace GameGate.Services
                             }
                         }
                     }
-                }, _cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
+                }, _cts.Token);
             }
 
             public void Stop()

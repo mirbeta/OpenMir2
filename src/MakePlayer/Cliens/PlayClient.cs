@@ -1,6 +1,5 @@
 using System.Net;
 using SystemModule;
-using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
@@ -10,48 +9,25 @@ namespace MakePlayer.Cliens
     public class PlayClient
     {
         public string SessionId;
-        public int ConnectTick = 0;
+        public int ConnectTick;
         public string LoginAccount;
         public string LoginPasswd;
-        public int Certification = 0;
+        public int Certification;
         public string ChrName;
         /// <summary>
         /// 当前游戏网络连接步骤
         /// </summary>
         public TConnectionStep ConnectionStep;
-        public TConnectionStatus ConnectionStatus;
+        public ConnectionStatus ConnectionStatus;
         public string ServerName = string.Empty;
-        public short MWAvailIdDay = 0;
-        public short MWAvailIdHour = 0;
-        public short MWAvailIpDay = 0;
-        public short MWAvailIpHour = 0;
-        public bool MBoDoFastFadeOut = false;
-        public long MDwFirstServerTime = 0;
-        public long MDwFirstClientTime = 0;
-        public string MSSelChrAddr = string.Empty;
-        public int MNSelChrPort = 0;
-        public string MSRunServerAddr = string.Empty;
-        public int MNRunServerPort = 0;
-        public TSelChar[] MChrArr;
-        public string MSMapTitle = string.Empty;
-        public string MSMapName = string.Empty;
-        public int MNMapMusic = 0;
-        public bool MBoActionLock = false;
-        public long MDwNotifyEventTick = 0;
-        public int MNReceiveCount = 0;
-        public string MSMakeNewId = string.Empty;
-        public bool MBoTimerMainBusy = false;
-        public bool MBoMapMovingWait = false;
-        public byte MBtCode = 0;
-        public bool MBoSendLogin = false;
-        public bool MBoNewAccount = false;
-        public int MNGold = 0;
-        public byte MBtJob = 0;
-        public int MNGameGold = 0;
-        public Ability MAbil = null;
-        public bool MBoLogin = false;
-        public long MDwSayTick = 0;
-        private Action? _fNotifyEvent = null;
+        public TSelChar[] ChrArr;
+        public long NotifyEventTick;
+        public byte MBtCode;
+        public bool CreateAccount;
+        public Ability MAbil;
+        public bool IsLogin;
+        public long SayTick;
+        private Action? _notifyEvent;
         public readonly ScoketClient ClientSocket;
         private readonly ClientManager _clientManager;
 
@@ -69,14 +45,13 @@ namespace MakePlayer.Cliens
             Certification = 0;
             ChrName = "";
             ConnectionStep = TConnectionStep.cnsConnect;
-            ConnectionStatus = TConnectionStatus.cns_Success;
-            MBoSendLogin = false;
-            MBoLogin = false;
-            MBoNewAccount = false;
+            ConnectionStatus = ConnectionStatus.Success;
+            IsLogin = false;
+            CreateAccount = false;
             ConnectTick = HUtil32.GetTickCount();
-            _fNotifyEvent = null;
-            MDwNotifyEventTick = HUtil32.GetTickCount();
-            MChrArr = new TSelChar[2];
+            _notifyEvent = null;
+            NotifyEventTick = HUtil32.GetTickCount();
+            ChrArr = new TSelChar[2];
             _clientManager = clientManager;
         }
 
@@ -96,7 +71,7 @@ namespace MakePlayer.Cliens
         {
             if (ConnectionStep == TConnectionStep.cnsConnect)
             {
-                if (MBoNewAccount)
+                if (CreateAccount)
                 {
                     SetNotifyEvent(NewAccount, 6000);
                 }
@@ -239,7 +214,6 @@ namespace MakePlayer.Cliens
             ConnectionStep = TConnectionStep.cnsLogin;
             var defMsg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sAccount + "/" + sPassword));
-            MBoSendLogin = true;
         }
 
         private void SendNewChr(string sAccount, string sChrName, byte sHair, byte sJob, byte sSex)
@@ -276,35 +250,33 @@ namespace MakePlayer.Cliens
 
         private void DoNotifyEvent()
         {
-            if (_fNotifyEvent != null)
+            if (_notifyEvent != null)
             {
-                if (HUtil32.GetTickCount() > MDwNotifyEventTick)
+                if (HUtil32.GetTickCount() > NotifyEventTick)
                 {
-                    _fNotifyEvent();
-                    _fNotifyEvent = null;
+                    _notifyEvent();
+                    _notifyEvent = null;
                 }
             }
         }
 
         private void SetNotifyEvent(Action aNotifyEvent, int nTime)
         {
-            MDwNotifyEventTick = HUtil32.GetTickCount() + nTime;
-            _fNotifyEvent = aNotifyEvent;
+            NotifyEventTick = HUtil32.GetTickCount() + nTime;
+            _notifyEvent = aNotifyEvent;
         }
 
         private void ClientGetStartPlay(string sData)
         {
+            var runServerAddr = string.Empty;
+            var runServerPort = 0;
             var sText = EDCode.DeCodeString(sData);
-            var sRunPort = HUtil32.GetValidStr3(sText, ref MSRunServerAddr, '/');
-            MNRunServerPort = Convert.ToInt32(sRunPort);
-            //ClientSocket.Disconnect();
+            var sRunPort = HUtil32.GetValidStr3(sText, ref runServerAddr, '/');
+            runServerPort = Convert.ToInt32(sRunPort);
             ConnectionStep = TConnectionStep.cnsPlay;
             MainOutMessage($"[{LoginAccount}] 准备进入游戏");
-            //ClientSocket.ClientType = ClientSocket.ctNonBlocking;
-            //ClientSocket.Close();
-            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(MSRunServerAddr), MNRunServerPort);
+            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(runServerAddr), runServerPort);
             ClientSocket.Connect();
-            //ClientSocket.Active = true;
         }
 
         private void ClientStartPlayFail()
@@ -325,25 +297,25 @@ namespace MakePlayer.Cliens
 
         private void ClientGetUserLogin(CommandMessage defMsg, string sData)
         {
-            MBoLogin = true;
+            IsLogin = true;
             ConnectionStep = TConnectionStep.cnsPlay;
-            ConnectionStatus = TConnectionStatus.cns_Success;
+            ConnectionStatus = ConnectionStatus.Success;
             MainOutMessage($"[{LoginAccount}] 成功进入游戏");
             MainOutMessage("-----------------------------------------------");
         }
 
         public void ClientLoginSay(string message)
         {
-            MDwSayTick = HUtil32.GetTickCount();
+            SayTick = HUtil32.GetTickCount();
             var msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(message));
         }
 
         private void ClientGetAbility(CommandMessage defMsg, string sData)
         {
-            MNGold = defMsg.Recog;
-            MBtJob = (byte)defMsg.Param;
-            MNGameGold = HUtil32.MakeLong(defMsg.Tag, defMsg.Series);
+            var gold = defMsg.Recog;
+            var job = (byte)defMsg.Param;
+            var gameGold = HUtil32.MakeLong(defMsg.Tag, defMsg.Series);
             var buff = EDCode.DecodeBuffer(sData);
             MAbil = ClientPacket.ToPacket<Ability>(buff);
         }
@@ -360,12 +332,12 @@ namespace MakePlayer.Cliens
 
         private void ClientQueryChrFail(int nFailCode)
         {
-            ConnectionStatus = TConnectionStatus.cns_Failure;
+            ConnectionStatus = ConnectionStatus.Failure;
         }
 
         private void ClientNewChrFail(int nFailCode)
         {
-            ConnectionStatus = TConnectionStatus.cns_Failure;
+            ConnectionStatus = ConnectionStatus.Failure;
             Close();
             switch (nFailCode)
             {
@@ -391,7 +363,7 @@ namespace MakePlayer.Cliens
         {
             if (nFailCode != 0)
             {
-                ConnectionStatus = TConnectionStatus.cns_Failure;
+                ConnectionStatus = ConnectionStatus.Failure;
                 Close();
             }
             switch (nFailCode)
@@ -414,19 +386,21 @@ namespace MakePlayer.Cliens
 
         private void ClientGetPasswdSuccess(string sData)
         {
+            var SelChrAddr = string.Empty;
+            var SelChrPort = 0;
             var sSelChrPort = string.Empty;
             var sCertification = string.Empty;
             MainOutMessage($"[{LoginAccount}] 帐号登录成功！");
             var sText = EDCode.DeCodeString(sData);
-            sText = HUtil32.GetValidStr3(sText, ref MSSelChrAddr, '/');
+            sText = HUtil32.GetValidStr3(sText, ref SelChrAddr, '/');
             sText = HUtil32.GetValidStr3(sText, ref sSelChrPort, '/');
             sText = HUtil32.GetValidStr3(sText, ref sCertification, '/');
             Certification = Convert.ToInt32(sCertification);
-            MNSelChrPort = Convert.ToInt32(sSelChrPort);
+            SelChrPort = Convert.ToInt32(sSelChrPort);
             //ClientSocket.Disconnect();
             ConnectionStep = TConnectionStep.cnsQueryChr;
             //ClientSocket.Close();
-            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(MSSelChrAddr), MNSelChrPort);
+            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(SelChrAddr), SelChrPort);
             ClientSocket.Connect();
             //ClientSocket.Active = true;
             // ClientSocket.Socket.SendText('#' + '+' + '!');
@@ -441,11 +415,11 @@ namespace MakePlayer.Cliens
         private void ClientGetReceiveChrs_AddChr(string sName, byte nJob, byte nHair, int nLevel, byte nSex)
         {
             int I;
-            if (!MChrArr[0].boValid)
+            if (!ChrArr[0].boValid)
             {
                 I = 0;
             }
-            else if (!MChrArr[1].boValid)
+            else if (!ChrArr[1].boValid)
             {
                 I = 1;
             }
@@ -453,12 +427,12 @@ namespace MakePlayer.Cliens
             {
                 return;
             }
-            MChrArr[I].UserChr.sName = sName;
-            MChrArr[I].UserChr.btJob = nJob;
-            MChrArr[I].UserChr.btHair = nHair;
-            MChrArr[I].UserChr.wLevel = (ushort)nLevel;
-            MChrArr[I].UserChr.btSex = nSex;
-            MChrArr[I].boValid = true;
+            ChrArr[I].UserChr.sName = sName;
+            ChrArr[I].UserChr.btJob = nJob;
+            ChrArr[I].UserChr.btHair = nHair;
+            ChrArr[I].UserChr.wLevel = (ushort)nLevel;
+            ChrArr[I].UserChr.btSex = nSex;
+            ChrArr[I].boValid = true;
         }
 
         public string ClientGetReceiveChrs_GetJobName(int nJob)
@@ -510,7 +484,7 @@ namespace MakePlayer.Cliens
             var sText = EDCode.DeCodeString(sData);
             var nChrCount = 0;
             var nSelect = 0;
-            for (var i = 0; i < MChrArr.Length; i++)
+            for (var i = 0; i < ChrArr.Length; i++)
             {
                 sText = HUtil32.GetValidStr3(sText, ref sName, '/');
                 sText = HUtil32.GetValidStr3(sText, ref sJob, '/');
@@ -530,22 +504,22 @@ namespace MakePlayer.Cliens
                 }
                 if (nSelect == 0)
                 {
-                    MChrArr[0].boFreezeState = false;
-                    MChrArr[0].boSelected = true;
-                    MChrArr[1].boFreezeState = true;
-                    MChrArr[1].boSelected = false;
+                    ChrArr[0].boFreezeState = false;
+                    ChrArr[0].boSelected = true;
+                    ChrArr[1].boFreezeState = true;
+                    ChrArr[1].boSelected = false;
                 }
                 else
                 {
-                    MChrArr[0].boFreezeState = true;
-                    MChrArr[0].boSelected = false;
-                    MChrArr[1].boFreezeState = false;
-                    MChrArr[1].boSelected = true;
+                    ChrArr[0].boFreezeState = true;
+                    ChrArr[0].boSelected = false;
+                    ChrArr[1].boFreezeState = false;
+                    ChrArr[1].boSelected = true;
                 }
             }
             if (nChrCount > 0)
             {
-                SendSelChr(MChrArr[nSelect].UserChr.sName);
+                SendSelChr(ChrArr[nSelect].UserChr.sName);
             }
             else
             {
@@ -555,38 +529,30 @@ namespace MakePlayer.Cliens
 
         private void ClientLoginFail(int nFailCode)
         {
-            if (nFailCode == -3)
+            ConnectionStatus = ConnectionStatus.Failure;
+            switch (nFailCode)
             {
-                SendLogin(LoginAccount, LoginPasswd);
-                MainOutMessage($"[{LoginAccount}] 此帐号已经登录或被异常锁定，请稍候再登录！");
+                case -1:
+                    MainOutMessage($"[{LoginAccount}] 密码错误！！");
+                    break;
+                case -2:
+                    MainOutMessage($"[{LoginAccount}] 密码输入错误超过3次，此帐号被暂时锁定，请稍候再登录！");
+                    break;
+                case -3:
+                    SendLogin(LoginAccount, LoginPasswd);
+                    MainOutMessage($"[{LoginAccount}] 此帐号已经登录或被异常锁定，请稍候再登录！");
+                    break;
+                case -4:
+                    MainOutMessage($"[{LoginAccount}] 这个帐号访问失败！请使用其他帐号登录，或者申请付费注册。");
+                    break;
+                case -5:
+                    MainOutMessage($"[{LoginAccount}] 这个帐号被锁定！");
+                    break;
+                default:
+                    MainOutMessage($"[{LoginAccount}] 此帐号不存在或出现未知错误！！");
+                    break;
             }
-            else
-            {
-                ConnectionStatus = TConnectionStatus.cns_Failure;
-                switch (nFailCode)
-                {
-                    case -1:
-                        MainOutMessage($"[{LoginAccount}] 密码错误！！");
-                        break;
-                    case -2:
-                        MainOutMessage($"[{LoginAccount}] 密码输入错误超过3次，此帐号被暂时锁定，请稍候再登录！");
-                        break;
-                    case -3:
-                        MainOutMessage($"[{LoginAccount}] 此帐号已经登录或被异常锁定，请稍候再登录！");
-                        break;
-                    case -4:
-                        MainOutMessage($"[{LoginAccount}] 这个帐号访问失败！请使用其他帐号登录，或者申请付费注册。");
-                        break;
-                    case -5:
-                        MainOutMessage($"[{LoginAccount}] 这个帐号被锁定！");
-                        break;
-                    default:
-                        MainOutMessage($"[{LoginAccount}] 此帐号不存在或出现未知错误！！");
-                        break;
-                }
-                MBoSendLogin = false;
-                Close();
-            }
+            Close();
         }
 
         private void ClientGetServerName(CommandMessage defMsg, string sBody)
@@ -628,9 +594,9 @@ namespace MakePlayer.Cliens
 
         private void Login()
         {
-            if (ConnectionStep == TConnectionStep.cnsConnect && (_fNotifyEvent == null) && !ClientSocket.IsConnected)
+            if (ConnectionStep == TConnectionStep.cnsConnect && (_notifyEvent == null) && !ClientSocket.IsConnected)
             {
-                if ((ConnectionStatus == TConnectionStatus.cns_Success) && (HUtil32.GetTickCount() > ConnectTick))
+                if ((ConnectionStatus == ConnectionStatus.Success) && (HUtil32.GetTickCount() > ConnectTick))
                 {
                     ConnectTick = HUtil32.GetTickCount();
                     try
@@ -639,7 +605,7 @@ namespace MakePlayer.Cliens
                     }
                     catch
                     {
-                        ConnectionStatus = TConnectionStatus.cns_Failure;
+                        ConnectionStatus = ConnectionStatus.Failure;
                     }
                 }
             }
@@ -647,35 +613,23 @@ namespace MakePlayer.Cliens
 
         public void ProcessPacket(byte[] reviceBuffer)
         {
-            MBoTimerMainBusy = true;
-            try
+            var sockText = HUtil32.GetString(reviceBuffer, 0, reviceBuffer.Length);
+            if (!string.IsNullOrEmpty(sockText))
             {
-                var sockText = HUtil32.GetString(reviceBuffer, 0, reviceBuffer.Length);
-                if (!string.IsNullOrEmpty(sockText))
+                while (sockText.Length >= 2)
                 {
-                    while (sockText.Length >= 2)
+                    if (sockText.IndexOf("!", StringComparison.OrdinalIgnoreCase) <= 0)
                     {
-                        if (MBoMapMovingWait)
-                        {
-                            break;
-                        }
-                        if (sockText.IndexOf("!", StringComparison.OrdinalIgnoreCase) <= 0)
-                        {
-                            break;
-                        }
-                        var sData = string.Empty;
-                        sockText = HUtil32.ArrestStringEx(sockText, "#", "!", ref sData);
-                        if (string.IsNullOrEmpty(sData))
-                        {
-                            break;
-                        }
-                        DecodeMessagePacket(sData);
+                        break;
                     }
+                    var sData = string.Empty;
+                    sockText = HUtil32.ArrestStringEx(sockText, "#", "!", ref sData);
+                    if (string.IsNullOrEmpty(sData))
+                    {
+                        break;
+                    }
+                    DecodeMessagePacket(sData);
                 }
-            }
-            finally
-            {
-                MBoTimerMainBusy = false;
             }
         }
 

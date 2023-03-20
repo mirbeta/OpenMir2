@@ -44,10 +44,10 @@ namespace MakePlayer
         cnsPlay
     }
 
-    public enum TConnectionStatus
+    public enum ConnectionStatus
     {
-        cns_Success,
-        cns_Failure
+        Success,
+        Failure
     }
 }
 

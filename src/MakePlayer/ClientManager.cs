@@ -130,9 +130,9 @@ namespace MakePlayer
                     boProcessLimit = true;
                     break;
                 }
-                if (_clientList[i].MBoLogin && (HUtil32.GetTickCount() - _clientList[i].MDwSayTick > 3000))
+                if (_clientList[i].IsLogin && (HUtil32.GetTickCount() - _clientList[i].SayTick > 3000))
                 {
-                    _clientList[i].MDwSayTick = HUtil32.GetTickCount();
+                    _clientList[i].SayTick = HUtil32.GetTickCount();
                     _clientList[i].ClientLoginSay(_sayMsgList[RandomNumber.GetInstance().Random(_sayMsgList.Count)]);
                 }
             }

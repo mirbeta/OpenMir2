@@ -181,7 +181,7 @@ namespace GameGate.Conf
         }
     }
 
-    public struct GameGateInfo
+    public class GameGateInfo
     {
         public byte ServiceId;
         /// <summary>
