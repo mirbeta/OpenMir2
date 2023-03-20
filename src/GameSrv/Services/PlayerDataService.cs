@@ -110,54 +110,48 @@ namespace GameSrv.Services
 
         public static void ProcessSaveQueue()
         {
-            while (!SaveProcessList.IsEmpty)//todo 保存数据优化一下流程，GameSrv无需等待DBSrv结果，异步通知即可
+            if (SaveProcessList.TryPeek(out var queryId))//todo 保存数据优化一下流程，GameSrv无需等待DBSrv结果，异步通知即可
             {
-                if (SaveProcessList.TryPeek(out var queryId))
+                int nIdent = 0;
+                int nRecog = 0;
+                byte[] data = null;
+                if (GetDbSrvMessage(queryId, ref nIdent, ref nRecog, ref data))
                 {
-                    int nIdent = 0;
-                    int nRecog = 0;
-                    byte[] data = null;
-                    if (GetDbSrvMessage(queryId, ref nIdent, ref nRecog, ref data))
+                    if (nIdent == Messages.DBR_SAVEHUMANRCD && nRecog == 1)
                     {
-                        if (nIdent == Messages.DBR_SAVEHUMANRCD && nRecog == 1)
-                        {
-                            M2Share.FrontEngine.RemoveSaveList(queryId);
-                        }
-                        SaveProcessList.TryDequeue(out _);
+                        M2Share.FrontEngine.RemoveSaveList(queryId);
                     }
+                    SaveProcessList.TryDequeue(out _);
                 }
             }
         }
 
         public static void ProcessQueryQueue()
         {
-            while (!QueryProcessList.IsEmpty)
+            if (QueryProcessList.TryDequeue(out var queryData))
             {
-                if (QueryProcessList.TryPeek(out var queryData))
+                if (queryData.QuetyCount >= 10000)
                 {
-                    if (queryData.QuetyCount >= 50)
+                    Logger.Warn("超过最大查询次数,放弃此次保存.");
+                    return;
+                }
+                int nIdent = 0;
+                int nRecog = 0;
+                byte[] data = null;
+                if (GetDbSrvMessage(queryData.QueryId, ref nIdent, ref nRecog, ref data))
+                {
+                    if (nIdent == Messages.DBR_LOADHUMANRCD && nRecog == 1 && data.Length > 0)
                     {
-                        QueryProcessList.TryDequeue(out _);
-                        Logger.Warn("超过最大查询次数,放弃此次保存.");
-                        continue;
+                        var responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(EDCode.DecodeBuff(data));
+                        responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
+                        LoadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
                     }
-                    int nIdent = 0;
-                    int nRecog = 0;
-                    byte[] data = null;
-                    if (GetDbSrvMessage(queryData.QueryId, ref nIdent, ref nRecog, ref data))
-                    {
-                        if (nIdent == Messages.DBR_LOADHUMANRCD && nRecog == 1 && data.Length > 0)
-                        {
-                            var responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(EDCode.DecodeBuff(data));
-                            responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
-                            LoadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
-                        }
-                        QueryProcessList.TryDequeue(out _);
-                    }
-                    else
-                    {
-                        queryData.QuetyCount++;
-                    }
+                    QueryProcessList.TryDequeue(out _);
+                }
+                else
+                {
+                    queryData.QuetyCount++;
+                    QueryProcessList.Enqueue(queryData);
                 }
             }
         }

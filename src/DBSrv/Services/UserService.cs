@@ -746,7 +746,7 @@ namespace DBSrv.Services
                 if (nIndex >= 0)
                 {
                     var chrRecord = _playDataStorage.Query(nIndex);
-                    if (string.IsNullOrEmpty(chrRecord.ChrName))
+                    if (!string.IsNullOrEmpty(chrRecord.ChrName))
                     {
                         sCurMap = chrRecord.CurMap;
                         boDataOk = true;
@@ -766,7 +766,7 @@ namespace DBSrv.Services
                 SendUserSocket(curGate.ConnectionId, userInfo.SessionId, sDefMsg + sRouteMsg);
                 _loginService.SetGlobaSessionPlay(userInfo.nSessionID);
                 result = true;
-                _logger.Debug($"玩家获取游戏网关信息 GameRun:{sRouteIp} Port:{nRoutePort + nMapIndex}");
+                _logger.Debug($"玩家获取游戏网关信息 RunGame:{sRouteIp} Port:{nRoutePort + nMapIndex}");
             }
             else
             {

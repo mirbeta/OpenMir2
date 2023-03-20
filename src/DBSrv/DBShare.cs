@@ -319,8 +319,8 @@ namespace DBSrv
 
         public GateRouteInfo()
         {
-            GameGateIP = new string[8];
-            GameGatePort = new int[8];
+            GameGateIP = new string[20];
+            GameGatePort = new int[20];
         }
     }
 }

@@ -317,20 +317,33 @@ namespace DBSrv
                     DBShare.RouteInfo[nRouteIdx].SelGateIP = sSelGateIPaddr.Trim();
                     DBShare.RouteInfo[nRouteIdx].GateCount = 0;
                     nGateIdx = 0;
-                    while ((sGameGate != ""))
+                    while (!string.IsNullOrEmpty(sGameGate))
                     {
                         sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
-                        sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
-                        DBShare.RouteInfo[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
-                        DBShare.RouteInfo[nRouteIdx].GameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
-                        nGateIdx++;
+                        var gamrGates = sGameGate.Split(",");
+                        if (gamrGates.Length == 0)
+                        {
+                            sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
+                            DBShare.RouteInfo[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
+                            DBShare.RouteInfo[nRouteIdx].GameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
+                            nGateIdx++;
+                        }
+                        else
+                        {
+                            for (int j = 0; j < gamrGates.Length; j++)
+                            {
+                                DBShare.RouteInfo[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
+                                DBShare.RouteInfo[nRouteIdx].GameGatePort[nGateIdx] = HUtil32.StrToInt(gamrGates[j], 0);
+                                nGateIdx++;
+                            }
+                            sGameGate = string.Empty;
+                        }
                     }
                     DBShare.RouteInfo[nRouteIdx].GateCount = nGateIdx;
                     nRouteIdx++;
-                    _logger.Info($"读取网关配置信息.GameGateIP:[{sGameGateIPaddr}:{sGameGatePort}]");
                 }
             }
-            _logger.Info($"读取网关配置信息成功.[{loadList.Count}]");
+            _logger.Info($"读取网关配置信息成功.[{DBShare.RouteInfo.Where(x => x != null).Sum(x => x.GateCount)}]");
             DBShare.MapList.Clear();
             if (File.Exists(_setting.MapFile))
             {

@@ -9,7 +9,7 @@ namespace GameSrv.World.Threads
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public StorageProcessor() : base(TimeSpan.FromMilliseconds(1000), "StorageProcessor")
+        public StorageProcessor() : base(TimeSpan.FromMilliseconds(500), "StorageProcessor")
         {
 
         }
