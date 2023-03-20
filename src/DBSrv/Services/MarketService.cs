@@ -237,20 +237,21 @@ namespace DBSrv.Services
 
         private void QueryMarketUserLoad(int nQueryId, int actorId, byte[] sData, string connectionId)
         {
-            var marketSearch = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
-            if (marketSearch.GroupId == 0)
+            var userMarket = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
+            if (userMarket.GroupId == 0)
             {
                 var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 0, 0, 0);
                 SendFailMessage(nQueryId, connectionId, messagePacket);
-                _logger.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
+                _logger.Info($"服务器组[{userMarket.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
                 return;
             }
-            var userItemLoad = _marketStorage.QueryMarketItemsCount(marketSearch.GroupId, marketSearch.SearchWho);
+            var userItemLoad = _marketStorage.QueryMarketItemsCount(userMarket.GroupId, userMarket.SearchWho);
             var marketLoadMessgae = new MarkerUserLoadMessage();
             marketLoadMessgae.SellCount = userItemLoad;
             marketLoadMessgae.IsBusy = 0;
+            marketLoadMessgae.MarketNPC = userMarket.MarketNPC;
             SendSuccessMessage(connectionId, actorId, Messages.DB_LOADUSERMARKETSUCCESS, marketLoadMessgae);
-            _logger.Info($"获取服务器组[{marketSearch.GroupId}] 用户[{marketSearch.SearchWho}]个人拍卖行数据...");
+            _logger.Info($"获取服务器组[{userMarket.GroupId}] 用户[{userMarket.SearchWho}]个人拍卖行数据...");
         }
 
         private void SearchMarketItem(int nQueryId, int actorId, byte[] sData, string connectionId)

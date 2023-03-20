@@ -159,15 +159,16 @@ namespace GameSrv.Services
             return true;
         }
 
-        public bool SendUserMarketSellReady(int actorId, string account)
+        public bool SendUserMarketSellReady(int actorId, string chrName, int marketNpc)
         {
             var request = new ServerRequestMessage(Messages.DB_LOADUSERMARKET, actorId, 0, 0, 0);
             var requestData = new MarketSearchMessage
             {
-                UserName = account
+                UserName = chrName,
+                MarketNPC = marketNpc
             };
             M2Share.MarketService.SendRequest(1, request, requestData);
-            _logger.Info($"发送用户[{account}]个人拍卖行数据请求");
+            _logger.Info($"发送用户[{chrName}]个人拍卖行数据请求");
             return true;
         }
 
@@ -293,7 +294,7 @@ namespace GameSrv.Services
                                 var user = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
                                 if (user != null)
                                 {
-                                    user.ReadyToSellUserMarket(0, SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
+                                    user.ReadyToSellUserMarket(SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
                                 }
                                 else
                                 {

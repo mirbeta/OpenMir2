@@ -15,6 +15,7 @@ namespace SystemModule.Packets.ServerPackets
     public partial struct MarkerUserLoadMessage
     {
         public int SellCount{ get; set; }
+        public int MarketNPC { get; set; }
         public byte IsBusy { get; set; }
     }
 
@@ -49,5 +50,6 @@ namespace SystemModule.Packets.ServerPackets
         public short ItemType { get; set; }
         public byte ItemSet { get; set; }
         public int UserMode { get; set; }
+        public int MarketNPC { get; set; }
     }
 }

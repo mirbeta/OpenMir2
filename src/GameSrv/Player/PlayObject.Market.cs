@@ -44,12 +44,12 @@ namespace GameSrv.Player
             SendMsg(this, Messages.RM_MARKET_LIST, 0, MarketUser.UserMode, MarketUser.ItemType, bFirstSend, buffer);
         }
 
-        public void ReadyToSellUserMarket(int marketNpc, MarkerUserLoadMessage readyItem)
+        public void ReadyToSellUserMarket(MarkerUserLoadMessage readyItem)
         {
             if (readyItem.IsBusy != MarketConst.UMRESULT_SUCCESS) return;
             if (readyItem.SellCount < MarketConst.MARKET_MAX_SELL_COUNT)
             {
-                SendMsg(this, Messages.RM_MARKET_RESULT, 0, marketNpc, MarketConst.UMResult_ReadyToSell, 0, "");
+                SendMsg(this, Messages.RM_MARKET_RESULT, 0, readyItem.MarketNPC, MarketConst.UMResult_ReadyToSell, 0, "");
             }
             else
             {
