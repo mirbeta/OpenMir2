@@ -176,7 +176,7 @@ namespace GameSrv.Network
             catch (Exception e)
             {
                 _logger.Error(sExceptionMsg);
-                _logger.Error(e.StackTrace, MessageType.Error);
+                _logger.Error(e.StackTrace);
             }
         }
 
@@ -295,7 +295,7 @@ namespace GameSrv.Network
             string sClientVersion = string.Empty;
             string sHwid = string.Empty;
             string sIdx = string.Empty;
-            const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification -> GetCertification";
+            const string sExceptionMsg = "[Exception] ThreadSocket::DoClientCertification -> GetCertification";
             try
             {
                 string sData = EDCode.DeCodeString(sMsg);
@@ -323,12 +323,13 @@ namespace GameSrv.Network
                         tHwid = MD5.MD5UnPrInt(sHwid);
                         result = true;
                     }
-                    M2Share.Logger.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHwid}]");
+                    _logger.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHwid}]");
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                _logger.Error(sExceptionMsg, MessageType.Error);
+                _logger.Error(sExceptionMsg);
+                _logger.Error(ex);
             }
             return result;
         }
@@ -345,7 +346,7 @@ namespace GameSrv.Network
             long nPlayTime = 0L;
             byte[] hwid = MD5.EmptyDigest;
             PlayerSession sessInfo;
-            const string sExceptionMsg = "[Exception] TRunSocket::DoClientCertification";
+            const string sExceptionMsg = "[Exception] ThreadSocket::DoClientCertification";
             const string sDisable = "*disable*";
             try
             {

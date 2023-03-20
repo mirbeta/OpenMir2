@@ -35,7 +35,7 @@ namespace GameSrv.GameCommand.Commands {
             //catch (Exception E)
             //{
             //    M2Share.MainOutMessage("[Exceptioin] TPlayObject.CmdPositionMove");
-            //    M2Share.MainOutMessage(e.Message, MessageType.Error);
+            //    M2Share.MainOutMessage(e.Message);
             //}
         }
     }

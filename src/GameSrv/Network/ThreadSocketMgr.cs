@@ -192,7 +192,7 @@ namespace GameSrv.Network
             catch (Exception e)
             {
                 _logger.Error(sExceptionMsg);
-                _logger.Error(e.Message, MessageType.Error);
+                _logger.Error(e.Message);
             }
         }
 
