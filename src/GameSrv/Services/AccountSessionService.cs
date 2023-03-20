@@ -10,18 +10,20 @@ using SystemModule.Sockets.Event;
 namespace GameSrv.Services {
     public class AccountSessionService {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private int _dwClearEmptySessionTick;
         private readonly IList<PlayerSession> _sessionList;
         private readonly ScoketClient _clientScoket;
+        private readonly object UserIDSection;
+        private string SocketRecvText = string.Empty;
+        private bool SocketConnected = false;
 
         public AccountSessionService() {
             _sessionList = new List<PlayerSession>();
-            M2Share.Config.boIDSocketConnected = false;
             _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.sIDSAddr), M2Share.Config.nIDSPort));
             _clientScoket.OnConnected += IDSocketConnect;
             _clientScoket.OnDisconnected += IDSocketDisconnect;
             _clientScoket.OnError += IDSocketError;
             _clientScoket.OnReceivedData += IdSocketRead;
+            UserIDSection = new object();
         }
 
         public void CheckConnected() {
@@ -35,13 +37,13 @@ namespace GameSrv.Services {
         }
 
         private void IdSocketRead(object sender, DSCClientDataInEventArgs e) {
-            HUtil32.EnterCriticalSection(M2Share.Config.UserIDSection);
+            HUtil32.EnterCriticalSection(UserIDSection);
             try {
                 string recvText = HUtil32.GetString(e.Buff, 0, e.BuffLen);
-                M2Share.Config.sIDSocketRecvText += recvText;
+                SocketRecvText += recvText;
             }
             finally {
-                HUtil32.LeaveCriticalSection(M2Share.Config.UserIDSection);
+                HUtil32.LeaveCriticalSection(UserIDSection);
             }
         }
 
@@ -111,24 +113,23 @@ namespace GameSrv.Services {
             string sData = string.Empty;
             string sCode = string.Empty;
             const string sExceptionMsg = "[Exception] AccountService:DecodeSocStr";
-            GameSvrConf Config = M2Share.Config;
-            HUtil32.EnterCriticalSection(Config.UserIDSection);
+            HUtil32.EnterCriticalSection(UserIDSection);
             try
             {
-                if (string.IsNullOrEmpty(Config.sIDSocketRecvText))
+                if (string.IsNullOrEmpty(SocketRecvText))
                 {
                     return;
                 }
-                if (Config.sIDSocketRecvText.IndexOf(')') <= 0)
+                if (SocketRecvText.IndexOf(')') <= 0)
                 {
                     return;
                 }
-                sSocketText = Config.sIDSocketRecvText;
-                Config.sIDSocketRecvText = string.Empty;
+                sSocketText = SocketRecvText;
+                SocketRecvText = string.Empty;
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(Config.UserIDSection);
+                HUtil32.LeaveCriticalSection(UserIDSection);
             }
             try
             {
@@ -171,23 +172,19 @@ namespace GameSrv.Services {
                         break;
                     }
                 }
-                HUtil32.EnterCriticalSection(Config.UserIDSection);
+                HUtil32.EnterCriticalSection(UserIDSection);
                 try
                 {
-                    Config.sIDSocketRecvText = sSocketText + Config.sIDSocketRecvText;
+                    SocketRecvText = sSocketText + SocketRecvText;
                 }
                 finally
                 {
-                    HUtil32.LeaveCriticalSection(Config.UserIDSection);
+                    HUtil32.LeaveCriticalSection(UserIDSection);
                 }
             }
             catch
             {
                 _logger.Error(sExceptionMsg);
-            }
-            if ((HUtil32.GetTickCount() - _dwClearEmptySessionTick) > 10000)
-            {
-                _dwClearEmptySessionTick = HUtil32.GetTickCount();
             }
         }
 
@@ -375,7 +372,7 @@ namespace GameSrv.Services {
         }
 
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e) {
-            M2Share.Config.boIDSocketConnected = true;
+            SocketConnected = true;
             _logger.Info("登录服务器[" + _clientScoket.RemoteEndPoint + "]连接成功...");
             SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
         }
@@ -386,7 +383,7 @@ namespace GameSrv.Services {
             //     return;
             // }
             ClearSession();
-            M2Share.Config.boIDSocketConnected = false;
+            SocketConnected = false;
             _clientScoket.IsConnected = false;
             _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]断开连接...");
         }

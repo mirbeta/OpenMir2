@@ -81,7 +81,6 @@ namespace GameSrv
             M2Share.ItemBindChrName = new List<ItemBind>();
             M2Share.ProcessMsgCriticalSection = new object();
             M2Share.ProcessHumanCriticalSection = new object();
-            M2Share.Config.UserIDSection = new object();
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.SellOffItemList = new List<DealOffInfo>();

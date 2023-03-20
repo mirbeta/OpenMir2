@@ -954,9 +954,6 @@ namespace GameSrv.Conf.Model {
         /// </summary>
         public int ProcessMonsterInterval;
         public bool boCheckFail;
-        public bool boIDSocketConnected;
-        public object UserIDSection;
-        public string sIDSocketRecvText;
         public int nLoadDBCount;
         public int nLoadDBErrorCount;
         public int nSaveDBCount;
