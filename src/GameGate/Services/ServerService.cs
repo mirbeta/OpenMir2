@@ -188,6 +188,7 @@ namespace GameGate.Services
         /// </summary>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
+            _logger.Debug($"收到客户端消息:[{GateInfo.ServiceId}] SessionId:[{token.SessionId}]");
             var clientSession = SessionMgr.GetSession(GateInfo.ServiceId, token.SessionId);
             if (clientSession != null)
             {

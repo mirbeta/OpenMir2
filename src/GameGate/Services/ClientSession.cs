@@ -1078,7 +1078,6 @@ namespace GameGate.Services
             const int firstPakcetMaxLen = 254;
             if (nLen < firstPakcetMaxLen && nLen > 15)
             {
-                Logger.Debug("ClientLogin: " + loginData);
                 if (loginData[0] != '*' || loginData[1] != '*')
                 {
                     Logger.Info($"[ClientLogin] Kicked 1: {loginData}");
@@ -1215,7 +1214,7 @@ namespace GameGate.Services
                             return;
                         }
                     }
-                    var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNo}/{szCode}/{MD5.MD5Print(hardWareDigest)}";
+                    var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNo}/{szCode}/{MD5.MD5Print(hardWareDigest)}/{ServiceId}";
                     var tempBuf = HUtil32.GetBytes(loginPacket);
                     Span<byte> pszLoginPacket = stackalloc byte[tempBuf.Length + 100];
                     var encodeLen = EncryptUtil.Encode(tempBuf, tempBuf.Length, pszLoginPacket, 2);
@@ -1225,6 +1224,7 @@ namespace GameGate.Services
                     _session.Account = sAccount;
                     _session.ChrName = sHumName;
                     SendLoginMessage(pszLoginPacket, encodeLen + 3);
+                    Logger.Debug($"[ClientLogin] {sAccount} {sHumName} {addr} {szCert} {szClientVerNo} {szCode} {MD5.MD5Print(hardWareDigest)} {ServiceId}");
                     success = true;
                     HandleLogin = true;
                     /*var secretKey = _authenticator.GenerateSetupCode("openmir2", sAccount, SessionKey, 5);

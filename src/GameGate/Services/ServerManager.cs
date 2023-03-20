@@ -49,6 +49,7 @@ namespace GameGate.Services
             for (var i = 0; i < _serverServices.Length; i++)
             {
                 _serverServices[i] = new ServerService(ConfigManager.GateList[i]);
+                Thread.Sleep(300);
             }
         }
 

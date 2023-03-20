@@ -277,7 +277,7 @@ namespace GameGate.Services
                                 CheckServerTimeMax = CheckServerTimeMin;
                             }
                             CheckRecviceTick = HUtil32.GetTickCount();
-                            SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, 0, "");
+                            SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, "", 0);
                             break;
                         case Grobal2.GM_DATA:
                             Span<byte> dataMemory;
@@ -340,23 +340,22 @@ namespace GameGate.Services
             }
         }
 
-        private void SendServerMsg(ushort command, ushort socketIndex, int nSocket, ushort userIndex, int nLen,
-            string data)
+        private void SendServerMsg(ushort command, ushort sessionIndex, int nSocket, ushort userIndex, string data, int nLen)
         {
-            var gateMsg = new ServerMessage
+            var serverMessage = new ServerMessage
             {
                 PacketCode = Grobal2.RunGateCode,
                 Socket = nSocket,
-                SessionId = socketIndex,
+                SessionId = sessionIndex,
                 Ident = command,
                 SessionIndex = userIndex,
                 PackLength = nLen
             };
-            var sendBuffer = SerializerUtil.Serialize(gateMsg);
+            var sendBuffer = SerializerUtil.Serialize(serverMessage);
             if (!string.IsNullOrEmpty(data))
             {
                 var strBuff = HUtil32.GetBytes(data);
-                var tempBuff = new byte[20 + data.Length];
+                var tempBuff = new byte[ServerMessage.PacketSize + data.Length];
                 MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
                 MemoryCopy.BlockCopy(strBuff, 0, tempBuff, sendBuffer.Length, data.Length);
                 Send(tempBuff);
@@ -370,9 +369,9 @@ namespace GameGate.Services
         /// <summary>
         /// 玩家进入游戏
         /// </summary>
-        public void UserEnter(ushort socketIndex, int socketId, string data)
+        public void UserEnter(ushort sessionId, int socketId, string data)
         {
-            SendServerMsg(Grobal2.GM_OPEN, socketIndex, socketId, 0, data.Length, data);
+            SendServerMsg(Grobal2.GM_OPEN, sessionId, socketId, 0, data, data.Length);
         }
 
         /// <summary>
@@ -380,7 +379,7 @@ namespace GameGate.Services
         /// </summary>
         public void UserLeave(int socketId)
         {
-            SendServerMsg(Grobal2.GM_CLOSE, 0, socketId, 0, 0, "");
+            SendServerMsg(Grobal2.GM_CLOSE, 0, socketId, 0, "", 0);
         }
 
         /// <summary>
@@ -439,7 +438,7 @@ namespace GameGate.Services
             }
             if (GateReady)
             {
-                SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, 0, "");
+                SendServerMsg(Grobal2.GM_CHECKCLIENT, 0, 0, 0, "", 0);
                 CheckServerFailCount = 0;
                 return;
             }
