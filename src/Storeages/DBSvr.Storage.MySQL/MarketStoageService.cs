@@ -57,12 +57,12 @@ namespace DBSrv.Storage.MySQL
             return itemList;
         }
 
-        public int QueryMarketItemsCount(byte serverGroupId)
+        public int QueryMarketItemsCount(byte groupId, string sellWho)
         {
             return 0;
         }
 
-        public bool SaveMarketItem(MarketItem market, byte serverGroupId, byte serverIndex)
+        public bool SaveMarketItem(MarketItem market, byte groupId, byte serverIndex)
         {
             var sb = new StringBuilder();
             sb.AppendLine("INSERT INTO marketitems (GroupId, ServerIndex, SellIndex, SellState, MarketName, ItemType, ItemSet, ItemName, MakeIndex, SellName, SellPrice, SellDate) ");
@@ -77,7 +77,7 @@ namespace DBSrv.Storage.MySQL
             }
             var command = context.CreateCommand();
             command.CommandText = sb.ToString();
-            command.Parameters.AddWithValue("@GroupId", serverGroupId);
+            command.Parameters.AddWithValue("@GroupId", groupId);
             command.Parameters.AddWithValue("@ServerIndex", serverIndex);
             command.Parameters.AddWithValue("@MakeIndex", market.SellItem.MakeIndex);
             command.Parameters.AddWithValue("@SellIndex", market.Index);

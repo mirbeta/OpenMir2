@@ -517,6 +517,18 @@ namespace SystemModule
         /// 保存拍卖行数据失败
         /// </summary>
         public const byte DB_SAVEMARKETFAIL = 108;
+        /// <summary>
+        /// 获取用户拍卖行数据
+        /// </summary>
+        public const byte DB_LOADUSERMARKET = 109;
+        /// <summary>
+        /// 获取用户拍卖行数据成功
+        /// </summary>
+        public const byte DB_LOADUSERMARKETSUCCESS = 110;
+        /// <summary>
+        /// 获取用户拍卖行数据失败
+        /// </summary>
+        public const byte DB_LOADUSERMARKETFAIL = 111;
 
         public const int SM_RUNGATELOGOUT = 599;
         public const int SM_PLAYERCONFIG = 560;

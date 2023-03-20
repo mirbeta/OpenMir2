@@ -44,7 +44,7 @@ namespace GameSrv.World.Managers
         public const byte USERMARKET_MODE_INQUIRY = 2;
         public const byte USERMARKET_MODE_SELL = 3;
 
-        public const byte UMResult_Success = 0;
+        public const byte UMRESULT_SUCCESS = 0;
         public const byte UMResult_Fail = 1;
         public const byte UMResult_ReadFail = 2;
         public const byte UMResult_WriteFail = 3;

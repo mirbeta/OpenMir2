@@ -858,8 +858,9 @@ namespace GameSrv.Npc {
             {
                 SysMsg("寄售商人功能无法使用。", MsgColor.Red, MsgType.Hint);
             }
+            //M2Share.MarketService.SendUserMarketSellReady(this.ActorId, user.ActorId,);
         }
-
+        
         /// <summary>
         /// 特殊修理物品
         /// </summary>

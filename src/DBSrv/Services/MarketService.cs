@@ -229,7 +229,28 @@ namespace DBSrv.Services
                 case Messages.DB_SEARCHMARKET://GameSrv搜索拍卖行数据
                     SearchMarketItem(nQueryId, packet.Recog, sData, connectionId);
                     break;
+                case Messages.DB_LOADUSERMARKET://GameSrv拉取玩家拍卖行数据
+                    QueryMarketUserLoad(nQueryId, packet.Recog, sData, connectionId);
+                    break;
             }
+        }
+
+        private void QueryMarketUserLoad(int nQueryId, int actorId, byte[] sData, string connectionId)
+        {
+            var marketSearch = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
+            if (marketSearch.GroupId == 0)
+            {
+                var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 0, 0, 0);
+                SendFailMessage(nQueryId, connectionId, messagePacket);
+                _logger.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
+                return;
+            }
+            var userItemLoad = _marketStorage.QueryMarketItemsCount(marketSearch.GroupId, marketSearch.SearchWho);
+            var marketLoadMessgae = new MarkerUserLoadMessage();
+            marketLoadMessgae.SellCount = userItemLoad;
+            marketLoadMessgae.IsBusy = 0;
+            SendSuccessMessage(connectionId, actorId, Messages.DB_LOADUSERMARKETSUCCESS, marketLoadMessgae);
+            _logger.Info($"获取服务器组[{marketSearch.GroupId}] 用户[{marketSearch.SearchWho}]个人拍卖行数据...");
         }
 
         private void SearchMarketItem(int nQueryId, int actorId, byte[] sData, string connectionId)

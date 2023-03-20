@@ -159,6 +159,18 @@ namespace GameSrv.Services
             return true;
         }
 
+        public bool SendUserMarketSellReady(int actorId, string account)
+        {
+            var request = new ServerRequestMessage(Messages.DB_LOADUSERMARKET, actorId, 0, 0, 0);
+            var requestData = new MarketSearchMessage
+            {
+                UserName = account
+            };
+            M2Share.MarketService.SendRequest(1, request, requestData);
+            _logger.Info($"发送用户[{account}]个人拍卖行数据请求");
+            return true;
+        }
+
         private void MarketSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
@@ -276,6 +288,17 @@ namespace GameSrv.Services
                                     _logger.Info("获取拍卖行数据失败...");
                                 }
                                 M2Share.MarketManager.OnMsgReadData();
+                                break;
+                            case Messages.DB_LOADUSERMARKETSUCCESS:
+                                var user = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                if (user != null)
+                                {
+                                    user.ReadyToSellUserMarket(0, SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
+                                }
+                                else
+                                {
+                                    _logger.Debug("玩家不在线,拍卖行数据无需返回给玩家");
+                                }
                                 break;
                             case Messages.DB_SEARCHMARKETSUCCESS:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家

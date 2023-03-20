@@ -10,6 +10,13 @@ namespace SystemModule.Packets.ServerPackets
         public IList<MarketItem> List { get; set; }
         public int TotalCount { get; set; }
     }
+    
+    [MemoryPackable]
+    public partial struct MarkerUserLoadMessage
+    {
+        public int SellCount{ get; set; }
+        public byte IsBusy { get; set; }
+    }
 
     [MemoryPackable]
     public partial class MarketSaveDataItem

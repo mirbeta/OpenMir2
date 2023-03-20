@@ -9,12 +9,14 @@ namespace DBSrv.Storage
     /// </summary>
     public interface IMarketStorage
     {
-        IEnumerable<MarketItem> QueryMarketItems(byte serverGroupId);
+        IEnumerable<MarketItem> QueryMarketItems(byte groupId);
 
-        int QueryMarketItemsCount(byte serverGroupId);
+        int QueryMarketItemsCount(byte groupId, string sellWho);
 
-        bool SaveMarketItem(MarketItem item, byte serverGroupId, byte serverIndex);
+        bool SaveMarketItem(MarketItem item, byte groupId, byte serverIndex);
 
-        IEnumerable<MarketItem> SearchMarketItems(byte serverGroupId,string marketName, string sellWho, string itemName, short itemType, byte itemSet);
+        IEnumerable<MarketItem> SearchMarketItems(byte groupId,string marketName, string sellWho, string itemName, short itemType, byte itemSet);
+        
+        
     }
 }
