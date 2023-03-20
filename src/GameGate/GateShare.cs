@@ -72,12 +72,12 @@ namespace GameGate
         public int SessionId { get; }
         public byte ServiceId { get; }
 
-        public SessionMessage(byte[] Buffer, int PacketLen, int SessionId, byte ServiceId)
+        public SessionMessage(int sessionId, byte serviceId, byte[] buffer, int packetLen)
         {
-            this.Buffer = Buffer;
-            this.PacketLen = PacketLen;
-            this.SessionId = SessionId;
-            this.ServiceId = ServiceId;
+            this.Buffer = buffer;
+            this.PacketLen = packetLen;
+            this.SessionId = sessionId;
+            this.ServiceId = serviceId;
         }
     }
 
@@ -116,7 +116,7 @@ namespace GameGate
         /// 数据处理ThreadId
         /// </summary>
         public int ThreadId;
-        public ushort UserListIndex;
+        public ushort SessionIndex;
         public int ReceiveTick;
         public string Account;
         public string ChrName;

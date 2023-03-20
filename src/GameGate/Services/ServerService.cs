@@ -20,7 +20,7 @@ namespace GameGate.Services
         private readonly GameGateInfo GateInfo;
         private readonly ClientThread _clientThread;
         private readonly IPEndPoint _gateEndPoint;
-        private readonly SendQueue PacketSendQueue;
+        private readonly SendQueue messageSendQueue;
         private readonly ConcurrentQueue<int> SessionCloseQueue;
         private static SessionManager SessionMgr => SessionManager.Instance;
         private static ServerManager ServerMgr => ServerManager.Instance;
@@ -30,7 +30,7 @@ namespace GameGate.Services
             GateInfo = gameGate;
             _serverSocket = new SocketServer(GateShare.MaxSession, 500);
             SessionCloseQueue = new ConcurrentQueue<int>();
-            PacketSendQueue = new SendQueue();
+            messageSendQueue = new SendQueue();
             _gateEndPoint = IPEndPoint.Parse(string.Concat(gameGate.ServerAdress, ":", gameGate.GatePort));
             _clientThread = new ClientThread(_gateEndPoint, gameGate);
             ClientManager.Instance.AddClientThread(gameGate.ThreadId, _clientThread);
@@ -48,7 +48,7 @@ namespace GameGate.Services
             _serverSocket.Start(_gateEndPoint);
             _clientThread.RestSessionArray();
             _clientThread.Start();
-            PacketSendQueue.StartProcessQueueSend(stoppingToken);
+            messageSendQueue.StartProcessQueueSend(stoppingToken);
             _logger.Info($"游戏网关[{_gateEndPoint}]已启动...", 1);
         }
 
@@ -71,7 +71,7 @@ namespace GameGate.Services
         /// <returns></returns>
         private string GetSendQueueCount()
         {
-            return PacketSendQueue.QueueCount + "/" + SessionMgr.QueueCount;
+            return messageSendQueue.QueueCount + "/" + SessionMgr.QueueCount;
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace GameGate.Services
                 {
                     userSession = new SessionInfo();
                     userSession.Socket = e.Socket;
-                    userSession.UserListIndex = 0;
+                    userSession.SessionIndex = 0;
                     userSession.ConnectionId = e.ConnectionId;
                     userSession.ReceiveTick = HUtil32.GetTickCount();
                     userSession.SckHandle = e.SocHandle;
@@ -127,9 +127,9 @@ namespace GameGate.Services
             {
                 e.SessionId = userSession.SessionId;
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
-                SessionMgr.AddSession(GateInfo.ServiceId, userSession.SessionId, new ClientSession(userSession, clientThread, PacketSendQueue));
+                SessionMgr.AddSession(GateInfo.ServiceId, userSession.SessionId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, messageSendQueue));
                 _logger.Info("开始连接: " + sRemoteAddress);
-                _logger.Debug($"用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}-{clientThread.ThreadId}");
+                _logger.Debug($"GateId:{GateInfo.ServiceId} 用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}-{clientThread.ThreadId}");
             }
             else
             {
@@ -158,7 +158,7 @@ namespace GameGate.Services
                     if (clientThread.SessionArray[i].SckHandle == e.SocHandle)
                     {
                         clientThread.SessionArray[i].Socket.Close();
-                        clientThread.SessionArray[i].UserListIndex = 0;
+                        clientThread.SessionArray[i].SessionIndex = 0;
                         clientThread.SessionArray[i].ReceiveTick = 0;
                         clientThread.SessionArray[i].SckHandle = 0;
                         clientThread.SessionArray[i].SessionId = 0;
@@ -208,7 +208,7 @@ namespace GameGate.Services
                 }
                 var data = new byte[token.BytesReceived];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-                ServerMgr.SendMessageQueue(new SessionMessage(data, data.Length, token.SessionId, GateInfo.ServiceId));
+                ServerMgr.SendMessageQueue(new SessionMessage(token.SessionId, GateInfo.ServiceId, data, data.Length));
             }
             else
             {

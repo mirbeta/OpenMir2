@@ -267,7 +267,7 @@ namespace GameGate.Services
                             var userSession = SessionManager.GetSession(GateInfo.ServiceId, packetHeader.SessionId);
                             if (userSession != null)
                             {
-                                userSession.SvrListIdx = packetHeader.ServerIndex;
+                                userSession.SvrListIdx = packetHeader.SessionIndex;
                             }
                             break;
                         case Grobal2.GM_RECEIVE_OK:
@@ -289,7 +289,7 @@ namespace GameGate.Services
                             {
                                 dataMemory = dataSpan.Slice(GateShare.HeaderMessageSize, nLen - GateShare.HeaderMessageSize);
                             }
-                            var sessionPacket = new SessionMessage(dataMemory.ToArray(), packetHeader.PackLength, packetHeader.SessionId, GateInfo.ServiceId);
+                            var sessionPacket = new SessionMessage(packetHeader.SessionId, GateInfo.ServiceId, dataMemory.ToArray(), packetHeader.PackLength);
                             SessionManager.Enqueue(sessionPacket);
                             break;
                         case Messages.GM_TEST:
@@ -332,7 +332,7 @@ namespace GameGate.Services
                 if (SessionArray[i] != null)
                 {
                     SessionArray[i].Socket = null;
-                    SessionArray[i].UserListIndex = 0;
+                    SessionArray[i].SessionIndex = 0;
                     SessionArray[i].ReceiveTick = HUtil32.GetTickCount();
                     SessionArray[i].SckHandle = 0;
                     SessionArray[i].SessionId = 0;
@@ -349,7 +349,7 @@ namespace GameGate.Services
                 Socket = nSocket,
                 SessionId = socketIndex,
                 Ident = command,
-                ServerIndex = userIndex,
+                SessionIndex = userIndex,
                 PackLength = nLen
             };
             var sendBuffer = SerializerUtil.Serialize(gateMsg);

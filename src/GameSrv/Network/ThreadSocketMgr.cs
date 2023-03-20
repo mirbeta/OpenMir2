@@ -363,7 +363,6 @@ namespace GameSrv.Network
         internal void Send(string connectId, byte[] buff)
         {
             _gateSocket.Send(connectId, buff);
-            //((FixedLengthOwner<byte>)buff).Dispose();
         }
 
         /// <summary>

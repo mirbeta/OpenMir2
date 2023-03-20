@@ -19,7 +19,7 @@ namespace SystemModule.Packets
         /// </summary>
         public ushort SessionId { get; set; }
         public ushort Ident { get; set; }
-        public int ServerIndex { get; set; }
+        public int SessionIndex { get; set; }
         public int PackLength { get; set; }
 
         public const int PacketSize = 20;

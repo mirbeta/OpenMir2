@@ -30,6 +30,7 @@ namespace GameGate.Services
         private int SvrObjectId { get; set; }
         private int SendCheckTick { get; set; }
         private CheckStep Stat { get; set; }
+        private int ServiceId { get; set; }
 
         /// <summary>
         /// 会话密钥
@@ -38,10 +39,10 @@ namespace GameGate.Services
         private string SessionKey { get; set; }
 
         private long FinishTick { get; set; }
-        private readonly DynamicAuthenticator _authenticator = null;
 
-        public ClientSession(SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
+        public ClientSession(int serviceId, SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
+            ServiceId = serviceId;
             _session = session;
             ClientThread = clientThread;
             SendQueue = sendQueue;
@@ -52,7 +53,6 @@ namespace GameGate.Services
             _syncObj = new object();
             gameSpeed = new SessionSpeedRule();
             SessionKey = Guid.NewGuid().ToString("N");
-            _authenticator = new DynamicAuthenticator();
         }
 
         public SessionSpeedRule GetGameSpeed()
@@ -624,7 +624,7 @@ namespace GameGate.Services
                     PacketCode = Grobal2.RunGateCode,
                     Socket = _session.SckHandle,
                     Ident = Grobal2.GM_DATA,
-                    ServerIndex = SvrListIdx
+                    SessionIndex = SvrListIdx
                 };
                 int sendLen;
                 if (deCodeLen > CommandMessage.Size)
@@ -1224,7 +1224,7 @@ namespace GameGate.Services
                     pszLoginPacket[encodeLen + 2] = (byte)'!';
                     _session.Account = sAccount;
                     _session.ChrName = sHumName;
-                    SendLoginPacket(pszLoginPacket, encodeLen + 3);
+                    SendLoginMessage(pszLoginPacket, encodeLen + 3);
                     success = true;
                     HandleLogin = true;
                     /*var secretKey = _authenticator.GenerateSetupCode("openmir2", sAccount, SessionKey, 5);
@@ -1248,7 +1248,7 @@ namespace GameGate.Services
         /// <summary>
         /// 发送登录验证封包
         /// </summary>
-        private void SendLoginPacket(Span<byte> packet, int len = 0)
+        private void SendLoginMessage(Span<byte> packet, int len = 0)
         {
             byte[] tempBuff;
             if (len == 0)
@@ -1261,10 +1261,10 @@ namespace GameGate.Services
             }
             var packetHeader = new ServerMessage();
             packetHeader.PacketCode = Grobal2.RunGateCode;
-            packetHeader.Socket = (int)_session.Socket.Handle;
+            packetHeader.Socket = _session.SckHandle;
             packetHeader.SessionId = _session.SessionId;
             packetHeader.Ident = Grobal2.GM_DATA;
-            packetHeader.ServerIndex = _session.UserListIndex;
+            packetHeader.SessionIndex = _session.SessionIndex;
             packetHeader.PackLength = tempBuff.Length - ServerMessage.PacketSize;
             var sendBuffer = SerializerUtil.Serialize(packetHeader);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(packetHeader), 0, tempBuff, 0, sendBuffer.Length);
