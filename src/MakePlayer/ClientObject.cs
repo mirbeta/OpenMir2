@@ -30,18 +30,18 @@ namespace MakePlayer
         public long dwStartefftime;
     }
 
-    public enum TConnectionStep
+    public enum ConnectionStep
     {
-        cnsConnect,
-        cnsNewAccount,
-        cnsQueryServer,
-        cnsSelServer,
-        cnsLogin,
-        cnsNewChr,
-        cnsQueryChr,
-        cnsSelChr,
-        cnsReSelChr,
-        cnsPlay
+        Connect,
+        NewAccount,
+        QueryServer,
+        SelServer,
+        Login,
+        NewChr,
+        QueryChr,
+        SelChr,
+        ReSelChr,
+        Play
     }
 
     public enum ConnectionStatus

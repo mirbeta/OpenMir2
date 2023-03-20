@@ -17,7 +17,7 @@ namespace MakePlayer.Cliens
         /// <summary>
         /// 当前游戏网络连接步骤
         /// </summary>
-        public TConnectionStep ConnectionStep;
+        public ConnectionStep ConnectionStep;
         public ConnectionStatus ConnectionStatus;
         public string ServerName = string.Empty;
         public TSelChar[] ChrArr;
@@ -44,7 +44,7 @@ namespace MakePlayer.Cliens
             LoginPasswd = "";
             Certification = 0;
             ChrName = "";
-            ConnectionStep = TConnectionStep.cnsConnect;
+            ConnectionStep = ConnectionStep.Connect;
             ConnectionStatus = ConnectionStatus.Success;
             IsLogin = false;
             CreateAccount = false;
@@ -57,19 +57,19 @@ namespace MakePlayer.Cliens
 
         private void NewAccount()
         {
-            ConnectionStep = TConnectionStep.cnsNewAccount;
+            ConnectionStep = ConnectionStep.NewAccount;
             SendNewAccount(LoginAccount, LoginPasswd);
         }
 
         private void NewChr()
         {
-            ConnectionStep = TConnectionStep.cnsNewChr;
+            ConnectionStep = ConnectionStep.NewChr;
             SelectChrCreateNewChr(ChrName);
         }
 
         private void SocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            if (ConnectionStep == TConnectionStep.cnsConnect)
+            if (ConnectionStep == ConnectionStep.Connect)
             {
                 if (CreateAccount)
                 {
@@ -80,12 +80,12 @@ namespace MakePlayer.Cliens
                     ClientNewIdSuccess("");
                 }
             }
-            else if (ConnectionStep == TConnectionStep.cnsQueryChr)
+            else if (ConnectionStep == ConnectionStep.QueryChr)
             {
                 // Socket.SendText('#' + '+' + '!');
                 //SendQueryChr();
             }
-            else if (ConnectionStep == TConnectionStep.cnsPlay)
+            else if (ConnectionStep == ConnectionStep.Play)
             {
                 ClientSocket.IsConnected = true;
                 SendRunLogin();
@@ -153,7 +153,7 @@ namespace MakePlayer.Cliens
         private void SendNewAccount(string sAccount, string sPassword)
         {
             MainOutMessage($"[{LoginAccount}] 创建帐号");
-            ConnectionStep = TConnectionStep.cnsNewAccount;
+            ConnectionStep = ConnectionStep.NewAccount;
             var ue = new UserEntry();
             ue.Account = sAccount;
             ue.Password = sPassword;
@@ -202,7 +202,7 @@ namespace MakePlayer.Cliens
         private void SendSelChr(string sChrName)
         {
             MainOutMessage($"[{LoginAccount}] 选择人物：{sChrName}");
-            ConnectionStep = TConnectionStep.cnsSelChr;
+            ConnectionStep = ConnectionStep.SelChr;
             ChrName = sChrName;
             var defMsg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(LoginAccount + "/" + sChrName));
@@ -211,7 +211,7 @@ namespace MakePlayer.Cliens
         private void SendLogin(string sAccount, string sPassword)
         {
             MainOutMessage($"[{LoginAccount}] 开始登录");
-            ConnectionStep = TConnectionStep.cnsLogin;
+            ConnectionStep = ConnectionStep.Login;
             var defMsg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sAccount + "/" + sPassword));
         }
@@ -219,7 +219,7 @@ namespace MakePlayer.Cliens
         private void SendNewChr(string sAccount, string sChrName, byte sHair, byte sJob, byte sSex)
         {
             MainOutMessage($"[{LoginAccount}] 创建人物：{sChrName}");
-            ConnectionStep = TConnectionStep.cnsNewChr;
+            ConnectionStep = ConnectionStep.NewChr;
             var defMsg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sAccount + "/" + sChrName + "/" + sHair + "/" + sJob + "/" + sSex));
         }
@@ -227,7 +227,7 @@ namespace MakePlayer.Cliens
         private void SendQueryChr()
         {
             MainOutMessage($"[{LoginAccount}] 查询人物");
-            ConnectionStep = TConnectionStep.cnsQueryChr;
+            ConnectionStep = ConnectionStep.QueryChr;
             var defMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(LoginAccount + "/" + Certification));
         }
@@ -235,7 +235,7 @@ namespace MakePlayer.Cliens
         private void SendSelectServer(string sServerName)
         {
             MainOutMessage($"[{LoginAccount}] 选择服务器：{sServerName}");
-            ConnectionStep = TConnectionStep.cnsSelServer;
+            ConnectionStep = ConnectionStep.SelServer;
             var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sServerName));
         }
@@ -243,7 +243,7 @@ namespace MakePlayer.Cliens
         private void SendRunLogin()
         {
             MainOutMessage($"[{LoginAccount}] 进入游戏");
-            ConnectionStep = TConnectionStep.cnsPlay;
+            ConnectionStep = ConnectionStep.Play;
             var sSendMsg = $"**{LoginAccount}/{ChrName}/{Certification}/{Grobal2.CLIENT_VERSION_NUMBER}/{2022080300}";
             SendSocket(EDCode.EncodeString(sSendMsg));
         }
@@ -273,7 +273,7 @@ namespace MakePlayer.Cliens
             var sText = EDCode.DeCodeString(sData);
             var sRunPort = HUtil32.GetValidStr3(sText, ref runServerAddr, '/');
             runServerPort = Convert.ToInt32(sRunPort);
-            ConnectionStep = TConnectionStep.cnsPlay;
+            ConnectionStep = ConnectionStep.Play;
             MainOutMessage($"[{LoginAccount}] 准备进入游戏");
             ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(runServerAddr), runServerPort);
             ClientSocket.Connect();
@@ -298,7 +298,7 @@ namespace MakePlayer.Cliens
         private void ClientGetUserLogin(CommandMessage defMsg, string sData)
         {
             IsLogin = true;
-            ConnectionStep = TConnectionStep.cnsPlay;
+            ConnectionStep = ConnectionStep.Play;
             ConnectionStatus = ConnectionStatus.Success;
             MainOutMessage($"[{LoginAccount}] 成功进入游戏");
             MainOutMessage("-----------------------------------------------");
@@ -386,24 +386,20 @@ namespace MakePlayer.Cliens
 
         private void ClientGetPasswdSuccess(string sData)
         {
-            var SelChrAddr = string.Empty;
-            var SelChrPort = 0;
+            var selChrAddr = string.Empty;
+            var selChrPort = 0;
             var sSelChrPort = string.Empty;
             var sCertification = string.Empty;
             MainOutMessage($"[{LoginAccount}] 帐号登录成功！");
             var sText = EDCode.DeCodeString(sData);
-            sText = HUtil32.GetValidStr3(sText, ref SelChrAddr, '/');
+            sText = HUtil32.GetValidStr3(sText, ref selChrAddr, '/');
             sText = HUtil32.GetValidStr3(sText, ref sSelChrPort, '/');
             sText = HUtil32.GetValidStr3(sText, ref sCertification, '/');
             Certification = Convert.ToInt32(sCertification);
-            SelChrPort = Convert.ToInt32(sSelChrPort);
-            //ClientSocket.Disconnect();
-            ConnectionStep = TConnectionStep.cnsQueryChr;
-            //ClientSocket.Close();
-            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(SelChrAddr), SelChrPort);
+            selChrPort = Convert.ToInt32(sSelChrPort);
+            ConnectionStep = ConnectionStep.QueryChr;
+            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(selChrAddr), selChrPort);
             ClientSocket.Connect();
-            //ClientSocket.Active = true;
-            // ClientSocket.Socket.SendText('#' + '+' + '!');
             SendQueryChr();
         }
 
@@ -594,7 +590,7 @@ namespace MakePlayer.Cliens
 
         private void Login()
         {
-            if (ConnectionStep == TConnectionStep.cnsConnect && (_notifyEvent == null) && !ClientSocket.IsConnected)
+            if (ConnectionStep == ConnectionStep.Connect && (_notifyEvent == null) && !ClientSocket.IsConnected)
             {
                 if ((ConnectionStatus == ConnectionStatus.Success) && (HUtil32.GetTickCount() > ConnectTick))
                 {
