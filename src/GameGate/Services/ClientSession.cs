@@ -1267,7 +1267,7 @@ namespace GameGate.Services
             packetHeader.SessionIndex = _session.SessionIndex;
             packetHeader.PackLength = tempBuff.Length - ServerMessage.PacketSize;
             var sendBuffer = SerializerUtil.Serialize(packetHeader);
-            MemoryCopy.BlockCopy(SerializerUtil.Serialize(packetHeader), 0, tempBuff, 0, sendBuffer.Length);
+            MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)
             {
                 MemoryCopy.BlockCopy(packet, 0, tempBuff, sendBuffer.Length, packet.Length);
