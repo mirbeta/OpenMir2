@@ -25,16 +25,16 @@ namespace MakePlayer.Scenes.Scene
 
         public void Run()
         {
-            if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > ConnectTick)
+            if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > _play.ConnectTick)
             {
-                ConnectTick = HUtil32.GetTickCount();
+                _play.ConnectTick = HUtil32.GetTickCount();
                 try
                 {
                     ConnectionStatus = ConnectionStatus.Connect;
                 }
                 catch
                 {
-                    ConnectTick = HUtil32.GetTickCount() + 10000;
+                    _play.ConnectTick = HUtil32.GetTickCount() + 10000;
                     ConnectionStatus = ConnectionStatus.Failure;
                 }
             }
@@ -175,7 +175,7 @@ namespace MakePlayer.Scenes.Scene
 
         public void ClientLoginSay(string message)
         {
-            SayTick = HUtil32.GetTickCount();
+            _play.SayTick = HUtil32.GetTickCount();
             var msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(message));
         }

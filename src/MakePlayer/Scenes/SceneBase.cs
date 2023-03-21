@@ -14,9 +14,6 @@ namespace MakePlayer.Scenes
         /// 当前游戏网络连接步骤
         /// </summary>
         public ConnectionStatus ConnectionStatus;
-        public bool CreateAccount;
-        public int ConnectTick;
-        public int SayTick;
 
         public virtual void Initialize()
         {

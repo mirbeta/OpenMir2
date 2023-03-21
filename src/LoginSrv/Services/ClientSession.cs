@@ -125,7 +125,7 @@ namespace LoginSrv.Services
                 case Messages.CM_ADDNEWUSER:
                     if (_configMgr.Config.EnableMakingID)
                     {
-                        if (HUtil32.GetTickCount() - userInfo.ClientTick > 5000)
+                        if (HUtil32.GetTickCount() - userInfo.ClientTick > 10000)
                         {
                             AccountCreate(ref userInfo, sData);
                         }

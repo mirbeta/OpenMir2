@@ -1,4 +1,3 @@
-using System.Net;
 using MakePlayer.Cliens;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
@@ -10,28 +9,27 @@ namespace MakePlayer.Scenes.Scene
     public class LoginScene : SceneBase
     {
         private readonly ScoketClient _clientSocket;
-        private readonly PlayClient _client;
+        private readonly PlayClient play;
         private readonly string LoginAddr;
         private readonly int LoginPort;
-        private bool IsLogin;
 
         public LoginScene(PlayClient playClient, string serverAdd, int port)
         {
-            _client = playClient;
+            play = playClient;
             LoginAddr = serverAdd;
             LoginPort = port;
             _clientSocket = new ScoketClient();
-            _clientSocket.OnConnected += CSocketConnect;
-            _clientSocket.OnDisconnected += CSocketDisconnect;
-            _clientSocket.OnReceivedData += CSocketRead;
-            _clientSocket.OnError += CSocketError;
+            _clientSocket.OnConnected += LoginSocketConnect;
+            _clientSocket.OnDisconnected += LoginSocketDisconnect;
+            _clientSocket.OnReceivedData += LoginSocketRead;
+            _clientSocket.OnError += LoginSocketError;
         }
 
         public override void OpenScene()
         {
             ConnectionStatus = ConnectionStatus.Failure;
-            _clientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(LoginAddr), LoginPort);
-            //SetNotifyEvent(Login, 1000);
+            _clientSocket.Connect(LoginAddr, LoginPort);
+            SetNotifyEvent(Login, 1000);
         }
 
         public override void CloseScene()
@@ -41,7 +39,7 @@ namespace MakePlayer.Scenes.Scene
 
         public void PassWdFail()
         {
-            _client.ConnectionStep = ConnectionStep.Connect;
+            play.ConnectionStep = ConnectionStep.Connect;
         }
 
         public override void PlayScene()
@@ -74,9 +72,9 @@ namespace MakePlayer.Scenes.Scene
 
         public void Login()
         {
-            if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > ConnectTick)
+            if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > play.ConnectTick)
             {
-                ConnectTick = HUtil32.GetTickCount();
+                play.ConnectTick = HUtil32.GetTickCount();
                 try
                 {
                     _clientSocket.Connect();
@@ -84,7 +82,7 @@ namespace MakePlayer.Scenes.Scene
                 }
                 catch
                 {
-                    ConnectTick = HUtil32.GetTickCount() + 10000;
+                    play.ConnectTick = HUtil32.GetTickCount() + 10000;
                     ConnectionStatus = ConnectionStatus.Failure;
                 }
             }
@@ -92,7 +90,6 @@ namespace MakePlayer.Scenes.Scene
 
         private void ClientLoginFail(int nFailCode)
         {
-            ConnectionStatus = ConnectionStatus.Success;
             switch (nFailCode)
             {
                 case -1:
@@ -102,7 +99,7 @@ namespace MakePlayer.Scenes.Scene
                     MainOutMessage("密码输入错误超过3次，此帐号被暂时锁定，请稍候再登录！");
                     break;
                 case -3:
-                    SendLogin(_client.LoginId, _client.LoginPasswd);
+                    SendLogin(play.LoginId, play.LoginPasswd);
                     MainOutMessage("此帐号已经登录或被异常锁定，请稍候再登录！");
                     break;
                 case -4:
@@ -123,8 +120,8 @@ namespace MakePlayer.Scenes.Scene
         /// </summary>
         private void NewAccount()
         {
-            _client.ConnectionStep = ConnectionStep.NewAccount;
-            SendNewAccount(_client.LoginId, _client.LoginPasswd);
+            play.ConnectionStep = ConnectionStep.NewAccount;
+            SendNewAccount(play.LoginId, play.LoginPasswd);
         }
 
         /// <summary>
@@ -132,7 +129,7 @@ namespace MakePlayer.Scenes.Scene
         /// </summary>
         private void ClientSendLoginMessage()
         {
-            SendLogin(_client.LoginId, _client.LoginPasswd);
+            SendLogin(play.LoginId, play.LoginPasswd);
         }
 
         private void ClientNewIdFail(int nFailCode)
@@ -146,7 +143,7 @@ namespace MakePlayer.Scenes.Scene
             {
                 case 0:
                     MainOutMessage("帐号已被其他的玩家使用了。请选择其它帐号名注册，尝试使用该账号登陆游戏。");
-                    SendLogin(_client.LoginId, _client.LoginPasswd);
+                    SendLogin(play.LoginId, play.LoginPasswd);
                     break;
                 case 1:
                     MainOutMessage("验证码输入错误，请重新输入！！！");
@@ -155,7 +152,7 @@ namespace MakePlayer.Scenes.Scene
                     MainOutMessage("此帐号名被禁止使用！");
                     break;
                 default:
-                    MainOutMessage($" 帐号创建失败，请确认帐号是否包括空格、及非法字符！Code: {nFailCode}");
+                    MainOutMessage($"帐号创建失败，请确认帐号是否包括空格、及非法字符！Code: {nFailCode}");
                     break;
             }
         }
@@ -163,7 +160,7 @@ namespace MakePlayer.Scenes.Scene
         private void SendNewAccount(string sAccount, string sPassword)
         {
             MainOutMessage("创建帐号");
-            _client.ConnectionStep = ConnectionStep.NewAccount;
+            play.ConnectionStep = ConnectionStep.NewAccount;
             var ue = new UserEntry();
             ue.Account = sAccount;
             ue.Password = sPassword;
@@ -187,11 +184,8 @@ namespace MakePlayer.Scenes.Scene
         private void SendLogin(string uid, string passwd)
         {
             MainOutMessage("开始登陆");
-            _client.LoginId = uid;
-            _client.LoginPasswd = passwd;
             var msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + passwd));
-            //SendLogin = true;
         }
 
         private void ClientGetPasswordOk(CommandMessage msg, string sBody)
@@ -234,7 +228,7 @@ namespace MakePlayer.Scenes.Scene
             {
                 sBody = HUtil32.GetValidStr3(sBody, ref sServerName, '/');
                 sBody = HUtil32.GetValidStr3(sBody, ref sServerStatus, '/');
-                if (sServerName == _client.ServerName)
+                if (sServerName == play.ServerName)
                 {
                     SendSelectServer(sServerName);
                     return;
@@ -242,7 +236,7 @@ namespace MakePlayer.Scenes.Scene
             }
             if (nCount == 1)
             {
-                _client.ServerName = sServerName;
+                play.ServerName = sServerName;
                 SendSelectServer(sServerName);
             }
         }
@@ -250,7 +244,7 @@ namespace MakePlayer.Scenes.Scene
         private void SendSelectServer(string svname)
         {
             MainOutMessage($"选择服务器：{svname}");
-            _client.ConnectionStep = ConnectionStep.SelServer;
+            play.ConnectionStep = ConnectionStep.SelServer;
             var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(svname));
         }
@@ -267,11 +261,11 @@ namespace MakePlayer.Scenes.Scene
             str = HUtil32.GetValidStr3(str, ref runaddr, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref runport, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref certifystr, HUtil32.Backslash);
-            _client.Certification = HUtil32.StrToInt(certifystr, 0);
-            _client.SelChrAddr = runaddr;
-            _client.SelChrPort = HUtil32.StrToInt(runport, 0);
+            play.Certification = HUtil32.StrToInt(certifystr, 0);
+            play.SelChrAddr = runaddr;
+            play.SelChrPort = HUtil32.StrToInt(runport, 0);
             MainOutMessage("帐号登录成功！");
-            _client.DScreen.ChangeScene(SceneType.SelectChr);
+            play.DScreen.ChangeScene(SceneType.SelectChr);
         }
 
         private void SendSocket(string sendstr)
@@ -294,34 +288,25 @@ namespace MakePlayer.Scenes.Scene
 
         #region Socket Events
 
-        private void CSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private void LoginSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            if (_client.ConnectionStep == ConnectionStep.Connect)
+            ConnectionStatus = ConnectionStatus.Success;
+            if (play.CreateAccount)
             {
-                if (CreateAccount)
-                {
-                    SetNotifyEvent(NewAccount, 3000);
-                }
-                else
-                {
-                    ClientSendLoginMessage();
-                }
+                SetNotifyEvent(NewAccount, 3000);
             }
             else
             {
-                if (_client.ConnectionStep == ConnectionStep.Login)
-                {
-                    //RobotClient.DScreen.ChangeScene(SceneType.Login);
-                }
+                SetNotifyEvent(ClientSendLoginMessage, 1000);
             }
         }
 
-        private void CSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private void LoginSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
             MainOutMessage("登陆连接已关闭...");
         }
 
-        private void CSocketError(object sender, DSCClientErrorEventArgs e)
+        private void LoginSocketError(object sender, DSCClientErrorEventArgs e)
         {
             switch (e.ErrorCode)
             {
@@ -337,12 +322,11 @@ namespace MakePlayer.Scenes.Scene
             }
         }
 
-        private void CSocketRead(object sender, DSCClientDataInEventArgs e)
+        private void LoginSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
-            if (!string.IsNullOrEmpty(sData))
+            if (e.BuffLen > 0)
             {
-                ClientManager.AddPacket(_client.SessionId, e.Buff);
+                ClientManager.AddPacket(play.SessionId, e.Buff);
             }
         }
 

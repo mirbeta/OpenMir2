@@ -1,5 +1,4 @@
 using MakePlayer.Cliens;
-using NLog;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
@@ -9,10 +8,8 @@ namespace MakePlayer.Scenes.Scene
 {
     public class SelectChrScene : SceneBase
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient ClientSocket;
         private readonly PlayClient play;
-        private int NewIndex = 0;
         private readonly SelChar[] ChrArr;
 
         public SelectChrScene(PlayClient playClient)
@@ -21,7 +18,6 @@ namespace MakePlayer.Scenes.Scene
             ChrArr = new SelChar[2];
             ChrArr[0].UserChr = new UserCharacterInfo();
             ChrArr[1].UserChr = new UserCharacterInfo();
-            NewIndex = 0;
             ClientSocket = new ScoketClient();
             ClientSocket.OnConnected += CSocketConnect;
             ClientSocket.OnDisconnected += CSocketDisconnect;
@@ -76,7 +72,7 @@ namespace MakePlayer.Scenes.Scene
             MainOutMessage("游戏程序版本不正确，请下载最新版本游戏程序！");
         }
 
-        public string ClientGetReceiveChrs_GetJobName(int nJob)
+        public string ClientGetReceiveChrsGetJobName(int nJob)
         {
             string result;
             switch (nJob)
@@ -97,7 +93,7 @@ namespace MakePlayer.Scenes.Scene
             return result;
         }
 
-        public string ClientGetReceiveChrs_GetSexName(int nSex)
+        public string ClientGetReceiveChrsGetSexName(int nSex)
         {
             string result;
             switch (nSex)
@@ -115,7 +111,7 @@ namespace MakePlayer.Scenes.Scene
             return result;
         }
 
-        private void ClientGetReceiveChrs_AddChr(string sName, byte nJob, byte nHair, int nLevel, byte nSex)
+        private void ClientGetReceiveChrsAddChr(string sName, byte nJob, byte nHair, int nLevel, byte nSex)
         {
             int I;
             if (!ChrArr[0].boValid)
@@ -168,7 +164,7 @@ namespace MakePlayer.Scenes.Scene
                         nSelect = i;
                         sName = sName.Substring(1, sName.Length - 1);
                     }
-                    ClientGetReceiveChrs_AddChr(sName, Convert.ToByte(sJob), Convert.ToByte(sHair), Convert.ToInt32(sLevel), Convert.ToByte(sSex));
+                    ClientGetReceiveChrsAddChr(sName, Convert.ToByte(sJob), Convert.ToByte(sHair), Convert.ToInt32(sLevel), Convert.ToByte(sSex));
                     nChrCount++;
                 }
                 if (nSelect == 0)
@@ -340,8 +336,7 @@ namespace MakePlayer.Scenes.Scene
 
         private void CSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
-            if (!string.IsNullOrEmpty(sData))
+            if (e.BuffLen > 0)
             {
                 ClientManager.AddPacket(play.SessionId, e.Buff);
             }

@@ -19,7 +19,6 @@ namespace MakePlayer.Cliens
         /// </summary>
         public ConnectionStatus ConnectionStatus;
         public string ServerName = string.Empty;
-        public long NotifyEventTick;
         public byte SendNum;
         public bool CreateAccount;
         public bool IsLogin;
@@ -31,7 +30,6 @@ namespace MakePlayer.Cliens
         public string LoginPasswd;
         public string RunServerAddr;
         public int RunServerPort;
-        private Action? _notifyEvent;
         public ScreenManager DScreen = null;
         public IntroScene IntroScene = null;
         public LoginScene LoginScene = null;
@@ -53,8 +51,6 @@ namespace MakePlayer.Cliens
             IsLogin = false;
             CreateAccount = false;
             ConnectTick = HUtil32.GetTickCount();
-            _notifyEvent = null;
-            NotifyEventTick = HUtil32.GetTickCount();
         }
 
         private void SendSocket(string sText)
@@ -77,24 +73,6 @@ namespace MakePlayer.Cliens
             //ConnectionStep = ConnectionStep.SelServer;
             //var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             //SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sServerName));
-        }
-
-        private void DoNotifyEvent()
-        {
-            if (_notifyEvent != null)
-            {
-                if (HUtil32.GetTickCount() > NotifyEventTick)
-                {
-                    _notifyEvent();
-                    _notifyEvent = null;
-                }
-            }
-        }
-
-        private void SetNotifyEvent(Action aNotifyEvent, int nTime)
-        {
-            NotifyEventTick = HUtil32.GetTickCount() + nTime;
-            _notifyEvent = aNotifyEvent;
         }
 
         public void ProcessPacket(byte[] reviceBuffer)
@@ -143,36 +121,37 @@ namespace MakePlayer.Cliens
 
         public void Run()
         {
-            if (DScreen.Scenetype == SceneType.Intro)
+            if (HUtil32.GetTickCount() > ConnectTick)
             {
-                DScreen.ChangeScene(SceneType.Login);
-                return;
-            }
-            else
-            {
-                DScreen.CurrentScene.DoNotifyEvent();
-                switch (DScreen.Scenetype)
+                ConnectTick = HUtil32.GetTickCount();
+                if (DScreen.Scenetype == SceneType.Intro)
                 {
-                    case SceneType.Intro:
-                        break;
-                    case SceneType.Login:
-                        LoginScene.Login();
-                        break;
-                    case SceneType.SelectCountry:
-                        break;
-                    case SceneType.SelectChr:
-                        //DScreen.ChangeScene(SceneType.SelectChr);
-                        break;
-                    case SceneType.NewChr:
-                        break;
-                    case SceneType.Loading:
-                        break;
-                    case SceneType.PlayGame:
-                        PlayScene.Run();
-                        break;
+                    DScreen.ChangeScene(SceneType.Login);
+                    return;
+                }
+                else
+                {
+                    DScreen.CurrentScene.DoNotifyEvent();
+                    switch (DScreen.Scenetype)
+                    {
+                        case SceneType.Intro:
+                            break;
+                        case SceneType.Login:
+                            break;
+                        case SceneType.SelectCountry:
+                            break;
+                        case SceneType.SelectChr:
+                            break;
+                        case SceneType.NewChr:
+                            break;
+                        case SceneType.Loading:
+                            break;
+                        case SceneType.PlayGame:
+                            PlayScene.Run();
+                            break;
+                    }
                 }
             }
-            DoNotifyEvent();
         }
 
         private void Close()
