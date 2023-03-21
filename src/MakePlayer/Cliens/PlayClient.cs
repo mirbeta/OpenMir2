@@ -19,7 +19,6 @@ namespace MakePlayer.Cliens
         /// </summary>
         public ConnectionStatus ConnectionStatus;
         public string ServerName = string.Empty;
-        public byte SendNum;
         public bool CreateAccount;
         public bool IsLogin;
         public long SayTick;
@@ -30,21 +29,18 @@ namespace MakePlayer.Cliens
         public string LoginPasswd;
         public string RunServerAddr;
         public int RunServerPort;
-        public ScreenManager DScreen = null;
-        public IntroScene IntroScene = null;
-        public LoginScene LoginScene = null;
-        public SelectChrScene SelectChrScene = null;
-        public PlayScene PlayScene = null;
+        public ScreenManager DScreen;
+        public LoginScene LoginScene;
+        public SelectChrScene SelectChrScene;
+        public GameScene PlayScene;
 
         public PlayClient(MakePlayOptions playOptions)
         {
             SessionId = string.Empty;
             DScreen = new ScreenManager(this);
-            IntroScene = new IntroScene();
             LoginScene = new LoginScene(this, playOptions.Address, playOptions.Port);
             SelectChrScene = new SelectChrScene(this);
-            PlayScene = new PlayScene(this);
-            SendNum = 0;
+            PlayScene = new GameScene(this);
             Certification = 0;
             ConnectionStep = ConnectionStep.Connect;
             ConnectionStatus = ConnectionStatus.Success;
@@ -52,21 +48,7 @@ namespace MakePlayer.Cliens
             CreateAccount = false;
             ConnectTick = HUtil32.GetTickCount();
         }
-
-        private void SendSocket(string sText)
-        {
-            //if (ClientSocket.IsConnected)
-            //{
-            //    var sSendText = "#" + SendNum + sText + "!";
-            //    ClientSocket.SendText(sSendText);
-            //    SendNum++;
-            //    if (SendNum >= 10)
-            //    {
-            //        SendNum = 1;
-            //    }
-            //}
-        }
-
+        
         private void SendSelectServer(string sServerName)
         {
             //MainOutMessage($"[{LoginAccount}] 选择服务器：{sServerName}");
@@ -97,7 +79,7 @@ namespace MakePlayer.Cliens
             }
         }
 
-        public void DecodeMessagePacket(string sDataBlock)
+        private void DecodeMessagePacket(string sDataBlock)
         {
             if (sDataBlock[0] == '+')
             {
@@ -129,39 +111,26 @@ namespace MakePlayer.Cliens
                     DScreen.ChangeScene(SceneType.Login);
                     return;
                 }
-                else
+                DScreen.CurrentScene.DoNotifyEvent();
+                switch (DScreen.Scenetype)
                 {
-                    DScreen.CurrentScene.DoNotifyEvent();
-                    switch (DScreen.Scenetype)
-                    {
-                        case SceneType.Intro:
-                            break;
-                        case SceneType.Login:
-                            break;
-                        case SceneType.SelectCountry:
-                            break;
-                        case SceneType.SelectChr:
-                            break;
-                        case SceneType.NewChr:
-                            break;
-                        case SceneType.Loading:
-                            break;
-                        case SceneType.PlayGame:
-                            PlayScene.Run();
-                            break;
-                    }
+                    case SceneType.Intro:
+                        break;
+                    case SceneType.Login:
+                        break;
+                    case SceneType.SelectCountry:
+                        break;
+                    case SceneType.SelectChr:
+                        break;
+                    case SceneType.NewChr:
+                        break;
+                    case SceneType.Loading:
+                        break;
+                    case SceneType.PlayGame:
+                        PlayScene.PlayScene();
+                        break;
                 }
             }
-        }
-
-        private void Close()
-        {
-            //ClientSocket.Disconnect();
-        }
-
-        public void MainOutMessage(string msg)
-        {
-            Console.WriteLine(msg);
         }
     }
 }

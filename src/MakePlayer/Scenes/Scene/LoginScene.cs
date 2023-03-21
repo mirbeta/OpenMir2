@@ -29,12 +29,12 @@ namespace MakePlayer.Scenes.Scene
         {
             ConnectionStatus = ConnectionStatus.Failure;
             _clientSocket.Connect(LoginAddr, LoginPort);
-            SetNotifyEvent(Login, 1000);
+            SetNotifyEvent(Login, RandomNumber.GetInstance().Random(1000, 3000));
         }
 
         public override void CloseScene()
         {
-            SetNotifyEvent(CloseSocket, 1000);
+            SetNotifyEvent(CloseSocket, RandomNumber.GetInstance().Random(1000, 3000));
         }
 
         public void PassWdFail()
@@ -293,17 +293,18 @@ namespace MakePlayer.Scenes.Scene
             ConnectionStatus = ConnectionStatus.Success;
             if (play.CreateAccount)
             {
-                SetNotifyEvent(NewAccount, 3000);
+                SetNotifyEvent(NewAccount, RandomNumber.GetInstance().Random(1000, 3000));
             }
             else
             {
-                SetNotifyEvent(ClientSendLoginMessage, 1000);
+                SetNotifyEvent(ClientSendLoginMessage, RandomNumber.GetInstance().Random(1000, 3000));
             }
+            MainOutMessage($"连接登陆服务:[{e.RemoteEndPoint}]成功...");
         }
 
         private void LoginSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            MainOutMessage("登陆连接已关闭...");
+            MainOutMessage($"登陆服务[{e.RemoteEndPoint}]连接已关闭...");
         }
 
         private void LoginSocketError(object sender, DSCClientErrorEventArgs e)
@@ -311,13 +312,13 @@ namespace MakePlayer.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    MainOutMessage($"游戏服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...");
+                    MainOutMessage($"登陆服务[{_clientSocket.RemoteEndPoint}]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    MainOutMessage($"游戏服务器[{_clientSocket.RemoteEndPoint}]关闭连接...");
+                    MainOutMessage($"登陆服务[{_clientSocket.RemoteEndPoint}]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    MainOutMessage($"游戏服务器[{_clientSocket.RemoteEndPoint}]链接超时...");
+                    MainOutMessage($"登陆服务[{_clientSocket.RemoteEndPoint}]链接超时...");
                     break;
             }
         }

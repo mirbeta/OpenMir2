@@ -138,7 +138,7 @@ namespace MakePlayer.Scenes.Scene
         {
             if (string.IsNullOrEmpty(sData))
             {
-                SetNotifyEvent(NewChr, 3000);
+                SetNotifyEvent(NewChr, RandomNumber.GetInstance().Random(1000, 3000));
                 return;
             }
             var sName = string.Empty;
@@ -188,7 +188,7 @@ namespace MakePlayer.Scenes.Scene
             }
             else
             {
-                SetNotifyEvent(NewChr, 3000);
+                SetNotifyEvent(NewChr, RandomNumber.GetInstance().Random(1000, 3000));
             }
         }
 
@@ -307,15 +307,23 @@ namespace MakePlayer.Scenes.Scene
         {
             if (play.ConnectionStep == ConnectionStep.SelServer)
             {
-                SetNotifyEvent(SendQueryChr, 1000);
+                SetNotifyEvent(SendQueryChr, RandomNumber.GetInstance().Random(1000, 3000));
                 play.ConnectionStep = ConnectionStep.SelChr;
             }
-            MainOutMessage($"连接角色网关:[{play.SelChrAddr}:{play.SelChrPort}]");
+            MainOutMessage($"连接角色服务:[{e.RemoteEndPoint}]成功...");
         }
 
         private void CSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            MainOutMessage($"角色服务器[{ClientSocket.RemoteEndPoint}断开连接...");
+            MainOutMessage($"角色服务[{e.RemoteEndPoint}断开连接...");
+        }
+        
+        private void CSocketRead(object sender, DSCClientDataInEventArgs e)
+        {
+            if (e.BuffLen > 0)
+            {
+                ClientManager.AddPacket(play.SessionId, e.Buff);
+            }
         }
 
         private void CSocketError(object sender, DSCClientErrorEventArgs e)
@@ -323,22 +331,14 @@ namespace MakePlayer.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    MainOutMessage($"角色服务器[{ClientSocket.RemoteEndPoint}拒绝链接...");
+                    MainOutMessage($"角色服务[{ClientSocket.RemoteEndPoint}拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    MainOutMessage($"角色服务器[{ClientSocket.RemoteEndPoint}关闭连接...");
+                    MainOutMessage($"角色服务[{ClientSocket.RemoteEndPoint}关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    MainOutMessage($"角色服务器[{ClientSocket.RemoteEndPoint}链接超时...");
+                    MainOutMessage($"角色服务[{ClientSocket.RemoteEndPoint}链接超时...");
                     break;
-            }
-        }
-
-        private void CSocketRead(object sender, DSCClientDataInEventArgs e)
-        {
-            if (e.BuffLen > 0)
-            {
-                ClientManager.AddPacket(play.SessionId, e.Buff);
             }
         }
 

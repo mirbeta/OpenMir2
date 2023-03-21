@@ -6,24 +6,30 @@ using SystemModule.Sockets.Event;
 
 namespace MakePlayer.Scenes.Scene
 {
-    public class PlayScene : SceneBase
+    public class GameScene : SceneBase
     {
-        public readonly ScoketClient ClientSocket;
+        private readonly ScoketClient _clientSocket;
         private readonly PlayClient _play;
-        public Ability PlayAbil;
+        private Ability PlayAbil;
         private byte SendNum;
 
-        public PlayScene(PlayClient playClient)
+        public GameScene(PlayClient playClient)
         {
             _play = playClient;
-            ClientSocket = new ScoketClient();
-            ClientSocket.OnConnected += SocketConnect;
-            ClientSocket.OnDisconnected += SocketDisconnect;
-            ClientSocket.OnReceivedData += SocketRead;
-            ClientSocket.OnError += SocketError;
+            _clientSocket = new ScoketClient();
+            _clientSocket.OnConnected += SocketConnect;
+            _clientSocket.OnDisconnected += SocketDisconnect;
+            _clientSocket.OnReceivedData += SocketRead;
+            _clientSocket.OnError += SocketError;
         }
 
-        public void Run()
+        public override void OpenScene()
+        {
+            ConnectionStatus = ConnectionStatus.Failure;
+            _clientSocket.Connect(_play.RunServerAddr, _play.RunServerPort);
+        }
+
+        public override void PlayScene()
         {
             if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > _play.ConnectTick)
             {
@@ -49,12 +55,6 @@ namespace MakePlayer.Scenes.Scene
                     }
                 }
             }
-        }
-
-        public override void OpenScene()
-        {
-            ConnectionStatus = ConnectionStatus.Failure;
-            ClientSocket.Connect(_play.RunServerAddr, _play.RunServerPort);
         }
 
         internal override void ProcessPacket(CommandMessage command, string sBody)
@@ -86,15 +86,15 @@ namespace MakePlayer.Scenes.Scene
 
         private void ClientGetUserLogin(CommandMessage defMsg, string sData)
         {
-            _play.ConnectionStep = ConnectionStep.Play;
-            MainOutMessage($"³É¹¦½øÈëÓÎÏ·");
             _play.IsLogin = true;
+            _play.ConnectionStep = ConnectionStep.Play;
+            MainOutMessage("æˆåŠŸè¿›å…¥æ¸¸æˆ");
             MainOutMessage("-----------------------------------------------");
         }
 
         private void ClientGetSendNotice(string sData)
         {
-            MainOutMessage("·¢ËÍ¹«¸æ");
+            MainOutMessage("å‘é€å…¬å‘Š");
             SendClientMessage(Messages.CM_LOGINNOTICEOK, HUtil32.GetTickCount(), 0, 0, 0);
         }
 
@@ -125,10 +125,10 @@ namespace MakePlayer.Scenes.Scene
 
         private void SendSocket(string sText)
         {
-            if (ClientSocket.IsConnected)
+            if (_clientSocket.IsConnected)
             {
                 var sSendText = "#" + SendNum + sText + "!";
-                ClientSocket.SendText(sSendText);
+                _clientSocket.SendText(sSendText);
                 SendNum++;
                 if (SendNum >= 10)
                 {
@@ -137,53 +137,32 @@ namespace MakePlayer.Scenes.Scene
             }
         }
 
-        private void SocketConnect(object sender, DSCClientConnectedEventArgs e)
-        {
-            ConnectionStatus = ConnectionStatus.Success;
-            //if (_play.ConnectionStep == ConnectionStep.Login)
-            //{
-            //    //if (CreateAccount)
-            //    //{
-            //    //    SetNotifyEvent(NewAccount, 6000);
-            //    //}
-            //    //else
-            //    //{
-            //    //    ClientNewIdSuccess("");
-            //    //}
-            //}
-            //else if (_play.ConnectionStep == ConnectionStep.QueryChr)
-            //{
-            //    // Socket.SendText('#' + '+' + '!');
-            //    //SendQueryChr();
-            //}
-            //else if (_play.ConnectionStep == ConnectionStep.Play)
-            //{
-            //    ClientSocket.IsConnected = true;
-            //    SendRunLogin();
-            //}
-
-            SetNotifyEvent(SendRunLogin, 500);
-        }
-
         private void SendRunLogin()
         {
-            MainOutMessage($"½øÈëÓÎÏ·");
+            MainOutMessage($"è¿›å…¥æ¸¸æˆ");
             _play.ConnectionStep = ConnectionStep.Play;
             var sSendMsg = $"**{_play.LoginId}/{_play.ChrName}/{_play.Certification}/{Grobal2.CLIENT_VERSION_NUMBER}/{2022080300}";
             SendSocket(EDCode.EncodeString(sSendMsg));
         }
 
-        public void ClientLoginSay(string message)
+        private void ClientLoginSay(string message)
         {
             _play.SayTick = HUtil32.GetTickCount();
             var msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(message));
         }
+        
+        private void SocketConnect(object sender, DSCClientConnectedEventArgs e)
+        {
+            ConnectionStatus = ConnectionStatus.Success;
+            SetNotifyEvent(SendRunLogin, RandomNumber.GetInstance().Random(300, 5000));
+            MainOutMessage($"è¿æ¥æ¸¸æˆæœåŠ¡:[{e.RemoteEndPoint}]æˆåŠŸ...");
+        }
 
         private void SocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
             ConnectionStatus = ConnectionStatus.Failure;
-            MainOutMessage($"[{ClientSocket.RemoteEndPoint}] ¶Ï¿ªÁ´½Ó");
+            MainOutMessage($"[{e.RemoteEndPoint}] æ–­å¼€é“¾æ¥");
         }
 
         private void SocketRead(object sender, DSCClientDataInEventArgs e)
@@ -198,7 +177,7 @@ namespace MakePlayer.Scenes.Scene
             {
                 var sData2 = sData[..(nIdx - 1)];
                 sData = sData2 + sData.Substring(nIdx, sData.Length);
-                ClientSocket.SendText("*");
+                _clientSocket.SendText("*");
             }
             ClientManager.AddPacket(_play.SessionId, e.Buff);
         }
@@ -208,13 +187,13 @@ namespace MakePlayer.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    MainOutMessage("ÓÎÏ·[" + ClientSocket.RemoteEndPoint + "]¾Ü¾øÁ´½Ó...");
+                    MainOutMessage("æ¸¸æˆæœåŠ¡[" + _clientSocket.RemoteEndPoint + "]æ‹’ç»é“¾æ¥...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    MainOutMessage("ÓÎÏ·[" + ClientSocket.RemoteEndPoint + "]¹Ø±ÕÁ¬½Ó...");
+                    MainOutMessage("æ¸¸æˆæœåŠ¡[" + _clientSocket.RemoteEndPoint + "]å…³é—­è¿æ¥...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    MainOutMessage("ÓÎÏ·[" + ClientSocket.RemoteEndPoint + "]Á´½Ó³¬Ê±...");
+                    MainOutMessage("æ¸¸æˆæœåŠ¡[" + _clientSocket.RemoteEndPoint + "]é“¾æ¥è¶…æ—¶...");
                     break;
             }
         }
