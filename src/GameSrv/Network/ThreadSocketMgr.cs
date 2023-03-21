@@ -28,7 +28,7 @@ namespace GameSrv.Network
         /// </summary>
         public byte[] ReceiveBuffer;
         public int ReceiveLen;
-        
+
         public ThreadSocketMgr()
         {
             LoadRunAddr();
@@ -224,6 +224,10 @@ namespace GameSrv.Network
             {
                 for (int i = 0; i < GameGates.Length; i++)
                 {
+                    if (GameGates[i] == null)
+                    {
+                        continue;
+                    }
                     if (GameGates[i].ConnectionId == connectionId)
                     {
                         var gateInfo = GameGates[i].GateInfo;
@@ -253,6 +257,7 @@ namespace GameSrv.Network
                         gateInfo.Socket = null;
                         GameGates[i].Stop();
                         _logger.Error(string.Format(sGateClose, endPoint));
+                        break;
                     }
                 }
             }
@@ -389,16 +394,16 @@ namespace GameSrv.Network
         /// </summary>
         public Task StartMessageThread()
         {
-           return Task.Factory.StartNew(async () =>
-            {
-                while (await _receiveQueue.Reader.WaitToReadAsync(stoppingCancelReads))
-                {
-                    while (_receiveQueue.Reader.TryRead(out var message))
-                    {
-                        // ExecGateBuffers(message.Packet, message.Data);
-                    }
-                }
-            }, stoppingCancelReads);
+            return Task.Factory.StartNew(async () =>
+             {
+                 while (await _receiveQueue.Reader.WaitToReadAsync(stoppingCancelReads))
+                 {
+                     while (_receiveQueue.Reader.TryRead(out var message))
+                     {
+                         // ExecGateBuffers(message.Packet, message.Data);
+                     }
+                 }
+             }, stoppingCancelReads);
         }
 
         #region Socket Events
@@ -437,7 +442,8 @@ namespace GameSrv.Network
                 return;
             }
             var processLen = 0;
-            Span<byte> processBuff = e.ReceiveBuffer;
+            MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, ReceiveBuffer, ReceiveLen, nLen);
+            Span<byte> processBuff = ReceiveBuffer;
             try
             {
                 while (nLen >= DataPacketMessage.PacketSize)
@@ -493,7 +499,7 @@ namespace GameSrv.Network
                 _logger.Error(sExceptionMsg);
                 _logger.Error(ex.StackTrace);
             }
-            
+
             /*for (int i = 0; i < GameGates.Length; i++)
             {
                 if (GameGates[i].ConnectionId == e.ConnectionId)

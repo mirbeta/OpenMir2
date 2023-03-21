@@ -49,7 +49,6 @@ namespace GameGate.Services
             for (var i = 0; i < _serverServices.Length; i++)
             {
                 _serverServices[i] = new ServerService(ConfigManager.GateList[i]);
-                Thread.Sleep(300);
             }
         }
 
@@ -150,7 +149,7 @@ namespace GameGate.Services
             return _serverServices;
         }
 
-        public ClientThread GetClientThread(out int threadId)
+        public ClientThread GetClientThread(byte serviceId, out int threadId)
         {
             //TODO 根据配置文件有四种模式  默认随机
             //1.轮询分配
@@ -165,6 +164,11 @@ namespace GameGate.Services
             {
                 threadId = 1;
                 return availableList[0].ClientThread;
+            }
+            if (serviceId > 0)
+            {
+                threadId = serviceId;
+                return availableList[serviceId].ClientThread;
             }
             var random = RandomNumber.GetInstance().Random(availableList.Length);
             threadId = random;

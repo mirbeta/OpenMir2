@@ -96,8 +96,10 @@ namespace GameGate.Services
         /// </summary>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
+            _logger.Debug($"客户端链接:[{GateInfo.ServiceId}] SessionId:[{e.SessionId}] RunPort:{_gateEndPoint}");
+
             var threadId = -1;
-            var clientThread = ServerMgr.GetClientThread(out threadId);
+            var clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out threadId);
             if (clientThread == null || threadId < 0)
             {
                 //todo 这里应该直接断开玩家连接，并在客户端尽兴提示
@@ -188,7 +190,7 @@ namespace GameGate.Services
         /// </summary>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            _logger.Debug($"收到客户端消息:[{GateInfo.ServiceId}] SessionId:[{token.SessionId}]");
+            _logger.Debug($"收到客户端消息:[{GateInfo.ServiceId}] SessionId:[{token.SessionId}] RunPort:{_gateEndPoint}");
             var clientSession = SessionMgr.GetSession(GateInfo.ServiceId, token.SessionId);
             if (clientSession != null)
             {

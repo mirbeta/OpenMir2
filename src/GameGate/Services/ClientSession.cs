@@ -30,7 +30,7 @@ namespace GameGate.Services
         private int SvrObjectId { get; set; }
         private int SendCheckTick { get; set; }
         private CheckStep Stat { get; set; }
-        private int ServiceId { get; set; }
+        private byte ServiceId { get; set; }
 
         /// <summary>
         /// 会话密钥
@@ -40,7 +40,7 @@ namespace GameGate.Services
 
         private long FinishTick { get; set; }
 
-        public ClientSession(int serviceId, SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
+        public ClientSession(byte serviceId, SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
             ServiceId = serviceId;
             _session = session;
@@ -619,12 +619,13 @@ namespace GameGate.Services
                 }
 
                 byte[] bodyBuffer;
-                var commandPack = new ServerMessage
+                var commandPack = new DataPacketMessage
                 {
                     PacketCode = Grobal2.RunGateCode,
                     Socket = _session.SckHandle,
                     Ident = Grobal2.GM_DATA,
-                    SessionIndex = SvrListIdx
+                    SessionIndex = SvrListIdx,
+                    GateIdx = ServiceId
                 };
                 int sendLen;
                 if (deCodeLen > CommandMessage.Size)
@@ -632,19 +633,19 @@ namespace GameGate.Services
                     var sendBuffer = new byte[messagePacket.Buffer.Length - CommandMessage.Size + 1];
                     var tLen = EncryptUtil.Encode(decodeBuff, deCodeLen - CommandMessage.Size, sendBuffer);
                     commandPack.PackLength = CommandMessage.Size + tLen + 1;
-                    sendLen = ServerMessage.PacketSize + commandPack.PackLength;
+                    sendLen = DataPacketMessage.PacketSize + commandPack.PackLength;
                     bodyBuffer = GateShare.BytePool.Rent(sendLen);
-                    MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessage.PacketSize, CommandMessage.Size);
-                    MemoryCopy.BlockCopy(tempBuff, GateShare.CommandFixedLength, bodyBuffer, ServerMessage.PacketSize + CommandMessage.Size, tLen);//消息体
+                    MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, DataPacketMessage.PacketSize, CommandMessage.Size);
+                    MemoryCopy.BlockCopy(tempBuff, GateShare.CommandFixedLength, bodyBuffer, DataPacketMessage.PacketSize + CommandMessage.Size, tLen);//消息体
                 }
                 else
                 {
-                    sendLen = ServerMessage.PacketSize + decodeBuff.Length;
+                    sendLen = DataPacketMessage.PacketSize + decodeBuff.Length;
                     bodyBuffer = GateShare.BytePool.Rent(sendLen);
                     commandPack.PackLength = CommandMessage.Size;
-                    MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessage.PacketSize, decodeBuff.Length);
+                    MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, DataPacketMessage.PacketSize, decodeBuff.Length);
                 }
-                Buffer.BlockCopy(SerializerUtil.Serialize(commandPack), 0, bodyBuffer, 0, ServerMessage.PacketSize); //复制消息头
+                Buffer.BlockCopy(SerializerUtil.Serialize(commandPack), 0, bodyBuffer, 0, DataPacketMessage.PacketSize); //复制消息头
                 ClientThread.Send(bodyBuffer[..sendLen]);
                 GateShare.BytePool.Return(bodyBuffer);
             }
@@ -1253,19 +1254,20 @@ namespace GameGate.Services
             byte[] tempBuff;
             if (len == 0)
             {
-                tempBuff = new byte[ServerMessage.PacketSize + packet.Length];
+                tempBuff = new byte[DataPacketMessage.PacketSize + packet.Length];
             }
             else
             {
-                tempBuff = new byte[ServerMessage.PacketSize + len];
+                tempBuff = new byte[DataPacketMessage.PacketSize + len];
             }
-            var packetHeader = new ServerMessage();
+            var packetHeader = new DataPacketMessage();
             packetHeader.PacketCode = Grobal2.RunGateCode;
             packetHeader.Socket = _session.SckHandle;
             packetHeader.SessionId = _session.SessionId;
             packetHeader.Ident = Grobal2.GM_DATA;
             packetHeader.SessionIndex = _session.SessionIndex;
-            packetHeader.PackLength = tempBuff.Length - ServerMessage.PacketSize;
+            packetHeader.PackLength = tempBuff.Length - DataPacketMessage.PacketSize;
+            packetHeader.GateIdx = ServiceId;
             var sendBuffer = SerializerUtil.Serialize(packetHeader);
             MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
             if (len == 0)

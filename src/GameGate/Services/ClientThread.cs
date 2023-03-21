@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Packets;
+using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
@@ -342,20 +343,21 @@ namespace GameGate.Services
 
         private void SendServerMsg(ushort command, ushort sessionIndex, int nSocket, ushort userIndex, string data, int nLen)
         {
-            var serverMessage = new ServerMessage
+            var serverMessage = new DataPacketMessage
             {
                 PacketCode = Grobal2.RunGateCode,
                 Socket = nSocket,
                 SessionId = sessionIndex,
                 Ident = command,
                 SessionIndex = userIndex,
-                PackLength = nLen
+                PackLength = nLen,
+                GateIdx = GateInfo.ServiceId
             };
             var sendBuffer = SerializerUtil.Serialize(serverMessage);
             if (!string.IsNullOrEmpty(data))
             {
                 var strBuff = HUtil32.GetBytes(data);
-                var tempBuff = new byte[ServerMessage.PacketSize + data.Length];
+                var tempBuff = new byte[DataPacketMessage.PacketSize + data.Length];
                 MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
                 MemoryCopy.BlockCopy(strBuff, 0, tempBuff, sendBuffer.Length, data.Length);
                 Send(tempBuff);
@@ -372,6 +374,7 @@ namespace GameGate.Services
         public void UserEnter(ushort sessionId, int socketId, string data)
         {
             SendServerMsg(Grobal2.GM_OPEN, sessionId, socketId, 0, data, data.Length);
+            _logger.Info("发送玩家链接消息:" + GateInfo.ServiceId);
         }
 
         /// <summary>
