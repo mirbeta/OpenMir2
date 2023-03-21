@@ -125,8 +125,9 @@ namespace LoginSrv.Services
                 case Messages.CM_ADDNEWUSER:
                     if (_configMgr.Config.EnableMakingID)
                     {
-                        if (HUtil32.GetTickCount() - userInfo.LastCreateAccountTick > 10000)
+                        if (HUtil32.GetTickCount() - userInfo.LastCreateAccountTick > 1000)
                         {
+                            userInfo.LastCreateAccountTick = HUtil32.GetTickCount();
                             AccountCreate(ref userInfo, sData);
                         }
                         else
@@ -420,10 +421,6 @@ namespace LoginSrv.Services
             {
                 _logger.LogError("[Exception] LoginsService.AccountCreate");
                 _logger.LogError(ex);
-            }
-            finally
-            {
-                userInfo.LastCreateAccountTick = HUtil32.GetTickCount();
             }
         }
 
