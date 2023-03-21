@@ -261,5 +261,9 @@ namespace LoginSrv
         public bool SelServer;
         public Socket Socket;
         public long ClientTick;
+        public long LastCreateAccountTick;
+        public long LastUpdatePwdTick;
+        public long LastGetBackPwdTick;
+        public long LastUpdateAccountTick;
     }
 }

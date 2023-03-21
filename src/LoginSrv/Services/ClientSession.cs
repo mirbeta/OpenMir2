@@ -125,7 +125,7 @@ namespace LoginSrv.Services
                 case Messages.CM_ADDNEWUSER:
                     if (_configMgr.Config.EnableMakingID)
                     {
-                        if (HUtil32.GetTickCount() - userInfo.ClientTick > 10000)
+                        if (HUtil32.GetTickCount() - userInfo.LastCreateAccountTick > 10000)
                         {
                             AccountCreate(ref userInfo, sData);
                         }
@@ -144,9 +144,9 @@ namespace LoginSrv.Services
                 case Messages.CM_CHANGEPASSWORD:
                     if (string.IsNullOrEmpty(userInfo.Account))
                     {
-                        if (HUtil32.GetTickCount() - userInfo.ClientTick > 5000)
+                        if (HUtil32.GetTickCount() - userInfo.LastUpdatePwdTick > 5000)
                         {
-                            userInfo.ClientTick = HUtil32.GetTickCount();
+                            userInfo.LastUpdatePwdTick = HUtil32.GetTickCount();
                             AccountChangePassword(userInfo, sData);
                         }
                         else
@@ -160,9 +160,9 @@ namespace LoginSrv.Services
                     }
                     break;
                 case Messages.CM_UPDATEUSER:
-                    if (HUtil32.GetTickCount() - userInfo.ClientTick > 5000)
+                    if (HUtil32.GetTickCount() - userInfo.LastUpdateAccountTick > 5000)
                     {
-                        userInfo.ClientTick = HUtil32.GetTickCount();
+                        userInfo.LastUpdateAccountTick = HUtil32.GetTickCount();
                         AccountUpdateUserInfo(userInfo, sData);
                     }
                     else
@@ -171,9 +171,9 @@ namespace LoginSrv.Services
                     }
                     break;
                 case Messages.CM_GETBACKPASSWORD:
-                    if (HUtil32.GetTickCount() - userInfo.ClientTick > 5000)
+                    if (HUtil32.GetTickCount() - userInfo.LastGetBackPwdTick > 5000)
                     {
-                        userInfo.ClientTick = HUtil32.GetTickCount();
+                        userInfo.LastGetBackPwdTick = HUtil32.GetTickCount();
                         AccountGetBackPassword(userInfo, sData);
                     }
                     else
@@ -423,7 +423,7 @@ namespace LoginSrv.Services
             }
             finally
             {
-                userInfo.ClientTick = HUtil32.GetTickCount();
+                userInfo.LastCreateAccountTick = HUtil32.GetTickCount();
             }
         }
 

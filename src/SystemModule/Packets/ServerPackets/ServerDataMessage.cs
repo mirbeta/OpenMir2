@@ -1,5 +1,6 @@
 ﻿using MemoryPack;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace SystemModule.Packets.ServerPackets
 {
@@ -33,7 +34,7 @@ namespace SystemModule.Packets.ServerPackets
     }
 
     [MemoryPackable]
-    public partial class ServerDataMessage 
+    public partial class ServerDataMessage
     {
         public ServerDataType Type { get; set; }
         public int SocketId { get; set; }
