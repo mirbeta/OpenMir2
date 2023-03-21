@@ -75,7 +75,7 @@ namespace MakePlayer
                     }
                 }
                 _clientManager.Run();
-                Thread.Sleep(TimeSpan.FromMilliseconds(5));
+                Thread.Sleep(TimeSpan.FromMilliseconds(50));
             }
             return Task.CompletedTask;
         }
