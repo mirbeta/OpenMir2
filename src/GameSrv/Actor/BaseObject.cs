@@ -2591,7 +2591,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 设置肉的品质
         /// </summary>
-        protected void ApplyMeatQuality()
+        internal void ApplyMeatQuality()
         {
             for (int i = 0; i < ItemList.Count; i++)
             {

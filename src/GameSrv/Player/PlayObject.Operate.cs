@@ -728,7 +728,7 @@ namespace GameSrv.Player
                             if (baseObject.Race >= ActorRace.Animal && baseObject.Race < ActorRace.Monster)
                             {
                                 baseObject.Skeleton = true;
-                                ApplyMeatQuality();
+                                baseObject.ApplyMeatQuality();
                                 baseObject.SendRefMsg(Messages.RM_SKELETON, baseObject.Dir, baseObject.CurrX, baseObject.CurrY, 0, "");
                             }
                             if (!TakeBagItems(baseObject))

@@ -138,8 +138,9 @@ namespace GameGate
 
         private static void ChanggeLogLevel(LogLevel logLevel)
         {
-            LogManager.Configuration.Variables["logLevel"] = logLevel.ToString();
+            LogManager.Configuration.Variables["MirLevel"] = logLevel.ToString();
             LogManager.ReconfigExistingLoggers();
+            LogManager.Configuration.Reload();
         }
         
         private static async Task ShowServerStatus()
