@@ -46,6 +46,11 @@ namespace MakePlayer.Cliens
             ConnectionStatus = ConnectionStatus.Success;
             IsLogin = false;
             CreateAccount = false;
+            LoginId = string.Empty;
+            LoginPasswd = string.Empty;
+            RunServerAddr = string.Empty;
+            SelChrAddr = string.Empty;
+            ChrName = string.Empty;
             ConnectTick = HUtil32.GetTickCount();
         }
         

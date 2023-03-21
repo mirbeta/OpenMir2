@@ -8,7 +8,7 @@ namespace MakePlayer.Scenes
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         public SceneType Scenetype;
-        public Action NotifyEvent;
+        public Action? NotifyEvent;
         public int NotifyEventTick = 0;
         /// <summary>
         /// 当前游戏网络连接步骤

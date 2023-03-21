@@ -328,5 +328,19 @@ namespace SystemModule.Sockets.AsyncSocketClient
             }
             catch (Exception) { }
         }
+        
+        public void Disconnect(bool isReUse)
+        {
+            try
+            {
+                if (_cli != null)
+                {
+                    _cli.Shutdown(SocketShutdown.Both);
+                    _cli.Disconnect(isReUse);//Socket 复用
+                    _cli.Close();
+                }
+            }
+            catch (Exception) { }
+        }
     }
 }

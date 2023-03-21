@@ -10,7 +10,7 @@ namespace MakePlayer.Scenes.Scene
     {
         private readonly ScoketClient _clientSocket;
         private readonly PlayClient _play;
-        private Ability PlayAbil;
+        private Ability PlayAbil = default;
         private byte SendNum;
 
         public GameScene(PlayClient playClient)

@@ -282,7 +282,7 @@ namespace MakePlayer.Scenes.Scene
 
         private void CloseSocket()
         {
-            _clientSocket.Disconnect();//断开登录网关链接
+            _clientSocket.Disconnect(false);//断开登录网关链接
             MainOutMessage("主动断开");
         }
 

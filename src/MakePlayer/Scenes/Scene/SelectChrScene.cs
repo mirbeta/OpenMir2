@@ -8,26 +8,31 @@ namespace MakePlayer.Scenes.Scene
 {
     public class SelectChrScene : SceneBase
     {
-        private readonly ScoketClient ClientSocket;
-        private readonly PlayClient play;
-        private readonly SelChar[] ChrArr;
+        private readonly ScoketClient _clientSocket;
+        private readonly PlayClient _play;
+        private readonly SelChar[] _chrArr;
 
         public SelectChrScene(PlayClient playClient)
         {
-            play = playClient;
-            ChrArr = new SelChar[2];
-            ChrArr[0].UserChr = new UserCharacterInfo();
-            ChrArr[1].UserChr = new UserCharacterInfo();
-            ClientSocket = new ScoketClient();
-            ClientSocket.OnConnected += CSocketConnect;
-            ClientSocket.OnDisconnected += CSocketDisconnect;
-            ClientSocket.OnReceivedData += CSocketRead;
-            ClientSocket.OnError += CSocketError;
+            _play = playClient;
+            _chrArr = new SelChar[2];
+            _chrArr[0].UserChr = new UserCharacterInfo();
+            _chrArr[1].UserChr = new UserCharacterInfo();
+            _clientSocket = new ScoketClient();
+            _clientSocket.OnConnected += CSocketConnect;
+            _clientSocket.OnDisconnected += CSocketDisconnect;
+            _clientSocket.OnReceivedData += CSocketRead;
+            _clientSocket.OnError += CSocketError;
         }
 
         public override void OpenScene()
         {
-            ClientSocket.Connect(play.SelChrAddr, play.SelChrPort);
+            _clientSocket.Connect(_play.SelChrAddr, _play.SelChrPort);
+        }
+        
+        public override void CloseScene()
+        {
+            SetNotifyEvent(CloseSocket, RandomNumber.GetInstance().Random(1000, 3000));
         }
 
         internal override void ProcessPacket(CommandMessage command, string sBody)
@@ -114,11 +119,11 @@ namespace MakePlayer.Scenes.Scene
         private void ClientGetReceiveChrsAddChr(string sName, byte nJob, byte nHair, int nLevel, byte nSex)
         {
             int I;
-            if (!ChrArr[0].boValid)
+            if (!_chrArr[0].boValid)
             {
                 I = 0;
             }
-            else if (!ChrArr[1].boValid)
+            else if (!_chrArr[1].boValid)
             {
                 I = 1;
             }
@@ -126,12 +131,12 @@ namespace MakePlayer.Scenes.Scene
             {
                 return;
             }
-            ChrArr[I].UserChr.sName = sName;
-            ChrArr[I].UserChr.btJob = nJob;
-            ChrArr[I].UserChr.btHair = nHair;
-            ChrArr[I].UserChr.wLevel = (ushort)nLevel;
-            ChrArr[I].UserChr.btSex = nSex;
-            ChrArr[I].boValid = true;
+            _chrArr[I].UserChr.sName = sName;
+            _chrArr[I].UserChr.btJob = nJob;
+            _chrArr[I].UserChr.btHair = nHair;
+            _chrArr[I].UserChr.wLevel = (ushort)nLevel;
+            _chrArr[I].UserChr.btSex = nSex;
+            _chrArr[I].boValid = true;
         }
 
         private void ClientGetReceiveChrs(string sData)
@@ -149,7 +154,7 @@ namespace MakePlayer.Scenes.Scene
             var nChrCount = 0;
             var nSelect = 0;
             var sText = EDCode.DeCodeString(sData);
-            for (var i = 0; i < ChrArr.Length; i++)
+            for (var i = 0; i < _chrArr.Length; i++)
             {
                 sText = HUtil32.GetValidStr3(sText, ref sName, '/');
                 sText = HUtil32.GetValidStr3(sText, ref sJob, '/');
@@ -169,22 +174,22 @@ namespace MakePlayer.Scenes.Scene
                 }
                 if (nSelect == 0)
                 {
-                    ChrArr[0].boFreezeState = false;
-                    ChrArr[0].boSelected = true;
-                    ChrArr[1].boFreezeState = true;
-                    ChrArr[1].boSelected = false;
+                    _chrArr[0].boFreezeState = false;
+                    _chrArr[0].boSelected = true;
+                    _chrArr[1].boFreezeState = true;
+                    _chrArr[1].boSelected = false;
                 }
                 else
                 {
-                    ChrArr[0].boFreezeState = true;
-                    ChrArr[0].boSelected = false;
-                    ChrArr[1].boFreezeState = false;
-                    ChrArr[1].boSelected = true;
+                    _chrArr[0].boFreezeState = true;
+                    _chrArr[0].boSelected = false;
+                    _chrArr[1].boFreezeState = false;
+                    _chrArr[1].boSelected = true;
                 }
             }
             if (nChrCount > 0)
             {
-                SendSelChr(ChrArr[nSelect].UserChr.sName);
+                SendSelChr(_chrArr[nSelect].UserChr.sName);
             }
             else
             {
@@ -194,8 +199,8 @@ namespace MakePlayer.Scenes.Scene
 
         private void NewChr()
         {
-            play.ConnectionStep = ConnectionStep.NewChr;
-            SelectChrCreateNewChr(play.ChrName);
+            _play.ConnectionStep = ConnectionStep.NewChr;
+            SelectChrCreateNewChr(_play.ChrName);
         }
 
         private void SelectChrCreateNewChr(string sChrName)
@@ -220,23 +225,23 @@ namespace MakePlayer.Scenes.Scene
             }
             var sJob = (byte)RandomNumber.GetInstance().Random(2);
             var sSex = (byte)RandomNumber.GetInstance().Random(1);
-            SendNewChr(play.LoginId, sChrName, sHair, sJob, sSex);
+            SendNewChr(_play.LoginId, sChrName, sHair, sJob, sSex);
         }
 
         private void SendSelChr(string sChrName)
         {
             MainOutMessage($"选择人物：{sChrName}");
-            play.ConnectionStep = ConnectionStep.SelChr;
-            play.ChrName = sChrName;
+            _play.ConnectionStep = ConnectionStep.SelChr;
+            _play.ChrName = sChrName;
             var defMsg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(play.LoginId + "/" + sChrName));
+            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(_play.LoginId + "/" + sChrName));
         }
 
         private void SendQueryChr()
         {
-            play.ConnectionStep = ConnectionStep.QueryChr;
-            var DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(play.LoginId + "/" + play.Certification));
+            _play.ConnectionStep = ConnectionStep.QueryChr;
+            var defMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
+            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(_play.LoginId + "/" + _play.Certification));
             MainOutMessage("查询角色.");
         }
 
@@ -247,22 +252,20 @@ namespace MakePlayer.Scenes.Scene
             MainOutMessage("创建角色.");
         }
 
-        public void ClientGetStartPlay(string body)
+        private void ClientGetStartPlay(string body)
         {
-            string addr = string.Empty;
-            string Str = EDCode.DeCodeString(body);
-            string sport = HUtil32.GetValidStr3(Str, ref addr, HUtil32.Backslash);
-            play.RunServerPort = HUtil32.StrToInt(sport, 0);
-            play.RunServerAddr = addr;
-            play.ConnectionStep = ConnectionStep.Play;
+            var addr = string.Empty;
+            var str = EDCode.DeCodeString(body);
+            var sport = HUtil32.GetValidStr3(str, ref addr, HUtil32.Backslash);
+            _play.RunServerPort = HUtil32.StrToInt(sport, 0);
+            _play.RunServerAddr = addr;
+            _play.ConnectionStep = ConnectionStep.Play;
             MainOutMessage("准备进入游戏");
-            play.DScreen.ChangeScene(SceneType.PlayGame);
+            _play.DScreen.ChangeScene(SceneType.PlayGame);
         }
 
         private void ClientNewChrFail(int nFailCode)
         {
-            //ConnectionStatus = ConnectionStatus.Failure;
-            //Close();
             switch (nFailCode)
             {
                 case 0:
@@ -285,30 +288,35 @@ namespace MakePlayer.Scenes.Scene
 
         private void ClientQueryChrFail(int nFailCode)
         {
-            //ConnectionStatus = ConnectionStatus.Failure;
             MainOutMessage("查询角色失败.");
         }
 
         private void SendSocket(string sendstr)
         {
-            if (ClientSocket.IsConnected)
+            if (_clientSocket.IsConnected)
             {
-                ClientSocket.SendText($"#1{sendstr}!");
+                _clientSocket.SendText($"#1{sendstr}!");
             }
             else
             {
-                MainOutMessage($"Socket Close {ClientSocket.RemoteEndPoint}");
+                MainOutMessage($"Socket Close {_clientSocket.RemoteEndPoint}");
             }
         }
 
+        private void CloseSocket()
+        {
+            _clientSocket.Disconnect(false);//断开登录网关链接
+            MainOutMessage("主动断开");
+        }
+        
         #region Socket Events
 
         private void CSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            if (play.ConnectionStep == ConnectionStep.SelServer)
+            if (_play.ConnectionStep == ConnectionStep.SelServer)
             {
                 SetNotifyEvent(SendQueryChr, RandomNumber.GetInstance().Random(1000, 3000));
-                play.ConnectionStep = ConnectionStep.SelChr;
+                _play.ConnectionStep = ConnectionStep.SelChr;
             }
             MainOutMessage($"连接角色服务:[{e.RemoteEndPoint}]成功...");
         }
@@ -322,7 +330,7 @@ namespace MakePlayer.Scenes.Scene
         {
             if (e.BuffLen > 0)
             {
-                ClientManager.AddPacket(play.SessionId, e.Buff);
+                ClientManager.AddPacket(_play.SessionId, e.Buff);
             }
         }
 
@@ -331,13 +339,13 @@ namespace MakePlayer.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    MainOutMessage($"角色服务[{ClientSocket.RemoteEndPoint}拒绝链接...");
+                    MainOutMessage($"角色服务[{_clientSocket.RemoteEndPoint}拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    MainOutMessage($"角色服务[{ClientSocket.RemoteEndPoint}关闭连接...");
+                    MainOutMessage($"角色服务[{_clientSocket.RemoteEndPoint}关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    MainOutMessage($"角色服务[{ClientSocket.RemoteEndPoint}链接超时...");
+                    MainOutMessage($"角色服务[{_clientSocket.RemoteEndPoint}链接超时...");
                     break;
             }
         }
