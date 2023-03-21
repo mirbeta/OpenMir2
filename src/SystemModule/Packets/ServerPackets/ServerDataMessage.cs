@@ -34,7 +34,8 @@ namespace SystemModule.Packets.ServerPackets
     }
 
     [MemoryPackable]
-    public partial class ServerDataMessage
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public partial struct ServerDataMessage
     {
         public ServerDataType Type { get; set; }
         public int SocketId { get; set; }
