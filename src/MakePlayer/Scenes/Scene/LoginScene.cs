@@ -1,36 +1,39 @@
-using MakePlayer.Option;
-using NLog;
 using System.Net;
+using MakePlayer.Cliens;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
-namespace MakePlayer.Scenes
+namespace MakePlayer.Scenes.Scene
 {
     public class LoginScene : SceneBase
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient _clientSocket;
-        private readonly MakePlayOptions _options;
-        private int ConnectTick;
+        private readonly PlayClient _client;
+        private readonly string LoginAddr;
+        private readonly int LoginPort;
+        private bool IsLogin;
 
-        public LoginScene(MakePlayOptions options)
+        public LoginScene(PlayClient playClient, string serverAdd, int port)
         {
-            _options = options;
+            _client = playClient;
+            LoginAddr = serverAdd;
+            LoginPort = port;
             _clientSocket = new ScoketClient();
             _clientSocket.OnConnected += CSocketConnect;
             _clientSocket.OnDisconnected += CSocketDisconnect;
             _clientSocket.OnReceivedData += CSocketRead;
             _clientSocket.OnError += CSocketError;
         }
-        
+
         public override void OpenScene()
         {
-            _clientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(_options.Address), _options.Port);
-            SetNotifyEvent(Login, 1000);
+            ConnectionStatus = ConnectionStatus.Failure;
+            _clientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(LoginAddr), LoginPort);
+            //SetNotifyEvent(Login, 1000);
         }
-        
+
         public override void CloseScene()
         {
             SetNotifyEvent(CloseSocket, 1000);
@@ -38,7 +41,7 @@ namespace MakePlayer.Scenes
 
         public void PassWdFail()
         {
-            ConnectionStep = ConnectionStep.Connect;
+            _client.ConnectionStep = ConnectionStep.Connect;
         }
 
         public override void PlayScene()
@@ -46,12 +49,12 @@ namespace MakePlayer.Scenes
 
         }
 
-        protected override void ProcessPacket(CommandMessage command, string sBody)
+        internal override void ProcessPacket(CommandMessage command, string sBody)
         {
             switch (command.Ident)
             {
                 case Messages.SM_NEWID_SUCCESS:
-                    ClientNewIdSuccess();
+                    ClientSendLoginMessage();
                     break;
                 case Messages.SM_SELECTSERVER_OK:
                     ClientGetPasswdSuccess(sBody);
@@ -69,29 +72,27 @@ namespace MakePlayer.Scenes
             base.ProcessPacket(command, sBody);
         }
 
-        private void Login()
+        public void Login()
         {
-            if (ConnectionStep == ConnectionStep.Connect)
+            if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > ConnectTick)
             {
-                if ((ConnectionStep == ConnectionStep.ConnectFail) && (HUtil32.GetTickCount() > ConnectTick))
+                ConnectTick = HUtil32.GetTickCount();
+                try
                 {
-                    ConnectTick = HUtil32.GetTickCount();
-                    try
-                    {
-                        _clientSocket.Connect();
-                        ConnectionStep = ConnectionStep.Connect;
-                    }
-                    catch
-                    {
-                        ConnectionStep = ConnectionStep.ConnectFail;
-                    }
+                    _clientSocket.Connect();
+                    ConnectionStatus = ConnectionStatus.Connect;
+                }
+                catch
+                {
+                    ConnectTick = HUtil32.GetTickCount() + 10000;
+                    ConnectionStatus = ConnectionStatus.Failure;
                 }
             }
         }
-        
+
         private void ClientLoginFail(int nFailCode)
         {
-            ConnectionStep = ConnectionStep.ConnectFail;
+            ConnectionStatus = ConnectionStatus.Success;
             switch (nFailCode)
             {
                 case -1:
@@ -101,7 +102,7 @@ namespace MakePlayer.Scenes
                     MainOutMessage("密码输入错误超过3次，此帐号被暂时锁定，请稍候再登录！");
                     break;
                 case -3:
-                    SendLogin(LoginId, LoginPasswd);
+                    SendLogin(_client.LoginId, _client.LoginPasswd);
                     MainOutMessage("此帐号已经登录或被异常锁定，请稍候再登录！");
                     break;
                 case -4:
@@ -116,24 +117,24 @@ namespace MakePlayer.Scenes
             }
             //Close();
         }
-        
+
         /// <summary>
         /// 账号注册
         /// </summary>
         private void NewAccount()
         {
-            ConnectionStep = ConnectionStep.NewAccount;
-            SendNewAccount(LoginId, LoginPasswd);
+            _client.ConnectionStep = ConnectionStep.NewAccount;
+            SendNewAccount(_client.LoginId, _client.LoginPasswd);
         }
-        
+
         /// <summary>
         /// 账号注册成功
         /// </summary>
-        private void ClientNewIdSuccess()
+        private void ClientSendLoginMessage()
         {
-            SendLogin(LoginId, LoginPasswd);
+            SendLogin(_client.LoginId, _client.LoginPasswd);
         }
-        
+
         private void ClientNewIdFail(int nFailCode)
         {
             if (nFailCode != 0)
@@ -145,7 +146,7 @@ namespace MakePlayer.Scenes
             {
                 case 0:
                     MainOutMessage("帐号已被其他的玩家使用了。请选择其它帐号名注册，尝试使用该账号登陆游戏。");
-                    SendLogin(LoginId, LoginPasswd);
+                    SendLogin(_client.LoginId, _client.LoginPasswd);
                     break;
                 case 1:
                     MainOutMessage("验证码输入错误，请重新输入！！！");
@@ -154,15 +155,15 @@ namespace MakePlayer.Scenes
                     MainOutMessage("此帐号名被禁止使用！");
                     break;
                 default:
-                    MainOutMessage( $" 帐号创建失败，请确认帐号是否包括空格、及非法字符！Code: {nFailCode}");
+                    MainOutMessage($" 帐号创建失败，请确认帐号是否包括空格、及非法字符！Code: {nFailCode}");
                     break;
             }
         }
-        
+
         private void SendNewAccount(string sAccount, string sPassword)
         {
-            logger.Info("创建帐号");
-            ConnectionStep = ConnectionStep.NewAccount;
+            MainOutMessage("创建帐号");
+            _client.ConnectionStep = ConnectionStep.NewAccount;
             var ue = new UserEntry();
             ue.Account = sAccount;
             ue.Password = sPassword;
@@ -182,12 +183,12 @@ namespace MakePlayer.Scenes
             var msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
         }
-        
+
         private void SendLogin(string uid, string passwd)
         {
-            logger.Info("开始登陆");
-            LoginId = uid;
-            LoginPasswd = passwd;
+            MainOutMessage("开始登陆");
+            _client.LoginId = uid;
+            _client.LoginPasswd = passwd;
             var msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + passwd));
             //SendLogin = true;
@@ -199,17 +200,17 @@ namespace MakePlayer.Scenes
             var g_wAvailIDHour = HUtil32.HiWord(msg.Recog);
             var g_wAvailIPDay = msg.Param;
             var g_wAvailIPHour = msg.Tag;
-            if ((g_wAvailIDHour % 60) > 0)
+            if (g_wAvailIDHour % 60 > 0)
             {
-                logger.Info("个人帐户的期限: 剩余 " + (g_wAvailIDHour / 60) + " 小时 " + (g_wAvailIDHour % 60) + " 分钟.");
+                MainOutMessage("个人帐户的期限: 剩余 " + g_wAvailIDHour / 60 + " 小时 " + g_wAvailIDHour % 60 + " 分钟.");
             }
             else if (g_wAvailIDHour > 0)
             {
-                logger.Info("个人帐户的期限: 剩余 " + g_wAvailIDHour + " 分钟.");
+                MainOutMessage("个人帐户的期限: 剩余 " + g_wAvailIDHour + " 分钟.");
             }
             else
             {
-                logger.Info("帐号登录成功！");
+                MainOutMessage("帐号登录成功！");
             }
             var sServerName = string.Empty;
             var sText = EDCode.DeCodeString(sBody);
@@ -223,10 +224,33 @@ namespace MakePlayer.Scenes
 
         }
 
+        private void ClientGetServerName(CommandMessage defMsg, string sBody)
+        {
+            var sServerName = string.Empty;
+            var sServerStatus = string.Empty;
+            sBody = EDCode.DeCodeString(sBody);
+            var nCount = HUtil32._MIN(6, defMsg.Series);
+            for (var i = 0; i < nCount; i++)
+            {
+                sBody = HUtil32.GetValidStr3(sBody, ref sServerName, '/');
+                sBody = HUtil32.GetValidStr3(sBody, ref sServerStatus, '/');
+                if (sServerName == _client.ServerName)
+                {
+                    SendSelectServer(sServerName);
+                    return;
+                }
+            }
+            if (nCount == 1)
+            {
+                _client.ServerName = sServerName;
+                SendSelectServer(sServerName);
+            }
+        }
+
         private void SendSelectServer(string svname)
         {
             MainOutMessage($"选择服务器：{svname}");
-            ConnectionStep = ConnectionStep.SelServer;
+            _client.ConnectionStep = ConnectionStep.SelServer;
             var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(svname));
         }
@@ -243,32 +267,13 @@ namespace MakePlayer.Scenes
             str = HUtil32.GetValidStr3(str, ref runaddr, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref runport, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref certifystr, HUtil32.Backslash);
-            Certification = HUtil32.StrToInt(certifystr, 0);
-            SelChrAddr = runaddr;
-            SelChrPort = HUtil32.StrToInt(runport, 0);
-            ConnectionStep = ConnectionStep.QueryChr;
+            _client.Certification = HUtil32.StrToInt(certifystr, 0);
+            _client.SelChrAddr = runaddr;
+            _client.SelChrPort = HUtil32.StrToInt(runport, 0);
             MainOutMessage("帐号登录成功！");
+            _client.DScreen.ChangeScene(SceneType.SelectChr);
         }
-        
-        /*private void ClientGetPasswdSuccess(string sData)
-        {
-            var selChrAddr = string.Empty;
-            var selChrPort = 0;
-            var sSelChrPort = string.Empty;
-            var sCertification = string.Empty;
-            MainOutMessage($"[{LoginAccount}] 帐号登录成功！");
-            var sText = EDCode.DeCodeString(sData);
-            sText = HUtil32.GetValidStr3(sText, ref selChrAddr, '/');
-            sText = HUtil32.GetValidStr3(sText, ref sSelChrPort, '/');
-            sText = HUtil32.GetValidStr3(sText, ref sCertification, '/');
-            Certification = Convert.ToInt32(sCertification);
-            selChrPort = Convert.ToInt32(sSelChrPort);
-            ConnectionStep = ConnectionStep.QueryChr;
-            ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(selChrAddr), selChrPort);
-            ClientSocket.Connect();
-            SendQueryChr();
-        }*/
-        
+
         private void SendSocket(string sendstr)
         {
             if (_clientSocket.IsConnected)
@@ -277,21 +282,21 @@ namespace MakePlayer.Scenes
             }
             else
             {
-                logger.Warn($"Socket Close: {_clientSocket.RemoteEndPoint}");
+                MainOutMessage($"Socket Close: {_clientSocket.RemoteEndPoint}");
             }
         }
 
         private void CloseSocket()
         {
             _clientSocket.Disconnect();//断开登录网关链接
-            logger.Info("主动断开");
+            MainOutMessage("主动断开");
         }
-        
+
         #region Socket Events
 
         private void CSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            if (ConnectionStep == ConnectionStep.Connect)
+            if (_client.ConnectionStep == ConnectionStep.Connect)
             {
                 if (CreateAccount)
                 {
@@ -299,18 +304,21 @@ namespace MakePlayer.Scenes
                 }
                 else
                 {
-                    ClientNewIdSuccess();
+                    ClientSendLoginMessage();
                 }
             }
-            if (ConnectionStep == ConnectionStep.Login)
+            else
             {
-                //RobotClient.DScreen.ChangeScene(SceneType.Login);
+                if (_client.ConnectionStep == ConnectionStep.Login)
+                {
+                    //RobotClient.DScreen.ChangeScene(SceneType.Login);
+                }
             }
         }
 
         private void CSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            logger.Info("登陆连接已关闭...");
+            MainOutMessage("登陆连接已关闭...");
         }
 
         private void CSocketError(object sender, DSCClientErrorEventArgs e)
@@ -318,13 +326,13 @@ namespace MakePlayer.Scenes
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    logger.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...");
+                    MainOutMessage($"游戏服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    logger.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]关闭连接...");
+                    MainOutMessage($"游戏服务器[{_clientSocket.RemoteEndPoint}]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    logger.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]链接超时...");
+                    MainOutMessage($"游戏服务器[{_clientSocket.RemoteEndPoint}]链接超时...");
                     break;
             }
         }
@@ -334,7 +342,7 @@ namespace MakePlayer.Scenes
             var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (!string.IsNullOrEmpty(sData))
             {
-                ClientManager.AddPacket(SessionId, e.Buff);
+                ClientManager.AddPacket(_client.SessionId, e.Buff);
             }
         }
 

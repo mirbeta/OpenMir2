@@ -1,6 +1,6 @@
-using MakePlayer.Cliens;
 using System.Collections.Concurrent;
 using System.Threading.Channels;
+using MakePlayer.Cliens;
 using SystemModule;
 
 namespace MakePlayer
@@ -19,7 +19,6 @@ namespace MakePlayer
         private static int dwRunTick = 0;
         private static readonly ConcurrentDictionary<string, PlayClient> _clients;
         private static readonly IList<PlayClient> _clientList;
-        private static readonly IList<string> _sayMsgList;
         private static readonly Channel<RecvicePacket> _reviceQueue;
         private static readonly CancellationTokenSource _cancellation;
 
@@ -27,27 +26,12 @@ namespace MakePlayer
         {
             _clients = new ConcurrentDictionary<string, PlayClient>();
             _clientList = new List<PlayClient>();
-            _sayMsgList = new List<string>(100);
             _reviceQueue = Channel.CreateUnbounded<RecvicePacket>();
             _cancellation = new CancellationTokenSource();
         }
 
         public static void Start()
         {
-            var filePath = Path.Combine(AppContext.BaseDirectory, "SayMessage.txt");
-            if (File.Exists(filePath))
-            {
-                string line;
-                var sr = new StreamReader(filePath, System.Text.Encoding.ASCII);
-                while (!string.IsNullOrEmpty(line = sr.ReadLine()))
-                {
-                    _sayMsgList.Add(line);
-                }
-            }
-            else
-            {
-                Console.WriteLine("自动发言列表文件不存在.");
-            }
             Task.Factory.StartNew(async () =>
             {
                 while (await _reviceQueue.Reader.WaitToReadAsync(_cancellation.Token))
@@ -70,9 +54,11 @@ namespace MakePlayer
 
         public static void AddPacket(string socHandle, byte[] reviceBuff)
         {
-            var clientPacket = new RecvicePacket();
-            clientPacket.SessionId = socHandle;
-            clientPacket.ReviceBuffer = reviceBuff;
+            var clientPacket = new RecvicePacket
+            {
+                SessionId = socHandle,
+                ReviceBuffer = reviceBuff
+            };
             _reviceQueue.Writer.TryWrite(clientPacket);
         }
 
@@ -99,14 +85,6 @@ namespace MakePlayer
                     g_nPosition = i;
                     boProcessLimit = true;
                     break;
-                }
-                if (_clientList[i].IsLogin && (HUtil32.GetTickCount() - _clientList[i].SayTick > 3000))
-                {
-                    if (_sayMsgList.Count > 0)
-                    {
-                        _clientList[i].SayTick = HUtil32.GetTickCount();
-                        _clientList[i].ClientLoginSay(_sayMsgList[RandomNumber.GetInstance().Random(_sayMsgList.Count)]);
-                    }
                 }
             }
             if (!boProcessLimit)

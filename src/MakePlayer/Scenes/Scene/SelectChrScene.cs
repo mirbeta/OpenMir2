@@ -1,24 +1,23 @@
+using MakePlayer.Cliens;
 using NLog;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
-namespace MakePlayer.Scenes
+namespace MakePlayer.Scenes.Scene
 {
     public class SelectChrScene : SceneBase
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient ClientSocket;
+        private readonly PlayClient play;
         private int NewIndex = 0;
         private readonly SelChar[] ChrArr;
-        private string SelChrAddr;
-        private int SelChrPort;
-        private int Certification;
-        private string ChrName;
 
-        public SelectChrScene() 
+        public SelectChrScene(PlayClient playClient)
         {
+            play = playClient;
             ChrArr = new SelChar[2];
             ChrArr[0].UserChr = new UserCharacterInfo();
             ChrArr[1].UserChr = new UserCharacterInfo();
@@ -29,14 +28,13 @@ namespace MakePlayer.Scenes
             ClientSocket.OnReceivedData += CSocketRead;
             ClientSocket.OnError += CSocketError;
         }
-        
+
         public override void OpenScene()
         {
-            ConnectionStep = ConnectionStep.QueryChr;
-            ClientSocket.Connect(SelChrAddr, SelChrPort);
+            ClientSocket.Connect(play.SelChrAddr, play.SelChrPort);
         }
 
-        protected override void ProcessPacket(CommandMessage command, string sBody)
+        internal override void ProcessPacket(CommandMessage command, string sBody)
         {
             switch (command.Ident)
             {
@@ -67,15 +65,15 @@ namespace MakePlayer.Scenes
             }
             base.ProcessPacket(command, sBody);
         }
-        
+
         private void ClientStartPlayFail()
         {
             MainOutMessage("此服务器满员！");
         }
-        
+
         private void ClientVersionFail()
         {
-             MainOutMessage("游戏程序版本不正确，请下载最新版本游戏程序！");
+            MainOutMessage("游戏程序版本不正确，请下载最新版本游戏程序！");
         }
 
         public string ClientGetReceiveChrs_GetJobName(int nJob)
@@ -116,7 +114,7 @@ namespace MakePlayer.Scenes
             }
             return result;
         }
-        
+
         private void ClientGetReceiveChrs_AddChr(string sName, byte nJob, byte nHair, int nLevel, byte nSex)
         {
             int I;
@@ -163,7 +161,7 @@ namespace MakePlayer.Scenes
                 sText = HUtil32.GetValidStr3(sText, ref sLevel, '/');
                 sText = HUtil32.GetValidStr3(sText, ref sSex, '/');
                 nSelect = 0;
-                if ((!string.IsNullOrEmpty(sName)) && (!string.IsNullOrEmpty(sLevel)) && (!string.IsNullOrEmpty(sSex)))
+                if (!string.IsNullOrEmpty(sName) && !string.IsNullOrEmpty(sLevel) && !string.IsNullOrEmpty(sSex))
                 {
                     if (sName[0] == '*')
                     {
@@ -197,13 +195,13 @@ namespace MakePlayer.Scenes
                 SetNotifyEvent(NewChr, 3000);
             }
         }
-        
+
         private void NewChr()
         {
-            ConnectionStep = ConnectionStep.NewChr;
-            SelectChrCreateNewChr(ChrName);
+            play.ConnectionStep = ConnectionStep.NewChr;
+            SelectChrCreateNewChr(play.ChrName);
         }
-        
+
         private void SelectChrCreateNewChr(string sChrName)
         {
             byte sHair = 0;
@@ -226,44 +224,45 @@ namespace MakePlayer.Scenes
             }
             var sJob = (byte)RandomNumber.GetInstance().Random(2);
             var sSex = (byte)RandomNumber.GetInstance().Random(1);
-            SendNewChr(LoginId, sChrName, sHair, sJob, sSex);
+            SendNewChr(play.LoginId, sChrName, sHair, sJob, sSex);
         }
-        
+
         private void SendSelChr(string sChrName)
         {
             MainOutMessage($"选择人物：{sChrName}");
-            ConnectionStep = ConnectionStep.SelChr;
-            ChrName = sChrName;
+            play.ConnectionStep = ConnectionStep.SelChr;
+            play.ChrName = sChrName;
             var defMsg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(LoginId + "/" + sChrName));
+            SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(play.LoginId + "/" + sChrName));
         }
 
-        public void SendQueryChr()
+        private void SendQueryChr()
         {
-            ConnectionStep = ConnectionStep.QueryChr;
+            play.ConnectionStep = ConnectionStep.QueryChr;
             var DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(LoginId + "/" + Certification));
-            logger.Info("查询角色.");
+            SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(play.LoginId + "/" + play.Certification));
+            MainOutMessage("查询角色.");
         }
-        
+
         private void SendNewChr(string uid, string uname, byte shair, byte sjob, byte ssex)
         {
             var msg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + uname + "/" + shair + "/" + sjob + "/" + ssex));
-            logger.Info("创建角色.");
+            MainOutMessage("创建角色.");
         }
-        
+
         public void ClientGetStartPlay(string body)
         {
-            logger.Info("准备进入游戏");
             string addr = string.Empty;
             string Str = EDCode.DeCodeString(body);
             string sport = HUtil32.GetValidStr3(Str, ref addr, HUtil32.Backslash);
-            RunServerPort = HUtil32.StrToInt(sport, 0);
-            RunServerAddr = addr;
-            ConnectionStep = ConnectionStep.Play;
+            play.RunServerPort = HUtil32.StrToInt(sport, 0);
+            play.RunServerAddr = addr;
+            play.ConnectionStep = ConnectionStep.Play;
+            MainOutMessage("准备进入游戏");
+            play.DScreen.ChangeScene(SceneType.PlayGame);
         }
-        
+
         private void ClientNewChrFail(int nFailCode)
         {
             //ConnectionStatus = ConnectionStatus.Failure;
@@ -287,10 +286,11 @@ namespace MakePlayer.Scenes
                     break;
             }
         }
-        
+
         private void ClientQueryChrFail(int nFailCode)
         {
             //ConnectionStatus = ConnectionStatus.Failure;
+            MainOutMessage("查询角色失败.");
         }
 
         private void SendSocket(string sendstr)
@@ -301,25 +301,25 @@ namespace MakePlayer.Scenes
             }
             else
             {
-                logger.Warn($"Socket Close {ClientSocket.RemoteEndPoint}");
+                MainOutMessage($"Socket Close {ClientSocket.RemoteEndPoint}");
             }
         }
-        
+
         #region Socket Events
 
         private void CSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
-            if (ConnectionStep == ConnectionStep.QueryChr)
+            if (play.ConnectionStep == ConnectionStep.SelServer)
             {
                 SetNotifyEvent(SendQueryChr, 1000);
-                ConnectionStep = ConnectionStep.SelChr;
+                play.ConnectionStep = ConnectionStep.SelChr;
             }
-            logger.Info($"连接角色网关:[{SelChrAddr}:{SelChrPort}]");
+            MainOutMessage($"连接角色网关:[{play.SelChrAddr}:{play.SelChrPort}]");
         }
 
         private void CSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
-            logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}断开连接...");
+            MainOutMessage($"角色服务器[{ClientSocket.RemoteEndPoint}断开连接...");
         }
 
         private void CSocketError(object sender, DSCClientErrorEventArgs e)
@@ -327,13 +327,13 @@ namespace MakePlayer.Scenes
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}拒绝链接...");
+                    MainOutMessage($"角色服务器[{ClientSocket.RemoteEndPoint}拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}关闭连接...");
+                    MainOutMessage($"角色服务器[{ClientSocket.RemoteEndPoint}关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}链接超时...");
+                    MainOutMessage($"角色服务器[{ClientSocket.RemoteEndPoint}链接超时...");
                     break;
             }
         }
@@ -343,7 +343,7 @@ namespace MakePlayer.Scenes
             var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (!string.IsNullOrEmpty(sData))
             {
-                ClientManager.AddPacket(SessionId, e.Buff);
+                ClientManager.AddPacket(play.SessionId, e.Buff);
             }
         }
 

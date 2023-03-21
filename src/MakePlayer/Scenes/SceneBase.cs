@@ -1,3 +1,4 @@
+using NLog;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 
@@ -5,21 +6,17 @@ namespace MakePlayer.Scenes
 {
     public class SceneBase
     {
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        public SceneType Scenetype;
         public Action NotifyEvent;
         public int NotifyEventTick = 0;
         /// <summary>
         /// 当前游戏网络连接步骤
         /// </summary>
-        public ConnectionStep ConnectionStep;
+        public ConnectionStatus ConnectionStatus;
         public bool CreateAccount;
-        public string LoginId;
-        public string LoginPasswd;
-        public string SessionId;
-        public string SelChrAddr;
-        public int SelChrPort;
-        public string RunServerAddr;
-        public int RunServerPort;
-        public int Certification;
+        public int ConnectTick;
+        public int SayTick;
 
         public virtual void Initialize()
         {
@@ -64,14 +61,14 @@ namespace MakePlayer.Scenes
             }
         }
 
-        protected virtual void ProcessPacket(CommandMessage command, string sBody)
+        internal virtual void ProcessPacket(CommandMessage command, string sBody)
         {
 
         }
 
         protected void MainOutMessage(string msg)
         {
-            Console.WriteLine($"[{LoginId}] {msg}");
+            Console.WriteLine($"{msg}");
         }
     }
 }

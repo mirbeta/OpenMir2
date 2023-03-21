@@ -30,7 +30,7 @@ namespace MakePlayer
         public long dwStartefftime;
     }
 
-    public enum ConnectionStep
+    public enum ConnectionStep : byte
     {
         Connect,
         ConnectFail,
@@ -45,10 +45,10 @@ namespace MakePlayer
         Play
     }
 
-    public enum ConnectionStatus
+    public enum ConnectionStatus : byte
     {
         Success,
+        Connect,
         Failure
     }
 }
-
