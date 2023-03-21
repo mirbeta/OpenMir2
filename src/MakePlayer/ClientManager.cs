@@ -11,19 +11,19 @@ namespace MakePlayer
         public byte[] ReviceBuffer;
     }
 
-    public class ClientManager
+    public static class ClientManager
     {
-        private int g_dwProcessTimeMin = 0;
-        private int g_dwProcessTimeMax = 0;
-        private int g_nPosition = 0;
-        private int dwRunTick = 0;
-        private readonly ConcurrentDictionary<string, PlayClient> _clients;
-        private readonly IList<PlayClient> _clientList;
-        private readonly IList<string> _sayMsgList;
-        private readonly Channel<RecvicePacket> _reviceQueue;
-        private readonly CancellationTokenSource _cancellation;
+        private static int g_dwProcessTimeMin = 0;
+        private static int g_dwProcessTimeMax = 0;
+        private static int g_nPosition = 0;
+        private static int dwRunTick = 0;
+        private static readonly ConcurrentDictionary<string, PlayClient> _clients;
+        private static readonly IList<PlayClient> _clientList;
+        private static readonly IList<string> _sayMsgList;
+        private static readonly Channel<RecvicePacket> _reviceQueue;
+        private static readonly CancellationTokenSource _cancellation;
 
-        public ClientManager()
+        static ClientManager()
         {
             _clients = new ConcurrentDictionary<string, PlayClient>();
             _clientList = new List<PlayClient>();
@@ -32,19 +32,20 @@ namespace MakePlayer
             _cancellation = new CancellationTokenSource();
         }
 
-        public void Start()
+        public static void Start()
         {
             var filePath = Path.Combine(AppContext.BaseDirectory, "SayMessage.txt");
             if (File.Exists(filePath))
             {
-                var line = string.Empty;
+                string line;
                 var sr = new StreamReader(filePath, System.Text.Encoding.ASCII);
                 while (!string.IsNullOrEmpty(line = sr.ReadLine()))
                 {
                     _sayMsgList.Add(line);
                 }
             }
-            else {
+            else
+            {
                 Console.WriteLine("自动发言列表文件不存在.");
             }
             Task.Factory.StartNew(async () =>
@@ -62,12 +63,12 @@ namespace MakePlayer
             }, _cancellation.Token);
         }
 
-        public void Stop()
+        public static void Stop()
         {
             _cancellation.Cancel();
         }
 
-        public void AddPacket(string socHandle, byte[] reviceBuff)
+        public static void AddPacket(string socHandle, byte[] reviceBuff)
         {
             var clientPacket = new RecvicePacket();
             clientPacket.SessionId = socHandle;
@@ -75,18 +76,18 @@ namespace MakePlayer
             _reviceQueue.Writer.TryWrite(clientPacket);
         }
 
-        public void AddClient(string sessionId, PlayClient objClient)
+        public static void AddClient(string sessionId, PlayClient objClient)
         {
             _clients.TryAdd(sessionId, objClient);
             _clientList.Add(objClient);
         }
 
-        public void DelClient(PlayClient objClient)
+        public static void DelClient(PlayClient objClient)
         {
             //_Clients.Remove(objClient);
         }
 
-        public void Run()
+        public static void Run()
         {
             dwRunTick = HUtil32.GetTickCount();
             var boProcessLimit = false;

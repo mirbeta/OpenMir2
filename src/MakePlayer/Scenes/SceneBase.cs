@@ -1,0 +1,77 @@
+using SystemModule;
+using SystemModule.Packets.ClientPackets;
+
+namespace MakePlayer.Scenes
+{
+    public class SceneBase
+    {
+        public Action NotifyEvent;
+        public int NotifyEventTick = 0;
+        /// <summary>
+        /// 当前游戏网络连接步骤
+        /// </summary>
+        public ConnectionStep ConnectionStep;
+        public bool CreateAccount;
+        public string LoginId;
+        public string LoginPasswd;
+        public string SessionId;
+        public string SelChrAddr;
+        public int SelChrPort;
+        public string RunServerAddr;
+        public int RunServerPort;
+        public int Certification;
+
+        public virtual void Initialize()
+        {
+
+        }
+
+        public virtual void OpenScene()
+        {
+
+        }
+
+        public virtual void CloseScene()
+        {
+
+        }
+
+        public virtual void OpeningScene()
+        {
+
+        }
+
+        public virtual void PlayScene()
+        {
+
+        }
+
+        protected void SetNotifyEvent(Action notifyEvent, int nTime)
+        {
+            NotifyEventTick = HUtil32.GetTickCount() + nTime;
+            NotifyEvent = notifyEvent;
+        }
+
+        public void DoNotifyEvent()
+        {
+            if (NotifyEvent != null)
+            {
+                if (HUtil32.GetTickCount() > NotifyEventTick)
+                {
+                    NotifyEvent();
+                    NotifyEvent = null;
+                }
+            }
+        }
+
+        protected virtual void ProcessPacket(CommandMessage command, string sBody)
+        {
+
+        }
+
+        protected void MainOutMessage(string msg)
+        {
+            Console.WriteLine($"[{LoginId}] {msg}");
+        }
+    }
+}

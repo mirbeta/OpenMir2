@@ -10,14 +10,12 @@ namespace MakePlayer
     public class AppService : BackgroundService
     {
         private readonly MakePlayOptions options;
-        private readonly ClientManager _clientManager;
         private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
         private int _loginIndex;
         private int _loginTimeTick;
 
-        public AppService(IOptions<MakePlayOptions> options, ClientManager clientManager)
+        public AppService(IOptions<MakePlayOptions> options)
         {
-            _clientManager = clientManager;
             this.options = options.Value;
         }
 
@@ -25,13 +23,13 @@ namespace MakePlayer
         {
             options.ChrCount = HUtil32._MIN(options.ChrCount, options.TotalChrCount);
             _loginTimeTick = HUtil32.GetTickCount() - 1000 * options.ChrCount;
-            _clientManager.Start();
+            ClientManager.Start();
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _clientManager.Stop();
+            ClientManager.Stop();
             _cancellation.Cancel();
             return Task.CompletedTask;
         }
@@ -55,7 +53,7 @@ namespace MakePlayer
                         }
                         for (var i = 0; i < options.ChrCount; i++)
                         {
-                            var playClient = new PlayClient(_clientManager);
+                            var playClient = new PlayClient();
                             playClient.SessionId = Guid.NewGuid().ToString("N");
                             playClient.CreateAccount = options.NewAccount;
                             playClient.LoginAccount = string.Concat(options.LoginAccount, _loginIndex);
@@ -69,12 +67,12 @@ namespace MakePlayer
                             //playClient.ClientSocket.Close();
                             playClient.ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(options.Address), options.Port);
                             playClient.ConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
-                            _clientManager.AddClient(playClient.SessionId, playClient);
+                            ClientManager.AddClient(playClient.SessionId, playClient);
                             _loginIndex++;
                         }
                     }
                 }
-                _clientManager.Run();
+                ClientManager.Run();
                 Thread.Sleep(TimeSpan.FromMilliseconds(50));
             }
             return Task.CompletedTask;

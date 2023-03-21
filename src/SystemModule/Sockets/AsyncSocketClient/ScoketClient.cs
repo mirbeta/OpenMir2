@@ -310,7 +310,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
             if (_cli != null)
             {
                 _cli.Shutdown(SocketShutdown.Both);
-                _cli.Disconnect(true);//scoket 复用
+                _cli.Disconnect(true);//Socket 复用
                 _cli.Close();
             }
         }
@@ -322,7 +322,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 if (_cli != null)
                 {
                     _cli.Shutdown(SocketShutdown.Both);
-                    _cli.Disconnect(true);//scoket 复用
+                    _cli.Disconnect(true);//Socket 复用
                     _cli.Close();
                 }
             }

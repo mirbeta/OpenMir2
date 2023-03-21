@@ -5,7 +5,7 @@ namespace MakePlayer
         public const int MAXBAGITEMCL = 40;
     }
 
-    public struct TUserCharacterInfo
+    public struct UserCharacterInfo
     {
         public string sName;
         public byte btJob;
@@ -14,10 +14,10 @@ namespace MakePlayer
         public byte btSex;
     }
 
-    public struct TSelChar
+    public struct SelChar
     {
         public bool boValid;
-        public TUserCharacterInfo UserChr;
+        public UserCharacterInfo UserChr;
         public bool boSelected;
         public bool boFreezeState;
         public bool boUnfreezing;
@@ -33,6 +33,7 @@ namespace MakePlayer
     public enum ConnectionStep
     {
         Connect,
+        ConnectFail,
         NewAccount,
         QueryServer,
         SelServer,
