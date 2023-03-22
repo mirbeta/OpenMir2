@@ -54,14 +54,6 @@ namespace MakePlayer.Cliens
             RunTick = HUtil32.GetTickCount();
         }
 
-        private void SendSelectServer(string sServerName)
-        {
-            //MainOutMessage($"[{LoginAccount}] 选择服务器：{sServerName}");
-            //ConnectionStep = ConnectionStep.SelServer;
-            //var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
-            //SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sServerName));
-        }
-
         public void ProcessPacket(byte[] reviceBuffer)
         {
             var sockText = HUtil32.GetString(reviceBuffer, 0, reviceBuffer.Length);
@@ -98,12 +90,6 @@ namespace MakePlayer.Cliens
             var sBody = sDataBlock.Substring(Messages.DefBlockSize, sDataBlock.Length - Messages.DefBlockSize);
             var defMsg = EDCode.DecodePacket(sDefMsg);
             DScreen.CurrentScene.ProcessPacket(defMsg, sBody);
-        }
-
-        public void SetLoginInfo(string account, string loginPwd)
-        {
-            LoginId = account;
-            LoginPasswd = loginPwd;
         }
 
         public void Run()

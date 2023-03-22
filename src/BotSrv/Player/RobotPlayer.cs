@@ -2218,7 +2218,7 @@ namespace BotSrv.Player
         {
             MainOutMessage("进入游戏");
             DScreen.CurrentScene.ConnectionStep = ConnectionStep.Play;
-            var sSendMsg = $"**{LoginId}/{ChrName}/{Certification}/{Grobal2.CLIENT_VERSION_NUMBER}/{Grobal2.CLIENT_VERSION_NUMBER}";
+            var sSendMsg = $"**{LoginId}/{ChrName}/{Certification}/{Grobal2.ClientVersionNumber}/{Grobal2.ClientVersionNumber}";
             SendSocket(EDCode.EncodeString(sSendMsg));
         }
 

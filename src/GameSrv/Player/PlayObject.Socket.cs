@@ -7,16 +7,10 @@ namespace GameSrv.Player
     {
         private const byte HeaderLen = 32;
 
-        private ServerMessage messageHead = new ServerMessage
-        {
-            PacketCode = Grobal2.RunGateCode,
-            Ident = Grobal2.GM_DATA
-        };
-
         internal void SetSocket()
         {
-            messageHead.Socket = SocketId;
-            messageHead.SessionId = SocketIdx;
+            //messageHead.Socket = SocketId;
+            //messageHead.SessionId = SocketIdx;
         }
 
         /// <summary>
@@ -36,12 +30,18 @@ namespace GameSrv.Player
             if (string.IsNullOrEmpty(sMsg))
                 return;
             byte[] msgBuff = HUtil32.GetBytes(sMsg);
+            ServerMessage messageHead = new ServerMessage
+            {
+                PacketCode = Grobal2.PacketCode,
+                Ident = Grobal2.GM_DATA,
+                Socket = SocketId,
+                SessionId = SocketIdx
+            };
             messageHead.PackLength = -msgBuff.Length;
             byte[] actionData = new byte[ServerMessage.PacketSize + msgBuff.Length];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, actionData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(msgBuff, 0, actionData, ServerMessage.PacketSize, msgBuff.Length);
             M2Share.SocketMgr.AddGateBuffer(GateIdx, actionData);
-            //Console.WriteLine($"发送动作消息 Len:{actionData.Length}");
         }
 
         /// <summary>
@@ -58,12 +58,18 @@ namespace GameSrv.Player
             {
                 return;
             }
+            ServerMessage messageHead = new ServerMessage
+            {
+                PacketCode = Grobal2.PacketCode,
+                Ident = Grobal2.GM_DATA,
+                Socket = SocketId,
+                SessionId = SocketIdx
+            };
             messageHead.PackLength = CommandMessage.Size;
             byte[] sendData = new byte[HeaderLen];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
             M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
-            //Console.WriteLine($"发送命令消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 
         internal virtual void SendSocket(CommandMessage defMsg, string sMsg)
@@ -82,12 +88,18 @@ namespace GameSrv.Player
             }
             byte[] bMsg = HUtil32.GetBytes(sMsg);
             byte[] sendData = new byte[HeaderLen + bMsg.Length];
+            ServerMessage messageHead = new ServerMessage
+            {
+                PacketCode = Grobal2.PacketCode,
+                Ident = Grobal2.GM_DATA,
+                Socket = SocketId,
+                SessionId = SocketIdx
+            };
             messageHead.PackLength = bMsg.Length + CommandMessage.Size;
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
             MemoryCopy.BlockCopy(bMsg, 0, sendData, HeaderLen, bMsg.Length);
             M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
-            //Console.WriteLine($"发送文字消息 Len:{sendData.Length} Ident:{defMsg.Ident}");
         }
 
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)

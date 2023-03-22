@@ -71,7 +71,7 @@ namespace GameSrv.Services
         {
             var serverMessage = new ServerDataPacket
             {
-                PacketCode = Grobal2.RunGateCode,
+                PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
             var dataBuff = serverMessage.GetBuffer();
@@ -148,7 +148,7 @@ namespace GameSrv.Services
                 {
                     var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
                     var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
-                    if (message.PacketCode != Grobal2.RunGateCode)
+                    if (message.PacketCode != Grobal2.PacketCode)
                     {
                         srcOffset++;
                         dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);

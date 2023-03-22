@@ -621,7 +621,7 @@ namespace GameGate.Services
                 byte[] bodyBuffer;
                 var commandPack = new DataPacketMessage
                 {
-                    PacketCode = Grobal2.RunGateCode,
+                    PacketCode = Grobal2.PacketCode,
                     Socket = _session.SckHandle,
                     Ident = Grobal2.GM_DATA,
                     SessionIndex = SvrListIdx,
@@ -647,7 +647,7 @@ namespace GameGate.Services
                 }
                 Buffer.BlockCopy(SerializerUtil.Serialize(commandPack), 0, bodyBuffer, 0, DataPacketMessage.PacketSize); //复制消息头
                 ClientThread.Send(bodyBuffer[..sendLen]);
-                GateShare.BytePool.Return(bodyBuffer);
+                //GateShare.BytePool.Return(bodyBuffer);
             }
             else
             {
@@ -1232,7 +1232,7 @@ namespace GameGate.Services
 
                     var packetHeader = new DataPacketMessage
                     {
-                        PacketCode = Grobal2.RunGateCode,
+                        PacketCode = Grobal2.PacketCode,
                         Ident = Grobal2.GM_DATA,
                         Socket = _session.SckHandle,
                         SessionId = _session.SessionId,
@@ -1245,7 +1245,7 @@ namespace GameGate.Services
 
                     SendLoginMessage(loginDataPacket[..(DataPacketMessage.PacketSize + packetHeader.PackLength)]);
                     
-                    Logger.Debug($"[ClientLogin] {sAccount} {sHumName} {addr} {szCert} {szClientVerNo} {szCode} {MD5.MD5Print(hardWareDigest)} {ServiceId}");
+                    //Logger.Debug($"[ClientLogin] {sAccount} {sHumName} {addr} {szCert} {szClientVerNo} {szCode} {MD5.MD5Print(hardWareDigest)} {ServiceId}");
                     success = true;
                     HandleLogin = true;
                     /*var secretKey = _authenticator.GenerateSetupCode("openmir2", sAccount, SessionKey, 5);

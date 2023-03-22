@@ -748,7 +748,7 @@ namespace LoginSrv.Services
         {
             var serverMessage = new ServerDataPacket
             {
-                PacketCode = Grobal2.RunGateCode,
+                PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
             var dataBuff = serverMessage.GetBuffer();

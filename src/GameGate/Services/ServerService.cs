@@ -96,7 +96,7 @@ namespace GameGate.Services
         /// </summary>
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            _logger.Debug($"客户端链接:[{GateInfo.ServiceId}] SessionId:[{e.SessionId}] RunPort:{_gateEndPoint}");
+            //_logger.Debug($"客户端链接:[{GateInfo.ServiceId}] SessionId:[{e.SessionId}] RunPort:{_gateEndPoint}");
 
             var threadId = -1;
             var clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out threadId);
@@ -130,8 +130,8 @@ namespace GameGate.Services
                 e.SessionId = userSession.SessionId;
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
                 SessionMgr.AddSession(GateInfo.ServiceId, userSession.SessionId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, messageSendQueue));
-                _logger.Info("开始连接: " + sRemoteAddress);
-                _logger.Debug($"GateId:{GateInfo.ServiceId} 用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}-{clientThread.ThreadId}");
+                //_logger.Info("开始连接: " + sRemoteAddress);
+                //_logger.Debug($"GateId:{GateInfo.ServiceId} 用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}-{clientThread.ThreadId}");
             }
             else
             {
@@ -169,15 +169,15 @@ namespace GameGate.Services
                         break;
                     }
                 }
-                _logger.Info("断开链接: " + sRemoteAddr);
+                //_logger.Info("断开链接: " + sRemoteAddr);
             }
             else
             {
-                _logger.Info("断开链接: " + sRemoteAddr);
+                //_logger.Info("断开链接: " + sRemoteAddr);
             }
             SessionCloseQueue.Enqueue(e.SocHandle); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
             SessionMgr.CloseSession(e.SessionId);
-            _logger.Debug($"用户断开链接 Ip:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}] ScoketId:[{e.SocHandle}]");
+            //_logger.Debug($"用户断开链接 Ip:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}] ScoketId:[{e.SocHandle}]");
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -190,7 +190,7 @@ namespace GameGate.Services
         /// </summary>
         private void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            _logger.Debug($"收到客户端消息:[{GateInfo.ServiceId}] SessionId:[{token.SessionId}] RunPort:{_gateEndPoint}");
+            //_logger.Debug($"收到客户端消息:[{GateInfo.ServiceId}] SessionId:[{token.SessionId}] RunPort:{_gateEndPoint}");
             var clientSession = SessionMgr.GetSession(GateInfo.ServiceId, token.SessionId);
             if (clientSession != null)
             {

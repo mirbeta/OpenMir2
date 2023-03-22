@@ -20,6 +20,8 @@ namespace GameSrv.Network
         private readonly CancellationTokenSource _cancellation;
         private CommandMessage mesaagePacket;
         public string ConnectionId { get;  }
+        public byte[] PacketBuffer = new byte[4096];
+        public int PacketBufferIndex = 0;
 
         public ThreadSocket(ThreadGateInfo gateInfo)
         {
@@ -108,7 +110,7 @@ namespace GameSrv.Network
         {
             var msgHeader = new ServerMessage
             {
-                PacketCode = Grobal2.RunGateCode,
+                PacketCode = Grobal2.PacketCode,
                 Socket = 0,
                 Ident = nIdent,
                 PackLength = 0
@@ -118,11 +120,75 @@ namespace GameSrv.Network
             //data.CopyTo(sendData.Memory);
             _sendQueue.SendMessage(data);
         }
+        
+        public void ProcessBuffer()
+        {
+            const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
+            Span<byte> processBuff = PacketBuffer;
+            try
+            {
+                var nLen = PacketBufferIndex;
+                var processLen = 0;
+                while (nLen >= DataPacketMessage.PacketSize)
+                {
+                    var packetHeader = SerializerUtil.Deserialize<DataPacketMessage>(processBuff.Slice(processLen, DataPacketMessage.PacketSize));
+                    if (packetHeader.PacketCode == Grobal2.PacketCode)
+                    {
+                        var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + DataPacketMessage.PacketSize;
+                        if (nLen < nCheckMsgLen && nCheckMsgLen < 0x8000)
+                        {
+                            _logger.Warn("丢弃网关长度数据包.");
+                            break;
+                        }
+                        if (packetHeader.PackLength > 0)
+                        {
+                            Span<byte> body = processBuff.Slice(DataPacketMessage.PacketSize, packetHeader.PackLength);
+                            ExecGateBuffers(packetHeader, body, packetHeader.PackLength);
+                        }
+                        else
+                        {
+                            ExecGateBuffers(packetHeader, null, 0);
+                        }
+                        nLen -= nCheckMsgLen;
+                        processLen += nCheckMsgLen;
+                        if (nLen <= 0)
+                        {
+                            PacketBufferIndex = 0;
+                            break;
+                        }
+                        PacketBufferIndex -= nCheckMsgLen;
+                    }
+                    else
+                    {
+                        nLen -= 1;
+                        _logger.Warn("丢弃整段网关异常数据包");
+                    }
+                    if (nLen < ServerMessage.PacketSize)
+                    {
+                        break;
+                    }
+                }
+                if (nLen > 0)
+                {
+                    MemoryCopy.BlockCopy(processBuff, 0, PacketBuffer, 0, nLen);
+                    PacketBufferIndex -= nLen;
+                }
+                else
+                {
+                    PacketBufferIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(sExceptionMsg);
+                _logger.Error(ex.StackTrace);
+            }
+        }
 
         /// <summary>
         /// 执行网关封包消息
         /// </summary>
-        public void ExecGateBuffers(DataPacketMessage msgPacket, int nMsgLen, Span<byte> msgBuff)
+        public void ExecGateBuffers(DataPacketMessage msgPacket, Span<byte> msgBuff, int nMsgLen)
         {
             const string sExceptionMsg = "[Exception] ThreadSocket::ExecGateMsg";
             try
@@ -429,7 +495,7 @@ namespace GameSrv.Network
                 return;
             }
             var msgHeader = new ServerMessage();
-            msgHeader.PacketCode = Grobal2.RunGateCode;
+            msgHeader.PacketCode = Grobal2.PacketCode;
             msgHeader.Socket = nSocket;
             msgHeader.SessionId = socketId;
             msgHeader.Ident = Grobal2.GM_SERVERUSERINDEX;

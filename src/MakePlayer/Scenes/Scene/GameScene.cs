@@ -141,7 +141,7 @@ namespace MakePlayer.Scenes.Scene
         {
             MainOutMessage($"进入游戏");
             _play.ConnectionStep = ConnectionStep.Play;
-            var sSendMsg = $"**{_play.LoginId}/{_play.ChrName}/{_play.Certification}/{Grobal2.CLIENT_VERSION_NUMBER}/{2022080300}";
+            var sSendMsg = $"**{_play.LoginId}/{_play.ChrName}/{_play.Certification}/{Grobal2.ClientVersionNumber}/{2022080300}";
             SendSocket(EDCode.EncodeString(sSendMsg));
         }
 
@@ -175,8 +175,8 @@ namespace MakePlayer.Scenes.Scene
             var nIdx = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
             if (nIdx > 0)
             {
-                var sData2 = sData[..(nIdx - 1)];
-                sData = sData2 + sData.Substring(nIdx, sData.Length);
+                //var sData2 = sData[..(nIdx - 1)];
+                //sData = sData2 + sData.Substring(nIdx, sData.Length);
                 _clientSocket.SendText("*");
             }
             ClientManager.AddPacket(_play.SessionId, e.Buff);

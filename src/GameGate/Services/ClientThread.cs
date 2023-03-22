@@ -3,6 +3,7 @@ using NLog;
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Packets;
 using SystemModule.Packets.ServerPackets;
@@ -58,11 +59,11 @@ namespace GameGate.Services
         /// <summary>
         /// 发送总字节数
         /// </summary>
-        private int SendBytes { get; set; }
+        private long SendBytes { get; set; }
         /// <summary>
         /// 接收总字节数
         /// </summary>
-        private int ReceiveBytes { get; set; }
+        private long ReceiveBytes { get; set; }
         /// <summary>
         /// 运行状态
         /// </summary>
@@ -186,22 +187,20 @@ namespace GameGate.Services
             Connected = false;
             CheckServerFail = true;
         }
-        
+
         /// <summary>
         /// 接收GameSvr发来的封包消息
         /// </summary>
         private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             var nMsgLen = e.BuffLen;
-            if (BuffLen > 0)
+            if (nMsgLen <= 0)
             {
-                MemoryCopy.BlockCopy(e.Buff, 0, ReceiveBuffer, BuffLen, nMsgLen);
-                ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
+                return;
             }
-            else
-            {
-                ProcessServerPacket(e.Buff, nMsgLen);
-            }
+            //MemoryCopy.BlockCopy(e.Buff, 0, ReceiveBuffer, BuffLen, nMsgLen);
+            //BuffLen += nMsgLen;
+            ProcessServerPacket(e.Buff, nMsgLen);
             ReceiveBytes += nMsgLen;
         }
 
@@ -226,34 +225,33 @@ namespace GameGate.Services
             CheckServerFail = true;
         }
 
-        private void ProcessServerPacket(byte[] buff, int nLen)
+        private void ProcessServerPacket(byte[] data,int nLen)
         {
             var srcOffset = 0;
             var dataLen = nLen;
-            var dataSpan = buff.AsSpan();
+            Span<byte> dataSpan = data.AsSpan();
             try
             {
                 while (dataLen >= GateShare.HeaderMessageSize)
                 {
-                    var packetHeader = SerializerUtil.Deserialize<ServerMessage>(dataSpan[..GateShare.HeaderMessageSize]);
-                    if (packetHeader.PacketCode != Grobal2.RunGateCode)
+                    var readSuccess = MemoryMarshal.TryRead(dataSpan.Slice(srcOffset, GateShare.HeaderMessageSize), out ServerMessage packetHeader);
+                    if (!readSuccess)
+                    {
+                        _logger.Info("读取封包失败...");
+                        continue;
+                    }
+                    if (packetHeader.PacketCode != Grobal2.PacketCode)
                     {
                         srcOffset++;
-                        dataSpan = dataSpan[srcOffset..GateShare.HeaderMessageSize];
-                        if (dataSpan.Length < GateShare.HeaderMessageSize)
-                        {
-                            _logger.Warn("丢弃错误封包数据.");
-                            return;
-                        }
                         dataLen -= 1;
-                        //_logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         _logger.Debug("解析消息封包错误");
                         continue;
                     }
                     var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + GateShare.HeaderMessageSize;
-                    if (nCheckMsgLen > dataLen)
+                    if (dataLen < nCheckMsgLen)
                     {
-                        break;
+                        _logger.Info("封包长度不足...");
+                        //break;
                     }
                     switch (packetHeader.Ident)
                     {
@@ -299,20 +297,17 @@ namespace GameGate.Services
                     dataLen -= nCheckMsgLen;
                     if (dataLen <= 0)
                     {
+                        BuffLen = 0;
                         break;
                     }
-                    dataSpan = dataSpan.Slice(nCheckMsgLen, dataLen);
-                    BuffLen = dataLen;
-                    srcOffset = 0;
-                    if (dataLen < GateShare.HeaderMessageSize)
-                    {
-                        break;
-                    }
+                    BuffLen -= nCheckMsgLen;
+                    srcOffset += nCheckMsgLen;
                 }
                 if (dataLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
                 {
-                    MemoryCopy.BlockCopy(dataSpan, 0, ReceiveBuffer, 0, dataLen);
-                    BuffLen = dataLen;
+                    //MemoryCopy.BlockCopy(dataSpan, 0, ReceiveBuffer, 0, dataLen);
+                    //BuffLen -= dataLen;
+                    _logger.Info($"有消息没有处理完成 Len:{dataLen}");
                 }
                 else
                 {
@@ -321,7 +316,6 @@ namespace GameGate.Services
             }
             catch (Exception ex)
             {
-                _logger.Error($"[Exception] ProcReceiveBuffer BuffIndex:{srcOffset}");
                 _logger.Error(ex);
             }
         }
@@ -345,7 +339,7 @@ namespace GameGate.Services
         {
             var serverMessage = new DataPacketMessage
             {
-                PacketCode = Grobal2.RunGateCode,
+                PacketCode = Grobal2.PacketCode,
                 Socket = nSocket,
                 SessionId = sessionIndex,
                 Ident = command,

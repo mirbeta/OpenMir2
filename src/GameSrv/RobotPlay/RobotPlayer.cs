@@ -127,7 +127,7 @@ namespace GameSrv.RobotPlay
         public RobotPlayer() 
         {
             SoftVersionDate = M2Share.Config.SoftVersionDate;
-            SoftVersionDateEx = Grobal2.CLIENT_VERSION_NUMBER;
+            SoftVersionDateEx = Grobal2.ClientVersionNumber;
             AbilCopyToWAbil();
             IsRobot = true;
             LoginNoticeOk = true;

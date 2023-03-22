@@ -83,6 +83,10 @@ namespace GameGate.Services
 
         public void CloseSession(int sessionId)
         {
+            if (sessionId > _sessionMap.Length)
+            {
+                return;
+            }
             _sessionMap[sessionId] = null;
         }
 

@@ -265,7 +265,9 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
                 {
-                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, e.Buffer, e.BytesTransferred)); //引发接收数据事件
+                    var data = new byte[e.BytesTransferred];
+                    Array.Copy(e.Buffer, e.Offset, data, 0, e.BytesTransferred);
+                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, data, e.BytesTransferred)); //引发接收数据事件
                     StartWaitingForData();//继续接收数据
                 }
             }
