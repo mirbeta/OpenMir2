@@ -450,8 +450,8 @@ namespace GameSrv.Network
                 if (_gameGates[i].ConnectionId == e.ConnectionId)
                 {
                     var gateInfo = _gameGates[i];
-                    MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, gateInfo.PacketBuffer, gateInfo.PacketBufferIndex, nLen);
-                    gateInfo.PacketBufferIndex += nLen;
+                    MemoryCopy.BlockCopy(e.ReceiveBuffer, e.Offset, gateInfo.PacketBuffer, gateInfo.PacketIndex, nLen);
+                    gateInfo.PacketIndex += nLen;
                     _gameGates[i].ProcessBuffer();
                 }
             }

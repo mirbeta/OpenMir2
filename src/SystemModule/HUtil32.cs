@@ -204,7 +204,7 @@ namespace SystemModule
             return Encoding.GetEncoding("gb2312").GetString(bytes[0..len]);
         }
 
-        public static string GetString(Span<byte> bytes, int index, int count)
+        public static string GetString(ReadOnlySpan<byte> bytes, int index, int count)
         {
             return Encoding.GetEncoding("gb2312").GetString(bytes.Slice(index, count));
         }
@@ -242,7 +242,7 @@ namespace SystemModule
             return sb.ToString();
         }
 
-        public static string SpanToStr(Span<byte> buff)
+        public static string SpanToStr(ReadOnlySpan<byte> buff)
         {
             return Encoding.ASCII.GetString(buff);
         }

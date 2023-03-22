@@ -4,6 +4,8 @@ using GameSrv.Player;
 using GameSrv.Services;
 using GameSrv.World;
 using NLog;
+using System.Buffers;
+using System.Runtime.InteropServices;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets;
@@ -20,8 +22,10 @@ namespace GameSrv.Network
         private readonly CancellationTokenSource _cancellation;
         private CommandMessage mesaagePacket;
         public string ConnectionId { get;  }
-        public byte[] PacketBuffer = new byte[4096];
-        public int PacketBufferIndex = 0;
+        public byte[] PacketBuffer;
+        public int PacketIndex = 0;
+        private readonly MemoryStream _memoryReader;
+        private readonly BinaryReader _binaryReader;
 
         public ThreadSocket(ThreadGateInfo gateInfo)
         {
@@ -31,6 +35,9 @@ namespace GameSrv.Network
             _sendQueue = new SocketSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
             mesaagePacket = new CommandMessage();
+            PacketBuffer = new byte[4096];
+            _memoryReader = new MemoryStream(PacketBuffer);
+            _binaryReader = new BinaryReader(_memoryReader);
             Start();
         }
 
@@ -121,17 +128,36 @@ namespace GameSrv.Network
             _sendQueue.SendMessage(data);
         }
         
+        static ArraySegment<byte> GetArraySegment(ref ReadOnlySequence<byte> input)
+        {
+            if (input.IsSingleSegment && MemoryMarshal.TryGetArray(input.First, out var segment))
+            {
+                return segment;
+            }
+
+            // Should be rare
+            var array = input.ToArray();
+            return new ArraySegment<byte>(array);
+        }
+    
         public void ProcessBuffer()
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             Span<byte> processBuff = PacketBuffer;
             try
             {
-                var nLen = PacketBufferIndex;
+                var nLen = PacketIndex;
                 var processLen = 0;
+                _binaryReader.BaseStream.Position = 0;
                 while (nLen >= DataPacketMessage.PacketSize)
                 {
-                    var packetHeader = SerializerUtil.Deserialize<DataPacketMessage>(processBuff.Slice(processLen, DataPacketMessage.PacketSize));
+                    var headBuffer = _binaryReader.ReadBytes(DataPacketMessage.PacketSize);
+                    var readSuccess = MemoryMarshal.TryRead<DataPacketMessage>(headBuffer, out var packetHeader);
+                    if (!readSuccess)
+                    {
+                        _logger.Info("消息头解析失败.");
+                        break;
+                    }
                     if (packetHeader.PacketCode == Grobal2.PacketCode)
                     {
                         var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + DataPacketMessage.PacketSize;
@@ -142,7 +168,8 @@ namespace GameSrv.Network
                         }
                         if (packetHeader.PackLength > 0)
                         {
-                            Span<byte> body = processBuff.Slice(DataPacketMessage.PacketSize, packetHeader.PackLength);
+                            //ReadOnlySpan<byte> body = processBuff.Slice(DataPacketMessage.PacketSize, packetHeader.PackLength);
+                            var body = _binaryReader.ReadBytes(packetHeader.PackLength);
                             ExecGateBuffers(packetHeader, body, packetHeader.PackLength);
                         }
                         else
@@ -153,10 +180,10 @@ namespace GameSrv.Network
                         processLen += nCheckMsgLen;
                         if (nLen <= 0)
                         {
-                            PacketBufferIndex = 0;
+                            PacketIndex = 0;
                             break;
                         }
-                        PacketBufferIndex -= nCheckMsgLen;
+                        PacketIndex -= nCheckMsgLen;
                     }
                     else
                     {
@@ -171,11 +198,11 @@ namespace GameSrv.Network
                 if (nLen > 0)
                 {
                     MemoryCopy.BlockCopy(processBuff, 0, PacketBuffer, 0, nLen);
-                    PacketBufferIndex -= nLen;
+                    PacketIndex -= nLen;
                 }
                 else
                 {
-                    PacketBufferIndex = 0;
+                    PacketIndex = 0;
                 }
             }
             catch (Exception ex)
@@ -188,7 +215,7 @@ namespace GameSrv.Network
         /// <summary>
         /// 执行网关封包消息
         /// </summary>
-        public void ExecGateBuffers(DataPacketMessage msgPacket, Span<byte> msgBuff, int nMsgLen)
+        public void ExecGateBuffers(DataPacketMessage msgPacket, ReadOnlySpan<byte> msgBuff, int nMsgLen)
         {
             const string sExceptionMsg = "[Exception] ThreadSocket::ExecGateMsg";
             try
