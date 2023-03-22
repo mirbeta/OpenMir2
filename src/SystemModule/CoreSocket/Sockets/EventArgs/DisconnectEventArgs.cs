@@ -35,13 +35,4 @@ namespace TouchSocket.Sockets
         /// </summary>
         public bool Manual { get; private set; }
     }
-
-    /// <summary>
-    /// ClientDisconnectedEventArgs
-    /// </summary>
-    [Obsolete("该类型已被弃用，请使用DisconnectEventArgs替代。", true)]
-    public class ClientDisconnectedEventArgs : MsgEventArgs
-    { 
-    
-    }
 }

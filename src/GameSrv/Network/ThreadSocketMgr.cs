@@ -92,7 +92,7 @@ namespace GameSrv.Network
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(M2Share.Config.sGateAddr), M2Share.Config.nGatePort)
-            }).SetDataHandlingAdapter(() => new MyFixedHeaderCustomDataHandlingAdapter());
+            }).SetDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
             tcpService.Setup(touchSocketConfig).Start();
             _logger.Info($"游戏网关[{M2Share.Config.sGateAddr}:{M2Share.Config.nGatePort}]已启动...");
         }

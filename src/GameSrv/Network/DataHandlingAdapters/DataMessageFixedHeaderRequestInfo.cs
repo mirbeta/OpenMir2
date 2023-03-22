@@ -4,7 +4,7 @@ using TouchSocket.Sockets;
 
 namespace GameSrv.Network.DataHandlingAdapters
 {
-    public class MyFixedHeaderCustomDataHandlingAdapter : CustomFixedHeaderDataHandlingAdapter<DataMessageFixedHeaderRequestInfo>
+    public class PacketFixedHeaderDataHandlingAdapter : CustomFixedHeaderDataHandlingAdapter<DataMessageFixedHeaderRequestInfo>
     {
         /// <summary>
         /// 接口实现，指示固定包头长度
