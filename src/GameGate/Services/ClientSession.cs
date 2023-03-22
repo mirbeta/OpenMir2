@@ -634,14 +634,14 @@ namespace GameGate.Services
                     var tLen = EncryptUtil.Encode(decodeBuff, deCodeLen - CommandMessage.Size, sendBuffer);
                     commandPack.PackLength = CommandMessage.Size + tLen + 1;
                     sendLen = DataPacketMessage.PacketSize + commandPack.PackLength;
-                    bodyBuffer = GateShare.BytePool.Rent(sendLen);
+                    bodyBuffer = new byte[sendLen];
                     MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, DataPacketMessage.PacketSize, CommandMessage.Size);
                     MemoryCopy.BlockCopy(tempBuff, GateShare.CommandFixedLength, bodyBuffer, DataPacketMessage.PacketSize + CommandMessage.Size, tLen);//消息体
                 }
                 else
                 {
                     sendLen = DataPacketMessage.PacketSize + decodeBuff.Length;
-                    bodyBuffer = GateShare.BytePool.Rent(sendLen);
+                    bodyBuffer = new byte[sendLen];
                     commandPack.PackLength = CommandMessage.Size;
                     MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, DataPacketMessage.PacketSize, decodeBuff.Length);
                 }

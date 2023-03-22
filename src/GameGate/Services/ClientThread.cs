@@ -374,7 +374,6 @@ namespace GameGate.Services
         public void UserEnter(ushort sessionId, int socketId, string data)
         {
             SendServerMsg(Grobal2.GM_OPEN, sessionId, socketId, 0, data, data.Length);
-            _logger.Info("发送玩家链接消息:" + GateInfo.ServiceId);
         }
 
         /// <summary>
