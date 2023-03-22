@@ -31,16 +31,16 @@ namespace MakePlayer.Scenes.Scene
 
         public override void PlayScene()
         {
-            if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > _play.ConnectTick)
+            if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > _play.RunTick)
             {
-                _play.ConnectTick = HUtil32.GetTickCount();
+                _play.RunTick = HUtil32.GetTickCount();
                 try
                 {
                     ConnectionStatus = ConnectionStatus.Connect;
                 }
                 catch
                 {
-                    _play.ConnectTick = HUtil32.GetTickCount() + 10000;
+                    _play.RunTick = HUtil32.GetTickCount() + 10000;
                     ConnectionStatus = ConnectionStatus.Failure;
                 }
             }
@@ -51,7 +51,7 @@ namespace MakePlayer.Scenes.Scene
                     if (PlayHelper.SayMsgList.Count > 0)
                     {
                         _play.SayTick = HUtil32.GetTickCount();
-                        ClientLoginSay(PlayHelper.SayMsgList[RandomNumber.GetInstance().Random(PlayHelper.SayMsgList.Count)]);
+                        //ClientLoginSay(PlayHelper.SayMsgList[RandomNumber.GetInstance().Random(PlayHelper.SayMsgList.Count)]);
                     }
                 }
             }

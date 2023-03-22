@@ -64,9 +64,7 @@ namespace MakePlayer
                             var LoginPasswd = LoginAccount;
                             playClient.ChrName = LoginAccount;
                             playClient.ServerName = options.ServerName;
-                            //playClient.ClientSocket.Close();
-                            //playClient.ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(options.Address), options.Port);
-                            playClient.ConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
+                            playClient.RunTick = HUtil32.GetTickCount() + (i + 1) * 3000;
                             playClient.SetLoginInfo(LoginAccount, LoginPasswd);
                             ClientManager.AddClient(playClient.SessionId, playClient);
                             _loginIndex++;

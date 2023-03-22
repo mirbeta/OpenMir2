@@ -8,7 +8,7 @@ namespace MakePlayer.Cliens
     public class PlayClient
     {
         public string SessionId;
-        public int ConnectTick;
+        public int RunTick;
         public string ChrName;
         /// <summary>
         /// 当前场景步骤
@@ -51,9 +51,9 @@ namespace MakePlayer.Cliens
             RunServerAddr = string.Empty;
             SelChrAddr = string.Empty;
             ChrName = string.Empty;
-            ConnectTick = HUtil32.GetTickCount();
+            RunTick = HUtil32.GetTickCount();
         }
-        
+
         private void SendSelectServer(string sServerName)
         {
             //MainOutMessage($"[{LoginAccount}] 选择服务器：{sServerName}");
@@ -108,9 +108,9 @@ namespace MakePlayer.Cliens
 
         public void Run()
         {
-            if (HUtil32.GetTickCount() > ConnectTick)
+            if (HUtil32.GetTickCount() - RunTick > 1000)
             {
-                ConnectTick = HUtil32.GetTickCount();
+                RunTick = HUtil32.GetTickCount();
                 if (DScreen.Scenetype == SceneType.Intro)
                 {
                     DScreen.ChangeScene(SceneType.Login);

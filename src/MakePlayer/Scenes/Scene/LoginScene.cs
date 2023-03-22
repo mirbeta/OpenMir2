@@ -72,9 +72,9 @@ namespace MakePlayer.Scenes.Scene
 
         public void Login()
         {
-            if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > play.ConnectTick)
+            if (ConnectionStatus == ConnectionStatus.Failure && HUtil32.GetTickCount() > play.RunTick)
             {
-                play.ConnectTick = HUtil32.GetTickCount();
+                play.RunTick = HUtil32.GetTickCount();
                 try
                 {
                     _clientSocket.Connect();
@@ -82,7 +82,7 @@ namespace MakePlayer.Scenes.Scene
                 }
                 catch
                 {
-                    play.ConnectTick = HUtil32.GetTickCount() + 10000;
+                    play.RunTick = HUtil32.GetTickCount() + 10000;
                     ConnectionStatus = ConnectionStatus.Failure;
                 }
             }
