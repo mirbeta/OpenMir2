@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection.PortableExecutable;
+using System.Runtime.InteropServices;
 using MemoryPack;
 
 namespace SystemModule.Packets.ClientPackets
@@ -8,6 +9,7 @@ namespace SystemModule.Packets.ClientPackets
     /// 客户端消息体
     /// </summary>
     [MemoryPackable]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public partial struct CommandMessage
     {
         [MemoryPackInclude]
