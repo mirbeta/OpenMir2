@@ -51,7 +51,7 @@ namespace MakePlayer.Scenes.Scene
                     if (PlayHelper.SayMsgList.Count > 0)
                     {
                         _play.SayTick = HUtil32.GetTickCount();
-                        //ClientLoginSay(PlayHelper.SayMsgList[RandomNumber.GetInstance().Random(PlayHelper.SayMsgList.Count)]);
+                        ClientLoginSay(PlayHelper.SayMsgList[RandomNumber.GetInstance().Random(PlayHelper.SayMsgList.Count)]);
                     }
                 }
             }
