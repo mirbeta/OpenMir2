@@ -20,6 +20,10 @@ namespace GameSrv.Actor
             for (int i = 0; i < VisibleActors.Count; i++)
             {
                 visibleBaseObject = VisibleActors[i];
+                if (visibleBaseObject == null)
+                {
+                    continue;
+                }
                 if (visibleBaseObject.BaseObject == baseObject)
                 {
                     visibleBaseObject.VisibleFlag = VisibleFlag.Invisible;
@@ -214,6 +218,9 @@ namespace GameSrv.Actor
             IsVisibleActive = false;
             for (int i = 0; i < VisibleActors.Count; i++)
             {
+                if (VisibleActors[i] == null) {
+                    continue;
+                }
                 VisibleActors[i].VisibleFlag = 0;
             }
             short nStartX = (short)(CurrX - ViewRange);

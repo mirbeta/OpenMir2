@@ -482,6 +482,10 @@ namespace GameSrv.Actor {
         protected void ClearTargetCreat(BaseObject baseObject) {
             if (VisibleActors.Count > 0) {
                 for (int i = 0; i < VisibleActors.Count; i++) {
+                    if (VisibleActors[i] == null)
+                    {
+                        continue;
+                    }
                     if (VisibleActors[i].BaseObject == baseObject) {
                         VisibleActors.RemoveAt(i);
                         DelTargetCreat();
