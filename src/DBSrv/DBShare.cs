@@ -226,11 +226,6 @@ namespace DBSrv
         }
     }
 
-    public class ServerDataInfo
-    {
-        public string ConnectionId;
-    }
-
     public class THumSession
     {
         public string sChrName;

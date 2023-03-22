@@ -5,7 +5,7 @@ using TouchSocket.Sockets;
 
 namespace SystemModule.DataHandlingAdapters
 {
-    public class PlayerPacketFixedHeaderDataHandlingAdapter : CustomFixedHeaderDataHandlingAdapter<DataMessageFixedHeaderRequestInfo>
+    public class PlayerDataFixedHeaderDataHandlingAdapter : CustomFixedHeaderDataHandlingAdapter<DataMessageFixedHeaderRequestInfo>
     {
         /// <summary>
         /// 接口实现，指示固定包头长度
@@ -22,7 +22,7 @@ namespace SystemModule.DataHandlingAdapters
         }
     }
 
-    public class PlayerMessageFixedHeaderRequestInfo : IFixedHeaderRequestInfo
+    public class PlayerDataMessageFixedHeaderRequestInfo : IFixedHeaderRequestInfo
     {
         private int bodyLength;
         public int BodyLength => bodyLength;

@@ -112,14 +112,11 @@ namespace GameSrv.Planes {
 
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            if (requestInfo is not PlayerMessageFixedHeaderRequestInfo fixedHeader)
-                return;
             var client = (SocketClient)sender;
             if (int.TryParse(client.ID, out var clientId))
             {
                 var serverInfo = srvArray[clientId - 1];
-                //ProcessServerData(fixedHeader.Header, client.ID, fixedHeader.Message);
-                serverInfo.SocData = serverInfo.SocData + HUtil32.GetString(fixedHeader.Message);
+                serverInfo.SocData = serverInfo.SocData + HUtil32.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
             }
             else
             {

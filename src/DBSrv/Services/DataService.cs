@@ -19,7 +19,6 @@ namespace DBSrv.Services
     public class DataService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ServerDataInfo[] _serverList;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly ICacheStorage _cacheStorage;
         private readonly TcpService _serverSocket;
@@ -37,7 +36,6 @@ namespace DBSrv.Services
             _serverSocket.Connected += Connecting;
             _serverSocket.Disconnected += Disconnected;
             _serverSocket.Received += Received;
-            _serverList = new ServerDataInfo[20];
             PlaySessionList = new List<THumSession>();
         }
 
@@ -47,7 +45,7 @@ namespace DBSrv.Services
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_conf.ServerAddr), _conf.ServerPort)
-            }).SetDataHandlingAdapter(() => new PlayerPacketFixedHeaderDataHandlingAdapter());
+            }).SetDataHandlingAdapter(() => new PlayerDataFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
             _playDataStorage.LoadQuickList();
             _logger.Info($"玩家数据存储服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
@@ -55,23 +53,16 @@ namespace DBSrv.Services
 
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            if (requestInfo is not PlayerMessageFixedHeaderRequestInfo fixedHeader)
+            if (requestInfo is not PlayerDataMessageFixedHeaderRequestInfo fixedHeader)
                 return;
             var client = (SocketClient)sender;
-            if (int.TryParse(client.ID, out var clientId))
+            if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
             {
-                if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
-                {
-                    _logger.Error($"解析玩家数据封包出现异常封包.");
-                    return;
-                }
-                var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
-                ProcessMessagePacket(client.ID, messageData);
+                _logger.Error($"解析玩家数据封包出现异常封包.");
+                return;
             }
-            else
-            {
-                _logger.Info("未知客户端...");
-            }
+            var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
+            ProcessMessagePacket(client.ID, messageData);
         }
 
         private void Connecting(object sender, TouchSocketEventArgs e)
@@ -82,26 +73,13 @@ namespace DBSrv.Services
             {
                 _logger.Warn("非法服务器连接: " + endPoint);
                 client.Close();
-                return;
             }
-            var serverInfo = new ServerDataInfo();
-            serverInfo.ConnectionId = client.ID;
-            _serverList[int.Parse(client.ID) - 1] = serverInfo;
         }
 
         private void Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
-            for (var i = 0; i < _serverList.Length; i++)
-            {
-                var serverInfo = _serverList[i];
-                if (serverInfo.ConnectionId == client.ID)
-                {
-                    ClearSocket(client.ID);
-                    _serverList[i] = null;
-                    break;
-                }
-            }
+            ClearSocket(client.ID);
         }
         
         private void ProcessMessagePacket(string connectionId, ServerRequestData requestData)
@@ -354,7 +332,6 @@ namespace DBSrv.Services
 
         private void ClearSocket(string connectionId)
         {
-            THumSession HumSession;
             int nIndex = 0;
             while (true)
             {
@@ -362,10 +339,10 @@ namespace DBSrv.Services
                 {
                     break;
                 }
-                HumSession = PlaySessionList[nIndex];
-                if (HumSession.ConnectionId == connectionId)
+                var humSession = PlaySessionList[nIndex];
+                if (humSession.ConnectionId == connectionId)
                 {
-                    HumSession = null;
+                    humSession = null;
                     PlaySessionList.RemoveAt(nIndex);
                     continue;
                 }

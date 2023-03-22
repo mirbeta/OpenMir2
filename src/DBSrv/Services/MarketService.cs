@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using DBSrv.Conf;
@@ -24,7 +23,6 @@ namespace DBSrv.Services
         private readonly IMarketStorage _marketStorage;
         private readonly TcpService _socketServer;
         private readonly SettingConf _setting;
-        private readonly IList<ServerDataInfo> serverList;
 
         public MarketService(SettingConf setting, ICacheStorage cacheStorage, IMarketStorage marketStorage)
         {
@@ -35,7 +33,6 @@ namespace DBSrv.Services
             _socketServer.Connected += Connecting;
             _socketServer.Disconnected += Disconnected;
             _socketServer.Received += Received;
-            serverList = new List<ServerDataInfo>();
         }
 
         public void Start()
@@ -107,22 +104,12 @@ namespace DBSrv.Services
                 client.Close();
                 return;
             }
-            var serverInfo = new ServerDataInfo();
-            serverInfo.ConnectionId = client.ID;
-            serverList.Add(serverInfo);
             _logger.Info("拍卖行客户端(GameSrv)连接 " + client.MainSocket.RemoteEndPoint);
         }
 
         private void Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
-            for (var i = 0; i < serverList.Count; i++)
-            {
-                if (serverList[i].ConnectionId == client.ID)
-                {
-                    serverList.RemoveAt(i);
-                }
-            }
             _logger.Info("拍卖行客户端(GameSrv)断开连接 " + client.MainSocket.RemoteEndPoint);
         }
 
