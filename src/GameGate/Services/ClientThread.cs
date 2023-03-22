@@ -337,7 +337,7 @@ namespace GameGate.Services
 
         private void SendServerMsg(ushort command, ushort sessionIndex, int nSocket, ushort userIndex, string data, int nLen)
         {
-            var serverMessage = new DataPacketMessage
+            var serverMessage = new ServerMessage
             {
                 PacketCode = Grobal2.PacketCode,
                 Socket = nSocket,
@@ -345,13 +345,12 @@ namespace GameGate.Services
                 Ident = command,
                 SessionIndex = userIndex,
                 PackLength = nLen,
-                GateIdx = GateInfo.ServiceId
             };
             var sendBuffer = SerializerUtil.Serialize(serverMessage);
             if (!string.IsNullOrEmpty(data))
             {
                 var strBuff = HUtil32.GetBytes(data);
-                var tempBuff = new byte[DataPacketMessage.PacketSize + data.Length];
+                var tempBuff = new byte[ServerMessage.PacketSize + data.Length];
                 MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
                 MemoryCopy.BlockCopy(strBuff, 0, tempBuff, sendBuffer.Length, data.Length);
                 Send(tempBuff);

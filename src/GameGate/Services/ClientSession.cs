@@ -619,13 +619,12 @@ namespace GameGate.Services
                 }
 
                 byte[] bodyBuffer;
-                var commandPack = new DataPacketMessage
+                var commandPack = new ServerMessage
                 {
                     PacketCode = Grobal2.PacketCode,
                     Socket = _session.SckHandle,
                     Ident = Grobal2.GM_DATA,
-                    SessionIndex = SvrListIdx,
-                    GateIdx = ServiceId
+                    SessionIndex = SvrListIdx
                 };
                 int sendLen;
                 if (deCodeLen > CommandMessage.Size)
@@ -633,20 +632,20 @@ namespace GameGate.Services
                     var sendBuffer = new byte[messagePacket.Buffer.Length - CommandMessage.Size + 1];
                     var tLen = EncryptUtil.Encode(decodeBuff, deCodeLen - CommandMessage.Size, sendBuffer);
                     commandPack.PackLength = CommandMessage.Size + tLen + 1;
-                    sendLen = DataPacketMessage.PacketSize + commandPack.PackLength;
+                    sendLen = ServerMessage.PacketSize + commandPack.PackLength;
                     bodyBuffer = new byte[sendLen];
-                    MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, DataPacketMessage.PacketSize, CommandMessage.Size);
-                    MemoryCopy.BlockCopy(tempBuff, GateShare.CommandFixedLength, bodyBuffer, DataPacketMessage.PacketSize + CommandMessage.Size, tLen);//消息体
+                    MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessage.PacketSize, CommandMessage.Size);
+                    MemoryCopy.BlockCopy(tempBuff, GateShare.CommandFixedLength, bodyBuffer, ServerMessage.PacketSize + CommandMessage.Size, tLen);//消息体
                 }
                 else
                 {
-                    sendLen = DataPacketMessage.PacketSize + decodeBuff.Length;
+                    sendLen = ServerMessage.PacketSize + decodeBuff.Length;
                     bodyBuffer = new byte[sendLen];
                     commandPack.PackLength = CommandMessage.Size;
-                    MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, DataPacketMessage.PacketSize, decodeBuff.Length);
+                    MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessage.PacketSize, decodeBuff.Length);
                 }
-                Buffer.BlockCopy(SerializerUtil.Serialize(commandPack), 0, bodyBuffer, 0, DataPacketMessage.PacketSize); //复制消息头
-                ClientThread.Send(bodyBuffer[..sendLen]);
+                Buffer.BlockCopy(SerializerUtil.Serialize(commandPack), 0, bodyBuffer, 0, ServerMessage.PacketSize); //复制消息头
+                ClientThread.Send(bodyBuffer);
                 //GateShare.BytePool.Return(bodyBuffer);
             }
             else
@@ -1224,26 +1223,25 @@ namespace GameGate.Services
                     
                     var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNo}/{szCode}/{MD5.MD5Print(hardWareDigest)}/{ServiceId}";
                     var tempBuf = HUtil32.GetBytes(loginPacket);
-                    var loginDataPacket = new byte[tempBuf.Length + DataPacketMessage.PacketSize + 100];
-                    var encodeLen = EncryptUtil.Encode(tempBuf, tempBuf.Length, loginDataPacket, DataPacketMessage.PacketSize + 2);
-                    loginDataPacket[DataPacketMessage.PacketSize + 0] = (byte)'#';
-                    loginDataPacket[DataPacketMessage.PacketSize + 1] = (byte)'0';
-                    loginDataPacket[DataPacketMessage.PacketSize + encodeLen + 2] = (byte)'!';
+                    var loginDataPacket = new byte[tempBuf.Length + ServerMessage.PacketSize + 100];
+                    var encodeLen = EncryptUtil.Encode(tempBuf, tempBuf.Length, loginDataPacket, ServerMessage.PacketSize + 2);
+                    loginDataPacket[ServerMessage.PacketSize + 0] = (byte)'#';
+                    loginDataPacket[ServerMessage.PacketSize + 1] = (byte)'0';
+                    loginDataPacket[ServerMessage.PacketSize + encodeLen + 2] = (byte)'!';
 
-                    var packetHeader = new DataPacketMessage
+                    var packetHeader = new ServerMessage
                     {
                         PacketCode = Grobal2.PacketCode,
                         Ident = Grobal2.GM_DATA,
                         Socket = _session.SckHandle,
                         SessionId = _session.SessionId,
                         SessionIndex = _session.SessionIndex,
-                        PackLength = encodeLen + 3,
-                        GateIdx = ServiceId
+                        PackLength = encodeLen + 3
                     };
                     var packetBuff = SerializerUtil.Serialize(packetHeader);
                     MemoryCopy.BlockCopy(packetBuff, 0, loginDataPacket, 0, packetBuff.Length);
 
-                    SendLoginMessage(loginDataPacket[..(DataPacketMessage.PacketSize + packetHeader.PackLength)]);
+                    SendLoginMessage(loginDataPacket[..(ServerMessage.PacketSize + packetHeader.PackLength)]);
                     
                     //Logger.Debug($"[ClientLogin] {sAccount} {sHumName} {addr} {szCert} {szClientVerNo} {szCode} {MD5.MD5Print(hardWareDigest)} {ServiceId}");
                     success = true;

@@ -22,10 +22,6 @@ namespace GameSrv.Network
         private readonly CancellationTokenSource _cancellation;
         private CommandMessage mesaagePacket;
         public string ConnectionId { get;  }
-        public byte[] PacketBuffer;
-        public int PacketIndex = 0;
-        private readonly MemoryStream _memoryReader;
-        private readonly BinaryReader _binaryReader;
 
         public ThreadSocket(ThreadGateInfo gateInfo)
         {
@@ -35,9 +31,6 @@ namespace GameSrv.Network
             _sendQueue = new SocketSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
             mesaagePacket = new CommandMessage();
-            PacketBuffer = new byte[4096];
-            _memoryReader = new MemoryStream(PacketBuffer);
-            _binaryReader = new BinaryReader(_memoryReader);
             Start();
         }
 
@@ -139,70 +132,22 @@ namespace GameSrv.Network
             var array = input.ToArray();
             return new ArraySegment<byte>(array);
         }
-    
-        public void ProcessBuffer()
+
+        public void ProcessBuffer(ServerMessage packetHeader, byte[] message)
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
-            Span<byte> processBuff = PacketBuffer;
             try
             {
-                var nLen = PacketIndex;
-                var processLen = 0;
-                _binaryReader.BaseStream.Position = 0;
-                while (nLen >= DataPacketMessage.PacketSize)
+                if (packetHeader.PacketCode == Grobal2.PacketCode)
                 {
-                    var headBuffer = _binaryReader.ReadBytes(DataPacketMessage.PacketSize);
-                    var readSuccess = MemoryMarshal.TryRead<DataPacketMessage>(headBuffer, out var packetHeader);
-                    if (!readSuccess)
+                    if (packetHeader.PackLength > 0)
                     {
-                        _logger.Info("消息头解析失败.");
-                        break;
-                    }
-                    if (packetHeader.PacketCode == Grobal2.PacketCode)
-                    {
-                        var nCheckMsgLen = Math.Abs(packetHeader.PackLength) + DataPacketMessage.PacketSize;
-                        if (nLen < nCheckMsgLen && nCheckMsgLen < 0x8000)
-                        {
-                            _logger.Warn("丢弃网关长度数据包.");
-                            break;
-                        }
-                        if (packetHeader.PackLength > 0)
-                        {
-                            //ReadOnlySpan<byte> body = processBuff.Slice(DataPacketMessage.PacketSize, packetHeader.PackLength);
-                            var body = _binaryReader.ReadBytes(packetHeader.PackLength);
-                            ExecGateBuffers(packetHeader, body, packetHeader.PackLength);
-                        }
-                        else
-                        {
-                            ExecGateBuffers(packetHeader, null, 0);
-                        }
-                        nLen -= nCheckMsgLen;
-                        processLen += nCheckMsgLen;
-                        if (nLen <= 0)
-                        {
-                            PacketIndex = 0;
-                            break;
-                        }
-                        PacketIndex -= nCheckMsgLen;
+                        ExecGateBuffers(packetHeader, message, packetHeader.PackLength);
                     }
                     else
                     {
-                        nLen -= 1;
-                        _logger.Warn("丢弃整段网关异常数据包");
+                        ExecGateBuffers(packetHeader, null, 0);
                     }
-                    if (nLen < ServerMessage.PacketSize)
-                    {
-                        break;
-                    }
-                }
-                if (nLen > 0)
-                {
-                    MemoryCopy.BlockCopy(processBuff, 0, PacketBuffer, 0, nLen);
-                    PacketIndex -= nLen;
-                }
-                else
-                {
-                    PacketIndex = 0;
                 }
             }
             catch (Exception ex)
@@ -215,7 +160,7 @@ namespace GameSrv.Network
         /// <summary>
         /// 执行网关封包消息
         /// </summary>
-        public void ExecGateBuffers(DataPacketMessage msgPacket, ReadOnlySpan<byte> msgBuff, int nMsgLen)
+        private void ExecGateBuffers(ServerMessage msgPacket, ReadOnlySpan<byte> msgBuff, int nMsgLen)
         {
             const string sExceptionMsg = "[Exception] ThreadSocket::ExecGateMsg";
             try
@@ -299,9 +244,10 @@ namespace GameSrv.Network
                         break;
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 _logger.Error(sExceptionMsg);
+                _logger.Error(ex);
             }
         }
 

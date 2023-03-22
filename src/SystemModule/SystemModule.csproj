@@ -27,9 +27,12 @@
     <ItemGroup>
       <None Remove="AsyncSocket\" />
     </ItemGroup>
+
     <ItemGroup>
-      <Folder Include="AsyncSocket\" />
-      <Folder Include="NativeList" />
-      <Folder Include="Generation\" />
+        <PackageReference Include="IntelligentCoder" Version="1.0.12">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
+    
 </Project>
