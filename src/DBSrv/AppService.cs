@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DBSrv.Services;
 using DBSrv.Services.Impl;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,10 +43,13 @@ namespace DBSrv
                 {
                     try
                     {
+                        _userService.Initialize();
+                        _dataService.Initialize();
+                        _marketService.Initialize();
                         _userService.Start();
-                        _sessionService.Start();
                         _dataService.Start();
                         _marketService.Start();
+                        _sessionService.Start();
                         _exitCode = 0;
                     }
                     catch (TaskCanceledException)
@@ -71,6 +73,9 @@ namespace DBSrv
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             _userService.Stop();
+            _dataService.Stop();
+            _marketService.Stop();
+            _sessionService.Stop();
             if (_applicationTask != null)
             {
                 await _applicationTask;
