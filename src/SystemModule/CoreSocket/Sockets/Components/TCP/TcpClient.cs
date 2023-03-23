@@ -739,14 +739,6 @@ namespace TouchSocket.Sockets
             Socket socket = new Socket(iPHost.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             socket.ReceiveBufferSize = this.BufferLength;
             socket.SendBufferSize = this.BufferLength;
-#if NET45_OR_GREATER
-            KeepAliveValue keepAliveValue = this.Config.GetValue<KeepAliveValue>(TouchSocketConfigExtension.KeepAliveValueProperty);
-            if (keepAliveValue.Enable)
-            {
-                socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
-                socket.IOControl(IOControlCode.KeepAliveValues, keepAliveValue.KeepAliveTime, null);
-            }
-#else
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 KeepAliveValue keepAliveValue = Config.GetValue<KeepAliveValue>(TouchSocketConfigExtension.KeepAliveValueProperty);
@@ -756,7 +748,6 @@ namespace TouchSocket.Sockets
                     socket.IOControl(IOControlCode.KeepAliveValues, keepAliveValue.KeepAliveTime, null);
                 }
             }
-#endif
             socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, this.Config.GetValue<bool>(TouchSocketConfigExtension.NoDelayProperty));
             if (this.Config.GetValue<IPHost>(TouchSocketConfigExtension.BindIPHostProperty) != null)
             {

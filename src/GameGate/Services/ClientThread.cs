@@ -84,7 +84,7 @@ namespace GameGate.Services
             ClientSocket.Received += ClientSocketRead;
         }
 
-        public bool IsConnected => ClientSocket.Online;
+        public bool IsConnected => Connected;
 
         public string EndPoint => $"{GateInfo.ServerAdress}:{GateInfo.ServerPort}";
         
