@@ -47,9 +47,10 @@ namespace GameGate.Services
             _serverSocket.Init();
             _serverSocket.Start(_gateEndPoint);
             _clientThread.RestSessionArray();
+            _clientThread.Init();
             _clientThread.Start();
             messageSendQueue.StartProcessQueueSend(stoppingToken);
-            _logger.Info($"游戏网关[{_gateEndPoint}]已启动...", 1);
+            _logger.Info($"游戏网关[{_gateEndPoint}]已启动...");
         }
 
         public void Stop()

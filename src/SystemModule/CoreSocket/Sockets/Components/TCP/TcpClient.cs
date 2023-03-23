@@ -204,7 +204,6 @@ namespace TouchSocket.Sockets
                 this.Logger.Log(LogType.Error, this, $"在事件{nameof(this.Disconnecting)}中发生错误。", ex);
             }
         }
-
         #endregion 事件
 
         #region 属性
@@ -411,7 +410,6 @@ namespace TouchSocket.Sockets
                     this.MainSocket.Dispose();
                 }
                 this.MainSocket = this.CreateSocket(iPHost);
-
                 ConnectingEventArgs args = new ConnectingEventArgs(this.MainSocket);
                 this.PrivateOnConnecting(args);
                 if (timeout == 5000)
@@ -419,7 +417,6 @@ namespace TouchSocket.Sockets
                     this.MainSocket.Connect(iPHost.EndPoint);
                     this.CanSend = true;
                     this.LoadSocketAndReadIpPort();
-
                     if (this.Config.GetValue(TouchSocketConfigExtension.DelaySenderProperty) is DelaySenderOption senderOption)
                     {
                         this.m_useDelaySender = true;
@@ -429,7 +426,6 @@ namespace TouchSocket.Sockets
                             DelayLength = senderOption.DelayLength
                         };
                     }
-
                     this.BeginReceive();
                     this.PrivateOnConnected(new MsgEventArgs("连接成功"));
                 }
@@ -443,7 +439,6 @@ namespace TouchSocket.Sockets
                             this.MainSocket.EndConnect(result);
                             this.CanSend = true;
                             this.LoadSocketAndReadIpPort();
-
                             if (this.Config.GetValue(TouchSocketConfigExtension.DelaySenderProperty) is DelaySenderOption senderOption)
                             {
                                 this.m_useDelaySender = true;
@@ -453,7 +448,6 @@ namespace TouchSocket.Sockets
                                     DelayLength = senderOption.DelayLength
                                 };
                             }
-
                             this.BeginReceive();
                             this.PrivateOnConnected(new MsgEventArgs("连接成功"));
                             return;
@@ -484,10 +478,7 @@ namespace TouchSocket.Sockets
         /// </summary>
         public Task<ITcpClient> ConnectAsync(int timeout = 5000)
         {
-            return EasyTask.Run(() =>
-            {
-                return this.Connect(timeout);
-            });
+            return EasyTask.Run(() => this.Connect(timeout));
         }
 
         /// <summary>

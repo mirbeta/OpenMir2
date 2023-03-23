@@ -57,7 +57,6 @@ namespace GameGate
                 .ConfigureServices((hostContext, services) =>
                 {
                     //services.AddSingleton<CloudClient>();
-                    services.AddSingleton<ServerApp>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
                 }).ConfigureLogging(logging =>

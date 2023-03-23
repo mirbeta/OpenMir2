@@ -10,20 +10,10 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-
-using System;
 using System.Net.Sockets;
 
 namespace TouchSocket.Sockets
 {
-    /// <summary>
-    /// ClientConnectingEventArgs
-    /// </summary>
-    [Obsolete("此类已被弃用，请使用ConnectingEventArgs代替", true)]
-    public class ClientConnectingEventArgs : OperationEventArgs
-    { 
-    
-    }
     /// <summary>
     /// 客户端连接事件。
     /// </summary>
