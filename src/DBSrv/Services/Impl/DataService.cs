@@ -67,7 +67,7 @@ namespace DBSrv.Services.Impl
                 return;
             if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
             {
-                _logger.Error($"解析玩家数据封包出现异常封包.");
+                _logger.Error("验证玩家数据封包头出现异常...");
                 return;
             }
             var client = (SocketClient)sender;
@@ -84,6 +84,7 @@ namespace DBSrv.Services.Impl
                 _logger.Warn("非法服务器连接: " + remoteIp);
                 client.Close();
             }
+            _logger.Info("服务器连接: " + remoteIp);
         }
 
         private void Disconnected(object sender, DisconnectEventArgs e)

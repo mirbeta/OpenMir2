@@ -5,20 +5,20 @@ using TouchSocket.Sockets;
 
 namespace SystemModule.DataHandlingAdapters
 {
-    public class PlayerDataFixedHeaderDataHandlingAdapter : CustomFixedHeaderDataHandlingAdapter<DataMessageFixedHeaderRequestInfo>
+    public class PlayerDataFixedHeaderDataHandlingAdapter : CustomFixedHeaderDataHandlingAdapter<PlayerDataMessageFixedHeaderRequestInfo>
     {
         /// <summary>
         /// 接口实现，指示固定包头长度
         /// </summary>
-        public override int HeaderLength => 20;
+        public override int HeaderLength => 6;
 
         /// <summary>
         /// 获取新实例
         /// </summary>
         /// <returns></returns>
-        protected override DataMessageFixedHeaderRequestInfo GetInstance()
+        protected override PlayerDataMessageFixedHeaderRequestInfo GetInstance()
         {
-            return new DataMessageFixedHeaderRequestInfo();
+            return new PlayerDataMessageFixedHeaderRequestInfo();
         }
     }
 

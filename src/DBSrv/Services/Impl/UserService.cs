@@ -159,7 +159,7 @@ namespace DBSrv.Services.Impl
             if (int.TryParse(client.ID, out var clientId))
             {
                 var gateClient = _gateClients[clientId - 1];
-                ProcessGateData(fixedHeader.Header, fixedHeader.Message, client.ID, ref gateClient);
+                ProcessGateData(fixedHeader.Header, fixedHeader.Message, clientId - 1, ref gateClient);
             }
             else
             {
@@ -207,7 +207,7 @@ namespace DBSrv.Services.Impl
         private const string sGateOpen = "角色网关[{0}]({1})已打开...";
         private const string sGateClose = "角色网关[{0}]({1})已关闭...";
         
-        private void ProcessGateData(ServerDataPacket packetHead, byte[] data, string connectionId, ref SelGateInfo gateInfo)
+        private void ProcessGateData(ServerDataPacket packetHead, byte[] data, int connectionId, ref SelGateInfo gateInfo)
         {
             try
             {
@@ -235,7 +235,7 @@ namespace DBSrv.Services.Impl
                         break;
                     case ServerDataType.Data:
                         var userMessage = new UserGateMessage();
-                        userMessage.ConnectionId = int.Parse(connectionId);
+                        userMessage.ConnectionId = connectionId;
                         userMessage.Packet = messageData;
                         _reviceQueue.Writer.TryWrite(userMessage);
                         break;
@@ -347,7 +347,7 @@ namespace DBSrv.Services.Impl
 
         private void DeCodeUserMsg(string sData, SelGateInfo gateInfo, ref SessionUserInfo userInfo)
         {
-            var sDefMsg = sData.Substring(0, Messages.DefBlockSize);
+            var sDefMsg = sData[..Messages.DefBlockSize];
             var sText = sData.Substring(Messages.DefBlockSize, sData.Length - Messages.DefBlockSize);
             var clientPacket = EDCode.DecodePacket(sDefMsg);
             switch (clientPacket.Ident)

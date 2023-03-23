@@ -202,12 +202,6 @@ namespace GameGate.Services
                 _logger.Debug("解析GameSrv消息封包错误");
                 return;
             }
-            var nCheckMsgLen = Math.Abs(fixedHeader.Header.PackLength) + GateShare.HeaderMessageSize;
-            if (fixedHeader.BodyLength < nCheckMsgLen)
-            {
-                _logger.Info("封包长度不足...");
-                return;
-            }
             ProcessServerPacket(fixedHeader.Header, fixedHeader.Message);
             ReceiveBytes += fixedHeader.BodyLength;
         }
