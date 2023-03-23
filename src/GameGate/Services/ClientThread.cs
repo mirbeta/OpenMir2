@@ -19,7 +19,7 @@ namespace GameGate.Services
     {
         private readonly TcpClient ClientSocket;
         private readonly GameGateInfo GateInfo;
-        private readonly IPEndPoint GateEndPoint;
+        private readonly IPEndPoint LocalEndPoint;
         /// <summary>
         /// 用户会话
         /// </summary>
@@ -33,10 +33,6 @@ namespace GameGate.Services
         /// </summary>
         private int CheckServerFailCount { get; set; }
         /// <summary>
-        /// 发送GameSvr数据缓冲区
-        /// </summary>
-        private byte[] SendBuffer { get; set; }
-        /// <summary>
         /// 网关是否就绪
         /// </summary>
         private bool GateReady { get; set; }
@@ -47,7 +43,7 @@ namespace GameGate.Services
         /// <summary>
         /// 历史最高在线人数
         /// </summary>
-        private int Counter { get; set; }
+        private int OnlineCount { get; set; }
         /// <summary>
         /// 发送总字节数
         /// </summary>
@@ -64,8 +60,6 @@ namespace GameGate.Services
         private RunningState RunningState { get; set; }
         private int CheckRecviceTick { get; set; }
         private int CheckServerTick { get; set; }
-        private int CheckServerTimeMin { get; set; }
-        private int CheckServerTimeMax { get; set; }
         /// <summary>
         /// Session管理
         /// </summary>
@@ -82,7 +76,7 @@ namespace GameGate.Services
             ReceiveBytes = 0;
             SendBytes = 0;
             Connected = false;
-            GateEndPoint = endPoint;
+            LocalEndPoint = endPoint;
             CheckServerTick = HUtil32.GetTickCount();
             ClientSocket = new TcpClient();
             ClientSocket.Connected  += ClientSocketConnect;
@@ -141,11 +135,11 @@ namespace GameGate.Services
                     count++;
                 }
             }
-            if (count > Counter)
+            if (count > OnlineCount)
             {
-                Counter = count;
+                OnlineCount = count;
             }
-            return count + "/" + Counter;
+            return count + "/" + OnlineCount;
         }
 
         public void Stop()
@@ -164,15 +158,12 @@ namespace GameGate.Services
             GateReady = true;
             CheckServerTick = HUtil32.GetTickCount();
             CheckRecviceTick = HUtil32.GetTickCount();
-            CheckServerTimeMax = 0;
-            CheckServerTimeMax = 0;
             Connected = true;
             ReceiveBytes = 0;
             SendBytes = 0;
             RunningState = RunningState.Runing;
-            SendBuffer = new byte[2048];
             RestSessionArray();
-            _logger.Info($"[{GateEndPoint}] 游戏引擎[{client.MainSocket.RemoteEndPoint}]链接成功.");
+            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{client.MainSocket.RemoteEndPoint}]链接成功.");
             _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {client.MainSocket.RemoteEndPoint} 成功...");
         }
 
@@ -194,7 +185,7 @@ namespace GameGate.Services
             }
             RestSessionArray();
             GateReady = false;
-            _logger.Info($"[{GateEndPoint}] 游戏引擎[{client.MainSocket.RemoteEndPoint}]断开链接.");
+            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{client.MainSocket.RemoteEndPoint}]断开链接.");
             Connected = false;
             CheckServerFail = true;
         }
@@ -226,15 +217,15 @@ namespace GameGate.Services
             switch (error)
             {
                 case SocketError.ConnectionRefused:
-                    _logger.Warn($"游戏网关[{GateEndPoint}]链接游戏引擎[{EndPoint}]拒绝链接...");
+                    _logger.Warn($"游戏网关[{LocalEndPoint}]链接游戏引擎[{EndPoint}]拒绝链接...");
                     Connected = false;
                     break;
                 case SocketError.ConnectionReset:
-                    _logger.Info($"游戏引擎[{EndPoint}]主动关闭连接游戏网关[{GateEndPoint}]...");
+                    _logger.Info($"游戏引擎[{EndPoint}]主动关闭连接游戏网关[{LocalEndPoint}]...");
                     Connected = false;
                     break;
                 case SocketError.TimedOut:
-                    _logger.Info($"游戏网关[{GateEndPoint}]链接游戏引擎时[{EndPoint}]超时...");
+                    _logger.Info($"游戏网关[{LocalEndPoint}]链接游戏引擎时[{EndPoint}]超时...");
                     Connected = false;
                     break;
             }
@@ -263,11 +254,6 @@ namespace GameGate.Services
                         }
                         break;
                     case Grobal2.GM_RECEIVE_OK:
-                        CheckServerTimeMin = HUtil32.GetTickCount() - CheckRecviceTick;
-                        if (CheckServerTimeMin > CheckServerTimeMax)
-                        {
-                            CheckServerTimeMax = CheckServerTimeMin;
-                        }
                         CheckRecviceTick = HUtil32.GetTickCount();
                         SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, "", 0);
                         break;
@@ -382,11 +368,6 @@ namespace GameGate.Services
                         userSession.SckHandle = -1;
                         userSession.Socket = null;
                     }
-                }
-                CheckServerTimeMin = HUtil32.GetTickCount() - CheckServerTick;
-                if (CheckServerTimeMax < CheckServerTimeMin)
-                {
-                    CheckServerTimeMax = CheckServerTimeMin;
                 }
             }
         }

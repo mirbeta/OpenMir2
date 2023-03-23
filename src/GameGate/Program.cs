@@ -150,6 +150,7 @@ namespace GameGate
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             var serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);
+            table.AddColumn("[yellow]Id[/]");
             table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
             table.AddColumn("[yellow]Online[/]");
