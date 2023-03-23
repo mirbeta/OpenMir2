@@ -1,34 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using DBSrv.Conf;
+﻿using DBSrv.Conf;
 using DBSrv.Storage;
 using NLog;
+using System;
+using System.Collections.Generic;
+using System.Net;
 using SystemModule;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace DBSrv.Services
+namespace DBSrv.Services.Impl
 {
     /// <summary>
     /// 玩家数据服务
     /// DBSrv->GameSvr
     /// </summary>
-    public class DataService
+    public class DataService: IService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IPlayDataStorage _playDataStorage;
         private readonly ICacheStorage _cacheStorage;
         private readonly TcpService _serverSocket;
         private readonly ClientSession _loginService;
-        private readonly SettingConf _conf;
+        private readonly SettingConf _setting;
         private IList<THumSession> PlaySessionList { get; set; }
 
         public DataService(SettingConf conf, ClientSession loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
         {
-            _conf = conf;
+            _setting = conf;
             _loginService = loginService;
             _playDataStorage = playDataStorage;
             _cacheStorage = cacheStorage;
@@ -39,17 +39,26 @@ namespace DBSrv.Services
             PlaySessionList = new List<THumSession>();
         }
 
-        public void Start()
+        public void Initialize()
         {
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
-                new IPHost(IPAddress.Parse(_conf.ServerAddr), _conf.ServerPort)
+                new IPHost(IPAddress.Parse(_setting.ServerAddr), _setting.ServerPort)
             }).SetDataHandlingAdapter(() => new PlayerDataFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
+        }
+
+        public void Start()
+        {
             _serverSocket.Start();
             _playDataStorage.LoadQuickList();
-            _logger.Info($"玩家数据存储服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
+            _logger.Info($"玩家数据存储服务[{_setting.ServerAddr}:{_setting.ServerPort}]已启动.等待链接...");
+        }
+
+        public void Stop()
+        {
+            _serverSocket.Stop();
         }
 
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)

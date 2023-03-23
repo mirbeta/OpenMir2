@@ -1,22 +1,22 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using DBSrv.Conf;
+﻿using DBSrv.Conf;
 using DBSrv.Storage;
 using NLog;
+using System;
+using System.Linq;
+using System.Net;
 using SystemModule;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace DBSrv.Services
+namespace DBSrv.Services.Impl
 {
     /// <summary>
     /// 拍卖行数据存储服务
     /// GameSrv-> DBSrv
     /// </summary>
-    public class MarketService
+    public class MarketService : IService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ICacheStorage _cacheStorage;
@@ -35,7 +35,7 @@ namespace DBSrv.Services
             _socketServer.Received += Received;
         }
 
-        public void Start()
+        public void Initialize()
         {
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
@@ -43,6 +43,10 @@ namespace DBSrv.Services
                 new IPHost(IPAddress.Parse(_setting.MarketServerAddr), _setting.MarketServerPort)
             }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _socketServer.Setup(touchSocketConfig);
+        }
+
+        public void Start()
+        {
             _socketServer.Start();
             _logger.Info($"拍卖行数据库服务[{_setting.MarketServerAddr}:{_setting.MarketServerPort}]已启动.等待链接...");
         }

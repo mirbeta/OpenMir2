@@ -1,13 +1,13 @@
+using DBSrv.Conf;
+using DBSrv.Storage;
+using DBSrv.Storage.Model;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using DBSrv.Conf;
-using DBSrv.Storage;
-using DBSrv.Storage.Model;
-using NLog;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.DataHandlingAdapters;
@@ -17,13 +17,13 @@ using SystemModule.Sockets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace DBSrv.Services
+namespace DBSrv.Services.Impl
 {
     /// <summary>
     /// 角色数据服务
     /// DBSrv-SelGate-Client
     /// </summary>
-    public class UserService
+    public class UserService: IService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SettingConf _setting;
@@ -48,7 +48,7 @@ namespace DBSrv.Services
             _setting = conf;
         }
 
-        public void Start(CancellationToken stoppingToken)
+        public void Initialize()
         {
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
@@ -56,9 +56,13 @@ namespace DBSrv.Services
                 new IPHost(IPAddress.Parse(_setting.GateAddr), _setting.GatePort)
             }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _socketServer.Setup(touchSocketConfig);
+        }
+
+        public void Start()
+        {
             _socketServer.Start();
             _playRecordStorage.LoadQuickList();
-            StartMessageThread(stoppingToken);
+            StartMessageThread(CancellationToken.None);
             _logger.Info($"玩家数据网关服务[{_setting.GateAddr}:{_setting.GatePort}]已启动.等待链接...");
         }
 

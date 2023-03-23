@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using DBSrv.Services;
+using DBSrv.Services.Impl;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
@@ -43,7 +44,7 @@ namespace DBSrv
                 {
                     try
                     {
-                        _userService.Start(cancellationToken);
+                        _userService.Start();
                         _sessionService.Start();
                         _dataService.Start();
                         _marketService.Start();

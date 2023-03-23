@@ -1,13 +1,13 @@
 using DBSrv.Conf;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using NLog;
 using SystemModule;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 
-namespace DBSrv.Services
+namespace DBSrv.Services.Impl
 {
     /// <summary>
     /// 登陆会话同步服务(DBSrv-LoginSrv)
