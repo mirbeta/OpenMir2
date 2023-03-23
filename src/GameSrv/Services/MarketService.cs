@@ -1,35 +1,39 @@
-﻿using GameSrv.Player;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
+using GameSrv.Player;
 using NLog;
 using SystemModule.Data;
+using SystemModule.DataHandlingAdapters;
 using SystemModule.Enums;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace GameSrv.Services
 {
     public class MarketService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ScoketClient _clientScoket;
+        private readonly TcpClient _clientScoket;
         private bool IsFirstData = false;
-        private byte[] ReceiveBuffer { get; set; }
-        private int BuffLen { get; set; }
 
         public MarketService()
         {
-            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.MarketSrvAddr), M2Share.Config.MarketSrvPort), 4096);
-            _clientScoket.OnConnected += MarketScoketConnected;
-            _clientScoket.OnDisconnected += MarketScoketDisconnected;
-            _clientScoket.OnReceivedData += MarketSocketRead;
-            _clientScoket.OnError += MarketSocketError;
-            ReceiveBuffer = new byte[10 * 2048];
+            _clientScoket = new TcpClient();
+            _clientScoket.Connected += MarketScoketConnected;
+            _clientScoket.Disconnected += MarketScoketDisconnected;
+            _clientScoket.Received += MarketSocketRead;
         }
 
         public void Start()
         {
+            var config = new TouchSocketConfig();
+            config.SetRemoteIPHost(new IPHost(IPAddress.Parse(M2Share.Config.MarketSrvAddr), M2Share.Config.MarketSrvPort))
+                .SetBufferLength(4096);
+            config.SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            _clientScoket.Setup(config);
             if (M2Share.Config.EnableMarket)
             {
                 _clientScoket.Connect();
@@ -40,11 +44,11 @@ namespace GameSrv.Services
         {
             if (M2Share.Config.EnableMarket)
             {
-                _clientScoket.Disconnect();
+                _clientScoket.Close();
             }
         }
 
-        public bool IsConnected => _clientScoket.IsConnected;
+        public bool IsConnected => _clientScoket.Online;
 
         public void CheckConnected()
         {
@@ -52,20 +56,16 @@ namespace GameSrv.Services
             {
                 return;
             }
-            if (_clientScoket.IsConnected)
+            if (IsConnected)
             {
                 return;
             }
-            if (_clientScoket.IsBusy)
-            {
-                return;
-            }
-            _clientScoket.Connect(M2Share.Config.MarketSrvAddr, M2Share.Config.MarketSrvPort);
+            _clientScoket.Connect();
         }
 
         public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet)
         {
-            if (!_clientScoket.IsConnected)
+            if (!IsConnected)
             {
                 return false;
             }
@@ -93,22 +93,21 @@ namespace GameSrv.Services
             _clientScoket.Send(data);
         }
 
-        private void MarketScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
+        private void MarketScoketDisconnected(object sender, DisconnectEventArgs e)
         {
-            _clientScoket.IsConnected = false;
-            _logger.Error("数据库(拍卖行)服务器[" + e.RemoteEndPoint + "]断开连接...");
+            var client = (TcpClient)sender;
+            _logger.Error("数据库(拍卖行)服务器[" + client.MainSocket.RemoteEndPoint + "]断开连接...");
         }
 
-        private void MarketScoketConnected(object sender, DSCClientConnectedEventArgs e)
+        private void MarketScoketConnected(object sender, MsgEventArgs e)
         {
-            _clientScoket.IsConnected = true;
-            _logger.Info("数据库(拍卖行)服务器[" + e.RemoteEndPoint + "]连接成功...");
+            var client = (TcpClient)sender;
+            _logger.Info("数据库(拍卖行)服务器[" + client.MainSocket.RemoteEndPoint + "]连接成功...");
             SendFirstMessage();// 链接成功后进行第一次主动拉取拍卖行数据
         }
 
         private void MarketSocketError(object sender, DSCClientErrorEventArgs e)
         {
-            _clientScoket.IsConnected = false;
             switch (e.ErrorCode)
             {
                 case SocketError.ConnectionRefused:
@@ -172,85 +171,23 @@ namespace GameSrv.Services
             return true;
         }
 
-        private void MarketSocketRead(object sender, DSCClientDataInEventArgs e)
+        private void MarketSocketRead(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
+            if (requestInfo is not DataMessageFixedHeaderRequestInfo fixedHeader)
+                return;
             try
             {
-                var nMsgLen = e.BuffLen;
-                var packetData = e.Buff;
-                if (BuffLen > 0)
+                if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
                 {
-                    MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
-                    ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
+                    _logger.Debug($"解析寄售行封包出现异常封包...");
+                    return;
                 }
-                else
-                {
-                    ProcessServerPacket(packetData, nMsgLen);
-                }
+                var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
+                ProcessServerData(messageData);
             }
             catch (Exception exception)
             {
                 _logger.Error(exception);
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(M2Share.UserDBCriticalSection);
-            }
-        }
-
-        private void ProcessServerPacket(Span<byte> buff, int buffLen)
-        {
-            try
-            {
-                var srcOffset = 0;
-                var nLen = buffLen;
-                var dataBuff = buff;
-                while (nLen >= ServerDataPacket.FixedHeaderLen)
-                {
-                    var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                    var message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
-                    if (message.PacketCode != Grobal2.PacketCode)
-                    {
-                        srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
-                        nLen -= 1;
-                        _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
-                        continue;
-                    }
-                    var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
-                    if (nCheckMsgLen > nLen)
-                    {
-                        break;
-                    }
-                    var messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
-                    ProcessServerData(messageData);
-                    nLen -= nCheckMsgLen;
-                    if (nLen <= 0)
-                    {
-                        break;
-                    }
-                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
-                    BuffLen = nLen;
-                    srcOffset = 0;
-                    if (nLen < ServerDataPacket.FixedHeaderLen)
-                    {
-                        break;
-                    }
-                }
-                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
-                {
-                    MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
-                    BuffLen = nLen;
-                }
-                else
-                {
-                    BuffLen = 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
             }
         }
 

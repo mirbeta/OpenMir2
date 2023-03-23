@@ -1,13 +1,12 @@
-using GameGate.Auth;
-using GameGate.Conf;
-using GameGate.Packet;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using GameGate.Conf;
+using GameGate.Packet;
+using NLog;
 using SystemModule;
-using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace GameGate.Services
 {

@@ -1,8 +1,10 @@
-﻿using MemoryPack;
+﻿using System.Runtime.InteropServices;
+using MemoryPack;
 
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public partial class MagicRcd 
     {
         /// <summary>

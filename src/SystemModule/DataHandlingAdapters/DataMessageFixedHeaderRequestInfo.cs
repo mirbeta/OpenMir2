@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using SystemModule.Packets;
+using SystemModule.Packets.ServerPackets;
 using TouchSocket.Sockets;
 
 namespace SystemModule.DataHandlingAdapters

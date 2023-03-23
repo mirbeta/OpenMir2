@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 using MemoryPack;
 using SystemModule.Packets.ClientPackets;
 
-namespace SystemModule.Packets
+namespace SystemModule.Packets.ServerPackets
 {
     /// <summary>
     /// 封包消息头

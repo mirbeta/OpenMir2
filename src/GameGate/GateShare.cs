@@ -1,12 +1,12 @@
-using GameGate.Filters;
-using GameGate.Services;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using GameGate.Filters;
+using GameGate.Services;
 using SystemModule.Common;
-using SystemModule.Packets;
+using SystemModule.Packets.ServerPackets;
 
 namespace GameGate
 {

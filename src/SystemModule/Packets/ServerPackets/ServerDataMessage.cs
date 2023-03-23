@@ -1,10 +1,10 @@
-﻿using MemoryPack;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using MemoryPack;
 
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public partial struct ServerDataPacket
     {
         /// <summary>

@@ -105,7 +105,7 @@ namespace DBSrv.Services
                         }
                     }
                 }
-            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
+            }, stoppingToken);
         }
 
         private void ProcessMessage(SelGateInfo gateInfo, ServerDataMessage packet)

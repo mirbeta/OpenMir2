@@ -1,9 +1,11 @@
-﻿using MemoryPack;
+﻿using System.Runtime.InteropServices;
+using MemoryPack;
 using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public partial class ServerUserItem 
     {
         /// <summary>

@@ -1,5 +1,5 @@
-﻿using SystemModule.Packets;
-using SystemModule.Packets.ClientPackets;
+﻿using SystemModule.Packets.ClientPackets;
+using SystemModule.Packets.ServerPackets;
 
 namespace GameSrv.Player
 {
