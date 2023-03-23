@@ -9,6 +9,7 @@ using SystemModule.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 using TcpClient = TouchSocket.Sockets.TcpClient;
+using NetworkMonitor = SystemModule.NetworkMonitor;
 
 namespace GameGate.Services
 {
@@ -45,16 +46,6 @@ namespace GameGate.Services
         /// </summary>
         private int OnlineCount { get; set; }
         /// <summary>
-        /// 发送总字节数
-        /// </summary>
-        private long SendBytes { get; set; }
-        /// <summary>
-        /// 接收总字节数
-        /// </summary>
-        private long ReceiveBytes { get; set; }
-        public long TotalBytesWrite { get; set; }
-        public long TotalBytesRead { get; set; }
-        /// <summary>
         /// 运行状态
         /// </summary>
         private RunningState RunningState { get; set; }
@@ -68,16 +59,16 @@ namespace GameGate.Services
         /// 日志
         /// </summary>
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private readonly NetworkMonitor _networkMonitor;
 
-        public ClientThread(IPEndPoint endPoint, GameGateInfo gameGate)
+        public ClientThread(IPEndPoint endPoint, GameGateInfo gameGate, NetworkMonitor networkMonitor)
         {
             GateInfo = gameGate;
             RunningState = RunningState.Waiting;
-            ReceiveBytes = 0;
-            SendBytes = 0;
             Connected = false;
             LocalEndPoint = endPoint;
             CheckServerTick = HUtil32.GetTickCount();
+            _networkMonitor = networkMonitor;
             ClientSocket = new TcpClient();
             ClientSocket.Connected  += ClientSocketConnect;
             ClientSocket.Disconnected  += ClientSocketDisconnect;
@@ -159,8 +150,6 @@ namespace GameGate.Services
             CheckServerTick = HUtil32.GetTickCount();
             CheckRecviceTick = HUtil32.GetTickCount();
             Connected = true;
-            ReceiveBytes = 0;
-            SendBytes = 0;
             RunningState = RunningState.Runing;
             RestSessionArray();
             _logger.Info($"[{LocalEndPoint}] 游戏引擎[{client.MainSocket.RemoteEndPoint}]链接成功.");
@@ -203,7 +192,7 @@ namespace GameGate.Services
                 return;
             }
             ProcessServerPacket(fixedHeader.Header, fixedHeader.Message);
-            ReceiveBytes += fixedHeader.BodyLength;
+            _networkMonitor.Receive(fixedHeader.BodyLength);
         }
 
         private void ClientSocketError(SocketError error)
@@ -341,8 +330,8 @@ namespace GameGate.Services
             {
                 return;
             }
-            SendBytes += sendBuffer.Length;
             ClientSocket.Send(sendBuffer);
+            _networkMonitor.Send(sendBuffer.Length);
         }
 
         /// <summary>
@@ -412,39 +401,6 @@ namespace GameGate.Services
             }
         }
 
-        public string GetConnected()
-        {
-            return IsConnected ? "[green]Connected[/]" : "[red]Not Connected[/]";
-        }
-
-        public string ShowSend()
-        {
-            var sendStr = SendBytes switch
-            {
-                > 1024 * 1000 => $"↑{SendBytes / (1024 * 1000)}M",
-                > 1024 => $"↑{SendBytes / 1024}K",
-                _ => $"↑{SendBytes}B"
-            };
-            TotalBytesWrite += SendBytes;
-            SendBytes = 0;
-            return sendStr;
-        }
-
-        public string ShowReceive()
-        {
-            var receiveStr = ReceiveBytes switch
-            {
-                > 1024 * 1000 => $"↓{ReceiveBytes / (1024 * 1000)}M",
-                > 1024 => $"↓{ReceiveBytes / 1024}K",
-                _ => $"↓{ReceiveBytes}B"
-            };
-            TotalBytesRead += ReceiveBytes;
-            ReceiveBytes = 0;
-            return receiveStr;
-        }
-
-        public string TotalReceive => $"↓{HUtil32.FormatBytesValue(TotalBytesRead)}";
-
-        public string TotalSend => $"↑{HUtil32.FormatBytesValue(TotalBytesWrite)}";
+        public string GetConnected => IsConnected ? "[green]Connected[/]" : "[red]Not Connected[/]";
     }
 }

@@ -1,4 +1,5 @@
 using System.Threading;
+using TouchSocket.Sockets;
 
 namespace SystemModule
 {
@@ -45,6 +46,22 @@ namespace SystemModule
             m_SentPackets = 0;
 
             return string.Format(FORMAT_S, upload, download, sent, recv);
+        }
+
+        public string ShowSendStats()
+        {
+            var str = HUtil32.FormatBytesValue(BytesSent);
+            m_SentBytes = 0;
+            m_SentPackets = 0;
+            return str;
+        }
+
+        public string ShowReceive()
+        {
+            var str = HUtil32.FormatBytesValue(BytesRecv);
+            m_RecvBytes = 0;
+            m_RecvPackets = 0;
+            return str;
         }
 
         public int PacketsSent => m_SentPackets;

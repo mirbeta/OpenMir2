@@ -1,9 +1,9 @@
-using GameGate.Conf;
-using NLog;
 using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Threading;
+using GameGate.Conf;
+using NLog;
 using SystemModule;
 using SystemModule.Sockets;
 using SystemModule.Sockets.AsyncSocketServer;
@@ -24,15 +24,17 @@ namespace GameGate.Services
         private readonly ConcurrentQueue<int> SessionCloseQueue;
         private static SessionManager SessionMgr => SessionManager.Instance;
         private static ServerManager ServerMgr => ServerManager.Instance;
+        private readonly NetworkMonitor networkMonitor;
 
         public ServerService(GameGateInfo gameGate)
         {
             GateInfo = gameGate;
+            networkMonitor = new NetworkMonitor();
             _serverSocket = new SocketServer(GateShare.MaxSession, 500);
             SessionCloseQueue = new ConcurrentQueue<int>();
             messageSendQueue = new SendQueue();
             _gateEndPoint = IPEndPoint.Parse(string.Concat(gameGate.ServerAdress, ":", gameGate.GatePort));
-            _clientThread = new ClientThread(_gateEndPoint, gameGate);
+            _clientThread = new ClientThread(_gateEndPoint, gameGate, networkMonitor);
             ClientManager.Instance.AddClientThread(gameGate.ThreadId, _clientThread);
         }
 
@@ -61,19 +63,22 @@ namespace GameGate.Services
 
         public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string totalrevice, string totalSend, string queueCount, int threadCount) GetStatus()
         {
-            return (_gateEndPoint.ToString(), _clientThread.GetConnected(), _clientThread.GetSessionCount(),
-                _clientThread.ShowReceive(), _clientThread.ShowSend(),
-                _clientThread.TotalReceive, _clientThread.TotalSend, GetSendQueueCount(), ServerManager.MessageWorkThreads);
+            return (_gateEndPoint.ToString(), _clientThread.GetConnected, _clientThread.GetSessionCount(), ShowReceive, ShowSend, TotalReceive, TotalSend, WaitQueueCount, ServerManager.MessageWorkThreads);
         }
+
+        public string ShowReceive => $"↓{networkMonitor.ShowReceive()}";
+
+        public string ShowSend => $"↑{networkMonitor.ShowSendStats()}";
+
+        public string TotalReceive => $"↓{HUtil32.FormatBytesValue(networkMonitor.TotalBytesRecv)}";
+
+        public string TotalSend => $"↑{HUtil32.FormatBytesValue(networkMonitor.TotalBytesSent)}";
 
         /// <summary>
         /// 获取队列待处理数
         /// </summary>
         /// <returns></returns>
-        private string GetSendQueueCount()
-        {
-            return messageSendQueue.QueueCount + "/" + SessionMgr.QueueCount;
-        }
+        private string WaitQueueCount => messageSendQueue.QueueCount + "/" + SessionMgr.QueueCount;
 
         /// <summary>
         /// 处理会话关闭列表
@@ -90,6 +95,7 @@ namespace GameGate.Services
         public void Send(string connectionId, byte[] buffer)
         {
             _serverSocket.Send(connectionId, buffer);
+            networkMonitor.Send(buffer.Length);
         }
 
         /// <summary>
@@ -195,24 +201,10 @@ namespace GameGate.Services
             var clientSession = SessionMgr.GetSession(GateInfo.ServiceId, token.SessionId);
             if (clientSession != null)
             {
-                if (clientSession.Session == null)
-                {
-                    _logger.Debug($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Session会话已经失效");
-                    return;
-                }
-                if (clientSession.Session.Socket == null)
-                {
-                    _logger.Debug($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Socket已释放");
-                    return;
-                }
-                if (!clientSession.Session.Socket.Connected)
-                {
-                    _logger.Debug($"ConnectionId:[{token.ConnectionId}] SocketId:[{token.ConnectionId}] Socket链接已断开");
-                    return;
-                }
                 var data = new byte[token.BytesReceived];
                 Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
                 ServerMgr.SendMessageQueue(new SessionMessage(token.SessionId, GateInfo.ServiceId, data, data.Length));
+                networkMonitor.Receive(token.BytesReceived);
             }
             else
             {
