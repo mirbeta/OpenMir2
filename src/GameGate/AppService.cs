@@ -30,7 +30,7 @@ namespace GameGate
             _logger.Info("论坛:http://bbs.gameofmir.com");
             GateShare.Initialization();
             GateShare.Load();
-            ServerManager.Initialization();
+            ServerManager.Initialize();
             ServerManager.Start(stoppingToken);
             if (ConfigManager.GateConfig.UseCloudGate)
             {

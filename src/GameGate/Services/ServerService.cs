@@ -40,17 +40,21 @@ namespace GameGate.Services
 
         public ClientThread ClientThread => _clientThread;
 
-        public void Start(CancellationToken stoppingToken)
-        {
+        public void Initialize()
+        { 
+            _serverSocket.Init();
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
             _serverSocket.OnClientError += ServerSocketClientError;
-            _serverSocket.Init();
+            _clientThread.Initialize();
+        }
+
+        public void Start(CancellationToken stoppingToken)
+        {
             _serverSocket.Start(_gateEndPoint);
-            _clientThread.RestSessionArray();
-            _clientThread.Init();
             _clientThread.Start();
+            _clientThread.RestSessionArray();
             messageSendQueue.StartProcessQueueSend(stoppingToken);
             _logger.Info($"游戏网关[{_gateEndPoint}]已启动...");
         }
@@ -104,7 +108,6 @@ namespace GameGate.Services
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
             //_logger.Debug($"客户端链接:[{GateInfo.ServiceId}] SessionId:[{e.SessionId}] RunPort:{_gateEndPoint}");
-
             var threadId = -1;
             var clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out threadId);
             if (clientThread == null || threadId < 0)

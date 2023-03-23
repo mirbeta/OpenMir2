@@ -43,12 +43,13 @@ namespace GameGate.Services
             _messageQueue = Channel.CreateUnbounded<SessionMessage>();
         }
 
-        public void Initialization()
+        public void Initialize()
         {
             _serverServices = new ServerService[ConfigManager.GateConfig.ServerWorkThread];
             for (var i = 0; i < _serverServices.Length; i++)
             {
                 _serverServices[i] = new ServerService(ConfigManager.GateList[i]);
+                _serverServices[i].Initialize();
             }
         }
 

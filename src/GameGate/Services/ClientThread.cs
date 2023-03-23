@@ -83,11 +83,11 @@ namespace GameGate.Services
 
         public RunningState Running => RunningState;
 
-        public void Init()
+        public void Initialize()
         {
             var config = new TouchSocketConfig();
             config.SetRemoteIPHost(new IPHost(IPAddress.Parse(GateInfo.ServerAdress), GateInfo.ServerPort))
-                .SetBufferLength(1024);
+                .SetBufferLength(4096);
             config.SetDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
             ClientSocket.Setup(config);
         }
