@@ -1,11 +1,11 @@
-﻿using GameSrv.Network.DataHandlingAdapters;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
 using GameSrv.Player;
 using GameSrv.Services;
 using NLog;
 using SystemModule.Common;
+using SystemModule.DataHandlingAdapters;
 using SystemModule.Enums;
 using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
@@ -22,14 +22,8 @@ namespace GameSrv.Network
         private readonly object _runSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;//todo 一个网关一个队列
         private readonly ThreadSocket[] _gameGates;
-        private static int _currentGateIdx = 0;
         private readonly HashSet<long> _gatePermitMap = new HashSet<long>();
         private CancellationToken _stoppingCancelReads;
-        /// <summary>
-        /// 数据接收缓冲区
-        /// </summary>
-        private byte[] ReceiveBuffer;
-        private int ReceiveLen;
 
         public ThreadSocketMgr()
         {
@@ -42,7 +36,6 @@ namespace GameSrv.Network
             tcpService.Received += Received;
             _runSocketSection = new object();
             _stoppingCancelReads = new CancellationToken();
-            ReceiveBuffer = new byte[4096 * 10];
         }
 
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
@@ -74,26 +67,26 @@ namespace GameSrv.Network
             }
         }
 
-        public void Disconnected(object sender, DisconnectEventArgs e)
+        private void Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
             M2Share.SocketMgr.CloseGate(client.ID, client.ServiceIP);
-            Interlocked.Decrement(ref _currentGateIdx);
         }
 
         public void Initialize()
         {
+            var touchSocketConfig = new TouchSocketConfig();
+            touchSocketConfig.SetListenIPHosts(new IPHost[1]
+            {
+                new IPHost(IPAddress.Parse(M2Share.Config.sGateAddr), M2Share.Config.nGatePort)
+            }).SetDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
+            tcpService.Setup(touchSocketConfig);
             _logger.Info("游戏网关初始化完成...");
         }
 
         public void Start()
         {
-            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
-            touchSocketConfig.SetListenIPHosts(new IPHost[1]
-            {
-                new IPHost(IPAddress.Parse(M2Share.Config.sGateAddr), M2Share.Config.nGatePort)
-            }).SetDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
-            tcpService.Setup(touchSocketConfig).Start();
+            tcpService.Start();
             _logger.Info($"游戏网关[{M2Share.Config.sGateAddr}:{M2Share.Config.nGatePort}]已启动...");
         }
 
@@ -157,8 +150,7 @@ namespace GameSrv.Network
                 gateInfo.boSendKeepAlive = false;
                 gateInfo.nSendChecked = 0;
                 gateInfo.nSendBlockCount = 0;
-                _gameGates[_currentGateIdx] = new ThreadSocket(gateInfo);
-                Interlocked.Increment(ref _currentGateIdx);
+                _gameGates[int.Parse(e.ID) - 1] = new ThreadSocket(gateInfo);
                 _logger.Info(string.Format(sGateOpen, e.MainSocket.RemoteEndPoint));
             }
             else

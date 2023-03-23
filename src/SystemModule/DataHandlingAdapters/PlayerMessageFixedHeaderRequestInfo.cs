@@ -1,10 +1,11 @@
 using System.Runtime.InteropServices;
 using SystemModule.Packets;
+using SystemModule.Packets.ServerPackets;
 using TouchSocket.Sockets;
 
-namespace GameSrv.Network.DataHandlingAdapters
+namespace SystemModule.DataHandlingAdapters
 {
-    public class PacketFixedHeaderDataHandlingAdapter : CustomFixedHeaderDataHandlingAdapter<DataMessageFixedHeaderRequestInfo>
+    public class PlayerPacketFixedHeaderDataHandlingAdapter : CustomFixedHeaderDataHandlingAdapter<DataMessageFixedHeaderRequestInfo>
     {
         /// <summary>
         /// 接口实现，指示固定包头长度
@@ -21,12 +22,12 @@ namespace GameSrv.Network.DataHandlingAdapters
         }
     }
 
-    public class DataMessageFixedHeaderRequestInfo : IFixedHeaderRequestInfo
+    public class PlayerMessageFixedHeaderRequestInfo : IFixedHeaderRequestInfo
     {
         private int bodyLength;
         public int BodyLength => bodyLength;
-        private ServerMessage _header;
-        public ServerMessage Header => _header;
+        private ServerDataPacket _header;
+        public ServerDataPacket Header => _header;
         private byte[] _message;
         public byte[] Message => _message;
 
@@ -34,7 +35,7 @@ namespace GameSrv.Network.DataHandlingAdapters
         {
             if (!MemoryMarshal.TryRead(header, out _header))
                 return false;
-            this.bodyLength = _header.PackLength;
+            this.bodyLength = _header.PacketLen;
             return true;
         }
 

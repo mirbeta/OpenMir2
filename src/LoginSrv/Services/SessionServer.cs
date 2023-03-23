@@ -1,15 +1,16 @@
-using LoginSrv.Conf;
-using LoginSrv.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using LoginSrv.Conf;
+using LoginSrv.Storage;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Logger;
 using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace LoginSrv.Services
 {
@@ -20,7 +21,7 @@ namespace LoginSrv.Services
     {
         private readonly MirLogger _logger;
         private readonly IList<ServerSessionInfo> _serverList = null;
-        private readonly SocketServer _serverSocket;
+        private readonly TcpService _serverSocket;
         private readonly AccountStorage _accountStorage;
         private readonly Config _config;
         private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
@@ -31,11 +32,10 @@ namespace LoginSrv.Services
             _config = configManager.Config;
             _accountStorage = accountStorage;
             _serverList = new List<ServerSessionInfo>();
-            _serverSocket = new SocketServer(byte.MaxValue, 512);
-            _serverSocket.OnClientConnect += SocketClientConnect;
-            _serverSocket.OnClientDisconnect += SocketClientDisconnect;
-            _serverSocket.OnClientError += SocketClientError;
-            _serverSocket.OnClientRead += SocketClientRead;
+            _serverSocket = new TcpService();
+            _serverSocket.Connected += Connecting;
+            _serverSocket.Disconnected += Disconnected;
+            _serverSocket.Received += Received;
         }
 
         public IList<ServerSessionInfo> ServerList => _serverList;
@@ -44,18 +44,29 @@ namespace LoginSrv.Services
         {
             LoadServerAddr();
             LoadUserLimit();
-            _serverSocket.Init();
-            _serverSocket.Start(_config.sServerAddr, _config.nServerPort);
+            var touchSocketConfig = new TouchSocketConfig();
+            touchSocketConfig.SetListenIPHosts(new IPHost[1]
+            {
+                new IPHost(IPAddress.Parse(_config.sServerAddr), _config.nServerPort)
+            });
+            _serverSocket.Setup(touchSocketConfig);
             _logger.LogInformation($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
         }
-
-        private void SocketClientConnect(object sender, AsyncUserToken e)
+        
+        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            var sRemoteAddr = e.RemoteIPaddr;
+            var client = (SocketClient)sender;
+            SocketClientRead(client.ID, byteBlock.Buffer, (int)byteBlock.Length);
+        }
+
+        private void Connecting(object sender, TouchSocketEventArgs e)
+        {
+            var client = (SocketClient)sender;
+            var remoteEndPoint = client.MainSocket.RemoteEndPoint.GetIP();
             var boAllowed = false;
             for (var i = 0; i < LsShare.ServerAddr.Length; i++)
             {
-                if (sRemoteAddr == LsShare.ServerAddr[i])
+                if (remoteEndPoint == LsShare.ServerAddr[i])
                 {
                     boAllowed = true;
                     break;
@@ -65,33 +76,35 @@ namespace LoginSrv.Services
             {
                 var msgServer = new ServerSessionInfo();
                 msgServer.ReceiveMsg = string.Empty;
-                msgServer.Socket = e.Socket;
-                msgServer.EndPoint = e.EndPoint;
+                msgServer.Socket = client.MainSocket;
+                msgServer.SocketId = client.ID;
+                msgServer.EndPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
                 msgServer.SessionList = new List<SessionConnInfo>();
                 _serverList.Add(msgServer);
-                _logger.DebugLog($"{e.EndPoint}链接成功.");
+                _logger.DebugLog($"{client.MainSocket.RemoteEndPoint}链接成功.");
             }
             else
             {
-                _logger.LogWarning("非法地址连接:" + sRemoteAddr);
-                e.Socket.Close();
+                _logger.LogWarning("非法地址连接:" + remoteEndPoint);
+                client.Close();
             }
         }
 
-        private void SocketClientDisconnect(object sender, AsyncUserToken e)
+        private void Disconnected(object sender, DisconnectEventArgs e)
         {
+            var client = (SocketClient)sender;
             for (var i = 0; i < _serverList.Count; i++)
             {
                 var msgServer = _serverList[i];
-                if (msgServer.Socket == e.Socket)
+                if (msgServer.SocketId == client.ID)
                 {
                     if (msgServer.ServerIndex == 99)
                     {
-                        _logger.LogWarning($"[{msgServer.ServerName}]数据库服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.LogWarning($"[{msgServer.ServerName}]数据库服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
                     }
                     else
                     {
-                        _logger.LogWarning($"[{msgServer.ServerName}]游戏服务器[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
+                        _logger.LogWarning($"[{msgServer.ServerName}]游戏服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
                     }
                     msgServer = null;
                     _serverList.RemoveAt(i);
@@ -99,13 +112,8 @@ namespace LoginSrv.Services
                 }
             }
         }
-
-        private void SocketClientError(object sender, AsyncSocketErrorEventArgs e)
-        {
-
-        }
-
-        private void SocketClientRead(object sender, AsyncUserToken e)
+        
+        private void SocketClientRead(string socketId, byte[] data,int dataLen)
         {
             var sReviceMsg = string.Empty;
             var sMsg = string.Empty;
@@ -118,12 +126,9 @@ namespace LoginSrv.Services
             for (var i = 0; i < _serverList.Count; i++)
             {
                 var msgServer = _serverList[i];
-                if (msgServer.Socket == e.Socket)
+                if (msgServer.SocketId == socketId)
                 {
-                    var nReviceLen = e.BytesReceived;
-                    var data = new byte[nReviceLen];
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, data, 0, nReviceLen);
-                    sReviceMsg = msgServer.ReceiveMsg + HUtil32.GetString(data, 0, data.Length);
+                    sReviceMsg = msgServer.ReceiveMsg + HUtil32.GetString(data, 0, dataLen);
                     while (sReviceMsg.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0)
                     {
                         sReviceMsg = HUtil32.ArrestStringEx(sReviceMsg, "(", ")", ref sMsg);
@@ -676,6 +681,7 @@ namespace LoginSrv.Services
     {
         public string ReceiveMsg;
         public Socket Socket;
+        public string SocketId;
         public IPEndPoint EndPoint;
         public string ServerName;
         public int ServerIndex;

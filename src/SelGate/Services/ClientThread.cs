@@ -203,7 +203,7 @@ namespace SelGate.Services
             while (nLen > ServerDataPacket.FixedHeaderLen)
             {
                 var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
+                var message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
                 if (message.PacketCode != Grobal2.PacketCode)
                 {
                     srcOffset++;
@@ -314,7 +314,7 @@ namespace SelGate.Services
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = serverMessage.GetBuffer();
+            var dataBuff = SerializerUtil.Serialize(serverMessage);
             var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);

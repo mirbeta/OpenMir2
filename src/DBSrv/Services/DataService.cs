@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using DBSrv.Conf;
 using DBSrv.Storage;
 using NLog;
 using SystemModule;
+using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace DBSrv.Services
 {
@@ -17,126 +19,92 @@ namespace DBSrv.Services
     public class DataService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IList<ServerDataInfo> _serverList;
+        private readonly ServerDataInfo[] _serverList;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly ICacheStorage _cacheStorage;
-        private readonly SocketServer _serverSocket;
+        private readonly TcpService _serverSocket;
         private readonly SessionService _loginService;
         private readonly SettingConf _conf;
         private IList<THumSession> PlaySessionList { get; set; }
 
         public DataService(SettingConf conf, SessionService loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
         {
+            _conf = conf;
             _loginService = loginService;
             _playDataStorage = playDataStorage;
             _cacheStorage = cacheStorage;
-            _serverList = new List<ServerDataInfo>();
-            _serverSocket = new SocketServer(byte.MaxValue, 1024);
-            _serverSocket.OnClientConnect += ServerSocketClientConnect;
-            _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
-            _serverSocket.OnClientRead += ServerSocketClientRead;
-            _serverSocket.OnClientError += ServerSocketClientError;
-            _conf = conf;
+            _serverSocket = new TcpService();
+            _serverSocket.Connected += Connecting;
+            _serverSocket.Disconnected += Disconnected;
+            _serverSocket.Received += Received;
+            _serverList = new ServerDataInfo[20];
             PlaySessionList = new List<THumSession>();
         }
 
         public void Start()
         {
-            _serverSocket.Init();
-            _serverSocket.Start(_conf.ServerAddr, _conf.ServerPort);
+            var touchSocketConfig = new TouchSocketConfig();
+            touchSocketConfig.SetListenIPHosts(new IPHost[1]
+            {
+                new IPHost(IPAddress.Parse(_conf.ServerAddr), _conf.ServerPort)
+            }).SetDataHandlingAdapter(() => new PlayerPacketFixedHeaderDataHandlingAdapter());
+            _serverSocket.Setup(touchSocketConfig);
             _playDataStorage.LoadQuickList();
             _logger.Info($"玩家数据存储服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
         }
 
-        private void ServerSocketClientConnect(object sender, AsyncUserToken e)
+        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            string sIPaddr = e.RemoteIPaddr;
-            if (!DBShare.CheckServerIP(sIPaddr))
+            if (requestInfo is not PlayerMessageFixedHeaderRequestInfo fixedHeader)
+                return;
+            var client = (SocketClient)sender;
+            if (int.TryParse(client.ID, out var clientId))
             {
-                _logger.Warn("非法服务器连接: " + sIPaddr);
-                e.Socket.Close();
+                if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
+                {
+                    _logger.Error($"解析玩家数据封包出现异常封包.");
+                    return;
+                }
+                var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
+                ProcessMessagePacket(client.ID, messageData);
+            }
+            else
+            {
+                _logger.Info("未知客户端...");
+            }
+        }
+
+        private void Connecting(object sender, TouchSocketEventArgs e)
+        {
+            var client = (SocketClient)sender;
+            var endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
+            if (!DBShare.CheckServerIP(endPoint.Address.ToString()))
+            {
+                _logger.Warn("非法服务器连接: " + endPoint);
+                client.Close();
                 return;
             }
             var serverInfo = new ServerDataInfo();
-            serverInfo.Data = new byte[1024 * 20];
-            serverInfo.ConnectionId = e.ConnectionId;
-            _serverList.Add(serverInfo);
+            serverInfo.ConnectionId = client.ID;
+            _serverList[int.Parse(client.ID) - 1] = serverInfo;
         }
 
-        private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
+        private void Disconnected(object sender, DisconnectEventArgs e)
         {
-            for (var i = 0; i < _serverList.Count; i++)
+            var client = (SocketClient)sender;
+            for (var i = 0; i < _serverList.Length; i++)
             {
                 var serverInfo = _serverList[i];
-                if (serverInfo.ConnectionId == e.ConnectionId)
+                if (serverInfo.ConnectionId == client.ID)
                 {
-                    ClearSocket(e.ConnectionId);
-                    _serverList.Remove(serverInfo);
+                    ClearSocket(client.ID);
+                    _serverList[i] = null;
                     break;
                 }
             }
         }
-
-        private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
-        {
-
-        }
-
-        private void ProcessServerData(byte[] data, int nLen, ref ServerDataInfo serverInfo)
-        {
-            var srcOffset = 0;
-            Span<byte> dataBuff = data;
-            try
-            {
-                while (nLen >= ServerDataPacket.FixedHeaderLen)
-                {
-                    var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                    var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
-                    if (message.PacketCode != Grobal2.PacketCode)
-                    {
-                        srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
-                        nLen -= 1;
-                        _logger.Error($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
-                        continue;
-                    }
-                    var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
-                    if (nCheckMsgLen > nLen)
-                    {
-                        break;
-                    }
-                    var messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
-                    ProcessMessagePacket(serverInfo, messageData);
-                    nLen -= nCheckMsgLen;
-                    if (nLen <= 0)
-                    {
-                        break;
-                    }
-                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
-                    serverInfo.DataLen = nLen;
-                    srcOffset = 0;
-                    if (nLen < ServerDataPacket.FixedHeaderLen)
-                    {
-                        break;
-                    }
-                }
-                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
-                {
-                    MemoryCopy.BlockCopy(dataBuff, 0, serverInfo.Data, 0, nLen);
-                    serverInfo.DataLen = nLen;
-                }
-                else
-                {
-                    serverInfo.DataLen = 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
-        }
         
-        private void ProcessMessagePacket(ServerDataInfo serverInfo, ServerRequestData requestData)
+        private void ProcessMessagePacket(string connectionId, ServerRequestData requestData)
         {
             int nQueryId = requestData.QueryId;
             var requestMessage = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
@@ -147,12 +115,12 @@ namespace DBSrv.Services
                 var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
                 if (queryId <= 0)
                 {
-                    ProcessServerMsg(nQueryId, requestMessage, sData, serverInfo.ConnectionId);
+                    ProcessServerMsg(nQueryId, requestMessage, sData, connectionId);
                     return;
                 }
                 if (requestData.Sgin.Length <= 0)
                 {
-                    ProcessServerMsg(nQueryId, requestMessage, sData, serverInfo.ConnectionId);
+                    ProcessServerMsg(nQueryId, requestMessage, sData, connectionId);
                     return;
                 }
                 var signatureBuff = BitConverter.GetBytes(queryId);
@@ -161,41 +129,20 @@ namespace DBSrv.Services
                 var sgin = BitConverter.ToInt16(sginBuff);
                 if (sgin == signatureId)
                 {
-                    ProcessServerMsg(nQueryId, requestMessage, sData, serverInfo.ConnectionId);
+                    ProcessServerMsg(nQueryId, requestMessage, sData, connectionId);
                     return;
                 }
-                _serverSocket.CloseSocket(serverInfo.ConnectionId);
+                if (_serverSocket.TryGetSocketClient(connectionId, out var client))
+                {
+                    client.Close();
+                }
                 _logger.Error($"关闭错误的任务{nQueryId}查询请求.");
                 return;
             }
             var responsePack = new ServerRequestData();
             var messagePacket = new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0);
             responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
-            SendRequest(serverInfo.ConnectionId, nQueryId, responsePack);
-        }
-
-        private void ServerSocketClientRead(object sender, AsyncUserToken e)
-        {
-            for (var i = 0; i < _serverList.Count; i++)
-            {
-                var serverInfo = _serverList[i];
-                if (serverInfo.ConnectionId == e.ConnectionId)
-                {
-                    var nMsgLen = e.BytesReceived;
-                    if (serverInfo.DataLen > 0)
-                    {
-                        var packetData = new byte[e.BytesReceived];
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
-                        MemoryCopy.BlockCopy(packetData, 0, serverInfo.Data, serverInfo.DataLen, packetData.Length);
-                        ProcessServerData(serverInfo.Data, serverInfo.DataLen + nMsgLen, ref serverInfo);
-                    }
-                    else
-                    {
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, serverInfo.Data, 0, nMsgLen);
-                        ProcessServerData(serverInfo.Data, nMsgLen, ref serverInfo);
-                    }
-                }
-            }
+            SendRequest(connectionId, nQueryId, responsePack);
         }
         
         /// <summary>
@@ -463,7 +410,7 @@ namespace DBSrv.Services
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = serverMessage.GetBuffer();
+            var dataBuff = SerializerUtil.Serialize(serverMessage);
             var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);

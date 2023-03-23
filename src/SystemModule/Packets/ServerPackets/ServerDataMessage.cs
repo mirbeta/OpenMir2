@@ -4,13 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace SystemModule.Packets.ServerPackets
 {
-    public class ServerDataPacket : ServerPacket
+    [MemoryPackable]
+    public partial struct ServerDataPacket
     {
-        /// <summary>
-        /// 消息头固定大小
-        /// </summary>
-        public const int FixedHeaderLen = 6;
-
         /// <summary>
         /// 封包标识码
         /// </summary>
@@ -19,18 +15,11 @@ namespace SystemModule.Packets.ServerPackets
         /// 封包总长度
         /// </summary>
         public ushort PacketLen { get; set; }
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            PacketCode = reader.ReadUInt32();
-            PacketLen = reader.ReadUInt16();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(PacketCode);
-            writer.Write(PacketLen);
-        }
+        
+        /// <summary>
+        /// 消息头固定大小
+        /// </summary>
+        public const int FixedHeaderLen = 6;
     }
 
     [MemoryPackable]

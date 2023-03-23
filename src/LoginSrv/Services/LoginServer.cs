@@ -1,15 +1,16 @@
 using LoginSrv.Conf;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Net;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.DataHandlingAdapters;
 using SystemModule.Logger;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace LoginSrv.Services
 {
@@ -19,14 +20,14 @@ namespace LoginSrv.Services
     /// </summary>
     public class LoginServer
     {
-        private readonly SocketServer _serverSocket;
+        private readonly TcpService _serverSocket;
         private readonly MirLogger _logger;
         private readonly Config _config;
         private readonly ClientSession _clientSession;
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
         private readonly Channel<MessagePacket> _messageQueue;
-        private readonly Dictionary<string, LoginGateInfo> _loginGateMap = new Dictionary<string, LoginGateInfo>();
+        private readonly LoginGateInfo[] loginGates = new LoginGateInfo[20];
 
         public LoginServer(MirLogger logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager, SessionManager sessionManager)
         {
@@ -36,117 +37,71 @@ namespace LoginSrv.Services
             _sessionManager = sessionManager;
             _config = configManager.Config;
             _messageQueue = Channel.CreateUnbounded<MessagePacket>();
-            _serverSocket = new SocketServer(short.MaxValue, 2048);
-            _serverSocket.OnClientConnect += GSocketClientConnect;
-            _serverSocket.OnClientDisconnect += GSocketClientDisconnect;
-            _serverSocket.OnClientRead += GSocketClientRead;
-            _serverSocket.OnClientError += GSocketClientError;
+            _serverSocket = new TcpService();
+            _serverSocket.Connected += Connecting;
+            _serverSocket.Disconnected += Disconnected;
+            _serverSocket.Received += Received;
         }
 
         public void StartServer()
         {
-            _serverSocket.Init();
-            _serverSocket.Start(_config.sGateAddr, _config.nGatePort);
+            var touchSocketConfig = new TouchSocketConfig();
+            touchSocketConfig.SetListenIPHosts(new IPHost[1]
+            {
+                new IPHost(IPAddress.Parse(_config.sGateAddr), _config.nGatePort)
+            }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            _serverSocket.Setup(touchSocketConfig);
             _logger.LogInformation($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
-
-        private void GSocketClientConnect(object sender, AsyncUserToken e)
+        
+        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            var gateInfo = new LoginGateInfo();
-            gateInfo.Socket = e.Socket;
-            gateInfo.ConnectionId = e.ConnectionId;
-            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, e.RemoteIPaddr);//应该改为按策略获取一个对外的公开网关地址
-            gateInfo.UserList = new List<UserInfo>();
-            gateInfo.KeepAliveTick = HUtil32.GetTickCount();
-            _clientManager.AddSession(e.SocHandle, gateInfo);
-            _logger.LogInformation($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]已链接.");
-            _loginGateMap.Add(e.ConnectionId, gateInfo);
-        }
-
-        private void GSocketClientDisconnect(object sender, AsyncUserToken e)
-        {
-            _loginGateMap.Remove(e.ConnectionId);
-            _clientManager.Delete(e.SocHandle);
-            _logger.LogWarning($"登录网关[{e.RemoteIPaddr}:{e.RemotePort}]断开链接.");
-        }
-
-        private void GSocketClientError(object sender, AsyncSocketErrorEventArgs e)
-        {
-            _logger.LogError(e.Exception);
-        }
-
-        private void GSocketClientRead(object sender, AsyncUserToken e)
-        {
-            try
+            if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
+                return;
+            var client = (SocketClient)sender;
+            if (int.TryParse(client.ID, out var clientId))
             {
-                if (_loginGateMap.TryGetValue(e.ConnectionId, out var gateInfo))
-                {
-                    var nMsgLen = e.BytesReceived;
-                    if (gateInfo.DataLen > 0)
-                    {
-                        var packetData = new byte[e.BytesReceived];
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
-                        MemoryCopy.BlockCopy(packetData, 0, gateInfo.Data, gateInfo.DataLen, packetData.Length);
-                        ProcessGateData(gateInfo.Data, gateInfo.DataLen + nMsgLen, e.SocHandle, ref gateInfo);
-                    }
-                    else
-                    {
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, gateInfo.Data, 0, nMsgLen);
-                        ProcessGateData(gateInfo.Data, nMsgLen, e.SocHandle, ref gateInfo);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex);
-            }
-        }
-
-        private void ProcessGateData(byte[] data, int nLen, int socketId, ref LoginGateInfo gateInfo)
-        {
-            var srcOffset = 0;
-            Span<byte> dataBuff = data;
-            while (nLen > ServerDataPacket.FixedHeaderLen)
-            {
-                var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
-                if (message.PacketCode != Grobal2.PacketCode)
-                {
-                    srcOffset++;
-                    dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
-                    nLen -= 1;
-                    _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
-                    continue;
-                }
-                var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
-                if (nCheckMsgLen > nLen)
-                {
-                    break;
-                } 
-                var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
-                AddToQueue(socketId, messageData);
-                nLen -= nCheckMsgLen;
-                if (nLen <= 0)
-                {
-                    break;
-                }
-                dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
-                gateInfo.DataLen = nLen;
-                srcOffset = 0;
-                if (nLen < ServerDataPacket.FixedHeaderLen)
-                {
-                    break;
-                }
-            }
-            if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
-            {
-                MemoryCopy.BlockCopy(dataBuff, 0, gateInfo.Data, 0, nLen);
-                gateInfo.DataLen = nLen;
+                ProcessGateData(fixedHeader.Header, fixedHeader.Message, clientId);
             }
             else
             {
-                gateInfo.DataLen = 0;
+                //_logger.Info("未知客户端...");
             }
+        }
+
+        private void Connecting(object sender, TouchSocketEventArgs e)
+        {
+            var client = (SocketClient)sender;
+            var clientId = int.Parse(client.ID);
+            var gateInfo = new LoginGateInfo();
+            gateInfo.Socket = client.MainSocket;
+            gateInfo.ConnectionId = client.ID;
+            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, client.MainSocket.RemoteEndPoint.GetIP());//应该改为按策略获取一个对外的公开网关地址
+            gateInfo.UserList = new List<UserInfo>();
+            gateInfo.KeepAliveTick = HUtil32.GetTickCount();
+            _clientManager.AddSession(clientId, gateInfo);
+            _logger.LogInformation($"登录网关[{client.MainSocket.RemoteEndPoint}]已链接...");
+            loginGates[clientId] = gateInfo;
+        }
+
+        private void Disconnected(object sender, DisconnectEventArgs e)
+        {
+            var client = (SocketClient)sender;
+            var clientId = int.Parse(client.ID);
+            loginGates[clientId] = null;
+            _clientManager.Delete(clientId);
+            _logger.LogWarning($"登录网关[{client.MainSocket.RemoteEndPoint}]断开链接.");
+        }
+        
+        private void ProcessGateData(ServerDataPacket packetHead,byte[] data, int socketId)
+        {
+            if (packetHead.PacketCode != Grobal2.PacketCode)
+            {
+                _logger.DebugLog($"解析登录网关封包出现异常...");
+                return;
+            }
+            var messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
+            AddToQueue(socketId, messageData);
         }
 
         private void AddToQueue(int socketId, ServerDataMessage messageData)
@@ -308,11 +263,11 @@ namespace LoginSrv.Services
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = serverMessage.GetBuffer();
+            var dataBuff = SerializerUtil.Serialize(serverMessage);
             var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
-            if (_serverSocket.IsOnline(connectionId))
+            if (_serverSocket.SocketClientExist(connectionId))
             {
                 _serverSocket.Send(connectionId, data);
             }

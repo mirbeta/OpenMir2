@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -10,10 +10,12 @@ using DBSrv.Storage.Model;
 using NLog;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace DBSrv.Services
 {
@@ -27,41 +29,43 @@ namespace DBSrv.Services
         private readonly SettingConf _setting;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
-        private readonly SocketServer _userSocket;
+        private readonly TcpService _socketServer;
         private readonly SessionService _loginService;
         private readonly Channel<UserGateMessage> _reviceQueue;
-        private readonly Dictionary<string, SelGateInfo> _gateMap;
+        private readonly SelGateInfo[] _gateClients;
 
         public UserService(SettingConf conf, SessionService sessionService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
             _loginService = sessionService;
             _playRecordStorage = playRecord;
             _playDataStorage = playData;
-            _gateMap = new Dictionary<string, SelGateInfo>(StringComparer.OrdinalIgnoreCase);
+            _gateClients = new SelGateInfo[20];
             _reviceQueue = Channel.CreateUnbounded<UserGateMessage>();
-            _userSocket = new SocketServer(byte.MaxValue, 1024);
-            _userSocket.OnClientConnect += UserSocketClientConnect;
-            _userSocket.OnClientDisconnect += UserSocketClientDisconnect;
-            _userSocket.OnClientRead += UserSocketClientRead;
-            _userSocket.OnClientError += UserSocketClientError;
+            _socketServer = new TcpService();
+            _socketServer.Connected += Connecting;
+            _socketServer.Disconnected += Disconnected;
+            _socketServer.Received += Received;
             _setting = conf;
         }
 
         public void Start(CancellationToken stoppingToken)
         {
-            _userSocket.Init();
+            var touchSocketConfig = new TouchSocketConfig();
+            touchSocketConfig.SetListenIPHosts(new IPHost[1]
+            {
+                new IPHost(IPAddress.Parse(_setting.GateAddr), _setting.GatePort)
+            }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            _socketServer.Setup(touchSocketConfig);
             _playRecordStorage.LoadQuickList();
-            _userSocket.Start(_setting.GateAddr, _setting.GatePort);
             StartMessageThread(stoppingToken);
             _logger.Info($"玩家数据网关服务[{_setting.GateAddr}:{_setting.GatePort}]已启动.等待链接...");
         }
 
         public void Stop()
         {
-            var gateList = _gateMap.Values.ToList();
-            for (var i = 0; i < gateList.Count; i++)
+            for (var i = 0; i < _gateClients.Length; i++)
             {
-                var gateInfo = gateList[i];
+                var gateInfo = _gateClients[i];
                 if (gateInfo != null)
                 {
                     for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
@@ -73,7 +77,7 @@ namespace DBSrv.Services
             }
         }
 
-        public IEnumerable<SelGateInfo> GetGates => _gateMap.Values;
+        public IEnumerable<SelGateInfo> GetGates => _gateClients;
 
         /// <summary>
         /// 处理客户端请求消息
@@ -88,7 +92,7 @@ namespace DBSrv.Services
                     {
                         try
                         {
-                            var selGata = _gateMap[message.ConnectionId];
+                            var selGata = _gateClients[message.ConnectionId];
                             if (selGata == null)
                             {
                                 continue;
@@ -141,125 +145,96 @@ namespace DBSrv.Services
                 }
             }
         }
-
-        private void UserSocketClientConnect(object sender, AsyncUserToken e)
+        
+        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            var sIPaddr = e.RemoteIPaddr;
-            if (!DBShare.CheckServerIP(sIPaddr))
+            if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
+                return;
+            var client = (SocketClient)sender;
+            if (int.TryParse(client.ID, out var clientId))
             {
-                e.Socket.Close();
-                _logger.Warn("非法地址连接: " + sIPaddr);
+                var gateClient = _gateClients[clientId - 1];
+                ProcessGateData(fixedHeader.Header, fixedHeader.Message, client.ID, ref gateClient);
+            }
+            else
+            {
+                _logger.Info("未知客户端...");
+            }
+        }
+
+        private void Connecting(object sender, TouchSocketEventArgs e)
+        {
+            var client = (SocketClient)sender;
+            var endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
+            if (!DBShare.CheckServerIP(endPoint.Address.ToString()))
+            {
+                _logger.Warn("非法服务器连接: " + endPoint);
+                client.Close();
                 return;
             }
             var selGateInfo = new SelGateInfo();
-            selGateInfo.Socket = e.Socket;
-            selGateInfo.ConnectionId = e.ConnectionId;
-            selGateInfo.RemoteEndPoint = e.EndPoint;
+            selGateInfo.Socket = client.MainSocket;
+            selGateInfo.ConnectionId = client.ID;
+            selGateInfo.RemoteEndPoint = client.MainSocket.RemoteEndPoint;
             selGateInfo.UserList = new List<SessionUserInfo>();
-            selGateInfo.nGateID = DBShare.GetGateID(sIPaddr);
-            _gateMap.Add(e.ConnectionId, selGateInfo);
-            _logger.Info(string.Format(sGateOpen, 0, e.RemoteIPaddr, e.RemotePort));
+            selGateInfo.nGateID = DBShare.GetGateID(endPoint.Address.ToString());
+            _gateClients[int.Parse(client.ID) - 1] = selGateInfo;
+            _logger.Info(string.Format(sGateOpen, 0, client.MainSocket.RemoteEndPoint));
         }
 
-        private const string sGateOpen = "角色网关[{0}]({1}:{2})已打开...";
-        private const string sGateClose = "角色网关[{0}]({1}:{2})已关闭...";
-
-        private void UserSocketClientDisconnect(object sender, AsyncUserToken e)
+        private void Disconnected(object sender, DisconnectEventArgs e)
         {
-            var gateIndex = -1;
-            if (_gateMap.ContainsKey(e.ConnectionId))
+            var client = (SocketClient)sender;
+            var clientId = int.Parse(client.ID) - 1;
+            var gateClient = _gateClients[clientId];
+            if (gateClient != null && gateClient.UserList != null)
             {
-                if (_gateMap.TryGetValue(e.ConnectionId, out var gateInfo))
+                for (var ii = 0; ii < gateClient.UserList.Count; ii++)
                 {
-                    if (gateInfo != null && gateInfo.UserList != null)
-                    {
-                        for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
-                        {
-                            gateInfo.UserList[ii] = null;
-                        }
-                        gateInfo.UserList = null;
-                    }
-                    _logger.Info(string.Format(sGateClose, gateIndex, e.RemoteIPaddr, e.RemotePort));
+                    gateClient.UserList[ii] = null;
                 }
-                gateIndex++;
-                _gateMap.Remove(e.ConnectionId);
+                gateClient.UserList = null;
             }
+            _logger.Info(string.Format(sGateClose, clientId, client.MainSocket.RemoteEndPoint));
+            _gateClients[int.Parse(client.ID) - 1] = null;
         }
-
-        private void UserSocketClientError(object sender, AsyncSocketErrorEventArgs e)
+        
+        private const string sGateOpen = "角色网关[{0}]({1})已打开...";
+        private const string sGateClose = "角色网关[{0}]({1})已关闭...";
+        
+        private void ProcessGateData(ServerDataPacket packetHead, byte[] data, string connectionId, ref SelGateInfo gateInfo)
         {
-
-        }
-
-        private void ProcessGateData(byte[] data, int nLen,string connectionId, ref SelGateInfo gateInfo)
-        {
-            var srcOffset = 0;
-            Span<byte> dataBuff = data;
             try
             {
-                while (nLen >= ServerDataPacket.FixedHeaderLen)
+                if (packetHead.PacketCode != Grobal2.PacketCode)
                 {
-                    var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                    var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
-                    if (message.PacketCode != Grobal2.PacketCode)
-                    {
-                        srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
-                        nLen -= 1;
-                        _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
-                        continue;
-                    }
-                    var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
-                    if (nCheckMsgLen > nLen)
-                    {
-                        break;
-                    } 
-                    var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
-                    switch (messageData.Type)
-                    {
-                        case ServerDataType.KeepAlive:
-                            SendKeepAlivePacket(gateInfo.ConnectionId);
-                            _logger.Debug("Received SelGate Heartbeat.");
-                            break;
-                        case ServerDataType.Enter:
-                            var sData = string.Empty;
-                            var sTemp = string.Empty;
-                            var sText = HUtil32.GetString(messageData.Data, 0, messageData.DataLen);
-                            HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
-                            sData = HUtil32.GetValidStr3(sData, ref sTemp, HUtil32.Backslash);
-                            OpenUser(messageData.SocketId, sData, ref gateInfo);
-                            break;
-                        case ServerDataType.Leave:
-                            CloseUser(messageData.SocketId, ref gateInfo);
-                            break;
-                        case ServerDataType.Data:
-                            var userMessage = new UserGateMessage();
-                            userMessage.ConnectionId = connectionId;
-                            userMessage.Packet = messageData;
-                            _reviceQueue.Writer.TryWrite(userMessage);
-                            break;
-                    }
-                    nLen -= nCheckMsgLen;
-                    if (nLen <= 0)
-                    {
-                        break;
-                    }
-                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
-                    gateInfo.DataLen = nLen;
-                    srcOffset = 0;
-                    if (nLen < ServerDataPacket.FixedHeaderLen)
-                    {
-                        break;
-                    }
+                    _logger.Debug($"解析角色网关封包出现异常...");
+                    return;
                 }
-                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+                var messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
+                switch (messageData.Type)
                 {
-                    MemoryCopy.BlockCopy(dataBuff, 0, gateInfo.Data, 0, nLen);
-                    gateInfo.DataLen = nLen;
-                }
-                else
-                {
-                    gateInfo.DataLen = 0;
+                    case ServerDataType.KeepAlive:
+                        SendKeepAlivePacket(gateInfo.ConnectionId);
+                        _logger.Debug("Received SelGate Heartbeat.");
+                        break;
+                    case ServerDataType.Enter:
+                        var sData = string.Empty;
+                        var sTemp = string.Empty;
+                        var sText = HUtil32.GetString(messageData.Data, 0, messageData.DataLen);
+                        HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
+                        sData = HUtil32.GetValidStr3(sData, ref sTemp, HUtil32.Backslash);
+                        OpenUser(messageData.SocketId, sData, ref gateInfo);
+                        break;
+                    case ServerDataType.Leave:
+                        CloseUser(messageData.SocketId, ref gateInfo);
+                        break;
+                    case ServerDataType.Data:
+                        var userMessage = new UserGateMessage();
+                        userMessage.ConnectionId = int.Parse(connectionId);
+                        userMessage.Packet = messageData;
+                        _reviceQueue.Writer.TryWrite(userMessage);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -267,34 +242,17 @@ namespace DBSrv.Services
                 _logger.Error(ex);
             }
         }
-
-        private void UserSocketClientRead(object sender, AsyncUserToken e)
-        {
-            if (_gateMap.TryGetValue(e.ConnectionId, out var gateInfo))
-            {
-                var nMsgLen = e.BytesReceived;
-                if (gateInfo.DataLen > 0)
-                {
-                    var packetData = new byte[e.BytesReceived];
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
-                    MemoryCopy.BlockCopy(packetData, 0, gateInfo.Data, gateInfo.DataLen, packetData.Length);
-                    ProcessGateData(gateInfo.Data, gateInfo.DataLen + nMsgLen, e.ConnectionId, ref gateInfo);
-                }
-                else
-                {
-                    Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, gateInfo.Data, 0, nMsgLen);
-                    ProcessGateData(gateInfo.Data, nMsgLen, e.ConnectionId, ref gateInfo);
-                }
-            }
-        }
-
+        
         public int GetUserCount()
         {
             var nUserCount = 0;
-            var gateList = _gateMap.Values.ToList();
-            for (var i = 0; i < gateList.Count; i++)
+            for (var i = 0; i < _gateClients.Length; i++)
             {
-                var gateInfo = gateList[i];
+                var gateInfo = _gateClients[i];
+                if (gateInfo == null)
+                {
+                    continue;
+                }
                 nUserCount += gateInfo.UserList.Count;
             }
             return nUserCount;
@@ -819,7 +777,7 @@ namespace DBSrv.Services
 
         private void SendPacket(string connectionId, ServerDataMessage packet)
         {
-            if (!_userSocket.IsOnline(connectionId))
+            if (!_socketServer.SocketClientExist(connectionId))
                 return;
             SendMessage(connectionId, SerializerUtil.Serialize(packet));
         }
@@ -831,17 +789,17 @@ namespace DBSrv.Services
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = serverMessage.GetBuffer();
+            var dataBuff = SerializerUtil.Serialize(serverMessage);
             var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
-            _userSocket.Send(connectionId, data);
+            _socketServer.Send(connectionId, data);
         }
     }
 
     public struct UserGateMessage
     {
         public ServerDataMessage Packet;
-        public string ConnectionId;
+        public int ConnectionId;
     }
 }

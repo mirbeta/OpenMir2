@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using DBSrv.Conf;
 using DBSrv.Storage;
 using NLog;
 using SystemModule;
+using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace DBSrv.Services
 {
@@ -20,7 +22,7 @@ namespace DBSrv.Services
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ICacheStorage _cacheStorage;
         private readonly IMarketStorage _marketStorage;
-        private readonly SocketServer _socketServer;
+        private readonly TcpService _socketServer;
         private readonly SettingConf _setting;
         private readonly IList<ServerDataInfo> serverList;
 
@@ -29,24 +31,28 @@ namespace DBSrv.Services
             _setting = setting;
             _cacheStorage = cacheStorage;
             _marketStorage = marketStorage;
-            _socketServer = new SocketServer(byte.MaxValue, 1024);
-            _socketServer.OnClientConnect += ServerSocketClientConnect;
-            _socketServer.OnClientDisconnect += ServerSocketClientDisconnect;
-            _socketServer.OnClientRead += ServerSocketClientRead;
-            _socketServer.OnClientError += ServerSocketClientError;
+            _socketServer = new TcpService();
+            _socketServer.Connected += Connecting;
+            _socketServer.Disconnected += Disconnected;
+            _socketServer.Received += Received;
             serverList = new List<ServerDataInfo>();
         }
 
         public void Start()
         {
-            _socketServer.Init();
-            _socketServer.Start(_setting.MarketServerAddr, _setting.MarketServerPort);
+            var touchSocketConfig = new TouchSocketConfig();
+            touchSocketConfig.SetListenIPHosts(new IPHost[1]
+            {
+                new IPHost(IPAddress.Parse(_setting.MarketServerAddr), _setting.MarketServerPort)
+            }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            _socketServer.Setup(touchSocketConfig);
+            _socketServer.Start();
             _logger.Info($"拍卖行数据库服务[{_setting.MarketServerAddr}:{_setting.MarketServerPort}]已启动.等待链接...");
         }
 
         public void Stop()
         {
-            _socketServer.Shutdown();
+            _socketServer.Stop();
         }
         
         public void PushMarketData()
@@ -59,121 +65,31 @@ namespace DBSrv.Services
                 _logger.Info("拍卖行数据为空,跳过推送拍卖行数据.");
                 return;
             }
-            var socketList = _socketServer.GetSockets();
+            var socketList = _socketServer.GetClients();
             foreach (var client in socketList)
             {
-                if (_socketServer.IsOnline(client.ConnectionId))
+                if (_socketServer.SocketClientExist(client.ID))
                 {
-                    _socketServer.Send(client.ConnectionId, Array.Empty<byte>());//推送拍卖行数据
+                    _socketServer.Send(client.ID, Array.Empty<byte>());//推送拍卖行数据
                 }
             }
-            _logger.Info($"推送拍卖行数据成功.当前拍卖行物品数据:[{marketItems.Count()}],在线服务器:[{socketList.Count}]");
+            _logger.Info($"推送拍卖行数据成功.当前拍卖行物品数据:[{marketItems.Count()}],在线服务器:[{socketList.Length}]");
         }
-
-        private void ServerSocketClientConnect(object sender, AsyncUserToken e)
+        
+        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            string sIPaddr = e.RemoteIPaddr;
-            if (!DBShare.CheckServerIP(sIPaddr))
-            {
-                _logger.Warn("非法服务器连接: " + sIPaddr);
-                e.Socket.Close();
+            if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
                 return;
-            }
-            var serverInfo = new ServerDataInfo();
-            serverInfo.Data = new byte[1024 * 20];
-            serverInfo.ConnectionId = e.ConnectionId;
-            serverList.Add(serverInfo);
-            _logger.Info("拍卖行客户端(GameSrv)连接 " + e.RemoteIPaddr);
-        }
-
-        private void ServerSocketClientRead(object sender, AsyncUserToken e)
-        {
-            for (var i = 0; i < serverList.Count; i++)
-            {
-                var serverInfo = serverList[i];
-                if (serverInfo.ConnectionId == e.ConnectionId)
-                {
-                    var nMsgLen = e.BytesReceived;
-                    if (serverInfo.DataLen > 0)
-                    {
-                        var packetData = new byte[e.BytesReceived];
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, packetData, 0, nMsgLen);
-                        MemoryCopy.BlockCopy(packetData, 0, serverInfo.Data, serverInfo.DataLen, packetData.Length);
-                        ProcessServerData(serverInfo.Data, serverInfo.DataLen + nMsgLen, ref serverInfo);
-                    }
-                    else
-                    {
-                        Buffer.BlockCopy(e.ReceiveBuffer, e.Offset, serverInfo.Data, 0, nMsgLen);
-                        ProcessServerData(serverInfo.Data, nMsgLen, ref serverInfo);
-                    }
-                }
-            }
-        }
-
-        private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
-        {
-            for (int i = 0; i < serverList.Count; i++)
-            {
-                if (serverList[i].ConnectionId == e.ConnectionId)
-                {
-                    serverList.RemoveAt(i);
-                }
-            }
-            _logger.Info("拍卖行客户端(GameSrv)断开连接 " + e.RemoteIPaddr);
-        }
-
-        private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
-        {
-
-        }
-
-        private void ProcessServerData(byte[] data, int nLen, ref ServerDataInfo serverInfo)
-        {
-            var srcOffset = 0;
-            Span<byte> dataBuff = data;
+            var client = (SocketClient)sender;
             try
             {
-                while (nLen >= ServerDataPacket.FixedHeaderLen)
+                if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
                 {
-                    var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                    var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
-                    if (message.PacketCode != Grobal2.PacketCode)
-                    {
-                        srcOffset++;
-                        dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
-                        nLen -= 1;
-                        _logger.Error($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
-                        continue;
-                    }
-                    var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
-                    if (nCheckMsgLen > nLen)
-                    {
-                        break;
-                    }
-                    var messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
-                    ProcessMessagePacket(serverInfo, messageData);
-                    nLen -= nCheckMsgLen;
-                    if (nLen <= 0)
-                    {
-                        break;
-                    }
-                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
-                    serverInfo.DataLen = nLen;
-                    srcOffset = 0;
-                    if (nLen < ServerDataPacket.FixedHeaderLen)
-                    {
-                        break;
-                    }
+                    _logger.Error($"解析寄售行封包出现异常封包...");
+                    return;
                 }
-                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
-                {
-                    MemoryCopy.BlockCopy(dataBuff, 0, serverInfo.Data, 0, nLen);
-                    serverInfo.DataLen = nLen;
-                }
-                else
-                {
-                    serverInfo.DataLen = 0;
-                }
+                var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
+                ProcessMessagePacket(client.ID, messageData);
             }
             catch (Exception ex)
             {
@@ -181,7 +97,36 @@ namespace DBSrv.Services
             }
         }
 
-        private void ProcessMessagePacket(ServerDataInfo serverInfo, ServerRequestData requestData)
+        private void Connecting(object sender, TouchSocketEventArgs e)
+        {
+            var client = (SocketClient)sender;
+            var remoteIp = client.MainSocket.RemoteEndPoint.GetIP();
+            if (!DBShare.CheckServerIP(remoteIp))
+            {
+                _logger.Warn("非法服务器连接: " + remoteIp);
+                client.Close();
+                return;
+            }
+            var serverInfo = new ServerDataInfo();
+            serverInfo.ConnectionId = client.ID;
+            serverList.Add(serverInfo);
+            _logger.Info("拍卖行客户端(GameSrv)连接 " + client.MainSocket.RemoteEndPoint);
+        }
+
+        private void Disconnected(object sender, DisconnectEventArgs e)
+        {
+            var client = (SocketClient)sender;
+            for (var i = 0; i < serverList.Count; i++)
+            {
+                if (serverList[i].ConnectionId == client.ID)
+                {
+                    serverList.RemoveAt(i);
+                }
+            }
+            _logger.Info("拍卖行客户端(GameSrv)断开连接 " + client.MainSocket.RemoteEndPoint);
+        }
+
+        private void ProcessMessagePacket(string connectionId, ServerRequestData requestData)
         {
             int nQueryId = requestData.QueryId;
             var requestMessage = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
@@ -192,12 +137,12 @@ namespace DBSrv.Services
                 var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
                 if (queryId <= 0)
                 {
-                    SendFailMessage(nQueryId, serverInfo.ConnectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
+                    SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
                     return;
                 }
                 if (requestData.Sgin.Length <= 0)
                 {
-                    SendFailMessage(nQueryId, serverInfo.ConnectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
+                    SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
                     return;
                 }
                 var signatureBuff = BitConverter.GetBytes(queryId);
@@ -206,14 +151,15 @@ namespace DBSrv.Services
                 var sgin = BitConverter.ToInt16(sginBuff);
                 if (sgin == signatureId)
                 {
-                    ProcessMarketPacket(nQueryId, requestMessage, sData, serverInfo.ConnectionId);
+                    ProcessMarketPacket(nQueryId, requestMessage, sData, connectionId);
                     return;
                 }
-                _socketServer.CloseSocket(serverInfo.ConnectionId);
+                _socketServer.TryGetSocketClient(connectionId, out var client);
+                client.Close();
                 _logger.Error($"关闭错误的任务{nQueryId}查询请求.");
                 return;
             }
-            SendFailMessage(nQueryId, serverInfo.ConnectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
+            SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
         }
 
         private void ProcessMarketPacket(int nQueryId, ServerRequestMessage packet, byte[] sData, string connectionId)
@@ -362,7 +308,7 @@ namespace DBSrv.Services
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = serverMessage.GetBuffer();
+            var dataBuff = SerializerUtil.Serialize(serverMessage);
             var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);

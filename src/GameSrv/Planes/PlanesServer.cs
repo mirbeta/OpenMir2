@@ -1,38 +1,42 @@
+using System.Net;
 using System.Net.Sockets;
-using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
+using SystemModule.DataHandlingAdapters;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace GameSrv.Planes {
     /// <summary>
     /// 位面服务器
     /// </summary>
     public class PlanesServer {
-        private readonly TServerMsgInfo[] m_SrvArray;
-        private readonly SocketServer _msgServer;
+        private readonly TServerMsgInfo[] srvArray;
+        private readonly TcpService _serverSocket;
         private readonly PlanesMessage _groupMessageHandle;
-
         private static PlanesServer instance;
-
         public static PlanesServer Instance => instance ??= new PlanesServer();
 
         private PlanesServer() {
-            m_SrvArray = new TServerMsgInfo[10];
-            _msgServer = new SocketServer(10, 512);
-            _msgServer.OnClientConnect += MsgServerClientConnect;
-            _msgServer.OnClientDisconnect += MsgServerClientDisconnect;
-            _msgServer.OnClientRead += MsgServerClientRead;
-            _msgServer.Init();
+            srvArray = new TServerMsgInfo[10];
+            _serverSocket = new TcpService();
+            _serverSocket.Connected += Connecting;
+            _serverSocket.Disconnected += Disconnected;
+            _serverSocket.Received += Received;
             _groupMessageHandle = new PlanesMessage();
         }
 
         public void StartPlanesServer() {
-            _msgServer.Start(M2Share.Config.MasterSrvAddr, M2Share.Config.MasterSrvPort);
+            var touchSocketConfig = new TouchSocketConfig();
+            touchSocketConfig.SetListenIPHosts(new IPHost[1]
+            {
+                new IPHost(IPAddress.Parse(M2Share.Config.MasterSrvAddr), M2Share.Config.MasterSrvPort)
+            });
+            _serverSocket.Setup(touchSocketConfig);
             M2Share.Logger.Info($"节点数据服务[{M2Share.Config.MasterSrvAddr}:{M2Share.Config.MasterSrvPort}]已启动.");
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr) {
-            for (int i = 0; i < m_SrvArray.Length; i++) {
-                TServerMsgInfo serverMsgInfo = m_SrvArray[i];
+            for (int i = 0; i < srvArray.Length; i++) {
+                TServerMsgInfo serverMsgInfo = srvArray[i];
                 if (serverMsgInfo == null) {
                     continue;
                 }
@@ -90,73 +94,85 @@ namespace GameSrv.Planes {
         /// 发送消息给所有节点服务器
         /// </summary>
         /// <param name="msgstr"></param>
-        public void SendServerSocket(string msgstr) {
-            TServerMsgInfo ServerMsgInfo;
-            for (int i = 0; i < m_SrvArray.Length; i++) {
-                ServerMsgInfo = m_SrvArray[i];
-                if (ServerMsgInfo == null) {
+        public void SendServerSocket(string msgstr)
+        {
+            for (int i = 0; i < srvArray.Length; i++)
+            {
+                var serverMsgInfo = srvArray[i];
+                if (serverMsgInfo == null)
+                {
                     continue;
                 }
-                if (ServerMsgInfo.Socket != null && ServerMsgInfo.Socket.Connected) {
-                    SendSocket(ServerMsgInfo.Socket, msgstr);
+                if (serverMsgInfo.Socket != null && serverMsgInfo.Socket.Connected)
+                {
+                    SendSocket(serverMsgInfo.Socket, msgstr);
                 }
             }
         }
 
-        private void MsgServerClientConnect(object sender, AsyncUserToken e) {
-            TServerMsgInfo ServerMsgInfo;
-            for (int i = 0; i < m_SrvArray.Length; i++) {
-                ServerMsgInfo = m_SrvArray[i];
-                if (ServerMsgInfo == null) {
-                    ServerMsgInfo = new TServerMsgInfo();
-                    ServerMsgInfo.Socket = e.Socket;
-                    ServerMsgInfo.SocData = "";
-                    ServerMsgInfo.SocketId = e.ConnectionId;
-                    M2Share.Logger.Info("节点服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")链接成功...");
-                    m_SrvArray[i] = ServerMsgInfo;
+        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        {
+            if (requestInfo is not PlayerMessageFixedHeaderRequestInfo fixedHeader)
+                return;
+            var client = (SocketClient)sender;
+            if (int.TryParse(client.ID, out var clientId))
+            {
+                var serverInfo = srvArray[clientId - 1];
+                //ProcessServerData(fixedHeader.Header, client.ID, fixedHeader.Message);
+                serverInfo.SocData = serverInfo.SocData + HUtil32.GetString(fixedHeader.Message);
+            }
+            else
+            {
+                //_logger.Info("未知客户端...");
+            }
+        }
+
+        private void Connecting(object sender, TouchSocketEventArgs e)
+        {
+            var client = (SocketClient)sender;
+            var endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
+            for (int i = 0; i < srvArray.Length; i++)
+            {
+                var serverMsgInfo = srvArray[i];
+                if (serverMsgInfo == null)
+                {
+                    serverMsgInfo = new TServerMsgInfo();
+                    serverMsgInfo.Socket = client.MainSocket;
+                    serverMsgInfo.SocData = string.Empty;
+                    serverMsgInfo.SocketId = client.ID;
+                    M2Share.Logger.Info($"节点服务器({endPoint})链接成功...");
+                    srvArray[i] = serverMsgInfo;
                     break;
                 }
             }
         }
 
-        private void MsgServerClientDisconnect(object sender, AsyncUserToken e) {
-            TServerMsgInfo ServerMsgInfo;
-            for (int i = 0; i < m_SrvArray.Length; i++) {
-                ServerMsgInfo = m_SrvArray[i];
-                if (ServerMsgInfo == null) {
+        private void Disconnected(object sender, DisconnectEventArgs e)
+        {
+            var client = (SocketClient)sender;
+            for (var i = 0; i < srvArray.Length; i++)
+            {
+                var serverMsgInfo = srvArray[i];
+                if (serverMsgInfo == null)
+                {
                     continue;
                 }
-                if (ServerMsgInfo.SocketId == e.ConnectionId) {
-                    ServerMsgInfo.Socket = null;
-                    ServerMsgInfo.SocData = "";
-                    M2Share.Logger.Error("节点服务器(" + e.RemoteIPaddr + ':' + e.EndPoint.Port + ")断开连接...");
-                    m_SrvArray[i] = null;
+                if (serverMsgInfo.SocketId == client.ID)
+                {
+                    serverMsgInfo.Socket = null;
+                    serverMsgInfo.SocData = "";
+                    M2Share.Logger.Error($"节点服务器({client.MainSocket.RemoteEndPoint})断开连接...");
+                    srvArray[i] = null;
                     break;
                 }
             }
         }
-
-        /// <summary>
-        /// 接收节点服务器发送过来的消息
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MsgServerClientRead(object sender, AsyncUserToken e) {
-            for (int i = 0; i < m_SrvArray.Length; i++) {
-                if (m_SrvArray[i] == null) {
-                    continue;
-                }
-                if (m_SrvArray[i].SocketId == e.ConnectionId) {
-                    m_SrvArray[i].SocData = m_SrvArray[i].SocData + HUtil32.GetString(e.ReceiveBuffer, e.Offset, e.BytesReceived);
-                }
-            }
-        }
-
+        
         public void Run() {
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::Run";
             try {
-                for (int i = 0; i < m_SrvArray.Length; i++) {
-                    TServerMsgInfo ps = m_SrvArray[i];
+                for (int i = 0; i < srvArray.Length; i++) {
+                    TServerMsgInfo ps = srvArray[i];
                     if (ps == null) {
                         continue;
                     }
