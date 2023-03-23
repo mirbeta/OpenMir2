@@ -18,13 +18,13 @@ namespace DBSrv
         private readonly PeriodicTimer _timer;
         private readonly SettingConf _config;
         private readonly UserService _userService;
-        private readonly SessionService _sessionService;
+        private readonly ClientSession _sessionService;
         private readonly DataService _dataService;
         private readonly MarketService _marketService;
         private readonly ICacheStorage _cacheStorage;
         private readonly IPlayDataStorage _playDataStorage;
 
-        public TimedService(SettingConf config, ICacheStorage cacheStorage, UserService userService, SessionService session, DataService dataService, IPlayDataStorage playDataStorage, MarketService marketService)
+        public TimedService(SettingConf config, ICacheStorage cacheStorage, UserService userService, ClientSession session, DataService dataService, IPlayDataStorage playDataStorage, MarketService marketService)
         {
             _config = config;
             _userService = userService;

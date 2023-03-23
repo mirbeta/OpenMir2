@@ -30,11 +30,11 @@ namespace DBSrv.Services
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
         private readonly TcpService _socketServer;
-        private readonly SessionService _loginService;
+        private readonly ClientSession _loginService;
         private readonly Channel<UserGateMessage> _reviceQueue;
         private readonly SelGateInfo[] _gateClients;
 
-        public UserService(SettingConf conf, SessionService sessionService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
+        public UserService(SettingConf conf, ClientSession sessionService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
             _loginService = sessionService;
             _playRecordStorage = playRecord;

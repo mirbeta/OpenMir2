@@ -12,18 +12,18 @@ namespace DBSrv.Services
     /// <summary>
     /// 登陆会话同步服务(DBSrv-LoginSrv)
     /// </summary>
-    public class SessionService
+    public class ClientSession
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient _clientScoket;
         private readonly IList<GlobaSessionInfo> _globaSessionList = null;
-        private readonly SettingConf _conf;
+        private readonly SettingConf _setting;
         private string _sockMsg = string.Empty;
 
-        public SessionService(SettingConf conf)
+        public ClientSession(SettingConf conf)
         {
-            _conf = conf;
-            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(_conf.LoginServerAddr), _conf.LoginServerPort));
+            _setting = conf;
+            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(_setting.LoginServerAddr), _setting.LoginServerPort));
             _clientScoket.OnReceivedData += LoginSocketRead;
             _clientScoket.OnConnected += LoginSocketConnected;
             _clientScoket.OnDisconnected += LoginSocketDisconnected;
@@ -36,13 +36,13 @@ namespace DBSrv.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logger.Warn("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]拒绝链接...");
+                    _logger.Warn("账号服务器[" + _setting.LoginServerAddr + ":" + _setting.LoginServerPort + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logger.Warn("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]关闭连接...");
+                    _logger.Warn("账号服务器[" + _setting.LoginServerAddr + ":" + _setting.LoginServerPort + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logger.Warn("账号服务器[" + _conf.LoginServerAddr + ":" + _conf.LoginServerPort + "]链接超时...");
+                    _logger.Warn("账号服务器[" + _setting.LoginServerAddr + ":" + _setting.LoginServerPort + "]链接超时...");
                     break;
             }
         }
@@ -80,8 +80,8 @@ namespace DBSrv.Services
             {
                 return;
             }
-            _logger.Debug($"重链接账号服务器[{_clientScoket.RemoteEndPoint}].");
-            _clientScoket.Connect(_conf.LoginServerAddr, _conf.LoginServerPort);
+            _logger.Debug($"开始接账号服务器[{_clientScoket.RemoteEndPoint}].");
+            _clientScoket.Connect(_setting.LoginServerAddr, _setting.LoginServerPort);
         }
 
         private void LoginSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -95,9 +95,9 @@ namespace DBSrv.Services
 
         private void ProcessSocketMsg()
         {
-            string sData = string.Empty;
-            string sCode = string.Empty;
-            string sScoketText = _sockMsg;
+            var sData = string.Empty;
+            var sCode = string.Empty;
+            var sScoketText = _sockMsg;
             while (sScoketText.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0)
             {
                 sScoketText = HUtil32.ArrestStringEx(sScoketText, "(", ")", ref sData);
@@ -105,8 +105,8 @@ namespace DBSrv.Services
                 {
                     break;
                 }
-                string sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
-                int nIdent = HUtil32.StrToInt(sCode, 0);
+                var sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
+                var nIdent = HUtil32.StrToInt(sCode, 0);
                 switch (nIdent)
                 {
                     case Messages.SS_OPENSESSION:
@@ -126,7 +126,7 @@ namespace DBSrv.Services
         public void SendSocketMsg(short wIdent, string sMsg)
         {
             const string sFormatMsg = "({0}/{1})";
-            string sSendText = string.Format(sFormatMsg, wIdent, sMsg);
+            var sSendText = string.Format(sFormatMsg, wIdent, sMsg);
             if (_clientScoket.IsConnected)
             {
                 _clientScoket.SendText(sSendText);
@@ -135,7 +135,7 @@ namespace DBSrv.Services
 
         public bool CheckSession(string account, string sIPaddr, int sessionId)
         {
-            bool result = false;
+            var result = false;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
                 var globaSessionInfo = _globaSessionList[i];
@@ -153,7 +153,7 @@ namespace DBSrv.Services
 
         public int CheckSessionLoadRcd(string sAccount, string sIPaddr, int nSessionId, ref bool boFoundSession)
         {
-            int result = -1;
+            var result = -1;
             boFoundSession = false;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
@@ -177,7 +177,7 @@ namespace DBSrv.Services
 
         public bool SetSessionSaveRcd(string sAccount)
         {
-            bool result = false;
+            var result = false;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
                 var globaSessionInfo = _globaSessionList[i];
@@ -227,7 +227,7 @@ namespace DBSrv.Services
 
         public bool GetGlobaSessionStatus(int nSessionId)
         {
-            bool result = false;
+            var result = false;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
                 var globaSessionInfo = _globaSessionList[i];
@@ -265,17 +265,17 @@ namespace DBSrv.Services
 
         private void ProcessAddSession(string sData)
         {
-            string sAccount = string.Empty;
-            string s10 = string.Empty;
-            string s14 = string.Empty;
-            string s18 = string.Empty;
-            string sIPaddr = string.Empty;
+            var sAccount = string.Empty;
+            var s10 = string.Empty;
+            var s14 = string.Empty;
+            var s18 = string.Empty;
+            var sIPaddr = string.Empty;
             sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s10, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s14, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s18, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);
-            GlobaSessionInfo globaSessionInfo = new GlobaSessionInfo();
+            var globaSessionInfo = new GlobaSessionInfo();
             globaSessionInfo.sAccount = sAccount;
             globaSessionInfo.sIPaddr = sIPaddr;
             globaSessionInfo.nSessionID = HUtil32.StrToInt(s10, 0);
@@ -285,14 +285,14 @@ namespace DBSrv.Services
             globaSessionInfo.dwAddTick = HUtil32.GetTickCount();
             globaSessionInfo.dAddDate = DateTime.Now;
             _globaSessionList.Add(globaSessionInfo);
-            //_logger.DebugLog("收到账号中心同步会话消息.");
+            //_logger.Debug($"同步账号服务[{sAccount}]同步会话消息...");
         }
 
         private void ProcessDelSession(string sData)
         {
-            string sAccount = string.Empty;
+            var sAccount = string.Empty;
             sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-            int nSessionId = HUtil32.StrToInt(sData, 0);
+            var nSessionId = HUtil32.StrToInt(sData, 0);
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
                 var globaSessionInfo = _globaSessionList[i];
@@ -310,7 +310,7 @@ namespace DBSrv.Services
 
         public bool GetSession(string sAccount, string sIPaddr)
         {
-            bool result = false;
+            var result = false;
             for (var i = 0; i < _globaSessionList.Count; i++)
             {
                 var globaSessionInfo = _globaSessionList[i];
@@ -335,7 +335,7 @@ namespace DBSrv.Services
         {
             if (_clientScoket.IsConnected)
             {
-                _clientScoket.SendText("(" + Messages.SS_SERVERINFO + "/" + _conf.ServerName + "/" + "99" + "/" + userCount + ")");
+                _clientScoket.SendText("(" + Messages.SS_SERVERINFO + "/" + _setting.ServerName + "/" + "99" + "/" + userCount + ")");
             }
         }
     }

@@ -84,7 +84,7 @@ namespace DBSrv
                     break;
             }
             services.AddSingleton(_setting);
-            services.AddSingleton<SessionService>();
+            services.AddSingleton<ClientSession>();
             services.AddSingleton<UserService>();
             services.AddSingleton<DataService>();
             services.AddSingleton<MarketService>();
