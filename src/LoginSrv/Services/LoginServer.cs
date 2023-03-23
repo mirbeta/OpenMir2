@@ -51,6 +51,7 @@ namespace LoginSrv.Services
                 new IPHost(IPAddress.Parse(_config.sGateAddr), _config.nGatePort)
             }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
+            _serverSocket.Start();
             _logger.LogInformation($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
         

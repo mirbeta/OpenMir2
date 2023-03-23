@@ -56,6 +56,7 @@ namespace DBSrv.Services
                 new IPHost(IPAddress.Parse(_setting.GateAddr), _setting.GatePort)
             }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _socketServer.Setup(touchSocketConfig);
+            _socketServer.Start();
             _playRecordStorage.LoadQuickList();
             StartMessageThread(stoppingToken);
             _logger.Info($"玩家数据网关服务[{_setting.GateAddr}:{_setting.GatePort}]已启动.等待链接...");
@@ -216,7 +217,6 @@ namespace DBSrv.Services
                 {
                     case ServerDataType.KeepAlive:
                         SendKeepAlivePacket(gateInfo.ConnectionId);
-                        _logger.Debug("Received SelGate Heartbeat.");
                         break;
                     case ServerDataType.Enter:
                         var sData = string.Empty;
@@ -282,6 +282,7 @@ namespace DBSrv.Services
             var message = new ServerDataMessage();
             message.Type = ServerDataType.KeepAlive;
             SendPacket(connectionId, message);
+            _logger.Debug("响应角色网关心跳...");
         }
 
         /// <summary>

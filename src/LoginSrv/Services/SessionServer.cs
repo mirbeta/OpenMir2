@@ -50,6 +50,7 @@ namespace LoginSrv.Services
                 new IPHost(IPAddress.Parse(_config.sServerAddr), _config.nServerPort)
             });
             _serverSocket.Setup(touchSocketConfig);
+            _serverSocket.Start();
             _logger.LogInformation($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
         }
         

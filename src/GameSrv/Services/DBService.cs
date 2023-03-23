@@ -61,7 +61,7 @@ namespace GameSrv.Services
             requestPacket.QueryId = queryId;
             requestPacket.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(message));
             requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
-            var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+            var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
             requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
             SendMessage(SerializerUtil.Serialize(requestPacket));
             return true;
@@ -201,7 +201,7 @@ namespace GameSrv.Services
                 if (responsePacket != null)
                 {
                     var respCheckCode = responsePacket.QueryId;
-                    var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + 6;
+                    var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + ServerDataPacket.FixedHeaderLen;
                     if (nLen >= 12)
                     {
                         var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);

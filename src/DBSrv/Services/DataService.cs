@@ -47,6 +47,7 @@ namespace DBSrv.Services
                 new IPHost(IPAddress.Parse(_conf.ServerAddr), _conf.ServerPort)
             }).SetDataHandlingAdapter(() => new PlayerDataFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
+            _serverSocket.Start();
             _playDataStorage.LoadQuickList();
             _logger.Info($"玩家数据存储服务[{_conf.ServerAddr}:{_conf.ServerPort}]已启动.等待链接...");
         }
@@ -55,12 +56,12 @@ namespace DBSrv.Services
         {
             if (requestInfo is not PlayerDataMessageFixedHeaderRequestInfo fixedHeader)
                 return;
-            var client = (SocketClient)sender;
             if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
             {
                 _logger.Error($"解析玩家数据封包出现异常封包.");
                 return;
             }
+            var client = (SocketClient)sender;
             var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
             ProcessMessagePacket(client.ID, messageData);
         }
@@ -68,10 +69,10 @@ namespace DBSrv.Services
         private void Connecting(object sender, TouchSocketEventArgs e)
         {
             var client = (SocketClient)sender;
-            var endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
-            if (!DBShare.CheckServerIP(endPoint.Address.ToString()))
+            var remoteIp = client.MainSocket.RemoteEndPoint.GetIP();
+            if (!DBShare.CheckServerIP(remoteIp))
             {
-                _logger.Warn("非法服务器连接: " + endPoint);
+                _logger.Warn("非法服务器连接: " + remoteIp);
                 client.Close();
             }
         }
@@ -84,9 +85,9 @@ namespace DBSrv.Services
         
         private void ProcessMessagePacket(string connectionId, ServerRequestData requestData)
         {
-            int nQueryId = requestData.QueryId;
+            var nQueryId = requestData.QueryId;
             var requestMessage = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
-            var packetLen = requestData.Message.Length + requestData.Packet.Length + 6;
+            var packetLen = requestData.Message.Length + requestData.Packet.Length + ServerDataPacket.FixedHeaderLen;
             if (packetLen >= Messages.DefBlockSize && nQueryId > 0 && requestData.Packet != null && requestData.Sgin != null)
             {
                 var sData = EDCode.DecodeBuff(requestData.Packet);
@@ -128,38 +129,38 @@ namespace DBSrv.Services
         /// </summary>
         public void ClearTimeoutSession()
         {
-            int i = 0;
+            var i = 0;
             while (true)
             {
                 if (PlaySessionList.Count <= i)
                 {
                     break;
                 }
-                THumSession HumSession = PlaySessionList[i];
-                if (!HumSession.bo24)
+                var humSession = PlaySessionList[i];
+                if (!humSession.bo24)
                 {
-                    if (HumSession.bo2C)
+                    if (humSession.bo2C)
                     {
-                        if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 20 * 1000)
+                        if ((HUtil32.GetTickCount() - humSession.lastSessionTick) > 20 * 1000)
                         {
-                            HumSession = null;
+                            humSession = null;
                             PlaySessionList.RemoveAt(i);
                             continue;
                         }
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 2 * 60 * 1000)
+                        if ((HUtil32.GetTickCount() - humSession.lastSessionTick) > 2 * 60 * 1000)
                         {
-                            HumSession = null;
+                            humSession = null;
                             PlaySessionList.RemoveAt(i);
                             continue;
                         }
                     }
                 }
-                if ((HUtil32.GetTickCount() - HumSession.lastSessionTick) > 40 * 60 * 1000)
+                if ((HUtil32.GetTickCount() - humSession.lastSessionTick) > 40 * 60 * 1000)
                 {
-                    HumSession = null;
+                    humSession = null;
                     PlaySessionList.RemoveAt(i);
                     continue;
                 }
@@ -196,9 +197,9 @@ namespace DBSrv.Services
             {
                 return;
             }
-            PlayerDataInfo HumanRCD = null;
-            bool boFoundSession = false;
-            int nCheckCode = -1;
+            PlayerDataInfo humanRcd = null;
+            var boFoundSession = false;
+            var nCheckCode = -1;
             if ((!string.IsNullOrEmpty(loadHumanPacket.Account)) && (!string.IsNullOrEmpty(loadHumanPacket.ChrName)))
             {
                 nCheckCode = _loginService.CheckSessionLoadRcd(loadHumanPacket.Account, loadHumanPacket.UserAddr, loadHumanPacket.SessionID, ref boFoundSession);
@@ -209,13 +210,13 @@ namespace DBSrv.Services
             }
             if ((nCheckCode == 1) || boFoundSession)
             {
-                int nIndex = _playDataStorage.Index(loadHumanPacket.ChrName);
+                var nIndex = _playDataStorage.Index(loadHumanPacket.ChrName);
                 if (nIndex >= 0)
                 {
-                    HumanRCD = _cacheStorage.Get(loadHumanPacket.ChrName, out bool isExist);
+                    humanRcd = _cacheStorage.Get(loadHumanPacket.ChrName, out var isExist);
                     if (!isExist)
                     {
-                        if (!_playDataStorage.Get(loadHumanPacket.ChrName, ref HumanRCD))
+                        if (!_playDataStorage.Get(loadHumanPacket.ChrName, ref humanRcd))
                         {
                             nCheckCode = -2;
                         }
@@ -231,7 +232,7 @@ namespace DBSrv.Services
             {
                 var loadHumData = new LoadPlayerDataPacket();
                 loadHumData.ChrName = EDCode.EncodeString(loadHumanPacket.ChrName);
-                loadHumData.HumDataInfo = HumanRCD;
+                loadHumData.HumDataInfo = humanRcd;
                 var messagePacket = new ServerRequestMessage(Messages.DBR_LOADHUMANRCD, 1, 0, 0, 1);
                 responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
                 SendRequest(connectionId, queryId, responsePack, loadHumData);
@@ -255,10 +256,10 @@ namespace DBSrv.Services
                     _logger.Error("保存玩家数据出错.");
                     return;
                 }
-                var sUserID = saveHumDataPacket.Account;
+                var sUserId = saveHumDataPacket.Account;
                 var sChrName = saveHumDataPacket.ChrName;
                 var humanRcd = saveHumDataPacket.HumDataInfo;
-                bool bo21 = humanRcd == null;
+                var bo21 = humanRcd == null;
                 if (!bo21)
                 {
                     bo21 = true;
@@ -275,17 +276,17 @@ namespace DBSrv.Services
                         _playDataStorage.Update(sChrName, humanRcd);
                         bo21 = false;
                     }
-                    _loginService.SetSessionSaveRcd(sUserID);
+                    _loginService.SetSessionSaveRcd(sUserId);
                 }
                 var responsePack = new ServerRequestData();
                 if (!bo21)
                 {
                     for (var i = 0; i < PlaySessionList.Count; i++)
                     {
-                        THumSession HumSession = PlaySessionList[i];
-                        if ((HumSession.sChrName == sChrName) && (HumSession.nIndex == nRecog))
+                        var humSession = PlaySessionList[i];
+                        if ((string.Compare(humSession.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0) && (humSession.nIndex == nRecog))
                         {
-                            HumSession.lastSessionTick = HUtil32.GetTickCount();
+                            humSession.lastSessionTick = HUtil32.GetTickCount();
                             break;
                         }
                     }
@@ -317,13 +318,13 @@ namespace DBSrv.Services
             var sChrName = saveHumDataPacket.ChrName;
             for (var i = 0; i < PlaySessionList.Count; i++)
             {
-                THumSession HumSession = PlaySessionList[i];
-                if ((HumSession.sChrName == sChrName) && (HumSession.nIndex == nRecog))
+                var humSession = PlaySessionList[i];
+                if ((string.Compare(humSession.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0) && (humSession.nIndex == nRecog))
                 {
-                    HumSession.bo24 = false;
-                    HumSession.ConnectionId = connectionId;
-                    HumSession.bo2C = true;
-                    HumSession.lastSessionTick = HUtil32.GetTickCount();
+                    humSession.bo24 = false;
+                    humSession.ConnectionId = connectionId;
+                    humSession.bo2C = true;
+                    humSession.lastSessionTick = HUtil32.GetTickCount();
                     break;
                 }
             }
@@ -332,7 +333,7 @@ namespace DBSrv.Services
 
         private void ClearSocket(string connectionId)
         {
-            int nIndex = 0;
+            var nIndex = 0;
             while (true)
             {
                 if (PlaySessionList.Count <= nIndex)
@@ -353,15 +354,15 @@ namespace DBSrv.Services
         private void SendRequest(string connectionId, int queryId, ServerRequestData requestPacket)
         {
             requestPacket.QueryId = queryId;
-            var queryPart = 0;
+            int queryPart;
             if (requestPacket.Packet != null)
             {
-                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
+                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
             }
             else
             {
                 requestPacket.Packet = Array.Empty<byte>();
-                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + 6));
+                queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + ServerDataPacket.FixedHeaderLen));
             }
             var nCheckCode = BitConverter.GetBytes(queryPart);
             requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
@@ -375,8 +376,8 @@ namespace DBSrv.Services
             {
                 requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
             }
-            var s = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + 6));
-            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(s));
+            var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
+            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
             SendMessage(connectionId, SerializerUtil.Serialize(requestPacket));
         }
 
