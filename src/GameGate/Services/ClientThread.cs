@@ -250,7 +250,7 @@ namespace GameGate.Services
                         //{
                         //    dataMemory = data[..GateShare.HeaderMessageSize];
                         //}
-                        var sessionPacket = new SessionMessage(packetHeader.SessionId, GateInfo.ServiceId, data, packetHeader.PackLength);
+                        var sessionPacket = new SessionMessage(GateInfo.ServiceId, packetHeader.SessionId, data, packetHeader.PackLength);
                         SessionManager.Enqueue(sessionPacket);
                         break;
                     case Messages.GM_TEST:

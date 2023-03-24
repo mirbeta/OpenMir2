@@ -81,13 +81,13 @@ namespace GameGate.Services
             return _sessionMap[serviceId][sessionId];
         }
 
-        public void CloseSession(int sessionId)
+        public void CloseSession(byte serviceId, int sessionId)
         {
-            if (sessionId > _sessionMap.Length)
+            if (serviceId > _sessionMap.Length)
             {
                 return;
             }
-            _sessionMap[sessionId] = null;
+            _sessionMap[serviceId][sessionId] = null;
         }
 
         public ClientSession[][] GetSessions()

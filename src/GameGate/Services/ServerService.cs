@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading;
 using GameGate.Conf;
 using NLog;
@@ -108,11 +109,10 @@ namespace GameGate.Services
         private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
             //_logger.Debug($"客户端链接:[{GateInfo.ServiceId}] SessionId:[{e.SessionId}] RunPort:{_gateEndPoint}");
-            var threadId = -1;
-            var clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out threadId);
+            var clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out int threadId);
             if (clientThread == null || threadId < 0)
             {
-                //todo 这里应该直接断开玩家连接，并在客户端尽兴提示
+                //todo 直接断开玩家连接，提示客户端链接失败
                 _logger.Debug("获取GameSvr服务器实例失败，请确认GameGate和GameSvr是否链接正常。");
                 return;
             }
@@ -137,7 +137,6 @@ namespace GameGate.Services
             }
             if (userSession != null)
             {
-                e.SessionId = userSession.SessionId;
                 clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
                 SessionMgr.AddSession(GateInfo.ServiceId, userSession.SessionId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, messageSendQueue));
                 //_logger.Info("开始连接: " + sRemoteAddress);
@@ -186,7 +185,7 @@ namespace GameGate.Services
                 //_logger.Info("断开链接: " + sRemoteAddr);
             }
             SessionCloseQueue.Enqueue(e.SocHandle); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
-            SessionMgr.CloseSession(e.SessionId);
+            SessionMgr.CloseSession(GateInfo.ServiceId, e.SessionId);
             //_logger.Debug($"用户断开链接 Ip:[{sRemoteAddr}] ConnectionId:[{e.ConnectionId}] ScoketId:[{e.SocHandle}]");
         }
 
@@ -198,15 +197,14 @@ namespace GameGate.Services
         /// <summary>
         /// 收到客户端消息
         /// </summary>
-        private void ServerSocketClientRead(object sender, AsyncUserToken token)
+        private unsafe void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            //_logger.Debug($"收到客户端消息:[{GateInfo.ServiceId}] SessionId:[{token.SessionId}] RunPort:{_gateEndPoint}");
             var clientSession = SessionMgr.GetSession(GateInfo.ServiceId, token.SessionId);
             if (clientSession != null)
             {
-                var data = new byte[token.BytesReceived];
-                Buffer.BlockCopy(token.ReceiveBuffer, token.Offset, data, 0, data.Length);
-                ServerMgr.SendMessageQueue(new SessionMessage(token.SessionId, GateInfo.ServiceId, data, data.Length));
+                var buff = new IntPtr(NativeMemory.AllocZeroed((uint)token.BytesReceived));
+                MemoryCopy.BlockCopy(token.ReceiveBuffer, token.Offset, buff.ToPointer(), 0, token.BytesReceived);
+                ServerMgr.SendMessageQueue(new ClientPacketMessage(GateInfo.ServiceId, token.SessionId, buff, token.BytesReceived));
                 networkMonitor.Receive(token.BytesReceived);
             }
             else

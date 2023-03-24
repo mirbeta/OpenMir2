@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using GameGate.Filters;
 using GameGate.Services;
 using SystemModule.Common;
@@ -68,16 +69,34 @@ namespace GameGate
     public readonly struct SessionMessage
     {
         public byte[] Buffer { get; }
-        public int PacketLen { get; }
         public int SessionId { get; }
         public byte ServiceId { get; }
+        public int BuffLen { get; }
+        public IntPtr Data { get; }
 
-        public SessionMessage(int sessionId, byte serviceId, byte[] buffer, int packetLen)
+        public SessionMessage(byte serviceId,int sessionId, byte[] buffer, int buffLen)
         {
-            this.Buffer = buffer;
-            this.PacketLen = packetLen;
             this.SessionId = sessionId;
             this.ServiceId = serviceId;
+            this.Buffer = buffer;
+            this.BuffLen = buffLen;
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public readonly struct ClientPacketMessage
+    {
+        public int SessionId { get; }
+        public byte ServiceId { get; }
+        public int BuffLen { get; }
+        public IntPtr Data { get; }
+
+        public ClientPacketMessage(byte serviceId, int sessionId, IntPtr buffer, int buffLen)
+        {
+            this.SessionId = sessionId;
+            this.ServiceId = serviceId;
+            this.Data = buffer;
+            this.BuffLen = buffLen;
         }
     }
 

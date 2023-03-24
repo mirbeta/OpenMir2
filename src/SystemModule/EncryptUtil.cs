@@ -104,7 +104,7 @@ namespace SystemModule
             return dstPos - dstOffset;
         }
 
-        public static Span<byte> DecodeSpan(byte[] srcBuf, int len, ref int decodeLen)
+        public static Span<byte> DecodeSpan(Span<byte> srcBuf, int len, ref int decodeLen)
         {
             return Decode(srcBuf, len, ref decodeLen);
         }

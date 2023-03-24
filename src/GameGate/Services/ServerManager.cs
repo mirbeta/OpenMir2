@@ -1,12 +1,12 @@
-﻿using GameGate.Conf;
-using NLog;
-using System;
+﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using GameGate.Conf;
+using NLog;
 using SystemModule;
-using SystemModule.MemoryPool;
 
 namespace GameGate.Services
 {
@@ -36,11 +36,11 @@ namespace GameGate.Services
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
-        private readonly Channel<SessionMessage> _messageQueue;
+        private readonly Channel<ClientPacketMessage> _messageQueue;
 
         private ServerManager()
         {
-            _messageQueue = Channel.CreateUnbounded<SessionMessage>();
+            _messageQueue = Channel.CreateUnbounded<ClientPacketMessage>();
         }
 
         public void Initialize()
@@ -90,7 +90,7 @@ namespace GameGate.Services
         /// 客户端消息添加到队列给服务端处理
         /// GameGate -> GameSrv
         /// </summary>
-        public void SendMessageQueue(SessionMessage messagePacket)
+        public void SendMessageQueue(ClientPacketMessage messagePacket)
         {
             _messageQueue.Writer.TryWrite(messagePacket);
         }
@@ -188,11 +188,11 @@ namespace GameGate.Services
             /// <summary>
             /// 接收封包（客户端-》网关）
             /// </summary>
-            private readonly ChannelReader<SessionMessage> _messageQueue;
+            private readonly ChannelReader<ClientPacketMessage> _messageQueue;
             public MessageThreadState ThreadState;
             private static SessionManager SessionMgr => SessionManager.Instance;
 
-            public ClientMessageWorkThread(CancellationToken stoppingToken, ChannelReader<SessionMessage> channel)
+            public ClientMessageWorkThread(CancellationToken stoppingToken, ChannelReader<ClientPacketMessage> channel)
             {
                 _messageQueue = channel;
                 _resetEvent = new ManualResetEvent(true);
@@ -238,6 +238,13 @@ namespace GameGate.Services
                             catch (Exception e)
                             {
                                 _logger.Error(e);
+                            }
+                            finally
+                            {
+                                unsafe
+                                {
+                                    NativeMemory.Free(message.Data.ToPointer());
+                                }
                             }
                         }
                     }
