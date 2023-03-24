@@ -509,7 +509,7 @@ namespace GameSrv.RobotPlay
                                         case CellType.Monster:
                                             if (HUtil32.GetTickCount() - cellObject.AddTime >= 60000)
                                             {
-                                                cellInfo.Remove(i);
+                                                cellInfo.Remove(cellObject);
                                                 if (cellInfo.Count <= 0)
                                                 {
                                                     cellInfo.Clear();
@@ -538,7 +538,7 @@ namespace GameSrv.RobotPlay
                                                     {
                                                         M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
                                                     }
-                                                    cellInfo.Remove(i);
+                                                    cellInfo.Remove(cellObject);
                                                     if (cellInfo.Count <= 0)
                                                     {
                                                         cellInfo.Clear();

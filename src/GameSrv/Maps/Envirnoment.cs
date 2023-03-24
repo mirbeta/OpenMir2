@@ -259,7 +259,7 @@ namespace GameSrv.Maps {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                                 moveObject = cellInfo.ObjList[i];
                                 if (moveObject.CellObjId == cert.ActorId && moveObject.ActorObject) {
-                                    cellInfo.Remove(i);
+                                    cellInfo.Remove(moveObject);
                                     if (cellInfo.Count > 0) {
                                         continue;
                                     }
@@ -467,7 +467,7 @@ namespace GameSrv.Maps {
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (cellObject.CellObjId > 0) {
                             if (cellObject.CellType == cellType && cellObject.CellObjId == cellId) {
-                                cellInfo.Remove(i);
+                                cellInfo.Remove(cellObject);
                                 result = 1;
                                 if (cellObject.ActorObject && pRemoveObject != null && !pRemoveObject.DelFormMaped) {
                                     pRemoveObject.DelFormMaped = true;
@@ -482,7 +482,7 @@ namespace GameSrv.Maps {
                             }
                         }
                         else {
-                            cellInfo.Remove(i);
+                            cellInfo.Remove(cellObject);
                             if (cellInfo.Count > 0) {
                                 continue;
                             }

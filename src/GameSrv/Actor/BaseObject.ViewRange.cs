@@ -136,7 +136,7 @@ namespace GameSrv.Actor
                                     {
                                         if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                         {
-                                            cellInfo.Remove(i);
+                                            cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
                                                 continue;
@@ -245,7 +245,7 @@ namespace GameSrv.Actor
                                     {
                                         if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                         {
-                                            cellInfo.Remove(i);
+                                            cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
                                                 continue;
@@ -258,7 +258,7 @@ namespace GameSrv.Actor
                                     {
                                         if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)
                                         {
-                                            cellInfo.Remove(i);
+                                            cellInfo.Remove(cellObject);
                                             if (cellInfo.Count > 0)
                                             {
                                                 continue;

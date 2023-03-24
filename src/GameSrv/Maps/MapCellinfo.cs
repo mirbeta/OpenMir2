@@ -39,9 +39,9 @@ namespace GameSrv.Maps
             ObjList[index] = cell;
         }
 
-        public void Remove(int index)
+        public void Remove(CellObject index)
         {
-            ObjList.RemoveAt(index);
+            ObjList.Remove(index);
         }
 
         public void SetAttribute(CellAttribute cellAttribute)
