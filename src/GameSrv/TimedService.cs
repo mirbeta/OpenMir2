@@ -43,7 +43,7 @@ namespace GameSrv
             {
                 while (await _timer.WaitForNextTickAsync(stoppingToken))
                 {
-                    ExecuteInternal();
+                   await ExecuteInternal();
                 }
             }
             catch (OperationCanceledException)
@@ -59,7 +59,7 @@ namespace GameSrv
             return base.StopAsync(cancellationToken);
         }
 
-        private void ExecuteInternal()
+        private async Task ExecuteInternal()
         {
             if (!M2Share.StartReady) return;
             var currentTick = HUtil32.GetTickCount();
@@ -69,6 +69,7 @@ namespace GameSrv
                 M2Share.DataServer.CheckConnected();
                 IdSrvClient.Instance.CheckConnected();
                 PlanesClient.Instance.CheckConnected();
+                await M2Share.ChatChannel.Ping();
             }
             if ((currentTick - _saveIntervalTime) > 60 * 1000) //保存游戏变量等
             {

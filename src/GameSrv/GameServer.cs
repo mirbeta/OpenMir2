@@ -26,6 +26,7 @@ namespace GameSrv
             await M2Share.SocketMgr.StartMessageThread();
             M2Share.DataServer.Start();
             M2Share.MarketService.Start();
+            await M2Share.ChatChannel.Start();
             M2Share.SocketMgr.Start();
             _logger.Info("初始化游戏世界服务线程完成...");
             M2Share.StartReady = true;
@@ -45,6 +46,7 @@ namespace GameSrv
             await M2Share.SocketMgr.StopAsync();
             M2Share.DataServer.Stop();
             M2Share.MarketService.Stop();
+            await M2Share.ChatChannel.Stop();
         }
 
         private static void ProcessGameNotice()

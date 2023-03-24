@@ -92,6 +92,7 @@ namespace GameSrv
             M2Share.GeneratorProcessor.Initialize(stoppingToken);
             M2Share.DataServer = new DBService();
             M2Share.MarketService = new MarketService();
+            M2Share.ChatChannel = new ChatChannelService();
             M2Share.ScriptSystem = new ScriptSystem();
             M2Share.SocketMgr = new ThreadSocketMgr();
             M2Share.EventSource = new GameEventSource();
