@@ -19,6 +19,7 @@ namespace GameGate
         private int ProcessClearSessionTick { get; set; }
         private int CheckServerConnectTick { get; set; }
         private int KepAliveTick { get; set; }
+        private int ShowMonitorTick { get; set; }
 
         private readonly PeriodicTimer _periodicTimer;
 
@@ -36,6 +37,7 @@ namespace GameGate
             ProcessClearSessionTick = startTick;
             KepAliveTick = startTick;
             CheckServerConnectTick = startTick;
+            ShowMonitorTick = startTick;
             while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
             {
                 var currentTick = HUtil32.GetTickCount();
@@ -43,6 +45,28 @@ namespace GameGate
                 ClearIdleSession(currentTick);
                 KeepAlive(currentTick);
                 ProcessDelayClose(currentTick);
+                ShowNetworkMonitor(currentTick);
+            }
+        }
+
+        private void ShowNetworkMonitor(int currentTick)
+        {
+            if (currentTick - ShowMonitorTick > 10000)
+            {
+                ShowMonitorTick = HUtil32.GetTickCount();
+                var serverList = ServerManager.GetServerList();
+                if (serverList == null)
+                {
+                    return;
+                }
+                for (var i = 0; i < serverList.Length; i++)
+                {
+                    if (serverList[i] == null)
+                    {
+                        continue;
+                    }
+                   _logger.Info( $"{serverList[i].GateInfo.ServiceId} {serverList[i].NetworkMonitor.UpdateStatsAsync(5000)}");
+                }
             }
         }
 
