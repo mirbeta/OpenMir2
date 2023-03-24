@@ -34,7 +34,14 @@ namespace SystemModule.DataHandlingAdapters
         {
             if (!MemoryMarshal.TryRead(header, out _header))
                 return false;
-            this.bodyLength = _header.PackLength;
+            if (_header.PackLength < 0)
+            {
+                this.bodyLength = -_header.PackLength;
+            }
+            else
+            {
+                this.bodyLength = _header.PackLength;
+            }
             return true;
         }
 

@@ -1,7 +1,7 @@
-using GameGate.Conf;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using GameGate.Conf;
 
 namespace GameGate.Services
 {
@@ -64,7 +64,7 @@ namespace GameGate.Services
                         userSession.ProcessServerPacket(message);
                     }
                 }
-            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
+            }, stoppingToken);
         }
 
         public void AddSession(byte serviceId, int sessionId, ClientSession clientSession)

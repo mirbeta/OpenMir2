@@ -241,16 +241,16 @@ namespace GameGate.Services
                         SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, "", 0);
                         break;
                     case Grobal2.GM_DATA:
-                        byte[] dataMemory;
-                        if (packetHeader.PackLength > 0)
-                        {
-                            dataMemory = data[..packetHeader.PackLength];
-                        }
-                        else
-                        {
-                            dataMemory = data[..GateShare.HeaderMessageSize];
-                        }
-                        var sessionPacket = new SessionMessage(packetHeader.SessionId, GateInfo.ServiceId, dataMemory, packetHeader.PackLength);
+                        //byte[] dataMemory;
+                        //if (packetHeader.PackLength > 0)
+                        //{
+                        //    dataMemory = data[..packetHeader.PackLength];
+                        //}
+                        //else
+                        //{
+                        //    dataMemory = data[..GateShare.HeaderMessageSize];
+                        //}
+                        var sessionPacket = new SessionMessage(packetHeader.SessionId, GateInfo.ServiceId, data, packetHeader.PackLength);
                         SessionManager.Enqueue(sessionPacket);
                         break;
                     case Messages.GM_TEST:
