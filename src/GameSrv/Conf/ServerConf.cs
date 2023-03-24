@@ -33,6 +33,14 @@ namespace GameSrv.Conf {
             M2Share.Config.MasterSrvPort = ReadWriteInteger("Server", "MsgSrvPort", M2Share.Config.MasterSrvPort);
             M2Share.Config.LogServerAddr = ReadWriteString("Server", "LogServerAddr", M2Share.Config.LogServerAddr);
             M2Share.Config.LogServerPort = ReadWriteInteger("Server", "LogServerPort", M2Share.Config.LogServerPort);
+            M2Share.Config.EnableMarket = ReadWriteBool("Server", "EnableMarket", M2Share.Config.EnableMarket);
+            M2Share.Config.MarketSrvAddr = ReadWriteString("Server", "MarketSrvAddr", M2Share.Config.MarketSrvAddr);
+            M2Share.Config.MarketSrvPort = ReadWriteInteger("Server", "MarketSrvPort", M2Share.Config.MarketSrvPort);
+            M2Share.Config.MarketToken = ReadWriteString("Server", "MarketToken", M2Share.Config.MarketToken);
+            M2Share.Config.EnableChatServer = ReadWriteBool("Server", "EnableChatServer", M2Share.Config.EnableChatServer);
+            M2Share.Config.ChatSrvAddr = ReadWriteString("Server", "ChatSrvAddr", M2Share.Config.ChatSrvAddr);
+            M2Share.Config.ChatSrvPort = ReadWriteInteger("Server", "ChatSrvPort", M2Share.Config.ChatSrvPort);
+            M2Share.Config.ChatSrvToken = ReadWriteString("Server", "ChatSrvToken", M2Share.Config.ChatSrvToken);
             M2Share.Config.DiscountForNightTime = ReadWriteString("Server", "DiscountForNightTime", HUtil32.BoolToStr(M2Share.Config.DiscountForNightTime)).CompareTo("TRUE".ToLower()) == 0;
             M2Share.Config.HalfFeeStart = ReadWriteInteger("Server", "HalfFeeStart", M2Share.Config.HalfFeeStart);
             M2Share.Config.HalfFeeEnd = ReadWriteInteger("Server", "HalfFeeEnd", M2Share.Config.HalfFeeEnd);

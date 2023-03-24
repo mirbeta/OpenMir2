@@ -94,11 +94,33 @@ namespace GameSrv.Conf.Model {
         /// </summary>
         public int MasterSrvPort;
         /// <summary>
+        /// 日志服务器IP
+        /// </summary>
+        public string LogServerAddr;
+        /// <summary>
+        /// 日志服务器端口
+        /// </summary>
+        public int LogServerPort;
+        /// <summary>
+        /// 是否启用聊天服务器
+        /// </summary>
+        public bool EnableChatServer;
+        /// <summary>
+        /// 聊天服务器IP
+        /// </summary>
+        public string ChatSrvAddr;
+        /// <summary>
+        /// 聊天服务器端口
+        /// </summary>
+        public int ChatSrvPort;
+        /// <summary>
+        /// 聊天服务器令牌
+        /// </summary>
+        public string ChatSrvToken;
+        /// <summary>
         /// 服务器关闭倒计时秒数
         /// </summary>
         public int ShutdownSeconds;
-        public string LogServerAddr;
-        public int LogServerPort;
         public bool DiscountForNightTime;
         public int HalfFeeStart;
         public int HalfFeeEnd;
@@ -1088,6 +1110,10 @@ namespace GameSrv.Conf.Model {
             MasterSrvPort = 4900;
             LogServerAddr = "127.0.0.1";
             LogServerPort = 10000;
+            EnableChatServer = false;
+            ChatSrvAddr = "127.0.0.1";
+            ChatSrvPort = 5900;
+            ChatSrvToken = "1234567890";
             DiscountForNightTime = false;
             HalfFeeStart = 2;
             HalfFeeEnd = 10;
