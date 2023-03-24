@@ -2410,30 +2410,6 @@ namespace GameSrv.Actor
 
         public void SysMsg(string sMsg, MsgColor msgColor, MsgType msgType)
         {
-            if (M2Share.Config.ShowPreFixMsg)
-            {
-                switch (msgType)
-                {
-                    case MsgType.Mon:
-                        sMsg = M2Share.Config.MonSayMsgPreFix + sMsg;
-                        break;
-                    case MsgType.Hint:
-                        sMsg = M2Share.Config.HintMsgPreFix + sMsg;
-                        break;
-                    case MsgType.GameManger:
-                        sMsg = M2Share.Config.GameManagerRedMsgPreFix + sMsg;
-                        break;
-                    case MsgType.System:
-                        sMsg = M2Share.Config.SysMsgPreFix + sMsg;
-                        break;
-                    case MsgType.Cust:
-                        sMsg = M2Share.Config.CustMsgPreFix + sMsg;
-                        break;
-                    case MsgType.Castle:
-                        sMsg = M2Share.Config.CastleMsgPreFix + sMsg;
-                        break;
-                }
-            }
             if (msgType == MsgType.Notice) // 公告
             {
                 string str = string.Empty;

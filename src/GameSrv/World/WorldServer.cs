@@ -1704,12 +1704,43 @@ namespace GameSrv.World
 
         public void SendBroadCastMsg(string sMsg, MsgType msgType)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            if (M2Share.Config.ShowPreFixMsg)
             {
-                var playObject = PlayObjectList[i];
-                if (!playObject.Ghost)
+                switch (msgType)
                 {
-                    playObject.SysMsg(sMsg, MsgColor.Red, msgType);
+                    case MsgType.Mon:
+                        sMsg = M2Share.Config.MonSayMsgPreFix + sMsg;
+                        break;
+                    case MsgType.Hint:
+                        sMsg = M2Share.Config.HintMsgPreFix + sMsg;
+                        break;
+                    case MsgType.GameManger:
+                        sMsg = M2Share.Config.GameManagerRedMsgPreFix + sMsg;
+                        break;
+                    case MsgType.System:
+                        sMsg = M2Share.Config.SysMsgPreFix + sMsg;
+                        break;
+                    case MsgType.Cust:
+                        sMsg = M2Share.Config.CustMsgPreFix + sMsg;
+                        break;
+                    case MsgType.Castle:
+                        sMsg = M2Share.Config.CastleMsgPreFix + sMsg;
+                        break;
+                }
+            }
+            if (M2Share.Config.EnableChatServer)
+            {
+                M2Share.ChatChannel.SendPubChannelMessage(sMsg);
+            }
+            else
+            {
+                for (var i = 0; i < PlayObjectList.Count; i++)
+                {
+                    var playObject = PlayObjectList[i];
+                    if (!playObject.Ghost)
+                    {
+                        playObject.SysMsg(sMsg, MsgColor.Red, msgType);
+                    }
                 }
             }
         }
