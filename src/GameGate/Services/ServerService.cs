@@ -18,7 +18,7 @@ namespace GameGate.Services
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SocketServer _serverSocket;
-        private readonly GameGateInfo _GateInfo;
+        private readonly GameGateInfo _gateInfo;
         private readonly ClientThread _clientThread;
         private readonly IPEndPoint _gateEndPoint;
         private readonly SendQueue messageSendQueue;
@@ -29,7 +29,7 @@ namespace GameGate.Services
 
         public ServerService(GameGateInfo gameGate)
         {
-            _GateInfo = gameGate;
+            _gateInfo = gameGate;
             networkMonitor = new NetworkMonitor();
             _serverSocket = new SocketServer(GateShare.MaxSession, 500);
             SessionCloseQueue = new ConcurrentQueue<int>();
@@ -41,7 +41,7 @@ namespace GameGate.Services
 
         public ClientThread ClientThread => _clientThread;
         public NetworkMonitor NetworkMonitor => networkMonitor;
-        public GameGateInfo GateInfo => GateInfo;
+        public GameGateInfo GateInfo => _gateInfo;
 
         public void Initialize()
         { 
