@@ -270,13 +270,12 @@ namespace TouchSocket.Sockets
         public TClient[] GetClients()
         {
             var clients = m_socketClients.GetClients().ToArray();
-
-            TClient[] clients1 = new TClient[clients.Length];
+            TClient[] clientsArr = new TClient[clients.Length];
             for (int i = 0; i < clients.Length; i++)
             {
-                clients1[i] = (TClient)clients[i];
+                clientsArr[i] = (TClient)clients[i];
             }
-            return clients1;
+            return clientsArr;
         }
 
         /// <summary>
