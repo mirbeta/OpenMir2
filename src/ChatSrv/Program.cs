@@ -126,8 +126,9 @@ namespace GameGate
             LogManager.Configuration.Reload();
         }
         
-        private static async Task ShowServerStatus()
+        private static Task ShowServerStatus()
         {
+            return Task.CompletedTask;
             /*ChanggeLogLevel(LogLevel.Off);
             
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));

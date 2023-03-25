@@ -1,50 +1,50 @@
 using MQTTnet.Diagnostics;
 using System;
+using NLog;
 
 namespace GameGate
 {
     public class QueueConsoleLogger : IMqttNetLogger
     {
-        readonly object _consoleSyncRoot = new();
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public bool IsEnabled => true;
 
         public void Publish(MqttNetLogLevel logLevel, string source, string message, object[]? parameters, Exception? exception)
         {
-            var foregroundColor = ConsoleColor.White;
             switch (logLevel)
             {
                 case MqttNetLogLevel.Verbose:
-                    foregroundColor = ConsoleColor.White;
+                    if (parameters?.Length > 0)
+                    {
+                        message = string.Format(message, parameters);
+                    }
+                    _logger.Trace(message);
                     break;
 
                 case MqttNetLogLevel.Info:
-                    foregroundColor = ConsoleColor.Green;
+                    if (parameters?.Length > 0)
+                    {
+                        message = string.Format(message, parameters);
+                    }
+                    _logger.Info(message);
                     break;
 
                 case MqttNetLogLevel.Warning:
-                    foregroundColor = ConsoleColor.DarkYellow;
+                    if (parameters?.Length > 0)
+                    {
+                        message = string.Format(message, parameters);
+                    }
+                    _logger.Warn(message);
                     break;
 
                 case MqttNetLogLevel.Error:
-                    foregroundColor = ConsoleColor.Red;
+                    if (parameters?.Length > 0)
+                    {
+                        message = string.Format(message, parameters);
+                    }
+                    _logger.Error(message);
                     break;
-            }
-
-            if (parameters?.Length > 0)
-            {
-                message = string.Format(message, parameters);
-            }
-
-            lock (_consoleSyncRoot)
-            {
-                Console.ForegroundColor = foregroundColor;
-                Console.WriteLine(message);
-
-                if (exception != null)
-                {
-                    Console.WriteLine(exception);
-                }
             }
         }
     }
