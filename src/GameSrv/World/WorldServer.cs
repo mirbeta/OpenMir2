@@ -857,18 +857,15 @@ namespace GameSrv.World
                 case Messages.CM_GUILDDELMEMBER:
                 case Messages.CM_GUILDUPDATENOTICE:
                 case Messages.CM_GUILDUPDATERANKINFO:
-                    playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag,
-                        sMsg);
+                    playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag, sMsg);
                     break;
                 case Messages.CM_PASSWORD:
                 case Messages.CM_CHGPASSWORD:
                 case Messages.CM_SETPASSWORD:
-                    playObject.SendMsg(playObject, defMsg.Ident, defMsg.Param, defMsg.Recog, defMsg.Series, defMsg.Tag,
-                        sMsg);
+                    playObject.SendMsg(playObject, defMsg.Ident, defMsg.Param, defMsg.Recog, defMsg.Series, defMsg.Tag, sMsg);
                     break;
                 case Messages.CM_ADJUST_BONUS:
-                    playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag,
-                        sMsg);
+                    playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag, sMsg);
                     break;
                 case Messages.CM_HORSERUN:
                 case Messages.CM_TURN:
@@ -886,21 +883,18 @@ namespace GameSrv.World
                 case Messages.CM_FIREHIT:
                     if (M2Share.Config.ActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
-                        playObject.SendActionMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog),
-                            HUtil32.HiWord(defMsg.Recog), 0, "");
+                        playObject.SendActionMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), 0, "");
                     }
                     else
                     {
-                        playObject.SendMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog),
-                            HUtil32.HiWord(defMsg.Recog), 0, "");
+                        playObject.SendMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), 0, "");
                     }
                     break;
                 case Messages.CM_SAY:
                     playObject.SendMsg(playObject, Messages.CM_SAY, 0, 0, 0, 0, sMsg);
                     break;
                 default:
-                    playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag,
-                        sMsg);
+                    playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag, sMsg);
                     break;
             }
             if (!playObject.BoReadyRun) return;

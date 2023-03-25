@@ -360,6 +360,11 @@ namespace SystemModule
             return int.TryParse(str, out var result) ? result : def;
         }
         
+        public static ushort StrToUInt16(string str, ushort def)
+        {
+            return ushort.TryParse(str, out var result) ? result : def;
+        }
+        
         public static short StrToInt16(string str, short def)
         {
             return short.TryParse(str, out var result) ? result : def;

@@ -2426,7 +2426,7 @@ namespace GameSrv.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Messages.RM_MOVEMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
+                            SendMsg(this, Messages.RM_MOVEMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
                         }
                     case '<':// 聊天框彩色公告
@@ -2437,7 +2437,7 @@ namespace GameSrv.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), 0, sMsg);
+                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
                         }
                     case '{': // 屏幕居中公告
@@ -2450,7 +2450,7 @@ namespace GameSrv.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Messages.RM_MOVEMESSAGE, 1, HUtil32.StrToInt(fColor, 255), HUtil32.StrToInt(bColor, 255), HUtil32.StrToInt(nTime, 0), sMsg);
+                            SendMsg(this, Messages.RM_MOVEMESSAGE, 1, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), HUtil32.StrToUInt16(nTime, 0), sMsg);
                             break;
                         }
                     default:
