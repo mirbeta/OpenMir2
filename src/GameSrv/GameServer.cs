@@ -24,9 +24,9 @@ namespace GameSrv
             await M2Share.StorageProcessor.StartAsync(stoppingToken);
             await M2Share.TimedRobotProcessor.StartAsync(stoppingToken);
             await M2Share.SocketMgr.StartMessageThread();
+            await M2Share.ChatChannel.Start();
             M2Share.DataServer.Start();
             M2Share.MarketService.Start();
-            await M2Share.ChatChannel.Start();
             M2Share.SocketMgr.Start();
             _logger.Info("初始化游戏世界服务线程完成...");
             M2Share.StartReady = true;

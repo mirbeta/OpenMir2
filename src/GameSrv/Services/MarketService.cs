@@ -29,14 +29,21 @@ namespace GameSrv.Services
 
         public void Start()
         {
-            var config = new TouchSocketConfig();
-            config.SetRemoteIPHost(new IPHost(IPAddress.Parse(M2Share.Config.MarketSrvAddr), M2Share.Config.MarketSrvPort))
-                .SetBufferLength(4096);
-            config.SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
-            _clientScoket.Setup(config);
             if (M2Share.Config.EnableMarket)
             {
-                _clientScoket.Connect();
+                var config = new TouchSocketConfig();
+                config.SetRemoteIPHost(new IPHost(IPAddress.Parse(M2Share.Config.MarketSrvAddr), M2Share.Config.MarketSrvPort))
+                    .SetBufferLength(4096);
+                config.SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+                _clientScoket.Setup(config);
+                try
+                {
+                    _clientScoket.Connect();
+                }
+                catch (SocketException ex)
+                {
+                    MarketSocketError(ex);
+                }
             }
         }
 
@@ -106,9 +113,9 @@ namespace GameSrv.Services
             SendFirstMessage();// 链接成功后进行第一次主动拉取拍卖行数据
         }
 
-        private void MarketSocketError(object sender, DSCClientErrorEventArgs e)
+        private void MarketSocketError(SocketException e)
         {
-            switch (e.ErrorCode)
+            switch (e.SocketErrorCode)
             {
                 case SocketError.ConnectionRefused:
                     _logger.Error("数据库(拍卖行)服务器[" + M2Share.Config.MarketSrvAddr + ":" + M2Share.Config.MarketSrvPort + "]拒绝链接...");

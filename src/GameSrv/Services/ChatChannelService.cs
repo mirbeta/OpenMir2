@@ -12,13 +12,20 @@ namespace GameSrv.Services
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly MqttFactory mqttFactory;
-        private readonly IMqttClient mqttClient;
+        private readonly IMqttClient chatClient;
 
         public ChatChannelService()
         {
             mqttFactory = new MqttFactory();
-            mqttClient = mqttFactory.CreateMqttClient();
-            mqttClient.DisconnectedAsync += ClientDisconnectedAsync;
+            chatClient = mqttFactory.CreateMqttClient();
+            chatClient.DisconnectedAsync += ClientDisconnectedAsync;
+            chatClient.ConnectedAsync += ClientConnectedAsync;
+        }
+
+        private Task ClientConnectedAsync(MqttClientConnectedEventArgs arg)
+        {
+            logger.Info("链接世界聊天频道服务器成功...");
+            return Task.CompletedTask;
         }
 
         public bool IsEnableChatServer
@@ -33,11 +40,11 @@ namespace GameSrv.Services
                 return;
             }
             logger.Info("开始链接世界聊天频道...");
-            var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(M2Share.Config.ChatSrvAddr, M2Share.Config.ChatSrvPort).Build();
+            var chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(M2Share.Config.ChatSrvAddr, M2Share.Config.ChatSrvPort).Build();
             try
             {
                 using var timeoutToken = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                var response = await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+                var response = await chatClient.ConnectAsync(chatClientOptions, CancellationToken.None);
                 if (response.ResultCode == MqttClientConnectResultCode.Success)
                 {
                     logger.Info("链接世界聊天频道成功...");
@@ -59,7 +66,7 @@ namespace GameSrv.Services
         {
             if (arg.ClientWasConnected)
             {
-                await mqttClient.ConnectAsync(mqttClient.Options);
+                await chatClient.ConnectAsync(chatClient.Options);
             }
             logger.Info("与世界聊天频道失去链接...");
         }
@@ -67,16 +74,20 @@ namespace GameSrv.Services
         public async Task Stop()
         {
             logger.Info("断开世界聊天频道...");
-            await mqttClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().WithReason(MqttClientDisconnectReason.NormalDisconnection).Build());
+            await chatClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().WithReason(MqttClientDisconnectReason.NormalDisconnection).Build());
         }
 
         public async Task Ping()
         {
-            if (!await mqttClient.TryPingAsync())
+            if (!IsEnableChatServer)
+            {
+                return;
+            }
+            if (!await chatClient.TryPingAsync())
             {
                 using (var timeout = new CancellationTokenSource(5000))
                 {
-                    await mqttClient.ConnectAsync(mqttClient.Options, timeout.Token);
+                    await chatClient.ConnectAsync(chatClient.Options, timeout.Token);
                 }
                 logger.Info("与世界聊天频道失去链接...");
             }
@@ -90,7 +101,7 @@ namespace GameSrv.Services
         public void SendPubChannelMessage(string sendMsg)
         {
             //todo 需要对消息加密处理
-            mqttClient.PublishStringAsync("mir/chat", sendMsg);
+            chatClient.PublishStringAsync("mir/chat", sendMsg);
         }
     }
 }
