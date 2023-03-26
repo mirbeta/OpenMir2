@@ -18,14 +18,14 @@ namespace GameSrv.Event
         public IList<EventInfo> Events => _eventList;
         public IList<EventInfo> ClosedEvents => _closedEventList;
         
-        public EventInfo GetEvent(Envirnoment Envir, int nX, int nY, int nType)
+        public EventInfo GetEvent(Envirnoment envir, int nX, int nY, int nType)
         {
             for (int i = _eventList.Count - 1; i >= 0; i--)
             {
                 EventInfo currentEvent = _eventList[i];
                 if (currentEvent.EventType == nType)
                 {
-                    if (currentEvent.Envir == Envir && currentEvent.nX == nX && currentEvent.nY == nY)
+                    if (currentEvent.Envir == envir && currentEvent.nX == nX && currentEvent.nY == nY)
                     {
                         return currentEvent;
                     }

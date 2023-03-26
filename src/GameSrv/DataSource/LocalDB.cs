@@ -79,31 +79,39 @@ namespace GameSrv.DataSource {
         /// <summary>
         /// 读取守卫配置
         /// </summary>
-        public static void LoadGuardList() {
-            try {
+        public static void LoadGuardList()
+        {
+            try
+            {
                 string monName = string.Empty;
                 string mapName = string.Empty;
                 string cX = string.Empty;
                 string cY = string.Empty;
                 string direction = string.Empty;
                 string sFileName = M2Share.GetEnvirFilePath("GuardList.txt");
-                if (File.Exists(sFileName)) {
+                if (File.Exists(sFileName))
+                {
                     StringList guardList = new StringList();
                     guardList.LoadFromFile(sFileName);
-                    for (int i = 0; i < guardList.Count; i++) {
+                    for (int i = 0; i < guardList.Count; i++)
+                    {
                         string sLine = guardList[i];
-                        if (!string.IsNullOrEmpty(sLine) && sLine[0] != ';') {
+                        if (!string.IsNullOrEmpty(sLine) && sLine[0] != ';')
+                        {
                             sLine = HUtil32.GetValidStrCap(sLine, ref monName, ' ');
-                            if (!string.IsNullOrEmpty(monName) && monName[0] == '\"') {
+                            if (!string.IsNullOrEmpty(monName) && monName[0] == '\"')
+                            {
                                 HUtil32.ArrestStringEx(monName, "\"", "\"", ref monName);
                             }
                             sLine = HUtil32.GetValidStr3(sLine, ref mapName, ' ');
                             sLine = HUtil32.GetValidStr3(sLine, ref cX, new[] { ' ', ',' });
                             sLine = HUtil32.GetValidStr3(sLine, ref cY, new[] { ' ', ',', ':' });
                             sLine = HUtil32.GetValidStr3(sLine, ref direction, new[] { ' ', ':' });
-                            if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction)) {
+                            if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction))
+                            {
                                 BaseObject guard = M2Share.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
-                                if (guard != null) {
+                                if (guard != null)
+                                {
                                     guard.Dir = (byte)HUtil32.StrToInt(direction, 0);
                                 }
                             }
@@ -111,7 +119,8 @@ namespace GameSrv.DataSource {
                     }
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 M2Share.Logger.Error(ex.StackTrace);
             }
         }
@@ -869,8 +878,8 @@ namespace GameSrv.DataSource {
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sCastle, _textSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, _textSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, _textSpitConst);
-                    int nX = HUtil32.StrToInt(sX, 0);
-                    int nY = HUtil32.StrToInt(sY, 0);
+                    short nX = (short)HUtil32.StrToInt(sX, 0);
+                    short nY = (short)HUtil32.StrToInt(sY, 0);
                     bool boNewNpc = true;
                     for (int j = 0; j < M2Share.WorldEngine.MerchantList.Count; j++) {
                         merchant = M2Share.WorldEngine.MerchantList[j];
@@ -900,8 +909,8 @@ namespace GameSrv.DataSource {
                         merchant.Envir = M2Share.MapMgr.FindMap(merchant.MapName);
                         if (merchant.Envir != null) {
                             merchant.ScriptName = sScript;
-                            merchant.CurrX = (short)nX;
-                            merchant.CurrY = (short)nY;
+                            merchant.CurrX = nX;
+                            merchant.CurrY = nY;
                             merchant.ChrName = sChrName;
                             merchant.NpcFlag = HUtil32.StrToInt16(sFlag, 0);
                             merchant.Appr = (ushort)HUtil32.StrToInt(sAppr, 0);
