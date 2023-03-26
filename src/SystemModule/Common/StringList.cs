@@ -123,17 +123,14 @@ namespace SystemModule.Common
             this.Capacity = num1;
         }
 
-        public int Add(string value)
+        public void Add(string value)
         {
             if (this.Count == _mStrings.Length)
             {
                 EnsureCapacity(this.Count + 1);
             }
-
             _mStrings[this.Count] = value;
             _mSize++;
-
-            return _mSize;
         }
 
         /// <summary>
@@ -267,21 +264,10 @@ namespace SystemModule.Common
         /// 保存为一个文件
         /// </summary>
         /// <param name="fileName"></param>
-        /// <param name="encoding"></param>
-        public void SaveToFile(string fileName, Encoding encoding)
-        {
-            var sw2 = new StreamWriter(fileName, false, encoding);
-            for (var i = 0; i < this.Count; i++)
-            {
-                sw2.WriteLine(_mStrings[i]);
-            }
-            sw2.Close();
-            sw2.Dispose();
-        }
-
         public void SaveToFile(string fileName)
         {
-            var sw2 = new StreamWriter(fileName, false, Encoding.GetEncoding("gb2312"));
+            var fs = GetEncoding(fileName, Encoding.GetEncoding("gb2312"));
+            var sw2 = new StreamWriter(fileName, false, fs);
             for (var i = 0; i < this.Count; i++)
             {
                 sw2.WriteLine(_mStrings[i]);
@@ -311,31 +297,7 @@ namespace SystemModule.Common
             sr2.Dispose();
         }
 
-        public void LoadFromFile(string fileName, bool isAdd)
-        {
-            this.Clear();
-            var sr2 = new StreamReader(fileName, Encoding.GetEncoding("gb2312"));
-            while (sr2.Peek() >= 0)
-            {
-                this.AppendText(sr2.ReadLine());
-            }
-            sr2.Close();
-            sr2.Dispose();
-        }
-
-        public void LoadFromFile(string fileName, Encoding encoding)
-        {
-            this.Clear();
-            var sr2 = new StreamReader(fileName, encoding);
-            while (sr2.Peek() >= 0)
-            {
-                this.AppendText(sr2.ReadLine());
-            }
-            sr2.Close();
-            sr2.Dispose();
-        }
-
-        private Encoding GetEncoding(string fileName, Encoding defaultEncoding)
+        private static Encoding GetEncoding(string fileName, Encoding defaultEncoding)
         {
             var fs = new FileStream(fileName, FileMode.Open);
             var targetEncoding = GetEncoding(fs, defaultEncoding);
@@ -344,7 +306,7 @@ namespace SystemModule.Common
             return targetEncoding;
         }
 
-        private Encoding GetEncoding(Stream stream, Encoding defaultEncoding)
+        private static Encoding GetEncoding(Stream stream, Encoding defaultEncoding)
         {
             var targetEncoding = defaultEncoding;
             if (stream != null && stream.Length >= 2)

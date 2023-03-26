@@ -53,7 +53,7 @@ namespace GameSrv.Notices {
                             if (NoticeList[i].sList == null) {
                                 NoticeList[i].sList = new StringList();
                             }
-                            NoticeList[i].sList.LoadFromFile(fileName, true);
+                            NoticeList[i].sList.LoadFromFile(fileName);
                             for (int j = 0; j < NoticeList[i].sList.Count; j++) {
                                 LoadList.Add(NoticeList[i].sList[j]);
                             }
