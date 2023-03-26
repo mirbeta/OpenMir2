@@ -49,12 +49,12 @@ namespace GameGate.Services
         public GameGateInfo GateInfo => _gateInfo;
 
         public void Initialize()
-        { 
+        {
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_gateInfo.ServerAdress), _gateInfo.GatePort)
-            }).SetMaxCount(GateShare.MaxSession);
+            }).SetBufferLength(255).SetMaxCount(GateShare.MaxSession);
             _serverSocket.Setup(touchSocketConfig);
             _clientThread.Initialize();
         }
@@ -168,7 +168,7 @@ namespace GameGate.Services
             var client = (SocketClient)sender;
             var sRemoteAddress = client.MainSocket.RemoteEndPoint.GetIP();
             var sessionId = int.Parse(client.ID);
-            var clientSession = SessionMgr.GetSession(GateInfo.ServiceId,sessionId);
+            var clientSession = SessionMgr.GetSession(GateInfo.ServiceId, sessionId);
             if (clientSession == null)
             {
                 return;
