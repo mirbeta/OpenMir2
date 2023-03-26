@@ -3,10 +3,7 @@
         /// <summary>
         /// 线程ID
         /// </summary>
-        public int Id = 0;
-        public long LastRunTime = 0;
-        public long StartTime = 0;
-        public long EndTime = 0;
+        public byte Id = 0;
         public bool Stop = false;
         /// <summary>
         /// 当前怪物列表处理位置索引

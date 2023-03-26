@@ -147,7 +147,6 @@ namespace GameSrv.World
                         continue;
                     }
                     if (!mobThread.Stop) continue;
-                    mobThread.EndTime = HUtil32.GetTickCount() + 10;
                     mobThread.Stop = false;
                 }
                 lock (_locker)

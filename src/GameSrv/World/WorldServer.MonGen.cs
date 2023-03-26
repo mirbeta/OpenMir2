@@ -117,17 +117,17 @@ namespace GameSrv.World {
             MonGenList.Clear();
         }
 
-        public void Stop() {
-            lock (_locker) {
+        public void Stop()
+        {
+            lock (_locker)
+            {
                 Monitor.PulseAll(_locker);
             }
-
-            for (var i = 0; i < MobThreading.Length; i++) {
-                if (MobThreads[i] != null) {
-                    MobThreads[i].EndTime = HUtil32.GetTickCount() + 9999;
-                }
+            for (var i = 0; i < MobThreading.Length; i++)
+            {
                 if (MobThreading[i] != null &&
-                    MobThreading[i].ThreadState != ThreadState.Stopped && MobThreading[i].ThreadState != ThreadState.Unstarted) {
+                    MobThreading[i].ThreadState != ThreadState.Stopped && MobThreading[i].ThreadState != ThreadState.Unstarted)
+                {
                     MobThreading[i].Interrupt();
                 }
             }
@@ -145,7 +145,7 @@ namespace GameSrv.World {
             MobThreads = new MonsterThread[monsterThreads];
             MobThreading = new Thread[monsterThreads];
 
-            for (var i = 0; i < monsterThreads; i++)
+            for (byte i = 0; i < monsterThreads; i++)
             {
                 MobThreads[i] = new MonsterThread() { Id = i };
             }
