@@ -61,6 +61,7 @@ namespace GameGate.Services
 
         public void Start(CancellationToken stoppingToken)
         {
+            _serverSocket.Start();
             _clientThread.Start();
             _clientThread.RestSessionArray();
             messageSendQueue.StartProcessQueueSend(stoppingToken);
@@ -121,7 +122,8 @@ namespace GameGate.Services
         {
             var client = (SocketClient)sender;
             var sRemoteAddress = client.MainSocket.RemoteEndPoint.GetIP();
-            _logger.Debug($"客户端 IP:{sRemoteAddress} ThreadId:{GateInfo.ServiceId} SessionId:{client.ID} RunPort:{_gateEndPoint}");
+            var clientId = int.Parse(client.ID);
+            _logger.Debug($"客户端 IP:{sRemoteAddress} ThreadId:{GateInfo.ServiceId} SessionId:{clientId} RunPort:{_gateEndPoint}");
             var clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out var threadId);
             if (clientThread == null || threadId < 0)
             {
@@ -149,10 +151,10 @@ namespace GameGate.Services
             }
             if (userSession != null)
             {
-                clientThread.UserEnter(userSession.SessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
-                SessionMgr.AddSession(GateInfo.ServiceId, userSession.SessionId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, messageSendQueue));
+                clientThread.UserEnter((ushort)clientId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
+                SessionMgr.AddSession(GateInfo.ServiceId, clientId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, messageSendQueue));
                 _logger.Info("开始连接: " + sRemoteAddress);
-                _logger.Debug($"GateId:{GateInfo.ServiceId} 用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}-{clientThread.ThreadId}");
+                _logger.Debug($"GateId:{GateInfo.ServiceId} 用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}/{clientThread.ThreadId}");
             }
             else
             {

@@ -48,9 +48,9 @@ namespace GameGate.Services
         /// <summary>
         /// 转发GameSvr封包消息
         /// </summary>
-        public void ProcessSendMessage(CancellationToken stoppingToken)
+        public Task ProcessSendMessage(CancellationToken stoppingToken)
         {
-            Task.Factory.StartNew(async () =>
+           return Task.Factory.StartNew(async () =>
             {
                 while (await _messageChannel.Reader.WaitToReadAsync(stoppingToken))
                 {

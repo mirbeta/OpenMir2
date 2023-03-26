@@ -103,9 +103,9 @@ namespace GameGate.Services
         /// <summary>
         /// 开启客户端消息消费线程
         /// </summary>
-        public void StartMessageWorkThread(CancellationToken stoppingToken)
+        public Task StartMessageWorkThread(CancellationToken stoppingToken)
         {
-            Task.Factory.StartNew(() =>
+            return Task.Factory.StartNew(() =>
             {
                 if (LastMessageThreadCount == ConfigManager.GateConfig.MessageWorkThread)
                 {

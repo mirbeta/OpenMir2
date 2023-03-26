@@ -21,7 +21,7 @@ namespace GameGate
             
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.Register(() => Debug.WriteLine($"GameGate is stopping."));
             _logger.Info("服务已启动成功...");
@@ -46,9 +46,8 @@ namespace GameGate
                 //_cloudClient.Start(cloudEndpoint);
                 _logger.Info("智能反外挂程序已启动...");
             }
-            ServerManager.StartMessageWorkThread(stoppingToken);
-            SessionManager.ProcessSendMessage(stoppingToken);
-            return Task.CompletedTask;
+            await ServerManager.StartMessageWorkThread(stoppingToken);
+            await SessionManager.ProcessSendMessage(stoppingToken);
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

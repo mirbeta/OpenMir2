@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using GameGate.Conf;
 using GameGate.Packet;
 using NLog;
+using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
@@ -617,6 +618,7 @@ namespace GameGate.Services
                         break;
                 }
 
+                //todo 优化下面这个bodyBuffer的创建
                 byte[] bodyBuffer;
                 int sendLen;
                 SendMsg.SessionIndex = SvrListIdx;
@@ -626,19 +628,20 @@ namespace GameGate.Services
                     var tLen = EncryptUtil.Encode(decodeBuff, deCodeLen - CommandMessage.Size, sendBuffer);
                     SendMsg.PackLength = CommandMessage.Size + tLen + 1;
                     sendLen = ServerMessage.PacketSize + SendMsg.PackLength;
-                    bodyBuffer = new byte[sendLen];
+                    bodyBuffer = GateShare.BytePool.Rent(sendLen);
                     MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessage.PacketSize, CommandMessage.Size);
                     MemoryCopy.BlockCopy(tempBuff, GateShare.CommandFixedLength, bodyBuffer, ServerMessage.PacketSize + CommandMessage.Size, tLen);//消息体
                 }
                 else
                 {
                     sendLen = ServerMessage.PacketSize + decodeBuff.Length;
-                    bodyBuffer = new byte[sendLen];
+                    bodyBuffer = GateShare.BytePool.Rent(sendLen);
                     SendMsg.PackLength = CommandMessage.Size;
                     MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessage.PacketSize, decodeBuff.Length);
                 }
-                Buffer.BlockCopy(SerializerUtil.Serialize(SendMsg), 0, bodyBuffer, 0, ServerMessage.PacketSize); //复制消息头
-                ClientThread.Send(bodyBuffer);
+                MemoryCopy.BlockCopy(SerializerUtil.Serialize(SendMsg), 0, bodyBuffer, 0, ServerMessage.PacketSize); //复制消息头
+                ClientThread.Send(bodyBuffer[..sendLen]);
+                GateShare.BytePool.Return(bodyBuffer);
             }
             else
             {
