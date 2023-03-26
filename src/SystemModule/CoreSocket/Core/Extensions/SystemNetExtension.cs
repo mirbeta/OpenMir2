@@ -11,7 +11,6 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-using System;
 using System.Net;
 
 namespace TouchSocket.Core
@@ -28,8 +27,7 @@ namespace TouchSocket.Core
         /// <returns></returns>
         public static string GetIP(this EndPoint endPoint)
         {
-            int r = endPoint.ToString().LastIndexOf(":");
-            return endPoint.ToString().Substring(0, r);
+            return ((IPEndPoint)endPoint).Address.ToString();
         }
 
         /// <summary>
@@ -39,8 +37,7 @@ namespace TouchSocket.Core
         /// <returns></returns>
         public static int GetPort(this EndPoint endPoint)
         {
-            int r = endPoint.ToString().LastIndexOf(":");
-            return Convert.ToInt32(endPoint.ToString().Substring(r + 1, endPoint.ToString().Length - (r + 1)));
+            return ((IPEndPoint)endPoint).Port;
         }
     }
 }

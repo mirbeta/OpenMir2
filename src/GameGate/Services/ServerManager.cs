@@ -80,10 +80,10 @@ namespace GameGate.Services
         /// <summary>
         /// 添加到客户端消息队列
         /// </summary>
-        public void Send(ClientOutPacketData outPacket)
+        public void Send(SessionMessage sendPacket)
         {
-            _serverServices[outPacket.ThreadId].Send(outPacket.ConnectId, outPacket.Buffer);
-            GateShare.BytePool.Return(outPacket.Buffer, true);
+            _serverServices[sendPacket.ServiceId].Send(sendPacket.ConnectionId, sendPacket.Buffer);
+            //GateShare.BytePool.Return(outPacket.Buffer, true);
         }
 
         /// <summary>

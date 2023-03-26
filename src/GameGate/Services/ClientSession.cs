@@ -77,13 +77,16 @@ namespace GameGate.Services
             Session.Socket.Close();
         }
 
+        private readonly byte[] httpSpan = HUtil32.GetBytes("http://");
+        private readonly byte[] commmandFlagSpan = HUtil32.GetBytes("@");
+        private readonly byte[] whisperFlagSpan = HUtil32.GetBytes("/");
+
         /// <summary>
         /// 处理客户端封包
         /// </summary>
         public unsafe void ProcessPacket(ClientPacketMessage messagePacket)
         {
             _session.ReceiveTick = HUtil32.GetTickCount();
-            var sMsg = string.Empty;
             int currentTick;
             if (KickFlag)
             {
@@ -94,19 +97,18 @@ namespace GameGate.Services
             var packetLen = messagePacket.BuffLen;
             if (Config.IsDefenceCCPacket && (packetLen >= 5))
             {
-                sMsg = HUtil32.GetString(destinationSpan.Slice(2, packetLen - 3));
-                if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
+                if (destinationSpan[..7].SequenceEqual(httpSpan))
                 {
+                    //HTTP封包，直接丢弃
                     //if (LogManager.g_pLogMgr.CheckLevel(6))
                     //{
                     //    Console.WriteLine("CC Attack, Kick: " + m_pUserOBJ.pszIPAddr);
                     //}
                     //Misc.KickUser(m_pUserOBJ.nIPAddr);
-                    //Succeed = false;
-                    //return;
+                    KickFlag = false;
+                    return;
                 }
             }
-
             if ((Stat == CheckStep.CheckLogin) || (Stat == CheckStep.SendCheck))
             {
                 currentTick = HUtil32.GetTickCount();
@@ -458,10 +460,10 @@ namespace GameGate.Services
                         }
                         break;
                     case Messages.CM_SAY:
-                        sMsg = HUtil32.GetString(decodeBuff[12..]);
+                        var msgContent = decodeBuff[12..];
                         if (Config.IsChatInterval)
                         {
-                            if (!sMsg.StartsWith("@"))
+                            if (!msgContent.StartsWith(commmandFlagSpan))
                             {
                                 currentTick = HUtil32.GetTickCount();
                                 if (currentTick - gameSpeed.SayMsgTick < Config.ChatInterval)
@@ -473,7 +475,7 @@ namespace GameGate.Services
                         }
                         if (deCodeLen > GateShare.CommandFixedLength)
                         {
-                            if (sMsg.StartsWith("@"))
+                            if (msgContent.StartsWith(commmandFlagSpan))
                             {
                                 var pszChatBuffer = new byte[255];
                                 var pszChatCmd = string.Empty;
@@ -524,54 +526,54 @@ namespace GameGate.Services
                             }
                             else if (Config.IsChatFilter)
                             {
-                                if (sMsg.StartsWith("/"))
+                                if (msgContent.StartsWith(whisperFlagSpan))
                                 {
                                     var pszChatBuffer = new byte[255];
                                     var pszChatCmd = string.Empty;
                                     //Move((nABuf + TCmdPack.PackSize as string), pszChatBuffer[0], nDeCodeLen - TCmdPack.PackSize);
                                     MemoryCopy.BlockCopy(destinationSpan, GateShare.CommandFixedLength, pszChatBuffer, 0, deCodeLen - GateShare.CommandFixedLength);
                                     pszChatBuffer[deCodeLen - GateShare.CommandFixedLength] = (byte)'\0';
-                                    var tempStr = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
-                                    var nChatStrPos = tempStr.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
-                                    if (nChatStrPos > 0)
-                                    {
-                                        //Move(pszChatBuffer[0], pszChatCmd[0], nChatStrPos - 1);
-                                        //pszChatCmd[nChatStrPos - 1] = '\0';
-                                        //szChatBuffer = pszChatBuffer[nChatStrPos];
-                                        //var fChatFilter = AbusiveFilter.CheckChatFilter(ref szChatBuffer, ref Succeed);
-                                        //if ((fChatFilter > 0) && !Succeed)
-                                        //{
-                                        //    _logger.Info("Kick off user,saying in filter");
-                                        //    return;
-                                        //}
-                                        //if (fChatFilter == 2)
-                                        //{
-                                        //    var buffString = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
-                                        //    pszChatBuffer = $"{pszChatCmd} {szChatBuffer}";
-                                        //    nDeCodeLen = pszChatBuffer.Length + TCmdPack.PackSize;
-                                        //    Move(pszChatBuffer[0], (nABuf + TCmdPack.PackSize as string), pszChatBuffer.Length);
-                                        //}
-                                    }
+                                    //var tempStr = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length); //todo 需要优化此处,使用Span处理
+                                    //var nChatStrPos = tempStr.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
+                                    //if (nChatStrPos > 0)
+                                    //{
+                                    //    //Move(pszChatBuffer[0], pszChatCmd[0], nChatStrPos - 1);
+                                    //    //pszChatCmd[nChatStrPos - 1] = '\0';
+                                    //    //szChatBuffer = pszChatBuffer[nChatStrPos];
+                                    //    //var fChatFilter = AbusiveFilter.CheckChatFilter(ref szChatBuffer, ref Succeed);
+                                    //    //if ((fChatFilter > 0) && !Succeed)
+                                    //    //{
+                                    //    //    _logger.Info("Kick off user,saying in filter");
+                                    //    //    return;
+                                    //    //}
+                                    //    //if (fChatFilter == 2)
+                                    //    //{
+                                    //    //    var buffString = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
+                                    //    //    pszChatBuffer = $"{pszChatCmd} {szChatBuffer}";
+                                    //    //    nDeCodeLen = pszChatBuffer.Length + TCmdPack.PackSize;
+                                    //    //    Move(pszChatBuffer[0], (nABuf + TCmdPack.PackSize as string), pszChatBuffer.Length);
+                                    //    //}
+                                    //}
                                 }
-                                else if (!sMsg.StartsWith("@"))
+                                else if (!msgContent.StartsWith(commmandFlagSpan))
                                 {
                                     var pszChatBuffer = new byte[255];
                                     MemoryCopy.BlockCopy(destinationSpan, GateShare.CommandFixedLength, pszChatBuffer, 0, deCodeLen - GateShare.CommandFixedLength);
                                     pszChatBuffer[deCodeLen - GateShare.CommandFixedLength] = (byte)'\0';
-                                    var tempStr = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);
-                                    //szChatBuffer = nABuf + CommandPacket.Size;
-                                    var isSucceed = false;
-                                    var fChatFilter = GateShare.AbusiveFilter.CheckChatFilter(ref tempStr, ref isSucceed);
-                                    if ((fChatFilter > 0) && !isSucceed)
-                                    {
-                                        Logger.Info("Kick off user,saying in filter");
-                                        return;
-                                    }
-                                    if (fChatFilter == 2)
-                                    {
-                                        deCodeLen = pszChatBuffer.Length + CommandMessage.Size;
-                                        //  Move(szChatBuffer[1], (nABuf + TCmdPack.PackSize as string), szChatBuffer.Length);
-                                    }
+                                    //var tempStr = HUtil32.GetString(pszChatBuffer, 0, pszChatBuffer.Length);//todo 需要优化此处,使用Span处理
+                                    ////szChatBuffer = nABuf + CommandPacket.Size;
+                                    //var isSucceed = false;
+                                    //var fChatFilter = GateShare.AbusiveFilter.CheckChatFilter(ref tempStr, ref isSucceed);
+                                    //if ((fChatFilter > 0) && !isSucceed)
+                                    //{
+                                    //    Logger.Info("Kick off user,saying in filter");
+                                    //    return;
+                                    //}
+                                    //if (fChatFilter == 2)
+                                    //{
+                                    //    deCodeLen = pszChatBuffer.Length + CommandMessage.Size;
+                                    //    //  Move(szChatBuffer[1], (nABuf + TCmdPack.PackSize as string), szChatBuffer.Length);
+                                    //}
                                 }
                             }
                         }
@@ -896,37 +898,39 @@ namespace GameGate.Services
             return true;
         }
 
-        private void SendPacketData(byte[] packtData)
+        private void SendPacketData(SessionMessage sessionPacket)
         {
-            SendQueue.AddClientQueue(_session.ConnectionId, _session.ThreadId, packtData);
+            SendQueue.AddClientQueue(sessionPacket);
         }
 
         /// <summary>
         /// 处理GameSvr消息 
         /// 处理后发送到游戏客户端
         /// </summary>
-        public void ProcessServerPacket(SessionMessage message)
+        public unsafe void ProcessServerPacket(SessionMessage message)
         {
             if (Session.Socket == null)
             {
                 return;
             }
+            ref var msg = ref message;
+            msg.ConnectionId = _session.ConnectionId;
+
             var bufferLen = message.BuffLen;
             var sourcePacket = message.Buffer;
-            byte[] sendBuffer;
-            if (bufferLen <= 0)//小包 走路 攻击等
+            if (bufferLen < 0)//小包 走路 攻击等
             {
                 var buffLen = -bufferLen;
-                sendBuffer = GateShare.BytePool.Rent(buffLen + 2);
+               var  sendBuffer = new byte[buffLen + 2];
                 sendBuffer[0] = (byte)'#';
                 MemoryCopy.BlockCopy(sourcePacket, 0, sendBuffer, 1, buffLen);
                 sendBuffer[buffLen + 1] = (byte)'!';
-                Session.Socket.Send(sendBuffer[..(buffLen + 2)], SocketFlags.None);
-                GateShare.BytePool.Return(sendBuffer);
+                msg.Buffer = sendBuffer[..(buffLen + 2)];
             }
             else
             {
-                sendBuffer = GateShare.BytePool.Rent(bufferLen + CommandMessage.Size);
+                var sendLen = bufferLen + CommandMessage.Size;
+                Span<byte> sendBuffer = sendLen <= 128 ? stackalloc byte[sendLen] : new byte[sendLen];
                 sendBuffer[0] = (byte)'#';
                 var nLen = EncryptUtil.Encode(sourcePacket, CommandMessage.Size, sendBuffer, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
@@ -935,8 +939,9 @@ namespace GameGate.Services
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
                 sendBuffer[nLen + 1] = (byte)'!';
-                Session.Socket.Send(sendBuffer[..(nLen + 2)], SocketFlags.None);
+                msg.Buffer = sendBuffer.ToArray();
             }
+            SendPacketData(msg);
 
             if (bufferLen > 10)
             {
@@ -1003,8 +1008,6 @@ namespace GameGate.Services
                         break;
                 }
             }
-
-            GateShare.BytePool.Return(sendBuffer);
         }
 
         private void SendKickMsg(int killType)

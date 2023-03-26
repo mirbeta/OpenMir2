@@ -8,12 +8,12 @@ namespace GameGate
 {
     public class SendQueue
     {
-        private readonly Channel<ClientOutPacketData> _sendQueue;
+        private readonly Channel<SessionMessage> _sendQueue;
         private readonly ServerManager ServerMgr = ServerManager.Instance;
 
         public SendQueue()
         {
-            _sendQueue = Channel.CreateUnbounded<ClientOutPacketData>();
+            _sendQueue = Channel.CreateUnbounded<SessionMessage>();
         }
 
         /// <summary>
@@ -24,10 +24,9 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddClientQueue(string connectionId, int threadId, byte[] buffer)
+        public void AddClientQueue(SessionMessage sessionPacket)
         {
-            var sendPacket = new ClientOutPacketData(connectionId, threadId, buffer);
-            _sendQueue.Writer.TryWrite(sendPacket);
+            _sendQueue.Writer.TryWrite(sessionPacket);
         }
 
         /// <summary>

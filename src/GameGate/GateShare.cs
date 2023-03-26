@@ -66,17 +66,25 @@ namespace GameGate
         }
     }
 
-    public readonly struct SessionMessage
+    public struct SessionMessage
     {
-        public byte[] Buffer { get; }
-        public int SessionId { get; }
-        public byte ServiceId { get; }
-        public int BuffLen { get; }
-        public IntPtr Data { get; }
+        public byte[] Buffer { get; set; }
+        public readonly int SessionId { get; }
+        public readonly byte ServiceId { get; }
+        public readonly int BuffLen { get; }
+        public string ConnectionId { get; set; }
 
-        public SessionMessage(byte serviceId,int sessionId, byte[] buffer, int buffLen)
+        public SessionMessage(byte serviceId, int sessionId, byte[] buffer, int buffLen)
         {
             this.SessionId = sessionId;
+            this.ServiceId = serviceId;
+            this.Buffer = buffer;
+            this.BuffLen = buffLen;
+        }
+
+        public SessionMessage(byte serviceId, string connectionId, byte[] buffer, int buffLen)
+        {
+            this.ConnectionId = connectionId;
             this.ServiceId = serviceId;
             this.Buffer = buffer;
             this.BuffLen = buffLen;
