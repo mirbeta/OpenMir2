@@ -30,14 +30,13 @@ namespace GameGate.Services
         private int SendCheckTick { get; set; }
         private CheckStep Stat { get; set; }
         private byte ServiceId { get; set; }
-
         /// <summary>
         /// 会话密钥
         /// 用于OTP动态口令验证
         /// </summary>
         private string SessionKey { get; set; }
-
         private long FinishTick { get; set; }
+        private ServerMessage SendMsg;
 
         public ClientSession(byte serviceId, SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
         {
@@ -52,6 +51,13 @@ namespace GameGate.Services
             _syncObj = new object();
             gameSpeed = new SessionSpeedRule();
             SessionKey = Guid.NewGuid().ToString("N");
+            SendMsg = new ServerMessage
+            {
+                PacketCode = Grobal2.PacketCode,
+                Socket = _session.SckHandle,
+                Ident = Grobal2.GM_DATA,
+                SessionIndex = SvrListIdx
+            };
         }
 
         public SessionSpeedRule GetGameSpeed()
@@ -160,6 +166,16 @@ namespace GameGate.Services
                 //        return;
                 //    }
                 //}
+
+                if (packetLen > Config.NomClientPacketSize)
+                {
+                    Logger.Info("Kick off user,over nom client packet size: " + packetLen);
+                    // Misc.KickUser(m_pUserOBJ.nIPAddr);
+                    return;
+                }
+                int delayMsgCount;
+                int dwDelay;
+                int nInterval;
                 switch (ident)
                 {
                     case Messages.CM_GUILDUPDATENOTICE:
@@ -170,24 +186,7 @@ namespace GameGate.Services
                             // Misc.KickUser(m_pUserOBJ.nIPAddr);
                             return;
                         }
-
                         break;
-                    default:
-                        if (packetLen > Config.NomClientPacketSize)
-                        {
-                            Logger.Info("Kick off user,over nom client packet size: " + packetLen);
-                            // Misc.KickUser(m_pUserOBJ.nIPAddr);
-                            return;
-                        }
-
-                        break;
-                }
-
-                int delayMsgCount;
-                int dwDelay;
-                int nInterval;
-                switch (ident)
-                {
                     case Messages.CM_WALK:
                     case Messages.CM_RUN:
                         if (Config.IsMoveInterval) // 700
@@ -619,20 +618,14 @@ namespace GameGate.Services
                 }
 
                 byte[] bodyBuffer;
-                var commandPack = new ServerMessage
-                {
-                    PacketCode = Grobal2.PacketCode,
-                    Socket = _session.SckHandle,
-                    Ident = Grobal2.GM_DATA,
-                    SessionIndex = SvrListIdx
-                };
                 int sendLen;
+                SendMsg.SessionIndex = SvrListIdx;
                 if (deCodeLen > CommandMessage.Size)
                 {
                     var sendBuffer = new byte[messagePacket.BuffLen - CommandMessage.Size + 1];
                     var tLen = EncryptUtil.Encode(decodeBuff, deCodeLen - CommandMessage.Size, sendBuffer);
-                    commandPack.PackLength = CommandMessage.Size + tLen + 1;
-                    sendLen = ServerMessage.PacketSize + commandPack.PackLength;
+                    SendMsg.PackLength = CommandMessage.Size + tLen + 1;
+                    sendLen = ServerMessage.PacketSize + SendMsg.PackLength;
                     bodyBuffer = new byte[sendLen];
                     MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessage.PacketSize, CommandMessage.Size);
                     MemoryCopy.BlockCopy(tempBuff, GateShare.CommandFixedLength, bodyBuffer, ServerMessage.PacketSize + CommandMessage.Size, tLen);//消息体
@@ -641,12 +634,11 @@ namespace GameGate.Services
                 {
                     sendLen = ServerMessage.PacketSize + decodeBuff.Length;
                     bodyBuffer = new byte[sendLen];
-                    commandPack.PackLength = CommandMessage.Size;
+                    SendMsg.PackLength = CommandMessage.Size;
                     MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessage.PacketSize, decodeBuff.Length);
                 }
-                Buffer.BlockCopy(SerializerUtil.Serialize(commandPack), 0, bodyBuffer, 0, ServerMessage.PacketSize); //复制消息头
+                Buffer.BlockCopy(SerializerUtil.Serialize(SendMsg), 0, bodyBuffer, 0, ServerMessage.PacketSize); //复制消息头
                 ClientThread.Send(bodyBuffer);
-                //GateShare.BytePool.Return(bodyBuffer);
             }
             else
             {

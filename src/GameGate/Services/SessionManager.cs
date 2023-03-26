@@ -16,7 +16,7 @@ namespace GameGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<SessionMessage> SessionMessageQueue;
+        private readonly Channel<SessionMessage> _messageChannel;
         /// <summary>
         /// 客户端会话列表
         /// </summary>
@@ -24,7 +24,7 @@ namespace GameGate.Services
 
         private SessionManager()
         {
-            SessionMessageQueue = Channel.CreateUnbounded<SessionMessage>();
+            _messageChannel = Channel.CreateUnbounded<SessionMessage>();
             _sessionMap = new ClientSession[ConfigManager.GateConfig.ServerWorkThread][];
             for (var i = 0; i < _sessionMap.Length; i++)
             {
@@ -35,14 +35,14 @@ namespace GameGate.Services
         /// <summary>
         /// 获取待处理的队列数量
         /// </summary>
-        public int QueueCount => SessionMessageQueue.Reader.Count;
+        public int QueueCount => _messageChannel.Reader.Count;
 
         /// <summary>
         /// 添加到消息处理队列
         /// </summary>
         public void Enqueue(SessionMessage sessionPacket)
         {
-            SessionMessageQueue.Writer.TryWrite(sessionPacket);
+            _messageChannel.Writer.TryWrite(sessionPacket);
         }
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace GameGate.Services
         {
             Task.Factory.StartNew(async () =>
             {
-                while (await SessionMessageQueue.Reader.WaitToReadAsync(stoppingToken))
+                while (await _messageChannel.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (SessionMessageQueue.Reader.TryRead(out var message))
+                    if (_messageChannel.Reader.TryRead(out var message))
                     {
                         var userSession = GetSession(message.ServiceId, message.SessionId);
                         if (userSession == null)
@@ -74,11 +74,7 @@ namespace GameGate.Services
 
         public ClientSession GetSession(byte serviceId, int sessionId)
         {
-            if (_sessionMap[serviceId] == null)
-            {
-                return null;
-            }
-            return _sessionMap[serviceId][sessionId];
+            return _sessionMap[serviceId] == null ? null : _sessionMap[serviceId][sessionId];
         }
 
         public void CloseSession(byte serviceId, int sessionId)

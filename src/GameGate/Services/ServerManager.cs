@@ -216,24 +216,19 @@ namespace GameGate.Services
                         if (_messageQueue.TryRead(out var message))
                         {
                             var clientSession = SessionMgr.GetSession(message.ServiceId, message.SessionId);
+                            if (clientSession == null)
+                            {
+                                _logger.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Session会话不存在");
+                                return;
+                            }
                             if (clientSession.Session == null)
                             {
                                 _logger.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Session会话已经失效");
                                 return;
                             }
-                            if (clientSession.Session.Socket == null)
-                            {
-                                _logger.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Socket已释放");
-                                return;
-                            }
-                            if (!clientSession.Session.Socket.Connected)
-                            {
-                                _logger.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Socket链接已断开");
-                                return;
-                            }
                             try
                             {
-                                clientSession?.ProcessPacket(message);
+                                clientSession.ProcessPacket(message);
                             }
                             catch (Exception e)
                             {

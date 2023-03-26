@@ -97,7 +97,11 @@ namespace GameGate.Services
         /// </summary>
         public void ProcessCloseSessionQueue()
         {
-            while (!SessionCloseQueue.IsEmpty)
+            if (SessionCloseQueue.IsEmpty)
+            {
+                return;
+            }
+            for (var i = 0; i < SessionCloseQueue.Count; i++)
             {
                 SessionCloseQueue.TryDequeue(out var socketId);
                 _clientThread.UserLeave(socketId); //发送消息给GameSvr断开链接

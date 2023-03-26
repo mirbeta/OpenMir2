@@ -67,6 +67,9 @@ namespace GameGate.Conf
         public int MaxConnectOfIP;
         public int MaxClientCount;
         public int ClientTimeOutTime;
+        /// <summary>
+        /// 客户端封包大小
+        /// </summary>
         public int NomClientPacketSize;
         public int MaxClientPacketSize;
         public int MaxClientPacketCount;
