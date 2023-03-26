@@ -6,39 +6,30 @@ namespace SystemModule.Common
 {
     public sealed class StringList : IDisposable
     {
-        private readonly int m_Capacity;
-        private string[] _mStrings;
-        private int _mSize;
+        private readonly int _capacity;
+        private string[] _strings;
+        private int _size;
 
         /// <summary>
         /// 数据个数属性
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return _mSize;
-            }
-        }
+        public int Count => _size;
 
         /// <summary>
         /// 缓存大小属性
         /// </summary>
         public int Capacity
         {
-            get
-            {
-                return m_Capacity;
-            }
+            get => _capacity;
             set
             {
-                if (_mStrings == null)
+                if (_strings == null)
                 {
                     return;
                 }
 
-                if (value == _mStrings.Length) return;
-                if (value < this._mSize)
+                if (value == _strings.Length) return;
+                if (value < this._size)
                 {
                     throw new ArgumentOutOfRangeException();
                 }
@@ -46,26 +37,20 @@ namespace SystemModule.Common
                 if (value > 0)
                 {
                     var objArray1 = new string[value];
-                    if (this._mSize > 0)
+                    if (this._size > 0)
                     {
-                        Array.Copy(this._mStrings, 0, objArray1, 0, this._mSize);
+                        Array.Copy(this._strings, 0, objArray1, 0, this._size);
                     }
-                    this._mStrings = objArray1;
+                    this._strings = objArray1;
                 }
                 else
                 {
-                    this._mStrings = new string[0x10];
+                    this._strings = new string[0x10];
                 }
             }
         }
 
-        public string Text
-        {
-            get
-            {
-                return this.ToString();
-            }
-        }
+        public string Text => this.ToString();
 
         /// <summary>
         /// 构造函数
@@ -80,9 +65,9 @@ namespace SystemModule.Common
         /// </summary>
         public StringList(int capacity)
         {
-            m_Capacity = capacity;
-            _mStrings = new string[capacity];
-            _mSize = 0;
+            _capacity = capacity;
+            _strings = new string[capacity];
+            _size = 0;
         }
 
         /// <summary>
@@ -93,19 +78,19 @@ namespace SystemModule.Common
         {
             get
             {
-                if ((index < 0) || (index >= _mSize))
+                if ((index < 0) || (index >= _size))
                 {
                     throw new ArgumentOutOfRangeException();
                 }
-                return this._mStrings[index];
+                return this._strings[index];
             }
             set
             {
-                if ((index < 0) || (index >= _mSize))
+                if ((index < 0) || (index >= _size))
                 {
                     throw new ArgumentOutOfRangeException();
                 }
-                this._mStrings[index] = value;
+                this._strings[index] = value;
             }
         }
 
@@ -114,8 +99,8 @@ namespace SystemModule.Common
         /// </summary>
         private void EnsureCapacity(int min)
         {
-            if (this._mStrings.Length >= min) return;
-            var num1 = (this._mStrings.Length == 0) ? 0x10 : (this._mStrings.Length * 2);
+            if (this._strings.Length >= min) return;
+            var num1 = (this._strings.Length == 0) ? 0x10 : (this._strings.Length * 2);
             if (num1 < min)
             {
                 num1 = min;
@@ -125,12 +110,12 @@ namespace SystemModule.Common
 
         public void Add(string value)
         {
-            if (this.Count == _mStrings.Length)
+            if (this.Count == _strings.Length)
             {
                 EnsureCapacity(this.Count + 1);
             }
-            _mStrings[this.Count] = value;
-            _mSize++;
+            _strings[this.Count] = value;
+            _size++;
         }
 
         /// <summary>
@@ -138,15 +123,15 @@ namespace SystemModule.Common
         /// </summary>
         public int AppendText(string value)
         {
-            if (this.Count == _mStrings.Length)
+            if (this.Count == _strings.Length)
             {
                 EnsureCapacity(this.Count + 1);
             }
 
-            _mStrings[this.Count] = value;
-            _mSize++;
+            _strings[this.Count] = value;
+            _size++;
 
-            return _mSize;
+            return _size;
         }
 
         /// <summary>
@@ -160,20 +145,20 @@ namespace SystemModule.Common
                 index = 0;
             }
 
-            if (this.Count == _mStrings.Length)
+            if (this.Count == _strings.Length)
             {
                 EnsureCapacity(this.Count + 1);
             }
 
             if (index < this.Count)
             {
-                Array.Copy(this._mStrings, index, this._mStrings, index + 1, this._mSize - index);
+                Array.Copy(this._strings, index, this._strings, index + 1, this._size - index);
             }
 
-            _mStrings[index] = value;
-            _mSize++;
+            _strings[index] = value;
+            _size++;
 
-            return _mSize;
+            return _size;
         }
 
         /// <summary>
@@ -181,7 +166,7 @@ namespace SystemModule.Common
         /// </summary>
         public int IndexOf(string value)
         {
-            return Array.IndexOf(this._mStrings, value, 0, this._mSize);
+            return Array.IndexOf(this._strings, value, 0, this._size);
         }
 
         /// <summary>
@@ -190,16 +175,16 @@ namespace SystemModule.Common
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            if ((index < 0) || (index >= this._mSize))
+            if ((index < 0) || (index >= this._size))
             {
                 throw new ArgumentOutOfRangeException();
             }
-            this._mSize--;
-            if (index < this._mSize)
+            this._size--;
+            if (index < this._size)
             {
-                Array.Copy(this._mStrings, index + 1, this._mStrings, index, this._mSize - index);
+                Array.Copy(this._strings, index + 1, this._strings, index, this._size - index);
             }
-            this._mStrings[this._mSize] = null;
+            this._strings[this._size] = null;
         }
 
         /// <summary>
@@ -210,7 +195,7 @@ namespace SystemModule.Common
             var s = new StringBuilder(this.Count);
             for (var i = 0; i < this.Count; i++)
             {
-                s.AppendLine(_mStrings[i]);
+                s.AppendLine(_strings[i]);
             }
             return s.ToString();
         }
@@ -246,7 +231,7 @@ namespace SystemModule.Common
 
             for (var i = startIndex; i < count; i++)
             {
-                s.Append(_mStrings[i] + "\r\n");
+                s.Append(_strings[i] + "\r\n");
             }
 
             return s.ToString();
@@ -257,7 +242,7 @@ namespace SystemModule.Common
         /// </summary>
         public void Clear()
         {
-            this._mSize = 0;
+            this._size = 0;
         }
 
         /// <summary>
@@ -270,7 +255,7 @@ namespace SystemModule.Common
             var sw2 = new StreamWriter(fileName, false, fs);
             for (var i = 0; i < this.Count; i++)
             {
-                sw2.WriteLine(_mStrings[i]);
+                sw2.WriteLine(_strings[i]);
             }
             sw2.Close();
             sw2.Dispose();
@@ -354,8 +339,8 @@ namespace SystemModule.Common
 
         public void Dispose()
         {
-            _mStrings = null;
-            _mSize = 0;
+            _strings = null;
+            _size = 0;
         }
     }
 }
