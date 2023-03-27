@@ -35,7 +35,7 @@ namespace GameGate.Services
             networkMonitor = new NetworkMonitor();
             SessionCloseQueue = new ConcurrentQueue<int>();
             messageSendQueue = new SendQueue();
-            _gateEndPoint = IPEndPoint.Parse(string.Concat(gameGate.ServerAdress, ":", gameGate.GatePort));
+            _gateEndPoint = new IPEndPoint(IPAddress.Parse(gameGate.ServerAdress), gameGate.GatePort);
             _clientThread = new ClientThread(_gateEndPoint, gameGate, networkMonitor);
             _serverSocket = new TcpService();
             _serverSocket.Connected += ServerSocketClientConnect;

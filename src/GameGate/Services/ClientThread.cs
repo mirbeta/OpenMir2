@@ -8,8 +8,8 @@ using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
-using TcpClient = TouchSocket.Sockets.TcpClient;
 using NetworkMonitor = SystemModule.NetworkMonitor;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace GameGate.Services
 {
@@ -49,7 +49,6 @@ namespace GameGate.Services
         /// 运行状态
         /// </summary>
         private RunningState RunningState { get; set; }
-        private int CheckRecviceTick { get; set; }
         private int CheckServerTick { get; set; }
         /// <summary>
         /// Session管理
@@ -148,7 +147,6 @@ namespace GameGate.Services
             var client = (TcpClient)sender;
             GateReady = true;
             CheckServerTick = HUtil32.GetTickCount();
-            CheckRecviceTick = HUtil32.GetTickCount();
             Connected = true;
             RunningState = RunningState.Runing;
             RestSessionArray();
@@ -237,7 +235,6 @@ namespace GameGate.Services
                         }
                         break;
                     case Grobal2.GM_RECEIVE_OK:
-                        CheckRecviceTick = HUtil32.GetTickCount();
                         SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, "", 0);
                         break;
                     case Grobal2.GM_DATA:
