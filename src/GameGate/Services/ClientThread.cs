@@ -214,7 +214,7 @@ namespace GameGate.Services
             CheckServerFail = true;
         }
 
-        private void ProcessServerPacket(ServerMessage packetHeader, byte[] data)
+        private void ProcessServerPacket(ServerMessage packetHeader, Memory<byte> data)
         {
             try
             {

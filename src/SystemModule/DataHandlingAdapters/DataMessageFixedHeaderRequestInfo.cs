@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using SystemModule.Packets.ServerPackets;
 using TouchSocket.Sockets;
@@ -27,8 +28,8 @@ namespace SystemModule.DataHandlingAdapters
         public int BodyLength => bodyLength;
         private ServerMessage _header;
         public ServerMessage Header => _header;
-        private byte[] _message;
-        public byte[] Message => _message;
+        private Memory<byte> _message;
+        public Memory<byte> Message => _message;
 
         public bool OnParsingHeader(byte[] header)
         {

@@ -109,9 +109,9 @@ namespace GameGate.Services
             }
         }
 
-        public void Send(int connectionId, byte[] buffer)
+        public void Send(int connectionId, ReadOnlyMemory<byte> buffer)
         {
-            _serverSocket.Send(Convert.ToString(connectionId), buffer);
+            _serverSocket.Send(Convert.ToString(connectionId), buffer.ToArray());
             networkMonitor.Send(buffer.Length);
         }
 

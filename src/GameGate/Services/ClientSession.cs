@@ -922,7 +922,7 @@ namespace GameGate.Services
                 var buffLen = -bufferLen;
                 var sendBuffer = new byte[buffLen + 2];
                 sendBuffer[0] = (byte)'#';
-                MemoryCopy.BlockCopy(sourcePacket, 0, sendBuffer, 1, buffLen);
+                MemoryCopy.BlockCopy(sourcePacket.Span, 0, sendBuffer, 1, buffLen);
                 sendBuffer[buffLen + 1] = (byte)'!';
                 msg.Buffer = sendBuffer;
             }
@@ -931,21 +931,22 @@ namespace GameGate.Services
                 var sendLen = bufferLen + CommandMessage.Size;
                 Span<byte> sendBuffer = sendLen <= 128 ? stackalloc byte[sendLen] : new byte[sendLen];
                 sendBuffer[0] = (byte)'#';
-                var nLen = EncryptUtil.Encode(sourcePacket, CommandMessage.Size, sendBuffer, 1);//消息头
+                var nLen = EncryptUtil.Encode(sourcePacket.Span, CommandMessage.Size, sendBuffer, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
                 {
-                    MemoryCopy.BlockCopy(sourcePacket, CommandMessage.Size, sendBuffer, nLen + 1, bufferLen - CommandMessage.Size);
+                    MemoryCopy.BlockCopy(sourcePacket.Span, CommandMessage.Size, sendBuffer, nLen + 1, bufferLen - CommandMessage.Size);
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
                 sendBuffer[nLen + 1] = (byte)'!';
-                msg.Buffer = sendBuffer.ToArray();
+                //msg.Buffer = sendBuffer;
+                sendBuffer.TryCopyTo(msg.Buffer.Span);
             }
             msg.BuffLen = _session.ConnectionId; //用BuffLen代替ConnectionId
             SendPacketData(msg);
 
             if (bufferLen > 10)
             {
-                var messagePacket = sourcePacket.AsSpan();
+                var messagePacket = sourcePacket.Span;
                 var recog = BitConverter.ToInt32(messagePacket[..4]);
                 var ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
                 //var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
