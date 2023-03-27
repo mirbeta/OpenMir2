@@ -82,8 +82,7 @@ namespace GameGate.Services
         /// </summary>
         public void Send(SessionMessage sendPacket)
         {
-            _serverServices[sendPacket.ServiceId].Send(sendPacket.ConnectionId, sendPacket.Buffer);
-            //GateShare.BytePool.Return(outPacket.Buffer, true);
+            _serverServices[sendPacket.ServiceId].Send(sendPacket.BuffLen, sendPacket.Buffer);
         }
 
         /// <summary>

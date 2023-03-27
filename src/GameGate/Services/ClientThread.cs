@@ -182,15 +182,15 @@ namespace GameGate.Services
         /// </summary>
         private void ClientSocketRead(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            if (requestInfo is not DataMessageFixedHeaderRequestInfo fixedHeader)
+            if (requestInfo is not DataMessageFixedHeaderRequestInfo message)
                 return;
-            if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
+            if (message.Header.PacketCode != Grobal2.PacketCode)
             {
                 _logger.Debug("解析GameSrv消息封包错误");
                 return;
             }
-            ProcessServerPacket(fixedHeader.Header, fixedHeader.Message);
-            _networkMonitor.Receive(fixedHeader.BodyLength);
+            ProcessServerPacket(message.Header, message.Message);
+            _networkMonitor.Receive(message.BodyLength);
         }
 
         private void ClientSocketError(SocketError error)
@@ -214,7 +214,7 @@ namespace GameGate.Services
             CheckServerFail = true;
         }
 
-        private void ProcessServerPacket(ServerMessage packetHeader,byte[] data)
+        private void ProcessServerPacket(ServerMessage packetHeader, byte[] data)
         {
             try
             {
@@ -238,15 +238,6 @@ namespace GameGate.Services
                         SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, "", 0);
                         break;
                     case Grobal2.GM_DATA:
-                        //byte[] dataMemory;
-                        //if (packetHeader.PackLength > 0)
-                        //{
-                        //    dataMemory = data[..packetHeader.PackLength];
-                        //}
-                        //else
-                        //{
-                        //    dataMemory = data[..GateShare.HeaderMessageSize];
-                        //}
                         var sessionPacket = new SessionMessage(GateInfo.ServiceId, packetHeader.SessionId, data, packetHeader.PackLength);
                         SessionContainer.Enqueue(sessionPacket);
                         break;

@@ -914,7 +914,6 @@ namespace GameGate.Services
                 return;
             }
             ref var msg = ref message;
-            msg.ConnectionId = _session.ConnectionId;
 
             var bufferLen = message.BuffLen;
             var sourcePacket = message.Buffer;
@@ -941,6 +940,7 @@ namespace GameGate.Services
                 sendBuffer[nLen + 1] = (byte)'!';
                 msg.Buffer = sendBuffer.ToArray();
             }
+            msg.BuffLen = _session.ConnectionId; //用BuffLen代替ConnectionId
             SendPacketData(msg);
 
             if (bufferLen > 10)
