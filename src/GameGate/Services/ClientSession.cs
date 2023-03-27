@@ -921,11 +921,11 @@ namespace GameGate.Services
             if (bufferLen < 0)//小包 走路 攻击等
             {
                 var buffLen = -bufferLen;
-               var  sendBuffer = new byte[buffLen + 2];
+                var sendBuffer = new byte[buffLen + 2];
                 sendBuffer[0] = (byte)'#';
                 MemoryCopy.BlockCopy(sourcePacket, 0, sendBuffer, 1, buffLen);
                 sendBuffer[buffLen + 1] = (byte)'!';
-                msg.Buffer = sendBuffer[..(buffLen + 2)];
+                msg.Buffer = sendBuffer;
             }
             else
             {
