@@ -12,7 +12,7 @@ namespace GameGate
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static ClientManager ClientManager => ClientManager.Instance;
-        private static SessionManager SessionManager => SessionManager.Instance;
+        private static SessionContainer SessionContainer => SessionContainer.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
         private int ProcessDelayTick { get; set; }
         private int ProcessDelayCloseTick { get; set; }
@@ -102,7 +102,7 @@ namespace GameGate
             if (currentTick - ProcessDelayTick > 200)
             {
                 ProcessDelayTick = currentTick;
-                var sessionList = SessionManager.GetSessions();
+                var sessionList = SessionContainer.GetSessions();
                 if (sessionList == null)
                 {
                     return;

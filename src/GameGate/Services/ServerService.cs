@@ -25,7 +25,7 @@ namespace GameGate.Services
         private readonly IPEndPoint _gateEndPoint;
         private readonly SendQueue messageSendQueue;
         private readonly ConcurrentQueue<int> SessionCloseQueue;
-        private static SessionManager SessionMgr => SessionManager.Instance;
+        private static SessionContainer SessionContainer => SessionContainer.Instance;
         private static ServerManager ServerMgr => ServerManager.Instance;
         private readonly NetworkMonitor networkMonitor;
 
@@ -91,7 +91,7 @@ namespace GameGate.Services
         /// 获取队列待处理数
         /// </summary>
         /// <returns></returns>
-        private string WaitQueueCount => messageSendQueue.QueueCount + "/" + SessionMgr.QueueCount;
+        private string WaitQueueCount => messageSendQueue.QueueCount + "/" + SessionContainer.QueueCount;
 
         /// <summary>
         /// 处理会话关闭列表
@@ -152,7 +152,7 @@ namespace GameGate.Services
             if (userSession != null)
             {
                 clientThread.UserEnter((ushort)clientId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
-                SessionMgr.AddSession(GateInfo.ServiceId, clientId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, messageSendQueue));
+                SessionContainer.AddSession(GateInfo.ServiceId, clientId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, messageSendQueue));
                 _logger.Info("开始连接: " + sRemoteAddress);
                 _logger.Debug($"GateId:{GateInfo.ServiceId} 用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}/{clientThread.ThreadId}");
             }
@@ -168,7 +168,7 @@ namespace GameGate.Services
             var client = (SocketClient)sender;
             var sRemoteAddress = client.MainSocket.RemoteEndPoint.GetIP();
             var sessionId = int.Parse(client.ID);
-            var clientSession = SessionMgr.GetSession(GateInfo.ServiceId, sessionId);
+            var clientSession = SessionContainer.GetSession(GateInfo.ServiceId, sessionId);
             if (clientSession == null)
             {
                 return;
@@ -201,7 +201,7 @@ namespace GameGate.Services
                 _logger.Info("断开链接: " + sRemoteAddress);
             }
             SessionCloseQueue.Enqueue((int)client.MainSocket.Handle); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
-            SessionMgr.CloseSession(GateInfo.ServiceId, sessionId);
+            SessionContainer.CloseSession(GateInfo.ServiceId, sessionId);
             _logger.Debug($"用户断开链接 Ip:[{sRemoteAddress}] ThreadId:{_gateInfo.ServiceId} SessionId:{client.ID}");
         }
 
@@ -218,7 +218,7 @@ namespace GameGate.Services
             var client = (SocketClient)sender;
             var sRemoteAddress = client.MainSocket.RemoteEndPoint.GetIP();
             var sessionId = int.Parse(client.ID);
-            var clientSession = SessionMgr.GetSession(GateInfo.ServiceId, sessionId);
+            var clientSession = SessionContainer.GetSession(GateInfo.ServiceId, sessionId);
             if (clientSession != null)
             {
                 var buff = new IntPtr(NativeMemory.AllocZeroed((uint)byteBlock.Len));

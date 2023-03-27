@@ -54,7 +54,7 @@ namespace GameGate.Services
         /// <summary>
         /// Session管理
         /// </summary>
-        private static SessionManager SessionManager => SessionManager.Instance;
+        private static SessionContainer SessionContainer => SessionContainer.Instance;
         /// <summary>
         /// 日志
         /// </summary>
@@ -230,7 +230,7 @@ namespace GameGate.Services
                         CheckServerTick = HUtil32.GetTickCount();
                         break;
                     case Grobal2.GM_SERVERUSERINDEX:
-                        var userSession = SessionManager.GetSession(GateInfo.ServiceId, packetHeader.SessionId);
+                        var userSession = SessionContainer.GetSession(GateInfo.ServiceId, packetHeader.SessionId);
                         if (userSession != null)
                         {
                             userSession.SvrListIdx = packetHeader.SessionIndex;
@@ -251,7 +251,7 @@ namespace GameGate.Services
                         //    dataMemory = data[..GateShare.HeaderMessageSize];
                         //}
                         var sessionPacket = new SessionMessage(GateInfo.ServiceId, packetHeader.SessionId, data, packetHeader.PackLength);
-                        SessionManager.Enqueue(sessionPacket);
+                        SessionContainer.Enqueue(sessionPacket);
                         break;
                     case Messages.GM_TEST:
                         break;

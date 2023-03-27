@@ -13,7 +13,7 @@ namespace GameGate
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static ConfigManager ConfigManager => ConfigManager.Instance;
-        private static SessionManager SessionManager => SessionManager.Instance;
+        private static SessionContainer SessionContainer => SessionContainer.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
         
         public AppService( )
@@ -47,7 +47,7 @@ namespace GameGate
                 _logger.Info("智能反外挂程序已启动...");
             }
             await ServerManager.StartMessageWorkThread(stoppingToken);
-            await SessionManager.ProcessSendMessage(stoppingToken);
+            await SessionContainer.ProcessSendMessage(stoppingToken);
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

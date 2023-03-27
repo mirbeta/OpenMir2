@@ -190,7 +190,7 @@ namespace GameGate.Services
             /// </summary>
             private readonly ChannelReader<ClientPacketMessage> _messageQueue;
             public MessageThreadState ThreadState;
-            private static SessionManager SessionMgr => SessionManager.Instance;
+            private static SessionContainer SessionContainer => SessionContainer.Instance;
 
             public ClientMessageWorkThread(CancellationToken stoppingToken, ChannelReader<ClientPacketMessage> channel)
             {
@@ -215,7 +215,7 @@ namespace GameGate.Services
                         _resetEvent.WaitOne();
                         if (_messageQueue.TryRead(out var message))
                         {
-                            var clientSession = SessionMgr.GetSession(message.ServiceId, message.SessionId);
+                            var clientSession = SessionContainer.GetSession(message.ServiceId, message.SessionId);
                             if (clientSession == null)
                             {
                                 _logger.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Session会话不存在");
