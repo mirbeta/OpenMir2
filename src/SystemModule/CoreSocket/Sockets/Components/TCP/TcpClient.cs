@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -1010,23 +1011,22 @@ namespace TouchSocket.Sockets
                 return;
             }
 
-            string ipport;
+            IPEndPoint endPoint;
             if (this.MainSocket.Connected && this.MainSocket.RemoteEndPoint != null)
             {
-                ipport = this.MainSocket.RemoteEndPoint.ToString();
+                endPoint = (IPEndPoint)this.MainSocket.RemoteEndPoint;
             }
             else if (this.MainSocket.IsBound && this.MainSocket.LocalEndPoint != null)
             {
-                ipport = this.MainSocket.LocalEndPoint.ToString();
+                endPoint = (IPEndPoint)this.MainSocket.LocalEndPoint;
             }
             else
             {
                 return;
             }
 
-            int r = ipport.LastIndexOf(":");
-            this.IP = ipport.Substring(0, r);
-            this.Port = Convert.ToInt32(ipport.Substring(r + 1, ipport.Length - (r + 1)));
+            this.IP = endPoint.Address.ToString();
+            this.Port = endPoint.Port;
         }
 
         private void ProcessReceived(SocketAsyncEventArgs e)
