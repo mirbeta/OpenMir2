@@ -223,7 +223,7 @@ namespace GameGate.Services
             {
                 var buff = new IntPtr(NativeMemory.AllocZeroed((uint)byteBlock.Len));
                 MemoryCopy.BlockCopy(byteBlock.Buffer, 0, buff.ToPointer(), 0, byteBlock.Len);
-                ServerMgr.SendMessageQueue(new ClientPacketMessage(GateInfo.ServiceId, sessionId, buff, byteBlock.Len));
+                ServerMgr.SendMessageQueue(new ClientPacketMessage(GateInfo.ServiceId, sessionId, buff, (ushort)byteBlock.Len));
                 networkMonitor.Receive(byteBlock.Len);
             }
             else

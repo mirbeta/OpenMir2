@@ -189,7 +189,7 @@ namespace GameSrv.Services
                     _logger.Debug($"解析寄售行封包出现异常封包...");
                     return;
                 }
-                var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
+                var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message.Span);
                 ProcessServerData(messageData);
             }
             catch (Exception exception)
