@@ -53,7 +53,7 @@ namespace GameGate.Services
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
-                new IPHost(IPAddress.Parse(_gateInfo.ServerAdress), _gateInfo.GatePort)
+                new IPHost(_gateEndPoint.Address,_gateEndPoint.Port)
             }).SetBufferLength(255).SetMaxCount(GateShare.MaxSession);
             _serverSocket.Setup(touchSocketConfig);
             _clientThread.Initialize();
