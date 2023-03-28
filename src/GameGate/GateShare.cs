@@ -88,10 +88,10 @@ namespace GameGate
     {
         public int SessionId { get; }
         public byte ServiceId { get; }
-        public int BuffLen { get; }
+        public ushort BuffLen { get; }
         public IntPtr Data { get; }
 
-        public ClientPacketMessage(byte serviceId, int sessionId, IntPtr buffer, int buffLen)
+        public ClientPacketMessage(byte serviceId, int sessionId, IntPtr buffer, ushort buffLen)
         {
             this.SessionId = sessionId;
             this.ServiceId = serviceId;
