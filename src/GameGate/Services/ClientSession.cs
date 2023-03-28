@@ -1219,7 +1219,7 @@ namespace GameGate.Services
                     _session.Account = sAccount;
                     _session.ChrName = sHumName;
 
-                    var hardwareStr = Config.IsProcClientHardwareID ? MD5.MD5Print(hardWareDigest) : "000000000000000";
+                    var hardwareStr = Config.IsProcClientHardwareID ? MD5.MD5Print(hardWareDigest) : "000000000000000000000000000000";
                     var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNo}/{szCode}/{hardwareStr}/{ServiceId}";
                     var tempBuf = HUtil32.GetBytes(loginPacket);
                     var loginDataPacket = new byte[tempBuf.Length + ServerMessage.PacketSize + 100];
