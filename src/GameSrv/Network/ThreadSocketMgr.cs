@@ -46,7 +46,7 @@ namespace GameSrv.Network
             var client = (SocketClient)sender;
             if (int.TryParse(client.ID, out var clientId))
             {
-                _gameGates[clientId - 1].ProcessBuffer(fixedHeader.Header, fixedHeader.Message);
+                _gameGates[clientId - 1].ProcessBuffer(fixedHeader.Header, fixedHeader.Message.Span);
             }
             else
             {

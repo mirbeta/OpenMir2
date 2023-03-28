@@ -132,7 +132,7 @@ namespace GameSrv.Network
             return new ArraySegment<byte>(array);
         }
 
-        public void ProcessBuffer(ServerMessage packetHeader, byte[] message)
+        public void ProcessBuffer(ServerMessage packetHeader, ReadOnlySpan<byte> message)
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             try
