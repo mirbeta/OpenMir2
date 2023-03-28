@@ -156,6 +156,64 @@ namespace TouchSocket.Sockets
         }
 
         /// <summary>
+        /// 当发送数据前处理数据
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        protected override void PreviewSend(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            if (length < MinPackageSize)
+            {
+                throw new Exception("发送数据小于设定值，相同解析器可能无法收到有效数据，已终止发送");
+            }
+
+            if (length > MaxPackageSize)
+            {
+                throw new Exception("发送数据大于设定值，相同解析器可能无法收到有效数据，已终止发送");
+            }
+
+            ByteBlock byteBlock = null;
+            byte[] lenBytes = null;
+
+            switch (FixedHeaderType)
+            {
+                case FixedHeaderType.Byte:
+                    {
+                        byte dataLen = (byte)(length - offset);
+                        byteBlock = new ByteBlock(dataLen + 1);
+                        lenBytes = new byte[] { dataLen };
+                        break;
+                    }
+                case FixedHeaderType.Ushort:
+                    {
+                        ushort dataLen = (ushort)(length - offset);
+                        byteBlock = new ByteBlock(dataLen + 2);
+                        lenBytes = TouchSocketBitConverter.Default.GetBytes(dataLen);
+                        break;
+                    }
+                case FixedHeaderType.Int:
+                    {
+                        int dataLen = length - offset;
+                        byteBlock = new ByteBlock(dataLen + 4);
+                        lenBytes = TouchSocketBitConverter.Default.GetBytes(dataLen);
+                        break;
+                    }
+            }
+
+            try
+            {
+                byteBlock.Write(lenBytes);
+                byteBlock.Write(buffer, offset, length);
+                GoSend(byteBlock.Buffer, 0, byteBlock.Len);
+            }
+            finally
+            {
+                byteBlock.Dispose();
+            }
+        }
+        
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="transferBytes"></param>

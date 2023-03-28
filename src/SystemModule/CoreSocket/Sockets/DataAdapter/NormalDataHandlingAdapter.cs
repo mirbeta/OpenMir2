@@ -51,6 +51,11 @@ namespace TouchSocket.Sockets
             GoSend(buffer, offset, length);
         }
 
+        protected override void PreviewSend(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            GoSend(buffer, offset, length);
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

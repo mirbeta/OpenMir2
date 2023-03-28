@@ -187,6 +187,27 @@ namespace TouchSocket.Sockets
             }
         }
 
+        protected override void PreviewSend(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            if (length > MaxPackageSize)
+            {
+                throw new Exception("发送的数据长度大于适配器设定的最大值，接收方可能会抛弃。");
+            }
+            int dataLen = length - offset + m_terminatorCode.Length;
+            ByteBlock byteBlock = new ByteBlock(dataLen);
+            byteBlock.Write(buffer, offset, length);
+            byteBlock.Write(m_terminatorCode);
+
+            try
+            {
+                GoSend(byteBlock.Buffer, 0, byteBlock.Len);
+            }
+            finally
+            {
+                byteBlock.Dispose();
+            }
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

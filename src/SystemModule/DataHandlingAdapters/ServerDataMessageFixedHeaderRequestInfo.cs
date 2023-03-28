@@ -15,13 +15,16 @@ namespace SystemModule.DataHandlingAdapters
         /// </summary>
         public override int HeaderLength => 6;
 
+        static readonly ServerDataMessageFixedHeaderRequestInfo instance = new ServerDataMessageFixedHeaderRequestInfo();
+        static ServerDataMessageFixedHeaderRequestInfo Instance => instance;
+        
         /// <summary>
         /// 获取新实例
         /// </summary>
         /// <returns></returns>
         protected override ServerDataMessageFixedHeaderRequestInfo GetInstance()
         {
-            return new ServerDataMessageFixedHeaderRequestInfo();
+            return Instance;
         }
     }
 

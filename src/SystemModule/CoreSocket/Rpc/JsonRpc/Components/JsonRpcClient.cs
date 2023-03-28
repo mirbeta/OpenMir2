@@ -869,6 +869,11 @@ namespace TouchSocket.Rpc.JsonRpc
             return Client.RemoveValue(dp);
         }
 
+        public void Send(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion RPC调用
     }
 }

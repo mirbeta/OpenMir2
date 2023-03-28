@@ -38,7 +38,7 @@ namespace TouchSocket.Core
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="length"></param>
-        public QueueDataBytes(byte[] buffer, int offset, int length)
+        public QueueDataBytes(ReadOnlyMemory<byte> buffer, int offset, int length)
         {
             Offset = offset;
             Length = length;
@@ -71,7 +71,7 @@ namespace TouchSocket.Core
         /// <summary>
         /// 数据内存
         /// </summary>
-        public byte[] Buffer { get; }
+        public ReadOnlyMemory<byte> Buffer { get; }
 
         /// <summary>
         /// 长度

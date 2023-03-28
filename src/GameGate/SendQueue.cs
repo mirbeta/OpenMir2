@@ -1,4 +1,5 @@
 using GameGate.Services;
+using NLog;
 using System;
 using System.Threading;
 using System.Threading.Channels;
@@ -8,6 +9,7 @@ namespace GameGate
 {
     public class SendQueue
     {
+        private readonly NLog.Logger logger = LogManager.GetCurrentClassLogger();
         private readonly Channel<SessionMessage> _sendQueue;
         private readonly ServerManager ServerMgr = ServerManager.Instance;
 
@@ -46,25 +48,11 @@ namespace GameGate
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e.StackTrace);
+                            logger.Error(e.StackTrace);
                         }
                     }
                 }
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
-        }
-    }
-
-    public readonly struct ClientOutPacketData
-    {
-        public readonly string ConnectId;
-        public readonly int ThreadId;
-        public readonly byte[] Buffer;
-
-        public ClientOutPacketData(string connectId, int threadId, byte[] buff)
-        {
-            ConnectId = connectId;
-            ThreadId = threadId;
-            Buffer = buff;
         }
     }
 }

@@ -196,6 +196,44 @@ namespace TouchSocket.Sockets
         protected abstract void OnClientReceivedData(ISocketClient socketClient, ByteBlock byteBlock, IRequestInfo requestInfo);
 
         #region ID发送
+        /// <summary>
+        /// 发送字节流
+        /// </summary>
+        /// <param name="id">用于检索TcpSocketClient</param>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="NotConnectedException"></exception>
+        /// <exception cref="OverlengthException"></exception>
+        /// <exception cref="Exception"></exception>
+        public void Send(string id, ReadOnlyMemory<byte> buffer)
+        {
+            if (SocketClients.TryGetSocketClient(id, out ISocketClient client))
+            {
+                client.Send(buffer, 0, buffer.Length);
+            }
+            else
+            {
+                throw new ClientNotFindException(TouchSocketStatus.ClientNotFind.GetDescription(id));
+            }
+        }
+
+        /// <summary>
+        /// 发送字节流
+        /// </summary>
+        /// <param name="id">用于检索TcpSocketClient</param>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="NotConnectedException"></exception>
+        /// <exception cref="OverlengthException"></exception>
+        /// <exception cref="Exception"></exception>
+        public void Send(string id, ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            Send(id, buffer);
+        }
 
         /// <summary>
         /// 发送字节流

@@ -130,6 +130,16 @@ namespace TouchSocket.Sockets
             }
         }
 
+        protected override void PreviewSend(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            int dataLen = length - offset;
+            if (dataLen > FixedSize)
+            {
+                throw new OverlengthException("发送的数据包长度大于FixedSize");
+            }
+            GoSend(buffer, 0, length);
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

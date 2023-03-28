@@ -512,7 +512,29 @@ namespace TouchSocket.Sockets
             return true;
         }
 
-        
+        /// <summary>
+        /// 当即将发送时，如果覆盖父类方法，则不会触发插件。
+        /// </summary>
+        /// <param name="buffer">数据缓存区</param>
+        /// <param name="offset">偏移</param>
+        /// <param name="length">长度</param>
+        /// <returns>返回值表示是否允许发送</returns>
+        protected virtual bool HandleSendingData(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            if (m_usePlugin)
+            {
+                //todo 待实现
+                //SendingEventArgs args = new SendingEventArgs(buffer, offset, length);
+                //PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnSendingData), this, args);
+                //if (args.IsPermitOperation)
+                //{
+                //    return true;
+                //}
+                //return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// 设置适配器，该方法不会检验<see cref="CanSetDataHandlingAdapter"/>的值。
         /// </summary>
@@ -756,6 +778,42 @@ namespace TouchSocket.Sockets
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <exception cref="NotConnectedException"></exception>
+        /// <exception cref="OverlengthException"></exception>
+        /// <exception cref="Exception"></exception>
+        public void DefaultSend(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            if (!m_online)
+            {
+                throw new NotConnectedException(TouchSocketStatus.NotConnected.GetDescription());
+            }
+            if (HandleSendingData(buffer, offset, length))
+            {
+                if (UseSsl)
+                {
+                    //m_workStream.Write(buffer, offset, length);
+                }
+                else
+                {
+                    if (m_useDelaySender && length < TouchSocketUtility.BigDataBoundary)
+                    {
+                        m_delaySender.Send(new QueueDataBytes(buffer, offset, length));
+                    }
+                    else
+                    {
+                        m_mainSocket.AbsoluteSend(buffer, offset, length);
+                    }
+                }
+                LastSendTime = DateTime.Now;
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         /// <param name="buffer"><inheritdoc/></param>
         /// <param name="offset"><inheritdoc/></param>
         /// <param name="length"><inheritdoc/></param>
@@ -806,6 +864,28 @@ namespace TouchSocket.Sockets
         /// <exception cref="OverlengthException"></exception>
         /// <exception cref="Exception"></exception>
         public virtual void Send(byte[] buffer, int offset, int length)
+        {
+            if (DisposedValue)
+            {
+                return;
+            }
+            if (m_adapter == null)
+            {
+                throw new ArgumentNullException(nameof(DataHandlingAdapter), TouchSocketStatus.NullDataAdapter.GetDescription());
+            }
+            m_adapter.SendInput(buffer, offset, length);
+        }
+
+        /// <summary>
+        /// 发送字节流
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <exception cref="NotConnectedException"></exception>
+        /// <exception cref="OverlengthException"></exception>
+        /// <exception cref="Exception"></exception>
+        public virtual void Send(ReadOnlyMemory<byte> buffer, int offset, int length)
         {
             if (DisposedValue)
             {
@@ -918,6 +998,22 @@ namespace TouchSocket.Sockets
         /// <exception cref="OverlengthException"></exception>
         /// <exception cref="Exception"></exception>
         public void Send(string id, byte[] buffer, int offset, int length)
+        {
+            m_service.Send(id, buffer, offset, length);
+        }
+
+        /// <summary>
+        /// 发送字节流
+        /// </summary>
+        /// <param name="id">用于检索TcpSocketClient</param>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="NotConnectedException"></exception>
+        /// <exception cref="OverlengthException"></exception>
+        /// <exception cref="Exception"></exception>
+        public void Send(string id, ReadOnlyMemory<byte> buffer, int offset, int length)
         {
             m_service.Send(id, buffer, offset, length);
         }

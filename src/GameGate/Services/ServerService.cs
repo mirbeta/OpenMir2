@@ -111,7 +111,7 @@ namespace GameGate.Services
 
         public void Send(int connectionId, ReadOnlyMemory<byte> buffer)
         {
-            _serverSocket.Send(Convert.ToString(connectionId), buffer.ToArray());
+            _serverSocket.Send(Convert.ToString(connectionId), buffer);
             networkMonitor.Send(buffer.Length);
         }
 

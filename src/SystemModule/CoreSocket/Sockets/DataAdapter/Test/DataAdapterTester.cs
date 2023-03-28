@@ -149,7 +149,28 @@ namespace TouchSocket.Sockets
         private void SendCallback(byte[] buffer, int offset, int length)
         {
             QueueDataBytes asyncByte = new QueueDataBytes(new byte[length], 0, length);
-            Array.Copy(buffer, offset, asyncByte.Buffer, 0, length);
+            //Array.Copy(buffer, offset, asyncByte.Buffer, 0, length);
+            asyncBytes.Enqueue(asyncByte);
+        }
+
+        private void SendCallback(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            QueueDataBytes asyncByte = new QueueDataBytes(new byte[length], 0, length);
+            unsafe
+            {
+                fixed (byte* src = &buffer.Span[offset])
+                {
+                    fixed (byte* dest = &asyncByte.Buffer.Span[0])
+                    {
+                        Buffer.MemoryCopy(
+                            source: src, //要复制的字节的地址
+                            destination: dest, //目标地址
+                            destinationSizeInBytes: count, //目标内存块中可用的字节数
+                            sourceBytesToCopy: count //要复制的字节数
+                        );
+                    }
+                }
+            }
             asyncBytes.Enqueue(asyncByte);
         }
 
@@ -344,7 +365,7 @@ namespace TouchSocket.Sockets
         private void SendCallback(EndPoint endPoint, byte[] buffer, int offset, int length)
         {
             QueueDataBytes asyncByte = new QueueDataBytes(new byte[length], 0, length);
-            Array.Copy(buffer, offset, asyncByte.Buffer, 0, length);
+            //Array.Copy(buffer, offset, asyncByte.Buffer, 0, length);
             asyncBytes.Enqueue(asyncByte);
         }
 

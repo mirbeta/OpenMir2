@@ -856,6 +856,11 @@ namespace TouchSocket.Sockets
             });
         }
 
+        public void Send(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion 组合发送
     }
 }

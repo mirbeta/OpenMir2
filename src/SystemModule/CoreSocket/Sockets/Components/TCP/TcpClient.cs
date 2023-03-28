@@ -594,6 +594,28 @@ namespace TouchSocket.Sockets
         }
 
         /// <summary>
+        /// 当即将发送时，如果覆盖父类方法，则不会触发插件。
+        /// </summary>
+        /// <param name="buffer">数据缓存区</param>
+        /// <param name="offset">偏移</param>
+        /// <param name="length">长度</param>
+        /// <returns>返回值表示是否允许发送</returns>
+        protected virtual bool HandleSendingData(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            if (this.UsePlugin)
+            {
+                //SendingEventArgs args = new SendingEventArgs(buffer, offset, length);
+                //this.PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnSendingData), this, args);
+                //if (args.IsPermitOperation)
+                //{
+                //    return true;
+                //}
+                //return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// 加载配置
         /// </summary>
         /// <param name="config"></param>
@@ -860,6 +882,24 @@ namespace TouchSocket.Sockets
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        /// <param name="buffer"><inheritdoc/></param>
+        /// <param name="offset"><inheritdoc/></param>
+        /// <param name="length"><inheritdoc/></param>
+        /// <exception cref="NotConnectedException"><inheritdoc/></exception>
+        /// <exception cref="OverlengthException"><inheritdoc/></exception>
+        /// <exception cref="Exception"><inheritdoc/></exception>
+        public virtual void Send(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            if (this.DataHandlingAdapter == null)
+            {
+                throw new ArgumentNullException(nameof(this.DataHandlingAdapter), TouchSocketStatus.NullDataAdapter.GetDescription());
+            }
+            this.DataHandlingAdapter.SendInput(buffer, offset, length);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         /// <param name="transferBytes"><inheritdoc/></param>
         /// <exception cref="NotConnectedException"><inheritdoc/></exception>
         /// <exception cref="OverlengthException"><inheritdoc/></exception>
@@ -983,6 +1023,43 @@ namespace TouchSocket.Sockets
             }
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="buffer"><inheritdoc/></param>
+        /// <param name="offset"><inheritdoc/></param>
+        /// <param name="length"><inheritdoc/></param>
+        /// <exception cref="NotConnectedException"><inheritdoc/></exception>
+        /// <exception cref="OverlengthException"><inheritdoc/></exception>
+        /// <exception cref="Exception"><inheritdoc/></exception>
+        public void DefaultSend(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            if (!this.CanSend)
+            {
+                throw new NotConnectedException(TouchSocketStatus.NotConnected.GetDescription());
+            }
+            if (this.HandleSendingData(buffer, offset, length))
+            {
+                if (this.UseSsl)
+                {
+                    //this.m_workStream.Write(buffer, offset, length);
+                }
+                else
+                {
+                    if (this.m_useDelaySender && length < TouchSocketUtility.BigDataBoundary)
+                    {
+                        this.m_delaySender.Send(new QueueDataBytes(buffer, offset, length));
+                    }
+                    else
+                    {
+                        this.MainSocket.AbsoluteSend(buffer, offset, length);
+                    }
+                }
+
+                this.LastSendTime = DateTime.Now;
+            }
+        }
+        
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

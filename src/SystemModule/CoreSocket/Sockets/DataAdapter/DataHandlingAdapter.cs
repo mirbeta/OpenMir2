@@ -89,7 +89,7 @@ namespace TouchSocket.Sockets
         /// <summary>
         /// 当接收数据处理完成后，回调该函数执行发送
         /// </summary>
-        public Action<byte[], int, int> SendCallBack { get; set; }
+        public Action<ReadOnlyMemory<byte>, int, int> SendCallBack { get; set; }
 
         /// <summary>
         /// 收到数据的切入点，该方法由框架自动调用。
@@ -114,6 +114,17 @@ namespace TouchSocket.Sockets
         /// <param name="offset"></param>
         /// <param name="length"></param>
         public void SendInput(byte[] buffer, int offset, int length)
+        {
+            PreviewSend(buffer, offset, length);
+        }
+
+        /// <summary>
+        /// 发送数据的切入点，该方法由框架自动调用。
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        public void SendInput(ReadOnlyMemory<byte> buffer, int offset, int length)
         {
             PreviewSend(buffer, offset, length);
         }
@@ -158,6 +169,17 @@ namespace TouchSocket.Sockets
         }
 
         /// <summary>
+        /// 发送已经经过预先处理后的数据
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        protected void GoSend(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            SendCallBack.Invoke(buffer, offset, length);
+        }
+
+        /// <summary>
         /// 在解析时发生错误。
         /// </summary>
         /// <param name="error">错误异常</param>
@@ -189,6 +211,14 @@ namespace TouchSocket.Sockets
         /// <param name="length">长度</param>
         protected abstract void PreviewSend(byte[] buffer, int offset, int length);
 
+        /// <summary>
+        /// 当发送数据前预先处理数据
+        /// </summary>
+        /// <param name="buffer">数据</param>
+        /// <param name="offset">偏移</param>
+        /// <param name="length">长度</param>
+        protected abstract void PreviewSend(ReadOnlyMemory<byte> buffer, int offset, int length);
+        
         /// <summary>
         /// 当发送数据前预先处理数据
         /// </summary>

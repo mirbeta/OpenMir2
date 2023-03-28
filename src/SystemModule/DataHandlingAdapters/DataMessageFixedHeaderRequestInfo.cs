@@ -12,13 +12,16 @@ namespace SystemModule.DataHandlingAdapters
         /// </summary>
         public override int HeaderLength => 20;
 
+        static readonly DataMessageFixedHeaderRequestInfo instance = new DataMessageFixedHeaderRequestInfo();
+        static DataMessageFixedHeaderRequestInfo Instance => instance;
+
         /// <summary>
         /// 获取新实例
         /// </summary>
         /// <returns></returns>
         protected override DataMessageFixedHeaderRequestInfo GetInstance()
         {
-            return new DataMessageFixedHeaderRequestInfo();
+            return Instance;
         }
     }
 

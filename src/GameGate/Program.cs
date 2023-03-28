@@ -1,4 +1,10 @@
-﻿using GameGate.Conf;
+﻿using System;
+using System.Linq;
+using System.Runtime;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using GameGate.Conf;
 using GameGate.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,12 +13,6 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
-using System;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using LogLevel = NLog.LogLevel;
 
 namespace GameGate
@@ -26,7 +26,7 @@ namespace GameGate
         private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+            GCSettings.LatencyMode = GCLatencyMode.Batch;
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
 
             ThreadPool.SetMaxThreads(200, 200);

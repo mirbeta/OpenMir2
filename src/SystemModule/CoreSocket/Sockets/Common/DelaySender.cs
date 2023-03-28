@@ -162,7 +162,22 @@ namespace TouchSocket.Sockets
                     {
                         if (m_queueDatas.TryDequeue(out QueueDataBytes asyncByte))
                         {
-                            Array.Copy(asyncByte.Buffer, asyncByte.Offset, buffer, len, asyncByte.Length);
+                            unsafe
+                            {
+                                fixed (byte* src = &asyncByte.Buffer.Span[asyncByte.Offset])
+                                {
+                                    fixed (byte* dest = &buffer[len])
+                                    {
+                                        Buffer.MemoryCopy(
+                                            source: src, //要复制的字节的地址
+                                            destination: dest, //目标地址
+                                            destinationSizeInBytes: asyncByte.Length, //目标内存块中可用的字节数
+                                            sourceBytesToCopy: asyncByte.Length //要复制的字节数
+                                        );
+                                    }
+                                }
+                            }
+                            //Array.Copy(asyncByte.Buffer, asyncByte.Offset, buffer, len, asyncByte.Length);
                             len += asyncByte.Length;
                             surLen -= asyncByte.Length;
                         }

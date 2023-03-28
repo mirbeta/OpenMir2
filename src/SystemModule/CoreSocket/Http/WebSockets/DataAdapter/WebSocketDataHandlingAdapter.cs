@@ -208,6 +208,11 @@ namespace TouchSocket.Http.WebSockets
             throw new NotImplementedException();
         }
 
+        protected override void PreviewSend(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

@@ -122,6 +122,17 @@ namespace TouchSocket.Sockets
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        /// <param name="buffer">数据</param>
+        /// <param name="offset">偏移</param>
+        /// <param name="length">长度</param>
+        protected override void PreviewSend(ReadOnlyMemory<byte> buffer, int offset, int length)
+        {
+            GoSend(buffer, offset, length);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         /// <param name="transferBytes"></param>
         protected override void PreviewSend(IList<ArraySegment<byte>> transferBytes)
         {

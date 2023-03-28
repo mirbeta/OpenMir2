@@ -173,6 +173,18 @@ namespace TouchSocket.Sockets
         /// <typeparam name="TClient"></typeparam>
         /// <param name="client"></param>
         /// <param name="id"></param>
+        /// <param name="buffer"></param>
+        public static void Send<TClient>(this TClient client, string id, Memory<byte> buffer) where TClient : IIDSender
+        {
+            client.Send(id, buffer, 0, buffer.Length);
+        }
+
+        /// <summary>
+        /// 同步发送数据。
+        /// </summary>
+        /// <typeparam name="TClient"></typeparam>
+        /// <param name="client"></param>
+        /// <param name="id"></param>
         /// <param name="byteBlock"></param>
         public static void Send<TClient>(this TClient client, string id, ByteBlock byteBlock) where TClient : IIDSender
         {
