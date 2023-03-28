@@ -86,7 +86,7 @@ namespace GameGate.Services
         {
             var config = new TouchSocketConfig();
             config.SetRemoteIPHost(new IPHost(IPAddress.Parse(GateInfo.ServerAdress), GateInfo.ServerPort))
-                .SetBufferLength(4096);
+                .SetBufferLength(1024);
             config.SetDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
             ClientSocket.Setup(config);
         }
@@ -101,7 +101,7 @@ namespace GameGate.Services
             {
                 ClientSocketError(e.SocketErrorCode);
             }
-            catch (TimeoutException e)
+            catch (TimeoutException)
             {
                 ClientSocketError(SocketError.TimedOut);
             }

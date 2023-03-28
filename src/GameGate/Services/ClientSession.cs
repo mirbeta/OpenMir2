@@ -929,7 +929,7 @@ namespace GameGate.Services
             else
             {
                 var sendLen = bufferLen + CommandMessage.Size;
-                Span<byte> sendBuffer = sendLen <= 128 ? stackalloc byte[sendLen] : new byte[sendLen];
+                byte[] sendBuffer = new byte[sendLen];
                 sendBuffer[0] = (byte)'#';
                 var nLen = EncryptUtil.Encode(sourcePacket.Span, CommandMessage.Size, sendBuffer, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
@@ -938,10 +938,9 @@ namespace GameGate.Services
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
                 sendBuffer[nLen + 1] = (byte)'!';
-                //msg.Buffer = sendBuffer;
-                sendBuffer.TryCopyTo(msg.Buffer.Span);
+                msg.Buffer = sendBuffer;
             }
-            msg.BuffLen = _session.ConnectionId; //用BuffLen代替ConnectionId
+            msg.BuffLen = _session.ConnectionId; //用BuffLen代替ConnectionId链接标识
             SendPacketData(msg);
 
             if (bufferLen > 10)
@@ -1219,8 +1218,9 @@ namespace GameGate.Services
                     }
                     _session.Account = sAccount;
                     _session.ChrName = sHumName;
-                    
-                    var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNo}/{szCode}/{MD5.MD5Print(hardWareDigest)}/{ServiceId}";
+
+                    var hardwareStr = Config.IsProcClientHardwareID ? MD5.MD5Print(hardWareDigest) : "000000000000000";
+                    var loginPacket = $"**{sAccount}/{sHumName}/{szCert}/{szClientVerNo}/{szCode}/{hardwareStr}/{ServiceId}";
                     var tempBuf = HUtil32.GetBytes(loginPacket);
                     var loginDataPacket = new byte[tempBuf.Length + ServerMessage.PacketSize + 100];
                     var encodeLen = EncryptUtil.Encode(tempBuf, tempBuf.Length, loginDataPacket, ServerMessage.PacketSize + 2);
