@@ -47,6 +47,7 @@ namespace GameGate
         public static HardwareFilter HardwareFilter;
         public static AbusiveFilter AbusiveFilter;
         public static ChatCommandFilter ChatCommandFilter;
+        public static readonly PacketMessagePool PacketMessagePool = new PacketMessagePool();
         public const int HeaderMessageSize = ServerMessage.PacketSize;
 
         public static void Initialization()
@@ -57,6 +58,11 @@ namespace GameGate
             ChatCommandFilter = ChatCommandFilter.Instance;
             PunishList = new Dictionary<string, ClientSession>(StringComparer.OrdinalIgnoreCase);
             ChatCommandFilterMap = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < MaxSession; i++)
+            {
+                PacketMessagePool.Push(default);
+            }
         }
 
         public static void Load()
@@ -70,10 +76,9 @@ namespace GameGate
     public struct SessionMessage
     {
         public byte[] Buffer { get; set; }
-        public readonly int SessionId { get; }
-        public readonly byte ServiceId { get; }
+        public int SessionId { get; }
+        public byte ServiceId { get; }
         public short BuffLen { get; set; }
-        public ushort ConnectionId { get; set; }
 
         public SessionMessage(byte serviceId, int sessionId, byte[] buffer, short buffLen)
         {
@@ -82,6 +87,16 @@ namespace GameGate
             this.Buffer = buffer;
             this.BuffLen = buffLen;
         }
+    }
+    
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct SendSessionMessage
+    {
+        public IntPtr Buffer { get; set; }
+        public int SessionId{ get; set; }
+        public byte ServiceId{ get; set; }
+        public short BuffLen { get; set; }
+        public ushort ConnectionId { get; set; }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

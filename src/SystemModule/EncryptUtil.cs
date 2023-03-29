@@ -25,7 +25,86 @@ namespace SystemModule
             var encBuf = Decode(tempBuf, str.Length, ref buffLen);
             return HUtil32.GetString(encBuf, 0, buffLen);
         }
-
+        
+        /// <summary>
+        /// 加密
+        /// </summary>
+        public static unsafe int Encode(byte[] srcBuf, int len, void* destination, int dstOffset = 0)
+        {
+            var no = 2;
+            byte remainder = 0;
+            var pos = 0;
+            var dstPos = dstOffset;
+            byte* dstBuf = (byte*)destination;
+            for (var i = 0; i < len; i++)
+            {
+                var c = (byte)(srcBuf[pos] ^ BySeed);
+                pos++;
+                if (no == 6)
+                {
+                    dstBuf[dstPos] = (byte)((c & 0x3F) + ByBase);
+                    dstPos++;
+                    remainder = (byte)(remainder | ((c >> 2) & 0x30));
+                    dstBuf[dstPos] = (byte)(remainder + ByBase);
+                    dstPos++;
+                    remainder = 0;
+                }
+                else
+                {
+                    var temp = (byte)(c >> 2);
+                    dstBuf[dstPos] = (byte)(((temp & 0x3C) | (c & 0x3)) + ByBase);
+                    dstPos++;
+                    remainder = (byte)((remainder << 2) | (temp & 0x3));
+                }
+                no = no % 6 + 2;
+            }
+            if (no != 2)
+            {
+                dstBuf[dstPos] = (byte)(remainder + ByBase);
+                dstPos++;
+            }
+            return dstPos - dstOffset;
+        }
+        
+        /// <summary>
+        /// 加密
+        /// </summary>
+        public static int Encode(byte[] srcBuf, int len, Span<byte> dstBuf, int dstOffset = 0)
+        {
+            var no = 2;
+            byte remainder = 0;
+            var pos = 0;
+            var dstPos = dstOffset;
+            for (var i = 0; i < len; i++)
+            {
+                var c = (byte)(srcBuf[pos] ^ BySeed);
+                pos++;
+                if (no == 6)
+                {
+                    dstBuf[dstPos] = (byte)((c & 0x3F) + ByBase);
+                    dstPos++;
+                    remainder = (byte)(remainder | ((c >> 2) & 0x30));
+                    dstBuf[dstPos] = (byte)(remainder + ByBase);
+                    dstPos++;
+                    remainder = 0;
+                }
+                else
+                {
+                    var temp = (byte)(c >> 2);
+                    dstBuf[dstPos] = (byte)(((temp & 0x3C) | (c & 0x3)) + ByBase);
+                    dstPos++;
+                    remainder = (byte)((remainder << 2) | (temp & 0x3));
+                }
+                no = no % 6 + 2;
+            }
+            if (no != 2)
+            {
+                dstBuf[dstPos] = (byte)(remainder + ByBase);
+                dstPos++;
+            }
+            return dstPos - dstOffset;
+        }
+        
         /// <summary>
         /// 加密
         /// </summary>

@@ -80,7 +80,7 @@ namespace GameGate.Services
         /// <summary>
         /// 添加到客户端消息队列
         /// </summary>
-        public void Send(SessionMessage sendPacket)
+        public void Send(SendSessionMessage sendPacket)
         {
             _serverServices[sendPacket.ServiceId].Send(sendPacket);
         }

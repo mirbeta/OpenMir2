@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using GameGate.Conf;
 using GameGate.Packet;
 using NLog;
+using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
@@ -862,7 +863,7 @@ namespace GameGate.Services
             }
         }
 
-        private void SendPacketData(SessionMessage sessionPacket)
+        private void SendPacketData(SendSessionMessage sessionPacket)
         {
             SendQueue.AddClientQueue(sessionPacket);
         }
@@ -877,42 +878,44 @@ namespace GameGate.Services
             {
                 return;
             }
-            ref var msg = ref message;
+
+            var sendMsg = GateShare.PacketMessagePool.Pop();
+            sendMsg.ServiceId = message.ServiceId;
+            sendMsg.SessionId = message.ServiceId;
+            sendMsg.ConnectionId = (ushort)_session.ConnectionId;
 
             var bufferLen = message.BuffLen;
-            var sourcePacket = message.Buffer;
             if (bufferLen < 0)//小包 走路 攻击等
             {
                 var buffLen = -bufferLen;
-                var sendBuffer = GateShare.BytePool.Rent(buffLen + 2);
-                sendBuffer[0] = (byte)'#';
-                MemoryCopy.BlockCopy(sourcePacket, 0, sendBuffer, 1, buffLen);
-                sendBuffer[buffLen + 1] = (byte)'!';
-                msg.Buffer = sendBuffer;
-                msg.BuffLen = (short)(buffLen + 2);
+                var smallBuff = new nint(NativeMemory.AllocZeroed((uint)buffLen + 2));
+                var destinationSpan = new Span<byte>(smallBuff.ToPointer(), buffLen + 2);
+                destinationSpan[0] = (byte)'#';//消息头
+                MemoryCopy.BlockCopy(message.Buffer, 0, destinationSpan, 1, buffLen);
+                destinationSpan[buffLen + 1] = (byte)'!';//消息结尾
+                sendMsg.Buffer = smallBuff;
+                sendMsg.BuffLen = (short)(buffLen + 2);
             }
             else
             {
                 var sendLen = bufferLen + CommandMessage.Size;
-                byte[] sendBuffer = GateShare.BytePool.Rent(sendLen);
-                sendBuffer[0] = (byte)'#';  
-                var nLen = EncryptUtil.Encode(sourcePacket, CommandMessage.Size, sendBuffer, 1);//消息头
+                var bigBuff = new nint(NativeMemory.AllocZeroed((uint)sendLen));
+                var destinationSpan = new Span<byte>(bigBuff.ToPointer(), sendLen);
+                destinationSpan[0] = (byte)'#';  //消息头
+                var nLen = EncryptUtil.Encode(message.Buffer, CommandMessage.Size, destinationSpan, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
                 {
-                    MemoryCopy.BlockCopy(sourcePacket, CommandMessage.Size, sendBuffer, nLen + 1, bufferLen - CommandMessage.Size);
+                    MemoryCopy.BlockCopy(message.Buffer, CommandMessage.Size, destinationSpan, nLen + 1, bufferLen - CommandMessage.Size);
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
-                sendBuffer[nLen + 1] = (byte)'!';
-                msg.Buffer = sendBuffer;
-                msg.BuffLen = (short)sendLen;
+                destinationSpan[nLen + 1] = (byte)'!'; //消息结尾
+                sendMsg.Buffer = bigBuff;
+                sendMsg.BuffLen = (short)(nLen + 2);
             }
-            
-            msg.ConnectionId = (ushort)_session.ConnectionId;
-            SendPacketData(msg);
 
             if (bufferLen > 10)
             {
-                var messagePacket = sourcePacket.AsSpan();
+                var messagePacket = message.Buffer.AsSpan();
                 var recog = BitConverter.ToInt32(messagePacket[..4]);
                 var ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
                 //var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
@@ -975,6 +978,8 @@ namespace GameGate.Services
                         break;
                 }
             }
+            
+            SendPacketData(sendMsg);
         }
 
         private void SendKickMsg(int killType)

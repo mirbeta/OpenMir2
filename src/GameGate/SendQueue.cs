@@ -1,6 +1,7 @@
 using GameGate.Services;
 using NLog;
 using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -10,12 +11,12 @@ namespace GameGate
     public class SendQueue
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly Channel<SessionMessage> _sendQueue;
+        private readonly Channel<SendSessionMessage> _sendQueue;
         private readonly ServerManager ServerMgr = ServerManager.Instance;
 
         public SendQueue()
         {
-            _sendQueue = Channel.CreateUnbounded<SessionMessage>();
+            _sendQueue = Channel.CreateUnbounded<SendSessionMessage>();
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddClientQueue(SessionMessage sessionPacket)
+        public void AddClientQueue(SendSessionMessage sessionPacket)
         {
             _sendQueue.Writer.TryWrite(sessionPacket);
         }
@@ -52,7 +53,11 @@ namespace GameGate
                         }
                         finally
                         {
-                            GateShare.BytePool.Return(sendPacket.Buffer, true);
+                            unsafe
+                            {
+                                NativeMemory.Free(sendPacket.Buffer.ToPointer());
+                            }
+                            GateShare.PacketMessagePool.Return(sendPacket);
                         }
                     }
                 }

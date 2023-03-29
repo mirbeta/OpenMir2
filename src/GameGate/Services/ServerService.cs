@@ -36,7 +36,7 @@ namespace GameGate.Services
             _messageSendQueue = new SendQueue();
             _gateEndPoint = new IPEndPoint(IPAddress.Parse(gameGate.ServerAdress), gameGate.GatePort);
             _clientThread = new ClientThread(_gateEndPoint, gameGate, _networkMonitor);
-            _serverSocket = new SocketServer(GateShare.MaxSession, 75);
+            _serverSocket = new SocketServer(GateShare.MaxSession, 256);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -104,9 +104,9 @@ namespace GameGate.Services
             }
         }
 
-        public void Send(SessionMessage sessionMessage)
+        public void Send(SendSessionMessage sessionMessage)
         {
-            _serverSocket.Send(sessionMessage.ConnectionId, sessionMessage.Buffer,sessionMessage.BuffLen);
+            _serverSocket.Send(sessionMessage.ConnectionId, sessionMessage.Buffer, sessionMessage.BuffLen);
             _networkMonitor.Send(sessionMessage.BuffLen);
         }
 

@@ -9,7 +9,7 @@ namespace SystemModule
             Array.Copy(source, srcOff, destination, dstOff, count);
         }
 
-        public unsafe static void BlockCopy(byte[] source, int srcOff, void* destination, int dstOff, int count)
+        public static unsafe void BlockCopy(byte[] source, int srcOff, void* destination, int dstOff, int count)
         {
             unsafe
             {
