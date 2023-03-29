@@ -22,21 +22,21 @@ namespace GameGate.Services
         private readonly GameGateInfo _gateInfo;
         private readonly ClientThread _clientThread;
         private readonly IPEndPoint _gateEndPoint;
-        private readonly SendQueue messageSendQueue;
-        private readonly ConcurrentQueue<int> SessionCloseQueue;
+        private readonly SendQueue _messageSendQueue;
+        private readonly ConcurrentQueue<int> _sessionCloseQueue;
         private static SessionContainer SessionContainer => SessionContainer.Instance;
         private static ServerManager ServerMgr => ServerManager.Instance;
-        private readonly NetworkMonitor networkMonitor;
+        private readonly NetworkMonitor _networkMonitor;
 
         public ServerService(GameGateInfo gameGate)
         {
             _gateInfo = gameGate;
-            networkMonitor = new NetworkMonitor();
-            SessionCloseQueue = new ConcurrentQueue<int>();
-            messageSendQueue = new SendQueue();
+            _networkMonitor = new NetworkMonitor();
+            _sessionCloseQueue = new ConcurrentQueue<int>();
+            _messageSendQueue = new SendQueue();
             _gateEndPoint = new IPEndPoint(IPAddress.Parse(gameGate.ServerAdress), gameGate.GatePort);
-            _clientThread = new ClientThread(_gateEndPoint, gameGate, networkMonitor);
-            _serverSocket = new SocketServer(GateShare.MaxSession, 256);
+            _clientThread = new ClientThread(_gateEndPoint, gameGate, _networkMonitor);
+            _serverSocket = new SocketServer(GateShare.MaxSession, 75);
             _serverSocket.OnClientConnect += ServerSocketClientConnect;
             _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
             _serverSocket.OnClientRead += ServerSocketClientRead;
@@ -45,7 +45,7 @@ namespace GameGate.Services
         }
 
         public ClientThread ClientThread => _clientThread;
-        public NetworkMonitor NetworkMonitor => networkMonitor;
+        public NetworkMonitor NetworkMonitor => _networkMonitor;
         public GameGateInfo GateInfo => _gateInfo;
 
         public void Initialize()
@@ -59,7 +59,7 @@ namespace GameGate.Services
             _serverSocket.Start(_gateEndPoint);
             _clientThread.Start();
             _clientThread.RestSessionArray();
-            messageSendQueue.StartProcessQueueSend(stoppingToken);
+            _messageSendQueue.StartProcessQueueSend(stoppingToken);
             _logger.Info($"游戏网关[{_gateEndPoint}]已启动...");
         }
 
@@ -74,40 +74,40 @@ namespace GameGate.Services
             return (_gateEndPoint.ToString(), _clientThread.GetConnected, _clientThread.GetSessionCount(), ShowReceive, ShowSend, TotalReceive, TotalSend, WaitQueueCount, ServerManager.MessageWorkThreads);
         }
 
-        public string ShowReceive => $"↓{networkMonitor.ShowReceive()}";
+        public string ShowReceive => $"↓{_networkMonitor.ShowReceive()}";
 
-        public string ShowSend => $"↑{networkMonitor.ShowSendStats()}";
+        public string ShowSend => $"↑{_networkMonitor.ShowSendStats()}";
 
-        public string TotalReceive => $"↓{HUtil32.FormatBytesValue(networkMonitor.TotalBytesRecv)}";
+        public string TotalReceive => $"↓{HUtil32.FormatBytesValue(_networkMonitor.TotalBytesRecv)}";
 
-        public string TotalSend => $"↑{HUtil32.FormatBytesValue(networkMonitor.TotalBytesSent)}";
+        public string TotalSend => $"↑{HUtil32.FormatBytesValue(_networkMonitor.TotalBytesSent)}";
 
         /// <summary>
         /// 获取队列待处理数
         /// </summary>
         /// <returns></returns>
-        private string WaitQueueCount => messageSendQueue.QueueCount + "/" + SessionContainer.QueueCount;
+        private string WaitQueueCount => _messageSendQueue.QueueCount + "/" + SessionContainer.QueueCount;
 
         /// <summary>
         /// 处理会话关闭列表
         /// </summary>
         public void ProcessCloseSessionQueue()
         {
-            if (SessionCloseQueue.IsEmpty)
+            if (_sessionCloseQueue.IsEmpty)
             {
                 return;
             }
-            for (var i = 0; i < SessionCloseQueue.Count; i++)
+            for (var i = 0; i < _sessionCloseQueue.Count; i++)
             {
-                SessionCloseQueue.TryDequeue(out var socketId);
+                _sessionCloseQueue.TryDequeue(out var socketId);
                 _clientThread.UserLeave(socketId); //发送消息给GameSvr断开链接
             }
         }
 
         public void Send(SessionMessage sessionMessage)
         {
-            _serverSocket.Send(sessionMessage.ConnectionId, sessionMessage.Buffer[..sessionMessage.BuffLen]);
-            networkMonitor.Send(sessionMessage.BuffLen);
+            _serverSocket.Send(sessionMessage.ConnectionId, sessionMessage.Buffer,sessionMessage.BuffLen);
+            _networkMonitor.Send(sessionMessage.BuffLen);
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace GameGate.Services
             if (userSession != null)
             {
                 clientThread.UserEnter((ushort)clientId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
-                SessionContainer.AddSession(GateInfo.ServiceId, clientId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, messageSendQueue));
+                SessionContainer.AddSession(GateInfo.ServiceId, clientId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, _messageSendQueue));
                 _logger.Info("开始连接: " + sRemoteAddress);
                 _logger.Debug($"GateId:{GateInfo.ServiceId} 用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}/{clientThread.ThreadId}");
             }
@@ -193,7 +193,7 @@ namespace GameGate.Services
             {
                 _logger.Info("断开链接: " + sRemoteAddress);
             }
-            SessionCloseQueue.Enqueue(e.SocHandle); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
+            _sessionCloseQueue.Enqueue(e.SocHandle); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
             SessionContainer.CloseSession(GateInfo.ServiceId, clientId);
             _logger.Debug($"用户断开链接 Ip:[{sRemoteAddress}] ThreadId:{_gateInfo.ServiceId} SessionId:{e.ConnectionId}");
         }
@@ -216,7 +216,7 @@ namespace GameGate.Services
                 var buff = new IntPtr(NativeMemory.AllocZeroed((uint)token.BytesReceived));
                 MemoryCopy.BlockCopy(token.ReceiveBuffer, token.Offset, buff.ToPointer(), 0, token.BytesReceived);
                 ServerMgr.SendMessageQueue(new ClientPacketMessage(GateInfo.ServiceId, sessionId, buff, (ushort)token.BytesReceived));
-                networkMonitor.Receive(token.BytesReceived);
+                _networkMonitor.Receive(token.BytesReceived);
             }
             else
             {

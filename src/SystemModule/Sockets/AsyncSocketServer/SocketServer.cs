@@ -504,7 +504,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
             token.Socket.Close();
         }
 
-        public void Send(int connectionId, byte[] buffer)
+        public void Send(int connectionId, byte[] buffer,int buffLen)
         {
             if (!this._Tokens.TryGetValue(connectionId, out AsyncUserToken token))
             {
@@ -512,10 +512,10 @@ namespace SystemModule.Sockets.AsyncSocketServer
             }
             try
             {
-                rwl.AcquireReaderLock(3);
+                //rwl.AcquireWriterLock(3);
                 var writeEventArgs = _writePool.Pop();// 分配一个写SocketAsyncEventArgs对象
                 writeEventArgs.UserToken = token;
-                if (buffer.Length <= _bufferSize)
+                if (buffLen <= _bufferSize)
                 {
                     unsafe
                     {
@@ -524,15 +524,15 @@ namespace SystemModule.Sockets.AsyncSocketServer
                             fixed (byte* dest = &writeEventArgs.Buffer[writeEventArgs.Offset])
                             {
                                 Buffer.MemoryCopy(
-                                    source: src, //要复制的字节的地址
-                                    destination: dest, //目标地址
-                                    destinationSizeInBytes: buffer.Length, //目标内存块中可用的字节数
-                                    sourceBytesToCopy: buffer.Length //要复制的字节数
+                                    source: src,//要复制的字节的地址
+                                    destination: dest,//目标地址
+                                    destinationSizeInBytes: buffLen,//目标内存块中可用的字节数
+                                    sourceBytesToCopy: buffLen//要复制的字节数
                                 );
                             }
                         }
                     }
-                    writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
+                    writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffLen);
                 }
                 else
                 {
@@ -545,22 +545,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
                     //{
                     //    _bufferManager.FreeBuffer(writeEventArgs);
                     //}
-                    unsafe
-                    {
-                        fixed (byte* src = &buffer[0])
-                        {
-                            fixed (byte* dest = &writeEventArgs.Buffer[0])
-                            {
-                                Buffer.MemoryCopy(
-                                    source: src, //要复制的字节的地址
-                                    destination: dest, //目标地址
-                                    destinationSizeInBytes: buffer.Length, //目标内存块中可用的字节数
-                                    sourceBytesToCopy: buffer.Length //要复制的字节数
-                                );
-                            }
-                        }
-                    }
-                    writeEventArgs.SetBuffer(writeEventArgs.Buffer, 0, buffer.Length);
+                    writeEventArgs.SetBuffer(buffer, 0, buffLen);
                 }
                 // 异步发送数据
                 var willRaiseEvent = token.Socket.SendAsync(writeEventArgs);
@@ -591,7 +576,7 @@ namespace SystemModule.Sockets.AsyncSocketServer
             }
             finally
             {
-                rwl.ReleaseReaderLock();
+                //rwl.ReleaseWriterLock();
             }
         }
 

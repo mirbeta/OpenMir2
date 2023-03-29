@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using GameGate.Conf;
 using GameGate.Packet;
 using NLog;
-using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
@@ -147,6 +146,12 @@ namespace GameGate.Services
                 var deCodeLen = 0;
                 var decodeBuff = EncryptUtil.DecodeSpan(tempBuff, tempBuff.Length, ref deCodeLen);
 
+                if (deCodeLen < 12)
+                {
+                    Logger.Debug("解析数据包小于12...解析后长度:" + deCodeLen);
+                    //_session.Socket.Close();//关闭异常会话
+                    return;
+                }
                 var recog = BitConverter.ToInt32(decodeBuff[..4]);
                 var ident = BitConverter.ToUInt16(decodeBuff.Slice(4, 2));
                 var param = BitConverter.ToUInt16(decodeBuff.Slice(6, 2));
@@ -834,41 +839,20 @@ namespace GameGate.Services
         /// <summary>
         /// 发送延时处理消息
         /// </summary>
-        private void SendDelayMsg(int nMid, int nDir, int nIdx, int nLen, string sMsg, int dwDelay)
-        {
-            const int delayBufferLen = 1024;
-            if (nLen > 0 && nLen <= delayBufferLen)
-            {
-                var pDelayMsg = new DelayMessage();
-                pDelayMsg.Mag = nMid;
-                pDelayMsg.Dir = nDir;
-                pDelayMsg.Cmd = nIdx;
-                pDelayMsg.DelayTime = HUtil32.GetTickCount() + dwDelay;
-                pDelayMsg.BufLen = nLen;
-                if (!string.IsNullOrEmpty(sMsg))
-                {
-                    var bMsg = HUtil32.GetBytes(sMsg);
-                    pDelayMsg.Buffer = bMsg;
-                }
-                MsgList.Add(pDelayMsg);
-            }
-        }
-
-        /// <summary>
-        /// 发送延时处理消息
-        /// </summary>
         private void SendDelayMsg(int magicId, byte nDir, int nIdx, int nLen, byte[] pMsg, int delayTime)
         {
             const int delayBufferLen = 1024;
             if (nLen > 0 && nLen <= delayBufferLen)
             {
-                var pDelayMsg = new DelayMessage();
-                pDelayMsg.Mag = magicId;
-                pDelayMsg.Dir = nDir;
-                pDelayMsg.Cmd = nIdx;
-                pDelayMsg.DelayTime = HUtil32.GetTickCount() + delayTime;
-                pDelayMsg.BufLen = nLen;
-                pDelayMsg.Buffer = pMsg;
+                var pDelayMsg = new DelayMessage
+                {
+                    Mag = magicId,
+                    Dir = nDir,
+                    Cmd = nIdx,
+                    DelayTime = HUtil32.GetTickCount() + delayTime,
+                    BufLen = nLen,
+                    Buffer = pMsg
+                };
                 MsgList.Add(pDelayMsg);
             }
 
