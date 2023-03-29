@@ -26,7 +26,7 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 从池里删除一个SocketAsyncEventArgs对象实例
+        /// 从池里删除一个SendSessionMessage对象实例
         /// </summary>
         /// <returns>要被从池里删除的对象</returns>
         public SendSessionMessage Pop()
