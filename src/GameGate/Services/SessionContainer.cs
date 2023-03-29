@@ -1,7 +1,9 @@
+using System;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using GameGate.Conf;
+using NLog;
 
 namespace GameGate.Services
 {
@@ -64,7 +66,14 @@ namespace GameGate.Services
                         {
                             continue;
                         }
-                        userSession.ProcessServerPacket(message);
+                        try
+                        {
+                            userSession.ProcessServerPacket(message);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
                     }
                 }
             }, stoppingToken);

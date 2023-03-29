@@ -1,14 +1,13 @@
+using GameGate.Conf;
+using NLog;
 using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
-using GameGate.Conf;
-using NLog;
 using SystemModule;
 using SystemModule.Sockets;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
+using SystemModule.Sockets.AsyncSocketServer;
 using NetworkMonitor = SystemModule.NetworkMonitor;
 
 namespace GameGate.Services
@@ -19,7 +18,7 @@ namespace GameGate.Services
     public class ServerService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly TcpService _serverSocket;
+        private readonly SocketServer _serverSocket;
         private readonly GameGateInfo _gateInfo;
         private readonly ClientThread _clientThread;
         private readonly IPEndPoint _gateEndPoint;
@@ -37,10 +36,11 @@ namespace GameGate.Services
             messageSendQueue = new SendQueue();
             _gateEndPoint = new IPEndPoint(IPAddress.Parse(gameGate.ServerAdress), gameGate.GatePort);
             _clientThread = new ClientThread(_gateEndPoint, gameGate, networkMonitor);
-            _serverSocket = new TcpService();
-            _serverSocket.Connected += ServerSocketClientConnect;
-            _serverSocket.Disconnected += ServerSocketClientDisconnect;
-            _serverSocket.Received += ServerSocketClientRead;
+            _serverSocket = new SocketServer(GateShare.MaxSession, 256);
+            _serverSocket.OnClientConnect += ServerSocketClientConnect;
+            _serverSocket.OnClientDisconnect += ServerSocketClientDisconnect;
+            _serverSocket.OnClientRead += ServerSocketClientRead;
+            _serverSocket.OnClientError += ServerSocketClientError;
             ClientManager.Instance.AddClientThread(gameGate.ThreadId, _clientThread);
         }
 
@@ -50,18 +50,13 @@ namespace GameGate.Services
 
         public void Initialize()
         {
-            var touchSocketConfig = new TouchSocketConfig();
-            touchSocketConfig.SetListenIPHosts(new IPHost[1]
-            {
-                new IPHost(_gateEndPoint.Address,_gateEndPoint.Port)
-            }).SetBufferLength(255).SetMaxCount(GateShare.MaxSession);
-            _serverSocket.Setup(touchSocketConfig);
+            _serverSocket.Init(20);
             _clientThread.Initialize();
         }
 
         public void Start(CancellationToken stoppingToken)
         {
-            _serverSocket.Start();
+            _serverSocket.Start(_gateEndPoint);
             _clientThread.Start();
             _clientThread.RestSessionArray();
             messageSendQueue.StartProcessQueueSend(stoppingToken);
@@ -71,7 +66,7 @@ namespace GameGate.Services
         public void Stop()
         {
             _clientThread.Stop();
-            _serverSocket.Stop();
+            _serverSocket.Shutdown();
         }
 
         public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string totalrevice, string totalSend, string queueCount, int threadCount) GetStatus()
@@ -109,20 +104,19 @@ namespace GameGate.Services
             }
         }
 
-        public void Send(int connectionId, ReadOnlyMemory<byte> buffer)
+        public void Send(SessionMessage sessionMessage)
         {
-            _serverSocket.Send(Convert.ToString(connectionId), buffer);
-            networkMonitor.Send(buffer.Length);
+            _serverSocket.Send(sessionMessage.ConnectionId, sessionMessage.Buffer[..sessionMessage.BuffLen]);
+            networkMonitor.Send(sessionMessage.BuffLen);
         }
 
         /// <summary>
         /// 新玩家链接
         /// </summary>
-        private void ServerSocketClientConnect(object sender, TouchSocketEventArgs e)
+        private void ServerSocketClientConnect(object sender, AsyncUserToken e)
         {
-            var client = (SocketClient)sender;
-            var sRemoteAddress = client.MainSocket.RemoteEndPoint.GetIP();
-            var clientId = int.Parse(client.ID);
+            var sRemoteAddress = e.RemoteIPaddr;
+            var clientId = e.ConnectionId;
             _logger.Debug($"客户端 IP:{sRemoteAddress} ThreadId:{GateInfo.ServiceId} SessionId:{clientId} RunPort:{_gateEndPoint}");
             var clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out var threadId);
             if (clientThread == null || threadId < 0)
@@ -138,11 +132,11 @@ namespace GameGate.Services
                 if (userSession == null)
                 {
                     userSession = new SessionInfo();
-                    userSession.Socket = client.MainSocket;
+                    userSession.Socket = e.Socket;
                     userSession.SessionIndex = 0;
                     userSession.ConnectionId = clientId;
                     userSession.ReceiveTick = HUtil32.GetTickCount();
-                    userSession.SckHandle = (int)client.MainSocket.Handle;
+                    userSession.SckHandle = e.SocHandle;
                     userSession.SessionId = (ushort)nIdx;
                     userSession.ThreadId = threadId;
                     clientThread.SessionArray[nIdx] = userSession;
@@ -158,16 +152,15 @@ namespace GameGate.Services
             }
             else
             {
-                client.Close();
+                e.Socket.Close();
                 _logger.Info("禁止连接: " + sRemoteAddress);
             }
         }
 
-        private void ServerSocketClientDisconnect(object sender, DisconnectEventArgs e)
+        private void ServerSocketClientDisconnect(object sender, AsyncUserToken e)
         {
-            var client = (SocketClient)sender;
-            var sRemoteAddress = client.MainSocket.RemoteEndPoint.GetIP();
-            var clientId = int.Parse(client.ID);
+            var sRemoteAddress = e.RemoteIPaddr;
+            var clientId = e.ConnectionId;
             var clientSession = SessionContainer.GetSession(GateInfo.ServiceId, clientId);
             if (clientSession == null)
             {
@@ -200,9 +193,9 @@ namespace GameGate.Services
             {
                 _logger.Info("断开链接: " + sRemoteAddress);
             }
-            SessionCloseQueue.Enqueue((int)client.MainSocket.Handle); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
+            SessionCloseQueue.Enqueue(e.SocHandle); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
             SessionContainer.CloseSession(GateInfo.ServiceId, clientId);
-            _logger.Debug($"用户断开链接 Ip:[{sRemoteAddress}] ThreadId:{_gateInfo.ServiceId} SessionId:{client.ID}");
+            _logger.Debug($"用户断开链接 Ip:[{sRemoteAddress}] ThreadId:{_gateInfo.ServiceId} SessionId:{e.ConnectionId}");
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
@@ -213,22 +206,21 @@ namespace GameGate.Services
         /// <summary>
         /// 收到客户端消息
         /// </summary>
-        private unsafe void ServerSocketClientRead(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        private unsafe void ServerSocketClientRead(object sender, AsyncUserToken token)
         {
-            var client = (SocketClient)sender;
-            var sRemoteAddress = client.MainSocket.RemoteEndPoint.GetIP();
-            var sessionId = int.Parse(client.ID);
+            var sRemoteAddress = token.RemoteIPaddr;
+            var sessionId = token.ConnectionId;
             var clientSession = SessionContainer.GetSession(GateInfo.ServiceId, sessionId);
             if (clientSession != null)
             {
-                var buff = new IntPtr(NativeMemory.AllocZeroed((uint)byteBlock.Len));
-                MemoryCopy.BlockCopy(byteBlock.Buffer, 0, buff.ToPointer(), 0, byteBlock.Len);
-                ServerMgr.SendMessageQueue(new ClientPacketMessage(GateInfo.ServiceId, sessionId, buff, (ushort)byteBlock.Len));
-                networkMonitor.Receive(byteBlock.Len);
+                var buff = new IntPtr(NativeMemory.AllocZeroed((uint)token.BytesReceived));
+                MemoryCopy.BlockCopy(token.ReceiveBuffer, token.Offset, buff.ToPointer(), 0, token.BytesReceived);
+                ServerMgr.SendMessageQueue(new ClientPacketMessage(GateInfo.ServiceId, sessionId, buff, (ushort)token.BytesReceived));
+                networkMonitor.Receive(token.BytesReceived);
             }
             else
             {
-                client.Close();
+                token.Socket.Close();
                 _logger.Info("非法攻击: " + sRemoteAddress);
             }
         }

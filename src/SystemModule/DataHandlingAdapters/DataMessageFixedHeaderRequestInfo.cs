@@ -31,8 +31,8 @@ namespace SystemModule.DataHandlingAdapters
         public int BodyLength => bodyLength;
         private ServerMessage _header;
         public ServerMessage Header => _header;
-        private Memory<byte> _message;
-        public Memory<byte> Message => _message;
+        private byte[] _message;
+        public byte[] Message => _message;
 
         public bool OnParsingHeader(byte[] header)
         {

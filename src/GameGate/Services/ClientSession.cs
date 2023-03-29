@@ -84,7 +84,7 @@ namespace GameGate.Services
         /// <summary>
         /// 处理客户端封包
         /// </summary>
-        public unsafe void ProcessPacket(ClientPacketMessage messagePacket)
+        public unsafe void ProcessSessionPacket(ClientPacketMessage messagePacket)
         {
             _session.ReceiveTick = HUtil32.GetTickCount();
             int currentTick;
@@ -711,19 +711,14 @@ namespace GameGate.Services
 
                             if (Config.IsItemSpeedCompensate)
                             {
-                                gameSpeed.MoveTick = dwCurrentTick - (Config.AttackNextMoveCompensate +
-                                                                       Config.MaxItemSpeedRate *
-                                                                       gameSpeed.ItemSpeed); // 550
-                                gameSpeed.SpellTick = dwCurrentTick - (Config.AttackNextSpellCompensate +
-                                                                        Config.MaxItemSpeedRate *
-                                                                        gameSpeed.ItemSpeed); // 1150
+                                gameSpeed.MoveTick = dwCurrentTick - (Config.AttackNextMoveCompensate + Config.MaxItemSpeedRate * gameSpeed.ItemSpeed); // 550
+                                gameSpeed.SpellTick = dwCurrentTick - (Config.AttackNextSpellCompensate + Config.MaxItemSpeedRate * gameSpeed.ItemSpeed); // 1150
                             }
                             else
                             {
                                 gameSpeed.MoveTick = dwCurrentTick - Config.AttackNextMoveCompensate; // 550
                                 gameSpeed.SpellTick = dwCurrentTick - Config.AttackNextSpellCompensate; // 1150
                             }
-
                             LastDirection = delayMsg.Dir;
                             break;
                         case Messages.CM_SPELL:
@@ -883,21 +878,6 @@ namespace GameGate.Services
             }
         }
 
-        public static bool EqualsBytes(byte[] obj, byte[] target)
-        {
-            if (obj.Length != target.Length)
-                return false;
-            for (int i = 0; i < obj.Length; i++)
-            {
-                if (obj[i] != target[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         private void SendPacketData(SessionMessage sessionPacket)
         {
             SendQueue.AddClientQueue(sessionPacket);
@@ -920,32 +900,35 @@ namespace GameGate.Services
             if (bufferLen < 0)//小包 走路 攻击等
             {
                 var buffLen = -bufferLen;
-                var sendBuffer = new byte[buffLen + 2];
+                var sendBuffer = GateShare.BytePool.Rent(buffLen + 2);
                 sendBuffer[0] = (byte)'#';
-                MemoryCopy.BlockCopy(sourcePacket.Span, 0, sendBuffer, 1, buffLen);
+                MemoryCopy.BlockCopy(sourcePacket, 0, sendBuffer, 1, buffLen);
                 sendBuffer[buffLen + 1] = (byte)'!';
                 msg.Buffer = sendBuffer;
+                msg.BuffLen = (short)(buffLen + 2);
             }
             else
             {
                 var sendLen = bufferLen + CommandMessage.Size;
-                byte[] sendBuffer = new byte[sendLen];
-                sendBuffer[0] = (byte)'#';
-                var nLen = EncryptUtil.Encode(sourcePacket.Span, CommandMessage.Size, sendBuffer, 1);//消息头
+                byte[] sendBuffer = GateShare.BytePool.Rent(sendLen);
+                sendBuffer[0] = (byte)'#';  
+                var nLen = EncryptUtil.Encode(sourcePacket, CommandMessage.Size, sendBuffer, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
                 {
-                    MemoryCopy.BlockCopy(sourcePacket.Span, CommandMessage.Size, sendBuffer, nLen + 1, bufferLen - CommandMessage.Size);
+                    MemoryCopy.BlockCopy(sourcePacket, CommandMessage.Size, sendBuffer, nLen + 1, bufferLen - CommandMessage.Size);
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
                 sendBuffer[nLen + 1] = (byte)'!';
                 msg.Buffer = sendBuffer;
+                msg.BuffLen = (short)sendLen;
             }
-            msg.BuffLen = _session.ConnectionId; //用BuffLen代替ConnectionId链接标识
+            
+            msg.ConnectionId = (ushort)_session.ConnectionId;
             SendPacketData(msg);
 
             if (bufferLen > 10)
             {
-                var messagePacket = sourcePacket.Span;
+                var messagePacket = sourcePacket.AsSpan();
                 var recog = BitConverter.ToInt32(messagePacket[..4]);
                 var ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
                 //var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));

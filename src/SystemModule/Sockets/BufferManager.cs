@@ -75,6 +75,23 @@ namespace SystemModule.Sockets
         }
 
         /// <summary>
+        /// 从缓冲区池中分配一个缓冲区给指定的SocketAsyncEventArgs对象
+        /// </summary>
+        /// <returns>如果缓冲区被成功设置返回真否则返回假</returns>
+        public void SetBuffer(SocketAsyncEventArgs args, bool tr)
+        {
+            if (_freeIndexPool.Count > 0)
+            {
+                args.SetBuffer(_buffer, _freeIndexPool.Pop(), _bufferSize);
+            }
+            else
+            {
+                args.SetBuffer(_buffer, _currentIndex, _bufferSize);
+                _currentIndex += _bufferSize;
+            }
+        }
+
+        /// <summary>
         /// 从一个SocketAsyncEventArgs对象上删除缓冲区，这将把缓冲区释放回缓冲区池
         /// </summary>
         public void FreeBuffer(SocketAsyncEventArgs args)

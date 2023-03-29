@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Net.Sockets;
-using System.Threading;
 
 namespace SystemModule.Sockets
 {
@@ -11,7 +10,6 @@ namespace SystemModule.Sockets
     internal class SocketAsyncEventArgsPool
     {
         private readonly ConcurrentStack<SocketAsyncEventArgs> m_pool;
-        private readonly ReaderWriterLock toolLock = new ReaderWriterLock();
 
         /// <summary>
         /// 用指定的大小初始化对象池
@@ -29,9 +27,7 @@ namespace SystemModule.Sockets
         public void Push(SocketAsyncEventArgs item)
         {
             if (item == null) { throw new ArgumentNullException("要被添加到SocketAsyncEventArgs池的项目不能为空(null)"); }
-            toolLock.AcquireReaderLock(10);
             m_pool.Push(item);
-            toolLock.ReleaseReaderLock();
         }
 
         /// <summary>
@@ -40,26 +36,11 @@ namespace SystemModule.Sockets
         /// <returns>要被从池里删除的对象</returns>
         public SocketAsyncEventArgs Pop()
         {
-            try
+            if (m_pool.TryPop(out var pop))
             {
-                if (Count <= 200)
-                {
-                    toolLock.AcquireReaderLock(50);
-                }
-                else
-                {
-                    toolLock.AcquireReaderLock(5);
-                }
-                if (m_pool.TryPop(out var pop))
-                {
-                    return pop;
-                }
-                return null;
+                return pop;
             }
-            finally
-            {
-                toolLock.ReleaseReaderLock();
-            }
+            return null;
         }
 
         /// <summary>

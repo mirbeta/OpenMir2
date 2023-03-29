@@ -82,7 +82,7 @@ namespace GameGate.Services
         /// </summary>
         public void Send(SessionMessage sendPacket)
         {
-            _serverServices[sendPacket.ServiceId].Send(sendPacket.BuffLen, sendPacket.Buffer);
+            _serverServices[sendPacket.ServiceId].Send(sendPacket);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace GameGate.Services
                             }
                             try
                             {
-                                clientSession.ProcessPacket(message);
+                                clientSession.ProcessSessionPacket(message);
                             }
                             catch (Exception e)
                             {

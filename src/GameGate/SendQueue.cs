@@ -9,7 +9,7 @@ namespace GameGate
 {
     public class SendQueue
     {
-        private readonly NLog.Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly Channel<SessionMessage> _sendQueue;
         private readonly ServerManager ServerMgr = ServerManager.Instance;
 
@@ -50,9 +50,13 @@ namespace GameGate
                         {
                             logger.Error(e.StackTrace);
                         }
+                        finally
+                        {
+                            GateShare.BytePool.Return(sendPacket.Buffer, true);
+                        }
                     }
                 }
-            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
+            }, stoppingToken);
         }
     }
 }

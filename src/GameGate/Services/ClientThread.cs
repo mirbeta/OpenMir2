@@ -214,7 +214,7 @@ namespace GameGate.Services
             CheckServerFail = true;
         }
 
-        private void ProcessServerPacket(ServerMessage packetHeader, Memory<byte> data)
+        private void ProcessServerPacket(ServerMessage packetHeader, byte[] data)
         {
             try
             {
@@ -238,7 +238,7 @@ namespace GameGate.Services
                         SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, "", 0);
                         break;
                     case Grobal2.GM_DATA:
-                        var sessionPacket = new SessionMessage(GateInfo.ServiceId, packetHeader.SessionId, data, packetHeader.PackLength);
+                        var sessionPacket = new SessionMessage(GateInfo.ServiceId, packetHeader.SessionId, data, (short)packetHeader.PackLength);
                         SessionContainer.Enqueue(sessionPacket);
                         break;
                     case Messages.GM_TEST:
