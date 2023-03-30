@@ -71,7 +71,7 @@ namespace GameGate.Services
 
         public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string totalrevice, string totalSend, string queueCount, int threadCount) GetStatus()
         {
-            return (_gateEndPoint.ToString(), _clientThread.GetConnected, _clientThread.GetSessionCount(), ShowReceive, ShowSend, TotalReceive, TotalSend, WaitQueueCount, ServerManager.MessageWorkThreads);
+            return (_gateEndPoint.ToString(), _clientThread.GetConnected, _clientThread.GetSessionCount(), ShowReceive, ShowSend, TotalReceive, TotalSend, GetQueueStatus, ServerManager.MessageWorkThreads);
         }
 
         public string ShowReceive => $"↓{_networkMonitor.ShowReceive()}";
@@ -86,7 +86,7 @@ namespace GameGate.Services
         /// 获取队列待处理数
         /// </summary>
         /// <returns></returns>
-        private string WaitQueueCount => _messageSendQueue.QueueCount + "/" + SessionContainer.QueueCount;
+        private string GetQueueStatus => _messageSendQueue.QueueCount + "/" + SessionContainer.QueueCount;
 
         /// <summary>
         /// 处理会话关闭列表

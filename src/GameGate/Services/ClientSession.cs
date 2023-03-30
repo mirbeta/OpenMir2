@@ -863,7 +863,7 @@ namespace GameGate.Services
             }
         }
 
-        private void SendPacketData(SendSessionMessage sessionPacket)
+        private void SendPacketMessage(SendSessionMessage sessionPacket)
         {
             SendQueue.AddClientQueue(sessionPacket);
         }
@@ -979,7 +979,7 @@ namespace GameGate.Services
                 }
             }
             
-            SendPacketData(sendMsg);
+            SendPacketMessage(sendMsg);
         }
 
         private void SendKickMsg(int killType)

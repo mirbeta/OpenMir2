@@ -20,7 +20,7 @@ namespace GameGate
         }
 
         /// <summary>
-        /// 获取待发送队列数量
+        /// 返回等待发送到客户端消息的消息数量
         /// </summary>
         public int QueueCount => _sendQueue.Reader.Count;
 

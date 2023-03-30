@@ -38,7 +38,7 @@ namespace GameGate.Services
         }
 
         /// <summary>
-        /// 获取待处理的队列数量
+        /// 返回等待处理的消息数量
         /// </summary>
         public int QueueCount => _messageChannel.Reader.Count;
 
@@ -70,7 +70,7 @@ namespace GameGate.Services
                         {
                             userSession.ProcessServerPacket(message);
                         }
-                        catch (System.Exception ex)
+                        catch (Exception ex)
                         {
                             Console.WriteLine(ex.Message);
                         }
