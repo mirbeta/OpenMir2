@@ -60,6 +60,7 @@ namespace GameGate.Services
             _clientThread.Start();
             _clientThread.RestSessionArray();
             _messageSendQueue.StartProcessQueueSend(stoppingToken);
+            _clientThread.StartMessageQueue(stoppingToken);
             _logger.Info($"游戏网关[{_gateEndPoint}]已启动...");
         }
 
@@ -86,7 +87,7 @@ namespace GameGate.Services
         /// 获取队列待处理数
         /// </summary>
         /// <returns></returns>
-        private string GetQueueStatus => _messageSendQueue.QueueCount + "/" + SessionContainer.QueueCount;
+        private string GetQueueStatus => _messageSendQueue.QueueCount + "/" + _clientThread.QueueCount;
 
         /// <summary>
         /// 处理会话关闭列表

@@ -3,6 +3,9 @@ using System.Net;
 using System.Net.Sockets;
 using GameGate.Conf;
 using NLog;
+using System.Threading;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ServerPackets;
@@ -19,7 +22,6 @@ namespace GameGate.Services
     public class ClientThread
     {
         private readonly TcpClient ClientSocket;
-        private readonly byte _threadId;
         private readonly GameGateInfo GateInfo;
         private readonly IPEndPoint LocalEndPoint;
         /// <summary>
@@ -60,6 +62,10 @@ namespace GameGate.Services
         /// </summary>
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly NetworkMonitor _networkMonitor;
+        /// <summary>
+        /// 发送封包（网关-》客户端）
+        /// </summary>
+        private readonly Channel<SessionMessage> _messageChannel;
 
         public ClientThread(IPEndPoint endPoint, GameGateInfo gameGate, NetworkMonitor networkMonitor)
         {
@@ -69,6 +75,7 @@ namespace GameGate.Services
             LocalEndPoint = endPoint;
             CheckServerTick = HUtil32.GetTickCount();
             _networkMonitor = networkMonitor;
+            _messageChannel = Channel.CreateUnbounded<SessionMessage>();
             ClientSocket = new TcpClient();
             ClientSocket.Connected  += ClientSocketConnect;
             ClientSocket.Disconnected  += ClientSocketDisconnect;
@@ -82,6 +89,11 @@ namespace GameGate.Services
         public byte ThreadId => GateInfo.ServiceId;
 
         public RunningState Running => RunningState;
+        
+        /// <summary>
+        /// 返回等待处理的消息数量
+        /// </summary>
+        public int QueueCount => _messageChannel.Reader.Count;
 
         public void Initialize()
         {
@@ -116,31 +128,26 @@ namespace GameGate.Services
             }
         }
 
-        public string GetSessionCount()
-        {
-            var count = 0;
-            for (var i = 0; i < SessionArray.Length; i++)
-            {
-                if (SessionArray[i] != null && SessionArray[i].Socket != null)
-                {
-                    count++;
-                }
-            }
-            if (count > OnlineCount)
-            {
-                OnlineCount = count;
-            }
-            return count + "/" + OnlineCount;
-        }
-
         public void Stop()
         {
             ClientSocket.Close();
         }
 
-        public SessionInfo[] GetSession()
+        public string GetSessionCount()
         {
-            return SessionArray;
+            var sessionCount = 0;
+            for (var i = 0; i < SessionArray.Length; i++)
+            {
+                if (SessionArray[i] != null && SessionArray[i].Socket != null)
+                {
+                    sessionCount++;
+                }
+            }
+            if (sessionCount > OnlineCount)
+            {
+                OnlineCount = sessionCount;
+            }
+            return sessionCount + "/" + OnlineCount;
         }
 
         private void ClientSocketConnect(object sender, MsgEventArgs e)
@@ -239,8 +246,8 @@ namespace GameGate.Services
                         SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, "", 0);
                         break;
                     case Grobal2.GM_DATA:
-                        var sessionPacket = new SessionMessage(ThreadId, packetHeader.SessionId, data, (short)packetHeader.PackLength);
-                        SessionContainer.Enqueue(sessionPacket);
+                        var sessionPacket = new SessionMessage(packetHeader.SessionId, data, (short)packetHeader.PackLength);
+                        Enqueue(sessionPacket);
                         break;
                     case Messages.GM_TEST:
                         break;
@@ -251,7 +258,44 @@ namespace GameGate.Services
                 _logger.Error(ex);
             }
         }
-
+        
+        /// <summary>
+        /// 添加到消息处理队列
+        /// </summary>
+        private void Enqueue(SessionMessage sessionPacket)
+        {
+            _messageChannel.Writer.TryWrite(sessionPacket);
+        }
+        
+        /// <summary>
+        /// 转发GameSvr封包消息
+        /// </summary>
+        public Task StartMessageQueue(CancellationToken stoppingToken)
+        {
+            return Task.Factory.StartNew(async () =>
+            {
+                while (await _messageChannel.Reader.WaitToReadAsync(stoppingToken))
+                {
+                    if (_messageChannel.Reader.TryRead(out var message))
+                    {
+                        var userSession = SessionContainer.GetSession(ThreadId, message.SessionId);
+                        if (userSession == null)
+                        {
+                            continue;
+                        }
+                        try
+                        {
+                            userSession.ProcessServerPacket(ThreadId, message);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+                }
+            }, stoppingToken);
+        }
+        
         public void RestSessionArray()
         {
             for (var i = 0; i < GateShare.MaxSession; i++)

@@ -40,7 +40,7 @@ namespace GameGate
             }
             ServerManager.Start(stoppingToken);
             await ServerManager.StartMessageWorkThread(stoppingToken);
-            await SessionContainer.ProcessSendMessage(stoppingToken);
+            //await SessionContainer.ProcessSendMessage(stoppingToken);
             _logger.Info("服务已启动成功...");
             _logger.Info("欢迎使用翎风系列游戏软件...");
             _logger.Info("网站:http://www.gameofmir.com");

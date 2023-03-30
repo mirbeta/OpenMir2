@@ -872,7 +872,7 @@ namespace GameGate.Services
         /// 处理GameSvr消息 
         /// 处理后发送到游戏客户端
         /// </summary>
-        public unsafe void ProcessServerPacket(SessionMessage message)
+        public unsafe void ProcessServerPacket(byte serviceId,SessionMessage message)
         {
             if (Session.Socket == null)
             {
@@ -880,8 +880,7 @@ namespace GameGate.Services
             }
 
             var sendMsg = GateShare.PacketMessagePool.Pop();
-            sendMsg.ServiceId = message.ServiceId;
-            sendMsg.SessionId = message.ServiceId;
+            sendMsg.ServiceId = serviceId;
             sendMsg.ConnectionId = (ushort)_session.ConnectionId;
 
             var bufferLen = message.BuffLen;

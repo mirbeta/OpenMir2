@@ -73,27 +73,24 @@ namespace GameGate
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct SessionMessage
+    public readonly struct SessionMessage
     {
-        public byte[] Buffer { get; set; }
-        public int SessionId { get; }
-        public byte ServiceId { get; }
-        public short BuffLen { get; set; }
+        public ushort SessionId { get; }
+        public byte[] Buffer { get; }
+        public short BuffLen { get; }
 
-        public SessionMessage(byte serviceId, int sessionId, byte[] buffer, short buffLen)
+        public SessionMessage(ushort sessionId, byte[] buffer, short buffLen)
         {
             this.SessionId = sessionId;
-            this.ServiceId = serviceId;
             this.Buffer = buffer;
             this.BuffLen = buffLen;
         }
     }
-    
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct SendSessionMessage
     {
         public IntPtr Buffer { get; set; }
-        public int SessionId{ get; set; }
         public byte ServiceId{ get; set; }
         public short BuffLen { get; set; }
         public ushort ConnectionId { get; set; }
@@ -116,6 +113,12 @@ namespace GameGate
         }
     }
 
+    public enum MessageThreadState
+    {
+        Runing,
+        Stop
+    }
+    
     public enum RunningState : byte
     {
         /// <summary>

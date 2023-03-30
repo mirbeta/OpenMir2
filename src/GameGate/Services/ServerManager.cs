@@ -10,12 +10,6 @@ using SystemModule;
 
 namespace GameGate.Services
 {
-    public enum MessageThreadState
-    {
-        Runing,
-        Stop
-    }
-
     public class ServerManager
     {
         private static readonly ServerManager instance = new ServerManager();
@@ -32,7 +26,10 @@ namespace GameGate.Services
         /// 消息消费者线程
         /// </summary>
         private ClientMessageWorkThread[] _messageWorkThreads;
-        private int LastMessageThreadCount { get; set; }
+        /// <summary>
+        /// 运行消息消费线程数
+        /// </summary>
+        private int RunMessageThreadCount { get; set; }
         /// <summary>
         /// 接收封包（客户端-》网关）
         /// </summary>
@@ -106,11 +103,11 @@ namespace GameGate.Services
         {
             return Task.Factory.StartNew(() =>
             {
-                if (LastMessageThreadCount == ConfigManager.GateConfig.MessageWorkThread)
+                if (RunMessageThreadCount == ConfigManager.GateConfig.MessageWorkThread)
                 {
                     return;
                 }
-                if (ConfigManager.GateConfig.MessageWorkThread > LastMessageThreadCount)
+                if (ConfigManager.GateConfig.MessageWorkThread > RunMessageThreadCount)
                 {
                     Array.Resize(ref _messageWorkThreads, ConfigManager.GateConfig.MessageWorkThread);
                     for (var i = 0; i < ConfigManager.GateConfig.MessageWorkThread; i++)
@@ -140,7 +137,7 @@ namespace GameGate.Services
                         }
                     }
                 }
-                LastMessageThreadCount = ConfigManager.GateConfig.MessageWorkThread;
+                RunMessageThreadCount = ConfigManager.GateConfig.MessageWorkThread;
             }, stoppingToken);
         }
 
