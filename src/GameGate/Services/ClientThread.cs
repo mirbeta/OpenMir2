@@ -11,8 +11,6 @@ using SystemModule.Packets.ServerPackets;
 using NetworkMonitor = SystemModule.NetworkMonitor;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
-using System.Buffers;
-using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using TouchSocket.Core;
 
@@ -78,10 +76,10 @@ namespace GameGate.Services
             CheckServerTick = HUtil32.GetTickCount();
             _networkMonitor = networkMonitor;
             _messageChannel = Channel.CreateUnbounded<SessionMessage>();
-            ClientSocket = new AsyncClientSocket(GateInfo.ServerAdress, GateInfo.ServerPort, 40960);
+            ClientSocket = new AsyncClientSocket(GateInfo.ServerAdress, GateInfo.ServerPort, 2048);
             ClientSocket.OnConnected  += ClientSocketConnect;
             ClientSocket.OnDisconnected  += ClientSocketDisconnect;
-            ClientSocket.OnClientReceivedData += ClientSocketRead;
+            ClientSocket.OnReceivedData += ClientSocketRead;
             ClientSocket.OnError += ClientSocketError;
         }
 
@@ -182,79 +180,33 @@ namespace GameGate.Services
         /// <summary>
         /// 接收GameSvr发来的封包消息
         /// </summary>
-        private unsafe void ClientSocketRead(object sender, ClientReceiveDataEventArgs e)
+        private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            //if (requestInfo is not DataMessageFixedHeaderRequestInfo message)
-            //    return;
-            //if (message.Header.PacketCode != Grobal2.PacketCode)
-            //{
-            //    _logger.Debug("解析GameSrv消息封包错误");
-            //    return;
-            //}
-            if (e.BuffLen < 0)
+            try
             {
-                return;
+                if (beCached)
+                {
+                    buffBlock.Write(e.Buff, 0, e.BuffLen);
+                    unsafe
+                    {
+                        Span<byte> bodyData = stackalloc byte[bodyLength];
+                        buffBlock.Pos = 0;
+                        buffBlock.Read(bodyData, 0, bodyLength);
+                        ProcessPacket(bodyData, bodyLength);
+                        bodyLength = 0;
+                        beCached = false;
+                    }
+                }
+                else
+                {
+                    ProcessPacket(e.Buff, e.BuffLen);
+                }
             }
-            if (beCached)
+            catch (Exception exception)
             {
-                buffBlock.Read(out byte[] body, bodyLength);
-                beCached = false;
-                ProcessPacket(body, body.Length);
-            }
-            else
-            {
-                try
-                {
-                    var destinationSpan = new Span<byte>(e.Buff.ToPointer(), e.BuffLen);
-                    ProcessPacket(destinationSpan, e.BuffLen);
-                }
-                catch (Exception exception)
-                {
-                   _logger.Error(exception);
-                }
-                finally
-                {
-                    NativeMemory.Free(e.Buff.ToPointer());
-                }
+                _logger.Error(exception);
             }
             _networkMonitor.Receive(e.BuffLen);
-            
-            //ReadOnlySequence<byte> readSequence = new ReadOnlySequence<byte>(e.Buff, 0, e.BuffLen);
-            //var sequenceReader = new SequenceReader<byte>(readSequence);
-            //while (sequenceReader.Remaining > 0) //表示整个序列还剩几个数据，也就是“已读索引”之后有几个数据
-            //{
-            //    if (!MemoryMarshal.TryRead(sequenceReader.CurrentSpan, out message))
-            //    {
-            //        return;
-            //    }
-            //    if (message.PacketCode != Grobal2.PacketCode)
-            //    {
-            //        _logger.Debug("解析GameSrv消息封包错误");
-            //        return;
-            //    }
-            //    bodyLength = 0;
-            //    if (message.PackLength < 0)
-            //    {
-            //        bodyLength = -message.PackLength;
-            //    }
-            //    else
-            //    {
-            //        bodyLength = message.PackLength;
-            //    }
-            //    if (sequenceReader.Remaining < bodyLength)  //body不满足解析，开始缓存，然后保存对象
-            //    {
-            //        beCached = true;
-            //        buffBlock = new ByteBlock();
-            //        buffBlock.Write(sequenceReader.CurrentSpan, 0, (int)sequenceReader.Remaining);
-            //    }
-            //    else
-            //    {
-            //        sequenceReader.Advance(20 + bodyLength);
-            //        var data = sequenceReader.CurrentSpan.Slice(ServerMessage.PacketSize, bodyLength);
-            //        ProcessServerPacket(message, data);
-            //    }
-            //    _networkMonitor.Receive(e.BuffLen);
-            //}
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -310,11 +262,10 @@ namespace GameGate.Services
                 if (remaining < bodyLength)//body不满足解析，开始缓存，然后保存对象
                 {
                     beCached = true;
-                    //buffBlock.Write(data, remaining);
-                    buffBlock.Write(data);
+                    buffBlock.WriteSpan(data, consumed, remaining);
                     return;
                 }
-                var serverPacket = data.Slice(ServerMessage.PacketSize, bodyLength);
+                var serverPacket = data[ServerMessage.PacketSize..];
                 ProcessServerPacket(message, serverPacket);
                 Interlocked.Add(ref consumed, 20 + bodyLength);
                 remaining -= consumed;

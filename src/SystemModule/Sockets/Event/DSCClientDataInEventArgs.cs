@@ -18,14 +18,14 @@ namespace SystemModule.Sockets.Event
         }
     }
 
-    public class ClientReceiveDataEventArgs : EventArgs
+    public ref struct ClientReceiveDataEventArgs 
     {
         public int BuffLen;
-        public readonly IntPtr Buff;
+        public readonly ReadOnlySpan<byte> Buff;
         public readonly Socket Socket;
         public int SocketId => (int)Socket.Handle;
 
-        public ClientReceiveDataEventArgs(Socket soc, IntPtr buff, int buffLen)
+        public ClientReceiveDataEventArgs(Socket soc, ReadOnlySpan<byte> buff, int buffLen)
         {
             this.Socket = soc;
             this.Buff = buff;

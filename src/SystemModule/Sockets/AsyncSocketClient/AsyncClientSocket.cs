@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -22,6 +23,9 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 接收到数据事件
         /// </summary>
         public event DSCClientOnReceiveHandler OnReceivedData;
+        /// <summary>
+        /// 接收到数据事件
+        /// </summary>
         public event ClientOnReceiveHandler OnClientReceivedData;
         /// <summary>
         /// 数据发送事件
@@ -41,19 +45,9 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// </summary>
         private long _totalBytesWrite;
         /// <summary>
-        /// 接受缓存数组
-        /// </summary>
-        private readonly byte[] recvBuff = null;
-        /// <summary>
-        /// 发送缓存数组
-        /// </summary>
-        private readonly byte[] sendBuff = null;
-        /// <summary>
         /// 连接socket
         /// </summary>
-        private Socket connectSocket = null;
-        public IPEndPoint EndPoint;
-        public IPEndPoint RemoteEndpoint;
+        private Socket _connectSocket = null;
         /// <summary>
         /// 用于发送数据的SocketAsyncEventArgs
         /// </summary>
@@ -62,34 +56,34 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 用于接收数据的SocketAsyncEventArgs
         /// </summary>
         private readonly SocketAsyncEventArgs recvEventArg = null;
-        //tcp服务器ip
-        public string Host = "";
-        //tcp服务器端口
-        public int Port = 0;
+        /// <summary>
+        /// 监听端口
+        /// </summary>
+        private EndPoint ListerEndPoint = null;
+        private ArrayPool<byte> _arrayPool;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="bufferSize">用于socket发送和接受的缓存区大小</param>
-        public AsyncClientSocket(string ip, int port, int bufferSize)
+        public AsyncClientSocket(string ipAddress, int port, int bufferSize)
         {
-            if (string.IsNullOrEmpty(ip))
-                throw new ArgumentNullException("ip cannot be null");
+            if (string.IsNullOrEmpty(ipAddress))
+                throw new ArgumentNullException("IPAddress cannot be null");
             if (port < 1 || port > 65535)
                 throw new ArgumentOutOfRangeException("port is out of range");
 
             //设置用于发送数据的SocketAsyncEventArgs
-            sendBuff = new byte[bufferSize];
+            var sendBuff = new byte[bufferSize];
             sendEventArg = new SocketAsyncEventArgs();
             sendEventArg.Completed += IO_Completed;
             sendEventArg.SetBuffer(sendBuff, 0, bufferSize);
             //设置用于接受数据的SocketAsyncEventArgs
-            recvBuff = new byte[bufferSize];
+            var recvBuff = new byte[bufferSize];
             recvEventArg = new SocketAsyncEventArgs();
             recvEventArg.Completed += IO_Completed;
             recvEventArg.SetBuffer(recvBuff, 0, bufferSize);
-            this.Host = ip;
-            this.Port = port;
+            ListerEndPoint = new IPEndPoint(IPAddress.Parse(ipAddress), port);
+            _arrayPool = ArrayPool<byte>.Create(1024 * 10, 100);
         }
 
         /// <summary>
@@ -99,19 +93,15 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             try
             {
-                if (RemoteEndpoint == null)
-                {
-                    // 重置接收和发送字节总数
-                    _totalBytesRead = 0;
-                    _totalBytesWrite = 0;
-                    connectSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    RemoteEndpoint = new IPEndPoint(IPAddress.Parse(Host), Port);
-                }
+                // 重置接收和发送字节总数
+                _totalBytesRead = 0;
+                _totalBytesWrite = 0;
+                _connectSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 //连接tcp服务器
                 SocketAsyncEventArgs connectEventArg = new SocketAsyncEventArgs();
                 connectEventArg.Completed += ConnectEventArgs_Completed;
-                connectEventArg.RemoteEndPoint = RemoteEndpoint;//设置要连接的tcp服务器地址
-                bool willRaiseEvent = connectSocket.ConnectAsync(connectEventArg);
+                connectEventArg.RemoteEndPoint = ListerEndPoint;
+                bool willRaiseEvent = _connectSocket.ConnectAsync(connectEventArg);
                 if (!willRaiseEvent)
                     ProcessConnect(connectEventArg);
             }
@@ -130,11 +120,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
             if (buffer.Length <= 0)
                 throw new ArgumentNullException("buffer cannot be null");
 
-            if (connectSocket == null)
+            if (_connectSocket == null)
                 throw new Exception("socket cannot be null");
 
             sendEventArg.SetBuffer(buffer, 0, buffer.Length);
-            if (!connectSocket.SendAsync(sendEventArg))
+            if (!_connectSocket.SendAsync(sendEventArg))
             {
                 ProcessSend(sendEventArg);
             }
@@ -146,17 +136,16 @@ namespace SystemModule.Sockets.AsyncSocketClient
         public void CloseSocket()
         {
             IsConnected = false;
-            RemoteEndpoint = null;
-            if (connectSocket == null)
+            if (_connectSocket == null)
                 return;
             try
             {
                 //关闭socket时，单独使用socket.close()通常会造成资源提前被释放，应该在关闭socket之前，先使用shutdown进行接受或者发送的禁用，再使用socket进行释放
-                connectSocket.Shutdown(SocketShutdown.Both);
+                _connectSocket.Shutdown(SocketShutdown.Both);
             }
             catch
             {
-                connectSocket.Close();
+                _connectSocket.Close();
             }
         }
 
@@ -168,6 +157,14 @@ namespace SystemModule.Sockets.AsyncSocketClient
             IsConnected = false;
             CloseSocket();
             Start();
+        }
+
+        /// <summary>
+        /// 回收缓冲区
+        /// </summary>
+        public void ReturnBuffer(byte[] data)
+        {
+            _arrayPool.Return(data);
         }
 
         /// <summary>
@@ -206,7 +203,6 @@ namespace SystemModule.Sockets.AsyncSocketClient
             ProcessConnect(e);
             if (null != OnConnected)
             {
-                EndPoint = (IPEndPoint)e.RemoteEndPoint;
                 OnConnected(this, new DSCClientConnectedEventArgs(e.ConnectSocket)); //引发连接成功事件
             }
         }
@@ -221,7 +217,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// </summary>
         private void StartWaitingForData()
         {
-            if (!connectSocket.ReceiveAsync(recvEventArg))
+            if (!_connectSocket.ReceiveAsync(recvEventArg))
             {
                 ProcessReceive(recvEventArg);
             }
@@ -265,13 +261,12 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
                 {
-                    unsafe
-                    {
-                        var buff = new IntPtr(NativeMemory.AllocZeroed((uint)e.BytesTransferred));
-                        MemoryCopy.BlockCopy(e.Buffer, e.Offset, buff.ToPointer(), 0, e.BytesTransferred);
-                        OnClientReceivedData?.Invoke(this, new ClientReceiveDataEventArgs(e.ConnectSocket, buff, e.BytesTransferred)); //引发接收数据事件
-                        StartWaitingForData();//继续接收数据
-                    }
+                    //var receiveData = _arrayPool.Rent(e.BytesTransferred);
+                    //Buffer.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
+                    //Span<byte> receiveData = stackalloc byte[e.BytesTransferred];
+                    //MemoryCopy.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
+                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, e.Buffer, e.BytesTransferred));//引发接收数据事件
+                    StartWaitingForData();//继续接收数据
                 }
             }
             catch (ObjectDisposedException)
@@ -285,7 +280,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                     RaiseDisconnectedEvent(e.ConnectSocket);//引发断开连接事件
                     return;
                 }
-                RaiseErrorEvent(exception);//引发错误事件
+                RaiseErrorEvent(e.RemoteEndPoint,exception);//引发错误事件
             }
         }
 
@@ -319,7 +314,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
                     RaiseDisconnectedEvent(e.ConnectSocket);//引发断开连接事件
                     return;
                 }
-                RaiseErrorEvent(exception);
+                RaiseErrorEvent(e.RemoteEndPoint, exception);
             }
             catch (Exception exception_debug)
             {
@@ -327,11 +322,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
             }
         }
 
-        private void RaiseErrorEvent(SocketException error)
+        private void RaiseErrorEvent(EndPoint endPoint, SocketException error)
         {
             if (null != OnError)
             {
-                OnError(this, new DSCClientErrorEventArgs(EndPoint, error.SocketErrorCode, error));
+                OnError(this, new DSCClientErrorEventArgs(endPoint, error.SocketErrorCode, error));
             }
         }
 

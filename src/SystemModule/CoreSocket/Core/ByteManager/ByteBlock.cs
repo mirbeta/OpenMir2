@@ -23,7 +23,7 @@ namespace TouchSocket.Core
     /// 字节块流
     /// </summary>
     [DebuggerDisplay("Len={Len},Pos={Pos},Capacity={Capacity}")]
-    [IntelligentCoder.AsyncMethodPoster(Flags = IntelligentCoder.MemberFlags.Public)]
+    //[IntelligentCoder.AsyncMethodPoster(Flags = IntelligentCoder.MemberFlags.Public)]
     public sealed partial class ByteBlock : Stream, IWrite
     {
         private static float m_ratio = 1.5f;
@@ -201,6 +201,40 @@ namespace TouchSocket.Core
             }
             int len = m_length - m_position > length ? length : CanReadLen;
             Array.Copy(m_buffer, m_position, buffer, offset, len);
+            m_position += len;
+            return len;
+        }
+        
+        /// <summary>
+        /// 读取数据，然后递增Pos
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        /// <exception cref="ObjectDisposedException"></exception>
+        public int Read(Span<byte> buffer, int offset, int length)
+        {
+            if (!m_using)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
+            int len = m_length - m_position > length ? length : CanReadLen;
+            unsafe
+            {
+                fixed (byte* src = &m_buffer[m_position])
+                {
+                    fixed (byte* dest = &buffer[offset])
+                    {
+                        System.Buffer.MemoryCopy(
+                            source: src, //要复制的字节的地址
+                            destination: dest, //目标地址
+                            destinationSizeInBytes: len, //目标内存块中可用的字节数
+                            sourceBytesToCopy: len //要复制的字节数
+                        );
+                    }
+                }
+            }
             m_position += len;
             return len;
         }
@@ -522,6 +556,45 @@ namespace TouchSocket.Core
         //    m_position += count;
         //    m_length = Math.Max(m_position, m_length);
         //}
+
+        public void WriteSpan(ReadOnlySpan<byte> buffer, int offset, int count)
+        {
+            if (count == 0)
+            {
+                return;
+            }
+            if (!m_using)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
+            if (m_buffer.Length - m_position < count)
+            {
+                int need = m_buffer.Length + count - ((int)(m_buffer.Length - m_position));
+                int lend = m_buffer.Length;
+                while (need > lend)
+                {
+                    lend = (int)(lend * m_ratio);
+                }
+                SetCapacity(lend, true);
+            }
+            unsafe
+            {
+                fixed (byte* src = &buffer[offset])
+                {
+                    fixed (byte* dest = &m_buffer[m_position])
+                    {
+                        System.Buffer.MemoryCopy(
+                            source: src, //要复制的字节的地址
+                            destination: dest, //目标地址
+                            destinationSizeInBytes: count, //目标内存块中可用的字节数
+                            sourceBytesToCopy: count //要复制的字节数
+                        );
+                    }
+                }
+            }
+            m_position += count;
+            m_length = Math.Max(m_position, m_length);
+        }
 
         public void Write(ReadOnlyMemory<byte> buffer, int offset, int count)
         {
