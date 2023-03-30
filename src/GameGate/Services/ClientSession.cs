@@ -863,7 +863,7 @@ namespace GameGate.Services
             }
         }
 
-        private void SendPacketMessage(SendSessionMessage sessionPacket)
+        private void SendPacketMessage(SessionMessage sessionPacket)
         {
             SendQueue.AddClientQueue(sessionPacket);
         }
@@ -879,9 +879,8 @@ namespace GameGate.Services
                 return;
             }
 
-            var sendMsg = GateShare.PacketMessagePool.Pop();
-            sendMsg.ServiceId = serviceId;
-            sendMsg.ConnectionId = (ushort)_session.ConnectionId;
+            message.ServiceId = serviceId;
+            message.ConnectionId = (ushort)_session.ConnectionId;
 
             var bufferLen = message.BuffLen;
             if (bufferLen < 0)//小包 走路 攻击等
@@ -892,8 +891,8 @@ namespace GameGate.Services
                 destinationSpan[0] = (byte)'#';//消息头
                 MemoryCopy.BlockCopy(message.Buffer, 0, destinationSpan, 1, buffLen);
                 destinationSpan[buffLen + 1] = (byte)'!';//消息结尾
-                sendMsg.Buffer = smallBuff;
-                sendMsg.BuffLen = (short)(buffLen + 2);
+                message.Buffer = smallBuff;
+                message.BuffLen = (short)(buffLen + 2);
             }
             else
             {
@@ -904,12 +903,12 @@ namespace GameGate.Services
                 var nLen = EncryptUtil.Encode(message.Buffer, CommandMessage.Size, destinationSpan, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
                 {
-                    MemoryCopy.BlockCopy(message.Buffer, CommandMessage.Size, destinationSpan, nLen + 1, bufferLen - CommandMessage.Size);
+                    MemoryCopy.BlockCopy(message.Buffer, CommandMessage.Size, destinationSpan, nLen + 1, bufferLen - CommandMessage.Size, bufferLen);
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
                 destinationSpan[nLen + 1] = (byte)'!'; //消息结尾
-                sendMsg.Buffer = bigBuff;
-                sendMsg.BuffLen = (short)(nLen + 2);
+                message.Buffer = bigBuff;
+                message.BuffLen = (short)(nLen + 2);
             }
 
             if (bufferLen > 10)
@@ -978,7 +977,7 @@ namespace GameGate.Services
                 }
             }
             
-            SendPacketMessage(sendMsg);
+            SendPacketMessage(message);
         }
 
         private void SendKickMsg(int killType)

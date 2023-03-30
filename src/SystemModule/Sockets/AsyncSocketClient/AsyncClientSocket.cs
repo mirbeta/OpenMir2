@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Threading;
 using SystemModule.Sockets.Event;
 
@@ -21,6 +22,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// 接收到数据事件
         /// </summary>
         public event DSCClientOnReceiveHandler OnReceivedData;
+        public event ClientOnReceiveHandler OnClientReceivedData;
         /// <summary>
         /// 数据发送事件
         /// </summary>
@@ -79,12 +81,12 @@ namespace SystemModule.Sockets.AsyncSocketClient
             //设置用于发送数据的SocketAsyncEventArgs
             sendBuff = new byte[bufferSize];
             sendEventArg = new SocketAsyncEventArgs();
-            sendEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
+            sendEventArg.Completed += IO_Completed;
             sendEventArg.SetBuffer(sendBuff, 0, bufferSize);
             //设置用于接受数据的SocketAsyncEventArgs
             recvBuff = new byte[bufferSize];
             recvEventArg = new SocketAsyncEventArgs();
-            recvEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(IO_Completed);
+            recvEventArg.Completed += IO_Completed;
             recvEventArg.SetBuffer(recvBuff, 0, bufferSize);
             this.Host = ip;
             this.Port = port;
@@ -103,10 +105,8 @@ namespace SystemModule.Sockets.AsyncSocketClient
                     _totalBytesRead = 0;
                     _totalBytesWrite = 0;
                     connectSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    IPAddress address = IPAddress.Parse(Host);
-                    RemoteEndpoint = new IPEndPoint(address, Port);
+                    RemoteEndpoint = new IPEndPoint(IPAddress.Parse(Host), Port);
                 }
-
                 //连接tcp服务器
                 SocketAsyncEventArgs connectEventArg = new SocketAsyncEventArgs();
                 connectEventArg.Completed += ConnectEventArgs_Completed;
@@ -255,7 +255,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             try
             {
-                AsyncUserToken token = (AsyncUserToken)e.UserToken;
+                //AsyncUserToken token = (AsyncUserToken)e.UserToken;
                 // 增加发送计数器
                 Interlocked.Add(ref _totalBytesRead, e.BytesTransferred);
                 if (0 == e.BytesTransferred)
@@ -265,10 +265,13 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
                 {
-                    var data = new byte[e.BytesTransferred];
-                    Array.Copy(e.Buffer, e.Offset, data, 0, e.BytesTransferred);
-                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, data, e.BytesTransferred)); //引发接收数据事件
-                    StartWaitingForData();//继续接收数据
+                    unsafe
+                    {
+                        var buff = new IntPtr(NativeMemory.AllocZeroed((uint)e.BytesTransferred));
+                        MemoryCopy.BlockCopy(e.Buffer, e.Offset, buff.ToPointer(), 0, e.BytesTransferred);
+                        OnClientReceivedData?.Invoke(this, new ClientReceiveDataEventArgs(e.ConnectSocket, buff, e.BytesTransferred)); //引发接收数据事件
+                        StartWaitingForData();//继续接收数据
+                    }
                 }
             }
             catch (ObjectDisposedException)

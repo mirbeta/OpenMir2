@@ -11,12 +11,12 @@ namespace GameGate
     public class SendQueue
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly Channel<SendSessionMessage> _sendQueue;
+        private readonly Channel<SessionMessage> _sendQueue;
         private readonly ServerManager ServerMgr = ServerManager.Instance;
 
         public SendQueue()
         {
-            _sendQueue = Channel.CreateUnbounded<SendSessionMessage>();
+            _sendQueue = Channel.CreateUnbounded<SessionMessage>();
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace GameGate
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddClientQueue(SendSessionMessage sessionPacket)
+        public void AddClientQueue(SessionMessage sessionPacket)
         {
             _sendQueue.Writer.TryWrite(sessionPacket);
         }

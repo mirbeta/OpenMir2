@@ -105,7 +105,7 @@ namespace GameGate.Services
             }
         }
 
-        public void Send(SendSessionMessage sessionMessage)
+        public void Send(SessionMessage sessionMessage)
         {
             _serverSocket.Send(sessionMessage.ConnectionId, sessionMessage.Buffer, sessionMessage.BuffLen);
             _networkMonitor.Send(sessionMessage.BuffLen);
@@ -178,7 +178,7 @@ namespace GameGate.Services
                     }
                     if (clientThread.SessionArray[i].ConnectionId == clientId)
                     {
-                        clientThread.SessionArray[i].Socket.Close();
+                        clientThread.SessionArray[i].Socket?.Close();
                         clientThread.SessionArray[i].SessionIndex = 0;
                         clientThread.SessionArray[i].ReceiveTick = 0;
                         clientThread.SessionArray[i].SckHandle = 0;

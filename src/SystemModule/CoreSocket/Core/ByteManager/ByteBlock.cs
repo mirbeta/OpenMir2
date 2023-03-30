@@ -562,6 +562,45 @@ namespace TouchSocket.Core
             m_length = Math.Max(m_position, m_length);
         }
 
+        /*public void WriteSpan(Span<byte> buffer,int count)
+        {
+            if (count == 0)
+            {
+                return;
+            }
+            if (!m_using)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
+            if (m_buffer.Length - m_position < count)
+            {
+                int need = m_buffer.Length + count - ((int)(m_buffer.Length - m_position));
+                int lend = m_buffer.Length;
+                while (need > lend)
+                {
+                    lend = (int)(lend * m_ratio);
+                }
+                SetCapacity(lend, true);
+            }
+            unsafe
+            {
+                fixed (byte* src = &buffer[0])
+                {
+                    fixed (byte* dest = &m_buffer[m_position])
+                    {
+                        System.Buffer.MemoryCopy(
+                            source: src, //要复制的字节的地址
+                            destination: dest, //目标地址
+                            destinationSizeInBytes: count, //目标内存块中可用的字节数
+                            sourceBytesToCopy: count //要复制的字节数
+                        );
+                    }
+                }
+            }
+            m_position += count;
+            m_length = Math.Max(m_position, m_length);
+        }*/
+        
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

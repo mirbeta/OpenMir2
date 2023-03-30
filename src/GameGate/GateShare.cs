@@ -73,11 +73,13 @@ namespace GameGate
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public readonly struct SessionMessage
+    public struct SessionMessage
     {
-        public ushort SessionId { get; }
-        public IntPtr Buffer { get; }
-        public short BuffLen { get; }
+        public byte ServiceId{ get; set; }
+        public ushort SessionId { get;set; }
+        public IntPtr Buffer { get;set; }
+        public short BuffLen { get;set; }
+        public ushort ConnectionId { get; set; }
 
         public SessionMessage(ushort sessionId, IntPtr buffer, short buffLen)
         {
