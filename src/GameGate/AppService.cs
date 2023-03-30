@@ -38,6 +38,7 @@ namespace GameGate
                 //_cloudClient.Start(cloudEndpoint);
                 _logger.Info("智能反外挂程序已启动...");
             }
+            ServerManager.Initialize();
             ServerManager.Start(stoppingToken);
             await ServerManager.StartMessageWorkThread(stoppingToken);
             //await SessionContainer.ProcessSendMessage(stoppingToken);
@@ -56,7 +57,6 @@ namespace GameGate
             GateShare.Load();
             ConfigManager.LoadConfig();
             ConfigManager.SaveConfig();
-            ServerManager.Initialize();
             GateShare.HardwareFilter = new HardwareFilter();
             _logger.Info("配置信息加载完成...");
             return base.StartAsync(cancellationToken);

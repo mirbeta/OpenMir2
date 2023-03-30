@@ -65,7 +65,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                   _logger.Info( $"{serverList[i].GateInfo.ServiceId} {serverList[i].NetworkMonitor.UpdateStatsAsync(500)}");
+                   _logger.Debug( $"{serverList[i].GateInfo.ServiceId} {serverList[i].NetworkMonitor.UpdateStatsAsync(500)}");
                 }
             }
         }
@@ -173,7 +173,7 @@ namespace GameGate
                     }
                     clientList[i].ProcessIdleSession();
                 }
-                _logger.Debug("清理空闲或无效超时会话");
+                _logger.Debug("清理空闲或无效客户端会话...");
             }
         }
 

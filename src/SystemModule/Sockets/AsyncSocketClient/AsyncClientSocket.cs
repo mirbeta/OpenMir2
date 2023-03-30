@@ -261,11 +261,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
                 {
-                    //var receiveData = _arrayPool.Rent(e.BytesTransferred);
-                    //Buffer.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
+                    var receiveData = _arrayPool.Rent(e.BytesTransferred);
+                    Buffer.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
                     //Span<byte> receiveData = stackalloc byte[e.BytesTransferred];
                     //MemoryCopy.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
-                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, e.Buffer, e.BytesTransferred));//引发接收数据事件
+                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, receiveData, e.BytesTransferred));//引发接收数据事件
                     StartWaitingForData();//继续接收数据
                 }
             }

@@ -186,25 +186,30 @@ namespace GameGate.Services
             {
                 if (beCached)
                 {
-                    buffBlock.Write(e.Buff, 0, e.BuffLen);
+                    beCached = false;
                     unsafe
                     {
+                        buffBlock.Write(e.Buff, 0, e.BuffLen);
                         Span<byte> bodyData = stackalloc byte[bodyLength];
                         buffBlock.Pos = 0;
                         buffBlock.Read(bodyData, 0, bodyLength);
                         ProcessPacket(bodyData, bodyLength);
-                        bodyLength = 0;
-                        beCached = false;
                     }
+                    bodyLength = 0;
                 }
                 else
                 {
+                    //ReadOnlySpan<byte> bodyData = new ReadOnlySpan<byte>(e.Buff, 0, e.BuffLen);
                     ProcessPacket(e.Buff, e.BuffLen);
                 }
             }
             catch (Exception exception)
             {
                 _logger.Error(exception);
+            }
+            finally
+            {
+                ClientSocket.ReturnBuffer(e.Buff);
             }
             _networkMonitor.Receive(e.BuffLen);
         }
@@ -236,13 +241,10 @@ namespace GameGate.Services
             var consumed = 0;//表示整个序列还剩几个数据，也就是“已读索引”之后有几个数据
             while (remaining > 0)
             {
-                if (remaining > 400)
-                {
-                    _logger.Debug("大型封包...." + dataLen);
-                }
                 var sourceSpan = data.Slice(consumed, ServerMessage.PacketSize);
                 if (!MemoryMarshal.TryRead(sourceSpan, out ServerMessage message))
                 {
+                    _logger.Debug("解析GameSrv消息封包头错误");
                     return;
                 }
                 if (message.PacketCode != Grobal2.PacketCode)
@@ -250,7 +252,6 @@ namespace GameGate.Services
                     _logger.Debug("解析GameSrv消息封包错误");
                     return;
                 }
-                _logger.Info($"封包码:{message.Ident} 长度:{message.PackLength}");
                 if (message.PackLength < 0)
                 {
                     bodyLength = -message.PackLength;
@@ -297,11 +298,12 @@ namespace GameGate.Services
                 case Grobal2.GM_DATA:
                     unsafe
                     {
+                        var packetLen = packetHeader.PackLength < 0 ? -packetHeader.PackLength : packetHeader.PackLength;
                         var sendMsg = GateShare.PacketMessagePool.Pop();
                         sendMsg.SessionId = packetHeader.SessionId;
                         sendMsg.BuffLen = (short)packetHeader.PackLength;
-                        sendMsg.Buffer = new IntPtr(NativeMemory.AllocZeroed((uint)data.Length));
-                        MemoryCopy.BlockCopy(data, 0, sendMsg.Buffer.ToPointer(), 0, data.Length);
+                        sendMsg.Buffer = new IntPtr(NativeMemory.AllocZeroed((uint)packetLen));
+                        MemoryCopy.BlockCopy(data, 0, sendMsg.Buffer.ToPointer(), 0, packetLen);
                         Enqueue(sendMsg);
                     }
                     break;
