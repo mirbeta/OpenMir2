@@ -71,16 +71,16 @@ namespace GameGate.Services
 
         public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string totalrevice, string totalSend, string queueCount, int threadCount) GetStatus()
         {
-            return (_gateEndPoint.ToString(), _clientThread.GetConnected, _clientThread.GetSessionCount(), ShowReceive, ShowSend, TotalReceive, TotalSend, GetQueueStatus, ServerManager.MessageWorkThreads);
+            return (_gateEndPoint.ToString(), _clientThread.ConnectedState, _clientThread.GetSessionCount(), ShowReceive, ShowSend, TotalReceive, TotalSend, GetQueueStatus, ServerManager.MessageWorkThreads);
         }
 
-        public string ShowReceive => $"↓{_networkMonitor.ShowReceive()}";
+        private string ShowReceive => $"↓{_networkMonitor.ShowReceive()}";
 
-        public string ShowSend => $"↑{_networkMonitor.ShowSendStats()}";
+        private string ShowSend => $"↑{_networkMonitor.ShowSendStats()}";
 
-        public string TotalReceive => $"↓{HUtil32.FormatBytesValue(_networkMonitor.TotalBytesRecv)}";
+        private string TotalReceive => $"↓{HUtil32.FormatBytesValue(_networkMonitor.TotalBytesRecv)}";
 
-        public string TotalSend => $"↑{HUtil32.FormatBytesValue(_networkMonitor.TotalBytesSent)}";
+        private string TotalSend => $"↑{HUtil32.FormatBytesValue(_networkMonitor.TotalBytesSent)}";
 
         /// <summary>
         /// 获取队列待处理数

@@ -19,6 +19,7 @@ namespace GameGate.Services
     public class ClientThread
     {
         private readonly TcpClient ClientSocket;
+        private readonly byte _threadId;
         private readonly GameGateInfo GateInfo;
         private readonly IPEndPoint LocalEndPoint;
         /// <summary>
@@ -77,8 +78,8 @@ namespace GameGate.Services
         public bool IsConnected => Connected;
 
         public string EndPoint => $"{GateInfo.ServerAdress}:{GateInfo.ServerPort}";
-        
-        public string ThreadId=> $"{GateInfo.ThreadId}";
+
+        public byte ThreadId => GateInfo.ServiceId;
 
         public RunningState Running => RunningState;
 
@@ -228,7 +229,7 @@ namespace GameGate.Services
                         CheckServerTick = HUtil32.GetTickCount();
                         break;
                     case Grobal2.GM_SERVERUSERINDEX:
-                        var userSession = SessionContainer.GetSession(GateInfo.ServiceId, packetHeader.SessionId);
+                        var userSession = SessionContainer.GetSession(ThreadId, packetHeader.SessionId);
                         if (userSession != null)
                         {
                             userSession.SvrListIdx = packetHeader.SessionIndex;
@@ -238,7 +239,7 @@ namespace GameGate.Services
                         SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, "", 0);
                         break;
                     case Grobal2.GM_DATA:
-                        var sessionPacket = new SessionMessage(GateInfo.ServiceId, packetHeader.SessionId, data, (short)packetHeader.PackLength);
+                        var sessionPacket = new SessionMessage(ThreadId, packetHeader.SessionId, data, (short)packetHeader.PackLength);
                         SessionContainer.Enqueue(sessionPacket);
                         break;
                     case Messages.GM_TEST:
@@ -389,6 +390,6 @@ namespace GameGate.Services
             }
         }
 
-        public string GetConnected => IsConnected ? "[green]Connected[/]" : "[red]Not Connected[/]";
+        public string ConnectedState => IsConnected ? "[green]Connected[/]" : "[red]Not Connected[/]";
     }
 }
