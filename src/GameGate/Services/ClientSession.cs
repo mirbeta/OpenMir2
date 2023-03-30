@@ -914,7 +914,7 @@ namespace GameGate.Services
 
             if (bufferLen > 10)
             {
-                var messagePacket = message.Buffer.AsSpan();
+                var messagePacket = new Span<byte>(message.Buffer.ToPointer(), bufferLen);
                 var recog = BitConverter.ToInt32(messagePacket[..4]);
                 var ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
                 //var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));

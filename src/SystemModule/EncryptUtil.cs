@@ -29,30 +29,30 @@ namespace SystemModule
         /// <summary>
         /// 加密
         /// </summary>
-        public static unsafe int Encode(byte[] srcBuf, int len, void* destination, int dstOffset = 0)
+        public static unsafe int Encode(nint srcBuf, int len, Span<byte> destination, int dstOffset = 0)
         {
             var no = 2;
             byte remainder = 0;
             var pos = 0;
             var dstPos = dstOffset;
-            byte* dstBuf = (byte*)destination;
+            var destinationSpan = new Span<byte>(srcBuf.ToPointer(), len);
             for (var i = 0; i < len; i++)
             {
-                var c = (byte)(srcBuf[pos] ^ BySeed);
+                var c = (byte)(destinationSpan[pos] ^ BySeed);
                 pos++;
                 if (no == 6)
                 {
-                    dstBuf[dstPos] = (byte)((c & 0x3F) + ByBase);
+                    destination[dstPos] = (byte)((c & 0x3F) + ByBase);
                     dstPos++;
                     remainder = (byte)(remainder | ((c >> 2) & 0x30));
-                    dstBuf[dstPos] = (byte)(remainder + ByBase);
+                    destination[dstPos] = (byte)(remainder + ByBase);
                     dstPos++;
                     remainder = 0;
                 }
                 else
                 {
                     var temp = (byte)(c >> 2);
-                    dstBuf[dstPos] = (byte)(((temp & 0x3C) | (c & 0x3)) + ByBase);
+                    destination[dstPos] = (byte)(((temp & 0x3C) | (c & 0x3)) + ByBase);
                     dstPos++;
                     remainder = (byte)((remainder << 2) | (temp & 0x3));
                 }
@@ -60,7 +60,7 @@ namespace SystemModule
             }
             if (no != 2)
             {
-                dstBuf[dstPos] = (byte)(remainder + ByBase);
+                destination[dstPos] = (byte)(remainder + ByBase);
                 dstPos++;
             }
             return dstPos - dstOffset;

@@ -76,10 +76,10 @@ namespace GameGate
     public readonly struct SessionMessage
     {
         public ushort SessionId { get; }
-        public byte[] Buffer { get; }
+        public IntPtr Buffer { get; }
         public short BuffLen { get; }
 
-        public SessionMessage(ushort sessionId, byte[] buffer, short buffLen)
+        public SessionMessage(ushort sessionId, IntPtr buffer, short buffLen)
         {
             this.SessionId = sessionId;
             this.Buffer = buffer;

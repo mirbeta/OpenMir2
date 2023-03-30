@@ -9,7 +9,27 @@ namespace SystemModule
             Array.Copy(source, srcOff, destination, dstOff, count);
         }
 
-        public static unsafe void BlockCopy(byte[] source, int srcOff, void* destination, int dstOff, int count)
+        public static unsafe void BlockCopy(nint source, int srcOff, Span<byte> destination, int dstOff, int count)
+        {
+            unsafe
+            {
+                var destinationSpan = new Span<byte>(source.ToPointer(), count);
+                fixed (byte* src = &destinationSpan[srcOff])
+                {
+                    fixed (byte* dest = &destination[dstOff])
+                    {
+                        Buffer.MemoryCopy(
+                            source: src, //要复制的字节的地址
+                            destination: dest, //目标地址
+                            destinationSizeInBytes: count, //目标内存块中可用的字节数
+                            sourceBytesToCopy: count //要复制的字节数
+                        );
+                    }
+                }
+            }
+        }
+
+        public static unsafe void BlockCopy(ReadOnlySpan<byte> source, int srcOff, void* destination, int dstOff, int count)
         {
             unsafe
             {
