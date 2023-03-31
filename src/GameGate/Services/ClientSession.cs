@@ -872,7 +872,7 @@ namespace GameGate.Services
         /// 处理GameSvr消息 
         /// 处理后发送到游戏客户端
         /// </summary>
-        public unsafe void ProcessServerPacket(byte serviceId, SessionMessage message)
+        public unsafe void ProcessServerPacket(byte serviceId, ServerSessionMessage message)
         {
             if (Session.Socket == null)
             {
@@ -883,8 +883,6 @@ namespace GameGate.Services
             sendMsg.ConnectionId = (ushort)_session.ConnectionId;
             sendMsg.SessionId = message.SessionId;
 
-            var sourceBuff = message.Buffer.ToPointer();
-            var sourceSpan = new Span<byte>(sourceBuff, message.BuffLen);//原始Buffer
             var bufferLen = message.BuffLen;
             IntPtr sendData;
             if (bufferLen < 0)//小包 走路 攻击等
@@ -893,93 +891,93 @@ namespace GameGate.Services
                 sendData = new nint(NativeMemory.AllocZeroed((uint)buffLen + 2));
                 var destinationSpan = new Span<byte>(sendData.ToPointer(), buffLen + 2);
                 destinationSpan[0] = (byte)'#';//消息头
-                MemoryCopy.BlockCopy(sourceSpan, 0, destinationSpan, 1, buffLen);
+                MemoryCopy.BlockCopy(message.Buffer, 0, destinationSpan, 1, buffLen);
                 destinationSpan[buffLen + 1] = (byte)'!';//消息结尾
-                message.BuffLen = (short)(buffLen + 2);
+                sendMsg.BuffLen = (short)(buffLen + 2);
             }
             else
             {
+                var sourceSpan = new Span<byte>(message.Buffer, 0, message.BuffLen);//原始Buffer
                 var sendLen = bufferLen + CommandMessage.Size;
                 sendData = new nint(NativeMemory.AllocZeroed((uint)sendLen));
                 var destinationSpan = new Span<byte>(sendData.ToPointer(), sendLen);
-                destinationSpan[0] = (byte)'#';  //消息头
+                destinationSpan[0] = (byte)'#';//消息头
                 var nLen = EncryptUtil.Encode(sourceSpan, CommandMessage.Size, destinationSpan, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
                 {
                     MemoryCopy.BlockCopy(sourceSpan, CommandMessage.Size, destinationSpan, nLen + 1, bufferLen - CommandMessage.Size);
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
-                destinationSpan[nLen + 1] = (byte)'!'; //消息结尾
-                message.BuffLen = (short)(nLen + 2);
-            }
-            message.Buffer = sendData;
+                destinationSpan[nLen + 1] = (byte)'!';//消息结尾
+                sendMsg.BuffLen = (short)(nLen + 2);
 
-            if (bufferLen > 10)
-            {
-                var messagePacket = new Span<byte>(message.Buffer.ToPointer(), bufferLen);
-                var recog = BitConverter.ToInt32(messagePacket[..4]);
-                var ident = BitConverter.ToUInt16(messagePacket.Slice(4, 2));
-                //var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
-                //var tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
-                int series;
-                switch (ident)
+                if (bufferLen > 10)
                 {
-                    case Messages.SM_RUSH:
-                        if (SvrObjectId == recog)
-                        {
-                            var dwCurrentTick = HUtil32.GetTickCount();
-                            gameSpeed.MoveTick = dwCurrentTick;
-                            gameSpeed.AttackTick = dwCurrentTick;
-                            gameSpeed.SpellTick = dwCurrentTick;
-                            gameSpeed.SitDownTick = dwCurrentTick;
-                            gameSpeed.ButchTick = dwCurrentTick;
-                            gameSpeed.DealTick = dwCurrentTick;
-                        }
-                        break;
-                    case Messages.SM_NEWMAP:
-                    case Messages.SM_CHANGEMAP:
-                    case Messages.SM_LOGON:
-                        if (SvrObjectId == 0)
-                        {
-                            SvrObjectId = recog;
-                        }
-                        break;
-                    case Messages.SM_PLAYERCONFIG:
-
-                        break;
-                    case Messages.SM_CHARSTATUSCHANGED:
-                        series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
-                        if (SvrObjectId == recog)
-                        {
-                            gameSpeed.DefItemSpeed = series;
-                            gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, series);
-                            //_mNChrStutas = HUtil32.MakeLong(param, tag);
-                            //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
-                        }
-                        break;
-                    case Messages.SM_HWID:
-                        series = BitConverter.ToUInt16(messagePacket.Slice(10, 2));
-                        if (Config.IsProcClientHardwareID)
-                        {
-                            switch (series)
+                    var recog = BitConverter.ToInt32(sourceSpan[..4]);
+                    var ident = BitConverter.ToUInt16(sourceSpan.Slice(4, 2));
+                    //var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
+                    //var tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
+                    int series;
+                    switch (ident)
+                    {
+                        case Messages.SM_RUSH:
+                            if (SvrObjectId == recog)
                             {
-                                case 1:
-                                    Logger.Debug("封机器码");
-                                    break;
-                                case 2:
-                                    Logger.Debug("清理机器码");
-                                    GateShare.HardwareFilter.ClearDeny();
-                                    GateShare.HardwareFilter.SaveDenyList();
-                                    break;
+                                var dwCurrentTick = HUtil32.GetTickCount();
+                                gameSpeed.MoveTick = dwCurrentTick;
+                                gameSpeed.AttackTick = dwCurrentTick;
+                                gameSpeed.SpellTick = dwCurrentTick;
+                                gameSpeed.SitDownTick = dwCurrentTick;
+                                gameSpeed.ButchTick = dwCurrentTick;
+                                gameSpeed.DealTick = dwCurrentTick;
                             }
-                        }
-                        break;
-                    case Messages.SM_RUNGATELOGOUT:
-                        SendKickMsg(2);
-                        break;
+                            break;
+                        case Messages.SM_NEWMAP:
+                        case Messages.SM_CHANGEMAP:
+                        case Messages.SM_LOGON:
+                            if (SvrObjectId == 0)
+                            {
+                                SvrObjectId = recog;
+                            }
+                            break;
+                        case Messages.SM_PLAYERCONFIG:
+
+                            break;
+                        case Messages.SM_CHARSTATUSCHANGED:
+                            series = BitConverter.ToUInt16(sourceSpan.Slice(10, 2));
+                            if (SvrObjectId == recog)
+                            {
+                                gameSpeed.DefItemSpeed = series;
+                                gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, series);
+                                //_mNChrStutas = HUtil32.MakeLong(param, tag);
+                                //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
+                            }
+                            break;
+                        case Messages.SM_HWID:
+                            series = BitConverter.ToUInt16(sourceSpan.Slice(10, 2));
+                            if (Config.IsProcClientHardwareID)
+                            {
+                                switch (series)
+                                {
+                                    case 1:
+                                        Logger.Debug("封机器码");
+                                        break;
+                                    case 2:
+                                        Logger.Debug("清理机器码");
+                                        GateShare.HardwareFilter.ClearDeny();
+                                        GateShare.HardwareFilter.SaveDenyList();
+                                        break;
+                                }
+                            }
+                            break;
+                        case Messages.SM_RUNGATELOGOUT:
+                            SendKickMsg(2);
+                            break;
+                    }
                 }
             }
-
+            
+            sendMsg.Buffer = sendData;
             SendPacketMessage(sendMsg);
         }
 

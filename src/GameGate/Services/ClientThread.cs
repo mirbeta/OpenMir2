@@ -68,7 +68,7 @@ namespace GameGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<SessionMessage> _messageChannel;
+        private readonly Channel<ServerSessionMessage> _messageChannel;
 
         public ClientThread(IPEndPoint endPoint, GameGateInfo gameGate, NetworkMonitor networkMonitor)
         {
@@ -78,7 +78,7 @@ namespace GameGate.Services
             LocalEndPoint = endPoint;
             CheckServerTick = HUtil32.GetTickCount();
             _networkMonitor = networkMonitor;
-            _messageChannel = Channel.CreateUnbounded<SessionMessage>();
+            _messageChannel = Channel.CreateUnbounded<ServerSessionMessage>();
             ClientSocket = new AsyncClientSocket(GateInfo.ServerAdress, GateInfo.ServerPort, 2048);
             ClientSocket.OnConnected  += ClientSocketConnect;
             ClientSocket.OnDisconnected  += ClientSocketDisconnect;
@@ -301,12 +301,11 @@ namespace GameGate.Services
                     unsafe
                     {
                         var packetLen = packetHeader.PackLength < 0 ? -packetHeader.PackLength : packetHeader.PackLength;
-                        var sendMsg = GateShare.PacketMessagePool.Pop();
-                        sendMsg.ServiceId = ThreadId;
+                        var sendMsg = new ServerSessionMessage();
                         sendMsg.SessionId = packetHeader.SessionId;
                         sendMsg.BuffLen = (short)packetHeader.PackLength;
-                        sendMsg.Buffer = new IntPtr(NativeMemory.AllocZeroed((uint)packetLen));
-                        MemoryCopy.BlockCopy(data, 0, sendMsg.Buffer.ToPointer(), 0, packetLen);
+                        sendMsg.Buffer = GateShare.BytePool.Rent(packetLen);
+                        MemoryCopy.BlockCopy(data, 0, sendMsg.Buffer, 0, packetLen);
                         Enqueue(sendMsg);
                     }
                     break;
@@ -318,7 +317,7 @@ namespace GameGate.Services
         /// <summary>
         /// 添加到消息处理队列
         /// </summary>
-        private void Enqueue(SessionMessage sessionPacket)
+        private void Enqueue(ServerSessionMessage sessionPacket)
         {
             _messageChannel.Writer.TryWrite(sessionPacket);
         }
@@ -349,10 +348,7 @@ namespace GameGate.Services
                         }
                         finally
                         {
-                            unsafe
-                            {
-                                NativeMemory.Free(message.Buffer.ToPointer());
-                            }
+                            GateShare.BytePool.Return(message.Buffer);
                         }
                     }
                 }

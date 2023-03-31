@@ -90,12 +90,18 @@ namespace GameGate
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct SendSessionMessage
+    public struct ServerSessionMessage
     {
-        public IntPtr Buffer { get; set; }
-        public byte ServiceId{ get; set; }
-        public short BuffLen { get; set; }
-        public ushort ConnectionId { get; set; }
+        public ushort SessionId { get;set; }
+        public byte[] Buffer { get;set; }
+        public short BuffLen { get;set; }
+
+        public ServerSessionMessage(ushort sessionId, byte[] buffer, short buffLen)
+        {
+            this.SessionId = sessionId;
+            this.Buffer = buffer;
+            this.BuffLen = buffLen;
+        }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
