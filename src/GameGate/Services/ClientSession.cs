@@ -878,11 +878,12 @@ namespace GameGate.Services
             {
                 return;
             }
-
-            message.ServiceId = serviceId;
-            message.ConnectionId = (ushort)_session.ConnectionId;
-
+            var sendMsg = GateShare.PacketMessagePool.Pop();
+            sendMsg.ServiceId = serviceId;
+            sendMsg.ConnectionId = (ushort)_session.ConnectionId;
+            sendMsg.SessionId = message.SessionId;
             var bufferLen = message.BuffLen;
+            
             if (bufferLen < 0)//小包 走路 攻击等
             {
                 var buffLen = -bufferLen;
@@ -891,8 +892,8 @@ namespace GameGate.Services
                 destinationSpan[0] = (byte)'#';//消息头
                 MemoryCopy.BlockCopy(message.Buffer, 0, destinationSpan, 1, buffLen);
                 destinationSpan[buffLen + 1] = (byte)'!';//消息结尾
-                message.Buffer = smallBuff;
-                message.BuffLen = (short)(buffLen + 2);
+                sendMsg.Buffer = smallBuff;
+                sendMsg.BuffLen = (short)(buffLen + 2);
             }
             else
             {
@@ -907,8 +908,8 @@ namespace GameGate.Services
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
                 destinationSpan[nLen + 1] = (byte)'!'; //消息结尾
-                message.Buffer = bigBuff;
-                message.BuffLen = (short)(nLen + 2);
+                sendMsg.Buffer = bigBuff;
+                sendMsg.BuffLen = (short)(nLen + 2);
             }
 
             if (bufferLen > 10)
@@ -977,7 +978,7 @@ namespace GameGate.Services
                 }
             }
             
-            SendPacketMessage(message);
+            SendPacketMessage(sendMsg);
         }
 
         private void SendKickMsg(int killType)

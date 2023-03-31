@@ -23,6 +23,10 @@ namespace GameGate
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.Info("服务已启动成功...");
+            _logger.Info("欢迎使用翎风系列游戏软件...");
+            _logger.Info("网站:http://www.gameofmir.com");
+            _logger.Info("论坛:http://bbs.gameofmir.com");
             stoppingToken.Register(() => Debug.WriteLine($"GameGate is stopping."));
             if (ConfigManager.GateConfig.UseCloudGate)
             {
@@ -42,10 +46,6 @@ namespace GameGate
             ServerManager.Start(stoppingToken);
             await ServerManager.StartMessageWorkThread(stoppingToken);
             //await SessionContainer.ProcessSendMessage(stoppingToken);
-            _logger.Info("服务已启动成功...");
-            _logger.Info("欢迎使用翎风系列游戏软件...");
-            _logger.Info("网站:http://www.gameofmir.com");
-            _logger.Info("论坛:http://bbs.gameofmir.com");
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)

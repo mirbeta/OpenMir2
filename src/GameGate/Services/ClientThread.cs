@@ -13,6 +13,7 @@ using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 using System.Runtime.InteropServices;
 using TouchSocket.Core;
+using System.Threading.Tasks.Dataflow;
 
 namespace GameGate.Services
 {
@@ -196,11 +197,13 @@ namespace GameGate.Services
                         ProcessPacket(bodyData, bodyLength);
                     }
                     bodyLength = 0;
+                    buffBlock.Reset();
                 }
                 else
                 {
-                    //ReadOnlySpan<byte> bodyData = new ReadOnlySpan<byte>(e.Buff, 0, e.BuffLen);
                     ProcessPacket(e.Buff, e.BuffLen);
+                    //buffBlock.Write(e.Buff, 0, e.BuffLen);
+                    //buffBlock.Pos = 0;
                 }
             }
             catch (Exception exception)
@@ -299,7 +302,7 @@ namespace GameGate.Services
                     unsafe
                     {
                         var packetLen = packetHeader.PackLength < 0 ? -packetHeader.PackLength : packetHeader.PackLength;
-                        var sendMsg = GateShare.PacketMessagePool.Pop();
+                        var sendMsg = new SessionMessage();
                         sendMsg.SessionId = packetHeader.SessionId;
                         sendMsg.BuffLen = (short)packetHeader.PackLength;
                         sendMsg.Buffer = new IntPtr(NativeMemory.AllocZeroed((uint)packetLen));
