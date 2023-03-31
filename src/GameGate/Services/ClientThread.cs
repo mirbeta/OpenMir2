@@ -201,9 +201,8 @@ namespace GameGate.Services
                 }
                 else
                 {
-                    ProcessPacket(e.Buff, e.BuffLen);
-                    //buffBlock.Write(e.Buff, 0, e.BuffLen);
-                    //buffBlock.Pos = 0;
+                    var dataSpan = new ReadOnlySpan<byte>(e.Buff, 0, e.BuffLen);
+                    ProcessPacket(dataSpan, e.BuffLen);
                 }
             }
             catch (Exception exception)
@@ -212,7 +211,7 @@ namespace GameGate.Services
             }
             finally
             {
-                ClientSocket.ReturnBuffer(e.Buff);
+                //ClientSocket.ReturnBuffer(e.Buff);
             }
             _networkMonitor.Receive(e.BuffLen);
         }
@@ -242,7 +241,7 @@ namespace GameGate.Services
         {
             var remaining = dataLen;//表示整个序列还剩几个数据，也就是“已读索引”之后有几个数据
             var consumed = 0;//表示整个序列还剩几个数据，也就是“已读索引”之后有几个数据
-            while (remaining > 0)
+            while (remaining >= ServerMessage.PacketSize)
             {
                 var sourceSpan = data.Slice(consumed, ServerMessage.PacketSize);
                 if (!MemoryMarshal.TryRead(sourceSpan, out ServerMessage message))
@@ -271,9 +270,14 @@ namespace GameGate.Services
                 }
                 var serverPacket = data[ServerMessage.PacketSize..];
                 ProcessServerPacket(message, serverPacket);
-                Interlocked.Add(ref consumed, 20 + bodyLength);
+                Interlocked.Add(ref consumed, ServerMessage.PacketSize + bodyLength);
                 remaining -= consumed;
                 bodyLength = 0;
+            }
+            if (remaining > 0)
+            {
+                beCached = true;
+                buffBlock.WriteSpan(data, consumed, remaining);
             }
         }
 

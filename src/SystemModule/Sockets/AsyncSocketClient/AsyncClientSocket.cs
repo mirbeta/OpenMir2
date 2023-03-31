@@ -3,7 +3,6 @@ using System.Buffers;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Threading;
 using SystemModule.Sockets.Event;
 
@@ -118,10 +117,10 @@ namespace SystemModule.Sockets.AsyncSocketClient
         public void Send(byte[] buffer)
         {
             if (buffer.Length <= 0)
-                throw new ArgumentNullException("buffer cannot be null");
+                throw new ArgumentNullException(nameof(buffer));
 
             if (_connectSocket == null)
-                throw new Exception("socket cannot be null");
+                throw new Exception(nameof(_connectSocket));
 
             sendEventArg.SetBuffer(buffer, 0, buffer.Length);
             if (!_connectSocket.SendAsync(sendEventArg))
@@ -261,11 +260,11 @@ namespace SystemModule.Sockets.AsyncSocketClient
                 }
                 if (e.BytesTransferred > 0 && e.SocketError == SocketError.Success)
                 {
-                    var receiveData = _arrayPool.Rent(e.BytesTransferred);
-                    Buffer.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
+                    //var receiveData = _arrayPool.Rent(e.BytesTransferred);
+                    //Buffer.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
                     //Span<byte> receiveData = stackalloc byte[e.BytesTransferred];
                     //MemoryCopy.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
-                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, receiveData, e.BytesTransferred));//引发接收数据事件
+                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, e.Buffer, e.BytesTransferred));//引发接收数据事件
                     StartWaitingForData();//继续接收数据
                 }
             }
