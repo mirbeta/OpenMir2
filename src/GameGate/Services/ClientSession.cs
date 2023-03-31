@@ -872,7 +872,7 @@ namespace GameGate.Services
         /// 处理GameSvr消息 
         /// 处理后发送到游戏客户端
         /// </summary>
-        public unsafe void ProcessServerPacket(byte serviceId,SessionMessage message)
+        public unsafe void ProcessServerPacket(byte serviceId, SessionMessage message)
         {
             if (Session.Socket == null)
             {
@@ -882,35 +882,37 @@ namespace GameGate.Services
             sendMsg.ServiceId = serviceId;
             sendMsg.ConnectionId = (ushort)_session.ConnectionId;
             sendMsg.SessionId = message.SessionId;
+
+            var sourceBuff = message.Buffer.ToPointer();
+            var sourceSpan = new Span<byte>(sourceBuff, message.BuffLen);//原始Buffer
             var bufferLen = message.BuffLen;
-            
+            IntPtr sendData;
             if (bufferLen < 0)//小包 走路 攻击等
             {
                 var buffLen = -bufferLen;
-                var smallBuff = new nint(NativeMemory.AllocZeroed((uint)buffLen + 2));
-                var destinationSpan = new Span<byte>(smallBuff.ToPointer(), buffLen + 2);
+                sendData = new nint(NativeMemory.AllocZeroed((uint)buffLen + 2));
+                var destinationSpan = new Span<byte>(sendData.ToPointer(), buffLen + 2);
                 destinationSpan[0] = (byte)'#';//消息头
-                MemoryCopy.BlockCopy(message.Buffer, 0, destinationSpan, 1, buffLen);
+                MemoryCopy.BlockCopy(sourceSpan, 0, destinationSpan, 1, buffLen);
                 destinationSpan[buffLen + 1] = (byte)'!';//消息结尾
-                sendMsg.Buffer = smallBuff;
-                sendMsg.BuffLen = (short)(buffLen + 2);
+                message.BuffLen = (short)(buffLen + 2);
             }
             else
             {
                 var sendLen = bufferLen + CommandMessage.Size;
-                var bigBuff = new nint(NativeMemory.AllocZeroed((uint)sendLen));
-                var destinationSpan = new Span<byte>(bigBuff.ToPointer(), sendLen);
+                sendData = new nint(NativeMemory.AllocZeroed((uint)sendLen));
+                var destinationSpan = new Span<byte>(sendData.ToPointer(), sendLen);
                 destinationSpan[0] = (byte)'#';  //消息头
-                var nLen = EncryptUtil.Encode(message.Buffer, CommandMessage.Size, destinationSpan, 1);//消息头
+                var nLen = EncryptUtil.Encode(sourceSpan, CommandMessage.Size, destinationSpan, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
                 {
-                    MemoryCopy.BlockCopy(message.Buffer, CommandMessage.Size, destinationSpan, nLen + 1, bufferLen - CommandMessage.Size, bufferLen);
+                    MemoryCopy.BlockCopy(sourceSpan, CommandMessage.Size, destinationSpan, nLen + 1, bufferLen - CommandMessage.Size);
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
                 destinationSpan[nLen + 1] = (byte)'!'; //消息结尾
-                sendMsg.Buffer = bigBuff;
-                sendMsg.BuffLen = (short)(nLen + 2);
+                message.BuffLen = (short)(nLen + 2);
             }
+            message.Buffer = sendData;
 
             if (bufferLen > 10)
             {
@@ -977,7 +979,7 @@ namespace GameGate.Services
                         break;
                 }
             }
-            
+
             SendPacketMessage(sendMsg);
         }
 

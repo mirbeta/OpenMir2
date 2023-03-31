@@ -148,13 +148,13 @@ namespace GameGate.Services
             {
                 clientThread.UserEnter((ushort)clientId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
                 SessionContainer.AddSession(GateInfo.ServiceId, clientId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, _messageSendQueue));
-                _logger.Info("开始连接: " + sRemoteAddress);
+                _logger.Trace("开始连接: " + sRemoteAddress);
                 _logger.Debug($"GateId:{GateInfo.ServiceId} 用户 IP:[{sRemoteAddress}] SocketId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}/{clientThread.ThreadId}");
             }
             else
             {
                 e.Socket.Close();
-                _logger.Info("禁止连接: " + sRemoteAddress);
+                _logger.Trace("禁止连接: " + sRemoteAddress);
             }
         }
 
@@ -188,11 +188,11 @@ namespace GameGate.Services
                         break;
                     }
                 }
-                _logger.Info("断开链接: " + sRemoteAddress);
+                _logger.Trace("断开链接: " + sRemoteAddress);
             }
             else
             {
-                _logger.Info("断开链接: " + sRemoteAddress);
+                _logger.Trace("断开链接: " + sRemoteAddress);
             }
             _sessionCloseQueue.Enqueue(e.SocHandle); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
             SessionContainer.CloseSession(GateInfo.ServiceId, clientId);
@@ -222,7 +222,7 @@ namespace GameGate.Services
             else
             {
                 token.Socket.Close();
-                _logger.Info("非法攻击: " + sRemoteAddress);
+                _logger.Trace("非法攻击: " + sRemoteAddress);
             }
         }
     }

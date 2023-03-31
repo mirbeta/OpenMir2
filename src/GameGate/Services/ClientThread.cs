@@ -14,6 +14,8 @@ using SystemModule.Sockets.Event;
 using System.Runtime.InteropServices;
 using TouchSocket.Core;
 using System.Threading.Tasks.Dataflow;
+using SystemModule.Packets.ClientPackets;
+using System.Collections.Concurrent;
 
 namespace GameGate.Services
 {
@@ -175,7 +177,7 @@ namespace GameGate.Services
         }
 
         private bool beCached = false;
-        private ByteBlock buffBlock = new ByteBlock();
+        private readonly ByteBlock buffBlock = new ByteBlock();
         private int bodyLength = 0;
 
         /// <summary>
@@ -191,10 +193,11 @@ namespace GameGate.Services
                     unsafe
                     {
                         buffBlock.Write(e.Buff, 0, e.BuffLen);
-                        Span<byte> bodyData = stackalloc byte[bodyLength];
+                        var readLen = bodyLength + e.BuffLen;
+                        Span<byte> bodyData = stackalloc byte[readLen]; //把最新的和上次的全部读出来
                         buffBlock.Pos = 0;
-                        buffBlock.Read(bodyData, 0, bodyLength);
-                        ProcessPacket(bodyData, bodyLength);
+                        buffBlock.Read(bodyData, 0, readLen);
+                        ProcessPacket(bodyData, readLen);
                     }
                     bodyLength = 0;
                     buffBlock.Reset();
@@ -254,25 +257,17 @@ namespace GameGate.Services
                     _logger.Debug("解析GameSrv消息封包错误");
                     return;
                 }
-                if (message.PackLength < 0)
-                {
-                    bodyLength = -message.PackLength;
-                }
-                else
-                {
-                    bodyLength = message.PackLength;
-                }
+                bodyLength = message.PackLength < 0 ? -message.PackLength : message.PackLength;
                 if (remaining < bodyLength)//body不满足解析，开始缓存，然后保存对象
                 {
                     beCached = true;
                     buffBlock.WriteSpan(data, consumed, remaining);
                     return;
                 }
-                var serverPacket = data[ServerMessage.PacketSize..];
+                var serverPacket = data.Slice(ServerMessage.PacketSize, bodyLength);
                 ProcessServerPacket(message, serverPacket);
                 Interlocked.Add(ref consumed, ServerMessage.PacketSize + bodyLength);
                 remaining -= consumed;
-                bodyLength = 0;
             }
             if (remaining > 0)
             {
@@ -306,7 +301,8 @@ namespace GameGate.Services
                     unsafe
                     {
                         var packetLen = packetHeader.PackLength < 0 ? -packetHeader.PackLength : packetHeader.PackLength;
-                        var sendMsg = new SessionMessage();
+                        var sendMsg = GateShare.PacketMessagePool.Pop();
+                        sendMsg.ServiceId = ThreadId;
                         sendMsg.SessionId = packetHeader.SessionId;
                         sendMsg.BuffLen = (short)packetHeader.PackLength;
                         sendMsg.Buffer = new IntPtr(NativeMemory.AllocZeroed((uint)packetLen));
@@ -326,7 +322,7 @@ namespace GameGate.Services
         {
             _messageChannel.Writer.TryWrite(sessionPacket);
         }
-        
+
         /// <summary>
         /// 转发GameSvr封包消息
         /// </summary>
@@ -362,7 +358,7 @@ namespace GameGate.Services
                 }
             }, stoppingToken);
         }
-        
+
         public void RestSessionArray()
         {
             for (var i = 0; i < GateShare.MaxSession; i++)
