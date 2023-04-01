@@ -25,7 +25,7 @@ namespace Cowboy.Sockets
         public FixedHeaderLengthFrameEncoder(int fixedFrameLength)
         {
             if (fixedFrameLength <= 0)
-                throw new ArgumentOutOfRangeException("fixedFrameLength");
+                throw new ArgumentOutOfRangeException(nameof(fixedFrameLength));
             _fixedFrameLength = fixedFrameLength;
         }
 
@@ -69,7 +69,7 @@ namespace Cowboy.Sockets
         public FixedHeaderLengthFrameDecoder(int fixedFrameLength)
         {
             if (fixedFrameLength <= 0)
-                throw new ArgumentOutOfRangeException("fixedFrameLength");
+                throw new ArgumentOutOfRangeException(nameof(fixedFrameLength));
             _fixedFrameLength = fixedFrameLength;
         }
 

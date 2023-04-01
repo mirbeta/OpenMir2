@@ -55,12 +55,12 @@ namespace GameGate.Services
             _clientThread.Initialize();
         }
 
-        public async Task Start(CancellationToken stoppingToken)
+        public void Start(CancellationToken stoppingToken)
         {
             _serverSocket.Start(_gateEndPoint);
+            _clientThread.Start();
             _clientThread.RestSessionArray();
             _messageSendQueue.StartProcessQueueSend(stoppingToken);
-            await _clientThread.StartMessageQueue(stoppingToken);
             _logger.Info($"游戏网关[{_gateEndPoint}]已启动...");
         }
 

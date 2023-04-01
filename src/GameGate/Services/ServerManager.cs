@@ -97,9 +97,23 @@ namespace GameGate.Services
         public static int MessageWorkThreads => ConfigManager.GateConfig.MessageWorkThread;
 
         /// <summary>
+        /// 开启服务消息消费线程
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        public void StartServerThreadMessageWork(CancellationToken cancellationToken)
+        {
+            Task[] tasks = new Task[_serverServices.Length];
+            for (int i = 0; i < _serverServices.Length; i++)
+            {
+                tasks[i] = _serverServices[i].ClientThread.StartMessageQueue(cancellationToken);
+            }
+            Task.WaitAll(tasks, cancellationToken);
+        }
+
+        /// <summary>
         /// 开启客户端消息消费线程
         /// </summary>
-        public Task StartMessageWorkThread(CancellationToken stoppingToken)
+        public Task StartClientMessageWork(CancellationToken stoppingToken)
         {
             return Task.Factory.StartNew(() =>
             {

@@ -88,7 +88,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         /// <summary>
         /// 开启tcp客户端，连接tcp服务器
         /// </summary>
-        public void Start()
+        public void Connect()
         {
             try
             {
@@ -155,7 +155,7 @@ namespace SystemModule.Sockets.AsyncSocketClient
         {
             IsConnected = false;
             CloseSocket();
-            Start();
+            Connect();
         }
 
         /// <summary>

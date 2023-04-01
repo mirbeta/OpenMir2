@@ -1,22 +1,18 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
-using GameGate.Conf;
-using NLog;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using GameGate.Conf;
+using NLog;
 using SystemModule;
 using SystemModule.Packets.ServerPackets;
-using NetworkMonitor = SystemModule.NetworkMonitor;
 using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
-using System.Runtime.InteropServices;
 using TouchSocket.Core;
-using System.Threading.Tasks.Dataflow;
-using SystemModule.Packets.ClientPackets;
-using System.Collections.Concurrent;
-using Cowboy.Sockets;
+using NetworkMonitor = SystemModule.NetworkMonitor;
 
 namespace GameGate.Services
 {
@@ -26,7 +22,7 @@ namespace GameGate.Services
     /// </summary>
     public class ClientThread
     {
-        private readonly TcpSocketSaeaClient ClientSocket;
+        private readonly AsyncClientSocket ClientSocket;
         private readonly GameGateInfo GateInfo;
         private readonly IPEndPoint LocalEndPoint;
         /// <summary>
@@ -81,10 +77,11 @@ namespace GameGate.Services
             CheckServerTick = HUtil32.GetTickCount();
             _networkMonitor = networkMonitor;
             _messageChannel = Channel.CreateUnbounded<ServerSessionMessage>();
-            var config = new TcpSocketSaeaClientConfiguration();
-            config.FrameBuilder = new FixedHeaderLengthFrameBuilder(20);
-            IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse(GateInfo.ServerAdress), GateInfo.ServerPort);
-            ClientSocket = new TcpSocketSaeaClient(remoteEP, new ThreadClientEventDispatcher(this), config);
+            ClientSocket = new AsyncClientSocket(GateInfo.ServerAdress, GateInfo.ServerPort, 2048);
+            ClientSocket.OnConnected += ClientSocketConnect;
+            ClientSocket.OnDisconnected += ClientSocketDisconnect;
+            ClientSocket.OnReceivedData += ClientSocketRead;
+            ClientSocket.OnError += ClientSocketError;
         }
 
         public bool IsConnected => Connected;
@@ -109,9 +106,9 @@ namespace GameGate.Services
             //ClientSocket.Setup(config);
         }
 
-        public async Task Start()
+        public void Start()
         {
-           await ClientSocket.Connect();
+           ClientSocket.Connect();
         }
 
         private void ReConnected()
@@ -124,7 +121,7 @@ namespace GameGate.Services
 
         public void Stop()
         {
-            ClientSocket.Close();
+            ClientSocket.CloseSocket();
         }
 
         public string GetSessionCount()
@@ -326,39 +323,35 @@ namespace GameGate.Services
         /// <summary>
         /// 转发GameSvr封包消息
         /// </summary>
-        public async Task StartMessageQueue(CancellationToken stoppingToken)
+        public Task StartMessageQueue(CancellationToken stoppingToken)
         {
-            await ClientSocket.Connect();
-            Task.Factory.StartNew(async () =>
-            {
-                await ClientSocket.Process();
-            });
-            Task.Factory.StartNew(async () =>
-            {
-                while (await _messageChannel.Reader.WaitToReadAsync(stoppingToken))
-                {
-                    if (_messageChannel.Reader.TryRead(out var message))
-                    {
-                        var userSession = SessionContainer.GetSession(ThreadId, message.SessionId);
-                        if (userSession == null)
-                        {
-                            continue;
-                        }
-                        try
-                        {
-                            userSession.ProcessServerPacket(ThreadId, message);
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.Error(ex);
-                        }
-                        finally
-                        {
-                            GateShare.BytePool.Return(message.Buffer);
-                        }
-                    }
-                }
-            }, stoppingToken);
+            return Task.Factory.StartNew(async () =>
+               {
+                   
+                   while (await _messageChannel.Reader.WaitToReadAsync(stoppingToken))
+                   {
+                       if (_messageChannel.Reader.TryRead(out var message))
+                       {
+                           var userSession = SessionContainer.GetSession(ThreadId, message.SessionId);
+                           if (userSession == null)
+                           {
+                               continue;
+                           }
+                           try
+                           {
+                               userSession.ProcessServerPacket(ThreadId, message);
+                           }
+                           catch (Exception ex)
+                           {
+                               _logger.Error(ex);
+                           }
+                           finally
+                           {
+                               GateShare.BytePool.Return(message.Buffer);
+                           }
+                       }
+                   }
+               }, stoppingToken);
         }
 
         public void RestSessionArray()
@@ -424,9 +417,9 @@ namespace GameGate.Services
         /// <param name="sendBuffer"></param>
         internal void Send(byte[] sendBuffer)
         {
-            if (ClientSocket.State == TcpSocketConnectionState.Connected)
+            if (ClientSocket.IsConnected)
             {
-                ClientSocket.SendAsync(sendBuffer);
+                ClientSocket.Send(sendBuffer);
                 _networkMonitor.Send(sendBuffer.Length);
             }
         }
@@ -499,60 +492,5 @@ namespace GameGate.Services
         }
 
         public string ConnectedState => IsConnected ? "[green]Connected[/]" : "[red]Not Connected[/]";
-
-
-        private class ThreadClientEventDispatcher : ITcpSocketSaeaClientEventDispatcher
-        {
-            private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-            private ClientThread _clientThread;
-
-            public ThreadClientEventDispatcher(ClientThread clientThread)
-            {
-                _clientThread = clientThread;
-            }
-
-            public Task OnServerConnected(TcpSocketSaeaClient client)
-            {
-                _clientThread.GateReady = true;
-                _clientThread.CheckServerTick = HUtil32.GetTickCount();
-                _clientThread.Connected = true;
-                _clientThread.RunningState = RunningState.Runing;
-                _clientThread.RestSessionArray();
-                _logger.Info($"[{_clientThread.LocalEndPoint}] 游戏引擎[{client.RemoteEndPoint}]链接成功.");
-                _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {client.RemoteEndPoint} 成功...");
-                return Task.CompletedTask;
-            }
-
-            public Task OnServerDataReceived(TcpSocketSaeaClient client, byte[] data, int offset, int count)
-            {
-                var messageBuffer = new byte[count];
-                MemoryCopy.BlockCopy(data, offset, messageBuffer, 0, count);
-                _clientThread.ProcessPacket(messageBuffer, count);
-                return Task.CompletedTask;
-            }
-
-            public Task OnServerDisconnected(TcpSocketSaeaClient client)
-            {
-                for (var i = 0; i < GateShare.MaxSession; i++)
-                {
-                    var userSession = _clientThread.SessionArray[i];
-                    if (userSession != null)
-                    {
-                        if (userSession.Socket != null && userSession.Socket.Handle == client.SocketId)
-                        {
-                            userSession.Socket.Close();
-                            userSession.Socket = null;
-                            userSession.SckHandle = -1;
-                        }
-                    }
-                }
-                _clientThread.RestSessionArray();
-                _clientThread.GateReady = false;
-                _logger.Info($"[{_clientThread.LocalEndPoint}] 游戏引擎[{client.RemoteEndPoint}]断开链接.");
-                _clientThread.Connected = false;
-                _clientThread.CheckServerFail = true;
-                return Task.CompletedTask;
-            }
-        }
     }
 }

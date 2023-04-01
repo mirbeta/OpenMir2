@@ -911,12 +911,10 @@ namespace GameGate.Services
                 destinationSpan[nLen + 1] = (byte)'!';//消息结尾
                 sendMsg.BuffLen = (short)(nLen + 2);
 
-                if (bufferLen > 10)
+                if (bufferLen > 8)
                 {
                     var recog = BitConverter.ToInt32(sourceSpan[..4]);
                     var ident = BitConverter.ToUInt16(sourceSpan.Slice(4, 2));
-                    //var param = BitConverter.ToUInt16(messagePacket.Slice(6, 2));
-                    //var tag = BitConverter.ToUInt16(messagePacket.Slice(8, 2));
                     int series;
                     switch (ident)
                     {

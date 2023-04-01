@@ -1,11 +1,11 @@
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using GameGate.Conf;
 using GameGate.Filters;
 using GameGate.Services;
 using Microsoft.Extensions.Hosting;
 using NLog;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GameGate
 {
@@ -44,7 +44,8 @@ namespace GameGate
             }
             ServerManager.Initialize();
             ServerManager.Start(stoppingToken);
-            await ServerManager.StartMessageWorkThread(stoppingToken);
+            ServerManager.StartServerThreadMessageWork(stoppingToken);
+            await ServerManager.StartClientMessageWork(stoppingToken);
             //await SessionContainer.ProcessSendMessage(stoppingToken);
         }
 
