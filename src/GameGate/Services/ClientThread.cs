@@ -266,22 +266,18 @@ namespace GameGate.Services
                     buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
                     return;
                 }
-                if (data.Length >= bodyLength) //包的长度大于消息包长度则直接解析
+                if (bodyLength == 0)
                 {
-                    if (bodyLength == 0)
-                    {
-                        ProcessServerPacket(message, Array.Empty<byte>());
-                    }
-                    else
-                    {
-                        var serverPacket = dataSeq.CurrentSpan.Slice(ServerMessage.PacketSize, bodyLength);
-                        ProcessServerPacket(message, serverPacket);
-                        dataSeq.Advance(bodyLength);
-                    }
+                    ProcessServerPacket(message, Array.Empty<byte>());
                 }
                 else
                 {
-                    //消息封包长度不够,需缓存
+                    var serverPacket = dataSeq.CurrentSpan.Slice(ServerMessage.PacketSize, bodyLength);
+                    ProcessServerPacket(message, serverPacket);
+                    dataSeq.Advance(bodyLength);
+                }
+                if (dataSeq.Remaining < ServerMessage.PacketSize) //消息封包长度不够,需缓存
+                {
                     buffBlock.Reset();
                     beCached = true;
                     buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
