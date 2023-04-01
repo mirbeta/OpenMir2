@@ -1,10 +1,12 @@
 using System;
+using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using GameGate.Conf;
 using NLog;
 using SystemModule;
@@ -192,7 +194,8 @@ namespace GameGate.Services
                     {
                         buffBlock.Write(e.Buff, 0, e.BuffLen);
                         var readLen = bodyLength + e.BuffLen;
-                        Span<byte> bodyData = stackalloc byte[readLen]; //把最新的和上次的全部读出来
+                        //Span<byte> bodyData = stackalloc byte[readLen]; //把最新的和上次的全部读出来
+                        var bodyData = new byte[readLen];
                         buffBlock.Pos = 0;
                         buffBlock.Read(bodyData, 0, readLen);
                         ProcessPacket(bodyData, readLen);
@@ -202,8 +205,7 @@ namespace GameGate.Services
                 }
                 else
                 {
-                    var dataSpan = new ReadOnlySpan<byte>(e.Buff, 0, e.BuffLen);
-                    ProcessPacket(dataSpan, e.BuffLen);
+                    ProcessPacket(e.Buff, e.BuffLen);
                 }
             }
             catch (Exception exception)
@@ -238,13 +240,13 @@ namespace GameGate.Services
             CheckServerFail = true;
         }
 
-        private void ProcessPacket(ReadOnlySpan<byte> data, int dataLen)
+        private void ProcessPacket(byte[] data, int dataLen)
         {
-            var remaining = dataLen;//表示整个序列还剩几个数据，也就是“已读索引”之后有几个数据
-            var consumed = 0;//表示整个序列还剩几个数据，也就是“已读索引”之后有几个数据
-            while (remaining >= ServerMessage.PacketSize)
+            var dataSpan = new ReadOnlySequence<byte>(data);
+            var dataSeq = new SequenceReader<byte>(dataSpan);
+            while (dataSeq.Remaining >= ServerMessage.PacketSize)
             {
-                var sourceSpan = data.Slice(consumed, ServerMessage.PacketSize);
+                var sourceSpan = dataSeq.CurrentSpan.Slice((int)dataSeq.Consumed, ServerMessage.PacketSize);
                 if (!MemoryMarshal.TryRead(sourceSpan, out ServerMessage message))
                 {
                     _logger.Debug("解析GameSrv消息封包头错误");
@@ -255,22 +257,41 @@ namespace GameGate.Services
                     _logger.Debug("解析GameSrv消息封包错误");
                     return;
                 }
+                dataSeq.Advance(20);
                 bodyLength = message.PackLength < 0 ? -message.PackLength : message.PackLength;
-                if (remaining < bodyLength)//body不满足解析，开始缓存，然后保存对象
+                if ((int)dataSeq.Remaining < bodyLength)//body不满足解析，开始缓存，然后保存对象
                 {
+                    buffBlock.Reset();
                     beCached = true;
-                    buffBlock.WriteSpan(data, consumed, remaining);
+                    buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
                     return;
                 }
-                var serverPacket = data.Slice(ServerMessage.PacketSize, bodyLength);
-                ProcessServerPacket(message, serverPacket);
-                Interlocked.Add(ref consumed, ServerMessage.PacketSize + bodyLength);
-                remaining -= consumed;
+                if (data.Length >= bodyLength) //包的长度大于消息包长度则直接解析
+                {
+                    if (bodyLength == 0)
+                    {
+                        ProcessServerPacket(message, Array.Empty<byte>());
+                    }
+                    else
+                    {
+                        var serverPacket = dataSeq.CurrentSpan.Slice(ServerMessage.PacketSize, bodyLength);
+                        ProcessServerPacket(message, serverPacket);
+                        dataSeq.Advance(bodyLength);
+                    }
+                }
+                else
+                {
+                    //消息封包长度不够,需缓存
+                    buffBlock.Reset();
+                    beCached = true;
+                    buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
+                }
             }
-            if (remaining > 0)
+            if (dataSeq.Remaining > 0)
             {
+                buffBlock.Reset();
                 beCached = true;
-                buffBlock.WriteSpan(data, consumed, remaining);
+                buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
             }
         }
 
@@ -302,7 +323,8 @@ namespace GameGate.Services
                         var sendMsg = new ServerSessionMessage();
                         sendMsg.SessionId = packetHeader.SessionId;
                         sendMsg.BuffLen = (short)packetHeader.PackLength;
-                        sendMsg.Buffer = GateShare.BytePool.Rent(packetLen);
+                        //sendMsg.Buffer = GateShare.BytePool.Rent(packetLen);
+                        sendMsg.Buffer = new byte[packetLen];
                         MemoryCopy.BlockCopy(data, 0, sendMsg.Buffer, 0, packetLen);
                         Enqueue(sendMsg);
                     }
@@ -347,7 +369,7 @@ namespace GameGate.Services
                            }
                            finally
                            {
-                               GateShare.BytePool.Return(message.Buffer);
+                               //GateShare.BytePool.Return(message.Buffer);
                            }
                        }
                    }

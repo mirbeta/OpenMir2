@@ -15,6 +15,10 @@ namespace SystemModule.Sockets.AsyncSocketServer
     public class SocketServer
     {
         /// <summary>
+        /// 缓冲区同步对象
+        /// </summary>
+        private object m_bufferLock = new object();
+        /// <summary>
         /// 读写对象池同步对象
         /// </summary>
         private readonly ReaderWriterLock rwl = new ReaderWriterLock();
@@ -517,22 +521,23 @@ namespace SystemModule.Sockets.AsyncSocketServer
                 writeEventArgs.UserToken = token;
                 if (buffLen <= _bufferSize)
                 {
-                    unsafe
-                    {
-                        fixed (byte* src = &buffer[0])
-                        {
-                            fixed (byte* dest = &writeEventArgs.Buffer[writeEventArgs.Offset])
-                            {
-                                Buffer.MemoryCopy(
-                                    source: src,//要复制的字节的地址
-                                    destination: dest,//目标地址
-                                    destinationSizeInBytes: buffLen,//目标内存块中可用的字节数
-                                    sourceBytesToCopy: buffLen//要复制的字节数
-                                );
-                            }
-                        }
-                    }
-                    writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffLen);
+                    //unsafe
+                    //{
+                    //    fixed (byte* src = &buffer[0])
+                    //    {
+                    //        fixed (byte* dest = &writeEventArgs.Buffer[writeEventArgs.Offset])
+                    //        {
+                    //            Buffer.MemoryCopy(
+                    //                source: src,//要复制的字节的地址
+                    //                destination: dest,//目标地址
+                    //                destinationSizeInBytes: buffLen,//目标内存块中可用的字节数
+                    //                sourceBytesToCopy: buffLen//要复制的字节数
+                    //            );
+                    //        }
+                    //    }
+                    //}
+                    Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
+                    writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
                 }
                 else
                 {
@@ -541,10 +546,14 @@ namespace SystemModule.Sockets.AsyncSocketServer
                         writeEventArgs.SetBuffer(buffer);
                         return;
                     }
-                    //lock (_bufferLock)
-                    //{
-                    //    _bufferManager.FreeBuffer(writeEventArgs);
-                    //}
+                    lock (m_bufferLock)
+                    {
+                        _bufferManager.FreeBuffer(writeEventArgs);
+                    }
+                    //Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffLen);
+                    //writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffLen);
+                    //writeEventArgs.SetBuffer(buffer, 0, buffLen);
+
                     writeEventArgs.SetBuffer(buffer, 0, buffLen);
                 }
                 // 异步发送数据
@@ -683,9 +692,10 @@ namespace SystemModule.Sockets.AsyncSocketServer
                 Interlocked.Add(ref _totalBytesWrite, e.BytesTransferred);
                 if (e.Count > _bufferSize)
                 {
-                    //rwl.AcquireWriterLock(100);
-                    _bufferManager.SetBuffer(e);// 恢复默认大小缓冲区
-                    //rwl.ReleaseWriterLock();
+                    lock (m_bufferLock)
+                    {
+                        _bufferManager.SetBuffer(e);// 恢复默认大小缓冲区
+                    }
                     //e.SetBuffer(null, e.Offset, e.Count);// 清除发送缓冲区
                 }
 

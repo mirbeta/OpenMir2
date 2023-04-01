@@ -72,16 +72,25 @@ namespace GameGate
         }
     }
 
+    public enum CheckStep : byte
+    {
+        CheckLogin,
+        SendCheck,
+        SendSmu,
+        SendFinsh,
+        CheckTick
+    }
+    
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct SessionMessage
     {
         public byte ServiceId{ get; set; }
         public ushort SessionId { get;set; }
-        public IntPtr Buffer { get;set; }
+        public byte[] Buffer { get;set; }
         public short BuffLen { get;set; }
         public ushort ConnectionId { get; set; }
 
-        public SessionMessage(ushort sessionId, IntPtr buffer, short buffLen)
+        public SessionMessage(ushort sessionId, byte[] buffer, short buffLen)
         {
             this.SessionId = sessionId;
             this.Buffer = buffer;

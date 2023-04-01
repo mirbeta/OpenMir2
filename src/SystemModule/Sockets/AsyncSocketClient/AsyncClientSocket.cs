@@ -264,7 +264,9 @@ namespace SystemModule.Sockets.AsyncSocketClient
                     //Buffer.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
                     //Span<byte> receiveData = stackalloc byte[e.BytesTransferred];
                     //MemoryCopy.BlockCopy(e.Buffer, e.Offset, receiveData, 0, e.BytesTransferred);
-                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, e.Buffer, e.BytesTransferred));//引发接收数据事件
+                    var data = new byte[e.BytesTransferred];
+                    Buffer.BlockCopy(e.Buffer, e.Offset, data, 0, e.BytesTransferred);
+                    OnReceivedData?.Invoke(this, new DSCClientDataInEventArgs(e.ConnectSocket, data, e.BytesTransferred));//引发接收数据事件
                     StartWaitingForData();//继续接收数据
                 }
             }
