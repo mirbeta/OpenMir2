@@ -190,17 +190,11 @@ namespace GameGate.Services
                 if (beCached)
                 {
                     beCached = false;
-                    unsafe
-                    {
-                        buffBlock.Write(e.Buff, 0, e.BuffLen);
-                        var readLen = bodyLength + e.BuffLen;
-                        //Span<byte> bodyData = stackalloc byte[readLen]; //把最新的和上次的全部读出来
-                        var bodyData = new byte[readLen];
-                        buffBlock.Pos = 0;
-                        buffBlock.Read(bodyData, 0, readLen);
-                        ProcessPacket(bodyData, readLen);
-                    }
-                    bodyLength = 0;
+                    buffBlock.Write(e.Buff, 0, e.BuffLen);
+                    var bodyData = new byte[(int)buffBlock.Position];
+                    buffBlock.Pos = 0;
+                    buffBlock.Read(bodyData, 0, bodyData.Length);
+                    ProcessPacket(bodyData, bodyData.Length);
                     buffBlock.Reset();
                 }
                 else
@@ -214,6 +208,7 @@ namespace GameGate.Services
             }
             finally
             {
+                bodyLength = 0;
                 //ClientSocket.ReturnBuffer(e.Buff);
             }
             _networkMonitor.Receive(e.BuffLen);
@@ -242,7 +237,7 @@ namespace GameGate.Services
 
         private void ProcessPacket(byte[] data, int dataLen)
         {
-            var dataSpan = new ReadOnlySequence<byte>(data);
+            var dataSpan = new ReadOnlySequence<byte>(data, 0, dataLen);
             var dataSeq = new SequenceReader<byte>(dataSpan);
             while (dataSeq.Remaining >= ServerMessage.PacketSize)
             {
@@ -257,7 +252,6 @@ namespace GameGate.Services
                     _logger.Debug("解析GameSrv消息封包错误");
                     return;
                 }
-                dataSeq.Advance(20);
                 bodyLength = message.PackLength < 0 ? -message.PackLength : message.PackLength;
                 if ((int)dataSeq.Remaining < bodyLength)//body不满足解析，开始缓存，然后保存对象
                 {
@@ -266,6 +260,7 @@ namespace GameGate.Services
                     buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
                     return;
                 }
+                dataSeq.Advance(20);
                 if (bodyLength == 0)
                 {
                     ProcessServerPacket(message, Array.Empty<byte>());
@@ -276,8 +271,9 @@ namespace GameGate.Services
                     ProcessServerPacket(message, serverPacket);
                     dataSeq.Advance(bodyLength);
                 }
-                if (dataSeq.Remaining < ServerMessage.PacketSize) //消息封包长度不够,需缓存
+                if (dataSeq.Remaining > 0 && dataSeq.Remaining < ServerMessage.PacketSize) //消息封包长度不够,需缓存
                 {
+                    _logger.Debug($"{dataSeq.Remaining}   {dataSeq.CurrentSpan.Length}");
                     buffBlock.Reset();
                     beCached = true;
                     buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
